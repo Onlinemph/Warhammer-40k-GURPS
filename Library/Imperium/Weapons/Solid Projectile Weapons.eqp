@@ -4,7 +4,7 @@
 		{
 			"id": "exMrY_6xoTahcTnBt",
 			"description": "Autopistol",
-			"local_notes": "Lore: A cheap, mass-produced sidearm found across a billion hive worlds: gang muscle, PDF conscripts and Guard officers who don't rate a laspistol all carry one. Consistently portrayed in Guard and Arbites fiction as the low-status \"poor man's laspistol.\"\n\nDesign: No framework anchor covers stub weapons, so this is built from scratch as a real-world-style light service pistol at TL7 (per framework.md's stub-tech tier), not lifted from any catalogue. 2d pi- averages 7, halved by the pi- wounding modifier to ~3.5 — a real but unimpressive threat to an unarmoured target, matching the autopistol's reputation as a backup weapon rather than a main-line arm. The Manstopper usage swaps to pi+ (bigger wound multiplier) with an armour divisor of (0.5), the standard GURPS way to model an expanding round: more damage to flesh, worse against any DR.",
+			"local_notes": "Lore: A cheap, mass-produced sidearm found across a billion hive worlds: gang muscle, PDF conscripts and Guard officers who don't rate a laspistol all carry one. Consistently portrayed in Guard and Arbites fiction as the low-status \"poor man's laspistol.\"\n\nDesign: No framework anchor covers stub weapons directly, but they must stay consistent with the autogun anchor (5d+1 pi) they're built alongside. GURPS's own real-world pistol-calibre baseline (a modern 9mm Parabellum ball round, roughly 2d+2 pi) already sits at almost exactly the same fraction of the new autogun that the old 2d pi- sat below the old autogun (avg 9 / avg 18.5 = 49%, versus the old 7 / 15 = 47%), so the autopistol is set to that real 9mm figure rather than derived by pure arithmetic scaling: full pi wounding (not pi-) reflects a modern jacketed round rather than the crude ball ammo the earlier pass assumed. Against flak (DR 12) it penetrates just 8.3% of hits — a real but unimpressive threat, matching the autopistol's reputation as a backup weapon rather than a main-line arm. The Manstopper usage keeps the same pi+/divisor(0.5) shape as before, bumped by the same +2 average as the ball round (2d+3, avg 10): it never penetrates flak or better (0% of hits, effective DR doubled by the divisor) but hits unarmoured flesh harder, the standard GURPS way to model an expanding round — more damage to flesh, worse against any DR.",
 			"tags": [
 				"Missile Weapon",
 				"Imperium"
@@ -18,8 +18,8 @@
 					"id": "WCVEII5nuJbCBrrZA",
 					"sv": 1,
 					"damage": {
-						"type": "pi-",
-						"base": "2d"
+						"type": "pi",
+						"base": "2d+2"
 					},
 					"accuracy": "2",
 					"range": "80/180",
@@ -136,7 +136,7 @@
 					"sv": 1,
 					"damage": {
 						"type": "pi+",
-						"base": "2d+1",
+						"base": "2d+3",
 						"armor_divisor": 0.5
 					},
 					"accuracy": "2",
@@ -256,7 +256,7 @@
 		{
 			"id": "eMqUJlv_ICTqngWle",
 			"description": "Autogun",
-			"local_notes": "Lore: The standard-issue solid-slug battle rifle of regiments and militias that lack a lasgun allocation — a recoil-operated intermediate-calibre rifle that recurs across Astra Militarum background material as the \"poor cousin\" of the lasgun, more common on low-priority garrison and PDF postings.\n\nDesign: Calibrated to lasgun parity rather than to flak. In the fiction autoguns kill as readily as lasguns, and Only War gives both the same damage (1d10+3), so the autogun sits at 4d+1 pi against the lasgun's 4d burn: avg 15, getting ~7 through flak (DR 8) and rarely beating carapace (DR 20), the same outcomes as the lasgun. An earlier draft used 2d+2 pi to make flak \"stop stub rounds\"; that framework wording was about pistol calibres and has been corrected. Range 500/2000 fits an intermediate-calibre rifle. RoF 10, 30(3) follow selective-fire rifle conventions. The Dum-Dum usage applies the same expanding-round logic as the autopistol's Manstopper.",
+			"local_notes": "Lore: The standard-issue solid-slug battle rifle of regiments and militias that lack a lasgun allocation — a recoil-operated intermediate-calibre rifle that recurs across Astra Militarum background material as the \"poor cousin\" of the lasgun, more common on low-priority garrison and PDF postings.\n\nDesign: Fixed autogun anchor (5d+1 pi): calibrated to lasgun parity rather than to flak. In the fiction autoguns kill as readily as lasguns, and Only War gives both the same damage, so the autogun is set for the same practical lethality as the lasgun anchor (5d(2) burn, avg 17.5) without copying its armour divisor — a solid slug has no focusing trick to help it through DR. Average roll 18.5 gets through flak (DR 12) on 94.1% of hits and mesh (DR 15) on 77.9%, both comparable to the lasgun's own flak/mesh numbers; against carapace (DR 45) it penetrates 0% of hits, even worse than the lasgun's rare 9.8% since it has no armour divisor to help it — confirming \"stopped by carapace.\" An earlier draft used 2d+2 pi to make flak \"stop stub rounds\"; that framework wording was about pistol calibres and has been corrected. Range 500/2000 fits an intermediate-calibre rifle. RoF 10, 30(3) follow selective-fire rifle conventions. The Dum-Dum usage applies the same expanding-round logic as the autopistol's Manstopper, bumped the same +1 die as the ball round.",
 			"tags": [
 				"Missile Weapon",
 				"Imperium",
@@ -272,7 +272,7 @@
 					"sv": 1,
 					"damage": {
 						"type": "pi",
-						"base": "4d+1"
+						"base": "5d+1"
 					},
 					"accuracy": "4",
 					"range": "500/2000",
@@ -389,7 +389,7 @@
 					"sv": 1,
 					"damage": {
 						"type": "pi+",
-						"base": "4d+1",
+						"base": "5d+1",
 						"armor_divisor": 0.5
 					},
 					"accuracy": "4",
@@ -509,7 +509,7 @@
 		{
 			"id": "eGE58NvXGebFKBY9S",
 			"description": "Stub Revolver",
-			"local_notes": "Lore: A well-made, reliable break-top or swing-cylinder handgun favoured by Inquisitorial acolytes, enforcers and anyone who prizes reliability over firepower or rate of fire; FFG-line background (used here only for relative calibration, per framework.md's source order) singles the stub revolver out as the higher-quality, slower-firing counterpart to the stub automatic.\n\nDesign: Single-action cycling caps RoF at 1 — there's no autofire mechanism. Full pi wounding (rather than the autopistol's pi-) and a higher base die (2d+1) reflect a larger-calibre, better-machined round fired from a tighter, hand-fitted barrel; low Rcl (1) follows from GURPS convention for a heavier, well-balanced revolver.",
+			"local_notes": "Lore: A well-made, reliable break-top or swing-cylinder handgun favoured by Inquisitorial acolytes, enforcers and anyone who prizes reliability over firepower or rate of fire; FFG-line background (used here only for relative calibration, per framework.md's source order) singles the stub revolver out as the higher-quality, slower-firing counterpart to the stub automatic.\n\nDesign: Single-action cycling caps RoF at 1 — there's no autofire mechanism. A heavier, hand-loaded magnum-class round (GURPS real-world baseline: a .44 Magnum runs about 3d pi) sits above the autopistol's 9mm-class 2d+2 pi, reflecting a larger-calibre, better-machined round fired from a tighter, hand-fitted barrel — and stays well under the autogun's 5d+1 pi rifle round, the same gap the old 2d+1 kept below the old 4d+1 autogun. Average roll 10.5 penetrates flak (DR 12) on 25.9% of hits (better than the autopistol's 8.3%), mesh (DR 15) on 4.6%, and never beats carapace (DR 45: 0%). Low Rcl (1) follows from GURPS convention for a heavier, well-balanced revolver.",
 			"tags": [
 				"Missile Weapon",
 				"Imperium"
@@ -524,7 +524,7 @@
 					"sv": 1,
 					"damage": {
 						"type": "pi",
-						"base": "2d+1"
+						"base": "3d"
 					},
 					"accuracy": "2",
 					"range": "100/250",
@@ -642,7 +642,7 @@
 		{
 			"id": "euoNQNsracKvxragr",
 			"description": "Stub Automatic",
-			"local_notes": "Lore: The cheaper, select-fire cousin of the autopistol and stub revolver, common as a backup piece among gangers, cultists and low-tier militia; distinguished in FFG-line background primarily by cost and magazine capacity rather than raw power.\n\nDesign: Same round as the autopistol's standard ball ammunition (2d pi-), since both fire generic mass-produced pistol-calibre cartridges — the difference is a smaller magazine (10+1 vs. 16+1) and cheaper construction, reflected here in cost and weight rather than a duplicate damage figure, since GCS has no separate build-quality stat.",
+			"local_notes": "Lore: The cheaper, select-fire cousin of the autopistol and stub revolver, common as a backup piece among gangers, cultists and low-tier militia; distinguished in FFG-line background primarily by cost and magazine capacity rather than raw power.\n\nDesign: Same round as the autopistol's standard ball ammunition (2d+2 pi), since both fire generic mass-produced pistol-calibre cartridges — the difference is a smaller magazine (10+1 vs. 16+1) and cheaper construction, reflected here in cost and weight rather than a duplicate damage figure, since GCS has no separate build-quality stat.",
 			"tags": [
 				"Missile Weapon",
 				"Imperium"
@@ -656,8 +656,8 @@
 					"id": "WCqaR9ajFdLaEQdvD",
 					"sv": 1,
 					"damage": {
-						"type": "pi-",
-						"base": "2d"
+						"type": "pi",
+						"base": "2d+2"
 					},
 					"accuracy": "2",
 					"range": "80/180",
@@ -775,7 +775,7 @@
 		{
 			"id": "egbMrzIvOXBAZnZmZ",
 			"description": "Heavy Stubber",
-			"local_notes": "Lore: The Imperium's standard heavy machine gun: a deliberately archaic solid-slug design valued precisely because a forge world with almost no infrastructure can still manufacture it. A mainstay on Chimera pintles, Sentinel weapon mounts and heavy-weapon squads across Guard background art and fiction, and never once shown killing a tank.\n\nDesign: Scaled up from the autogun's pi rating to a true heavy-calibre weapon (pi+, the GURPS x1.5 wounding multiplier), reasoned from a real-world heavy support-gun analogue rather than any catalogue entry. Deliberately pitched below the heavy bolter anchor (8d(2) pi+, which \"chews light vehicles\"): 5d+1 pi+ averages ~19 with no armour divisor, nowhere near AV10's DR 50. That failure is intentional — the fiction never shows a heavy stubber meaningfully hurting a vehicle, only infantry, and this stat block reproduces that gap explicitly. Mounted per framework.md's braced/mounted-heavies rule, hence Gunner (Machine Gun) rather than Guns.",
+			"local_notes": "Lore: The Imperium's standard heavy machine gun: a deliberately archaic solid-slug design valued precisely because a forge world with almost no infrastructure can still manufacture it. A mainstay on Chimera pintles, Sentinel weapon mounts and heavy-weapon squads across Guard background art and fiction, and never once shown killing a tank.\n\nDesign: Scaled up from the autogun's pi rating to a true heavy-calibre weapon (pi+, the GURPS x1.5 wounding multiplier), landing close to GURPS's own real-world .50-calibre benchmark (roughly 6d+2 pi+) rather than any 40k catalogue entry. Deliberately pitched well below the heavy bolter anchor (7d×2(2) pi++, which \"chews light vehicles\" at AV10): 6d+2 pi+ averages 23 with no armour divisor, penetrating 0% of hits against AV10 (DR 100). That failure is intentional and total — the fiction never shows a heavy stubber meaningfully hurting a vehicle, only infantry, and this stat block reproduces that gap explicitly and by a wider margin than the old DR 50 threshold did. Mounted per framework.md's braced/mounted-heavies rule, hence Gunner (Machine Gun) rather than Guns.",
 			"tags": [
 				"Missile Weapon",
 				"Imperium",
@@ -791,7 +791,7 @@
 					"sv": 1,
 					"damage": {
 						"type": "pi+",
-						"base": "5d+1"
+						"base": "6d+2"
 					},
 					"accuracy": "4",
 					"range": "500/2000",
@@ -833,7 +833,7 @@
 		{
 			"id": "elmowmV1PexTMlHay",
 			"description": "Combat Shotgun",
-			"local_notes": "Lore: A full-auto-capable military scattergun issued to void-ship boarding parties, PDF close-quarters units and Adeptus Arbites riot squads. \"Executioner\" shells are referenced in FFG-line background (relative calibration only, per framework.md) as a specialist close-range, armour-beating round issued to elite units rather than line troops.\n\nDesign: Buckshot and slug follow the usual GURPS shotgun split — short-ranged and hard-hitting versus long-ranged and precise — but are given single flat damage figures rather than the Basic Set's full range-banded pellet-spread rules, a deliberate simplification noted here for transparency. The Executioner shell keeps the buckshot's short range but adds an armour divisor of (2), modelling a penetrator flechette payload that trades general usefulness for beating armour at point- blank range.",
+			"local_notes": "Lore: A full-auto-capable military scattergun issued to void-ship boarding parties, PDF close-quarters units and Adeptus Arbites riot squads. \"Executioner\" shells are referenced in FFG-line background (relative calibration only, per framework.md) as a specialist close-range, armour-beating round issued to elite units rather than line troops.\n\nDesign: Buckshot and slug follow the usual GURPS shotgun split — short-ranged and hard-hitting versus long-ranged and precise — but are given single flat damage figures rather than the Basic Set's full range-banded pellet-spread rules, a deliberate simplification noted here for transparency. Both are scaled up in proportion to the autogun's own 1.27x jump (old 4d+1 avg 15 to new 5d+1 avg 18.5): buckshot averages 16 and penetrates flak (DR 12) on 84.1% of hits at point-blank range; slug averages 21 and still can't beat carapace (DR 45: 0% of hits), matching a shotgun's real-world reputation against rigid plate. The Executioner shell keeps the buckshot's short range but adds an armour divisor of (2), modelling a penetrator flechette payload that trades general usefulness for beating armour at point-blank range: average 17.5, penetrating carapace (DR 45, effective 22.5) on 9.8% of hits, the same figure as a standard lasgun.",
 			"tags": [
 				"Missile Weapon",
 				"Imperium",
@@ -849,7 +849,7 @@
 					"sv": 1,
 					"damage": {
 						"type": "pi+",
-						"base": "3d+2"
+						"base": "4d+2"
 					},
 					"accuracy": "2",
 					"range": "20/70",
@@ -966,7 +966,7 @@
 					"sv": 1,
 					"damage": {
 						"type": "pi+",
-						"base": "5d"
+						"base": "6d"
 					},
 					"accuracy": "3",
 					"range": "150/500",
@@ -1083,7 +1083,7 @@
 					"sv": 1,
 					"damage": {
 						"type": "pi+",
-						"base": "4d",
+						"base": "5d",
 						"armor_divisor": 2
 					},
 					"accuracy": "2",
@@ -1203,7 +1203,7 @@
 		{
 			"id": "efE2RLOO5MyRv0uWf",
 			"description": "Pump Shotgun",
-			"local_notes": "Lore: A civilian and militia pump-action scattergun common on agri and feral worlds and among hive gangers — a step down from the military combat shotgun, and the more commonly depicted shotgun among non-military characters in Imperial fiction.\n\nDesign: Same buckshot/slug split as the Combat Shotgun, toned down roughly half a die and locked to RoF 1 (manual pump cycling, no autofire) to reflect civilian manufacture rather than a military select-fire action.",
+			"local_notes": "Lore: A civilian and militia pump-action scattergun common on agri and feral worlds and among hive gangers — a step down from the military combat shotgun, and the more commonly depicted shotgun among non-military characters in Imperial fiction.\n\nDesign: Same buckshot/slug split as the Combat Shotgun, toned down roughly half a die (matching the Combat Shotgun's own new figures) and locked to RoF 1 (manual pump cycling, no autofire) to reflect civilian manufacture rather than a military select-fire action: buckshot averages 14 (66.4% through flak at point-blank range), slug averages 19.5 and still fails against carapace (0% of hits).",
 			"tags": [
 				"Missile Weapon",
 				"Imperium"
@@ -1218,7 +1218,7 @@
 					"sv": 1,
 					"damage": {
 						"type": "pi+",
-						"base": "3d"
+						"base": "4d"
 					},
 					"accuracy": "2",
 					"range": "15/60",
@@ -1335,7 +1335,7 @@
 					"sv": 1,
 					"damage": {
 						"type": "pi+",
-						"base": "4d+2"
+						"base": "5d+2"
 					},
 					"accuracy": "3",
 					"range": "120/400",
@@ -1453,7 +1453,7 @@
 		{
 			"id": "eCBBOcoit4P8Su45p",
 			"description": "Hunting Rifle",
-			"local_notes": "Lore: A bolt-action precision rifle common on agri, feral and frontier worlds, pressed into service as a stopgap sniper weapon by Guard marksmen and PDF units where a long-las isn't issued.\n\nDesign: Modelled as a realistic TL7 bolt-action big-game rifle (a real-world analogue, not a renamed catalogue item): a large single round for maximum penetration, RoF 1 for manual bolt cycling between shots. Kept below the long-las (5d burn, no armour help at all against carapace or better) in practical terms — full pi wounding and no armour divisor mean it's comparably lethal to an unarmoured target but does nothing against carapace-or-better armour, in contrast to the long-las which at least keeps pace with a standard lasgun there.",
+			"local_notes": "Lore: A bolt-action precision rifle common on agri, feral and frontier worlds, pressed into service as a stopgap sniper weapon by Guard marksmen and PDF units where a long-las isn't issued.\n\nDesign: Modelled as a realistic TL7 bolt-action big-game rifle (a real-world analogue, not a renamed catalogue item), scaled up in the same proportion as the other stub-tech weapons in this file: a large single round for maximum penetration (average 24.5), RoF 1 for manual bolt cycling between shots. Kept below the long-las (6d(2) burn) in practical terms — full pi wounding and no armour divisor mean it's comparably lethal to an unarmoured target (99.7% through flak, DR 12) but does nothing against carapace-or-better armour (0% of hits at DR 45), in contrast to the long-las which at least keeps pace with a standard lasgun there.",
 			"tags": [
 				"Missile Weapon",
 				"Imperium"
@@ -1468,7 +1468,7 @@
 					"sv": 1,
 					"damage": {
 						"type": "pi",
-						"base": "6d"
+						"base": "7d"
 					},
 					"accuracy": "7",
 					"range": "600/2000",

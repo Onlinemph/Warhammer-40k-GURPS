@@ -9,7 +9,7 @@ items:
     tags: [Missile Weapon, Imperium, Astra Militarum]
     weapons:
       - usage: Standard
-        damage: 3d burn
+        damage: 3d(2) burn
         acc: 2
         range: 120/360
         rof: 3
@@ -25,14 +25,17 @@ items:
       the Ciaphas Cain novels) as the backup weapon of choice once a soldier's
       lasgun runs dry or their hands are full.
     design: >-
-      Damage is the fixed laspistol anchor (3d burn), which per framework.md
-      "kills an unarmoured man in 1-2 hits": an average roll of 10.5 against
-      HP 10 confirms this without adjustment. Acc, range, RoF and shot count
-      are not anchored, so they're built from scratch for a hand-held energy
-      pistol: a smaller accumulator than a lasgun's gives roughly half the
-      lasgun's shot count (30 vs. 60), and the short emitter keeps Bulk and
-      ST modest. RoF 3 represents the selector's rapid-pulse setting rather
-      than a sustained full-auto mode.
+      Damage is the fixed laspistol anchor (3d(2) burn). Average roll 10.5
+      already kills an unarmoured man (HP 10) in 1-2 hits per framework.md;
+      the (2) divisor is carried by every las weapon in the post-Rescale
+      lineup so a laspistol still means something against flak (DR 12):
+      3d(2) penetrates 90.7% of hits there, but never against carapace
+      (DR 45, effective 22.5) — 0% of hits get through. Acc, range, RoF and
+      shot count are not anchored, so they're built from scratch for a
+      hand-held energy pistol: a smaller accumulator than a lasgun's gives
+      roughly half the lasgun's shot count (30 vs. 60), and the short
+      emitter keeps Bulk and ST modest. RoF 3 represents the selector's
+      rapid-pulse setting rather than a sustained full-auto mode.
 
   - name: Laspistol, Compact "Hostile Environment" Pattern
     tl: 10
@@ -42,7 +45,7 @@ items:
     tags: [Missile Weapon, Imperium, Astra Militarum]
     weapons:
       - usage: Standard
-        damage: 3d burn
+        damage: 3d(2) burn
         acc: 1
         range: 80/240
         rof: 3
@@ -59,12 +62,12 @@ items:
       gives it a formal designation, so "Hostile Environment Pattern" here is
       a descriptive label rather than an attested in-universe name.
     design: >-
-      Damage stays at the fixed laspistol anchor (3d burn) — shrinking the
-      emitter doesn't change the lasing chemistry, only its housing. A
-      smaller cell drops the shot count to 20 and shortens effective range;
-      the shorter barrel worsens Acc by 1 but improves Bulk to -1, which is
-      the standard GURPS trade a concealable pistol makes against a
-      full-size one.
+      Damage stays at the fixed laspistol anchor (3d(2) burn) — shrinking
+      the emitter doesn't change the lasing chemistry or the focusing coil
+      that gives it the (2) divisor, only its housing. A smaller cell drops
+      the shot count to 20 and shortens effective range; the shorter barrel
+      worsens Acc by 1 but improves Bulk to -1, which is the standard GURPS
+      trade a concealable pistol makes against a full-size one.
 
   - name: Lasgun, Kantrael Pattern
     tl: 10
@@ -74,7 +77,7 @@ items:
     tags: [Missile Weapon, Imperium, Astra Militarum]
     weapons:
       - usage: Standard
-        damage: 4d burn
+        damage: 5d(2) burn
         acc: 6
         range: 300/900
         rof: 10
@@ -84,7 +87,7 @@ items:
         rcl: 1
         skill: Beam Weapons (Rifle)
       - usage: Hot-shot pack
-        damage: 5d(2) burn
+        damage: 6d(3) burn
         acc: 6
         range: 300/900
         rof: 1
@@ -99,7 +102,7 @@ items:
           second hot-shot round without replacing the pack risks cooking off
           or fusing the lasing chamber (GM's call).
       - usage: Overcharge shot
-        damage: 5d burn
+        damage: 6d burn
         acc: 6
         range: 300/900
         rof: 1
@@ -109,10 +112,10 @@ items:
         rcl: 1
         skill: Beam Weapons (Rifle)
         notes: >-
-          Fired from an Overcharge Power Pack: one extra die of damage, but
-          the deliberately overloaded cell only lasts for 10 such shots and
-          increases the odds of a jam or a scorched barrel on any given shot
-          (GM's call).
+          Fired from an Overcharge Power Pack: one extra die of damage over
+          the standard shot, but no armour divisor, and the deliberately
+          overloaded cell only lasts for 10 such shots and increases the
+          odds of a jam or a scorched barrel on any given shot (GM's call).
     lore: >-
       The most widely issued lasgun in the Astra Militarum, standard
       Departmento Munitorum pattern and the rifle carried by the Cadian
@@ -121,23 +124,27 @@ items:
       design as "M-Galaxy pattern"; this entry treats the two names as the
       same underlying weapon rather than asserting they're formally distinct.
     design: >-
-      Damage is the fixed lasgun anchor (4d burn). Range/RoF/shots are not
+      Damage is the fixed lasgun anchor (5d(2) burn). Range/RoF/shots are not
       anchored and are built to match the lasgun's lore signature: a 60-shot
       accumulator that recharges off almost any power source, and a fire
       selector giving single, burst and full-auto settings (abstracted here
       as RoF 10 for full-auto; treat single fire as RoF 1 at the GM's
-      discretion). Required lasgun-vs-armour check (framework.md): 4d burn
-      averages 14. Against flak (DR 8) that's 6 points clean through on an
-      average hit, matching "punches flak." Against carapace (DR 20) an
-      average hit (14) fails outright; only the top end of the roll (18-24
-      on 4d, roughly the upper 5%) gets through at all, matching "rarely
-      penetrates carapace." No departure from the anchor was needed — the
-      numbers check out as written. The Hot-shot pack usage reuses the
-      hellgun anchor (5d(2) burn) exactly, since a hot-shot pack is
-      explicitly the same overcharge trick as a hellgun's power cell, just
-      dropped into an ordinary lasgun for one shot. The Overcharge usage is
-      a milder, non-hellgun field expedient: +1 die, no armour divisor,
-      limited shots.
+      discretion). Required lasgun-vs-armour check (framework.md, exact dice
+      distribution): 5d(2) averages 17.5 and penetrates flak (DR 12,
+      effective 6) on 99.9% of hits, matching "punches flak"; against
+      carapace (DR 45, effective 22.5) it penetrates only 9.8% of hits,
+      matching "penetrates carapace about one hit in ten"; against Astartes
+      power armour (DR 100, effective 50) it penetrates 0% of hits, matching
+      "useless against power armour." No departure from the anchor was
+      needed — the numbers check out as written. The Hot-shot pack usage
+      reuses the hellgun anchor (6d(3) burn) exactly, since a hot-shot pack
+      is explicitly the same overcharge trick as a hellgun's power cell,
+      just dropped into an ordinary lasgun for one shot. The Overcharge
+      usage is a milder, non-hellgun field expedient stepped up from the
+      lasgun anchor: +1 die (6d burn, average 21), no armour divisor,
+      limited shots — it still only clears flak (98.0% of hits) and fails
+      against carapace (0% of hits), because the whole point of the divisor
+      is what an overcharge pack doesn't add.
 
   - name: Lasgun, Mars Pattern
     tl: 10
@@ -147,7 +154,7 @@ items:
     tags: [Missile Weapon, Imperium, Adeptus Mechanicus]
     weapons:
       - usage: Standard
-        damage: 4d burn
+        damage: 5d(2) burn
         acc: 6
         range: 300/900
         rof: 10
@@ -163,7 +170,7 @@ items:
       repeatedly single it out as the most rugged of the mass-production
       lasgun patterns.
     design: >-
-      Same fixed lasgun anchor (4d burn) as every pattern in this family —
+      Same fixed lasgun anchor (5d(2) burn) as every pattern in this family —
       the difference is build quality, not lasing power. Extra shielding and
       a reinforced housing add roughly 1.5 lb and 1 ST over the Kantrael
       baseline and justify the higher cost. GCS has no reliability/
@@ -178,7 +185,7 @@ items:
     tags: [Missile Weapon, Imperium, Astra Militarum]
     weapons:
       - usage: Standard
-        damage: 4d burn
+        damage: 5d(2) burn
         acc: 6
         range: 280/840
         rof: 10
@@ -193,7 +200,7 @@ items:
       ash — a design emphasis that recurs throughout Krieg background art
       and Forge World material.
     design: >-
-      Damage fixed at the lasgun anchor (4d burn); the sealed barrel shroud
+      Damage fixed at the lasgun anchor (5d(2) burn); the sealed barrel shroud
       that keeps mud and gas out marginally shortens the beam path, modelled
       as a small range reduction (280/840 vs. the Kantrael's 300/900) rather
       than any change to the fixed damage figure.
@@ -206,7 +213,7 @@ items:
     tags: [Missile Weapon, Imperium, Astra Militarum]
     weapons:
       - usage: Standard
-        damage: 4d burn
+        damage: 5d(2) burn
         acc: 6
         range: 300/900
         rof: 10
@@ -221,7 +228,7 @@ items:
       reliable but less tolerant of mud and rough handling than the
       heavier Munitorum-standard patterns.
     design: >-
-      Damage fixed at the lasgun anchor (4d burn) — a slimmer frame doesn't
+      Damage fixed at the lasgun anchor (5d(2) burn) — a slimmer frame doesn't
       change the lasing chamber's output. The lighter build lowers ST
       requirement and improves Bulk to -3 (vs. -4 for the Kantrael/Mars/
       Accatran patterns), reflecting the more compact, less rugged design.
@@ -236,7 +243,7 @@ items:
     tags: [Missile Weapon, Imperium, Astra Militarum]
     weapons:
       - usage: Burst (3-round)
-        damage: 4d burn
+        damage: 5d(2) burn
         acc: 7
         range: 300/900
         rof: 3
@@ -246,7 +253,7 @@ items:
         rcl: 1
         skill: Beam Weapons (Rifle)
       - usage: Full Auto
-        damage: 4d burn
+        damage: 5d(2) burn
         acc: 6
         range: 300/900
         rof: 10
@@ -260,7 +267,7 @@ items:
       mechanical 3-round burst mode on top of the usual single/full-auto
       options found across the standard lasgun family.
     design: >-
-      Damage fixed at the lasgun anchor (4d burn) for both modes — the
+      Damage fixed at the lasgun anchor (5d(2) burn) for both modes — the
       selector changes how the shots are grouped, not the lasing output.
       The controlled 3-round burst gets a +1 Acc bump over the full-auto
       line (7 vs. 6) to represent the tighter grouping a mechanical burst
@@ -274,7 +281,7 @@ items:
     tags: [Missile Weapon, Imperium, Astra Militarum]
     weapons:
       - usage: Standard
-        damage: 4d burn
+        damage: 5d(2) burn
         acc: 5
         range: 200/600
         rof: 10
@@ -289,7 +296,7 @@ items:
       lasguns of this kind appear throughout Guard fiction as tank-crew and
       support-trooper sidearms.
     design: >-
-      Damage fixed at the lasgun anchor (4d burn); the lasing chemistry
+      Damage fixed at the lasgun anchor (5d(2) burn); the lasing chemistry
       that produces that figure doesn't depend on barrel length the way a
       slugthrower's velocity does, so the carbine's shorter emitter only
       costs Acc and effective range (5/200-600 vs. the full lasgun's
@@ -304,7 +311,7 @@ items:
     tags: [Missile Weapon, Imperium, Astra Militarum]
     weapons:
       - usage: Standard
-        damage: 5d burn
+        damage: 6d(2) burn
         acc: 9
         range: 600/1800
         rof: 1
@@ -319,13 +326,18 @@ items:
       known example, and the weapon recurs as the Guard's standard sniper
       tool across Black Library fiction.
     design: >-
-      Damage is the fixed long-las anchor (5d burn), one die over the
+      Damage is the fixed long-las anchor (6d(2) burn), one die over the
       standard lasgun — an extra focusing chamber concentrates more energy
-      per shot at the cost of rate of fire. RoF drops to 1 (no autofire
-      mechanism survives the rebuild) and the custom cell holds fewer shots
-      than a stock lasgun. Acc rises to 9 for the integral scope, and Bulk
-      worsens to -6 for the longer, heavier weapon, following the usual
-      GURPS convention for a dedicated sniper rifle.
+      per shot at the cost of rate of fire, and keeps the same (2) divisor
+      family-wide. Average roll 21 makes flak (DR 12) meaningless (100% of
+      hits penetrate) and gets through carapace (DR 45, effective 22.5) on
+      36.3% of hits, comfortably better than the lasgun's 9.8% and matching
+      the long-las's role as the harder-hitting sniper pattern; it still
+      fails outright against Astartes power armour (0% of hits). RoF drops
+      to 1 (no autofire mechanism survives the rebuild) and the custom cell
+      holds fewer shots than a stock lasgun. Acc rises to 9 for the integral
+      scope, and Bulk worsens to -6 for the longer, heavier weapon, following
+      the usual GURPS convention for a dedicated sniper rifle.
 
   - name: Hellpistol
     tl: 11
@@ -335,7 +347,7 @@ items:
     tags: [Missile Weapon, Imperium, Militarum Tempestus]
     weapons:
       - usage: Standard
-        damage: 4d(2) burn
+        damage: 5d(3) burn
         acc: 2
         range: 100/300
         rof: 3
@@ -349,13 +361,15 @@ items:
       Tempestus officers and Inquisitorial agents who need a backup weapon
       that can still trouble carapace armour.
     design: >-
-      Scaled from the hellgun anchor (5d(2) burn) the same way the
+      Scaled from the hellgun anchor (6d(3) burn) the same way the
       laspistol steps down one die from the lasgun: -1d, armour divisor
-      unchanged. The (2) divisor is what lets it beat carapace at all —
+      unchanged. The (3) divisor is what lets it beat carapace at all —
       that's the entire point of the hot-shot family, so it carries over
-      unmodified. Shot count is lower than an ordinary laspistol's because a
-      hot-shot cell packs more energy per shot into the same volume, so it
-      burns out faster.
+      unmodified. Average roll 17.5 against carapace (DR 45, effective 15)
+      penetrates 69.5% of hits: a real threat, if less reliable than the
+      full-size hellgun's 90.4%. Shot count is lower than an ordinary
+      laspistol's because a hot-shot cell packs more energy per shot into
+      the same volume, so it burns out faster.
 
   - name: Hellgun
     tl: 11
@@ -365,7 +379,7 @@ items:
     tags: [Missile Weapon, Imperium, Militarum Tempestus]
     weapons:
       - usage: Standard
-        damage: 5d(2) burn
+        damage: 6d(3) burn
         acc: 6
         range: 280/840
         rof: 10
@@ -380,14 +394,18 @@ items:
       can't; its role as the carapace-killer of Imperial small arms is
       consistent background across Scion-focused fiction and codex material.
     design: >-
-      Damage is the fixed hellgun anchor (5d(2) burn) exactly. Sanity check
-      against the framework's stated purpose: average roll 17.5, armour
-      divisor 2 halves carapace's DR 20 to an effective 10, so ~7.5 points
-      get through on an average hit — it reliably beats carapace, confirming
-      "built to beat carapace" with no adjustment needed. Shot count (40) is
-      lower than a standard lasgun's 60 to reflect the hungrier, hotter
-      cell; ST is bumped to 7 for the heavier housing needed to safely
-      contain the higher-energy discharge.
+      Damage is the fixed hellgun anchor (6d(3) burn) exactly. Sanity check
+      against the framework's stated purpose, computed by exact dice
+      distribution: average roll 21, armour divisor 3 cuts carapace's DR 45
+      to an effective 15, so 6d(3) penetrates carapace on 90.4% of hits —
+      it reliably beats carapace, confirming "built to beat carapace" with
+      no adjustment needed. Against Sororitas power armour (DR 70, effective
+      23.3) it still gets through 27.9% of the time; against Astartes power
+      armour (DR 100, effective 33.3) that drops to 0.1%, essentially none,
+      matching hellgun's place below the boltgun as an infantry-scale
+      weapon. Shot count (40) is lower than a standard lasgun's 60 to
+      reflect the hungrier, hotter cell; ST is bumped to 7 for the heavier
+      housing needed to safely contain the higher-energy discharge.
 
   - name: Hot-Shot Volley Gun
     tl: 11
@@ -397,7 +415,7 @@ items:
     tags: [Missile Weapon, Imperium, Militarum Tempestus]
     weapons:
       - usage: Standard
-        damage: 5d(2) burn
+        damage: 6d(3) burn
         acc: 4
         range: 280/840
         rof: 6
@@ -413,7 +431,7 @@ items:
       Militarum Tempestus background material as scarce and Munitorum-
       restricted compared to the standard hellgun.
     design: >-
-      Per-bolt damage is the hellgun anchor (5d(2) burn) unchanged, since
+      Per-bolt damage is the hellgun anchor (6d(3) burn) unchanged, since
       the volley gun is simply several hellgun-grade lasing chambers fired
       in quick succession rather than one bigger blast. RoF 6 represents
       that volley of near-simultaneous pulses. It's mounted (ST 10B on a

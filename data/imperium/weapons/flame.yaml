@@ -10,7 +10,7 @@ items:
     tags: [Missile Weapon, Imperium, Adepta Sororitas, Inquisition]
     weapons:
       - usage: Cone attack (3 yards)
-        damage: 2d burn
+        damage: 2d+2 burn
         range: 3
         shots: 3(5)
         st: 8
@@ -32,7 +32,12 @@ items:
         notes: >
           A target who fails an HT roll on being hit catches fire and takes this every turn until
           extinguished (see B433's fire rules); this damage is not stopped by DR, since it is the
-          promethium burning on and around the target rather than a fresh attack.
+          promethium burning on and around the target rather than a fresh attack. This assumes
+          exposed flesh, cloth or open-visored armour the fire can actually catch on: against a
+          hermetically sealed suit (Astartes or Terminator power armour with the helmet locked, a
+          void suit, etc.) the follow-up does not apply at all unless the seal has already been
+          breached that scene (GM's call) — promethium can wash across ceramite for a turn or two
+          of cosmetic flame, but it has nothing to ignite.
     lore: >
       A compact, one-handed flame weapon carried by Adepta Sororitas Seraphim and Inquisitorial
       agents for close-quarters purging; background stresses its short reach compared with a full
@@ -40,11 +45,18 @@ items:
     design: >
       Built bottom-up rather than from an anchor, since the framework's weapon table has none for
       flame weapons: base damage and cone length scale down from the standard Flamer entry below in
-      the same rough proportion the bolt and plasma families use for their pistol-scale members (2d
-      burn and a 3-yard cone versus the Flamer's 3d and 5 yards). The clinging, DR-ignoring
-      follow-up and the cover-bypassing behaviour are the two lore properties the assignment calls
-      out for the whole flame family; both are given the same treatment as the Flamer entry so they
-      read identically across every weapon in this file.
+      the same rough proportion the bolt and plasma families use for their pistol-scale members
+      (2d+2 burn and a 3-yard cone versus the Flamer's 4d and 5 yards). Checked by exact dice
+      distribution: average roll 9 penetrates flak (DR 12) on only 8.3% of hits — a flamer is not
+      an armour-piercing weapon, its cone attack alone barely threatens even light armour, and the
+      real threat is the DR-ignoring follow-up below. The clinging, DR-ignoring follow-up and the
+      cover-bypassing behaviour are the two lore properties the assignment calls out for the whole
+      flame family; both are given the same treatment as the Flamer entry so they read identically
+      across every weapon in this file. The follow-up's sealed-armour exemption is a deliberate new
+      rule for this Rescale: without it, a weapon whose whole selling point is bypassing armour
+      would trivialise Astartes power armour turn after turn, which the fiction never shows — flame
+      weapons are feared by infantry in flak, mesh or carapace, and by anyone whose suit isn't
+      sealed, but a battle-brother who keeps his helmet locked shrugs off the fire itself.
 
   - name: Flamer
     tl: 8
@@ -54,7 +66,7 @@ items:
     tags: [Missile Weapon, Imperium, Astra Militarum, Adeptus Astartes]
     weapons:
       - usage: Cone attack (5 yards)
-        damage: 3d burn
+        damage: 4d burn
         range: 5
         shots: 4(5)
         st: 9
@@ -75,7 +87,10 @@ items:
         skill: Liquid Projector (Flamethrower)
         notes: >
           A target who fails an HT roll on being hit catches fire and takes this every turn until
-          extinguished (see B433's fire rules); this damage is not stopped by DR.
+          extinguished (see B433's fire rules); this damage is not stopped by DR. As with the Hand
+          Flamer, this assumes something the fire can actually catch on: it does not apply at all
+          against a hermetically sealed suit (Astartes or Terminator power armour, void suits) whose
+          seal hasn't been breached (GM's call).
     lore: >
       Standard Astra Militarum and Astartes squad flame weapon, used throughout the fiction to
       clear trenches, bunkers, hab-blocks and tunnel networks of infantry, xenos broods and
@@ -85,11 +100,17 @@ items:
       No anchor exists for flame weapons in the framework, so this entry is built from GURPS's own
       area/cone attack design language (B412) rather than from a catalogue item: an "always hits
       inside the cone, no Acc" ranged attack with a burning-target follow-up per the Fire rules
-      (B433). Base damage (3d burn) and cone length (5 yards) are set to comfortably kill an
-      unarmoured man and threaten (but not reliably beat) flak DR 8 on the initial hit, with the
-      real killing power coming from repeated, DR-ignoring burning damage once a target catches
-      fire - matching the fiction's emphasis on flame weapons as area-denial and anti-infantry tools
-      rather than armour-piercing ones. TL is set at 8, well below the TL10 the framework gives
+      (B433). Base damage (4d burn, up from the pre-Rescale 3d to stay meaningful now flak DR has
+      risen to 12) and cone length (5 yards) are set to comfortably kill an unarmoured man and
+      threaten flak on the initial hit: average roll 14 penetrates DR 12 on 66.4% of hits and DR 15
+      mesh on 33.6%, by exact dice distribution — a real threat to unarmoured or flak-armoured
+      infantry, much less reliable against mesh, and the real killing power still comes from
+      repeated, DR-ignoring burning damage once a target catches fire. That follow-up is
+      deliberately left unscaled and instead gated by a new sealed-armour exemption (see the Hand
+      Flamer's design note): flame weapons are feared by infantry in any armour short of sealed
+      power armour, and should do next to nothing to a battle-brother who keeps his helmet locked,
+      matching how the fiction never shows a flamer meaningfully hurting a sealed Astartes except by
+      setting his surroundings alight. TL is set at 8, well below the TL10 the framework gives
       most standard Imperial small arms, because a pressurised-fuel-and-igniter weapon is genuinely
       simple compared with a lasgun or bolter; LC2 (rather than the low LC4 real stub-tech gets)
       reflects that the Imperium restricts flame weapons for what they do and who is trusted to
@@ -105,7 +126,7 @@ items:
     tags: [Missile Weapon, Imperium, Astra Militarum, Adeptus Astartes]
     weapons:
       - usage: Cone attack (8 yards)
-        damage: 4d burn
+        damage: 5d burn
         range: 8
         shots: 6(5)
         st: 12
@@ -125,18 +146,23 @@ items:
         skill: Liquid Projector (Flamethrower)
         notes: >
           A target who fails an HT roll on being hit catches fire and takes this every turn until
-          extinguished (see B433's fire rules); this damage is not stopped by DR.
+          extinguished (see B433's fire rules); this damage is not stopped by DR. As above, it does
+          not apply at all against a hermetically sealed suit whose seal hasn't been breached.
     lore: >
       A heavier, hotter-burning flame weapon mounted on vehicles or carried by Astartes Devastator/
       Aggressor-adjacent squads and Inquisitorial storm troopers; background treats it as a bunker-
       and horde-clearing weapon with a longer, wider cone and a bigger promethium reservoir than a
       standard flamer.
     design: >
-      One die over the standard Flamer, with a longer 8-yard cone and a bigger fuel tank (6 bursts
-      vs 4), on a much higher ST 12 reflecting a genuinely heavy weapon usually carried by an
-      Astartes or mounted on a vehicle sponson. The DR-ignoring burning follow-up is scaled the
-      same amount as the base damage, keeping the same design relationship used for the Hand
-      Flamer and Flamer above.
+      One die over the standard Flamer's new 4d (so 5d burn), with a longer 8-yard cone and a
+      bigger fuel tank (6 bursts vs 4), on a much higher ST 12 reflecting a genuinely heavy weapon
+      usually carried by an Astartes or mounted on a vehicle sponson. Average roll 17.5 penetrates
+      flak (DR 12) on 90.2% of hits and still fails against carapace (DR 45: 0%), by exact dice
+      distribution — a decisive threat to flak-armoured infantry, consistent with its role clearing
+      bunkers full of cultists and light infantry, but no more able to hurt rigid plate than the
+      standard Flamer. The DR-ignoring burning follow-up is scaled the same amount as the base
+      damage and carries the same sealed-armour exemption as the Hand Flamer and Flamer above,
+      keeping the same design relationship used across the family.
 
   - name: Promethium Fuel Canister
     tl: 8
