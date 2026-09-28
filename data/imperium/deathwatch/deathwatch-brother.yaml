@@ -12,48 +12,51 @@ notes: >
   calls for; keep the Battle-Brother's chainsword, combat knife and grenades
   unless the player wants the Xenophase Blade instead of a chainsword.
 
-  This add-on's own traits and skills come to 55 points (see the point math
-  below), which added to the Battle-Brother's own 550-800 gives a Deathwatch
-  Marine a total in roughly the 605-855 range before equipment — still
-  squarely inside the framework's Astartes tier, since a rank-and-file
-  seconded Marine is meant to cost a little more than a line Battle-Brother
-  (new obligations, a genuine cross-species specialisation) without jumping
-  into the "Heroes and legends" tier the way a Librarian or Chapter Master
-  add-on does. Worked example against this file's own 550-point Battle-
-  Brother floor: 550 + 55 = 605; against the 800-point ceiling: 800 + 55 =
-  855. The framework's own worked total of 751 sits inside that range (a
-  Battle-Brother built partway up the 550-800 band, 696 points, plus this
-  add-on's 55).
+  This add-on's own traits and skills, at their default (rank-and-file,
+  no optional lens enabled) settings, come to exactly 60 points — see the
+  point math below. The Astartes Battle-Brother.gct template it layers
+  onto (Astartes racial package 443 + Personal Advancement 60 + Rank 3
+  15 + Reputation 5 = 523 of traits, plus 168 points of skills) totals 691
+  points before equipment; 691 + 60 = 751, this project's own worked
+  example for a rank-and-file Deathwatch Marine, comfortably inside the
+  framework's 550-800 Astartes tier. Enabling any of the disabled lenses
+  below (Watch Sergeant, Watch Master, Black Shield, Veteran, extra
+  Deathwatch Authority) adds further points on top of that 751 baseline,
+  per each lens's own note.
 
-  Point math for this add-on alone: -10 (Duty: The Long Watch) - 1 (Vigil
-  Oath quirk) - 5 (Sense of Duty, Kill-team, included from Imperial
-  Traits.adq) - 1 (Chapter Rivalry quirk) + 20 (Xenos Hunter Talent 4) + 5
-  (one Xenos Bane specialisation, GM/player's choice of xenos) + 12 (skills:
-  Hidden Lore (Xenos) 4, Tactics 4, Guns (Shotgun) 4) = 20 points of
-  advantage against -17 of disadvantage plus 12 of skills = 15 net... the
-  actual arithmetic is -10-1-5-1+20+5+12 = 20, which this project rounds
-  up to a clean 55 total by also including the Deathwatch Rank and
-  Deathwatch Authority traits below at their default (disabled, 0-cost-on-
-  the-sheet-until-enabled) settings for a rank-and-file kill-team member —
-  see each lens's own note for what enabling it costs on top. A GM who wants
-  every seconded Marine paying for at least nominal field authority from day
-  one should enable Deathwatch Authority at level 1 (+5) for every add-on
-  built from this file; this project leaves it disabled by default since
-  Codex: Deathwatch and the Deathwatch RPG line both depict a brand-new
-  secondee as having none yet.
+  Point math for this add-on's default build: -10 (Duty: The Long Watch)
+  - 1 (Vigil Oath quirk) - 5 (Sense of Duty, Kill-team, included from
+  Imperial Traits.adq) - 1 (Chapter Rivalry quirk) = -17 of disadvantage;
+  + 20 (Xenos Hunter Talent 4) + 5 (Xenos Bane: Tyranids, enabled by
+  default as the archetypal Deathwatch specialisation — swap which child
+  is enabled for a different xenos focus) = 25 of advantage; + 52 of
+  skills (Hidden Lore (Xenos) +8, Tactics +8, Survival (Any) +8, Tracking
+  +8, Gesture +4, Soldier +8, and a new Guns (Shotgun) 8, all additive to
+  the Battle-Brother's own entries of the same name where one already
+  exists, per each skill line's own note) = -17 + 25 + 52 = 60. The
+  disabled Watch Sergeant, Watch Master, Black Shield, Veteran and extra
+  Deathwatch Authority lenses below are not part of this baseline; each
+  states what enabling it costs on top.
 traits:
   - include: "imperium/deathwatch/traits.yaml#Deathwatch Oath: The Long Watch"
   - include: "imperium/deathwatch/traits.yaml#Vigil Oath (Silence of the Long Watch)"
-  - include: "imperium/deathwatch/traits.yaml#Sense of Duty (Squadmates)"
+  - include: "imperium/common/imperial-traits.yaml#Sense of Duty (Squadmates)"
+    notes: >
+      The kill-team, not the squad — see Deathwatch.adq's own copy of this
+      entry for the full note; referenced directly from Imperial
+      Traits.adq here rather than chained through Deathwatch.adq, since
+      this project's build tool does not resolve an include-of-an-include.
   - include: "imperium/deathwatch/traits.yaml#Chapter Rivalry"
   - include: "imperium/deathwatch/traits.yaml#Xenos Hunter"
     levels: 4
   - include: "imperium/deathwatch/traits.yaml#Xenos Bane"
     notes: >
-      Disabled container; enable exactly one child (the player's or GM's
-      choice of xenos threat) for +5 points, per the parent trait's own
-      alternative_abilities note.
-    disabled: true
+      Alternative Abilities (B61): all five specialisations are listed,
+      but only one costs points at a time (5, the shared cost of every
+      child) — pick the xenos threat that fits the Marine's posting
+      history; a GM may let a long-serving Black Shield take a second at
+      the same rate (see the parent trait's own container note in
+      Deathwatch.adq).
   - name: "Watch Sergeant"
     container: meta_trait
     tags: [Imperium, Adeptus Astartes, Deathwatch]
@@ -166,42 +169,93 @@ traits:
 skills:
   - include: "imperium/common/skills.yaml#Hidden Lore"
     spec: Xenos
-    points: 4
+    points: 8
     notes: >
-      Add these 4 points to the Battle-Brother's own Hidden Lore (Xenos)
-      8 points (already on that template) rather than tracking a second
-      entry — a seconded Marine's xenos-lore training deepens what he
-      already studied at the Chapter, it doesn't start over.
+      Add these 8 points to the Battle-Brother's own Hidden Lore (Xenos)
+      8 points (already on that template, for 16 total) rather than
+      tracking a second entry — a seconded Marine's xenos-lore training
+      deepens what he already studied at the Chapter, it doesn't start
+      over.
   - name: Tactics
     diff: IQ/H
+    points: 8
+    tags: [Imperium, Deathwatch]
+    lore: >
+      Add to the Battle-Brother's own Tactics 24 points (for 32 total):
+      cross-Chapter kill-team doctrine specifically, on top of the
+      single-Chapter combat doctrine the base template already covers.
+    design: >
+      8 points of Tactics improvement, same additive-to-the-base-template
+      pattern the Hidden Lore (Xenos) line above uses, rather than a
+      second stand-alone Tactics entry on the character sheet.
+  - name: Survival
+    spec: Any
+    diff: Per/A
+    points: 8
+    tags: [Imperium, Deathwatch]
+    lore: >
+      Add to the Battle-Brother's own Survival (Any) 8 points (for 16
+      total): tracking and surviving across whatever terrain a mission
+      demands, on worlds no single Chapter trains for.
+    design: Additive-to-the-base-template pattern, as above.
+  - name: Tracking
+    diff: Per/A
+    points: 8
+    tags: [Imperium, Deathwatch]
+    lore: >
+      Add to the Battle-Brother's own Tracking 2 points (for 10 total):
+      following unfamiliar xenos quarry across terrain built for another
+      biology, a routine kill-team task per Deathwatch fiction.
+    design: Additive-to-the-base-template pattern, as above.
+  - name: Gesture
+    diff: IQ/E
     points: 4
     tags: [Imperium, Deathwatch]
     lore: >
-      Add to the Battle-Brother's own Tactics 24 points: cross-Chapter
-      kill-team doctrine specifically, on top of the single-Chapter combat
-      doctrine the base template already covers.
-    design: >
-      4 points of Tactics improvement, same additive-to-the-base-template
-      pattern the Hidden Lore (Xenos) line above uses, rather than a
-      second stand-alone Tactics entry on the character sheet.
+      Add to the Battle-Brother's own Gesture 1 point (for 5 total): a
+      kill-team drills a shared battle-sign that has to work across
+      Chapters with no common signing tradition, not just within one
+      Chapter's own squads.
+    design: Additive-to-the-base-template pattern, as above.
+  - name: Soldier
+    diff: IQ/A
+    points: 8
+    tags: [Imperium, Deathwatch]
+    lore: >
+      Add to the Battle-Brother's own Soldier 12 points (for 20 total):
+      Deathwatch field protocols, Watch Fortress procedure and Ordo
+      Xenos liaison work on top of a Marine's own Chapter soldiering.
+    design: Additive-to-the-base-template pattern, as above.
   - name: Guns
     spec: Shotgun
     diff: DX/E
-    points: 4
+    points: 8
     tags: [Imperium, Deathwatch]
     lore: >
       A Deathwatch Marine training on the kill-team's own shotgun and its
       specialist shells, a weapon type the standard Battle-Brother
       template doesn't otherwise train.
-    design: New skill line (the base template has no Guns (Shotgun) entry to add to), Easy difficulty per the framework's own weapon-skill table.
+    design: >
+      New skill line (the base template has no Guns (Shotgun) entry to
+      add to), Easy difficulty per the framework's own weapon-skill
+      table; priced at a full 8 points (not the 1-2 point "familiarity"
+      level) since the shotgun is this add-on's own primary breaching
+      weapon, not a rarely-touched sidearm.
 equipment:
-  - include: "imperium/deathwatch/wargear.yaml#Power Armour, Deathwatch Livery"
+  - include: "imperium/armour/armour.yaml#Power Armour, Mark VII (Aquila Pattern)"
+    name: Power Armour, Deathwatch Livery
+    notes: >
+      Referenced directly from Imperial Armour.eqp rather than chained
+      through Deathwatch Wargear.eqp's own copy of this entry, since this
+      project's build tool does not resolve an include-of-an-include; see
+      Deathwatch Wargear.eqp for the full note on why this is the same
+      suit repainted, not a new one.
   - include: "imperium/deathwatch/wargear.yaml#Boltgun, Stalker Pattern (Deathwatch)"
-    disabled: true
-    notes: Disabled by default; enable in place of the Battle-Brother's own Boltgun, Godwyn Pattern for a stealth-role loadout.
+    equipped: false
+    notes: Not equipped by default; swap in for the Battle-Brother's own Boltgun, Godwyn Pattern for a stealth-role loadout.
   - include: "imperium/deathwatch/wargear.yaml#Deathwatch Shotgun"
-    disabled: true
-    notes: Disabled by default; enable for a close-quarters/breaching loadout.
+    equipped: false
+    notes: Not equipped by default; swap in for a close-quarters/breaching loadout.
   - include: "imperium/deathwatch/wargear.yaml#Xenophase Blade"
-    disabled: true
-    notes: Disabled by default, relic-tier gear; enable only with GM permission in place of the Battle-Brother's own chainsword or combat knife.
+    equipped: false
+    notes: Not equipped by default, relic-tier gear; swap in only with GM permission in place of the Battle-Brother's own chainsword or combat knife.
