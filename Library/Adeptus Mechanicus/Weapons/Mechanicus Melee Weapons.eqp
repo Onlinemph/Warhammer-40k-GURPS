@@ -1,0 +1,1308 @@
+{
+	"version": 5,
+	"rows": [
+		{
+			"id": "eE1SLK9NH3apdOUbW",
+			"description": "Omnissian Axe",
+			"local_notes": "Field toggle and depleted-cell rules as the Imperium Power Sword.\n\nLore: A ceremonial axe carried by senior Tech-Priests as a badge of office and a functional close combat weapon in equal measure, current Codex Adeptus Mechanicus background depicting it wreathed in a disruption field identical in effect to an Astartes or Militarum power weapon - the Cult Mechanicus reveres the technology behind the field as much as it uses the weapon itself.\n\nDesign: Per framework.md's own instruction that a bolter built for the Astartes armoury and one carried by a Sister of Battle are the same weapon with the same numbers, this is mechanically identical to the Imperium Power Axe (sw+3d+2(10) cut field on / sw+2 cut field off, the power-field rule established under Power Sword) rather than a re-derived Mechanicus-specific disruption field - nothing in the lore suggests a Tech-Priest's field works any differently from an Astartes officer's, only that the Cult Mechanicus treats the underlying technology as a sacred mystery rather than standard-issue wargear, which is reflected in cost and legality (LC1, Mechanicus-restricted) rather than a different damage line.",
+			"tags": [
+				"Melee Weapon",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"tech_level": "11",
+			"legality_class": "1",
+			"base_value": "6000",
+			"base_weight": "6 lb",
+			"weapons": [
+				{
+					"id": "wjlv3ctKhJ2UfRM6r",
+					"sv": 1,
+					"damage": {
+						"type": "cut",
+						"st": "sw",
+						"base": "3d+2",
+						"armor_divisor": 10
+					},
+					"reach": "1",
+					"parry": "-1",
+					"strength": "12",
+					"usage": "Field on",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Axe/Mace"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Flail"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Two-Handed Axe/Mace"
+							},
+							"modifier": -3
+						}
+					]
+				},
+				{
+					"id": "wNpEEYMa3mOtxSE3q",
+					"sv": 1,
+					"damage": {
+						"type": "cut",
+						"st": "sw",
+						"base": "2"
+					},
+					"reach": "1",
+					"parry": "-1",
+					"strength": "12",
+					"usage": "Field off (as plain axe)",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Axe/Mace"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Flail"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Two-Handed Axe/Mace"
+							},
+							"modifier": -3
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eRutpOgQVrMkd21y0",
+			"description": "Omnissian Staff",
+			"local_notes": "This is a powered ritual staff, not a psyker's force stave; the psyker variant belongs to the psychic-gear file, not here.\n\nLore: A two-handed ritual staff carried by Magi and senior Tech-Priests who favour reach and a quarterstaff's defensive profile over a one-handed blade; depicted throughout current Codex Adeptus Mechanicus background as functionally interchangeable with the Omnissian Axe in combat effect, the choice between the two being a matter of the individual Tech-Priest's training and station.\n\nDesign: Mechanically identical to the Imperium Power Stave (same power-field rule applied to a two-handed quarterstaff baseline), for the same reason the Omnissian Axe above matches the Power Axe: this project treats the disruption field itself as a fixed, faction-neutral technology once established, so the only things that vary between an Ecclesiarchy Power Stave and this Mechanicus-forged Omnissian Staff are cost, legality and the ritual it's blessed with, not its numbers.",
+			"tags": [
+				"Melee Weapon",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"tech_level": "11",
+			"legality_class": "1",
+			"base_value": "5000",
+			"base_weight": "5 lb",
+			"weapons": [
+				{
+					"id": "wlLLJ33r3i84PCWUk",
+					"sv": 1,
+					"damage": {
+						"type": "cr",
+						"st": "sw",
+						"base": "3d+2",
+						"armor_divisor": 10
+					},
+					"reach": "1,2",
+					"parry": "0",
+					"strength": "10",
+					"usage": "Field on, swing",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Staff"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Polearm"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Spear"
+							},
+							"modifier": -2
+						}
+					]
+				},
+				{
+					"id": "wxI6p-g1pUSOR1tsO",
+					"sv": 1,
+					"damage": {
+						"type": "cr",
+						"st": "thr",
+						"base": "3d+2",
+						"armor_divisor": 10
+					},
+					"reach": "1,2",
+					"parry": "0",
+					"strength": "10",
+					"usage": "Field on, thrust",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Staff"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Polearm"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Spear"
+							},
+							"modifier": -2
+						}
+					]
+				},
+				{
+					"id": "w5eX1nwqQhAhJ0qy-",
+					"sv": 1,
+					"damage": {
+						"type": "cr",
+						"st": "sw",
+						"base": "2"
+					},
+					"reach": "1,2",
+					"parry": "0",
+					"strength": "10",
+					"usage": "Field off",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Staff"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Polearm"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Spear"
+							},
+							"modifier": -2
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eQPFuNRPxjaPsi0qS",
+			"description": "Power Goad",
+			"local_notes": "Lore: A long-handled prod used by Tech-Priests and Magos-overseers to administer correction to servitors, indentured menials and disobedient Kataphron husks; background material treats it as a tool of discipline within the Cult Mechanicus hierarchy rather than a war weapon, closer in spirit to a cattle-prod than to a power weapon.\n\nDesign: Not built from the power-field rule at all, despite the name: framework.md's power-field rule is reserved for genuine disruption-field weapons meant to kill (the Omnissian Axe/Staff above), and nothing in the goad's lore suggests it is meant to. Instead it follows the Imperium Shock Maul/Staff family's own design (a plain thrusting weapon, thr cr, plus a Basic Set HT-roll stun effect layered on top rather than extra damage), at a milder HT-2 rather than the Shock Maul's HT-3, reflecting a tool built to correct rather than to incapacitate outright. TL11 for the internal charge cell; LC2 (Mechanicus/enforcement-tier, matching the framework's Shock Maul bracket) rather than LC1, since this is disciplinary rather than combat-restricted gear.",
+			"tags": [
+				"Melee Weapon",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"tech_level": "11",
+			"legality_class": "2",
+			"base_value": "900",
+			"base_weight": "4 lb",
+			"weapons": [
+				{
+					"id": "wYXHBgXPLcc_Sn8Ib",
+					"sv": 1,
+					"damage": {
+						"type": "cr",
+						"st": "thr"
+					},
+					"reach": "1,2",
+					"parry": "-1",
+					"strength": "8",
+					"usage": "Thrust",
+					"usage_notes": "A hit that does any HP of damage forces the target to roll HT-2 or be stunned (B420), as the Imperium Shock Maul's electro-stun rule at a milder setting - a goad is built to discipline and herd, not to kill.\n",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Spear"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Polearm"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Staff"
+							},
+							"modifier": -2
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "epVYG-ftK7Q19TRHX",
+			"description": "Arc Goad",
+			"local_notes": "Lore: A goad built around the same capacitor-discharge principle as an arc weapon rather than a simple electro-shock cell, used specifically to correct and discipline the Cult Mechanicus's own cybernetic servants - a rogue servitor or an under-performing Kataphron husk - by shocking its internal systems directly rather than merely hurting whatever flesh remains.\n\nDesign: Combines the Power Goad's plain thr cr baseline with the Arc Pistol's own machine-disabling surge rule rather than its raw damage line, since the whole point of this variant is correcting machines, not people: the HT-3 penalty sits at the lower end of the arc-weapon family's escalating penalties (pistol -2, rifle -4, heavy rifle -6), appropriate for a melee-range prod rather than a dedicated ranged weapon. No organic-target stun note is included, unlike the Power Goad or Taser Goad, since an arc discharge's whole design purpose in this project is to be \"weak against flesh,\" per framework.md's arc-weapon anchor.",
+			"tags": [
+				"Melee Weapon",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"tech_level": "11",
+			"legality_class": "2",
+			"base_value": "1400",
+			"base_weight": "5 lb",
+			"weapons": [
+				{
+					"id": "wtnhbRHwy5uL9u2KU",
+					"sv": 1,
+					"damage": {
+						"type": "cr",
+						"st": "thr"
+					},
+					"reach": "1,2",
+					"parry": "-1",
+					"strength": "8",
+					"usage": "Thrust",
+					"usage_notes": "A hit against a machine target (vehicle, servitor, robot, cyborg limb, or a powered-armour suit's servo/sensor systems) forces that target's HT roll at -3 to avoid a short-circuit, exactly as the Adeptus Mechanicus Arc Pistol's surge effect, regardless of whether the raw damage penetrated DR.\n",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Spear"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Polearm"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Staff"
+							},
+							"modifier": -2
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "e4_8LREhhNv0EzVB4",
+			"description": "Taser Goad",
+			"local_notes": "Lore: The organic-focused counterpart to the arc goad, built to incapacitate an unruly menial or a heretic under interrogation rather than to correct machinery; depicted in Inquisitorial and Mechanicus background as standard-issue crowd-control and discipline gear wherever the Cult Mechanicus polices its own.\n\nDesign: Identical thr cr baseline to the Power Goad and Arc Goad, but with the full HT-3 stun setting the Imperium Shock Maul uses (rather than the Power Goad's milder HT-2), reflecting a purpose-built taser rather than a general correctional prod - this project treats \"taser\" and \"shock\" as the same underlying electro-stun mechanic wherever it appears, per the Shock Maul's own precedent, rather than inventing a new effect for each named variant.",
+			"tags": [
+				"Melee Weapon",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"tech_level": "11",
+			"legality_class": "2",
+			"base_value": "1000",
+			"base_weight": "4 lb",
+			"weapons": [
+				{
+					"id": "wj9sW4d8ST3VlHOxx",
+					"sv": 1,
+					"damage": {
+						"type": "cr",
+						"st": "thr"
+					},
+					"reach": "1,2",
+					"parry": "-1",
+					"strength": "8",
+					"usage": "Thrust",
+					"usage_notes": "A hit that does any HP of damage forces the target to roll HT-3 or be stunned (B420), as the Imperium Shock Maul - a stronger organic-targeted jolt than the plain Power Goad's.\n",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Spear"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Polearm"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Staff"
+							},
+							"modifier": -2
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "ege0vRtvNPs2XVwcl",
+			"description": "Taser Lance",
+			"local_notes": "Lore: A lance-length taser weapon mounted on Skitarii Dragoon walker chassis, current Codex Adeptus Mechanicus background depicting a Dragoon's charge as smashing infantry aside with a paralysing jolt rather than a piercing thrust - the walker's own momentum, not the weapon's own field, supplying most of the damage.\n\nDesign: Built on the Imperium Power Lance's own mounted-charge/braced structure (a plain cavalry-lance baseline that gets extra reach and damage only while the mount is moving) but without that entry's power-field bonus, since a taser lance is explicitly an electro-stun weapon, not a disruption-field one: the charge bonus is the mundane momentum bonus alone (thr+2 cr charging, thr+1 cr braced) plus the same HT-3 stun effect as the Taser Goad, reflecting a weapon whose real threat is a walker-speed collision punctuated by a paralysing shock, not a blade that shears through armour. TL11/LC1 (Skitarii walker wargear, one step more restricted than the goads' enforcement-tier LC2).",
+			"tags": [
+				"Melee Weapon",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"tech_level": "11",
+			"legality_class": "1",
+			"base_value": "3500",
+			"base_weight": "12 lb",
+			"weapons": [
+				{
+					"id": "wXpM1mzxNMKpNOdYC",
+					"sv": 1,
+					"damage": {
+						"type": "cr",
+						"st": "thr",
+						"base": "2"
+					},
+					"reach": "1,2*,3*",
+					"parry": "-1",
+					"strength": "11",
+					"usage": "Mounted charge",
+					"usage_notes": "A hit that does any HP of damage forces the target to roll HT-3 or be stunned (B420), as the Taser Goad. The full mounted-charge reach and damage bonus (marked *) requires a Sydonian Dragoon or Ironstrider-class walker chassis (or an actual mount) moving at speed, per the Imperium Power Lance's own charge rule.\n",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Spear"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Polearm"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Staff"
+							},
+							"modifier": -2
+						}
+					]
+				},
+				{
+					"id": "wybV-Vfn1sSYSXvXH",
+					"sv": 1,
+					"damage": {
+						"type": "cr",
+						"st": "thr",
+						"base": "1"
+					},
+					"reach": "1,2",
+					"parry": "-1",
+					"strength": "11",
+					"usage": "Braced (dismounted/stationary)",
+					"usage_notes": "As the mounted charge usage's stun note.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Spear"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Polearm"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Staff"
+							},
+							"modifier": -2
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eaQUeQQ_u10-cvJjT",
+			"description": "Transonic Razor",
+			"local_notes": "The transonic field is a toggle (free action), exactly as an Imperial power weapon's disruption field; a depleted or damaged power cell disables it the same way.\n\nLore: The signature weapon of the Sicarian Ruststalker: a blade vibrating at a resonant frequency current Codex Adeptus Mechanicus background describes as letting it part armour plate almost without resistance, distinct in the fiction from an Astartes or Militarum disruption-field weapon's shearing, disintegrating bite.\n\nDesign: Deliberately not built as another disruption-field weapon under framework.md's power-field rule (Armor Divisor (10)): the lore describes a mechanically different effect - a resonant vibration that shears through matter cleanly along its own weak points, rather than a field that disrupts molecular bonds outright - so this project gives transonic weapons their own, lesser armour divisor (5) rather than reusing the power-field number wholesale, exactly the kind of \"own derivation, not a renamed catalogue entry\" step framework.md's goals call for. The mundane baseline (sw+1 cut, field off) matches the Power Sword's own one-handed-blade baseline, since underneath the resonant emitter this is still an ordinary well-made blade; the field itself adds +2d+1 rather than the Power Sword's +3d+1, one step down, reflecting a genuinely different (and, per Mechanicus doctrine, less spiritually significant) technology rather than a cut-rate power sword. Checked by exact dice distribution at a representative Sicarian Ruststalker ST of 13 (a cybernetically reinforced combat chassis, sw=2d, giving a field-on total of 4d+1(5), avg 15): it penetrates carapace (DR 70, eff. 14) 55.6% of the time - a genuine, if no longer overwhelming, threat to rigid infantry plate under the heavier post-rescale carapace DR, still meaningfully \"parting armour\" more often than not - but only 5.4% of the time against Astartes power armour (DR 100, eff. 20) and effectively never against Terminator plate (DR 200, eff. 40), keeping it a devastating anti-infantry weapon without quietly becoming an Astartes-killer, which no depiction supports. TL11 (advanced but not archeotech - Ruststalkers are current-production Cult Mechanicus wargear) and LC0 (Sicarian-pattern kit, chapter-restricted per the Phosphor Serpenta's own LC0 reasoning).",
+			"tags": [
+				"Melee Weapon",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"tech_level": "11",
+			"legality_class": "0",
+			"base_value": "9000",
+			"base_weight": "5 lb",
+			"weapons": [
+				{
+					"id": "wac4lgU4FzfwMwtui",
+					"sv": 1,
+					"damage": {
+						"type": "cut",
+						"st": "sw",
+						"base": "2d+1",
+						"armor_divisor": 5
+					},
+					"reach": "1",
+					"parry": "0",
+					"strength": "10",
+					"usage": "Field on",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Shortsword"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Broadsword"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Force Sword"
+							},
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Jitte/Sai"
+							},
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Knife"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Saber"
+							},
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Smallsword"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Tonfa"
+							},
+							"modifier": -3
+						}
+					]
+				},
+				{
+					"id": "wdAzkMC_ix0aDbR0R",
+					"sv": 1,
+					"damage": {
+						"type": "cut",
+						"st": "sw",
+						"base": "1"
+					},
+					"reach": "1",
+					"parry": "0",
+					"strength": "10",
+					"usage": "Field off (as plain blade)",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Shortsword"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Broadsword"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Force Sword"
+							},
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Jitte/Sai"
+							},
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Knife"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Saber"
+							},
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Smallsword"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Tonfa"
+							},
+							"modifier": -3
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "e0blrFM6g2fELvGdC",
+			"description": "Transonic Blades",
+			"local_notes": "One blade worn per hand, mirroring the Imperium Lightning Claws' pairing convention: a Ruststalker trained in two-weapon fighting attacks with both under the standard Basic Set dual-weapon rules, with no bespoke \"paired blades\" mechanic added on top.\n\nLore: The alternative Ruststalker loadout to a razor-and-chordclaw pairing: two shorter transonic blades worn as a matched set, background depicting Ruststalkers so equipped as trading the razor's single heavier cut for a faster flurry from both hands, in keeping with their role as an ambush unit that overwhelms a position in a single, brief melee before withdrawing.\n\nDesign: Built the same way the Imperium Lightning Claw is built relative to the Power Sword: a shorter-reach, paired weapon with a smaller field bonus than the family's main blade, applying the Transonic Razor's own +2d+1(5)-over-mundane-baseline logic to a lighter starting weapon (sw-1 cut, one step below the Razor's sw+1, reflecting a shorter blade meant to be worn in pairs) for a total +1d+3 field-on bonus over that baseline (5) armour divisor, unchanged from the Razor's since it's the same underlying resonant technology at a smaller scale. Checked by exact dice distribution at the same representative Ruststalker ST 13 (sw=2d, giving 3d+3(5), avg 13.5): 37.5% against carapace (DR 70, eff. 14), 0.5% against Astartes power armour - a real step below the single Razor's own figures at each tier, matching \"trades the razor's single heavier cut for a faster flurry\" rather than simply doubling its damage output, which this project's Basic Set two-weapon-fighting rules already handle for the \"flurry\" part without a new mechanic. TL11/LC0 as the Transonic Razor.",
+			"tags": [
+				"Melee Weapon",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"tech_level": "11",
+			"legality_class": "0",
+			"base_value": "8500",
+			"base_weight": "4 lb",
+			"weapons": [
+				{
+					"id": "wdhxBCpLw6O_VqV-K",
+					"sv": 1,
+					"damage": {
+						"type": "cut",
+						"st": "sw",
+						"base": "1d+3",
+						"armor_divisor": 5
+					},
+					"reach": "C,1",
+					"parry": "-1",
+					"strength": "9",
+					"usage": "Field on (either blade)",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Shortsword"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Broadsword"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Force Sword"
+							},
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Jitte/Sai"
+							},
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Knife"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Saber"
+							},
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Smallsword"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Tonfa"
+							},
+							"modifier": -3
+						}
+					]
+				},
+				{
+					"id": "wDfcVag-2m7VDY2DC",
+					"sv": 1,
+					"damage": {
+						"type": "cut",
+						"st": "sw",
+						"base": "-1"
+					},
+					"reach": "C,1",
+					"parry": "-1",
+					"strength": "9",
+					"usage": "Field off (either blade)",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Shortsword"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Broadsword"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Force Sword"
+							},
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Jitte/Sai"
+							},
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Knife"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Saber"
+							},
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Smallsword"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Tonfa"
+							},
+							"modifier": -3
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eyD5VRa12ZfgpZE9p",
+			"description": "Chordclaw",
+			"local_notes": "Lore: The Sicarian Ruststalker's off-hand weapon, a piston-driven claw on a retractable cable used to snag, entangle and drag a target off-balance or into range of the Ruststalker's transonic blade, background material consistently depicting it as a grip-and-control tool rather than a killing weapon in its own right.\n\nDesign: Built entirely from GURPS's own existing Grapple/Committed Attack rules (B370, B378) rather than a bespoke \"entangle\" mechanic, since GURPS already has exactly the tool this weapon's lore calls for: a low, deliberately unthreatening raw-damage baseline (thr-1 cr, avg 3.5 at a Sicarian ST 9-13 range, never intended to beat any meaningful DR on its own) paired with an automatic grapple attempt on any hit, reflecting a weapon whose entire purpose is to open a target up for the transonic blade rather than to hurt them directly. TL11/LC0 as the rest of the Sicarian Ruststalker's kit.",
+			"tags": [
+				"Melee Weapon",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"tech_level": "11",
+			"legality_class": "0",
+			"base_value": "4000",
+			"base_weight": "6 lb",
+			"weapons": [
+				{
+					"id": "wXusxcetwZlRMQYiL",
+					"sv": 1,
+					"damage": {
+						"type": "cr",
+						"st": "thr",
+						"base": "-1"
+					},
+					"reach": "1,2*",
+					"parry": "0",
+					"strength": "9",
+					"usage": "Grapple strike",
+					"usage_notes": "A hit (whether or not it does enough damage to matter) lets the wielder immediately attempt a Grapple (B370) as a free follow-up, using this weapon's own skill roll in place of DX for the Quick Contest against the target's ST or DX (target's choice); a target successfully grappled this way suffers the normal -4 to active defenses and must win a Committed Attack (Strong) or an ST-based Escape roll to break free (B378), exactly as an ordinary GURPS grapple. The claw's own reach (marked *) extends to 2 yards only while reeling a grappled target in or holding them at range on the cable; once closed to grip range, treat reach as C for the purposes of the hold.\n",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Spear"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Polearm"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Staff"
+							},
+							"modifier": -2
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eW7vCMN-O-nFxF2q-",
+			"description": "Arc Maul",
+			"local_notes": "Lore: A heavier arc weapon built as a maul rather than a goad or pistol, issued to Skitarii heavy support elements and Mechanicus explorator security teams for close-range work against war machines, cortex-hubs and powered armour rather than infantry - background treats it as a genuine melee weapon rather than the goads' disciplinary tool, but still built around the same \"weak against flesh, strong against machines\" principle as every other arc weapon.\n\nDesign: One step heavier than the Imperium Power Maul's own mundane baseline (sw+2 cr): a built-in coil housing adds enough head mass to justify sw+3 cr even with the field-generation hardware doing none of the cutting, since (per the Arc Pistol/Rifle's own design note) this project does not model the arc-weapon surge as bonus raw damage. The HT-3 surge penalty sits at the goad-and-pistol tier of the family's escalating scale (pistol -2, this maul and the arc goad -3, rifle -4, heavy rifle -6), reflecting a hand weapon's single heavy hit rather than a sustained rifle discharge. Checked by exact dice distribution at a representative Skitarii ST of 12 (sw=2d-1, giving 2d+2, avg 9): 0% penetration against even flak (DR 30) - no real threat to flesh at all, exactly the \"weak against flesh\" half of the family anchor, with its actual combat value entirely in the surge effect against machines. TL11/LC1 (Skitarii combat-issue, one step more restricted than the enforcement-tier goads' LC2).",
+			"tags": [
+				"Melee Weapon",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"tech_level": "11",
+			"legality_class": "1",
+			"base_value": "2200",
+			"base_weight": "6 lb",
+			"weapons": [
+				{
+					"id": "wyqKdVJ7NM92RjQqK",
+					"sv": 1,
+					"damage": {
+						"type": "cr",
+						"st": "sw",
+						"base": "3"
+					},
+					"reach": "1",
+					"parry": "-1",
+					"strength": "9",
+					"usage": "Swing",
+					"usage_notes": "As the Arc Pistol's surge note: a hit against a machine target (vehicle, servitor, robot, cyborg limb, or powered-armour system) forces that target's HT roll at -3 to avoid a short-circuit, regardless of whether the raw damage penetrated DR.\n",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Axe/Mace"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Flail"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Two-Handed Axe/Mace"
+							},
+							"modifier": -3
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eF-yi12FWaYfDXL_B",
+			"description": "Electroleech Stave",
+			"local_notes": "This entry covers only the physical stave and its built-in electro-stun charge. Current background credits a Fulgurite Electro-Priest's own bio-electric implants (the \"Flesh is Weak\" doctrine and its associated grafts) with letting a charged Electro-Priest turn a hit from this weapon into something far more lethal than the stave's own listed damage - that capability is a character-level trait, not a property of the stave itself, and belongs in a traits file rather than here, per the same separation of concerns this project already applies to the Storm Shield's force-field component and the Blessed Blade's consecration.\n\nLore: The Fulgurite Electro-Priest's iconic weapon: a metal-shod stave built to conduct and discharge massive current into whatever it strikes, current Codex Adeptus Mechanicus background describing Electro-Priests as capable of frying a target to component ash when fully charged - a reputation this project attributes chiefly to the Electro-Priest's own bio-electric physiology rather than to the stave as a mundane object.\n\nDesign: Built on the Imperium Power Stave/Shock Staff's own quarterstaff baseline (sw+2 cr/thr+2 cr, reach 1,2) with the electro-stun note bumped one step past the Shock Staff's own HT-3 to HT-4, reflecting a purpose-built high-current weapon rather than a simple riot tool - but deliberately not given the Power Stave's disruption-field damage bonus, since nothing in the lore suggests the stave itself is a power weapon in the framework.md sense; the devastating \"fries a man to ash\" reputation instead belongs, as the notes above explain, to the Electro-Priest's own trait-level physiology (the \"Flesh is Weak\" implants), keeping this equipment entry an honestly modest metal stave with a strong stun charge, the same way the Storm Shield's physical component is \"just\" a very large plate until its trait-level force field is added on top. TL11 for the charge cell; LC1 (Cult Mechanicus cultist-tier wargear, one step more restricted than the general-issue goads).",
+			"tags": [
+				"Melee Weapon",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"tech_level": "11",
+			"legality_class": "1",
+			"base_value": "1800",
+			"base_weight": "6 lb",
+			"weapons": [
+				{
+					"id": "wTEaEUu23XJFjAn90",
+					"sv": 1,
+					"damage": {
+						"type": "cr",
+						"st": "sw",
+						"base": "2"
+					},
+					"reach": "1,2",
+					"parry": "0",
+					"strength": "10",
+					"usage": "Swing",
+					"usage_notes": "A hit that does any HP of damage forces the target to roll HT-4 or be stunned (B420), a heavier jolt than the Imperium Shock Staff's HT-3.\n",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Staff"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Polearm"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Spear"
+							},
+							"modifier": -2
+						}
+					]
+				},
+				{
+					"id": "wF-nDMEO0e1IuRGj1",
+					"sv": 1,
+					"damage": {
+						"type": "cr",
+						"st": "thr",
+						"base": "2"
+					},
+					"reach": "1,2",
+					"parry": "0",
+					"strength": "10",
+					"usage": "Thrust",
+					"usage_notes": "As the swing usage above.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Staff"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Polearm"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Spear"
+							},
+							"modifier": -2
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "emHSX2cjKCHpblRCv",
+			"description": "Hydraulic Claw",
+			"local_notes": "Slow and clumsy in a defensive sense, as the Imperium Power Fist: cannot be used to Feint, and the -2 parry reflects the actuator's poor reaction speed compared to a natural limb.\n\nLore: A heavy mechanical grasping claw built for prying open bulkheads and hauling wreckage, carried by some Skitarii and Mechanicus combat-menials as an improvised or secondary crushing weapon when a proper melee weapon isn't at hand; background material is consistent that it is fundamentally an industrial tool pressed into service rather than a dedicated war-weapon.\n\nDesign: Deliberately not built on the power-field rule or given any armour divisor at all, unlike the Power Fist it superficially resembles: the Power Fist's whole design note explains that its Armor Divisor (10) comes from an internal disruption field, and nothing in the hydraulic claw's lore or name suggests one - this is pure mechanical leverage, hydraulics compressing rather than a field disrupting, so it stays a flat thr+3d cr with no divisor, following the same \"own derivation, not a renamed catalogue entry\" principle the Power Fist's own design note sets out. Checked by exact dice distribution at a representative Skitarii/Sicarian ST of 14 (thr=1d+2, giving 4d+2 cr, avg 16): it crushes an unarmoured target outright but 0% of hits get through even flak (DR 30) under the current, much heavier post-rescale flak anchor, let alone carapace (DR 70) - a real threat only to unarmoured infantry and light material (matching its lore role prying open bulkheads), exactly what \"an industrial tool, not a war weapon\" should mean mechanically. TL11/LC1.",
+			"tags": [
+				"Melee Weapon",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"tech_level": "11",
+			"legality_class": "1",
+			"base_value": "3500",
+			"base_weight": "25 lb",
+			"weapons": [
+				{
+					"id": "wIDiFDIXMCQscCkCL",
+					"sv": 1,
+					"damage": {
+						"type": "cr",
+						"st": "thr",
+						"base": "3d"
+					},
+					"reach": "C",
+					"parry": "-2",
+					"strength": "13",
+					"usage": "Crush",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": 0
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Brawling"
+							}
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eIti12UNmgbkQNiP0",
+			"description": "Servo-arm",
+			"local_notes": "Primarily a repair and maintenance tool (its actual function - fine manipulation, welding and heavy lifting for field repairs - is gear, not a weapon, and belongs in a Mechanicus gear file rather than here); this entry covers only its use as an improvised crushing weapon in a pinch, the way the Imperium Entrenching Tool is priced and statted as a weapon despite being a digging implement first.\n\nLore: Every Tech-Priest's servo-arm - the heavy mechanical limb mounted over one shoulder for repair work - is occasionally shown in Black Library fiction and Codex background swatting an attacker aside or crushing a skull when a Tech-Priest is caught without a proper weapon, always framed as an improvised, clumsy use of a tool built for an entirely different purpose.\n\nDesign: Follows the Imperium Entrenching Tool's own precedent exactly: a mundane tool that is \"already priced and statted as [a weapon], no further penalty needed when used as intended,\" at a correspondingly heavy -3 parry (worse than the Power Fist's -2, since the arm is built for delicate manipulation and heavy static lifting, not for reacting quickly in a fight) and reach C,1 for its long but slow reach. The listed thr+2 cr and ST 10 describe the servo-motor's own modest crushing assist over an unaugmented Tech-Priest's own thrust, not a combat-grade actuator - this is not the Power Fist's disruption-field gauntlet, and does not pretend to threaten anything beyond an unarmoured target. TL11 for the servo-motor itself; LC2 since it is general Mechanicus tech-adept gear rather than Skitarii combat-issue.",
+			"tags": [
+				"Melee Weapon",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"tech_level": "11",
+			"legality_class": "2",
+			"base_value": "2200",
+			"base_weight": "20 lb",
+			"weapons": [
+				{
+					"id": "wStrEH1hvvrxVwBLu",
+					"sv": 1,
+					"damage": {
+						"type": "cr",
+						"st": "thr",
+						"base": "2"
+					},
+					"reach": "C,1",
+					"parry": "-3",
+					"strength": "10",
+					"usage": "Crush",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": 0
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Brawling"
+							}
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eakadOiAM_BmpNy1m",
+			"description": "Mechadendrite, Combat Tip",
+			"local_notes": "This entry is the weapon fitting only - a hardened, piston-driven puncturing spike or hooked blade swapped onto a mechadendrite's mount. The mechadendrite limb itself (an Extra Arm with appropriate reach/DX limitations) is a trait, not equipment, and is defined in a traits file by the traits agent, not here; this item exists so that file's Extra Arms trait has a concrete weapon profile to plug into when a Tech-Priest chooses a combat tip over a manipulator claw or tool interface.\n\nLore: Many Tech-Priests carry one mechadendrite fitted with a combat-capable tip rather than a purely utilitarian manipulator or tool head, background material depicting this as an option chosen by Tech-Priests who expect to see combat (Enginseers and Secutors especially) rather than as universal Mechanicus practice.\n\nDesign: A light, awkward weapon by design: reach C,1 and a poor -2 parry reflect a limb built primarily for fine manipulation rather than combat, with min ST 8 and thr+1 imp describing only the piston-driven spike's own bite, not any augmentation of the wielder's own body (that augmentation, if any, lives in the Extra Arms trait's own ST value, not here). No armour divisor or power field: this is a mundane hardened spike, one clear step below any of the dedicated melee weapons in this file, existing to give a baseline \"what does a combat mechadendrite actually do in a fight\" answer rather than to be anyone's primary weapon. TL11/LC1.",
+			"tags": [
+				"Melee Weapon",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"tech_level": "11",
+			"legality_class": "1",
+			"base_value": "1200",
+			"base_weight": "4 lb",
+			"weapons": [
+				{
+					"id": "wECnMm7LCs75Q7oY8",
+					"sv": 1,
+					"damage": {
+						"type": "imp",
+						"st": "thr",
+						"base": "1"
+					},
+					"reach": "C,1",
+					"parry": "-2",
+					"strength": "8",
+					"usage": "Thrust",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Spear"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Polearm"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Staff"
+							},
+							"modifier": -2
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eRKANoR5z43fYk8Pr",
+			"description": "Kataphron Arc Claw",
+			"local_notes": "Lore: The integral close-combat claw of the Kataphron Destroyer and Breacher war-forms, current Codex Adeptus Mechanicus background describing it crushing infantry and light structures alike while its built-in arc discharge shorts out anything electronic it grips - combining raw hydraulic force with the same anti-machine principle as the Mechanicus's smaller arc weapons.\n\nDesign: Combines the Hydraulic Claw's mundane, no-divisor crushing design (a huge hydraulic ram, not a disruption field, per that entry's own reasoning) with the Arc Maul's machine-disabling surge effect at the top of the family's escalating HT-penalty scale (-6, matching the Heavy Arc Rifle's own largest jolt), since a chassis this size carries a proportionally larger capacitor. Checked by exact dice distribution at the Kataphron chassis's own ST of 20 (thr=2d, giving 8d cr, avg 28): it crushes an unarmoured target outright and still gets through flak (DR 30, eff. 30) 30.5% of the time - a real threat even under the heavier post-rescale flak anchor, reflecting the sheer mass behind a Kataphron-scale blow - but, matching the Hydraulic Claw's own reasoning, 0% of hits get through carapace (DR 70) or better with no armour divisor applied - the claw's real threat to anything well-armoured or mechanical is the surge effect, not its raw crushing force, keeping the Kataphron's actual anti-vehicle work with its ranged weapons (the Heavy Grav-cannon and Eradication Ray in the ranged weapons file) rather than this claw, exactly as current Codex background depicts a Kataphron's loadout. TL12 (a purpose-built cybernetic war-form component, not general Skitarii issue) and LC0 (Kataphron husks are Cult Mechanicus-restricted war material in their own right).",
+			"tags": [
+				"Melee Weapon",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"tech_level": "12",
+			"legality_class": "0",
+			"base_value": "8000",
+			"base_weight": "60 lb",
+			"weapons": [
+				{
+					"id": "wbBkjn1Jzo4jjPoS_",
+					"sv": 1,
+					"damage": {
+						"type": "cr",
+						"st": "thr",
+						"base": "6d"
+					},
+					"reach": "C,1",
+					"parry": "-3",
+					"strength": "20",
+					"usage": "Crush",
+					"usage_notes": "As the Arc Maul's surge note, at a heavier HT-6 penalty for a qualifying machine target hit by this weapon's much larger built-in capacitor discharge - a Kataphron's own reactor feeds far more current into the strike than a hand-held arc weapon's cell ever could.\n",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": 0
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Brawling"
+							}
+						}
+					]
+				}
+			],
+			"quantity": 1
+		}
+	]
+}

@@ -67,11 +67,28 @@ GURPS real-world baseline for scale: a modern soft vest with ceramic plate is ro
 | Mesh | 36, flexible | Hive-noble and assassin wear. Flexible: blunt trauma applies. |
 | Carapace | 70 | User's figure. Rigid plate, near-immune to las (lasgun 0.6%, long-las 6%); a hellgun (82%) or bolter (79%) goes through. |
 | Adepta Sororitas power armour | 85 | Raised with carapace so power armour stays above it; lighter than Astartes plate. A bolter penetrates 45%. |
-| Astartes power armour (Mk VII baseline) | 100 | Ignores las and stub fire. A bolter penetrates about one shot in seven. Limbs a little lower. Eye lenses DR 50. Marks vary ±10–15 around this. |
+| Astartes power armour (Mk VII baseline) | 100 | Ignores las and stub fire. A bolter penetrates about one shot in seven. Limbs a little lower. Eye lenses DR 40. Marks vary ±10–15 around this. |
 | Mk X Gravis | 130 | Between power armour and Terminator plate. |
 | Tactical Dreadnought (Terminator) | 200 | Ignores bolters. Plasma, lascannon, power fist and thunder hammer still kill. |
 
 Limbs are usually a few DR below torso. Specify every location explicitly.
+
+### Weak points and eye lenses
+
+Massed fire brings down heavily armoured targets in the fiction, so armour has gaps.
+
+**Weak Points.** Every armour piece has a Weak Points rating (3–9, a 3d target). When a hit on that armour fails to penetrate, roll 3d: on the rating or less the hit found a joint, seal or vision slit, and DR is halved against it (as for chinks in armour, B400, but by chance rather than aim). Recompute penetration with the halved DR.
+
+| Armour | Weak Points | Lasgun hit penetrates (per hit) | 30 lasgun hits, chance of at least one |
+|---|---|---|---|
+| Flak | 7 | (always penetrates anyway) | |
+| Carapace, Guard pattern | 5 | 4.9% | 78% |
+| Carapace, Tempestus/Arbites/Vratine | 4 | 2.3% | 51% |
+| Sororitas power armour | 5 | | |
+| Astartes Mk VII | 4 | 0.8% | 21% |
+| Terminator, Auramite, Allarus | 3 | 0 (bolter vs Terminator 0.07%) | |
+
+**Eye lenses.** Helmet eye lenses and visors have much lower DR than the rest of the helmet: carapace visors 20, Sororitas 30, Astartes 40, Terminator and Auramite 60, Allarus 70. A hit through an eye counts as a brain hit for piercing, impaling and tight-beam burning (las) damage (B399). House rule: when a random hit location comes up face, roll 1d; on a 1 the hit struck an eye lens instead (about 0.5% of random hits). A lasgun that finds an Astartes lens penetrates 81% of the time.
 
 ### Personal force fields (regenerating shields)
 

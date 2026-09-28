@@ -1,0 +1,444 @@
+{
+	"version": 5,
+	"id": "BEV7Ab6ThwDJtu8cW",
+	"notes": "A field Enginseer: an ordained Tech-Priest sent out from a Forge World or a Titan Legion's Adeptus Mechanicus detachment to keep an Imperial Guard regiment's vehicles, weapons, and vox-network running, rather than a combat specialist in their own right (that's the Skitarii templates) or a senior Magos directing a whole forge (Magos.gct). Point math: ST 11 (+10), DX 12 (+40), IQ 13 (+60), HT 11 (+10) = 120, plus Will +1 (+5) = 125; advantages +128; disadvantages -55; skills +57. Total 255 points, inside the ~250-350 band this project's brief sets for the Enginseer rank. Augmetics and faith traits are pulled in with `include` from Adeptus Mechanicus/Traits/Augmetics and the Cult Mechanicus.adq rather than copied, per docs/data-format.md.\n",
+	"traits": [
+		{
+			"id": "tKg8IJ4WLzy7MZoZM",
+			"name": "ST",
+			"local_notes": "Lore: An Enginseer is not chosen for physical prowess; most of that comes from the Servo-Arm instead.\n\nDesign: ST 11 (+1), 10 pts/level (B15).",
+			"tags": [
+				"Attribute"
+			],
+			"base_points": 10
+		},
+		{
+			"id": "tYePRa8jA-J-j_lOO",
+			"name": "DX",
+			"local_notes": "Lore: Steady hands for delicate repair work and enough reflex to not die the first time a Guardsman's line breaks.\n\nDesign: DX 12 (+2), 20 pts/level (B15).",
+			"tags": [
+				"Attribute"
+			],
+			"base_points": 40
+		},
+		{
+			"id": "tnkrD8-LlMQaBsiXj",
+			"name": "IQ",
+			"local_notes": "Lore: A working Tech-Priest is, at minimum, a genuinely capable engineer and archivist.\n\nDesign: IQ 13 (+3), 20 pts/level (B15).",
+			"tags": [
+				"Attribute"
+			],
+			"base_points": 60
+		},
+		{
+			"id": "t6CbQ2wVk1iRzwozU",
+			"name": "HT",
+			"local_notes": "Lore: Field postings mean irregular meals and worse sleep, offset only partly by augmetic upkeep.\n\nDesign: HT 11 (+1), 10 pts/level (B14).",
+			"tags": [
+				"Attribute"
+			],
+			"base_points": 10
+		},
+		{
+			"id": "t5VLoA-LmwWJxdU2s",
+			"name": "Will",
+			"local_notes": "Lore: Doctrinal certainty steadies the nerve past what raw intellect alone would give.\n\nDesign: Will 14 (+1 above the IQ-derived default of 13), 5 pts/level (B16).",
+			"tags": [
+				"Attribute"
+			],
+			"base_points": 5
+		},
+		{
+			"id": "txwd3Q_dc2LP0jurH",
+			"name": "Fit",
+			"reference": "B55",
+			"local_notes": "Lore: Field service keeps an Enginseer from the sedentary decline of a forge-bound archivist.\n\nDesign: Basic Set Fit (B55), 5 points.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Imperium"
+			],
+			"base_points": 5
+		},
+		{
+			"id": "tZ6OvddEH0kCaH2yk",
+			"name": "Cranial Circuitry",
+			"local_notes": "Lore: A basic subcutaneous data-port and skull-mounted junction box, common to nearly every ordained Tech-Priest: the hardware prerequisite for plugging into a standard Mechanicus cogitator terminal or picter-feed, rather than any enhancement to the mind behind it.\n\nDesign: 1-point Perk (B9): waives the unfamiliarity penalty for operating a Mechanicus-standard terminal, by direct analogy with how Black Carapace (Imperium/Traits/Astartes Gene-Seed.adq) is priced as the interface hardware rather than the capability it plugs into.",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Imperium",
+				"Adeptus Mechanicus",
+				"Perk"
+			],
+			"base_points": 1
+		},
+		{
+			"id": "tt4VRvQzIrmX1Un2w",
+			"name": "Cortex Implant, Logis Pattern",
+			"local_notes": "Eidetic Memory; Lightning Calculator.\n\nLore: A cogitator wafer grafted directly to the parietal cortex, banking perfect recall of anything the adept has read or witnessed and running arithmetic as fast as a slate abacus — the piece of kit behind a Tech-Priest's habit of reciting exact figures and quoting obscure STC clauses from memory.\n\nDesign: Eidetic Memory (B51, 5) + Lightning Calculator (B66, 2) = 7 points.",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"base_points": 7
+		},
+		{
+			"id": "tw8N9zPDZhqrrUBtf",
+			"name": "Respirator Plugs (Filtration Lungs)",
+			"reference": "B55",
+			"local_notes": "Lore: Grille-covered intake valves set into the throat or chest, scrubbing forge smog, promethium fumes, and toxic industrial atmosphere before it reaches the lungs — near-universal among Mechanicus adepts who spend their working lives on a forge-world's surface.\n\nDesign: Basic Set Filter Lungs (B55), 5 points.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"base_points": 5
+		},
+		{
+			"id": "tPJKcbS_8y-Ufz-Lb",
+			"name": "Augmetic Arm, Combat Pattern",
+			"reference": "B40",
+			"local_notes": "Arm ST +6 (lifting and thrust/swing damage with this arm only); DR 6 on this arm only.\n\nLore: Enginseers are drawn from the ranks of the Cult Mechanicus after some years of service; an augmetic arm lost to accident or willingly offered up as an act of devotion is common enough by this rank that it is included in the baseline rather than left optional.\n\nDesign: Arm ST +6 (B40, 5/level, 30) + DR 6, Partial (single limb) -60% (6x5=30, x0.4=12) = 42 points.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Imperium",
+				"Adeptus Mechanicus",
+				"Skitarii"
+			],
+			"base_points": 42
+		},
+		{
+			"id": "t8PvIxjHZ5Y0OQmv1",
+			"name": "Servo-Arm",
+			"reference": "B53",
+			"local_notes": "Extra Arm; Lifting ST +8; Striking ST +3; Payload 1.\n\nLore: The heavy, back-mounted tool-arm carried by Enginseers and Techmarines: strong enough to tear open a sealed hatch or wrench a fused component free, and — as more than one heretic has learned the hard way — strong enough to crush a skull if its bearer chooses.\n\nDesign: Extra Arm (B53, 10) + Lifting ST +8 (B65, 3/level, 24) for heavy lifting/grappling work + Striking ST +3 (B88, 5/level, 15) for its use as an improvised weapon + Payload 1 (B74, 1) for a small tool magazine = 50 points.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"base_points": 50
+		},
+		{
+			"id": "tnXDafN442KDoCm5i",
+			"name": "Noospheric Link",
+			"reference": "B91",
+			"local_notes": "Short-to-medium range wireless data-link to the Cult Mechanicus' noosphere: other Noospheric Link-bearing adepts and compatible cogitators/machine spirits only.\n\nLore: A subcutaneous vox-and-data transceiver that lets a Tech-Priest read and post to the layered, half-mystical data-cloud the Mechanicus calls the noosphere — status runes, binharic liturgy, and tactical chatter overlaid on the world for anyone plugged in, and gibberish static to anyone who isn't.\n\nDesign: Basic Set Telecommunication (Radio type, B91, 10 points) with the Racial limitation (B91, -20%, restricted to others who share the trait — here, other noosphere-linked adepts and machine spirits): 10 x 0.8 = 8 points. Pairs with the Language (Binharic) skill (Adeptus Mechanicus/Skills/Mechanicus Skills.skl) for the liturgical cant spoken over the link; the link itself is the hardware, the language is the learned code riding on it.",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"base_points": 8
+		},
+		{
+			"id": "tIcpgySh5y9QjcBiK",
+			"name": "Mechanicus Rank",
+			"reference": "B29",
+			"local_notes": "Levels: 1 Skitarii Alpha/menial overseer, 2-3 Enginseer, 4-5 Magos, 6-7 Archmagos, 8 Fabricator-Locum, 9 Fabricator-General of a Forge World.\n\nLore: An ordained Enginseer, several years past their Skitarii-adjacent novitiate but well below a Magos.\n\nDesign: Basic Set Rank (B29), 5 points/level, by direct analogy with this project's existing Military Rank and Religious Rank entries (Imperium/Traits/Imperial Traits.adq).",
+			"tags": [
+				"Advantage",
+				"Social",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"points_per_level": 5,
+			"can_level": true,
+			"levels": 2,
+			"max_levels": 9
+		},
+		{
+			"id": "twDI_U7Up0SawS_NE",
+			"name": "Disciplines of the Cult Mechanicus",
+			"reference": "B127",
+			"local_notes": "As Code of Honor: obey the ritual forms and chain of command of the Priesthood, never share proscribed knowledge outside sanctioned channels, never act against a superior adept's direct instruction without Martian sanction.\n\nLore: The Cult Mechanicus runs on ritual precision and a rigid hierarchy of knowledge: an adept who improvises outside sanctioned procedure, or who shares forbidden data with the unworthy, has broken discipline in a way their peers will report on sight.\n\nDesign: Basic Set Code of Honor (B127), moderate severity, -10 — the same cost this project already uses for Code of Honor (Codex Astartes) in Imperium/Traits/Astartes Gene-Seed.adq.",
+			"tags": [
+				"Disadvantage",
+				"Mental",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"base_points": -10
+		},
+		{
+			"id": "tOYYoiN5uBNWYwcPC",
+			"name": "Duty (Adeptus Mechanicus)",
+			"reference": "B133",
+			"local_notes": "An Enginseer's posting to a specific Guard regiment or garrison is binding and long-term, but not \"almost always hazardous\" the way front-line Guard service is.\n\nLore: A sworn Tech-Priest, Enginseer, or Skitarii answers first to their Forge World and its Fabricator-General, not to any Guard officer or Administratum functionary they happen to be attached to — a binding, frequent, but not universally life-threatening obligation (unlike a Guardsman's), since a Mechanicus posting is at least as often archival or industrial as it is a battlefield one.\n\nDesign: Basic Set Duty (B133), fairly frequent but not \"almost always hazardous\" the way Duty (Astra Militarum) is (Imperium/Traits/ Imperial Traits.adq) — pegged one tier below that entry, at -10, to reflect the Priesthood's broader range of postings. A Skitarii or a field-attached Enginseer/Techmarine should reasonably use -15 instead; -10 is this template's baseline for a workshop- or forge-based adept.",
+			"tags": [
+				"Disadvantage",
+				"Social",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"base_points": -10
+		},
+		{
+			"id": "tF_fl6lKnUcKDlnR0",
+			"name": "Distrust of Flesh",
+			"reference": "B140",
+			"local_notes": "Lore: Cult doctrine holds that unaugmented flesh is weak, corruptible, and an obstacle to the Machine God's perfection; many adepts, especially the more heavily augmented, come to regard baseline humans (even loyal Imperial citizens) with the same doctrinal contempt other Imperial institutions reserve for mutants or heretics.\n\nDesign: Basic Set Intolerance (B140), broad-category cost, -10 — built the same way this project's existing Intolerance (Xenos)/(Mutants) entries are (Imperium/Traits/Imperial Traits.adq).",
+			"tags": [
+				"Disadvantage",
+				"Mental",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"base_points": -10
+		},
+		{
+			"id": "tMcWjV-3UBOpfquPU",
+			"name": "Dependency (Maintenance Rites and Sacred Unguents)",
+			"reference": "B131",
+			"local_notes": "Common substance (sanctified oils, incense, replacement components), needed roughly daily; 1d damage if a maintenance cycle is missed entirely.\n\nLore: A body carrying real augmetic load needs its joints oiled, its cabling checked, and its power cells topped up on a strict ritual schedule, or it seizes, shorts, or bleeds power — a problem the Cult Mechanicus dresses in liturgy, but a real, physical maintenance dependency underneath.\n\nDesign: An own-estimate application of Basic Set Dependency's guidelines (B131): a substance that's common and easy to obtain anywhere the Mechanicus has a presence, needed about daily, doing moderate (1d) damage if missed entirely. -10 points; a specific character with much rarer parts (an isolated relic-tech Servitor, say) should cost this disadvantage higher per the same table.",
+			"tags": [
+				"Disadvantage",
+				"Physical",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"base_points": -10
+		},
+		{
+			"id": "t0f3WYII9XqqMfvgd",
+			"name": "Social Stigma (Heavily Augmented)",
+			"reference": "B155",
+			"local_notes": "Lore: Past a certain point of visible augmetic replacement, ordinary Imperial citizens stop reading a Tech-Priest as a person wearing machinery and start reading them as a machine wearing a person's shape — unease and minor deference-avoidance rather than outright hostility, but real, and consistent with how Black Library repeatedly writes civilian reactions to a fully-vested Magos.\n\nDesign: Basic Set Social Stigma (B155), minor-category cost, -5. A GM running a near-fully-mechanical Archmagos with almost no flesh left may reasonably price this at the \"Monster\" tier (-15) instead; this entry covers the ordinary working Tech-Priest or Skitarii.",
+			"tags": [
+				"Disadvantage",
+				"Social",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"base_points": -5
+		},
+		{
+			"id": "txqoywAjLYieRdtwP",
+			"name": "Mutters Litanies Over Balky Machinery",
+			"local_notes": "Lore: The line between diagnostics and prayer is not one an Enginseer draws.\n\nDesign: Quirk (B9), roleplaying flag only.",
+			"tags": [
+				"Quirk",
+				"Imperium"
+			],
+			"base_points": -1
+		},
+		{
+			"id": "tw91g_digXImK0WOY",
+			"name": "Keeps a Ledger of Every Component Ever Replaced",
+			"local_notes": "Lore: Meticulous record-keeping is doctrine, not merely habit.\n\nDesign: Quirk (B9), roleplaying flag only.",
+			"tags": [
+				"Quirk",
+				"Imperium"
+			],
+			"base_points": -1
+		}
+	],
+	"skills": [
+		{
+			"id": "sVHhnFKf_nIOwSSX3",
+			"name": "Engineer",
+			"local_notes": "Lore: Field repair and modification of vehicles, weapons, and fortifications; a Guard regiment's main reason to have an Enginseer attached at all.\n\nDesign: IQ+2 (15) for 12 points, Hard (B170).",
+			"tags": [
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"specialization": "Combat Engineering",
+			"difficulty": "iq/h",
+			"points": 12
+		},
+		{
+			"id": "suapr2uivfOEkPbfi",
+			"name": "Mechanic",
+			"local_notes": "Lore: Keeping Chimeras, Leman Russ tanks, and Sentinels running between engagements.\n\nDesign: IQ+2 (15) for 8 points, Average.",
+			"tags": [
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"specialization": "Ground Vehicles",
+			"difficulty": "iq/a",
+			"points": 8
+		},
+		{
+			"id": "sxzQi87zfzn_yP7y0",
+			"name": "Armoury",
+			"local_notes": "Lore: Servicing lasguns and bolters at the standard, sanctioned Imperial TL.\n\nDesign: IQ+0 (13) for 2 points, Average.",
+			"tags": [
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"specialization": "Small Arms",
+			"difficulty": "iq/a",
+			"points": 2
+		},
+		{
+			"id": "svx58T58K0BoXV1OC",
+			"name": "Electronics Repair",
+			"local_notes": "Lore: Vox-network upkeep, a constant field task.\n\nDesign: IQ+0 (13) for 4 points, Hard.",
+			"tags": [
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"specialization": "Communications",
+			"difficulty": "iq/h",
+			"points": 4
+		},
+		{
+			"id": "s5cBgbk3ybts6VZlC",
+			"name": "Theology",
+			"local_notes": "Lore: The Motive Force catechisms and binary liturgies; see Imperium/Skills/Imperial Skills.skl.\n\nDesign: IQ+1 (14) for 8 points, Hard.",
+			"tags": [
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"specialization": "Cult Mechanicus",
+			"difficulty": "iq/h",
+			"points": 8
+		},
+		{
+			"id": "s-WjX84BCAI0oY9dO",
+			"name": "Hidden Lore",
+			"local_notes": "Lore: Recognising STC fragments and Dark Age relics; see Imperium/Skills/Imperial Skills.skl.\n\nDesign: IQ+1 (14) for 4 points, Average.",
+			"tags": [
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"specialization": "Archeotech",
+			"difficulty": "iq/a",
+			"points": 4
+		},
+		{
+			"id": "s7827i6ex7WatCG7g",
+			"name": "Language",
+			"reference": "B23",
+			"local_notes": "Lore: The Cult Mechanicus' machine-cant: a clipped, heavily compressed binary/logical language spoken and sub-vocalized between adepts, servitors, and machine spirits alike, ranging from a few ritual phrases a menial picks up to the dense technical liturgy a Magos trades with another Magos.\n\nDesign: IQ+1 (14) for 4 points, Average — comfortably fluent in the liturgical cant.",
+			"tags": [
+				"Mental",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"specialization": "Binharic",
+			"difficulty": "iq/a",
+			"points": 4
+		},
+		{
+			"id": "sba07-n93oMPP6IrN",
+			"name": "Savoir-Faire",
+			"reference": "B218",
+			"local_notes": "Lore: Court protocol inside the Priesthood: correct forms of address for a Magos or Archmagos, ritual precedence between Forge Worlds and Explorator fleets, and which questions are simply never asked of a superior adept. Not attested under this exact name in the fiction, but the Mechanicus is consistently shown (across Black Library and codex background) to run on a court culture at least as rigid as the Ecclesiarchy's own.\n\nDesign: IQ+0 (13) for 1 point, Easy.",
+			"tags": [
+				"Mental",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"specialization": "Adeptus Mechanicus",
+			"difficulty": "iq/e",
+			"defaults": [
+				{
+					"type": "iq",
+					"modifier": -4
+				}
+			],
+			"points": 1
+		},
+		{
+			"id": "s0hHJwzJKzue-kci0",
+			"name": "First Aid",
+			"local_notes": "Lore: Battlefield first aid, more habit from working around wounded troopers than a specialty.\n\nDesign: IQ+0 (13) for 1 point, Easy.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "iq/e",
+			"points": 1
+		},
+		{
+			"id": "syT7suSxrtanyh8nU",
+			"name": "Research",
+			"local_notes": "Lore: Archive and STC-fragment cross-referencing.\n\nDesign: IQ+0 (13) for 2 points, Average.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "iq/a",
+			"points": 2
+		},
+		{
+			"id": "sU-A3LDUFKBOX5VFO",
+			"name": "Current Affairs",
+			"reference": "B186",
+			"local_notes": "Lore: What passes for Imperium-wide news: Munitorum bulletins, Ecclesiarchy pronouncements, and whatever rumours of war and heresy filter down through a thousand relay stations, usually months stale and already propaganda by the time they arrive.\n\nDesign: IQ+0 (13) for 1 point, Easy.",
+			"tags": [
+				"Mental",
+				"Knowledge",
+				"Imperium"
+			],
+			"specialization": "Imperium",
+			"difficulty": "iq/e",
+			"defaults": [
+				{
+					"type": "iq",
+					"modifier": -4
+				}
+			],
+			"points": 1
+		},
+		{
+			"id": "sBJX4tk502oQDxzNC",
+			"name": "Guns",
+			"local_notes": "Lore: A laspistol for self-defense; an Enginseer is a technician first.\n\nDesign: DX+1 (13) for 2 points, Easy.",
+			"tags": [
+				"Imperium"
+			],
+			"specialization": "Pistol",
+			"difficulty": "dx/e",
+			"points": 2
+		},
+		{
+			"id": "sQrY5OCyeb3AoSSMU",
+			"name": "Physician",
+			"local_notes": "Lore: Basic biological repair, useful when a wounded trooper needs more than First Aid and no proper medicae is at hand.\n\nDesign: IQ+0 (13) for 4 points, Hard.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "iq/h",
+			"points": 4
+		},
+		{
+			"id": "sfZx6eCUP8m-iwfqg",
+			"name": "Traps",
+			"local_notes": "Lore: Rigging and disarming demolition charges and improvised hazards.\n\nDesign: IQ+0 (13) for 2 points, Average.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "iq/a",
+			"points": 2
+		},
+		{
+			"id": "sezOV_PXthmM-ydNF",
+			"name": "Navigation",
+			"local_notes": "Lore: Basic land navigation without void or hyperspace instruments.\n\nDesign: IQ-1 (12) for 1 point, Average.",
+			"tags": [
+				"Imperium"
+			],
+			"specialization": "Land",
+			"difficulty": "iq/a",
+			"points": 1
+		},
+		{
+			"id": "sHxzqJMZClxY36dpo",
+			"name": "Stealth",
+			"local_notes": "Lore: Enough fieldcraft not to be the first target singled out.\n\nDesign: DX-1 (11) for 1 point, Average.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "dx/a",
+			"points": 1
+		}
+	],
+	"equipment": []
+}

@@ -1,0 +1,3029 @@
+{
+	"version": 5,
+	"rows": [
+		{
+			"id": "eakgajDjInkXx-twk",
+			"description": "Radium Pistol",
+			"local_notes": "Lore: Skitarii Vanguard carry the radium pistol as a sidearm to their carbines: an autoloading handgun firing irradiated needle rounds that keep hurting a survivor long after the shot lands, described across current Codex Adeptus Mechanicus background and Forge World's Mechanicus fluff as a weapon that \"keeps killing\" - and one whose habitual users, the rad-saturated Vanguard, are themselves quietly poisoned by long exposure to their own ammunition, a detail the background returns to repeatedly.\n\nDesign: Not a scaled-down radium carbine round (the carbine below is itself the family anchor, framework.md: \"Radium carbine | Lasgun-class ... plus a radiation follow-up,\" now stepped from the current 7d(2) burn lasgun anchor) but a genuinely smaller cartridge for a handgun frame, one die down at 6d(2) pi (avg 21): penetrates flak (DR 30, eff. 15) 90.4% of the time by exact dice distribution but carapace (DR 70, eff. 35) 0% - a pistol that barely dents rigid plate, exactly as its raw stopping power should read for a sidearm. Its real threat, as with the carbine, is the DR-ignoring radiation follow-up. Handling stats derived individually rather than copied from any other pistol in this project: loaded weight is set at 2.5 lb from its lore description as a compact autoloader comparable in size to a laspistol; minimum ST follows framework.md's shoulder-arm formula scaled to a one-handed weapon, sqrt(10x2.5)=5.0, so ST 5 with no adjustment (a light, well-balanced sidearm, nothing to correct for). RoF 3 because it is genuinely semi-automatic (an autoloading needle-cycling action, not a beam that has to recharge). Shots 12(3): a modest rotary clip of individually-cased irradiated rounds, smaller than a laspistol's cell because each round is a hand-machined, individually-shielded cartridge rather than a mass-produced las charge, with a quick 3-second reload for a fresh clip. Bulk -2 and Rcl 2 follow directly from its size as a hand-held pistol firing a real (if light) physical cartridge, distinct from the recoil-free las/plasma pistols in the Imperium files. Acc 1: a plain iron-sighted service pistol with no scope or targeting aid. TL11 and LC1 place it at \"advanced Imperial/rare\" manufacture restricted outside the Mechanicus and its Skitarii, per framework.md.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"tech_level": "11",
+			"legality_class": "1",
+			"base_value": "900",
+			"base_weight": "2.5 lb",
+			"weapons": [
+				{
+					"id": "WqOqlMTeBkOXJu-K1",
+					"sv": 1,
+					"damage": {
+						"type": "pi",
+						"base": "6d",
+						"armor_divisor": 2
+					},
+					"accuracy": "1",
+					"range": "100/300",
+					"rate_of_fire": "3",
+					"shots": "12(3)",
+					"bulk": "-2",
+					"recoil": "2",
+					"strength": "5",
+					"usage": "Standard",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "WjmEGwi_vXPxIxPnw",
+					"sv": 1,
+					"damage": {
+						"type": "tox",
+						"base": "1d",
+						"armor_divisor": -1
+					},
+					"accuracy": "1",
+					"range": "100/300",
+					"rate_of_fire": "3",
+					"shots": "12(3)",
+					"bulk": "-2",
+					"recoil": "2",
+					"strength": "5",
+					"usage": "Radiation follow-up (any wound inflicted)",
+					"usage_notes": "Any hit that breaks the skin (i.e. any hit at all against an unarmoured location, or any hit that already penetrated DR) irradiates the wound track directly; this follow-up ignores any remaining DR entirely and repeats every 30 seconds until treated, per the framework's radium-poisoning rule. A target already dying of radiation sickness who is hit again does not roll twice for the same wound.\n",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "e8ePnqjhXXMYOInMj",
+			"description": "Radium Carbine",
+			"local_notes": "Lore: The signature weapon of the Skitarii Vanguard: a carbine firing irradiated needle rounds that Codex Adeptus Mechanicus and Forge World background describe as continuing to poison a wound long after the shot itself has done its work, doctrinally paired with the longer-ranged galvanic rifle carried by their Ranger counterparts. Vanguard are themselves depicted as visibly rad-saturated from years of handling this ammunition - gaunt, sickly, faintly luminous under a photo-visor - a cost the Cult Mechanicus treats as an acceptable sacrament rather than a hazard to correct.\n\nDesign: This is the project's fixed radium anchor from framework.md's Adeptus Mechanicus table: \"Lasgun-class ... plus a radiation follow-up that ignores DR on unsealed targets,\" stepped from the current lasgun anchor (7d(2) burn) per the user's own rescale of that anchor. Checked by exact dice distribution against the lasgun's own figures (7d(2) burn, avg 24.5): the two are numerically identical for penetration purposes, so the radium carbine punches flak (DR 30, eff. 15) 97.8% of the time, gets through carapace (DR 70, eff. 35) 0.6% of the time, and fails outright against Astartes power armour (DR 100, eff. 50) - exactly matching \"lasgun-class.\" The DR-ignoring 1d radiation follow-up is what actually sets it apart from a lasgun: any hit that draws blood keeps hurting the target every 30 seconds afterward, regardless of armour, representing the fiction's \"keeps killing\" reputation and giving a mechanical hook for the Vanguard's own rad-sickness (a GM using this project's traits files may charge the wielder the same follow-up over a long campaign of habitual use - that trait belongs to the traits agent, not this file). Handling stats: weight 7 lb from its lore description as a carbine-length weapon, lighter than a full lasgun; min ST sqrt(10x7)=8.4, rounded to 8. RoF 6, not the lasgun's 10 and not a pistol's 3: the round is a rotary-chambered, individually-machined irradiated dart rather than a las pulse, so its autoloader cycles at a genuinely intermediate cyclic rate - fast enough to be a real automatic weapon, slower than a lasgun's near-instantaneous lasing action. Shots 18(3): a compact rotary magazine of hand-finished rounds, well short of a lasgun's 60-shot accumulator because each dart is a manufactured object, not a stored charge. Bulk -3 and Rcl 2 fit a carbine firing a real if light projectile. Acc 4 sits at the low end of the carbine bracket (3-4) since the weapon is built for aggressive, close-in Vanguard fire support rather than precision work - that role belongs to the galvanic rifle below. TL11/LC1 as the radium pistol.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"tech_level": "11",
+			"legality_class": "1",
+			"base_value": "1400",
+			"base_weight": "7 lb",
+			"weapons": [
+				{
+					"id": "W4H51D-ZN1ef8B7ea",
+					"sv": 1,
+					"damage": {
+						"type": "pi",
+						"base": "7d",
+						"armor_divisor": 2
+					},
+					"accuracy": "4",
+					"range": "200/600",
+					"rate_of_fire": "6",
+					"shots": "18(3)",
+					"bulk": "-3",
+					"recoil": "2",
+					"strength": "8",
+					"usage": "Standard",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "W8uB2TjjTRvoHAbKN",
+					"sv": 1,
+					"damage": {
+						"type": "tox",
+						"base": "1d",
+						"armor_divisor": -1
+					},
+					"accuracy": "4",
+					"range": "200/600",
+					"rate_of_fire": "6",
+					"shots": "18(3)",
+					"bulk": "-3",
+					"recoil": "2",
+					"strength": "8",
+					"usage": "Radiation follow-up (any wound inflicted)",
+					"usage_notes": "As the Radium Pistol's follow-up above.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "euupVdRB_uZEeIrDx",
+			"description": "Galvanic Rifle",
+			"local_notes": "Lore: The Skitarii Rangers' standard-issue long arm: a magnetic tri-radial dart accelerator built for aimed, long-range fire, doctrinally contrasted throughout current Codex Adeptus Mechanicus background with the closer-ranged, higher-volume radium carbine carried by Vanguard cohorts.\n\nDesign: Framework.md's Adeptus Mechanicus table places this \"between long-las and hellgun,\" and per the user's own rescale of those two anchors (long-las now 8d(2) burn, hellgun 8d(3) burn) this entry is rebuilt at 8d(2) pi+ - matching the long-las end of that bracket in dice and divisor, with the heavier pi+ wounding multiplier (rather than the long-las's burn) supplying the extra lethality that keeps it genuinely \"between\" the two rather than an exact copy of either. Checked by exact dice distribution: average roll 28 penetrates flak (DR 30, eff. 15) 99.6% of the time and carapace (DR 70, eff. 35) 6.1% of the time, identical in penetration odds to the long-las anchor (8d(2) burn) and comfortably ahead of the standard lasgun's 0.6%, matching \"between long-las and hellgun\" on effective lethality even where the raw penetration number ties the long-las - it fails outright against Astartes power armour (DR 100, eff. 50), as a rifle at this tier should. The pi+ type reflects that this is a genuine hypersonic kinetic dart, not a lasing weapon - the same wounding-multiplier distinction the project already draws between the autogun (pi) and lasgun (burn) families. Handling stats: weight 9 lb for a full-length magnetic rifle, a little heavier than a lasgun for the accelerator coils; min ST sqrt(10x9)=9.5, rounded to 9. RoF 1, not a lasgun's 10: the accelerator's capacitor bank must fully recharge between shots to reach the dart's hypersonic velocity, placing it squarely in framework.md's \"must recharge between shots\" RoF-1 bracket alongside plasma and melta weapons, not the lasgun's near-instant lasing cycle - this is also what lets it be a genuine long-range precision weapon rather than a spray-and-pray carbine. Shots 24(3): a moderate magazine of pre-shaped darts. Bulk -5, at the heavier end of the rifle bracket, for its long barrel and accelerator housing. Rcl 1: a magnetically-launched dart carries no propellant charge, so felt recoil is only the dart's own momentum, lighter than any chemical or las weapon in this file. Acc 7, well above a plain rifle's 4-5 band per the anchor's explicit \"high Acc,\" reflecting purpose-built long-range sights without going as high as the long-las's dedicated scope (Acc 9). TL11/LC1 as the radium family.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"tech_level": "11",
+			"legality_class": "1",
+			"base_value": "1300",
+			"base_weight": "9 lb",
+			"weapons": [
+				{
+					"id": "WbF52waVTvcuig-au",
+					"sv": 1,
+					"damage": {
+						"type": "pi+",
+						"base": "8d",
+						"armor_divisor": 2
+					},
+					"accuracy": "7",
+					"range": "400/1200",
+					"rate_of_fire": "1",
+					"shots": "24(3)",
+					"bulk": "-5",
+					"recoil": "1",
+					"strength": "9",
+					"usage": "Standard",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eWFJ-idk_Yw3MiV4u",
+			"description": "Arc Pistol",
+			"local_notes": "Lore: A close-range clamp-like sidearm built around a capacitor discharge rather than a lasing chamber or accelerator coil, issued to Skitarii and Mechanicus enginseers for exactly the job an arc weapon is known for in current Codex background: barely scratching an unarmoured target while locking up a servitor's limbs, stalling a light vehicle's ignition or shorting out a suit of powered armour's systems at a touch.\n\nDesign: Framework.md's Adeptus Mechanicus anchor calls for arc weapons to be \"weak against flesh, strong against machines: extra effect vs vehicles, cyborgs and powered armour systems (surge).\" A raw damage bonus against \"machine-type DR\" was tried and rejected: at any die count small enough to stay \"weak against flesh,\" no armour-divisor bonus made a meaningful dent in a vehicle's DR 100+ by exact dice distribution, and any die count large enough to matter against a vehicle stopped being a weak, personal-scale sidearm. Instead this project reuses its own existing precedent for a subdual/disabling ranged effect - the Shock Maul and Power Maul (Suppression Setting) HT-roll-to-stun rule already established in the Imperium melee file - applied to machines instead of flesh: any hit against a qualifying machine target forces a HT roll at a penalty equal to the weapon's dice count, with failure locking up the target system for a short time regardless of DR. Checked by exact dice distribution, the base attack itself is genuinely weak against flesh: 2d(2) burn averages 7 and fails outright (0%) against flak (DR 30, eff. 15) or carapace (DR 70, eff. 35) by exact dice distribution - a real threat only to an unarmoured human, exactly the \"weak against flesh\" half of the anchor. Handling stats: weight 3 lb for a compact clamp pistol; min ST sqrt(10x3)=5.5, rounded to 5. RoF 3: genuinely semi-automatic, a trigger-timed capacitor discharge rather than a weapon that must vent or cool between shots (the capacitor here is sized to allow several quick pulses before it needs a real recharge, unlike the larger arc weapons below). Shots 8(3): a small capacitor bank, swapped rather than recharged in the field. Bulk -2 and Rcl 1 (a beam-adjacent energy discharge, no propellant kick) follow directly from its size and mechanism. Acc 2, a plain pistol-class sight with no beam-weapon Acc bonus, since an arc weapon's effective range is short by design regardless of its sighting. TL11/LC1.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"tech_level": "11",
+			"legality_class": "1",
+			"base_value": "1100",
+			"base_weight": "3 lb",
+			"weapons": [
+				{
+					"id": "WCgxBAOa1TqctWf4B",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "2d",
+						"armor_divisor": 2
+					},
+					"accuracy": "2",
+					"range": "40/120",
+					"rate_of_fire": "3",
+					"shots": "8(3)",
+					"bulk": "-2",
+					"recoil": "1",
+					"strength": "5",
+					"usage": "Standard",
+					"usage_notes": "A hit against a machine target (vehicle, servitor, robot, cyborg limb, or a powered-armour suit's servo/sensor systems) forces that target's HT roll (or a GM-assigned equivalent for a mindless machine) at a penalty equal to the weapon's own dice count (-2 here) to avoid a short-circuit: on a failure the struck system locks up or shuts down for 1d seconds, regardless of whether the raw damage penetrated DR. This is the arc weapon's signature \"surge\" effect (framework.md).\n",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eSZmLofaLMGm5dNAe",
+			"description": "Arc Rifle",
+			"local_notes": "Lore: A longer-barrelled arc weapon issued to Skitarii support elements and Mechanicus explorator teams for the same anti-machine role as the arc pistol at a real, if still short, engagement range - background material treats the whole arc-weapon family as specialist kit for cracking open enemy war-machines, cortex-hubs and armoured vehicles' systems rather than as a front-line anti-infantry rifle.\n\nDesign: Same \"weak against flesh, strong against machines\" design as the Arc Pistol above, scaled up one size class rather than one die: base damage climbs to 4d(2) burn (avg 14, penetrating flak (DR 30, eff. 15) 33.6% of the time by exact dice distribution but carapace (DR 70, eff. 35) 0% - a real, if inconsistent, threat to flak, still no real threat to rigid armour) and the surge HT penalty deepens to -4 with the bigger discharge, reflecting a more dangerous jolt to anything with cabling or servos to fry. Handling stats: weight 8 lb for a two-handed rifle-length capacitor weapon; min ST sqrt(10x8)=8.9, rounded to 9. RoF 1, unlike the pistol's RoF 3: the larger single discharge this rifle is built to deliver needs a full capacitor recharge between shots, placing it in framework.md's \"must recharge\" bracket rather than the pistol's rapid-pulse one. Shots 12(5): a bigger capacitor bank than the pistol's but a slower reload, reflecting the heavier hardware being swapped. Bulk -4 and Rcl 1 follow the rifle bracket and the energy-discharge mechanism. Acc 3 is modest for a rifle: an arc weapon's short effective range means little is gained from better sights, so its sighting system is kept simple rather than built out like a galvanic rifle's. TL11/LC1.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"tech_level": "11",
+			"legality_class": "1",
+			"base_value": "1800",
+			"base_weight": "8 lb",
+			"weapons": [
+				{
+					"id": "WAhHvBqUJSdoYZm2e",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "4d",
+						"armor_divisor": 2
+					},
+					"accuracy": "3",
+					"range": "60/180",
+					"rate_of_fire": "1",
+					"shots": "12(5)",
+					"bulk": "-4",
+					"recoil": "1",
+					"strength": "9",
+					"usage": "Standard",
+					"usage_notes": "As the Arc Pistol's surge note, at this weapon's own dice count (HT-4 to resist a short-circuit on any hit against a qualifying machine target).\n",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eFmlbquj0iOO734m9",
+			"description": "Heavy Arc Rifle",
+			"local_notes": "Lore: A shoulder-braced support weapon carried by Skitarii heavy-support elements and vehicle breaching teams, background material treats it as the arc family's answer to something too well-armoured or too electronically hardened for a standard arc rifle to trouble - still not a serious anti-infantry weapon, but a real threat to a vehicle's ignition, a servitor's cortex, or a suit of powered armour's servo-motors.\n\nDesign: Continues the same family design one size class up again: base damage 6d(2) burn (avg 21, 90.4% against flak but 0% against carapace by exact dice distribution - genuinely dangerous to an unarmoured or flak-clad human now, though still no threat at all to carapace and above) and the surge HT penalty deepens further to -6, the largest jolt in the family. Handling stats: weight 20 lb for a genuinely heavy, backpack-fed capacitor weapon; min ST sqrt(10x20)=14.1, rounded to 14, with the B suffix (bipod-braced, per framework.md and Basic Set) since a weapon this size is meant to be fired from a folding bipod rather than a standing shoulder mount. RoF 1 and the largest recharge-limited capacitor bank in the family (shots 6(8), the slowest reload here) reflect its much bigger single discharge. Bulk -6 sits at the \"heavy/support\" end of the bracket. Rcl 1 is unchanged from the smaller arc weapons - it is still a capacitor discharge with no propellant kick, and being braced removes what little recoil there would be anyway. Acc 4 gets a modest bump over the arc rifle's 3 for the bipod's extra stability. TL11/LC1.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"tech_level": "11",
+			"legality_class": "1",
+			"base_value": "3200",
+			"base_weight": "20 lb",
+			"weapons": [
+				{
+					"id": "WU_9QRKeYZCMfNQ9x",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "6d",
+						"armor_divisor": 2
+					},
+					"accuracy": "4",
+					"range": "90/270",
+					"rate_of_fire": "1",
+					"shots": "6(8)",
+					"bulk": "-6",
+					"recoil": "1",
+					"strength": "14B",
+					"usage": "Braced",
+					"usage_notes": "As the smaller arc weapons' surge note, at HT-6 for a qualifying machine target hit by this weapon's larger discharge.\n",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "e0bs8SwF5qIHIn4S-",
+			"description": "Phosphor Blast Pistol",
+			"local_notes": "Lore: A compact sidearm issued to Skitarii officers and Cult Mechanicus agents, firing a bolt of searing white phosphor compound; current Codex Adeptus Mechanicus background repeatedly describes phosphor weapons burning straight through camouflage netting, smoke and light cover and leaving anything they touch marked with an unmistakable glow for the rest of a fight.\n\nDesign: Framework.md's anchor gives phosphor weapons as \"burn damage that ignores concealment and marks the target\" without fixing dice, so this pistol-scale entry is set to match the current Laspistol anchor exactly (4d(2) burn) rather than an arbitrarily scaled-down figure, since both are pistol-class energy sidearms sharing the same basic emitter class. Checked by exact dice distribution: 4d(2) burn averages 14, penetrating flak (DR 30, eff. 15) 33.6% of the time but failing outright against carapace (DR 70, eff. 35) - a real, if inconsistent, threat to unarmoured or flak-clad infantry, in line with a pistol-class weapon, while its real value (as with the whole family) is bypassing cover and marking the target rather than raw penetration. Handling stats: weight 2.5 lb for a compact energy pistol; min ST sqrt(10x2.5)=5.0, so ST 5. RoF 3: this is a genuine beam-pistol trigger-pulse weapon, not a weapon that must vent between shots at this small a charge. Shots 20(3): a small phosphor-compound cell, more shots than a plasma pistol's since each pulse is a much lighter charge. Bulk -2 and Rcl 1 (a beam weapon, no meaningful recoil) follow pistol convention. Acc 3 takes the pistol bracket's high end plus the framework's \"beam weapons about +2 over a slug-thrower of the same size\" allowance, applied modestly since this is meant as a sidearm rather than a marksman's tool. TL11/LC1.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"tech_level": "11",
+			"legality_class": "1",
+			"base_value": "950",
+			"base_weight": "2.5 lb",
+			"weapons": [
+				{
+					"id": "W0sUBRpfjhS_UPNf8",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "4d",
+						"armor_divisor": 2
+					},
+					"accuracy": "3",
+					"range": "90/270",
+					"rate_of_fire": "3",
+					"shots": "20(3)",
+					"bulk": "-2",
+					"recoil": "1",
+					"strength": "5",
+					"usage": "Standard",
+					"usage_notes": "Phosphor fire clings and glows white-hot on whatever it touches: treat cover bonuses against it as halved (round down), as the flame-weapon family's cover-bypassing rule in the Imperium files, and any target hit is luminously marked - it cannot benefit from Stealth, camouflage, or being in shadow or smoke for the rest of the encounter (the glow only fades with a wash-down or a fresh coat of cammo paint).\n",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eFHis9zQ3h1S-zfKq",
+			"description": "Phosphor Blaster",
+			"local_notes": "Lore: The standard-issue phosphor weapon of Skitarii cohorts fielded alongside radium and galvanic arms, background material treating it as the squad-level tool of choice for burning entrenched infantry out of cover that would stop conventional las or solid-shot fire, at the cost of marking the whole position with a glow that gives away exactly where the fight has been.\n\nDesign: This entry is the phosphor family's rifle-scale reference point, built on the lasgun's own housing and cycle rate (the Mars-pattern lasgun in the Imperium las file is explicitly a Mechanicus-forged weapon, and current background depicts the phosphor blaster as sharing that same basic chassis with a phosphor-compound charge in place of a lasing crystal) rather than copied from any catalogue weapon: 7d(2) burn, identical in penetration terms to the standard lasgun by exact dice distribution (97.8% vs. flak, 0.6% vs. carapace, 0% vs. Astartes power armour), because it is the same energy output through a chemically different emitter - exactly what \"shares the housing, different charge\" should mean mechanically. Handling stats: weight 8 lb, matching a lasgun-class rifle's housing; min ST sqrt(10x8)=8.9, rounded to 9. RoF 10, the same automatic cyclic rate as a lasgun on full auto per framework.md's guidance for las-pattern housings, since the phosphor ignition chamber cycles at the same rate the shared chassis was built for. Shots 40(3): fewer than a lasgun's 60 because each phosphor round carries more chemical payload per shot than a las charge of the same housing. Bulk -4 and Rcl 1 (a beam-pattern weapon) follow rifle convention. Acc 6: rifle-bracket 4-5 plus the beam-weapon +2 allowance, rounded down slightly since the housing's stock sights are standard-issue rather than a dedicated optic. TL11/LC1.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"tech_level": "11",
+			"legality_class": "1",
+			"base_value": "1500",
+			"base_weight": "8 lb",
+			"weapons": [
+				{
+					"id": "WusDwY26zLHKpqgp8",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "7d",
+						"armor_divisor": 2
+					},
+					"accuracy": "6",
+					"range": "250/750",
+					"rate_of_fire": "10",
+					"shots": "40(3)",
+					"bulk": "-4",
+					"recoil": "1",
+					"strength": "9",
+					"usage": "Standard",
+					"usage_notes": "As the Phosphor Blast Pistol's cover-bypass and marking note above.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eG9An33-Mxy42112q",
+			"description": "Phosphor Serpenta",
+			"local_notes": "Lore: A twin-emitter phosphor sidearm issued to Sicarian Ruststalkers alongside their transonic blades, background depicting the \"serpenta\" pattern generally as a paired, elite-issue variant one step above a standard sidearm and one step below a full rifle - here, a weapon built to keep a Ruststalker's hands free for its bladework while still able to mark and burn a target at closer range than a phosphor blaster.\n\nDesign: Sits deliberately between the Phosphor Blast Pistol and Phosphor Blaster rather than matching either exactly, per its \"elite sidearm, not quite a rifle\" place in the family: 6d(2) burn (avg 21, penetrating flak 90.4% of the time and carapace 0% by exact dice distribution) splits the difference between the pistol's 4d and the blaster's 7d. The twin emitters are modelled as a single weapon profile fired from either barrel (not a doubled attack - this project does not stack automatic-fire-style bonuses onto a sidearm without a specific anchor for it) with a faster cyclic rate than a single-emitter pistol to represent the two barrels alternating: RoF 6, between the Phosphor Blast Pistol's semi-auto 3 and the Phosphor Blaster's full-auto 10. Handling stats: weight 4 lb for a twin-barrelled handgun unit; min ST sqrt(10x4)=6.3, rounded to 6. Shots 16(3): a shared cell feeding both emitters. Bulk -3 (bulkier than a single pistol for the paired housing) and Rcl 1 (beam weapon). Acc 4: between the blast pistol's 3 and the blaster's 6. LC0 rather than LC1: Sicarian-pattern gear is Cult Mechanicus chapter-restricted kit in its own right, one step more closely held than standard Skitarii cohort issue.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"tech_level": "11",
+			"legality_class": "0",
+			"base_value": "2600",
+			"base_weight": "4 lb",
+			"weapons": [
+				{
+					"id": "WJzhrFVejdvIwDBEt",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "6d",
+						"armor_divisor": 2
+					},
+					"accuracy": "4",
+					"range": "130/390",
+					"rate_of_fire": "6",
+					"shots": "16(3)",
+					"bulk": "-3",
+					"recoil": "1",
+					"strength": "6",
+					"usage": "Standard (either emitter)",
+					"usage_notes": "As the Phosphor Blast Pistol's cover-bypass and marking note above.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "ef2i-dG4vDAQySzQ_",
+			"description": "Plasma Caliver",
+			"local_notes": "Lore: A Mechanicus-pattern plasma weapon fielded by Skitarii and Cult Mechanicus forces, current background material describing it as functionally the same lethal plasma discharge as the standard Imperial plasma gun but built around a dual-flask containment system that lets it cycle noticeably faster than a legacy plasma gun's single-shot-and-recharge cadence.\n\nDesign: Framework.md's Adeptus Mechanicus anchor is explicit: \"Plasma caliver | Plasma gun anchor, higher RoF, same overheat risk.\" Damage is therefore identical, unchanged die for die, to the Plasma Gun entry in the Imperium plasma file (6dx4(3)/6dx5(3) burn ex) - checked there by exact dice distribution at 99.9%/85.5% against Astartes power armour and Terminator plate respectively, and unchanged here since the anchor gives no reason to move it. What is genuinely different, and what the anchor calls out, is RoF: framework.md's general handling rule puts single-shot plasma weapons at RoF 1 (anything that must recharge or vent between shots), but the caliver's whole distinguishing feature is a second capacitor/flask working in relay with the first, letting it fire again before the first flask has fully cycled - a real mechanical reason for RoF 3, used here (per the handling-stats rule) only because the caliver really is built to fire semi-automatically rather than as a blanket plasma-weapon default. Handling stats otherwise derived independently: weight 12 lb, lighter than the plasma gun's 14 lb since the dual-flask design trades some of the single reactor's bulk for the second, smaller flask; min ST sqrt(10x12)=11.0, so ST 11. Shots 10(20): a bigger combined flask capacity than the plasma gun's 8(20) to feed the faster cycle. Bulk -4 and Rcl 2 match the plasma gun's own housing-class figures for a rifle-sized plasma weapon. Acc 5: modestly above the plasma gun's 3, for improved Mechanicus optics feeding the faster-cycling weapon. TL11/LC1 as the standard plasma family.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"tech_level": "11",
+			"legality_class": "1",
+			"base_value": "3600",
+			"base_weight": "12 lb",
+			"weapons": [
+				{
+					"id": "WKgG8ziU3ArBAndu8",
+					"sv": 1,
+					"damage": {
+						"type": "burn ex",
+						"base": "6dx4",
+						"armor_divisor": 3
+					},
+					"accuracy": "5",
+					"range": "150/450",
+					"rate_of_fire": "3",
+					"shots": "10(20)",
+					"bulk": "-4",
+					"recoil": "2",
+					"strength": "11",
+					"usage": "Standard",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "WSZsx4WviGiJ-yV93",
+					"sv": 1,
+					"damage": {
+						"type": "burn ex",
+						"base": "6dx5",
+						"armor_divisor": 3
+					},
+					"accuracy": "5",
+					"range": "150/450",
+					"rate_of_fire": "3",
+					"shots": "10(20)",
+					"bulk": "-4",
+					"recoil": "2",
+					"strength": "11",
+					"usage": "Supercharged",
+					"usage_notes": "Malf 14, as any other supercharged plasma weapon in this project's lineup: on a malfunction the containment coil fails and the firer immediately takes 2d(5) burn ex, and the weapon is disabled until a Tech-Priest or Armoury roll repairs it.\n",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "emNVbJ81QJJfyeona",
+			"description": "Transuranic Arquebus",
+			"local_notes": "Lore: The heavy sniper rifle of the Sicarian Ruststalkers and dedicated Skitarii marksmen, firing a dense transuranic-metal penetrator round; current Codex Adeptus Mechanicus background singles it out as one of the few infantry-scale weapons that can put down an Astartes or crack open a light vehicle's armour at genuine long range, distinct from the galvanic rifle's more general-purpose reach.\n\nDesign: Framework.md's anchor: \"Transuranic arquebus | Heavy sniper: beats Astartes armour (DR 100) reliably at long range.\" Checked by exact dice distribution against several candidate dice combinations before settling on 6dx3(3) pi+ (avg 63): it goes through carapace (DR 70, eff. 23.3) 100% of the time and Astartes power armour (DR 100, eff. 33.3) 99% of the time - \"reliably,\" as required - while only 36.3% of the time against a Terminator (DR 200, eff. 66.7), keeping it well short of a lascannon's guaranteed kill against the heaviest personal armour in the game, appropriate for a sniper rifle rather than a dedicated anti-tank weapon. A dense metal long-rod penetrator gets pi+ (heavy solid shot) rather than a burn/las damage type, with a hardened-core armour divisor (3) matching the autocannon's own long-rod divisor in the Imperium heavy weapons file. Handling stats: weight 25 lb for a genuinely oversized two-handed long-rifle, per its consistent depiction as a cumbersome specialist weapon; the raw formula gives min ST sqrt(10x25)=15.8, rounded to 16, but the standard-issue folding bipod (B suffix) that every depiction shows it braced on takes enough of that mass off the firer's own arms to bring the effective figure down to ST 14, the adjustment framework.md's handling-stats section calls for \"adjusted for recoil and balance.\" RoF 1: a single heavy round with a bolt-cycled or gas-vented action between shots (the anchor calls it a \"heavy sniper,\" and no depiction shows it fired rapidly). Shots 4(3): a small clip of oversized rounds, quickly swapped. Bulk -7, at the heavy end of its bracket for its size. Rcl 3: this is a real chemical- or coil-propelled heavy penetrator round with genuine kick, unlike the family's lighter energy weapons. Acc 8: rifle bracket topped out with a dedicated sniper optic (+3), matching the long-las's own sniper-class Acc.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"tech_level": "12",
+			"legality_class": "0",
+			"base_value": "9500",
+			"base_weight": "25 lb",
+			"weapons": [
+				{
+					"id": "WPYKChhC5j6EmGLdY",
+					"sv": 1,
+					"damage": {
+						"type": "pi+",
+						"base": "6dx3",
+						"armor_divisor": 3
+					},
+					"accuracy": "8",
+					"range": "500/1500",
+					"rate_of_fire": "1",
+					"shots": "4(3)",
+					"bulk": "-7",
+					"recoil": "3",
+					"strength": "14B",
+					"usage": "Braced",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "exwtHz8EwrgB0eVXU",
+			"description": "Volkite Blaster",
+			"local_notes": "Lore: An archeotech thermal-ray weapon predating even the STC-derived plasma gun, volkite weapons are described across current Codex Adeptus Mechanicus and Horus Heresy-era background alike as firing a ray that boils a target from within and, on a kill, can release enough residual heat to lash out and cook whoever is standing next to the corpse - a detail repeatedly used to distinguish volkite fire from an ordinary beam weapon.\n\nDesign: Framework.md's anchor: \"Volkite weapons | Burn ex that chains to nearby targets on a kill; volkite blaster sits between heavy bolter and plasma.\" Checked by exact dice distribution against both bracketing anchors: the heavy bolter (7dx2(2) pi++) averages 49 and penetrates Astartes power armour 41.4% of the time; the plasma gun (6dx4(3) burn ex) averages 84 and penetrates 99.9% of the time. 6dx3(2) burn ex averages 63 - between the two - and goes through carapace (DR 70, eff. 35) 99% of the time and Astartes power armour (DR 100, eff. 50) 85.5% of the time, likewise sitting between the heavy bolter's 41.4% and the plasma gun's 99.9% against power armour, exactly matching \"sits between heavy bolter and plasma\" on both damage and penetration rather than damage alone; against a Terminator (DR 200, eff. 100) that drops to a negligible 0.1%, keeping it well short of plasma's own 85.5% at that tier. The chain-on-kill effect is built as a second ordinary attack roll using the weapon's own profile rather than a new damage or targeting mechanic, per this project's preference for reusing existing structure wherever it will carry the lore detail cleanly. Handling stats: weight 12 lb for a rifle-class thermal-ray weapon with a heavier heat-dissipating housing than a plasma gun's reactor; min ST sqrt(10x12)=11.0, so ST 11. RoF 1: a full-power thermal discharge that must vent heat before the next shot, squarely in framework.md's recharge-limited bracket alongside plasma and melta. Shots 6(10): a modest thermal-cell capacity with a slower reload than a plasma flask, since archeotech volkite cells are irreplaceable relics rather than mass-produced components. Bulk -5 and Rcl 1 (a beam weapon) fit its size. Acc 6: rifle bracket (4-5) plus the beam-weapon +2 allowance.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"tech_level": "12",
+			"legality_class": "0",
+			"base_value": "7000",
+			"base_weight": "12 lb",
+			"weapons": [
+				{
+					"id": "WCeysbSKB_wRno2ca",
+					"sv": 1,
+					"damage": {
+						"type": "burn ex",
+						"base": "6dx3",
+						"armor_divisor": 2
+					},
+					"accuracy": "6",
+					"range": "200/600",
+					"rate_of_fire": "1",
+					"shots": "6(10)",
+					"bulk": "-5",
+					"recoil": "1",
+					"strength": "11",
+					"usage": "Standard",
+					"usage_notes": "Chain effect (framework.md): a hit that reduces a target to 0 HP or kills it outright releases the stored thermal charge as a second, lesser bolt automatically aimed at the nearest other valid target within 3 yards, resolved as a single ordinary Beam Weapons attack roll at this weapon's own stats rather than a new sub-system - left GM-adjudicated for exact targeting and cover, the same way this project leaves the Jump Pack's flight and the Displacer Field's teleport destination to the table rather than a bespoke mechanic.\n",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "ei3dy2CDbY5A7TM1-",
+			"description": "Volkite Charger",
+			"local_notes": "Lore: The classic Legion- and Solar Auxilia-era volkite rifle, per Horus Heresy-era Black Library and Forge World background the direct ancestor of the modern volkite blaster the Mechanicus still forges today - background treats the two as functionally the same weapon separated by millennia of continuous, ritual-bound manufacture rather than by any real technological gap.\n\nDesign: Kept at the same fixed damage as the Volkite Blaster (6dx3(2) burn ex): the anchor and the lore both treat this as the same weapon at an earlier point on an unbroken production lineage, not a mechanically distinct pattern, so its numbers are not re-derived. What differs is build quality and vintage: a bulkier pre-Mechanicus housing lacking millennia of incremental refinement, reflected as 14 lb (heavier than the modern blaster's 12) and a correspondingly higher min ST, sqrt(10x14)=11.8, rounded to 12. Shots 5(10), one fewer than the blaster, for a less efficient older-pattern thermal cell. Acc 5, one point below the blaster's 6, for coarser period optics. Bulk, Rcl, RoF and range are otherwise unchanged from the blaster since none of those figures have any lore reason to move. LC0 as the rest of the volkite family: an archeotech-adjacent weapon restricted well outside general Mechanicus issue.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium",
+				"Adeptus Mechanicus",
+				"Solar Auxilia"
+			],
+			"tech_level": "12",
+			"legality_class": "0",
+			"base_value": "6800",
+			"base_weight": "14 lb",
+			"weapons": [
+				{
+					"id": "WN4lbJvxiiS-TFtXU",
+					"sv": 1,
+					"damage": {
+						"type": "burn ex",
+						"base": "6dx3",
+						"armor_divisor": 2
+					},
+					"accuracy": "5",
+					"range": "200/600",
+					"rate_of_fire": "1",
+					"shots": "5(10)",
+					"bulk": "-5",
+					"recoil": "1",
+					"strength": "12",
+					"usage": "Standard",
+					"usage_notes": "Chain effect as the Volkite Blaster above.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eFKQQ5D2_xYExFAE7",
+			"description": "Volkite Serpenta",
+			"local_notes": "Lore: The pistol-scale volkite sidearm, background material treating \"serpenta\" consistently as this family's small, personal-defence pattern - a badge of rank for Mechanicus officers and veteran Skitarii who otherwise carry a rifle-class weapon as their primary arm.\n\nDesign: One die down from the Volkite Blaster/Charger anchor, matching this project's standard one-die pistol-from-rifle step (compare the Plasma Pistol's two-die step down from the Plasma Gun, used where the family anchor is a rifle rather than a pistol): 5dx3(2) burn ex, avg 52.5, still a real threat by exact dice distribution (94.1% against carapace, DR 70, eff. 35; 77.9% against Sororitas power armour, DR 85, eff. 42.5; 60% against Astartes power armour) for a sidearm, matching the \"compact but still deadly\" reading of a volkite pistol in the fiction. Handling stats: weight 4 lb for a one-handed thermal-ray pistol; min ST sqrt(10x4)=6.3, rounded to 6. Shots 4(10), the smallest thermal cell in the family. Bulk -2 and Rcl 1 for a pistol-class beam weapon. Acc 4: pistol bracket (1-3) plus the beam-weapon +2 allowance, rounded to the family's established pattern.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"tech_level": "12",
+			"legality_class": "0",
+			"base_value": "4200",
+			"base_weight": "4 lb",
+			"weapons": [
+				{
+					"id": "WLaA1BIHN1x0MMgXD",
+					"sv": 1,
+					"damage": {
+						"type": "burn ex",
+						"base": "5dx3",
+						"armor_divisor": 2
+					},
+					"accuracy": "4",
+					"range": "90/270",
+					"rate_of_fire": "1",
+					"shots": "4(10)",
+					"bulk": "-2",
+					"recoil": "1",
+					"strength": "6",
+					"usage": "Standard",
+					"usage_notes": "Chain effect as the Volkite Blaster above, at this weapon's own damage.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eRdtNjBwil5mMnyZM",
+			"description": "Volkite Caliver",
+			"local_notes": "Lore: A heavier, two-handed volkite support weapon, background depicting the caliver as the family's squad-support pattern - too much thermal cell and heat sink for a standard rifle housing, issued in smaller numbers than the volkite blaster to Mechanicus heavy-support details.\n\nDesign: One die up from the Volkite Blaster/Charger anchor, matching the family's one-die-per-size- class progression (as the Heavy Arc Rifle steps up from the Arc Rifle): 7dx3(2) burn ex, avg 73.5, penetrating Astartes power armour 96.2% of the time by exact dice distribution - a clear step above the blaster's 85.5% without reaching the volkite family's own upper bound against Terminator plate (2.2%, essentially unchanged from the blaster's 0.1% - this remains a sub-lascannon-tier weapon even at its biggest). Handling stats: weight 18 lb for a genuinely two-handed support weapon with a bigger heat sink than the blaster's 12 lb; min ST sqrt(10x18)=13.4, rounded to 13, with the † suffix (fireable two-handed at that ST per Basic Set convention, since it is not quite heavy enough to require a true mount). Shots 8(10), the biggest thermal cell in the family. Bulk -6 and Acc 7 (rifle bracket topped out, plus the beam-weapon allowance) both sit above the blaster's own figures for the larger housing. Rcl 1 unchanged - it remains a beam weapon regardless of size.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"tech_level": "12",
+			"legality_class": "0",
+			"base_value": "8200",
+			"base_weight": "18 lb",
+			"weapons": [
+				{
+					"id": "Wes8lglr6-QZNo5wv",
+					"sv": 1,
+					"damage": {
+						"type": "burn ex",
+						"base": "7dx3",
+						"armor_divisor": 2
+					},
+					"accuracy": "7",
+					"range": "250/750",
+					"rate_of_fire": "1",
+					"shots": "8(10)",
+					"bulk": "-6",
+					"recoil": "1",
+					"strength": "13†",
+					"usage": "Braced",
+					"usage_notes": "Chain effect as the Volkite Blaster above, at this weapon's own damage.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eOBDtsY_HBPPXI4nY",
+			"description": "Eradication Ray",
+			"local_notes": "Lore: The heavy, arm-integrated disintegration weapon of the Kataphron Destroyer, current Codex Adeptus Mechanicus background describing it as capable of reducing infantry and light vehicles alike to ash at close range - the Mechanicus's answer to the meltagun, built into a cybernetic war-form rather than carried.\n\nDesign: Framework.md's anchor: \"Eradication ray | Melta-like, short range, disintegrating.\" Built as a heavier sibling of the meltagun anchor (8dx6(10) burn short-range, 4dx6(3) beyond ½D) rather than re-derived from scratch, per the shared \"melta-like\" lore description, but at a genuinely bigger scale: where the man-portable meltagun's 8dx6(10) already penetrates every DR on the vehicle table (checked by exact dice distribution in the Imperium melta file), a literal die increase over that anchor would only add redundant overkill, so instead the eradication ray keeps the meltagun's own dice exactly and lets its heavier weight and integral mount carry the \"bigger, Kataphron-scale\" reading instead of a bigger number - this project prefers a reasoned \"no further departure needed\" over inflating dice with no lore payoff, the same judgement call the Lascannon entry makes when its worst-case roll already clears every AV on the table. Handling stats, however, are genuinely different from the meltagun's: weight 90 lb for a weapon built into a Destroyer's reactor-fed arm rather than carried; the raw ST formula, sqrt(10x90)=30, is kept as a literal figure with the M suffix (mounted) even though \"mounted\" here means bolted to a cybernetic chassis rather than a tripod, since the weapon is never fired independently of that chassis. RoF 1 and the beyond- ½D falloff line are unchanged from the meltagun's own fusion-beam mechanism. Shots 6(10): a reactor-fed cell, smaller in shot count than the meltagun's 4(5) is large in individual power, reflecting a Destroyer's sustained-combat role rather than a single ambush shot. Bulk -8 is nominal (the \"weapon\" is never unslung or carried separately). Rcl 1, as the meltagun, since a fusion beam has no propellant kick. Acc 2: this is emphatically a close-range, point-blank weapon per its own short range band, so fine aiming optics buy little and are not fitted.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"tech_level": "12",
+			"legality_class": "0",
+			"base_value": "14000",
+			"base_weight": "90 lb",
+			"weapons": [
+				{
+					"id": "WbArofloRWHspoEbd",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "8dx6",
+						"armor_divisor": 10
+					},
+					"accuracy": "2",
+					"range": "8/40",
+					"rate_of_fire": "1",
+					"shots": "6(10)",
+					"bulk": "-8",
+					"recoil": "1",
+					"strength": "30M",
+					"usage": "Short range (up to ½D)",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Gunner"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Beams"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Gunner"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "WRslkEDbQZJAoELEf",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "4dx6",
+						"armor_divisor": 3
+					},
+					"accuracy": "2",
+					"range": "8/40",
+					"rate_of_fire": "1",
+					"shots": "6(10)",
+					"bulk": "-8",
+					"recoil": "1",
+					"strength": "30M",
+					"usage": "Beyond ½D",
+					"usage_notes": "Half the dice past ½D and the armour divisor falls from (10) to (3), exactly as the Imperium Meltagun's own beyond-½D line - the eradication ray shares the meltagun anchor's fusion-beam physics (framework.md: \"melta-like, short range, disintegrating\"), just scaled to a Kataphron Destroyer's integral reactor arm rather than a shoulder-fired weapon.\n",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Gunner"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Beams"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Gunner"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eVV9PgC6YQy_QHaLa",
+			"description": "Eradication Beamer",
+			"local_notes": "Lore: A lighter, tripod-portable disintegration weapon fielded by Mechanicus heavy-support details where a full Kataphron isn't available: background describes it as trading the eradication ray's point-blank, melta-like violence for a longer-ranged, continuously-sustained disintegration beam.\n\nDesign: Deliberately not the same fusion-beam physics as the Eradication Ray (that weapon's short, violent pulse is exactly what the meltagun-derived (10) divisor and the harsh beyond-½D falloff represent): the beamer is instead a sustained beam with a real, if shorter, effective range and no half-range penalty structure, so it needs its own armour divisor rather than inheriting the melta family's. Checked by exact dice distribution across several divisors before settling on (4) - meaningfully better than the plasma gun's (3) as befits a dedicated disintegrator, but nowhere near the melta family's (10) since this is a continuous beam rather than a single point-blank fusion event: 6dx4(4) burn ex averages 84 and penetrates Astartes power armour (DR 100, eff. 25) 100% of the time and even a Terminator (DR 200, eff. 50) 98% of the time - a genuinely fearsome support weapon, appropriate to its rarity and cost, without quite matching the eradication ray's guaranteed-everywhere melta-tier overkill at point-blank range. Handling stats: weight 35 lb for a tripod-portable support weapon, well below the Kataphron-integral eradication ray's 90 lb; the raw formula gives sqrt(10x35)=18.7, rounded to 19, adjusted down to 18 with the B suffix since it is depicted braced on a folding bipod/tripod rather than carried loose. RoF 1 (a sustained beam still needs to recharge between full discharges) and shots 8(10) (bigger cell than the eradication ray's, since this is the family's longer-endurance support pattern). Bulk -7 and Rcl 1 fit a heavy, beam-class support weapon. Acc 5: real sighting optics for its longer engagement range, unlike the point-blank eradication ray's Acc 2.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"tech_level": "12",
+			"legality_class": "0",
+			"base_value": "11000",
+			"base_weight": "35 lb",
+			"weapons": [
+				{
+					"id": "W7y_4wj6bQx6mhqwF",
+					"sv": 1,
+					"damage": {
+						"type": "burn ex",
+						"base": "6dx4",
+						"armor_divisor": 4
+					},
+					"accuracy": "5",
+					"range": "150/450",
+					"rate_of_fire": "1",
+					"shots": "8(10)",
+					"bulk": "-7",
+					"recoil": "1",
+					"strength": "18B",
+					"usage": "Braced",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Gunner"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Beams"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Gunner"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "e7Q-wRtPh8PJ2V0yw",
+			"description": "Gamma Pistol",
+			"local_notes": "Lore: An Ordo Reductor relic sidearm, exceedingly rare even by archeotech standards, described in what little background exists on it as firing a focused pulse of hard gamma radiation that burns through matter and irradiates whatever it touches regardless of armour - carried, when it is carried at all, by senior Tech-Priests as a badge of the Ordo's forbidden research as much as a working weapon.\n\nDesign: No framework.md anchor covers this item by name, so it is built as a small step beyond the Imperium Plasma Pistol (4dx4(3) burn ex, avg 56) rather than invented from nothing: a slightly better armour divisor, (4) instead of (3), for exotic gamma-emission physics rather than contained plasma, dropping the \"ex\" (this is a penetrating ray, not an explosive plasma bolt) and adding the radium-style DR-ignoring radiation follow-up as its real signature effect, per its reputation as a weapon that \"burns through matter.\" Checked by exact dice distribution: 4dx4(4) burn averages 56 and penetrates Astartes power armour (DR 100, eff. 25) 98.8% of the time, a clear step above the plasma pistol's own 95% at the same average damage - the improved divisor is exactly what should be different about a gamma-ray weapon over a magnetically contained plasma bolt. Handling stats: weight 3 lb for a compact relic pistol; the raw formula gives sqrt(10x3)=5.5, rounded to 5, but this is bumped to ST 6 because the archeotech capacitor housing is bulkier and less ergonomic than its light weight suggests - a relic built for a different hand than the one now holding it. RoF 1: an exotic capacitor that must fully recharge between shots, not a weapon anyone has ever depicted firing rapidly. Shots 3(20): an extremely limited, slow-to-recharge archeotech cell, reflecting genuine rarity rather than combat utility. Bulk -2 and Rcl 1 (a beam weapon) fit its pistol size. Acc 2: a crude, ill-understood period sight rather than a modern optic. LC0 and a five-figure cost reflect that this is a hoarded Ordo Reductor relic, not issued equipment.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"tech_level": "12",
+			"legality_class": "0",
+			"base_value": "22000",
+			"base_weight": "3 lb",
+			"weapons": [
+				{
+					"id": "WXyKvCpFTihOIxNAT",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "4dx4",
+						"armor_divisor": 4
+					},
+					"accuracy": "2",
+					"range": "60/180",
+					"rate_of_fire": "1",
+					"shots": "3(20)",
+					"bulk": "-2",
+					"recoil": "1",
+					"strength": "6",
+					"usage": "Standard",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "WqqpdOGjfcNEBhuS9",
+					"sv": 1,
+					"damage": {
+						"type": "tox",
+						"base": "1d",
+						"armor_divisor": -1
+					},
+					"accuracy": "2",
+					"range": "60/180",
+					"rate_of_fire": "1",
+					"shots": "3(20)",
+					"bulk": "-2",
+					"recoil": "1",
+					"strength": "6",
+					"usage": "Radiation follow-up (any wound inflicted)",
+					"usage_notes": "As the Radium Pistol's follow-up, but the gamma discharge irradiates even a target whose armour stopped the primary blast (a penetrating hit is not required to trigger this line) - a stray dose of hard radiation the target's own suit cannot fully block. This still does not apply to a target under an active energy shield (the field, not the plate, is what actually stops the radiation) or one already immune to radiation damage.\n",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "ezQaDJVDAMUhHmXOH",
+			"description": "Solar Atomiser",
+			"local_notes": "Lore: A one-of-a-kind Dark Age relic weapon associated with Archmagos Dominus Belisarius Cawl's own research and field kit rather than any standard Mechanicus pattern, rarely depicted at all and described in what little background exists as disintegrating its target outright at close range - the kind of single named archeotech relic this project's Relic Blade and Displacer Field entries already treat as GM-reference, hero-tier equipment rather than campaign-standard gear.\n\nDesign: No framework.md anchor exists for a single named relic like this; it is built, per this project's \"hero weapon\" precedent (the Relic Blade, one step above the standard power sword), as the single most powerful infantry-scale energy weapon in this file, checked by exact dice distribution to justify that status: 8dx4(5) burn ex averages 112 and penetrates every DR on both the personal-armour and the AV10-14 vehicle tables at or above 98-100%, including a Terminator's DR 200 (eff. 40) - a figure this project otherwise reserves for the Lascannon anchor, appropriate for a one-of-a-kind Dark Age relic rather than issued wargear. Handling stats: weight 10 lb for a two-handed relic device of unclear original purpose, neither pistol- nor rifle-sized in any conventional sense; min ST sqrt(10x10)=10.0, so ST 10. RoF 1 and a very slow-recharging shots 4(30): the weapon's archeotech power cell is irreplaceable and no depiction shows it fired more than a handful of times in a scene. Bulk -4 and Rcl 1 (a beam weapon) are reasoned rather than anchored. Acc 4: decent, if unremarkable, integral sights. TL marked 12^ per framework.md's \"Warp-dependent/superscience\" notation, since its function is not fully understood even by the Mechanicus itself; LC0 and its six-figure notional cost reflect that this is unique, GM-reference equipment, not something a player character is expected to be issued.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"tech_level": "12^",
+			"legality_class": "0",
+			"base_value": "60000",
+			"base_weight": "10 lb",
+			"weapons": [
+				{
+					"id": "Wlqby17ujGu42LZLu",
+					"sv": 1,
+					"damage": {
+						"type": "burn ex",
+						"base": "8dx4",
+						"armor_divisor": 5
+					},
+					"accuracy": "4",
+					"range": "15/45",
+					"rate_of_fire": "1",
+					"shots": "4(30)",
+					"bulk": "-4",
+					"recoil": "1",
+					"strength": "10",
+					"usage": "Standard",
+					"usage_notes": "A target reduced to 0 HP or less by this weapon and not merely wounded is not left a corpse: it is converted to ash and drifting light, per its \"atomiser\" name and its extremely rare depiction in the fiction. This is colour with no separate mechanical effect beyond the raw damage above (GURPS already has no separate \"how the body looks afterward\" stat).\n",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eZsz-pf7Dm05iqfls",
+			"description": "Flechette Blaster",
+			"local_notes": "Lore: The sidearm of the Sicarian Infiltrators, a compact gas-vented pistol firing a spray of small needle-flechettes; current Codex Adeptus Mechanicus background frames Infiltrators as an ambush and vanguard-clearing unit whose weapons are built to drop lightly-armoured scouts and point troops quickly and quietly rather than to threaten real armour.\n\nDesign: No framework.md anchor covers flechette weapons, so this is built from GURPS's own small-shot design logic rather than any catalogue item: a cluster of light needles gets pi- (the reduced wounding multiplier for small, low-penetration projectiles, as GURPS uses for shot pellets and small-calibre rounds) at a light 2d-1 (avg 6). Checked by exact dice distribution: it deals its full average against a wholly unarmoured target but 0% of hits get through even flak (DR 30) - deliberately no armour-piercing pretension at all, matching its role as an anti-personnel ambush weapon against unarmoured or lightly-clothed scouts and vanguard troops, not a general-purpose sidearm. Handling stats: weight 3 lb for a compact gas-vented cluster pistol; min ST sqrt(10x3)=5.5, rounded to 5. RoF 6: neither a plain semi-auto pistol's 3 nor a full rifle's 10, reflecting a genuine multi-needle cluster discharge mechanism faster than a single-round trigger pull but still hand-held and magazine-fed. Shots 30(3): a dense magazine of small flechette rounds, more than a conventional pistol's since each round is far smaller. Bulk -2 and Rcl 1 (light needles impart very little recoil individually) fit its size. Acc 1: a cluster-fire weapon's spread works against fine individual aim.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"tech_level": "11",
+			"legality_class": "1",
+			"base_value": "650",
+			"base_weight": "3 lb",
+			"weapons": [
+				{
+					"id": "WTkiHuL0uDhAUm6W-",
+					"sv": 1,
+					"damage": {
+						"type": "pi-",
+						"base": "2d-1"
+					},
+					"accuracy": "1",
+					"range": "60/180",
+					"rate_of_fire": "6",
+					"shots": "30(3)",
+					"bulk": "-2",
+					"recoil": "1",
+					"strength": "5",
+					"usage": "Standard",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eSAJB3KQL4-mr1D2D",
+			"description": "Flechette Stubcarbine",
+			"local_notes": "Lore: The carbine-length flechette weapon carried by Sicarian Infiltrators alongside their pistols, background describing it as a genuinely automatic weapon built for the same fast, close-in ambush work as the flechette blaster at a longer effective range and with more rounds ready to fire.\n\nDesign: One die up from the Flechette Blaster's 2d-1 pi- (a longer barrel and bigger cartridge feed more of the flechette payload's velocity), giving 2d pi- (avg 7): checked by exact dice distribution, still 0% penetration against flak (DR 30) or better - the family's whole point remains anti-unarmoured ambush work, not armour penetration, and a genuinely automatic carbine does not change that design intent, only the volume of fire. Handling stats: weight 6 lb for a carbine-length gas-vented weapon; min ST sqrt(10x6)=7.7, rounded to 8. RoF 10, a true automatic cyclic rate (unlike the pistol's cluster-discharge RoF 6) since the carbine's longer action and bigger magazine let it sustain genuine full-auto fire. Shots 60(3): double the pistol's magazine for the bigger, longer weapon. Bulk -3 and Rcl 2 (a little more felt recoil through a shoulder stock at full auto than the pistol's one-handed cluster discharge) fit carbine convention. Acc 3: carbine bracket, at the low end since the weapon's automatic-fire role trades fine aim for volume.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"tech_level": "11",
+			"legality_class": "1",
+			"base_value": "900",
+			"base_weight": "6 lb",
+			"weapons": [
+				{
+					"id": "WWcOAmII7ko4zkgmN",
+					"sv": 1,
+					"damage": {
+						"type": "pi-",
+						"base": "2d"
+					},
+					"accuracy": "3",
+					"range": "90/270",
+					"rate_of_fire": "10",
+					"shots": "60(3)",
+					"bulk": "-3",
+					"recoil": "2",
+					"strength": "8",
+					"usage": "Standard",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "exouzdyuLH1AZN5hp",
+			"description": "Macrostubber",
+			"local_notes": "Lore: A big-bore stub pistol also carried by Sicarian Infiltrators and some Skitarii officers, background describing it as a heavier, harder-hitting relic-pattern sidearm than the common Guard-issue stub automatic or revolver, firing an oversized round with genuine stopping power at the cost of a stiff recoil and a small magazine.\n\nDesign: Placed one clear step above the Imperium Stub Revolver (3d pi, avg 10.5, the \"heavier, better-machined round\" reference point in the stub-weapon family) rather than derived from any catalogue \"hand cannon\": a bigger case and a hollow-tipped or hardened penetrator core give it both a higher average (3d+1, avg 11.5) and the pi+ wounding multiplier the plain stub revolver lacks, reflecting a genuinely more dangerous round to flesh. Checked by exact dice distribution: under the current flak anchor (DR 30) it fails to penetrate flak at all (0%), exactly as the plain Stub Revolver (4d pi, avg 14) now also does - the heavier flak DR this project's own rescale settled on stops every unmodified pistol-calibre round in this file, stub or las alike, and this entry does not try to buy its way past that with a bigger number; its higher average and pi+ wounding multiplier over the Stub Revolver instead show up entirely against an unarmoured or barely-clothed target, where it deals meaningfully more damage per hit. It fails outright against carapace (DR 70) as well, keeping it a man-portable sidearm rather than a rifle-class threat. Handling stats: weight 4 lb, heavier than the stub revolver's 2.5 lb for its bigger case and reinforced slide; min ST sqrt(10x4)=6.3, rounded to 6, bumped to ST 7 to reflect the genuinely stiff recoil of a big-bore stub round (the raw carry-weight formula understates the grip strength a hard-kicking pistol actually needs). RoF 3 (semi-automatic) and shots 8(3) (a small magazine for the oversized cartridge) follow directly from its being a self-loading pistol rather than a revolver. Bulk -3, one step bulkier than a standard autopistol for its larger frame. Rcl 3, well above a normal service pistol's 2, for the big-bore round's real kick. Acc 2: plain iron sights, unremarkable for a sidearm.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"tech_level": "11",
+			"legality_class": "1",
+			"base_value": "550",
+			"base_weight": "4 lb",
+			"weapons": [
+				{
+					"id": "WM5AGi5S5jITB66LP",
+					"sv": 1,
+					"damage": {
+						"type": "pi+",
+						"base": "3d+1"
+					},
+					"accuracy": "2",
+					"range": "120/300",
+					"rate_of_fire": "3",
+					"shots": "8(3)",
+					"bulk": "-3",
+					"recoil": "3",
+					"strength": "7",
+					"usage": "Standard",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "efDFFZViQ3QrDaYnK",
+			"description": "Torsion Cannon",
+			"local_notes": "Lore: The main weapon of the Sydonian Dragoon and Ironstrider Ballistarius walker chassis, current Codex Adeptus Mechanicus background describing a torsion cannon as warping local gravity into a crushing, armour-buckling pulse rather than firing a conventional bolt or beam - consistently shown wrecking light and medium vehicles and infantry alike from a fast-moving walker platform.\n\nDesign: No framework.md anchor names graviton weapons directly, so this is built from the project's existing anti-armour design language (a high-damage, divisor-boosted crushing attack, the same structural approach the Autocannon and Krak Missile entries use, rather than any new grav- specific mechanic) instead of a 40k tabletop \"ignores extra armour save\" rule this project doesn't reproduce. Checked by exact dice distribution against the vehicle AV table: 6dx4(4) cr averages 84 and penetrates AV10-12 (DR 100-200, eff. 25-50) 98-100% of the time, AV13 (DR 275, eff. 68.8) 79.4% of the time, and AV14 (DR 350, eff. 87.5) 45.4% of the time - a hair below the Krak Missile anchor's own figures at the same tiers (90%/64%), appropriately positioning a walker-mounted repeating weapon just under a disposable one-shot warhead's raw punch. Handling stats: weight 150 lb reflects that this is bolted permanently to a war-engine's chassis, never carried; the raw formula, sqrt(10x150)=38.7, is not meaningful for a weapon no human ever shoulders, so ST is given as a nominal 30M (mounted) simply to flag that it cannot be fired unmounted. RoF 1 (the gravitic capacitor array must recharge between pulses) and shots 6(10) follow a heavy energy-weapon reload cycle. Bulk -8 is nominal, as with the Eradication Ray. Rcl 1: the \"kick\" of a gravity pulse is absorbed by the chassis mount, not felt as conventional recoil. Acc 9: built for a fast walker platform engaging light vehicles and infantry at real range, this carries genuine targeting optics, matching the Lascannon's own Acc 14 scaled down for a lighter chassis and shorter range band. TL marked 12^ per framework.md's superscience notation, since graviton manipulation is warp-adjacent physics even the Mechanicus does not fully explain.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"tech_level": "12^",
+			"legality_class": "0",
+			"base_value": "32000",
+			"base_weight": "150 lb",
+			"weapons": [
+				{
+					"id": "W-i3B9OZoNeS7_qFx",
+					"sv": 1,
+					"damage": {
+						"type": "cr",
+						"base": "6dx4",
+						"armor_divisor": 4
+					},
+					"accuracy": "9",
+					"range": "300/900",
+					"rate_of_fire": "1",
+					"shots": "6(10)",
+					"bulk": "-8",
+					"recoil": "1",
+					"strength": "30M",
+					"usage": "Braced (chassis-mounted)",
+					"usage_notes": "A graviton weapon crushes rather than burns or pierces: it deals crushing damage as shown, with no separate bonus against heavier armour beyond the armour divisor already applied - this project does not add a bespoke \"extra effect vs. high DR\" sub-mechanic on top of the existing divisor/DR system per its own design principles, so the anchor's anti-armour reputation is carried entirely by the (4) divisor and high raw damage below.\n",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Gunner"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Beams"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Gunner"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eOL42lOiresVPUJAi",
+			"description": "Heavy Grav-cannon, Kataphron Pattern",
+			"local_notes": "Lore: The Kataphron Destroyer's own graviton weapon, background material distinguishing it from the Ironstrider/Dragoon's torsion cannon as a shorter-ranged, closer-support pattern built into a slower, more heavily armoured war-form rather than a fast walker's main gun.\n\nDesign: One die down from the Torsion Cannon (5dx4(4) cr vs. 6dx4(4) cr), reflecting a smaller reactor-fed unit on a close-support chassis rather than a walker's dedicated main gun: checked by exact dice distribution, it averages 70 and penetrates AV10-12 90-100% of the time, falling to 50% at AV13 and 15.2% at AV14 - meaningfully behind the Torsion Cannon at the top end of the vehicle table, matching its \"close-support, not a dedicated tank-hunter\" role. Handling stats: weight 120 lb, lighter than the Torsion Cannon's 150 lb for the smaller unit; ST given as a nominal 28M (chassis-mounted, never carried) for the same reason as the Torsion Cannon's own figure. RoF 1 and shots 8(10) (a slightly larger, slower-cycling cell than the Torsion Cannon's, suited to a slower-moving chassis) follow the same graviton-recharge logic. Bulk -8 and Rcl 1 as the Torsion Cannon. Acc 6, well below the Torsion Cannon's 9, reflecting a shorter-ranged, close-support engagement profile rather than a fast walker's stand-off gunnery role.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"tech_level": "12^",
+			"legality_class": "0",
+			"base_value": "26000",
+			"base_weight": "120 lb",
+			"weapons": [
+				{
+					"id": "Wm1HjLTmPe4373SAA",
+					"sv": 1,
+					"damage": {
+						"type": "cr",
+						"base": "5dx4",
+						"armor_divisor": 4
+					},
+					"accuracy": "6",
+					"range": "150/450",
+					"rate_of_fire": "1",
+					"shots": "8(10)",
+					"bulk": "-8",
+					"recoil": "1",
+					"strength": "28M",
+					"usage": "Braced (chassis-mounted)",
+					"usage_notes": "As the Torsion Cannon's note on how graviton crushing damage is modelled.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Gunner"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Beams"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Gunner"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eMgv7kLzPxc-0w0hI",
+			"description": "Grav-gun, Skitarii Pattern",
+			"local_notes": "Lore: A rare man-portable graviton weapon fielded by Skitarii heavy-support specialists rather than a war-engine, scaling the Torsion Cannon and Heavy Grav-cannon's principle down to something a single augmented human can shoulder and fire.\n\nDesign: Continues the graviton family's established design (crushing damage, divisor (4), no bespoke \"ignores extra armour\" rule beyond that divisor) scaled down to a genuinely man-portable weapon: 4dx3(4) cr averages 42 and penetrates carapace (DR 70, eff. 17.5) 99.6% of the time, Sororitas power armour (DR 85, eff. 21.2) 97.3% of the time and Astartes power armour (DR 100, eff. 25) 94.6% of the time by exact dice distribution, falling to 66.4% against Mk X Gravis plate (DR 150, eff. 37.5) - a real anti-armour threat at personal scale without approaching the Torsion Cannon or Heavy Grav-cannon's vehicle-wrecking output, appropriate for the smallest weapon in the family. Handling stats: weight 14 lb for a genuinely shoulder-fired support weapon, far below the chassis-mounted members of the family; min ST sqrt(10x14)=11.8, rounded to 12. RoF 1 and shots 10(10) follow the same graviton-recharge logic as the rest of the family, with a larger shot count than the chassis-mounted weapons since this cell is built for sustained squad-support fire rather than a war-engine's already-considerable reactor draw. Bulk -6 (heavy/support bracket) and Rcl 1 (the gravitic \"kick\" is absorbed the same way at any scale) follow. Acc 5: solid support-weapon optics, between the chassis weapons' higher figures and a standard rifle's.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"tech_level": "12^",
+			"legality_class": "0",
+			"base_value": "9000",
+			"base_weight": "14 lb",
+			"weapons": [
+				{
+					"id": "W4hPXn1cvFhRoBY1C",
+					"sv": 1,
+					"damage": {
+						"type": "cr",
+						"base": "4dx3",
+						"armor_divisor": 4
+					},
+					"accuracy": "5",
+					"range": "100/300",
+					"rate_of_fire": "1",
+					"shots": "10(10)",
+					"bulk": "-6",
+					"recoil": "1",
+					"strength": "12",
+					"usage": "Braced",
+					"usage_notes": "As the Torsion Cannon's note on how graviton crushing damage is modelled.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "e7tylobhAoL-9nGHM",
+			"description": "Incendine Combustor",
+			"local_notes": "Lore: A wrist- or forearm-mounted incendiary projector built into the Sicarian Ruststalker's chassis alongside its transonic blade, current Codex Adeptus Mechanicus background describing it as a short, hot burst used to flush a target from cover or finish a wounded opponent at the same close range the Ruststalker's melee weapons already operate in, rather than a squad-support flame weapon in its own right.\n\nDesign: Built as a hand-flamer-class weapon on the Imperium Flame Weapons file's own established design logic (B412 area/cone attack, plus the B433 burning-target follow-up and its sealed-armour exemption) rather than a new mechanic, since framework.md gives no separate Mechanicus flame-weapon anchor: one die and a range yard above the Imperium Hand Flamer's 2d+2 burn/3-yard cone (3d+2 burn/4 yards), reflecting a purpose-built incendiary designed to finish a fight rather than clear a room, and correspondingly shorter shot count than a standalone flamer since it draws from a small integral reservoir shared with the rest of the Ruststalker's wargear rather than a dedicated fuel tank. Checked by exact dice distribution against the current flak anchor (DR 30): average roll 12.5 fails to penetrate outright (0% of hits) on the initial hit, same as every unmodified flame weapon's cone attack against the heavier post-rescale flak DR - the real killing power, as with the rest of the flame-weapon family, is entirely the DR-ignoring burning follow-up below, not the initial cone hit. Handling stats: weight 5 lb for a compact, forearm-integrated unit; min ST sqrt(10x5)=7.1, rounded to 7 (a nominal figure, since it's normally fired as part of the Ruststalker's integrated wargear rather than hand-held, but given here so it can also be issued as a stand-alone sidearm at the GM's discretion). Bulk -3, between the Hand Flamer's -2 and the standard Flamer's -3, for its slightly longer reach. Shots 3(5): a small reservoir, one fewer burst than the Hand Flamer's. No Acc/RoF fields, matching the flame-weapon family's existing convention that a cone attack needs neither.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"tech_level": "11",
+			"legality_class": "1",
+			"base_value": "1200",
+			"base_weight": "5 lb",
+			"weapons": [
+				{
+					"id": "WFborOIgYdIlJ7c70",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "3d+2"
+					},
+					"range": "4",
+					"shots": "3(5)",
+					"bulk": "-3",
+					"strength": "7",
+					"usage": "Cone attack (4 yards)",
+					"usage_notes": "As the Imperium Flamer family: no Acc bonus and no aiming roll against a target inside the cone (B412), the skill roll being only to avoid obstacles and keep the cone off allies; treat cover bonuses as halved (round down) against the cone rather than ignored.\n",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Liquid Projector"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Flamethrower"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Liquid Projector"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "WF1dyS8UF_j0kZsnP",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "1d"
+					},
+					"range": "4",
+					"shots": "3(5)",
+					"bulk": "-3",
+					"strength": "7",
+					"usage": "Follow-up (per turn while ablaze)",
+					"usage_notes": "As the Imperium Flamer family's burning-target follow-up: a failed HT roll on being hit sets the target alight for this much burn damage per turn (ignoring DR, B433) until extinguished; does not apply against a hermetically sealed suit whose seal hasn't been breached that scene.\n",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Liquid Projector"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Flamethrower"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Liquid Projector"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "ewqrFBeAX8K9dbigZ",
+			"description": "Cognis Flamer",
+			"local_notes": "Lore: A Mechanicus-pattern flamer built with an integrated targeting cogitator (\"cognis\" weapons carry a rudimentary machine-spirit that assists a vehicle or war-engine's own targeting array), mounted on Onager Dunecrawlers, Kastelan Robots and Knight war-engines' hardpoints per current Codex Adeptus Mechanicus background, functionally the same weapon as a standard heavy flamer wired into a larger machine's fire-control system.\n\nDesign: Built directly on the Imperium Heavy Flamer's own profile (5d burn/8-yard cone, 1d+1 burn follow-up) since a cognis weapon is explicitly the same weapon plus a targeting cogitator, not a different gun: this entry sits one small step below that anchor (4d+2 burn/7-yard cone) rather than exactly matching it, reflecting that this is the version scaled to a Dunecrawler or Kastelan hardpoint rather than the vehicle-sponson-class mount the Heavy Flamer anchor implies, with the \"cognis\" targeting cogitator's actual mechanical contribution modelled as a flat +1 to the Liquid Projector skill roll used to avoid obstacles and keep the cone off allies (there being no separate \"to-hit\" roll on a B412 cone attack for a targeting computer to improve). Checked by exact dice distribution against the current flak anchor (DR 30): average roll 16.5 fails to penetrate outright (0% of hits) on the initial cone hit, same as the rest of the flame-weapon family under the heavier post-rescale flak DR - as with every flame weapon in this project, the real threat is the DR-ignoring burning follow-up, not the initial hit. Handling stats: weight 30 lb for a robot/vehicle hardpoint weapon, well above a man-portable Heavy Flamer's 26 lb for its additional targeting hardware and mounting bracket; ST given as a nominal 17M (hardpoint- mounted only) since it is never carried independently of its host machine. Bulk -6 is nominal for the same reason. Shots 5(5), matching the Heavy Flamer's own reservoir size, since the underlying fuel system is unchanged. No Acc/RoF fields, per the flame-weapon family convention.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"tech_level": "11",
+			"legality_class": "1",
+			"base_value": "2600",
+			"base_weight": "30 lb",
+			"weapons": [
+				{
+					"id": "W7w2MsWxWowLpoSJx",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "4d+2"
+					},
+					"range": "7",
+					"shots": "5(5)",
+					"bulk": "-6",
+					"strength": "17M",
+					"usage": "Cone attack (7 yards)",
+					"usage_notes": "As the Imperium Flamer family's cone-attack note above. The \"cognis\" machine-spirit targeting cogitator feeding this weapon's mount grants a flat +1 to the Liquid Projector skill roll made to avoid intervening obstacles and keep the cone off friendly targets, representing its auto-tracking assistance; it grants no bonus to the cone's raw damage or to hitting a target already inside the cone, since B412's cone attack has no to-hit roll to bonus in the first place.\n",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Liquid Projector"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Flamethrower"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Liquid Projector"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "Wfkj9WLBUTa5JPjqO",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "1d+1"
+					},
+					"range": "7",
+					"shots": "5(5)",
+					"bulk": "-6",
+					"strength": "17M",
+					"usage": "Follow-up (per turn while ablaze)",
+					"usage_notes": "As the Imperium Flamer family's burning-target follow-up, with the same sealed-armour exemption.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Liquid Projector"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Flamethrower"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Liquid Projector"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		}
+	]
+}

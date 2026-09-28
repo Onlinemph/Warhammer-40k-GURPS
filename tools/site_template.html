@@ -181,7 +181,8 @@ function more(e){
 function tagChips(tags){ return (tags||[]).map(t=>`<span class="chip tag">${esc(t)}</span>`).join(""); }
 
 function eqCard(e, child){
-  const chips = [e.tl?`TL${e.tl}`:"", e.lc!=null&&e.lc!==undefined?`LC${e.lc}`:"", money(e.cost), e.weight||"",
+  const wpm = /^Weak Points (\d+):/.exec(e.notes||"");
+  const chips = [wpm?`Weak Points ${wpm[1]}`:"", e.tl?`TL${e.tl}`:"", e.lc!=null&&e.lc!==undefined?`LC${e.lc}`:"", money(e.cost), e.weight||"",
     e.qty>1?`×${e.qty}`:"", e.uses!=null?`${e.uses} SP / uses`:"", e.ref||""].filter(Boolean);
   return `<article class="entry${child?" child":""}"><div class="ehead"><h3 class="ename">${esc(e.name)}</h3></div>
     <div class="meta">${chips.map(c=>`<span class="chip">${esc(c)}</span>`).join("")}${child?"":tagChips(e.tags)}</div>

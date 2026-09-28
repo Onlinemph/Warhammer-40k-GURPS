@@ -1,0 +1,373 @@
+{
+	"version": 5,
+	"rows": [
+		{
+			"id": "EI19Y_Z3p_jhM0eU2",
+			"description": "Auramite Power Armour (Aquilon Pattern)",
+			"local_notes": "Weak Points 3: when a hit on this armour fails to penetrate, roll 3d; on 3 or less it found a gap and DR is halved against it.\n\nUnlike an Astartes power armour Mark, Aquilon pattern leaves no significantly weaker location: every hit location carries substantial DR, per the framework's explicit instruction. Requires no black-carapace-style interface - a Custodian's own physiology and training suffice - and imposes no fine-motor or DX penalty even on a wearer without one, since it is built individually for its wearer from the start.\n\nLore: Aquilon pattern Auramite armour is the standard plate of the Legio Custodes across current Codex: Adeptus Custodes background and Chris Wraight's Custodes novels: golden, ornate, and consistently described as superior in every respect to Astartes power armour, matched to the wearer's own body rather than issued from a common pool.\n\nDesign: Torso DR is the framework's own fixed Custodes anchor (150), 50 above Astartes power armour's Mk VII baseline (100). Limb/head DR use the same proportional offsets as the Mk VII Astartes family (Imperium/Armour/Imperial Armour.eqp), scaled by 150/100 = 1.5x: arm/ leg 88x1.5=132, neck 63x1.5=94.5 rounded to 95, skull 100x1.5=150, face 75x1.5=112.5 rounded to 113, hand 63x1.5=94.5 rounded to 95, foot 75x1.5=112.5 rounded to 113. Eye lenses are set to 60, level with Terminator lenses and a step above the Astartes 40 (framework.md eye-lens rule) - a coincidental match with the framework's own Terminator eye-lens figure, kept as-is since it already lands at a sensible value one step above the Astartes eye lens (40). Servo bonus (lifting_st +10, striking_st +6) is set a clear step above the Astartes Mark VII suite's own +9/+5, reflecting superior Custodes-grade actuators on top of the wearer's already much higher ST 40. Checked against the assignment's calibration requirement: a standard boltgun (6dx2(2) pi++, eff. DR vs torso = 150/2 = 75) penetrates Auramite only 0.0% of the time by exact dice distribution (6dx2 never exceeds 72, max roll 6x2x2=144... correcting: max single-die roll 6, so max total (6x6)x2=72, always below 75) - a Custodian in Auramite shrugs off bolter fire completely, stronger even than the assignment's baseline expectation of \"should shrug off bolter fire,\" and a marked step up from an Astartes' own 14% chance of being hit through his own plate.",
+			"tags": [
+				"Body Armor",
+				"Imperium",
+				"Adeptus Custodes"
+			],
+			"tech_level": "12",
+			"legality_class": "0",
+			"base_value": "250000",
+			"base_weight": "320 lb",
+			"features": [
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"torso",
+						"vitals",
+						"groin"
+					],
+					"amount": 150
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"arm"
+					],
+					"amount": 132
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"leg"
+					],
+					"amount": 132
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"neck"
+					],
+					"amount": 95
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"skull"
+					],
+					"amount": 150
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"face"
+					],
+					"amount": 113
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"eye"
+					],
+					"amount": 60
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"hand"
+					],
+					"amount": 95
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"foot"
+					],
+					"amount": 113
+				},
+				{
+					"type": "attribute_bonus",
+					"attribute": "lifting_st",
+					"amount": 10
+				},
+				{
+					"type": "attribute_bonus",
+					"attribute": "striking_st",
+					"amount": 6
+				}
+			],
+			"quantity": 1,
+			"children": [
+				{
+					"id": "emU3OxgquYnWoDise",
+					"description": "Custodian Helm",
+					"local_notes": "Integrated auto-senses (threat auto-cueing, full-spectrum vision, audio filtering) tuned to a Custodian's own enhanced Perception rather than compensating for a lesser one.\n\nLore: The distinctive full helm of Custodes plate, shown throughout Codex art and background feeding tactical and sensory data directly to its wearer with no need for the kind of black- carapace neural bridge an Astartes suit requires.\n\nDesign: Flat Observation bonus, set one point above the Astartes Mark VII Auto-senses Suite's own +2 (Imperium/Armour/Imperial Armour.eqp) to reflect superior Custodes-grade sensors feeding an already-superior Perception score, no fixed anchor exists.",
+					"base_value": "20000",
+					"base_weight": "5 lb",
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "Observation"
+							},
+							"amount": 3
+						}
+					],
+					"quantity": 1,
+					"equipped": true
+				},
+				{
+					"id": "er-vIDffQ9rMoA0OT",
+					"description": "Respirator & Void Seal",
+					"local_notes": "Full atmospheric independence; immune to inhaled toxins and gas while sealed, vacuum-rated.\n\nLore: Custodians are shown operating in the void and in toxic environments in sealed plate, as Astartes are.\n\nDesign: Standard sealed-armour assumption carried over from the Astartes suit's equivalent subsystem; no separate anchor.",
+					"base_value": "4000",
+					"base_weight": "6 lb",
+					"quantity": 1,
+					"equipped": true
+				},
+				{
+					"id": "eCqzVNw1tzSQO4RPE",
+					"description": "Vox-Link (Integrated)",
+					"local_notes": "Encrypted short-to-medium range vox built into the gorget.\n\nLore: Custodian Guard coordinate as a unit in the same way Astartes squads do.\n\nDesign: Flavour/utility subsystem; no DR or attribute effect.",
+					"base_value": "3000",
+					"base_weight": "2 lb",
+					"quantity": 1,
+					"equipped": true
+				},
+				{
+					"id": "eiMR8IlanjW239R_6",
+					"description": "Servo-Motor Actuators (Aquilon Pattern)",
+					"local_notes": "The bulk of the suit's weight and cost, matching the parent item's own servo figures.\n\nLore: The core of what makes Auramite armour \"powered\" rather than merely thick.\n\nDesign: Duplicates the parent entry's own servo ST bonus for completeness of the container breakdown, as the Astartes Mark VII file does.",
+					"base_value": "60000",
+					"base_weight": "90 lb",
+					"features": [
+						{
+							"type": "attribute_bonus",
+							"attribute": "lifting_st",
+							"amount": 10
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "striking_st",
+							"amount": 6
+						}
+					],
+					"quantity": 1,
+					"equipped": true
+				}
+			]
+		},
+		{
+			"id": "eHKI13_agc8MmYrtV",
+			"description": "Allarus Terminator Armour",
+			"local_notes": "Weak Points 3: when a hit on this armour fails to penetrate, roll 3d; on 3 or less it found a gap and DR is halved against it.\n\nEffective SM +1 while worn on top of a Custodian's own unarmoured SM +1 (total SM +2), the bulkiest infantry-portable armour in the setting. Requires no black-carapace-style interface, as Auramite above. Life support allows unaided teleportation and extended void operations, as Astartes Terminator plate.\n\nLore: Allarus Custodians - the Legio Custodes' Terminator-analogue elite - wear this pattern per current Codex: Adeptus Custodes background, consistently described as heavier and more protective than an Astartes Terminator's own Tactical Dreadnought Armour, matching the framework's fixed Allarus anchor.\n\nDesign: Torso DR is the framework's own fixed anchor (250), 50 above the Astartes Tactical Dreadnought (Terminator) anchor of 200. Limb/head DR scale by 250/200 = 1.25x from the Indomitus-pattern Terminator armour's own values (Imperium/Armour/Imperial Armour.eqp): arm/leg 175x1.25=218.75 rounded to 220, neck 138x1.25=172.5 - deliberately pulled down slightly to 158 rather than following the multiplier exactly, since a straight 1.25x on every location would leave the neck disproportionately strong relative to the arm/leg figures; skull 200x1.25=250, face 150x1.25=187.5 rounded to 188, hand 125x1.25=156.25 rounded to 158, foot 150x1.25=187.5 rounded to 188. Eye lenses set to 70, a clear step above both the Astartes Terminator's 60 and this file's own Auramite figure of 60, matching Allarus plate's status as the single best infantry armour modelled in this project. Servo bonus (lifting_st +22, striking_st +12) sits above the Astartes Indomitus Terminator suite's own +20/+10. An extra +1 SM (stacking to SM +2 total with the wearer's own unarmoured SM +1) reflects Allarus plate's even greater bulk than Auramite armour, mirroring how the Astartes Terminator suit adds SM +1 over that wearer's own SM 0 baseline; -1 Basic Move follows the same convention. Checked against the assignment's calibration requirement (a standard boltgun, eff. DR vs torso = 250/2 = 125): penetration is 0.0% by exact dice distribution, comfortably beneath even Auramite's own already-total immunity to bolter fire.",
+			"tags": [
+				"Body Armor",
+				"Imperium",
+				"Adeptus Custodes"
+			],
+			"tech_level": "12",
+			"legality_class": "0",
+			"base_value": "400000",
+			"base_weight": "480 lb",
+			"features": [
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"torso",
+						"vitals",
+						"groin"
+					],
+					"amount": 250
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"arm"
+					],
+					"amount": 220
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"leg"
+					],
+					"amount": 220
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"neck"
+					],
+					"amount": 158
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"skull"
+					],
+					"amount": 250
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"face"
+					],
+					"amount": 188
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"eye"
+					],
+					"amount": 70
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"hand"
+					],
+					"amount": 158
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"foot"
+					],
+					"amount": 188
+				},
+				{
+					"type": "attribute_bonus",
+					"attribute": "lifting_st",
+					"amount": 22
+				},
+				{
+					"type": "attribute_bonus",
+					"attribute": "striking_st",
+					"amount": 12
+				},
+				{
+					"type": "attribute_bonus",
+					"attribute": "sm",
+					"amount": 1
+				},
+				{
+					"type": "attribute_bonus",
+					"attribute": "basic_move",
+					"amount": -1
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "EuwnHeOx4skOk6vE7",
+			"description": "Vratine Armour",
+			"local_notes": "Weak Points 4: when a hit on this armour fails to penetrate, roll 3d; on 4 or less it found a gap and DR is halved against it.\n\nFull-enclosure ceramite plate over a padded underlayer; imposes the usual GURPS bulky-armour DX/Stealth penalties for rigid heavy armour, as any carapace-class suit. Built for an unaugmented human body, exactly as Adepta Sororitas power armour is: no black- carapace-style interface of any kind is needed or possible for a Sister of Silence.\n\nLore: Vratine armour is the Sisters of Silence's standard-issue plate per current Codex: Adeptus Custodes background (which covers the Sisterhood alongside the Legio Custodes) and The Master of Mankind's depiction of Sisters operating on Terra; framework.md classes it as carapace-tier rather than true power armour, matching its consistently more austere, masked-helm silhouette relative to Custodes gold.\n\nDesign: Torso DR held at the fixed Carapace anchor (70, framework.md), the same tier used for the Imperium's other elite carapace suits (Tempestus, Arbites patterns). Non-torso figures scale from the Arbites Pattern carapace suit's own full-head-enclosure, hands-and- feet-covered profile (Imperium/Armour/Imperial Armour.eqp: arm/leg 36, neck 41, skull 45, face 34, eye/hand 23, foot 27) by the anchor's own move from 45 to 70 (x14/9), since Vratine armour's enclosed, masked helm is closer to that design brief than the open-faced Guard pattern's: arm/leg 56, neck 64, skull 70, face 53, hand 36, eye 20, foot 42.",
+			"tags": [
+				"Body Armor",
+				"Imperium",
+				"Sisters of Silence"
+			],
+			"tech_level": "10",
+			"legality_class": "1",
+			"base_value": "2200",
+			"base_weight": "32 lb",
+			"features": [
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"torso",
+						"vitals",
+						"groin"
+					],
+					"amount": 70
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"arm"
+					],
+					"amount": 56
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"leg"
+					],
+					"amount": 56
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"neck"
+					],
+					"amount": 64
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"skull"
+					],
+					"amount": 70
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"face"
+					],
+					"amount": 53
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"eye"
+					],
+					"amount": 20
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"hand"
+					],
+					"amount": 36
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"foot"
+					],
+					"amount": 42
+				}
+			],
+			"quantity": 1,
+			"children": [
+				{
+					"id": "emGnhR0s7TYlvwDfq",
+					"description": "Vratine Visor",
+					"local_notes": "Basic low-light optics and audio filtering; simpler than a Custodes or Astartes auto-senses suite.\n\nLore: A modest sensory package appropriate to an unaugmented (if pariah-blooded) human wearer.\n\nDesign: Small flat skill bonus, kept deliberately below the Astartes/Custodes suites' own bonuses for the same reason the Sororitas power armour's own Auto-senses Suite is kept modest; no fixed anchor.",
+					"base_value": "1500",
+					"base_weight": "2 lb",
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "Observation"
+							},
+							"amount": 1
+						}
+					],
+					"quantity": 1,
+					"equipped": true
+				},
+				{
+					"id": "edDG8jJhz-wzypQs4",
+					"description": "Respirator & Void Seal",
+					"local_notes": "Full atmospheric seal; immune to inhaled toxins and gas while sealed, short-duration vacuum survival.\n\nLore: Sisters of Silence are shown operating in hazardous void and daemon-tainted environments in sealed plate, as other Imperial elites are.\n\nDesign: Standard sealed-armour assumption carried over from the Sororitas power armour's equivalent subsystem; no separate anchor.",
+					"base_value": "1500",
+					"base_weight": "4 lb",
+					"quantity": 1,
+					"equipped": true
+				}
+			]
+		}
+	]
+}

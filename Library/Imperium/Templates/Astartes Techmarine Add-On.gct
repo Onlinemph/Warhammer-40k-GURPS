@@ -1,0 +1,211 @@
+{
+	"version": 5,
+	"id": "BgiVP6O2vd2XDuBkf",
+	"notes": "An add-on, not a full character: layer this over Imperium/Templates/ Astartes Battle-Brother.gct (plus a Chapter Gene-Seed lens) to build a Techmarine, exactly as Imperium/Templates/Astartes Librarian Add-On.gct builds a Librarian. It does not repeat the Battle-Brother's attributes, physiology, Chapter Rank, or Reputation -- only what a Techmarine has beyond a Tactical Marine: a full second apprenticeship on Mars (or a Chapter's own equivalent forge) inducted into the Cult Mechanicus, plus the servo-harness every Techmarine is known for. Augmetics and Mechanicus faith traits are pulled in with `include` from Adeptus Mechanicus/Traits/ Augmetics and the Cult Mechanicus.adq rather than copied.\nPoint math for this add-on alone: traits 1 (Cranial Circuitry) + 7 (Cortex Implant) + 8 (Noospheric Link) + 50 (Servo-Arm) + 1 (Mind Impulse Unit) + 9 (Mechadendrite, Utility Pattern) + 10 (Mechanicus Rank 2) - 10 (Disciplines of the Cult Mechanicus) - 10 (Duty, Adeptus Mechanicus) = 66, plus skills 8 (Engineer, Combat Engineering) + 8 (Engineer, Powered Armor) + 4 (Theology, Cult Mechanicus) + 4 (Language, Binharic) + 4 (Hidden Lore, Archeotech) + 1 (Savoir-Faire, Adeptus Mechanicus) = 29. 95 points on top of the Battle-Brother's own 751, landing at roughly 846 -- past the Astartes tier's normal 550-800 ceiling and into framework.md's \"Heroes and legends\" band, matching how the Librarian add-on (bringing a Battle-Brother to ~962) already treats a Chapter specialist as costing more than a line Marine. The servo-harness itself (the physical mount the Servo-Arm and Mechadendrite are built into) and any Techmarine-pattern weapon (servo-harness-mounted flamer, plasma cutter, etc.) are equipment, not covered here.\n",
+	"traits": [
+		{
+			"id": "tjBcJnu6Ea7300Nhd",
+			"name": "Cranial Circuitry",
+			"local_notes": "Lore: A basic subcutaneous data-port and skull-mounted junction box, common to nearly every ordained Tech-Priest: the hardware prerequisite for plugging into a standard Mechanicus cogitator terminal or picter-feed, rather than any enhancement to the mind behind it.\n\nDesign: 1-point Perk (B9): waives the unfamiliarity penalty for operating a Mechanicus-standard terminal, by direct analogy with how Black Carapace (Imperium/Traits/Astartes Gene-Seed.adq) is priced as the interface hardware rather than the capability it plugs into.",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Imperium",
+				"Adeptus Mechanicus",
+				"Perk"
+			],
+			"base_points": 1
+		},
+		{
+			"id": "tDOv4HRMgCYzOx-e0",
+			"name": "Cortex Implant, Logis Pattern",
+			"local_notes": "Eidetic Memory; Lightning Calculator.\n\nLore: A cogitator wafer grafted directly to the parietal cortex, banking perfect recall of anything the adept has read or witnessed and running arithmetic as fast as a slate abacus — the piece of kit behind a Tech-Priest's habit of reciting exact figures and quoting obscure STC clauses from memory.\n\nDesign: Eidetic Memory (B51, 5) + Lightning Calculator (B66, 2) = 7 points.",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"base_points": 7
+		},
+		{
+			"id": "t6ABvUD_WzP9OY2qm",
+			"name": "Noospheric Link",
+			"reference": "B91",
+			"local_notes": "Short-to-medium range wireless data-link to the Cult Mechanicus' noosphere: other Noospheric Link-bearing adepts and compatible cogitators/machine spirits only.\n\nLore: A subcutaneous vox-and-data transceiver that lets a Tech-Priest read and post to the layered, half-mystical data-cloud the Mechanicus calls the noosphere — status runes, binharic liturgy, and tactical chatter overlaid on the world for anyone plugged in, and gibberish static to anyone who isn't.\n\nDesign: Basic Set Telecommunication (Radio type, B91, 10 points) with the Racial limitation (B91, -20%, restricted to others who share the trait — here, other noosphere-linked adepts and machine spirits): 10 x 0.8 = 8 points. Pairs with the Language (Binharic) skill (Adeptus Mechanicus/Skills/Mechanicus Skills.skl) for the liturgical cant spoken over the link; the link itself is the hardware, the language is the learned code riding on it.",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"base_points": 8
+		},
+		{
+			"id": "trKo_yd2vLkF7jMQJ",
+			"name": "Servo-Arm",
+			"reference": "B53",
+			"local_notes": "Extra Arm; Lifting ST +8; Striking ST +3; Payload 1.\n\nLore: Mounted on the servo-harness every Techmarine carries into battle alongside their bolter and chainsword.\n\nDesign: Extra Arm (B53, 10) + Lifting ST +8 (B65, 3/level, 24) for heavy lifting/grappling work + Striking ST +3 (B88, 5/level, 15) for its use as an improvised weapon + Payload 1 (B74, 1) for a small tool magazine = 50 points.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"base_points": 50
+		},
+		{
+			"id": "tOnwxBqPiaivN3udP",
+			"name": "Mind Impulse Unit",
+			"local_notes": "Lore: The same interface hardware a Dreadnought pilot or Titan princeps uses, fitted so a Techmarine can drive a servo-harness or (rarely) an interred war machine as an extension of their own reflexes.\n\nDesign: A 1-point Perk (B9): the prerequisite hardware for using MIU-linked equipment, priced the same way as Black Carapace (Imperium/Traits/ Astartes Gene-Seed.adq) — the actual mechanical payoff (no penalty for driving an MIU-linked machine, full reflexes through it) belongs on that equipment's own entry, since the implant does nothing for a bearer with nothing to plug it into.",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Imperium",
+				"Adeptus Mechanicus",
+				"Perk"
+			],
+			"base_points": 1
+		},
+		{
+			"id": "t3bAUUEGs33pwXsDl",
+			"name": "Mechadendrite, Utility Pattern",
+			"reference": "B53",
+			"local_notes": "Extra Arm (Weak, half body ST), Payload 1.\n\nLore: A second harness limb for fine repair work alongside the heavier Servo-Arm.\n\nDesign: Extra Arm (B53, 10) with the Weak modifier (half body ST, -25%; a slender tool-limb, not a lifting limb): 10 x 0.75 = 7.5, plus Payload 1 (B74, 1 point, for the internal parts magazine) = 8.5, rounded to 9.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"base_points": 9
+		},
+		{
+			"id": "tmVrzIQLMPFwLDW9d",
+			"name": "Mechanicus Rank",
+			"reference": "B29",
+			"local_notes": "Levels: 1 Skitarii Alpha/menial overseer, 2-3 Enginseer, 4-5 Magos, 6-7 Archmagos, 8 Fabricator-Locum, 9 Fabricator-General of a Forge World.\n\nLore: A Techmarine is ordained into the Cult Mechanicus at roughly an Enginseer's standing, separate from and in addition to whatever Chapter rank they also hold.\n\nDesign: Basic Set Rank (B29), 5 points/level, by direct analogy with this project's existing Military Rank and Religious Rank entries (Imperium/Traits/Imperial Traits.adq).",
+			"tags": [
+				"Advantage",
+				"Social",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"points_per_level": 5,
+			"can_level": true,
+			"levels": 2,
+			"max_levels": 9
+		},
+		{
+			"id": "tdRJhHbdLvIE8ucgp",
+			"name": "Disciplines of the Cult Mechanicus",
+			"reference": "B127",
+			"local_notes": "As Code of Honor: obey the ritual forms and chain of command of the Priesthood, never share proscribed knowledge outside sanctioned channels, never act against a superior adept's direct instruction without Martian sanction.\n\nLore: The Cult Mechanicus runs on ritual precision and a rigid hierarchy of knowledge: an adept who improvises outside sanctioned procedure, or who shares forbidden data with the unworthy, has broken discipline in a way their peers will report on sight.\n\nDesign: Basic Set Code of Honor (B127), moderate severity, -10 — the same cost this project already uses for Code of Honor (Codex Astartes) in Imperium/Traits/Astartes Gene-Seed.adq.",
+			"tags": [
+				"Disadvantage",
+				"Mental",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"base_points": -10
+		},
+		{
+			"id": "tC_RIhYDPO8WQ9YXr",
+			"name": "Duty (Adeptus Mechanicus)",
+			"reference": "B133",
+			"local_notes": "Lore: A second, genuinely distinct Duty from the Battle-Brother base template's Duty (Chapter and Imperium): a Techmarine answers to Mars as well as to their Chapter, and Black Library background (the Ultramarines' and Iron Hands' Techmarine characters especially) plays the two loyalties as capable of real tension.\n\nDesign: Basic Set Duty (B133), fairly frequent but not \"almost always hazardous\" the way Duty (Astra Militarum) is (Imperium/Traits/ Imperial Traits.adq) — pegged one tier below that entry, at -10, to reflect the Priesthood's broader range of postings. A Skitarii or a field-attached Enginseer/Techmarine should reasonably use -15 instead; -10 is this template's baseline for a workshop- or forge-based adept.",
+			"tags": [
+				"Disadvantage",
+				"Social",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"base_points": -10
+		}
+	],
+	"skills": [
+		{
+			"id": "sO86MKEtnO4-hqurH",
+			"name": "Engineer",
+			"local_notes": "Lore: Field repair and modification of vehicles and heavy weapons under fire.\n\nDesign: Hard skill; points left generic since this add-on does not know the base template's final IQ, exactly as Imperium/Templates/Astartes Librarian Add-On.gct leaves Meditation and Hidden Lore (the Warp) generic for the same reason.",
+			"tags": [
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"specialization": "Combat Engineering",
+			"difficulty": "iq/h",
+			"points": 8
+		},
+		{
+			"id": "skoiSktOs5D2kMsh4",
+			"name": "Engineer",
+			"local_notes": "Lore: Astartes power armour maintenance and battlefield repair -- a Chapter's Techmarines are who keep the rest of the company's plate running.\n\nDesign: Hard skill; points as above.",
+			"tags": [
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"specialization": "Powered Armor",
+			"difficulty": "iq/h",
+			"points": 8
+		},
+		{
+			"id": "s3hcBBXc80GrREVEW",
+			"name": "Theology",
+			"local_notes": "Lore: A Mars apprenticeship's doctrinal instruction; see Imperium/Skills/Imperial Skills.skl.\n\nDesign: Hard skill; points as above.",
+			"tags": [
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"specialization": "Cult Mechanicus",
+			"difficulty": "iq/h",
+			"points": 4
+		},
+		{
+			"id": "soIwOjnhGCP0t1JJn",
+			"name": "Language",
+			"reference": "B23",
+			"local_notes": "Lore: The Cult Mechanicus' machine-cant: a clipped, heavily compressed binary/logical language spoken and sub-vocalized between adepts, servitors, and machine spirits alike, ranging from a few ritual phrases a menial picks up to the dense technical liturgy a Magos trades with another Magos.\n\nDesign: Average skill; points as above.",
+			"tags": [
+				"Mental",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"specialization": "Binharic",
+			"difficulty": "iq/a",
+			"points": 4
+		},
+		{
+			"id": "sOTUSF5rcVex679OT",
+			"name": "Hidden Lore",
+			"local_notes": "Lore: STC and relic recognition from the Mars apprenticeship; see Imperium/Skills/Imperial Skills.skl.\n\nDesign: Average skill; points as above.",
+			"tags": [
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"specialization": "Archeotech",
+			"difficulty": "iq/a",
+			"points": 4
+		},
+		{
+			"id": "s8h-9-FaU16xbeNwv",
+			"name": "Savoir-Faire",
+			"reference": "B218",
+			"local_notes": "Lore: Court protocol inside the Priesthood: correct forms of address for a Magos or Archmagos, ritual precedence between Forge Worlds and Explorator fleets, and which questions are simply never asked of a superior adept. Not attested under this exact name in the fiction, but the Mechanicus is consistently shown (across Black Library and codex background) to run on a court culture at least as rigid as the Ecclesiarchy's own.\n\nDesign: Easy skill; points as above.",
+			"tags": [
+				"Mental",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"specialization": "Adeptus Mechanicus",
+			"difficulty": "iq/e",
+			"defaults": [
+				{
+					"type": "iq",
+					"modifier": -4
+				}
+			],
+			"points": 1
+		}
+	],
+	"equipment": []
+}

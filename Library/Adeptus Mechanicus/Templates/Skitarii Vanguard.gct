@@ -1,0 +1,567 @@
+{
+	"version": 5,
+	"id": "Bnu_dpwPGxu6UDAjX",
+	"notes": "A Skitarii Vanguard: the close-range counterpart to the Skitarii Ranger (Adeptus Mechanicus/Templates/Skitarii Ranger.gct), built around the radium carbine and the ambient radiation field its support gear leaks. Point math: ST 12 (+20), DX 13 (+60), IQ 10 (+0), HT 12 (+20) = 100; advantages +80 (Combat Reflexes 15 + Auto-senses, Skitarii Pattern 14 + Augmetic Legs, Combat Pattern 20 + Respirator Plugs 5 + Subdermal Armour Plating 5 + Noospheric Link 8 + Rad-Saturation Field's own near-zero net cost 1 + Skitarii Doctrina Imperatives' GCS-discounted effective 12 points, exactly as the Ranger template uses); disadvantages -71; skills +63. Mechanicus Rank is included disabled by default. Total 172 points: the same \"between Trained Soldier and Elite Human\" band as the Ranger. Weapons (radium carbine, etc.) are equipment, not covered here.\n",
+	"traits": [
+		{
+			"id": "tnpsNmYdywKEdz2DE",
+			"name": "ST",
+			"local_notes": "Lore: Skitarii physical conditioning and augmetic reinforcement together produce a soldier stronger than an ordinary Guardsman.\n\nDesign: ST 12 (+2), 10 pts/level (B15).",
+			"tags": [
+				"Attribute"
+			],
+			"base_points": 20
+		},
+		{
+			"id": "tNz0tchASH4h9KsUR",
+			"name": "DX",
+			"local_notes": "Lore: Cybernetic reflex conditioning and constant live-fire drilling.\n\nDesign: DX 13 (+3), 20 pts/level (B15).",
+			"tags": [
+				"Attribute"
+			],
+			"base_points": 60
+		},
+		{
+			"id": "tVWIhyZTWUfjuMqwj",
+			"name": "IQ",
+			"local_notes": "Lore: Average intelligence; Skitarii conditioning narrows initiative and affect, not raw intellect.\n\nDesign: IQ 10 (baseline), 20 pts/level (B15).",
+			"tags": [
+				"Attribute"
+			],
+			"base_points": 0
+		},
+		{
+			"id": "tr3mU-GaoT80lx7xh",
+			"name": "HT",
+			"local_notes": "Lore: Augmetic reinforcement and conditioning produce real battlefield endurance.\n\nDesign: HT 12 (+2), 10 pts/level (B14).",
+			"tags": [
+				"Attribute"
+			],
+			"base_points": 20
+		},
+		{
+			"id": "twTCNWMX5TLOp677R",
+			"name": "Combat Reflexes",
+			"reference": "B43",
+			"local_notes": "Lore: Drilled, doctrina-reinforced reactions under fire.\n\nDesign: Basic Set Combat Reflexes (B43), 15 points.",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Imperium"
+			],
+			"base_points": 15
+		},
+		{
+			"id": "tFvfsWjdsIMjIpdvI",
+			"name": "Auto-senses, Skitarii Pattern",
+			"reference": "B60",
+			"local_notes": "Infravision; Acute Vision +2.\n\nLore: Vanguard close-range doctrine doesn't need the Ranger's long zoom train, so they're issued the cheaper standard-pattern auto-senses instead of Ballistic Auto-senses.\n\nDesign: Infravision (B60, 10) + Acute Vision +2 (B35, 2/level, 4) = 14 points.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"base_points": 14
+		},
+		{
+			"id": "tzsj64Xc01KHDfGsj",
+			"name": "Augmetic Legs, Combat Pattern (Matched Pair)",
+			"reference": "B46",
+			"local_notes": "DR 6 on both legs; Basic Move +1 from servo-assisted stride.\n\nLore: Skitarii Rangers and Vanguard are routinely fielded with both legs replaced outright rather than one at a time; the matched pair's synchronized actuators give a longer, steadier stride than a single prosthetic bolted onto an otherwise natural gait.\n\nDesign: DR 6, Partial (both legs, a larger fraction of the body than a single limb) -50% (6x5=30, x0.5=15) + Basic Move +1 (B17, 5 points/level) = 20 points. Buying only one leg from this pair does not grant the Move bonus; use Augmetic Leg, Menial Pattern for a single prosthetic instead.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Imperium",
+				"Adeptus Mechanicus",
+				"Skitarii"
+			],
+			"base_points": 20
+		},
+		{
+			"id": "t9i1J2o1gj4qxKhvB",
+			"name": "Respirator Plugs (Filtration Lungs)",
+			"reference": "B55",
+			"local_notes": "Lore: Grille-covered intake valves set into the throat or chest, scrubbing forge smog, promethium fumes, and toxic industrial atmosphere before it reaches the lungs — near-universal among Mechanicus adepts who spend their working lives on a forge-world's surface.\n\nDesign: Basic Set Filter Lungs (B55), 5 points.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"base_points": 5
+		},
+		{
+			"id": "tDin5ka9m1KYkY61W",
+			"name": "Subdermal Armour Plating",
+			"reference": "B46",
+			"local_notes": "DR, all locations; stacks with worn armor.\n\nLore: Ceramite or plasteel weave grafted beneath the skin across the whole body, rather than replacing a specific organ or limb — the augmetic equivalent of the Astartes' Ossmodula, bought by Tech-Priests who expect to take a hit.\n\nDesign: Plain Damage Resistance (B46), 5 points/level, no location restriction since it covers the whole body. Bought here at a default 2 levels (DR 10, 10 points); raise or lower the level to taste.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"points_per_level": 5,
+			"can_level": true,
+			"levels": 1
+		},
+		{
+			"id": "tjZ0ukiE8tNiTo9qi",
+			"name": "Noospheric Link",
+			"reference": "B91",
+			"local_notes": "Short-to-medium range wireless data-link to the Cult Mechanicus' noosphere: other Noospheric Link-bearing adepts and compatible cogitators/machine spirits only.\n\nLore: A subcutaneous vox-and-data transceiver that lets a Tech-Priest read and post to the layered, half-mystical data-cloud the Mechanicus calls the noosphere — status runes, binharic liturgy, and tactical chatter overlaid on the world for anyone plugged in, and gibberish static to anyone who isn't.\n\nDesign: Basic Set Telecommunication (Radio type, B91, 10 points) with the Racial limitation (B91, -20%, restricted to others who share the trait — here, other noosphere-linked adepts and machine spirits): 10 x 0.8 = 8 points. Pairs with the Language (Binharic) skill (Adeptus Mechanicus/Skills/Mechanicus Skills.skl) for the liturgical cant spoken over the link; the link itself is the hardware, the language is the learned code riding on it.",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"base_points": 8
+		},
+		{
+			"id": "T6e_gYENx-l3I1dHz",
+			"name": "Rad-Saturation Field",
+			"local_notes": "Lore: Skitarii Vanguard carry radium weapons whose ammunition and support systems bleed a low but constant field of ionizing radiation, harmless to the fully-sealed Skitarii themselves in the short term but a real hazard to anyone standing near one unprotected — and, over a long enough campaign, a hazard to the Vanguard too, one more reason Skitarii service so rarely ends in old age.\n\nDesign: Innate Attack (Toxic) (B61, 4/die) with Aura (B102, an estimated +80%, so it affects everyone in reach without an attack roll), Always On (B110, an estimated -20%, it can't be switched off) and Emanation (B112, an estimated -20%, it can't be aimed or withheld from allies): net +40%, 4 x 1.4 = 5.6, rounded to 6. Paired with Unfit (B160, -5) for the field's slow toll on its own bearer. Net 1 point: deliberately close to zero, since this is simultaneously a minor hazard-weapon and a curse, not a purchase anyone takes for the points.",
+			"tags": [
+				"Advantage",
+				"Disadvantage",
+				"Physical",
+				"Imperium",
+				"Adeptus Mechanicus",
+				"Skitarii"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "t6qs-TLMMyPZWXTKk",
+					"name": "Ambient Radium Field",
+					"reference": "B61",
+					"local_notes": "Innate Attack (Toxic), 1 die, always on, affecting everyone adjacent (including allies) each turn they're in reach; HT to resist as normal for toxic damage.",
+					"base_points": 6
+				},
+				{
+					"id": "tVCb47w2Tz9IYfd47",
+					"name": "Unfit",
+					"reference": "B160",
+					"local_notes": "The same field that saturates the air nearby also cooks its bearer slowly.",
+					"base_points": -5
+				}
+			]
+		},
+		{
+			"id": "Trqh-X_4_F9yPg1E3",
+			"name": "Skitarii Doctrina Imperatives",
+			"local_notes": "Lore: A Skitarii Maniple's cranial implants take a battle-doctrina uploaded before an engagement, biasing every Skitarii in the maniple toward one combat posture at a time: Protector for a defensive cordon, Conqueror for an all-out firing advance, Hunter for pursuit and encirclement. A Skitarii can only run one imperative at a time and must be re-flashed (a Ready maneuver, or a scene break, at the GM's call) to switch.\n\nDesign: Basic Set Alternative Abilities (B61): buy the most expensive ability at full price and the rest at 1/5 cost (round up), since only one can be active. Full prices: Enhanced Parry, All Parries (B51, 10), Conqueror Imperative as a narrow +1 combat Talent (B90-style, 5), Hunter Imperative as Basic Move +1 (B17, 5). GCS applies the Alternative Abilities discount natively for this container type; worked by hand, the effective total is 10 + ceil(5/5) + ceil(5/5) = 12 points.",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Imperium",
+				"Adeptus Mechanicus",
+				"Skitarii"
+			],
+			"container_type": "alternative_abilities",
+			"children": [
+				{
+					"id": "tjn5IX2noZfpdKNE8",
+					"name": "Protector Imperative",
+					"reference": "B51",
+					"local_notes": "Enhanced Parry (All Parries) +1.",
+					"base_points": 10
+				},
+				{
+					"id": "tryAK8ywM8aPqZnHE",
+					"name": "Conqueror Imperative",
+					"reference": "B90",
+					"local_notes": "+1 to Guns and Gunner skills (Talent-style construction).",
+					"base_points": 5
+				},
+				{
+					"id": "t1fOWs4G5eMNE6ZE3",
+					"name": "Hunter Imperative",
+					"reference": "B17",
+					"local_notes": "Basic Move +1.",
+					"base_points": 5
+				}
+			]
+		},
+		{
+			"id": "tnvrDYG4kDTTlqki3",
+			"name": "Mechanicus Rank",
+			"reference": "B29",
+			"local_notes": "Levels: 1 Skitarii Alpha/menial overseer, 2-3 Enginseer, 4-5 Magos, 6-7 Archmagos, 8 Fabricator-Locum, 9 Fabricator-General of a Forge World.\n\nLore: Disabled by default: most Vanguard hold no formal Mechanicus rank at all. Enable at level 1 (+5 points) for a Skitarii Alpha or veteran squad leader.\n\nDesign: Basic Set Rank (B29), 5 points/level, by direct analogy with this project's existing Military Rank and Religious Rank entries (Imperium/Traits/Imperial Traits.adq).",
+			"tags": [
+				"Advantage",
+				"Social",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"points_per_level": 5,
+			"can_level": true,
+			"levels": 1,
+			"max_levels": 9,
+			"disabled": true
+		},
+		{
+			"id": "TMjIFbf40ycy5Xp2c",
+			"name": "Skitarii Conditioning",
+			"local_notes": "Lore: Skitarii undergo extensive neural conditioning and cybernetic replacement of their own that, while far short of a Servitor's total lobotomy, strips away most of the emotional affect and small-talk that would otherwise mark them as still fully human — codex and Black Library background alike describe them as unnervingly flat and literal even next to other Mechanicus adepts.\n\nDesign: Low Empathy (B142, -20) + No Sense of Humor (B146, -10) + a 1-point Quirk (B9) for clipped, ritualized speech patterns = -31 points. Deliberately short of Servitor Lobotomy (Neural Excision) above: Skitarii still hold rank, opinions, and (per some Codex background) occasional flickers of the person they were, where a Servitor has none of that left.",
+			"tags": [
+				"Disadvantage",
+				"Mental",
+				"Imperium",
+				"Adeptus Mechanicus",
+				"Skitarii"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "t9CQZAQx2T7YhwZU4",
+					"name": "Low Empathy",
+					"reference": "B142",
+					"base_points": -20
+				},
+				{
+					"id": "tB2N-ySnumVccppNq",
+					"name": "No Sense of Humor",
+					"reference": "B146",
+					"base_points": -10
+				},
+				{
+					"id": "tqH2scQBCk-Wwun7A",
+					"name": "Speaks Only in Clipped Binharic-Inflected Report",
+					"tags": [
+						"Quirk"
+					],
+					"base_points": -1
+				}
+			]
+		},
+		{
+			"id": "tiHg8W59LUCMjiiMM",
+			"name": "Fanaticism (The Omnissiah)",
+			"reference": "B136",
+			"local_notes": "Lore: Doctrinal certainty that the Machine God — the same Emperor, in the Cult Mechanicus' own theology, understood as a being of pure technological perfection — must be served without question, and that His will (as interpreted by the Priesthood's hierarchy) justifies whatever it demands. Distinct from the Imperial Creed's Fanaticism (The God-Emperor) in Imperium/Traits/Imperial Traits.adq: the same shape of belief, aimed at a different reading of the same divinity.\n\nDesign: Basic Set Fanaticism (B136), flat -15, as the existing Imperial Fanaticism entry is built.",
+			"tags": [
+				"Disadvantage",
+				"Mental",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"base_points": -15
+		},
+		{
+			"id": "tJvajVX0K5yjl56I5",
+			"name": "Duty (Adeptus Mechanicus)",
+			"reference": "B133",
+			"local_notes": "Overridden to -15 (almost always hazardous) rather than this trait's -10 baseline: a Skitarii's Duty is combat service, not a workshop posting.\n\nLore: A sworn Tech-Priest, Enginseer, or Skitarii answers first to their Forge World and its Fabricator-General, not to any Guard officer or Administratum functionary they happen to be attached to — a binding, frequent, but not universally life-threatening obligation (unlike a Guardsman's), since a Mechanicus posting is at least as often archival or industrial as it is a battlefield one.\n\nDesign: Basic Set Duty (B133), fairly frequent but not \"almost always hazardous\" the way Duty (Astra Militarum) is (Imperium/Traits/ Imperial Traits.adq) — pegged one tier below that entry, at -10, to reflect the Priesthood's broader range of postings. A Skitarii or a field-attached Enginseer/Techmarine should reasonably use -15 instead; -10 is this template's baseline for a workshop- or forge-based adept.",
+			"tags": [
+				"Disadvantage",
+				"Social",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"base_points": -15
+		},
+		{
+			"id": "tHuizX8mZ6ByAFz2J",
+			"name": "Intolerance (Xenos)",
+			"reference": "B140",
+			"local_notes": "Lore: \"The alien is the enemy\" as baseline Imperial doctrine — not personal bigotry but state religion. Universal across Black Library fiction; only a minority of xenos-sympathetic characters (some Rogue Traders, Ordo Xenos radicals) lack it.\n\nDesign: Basic Set Intolerance (B140). Costed at -10, the \"very broad category\" end of the range the book allows, since \"all non-human sapient species\" is about as broad a target as Intolerance can name.",
+			"tags": [
+				"Disadvantage",
+				"Mental",
+				"Imperium"
+			],
+			"base_points": -10
+		},
+		{
+			"id": "tCGt3qD-F77mUYhsY",
+			"name": "Doesn't Question a Doctrina Imperative",
+			"local_notes": "Lore: A Skitarii obeys the uploaded battle-doctrina without hesitation, for good or ill.\n\nDesign: Quirk (B9), roleplaying flag only.",
+			"tags": [
+				"Quirk",
+				"Imperium"
+			],
+			"base_points": -1
+		}
+	],
+	"skills": [
+		{
+			"id": "sR3CCFodwJB3GuzGs",
+			"name": "Guns",
+			"local_notes": "Lore: The radium carbine, a Vanguard's standard-issue weapon (framework.md's Mechanicus weapon anchor table); short-ranged compared to a Ranger's galvanic rifle but devastating against unsealed targets.\n\nDesign: DX+5 (18) for 20 points, Easy (B170).",
+			"tags": [
+				"Imperium",
+				"Adeptus Mechanicus",
+				"Skitarii"
+			],
+			"specialization": "Rifle",
+			"difficulty": "dx/e",
+			"points": 20
+		},
+		{
+			"id": "sLovKXJvlzGWZD-i-",
+			"name": "Guns",
+			"local_notes": "Lore: A radium pistol or similar sidearm.\n\nDesign: DX+1 (14) for 2 points, Easy.",
+			"tags": [
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"specialization": "Pistol",
+			"difficulty": "dx/e",
+			"points": 2
+		},
+		{
+			"id": "skglI4UzTFo7GE9Yx",
+			"name": "Gunner",
+			"local_notes": "Lore: Squad-mounted arc weapon familiarity.\n\nDesign: DX+0 (13) for 2 points, Average.",
+			"tags": [
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"specialization": "Beams",
+			"difficulty": "dx/a",
+			"points": 2
+		},
+		{
+			"id": "sVPSK_BQBhpOJRSFj",
+			"name": "Soldier",
+			"local_notes": "Lore: Maniple procedure, logistics, and rank structure.\n\nDesign: IQ+0 (10) for 2 points, Average.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "iq/a",
+			"points": 2
+		},
+		{
+			"id": "sPz7KHOdgCKiSFdpK",
+			"name": "Tactics",
+			"local_notes": "Lore: Squad- and maniple-level small-unit tactics.\n\nDesign: IQ+0 (10) for 4 points, Hard.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "iq/h",
+			"points": 4
+		},
+		{
+			"id": "sr-SaPt_fmfnDbV4t",
+			"name": "Stealth",
+			"local_notes": "Lore: Enough fieldcraft to close to radium-carbine range; less emphasized than a Ranger's overwatch discipline, so bought at half the level.\n\nDesign: DX+0 (13) for 4 points, Average.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "dx/a",
+			"points": 4
+		},
+		{
+			"id": "sJqACk7VxY_2y98uK",
+			"name": "Camouflage",
+			"local_notes": "Lore: Breaking up a firing position's silhouette.\n\nDesign: IQ+0 (10) for 1 point, Easy.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "iq/e",
+			"points": 1
+		},
+		{
+			"id": "scKHPoZWh1ezGt8dp",
+			"name": "Survival",
+			"local_notes": "Lore: Field survival in whatever terrain the maniple is deployed to.\n\nDesign: Per+0 (10) for 2 points, Average.",
+			"tags": [
+				"Imperium"
+			],
+			"specialization": "(choose deployment terrain)",
+			"difficulty": "per/a",
+			"points": 2
+		},
+		{
+			"id": "sFViWtvA5G6kUvTxO",
+			"name": "Brawling",
+			"local_notes": "Lore: Vanguard close to contact range far more often than Rangers do, and are drilled accordingly in melee back-up skill.\n\nDesign: DX+1 (14) for 4 points, Easy.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "dx/e",
+			"points": 4
+		},
+		{
+			"id": "sawqDmeYrIoYUrgpi",
+			"name": "Forced Entry",
+			"local_notes": "Lore: Breaching doors and barricades in close-quarters actions.\n\nDesign: DX+1 (14) for 2 points, Easy.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "dx/e",
+			"points": 2
+		},
+		{
+			"id": "skZ6_HQZJ-V6AC3HP",
+			"name": "Theology",
+			"local_notes": "Lore: A Vanguard's basic catechisms of the Machine God; see Imperium/Skills/Imperial Skills.skl.\n\nDesign: IQ-1 (9) for 4 points, Hard.",
+			"tags": [
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"specialization": "Cult Mechanicus",
+			"difficulty": "iq/h",
+			"points": 4
+		},
+		{
+			"id": "sPvbJ6XQ514mA66Zu",
+			"name": "Savoir-Faire",
+			"reference": "B218",
+			"local_notes": "Lore: Court protocol inside the Priesthood: correct forms of address for a Magos or Archmagos, ritual precedence between Forge Worlds and Explorator fleets, and which questions are simply never asked of a superior adept. Not attested under this exact name in the fiction, but the Mechanicus is consistently shown (across Black Library and codex background) to run on a court culture at least as rigid as the Ecclesiarchy's own.\n\nDesign: IQ+0 (10) for 1 point, Easy.",
+			"tags": [
+				"Mental",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"specialization": "Adeptus Mechanicus",
+			"difficulty": "iq/e",
+			"defaults": [
+				{
+					"type": "iq",
+					"modifier": -4
+				}
+			],
+			"points": 1
+		},
+		{
+			"id": "sZb3Y0XX6TlqI1G9s",
+			"name": "Intimidation",
+			"local_notes": "Lore: A visibly rad-scarred Vanguard is a frightening thing to stand near.\n\nDesign: Will+0 (10) for 2 points, Average.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "will/a",
+			"points": 2
+		},
+		{
+			"id": "sxejCx9CWzlLyuWMu",
+			"name": "First Aid",
+			"local_notes": "Lore: Basic combat first aid.\n\nDesign: IQ+0 (10) for 1 point, Easy.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "iq/e",
+			"points": 1
+		},
+		{
+			"id": "sbb9nZoslIFFfiVSh",
+			"name": "Climbing",
+			"local_notes": "Lore: Assault-position fitness.\n\nDesign: DX-1 (12) for 1 point, Average.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "dx/a",
+			"points": 1
+		},
+		{
+			"id": "sbPUts_VHP3jDHtQg",
+			"name": "Running",
+			"local_notes": "Lore: Conditioning for closing distance under fire.\n\nDesign: HT-1 (11) for 1 point, Average.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "ht/a",
+			"points": 1
+		},
+		{
+			"id": "szR_IlQe7yhSBNxlD",
+			"name": "Jumping",
+			"local_notes": "Lore: Obstacle-course fitness.\n\nDesign: DX+0 (13) for 1 point, Easy.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "dx/e",
+			"points": 1
+		},
+		{
+			"id": "sJyHSV-IBmI5gyYln",
+			"name": "Navigation",
+			"local_notes": "Lore: Basic land navigation.\n\nDesign: IQ-1 (9) for 1 point, Average.",
+			"tags": [
+				"Imperium"
+			],
+			"specialization": "Land",
+			"difficulty": "iq/a",
+			"points": 1
+		},
+		{
+			"id": "sNe-J9CQFAnVWRLJX",
+			"name": "Area Knowledge",
+			"local_notes": "Lore: Knowledge of the Vanguard's home Forge World or current deployment.\n\nDesign: IQ+0 (10) for 1 point, Easy.",
+			"tags": [
+				"Imperium"
+			],
+			"specialization": "(home Forge World or deployment sector)",
+			"difficulty": "iq/e",
+			"points": 1
+		},
+		{
+			"id": "sVYnVdw54NRhmv-yN",
+			"name": "Current Affairs",
+			"reference": "B186",
+			"local_notes": "Lore: What passes for Imperium-wide news: Munitorum bulletins, Ecclesiarchy pronouncements, and whatever rumours of war and heresy filter down through a thousand relay stations, usually months stale and already propaganda by the time they arrive.\n\nDesign: IQ+0 (10) for 1 point, Easy.",
+			"tags": [
+				"Mental",
+				"Knowledge",
+				"Imperium"
+			],
+			"specialization": "Imperium",
+			"difficulty": "iq/e",
+			"defaults": [
+				{
+					"type": "iq",
+					"modifier": -4
+				}
+			],
+			"points": 1
+		},
+		{
+			"id": "sTQdoueMWYsH6vo2r",
+			"name": "Tracking",
+			"local_notes": "Lore: Closing on a target across terrain.\n\nDesign: Per+0 (10) for 2 points, Average.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "per/a",
+			"points": 2
+		},
+		{
+			"id": "s9CstS54T_hiinjc8",
+			"name": "Electronics Operation",
+			"local_notes": "Lore: Field auspex and sensor-suite operation.\n\nDesign: IQ+0 (10) for 2 points, Average.",
+			"tags": [
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"specialization": "Sensors",
+			"difficulty": "iq/a",
+			"points": 2
+		},
+		{
+			"id": "stwgPH84Kcrtgjd56",
+			"name": "Hiking",
+			"local_notes": "Lore: Long-march conditioning between deployments.\n\nDesign: HT-1 (11) for 1 point, Average.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "ht/a",
+			"points": 1
+		},
+		{
+			"id": "syYC44cRPW7VI8PEV",
+			"name": "Fast-Draw",
+			"local_notes": "Lore: Reloading without breaking a firing stance.\n\nDesign: DX+0 (13) for 1 point, Easy.",
+			"tags": [
+				"Imperium"
+			],
+			"specialization": "Ammo",
+			"difficulty": "dx/e",
+			"points": 1
+		}
+	],
+	"equipment": []
+}

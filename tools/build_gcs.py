@@ -277,7 +277,7 @@ def common(out, item):
 
 EQ_KEYS = {"name", "tl", "lc", "cost", "weight", "qty", "tags", "ref", "notes", "lore", "design", "weapons",
            "dr", "attributes", "skill_bonuses", "reactions", "conditional", "raw_features", "children",
-           "uses", "modifiers", "equipped"}
+           "uses", "modifiers", "equipped", "weak_points"}
 
 
 def build_equipment(item, path, trail):
@@ -289,6 +289,13 @@ def build_equipment(item, path, trail):
     out = {"id": make_id("E" if kids is not None else "e", path, *trail, item.get("name")),
            "description": item["name"]}
     common(out, item)
+    if "weak_points" in item:
+        wp = int(item["weak_points"])
+        if not 3 <= wp <= 9:
+            err(ctx, f"weak_points {wp} outside 3-9")
+        line = (f"Weak Points {wp}: when a hit on this armour fails to penetrate, roll 3d; "
+                f"on {wp} or less it found a gap and DR is halved against it.")
+        out["local_notes"] = line + ("\n\n" + out["local_notes"] if out.get("local_notes") else "")
     if "tl" in item:
         out["tech_level"] = str(item["tl"])
     if "lc" in item:

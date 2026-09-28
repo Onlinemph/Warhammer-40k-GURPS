@@ -1,0 +1,424 @@
+{
+	"version": 5,
+	"id": "BKjbh1wMgP9YCiK6E",
+	"notes": "A Sister of Silence: an unaugmented human Pariah trained by the Silent Sisterhood to hunt rogue psykers and stand ready against daemonic incursion, per framework.md's \"Sisters of Silence are unaugmented human Pariahs ... in Vratine armour.\" Point total (attributes + Pariah Gene + oath + skills, no gear) sits inside the framework's 250-400 point target for this tier - well above the \"Elite human\" bracket's own 200-350 midpoint, reflecting a Sister's specialised training, but nowhere near Astartes or Custodes physiology, since a Sister of Silence carries no genetic augmentation at all. Equipment (executioner greatblade, Vratine armour) is defined in the Custodes weapons and armour files, not here.",
+	"traits": [
+		{
+			"id": "TWKymlF5TloKKt7Ne",
+			"name": "Pariah Gene (Blank)",
+			"local_notes": "Lore: A blank is born, not made: a rare genetic absence that leaves a person's soul all but invisible in the warp, and makes the warp itself recoil from them. Psykers, daemons, and even animals find blanks instinctively unsettling to be near — a \"hole\" where a presence should be. Depicted consistently across Black Library (the Culexus Temple's \"Untouchables,\" Cain-series and Eisenhorn-cycle blanks) and Dark Heresy/Only War's Untouchable career.\n\nDesign: Deliberately carries no Warp Sorcery or Perils of the Warp modifier, and needs no Warp Empowerment: a Pariah's field is the *absence* of the warp, not a channelled act, so none of the framework's activation risk or spell-cost cap applies. See each child trait for its own derivation. Net for the package: +12 (Null Aura) +10 (Immunity) -3 (Unnerving Void) -10 (Social Stigma) = +9.",
+			"tags": [
+				"Advantage",
+				"Disadvantage",
+				"Mental",
+				"Psyker",
+				"Imperium"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "tG5UMr6srtAmc-Oqs",
+					"name": "Null Aura",
+					"local_notes": "Lore: The blank's presence itself smothers nearby psychic workings — the basis for why the Inquisition uses blanks to hunt witches and why daemons fear and hate them.\n\nDesign: Built on Affliction (Basic B35): base 10, the delivered \"Warp- Choked\" disadvantage is valued at -30 points for the enhancement math (+30%), stacked with Area Effect (+50%, B102, 2-yard radius), Always On (-40%, B113, it can't be switched off or aimed), and Emanation (-20%, B111, no ranged attack roll, just proximity).",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Psyker",
+						"Imperium"
+					],
+					"modifiers": [
+						{
+							"id": "mSXIF71nTr5MREBQY",
+							"name": "Disadvantage Delivered (Warp-Choked",
+							"local_notes": "Any Warp-tagged ability used in the area must be rolled again as if failed; already-running continuous Warp effects go inert while inside it.",
+							"cost_adj": "+30%"
+						},
+						{
+							"id": "mQoOMeKwieJpF-rbr",
+							"name": "Area Effect, 2 yards",
+							"cost_adj": "+50%"
+						},
+						{
+							"id": "m5dO5yDq44Cq7u53T",
+							"name": "Always On",
+							"cost_adj": "-40%"
+						},
+						{
+							"id": "mnC_Nw3sMGMyVa6nW",
+							"name": "Emanation",
+							"cost_adj": "-20%"
+						}
+					],
+					"base_points": 10
+				},
+				{
+					"id": "tf0LtcBXg2RcANPVj",
+					"name": "Immunity to Warp-Based Effects",
+					"local_notes": "Lore: Warp-based Affliction, Mind Control, Mind Probe, and Fear simply do not work on a Pariah.\n\nDesign: Resistant, Immunity tier (Basic B80: base rarity value x5). Warp- based attacks are treated as an \"occasional\" specific hazard (base 2) for a Pariah, since it is their entire defining trait, giving 2 x 5 = 10.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Psyker",
+						"Imperium"
+					],
+					"base_points": 10
+				},
+				{
+					"id": "tapxZ3YKF6qmKnNyM",
+					"name": "Unnatural Features (Unnerving Void)",
+					"local_notes": "Lore: People and animals find a Pariah's presence quietly, deeply wrong.\n\nDesign: Basic's Unnatural Features (per-level reaction penalty), 3 levels of -1 each.",
+					"tags": [
+						"Disadvantage",
+						"Social",
+						"Psyker",
+						"Imperium"
+					],
+					"points_per_level": -1,
+					"can_level": true,
+					"levels": 3
+				},
+				{
+					"id": "tG0BXEbYFom1HCVfm",
+					"name": "Social Stigma (Feared Blank)",
+					"local_notes": "Lore: Feared and, in many sectors, watched or conscripted by the Inquisition and the Officio Assassinorum.\n\nDesign: Basic's Social Stigma (Minority Group), -10 (B155).",
+					"tags": [
+						"Disadvantage",
+						"Social",
+						"Psyker",
+						"Imperium"
+					],
+					"base_points": -10
+				}
+			]
+		},
+		{
+			"id": "tQYHBKHSqqr4NYrMP",
+			"name": "Vow of Silence (Oath of the Silent Sisterhood)",
+			"reference": "B161",
+			"local_notes": "Major Vow: never speak aloud, under any circumstance. A Sister of Silence can still make non-verbal sounds (a battle-cry grunt, a warning shout with no words in it) and can write; she cannot use spoken language, ever, by her own binding oath rather than physical incapacity.\n\nLore: The Sisters of Silence take a formal vow of silence on joining the Sisterhood, communicating instead through their own battle-sign; the practice is widely depicted (Codex: Adeptus Custodes background, which covers the Sisters as the Custodes' sister order, and the Horus Heresy-era novel The Master of Mankind, where Sisters of Silence hunt and confront rogue psykers on Terra) without a single canonical page citation this project can point to.\n\nDesign: Modelled as a Vow (B161, Major, -10) rather than the involuntary Cannot Speak (Mute) disadvantage (-25): a Sister of Silence can physically speak and her pariah nature has nothing to do with her vocal cords, she simply never does, by oath - \"Mute by vow,\" per the framework's own phrasing, is exactly what a self-imposed Vow models, while the involuntary Basic Set Mute disadvantage would misrepresent the cause. Major (not Minor or Great) because it affects nearly every social and command interaction outside the Sisterhood's own sign language, but doesn't prevent effective communication outright.",
+			"tags": [
+				"Disadvantage",
+				"Mental",
+				"Imperium",
+				"Sisters of Silence"
+			],
+			"base_points": -10
+		},
+		{
+			"id": "t3qiBN2hm13Ktp9ZZ",
+			"name": "Silent Sisterhood Battle-Sign",
+			"reference": "B24",
+			"local_notes": "Language (Silent Sisterhood Battle-Sign): Sign-only, Accented.\n\nLore: The Sisters' own hand-and-body sign language, drilled into every Sister as her primary means of tactical communication in place of vox or speech; referenced throughout Custodes-adjacent background as distinct from ordinary military hand signals.\n\nDesign: Built as a Language (B23-24) using the sign-language variant of the standard cost table rather than the spoken/written columns, at Accented fluency (4 points): fluent enough for real tactical use but, per the framework's citation-honesty rule, this project has no source claiming Sisters are drilled to native perfect fluency versus merely very good working fluency.",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Imperium",
+				"Sisters of Silence"
+			],
+			"base_points": 4
+		},
+		{
+			"id": "tUUaik2LggdQ07aE9",
+			"name": "Sense of Duty (The Silent Sisterhood)",
+			"reference": "B153",
+			"local_notes": "Large group: the Sisterhood as a whole, not just one Sister's own squad.\n\nLore: Sisters of Silence operate as a tight, self-contained order bound to each other and to their hunt for rogue psykers and daemonic incursion; background consistently shows them protecting and recovering their own before anything else.\n\nDesign: Sense of Duty (B153), Large Group, -10 points, as the modifier table gives for an order-sized in-group.",
+			"tags": [
+				"Disadvantage",
+				"Mental",
+				"Imperium",
+				"Sisters of Silence"
+			],
+			"base_points": -10
+		},
+		{
+			"id": "t6ngvzODldtdNrLcn",
+			"name": "Intolerance (Psykers)",
+			"reference": "B140",
+			"local_notes": "Occasional scope: psykers are a small fraction of the Imperium's population.\n\nLore: A Sister of Silence's pariah nature makes her instinctively wary of, and unwelcoming to, psykers - the profession the Sisterhood exists to police - though background stops short of showing them cruel to psykic Imperial citizens who pose no threat.\n\nDesign: Intolerance (B140) at the \"Occasional\" scope modifier (-2 points): psykers are rare in the general population even though a Sister encounters them often professionally, and B140's scope size is about real-world prevalence of the disliked group, not how often the character's job brings her into contact with it.",
+			"tags": [
+				"Disadvantage",
+				"Mental",
+				"Imperium",
+				"Sisters of Silence"
+			],
+			"base_points": -2,
+			"features": [
+				{
+					"type": "reaction_bonus",
+					"situation": "from psykers who sense the dislike",
+					"amount": -1
+				}
+			]
+		},
+		{
+			"id": "tL5o7pzSPi44O-ZyE",
+			"name": "Sisterhood Attribute Modifiers",
+			"local_notes": "Lore: Sisters of Silence are drawn from across the Imperium and drilled from a young age to a standard the fiction places well above an ordinary soldier's, though still recognizably human - unlike Astartes or Custodes, no source claims any genetic rebuilding is involved.\n\nDesign: Increased Strength +2 (B14, 10/level, 20) for ST 12, Increased Dexterity +3 (B14, 20/level, 60) for DX 13, Increased Intelligence +1 (B16, 20/level, 20) for IQ 11, Increased Health +2 (B15, 10/level, 20) for HT 12, Increased Will +2 (B16, 5/level, 10) for Will 13. 20+60+20+20+10 = 130 points: a genuinely elite human profile (comparable to the framework's Battle Sister/Stormtrooper tier) without a single point spent on anything a training regimen alone couldn't produce.",
+			"tags": [
+				"Physical",
+				"Mental"
+			],
+			"base_points": 130,
+			"features": [
+				{
+					"type": "attribute_bonus",
+					"attribute": "st",
+					"amount": 2
+				},
+				{
+					"type": "attribute_bonus",
+					"attribute": "dx",
+					"amount": 3
+				},
+				{
+					"type": "attribute_bonus",
+					"attribute": "iq",
+					"amount": 1
+				},
+				{
+					"type": "attribute_bonus",
+					"attribute": "ht",
+					"amount": 2
+				},
+				{
+					"type": "attribute_bonus",
+					"attribute": "will",
+					"amount": 2
+				}
+			]
+		},
+		{
+			"id": "tJ0YWLtDg3Gj2C6qv",
+			"name": "Combat Reflexes",
+			"reference": "B43",
+			"local_notes": "Lore: Sisters of Silence fight daemons and rogue psykers for a living; background shows them unshaken by the kind of threat that breaks ordinary soldiers.\n\nDesign: Combat Reflexes (B43, 15 points), as the Astartes and Custodes packages.",
+			"tags": [
+				"Advantage",
+				"Mental"
+			],
+			"base_points": 15
+		},
+		{
+			"id": "tpu38LE71iG10trYh",
+			"name": "Fearlessness",
+			"reference": "B55",
+			"local_notes": "Lore: A Sister's own null nature and training leave her harder to frighten than an ordinary human, though the fiction doesn't support the total fear immunity a Custodian gets.\n\nDesign: Fearlessness 2 (B55, 2/level, 4 points), a modest version of the Custodian package's full Unfazeable, matching \"unaugmented human, extensively trained\" rather than post-human.",
+			"tags": [
+				"Advantage",
+				"Mental"
+			],
+			"points_per_level": 2,
+			"can_level": true,
+			"levels": 2
+		},
+		{
+			"id": "t__x9Ys843RXuf4CC",
+			"name": "Duty (The Silent Sisterhood's Hunt)",
+			"reference": "B133",
+			"local_notes": "Almost all the time, Hazardous.\n\nLore: A Sister of Silence's life is her Order's endless work hunting rogue psykers and warding against the warp; background gives her no life outside that duty.\n\nDesign: Duty (B133), Almost all the time, Hazardous (rather than Extremely Hazardous, since a Sister isn't thrown at the very worst the Imperium fights as routinely as a Custodian is), -10 points.",
+			"tags": [
+				"Disadvantage",
+				"Mental"
+			],
+			"base_points": -10
+		},
+		{
+			"id": "tDS-iWB6aMR7KHQGG",
+			"name": "Rank (Silent Sisterhood)",
+			"reference": "B29",
+			"local_notes": "Lore: A senior Sister of Silence carries real authority within her own Order, though nothing approaching a Custodian's Imperium-wide standing.\n\nDesign: Rank (B29), 5 points/level, 2 levels = 10 points - a small fraction of either Custodes Rank trait, reflecting standing within the Sisterhood alone.",
+			"tags": [
+				"Advantage",
+				"Social"
+			],
+			"points_per_level": 5,
+			"can_level": true,
+			"levels": 2
+		}
+	],
+	"skills": [
+		{
+			"id": "sbQH1hevwPbeuO4eQ",
+			"name": "Two-Handed Sword",
+			"local_notes": "Executioner greatblade.",
+			"difficulty": "dx/a",
+			"points": 24
+		},
+		{
+			"id": "swdXnOl8wGGgi5WD1",
+			"name": "Liquid Projector",
+			"local_notes": "Vratine flamer.",
+			"specialization": "Flamethrower",
+			"difficulty": "dx/e",
+			"points": 8
+		},
+		{
+			"id": "sGjESTeuNr87r5yQp",
+			"name": "Throwing",
+			"local_notes": "Psyk-out grenades.",
+			"difficulty": "dx/a",
+			"points": 8
+		},
+		{
+			"id": "sKnqJUUKIoDQZap61",
+			"name": "Brawling",
+			"difficulty": "dx/e",
+			"points": 2
+		},
+		{
+			"id": "slDj_RywshErtihrm",
+			"name": "Wrestling",
+			"difficulty": "dx/a",
+			"points": 4
+		},
+		{
+			"id": "sKucb5LlOH2yED_B7",
+			"name": "Stealth",
+			"difficulty": "dx/a",
+			"points": 12
+		},
+		{
+			"id": "sPds2T8f2pYv5Byl8",
+			"name": "Shield",
+			"difficulty": "dx/e",
+			"points": 2
+		},
+		{
+			"id": "snWeZJ565ucxexybK",
+			"name": "Free Fall",
+			"difficulty": "dx/a",
+			"points": 2
+		},
+		{
+			"id": "snVXinDZ6NLlqIYEa",
+			"name": "Tactics",
+			"difficulty": "iq/h",
+			"points": 12
+		},
+		{
+			"id": "sZnUfT6-yWLBvzVqx",
+			"name": "Soldier",
+			"difficulty": "iq/a",
+			"points": 8
+		},
+		{
+			"id": "sQvlufC6BK7LoJVLE",
+			"name": "Leadership",
+			"difficulty": "iq/a",
+			"points": 4
+		},
+		{
+			"id": "sJAe0s5Ruhq-PBmah",
+			"name": "Hidden Lore",
+			"specialization": "Daemons",
+			"difficulty": "iq/a",
+			"points": 12
+		},
+		{
+			"id": "sI_QcAcPgtPxDDf1V",
+			"name": "Hidden Lore",
+			"specialization": "Psykers",
+			"difficulty": "iq/a",
+			"points": 12
+		},
+		{
+			"id": "sThZ0d4uazdDOxIQp",
+			"name": "Hidden Lore",
+			"specialization": "The Warp",
+			"difficulty": "iq/a",
+			"points": 8
+		},
+		{
+			"id": "smxgYAq3WptiStYlQ",
+			"name": "Theology",
+			"specialization": "Imperial Creed",
+			"difficulty": "iq/h",
+			"points": 8
+		},
+		{
+			"id": "s-ndhGoQcsZWGBF1O",
+			"name": "Psyniscience",
+			"local_notes": "A Sister of Silence's Pariah nature makes her own reading of the warp unusual; a GM may rule she senses psykers and warp activity as an absence rather than a presence, at the same effective skill.",
+			"difficulty": "per/h",
+			"points": 8
+		},
+		{
+			"id": "svgIpJQD_B_z05DEN",
+			"name": "Fast-Talk",
+			"difficulty": "iq/a",
+			"points": 2
+		},
+		{
+			"id": "sXNCxth-npZDQa4co",
+			"name": "Interrogation",
+			"local_notes": "Questioning suspected rogue psykers.",
+			"difficulty": "iq/a",
+			"points": 8
+		},
+		{
+			"id": "sPokVN5riIXDn-ZKx",
+			"name": "Armoury",
+			"specialization": "Body Armor",
+			"difficulty": "iq/a",
+			"points": 2
+		},
+		{
+			"id": "s9XBX6erMwMUWTB3q",
+			"name": "First Aid",
+			"difficulty": "iq/e",
+			"points": 1
+		},
+		{
+			"id": "skKi1NHP36CDLqfAG",
+			"name": "Navigation",
+			"specialization": "Land",
+			"difficulty": "iq/a",
+			"points": 1
+		},
+		{
+			"id": "sd5NSo7U4cBwWP5Bd",
+			"name": "Savoir-Faire",
+			"specialization": "Military",
+			"difficulty": "iq/e",
+			"points": 1
+		},
+		{
+			"id": "sZqus3rj9aYHoZFgC",
+			"name": "Intimidation",
+			"difficulty": "will/a",
+			"points": 8
+		},
+		{
+			"id": "shUhiR6P7NTuh2dcZ",
+			"name": "Observation",
+			"difficulty": "per/a",
+			"points": 12
+		},
+		{
+			"id": "scRUB51eclwJi15tY",
+			"name": "Search",
+			"local_notes": "Rooting out a rogue psyker in hiding.",
+			"difficulty": "per/a",
+			"points": 4
+		},
+		{
+			"id": "sZxKFAV42MjB9VPQ9",
+			"name": "Tracking",
+			"difficulty": "per/a",
+			"points": 2
+		},
+		{
+			"id": "sSu5ZO6Uwo8_hADt3",
+			"name": "Running",
+			"difficulty": "ht/a",
+			"points": 2
+		},
+		{
+			"id": "s63wK13a0EqUDeXrX",
+			"name": "Hiking",
+			"difficulty": "ht/a",
+			"points": 2
+		}
+	],
+	"equipment": []
+}
