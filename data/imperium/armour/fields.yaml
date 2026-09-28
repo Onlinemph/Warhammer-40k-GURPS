@@ -10,10 +10,10 @@ items:
     lc: 1
     cost: 8000
     weight: 2
-    uses: 20
+    uses: 40
     tags: [Force Field, Energy Shield, Imperium, Inquisition]
     notes: >-
-      Shield 20 SP. Recharge: after 2 seconds without taking damage, regains 5 SP per second.
+      Shield 40 SP. Recharge: after 2 seconds without taking damage, regains 10 SP per second.
       Ranged attacks only: melee blows and thrown objects pass through at walking speed. A
       faint shimmer surrounds the wearer while active (-1 to Holdout, Stealth in darkness -1).
     lore: >-
@@ -22,9 +22,9 @@ items:
       and Rogue Trader lines: a shimmering field that scatters incoming fire. Shown as good
       against a stream of small-arms fire and poor against one heavy hit.
     design: >-
-      Small pool, fastest recharge of the Imperial fields, which reproduces the lore: it eats a
-      lasgun hit (avg 14) and is back to full two or three seconds after the shooting pauses,
-      but a single plasma bolt (avg 42) goes straight through. Ranged-only follows the fiction
+      Small pool, fastest recharge of the Imperial fields, which reproduces the lore: it eats two
+      lasgun hits (avg 17.5 each) and is back to full a few seconds after the shooting pauses,
+      but one bolt (avg 42, plus its 6d follow-up detonating on the field) breaks it. Ranged-only follows the fiction
       of fields that stop fast projectiles but not slow objects.
 
   - name: Rosarius
@@ -32,18 +32,18 @@ items:
     lc: 2
     cost: 6000
     weight: 1
-    uses: 30
+    uses: 60
     tags: [Force Field, Energy Shield, Imperium, Ecclesiarchy]
     notes: >-
-      Shield 30 SP. Recharge: after 3 seconds without taking damage, regains 5 SP per second.
+      Shield 60 SP. Recharge: after 3 seconds without taking damage, regains 10 SP per second.
       Blocks ranged and melee attacks. Worn as an amulet; the field is invisible until struck.
     lore: >-
       Protection for Ministorum priests, Confessors and Canonesses who fight without full
       Sororitas plate. Ecclesiarchy background presents it as a blessed relic as much as a
       device: the faithful credit the Emperor's favour when it holds.
     design: >-
-      Two lasgun hits or one bolter round (avg 21) are absorbed; plasma or heavier weapons
-      break through. Ranked below the conversion field and iron halo, matching its role as the
+      Three lasgun hits are absorbed; one bolt (avg 42 plus ~21 follow-up) about breaks it,
+      and plasma (avg 84) goes through. Ranked below the conversion field and iron halo, matching its role as the
       field for mortal clergy rather than Astartes officers.
 
   - name: Conversion Field
@@ -51,11 +51,11 @@ items:
     lc: 1
     cost: 25000
     weight: 3
-    uses: 40
+    uses: 80
     tags: [Force Field, Energy Shield, Imperium, Inquisition]
     notes: >-
-      Shield 40 SP. Recharge: after 3 seconds without taking damage, regains 5 SP per second.
-      Blocks ranged and melee attacks. Flash: any single hit that removes 10+ SP converts into
+      Shield 80 SP. Recharge: after 3 seconds without taking damage, regains 10 SP per second.
+      Blocks ranged and melee attacks. Flash: any single hit that removes 20+ SP converts into
       a burst of light; everyone within 5 yards facing the wearer (not the wearer) rolls HT or
       is blinded for 1d seconds. Photo-visors and auto-senses negate the flash.
     lore: >-
@@ -63,8 +63,8 @@ items:
       fiction: it turns a chainsword stroke or a point-blank shot into a blinding flare. A rare
       relic rather than standard Imperial manufacture.
     design: >-
-      Absorbs a plasma bolt (avg 42) about half the time, a bolter round easily, and stops
-      nearly any hand weapon wielded by an unaugmented human. The flash is its defining lore
+      Absorbs a bolt with room to spare, a plasma bolt (6dx4, avg 84) a bit under half the
+      time, and nearly any hand weapon wielded by an unaugmented human. The flash is its defining lore
       trait and makes heavy hits on the wearer dangerous to bystanders.
 
   - name: Iron Halo
@@ -72,10 +72,10 @@ items:
     lc: 0
     cost: 20000
     weight: 2
-    uses: 60
+    uses: 120
     tags: [Force Field, Energy Shield, Imperium, Adeptus Astartes]
     notes: >-
-      Shield 60 SP. Recharge: after 3 seconds without taking damage, regains 10 SP per second.
+      Shield 120 SP. Recharge: after 3 seconds without taking damage, regains 20 SP per second.
       Blocks ranged and melee attacks. Mounted on the backpack of Astartes power armour; needs
       the armour's power supply.
     lore: >-
@@ -83,19 +83,19 @@ items:
       background and Black Library fiction. An honour as well as protection: a Marine is
       granted one, not issued it.
     design: >-
-      Holds against a plasma bolt and most power-weapon blows (a power fist averages ~20) and
-      recovers quickly, so an Astartes hero can walk through small-arms fire in the fiction.
-      A lascannon (avg 112) still breaks it and continues into the armour.
+      Holds against a plasma bolt (avg 84) and a power-fist blow (thr+8d(10), ~34 in Astartes
+      hands) and recovers quickly, so an Astartes hero can walk through small-arms fire as in
+      the fiction. A lascannon (8dx8, avg 224) still breaks it and continues into the armour.
 
   - name: Storm Shield (Field Component)
     tl: 11
     lc: 0
     cost: 15000
     weight: 4
-    uses: 80
+    uses: 160
     tags: [Force Field, Energy Shield, Imperium, Adeptus Astartes]
     notes: >-
-      Shield 80 SP. Recharge: after 2 seconds without taking damage, regains 10 SP per second.
+      Shield 160 SP. Recharge: after 2 seconds without taking damage, regains 20 SP per second.
       Covers only attacks from the front and the shield-arm side (the arcs a shield covers);
       attacks from behind or the off side bypass it. The physical shield's Defense Bonus and
       melee stats are on the Storm Shield entry in Melee Weapons.
@@ -104,9 +104,9 @@ items:
       field, shown in Codex: Space Marines background and Black Library fiction shrugging off
       blows that would kill a Marine, including the occasional lascannon or plasma hit.
     design: >-
-      Largest pool of any personal field, limited to its arc. Plasma (avg 42) is stopped
-      outright; a lascannon (8dx4, avg 112) is stopped only when it rolls 80 or less (8d of
-      20 or less, about 5% of shots), matching "occasionally" in the fiction.
+      Largest pool of any personal field, limited to its arc. Plasma (avg 84) is stopped
+      outright; a lascannon (8dx8, avg 224) is stopped only when it rolls 160 or less (8d of
+      20 or less, about 6% of shots), matching "occasionally" in the fiction.
 
   - name: Displacer Field
     tl: 12

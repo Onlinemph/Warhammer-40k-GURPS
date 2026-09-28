@@ -58,15 +58,18 @@ These numbers are fixed. Everything else is placed relative to them.
 
 ### Personal armour (DR on covered locations)
 
+GURPS real-world baseline for scale: a modern soft vest with ceramic plate is roughly DR 30–35, and a 5.56 mm rifle round is about 5d pi. 40k armour and weapons sit well above that.
+
 | Armour | Torso DR | Notes |
 |---|---|---|
 | Unarmoured | 0 | |
-| Flak (vest/jacket) | 8 | Stops shrapnel and pistol-calibre stub rounds. Lasgun and autogun hits usually get through; bolts always do. Flak helmet DR 6. |
-| Mesh | 10, flexible | Hive-noble and assassin wear. Flexible: blunt trauma applies. |
-| Carapace | 20 | Rigid plate. Usually stops a lasgun; a bolter or hot-shot las goes through. |
-| Adepta Sororitas power armour | 32 | Lighter than Astartes plate. |
-| Astartes power armour (Mk VII baseline) | 40 | Shrugs off las, stub, most small-arms bolts. Eye lenses DR 20. Marks vary ±5 around this. |
-| Tactical Dreadnought (Terminator) | 80 | Ignores bolters. Plasma, lascannon, power fist and thunder hammer still kill. |
+| Flak (vest/jacket) | 12 | Stops shrapnel and pistol rounds. Lasgun and autogun hits usually get through; bolts always do. Flak helmet DR 10. |
+| Mesh | 15, flexible | Hive-noble and assassin wear. Flexible: blunt trauma applies. |
+| Carapace | 45 | Rigid plate. Stops stub rounds; stops most lasgun hits; a hellgun or bolter goes through. |
+| Adepta Sororitas power armour | 70 | Lighter than Astartes plate. A bolter penetrates about four shots in five. |
+| Astartes power armour (Mk VII baseline) | 100 | Ignores las and stub fire. A bolter penetrates about one shot in seven. Limbs a little lower. Eye lenses DR 50. Marks vary ±10–15 around this. |
+| Mk X Gravis | 130 | Between power armour and Terminator plate. |
+| Tactical Dreadnought (Terminator) | 200 | Ignores bolters. Plasma, lascannon, power fist and thunder hammer still kill. |
 
 Limbs are usually a few DR below torso. Specify every location explicitly.
 
@@ -82,11 +85,11 @@ Refractor fields, conversion fields, rosarii, iron halos and storm shields work 
 
 | Field | SP | Delay | Recharge/s | Covers |
 |---|---|---|---|---|
-| Refractor field | 20 | 2 s | 5 | Ranged only |
-| Rosarius | 30 | 3 s | 5 | All |
-| Conversion field | 40 | 3 s | 5 | All; flash on big hits |
-| Iron halo | 60 | 3 s | 10 | All |
-| Storm shield | 80 | 2 s | 10 | Front and shield side |
+| Refractor field | 40 | 2 s | 10 | Ranged only |
+| Rosarius | 60 | 3 s | 10 | All |
+| Conversion field | 80 | 3 s | 10 | All; flash on big hits |
+| Iron halo | 120 | 3 s | 20 | All |
+| Storm shield | 160 | 2 s | 20 | Front and shield side |
 
 Vehicle void shields will use the same rules at larger scale.
 
@@ -94,20 +97,23 @@ Vehicle void shields will use the same rules at larger scale.
 
 | Weapon | Damage | What it has to do |
 |---|---|---|
-| Laspistol | 3d burn | Kills an unarmoured man in 1–2 hits. |
-| Autogun | 4d+1 pi | Lasgun parity: the two are equally lethal in fiction and Only War. |
-| Lasgun | 4d burn | Punches flak; rarely penetrates carapace (4d max 24 vs DR 20). |
-| Long-las | 5d burn | Sniper. |
-| Hellgun / hot-shot | 5d(2) burn | Built to beat carapace. |
-| Boltgun (Godwyn/standard) | 6d(2) pi+, follow-up 3d cr ex | Turns an unarmoured man to paste. Penetrates carapace easily. Against power armour (effective DR 20), penetrates sometimes: a Marine takes several bolts to kill another Marine. |
-| Heavy bolter | 8d(2) pi+, follow-up 4d cr ex | Chews light vehicles (AV10 ≈ DR 50). |
-| Plasma gun | 6d×2(3) burn ex | Kills Marines through power armour. Overheat risk (see Malfunction). |
-| Meltagun | 8d×3(10) burn to ½D; beyond ½D 4d×3(5) | Vehicle-killer at short range. |
-| Lascannon | 8d×4(5) burn | Kills tanks and Terminators. |
-| Chainsword | sw+1d cut | Tears flesh, skids off power armour. |
-| Power sword | sw+1d+1(10) cut | The disruption field shears ceramite whoever holds it. |
+| Laspistol | 3d(2) burn | Kills an unarmoured man in 1–2 hits. |
+| Autogun | 5d+1 pi | Lasgun parity against flesh: equally lethal in the fiction and Only War. Stopped by carapace. |
+| Lasgun | 5d(2) burn | Punches flak; penetrates carapace (eff. DR 22) about one hit in ten. Useless against power armour. |
+| Long-las | 6d(2) burn | Sniper. |
+| Hellgun / hot-shot | 6d(3) burn | Built to beat carapace (eff. DR 15). |
+| Boltgun (Godwyn/standard) | 6d×2(2) pi++, follow-up 6d cr ex | Turns an unarmoured man to paste; always penetrates carapace. Against Astartes power armour (eff. DR 50) penetrates about one shot in seven (14%): a Marine takes several bolts to kill another Marine. |
+| Heavy bolter | 7d×2(2) pi++, follow-up 8d cr ex | Chews light vehicles (AV10, eff. DR 50) about 40% of the time. |
+| Plasma gun | 6d×4(3) burn ex | Kills Marines through power armour (eff. DR 33); penetrates Terminators (eff. DR 67) more often than not. Overheat risk. |
+| Meltagun | 8d×6(10) burn to ½D; beyond ½D 4d×6(3) | Kills AV14 (eff. DR 35) at short range; past ½D still wrecks AV12 (76%), almost never beats AV14 (5%). |
+| Lascannon | 8d×8(5) burn | Kills tanks (AV14 eff. DR 70) and Terminators. |
+| Krak missile | 6d×6(3) cr | Reliable vs AV12–13 (90%); about two in three vs AV14. |
+| Chainsword | sw+2d(2) cut | Tears flesh and flak; bites carapace; skids off power armour. |
+| Power sword | sw+3d(10) cut | The disruption field shears power armour whoever holds it. |
+| Power fist | thr+8d(10) cr | Kills Terminators in Astartes hands. |
+| Thunder hammer | sw+6d(10) cr | The Terminator-killer; knockback. |
 
-**Power-field rule.** Every disruption-field weapon (power sword, axe, maul, lance, fist, chainfist, thunder hammer, lightning claw) has armour divisor (10) with the field on, and a second weapon line for field-off at the mundane baseline. Bladed/mace power weapons add +1d over the mundane weapon; thunder hammers +2d; power fists thr+4d.
+**Power-field rule.** Every disruption-field weapon (power sword, axe, maul, lance, fist, chainfist, thunder hammer, lightning claw) has armour divisor (10) with the field on, and a second weapon line for field-off at the mundane baseline. Bladed/mace power weapons add +3d over the mundane weapon; thunder hammers +6d; power fists thr+8d.
 
 Follow-up damage (B414): the follow-up applies only when the penetrator gets through DR. In GCS, add the follow-up as a second weapon line with usage like "Follow-up (if bolt penetrates)".
 
@@ -119,11 +125,11 @@ Wargame armour values give only relative order. Map them to DR when a weapon nee
 
 | AV | DR | Typical |
 |---|---|---|
-| 10 | 50 | Rear armour, Sentinel, Chimera sides |
-| 11 | 80 | Rhino front/sides |
-| 12 | 120 | Chimera front |
-| 13 | 180 | Leman Russ sides |
-| 14 | 250 | Leman Russ front, Land Raider |
+| 10 | 100 | Rear armour, Sentinel, Chimera sides |
+| 11 | 150 | Rhino front/sides |
+| 12 | 200 | Chimera front |
+| 13 | 275 | Leman Russ sides |
+| 14 | 350 | Leman Russ front, Land Raider |
 
 Anti-tank weapons must beat the DR they are known to beat in the fiction.
 
@@ -153,13 +159,44 @@ The nineteen gene-seed organs each become a trait (or several) inside an **Astar
 
 ## Psykers and the warp
 
-Psychic abilities use the *Powers* framework with a **Warp** power modifier. The modifier covers:
+Psychic abilities in the fiction are the sort of thing GURPS Thaumatology:
+Sorcery was written to model: a personal, trained reserve of power that
+gates what you may know, sharpened by a separate Talent, drawn on at a
+fatigue cost, and prone to backfiring. This project builds 40k psychic
+powers directly on that chassis (data/imperium/psykers/warp.yaml has the
+full build):
 
-- Can be blocked by pariahs/blanks (Null), null rods, hexagrammic and psychic wards.
-- Detectable by other psykers, daemons, and the Astronomican-attuned.
-- **Perils of the Warp:** every use risks warp backlash. Model it as a limitation, not free flavour, and scale the risk by how hard the psyker pushes.
+- Discovery, legal status, the Scholastia Psykana, Soulbinding, blanks and
+  pariahs, and the Navigator's third eye are unchanged: psychic ability is
+  still a rare, dangerous mutation that the Imperium hunts, sanctions, or
+  binds into service, depending on what it finds.
+- Every trained psychic ability requires **Warp Empowerment**, a reskin of
+  Sorcerous Empowerment (TSOR4, 10 points + 10/level): a power's full,
+  modified point cost can never exceed the point cost of the psyker's own
+  Warp Empowerment. This is what actually gates which powers a given psyker
+  may know, and it is what the Adeptus Astra Telepathica's Assignment scale
+  (Iota through Alpha, Alpha-Plus beyond play) is calibrated against — see
+  the Warp Empowerment trait's notes for the full grade-to-level table.
+- **Psyker (Talent)** is this setting's Sorcery Talent (TSOR5, 10/level): it
+  sharpens Psyniscience, Meditation, Hidden Lore (the Warp), and the Will
+  roll to resist Perils of the Warp, exactly as Sorcery Talent aids a
+  sorcerer's related skills in TSOR. It does not gate which powers a psyker
+  may know — that is Warp Empowerment's job, on its own separate track.
+- **Warp Sorcery** (-20%) replaces the project's earlier bespoke -15% "Warp"
+  modifier with Sorcery (-15%, TSOR) stacked with Detectable (-5%, kept from
+  the original design). It is cast per Thaumatology: Sorcery (TSOR) — 1 FP
+  per casting — and fails against blanks/pariahs, null rods, hexagrammic and
+  psychic wards, and inside a Geller field, as appropriate to the scene.
+- **Perils of the Warp** stacks on top of Warp Sorcery unchanged: it is the
+  40k-specific backlash risk that Sorcery itself doesn't model, scaled by
+  how hard the psyker pushes past their safe limit (Pushing, kept as-is).
 
-Psychic abilities are grouped into disciplines (Biomancy, Divination, Pyromancy, Telekinesis, Telepathy, plus faction lists) as Talent-linked power groups. Assignment grades (Alpha–Iota) are used as a reference for how strong a psyker may be.
+Psychic abilities are grouped into disciplines (Biomancy, Divination,
+Pyromancy, Telekinesis, Telepathy, plus faction lists like Sanctic
+Daemonology and Librarius) as Talent-linked power groups, each child ability
+tagged with Warp Sorcery and Perils of the Warp. Great Powers (e.g. Vortex
+of Doom) are exempt from the Warp Empowerment cap outright — they are
+GM-reference material, not something any PC's Empowerment is meant to reach.
 
 ## Skills
 
