@@ -2,8 +2,8 @@ kind: template
 output: Xenos/Tyranids/Templates/Lictor.gct
 notes: >
   NPC creature stat block, not a player-facing race. Point math: Tyranid
-  Biology 15 + Body Lens: Lictor 547 + Flesh Hooks 11 + Lash Whip 47 +
-  Rending Claws 38 + skills 12 = 670 points. Stats: SM
+  Biology 20 + Body Lens: Lictor 547 + Flesh Hooks 11 + Rending Claws 38 +
+  skills 12 = 628 points. Stats: SM
   +1, ST 22, DX 15, IQ 8, HT 13, HP 26, Will 8, Per 8, natural chitin
   torso DR 60 (Weak Points 5, eye DR 30), Chameleonic Hide (-4/-2 to
   others' Vision rolls), Pheromone Trail, Shadow in the Warp (8 yards) —
@@ -14,15 +14,16 @@ notes: >
   reference only; do not read it as a measure of how a lone Lictor
   performs in a stand-up fight, which is never its role in the fiction.
 
-  Weapon-symbiotes: carries Flesh Hooks (a ranged grapple/snare) and a
-  Lash Whip (a disabling reach weapon), per framework.md's own symbiote
-  list, plus Rending Claws for its actual kill — all built as
-  natural-attack traits in data/xenos/tyranids/bio-weapons.yaml.
+  Weapon-symbiotes: carries Flesh Hooks (a ranged grapple/snare) plus
+  Rending Claws for its actual kill, both built as natural-attack traits
+  in data/xenos/tyranids/bio-weapons.yaml. The Lash Whip (a Bonesword
+  companion carried by Warriors) was removed from the Lictor; the Codex
+  gives Lictors flesh hooks, grasping talons and rending claws. There is
+  no Grasping Talons entry yet.
 traits:
   - include: "xenos/tyranids/traits.yaml#Tyranid Biology"
   - include: "xenos/tyranids/traits.yaml#Body Lens: Lictor"
   - include: "xenos/tyranids/bio-weapons.yaml#Flesh Hooks"
-  - include: "xenos/tyranids/bio-weapons.yaml#Lash Whip"
   - include: "xenos/tyranids/bio-weapons.yaml#Rending Claws"
 skills:
   - name: Brawling
@@ -30,7 +31,7 @@ skills:
     points: 4
     tags: [Xenos, Tyranids]
     lore: A Lictor's rending claws finish whatever its ambush started.
-    design: DX+1 (16) for 4 points, Easy.
+    design: DX+2 (17) for 4 points, Easy.
   - name: Stealth
     diff: DX/A
     points: 8

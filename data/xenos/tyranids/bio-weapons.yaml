@@ -531,6 +531,45 @@ items:
       skill table for natural close-combat weapons (power fist/lightning
       claws use the same skill).
 
+  - name: Scything Talons (Hormagaunt)
+    points: 45
+    ref: B88
+    tags: [Advantage, Physical, Xenos, Tyranids]
+    weapons:
+      - usage: Standard
+        damage: sw+4d(2) cut
+        reach: "1"
+        parry: 0
+        skill: Brawling
+        notes: >-
+          Written for a Hormagaunt-scale bearer (ST 10, sw 1d, giving a
+          total of 5d(2) cut). The +4d Innate Attack component is what makes
+          a small, weak bioform a threat to flak; rebuild it for any other
+          bearer's own ST per this file's header note.
+    lore: >-
+      The Hormagaunt's own scything talons: a leaping killer's blades,
+      swung in a frenzy by a body built to close on prey and shred it.
+      Codex: Tyranids background treats the Hormagaunt as the swarm's
+      melee shock troop, whose whole purpose is to cut down infantry in
+      the open; a Hormagaunt brood that cannot hurt a flak-armoured
+      Guardsman would not be worth growing.
+    design: >-
+      Framework.md's Scything Talons anchor (sw+2d(2) cut) is written at a
+      Tyranid Warrior's ST 24; at a Hormagaunt's ST 10 (sw 1d) it yields
+      only 3d(2), which penetrates flak (DR 30, eff. 15) 4.6% of the time
+      and left the swarm's leaping killer unable to hurt the Guardsmen it
+      exists to shred (weaker than a Termagant's fleshborer, 6d(2) at
+      90%). This entry keeps the same build with four dice of Innate Attack
+      instead of two: Cutting Striker (B88, 7 points) with Armor Divisor
+      (2) (B102, +50%) = 10.5, rounded to 11, for the bare sw(2) baseline;
+      Innate Attack (Cut) (B61, 7/die) at 4 dice = 28, with Armor Divisor
+      (2) (+50%) and Melee Attack, Reach C (-30%): net +20%, 28x1.2=33.6,
+      rounded to 34. Total 11+34 = 45. Checked by exact dice distribution
+      at ST 10 (sw+4d(2) = 5d(2)): averages 17.5 and penetrates flak 69.5%
+      of the time, carapace (DR 70, eff. 35) 0%, and nothing heavier - a
+      real killer of unarmoured and flak-armoured infantry (a brood of them
+      certainly is) and no threat to rigid plate.
+
   - name: Rending Claws
     points: 38
     ref: B88
@@ -680,10 +719,10 @@ items:
         parry: 0
         skill: Brawling
         notes: >-
-          Written for a Carnifex-scale bearer (ST 60, sw 13d+2, giving a
-          total of 17d+2(3) cut); rebuild the +4d Innate Attack component
-          for any other bearer's own ST (e.g. a Hive Tyrant, ST 45) per
-          this file's header note.
+          Written for a Carnifex-scale bearer (ST 60, sw 9d, giving a total
+          of 13d(3) cut); a Hive Tyrant (ST 45, sw 7d+1) totals 11d+1(3).
+          Rebuild the +4d Innate Attack component for any other bearer's own
+          ST per this file's header note.
     lore: >-
       Scything talons grown to Carnifex or Hive Tyrant scale: blades the
       size of a man, capable of shearing clean through a light vehicle's
@@ -693,20 +732,20 @@ items:
       a Warrior's own scything talons entirely.
     design: >-
       Framework.md's own anchor: "Monstrous scything talons | sw+4d(3)
-      cut." Built at a Carnifex's own ST 60 (sw 13d+2): Cutting Striker
+      cut." Built at a Carnifex's own ST 60 (sw 9d): Cutting Striker
       (B88, 7 points) with Armor Divisor (3) (+100%) = 14 for the
       sw+0(3) baseline; the anchor's own +4d is bought as Innate Attack
       (Cut) (B61, 7/die) at 4 dice = 28, with Armor Divisor (3) (+100%)
       and Melee Attack, Reach C (-30%): net +70%, 28x1.7=47.6, rounded to
       48. Total 14+48=62. Checked by exact dice distribution at ST 60
-      (sw+4d(3) = 17d+2(3)): averages 61.5 and clears every personal-armour
-      DR up to and including Astartes plate at 100%, dropping to 24.0%
-      against a Terminator (DR 200, eff. 66.7) — a decisive Marine-killer
-      and a real, if not certain, Terminator-killer. Against vehicles:
-      AV10 100%, AV11 94.1%, AV12 24.0%, AV13-14 0% — shears through
-      light vehicles and struggles against a main battle tank's own frontal
-      armour, exactly the "would shrug off a Warrior's own talons entirely"
-      step up the anchor implies.
+      (sw+4d(3) = 13d(3)): averages 45.5 and penetrates Astartes plate (DR
+      100, eff. 33.3) 97.5% of the time, Gravis (DR 130) 62.6%, and a
+      Terminator (DR 200, eff. 66.7) 0%. A Hive Tyrant at ST 45
+      (11d+1(3)) gets 85.3% against Astartes plate, 24.2% against Gravis
+      and 0% against a Terminator. Against vehicles at ST 60: AV10 97.5%,
+      AV11 21.0%, AV12 and up 0%. That is a decisive Marine-killer and a
+      light-vehicle cracker, but not a Terminator-killer: the crushing
+      claws below are the swarm's armour-buster.
 
   - name: Monstrous Crushing Claws
     points: 79

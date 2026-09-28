@@ -46,12 +46,21 @@ items:
     cost: 1700
     weight: 40
     tags: [Missile Weapon, Imperium, Adeptus Astartes, Deathwatch]
+    notes: >-
+      Tempest rounds (Special Issue Ammunition) are ballistically the same
+      as the standard subsonic bolt above; their casing is tuned to punch
+      clean through dense natural cover (jungle canopy, fungal growth, a
+      xenos hive-wall's membranous inner layers), so the GM may waive an
+      intervening light-cover DR bonus when one is used against a target
+      behind that kind of obstruction. There is no separate weapon line for
+      them. Stalker Silenced rounds are not listed: this gun's integral
+      suppressor already does what they do.
     weapons:
       - usage: Subsonic bolt
         damage: 6dx2(2) pi++
         acc: 5
         range: 200/1000
-        rof: 1
+        rof: 3
         shots: 24(3)
         st: 19
         bulk: -6
@@ -66,7 +75,7 @@ items:
         damage: 4d cr ex
         acc: 5
         range: 200/1000
-        rof: 1
+        rof: 3
         shots: 24(3)
         st: 19
         bulk: -6
@@ -76,7 +85,7 @@ items:
         damage: 5dx2(2) pi
         acc: 5
         range: 200/1000
-        rof: 1
+        rof: 3
         shots: 24(3)
         st: 19
         bulk: -6
@@ -89,66 +98,10 @@ items:
         damage: 5d burn ex
         acc: 5
         range: 200/1000
-        rof: 1
+        rof: 3
         shots: 24(3)
         st: 19
         bulk: -6
-        rcl: 3
-        skill: Guns (Rifle)
-      - usage: "Tempest round (SIA)"
-        damage: 6dx2(2) pi++
-        acc: 5
-        range: 200/1000
-        rof: 1
-        shots: 24(3)
-        st: 19
-        bulk: -6
-        rcl: 3
-        skill: Guns (Rifle)
-        notes: >
-          Ballistically identical to a standard bolt; its casing is tuned
-          to punch clean through dense natural cover (jungle canopy,
-          fungal growth, a xenos hive-wall's membranous inner layers)
-          without deflecting or detonating early. GM's call to waive an
-          intervening light-cover DR bonus entirely when this round is
-          used against a target behind that kind of obstruction.
-      - usage: "Tempest round, follow-up (if bolt penetrates)"
-        damage: 6d cr ex
-        acc: 5
-        range: 200/1000
-        rof: 1
-        shots: 24(3)
-        st: 19
-        bulk: -6
-        rcl: 3
-        skill: Guns (Rifle)
-      - usage: "Stalker Silenced round (SIA)"
-        damage: 6dx2(2) pi++
-        acc: 4
-        range: 200/1000
-        rof: 1
-        shots: 24(3)
-        st: 19
-        bulk: -5
-        rcl: 3
-        skill: Guns (Rifle)
-        notes: >
-          A reduced-charge shell meant for a standard (non-Stalker)
-          boltgun body: it trades this weapon's own integral suppressor
-          bonus for compatibility with any Godwyn-anchor Astartes boltgun
-          (Boltgun, Godwyn/Umbra/Phobos/Mk IV Pattern), quieting the report
-          at the cost of the RoF 3 semi-auto cycling those guns normally
-          use — loaded into this Stalker-pattern body it is redundant with
-          the Subsonic bolt usage above and included here only for
-          completeness.
-      - usage: "Stalker Silenced round, follow-up (if bolt penetrates)"
-        damage: 6d cr ex
-        acc: 4
-        range: 200/1000
-        rof: 1
-        shots: 24(3)
-        st: 19
-        bulk: -5
         rcl: 3
         skill: Guns (Rifle)
     lore: >
@@ -157,7 +110,7 @@ items:
       semi-automatic-only action, an integral suppressor and subsonic
       loads, issued to kill-teams that need to put down a target quietly
       before the rest of a xenos brood notices. Special Issue Ammunition
-      more broadly (Dragonfire, Tempest, Stalker Silenced rounds among
+      more broadly (Dragonfire and Tempest rounds among
       them, alongside Kraken, Hellfire, Metal Storm and Vengeance already
       covered in Boltgun, Godwyn Pattern.eqp) is the Deathwatch RPG line's
       own signature contribution to boltgun lore; this project's specific
@@ -170,10 +123,11 @@ items:
       Pattern.eqp), not copied: same loaded weight class (40 lb, 2 lb over
       the Godwyn anchor's 38 lb for the suppressor shroud and stiffened
       barrel a subsonic load needs) and the same min ST 19 the anchor
-      established for a 38-40 lb Astartes-pattern receiver. RoF drops to 1
-      (semi-automatic only, per its role as a precision/stealth weapon —
-      the same logic the Primaris Stalker Bolt Rifle uses in Bolt
-      Weapons.eqp) rather than the Godwyn anchor's RoF 3. Acc rises to 5
+      established for a 38-40 lb Astartes-pattern receiver. RoF stays at
+      the Godwyn anchor's 3: the framework rule is RoF 1 only for
+      single-shot or bolt-action mechanisms and RoF 3 for a semi-automatic
+      weapon fired as fast as the trigger allows, and this gun is
+      explicitly the semi-automatic-only pattern (no burst setting). Acc rises to 5
       (one over the Godwyn anchor's 4) for the integrated optics a
       stealth-role weapon needs; Bulk drops one further step to -6 (worse
       than the Godwyn anchor's -5) for the suppressor's added length. The
@@ -193,14 +147,14 @@ items:
       Astartes power armour (DR 100, eff. DR 50) on 1.6% — identical
       figures to the Godwyn-family Bolt Pistol's own 5dx2(2) line, since
       it is the same reduced-mass penetrator core in a different housing.
-      Tempest and Stalker Silenced rounds are ballistically unchanged from
-      the standard bolt (6dx2(2) pi++ / 6d cr ex, matching the Godwyn
-      anchor's own 79%/45%/14% figures against carapace/Sororitas/
-      Astartes), with their special property carried entirely as a
-      notes-level rule, the same treatment the Godwyn entry gives
-      Vengeance and Sanctified rounds — Stalker Silenced additionally
-      loses the Acc/Bulk bonus this gun's own integral suppressor
-      provides, since that bonus is the Stalker body's, not the shell's.
+      Tempest rounds are ballistically unchanged from the standard bolt
+      (6dx2(2) pi++ / 6d cr ex, matching the Godwyn anchor's own
+      79%/45%/14% figures against carapace/Sororitas/Astartes), so they are
+      folded into the weapon's notes as a cover-penetration rule rather
+      than copied as a second weapon line, the same treatment the Godwyn
+      entry gives Vengeance and Sanctified rounds. Stalker Silenced rounds
+      (a reduced-charge shell for standard boltgun bodies) are omitted:
+      they duplicate what this gun's integral suppressor already does.
 
   # ------------------------------------------------------------------ Shotgun
 
@@ -471,24 +425,44 @@ items:
     weight: 3
     tags: [Melee Weapon, Imperium, Adeptus Astartes, Deathwatch]
     weapons:
-      - usage: Thrust
+      - usage: Thrust, field off
+        damage: thr+1 imp
+        reach: C,1
+        parry: 0
+        st: 11
+        skill: Shortsword
+      - usage: Swing, field off
+        damage: sw+1 cut
+        reach: C,1
+        parry: 0
+        st: 11
+        skill: Shortsword
+      - usage: Thrust, phase field on
         damage: thr+1(inf) imp
         reach: C,1
         parry: 0
         st: 11
         skill: Shortsword
-      - usage: Swing
+      - usage: Swing, phase field on
         damage: sw+1(inf) cut
         reach: C,1
         parry: 0
         st: 11
         skill: Shortsword
     notes: >
+      Deliberate relic-tier exception: the phase field ignores armour
+      entirely (armour divisor (inf)), one step beyond the (10) every
+      disruption-field weapon in the framework uses. This is a design
+      escalation for a named archeotech relic, not something the lore
+      requires (canonical Xenophase blades are power-sword-class), and a GM
+      who wants it in line with other power weapons can swap the field-on
+      lines for thr+3d+1(10) imp / sw+3d+1(10) cut.
+
       Phase field: good for 6 strikes before the generator needs about a
       minute to recharge (track with the item's Uses counter in GCS, per
-      framework.md's shield-recharge convention); a depleted blade still
-      cuts as a plain, beautifully made knife (drop the (inf) armor
-      divisor and treat as thr+1 imp / sw+1 cut) until it recovers.
+      framework.md's shield-recharge convention); a depleted blade cuts as
+      a plain, beautifully made knife (use the field-off lines) until it
+      recovers.
     lore: >
       A rare archeotech or Mechanicus-forged relic entrusted only to a
       handful of Deathwatch veterans: its blade briefly desynchronises
@@ -519,10 +493,13 @@ items:
       thr+1 imp / sw+1 cut, reach C,1, parry 0) rather than a bigger blade,
       since the weapon's threat is entirely the phase field, not raw
       mass — exact odds are unnecessary against DR the weapon is built to
-      ignore, but for reference an Astartes-strength blow (thr 3d-1) still
-      only averages about 8-9 points of raw cutting/impaling damage before
-      the divisor even applies, so this is a precision, one-target-at-a-
-      time relic, not a way to one-shot a Terminator. Weight (3 lb) and
+      ignore, but for reference an Astartes-strength blow at ST 30 (thr 3d,
+      sw 5d+2) averages about 11.5 points on the thrust and 20.5 on the
+      swing before wounding multipliers, so this is a precision,
+      one-target-at-a-time relic, not a way to one-shot a Terminator. The
+      field-off lines give the plain Astartes-scale knife baseline, and
+      the (inf) divisor is a deliberate escalation past the (10) power-
+      field anchor, flagged in the notes. Weight (3 lb) and
       min ST (11) match a real one-handed long knife; TL12 (archeotech/
       STC-era, per the framework's TL table) and LC0 (Astartes/xenos-tech-
       adjacent relic) are both at the top of their respective brackets.

@@ -92,32 +92,39 @@ items:
 
   - &synapse_discipline
     name: "Synapse Discipline"
-    points: 5
+    points: 20
+    ref: B55
     tags: [Advantage, Mental, Xenos, Tyranids]
-    conditional:
-      - situation: "to Will rolls and Fright Checks, and to resist Bestial's effects, while within the range of a Synapse Creature's link (see that trait)"
-        amount: 4
+    modifiers:
+      - {name: "Accessibility (only while linked to a synapse creature)", cost: "-50%"}
     notes: >
-      While linked, Synapse Dependence's instinctive-behaviour effects
-      are fully suppressed: the organism fights with total discipline, no
-      fear, and follows the Hive Mind's tactical intent through the
-      nearest synapse creature exactly as ordered. The moment the link
-      breaks (the synapse creature dies, moves out of range, or is
-      itself cut off from a larger synapse creature further up the
-      chain), Synapse Dependence resumes immediately.
+      Fearlessness 5 (+5 to Fright Checks and to Will rolls to resist
+      fear, intimidation and Bestial) and High Pain Threshold (no shock
+      penalty, no stun from injury), both only while within the range of
+      a Synapse Creature's link (see that trait). While linked,
+      Synapse Dependence's instinctive-behaviour effects are fully
+      suppressed: the organism fights with total discipline, no fear, and
+      follows the Hive Mind's tactical intent through the nearest synapse
+      creature exactly as ordered. The moment the link breaks (the synapse
+      creature dies, moves out of range, or is itself cut off from a
+      larger synapse creature further up the chain), Synapse Dependence
+      resumes immediately and the fearlessness and pain immunity go with
+      it.
     lore: >
       A swarm fighting under a synapse creature's watch is unrecognisable
-      from the same swarm cut loose — utterly fearless, perfectly
-      coordinated, and willing to press an attack to the last organism.
-      This is the other half of the same well-documented Codex mechanic
-      that makes synapse creatures the Imperium's priority targets.
+      from the same swarm cut loose: utterly fearless, feeling no pain,
+      perfectly coordinated, and willing to press an attack to the last
+      organism. This is the other half of the same well-documented Codex
+      mechanic that makes synapse creatures the Imperium's priority
+      targets, and matches framework.md's "no fear or pain within
+      synapse."
     design: >
-      A narrow conditional Will/Fright Check bonus, built the same way
-      this project's Ork WAAAGH! Gestalt prices an equivalent situational
-      bonus (5 points) rather than a flat, always-on Fearlessness — here
-      the "always on" case is Synapse Dependence's disadvantage instead,
-      and this trait is the paired benefit that replaces it under a
-      synapse creature's link.
+      Fearlessness 5 (B55, 2 points/level = 10) plus High Pain Threshold
+      (B59, 10) = 20 points, with Accessibility (only while linked to a
+      synapse creature, -50%): 20 x 0.5 = 10 points. Earlier drafts priced
+      a 5-point conditional Will bonus that never delivered the
+      fearlessness and pain immunity the framework and the fiction give
+      Tyranids in synapse.
 
   - &cannot_speak
     name: "Cannot Speak"
@@ -204,9 +211,9 @@ items:
       chitin DR, and any special biology (leaping legs, rending claws,
       psychic organs, wings) that role calls for.
     design: >
-      5 (Hive Mind Link) - 10 (Synapse Dependence) + 5 (Synapse
+      5 (Hive Mind Link) - 10 (Synapse Dependence) + 10 (Synapse
       Discipline) - 15 (Cannot Speak) + 0 (No Independent Society) + 30
-      (Adapted Biology) = 15 points of shared physiology before
+      (Adapted Biology) = 20 points of shared physiology before
       attributes, chitin DR, special biology, or skills. See each
       template for a full stat block built on top of this plus a body-
       type lens.
@@ -266,7 +273,7 @@ items:
     ref: B35
     tags: [Advantage, Mental, Xenos, Tyranids]
     modifiers:
-      - {name: "Advantage Delivered (grants Synapse Discipline, 5 pts)", cost: "5%"}
+      - {name: "Advantage Delivered (grants Synapse Discipline, 10 pts)", cost: "10%"}
       - "Area Effect, 16 yards, +200%"
       - "Always On, -40%"
       - "Emanation, -20%"
@@ -284,12 +291,12 @@ items:
       link that keeps a local swarm fighting with purpose instead of
       degenerating into a feeding frenzy the instant a fight turns bad.
     design: >
-      Affliction (B35) base 10; Advantage Delivered (a 5-point granted
-      advantage, valued at +5% per this project's own Advantage/
+      Affliction (B35) base 10; Advantage Delivered (a 10-point granted
+      advantage, valued at +10% per this project's own Advantage/
       Disadvantage Delivered convention); Area Effect at the 16-yard tier
       (+200%, B102); Always On (-40%, B113, it cannot be switched off);
       Emanation (-20%, B111, proximity only, no attack roll). Net:
-      +5+200-40-20 = +145%. 10 x 2.45 = 24.5, rounded up to 25 points.
+      +10+200-40-20 = +150%. 10 x 2.5 = 25 points.
 
   - &synapse_creature_zoanthrope
     name: "Synapse Creature (Zoanthrope)"
@@ -297,7 +304,7 @@ items:
     ref: B35
     tags: [Advantage, Mental, Xenos, Tyranids]
     modifiers:
-      - {name: "Advantage Delivered (grants Synapse Discipline, 5 pts)", cost: "5%"}
+      - {name: "Advantage Delivered (grants Synapse Discipline, 10 pts)", cost: "10%"}
       - "Area Effect, 16 yards, +200%"
       - "Always On, -40%"
       - "Emanation, -20%"
@@ -312,7 +319,7 @@ items:
       of why they are escorted rather than left to operate alone.
     design: >
       Identical build and math to the Tyranid Warrior's Synapse Creature
-      trait, above (10 base, net +145%, 25 points) — a Zoanthrope's
+      trait, above (10 base, net +150%, 25 points) — a Zoanthrope's
       field is no wider than a Warrior's despite the psychic amplification
       that discipline goes into Shadow in the Warp instead.
 
@@ -322,7 +329,7 @@ items:
     ref: B35
     tags: [Advantage, Mental, Xenos, Tyranids]
     modifiers:
-      - {name: "Advantage Delivered (grants Synapse Discipline, 5 pts)", cost: "5%"}
+      - {name: "Advantage Delivered (grants Synapse Discipline, 10 pts)", cost: "10%"}
       - "Area Effect, 32 yards, +250%"
       - "Always On, -40%"
       - "Emanation, -20%"
@@ -337,9 +344,9 @@ items:
       range of any single bioform, able to hold an entire local swarm
       together where a lone Warrior only holds a squad.
     design: >
-      Affliction (B35) base 10; Advantage Delivered (+5%); Area Effect at
+      Affliction (B35) base 10; Advantage Delivered (+10%); Area Effect at
       the 32-yard tier (+250%, B102); Always On (-40%); Emanation (-20%).
-      Net: +5+250-40-20 = +195%. 10 x 2.95 = 29.5, rounded up to 30 points.
+      Net: +10+250-40-20 = +200%. 10 x 3.0 = 30 points.
 
   - &shadow_in_the_warp_ravener
     name: "Shadow in the Warp (Ravener)"
@@ -376,8 +383,12 @@ items:
       warp-sensitive targets only (-20%, the same kind of narrowing this
       project's Grey Knights Banishment entry uses for a daemon-only
       target restriction). Net: +30+150-40-20-20 = +100%. 10 x 2.0 = 20
-      points. Included on Raveners and other bioforms framework.md calls
-      out as "larger bioforms," never on the small swarm forms.
+      points. Carried by the Ravener and Lictor as this project's own
+      house choice (framework.md lists Shadow in the Warp as a Tyranid
+      trait without saying which bioforms carry it); the Codex ties it to
+      synapse creatures and the Hive Mind's psychic presence, which is why
+      the Warrior, Zoanthrope and Hive Tyrant carry it and the mindless
+      Carnifex does not.
 
   - &shadow_in_the_warp_lictor
     name: "Shadow in the Warp (Lictor)"
@@ -392,21 +403,6 @@ items:
       - {name: "Accessibility (only affects psykers and other warp-sensitive minds)", cost: "-20%"}
     notes: "As the Ravener's Shadow in the Warp trait, above: 8-yard radius, -3 to psychic rolls, forced Fright Check on first exposure."
     lore: A Lictor is large enough to carry the same psychic weight as any other mid-tier bioform, on top of everything else that makes it a nightmare to hunt.
-    design: Identical build and math to the Ravener's Shadow in the Warp trait, above (20 points).
-
-  - &shadow_in_the_warp_carnifex
-    name: "Shadow in the Warp (Carnifex)"
-    points: 10
-    ref: B35
-    tags: [Advantage, Mental, Xenos, Tyranids]
-    modifiers:
-      - {name: "Disadvantage Delivered (Warp-Deafened: -3 to psychic skill and Warp Empowerment-related rolls, plus an immediate Fright Check on first exposure, -30 pts)", cost: "30%"}
-      - "Area Effect, 8 yards, +150%"
-      - "Always On, -40%"
-      - "Emanation, -20%"
-      - {name: "Accessibility (only affects psykers and other warp-sensitive minds)", cost: "-20%"}
-    notes: "As the Ravener's Shadow in the Warp trait, above: 8-yard radius, -3 to psychic rolls, forced Fright Check on first exposure."
-    lore: A Carnifex is more brute muscle than psychic mass, so its field sits at the same modest radius as a Ravener's or Lictor's rather than a synapse creature's own wider reach.
     design: Identical build and math to the Ravener's Shadow in the Warp trait, above (20 points).
 
   - &shadow_in_the_warp_warrior
@@ -534,15 +530,19 @@ items:
 
   - &ravener_tunnelling
     name: "Tunnelling"
-    points: 12
+    points: 30
+    per_level: 5
+    levels: 7
+    ref: B94
     tags: [Advantage, Physical, Xenos, Tyranids]
+    modifiers:
+      - {name: "Accessibility (soft earth, sand and similar loose ground only)", cost: "-40%"}
     notes: >
-      Through loose earth, sand, or similar soft ground only (never solid
-      rock or a hardened floor), the Ravener may move at its full Basic
-      Move underground, submerging and re-surfacing as a single Move
-      action; it may not attack while submerged. The moment it erupts
-      from the ground it is treated as attacking from ambush for that
-      turn's initial attack.
+      Tunnel Move 7 (the Ravener's current Basic Move) through loose earth,
+      sand, or similar soft ground only (never solid rock or a hardened
+      floor), submerging and re-surfacing as a single Move action; it may
+      not attack while submerged. The moment it erupts from the ground it
+      is treated as attacking from ambush for that turn's initial attack.
     lore: >
       Raveners burrow beneath the battlefield and erupt without warning
       beneath their target, the signature ambush Codex background gives
@@ -550,17 +550,14 @@ items:
       material and Deathwatch's own Mark of the Xenos description of the
       species.
     design: >
-      Built from Basic Set Enhanced Move (Ground) (B52, 20 points/level,
-      the same base rate this file's Genestealer Speed and this
-      project's Astartes/Custodes/Aeldari files all use) with an
-      Accessibility limitation restricting the whole trait to a new,
-      narrow movement mode (through soft earth only, never on open
-      ground or hard rock, -40%, an eyeballed percentage in line with
-      this project's own Accessibility convention): 20 x 0.6 = 12 points.
-      This grants the underground Move itself rather than doubling an
-      existing one, a reasoned adaptation of the same mechanic rather
-      than a renamed catalogue trait, per framework.md's "built, not
-      borrowed" rule.
+      Basic Set Tunneling (B94, 30 base + 5/level of Tunnel Move) at Tunnel
+      Move 7 = 65, with an Accessibility limitation restricting it to
+      soft earth only (-40%, an eyeballed percentage in line with this
+      project's own Accessibility convention): 65 x 0.6 = 39 points. This
+      replaces an earlier Enhanced Move build (12 points), which doubled
+      an existing Move rather than granting a burrowing mode at all. If
+      the Ravener's Basic Move is later changed, set the Tunnel Move level
+      to match.
 
   - &lictor_chameleon
     name: "Chameleonic Hide"
@@ -636,13 +633,13 @@ items:
 
   - &zoanthrope_warp_field
     name: "Warp Field (Bio-Psychic Ward)"
-    points: 15
+    points: 30
     tags: [Advantage, Xenos, Tyranids]
     notes: >
       A regenerating psychic buffer, built on the same Shield Points
       mechanic framework.md's "Personal force fields" section uses for
       worn refractor fields and the like, scaled down for a Zoanthrope's
-      own biology: SP 30, 2-second delay, recharges 10 SP/second once
+      own biology: SP 60, 2-second delay, recharges 10 SP/second once
       undamaged for that long, covers all locations. Damage comes off
       this pool first (armour divisors do not apply to SP); once it is
       exhausted, excess damage carries on to the Zoanthrope's chitin at
@@ -663,7 +660,10 @@ items:
       price here. Eyeballed at half of Damage Resistance's own rate (B46,
       5 points per point of permanent DR) for a pool that absorbs the
       same amount of damage but is temporary and must recharge, i.e. 0.5
-      points per SP: 30 SP x 0.5 = 15 points. This is a reasoned
+      points per SP: 60 SP x 0.5 = 30 points. Raised from 30 SP (15
+      points), which was weaker than an ordinary Guardsman-tier refractor
+      field and left a fragile Zoanthrope dying to a single bolt; 60 SP
+      matches the Rosarius anchor (framework.md's personal force fields). This is a reasoned
       extrapolation from Basic Set principles, not a catalogue trait
       renamed, and a future framework update that adds a formal shield-
       point pricing formula should supersede it.
@@ -738,7 +738,7 @@ items:
       infantry.
     design: >
       -100 (Attribute Modifiers) + 125 (Chitin DR 25, 5/level) = 25
-      points, added to Tyranid Biology's 15 for 40 points of physiology
+      points, added to Tyranid Biology's 20 for 45 points of physiology
       alone before skills and its weapon-symbiote. See the Termagant
       template. NPC creature stat block only, not a player-facing race;
       the point total below is for GM reference, not party balance.
@@ -779,7 +779,7 @@ items:
       tier.
     design: >
       -50 (Attribute Modifiers) + 125 (Chitin DR 25) + 10 (Leaping
-      Musculature) = 85 points, added to Tyranid Biology's 15 for 100
+      Musculature) = 85 points, added to Tyranid Biology's 20 for 105
       points of physiology alone before skills and its weapon-symbiote.
       See the Hormagaunt template. NPC creature stat block only.
 
@@ -825,7 +825,7 @@ items:
     design: >
       154 (Attribute Modifiers) + 250 (Chitin DR 50) + 20 (Genestealer
       Speed) + 10 (Infravision) + 25 (Extra Attack) = 459 points, added
-      to Tyranid Biology's 15 for 474 points of physiology alone before
+      to Tyranid Biology's 20 for 479 points of physiology alone before
       skills and its weapon-symbiote. See the Genestealer template. NPC
       creature stat block only; a Genestealer's broodline-infestation
       role is a GM plot hook, not a point-costed trait.
@@ -867,9 +867,9 @@ items:
       it. Codex background across editions is explicit that this ambush
       capability, not raw combat stats, is the Ravener's whole purpose.
     design: >
-      136 (Attribute Modifiers) + 300 (Chitin DR 60) + 12 (Tunnelling) +
-      20 (Shadow in the Warp) = 468 points, added to Tyranid Biology's 15
-      for 483 points of physiology alone before skills and its weapon-
+      136 (Attribute Modifiers) + 300 (Chitin DR 60) + 39 (Tunnelling) +
+      20 (Shadow in the Warp) = 495 points, added to Tyranid Biology's 20
+      for 515 points of physiology alone before skills and its weapon-
       symbiote. See the Ravener template. NPC creature stat block only.
 
   - name: "Body Lens: Tyranid Warrior"
@@ -910,7 +910,7 @@ items:
     design: >
       198 (Attribute Modifiers) + 300 (Chitin DR 60) + 25 (Synapse
       Creature) + 25 (Shadow in the Warp) = 548 points, added to Tyranid
-      Biology's 15 for 563 points of physiology alone before skills and
+      Biology's 20 for 568 points of physiology alone before skills and
       its weapon-symbiotes -- deep in framework.md's Astartes point tier
       (550-800), matching a Warrior's role as the swarm's single most
       dangerous common bioform. See the Tyranid Warrior template. NPC
@@ -957,7 +957,7 @@ items:
     design: >
       206 (Attribute Modifiers) + 300 (Chitin DR 60) + 20 (Chameleonic
       Hide) + 1 (Pheromone Trail) + 20 (Shadow in the Warp) = 547 points,
-      added to Tyranid Biology's 15 for 562 points of physiology alone
+      added to Tyranid Biology's 20 for 567 points of physiology alone
       before skills and its weapon-symbiotes, on a par with the Tyranid
       Warrior lens. See the Lictor template. NPC creature stat block
       only.
@@ -1003,9 +1003,9 @@ items:
       Library's few Zoanthrope-focussed scenes always frame it as
       artillery to be escorted, not a front-line fighter.
     design: >
-      24 (Attribute Modifiers) + 200 (Chitin DR 40) + 15 (Warp Field) + 25
-      (Synapse Creature) + 25 (Shadow in the Warp) = 289 points, added to
-      Tyranid Biology's 15 for 304 points of physiology alone before
+      24 (Attribute Modifiers) + 200 (Chitin DR 40) + 30 (Warp Field) + 25
+      (Synapse Creature) + 25 (Shadow in the Warp) = 304 points, added to
+      Tyranid Biology's 20 for 324 points of physiology alone before
       skills and Warp Blast (data/xenos/tyranids/psychic.yaml). See the
       Zoanthrope template. NPC creature stat block only.
 
@@ -1053,7 +1053,7 @@ items:
       470 (Attribute Modifiers) + 600 (Chitin DR 120) + 25 (Regeneration)
       + 30 (Synapse Creature) + 30 (Shadow in the Warp) = 1155 points
       (Wings disabled by default, +30 more if enabled), added to Tyranid
-      Biology's 15 for 1170 points of physiology alone before skills,
+      Biology's 20 for 1175 points of physiology alone before skills,
       psychic powers (data/xenos/tyranids/psychic.yaml) and weapon-
       symbiotes -- squarely in framework.md's Heroes and Legends tier
       (1,000-3,000), appropriate for the swarm's synapse lord. See the
@@ -1088,7 +1088,6 @@ items:
           penetrate, roll 3d; 3 or less halves DR (75). Eye clusters run
           at DR 75 rather than 150.
       - *carnifex_regen
-      - *shadow_in_the_warp_carnifex
     lore: >
       The Carnifex: a living battering ram grown purely to soak up and
       deal out damage that would kill anything else outright, deployed
@@ -1097,8 +1096,7 @@ items:
       and Black Library's Hive Fleet fiction alike.
     design: >
       360 (Attribute Modifiers) + 750 (Chitin DR 150) + 50 (Regeneration,
-      Fast) + 20 (Shadow in the Warp) = 1180 points, added to Tyranid
-      Biology's 15 for 1195 points of physiology alone before skills and
+      Fast) = 1160 points, added to Tyranid Biology's 20 for 1180 points of physiology alone before skills and
       weapon-symbiotes -- squarely in framework.md's Heroes and Legends
       tier (1,000-3,000), matching a Hive Tyrant's own physiology cost
       almost exactly despite the very different build (raw ST and DR

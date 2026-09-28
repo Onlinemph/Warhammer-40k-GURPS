@@ -73,6 +73,12 @@ GURPS real-world baseline for scale: a modern soft vest with ceramic plate is ro
 
 Limbs are usually a few DR below torso. Specify every location explicitly.
 
+Additional armour set in the audit: Mk II (torso 92, Weak Points 6), Tartaros Terminator (torso 190, Weak Points 3), Gravis eye lens 50, Phobos eye lens 36. The displacer field is not a Shield Point field: it teleports the wearer instead.
+
+**GCS containers.** GCS adds a container's children to its own weight and cost, so a container item (e.g. power armour with subsystems) carries only its own share. Mk VII assembles to 240 lb, Indomitus Terminator 480 lb, Sororitas plate 80 lb. Servo Lifting/Striking ST lives on the servo child only.
+
+**Reference damage:** ST 30 is thr 3d, sw 5d+2 (Basic Set damage table). Quarterstaff-type weapons parry +2; flails 0U.
+
 ### Weak points and eye lenses
 
 Massed fire brings down heavily armoured targets in the fiction, so armour has gaps.
@@ -258,6 +264,12 @@ Ork physiology traits: very high pain tolerance, Hard to Kill, fast healing and 
 | Power klaw | Power-field weapon: thr+8d(10) cr, like a power fist but cruder |
 | 'Eavy armour | Torso DR 45, Weak Points 7 |
 | Mega armour | Torso DR 150, Weak Points 6: an Ork answer to Terminator plate |
+| Zzap gun | Unstable energy weapon: 6d×5(3) burn, Malf 12 |
+| Kustom force field | A Mek's mob-scale bubble: regenerating shield of 250 SP (delay 4 s, 15 SP/s) covering every Ork within 5 yards, with a 1-in-6 chance per attack that it fails to trigger |
+
+**WAAAGH!** In a mob of ten or more Orks: +2 to Fright Checks and Perils rolls, Ork-built weapons and vehicles get Malf +1, and a Weirdboy treats his Warp Empowerment as one level higher. A lone Ork gets none of it.
+
+Ork TLs: power-field gear, mega armour and force fields TL 11 (Mek Instinct offsets the TL gap); shootas and rokkits TL 7; zzap guns and mega-blastas TL 10.
 
 ### Aeldari
 
