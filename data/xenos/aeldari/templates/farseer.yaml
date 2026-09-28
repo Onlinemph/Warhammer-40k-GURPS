@@ -1,0 +1,138 @@
+kind: template
+output: Xenos/Aeldari/Templates/Farseer.gct
+notes: >
+  A Farseer: an Aeldari lost to the Path of the Seer entirely, walking the
+  strands of the future so far and so often that Codex background calls
+  them the psyker of the highest grade in the galaxy. Built on the same
+  Thaumatology: Sorcery chassis as every other psyker in this project
+  (Imperium/Psykers and the Warp.adq), with the milder Aeldari Runes Perils
+  variant (Xenos/Aeldari/Traits/Aeldari Physiology.adq): Perils of the Warp
+  (Aeldari Runes) is -5%/-10% where the human variant is -10%/-20%.
+
+  Point math: Aeldari Physiology 122 + Seer's Apprenticeship 25 + Farseer's
+  Mastery 45 + Lost to the Path -15 + psychic package (10 Aeldari Psychic
+  Sensitivity, already counted in Aeldari Physiology above + 50 Aeldari
+  Psyker (Talent) 5 + 60 Aeldari Warp Empowerment 5 + 8 Aeldari Soul-Sense)
+  + Runes of Fate (roughly 115 at each power's default level) + Runes of
+  Battle (roughly 62) + skills 95 = roughly 567 points. Stats: ST 10, DX 14,
+  IQ 15, HT 10, HP 10, Will 17, Per 15 (no Keen Battle-Sense: a Farseer's
+  gift runs inward, matching the anchor table's own Per == IQ line exactly),
+  Speed 6.25, Move 6, Dodge 9 — landing exactly on framework.md's Farseer
+  anchor line. This lands at the low end of framework.md's Astartes tier
+  (550-800): a psyker of the setting's absolute top rank, comparable in
+  total weight to an Astartes Librarian add-on stacked on a Battle-Brother
+  chassis, built here as a complete, self-contained character instead since
+  a Farseer has no equivalent "base template" the way a Librarian rides on
+  top of the Battle-Brother.
+
+  Aeldari Warp Empowerment is bought at level 5 (cap 60): the full Runes of
+  Fate and Runes of Battle roster this template knows all sit at or below
+  cap 20 individually, so level 5 buys real headroom to push a known Rune
+  (Doom or Mind War, both cap-tight at level 1) to a second or third level
+  in play, matching the framework's own note that Farseers reach the top
+  Warp Empowerment grades. A younger, less-developed Farseer who hasn't
+  grown into that headroom should drop to level 2 (cap 30, saving 30
+  points) until the GM says otherwise.
+traits:
+  - include: "xenos/aeldari/traits.yaml#Aeldari Physiology"
+  - include: "xenos/aeldari/traits.yaml#Seer's Apprenticeship"
+  - include: "xenos/aeldari/traits.yaml#Farseer's Mastery"
+  - include: "xenos/aeldari/traits.yaml#Path of the Seer"
+  - name: "Lost to the Path (Seer)"
+    points: -15
+    ref: B151
+    tags: [Disadvantage, Mental, Xenos, Aeldari]
+    notes: >
+      As Fanaticism (single-minded devotion to the Path itself, here the
+      Path of the Seer): a Farseer's mind is so given over to prophecy that
+      an ordinary life is no longer available to them. See the top-level
+      "Lost to the Path" entry in Xenos/Aeldari/Traits/Aeldari Physiology.adq
+      for the full design note.
+    lore: See that entry.
+    design: Fanaticism (B151, -15 points), redirected onto the Path itself; see that entry.
+  - include: "xenos/aeldari/traits.yaml#Aeldari Psyker (Talent)"
+    levels: 5
+  - include: "xenos/aeldari/traits.yaml#Aeldari Warp Empowerment"
+    levels: 5
+  - include: "xenos/aeldari/traits.yaml#Aeldari Soul-Sense"
+  - include: "xenos/aeldari/traits.yaml#Runes of Fate"
+  - include: "xenos/aeldari/traits.yaml#Runes of Battle"
+skills:
+  - include: "imperium/common/skills.yaml#Psyniscience"
+    points: 8
+  - name: Meditation
+    diff: IQ/H
+    points: 8
+    tags: [Xenos, Aeldari, Psyker]
+    lore: A Farseer's centuries of practice holding their own gift steady, and holding Perils of the Warp at bay, again and again.
+    design: IQ+0 (15) for 8 points, Hard.
+  - name: Hidden Lore
+    spec: (the Warp)
+    diff: IQ/A
+    points: 8
+    tags: [Xenos, Aeldari, Psyker]
+    lore: Formal Seer Council doctrine on the immaterium, studied for centuries.
+    design: IQ+2 (17) for 8 points, Average.
+  - name: Broadsword
+    diff: DX/A
+    points: 4
+    tags: [Xenos, Aeldari]
+    lore: The witchblade or force staff every Farseer still carries, even if a blade is rarely the answer to a Farseer's problems.
+    design: DX+0 (14) for 4 points, Average; the framework's force-weapon skill assignment matches this project's Librarius Broadsword precedent.
+  - name: Leadership
+    diff: IQ/A
+    points: 8
+    tags: [Xenos, Aeldari]
+    lore: A Farseer's word carries more weight in a warhost's councils than almost anyone else's, senior Autarchs excepted.
+    design: IQ+2 (17) for 8 points, Average.
+  - name: Strategy
+    spec: (Land)
+    diff: IQ/H
+    points: 16
+    tags: [Xenos, Aeldari]
+    lore: A Farseer who has read a war's likely futures is often the one actually setting a warhost's grand strategy.
+    design: IQ+2 (17) for 16 points, Hard.
+  - name: Diplomacy
+    diff: IQ/H
+    points: 12
+    tags: [Xenos, Aeldari]
+    lore: Negotiating between craftworlds, Path elders, and occasionally other species entirely.
+    design: IQ+1 (16) for 12 points, Hard.
+  - name: History
+    spec: (Aeldari Civilization)
+    diff: IQ/H
+    points: 8
+    tags: [Xenos, Aeldari]
+    lore: Centuries of accumulated memory of the Aeldari's own long fall and slower recovery.
+    design: IQ+0 (15) for 8 points, Hard.
+  - name: Fast-Talk
+    diff: IQ/A
+    points: 4
+    tags: [Xenos, Aeldari]
+    lore: A Farseer bends a conversation the way they bend fate, just with words instead of Runes.
+    design: IQ+2 (17) for 4 points, Average.
+  - name: Detect Lies
+    diff: Per/H
+    points: 8
+    tags: [Xenos, Aeldari]
+    lore: A mind that reads the shape of the future has little trouble reading a liar's face.
+    design: Per+1 (16) for 8 points, Hard.
+  - name: Occultism
+    diff: IQ/A
+    points: 4
+    tags: [Xenos, Aeldari, Psyker]
+    lore: Formal study of the warp's stranger phenomena, beyond a Warlock's own working knowledge.
+    design: IQ+2 (17) for 4 points, Average.
+  - name: Astronomy
+    spec: (Observational)
+    diff: IQ/H
+    points: 4
+    tags: [Xenos, Aeldari]
+    lore: Reading the void's own patterns is not so far from reading fate's.
+    design: IQ+0 (15) for 4 points, Hard.
+  - name: Public Speaking
+    diff: IQ/A
+    points: 3
+    tags: [Xenos, Aeldari]
+    lore: Addressing a Seer Council or an assembled warhost with the weight a Farseer's word carries.
+    design: IQ+1 (16) for 3 points, Average.

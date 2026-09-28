@@ -1,0 +1,139 @@
+kind: template
+output: Xenos/Aeldari/Templates/Aeldari Ranger.gct
+notes: >
+  An Aeldari Ranger: a Guardian who has left their craftworld's shielded
+  webway entirely to walk the Path of the Outcast, surviving alone or in
+  small bands across the wider galaxy as a scout, long-rifle sniper and
+  sometime guide for craftworld expeditions that need someone who actually
+  knows the ground. Gav Thorpe's Path of the Outcast is this project's
+  primary source. Point math (see Xenos/Aeldari/Traits/Aeldari Physiology.adq):
+  Aeldari Physiology 122 + Path of the Outcast -3 + skills 84 = 203 points.
+  Stats: ST 10, DX 14, IQ 12, HT 10, HP 10, Will 12, Per 12, Speed 6, Move
+  6, Dodge 9 — the bare Guardian-line anchor with no Keen Battle-Sense (a
+  Ranger's instincts are honed by isolation and field survival, not shrine
+  or militia drill, so Per stays at the Aeldari Physiology baseline of
+  IQ-equal rather than the warrior-track +1). This sits in framework.md's
+  "Elite human" tier (200-350) at its low end: tougher and far better
+  trained than a Guardian in the specific skills of surviving alone, but
+  without an Aspect Shrine's DX-raising training behind it — matching how
+  the fiction treats Rangers as dangerous specialists rather than
+  battlefield powerhouses.
+traits:
+  - include: "xenos/aeldari/traits.yaml#Aeldari Physiology"
+  - include: "xenos/aeldari/traits.yaml#Path of the Outcast"
+    disabled: false
+skills:
+  - name: Guns
+    spec: Rifle
+    diff: DX/E
+    points: 8
+    tags: [Xenos, Aeldari]
+    lore: A Ranger's long rifle is a longer-ranged, more accurate cousin of the Guardian shuriken catapult, per framework.md's long-las-equivalent scaling logic.
+    design: DX+4 (18) for 8 points, Easy (B170).
+  - name: Stealth
+    diff: DX/A
+    points: 8
+    tags: [Xenos, Aeldari]
+    lore: A Ranger's continued survival depends on never being found first.
+    design: DX+2 (16) for 8 points, Average.
+  - name: Camouflage
+    diff: IQ/E
+    points: 4
+    tags: [Xenos, Aeldari]
+    lore: Real, hard-earned field-craft rather than the basic version drilled into every Guardian.
+    design: IQ+2 (14) for 4 points, Easy.
+  - name: Survival
+    spec: (any)
+    diff: Per/A
+    points: 8
+    tags: [Xenos, Aeldari]
+    lore: "A Ranger's defining skill: living for months or years at a stretch, alone, on worlds no craftworld ever mapped."
+    design: Per+2 (14) for 8 points, Average.
+  - name: Tracking
+    diff: Per/A
+    points: 8
+    tags: [Xenos, Aeldari]
+    lore: Following what a quarry left behind, whether the quarry is prey, an enemy patrol, or another expedition's trail.
+    design: Per+2 (14) for 8 points, Average.
+  - name: Navigation
+    spec: (Land)
+    diff: IQ/A
+    points: 4
+    tags: [Xenos, Aeldari]
+    lore: Finding the way across unfamiliar ground with no craftworld infrastructure to rely on.
+    design: IQ+1 (13) for 4 points, Average.
+  - name: Scrounging
+    diff: Per/E
+    points: 2
+    tags: [Xenos, Aeldari]
+    lore: Living off whatever a hostile world actually offers, not what a quartermaster issues.
+    design: Per+1 (13) for 2 points, Easy.
+  - name: Broadsword
+    diff: DX/A
+    points: 4
+    tags: [Xenos, Aeldari]
+    lore: A Ranger's sidearm blade, for when stealth and range both fail.
+    design: DX+0 (14) for 4 points, Average.
+  - name: First Aid
+    diff: IQ/E
+    points: 2
+    tags: [Xenos, Aeldari]
+    lore: Field medicine with no craftworld healer to call on.
+    design: IQ+1 (13) for 2 points, Easy.
+  - name: Climbing
+    diff: DX/A
+    points: 4
+    tags: [Xenos, Aeldari]
+    lore: Whatever terrain a hostile world offers, a Ranger crosses it.
+    design: DX+0 (14) for 4 points, Average.
+  - name: Fast-Draw
+    spec: Ammo
+    diff: DX/E
+    points: 1
+    tags: [Xenos, Aeldari]
+    lore: Standard reload drill, carried over from Guardian training.
+    design: DX+0 (14) for 1 point, Easy.
+  - name: Hidden Lore
+    spec: (the Warp)
+    diff: IQ/A
+    points: 1
+    tags: [Xenos, Aeldari, Psyker]
+    lore: Carried over from Guardian training.
+    design: IQ-1 (11) for 1 point, Average.
+  - name: Fast-Talk
+    diff: IQ/A
+    points: 4
+    tags: [Xenos, Aeldari]
+    lore: Talking a wary local, human or otherwise, into helping rather than hindering.
+    design: IQ+0 (12) for 4 points, Average.
+  - name: Observation
+    diff: Per/A
+    points: 8
+    tags: [Xenos, Aeldari]
+    lore: Sighting trouble, or a target, before anyone else on the field does.
+    design: Per+2 (14) for 8 points, Average.
+  - name: Jumping
+    diff: DX/E
+    points: 1
+    tags: [Xenos, Aeldari]
+    lore: Basic battlefield mobility.
+    design: DX+0 (14) for 1 point, Easy.
+  - name: Traps
+    diff: IQ/A
+    points: 4
+    tags: [Xenos, Aeldari]
+    lore: Rangers seed the ground they defend, or move through, with unpleasant surprises.
+    design: IQ+1 (13) for 4 points, Average.
+  - name: Diplomacy
+    diff: IQ/H
+    points: 8
+    tags: [Xenos, Aeldari]
+    lore: Rangers are often a craftworld's only real point of contact with the wider galaxy's other powers.
+    design: IQ+0 (12) for 8 points, Hard.
+  - name: Piloting
+    spec: (Aeldari Skiff/Corsair Vessel)
+    diff: DX/A
+    points: 5
+    tags: [Xenos, Aeldari]
+    lore: Many Rangers travel between worlds aboard small Corsair vessels or personal skiffs rather than a craftworld's own fleet.
+    design: DX+1 (15) for 5 points, Average.

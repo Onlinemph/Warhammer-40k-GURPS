@@ -1,0 +1,185 @@
+kind: template
+output: Xenos/Aeldari/Templates/Autarch.gct
+notes: >
+  An Autarch: a craftworld's warmaster, drawn from those rare Aeldari who
+  have walked several Paths — Warrior, Outcast, sometimes Artisan — far
+  enough to master each without being lost to any of them, and trusted in
+  consequence to command a warhost drawn from every Aspect Shrine and
+  Guardian defense force at once. Point math (see Xenos/Aeldari/Traits/
+  Aeldari Physiology.adq for the full derivation of every trait below):
+  Aeldari Physiology 122 + Keen Battle-Sense 5 + Aspect Training 80 +
+  Autarch's Mastery 226 + skills 217 = 650 points. Stats: ST 12, DX 18, IQ
+  14, HT 12, HP 12, Will 16, Per 15, Speed 7.5, Move 7, Dodge 13 (Enhanced
+  Dodge 2 included) — matching an Exarch's own DX 18 and Enhanced Dodge, but
+  with higher IQ and Will than either the Exarch or Farseer anchor lines,
+  per framework.md's explicit direction that an Autarch sits higher than
+  both. This lands solidly inside framework.md's Astartes tier (550-800),
+  above both the Exarch (roughly 538-552) and Farseer (roughly 567)
+  templates: a master of many arts and a warhost's actual commander, built
+  from breadth (Weapon Master across an Aspect-weapon group, Charisma,
+  Reputation, and a wide skill spread across tactics, diplomacy, and
+  several weapon-forms at once) rather than any single narrower mastery.
+
+  Unlike Exarch and Farseer, this template carries no "Lost to the Path"
+  disadvantage: per framework.md and Codex background, an Autarch is
+  precisely the Aeldari who has not been consumed by a single Path, which
+  Autarch's Mastery's Versatile trait flags directly.
+traits:
+  - include: "xenos/aeldari/traits.yaml#Aeldari Physiology"
+  - include: "xenos/aeldari/traits.yaml#Keen Battle-Sense"
+  - include: "xenos/aeldari/traits.yaml#Aspect Training"
+  - include: "xenos/aeldari/traits.yaml#Autarch's Mastery"
+  - include: "xenos/aeldari/traits.yaml#Path of the Warrior"
+    disabled: true
+  - include: "xenos/aeldari/traits.yaml#Path of the Outcast"
+    disabled: true
+skills:
+  - name: Broadsword
+    diff: DX/A
+    points: 32
+    tags: [Xenos, Aeldari]
+    lore: The Autarch's own signature power blade, kept as sharp as any Exarch's.
+    design: DX+8 (26) for 32 points, Average (B208); Trained By A Master and Weapon Master apply as for Exarch's Mastery.
+  - name: Spear
+    diff: DX/A
+    points: 32
+    tags: [Xenos, Aeldari]
+    lore: >
+      Many Autarchs carry a reaper-of-souls glaive or banner-spear as their
+      second signature weapon, matching Codex background's mixed Autarch
+      wargear loadouts drawn from more than one Aspect.
+    design: DX+8 (26) for 32 points, Average (B182); covered by the same Weapon Master group as Broadsword.
+  - name: Guns
+    spec: Rifle
+    diff: DX/E
+    points: 12
+    tags: [Xenos, Aeldari]
+    lore: A shuriken catapult or fusion pistol, kept as ready as any line Aspect Warrior's.
+    design: DX+6 (24) for 12 points, Easy.
+  - name: Gunner
+    spec: Cannon
+    diff: DX/A
+    points: 8
+    tags: [Xenos, Aeldari]
+    lore: An Autarch who trained as a Dark Reaper before rising further keeps that mastery current.
+    design: DX+4 (22) for 8 points, Average.
+  - name: Beam Weapons
+    spec: Rifle
+    diff: DX/E
+    points: 8
+    tags: [Xenos, Aeldari]
+    lore: Fusion-gun proficiency, carried over from time spent among the Fire Dragons.
+    design: DX+7 (25) for 8 points, Easy.
+  - name: Tactics
+    diff: IQ/H
+    points: 32
+    tags: [Xenos, Aeldari]
+    lore: "An Autarch's actual job: reading a battle and shifting a warhost's whole shape mid-fight."
+    design: IQ+7 (21) for 32 points, Hard.
+  - name: Strategy
+    spec: (Land)
+    diff: IQ/H
+    points: 32
+    tags: [Xenos, Aeldari]
+    lore: Setting a whole campaign's shape, not just one battle's.
+    design: IQ+7 (21) for 32 points, Hard.
+  - name: Leadership
+    diff: IQ/A
+    points: 24
+    tags: [Xenos, Aeldari]
+    lore: Holding together a warhost drawn from Aspect Shrines that owe each other no formal obedience.
+    design: IQ+6 (20) for 24 points, Average.
+  - name: Intimidation
+    diff: Will/A
+    points: 12
+    tags: [Xenos, Aeldari]
+    lore: A reputation that precedes an Autarch onto any field.
+    design: Will+2 (18) for 12 points, Average.
+  - name: Diplomacy
+    diff: IQ/H
+    points: 16
+    tags: [Xenos, Aeldari]
+    lore: Negotiating alliances between craftworlds, and occasionally with other species entirely.
+    design: IQ+3 (17) for 16 points, Hard.
+  - name: Administration
+    diff: IQ/A
+    points: 4
+    tags: [Xenos, Aeldari]
+    lore: Running a warhost's own logistics between campaigns.
+    design: IQ+1 (15) for 4 points, Average.
+  - name: Fast-Talk
+    diff: IQ/A
+    points: 4
+    tags: [Xenos, Aeldari]
+    lore: Talking a rival Shrine's Exarch into falling in line without a formal order to back it up.
+    design: IQ+1 (15) for 4 points, Average.
+  - name: Piloting
+    spec: (Jump Generator)
+    diff: DX/A
+    points: 4
+    tags: [Xenos, Aeldari]
+    lore: Time spent among the Warp Spiders left its mark.
+    design: DX+1 (19) for 4 points, Average.
+  - name: Jumping
+    diff: DX/E
+    points: 2
+    tags: [Xenos, Aeldari]
+    lore: Carried over and sharpened from Aspect Warrior training.
+    design: DX+3 (21) for 2 points, Easy.
+  - name: Acrobatics
+    diff: DX/H
+    points: 8
+    tags: [Xenos, Aeldari]
+    lore: The same controlled precision every Aspect Warrior fights with.
+    design: DX+1 (19) for 8 points, Hard.
+  - name: Stealth
+    diff: DX/A
+    points: 8
+    tags: [Xenos, Aeldari]
+    lore: Carried over and sharpened from Aspect Warrior training.
+    design: DX+2 (20) for 8 points, Average.
+  - name: Survival
+    spec: (Craftworld/Webway)
+    diff: Per/A
+    points: 4
+    tags: [Xenos, Aeldari]
+    lore: Carried over from Guardian training.
+    design: Per+1 (16) for 4 points, Average.
+  - name: History
+    spec: (Aeldari Civilization)
+    diff: IQ/H
+    points: 4
+    tags: [Xenos, Aeldari]
+    lore: An Autarch's own long acquaintance with a craftworld's past campaigns and their outcomes.
+    design: IQ+1 (15) for 4 points, Hard.
+  - name: Hidden Lore
+    spec: (the Warp)
+    diff: IQ/A
+    points: 1
+    tags: [Xenos, Aeldari, Psyker]
+    lore: Carried over from Guardian training.
+    design: IQ-1 (13) for 1 point, Average.
+  - name: Body Language
+    diff: Per/A
+    points: 4
+    tags: [Xenos, Aeldari]
+    lore: Reading a rival commander, ally or enemy, a heartbeat before they move.
+    design: Per+1 (16) for 4 points, Average.
+  - name: Judo
+    diff: DX/H
+    points: 8
+    tags: [Xenos, Aeldari]
+    lore: When the blade is lost, an Autarch is still the deadliest thing on the field.
+    design: DX+1 (19) for 8 points, Hard.
+  - name: Climbing
+    diff: DX/A
+    points: 4
+    tags: [Xenos, Aeldari]
+    lore: Carried over and sharpened from Aspect Warrior training.
+    design: DX+1 (19) for 4 points, Average.
+  - name: First Aid
+    diff: IQ/E
+    points: 2
+    tags: [Xenos, Aeldari]
+    lore: Carried over from Guardian training.
+    design: IQ+2 (16) for 2 points, Easy.

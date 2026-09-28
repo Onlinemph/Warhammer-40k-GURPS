@@ -615,6 +615,112 @@ items:
       points of physiology (before the Lost to the Path disadvantage, the
       full psychic package, and skills). See the Farseer template.
 
+  # --------------------------------------------------------- Autarch's Mastery
+
+  - name: "Autarch's Mastery"
+    container: meta_trait
+    tags: [Advantage, Physical, Xenos, Aeldari]
+    children:
+      - name: Attribute Modifiers (Autarch)
+        points: 110
+        attributes: {st: 1, dx: 2, iq: 2, ht: 1, will: 2}
+        tags: [Physical]
+        design: >
+          Framework target over the Aspect Warrior + Keen Battle-Sense
+          baseline: ST 12, DX 18, IQ 14, HT 12, Per 15 (free: IQ 14 + Keen
+          Battle-Sense's existing +1), Will 16 — set deliberately above every
+          named anchor (Exarch's IQ 13/Will 15, Farseer's DX 14) per
+          framework.md's own direction that an Autarch sits higher than
+          either. Increased ST +1 (B14, 10/level, 10) for ST 12, matching an
+          Exarch's own frame. Increased DX +2 (B15, 20/level, 40) for DX 18,
+          matching an Exarch's own peerless reflexes rather than exceeding
+          them — an Autarch's edge over an Exarch is breadth and command, not
+          a faster blade. Increased IQ +2 (B16, 20/level, 40) for IQ 14: a
+          keener strategic mind than any single-Path specialist, per Codex
+          background's treatment of Autarchs as a craftworld's finest
+          tacticians. Increased HT +1 (B15, 10/level, 10) for HT 12.
+          Increased Will +2 (B16, 5/level, 10) for Will 16. 10+40+40+10+10 =
+          110 points.
+      - name: Enhanced Dodge
+        per_level: 15
+        levels: 1
+        ref: B52
+        tags: [Advantage, Physical, Xenos, Aeldari]
+        lore: An Autarch has fought inside enough different Aspects' own war-doctrines to match an Exarch's own evasion.
+        design: A further Enhanced Dodge 1 (B52, 15 points), stacking with Aspect Training's own level for Enhanced Dodge 2 total, matching an Exarch's own tier.
+      - name: Combat Reflexes
+        points: 15
+        ref: B43
+        tags: [Advantage, Mental, Xenos, Aeldari]
+        lore: An Autarch has led warhosts across more battles than almost any other living Aeldari.
+        design: Basic Set Combat Reflexes (B43), 15 points.
+      - name: "Weapon Master (Aspect Weapons)"
+        points: 25
+        ref: B99
+        tags: [Advantage, Physical, Xenos, Aeldari]
+        lore: >
+          Unlike an Exarch, bound to one Aspect's own signature weapon-art,
+          an Autarch has trained seriously across several — Codex background
+          repeatedly shows Autarchs equipped with a mix-and-match loadout no
+          single Aspect Shrine would issue.
+        design: Basic Set Weapon Master, a small related group of weapons (B99), 25 points — one step above the single-weapon 20-point tier Exarch's Mastery uses.
+      - name: Trained By A Master
+        points: 30
+        ref: B90
+        tags: [Advantage, Mental, Xenos, Aeldari]
+        lore: Formal mastery recognized across every Aspect Shrine an Autarch has passed through on their way to the role.
+        design: Basic Set Trained By A Master (B90), 30 points, matching Exarch's Mastery's own use of this trait.
+      - name: Enhanced Parry
+        per_level: 5
+        levels: 1
+        ref: B52
+        tags: [Advantage, Physical, Xenos, Aeldari]
+        lore: A guard drilled across multiple Aspects' own defensive doctrines.
+        design: Enhanced Parry 1, one weapon group (B52, 5/level, 5 points).
+      - name: Charisma
+        per_level: 5
+        levels: 2
+        ref: B41
+        tags: [Advantage, Mental, Xenos, Aeldari]
+        lore: An Autarch commands a warhost drawn from every Aspect Shrine and Guardian defense force on a craftworld, none of which owe the others any formal obedience — only genuine command presence holds it together.
+        design: Charisma 2 (B41, 5/level, 10 points).
+      - name: "Reputation (Legendary Autarch)"
+        points: 15
+        ref: B27
+        tags: [Advantage, Social, Xenos, Aeldari]
+        reactions:
+          - situation: from Aeldari who recognise the Autarch's name and deeds, and a Fright Check-adjacent bonus/penalty for enemies who know it
+            amount: 4
+        lore: An Autarch's name travels between craftworlds the way a Chapter Master's does between Imperial fleets.
+        design: Reputation (B27), priced in line with this project's other eyeballed Reputation entries (Ork Warboss's own Reputation, 15 points for +4).
+      - name: Versatile
+        points: 1
+        ref: B23
+        tags: [Advantage, Mental, Xenos, Aeldari, Perk]
+        lore: >
+          What actually sets an Autarch apart from an Exarch or Farseer is
+          this: they are not lost to any single Path. They carry what every
+          Path taught them forward together, rather than being consumed by
+          one — the mechanical reason this package includes no "Lost to the
+          Path" disadvantage at all, unlike Exarch's Mastery and Farseer's
+          Mastery above.
+        design: Basic Set Versatile (B23), 1-point Perk, +1 to any one skill-use roll per session.
+    lore: >
+      What an Autarch actually is: not a bigger Exarch and not a Farseer
+      with a sword, but an Aeldari who has walked several Paths far enough
+      to master each without being lost to any of them, and who a
+      craftworld therefore trusts to command a warhost drawn from every
+      Aspect Shrine, Guardian defense force, and allied Path all at once.
+    design: >
+      110 (Attribute Modifiers) + 15 (further Enhanced Dodge) + 15 (Combat
+      Reflexes) + 25 (Weapon Master) + 30 (Trained By A Master) + 5
+      (Enhanced Parry 1) + 10 (Charisma 2) + 15 (Reputation) + 1 (Versatile)
+      = 226 points, added to the Aspect Warrior package's 207 for 433 points
+      of physiology and command presence before skills. See the Autarch
+      template, which lands comfortably above both the Exarch and Farseer
+      totals per framework.md's own direction that an Autarch sits higher
+      than either.
+
   # -------------------------------------------------------- Aeldari psychic chassis
   # Reuses the Thaumatology: Sorcery model from Imperium/Psykers and the
   # Warp.adq exactly (Warp Sorcery, -20%, applied unchanged: same

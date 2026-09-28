@@ -1,0 +1,189 @@
+kind: template
+output: Xenos/Aeldari/Templates/Exarch.gct
+notes: >
+  An Exarch: an Aspect Warrior lost to the Path of the Warrior entirely,
+  leading their shrine's warriors from inside ancient, spirit-linked Exarch
+  armour that has passed from Exarch to Exarch for millennia. Point math
+  (see Xenos/Aeldari/Traits/Aeldari Physiology.adq): Aeldari Physiology 122
+  + Keen Battle-Sense 5 + Aspect Training 80 + Exarch's Mastery 160 + skills
+  185 = 552 points. Stats: ST 12, DX 18, IQ 13, HT 12, HP 12, Will 15, Per
+  14, Speed 7.5, Move 7, Dodge 13 (Enhanced Dodge 2 included) — landing
+  exactly on framework.md's Exarch anchor line, DX 18 above even a Battle-
+  Brother's own DX 16, matching Codex background's treatment of a proper
+  Exarch as a genuinely unmatched duelist. This lands at the low end of
+  framework.md's Astartes tier (550-800): a master specialist built almost
+  entirely from centuries of total focus on one weapon-art (Trained By A
+  Master, Weapon Master, Enhanced Parry, and a very high signature-weapon
+  skill level below) rather than an Astartes' raw ST and HP, matching how
+  the fiction treats an Exarch as lethal through precision, not bulk.
+
+  Enable exactly one Aspect lens (from Xenos/Aeldari/Traits/Aeldari
+  Physiology.adq, disabled by default; the same seven as the Aspect Warrior
+  template) for the specific shrine this Exarch leads — the Trained By A
+  Master, Weapon Master and signature-weapon skill points below assume
+  whichever weapon that Aspect's shrine centres on (shuriken catapult,
+  chainsword, power sword, fusion gun, reaper launcher, or equivalent).
+traits:
+  - include: "xenos/aeldari/traits.yaml#Aeldari Physiology"
+  - include: "xenos/aeldari/traits.yaml#Keen Battle-Sense"
+  - include: "xenos/aeldari/traits.yaml#Aspect Training"
+  - include: "xenos/aeldari/traits.yaml#Exarch's Mastery"
+  - include: "xenos/aeldari/traits.yaml#Aspect: Dire Avenger"
+    disabled: true
+  - include: "xenos/aeldari/traits.yaml#Aspect: Striking Scorpion"
+    disabled: true
+  - include: "xenos/aeldari/traits.yaml#Aspect: Howling Banshee"
+    disabled: true
+  - include: "xenos/aeldari/traits.yaml#Aspect: Fire Dragon"
+    disabled: true
+  - include: "xenos/aeldari/traits.yaml#Aspect: Dark Reaper"
+    disabled: true
+  - include: "xenos/aeldari/traits.yaml#Aspect: Swooping Hawk"
+    disabled: true
+  - include: "xenos/aeldari/traits.yaml#Aspect: Warp Spider"
+    disabled: true
+skills:
+  - name: Broadsword
+    diff: DX/A
+    points: 32
+    tags: [Xenos, Aeldari]
+    lore: >
+      An Exarch's signature blade (an Exarch's power weapon, or a Striking
+      Scorpion's chainsword-claw, or equivalent), the single most-drilled
+      skill of an entire centuries-long life, further sharpened by Trained
+      By A Master and Weapon Master above.
+    design: DX+7 (25) for 32 points, Average (B208); Trained By A Master lets this default from other combat skills at only -1, and Weapon Master doubles this skill's effective damage bonus rather than adding to the roll.
+  - name: Guns
+    spec: Rifle
+    diff: DX/E
+    points: 12
+    tags: [Xenos, Aeldari]
+    lore: The shrine's ranged weapon, kept sharp even for an Exarch whose true mastery is the blade.
+    design: DX+6 (24) for 12 points, Easy (B170).
+  - name: Tactics
+    diff: IQ/H
+    points: 16
+    tags: [Xenos, Aeldari]
+    lore: Leading a shrine's Aspect Warriors through battle after battle across centuries.
+    design: IQ+2 (15) for 16 points, Hard.
+  - name: Leadership
+    diff: IQ/A
+    points: 16
+    tags: [Xenos, Aeldari]
+    lore: An Exarch commands absolute, unquestioned authority within their own shrine's warriors.
+    design: IQ+4 (17) for 16 points, Average.
+  - name: Intimidation
+    diff: Will/A
+    points: 12
+    tags: [Xenos, Aeldari]
+    lore: A war mask, ancient armour and a reputation centuries in the making.
+    design: Will+2 (17) for 12 points, Average.
+  - name: Stealth
+    diff: DX/A
+    points: 8
+    tags: [Xenos, Aeldari]
+    lore: Precision under total control, whatever the specific Aspect's own approach doctrine.
+    design: DX+2 (20) for 8 points, Average.
+  - name: Acrobatics
+    diff: DX/H
+    points: 8
+    tags: [Xenos, Aeldari]
+    lore: Movement as controlled and exact as the killing blow itself.
+    design: DX+1 (19) for 8 points, Hard.
+  - name: Jumping
+    diff: DX/E
+    points: 4
+    tags: [Xenos, Aeldari]
+    lore: Carried over and sharpened from Aspect Warrior training.
+    design: DX+3 (21) for 4 points, Easy.
+  - name: Fast-Draw
+    spec: Ammo
+    diff: DX/E
+    points: 1
+    tags: [Xenos, Aeldari]
+    lore: Carried over from Aspect Warrior training.
+    design: DX+0 (18) for 1 point, Easy.
+  - name: Hidden Lore
+    spec: (the Warp)
+    diff: IQ/A
+    points: 2
+    tags: [Xenos, Aeldari, Psyker]
+    lore: An Exarch's own long acquaintance with their shrine's ancient, spirit-linked war-mask.
+    design: IQ+0 (13) for 2 points, Average.
+  - name: History
+    spec: (the Aspect's Shrine)
+    diff: IQ/H
+    points: 4
+    tags: [Xenos, Aeldari]
+    lore: Millennia of the shrine's own accumulated lore and every prior Exarch's deeds, carried forward.
+    design: IQ+0 (13) for 4 points, Hard.
+  - name: Survival
+    spec: (Craftworld/Webway)
+    diff: Per/A
+    points: 2
+    tags: [Xenos, Aeldari]
+    lore: Carried over from Aspect Warrior training.
+    design: Per+0 (14) for 2 points, Average.
+  - name: First Aid
+    diff: IQ/E
+    points: 2
+    tags: [Xenos, Aeldari]
+    lore: Carried over from Aspect Warrior training.
+    design: IQ+2 (15) for 2 points, Easy.
+  - name: Body Language
+    diff: Per/A
+    points: 8
+    tags: [Xenos, Aeldari]
+    lore: Reading an opponent's coming move a heartbeat before they make it.
+    design: Per+1 (15) for 8 points, Average.
+  - name: Judo
+    diff: DX/H
+    points: 8
+    tags: [Xenos, Aeldari]
+    lore: When the blade is lost or the fight closes past its reach, an Exarch is still the deadliest thing in the room.
+    design: DX+1 (19) for 8 points, Hard.
+  - name: Fast-Talk
+    diff: IQ/A
+    points: 8
+    tags: [Xenos, Aeldari]
+    lore: An Exarch negotiates between shrines and warhosts as readily as they command their own.
+    design: IQ+2 (15) for 8 points, Average.
+  - name: Strategy
+    spec: (Land)
+    diff: IQ/H
+    points: 12
+    tags: [Xenos, Aeldari]
+    lore: A senior Exarch is trusted with a warhost's own battle plan, not only their shrine's part of it.
+    design: IQ+1 (14) for 12 points, Hard.
+  - name: Meditation
+    diff: IQ/H
+    points: 8
+    tags: [Xenos, Aeldari]
+    lore: Even a Warrior-Path Exarch keeps the discipline that holds Emotional Intensity in check across centuries.
+    design: IQ+1 (14) for 8 points, Hard.
+  - name: Armoury
+    spec: (Aspect Wargear)
+    diff: IQ/A
+    points: 4
+    tags: [Xenos, Aeldari]
+    lore: An Exarch is entrusted with the maintenance rites for their shrine's ancient, spirit-linked wargear.
+    design: IQ+0 (13) for 4 points, Average.
+  - name: Climbing
+    diff: DX/A
+    points: 4
+    tags: [Xenos, Aeldari]
+    lore: Carried over and sharpened from Aspect Warrior training.
+    design: DX+1 (19) for 4 points, Average.
+  - name: Connoisseur
+    spec: (Aeldari Wargear)
+    diff: IQ/A
+    points: 4
+    tags: [Xenos, Aeldari]
+    lore: An Exarch's long familiarity with the finest wargear their shrine has produced across the centuries.
+    design: IQ+1 (14) for 4 points, Average.
+  - name: Streetwise
+    diff: IQ/A
+    points: 4
+    tags: [Xenos, Aeldari]
+    lore: An Exarch dealing with a warhost's less formal politics between battles.
+    design: IQ+0 (13) for 4 points, Average.

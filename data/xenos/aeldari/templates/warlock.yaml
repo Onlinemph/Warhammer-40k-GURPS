@@ -1,0 +1,83 @@
+kind: template
+output: Xenos/Aeldari/Templates/Warlock.gct
+notes: >
+  A Warlock: a Guardian or former Aspect Warrior who has stepped onto the
+  Path of the Seer far enough to work the Runes of Battle in the middle of
+  a fight, without being lost to prophecy the way a Farseer is — Codex
+  background is explicit that Warlocks remain warriors and squad leaders
+  first. Built on the same Thaumatology: Sorcery chassis as every other
+  psyker in this project (Imperium/Psykers and the Warp.adq), with the
+  milder Aeldari Runes Perils variant (Xenos/Aeldari/Traits/Aeldari
+  Physiology.adq): Perils of the Warp (Aeldari Runes) is -5%/-10% where the
+  human variant is -10%/-20%.
+
+  Point math: Aeldari Physiology 122 + Seer's Apprenticeship 25 + psychic
+  package 79 (10 Aeldari Psychic Sensitivity, already counted in Aeldari
+  Physiology above + 20 Aeldari Psyker (Talent) 2 + 30 Aeldari Warp
+  Empowerment 2 + 8 Aeldari Soul-Sense - included via traits below) +
+  Runes of Battle 60 (Conceal/Reveal 21 + Protect/Jinx 20 + Enhance/Drain
+  21, roughly, at default level) + skills 32 = roughly 348 points. Stats:
+  ST 10, DX 14, IQ 13, HT 10, HP 10, Will 14, Per 13 (Keen Battle-Sense
+  included: a Warlock still fights the line), Speed 6.25, Move 6, Dodge 9.
+  This sits at the top of framework.md's "Elite human" tier (200-350),
+  matching Codex background's treatment of a Warlock as a genuinely
+  dangerous specialist squad leader, distinctly short of a Farseer's own
+  reach into the Astartes tier.
+
+  Aeldari Warp Empowerment is bought at level 2 (cap 30): every Rune of
+  Battle basic above needs at most cap 19-21, so level 2 leaves the small
+  amount of headroom a Warlock typically has, per this project's own
+  Sanctioned Psyker precedent of buying only the level actually needed
+  rather than a Path's theoretical ceiling.
+traits:
+  - include: "xenos/aeldari/traits.yaml#Aeldari Physiology"
+  - include: "xenos/aeldari/traits.yaml#Keen Battle-Sense"
+  - include: "xenos/aeldari/traits.yaml#Seer's Apprenticeship"
+  - include: "xenos/aeldari/traits.yaml#Path of the Seer"
+  - include: "xenos/aeldari/traits.yaml#Aeldari Psyker (Talent)"
+    levels: 2
+  - include: "xenos/aeldari/traits.yaml#Aeldari Warp Empowerment"
+    levels: 2
+  - include: "xenos/aeldari/traits.yaml#Aeldari Soul-Sense"
+  - include: "xenos/aeldari/traits.yaml#Runes of Battle"
+skills:
+  - include: "imperium/common/skills.yaml#Psyniscience"
+    points: 4
+  - name: Meditation
+    diff: IQ/H
+    points: 4
+    tags: [Xenos, Aeldari, Psyker]
+    lore: The discipline that keeps a Warlock's gift steady under fire, without which no Aeldari psyker lasts long.
+    design: IQ+0 (13) for 4 points, Hard.
+  - name: Hidden Lore
+    spec: (the Warp)
+    diff: IQ/A
+    points: 4
+    tags: [Xenos, Aeldari, Psyker]
+    lore: A Warlock's real, Seer-Council-taught understanding of the immaterium, well beyond a Guardian's folk knowledge.
+    design: IQ+1 (14) for 4 points, Average.
+  - name: Guns
+    spec: Rifle
+    diff: DX/E
+    points: 4
+    tags: [Xenos, Aeldari]
+    lore: A Warlock still carries and uses a shuriken catapult like any other Guardian.
+    design: DX+2 (16) for 4 points, Easy.
+  - name: Broadsword
+    diff: DX/A
+    points: 8
+    tags: [Xenos, Aeldari]
+    lore: The witchblade, a Warlock's own force weapon, carried and drilled with as seriously as any Aspect Warrior's blade.
+    design: DX+2 (16) for 8 points, Average; the framework's las/plasma/melta and chainsword/power-sword weapon-skill table places force weapons on Broadsword/Staff/Axe, matched here to Broadsword.
+  - name: Leadership
+    diff: IQ/A
+    points: 4
+    tags: [Xenos, Aeldari]
+    lore: A Warlock is typically the senior figure attached to a Guardian defense force or Aspect warhost detachment.
+    design: IQ+1 (14) for 4 points, Average.
+  - name: Tactics
+    diff: IQ/H
+    points: 4
+    tags: [Xenos, Aeldari]
+    lore: Enough battlefield sense to know when to spend a Rune of Battle and when to hold it.
+    design: IQ-1 (12) for 4 points, Hard.
