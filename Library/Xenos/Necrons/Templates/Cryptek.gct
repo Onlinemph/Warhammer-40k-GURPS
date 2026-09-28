@@ -1,0 +1,532 @@
+{
+	"version": 5,
+	"id": "BtWnwFT89LBzxc2q2",
+	"notes": "A Cryptek: a dynasty's technosorcerer, master of half-understood pre- biotransference science. Point math: Necron Physiology 134 + Body Lens: Cryptek 592 + Mind: Cryptek Genius -15 + skills 32 = 743 points (all four Discipline lenses below start disabled and add nothing to this total). Stats: ST 18, DX 12, IQ 16, HT 14, HP 24, Will 16, Per 16, natural torso DR 60 (Weak Points 3, eye DR 30) — framework.md's Cryptek anchor line exactly. This lands within framework.md's Astartes tier (550-800): a Cryptek is not built for raw combat durability the way a noble or Lychguard is, trading some of that DR for the sharpest mind among the Necron castes.\nEnable exactly one Discipline lens below to specialise this Cryptek (Technomancy, Plasmancy, Psychomancy or Chronomancy); each adds its own points to the total when turned on. A Cryptek with no discipline enabled is a generalist archaeotech scholar without a signature ability yet.\n",
+	"traits": [
+		{
+			"id": "TdKBHPnK6PTK26rxS",
+			"name": "Necron Physiology",
+			"local_notes": "Lore: The Necron Physiology shared by every caste of the species: a body of living necrodermis animated by a soul drawn out of a long-dead Necrontyr and bound into the metal during the biotransference, self- repairing, near-unkillable in the field thanks to Reanimation Protocols, and untouched by disease, poison, pain or the warp's usual tricks. This trait is the baseline every body-type lens below (Warrior, Immortal, Deathmark, Lychguard, Flayed One, Noble, Cryptek) builds on top of; the lens supplies the caste's own attributes and necrodermis DR, and a separate mind package supplies its personality (or lack of one).\n\nDesign: 30 (Injury Tolerance) + 10 (Regeneration) + 43 (Reanimation Protocols) + 10 (No Pain Receptors) + 30 (Resistant to Metabolic Hazards) + 10 (Soulless) + 1 (Beneath a Daemon's Notice) + 0 (Machine-Body flavor) = 134 points of shared physiology before attributes, necrodermis DR, personality or skills. See each template for a full character built on top of this plus a body lens and a mind package.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Necrons"
+			],
+			"container_type": "ancestry",
+			"children": [
+				{
+					"id": "tyY2Sop-86JvdvcIJ",
+					"name": "Injury Tolerance (Unliving)",
+					"reference": "B60",
+					"local_notes": "Unliving wound multipliers (imp and pi++ x1, pi+ x1/2, pi x1/3, pi- x1/5); attacks to the vitals or groin are treated as attacks to the torso; does not bleed and is unaffected by blood-borne toxins.\n\nLore: A Necron body is living metal animated by a bound soul, not flesh wrapped around organs — there is nothing inside it to bleed or to target with a called shot to the \"vitals,\" and impaling or small- calibre fire that would drop a man does comparatively little to a chassis with no soft tissue to wound. Consistent across Codex background and both Rath's and Crowley's novels, which repeatedly show las-fire and small arms punching clean through a Necron with no effect beyond cosmetic damage until something heavier lands.\n\nDesign: Injury Tolerance (Unliving) (B60-61): Unliving 20 + No Blood 5 + No Vitals 5 = 30 points. No Brain/No Eyes/No Neck/No Head are deliberately left off: a Necron does have a reanimation-critical core the framework's Weak Points rule targets, and a called shot to the eye-slit is handled through the Necrodermis trait's notes below rather than by removing the eye as a target.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Necrons"
+					],
+					"modifiers": [
+						{
+							"id": "m1Zsbne1rp3-PQ504",
+							"name": "Unliving",
+							"reference": "B61",
+							"cost_adj": "20"
+						},
+						{
+							"id": "mgjuuVpYLmc-D86PV",
+							"name": "No Blood",
+							"reference": "B61",
+							"cost_adj": "5"
+						},
+						{
+							"id": "mHaMfzeAC9wGO2OiG",
+							"name": "No Vitals",
+							"reference": "B61",
+							"cost_adj": "5"
+						}
+					]
+				},
+				{
+					"id": "tPeaCt1tBJByummyw",
+					"name": "Regeneration (Necrodermis Self-Repair)",
+					"reference": "B80",
+					"local_notes": "Regeneration (Slow): recovers 1 HP per 12 hours even without rest or first aid, on top of Reanimation Protocols' active battlefield recovery.\n\nLore: Necrodermis is self-repairing: dents smooth out, gouges knit shut, and severed plating slowly reknits given time undisturbed, the same passive process both Codex background and Crowley's Twice-Dead King describe for a Necron left standing quietly after a fight. It is much slower than the active, on-the-spot recovery Reanimation Protocols below provides mid-battle.\n\nDesign: Regeneration (Slow) (B80, 10 points), the same tier and cost this project's Ork Warboss entry uses for \"recovers 1 HP per 12 hours even without rest,\" reused here for the analogous living-metal mending rather than biological healing.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Necrons"
+					],
+					"base_points": 10
+				},
+				{
+					"id": "tmN2Ky98dxxYJSjdD",
+					"name": "Reanimation Protocols",
+					"reference": "B60",
+					"local_notes": "When damage reduces a Necron below -1xHP, it is not destroyed outright unless a single injury exceeds -5xHP (the normal instant- kill threshold still applies past that point). Otherwise its body drops, inert. At the end of each of the next three turns, roll HT: on a success the Necron reanimates then and there, rising with HP restored to half its full total (round down, minimum 1) and fully combat-capable. Three failures in a row, or any critical failure, and it phases out instead: teleported home to its tomb complex or the nearest active node in a flash of green light, removed from the fight but not destroyed, and available to return in a later scene at the GM's discretion. A Necron whose remains are physically destroyed past -5xHP, disintegrated, or whose reanimation matrix is separately wrecked (a GM-adjudicated called shot, per the fiction's \"destroy the core\" solution) does not come back at all.\n\nLore: Reanimation Protocols are the signature Necron trick that makes Necron armies so dangerous to fight to a standstill: a Warrior cut down one moment can be back on its feet the next, teleported away only when the protocols themselves fail. Codex background across editions describes exactly this two-stage process (reanimate in place, or phase out to a tomb on failure), and both Rath's The Infinite and the Divine and Crowley's Twice-Dead King show Necrons shrugging off \"kills\" that would end any other soldier, while also showing that a thoroughly wrecked or disintegrated Necron stays down for good.\n\nDesign: Built on Basic Set's Extra Life (B60, base 25 points: you do not permanently die when killed, but eventually return to bodily function). Modified since this fires every time the trigger condition is met over a whole campaign rather than a fixed number of one-shot lives (Recurring, eyeballed at +100%, the same kind of judged percentage this project's Reputation and Accessibility entries use rather than a strict RAW calculation), Delayed Return (-20%, the multi-turn HT-roll window instead of an instant pop-up) and Partial Restoration (-10%, half HP rather than full). Net +100-20-10 = +70%. 25 x 1.7 = 42.5, rounded up to 43 points.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Necrons"
+					],
+					"modifiers": [
+						{
+							"id": "m3F2l6R9nFNEGXTdI",
+							"name": "Recurring (triggers every time the condition is met, not once ever)",
+							"cost_adj": "+100%"
+						},
+						{
+							"id": "mWjusfhxK-m-2pO2e",
+							"name": "Delayed Return (HT roll over several turns, not instant)",
+							"cost_adj": "-20%"
+						},
+						{
+							"id": "mBkuO9UNMfAf10WFn",
+							"name": "Partial Restoration (returns at half HP, not full)",
+							"cost_adj": "-10%"
+						}
+					],
+					"base_points": 25
+				},
+				{
+					"id": "ttg_XqDmMqrwP7ymr",
+					"name": "No Pain Receptors",
+					"reference": "B59",
+					"local_notes": "House rule, priced at High Pain Threshold's rate but total: a Necron's necrodermis has no pain receptors to speak of, so it never takes a shock penalty or a reaction penalty from injury of any kind, not merely a reduced chance of one.\n\nLore: A Necron does not flinch, wince or slow down from injury short of outright incapacitation — it has nothing resembling a nervous system built to register pain in the first place. Consistently background across Codex material and Black Library's Necron fiction, which never shows a Necron reacting to a wound the way a living creature would.\n\nDesign: Priced as Basic Set High Pain Threshold (B59, 10 points) rather than inventing a new, uncosted \"total\" tier: the RAW trait already covers \"never affected by physical torture\" and removes shock penalties most of the time, and this project treats a Necron's complete lack of a pain sense as the same trait applied without RAW's residual chance of a shock penalty, the same kind of small honest extrapolation this project's Larraman's Organ entry makes for \"seals in seconds.\"",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Necrons"
+					],
+					"base_points": 10
+				},
+				{
+					"id": "trdRook6Yj7agMfaC",
+					"name": "Resistant to Metabolic Hazards (Necrodermis)",
+					"reference": "B81",
+					"local_notes": "Resistant (Metabolic Hazards), Immunity.\n\nLore: A body of living metal has no metabolism for disease, poison, radiation or asphyxiation to act on, and it does not age in any biological sense — a Necron's chassis wears out mechanically over deep time rather than growing old. Universal, unremarked-on Codex background.\n\nDesign: Resistant (Metabolic Hazards), Immunity tier (B80-81): base value 30 for the broad Metabolic Hazards category, x1 for full Immunity = 30 points, the same base-value component this project's Basic Set \"Machine\" reference build (see the Basic Set library's own Machine meta-trait) uses for the same reason.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Necrons"
+					],
+					"modifiers": [
+						{
+							"id": "mwZ54n1tvVIlRRC2Q",
+							"name": "Metabolic Hazards (disease, poison, radiation, suffocation, aging)",
+							"reference": "B80",
+							"cost_adj": "30"
+						},
+						{
+							"id": "m1a4m48flGy80MI_p",
+							"name": "Immunity",
+							"reference": "B81",
+							"cost_adj": "x1"
+						}
+					]
+				},
+				{
+					"id": "tWO7JlMkhGa8D1YJ6",
+					"name": "Soulless",
+					"reference": "B80",
+					"local_notes": "Resistant (Mind Control, Possession and Emotion Control), Immunity.\n\nLore: Whatever a Necron's soul is now, it is bound into the necrodermis by Necrontyr technology rather than carried the way a living creature's is, and it registers as flatly uninteresting to the predators of the warp: daemons ignore Necrons in the fiction unless given a specific reason not to, and no depiction shows a Necron possessed, charmed or emotionally manipulated by psychic or daemonic means. This is consistent Codex background rather than a specific cited scene.\n\nDesign: Resistant, Immunity tier (B80-81: base rarity value x5), following this project's own Pariah Gene \"Immunity to Warp-Based Effects\" entry (data/imperium/psykers/warp.yaml) for the identical math: Mind Control/Possession/Emotion Control treated as an \"occasional\" hazard category (base 2) for a race this is definitional for, 2 x 5 = 10 points.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Xenos",
+						"Necrons"
+					],
+					"modifiers": [
+						{
+							"id": "mp1sKX-XHNoIFE2Vl",
+							"name": "Mind Control, Possession and Emotion Control simply do not work",
+							"reference": "B81",
+							"cost_adj": "10"
+						}
+					]
+				},
+				{
+					"id": "tim6Gbop1W3AuM61c",
+					"name": "Beneath a Daemon's Notice",
+					"local_notes": "Roleplaying/GM-adjudication flag: daemons default to ignoring a Necron target unless it is actively fighting them or blocking something they want.\n\nLore: A soulless construct is not worth a daemon's attention the way a mortal's soul is: Codex background and both Rath's and Crowley's novels play Necrons and daemons as largely talking past each other or fighting for territory rather than as predator and prey the way daemons treat the living.\n\nDesign: Perk (B21, 1 point): a narrow, GM-adjudicated targeting-priority flag rather than a numeric combat bonus, since \"usually ignored unless it's in the way\" is not the kind of reliable effect Basic Set prices as a full reaction bonus.",
+					"tags": [
+						"Perk",
+						"Xenos",
+						"Necrons"
+					],
+					"base_points": 1
+				},
+				{
+					"id": "tjBNWQ210pv5Ftp7i",
+					"name": "Necrodermis Machine-Body",
+					"local_notes": "0-point lore flag, the same convention this project's Ork Fungal Physiology entry uses: a Necron does not need to breathe, eat, drink or sleep, and its chassis wears out over millennia rather than ageing — all inherent to being a machine body under GURPS's own Machine meta-trait guidance (see the Basic Set library's Machine.gct for the same 0-point treatment of these same facts), not separately purchased advantages.\n\nLore: A Necron does not need food, water, air or rest, and the Tomb Worlds' sixty-million-year sleep is exactly this: a body that simply does not wear down the way a living one does, left inert rather than fed or rested.\n\nDesign: 0 points, documentation only; see notes for why this is not a priced Doesn't Breathe/Doesn't Eat or Drink purchase.",
+					"tags": [
+						"Xenos",
+						"Necrons"
+					],
+					"base_points": 0
+				}
+			]
+		},
+		{
+			"id": "TofY2GgIXAshvWYBP",
+			"name": "Body Lens: Cryptek",
+			"local_notes": "Lore: Crypteks are the dynasty's technosorcerers -- keepers of half- understood pre-biotransference science that looks, to everyone else, exactly like sorcery. Codex background, Rath's and Crowley's novels alike treat Cryptek genius as real and dangerous, and their necrodermis is built lighter than a soldier's to leave room for the arcana they carry.\n\nDesign: 292 (Attribute Modifiers) + 300 (Necrodermis DR 60, 5/level) = 592 points, added to Necron Physiology's 134 for 726 points of physiology and body alone, before a Discipline lens, the Mind: Cryptek Genius package and skills. See the Cryptek template.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Necrons"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "tAiXlxEHMvlfA7bLA",
+					"name": "Attribute Modifiers (Cryptek)",
+					"local_notes": "Design: Framework target: ST 18, DX 12, IQ 16, HT 14, HP 24. Increased ST +8 (80) for ST 18. Increased DX +2 (40) for DX 12. Increased IQ +6 (B16, 20/level, 120) for IQ 16 -- a Cryptek's genius is the whole point of the caste, well past even a Necron noble's own sharp mind. Increased HT +4 (40) for HT 14. Extra Hit Points +6 (12) on top of the ST-18 base of 18, for HP 24. 80+40+120+40+12 = 292.",
+					"tags": [
+						"Physical"
+					],
+					"base_points": 292,
+					"features": [
+						{
+							"type": "attribute_bonus",
+							"attribute": "st",
+							"amount": 8
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "dx",
+							"amount": 2
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "ht",
+							"amount": 4
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "hp",
+							"amount": 6
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "iq",
+							"amount": 6
+						}
+					]
+				},
+				{
+					"id": "tbgKpiVtAMXhUoZJV",
+					"name": "Necrodermis (Cryptek)",
+					"reference": "B46",
+					"local_notes": "DR 60, all locations. Weak Points 3 (a Cryptek's robes and arcana are laced through the necrodermis rather than bolted over it, per framework.md's \"nobles\" figure): on a hit that fails to penetrate, roll 3d; 3 or less halves DR (30). Eye-slit optics run at DR 30 rather than 60.\n\nLore: Necrodermis is a Necron's body and its armour at once: a skin of near-indestructible living metal with no separate suit to strip away. Universal across Codex background and every piece of Black Library Necron fiction.\n\nDesign: Damage Resistance (B46, 5/level, all locations): natural DR bought directly on the body, per framework.md's explicit instruction that necrodermis is a character trait, not equipment. Each body-type lens overrides `levels`/`dr` to its own figure from framework.md's Necron anchor table; see that lens's own copy of this trait for its point cost.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Necrons"
+					],
+					"points_per_level": 5,
+					"can_level": true,
+					"levels": 60,
+					"features": [
+						{
+							"type": "dr_bonus",
+							"locations": [
+								"all"
+							],
+							"amount": 60
+						}
+					]
+				}
+			]
+		},
+		{
+			"id": "TeBgoEQHtHyBcML-o",
+			"name": "Mind: Cryptek Genius",
+			"local_notes": "Lore: A Cryptek kept its full mind and sharpened it further -- genuinely brilliant, and single-mindedly curious about the half-understood technology it wields.\n\nDesign: -5 (Curious) - 10 (Obsession) = -15 points.",
+			"tags": [
+				"Advantage",
+				"Disadvantage",
+				"Mental",
+				"Xenos",
+				"Necrons"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "tJBNDPXcqbYvsfc11",
+					"name": "Curious",
+					"reference": "B131",
+					"local_notes": "Lore: A Cryptek investigates first and considers the consequences later -- every depiction of Crypteks in the fiction shows them unable to leave an interesting anomaly alone.\n\nDesign: Basic Set Curious (B131), self-control 12, -5 points.",
+					"tags": [
+						"Disadvantage",
+						"Mental",
+						"Xenos",
+						"Necrons"
+					],
+					"base_points": -5,
+					"cr": 12
+				},
+				{
+					"id": "tjybSRyNHc1tnESth",
+					"name": "Obsession (Unlock the Tomb-World's Secrets)",
+					"reference": "B146",
+					"local_notes": "Lore: Whatever a specific Cryptek's discipline, the underlying drive in the fiction is the same: recover and master pre- biotransference science the rest of the dynasty has lost or forgotten.\n\nDesign: Basic Set Obsession (B146), self-control 12, -10 points.",
+					"tags": [
+						"Disadvantage",
+						"Mental",
+						"Xenos",
+						"Necrons"
+					],
+					"base_points": -10,
+					"cr": 12
+				}
+			]
+		},
+		{
+			"id": "T0MzSSeS5kK2Mci5U",
+			"name": "Cryptek Discipline: Technomancy",
+			"local_notes": "Lore: Technomancers specialise in the half-understood engineering side of Necron science: reweaving damaged necrodermis, jury-rigging constructs, and keeping a dynasty's ancient machines running.\n\nDesign: 14 (Mending Field, level 2) + 10 (Artificer's Eye, level 1) = 24 points at default levels.",
+			"tags": [
+				"Xenos",
+				"Necrons"
+			],
+			"children": [
+				{
+					"id": "tPHpazqo545IgbkAg",
+					"name": "Mending Field",
+					"reference": "B59",
+					"local_notes": "Touch-range repair, restoring HP-equivalent structural damage to necrodermis or other machines only; has no effect on living tissue.\n\nLore: A Technomancer's signature trick: laying a hand on damaged necrodermis (a comrade's or their own) and knitting the metal back into shape well beyond its own passive self-repair rate.\n\nDesign: Healing (B59, 10 points/level) at level 2 (20 points) with Accessibility (constructs/necrodermis only, -30%, an eyeballed percentage per this project's own Accessibility convention): 20 x 0.7 = 14 points.",
+					"tags": [
+						"Advantage",
+						"Xenos",
+						"Necrons"
+					],
+					"modifiers": [
+						{
+							"id": "mbxLw2vYc0siONGdT",
+							"name": "Accessibility (necrodermis and other constructs only)",
+							"cost_adj": "-30%"
+						}
+					],
+					"points_per_level": 10,
+					"can_level": true,
+					"levels": 2
+				},
+				{
+					"id": "tD4vvQSHracT7k1hm",
+					"name": "Artificer's Eye",
+					"reference": "B90",
+					"local_notes": "Adds its level to Engineer (Necrodermis), Mechanic (Necron Constructs) and Armoury (Necron Weapons).\n\nLore: A Technomancer's instinct for Necron machinery runs deeper than formal training could teach a human engineer.\n\nDesign: Talent affecting three skills, Medium Talent rate (B90, 10/level, 3-5 skill bracket), the same rate this project's Mek Instinct entry uses. Level 1, 10 points.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Talent",
+						"Xenos",
+						"Necrons"
+					],
+					"points_per_level": 10,
+					"can_level": true,
+					"levels": 1
+				}
+			],
+			"disabled": true
+		},
+		{
+			"id": "T_Gt9Mk_TMHLIEg7P",
+			"name": "Cryptek Discipline: Plasmancy",
+			"local_notes": "Lore: Plasmancers are Necron energy-weapons specialists, channelling the same particle science behind gauss weaponry into more focused, more destructive bursts.\n\nDesign: 20 points (Channelled Discharge, level 4) at default level.",
+			"tags": [
+				"Xenos",
+				"Necrons"
+			],
+			"children": [
+				{
+					"id": "tMYqBbI1hIuEwqp8r",
+					"name": "Channelled Discharge",
+					"reference": "B61",
+					"local_notes": "Bare-handed emergency discharge; a Plasmancer normally releases this through a staff or rod (built separately as equipment), not empty-handed.\n\nLore: Plasmancers store and release raw particle/plasma energy through their staves, and can (if disarmed) still discharge a dangerous burst directly from their own hands as a last resort.\n\nDesign: Innate Attack (Burning) (B61, 5 points/die), the same anchor this project's 'Eadbanger and Betcher's Gland entries use. Level 4, 20 points.",
+					"tags": [
+						"Advantage",
+						"Xenos",
+						"Necrons"
+					],
+					"points_per_level": 5,
+					"can_level": true,
+					"levels": 4
+				}
+			],
+			"disabled": true
+		},
+		{
+			"id": "TcD89xJfoEoaO2Xjh",
+			"name": "Cryptek Discipline: Psychomancy",
+			"local_notes": "Lore: Psychomancers weaponise dread and despair through Necron tech rather than the warp -- close to a psyker's toolkit in effect, nothing like one in mechanism.\n\nDesign: 16 points (Aura of Dread) at default level.",
+			"tags": [
+				"Xenos",
+				"Necrons"
+			],
+			"children": [
+				{
+					"id": "tFJmBW8r1bX0kUNYX",
+					"name": "Aura of Dread",
+					"reference": "B35",
+					"local_notes": "Anyone within 2 yards of the Psychomancer's despair-generator scarabs suffers -2 to Fright Checks. Technological, not psychic: unaffected by Warp Sorcery countermeasures.\n\nLore: Psychomancers carry technology (usually swarms of tiny despair- generator scarabs) that projects a crushing dread rather than any true psychic power -- Codex background is explicit that Necron \"psychic\" effects are engineered, not warp-born.\n\nDesign: Affliction (B35) base 10, Disadvantage Delivered (Fright Check -2, valued at +30% per this project's own Null Aura precedent in data/imperium/psykers/warp.yaml), Area Effect (2 yards, +50%, B102) and Emanation (-20%, B111): net +60%. 10 x 1.6 = 16 points.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Xenos",
+						"Necrons"
+					],
+					"modifiers": [
+						{
+							"id": "mRKoU2fs3rBlMji3z",
+							"name": "Disadvantage Delivered (Fright Check -2)",
+							"cost_adj": "+30%"
+						},
+						{
+							"id": "mQpDLK_37ExDLm0rY",
+							"name": "Area Effect, 2 yards",
+							"cost_adj": "+50%"
+						},
+						{
+							"id": "mrY-YqwCLU8AOHI_g",
+							"name": "Emanation (no ranged attack roll, proximity only)",
+							"cost_adj": "-20%"
+						}
+					],
+					"base_points": 10
+				}
+			],
+			"disabled": true
+		},
+		{
+			"id": "Too0iL7zUpIB1Wx5o",
+			"name": "Cryptek Discipline: Chronomancy",
+			"local_notes": "Lore: Chronomancers are the rarest and strangest Cryptek discipline, manipulating probability and small pockets of local time rather than matter or energy directly.\n\nDesign: 15 (Chronal Precognition) + 9 (Temporal Distortion Field) = 24 points at default levels.",
+			"tags": [
+				"Xenos",
+				"Necrons"
+			],
+			"children": [
+				{
+					"id": "t6-pzpw-GtXTqFDzV",
+					"name": "Chronal Precognition",
+					"reference": "B47",
+					"local_notes": "Reflavored Danger Sense: a Chronomancer reads the immediate probability-stream around itself for incoming danger a fraction of a second before it happens.\n\nLore: Chronomancers manipulate probability and localised time rather than true prophecy, and the most reliable payoff of that is knowing danger is coming an instant before it arrives.\n\nDesign: Basic Set Danger Sense (B47, 15 points), reflavored.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Xenos",
+						"Necrons"
+					],
+					"base_points": 15
+				},
+				{
+					"id": "tJR30usfzEtozkNLZ",
+					"name": "Temporal Distortion Field",
+					"reference": "B35",
+					"local_notes": "A touch that locally slows a target's passage through time: -1 to Basic Speed (and so to Dodge and Move) for the rest of the encounter unless removed by a GM-adjudicated effect.\n\nLore: A Chronomancer's staff can pin a small volume of space slightly out of step with the current moment, dragging on anyone caught in it. Codex background frames Chronomancer power as subtle battlefield-tempo manipulation rather than flashy destruction.\n\nDesign: Affliction (B35) base 10, Disadvantage Delivered (Decreased Basic Speed 1, valued at roughly +5% per this project's own eyeballed Disadvantage Delivered convention) and Melee Attack, Reach C only (-20%, a touch-range limitation): net -15%. 10 x 0.85 = 8.5, rounded up to 9 points.",
+					"tags": [
+						"Advantage",
+						"Xenos",
+						"Necrons"
+					],
+					"modifiers": [
+						{
+							"id": "mLWgj5EAQbNGuRpsx",
+							"name": "Disadvantage Delivered (Decreased Basic Speed 1)",
+							"cost_adj": "+5%"
+						},
+						{
+							"id": "mP3soxqvfJZtEa1aJ",
+							"name": "Melee Attack, Reach C only",
+							"cost_adj": "-20%"
+						}
+					],
+					"base_points": 10
+				}
+			],
+			"disabled": true
+		}
+	],
+	"skills": [
+		{
+			"id": "s_A4l6SthPX3kh9-X",
+			"name": "Engineer",
+			"local_notes": "Lore: A Cryptek's core discipline is understanding and reshaping living metal itself.\n\nDesign: IQ+1 (17) for 12 points, Hard.",
+			"tags": [
+				"Xenos",
+				"Necrons"
+			],
+			"specialization": "(Necrodermis)",
+			"difficulty": "iq/h",
+			"points": 12
+		},
+		{
+			"id": "szGhDdCqqFDRvMoya",
+			"name": "Physics",
+			"local_notes": "Lore: Half-understood pre-biotransference science that everyone else calls sorcery.\n\nDesign: IQ+0 (16) for 8 points, Hard.",
+			"tags": [
+				"Xenos",
+				"Necrons"
+			],
+			"specialization": "(Necrontyr Archaeophysics)",
+			"difficulty": "iq/h",
+			"points": 8
+		},
+		{
+			"id": "sgOuiSwnvQ3LAFOzz",
+			"name": "Hidden Lore",
+			"local_notes": "Lore: What survives of the dynasty's archives and a Cryptek's own long research.\n\nDesign: IQ+1 (17) for 4 points, Average.",
+			"tags": [
+				"Xenos",
+				"Necrons"
+			],
+			"specialization": "(Necrontyr Science)",
+			"difficulty": "iq/a",
+			"points": 4
+		},
+		{
+			"id": "sC8IUwU2igmbCDOwT",
+			"name": "Staff of Light",
+			"local_notes": "Lore: A Cryptek's own staff of light doubles as a melee weapon and a ranged one; treated as a single combined skill for this technique-adjacent weapon.\n\nDesign: Broadsword-family melee skill (DX/A) covering the staff's melee use. DX+1 (13) for 4 points, Average.",
+			"tags": [
+				"Xenos",
+				"Necrons"
+			],
+			"difficulty": "dx/a",
+			"points": 4
+		},
+		{
+			"id": "s_Xj5SAnvIRFgydqq",
+			"name": "Beam Weapons",
+			"local_notes": "Lore: The staff of light's ranged discharge, treated as a beam weapon.\n\nDesign: Beam Weapons (Rifle) (DX/E). DX+1 (13) for 2 points, Easy.",
+			"tags": [
+				"Xenos",
+				"Necrons"
+			],
+			"specialization": "Rifle",
+			"difficulty": "dx/e",
+			"points": 2
+		},
+		{
+			"id": "sog1m3x0RkLi8O6hr",
+			"name": "Research",
+			"local_notes": "Lore: Digging a working principle out of a ruined archive or a captured relic.\n\nDesign: IQ+0 (16) for 2 points, Average.",
+			"tags": [
+				"Xenos",
+				"Necrons"
+			],
+			"difficulty": "iq/a",
+			"points": 2
+		}
+	],
+	"equipment": []
+}

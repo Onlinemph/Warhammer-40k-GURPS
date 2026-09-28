@@ -300,6 +300,7 @@ Necrons are ancient souls transferred into bodies of living metal (necrodermis) 
 | Flayed One | 18 | 12 | 6 | 14 | 24 | 50 | Cursed by the flayer virus: madness and bloodlust |
 | Lord / Overlord | 22–25 | 13 | 14 | 15 | 32–36 | 100 | Full personality, often eccentric |
 | Cryptek | 18 | 12 | 16 | 14 | 24 | 60 | Technosorcerer, genius |
+| Skorpekh Destroyer | 26 | 12 | 6 | 16 | 34 | 100 | War-form rebuilt for slaughter; nihilistic, fractured mind |
 
 Necron traits: Machine body (no need to breathe, eat or sleep; immune to disease, poison and pain-based effects), Injury Tolerance (Unliving: no blood, no vitals), living metal self-repair (Regeneration), and **Reanimation Protocols**: a Necron reduced below −1×HP is not destroyed unless the damage exceeds −5×HP; roll HT at the end of each of the next few turns to rise again with some HP restored, and on failure it phases out (teleports home to its tomb). Necrons are soulless: immune to psychic mind control and possession, and largely beneath daemons' notice. Weak Points on necrodermis are low (joints and eye-slits: Warriors 4, nobles and Lychguard 3), and glowing optics have eye DR about half the torso.
 

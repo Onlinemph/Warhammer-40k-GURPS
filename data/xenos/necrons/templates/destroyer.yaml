@@ -1,0 +1,40 @@
+kind: template
+output: Xenos/Necrons/Templates/Skorpekh Destroyer.gct
+notes: >
+  NPC template. A Skorpekh Destroyer: a Necron mind broken into a
+  consuming hatred of all organic life, fused permanently into a heavy,
+  scything mechanised war-form. Point math: Necron Physiology 134 + Body
+  Lens: Destroyer 696 + Mind: Destroyer Cult -35 + skills 22 = 817 points.
+  Stats: ST 26, DX 12, IQ 6, HT 16, HP 34, Will 6, Per 6, natural torso DR
+  100 (Weak Points 3, eye DR 50). Not one of framework.md's own anchor
+  rows -- see Body Lens: Destroyer's design note for the extrapolation
+  this template rests on. This lands just past the top of framework.md's
+  Astartes tier (550-800): a Destroyer is built to solo-wreck infantry
+  lines and shrug off return fire that would kill a Battle-Brother, at
+  the cost of any usefulness beyond killing organic life and no
+  reliability under central command.
+traits:
+  - include: "xenos/necrons/traits.yaml#Necron Physiology"
+  - include: "xenos/necrons/traits.yaml#Body Lens: Destroyer"
+  - include: "xenos/necrons/traits.yaml#Mind: Destroyer Cult"
+skills:
+  - name: Gunner
+    spec: (Beams)
+    diff: DX/A
+    points: 12
+    tags: [Xenos, Necrons]
+    lore: A Skorpekh's fused heavy gauss cannon or particle weapon is loosed the same way its scythe-limbs are swung, with total, indiscriminate commitment.
+    design: Gunner (Beams) (DX/A). DX+3 (15) for 12 points, Average.
+  - name: Two-Handed Axe/Mace
+    spec: Hyperphase Reap-Blade
+    diff: DX/A
+    points: 8
+    tags: [Xenos, Necrons]
+    lore: The scything limbs a Skorpekh Destroyer fights with in melee are built into the war-form itself.
+    design: Two-Handed Axe/Mace (DX/A). DX+2 (14) for 8 points, Average.
+  - name: Brawling
+    diff: DX/E
+    points: 2
+    tags: [Xenos, Necrons]
+    lore: A last resort if both its main weapon systems are somehow disabled.
+    design: DX+1 (13) for 2 points, Easy.

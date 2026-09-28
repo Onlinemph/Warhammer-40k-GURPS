@@ -1,0 +1,66 @@
+kind: template
+output: Xenos/Necrons/Templates/Necron Overlord.gct
+notes: >
+  A Necron Overlord: full-personality dynastic nobility, ruling a fraction
+  of a dynasty's Tomb World and its legions. Point math: Necron
+  Physiology 134 + Body Lens: Noble 850 + Mind: Noble Personality -10 +
+  skills 46 = 1,020 points. Stats: ST 24, DX 13, IQ 14, HT 15, HP 34, Will
+  14, Per 14, natural torso DR 100 (Weak Points 3, eye DR 50) —
+  framework.md's Lord/Overlord anchor line (ST 22-25, HP 32-36 midpoint).
+  This lands in framework.md's Heroes and Legends tier (1,000-3,000),
+  above the Astartes band (550-800) as instructed: an Overlord out-thinks
+  and out-lasts a Battle-Brother and commands whole legions besides, even
+  before any relic wargear (a resurrection orb, a phylactery, a
+  particularly ancient warscythe) is added on top. A named, dynasty-
+  founding Phaeron should be built well above this template rather than
+  read off it directly.
+traits:
+  - include: "xenos/necrons/traits.yaml#Necron Physiology"
+  - include: "xenos/necrons/traits.yaml#Body Lens: Noble (Lord/Overlord)"
+  - include: "xenos/necrons/traits.yaml#Mind: Noble Personality"
+skills:
+  - name: Two-Handed Sword
+    spec: Warscythe
+    diff: DX/A
+    points: 12
+    tags: [Xenos, Necrons]
+    lore: An Overlord's own warscythe is often a personal relic, older than most Imperial worlds.
+    design: Two-Handed Sword (DX/A). DX+3 (16) for 12 points, Average.
+  - name: Beam Weapons
+    spec: Rifle
+    diff: DX/E
+    points: 4
+    tags: [Xenos, Necrons]
+    lore: Even a noble carries a staff of light or gauss weapon for when the melee doesn't come to them first.
+    design: Beam Weapons (Rifle) (DX/E). DX+2 (15) for 4 points, Easy.
+  - name: Leadership
+    diff: IQ/A
+    points: 12
+    tags: [Xenos, Necrons]
+    lore: An Overlord commands legions of Warriors and Immortals through sheer authority backed by Status and reputation.
+    design: IQ+3 (17) for 12 points, Average.
+  - name: Tactics
+    diff: IQ/H
+    points: 8
+    tags: [Xenos, Necrons]
+    lore: Millions of years of memory (however fragmented) of real warfare, on a scale most species have never fought at.
+    design: IQ+1 (15) for 8 points, Hard.
+  - name: Strategy
+    spec: (Land)
+    diff: IQ/H
+    points: 4
+    tags: [Xenos, Necrons]
+    lore: Beyond a single battle, an Overlord plans a whole campaign to reclaim what the dynasty lost.
+    design: IQ+0 (14) for 4 points, Hard.
+  - name: Diplomacy
+    diff: IQ/H
+    points: 4
+    tags: [Xenos, Necrons]
+    lore: Necron nobility does deal with outsiders, on its own terms, when it suits the dynasty.
+    design: IQ+0 (14) for 4 points, Hard.
+  - name: Intimidation
+    diff: Will/A
+    points: 2
+    tags: [Xenos, Necrons]
+    lore: An ancient, unstoppable machine-lord's presence alone unsettles most mortals.
+    design: Will+0 (14) for 2 points, Average.

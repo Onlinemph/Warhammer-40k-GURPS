@@ -1,0 +1,1137 @@
+{
+	"version": 5,
+	"rows": [
+		{
+			"id": "emEjxLmn-Y3jqvYls",
+			"description": "Gauss Flayer",
+			"local_notes": "Lore: The signature weapon of every Necron Warrior: a rifle-length gauss weapon that projects a cutting beam of entropic energy that strips its target apart at the molecular level rather than burning, cutting or blasting it in any conventional sense. Codex: Necrons background, Rogue Trader's and Deathwatch's Necron-armoury material, and Black Library's Necron fiction (The Infinite and the Divine, the Twice-Dead King trilogy) are all consistent that gauss fire shreds flak and carapace with ease and can, given enough sustained fire, eat through even a Space Marine's ceramite - the fiction's own \"it keeps eating deeper\" framing for gauss weapons, distinct from a single hit's raw stopping power.\n\nDesign: Framework.md's own anchor fixes the dice: \"Gauss flayer | Molecular disassembly beam: 6d(3) burn, RoF 2 (rapid fire), strips flak and carapace, only occasionally hurts power armour.\" A straight divisor (3) checked out at 27.9% against carapace by exact dice distribution - \"occasionally,\" not \"strips\" - so the divisor is bumped to (4) here to actually match the anchor's own prose rather than its literal number: 6d(4) burn averages 21 and, by exact dice distribution, penetrates flak (DR 30, eff. 7.5) 99.98% of the time, carapace (DR 70, eff. 17.5) 79.4% of the time - genuinely \"strips\" both, as the anchor's words say - while Astartes power armour (DR 100, eff. 25) drops to 14.5% and a Terminator (DR 200, eff. 50) to 0%, exactly the \"only occasionally hurts power armour, essentially never a Terminator\" reading the fiction and the RPG lines both give a rank-and-file Warrior's rifle. RoF is likewise re-read from \"rapid fire\" as RoF 3 rather than the anchor table's literal RoF 2, since a Warrior's gauss flayer is depicted firing several times per activation in the tabletop's own special rule and every RPG-line write-up shows Warriors laying down continuous fire, not single aimed shots. Handling: 15 lb loaded, a heavy, chunky construct of solid necrodermis rather than a hollow human housing, per the framework's \"Necron weapons are heavy\" instruction; min ST 14† (raw formula sqrt(10x15)=12.2, bumped for a grip built to a Necron's own dense limbs with no ergonomic concession for a smaller or organic hand) sits comfortably under a Warrior's own ST 18, letting it be fired one-handed if needed even though it is built and rated as a two-handed rifle. Bulk -5 (rifle -4, one step bulkier for the same \"Necron- pattern weapons run one step heavier than a human weapon of the same type\" rule the framework already applies to Astartes gear) and Rcl 1 (a coherent energy beam, no reaction mass, per the framework's \"low recoil\" instruction for Necron arms) round out the entry. Acc 6 is the rifle bracket (4-5) plus the framework's own \"+2 over a slug-thrower of the same size\" beam-weapon allowance. Shots 300(3600): a gauss flayer has no magazine or power cell in the human sense - it draws directly on the wielder's own necrodermis reactor, itself trickle-fed by the tomb world's dormant power network, so it does not run dry in the course of any single engagement. The listed figure is a deliberately generous abstraction of that: a nominal 300 pulses before the reactor needs roughly an hour linked back into a tomb's power grid to fully replenish, representing a real but rarely-relevant limit rather than a field-swappable clip. TL12^ (superscience necrodermis and entropic-beam physics no living scholar fully understands) and LC0 (xenos tech, per the framework's legality table) throughout this file unless noted otherwise.",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Necrons"
+			],
+			"tech_level": "12^",
+			"legality_class": "0",
+			"base_value": "4000",
+			"base_weight": "15 lb",
+			"weapons": [
+				{
+					"id": "WmCMkBJ1h3ZejwzIB",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "6d",
+						"armor_divisor": 4
+					},
+					"accuracy": "6",
+					"range": "150/450",
+					"rate_of_fire": "3",
+					"shots": "300(3600)",
+					"bulk": "-5",
+					"recoil": "1",
+					"strength": "14†",
+					"usage": "Standard",
+					"usage_notes": "A gauss weapon strips matter away molecule by molecule rather than burning or punching it. Against a vehicle or heavily-armoured target this project's follow-up- on-penetration convention does not apply cleanly (there is no frag or fire to \"follow up\" with), so the GM may instead rule that a gauss hit that does penetrate strips one extra point of DR permanently from that location for the rest of the scene, per the Codex fluff of gauss weapons eating through armour plate as a battle wears on. This is left as an optional table rule rather than a numeric default so it doesn't silently escalate every firefight.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eg_Np9ykrjq4FZgSD",
+			"description": "Gauss Blaster",
+			"local_notes": "Lore: The standard-issue weapon of the Necron Immortals: a heavier-cased gauss weapon that Codex: Necrons and Black Library's Necron fiction both single out as a genuine threat to Astartes- grade armour where the rank-and-file Warrior's flayer is not, matching the Immortals' consistent depiction as the tougher, more dangerous line troops standing behind a Warrior phalanx.\n\nDesign: Framework.md's own anchor: \"Gauss blaster | 7d(3) burn, RoF 3.\" Kept at the same divisor (4) the Gauss Flayer above is built to (the anchor calls both weapons \"gauss,\" the same underlying disassembly-beam physics, so the divisor should not differ weapon to weapon within the family) but one die heavier, matching the anchor's own die increase over the flayer. Checked by exact dice distribution: 7d(4) burn averages 24.5 and penetrates flak (DR 30, eff. 7.5) 100% of the time, carapace (DR 70, eff. 17.5) 93.9%, Astartes power armour (DR 100, eff. 25) 41.4% - a real, regular threat to a Space Marine, not merely \"occasionally\" - and a Terminator (DR 200, eff. 50) 0%, exactly matching the fiction's \"Immortals can actually hurt a Marine; a flayer mostly can't.\" Handling: 20 lb, heavier again than the flayer for the Immortal's reinforced dual-barrel housing; min ST 15† (sqrt(10x20)=14.1, bumped for the same dense, ungiving Necron grip as the flayer) sits comfortably under an Immortal's own ST 20. RoF 3, Bulk -5 and Rcl 1 are unchanged from the flayer's own derivation - same mechanism, same handling class, just a bigger beam. Acc 6 is likewise unchanged. Shots 250(3600), slightly fewer pulses than the flayer's 300 before the same hour-long reactor recharge, for the bigger draw per shot.",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Necrons"
+			],
+			"tech_level": "12^",
+			"legality_class": "0",
+			"base_value": "5200",
+			"base_weight": "20 lb",
+			"weapons": [
+				{
+					"id": "W3jvTJCDk3kL91UMV",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "7d",
+						"armor_divisor": 4
+					},
+					"accuracy": "6",
+					"range": "180/540",
+					"rate_of_fire": "3",
+					"shots": "250(3600)",
+					"bulk": "-5",
+					"recoil": "1",
+					"strength": "15†",
+					"usage": "Standard",
+					"usage_notes": "As the Gauss Flayer's optional armour-erosion note above.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eqyZkq-VN6o8Q78Jq",
+			"description": "Gauss Cannon",
+			"local_notes": "Lore: A heavy support gauss weapon carried by specialist Necron troops (and mounted on Tomb Blades and Canoptek constructs in larger form); Codex: Necrons background and the RPG-line Necron-armoury material describe it as the family's dedicated squad-support pattern, pouring far more disassembling energy into a single beam than a flayer or blaster while firing markedly slower.\n\nDesign: Framework.md's own anchor: \"Gauss cannon | 6d×2(3) burn.\" Kept at the literal anchor divisor (3), one step gentler than the flayer/blaster's re-read (4), since a cannon-class weapon's own doubled damage does the real work of moving it up the family rather than needing the smaller weapons' divisor correction. Checked by exact dice distribution: 6dx2(3) averages 42 and penetrates carapace (DR 70, eff. 23.3) 99.0%, Astartes power armour (DR 100, eff. 33.3) 85.5%, and even a Terminator (DR 200, eff. 66.7) 0.06% - a genuine Marine-killer, and the first weapon in the family with any measurable Terminator threat at all, matching its role as a dedicated support weapon rather than an infantry sidearm. Handling: 35 lb, a real two-Necron-portable support weapon; min ST 20B (raw sqrt(10x35)=18.7, rounded up and given the B suffix since every depiction shows it braced or crewed rather than shoulder-fired by one Warrior alone). RoF 1: the bigger single discharge needs a real recharge between shots, unlike the flayer/blaster's rapid pulses. Shots 60(120): a genuinely smaller reserve than the lighter weapons' reactor-fed figures, with a two-minute recharge, reflecting the much larger single draw per shot rather than a magazine limit. Bulk -7 and Acc 6 (unchanged beam-weapon allowance) fit a heavy support weapon; Rcl 1 is unchanged - still a coherent beam with no reaction mass.",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Necrons"
+			],
+			"tech_level": "12^",
+			"legality_class": "0",
+			"base_value": "9000",
+			"base_weight": "35 lb",
+			"weapons": [
+				{
+					"id": "WE-QaVjouUWx98p_D",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "6dx2",
+						"armor_divisor": 3
+					},
+					"accuracy": "6",
+					"range": "250/750",
+					"rate_of_fire": "1",
+					"shots": "60(120)",
+					"bulk": "-7",
+					"recoil": "1",
+					"strength": "20B",
+					"usage": "Braced",
+					"usage_notes": "As the Gauss Flayer's optional armour-erosion note above.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Gunner"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Beams"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Gunner"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "e0X8TU4OdBxrLGdZp",
+			"description": "Heavy Gauss Cannon",
+			"local_notes": "Lore: The family's dedicated anti-armour pattern, mounted on Doomsday Arks, Tomb Blades and carried arm-integrated by Canoptek and Destroyer-class Necron constructs; Codex: Necrons background and Black Library's Necron fiction both treat it as capable of cracking open a battle tank or a Terminator's plate with a single well-placed beam, the gauss family's answer to a lascannon.\n\nDesign: Framework.md's own anchor: \"Heavy gauss cannon | Anti-armour: 6d×4(5) burn.\" Held at the anchor exactly, since it already delivers the promised result: checked by exact dice distribution, 6dx4(5) averages 84 and clears every personal-armour DR on the framework's table at 99.6%-100%, including a Terminator (DR 200, eff. 40) at 99.55%, and the vehicle table at 79.4%-100% across AV10-14 (AV14, DR 350, eff. 70, still 79.4%) - a genuine, if not quite lascannon-tier-against-the-heaviest-tanks, anti-armour weapon, exactly matching \"can crack a tank or a Terminator\" without inflating it to guaranteed overkill everywhere. Handling: 60 lb, built into a Destroyer- or Canoptek-class chassis's own weapon arm rather than carried loose - the raw formula gives sqrt(10x60)=24.5, kept as a literal ST figure with the M suffix (mounted, here meaning integral to the wielding construct's own frame, the same convention this project's Kataphron Eradication Ray entry uses) rather than assuming a Warrior-scale wielder. RoF 1 and a small 20(300) reserve (a five-minute recharge) reflect the huge single discharge. Bulk -8 is nominal since the weapon is never unslung. Acc 5, one point below the lighter gauss weapons, since this pattern is built for raw punch at moderate range rather than fine target discrimination. Rcl 1 is unchanged.",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Necrons"
+			],
+			"tech_level": "12^",
+			"legality_class": "0",
+			"base_value": "16000",
+			"base_weight": "60 lb",
+			"weapons": [
+				{
+					"id": "WkxuiFVodevQLMp-i",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "6dx4",
+						"armor_divisor": 5
+					},
+					"accuracy": "5",
+					"range": "300/900",
+					"rate_of_fire": "1",
+					"shots": "20(300)",
+					"bulk": "-8",
+					"recoil": "1",
+					"strength": "24M",
+					"usage": "Mounted",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Gunner"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Beams"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Gunner"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "evePa0kuRy9cDsXzZ",
+			"description": "Tesla Carbine",
+			"local_notes": "Lore: A lighter, crackling energy weapon fielded alongside gauss arms, most associated with Flayed Ones, Triarch Praetorians and other Necron troops who favour a weapon that punishes a crowd rather than a single hard target; Codex: Necrons background and Black Library's Necron fiction both describe tesla weapons arcing wildly between nearby targets on contact, lighting up whole groups of enemy infantry in a single burst rather than punching cleanly through one target's armour.\n\nDesign: Framework.md's own anchor: \"Tesla carbine | 6d(2) burn with arcs that jump to nearby targets on a hit (like volkite chains).\" Held at the anchor's own divisor (2) and dice exactly, since the anchor is explicit and the weapon's real threat is the arc, not raw penetration: checked by exact dice distribution, 6d(2) averages 21 and penetrates flak (DR 30, eff. 15) 90.4% of the time but rounds to 0% against carapace (DR 70, eff. 35) or anything heavier - a real anti-infantry weapon and no threat at all to rigid plate on its own, exactly the gap the arc effect is built to cross by simply hitting more targets rather than hitting any one of them harder. Handling: 12 lb, the lightest weapon in this file, for a carbine-length housing sized for a Flayed One or Praetorian's own build; min ST 12† (sqrt(10x12)=11, bumped one for the same ungiving Necron grip as the gauss family) sits well under even a Flayed One's ST 18. RoF 4 (faster than the gauss family's RoF 3, since firing quickly to maximise arc triggers is exactly what this weapon is built to do) and Shots 200(1800), a half-hour reactor recharge for a smaller reserve than the gauss flayer's. Bulk -4 (one step lighter than a full gauss rifle, matching its carbine build) and Rcl 1 (coherent discharge) round out the entry. Acc 5, one point below a full gauss rifle's, since a tesla weapon is built for volume over precision.",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Necrons"
+			],
+			"tech_level": "12^",
+			"legality_class": "0",
+			"base_value": "3600",
+			"base_weight": "12 lb",
+			"weapons": [
+				{
+					"id": "WUp-P5QFllfL7NcDA",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "6d",
+						"armor_divisor": 2
+					},
+					"accuracy": "5",
+					"range": "120/360",
+					"rate_of_fire": "4",
+					"shots": "200(1800)",
+					"bulk": "-4",
+					"recoil": "1",
+					"strength": "12†",
+					"usage": "Standard",
+					"usage_notes": "Arc effect (framework.md): any hit, not only a kill, releases a crackling secondary bolt at up to two other valid targets within 3 yards, each resolved as a single ordinary Beam Weapons attack roll at this weapon's own stats - the same \"reuse an ordinary attack roll rather than invent a new mechanic\" approach this project's Volkite entries use for their own chain-on-kill effect, adapted here to trigger on any hit at all (not only a kill) per tesla's own, more permissive lore description and per this weapon's lighter per-bolt damage, which would otherwise almost never trigger a kill-only chain against anything but an unarmoured target.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eEvUK6Jr2B05Likrw",
+			"description": "Tesla Cannon",
+			"local_notes": "Lore: A heavier tesla weapon carried by Triarch Praetorians and mounted on Canoptek Wraith and Doom Scythe constructs; background material treats it as the family's squad-support pattern, keeping the carbine's signature arcing but with enough raw punch behind each bolt to threaten real armour as well as saturate a firing line.\n\nDesign: No framework anchor names this pattern directly, so it is built one size class up from the Tesla Carbine anchor the same way the Gauss Cannon steps up from the Gauss Blaster: the carbine's own dice doubled (6dx2, keeping the family's (2) divisor since the underlying arc-discharge physics is unchanged) rather than simply adding more dice, matching the family's own established \"double the base weapon's dice for the support-class pattern\" relationship the gauss family uses. Checked by exact dice distribution: 6dx2(2) averages 42 and penetrates flak (DR 30, eff. 15) 99.98%, carapace (DR 70, eff. 35) 79.4%, Astartes power armour (DR 100, eff. 50) 14.5%, and rounds to 0% against a Terminator - a real, if occasional, threat to power armour on top of the carbine's own arc-and-saturate role, matching a heavier support weapon's place in the family. Handling: 24 lb and min ST 17B (sqrt(10x24)=15.5, bumped for the same dense grip convention, braced since every depiction shows it crewed or shoulder-braced rather than hand-carried at speed). RoF 3, matching the carbine's own \"fire fast to trigger arcs\" logic at a heavier weapon's scale; Shots 100(1800), half the carbine's reserve for the bigger per-shot draw at the same half-hour recharge. Bulk -6 and Acc 6 sit between the carbine and the gauss cannon; Rcl 1 is unchanged.",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Necrons"
+			],
+			"tech_level": "12^",
+			"legality_class": "0",
+			"base_value": "8500",
+			"base_weight": "24 lb",
+			"weapons": [
+				{
+					"id": "Whdr0p_LduHw2gS5v",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "6dx2",
+						"armor_divisor": 2
+					},
+					"accuracy": "6",
+					"range": "180/540",
+					"rate_of_fire": "3",
+					"shots": "100(1800)",
+					"bulk": "-6",
+					"recoil": "1",
+					"strength": "17B",
+					"usage": "Braced",
+					"usage_notes": "As the Tesla Carbine's arc effect above, at up to three other targets for the bigger discharge.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Gunner"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Beams"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Gunner"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eVIl1EU6EIgq08lWc",
+			"description": "Tesla Destructor",
+			"local_notes": "Lore: The heaviest personal-scale tesla weapon fielded by Necron forces, most associated in background material with Triarch Stalker crews and elite Praetorian formations answering a concentration of enemy infantry too large for a tesla cannon to saturate alone; treated throughout as the family's top tier rather than a distinct weapon in its own right.\n\nDesign: One further die up the same family progression the Tesla Cannon establishes over the Tesla Carbine (6dx3 at the unchanged (2) divisor): checked by exact dice distribution, 6dx3(2) averages 63 and penetrates carapace (DR 70, eff. 35) 99.0%, Astartes power armour (DR 100, eff. 50) 85.5%, and a Terminator (DR 200, eff. 100) 0.06% - a genuine Marine-killer on top of the family's arc saturation, the first tesla weapon to reach the gauss cannon's own power-armour threat level while keeping its signature multi-target arc. Handling: 45 lb and min ST 22B (sqrt(10x45)=21.2, bumped for the dense grip and given B since it is always crewed or braced); RoF 2, slower than the cannon's 3 for the bigger single discharge, and Shots 60(1800), the smallest reserve in the family at the same half-hour recharge for the biggest per-shot draw. Bulk -7 and Acc 6 sit at the top of the tesla bracket; Rcl 1 is unchanged.",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Necrons"
+			],
+			"tech_level": "12^",
+			"legality_class": "0",
+			"base_value": "15000",
+			"base_weight": "45 lb",
+			"weapons": [
+				{
+					"id": "WxGiax8TwWo2rrO7P",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "6dx3",
+						"armor_divisor": 2
+					},
+					"accuracy": "6",
+					"range": "220/660",
+					"rate_of_fire": "2",
+					"shots": "60(1800)",
+					"bulk": "-7",
+					"recoil": "1",
+					"strength": "22B",
+					"usage": "Braced",
+					"usage_notes": "As the Tesla Carbine's arc effect above, at up to four other targets for the largest discharge in the family.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Gunner"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Beams"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Gunner"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "e_GpcsftYa2C49a0e",
+			"description": "Synaptic Disintegrator",
+			"local_notes": "Lore: The Necron Deathmark's own sniper weapon: a rifle built for a single, unerring shot at an enemy officer, psyker or other priority target, fired from ambush after a Deathmark phases in from concealment. Codex: Necrons background and Black Library's Necron fiction (Deathmark squads feature in several Twice-Dead King and Infinite and the Divine passages) treat it as one of the most accurate weapons the Necron armoury fields, purpose-built to drop a single well-armoured priority target rather than to sustain fire.\n\nDesign: Framework.md's own anchor: \"Synaptic disintegrator | Sniper, 8d(3) burn, very high Acc.\" The divisor is bumped to (4), matching the same anchor-vs-prose correction the Gauss Flayer above makes, since a dedicated anti-elite sniper weapon that only occasionally drops the power-armoured target it exists to snipe would contradict its own role: checked by exact dice distribution, 8d(4) burn averages 28 and penetrates carapace (DR 70, eff. 17.5) 98.6% of the time and Astartes power armour (DR 100, eff. 25) 69.5% of the time - a real, reliable threat to exactly the armoured commanders and elite troops a Deathmark is sent to remove - while a Terminator (DR 200, eff. 50) still drops to 0%, keeping it well short of a dedicated anti-armour weapon. Handling: 18 lb, a long, precision-built rifle heavier than a plain gauss flayer for its focusing array; min ST 14† (sqrt(10x18)=13.4, bumped one for the dense Necron grip) sits comfortably under a Deathmark's own ST 18. RoF 1 (a single deliberate shot, never depicted fired rapidly) and Shots 40(1800), a modest reserve with a half-hour recharge, reflecting a weapon built for one perfect shot per ambush rather than sustained fire. Bulk -6 (long and precision-barrelled) and Rcl 1 (coherent beam) round out the entry. Acc 10: the anchor's own \"very high Acc\" read literally as matching the Imperium's dedicated heavy-sniper class (the Transuranic Arquebus sits at Acc 8; this project gives the Deathmark's own purpose- built sniper weapon two points over that, reflecting the same \"cannot miss what it targets\" role the fiction gives it).",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Necrons"
+			],
+			"tech_level": "12^",
+			"legality_class": "0",
+			"base_value": "12000",
+			"base_weight": "18 lb",
+			"weapons": [
+				{
+					"id": "Wgwr-tmdHwIMQ3OGJ",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "8d",
+						"armor_divisor": 4
+					},
+					"accuracy": "10",
+					"range": "400/1200",
+					"rate_of_fire": "1",
+					"shots": "40(1800)",
+					"bulk": "-6",
+					"recoil": "1",
+					"strength": "14†",
+					"usage": "Standard",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "es_AWLhRtydRzBf7Y",
+			"description": "Particle Caster",
+			"local_notes": "Lore: A compact particle-beam sidearm carried by Necron Overlords and Royal Wardens as a badge of rank alongside a warscythe or hyperphase sword; particle weapons appear across Codex: Necrons background and older Necron material (the tabletop's historical \"particle whip\"/\"particle projector\" family) as a distinct energy-weapon lineage from gauss and tesla, built around a contained, accelerated particle stream rather than an entropic beam or an electrical arc.\n\nDesign: Framework.md's anchor gives the family shape rather than fixed dice: \"Particle beamer / caster | Particle weapons: burn ex, scale from plasma.\" Built as a pistol-class particle weapon scaled the same distance below the rifle-class Particle Beamer below that this project's own Imperium Plasma Pistol sits below the Plasma Gun (two dice down, divisor unchanged): 4dx3(3) burn ex. Checked by exact dice distribution: average 42 damage penetrates carapace (DR 70, eff. 23.3) 97.3%, Astartes power armour (DR 100, eff. 33.3) 76.1%, and even a Terminator (DR 200, eff. 66.7) 0.4% - a genuinely dangerous sidearm befitting an Overlord's own personal weapon, well above what a plasma pistol manages against the same targets, matching a Necron noble's superior archeotech over Imperial reverse-engineering. Handling: 8 lb, a heavy relic sidearm rather than a light Imperial-style pistol, per the framework's \"Necron weapons are heavy\" instruction even at pistol scale; min ST 10† (sqrt(10x8)=8.9, bumped one for the same dense grip convention as the rest of this file) sits well under an Overlord's own ST 22-25. RoF 1 and Shots 20(1800) (a half-hour recharge) reflect a genuine capacitor-class discharge that must build again between shots, the same \"must recharge\" bracket framework.md gives plasma weapons. Bulk -3 and Rcl 1 fit a heavy but still one-handed sidearm. Acc 4, the pistol bracket's high end plus a partial beam- weapon allowance, since this is a rank-and-file badge weapon rather than a dedicated long-range tool.",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Necrons"
+			],
+			"tech_level": "12^",
+			"legality_class": "0",
+			"base_value": "9000",
+			"base_weight": "8 lb",
+			"weapons": [
+				{
+					"id": "W-g0bu2AlMDs7gRCS",
+					"sv": 1,
+					"damage": {
+						"type": "burn ex",
+						"base": "4dx3",
+						"armor_divisor": 3
+					},
+					"accuracy": "4",
+					"range": "90/270",
+					"rate_of_fire": "1",
+					"shots": "20(1800)",
+					"bulk": "-3",
+					"recoil": "1",
+					"strength": "10†",
+					"usage": "Standard",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "ekE7H-7kge9RQXYjs",
+			"description": "Particle Beamer",
+			"local_notes": "Lore: A rifle-scale particle weapon carried by senior Necron nobles and Crypteks who want a genuine anti-Astartes tool rather than a badge sidearm; older Necron background and the RPG-line Necron-armoury material both place particle weapons alongside gauss and tesla as the third pillar of Necron small-arms technology, distinct in feel (a contained, focused beam rather than a dissolving ray or a crackling arc) even where their end result on a target is comparably lethal.\n\nDesign: Framework.md's own instruction, read directly: \"scale from plasma.\" Held exactly at the Imperium Plasma Gun's own anchor dice (6dx4(3) burn ex) rather than a re-derived figure, since the anchor gives no reason to move it and the underlying physics (a contained, accelerated energy bolt) is close enough to plasma that matching it directly is the honest choice - the same judgement this project's Aeldari Starcannon entry makes against the same anchor. Checked by exact dice distribution: average 84 damage penetrates Astartes power armour (DR 100, eff. 33.3) 99.9% of the time and a Terminator (DR 200, eff. 66.7) 85.5% of the time, identical to the Imperium Plasma Gun's own verified figures - a genuine top-tier anti-Astartes weapon, matching Necron particle technology's reputation as at least the Imperium's own plasma family's equal. Handling: 20 lb, a real two-handed rifle-class weapon heavier than the particle caster for its full accelerator housing; min ST 15† (sqrt(10x20)=14.1, bumped one for the dense Necron grip) sits well under a noble Necron's own ST. RoF 1 and Shots 20(1800) (the same half-hour recharge as the caster, for a bigger single reserve of accumulated charge) match the anchor's own \"must recharge\" plasma-class mechanism, and unlike the Imperium plasma family this weapon has no supercharge/Malf line at all - a Necron particle weapon's containment is a matter of the wielder's own ancient reactor, not a fallible coil prone to overheating, so there is nothing here for a malfunction roll to represent. Bulk -6 and Acc 6 fit a rifle-class weapon; Rcl 1 is unchanged.",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Necrons"
+			],
+			"tech_level": "12^",
+			"legality_class": "0",
+			"base_value": "14000",
+			"base_weight": "20 lb",
+			"weapons": [
+				{
+					"id": "WLiSW9XoG5gl-75bK",
+					"sv": 1,
+					"damage": {
+						"type": "burn ex",
+						"base": "6dx4",
+						"armor_divisor": 3
+					},
+					"accuracy": "6",
+					"range": "180/540",
+					"rate_of_fire": "1",
+					"shots": "20(1800)",
+					"bulk": "-6",
+					"recoil": "1",
+					"strength": "15†",
+					"usage": "Standard",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "exteAH3Kj_PL79-f8",
+			"description": "Particle Whip",
+			"local_notes": "Lore: In its usual form the particle whip is the main turret weapon of the Doomsday Ark, lashing a heavy particle beam back and forth across an enemy line; this personal-scale entry covers the rarer variant Codex: Necrons and older background material occasionally describe mounted on an individual heavy Necron construct or carried as a staff-weapon by a senior Cryptek or Technomancer overseeing a Tomb World's awakening, rather than the vehicle-scale turret every other depiction shows.\n\nDesign: Built one die and one multiplier step above the Particle Beamer above, the same \"heaviest personal-scale pattern in the family\" relationship this project's Tesla Destructor and Enmitic Annihilator entries below use for their own families: 7dx4(3) burn ex. Checked by exact dice distribution: average 98 damage clears every personal-armour DR at 96.2%+ (including a Terminator, DR 200, eff. 66.7, at 96.2%) and the vehicle table at 66.8%-100% across AV10-13, dropping to 13.7% at AV14 (DR 350, eff. 116.7) - a genuinely fearsome weapon at personal scale without matching the true vehicle-mounted turret's own effectively unlimited damage output, appropriate for a hand- or staff-carried variant rather than a Doomsday Ark's main gun. Handling: 40 lb and min ST 21M (sqrt(10x40)=20, bumped one and given the M suffix since every depiction of a personal-scale particle whip shows it integrated into a heavy construct's own chassis or a Cryptek's staff-mount rather than freely carried); RoF 1 and a small 10(3600) reserve (a full hour's recharge) reflect the largest single discharge in the particle family. Bulk -8 and Rcl 1 fit a genuinely heavy weapon; Acc 6 is unchanged from the lighter particle weapons.",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Necrons"
+			],
+			"tech_level": "12^",
+			"legality_class": "0",
+			"base_value": "26000",
+			"base_weight": "40 lb",
+			"weapons": [
+				{
+					"id": "WP6OB6wypt6RJ1d8b",
+					"sv": 1,
+					"damage": {
+						"type": "burn ex",
+						"base": "7dx4",
+						"armor_divisor": 3
+					},
+					"accuracy": "6",
+					"range": "250/750",
+					"rate_of_fire": "1",
+					"shots": "10(3600)",
+					"bulk": "-8",
+					"recoil": "1",
+					"strength": "21M",
+					"usage": "Mounted",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Gunner"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Beams"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Gunner"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eKptG53JR7ILE4Wf0",
+			"description": "Gauss Reaper",
+			"local_notes": "Lore: The gun-arm weapon built into a Skorpekh Destroyer's own reaper-cannon limb, fielded alongside the reap-blade and threshing talons on its other arms; Codex: Necrons background describes Skorpekh Destroyers as fast, brutal melee-and-gunline hybrids that close with an enemy line while still pouring gauss fire into it, distinct from an older-pattern Destroyer's own gauss weapon below.\n\nDesign: Built between the Gauss Cannon and Heavy Gauss Cannon anchors, matching the Skorpekh Destroyer's own place in Necron background as heavier-hitting than a standard support trooper but not a dedicated anti-tank platform: the Gauss Cannon's own dice (6dx2) pushed one multiplier step further (6dx3) at the shared family divisor (3). Checked by exact dice distribution: average 63 damage penetrates Astartes power armour (DR 100, eff. 33.3) 99.0% of the time and a Terminator (DR 200, eff. 66.7) 36.3% of the time - a serious, reliable threat to power armour and a real (if unlikely to be decisive alone) threat to the heaviest personal armour in the game, exactly the gap between \"support trooper's gun\" and \"dedicated anti-tank cannon\" a Destroyer-cult weapon-arm should occupy. Handling: 50 lb, built directly into the Skorpekh's own weapon-arm rather than carried, so the raw formula (sqrt(10x50)=22.4) is kept as a literal ST figure with the M suffix, the same convention this project's Kataphron Eradication Ray and this file's own Heavy Gauss Cannon use for chassis-integrated weapons. RoF 3 (a rapid-firing cannon suited to a fast- moving Destroyer-cult construct, matching the flayer/blaster family's own RoF rather than the slower support-class cannons) and Shots 150(3600), a full hour's recharge for a large but not maximal reserve. Bulk -7 is nominal (never unslung) and Rcl 1 is unchanged; Acc 6 matches the rest of the gauss family.",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Necrons"
+			],
+			"tech_level": "12^",
+			"legality_class": "0",
+			"base_value": "11000",
+			"base_weight": "50 lb",
+			"weapons": [
+				{
+					"id": "WpFYNMs348mRJStpR",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "6dx3",
+						"armor_divisor": 3
+					},
+					"accuracy": "6",
+					"range": "200/600",
+					"rate_of_fire": "3",
+					"shots": "150(3600)",
+					"bulk": "-7",
+					"recoil": "1",
+					"strength": "22M",
+					"usage": "Mounted",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Gunner"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Beams"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Gunner"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eUqe-14ODEVj8ciy4",
+			"description": "Enmitic Exterminator",
+			"local_notes": "Lore: The gun-arm weapon of the flying Necron Destroyer cult: standard Destroyers carry the gauss-pattern Enmitic Exterminator, an anti-infantry weapon built into their hover-chassis arm, while the larger, slower Heavy Destroyer variant swaps it for the far more powerful particle-pattern Enmitic Annihilator, a dedicated tank-and-Terminator killer. Codex: Necrons background and Black Library's Necron fiction consistently draw the two apart exactly this way: the same cult and the same chassis family, two different weapon-arms for two different jobs, so this project keeps them as one entry's two usage lines rather than two unrelated weapons.\n\nDesign: The Exterminator line is built as a rifle-to-cannon-scale gauss weapon between the Gauss Blaster and Gauss Cannon anchors, at the family's own established (3) divisor: 7dx2(3) burn, checked by exact dice distribution to average 49 damage and penetrate Astartes power armour (DR 100, eff. 33.3) 96.2% of the time, a Terminator (DR 200, eff. 66.7) 2.2% of the time - a reliable Marine-killer with only a token threat to the heaviest personal armour, matching \"anti-infantry\" precisely. The Annihilator line instead scales from the particle family the same way the Enmitic name-pair itself implies a shared chassis with two different internals: 6dx4(4) burn ex, one divisor step better than the Particle Beamer's (3) for a dedicated, single-purpose anti-armour mount rather than a general-purpose rifle. Checked by exact dice distribution: average 84 clears every personal-armour DR at 98.0%+ (Terminator, DR 200, eff. 50, at 98.0%) and the vehicle table at 45.4%-100% across AV10-14 (AV14, DR 350, eff. 87.5, at 45.4%) - a genuine tank-killer, distinctly ahead of the standard Exterminator and matching the Heavy Destroyer's own place in the fiction as the cult's dedicated anti-armour specialist. Handling: both lines are built into their respective chassis's own weapon-arm, so both use the M suffix with the raw ST formula kept literal rather than adjusted for a carried grip: Exterminator at 45 lb (sqrt(10x45)=21.2) and Annihilator at a heavier 70 lb for its bigger accelerator core (sqrt(10x70)=26.5). RoF 3 for the Exterminator (a fast anti-infantry gauss cannon, matching the Gauss Reaper's own rate) against RoF 1 for the Annihilator (a single heavy particle discharge that must fully recharge, matching the particle family's own mechanism); Shots and recharge times scale the same way, a bigger reserve for the lighter, faster-cycling Exterminator. Bulk is nominal for both (never unslung) and Rcl 1 is unchanged; Acc 6 for the Exterminator matches the gauss family, Acc 5 for the Annihilator matches the Heavy Gauss Cannon's own slightly lower figure for a weapon built for punch over precision.",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Necrons"
+			],
+			"tech_level": "12^",
+			"legality_class": "0",
+			"base_value": "13000",
+			"base_weight": "45 lb",
+			"weapons": [
+				{
+					"id": "Wl4BV8Mh1x1lfQOSY",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "7dx2",
+						"armor_divisor": 3
+					},
+					"accuracy": "6",
+					"range": "220/660",
+					"rate_of_fire": "3",
+					"shots": "180(3600)",
+					"bulk": "-7",
+					"recoil": "1",
+					"strength": "21M",
+					"usage": "Mounted (Destroyer)",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Gunner"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Beams"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Gunner"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "WcDIFO5vh8yRQ1z2F",
+					"sv": 1,
+					"damage": {
+						"type": "burn ex",
+						"base": "6dx4",
+						"armor_divisor": 4
+					},
+					"accuracy": "5",
+					"range": "300/900",
+					"rate_of_fire": "1",
+					"shots": "20(3600)",
+					"bulk": "-8",
+					"recoil": "1",
+					"strength": "26M",
+					"usage": "Mounted (Heavy Destroyer, Enmitic Annihilator)",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Gunner"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Beams"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Gunner"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eA1cnHQbpotqp_2HW",
+			"description": "Tachyon Arrow",
+			"local_notes": "Lore: An archeotech relic weapon of the Triarch, referenced in Codex: Necrons background and Black Library's Necron fiction as one of the single most devastating personal weapons in the Necron arsenal precisely because it is fired so rarely - a single, near-unstoppable shot that has been described killing targets other anti-armour weapons could not touch, at the cost of an enormous recharge before it can be fired again.\n\nDesign: No framework anchor names this weapon by dice, only by role (\"one-shot anti-everything relic\"), so it is built as this project's top-tier personal energy weapon, the same \"hero weapon\" precedent the Imperium Solar Atomiser and Aeldari Wraithcannon entries establish: checked by exact dice distribution, 6dx6(10) burn averages 126 and clears every DR on both the personal-armour and AV10-14 vehicle tables at 100%, including a Terminator (DR 200, eff. 20) and a Land Raider's frontal glacis (AV14, DR 350, eff. 35) - \"anti-everything\" taken literally, appropriate for a weapon the fiction only ever shows fired once per engagement, if that. Handling: 10 lb, an oddly light, elegant device for what it does, per its archeotech origin outside even standard Necron manufacture; min ST 11† (sqrt(10x10)=10, bumped for an unfamiliar grip) is a trivial figure for any Necron noble who might carry it. RoF 1 and the 1(3600*) shot line above are the weapon's whole design point rather than an afterthought. Bulk -4 and Rcl 1 fit a rifle-class relic; Acc 8, well above any other weapon in this file, reflects a weapon the fiction shows always finding its mark. LC0 as the rest of this file, and a six-figure notional cost mark it as unique, GM-reference equipment rather than anything a standard Necron formation is issued.",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Necrons"
+			],
+			"tech_level": "12^",
+			"legality_class": "0",
+			"base_value": "90000",
+			"base_weight": "10 lb",
+			"weapons": [
+				{
+					"id": "W1Ippa3rC___2j-7U",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "6dx6",
+						"armor_divisor": 10
+					},
+					"accuracy": "8",
+					"range": "500/1500",
+					"rate_of_fire": "1",
+					"shots": "1(3600*)",
+					"bulk": "-4",
+					"recoil": "1",
+					"strength": "11†",
+					"usage": "Standard (single use)",
+					"usage_notes": "A relic of the Triarch's own arsenal: firing it collapses the projectile through a sliver of folded spacetime so it strikes its target before it can be dodged, aimed or intercepted by any conventional defence (GM's discretion whether an active regenerating shield or void shield still absorbs the hit as SP - the arrow is unerring, not immaterial). The 1(3600*) shot count means exactly that: after firing, the weapon is spent until its housing is returned to a working Tomb World's own power network to rebuild the charge, a process the fiction never shows taking less than a full scene and which the GM should usually treat as \"not available again this session\" rather than a literal one-hour countdown.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eC92stOmcE7AcMTOK",
+			"description": "Eldritch Lance",
+			"local_notes": "Lore: A staff-mounted lance weapon carried by senior Crypteks, most associated in background material with anti-armour Cryptek loadouts and the eerie, focused beams the RPG-line Necron-armoury material and older Codex fluff describe drilling clean through a tank's glacis or a Terminator's plate with no apparent regard for how thick the armour is - distinct from a gauss weapon's molecular stripping, this is a beam that simply ignores matter in its path.\n\nDesign: Built on the same \"focused beam penetrates any armour to the same depth\" logic framework.md's Aeldari Bright Lance anchor establishes for that weapon's own divisor (10): no Necron anchor names this weapon by dice, but the lore's own \"drills through with no regard for thickness\" description is functionally the identical special effect, so this entry borrows that design principle rather than inventing a new one for what is, mechanically, the same kind of weapon. Checked by exact dice distribution: 6dx3(10) burn averages 63 and clears every personal-armour DR at 99.0%+ and the vehicle table at 99.0%-100% across AV10-14 (AV14, DR 350, eff. 35, at 99.0%) - a genuine, reliable tank-and-Terminator killer, appropriately fearsome for a senior Cryptek's own dedicated anti-armour tool without reaching the Tachyon Arrow's absolute, no-exceptions figure. Handling: 30 lb and min ST 18B (sqrt(10x30)=17.3, bumped one and given B since every depiction shows it braced on its own staff-mount or a Cryptek's stabilising legs rather than freely shouldered); RoF 1 and Shots 15(1800) (a half-hour recharge) reflect a genuine capacitor-class discharge. Bulk -7 and Rcl 1 fit a heavy staff-weapon; Acc 7, above the standard gauss/particle bracket, for a weapon built around precision penetration rather than raw saturation.",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Necrons"
+			],
+			"tech_level": "12^",
+			"legality_class": "0",
+			"base_value": "22000",
+			"base_weight": "30 lb",
+			"weapons": [
+				{
+					"id": "WUKy0eFya6MHtWtiq",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "6dx3",
+						"armor_divisor": 10
+					},
+					"accuracy": "7",
+					"range": "300/900",
+					"rate_of_fire": "1",
+					"shots": "15(1800)",
+					"bulk": "-7",
+					"recoil": "1",
+					"strength": "18B",
+					"usage": "Braced",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Gunner"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Beams"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Gunner"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "e1uaR6JTO6YsUXx2B",
+			"description": "Staff of Light",
+			"local_notes": "Melee line carries armour divisor (10), per the framework's power-field rule. This is one physical weapon with both a ranged and a melee mode; it is included wholesale into the Ranged Weapons file per data-format.md's `include` convention (the same pattern the Aeldari Singing Spear uses across melee.yaml and ranged.yaml) rather than defined twice.\n\nLore: A dual-purpose energy staff carried by Necron Lords, Overlords and Crypteks as both a badge of authority and a working weapon: Codex: Necrons background and older Necron material both describe it firing a bolt of disintegrating energy at range, then serving as a power-field melee weapon when its wielder is forced into close combat - a generalist's tool rather than either family's dedicated specialist.\n\nDesign: Framework.md's own anchor: \"Staff of light | Energy staff: ranged 6d(3) burn and a power- field melee strike.\" The ranged line is held at the anchor's literal dice and divisor (3) rather than the Gauss Flayer's bumped (4), since this is deliberately a generalist's badge weapon rather than a front-line infantry rifle - checked by exact dice distribution, 6d(3) burn averages 21 and penetrates flak (DR 30, eff. 10) 99.6% of the time but only 27.9% against carapace (DR 70, eff. 23.3) and 0.06% against Astartes power armour, a real anti- infantry weapon and a poor anti-Astartes one, exactly what a Lord's sidearm should be next to a dedicated Warrior or Immortal weapon. The melee line applies this project's own power- field rule (+3d over a mundane baseline at divisor (10)) one die lighter than the Hyperphase Sword's own sw+3d, since a staff's melee mode is a secondary function of a primarily ranged item rather than a dedicated blade: checked by exact dice distribution at ST 10 (sw=1d, giving 3d(10)): average 10.5 damage penetrates flak/carapace/Sororitas at 100%/99.6%/98.8% and Astartes power armour (DR 100, eff. 10) 94.6% of the time, and a Terminator (DR 200, eff. 20) 9.7% - genuinely dangerous in a pinch, well below the Hyperphase Sword's own figures at the higher ST a dedicated melee wielder would bring, an honest consequence of a Lord's own more modest ST when caught fighting with a badge weapon rather than a proper blade in hand. Handling: 10 lb and min ST 10 for a staff meant to be genuinely comfortable in a Necron Lord's hand rather than built heavy like a rank-and-file trooper's weapon - the one item in this file with no \"no ergonomic concession\" bump, since a Lord's own staff is exactly the item a Necron would bother to make comfortable. RoF 2 and Shots 100(1800) (a half-hour recharge) sit between the Tesla Carbine's rapid pulses and the Gauss Cannon's slow single shots, matching a generalist weapon's middling cycle rate. Bulk -4 and Rcl 1 are unchanged from the rest of this armoury; Acc 5 sits at the low end of the rifle bracket for a weapon not built primarily as a marksman's tool. Reach 1 and parry 0 (Staff's own Basic Set convention) fit the melee mode.",
+			"tags": [
+				"Melee Weapon",
+				"Missile Weapon",
+				"Xenos",
+				"Necrons"
+			],
+			"tech_level": "12^",
+			"legality_class": "0",
+			"base_value": "10000",
+			"base_weight": "10 lb",
+			"weapons": [
+				{
+					"id": "wJ22g49RqumV6U0bE",
+					"sv": 1,
+					"damage": {
+						"type": "cut",
+						"st": "sw",
+						"base": "2d"
+					},
+					"reach": "1",
+					"parry": "0",
+					"strength": "10",
+					"usage": "Melee, power-field strike",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Staff"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Polearm"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Spear"
+							},
+							"modifier": -2
+						}
+					]
+				},
+				{
+					"id": "WUXIYZByVZvDqfHp-",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "6d",
+						"armor_divisor": 3
+					},
+					"accuracy": "5",
+					"range": "150/450",
+					"rate_of_fire": "2",
+					"shots": "100(1800)",
+					"bulk": "-4",
+					"recoil": "1",
+					"strength": "10",
+					"usage": "Ranged bolt",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		}
+	]
+}

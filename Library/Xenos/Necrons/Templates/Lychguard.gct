@@ -1,0 +1,349 @@
+{
+	"version": 5,
+	"id": "B7CNR1ORmqxWShJvt",
+	"notes": "A Lychguard: the personal, ritually-honour-bound bodyguard of a dynasty's nobility. Point math: Necron Physiology 134 + Body Lens: Lychguard 656 + Mind: Lychguard Honour -15 + skills 25 = 800 points. Stats: ST 22, DX 12, IQ 9, HT 15, HP 30, Will 9, Per 9, natural torso DR 90 (Weak Points 3, eye DR 45) — framework.md's Lychguard anchor line exactly. This lands at the top of framework.md's Astartes tier (550-800): a Lychguard is built to stand between its charge and anything short of a Custodian or a Warboss and simply not fall over.\n",
+	"traits": [
+		{
+			"id": "TelgP1s6QG4OuPKkT",
+			"name": "Necron Physiology",
+			"local_notes": "Lore: The Necron Physiology shared by every caste of the species: a body of living necrodermis animated by a soul drawn out of a long-dead Necrontyr and bound into the metal during the biotransference, self- repairing, near-unkillable in the field thanks to Reanimation Protocols, and untouched by disease, poison, pain or the warp's usual tricks. This trait is the baseline every body-type lens below (Warrior, Immortal, Deathmark, Lychguard, Flayed One, Noble, Cryptek) builds on top of; the lens supplies the caste's own attributes and necrodermis DR, and a separate mind package supplies its personality (or lack of one).\n\nDesign: 30 (Injury Tolerance) + 10 (Regeneration) + 43 (Reanimation Protocols) + 10 (No Pain Receptors) + 30 (Resistant to Metabolic Hazards) + 10 (Soulless) + 1 (Beneath a Daemon's Notice) + 0 (Machine-Body flavor) = 134 points of shared physiology before attributes, necrodermis DR, personality or skills. See each template for a full character built on top of this plus a body lens and a mind package.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Necrons"
+			],
+			"container_type": "ancestry",
+			"children": [
+				{
+					"id": "t5ogc0ND-L7cqRjzR",
+					"name": "Injury Tolerance (Unliving)",
+					"reference": "B60",
+					"local_notes": "Unliving wound multipliers (imp and pi++ x1, pi+ x1/2, pi x1/3, pi- x1/5); attacks to the vitals or groin are treated as attacks to the torso; does not bleed and is unaffected by blood-borne toxins.\n\nLore: A Necron body is living metal animated by a bound soul, not flesh wrapped around organs — there is nothing inside it to bleed or to target with a called shot to the \"vitals,\" and impaling or small- calibre fire that would drop a man does comparatively little to a chassis with no soft tissue to wound. Consistent across Codex background and both Rath's and Crowley's novels, which repeatedly show las-fire and small arms punching clean through a Necron with no effect beyond cosmetic damage until something heavier lands.\n\nDesign: Injury Tolerance (Unliving) (B60-61): Unliving 20 + No Blood 5 + No Vitals 5 = 30 points. No Brain/No Eyes/No Neck/No Head are deliberately left off: a Necron does have a reanimation-critical core the framework's Weak Points rule targets, and a called shot to the eye-slit is handled through the Necrodermis trait's notes below rather than by removing the eye as a target.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Necrons"
+					],
+					"modifiers": [
+						{
+							"id": "m76sqgT6V0hNeXFEv",
+							"name": "Unliving",
+							"reference": "B61",
+							"cost_adj": "20"
+						},
+						{
+							"id": "mUNPv6G0xLPD-cIJm",
+							"name": "No Blood",
+							"reference": "B61",
+							"cost_adj": "5"
+						},
+						{
+							"id": "mFPYI5wdjhFeXwd5z",
+							"name": "No Vitals",
+							"reference": "B61",
+							"cost_adj": "5"
+						}
+					]
+				},
+				{
+					"id": "tbNJySZqIAjqWuDko",
+					"name": "Regeneration (Necrodermis Self-Repair)",
+					"reference": "B80",
+					"local_notes": "Regeneration (Slow): recovers 1 HP per 12 hours even without rest or first aid, on top of Reanimation Protocols' active battlefield recovery.\n\nLore: Necrodermis is self-repairing: dents smooth out, gouges knit shut, and severed plating slowly reknits given time undisturbed, the same passive process both Codex background and Crowley's Twice-Dead King describe for a Necron left standing quietly after a fight. It is much slower than the active, on-the-spot recovery Reanimation Protocols below provides mid-battle.\n\nDesign: Regeneration (Slow) (B80, 10 points), the same tier and cost this project's Ork Warboss entry uses for \"recovers 1 HP per 12 hours even without rest,\" reused here for the analogous living-metal mending rather than biological healing.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Necrons"
+					],
+					"base_points": 10
+				},
+				{
+					"id": "tAUG3AzUp-vsDI8Wo",
+					"name": "Reanimation Protocols",
+					"reference": "B60",
+					"local_notes": "When damage reduces a Necron below -1xHP, it is not destroyed outright unless a single injury exceeds -5xHP (the normal instant- kill threshold still applies past that point). Otherwise its body drops, inert. At the end of each of the next three turns, roll HT: on a success the Necron reanimates then and there, rising with HP restored to half its full total (round down, minimum 1) and fully combat-capable. Three failures in a row, or any critical failure, and it phases out instead: teleported home to its tomb complex or the nearest active node in a flash of green light, removed from the fight but not destroyed, and available to return in a later scene at the GM's discretion. A Necron whose remains are physically destroyed past -5xHP, disintegrated, or whose reanimation matrix is separately wrecked (a GM-adjudicated called shot, per the fiction's \"destroy the core\" solution) does not come back at all.\n\nLore: Reanimation Protocols are the signature Necron trick that makes Necron armies so dangerous to fight to a standstill: a Warrior cut down one moment can be back on its feet the next, teleported away only when the protocols themselves fail. Codex background across editions describes exactly this two-stage process (reanimate in place, or phase out to a tomb on failure), and both Rath's The Infinite and the Divine and Crowley's Twice-Dead King show Necrons shrugging off \"kills\" that would end any other soldier, while also showing that a thoroughly wrecked or disintegrated Necron stays down for good.\n\nDesign: Built on Basic Set's Extra Life (B60, base 25 points: you do not permanently die when killed, but eventually return to bodily function). Modified since this fires every time the trigger condition is met over a whole campaign rather than a fixed number of one-shot lives (Recurring, eyeballed at +100%, the same kind of judged percentage this project's Reputation and Accessibility entries use rather than a strict RAW calculation), Delayed Return (-20%, the multi-turn HT-roll window instead of an instant pop-up) and Partial Restoration (-10%, half HP rather than full). Net +100-20-10 = +70%. 25 x 1.7 = 42.5, rounded up to 43 points.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Necrons"
+					],
+					"modifiers": [
+						{
+							"id": "m78UF5W2vF_7Z-pXB",
+							"name": "Recurring (triggers every time the condition is met, not once ever)",
+							"cost_adj": "+100%"
+						},
+						{
+							"id": "m6o2fh5k_Xj6Kdz3i",
+							"name": "Delayed Return (HT roll over several turns, not instant)",
+							"cost_adj": "-20%"
+						},
+						{
+							"id": "m_G1xPGaa7qzZCz4L",
+							"name": "Partial Restoration (returns at half HP, not full)",
+							"cost_adj": "-10%"
+						}
+					],
+					"base_points": 25
+				},
+				{
+					"id": "t9ELEMfnbH6DWFmn9",
+					"name": "No Pain Receptors",
+					"reference": "B59",
+					"local_notes": "House rule, priced at High Pain Threshold's rate but total: a Necron's necrodermis has no pain receptors to speak of, so it never takes a shock penalty or a reaction penalty from injury of any kind, not merely a reduced chance of one.\n\nLore: A Necron does not flinch, wince or slow down from injury short of outright incapacitation — it has nothing resembling a nervous system built to register pain in the first place. Consistently background across Codex material and Black Library's Necron fiction, which never shows a Necron reacting to a wound the way a living creature would.\n\nDesign: Priced as Basic Set High Pain Threshold (B59, 10 points) rather than inventing a new, uncosted \"total\" tier: the RAW trait already covers \"never affected by physical torture\" and removes shock penalties most of the time, and this project treats a Necron's complete lack of a pain sense as the same trait applied without RAW's residual chance of a shock penalty, the same kind of small honest extrapolation this project's Larraman's Organ entry makes for \"seals in seconds.\"",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Necrons"
+					],
+					"base_points": 10
+				},
+				{
+					"id": "t1kyZ2FO5UtIl6d5L",
+					"name": "Resistant to Metabolic Hazards (Necrodermis)",
+					"reference": "B81",
+					"local_notes": "Resistant (Metabolic Hazards), Immunity.\n\nLore: A body of living metal has no metabolism for disease, poison, radiation or asphyxiation to act on, and it does not age in any biological sense — a Necron's chassis wears out mechanically over deep time rather than growing old. Universal, unremarked-on Codex background.\n\nDesign: Resistant (Metabolic Hazards), Immunity tier (B80-81): base value 30 for the broad Metabolic Hazards category, x1 for full Immunity = 30 points, the same base-value component this project's Basic Set \"Machine\" reference build (see the Basic Set library's own Machine meta-trait) uses for the same reason.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Necrons"
+					],
+					"modifiers": [
+						{
+							"id": "muB7gfzg_Oimh-sdX",
+							"name": "Metabolic Hazards (disease, poison, radiation, suffocation, aging)",
+							"reference": "B80",
+							"cost_adj": "30"
+						},
+						{
+							"id": "mKdvmL4t-m6S1_uPr",
+							"name": "Immunity",
+							"reference": "B81",
+							"cost_adj": "x1"
+						}
+					]
+				},
+				{
+					"id": "tLjJfJaRXOaEvlNah",
+					"name": "Soulless",
+					"reference": "B80",
+					"local_notes": "Resistant (Mind Control, Possession and Emotion Control), Immunity.\n\nLore: Whatever a Necron's soul is now, it is bound into the necrodermis by Necrontyr technology rather than carried the way a living creature's is, and it registers as flatly uninteresting to the predators of the warp: daemons ignore Necrons in the fiction unless given a specific reason not to, and no depiction shows a Necron possessed, charmed or emotionally manipulated by psychic or daemonic means. This is consistent Codex background rather than a specific cited scene.\n\nDesign: Resistant, Immunity tier (B80-81: base rarity value x5), following this project's own Pariah Gene \"Immunity to Warp-Based Effects\" entry (data/imperium/psykers/warp.yaml) for the identical math: Mind Control/Possession/Emotion Control treated as an \"occasional\" hazard category (base 2) for a race this is definitional for, 2 x 5 = 10 points.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Xenos",
+						"Necrons"
+					],
+					"modifiers": [
+						{
+							"id": "mWwKFjMfDw9gJvhgu",
+							"name": "Mind Control, Possession and Emotion Control simply do not work",
+							"reference": "B81",
+							"cost_adj": "10"
+						}
+					]
+				},
+				{
+					"id": "tnEYgJD0mjXbXuA0d",
+					"name": "Beneath a Daemon's Notice",
+					"local_notes": "Roleplaying/GM-adjudication flag: daemons default to ignoring a Necron target unless it is actively fighting them or blocking something they want.\n\nLore: A soulless construct is not worth a daemon's attention the way a mortal's soul is: Codex background and both Rath's and Crowley's novels play Necrons and daemons as largely talking past each other or fighting for territory rather than as predator and prey the way daemons treat the living.\n\nDesign: Perk (B21, 1 point): a narrow, GM-adjudicated targeting-priority flag rather than a numeric combat bonus, since \"usually ignored unless it's in the way\" is not the kind of reliable effect Basic Set prices as a full reaction bonus.",
+					"tags": [
+						"Perk",
+						"Xenos",
+						"Necrons"
+					],
+					"base_points": 1
+				},
+				{
+					"id": "tCG25O41uzKPLXZJx",
+					"name": "Necrodermis Machine-Body",
+					"local_notes": "0-point lore flag, the same convention this project's Ork Fungal Physiology entry uses: a Necron does not need to breathe, eat, drink or sleep, and its chassis wears out over millennia rather than ageing — all inherent to being a machine body under GURPS's own Machine meta-trait guidance (see the Basic Set library's Machine.gct for the same 0-point treatment of these same facts), not separately purchased advantages.\n\nLore: A Necron does not need food, water, air or rest, and the Tomb Worlds' sixty-million-year sleep is exactly this: a body that simply does not wear down the way a living one does, left inert rather than fed or rested.\n\nDesign: 0 points, documentation only; see notes for why this is not a priced Doesn't Breathe/Doesn't Eat or Drink purchase.",
+					"tags": [
+						"Xenos",
+						"Necrons"
+					],
+					"base_points": 0
+				}
+			]
+		},
+		{
+			"id": "TMvdA8qrHXCOcdJoz",
+			"name": "Body Lens: Lychguard",
+			"local_notes": "Lore: Lychguard are the personal bodyguards of a dynasty's nobility -- hand-picked, heavily armoured, and sworn to interpose themselves between their charge and any threat with an honour that borders on ritual. Codex background and Crowley's Twice-Dead King both treat Lychguard as visibly more \"present\" and dutiful than a rank-and-file Warrior, without the full personality of a Lord.\n\nDesign: 206 (Attribute Modifiers) + 450 (Necrodermis DR 90, 5/level) = 656 points, added to Necron Physiology's 134 for 790 points of physiology and body alone. See the Lychguard template.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Necrons"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "t02v-y2o0NCkSyPuQ",
+					"name": "Attribute Modifiers (Lychguard)",
+					"local_notes": "Design: Framework target: ST 22, DX 12, IQ 9, HT 15, HP 30. Increased ST +12 (B14, 10/level, 120) for ST 22 -- the heaviest rank-and-file chassis outside a Lord's own guard. Increased DX +2 (B15, 20/ level, 40) for DX 12. Decreased IQ -1 (-20) for IQ 9, the same modest tactical sense as a Deathmark. Increased HT +5 (50) for HT 15. Extra Hit Points +8 (16) on top of the ST-22 base of 22, for HP 30. 120+40-20+50+16 = 206.",
+					"tags": [
+						"Physical"
+					],
+					"base_points": 206,
+					"features": [
+						{
+							"type": "attribute_bonus",
+							"attribute": "st",
+							"amount": 12
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "dx",
+							"amount": 2
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "ht",
+							"amount": 5
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "hp",
+							"amount": 8
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "iq",
+							"amount": -1
+						}
+					]
+				},
+				{
+					"id": "tYftuB44ImBEu_nOO",
+					"name": "Necrodermis (Lychguard)",
+					"reference": "B46",
+					"local_notes": "DR 90, all locations. Weak Points 3 (per framework.md's \"nobles and Lychguard\" figure): on a hit that fails to penetrate, roll 3d; 3 or less halves DR (45). Eye-slit optics run at DR 45 rather than 90.\n\nLore: Necrodermis is a Necron's body and its armour at once: a skin of near-indestructible living metal with no separate suit to strip away. Universal across Codex background and every piece of Black Library Necron fiction.\n\nDesign: Damage Resistance (B46, 5/level, all locations): natural DR bought directly on the body, per framework.md's explicit instruction that necrodermis is a character trait, not equipment. Each body-type lens overrides `levels`/`dr` to its own figure from framework.md's Necron anchor table; see that lens's own copy of this trait for its point cost.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Necrons"
+					],
+					"points_per_level": 5,
+					"can_level": true,
+					"levels": 90,
+					"features": [
+						{
+							"type": "dr_bonus",
+							"locations": [
+								"all"
+							],
+							"amount": 90
+						}
+					]
+				}
+			]
+		},
+		{
+			"id": "TPn9JkTJ2Gh4W0Gkr",
+			"name": "Mind: Lychguard Honour",
+			"local_notes": "Lore: Lychguard kept enough of themselves to serve with real, ritualised devotion, without the full independent personality of a noble.\n\nDesign: -10 (Code of Honor) - 5 (Sense of Duty) = -15 points.",
+			"tags": [
+				"Disadvantage",
+				"Mental",
+				"Xenos",
+				"Necrons"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "trUzJlZFMx3eJEF6l",
+					"name": "Code of Honor (Necron Nobility)",
+					"reference": "B127",
+					"local_notes": "Never abandon your charge; never break formation without leave; settle any grudge against another Lychguard through ritual challenge, not the battlefield.\n\nLore: Lychguard fight and die by an ancient bodyguard's code as old as the dynasties themselves -- Crowley's Twice-Dead King plays this as genuine, not decorative.\n\nDesign: Basic Set Code of Honor (Soldier's)-style build (B127), -10 points, reflavored to the Necron nobility's own ancient code.",
+					"tags": [
+						"Disadvantage",
+						"Mental",
+						"Xenos",
+						"Necrons"
+					],
+					"base_points": -10
+				},
+				{
+					"id": "tPe8hwSiDLxbCIzmH",
+					"name": "Sense of Duty (Their Charge)",
+					"reference": "B153",
+					"local_notes": "Single individual -- the specific Lord or Overlord this Lychguard is bound to protect.\n\nLore: A Lychguard's loyalty is bound to one noble, not the dynasty in the abstract.\n\nDesign: Basic Set Sense of Duty (B153), single individual, -5 points.",
+					"tags": [
+						"Disadvantage",
+						"Mental",
+						"Xenos",
+						"Necrons"
+					],
+					"base_points": -5
+				}
+			]
+		}
+	],
+	"skills": [
+		{
+			"id": "s5MWcOhvHxkExhXAb",
+			"name": "Two-Handed Sword",
+			"local_notes": "Lore: A Lychguard's warscythe is a two-handed power-field blade, wielded with real skill rather than a Warrior's blunt drilling.\n\nDesign: Two-Handed Sword (DX/A). DX+4 (16) for 16 points, Average.",
+			"tags": [
+				"Xenos",
+				"Necrons"
+			],
+			"specialization": "Warscythe",
+			"difficulty": "dx/a",
+			"points": 16
+		},
+		{
+			"id": "sFPLcPdTBr1RH03Bj",
+			"name": "Shield",
+			"local_notes": "Lore: A Lychguard equipped with a dispersion shield and hyperphase sword instead of a warscythe is drilled just as hard with it.\n\nDesign: Shield (DX/E). DX+2 (14) for 4 points, Easy.",
+			"tags": [
+				"Xenos",
+				"Necrons"
+			],
+			"difficulty": "dx/e",
+			"points": 4
+		},
+		{
+			"id": "sal-k2qH1phC5kPOA",
+			"name": "Brawling",
+			"local_notes": "Lore: A last-resort fallback if a Lychguard's weapon is somehow lost.\n\nDesign: DX+1 (13) for 2 points, Easy.",
+			"tags": [
+				"Xenos",
+				"Necrons"
+			],
+			"difficulty": "dx/e",
+			"points": 2
+		},
+		{
+			"id": "sjb6SFGpNg9JAoFnR",
+			"name": "Tactics",
+			"local_notes": "Lore: Enough grasp of a fight's shape to place itself correctly around its charge.\n\nDesign: IQ-1 (8) for 2 points, Hard.",
+			"tags": [
+				"Xenos",
+				"Necrons"
+			],
+			"difficulty": "iq/h",
+			"points": 2
+		},
+		{
+			"id": "stNyEmWQJx-tk8OiV",
+			"name": "Heraldry",
+			"local_notes": "Lore: Lychguard know the ritual forms, ranks and grudges of the nobility they guard.\n\nDesign: IQ+0 (9) for 1 point, Average.",
+			"tags": [
+				"Xenos",
+				"Necrons"
+			],
+			"difficulty": "iq/a",
+			"points": 1
+		}
+	],
+	"equipment": []
+}

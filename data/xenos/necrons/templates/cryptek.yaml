@@ -1,0 +1,72 @@
+kind: template
+output: Xenos/Necrons/Templates/Cryptek.gct
+notes: >
+  A Cryptek: a dynasty's technosorcerer, master of half-understood pre-
+  biotransference science. Point math: Necron Physiology 134 + Body Lens:
+  Cryptek 592 + Mind: Cryptek Genius -15 + skills 32 = 743 points (all
+  four Discipline lenses below start disabled and add nothing to this
+  total). Stats: ST 18, DX 12, IQ 16, HT 14, HP 24, Will 16, Per 16,
+  natural torso DR 60 (Weak Points 3, eye DR 30) — framework.md's Cryptek
+  anchor line exactly. This lands within framework.md's Astartes tier
+  (550-800): a Cryptek is not built for raw combat durability the way a
+  noble or Lychguard is, trading some of that DR for the sharpest mind
+  among the Necron castes.
+
+  Enable exactly one Discipline lens below to specialise this Cryptek
+  (Technomancy, Plasmancy, Psychomancy or Chronomancy); each adds its own
+  points to the total when turned on. A Cryptek with no discipline
+  enabled is a generalist archaeotech scholar without a signature
+  ability yet.
+traits:
+  - include: "xenos/necrons/traits.yaml#Necron Physiology"
+  - include: "xenos/necrons/traits.yaml#Body Lens: Cryptek"
+  - include: "xenos/necrons/traits.yaml#Mind: Cryptek Genius"
+  - include: "xenos/necrons/traits.yaml#Cryptek Discipline: Technomancy"
+    disabled: true
+  - include: "xenos/necrons/traits.yaml#Cryptek Discipline: Plasmancy"
+    disabled: true
+  - include: "xenos/necrons/traits.yaml#Cryptek Discipline: Psychomancy"
+    disabled: true
+  - include: "xenos/necrons/traits.yaml#Cryptek Discipline: Chronomancy"
+    disabled: true
+skills:
+  - name: Engineer
+    spec: (Necrodermis)
+    diff: IQ/H
+    points: 12
+    tags: [Xenos, Necrons]
+    lore: A Cryptek's core discipline is understanding and reshaping living metal itself.
+    design: IQ+1 (17) for 12 points, Hard.
+  - name: Physics
+    spec: (Necrontyr Archaeophysics)
+    diff: IQ/H
+    points: 8
+    tags: [Xenos, Necrons]
+    lore: Half-understood pre-biotransference science that everyone else calls sorcery.
+    design: IQ+0 (16) for 8 points, Hard.
+  - name: Hidden Lore
+    spec: (Necrontyr Science)
+    diff: IQ/A
+    points: 4
+    tags: [Xenos, Necrons]
+    lore: What survives of the dynasty's archives and a Cryptek's own long research.
+    design: IQ+1 (17) for 4 points, Average.
+  - name: Staff of Light
+    diff: DX/A
+    points: 4
+    tags: [Xenos, Necrons]
+    lore: A Cryptek's own staff of light doubles as a melee weapon and a ranged one; treated as a single combined skill for this technique-adjacent weapon.
+    design: Broadsword-family melee skill (DX/A) covering the staff's melee use. DX+1 (13) for 4 points, Average.
+  - name: Beam Weapons
+    spec: Rifle
+    diff: DX/E
+    points: 2
+    tags: [Xenos, Necrons]
+    lore: The staff of light's ranged discharge, treated as a beam weapon.
+    design: Beam Weapons (Rifle) (DX/E). DX+1 (13) for 2 points, Easy.
+  - name: Research
+    diff: IQ/A
+    points: 2
+    tags: [Xenos, Necrons]
+    lore: Digging a working principle out of a ruined archive or a captured relic.
+    design: IQ+0 (16) for 2 points, Average.
