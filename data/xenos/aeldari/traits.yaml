@@ -1,0 +1,1212 @@
+kind: traits
+output: Xenos/Aeldari/Traits/Aeldari Physiology.adq
+items:
+  # ------------------------------------------------------------------ physiology
+  # Aeldari biology, culture and psychic sensitivity, each its own trait so a
+  # GM can add, drop or re-tune a piece the way the Astartes gene-seed file
+  # and the Ork Physiology file let a Chapter or Klan differ from baseline.
+  # Calibrated to framework.md's "Xenos > Aeldari" anchor table (Guardian,
+  # Aspect Warrior, Exarch, Farseer) and its Aeldari gear notes. Sources:
+  # Codex: Craftworlds/Aeldari background across editions; Gav Thorpe's Path
+  # of the Eldar trilogy (Path of the Warrior, Path of the Seer, Path of the
+  # Outcast) for the Path mechanic and Ranger/Outcast material specifically;
+  # Dark Heresy/Rogue Trader/Deathwatch Aeldari material used per
+  # framework.md's source order for relative calibration only, never for
+  # absolute numbers.
+
+  - &attribute_modifiers
+    name: Attribute Modifiers
+    points: 125
+    attributes: {dx: 4, iq: 2, basic_speed: 0.25}
+    tags: [Physical]
+    design: >
+      Framework target (Guardian anchor line, the ancestry baseline every
+      other Aeldari template builds on): ST 10, DX 14, IQ 12, HT 10, HP 10.
+      Increased DX +4 (B15, 20/level, 80) for DX 14 — "faster and more
+      precise than any baseline human," matching the anchor table's own
+      figure without touching ST or HT, which stay human-baseline: Aeldari
+      are quick and precise, not physically overwhelming. Increased IQ +2
+      (B16, 20/level, 40) for IQ 12 — a subtler, more perceptive mind than a
+      human's on average, per Codex background's consistent "the Aeldari are
+      wiser and more perceptive than short-lived Humanity" framing. Increased
+      Basic Speed +0.25 (B17, 5 points per 0.25 level, 5) for reflexes a
+      shade faster even than DX 14 alone implies — the same design choice
+      this project's Astartes Attribute Modifiers makes for "faster reflexes
+      than baseline humans" without inflating every DX skill. 80+40+5 = 125.
+      Will and Per are left untouched here (both track IQ 12 with no
+      separate bonus): the Guardian anchor's own Per 13 and Aspect Warrior's
+      Will 13 come from Keen Battle-Sense and Aspect Training below, not
+      from this universal package, because a Farseer's own anchor (Per 15
+      exactly equal to IQ 15) shows the extra Per point is a warrior's
+      battlefield habit, not a species-wide trait — baking it in here would
+      overshoot the Farseer line once her own IQ is bought up.
+
+  - &acute_senses
+    name: Acute Senses
+    container: meta_trait
+    children:
+      - name: Acute Vision
+        per_level: 2
+        levels: 2
+        ref: B35
+      - name: Acute Hearing
+        per_level: 2
+        levels: 2
+        ref: B35
+    tags: [Advantage, Physical, Xenos, Aeldari]
+    lore: >
+      Aeldari sight and hearing are famously sharper than a human's — able to
+      read the wind off a craftworld's wraithbone spires, or track a single
+      voice through a warhost's roar. Consistently depicted across Codex
+      background and the Path trilogy (a Ranger's eyesight in particular is
+      played as near-supernatural).
+    design: >
+      Acute Vision 2 (B35, 2/level, 4) plus Acute Hearing 2 (B35, 2/level,
+      4) = 8 points, the same math this project's Astartes Occulobe/Lyman's
+      Ear entries use for the "raw acuity" half of their build, without the
+      Protected Sense half (Aeldari have no fused eye/ear armour organ to
+      shrug off flash and concussion the way an Astartes implant does).
+
+  - &aeldari_grace
+    name: Aeldari Grace
+    points: 4
+    ref: B21
+    tags: [Advantage, Physical, Xenos, Aeldari]
+    notes: Appearance (Attractive).
+    lore: >
+      Aeldari are consistently described, in the fiction and in their own
+      art, as slender, fine-boned and unnervingly graceful even to other
+      Aeldari — a species that finds its own dying beauty worth mourning.
+    design: Basic Set Appearance, Attractive tier (B21), 4 points.
+
+  - &slender_frame
+    name: Slender Frame
+    points: 0
+    tags: [Xenos, Aeldari]
+    lore: >
+      An Aeldari body is light and fine-boned next to a human's, let alone
+      an Ork's or an Astartes': speed and precision over mass. Codex
+      background and the Path trilogy both play Aeldari as easy to
+      underestimate physically and easy to actually hurt once a fight turns
+      physical.
+    design: >
+      0-point lore flag: the mechanical consequence is what's absent, not
+      present — this package buys no Extra Hit Points and no Damage
+      Resistance the way the Astartes and Ork physiology files do, so
+      Aeldari HP tracks bare ST with no bonus. This entry documents why,
+      rather than pricing anything itself.
+
+  - &extended_lifespan
+    name: Extended Lifespan
+    points: 4
+    per_level: 2
+    levels: 2
+    ref: B17
+    tags: [Advantage, Physical, Xenos, Aeldari]
+    notes: "x100 natural lifespan (roughly 8,000 years before natural death)."
+    lore: >
+      Aeldari live for millennia baseline, and the oldest craftworld seers
+      and named heroes (Eldrad Ulthran chief among them) are shown
+      outlasting even that by a wide margin — treated here as an
+      exceptional, GM-adjudicated extension on top of this baseline rather
+      than a fixed higher purchase every Aeldari makes.
+    design: Basic Set Extended Lifespan 2 (B17, 2/level, x100 natural lifespan), 4 points.
+
+  - &psychic_sensitivity
+    name: Aeldari Psychic Sensitivity
+    points: 10
+    tags: [Advantage, Mental, Xenos, Aeldari, Psyker]
+    lore: >
+      Every Aeldari is born with a latent thread into the warp — a legacy of
+      Isha and Cegorach's blessing, or of the psychic shock of the Fall,
+      depending which telling you credit — where among humans the gift is a
+      vanishingly rare mutation. Most Aeldari never develop it past a
+      constant, low background hum of unease near the warp; Warlocks and
+      Farseers are the ones who walk toward it instead of away.
+    design: >
+      This project's Aeldari analogue of Imperium/Psykers and the Warp.adq's
+      Unusual Background (Latent Psychic Potential): identical cost (10
+      points, B261) and identical function (it is the prerequisite for Aeldari
+      Psyker (Talent), Aeldari Warp Empowerment, and every Warp Sorcery-tagged
+      Rune below), but built as its own entry rather than reused verbatim
+      because the Imperium entry's own lore text is explicitly a rare human
+      mutation — false for a species where the gift is universal and latent.
+      Bought once as part of the Aeldari Physiology package below, unlike the
+      Imperium version, which is an optional purchase most humans never make.
+
+  - &spirit_stone
+    name: Spirit Stone
+    points: 1
+    tags: [Advantage, Mental, Xenos, Aeldari, Psyker, Perk]
+    conditional:
+      - situation: "on the Will roll to resist Perils of the Warp"
+        amount: 1
+    notes: >
+      Worn on the breast from childhood. At its bearer's death, an
+      attending psyker (a Warlock, Farseer, or another spirit-stone-bearer)
+      must draw the escaping soul into the stone within moments, or it is
+      lost to Slaanesh (see Slaanesh's Hunger, below) — a rite, not an
+      automatic save, and one that can fail on a battlefield in chaos or far
+      from help.
+    lore: >
+      Every Craftworld Aeldari wears a spirit stone: a small, wraithbone-
+      cored gem that anchors the soul against the warp and, at death, can
+      catch it before Slaanesh does — from which it may later be interred in
+      a craftworld's Infinity Circuit to live on, disembodied, among its
+      ancestors. Consistent, foundational Aeldari background across every
+      edition of Codex: Craftworlds and the Path trilogy.
+    design: >
+      A 1-point Perk (B21): the stone's real narrative weight — catching a
+      soul at death — is a rite the GM adjudicates in the moment (see
+      Slaanesh's Hunger below for exactly what it's warding against), not a
+      combat-turn mechanic worth a bigger purchase. The one live-play effect
+      it's worth pricing is a small, steadying +1 to the wearer's own Will
+      roll against Perils of the Warp (Aeldari Runes) — the stone's ward
+      dampens backlash the same way it will one day catch the soul itself.
+
+  - &emotional_intensity
+    name: Emotional Intensity
+    points: -10
+    cr: 12
+    tags: [Disadvantage, Mental, Xenos, Aeldari]
+    notes: >
+      As Bad Temper (B125), but the triggering emotion can be grief, joy,
+      desire or artistic rapture as easily as anger — whatever the moment's
+      strongest feeling is, not anger specifically. On a failed self-control
+      roll the Aeldari acts on the emotion, not on reason, for the rest of
+      the scene.
+    lore: >
+      Aeldari feel everything more sharply than a human does — joy, grief,
+      desire, fury — and the fiction is explicit that this, not any
+      weakness of will, is why the Path exists at all: without the
+      discipline of devoting centuries to one narrow art at a time, an
+      Aeldari mind burns out or turns inward on itself. Path of the Warrior
+      and Path of the Seer both open on exactly this problem.
+    design: >
+      Built as Bad Temper (B125, self-control 12, -10 points) with a
+      broadened trigger, the same "as Bloodlust, but..." reflavoring this
+      project's Chapter Gene-Seed: Blood Angels entry uses for Red Thirst:
+      same cost and self-control math, different triggering emotion.
+
+  - &arrogance
+    name: Arrogance Towards Younger Races
+    points: -5
+    ref: B22
+    tags: [Disadvantage, Mental, Xenos, Aeldari]
+    notes: "Odious Personal Habit: casual condescension toward humans, Orks, and other 'younger' races."
+    lore: >
+      An Aeldari watching over the ruins of a civilization older than
+      humanity's entire recorded history struggles not to be condescending
+      about it — Codex background and the Path trilogy alike play this as a
+      near-universal Aeldari failing, not a villain trait: even sympathetic
+      Aeldari protagonists talk down to "mon-keigh" without quite noticing
+      they're doing it.
+    design: >
+      Odious Personal Habit (B22), minor tier, -5 points: a real social cost
+      (reaction penalties from anyone who notices) but not the deliberate
+      cruelty a full Intolerance or Bully disadvantage would represent.
+
+  - &slaaneshs_hunger
+    name: "Slaanesh's Hunger"
+    points: -15
+    ref: B160
+    tags: [Disadvantage, Mental, Xenos, Aeldari]
+    notes: >
+      As Weirdness Magnet, but the "weirdness" is specifically Chaos and
+      warp phenomena drawn to an Aeldari soul's exceptional flavour: Chaos
+      cultists, daemons (Slaaneshi ones above all), and warp-touched
+      omens/hauntings single an Aeldari out over other bystanders, at the
+      GM's discretion, roughly as often as Weirdness Magnet's own frequency
+      guidance suggests.
+
+      This is also the mechanical flag for the larger, unpriced stake behind
+      it: an Aeldari who dies with no spirit stone drawing their soul clear
+      (see Spirit Stone, above) is devoured by Slaanesh, GM's call on the
+      exact fate — endless torment, absorption into the Dark Prince's being,
+      or worse. Like this project's Black Rage and Wulfen Curse entries,
+      this fate is a narrative endpoint the GM adjudicates when it's
+      dramatically earned, not a disadvantage bought and rolled against at
+      chargen. A functioning Spirit Stone worn at time of death, and
+      recovered promptly, avoids it outright.
+    lore: >
+      Slaanesh, the youngest Chaos god, was born screaming from the psychic
+      shockwave of the Aeldari's own Fall, and has hungered for Aeldari souls
+      above all others' ever since — this is one of the single most
+      consistent, foundational beats of Aeldari background across every
+      edition of Codex: Craftworlds and Codex: Drukhari, and the entire
+      reason spirit stones and the Infinity Circuit exist.
+    design: >
+      Weirdness Magnet (B160, -15 points) reused for its "supernatural
+      trouble finds you more often" mechanic, standing in for the fact that
+      an Aeldari's soul draws Chaos's attention the way a bright light draws
+      moths. The GM-adjudicated death fate it flags is deliberately not
+      separately priced, per the framework's own guidance to build this
+      honestly rather than as a combat-relevant stat; the Spirit Stone above
+      is what actually buys it off.
+
+  - &keen_battle_sense
+    name: Keen Battle-Sense
+    points: 5
+    attributes: {per: 1}
+    tags: [Advantage, Physical, Xenos, Aeldari]
+    lore: >
+      A Guardian's militia drills, an Aspect Warrior's shrine training, and
+      an Exarch's centuries in the same battle-role all sharpen the same
+      thing: a heightened, ever-present awareness of the battlefield around
+      them. A Farseer's gift runs a different direction entirely (inward and
+      forward, not outward), which is why this is a warrior's-path trait,
+      not part of the universal Aeldari package.
+    design: >
+      Increased Perception +1 (B16, 5 points/level): the Guardian anchor's
+      Per 13 over IQ 12, and the Aspect Warrior/Exarch anchors' matching
+      one-point gap over their own IQ, all come from this single trait
+      rather than a bonus baked into Attribute Modifiers, so it can be left
+      out of the Farseer line (whose own anchor is Per == IQ exactly) without
+      distorting that template's math.
+
+  - name: Aeldari Physiology
+    container: ancestry
+    tags: [Advantage, Physical, Xenos, Aeldari]
+    children:
+      - *attribute_modifiers
+      - *acute_senses
+      - *aeldari_grace
+      - *slender_frame
+      - *extended_lifespan
+      - *psychic_sensitivity
+      - *spirit_stone
+      - *emotional_intensity
+      - *arrogance
+      - *slaaneshs_hunger
+    lore: >
+      The Aeldari: an ancient, dying, near-immortal species, slender and
+      swift, all born with a latent thread into the warp and all hunted, in
+      the end, by the god their own species' fall gave birth to. This trait
+      is the baseline shared by every Craftworld Aeldari; Path lenses and
+      Aspect lenses below layer specialization on top of it, exactly as the
+      Astartes gene-seed file's Chapter lenses and the Ork Physiology file's
+      Klan lenses do for their own species.
+    design: >
+      125 (Attribute Modifiers) + 8 (Acute Senses) + 4 (Aeldari Grace) + 0
+      (Slender Frame) + 4 (Extended Lifespan) + 10 (Psychic Sensitivity) + 1
+      (Spirit Stone) - 10 (Emotional Intensity) - 5 (Arrogance) - 15
+      (Slaanesh's Hunger) = 122 points of physiology alone, before Path,
+      Aspect, or skills — landing ST 10, DX 14, IQ 12, HT 10, HP 10, Will 12,
+      Per 12 (Per 13 once Keen Battle-Sense is added by a warrior-path
+      template). See the Guardian template for the first full character
+      built on this package.
+
+  # ---------------------------------------------------------------- the Path
+  # An Aeldari devotes themselves fully to one Path at a time; these are
+  # small, largely-flavour lenses (matching the Ork Klan lens pattern) that a
+  # template includes to mark which Path its character currently walks. The
+  # Guardian template includes all four, disabled, exactly as the Ork Boy
+  # template offers Klan lenses: a citizen militia member hasn't yet
+  # committed and may enable one to flavor a specific Guardian.
+
+  - name: "Path of the Warrior"
+    container: group
+    disabled: true
+    tags: [Xenos, Aeldari]
+    children:
+      - name: Shrine Discipline
+        points: 1
+        tags: [Perk, Xenos, Aeldari]
+        skill_bonuses: {Tactics: 1}
+        design: Perk (B9), +1 to Tactics.
+        lore: Years spent drilling under an Exarch's eye instil a real, if narrow, tactical sense.
+    lore: >
+      The path of battle: years, sometimes decades, spent living and
+      training inside an Aspect Shrine, honing one narrow discipline of war
+      to a razor's edge before setting the mantle down and walking away —
+      unless the Path claims them permanently (see Lost to the Path, below).
+    design: Net 0 points, per-Path flavour lens, matching the Ork Klan lens pattern.
+
+  - name: "Path of the Seer"
+    container: group
+    disabled: true
+    tags: [Xenos, Aeldari]
+    children:
+      - name: Seer's Study
+        points: 1
+        tags: [Perk, Xenos, Aeldari]
+        skill_bonuses: {"Hidden Lore (the Warp)": 1}
+        design: Perk (B9), +1 to Hidden Lore (the Warp).
+        lore: Formal study of the immaterium under a craftworld's Seer Council.
+      - name: Cryptic Speech
+        points: -1
+        tags: [Quirk, Xenos, Aeldari]
+        design: Quirk (B9), roleplaying flag only.
+        lore: A Seer in training already speaks more in omen and riddle than plain sense.
+    lore: >
+      The path of prophecy: study under a craftworld's Seer Council, walking
+      the strands of possible futures under supervision before either
+      setting the gift aside or — for the rare few strong and disciplined
+      enough — being claimed by it entirely as a Warlock or Farseer.
+    design: Net 0 points, per-Path flavour lens, matching the Ork Klan lens pattern.
+
+  - name: "Path of the Outcast"
+    container: group
+    disabled: true
+    tags: [Xenos, Aeldari]
+    children:
+      - name: Wanderer's Eye
+        points: 1
+        tags: [Perk, Xenos, Aeldari]
+        skill_bonuses: {Survival: 1}
+        design: Perk (B9), +1 to Survival.
+        lore: Time spent living outside a craftworld's shielded webway sharpens practical survival sense fast.
+      - name: Unblooded Silence
+        points: 1
+        tags: [Perk, Xenos, Aeldari]
+        skill_bonuses: {Stealth: 1}
+        design: Perk (B9), +1 to Stealth.
+        lore: A Ranger or Corsair's continued survival depends on not being seen first.
+      - name: Social Stigma (Outcast)
+        points: -5
+        ref: B155
+        tags: [Disadvantage, Social, Xenos, Aeldari]
+        design: Basic Set Social Stigma tier (B155), -5 points, scoped to Craftworld society.
+        lore: >
+          Craftworld Aeldari who never left the webway regard those who did —
+          Rangers and Corsairs both — with a mix of pity and suspicion: an
+          Outcast has stepped outside the Path structure that keeps
+          Emotional Intensity in check, and it shows.
+    lore: >
+      The path outside the Path: those who leave their craftworld's shielded
+      webway entirely, for a season or for the rest of their life, and walk
+      the wider galaxy as Rangers, Corsairs, or simple wanderers — trading
+      a Craftworld's protection and society for a freedom most Aeldari find
+      unsettling to watch. Gav Thorpe's Path of the Outcast is this project's
+      primary source for the mechanic.
+    design: >
+      Net -3 points (1+1-5), the one Path lens with an honest net cost: it
+      trades a real social safety net for real independence, unlike the
+      other three Paths' pure flavour-lens neutrality.
+
+  - name: "Path of the Artisan"
+    container: group
+    disabled: true
+    tags: [Xenos, Aeldari]
+    children:
+      - name: Craftworker's Hand
+        points: 1
+        tags: [Perk, Xenos, Aeldari]
+        skill_bonuses: {Artist: 1}
+        design: Perk (B9), +1 to Artist.
+        lore: A craftworld runs on its artisans' work as much as its warriors' — wraithbone shaping, weaving, sculpture, music.
+    lore: >
+      The path of making: the quieter majority of Aeldari lives, spent
+      shaping wraithbone, weaving, composing, or otherwise building and
+      maintaining the culture the Warrior and Seer paths exist to protect.
+      Rarely a PC's own Path, but the backdrop every Guardian and Aspect
+      Warrior is ultimately defending.
+    design: Net 0 points, per-Path flavour lens, matching the Ork Klan lens pattern.
+
+  - name: "Lost to the Path"
+    points: -15
+    ref: B151
+    tags: [Disadvantage, Mental, Xenos, Aeldari]
+    notes: >
+      As Fanaticism (single-minded devotion to one specific cause — here,
+      the Path itself), but the "cause" is a role rather than a belief: an
+      Exarch cannot set the Warrior mantle down and walk away as an ordinary
+      Aspect Warrior does when their years in the shrine end, and a Farseer
+      cannot un-see the futures they have learned to read. Apply to Exarch
+      and Farseer characters specifically.
+    lore: >
+      Both Codex background and the Path trilogy are explicit that some
+      Aeldari, having walked one Path far enough, are lost to it permanently
+      — an Exarch fuses, in a very real sense, with their shrine's war
+      spirit and the ancient armour they don to lead it; a Farseer's mind
+      is so given over to prophecy that an ordinary life is no longer
+      available to them. It is treated as an honour and a tragedy in equal
+      measure, never a punishment.
+    design: >
+      Fanaticism (B151, -15 points): a psychological grip strong enough that
+      the character will not, and increasingly cannot, walk away from the
+      Path's demands, exactly Fanaticism's own definition, redirected from a
+      belief system onto the Path itself.
+
+  # -------------------------------------------------------------- Aspect Training
+
+  - &aspect_training
+    name: Aspect Training
+    container: meta_trait
+    tags: [Advantage, Physical, Xenos, Aeldari]
+    children:
+      - name: Attribute Modifiers (Aspect Training)
+        points: 65
+        attributes: {st: 1, dx: 2, ht: 1, will: 1}
+        tags: [Physical]
+        design: >
+          Framework target over the Aeldari Physiology + Keen Battle-Sense
+          baseline: ST 11, DX 16, IQ 12 (unchanged), HT 11, Will 13, Per 13
+          (unchanged, already delivered by Keen Battle-Sense at this IQ).
+          Increased ST +1 (B14, 10/level, 10) for ST 11 — enough muscle to
+          wear Aspect armour and carry a fusion gun or exarch blade, nowhere
+          near an Astartes' bulk. Increased DX +2 (B15, 20/level, 40) for DX
+          16, matching the anchor table's own note that this is exactly
+          where centuries on one Path bring an Aspect Warrior's precision
+          level with a Space Marine's own DX. Increased HT +1 (B15,
+          10/level, 10) for HT 11. Increased Will +1 (B16, 5/level, 5) for
+          Will 13, the discipline of the shrine holding Emotional Intensity
+          firmly in check. 10+40+10+5 = 65 points.
+      - name: Enhanced Dodge
+        per_level: 15
+        levels: 1
+        ref: B52
+        tags: [Advantage, Physical, Xenos, Aeldari]
+        lore: >
+          Framework.md calls this out by name: superior Aeldari reflexes
+          translate into an Enhanced Dodge for Aspect Warriors specifically,
+          on top of Guardian-tier speed — a Dire Avenger or Howling Banshee
+          weaving through incoming fire in a way no unaugmented human,
+          Guardsman or Guardian, quite manages.
+        design: Enhanced Dodge 1 (B52, 15 points/level).
+    lore: >
+      What a Shrine actually does to a Guardian who commits to the Path of
+      the Warrior: years, sometimes decades, of drilling one narrow art of
+      war until body and reflex both match its demands — matching
+      framework.md's own note that this is exactly what closes the gap to a
+      Space Marine's DX.
+    design: >
+      65 (Attribute Modifiers) + 15 (Enhanced Dodge 1) = 80 points, added to
+      the Aeldari Physiology + Keen Battle-Sense baseline (122 + 5 = 127) for
+      207 points of physiology before skills. See the Aspect Warrior template
+      for the full character, and Exarch's Mastery below for the further
+      step up to Exarch.
+
+  - name: "Exarch's Mastery"
+    container: meta_trait
+    tags: [Advantage, Physical, Xenos, Aeldari]
+    children:
+      - name: Attribute Modifiers (Exarch)
+        points: 85
+        attributes: {st: 1, dx: 2, iq: 1, ht: 1, will: 1}
+        tags: [Physical]
+        design: >
+          Framework target over the Aspect Warrior + Keen Battle-Sense
+          baseline: ST 12, DX 18, IQ 13, HT 12, Per 14 (free: IQ 13 + Keen
+          Battle-Sense's existing +1), Will 15. Increased ST +1 (B14,
+          10/level, 10) for ST 12. Increased DX +2 (B15, 20/level, 40) for DX
+          18 — the anchor table's own figure for the single deadliest duelist
+          tier this project has built. Increased IQ +1 (B16, 20/level, 20)
+          for IQ 13: centuries of total focus sharpen more than reflexes.
+          Increased HT +1 (B15, 10/level, 10) for HT 12. Increased Will +1
+          (B16, 5/level, 5) on top of Aspect Training's own +1, for Will 15
+          — an Exarch's Fanaticism-grade devotion (see Lost to the Path)
+          needs the Will to match. 10+40+20+10+5 = 85 points.
+      - name: Enhanced Dodge
+        per_level: 15
+        levels: 1
+        ref: B52
+        tags: [Advantage, Physical, Xenos, Aeldari]
+        lore: A further step up from an ordinary Aspect Warrior's already-formidable evasion, after centuries of nothing else.
+        design: A further Enhanced Dodge 1 (B52, 15 points), stacking with Aspect Training's own level for Enhanced Dodge 2 total.
+      - name: Combat Reflexes
+        points: 15
+        ref: B43
+        tags: [Advantage, Mental, Xenos, Aeldari]
+        lore: An Exarch has refought the same battle-role for centuries and simply does not freeze.
+        design: Basic Set Combat Reflexes (B43), 15 points, the same trait this project's Astartes and Ork Warboss packages use for veteran-tier battlefield composure.
+      - name: Trained By A Master
+        points: 30
+        ref: B90
+        tags: [Advantage, Mental, Xenos, Aeldari]
+        lore: >
+          An Exarch's chosen weapon-form (the shrine's own signature blade,
+          fusion gun, or reaper launcher) is drilled to a level no ordinary
+          Aspect Warrior reaches, matching the fiction's treatment of an
+          Exarch as an unmatched duelist within their Aspect's own art.
+        design: Basic Set Trained By A Master (B90), 30 points, one weapon-art.
+      - name: "Weapon Master (Aspect Weapon)"
+        points: 20
+        ref: B99
+        tags: [Advantage, Physical, Xenos, Aeldari]
+        lore: See Trained By A Master, above; the two together are how GURPS models a genuine master duelist.
+        design: Basic Set Weapon Master, one weapon (B99), 20 points.
+      - name: Enhanced Parry
+        per_level: 5
+        levels: 2
+        ref: B52
+        tags: [Advantage, Physical, Xenos, Aeldari]
+        lore: Centuries of the same duel, refought against every kind of foe, until the block is reflexive.
+        design: Enhanced Parry 2, one weapon (B52, 5/level, 10 points).
+      - name: "Lost to the Path (Warrior)"
+        points: -15
+        ref: B151
+        tags: [Disadvantage, Mental, Xenos, Aeldari]
+        notes: >
+          As Fanaticism (single-minded devotion to the Path itself, here the
+          Path of the Warrior): an Exarch cannot set the mantle down and
+          walk away as an ordinary Aspect Warrior does when their years in
+          the shrine end. See the top-level "Lost to the Path" entry above
+          for the full design note; duplicated here as its own child so
+          this container's point total is self-contained.
+        design: Fanaticism (B151, -15 points), redirected onto the Path itself; see the top-level entry above.
+    lore: >
+      What it costs, and what it grants, to be lost to the Path of the
+      Warrior entirely: an Exarch, wearing the shrine's own war-mask and
+      ancient armour, leading their Aspect's Aspect Warriors in battle after
+      battle across centuries, with no path back to an ordinary life.
+    design: >
+      85 (Attribute Modifiers) + 15 (further Enhanced Dodge) + 15 (Combat
+      Reflexes) + 30 (Trained By A Master) + 20 (Weapon Master) + 10
+      (Enhanced Parry 2) - 15 (Lost to the Path) = 160 points, added to the
+      Aspect Warrior package's 207 for 367 points of physiology and mastery
+      before skills. See the Exarch template.
+
+  # ------------------------------------------------------------ Seer lenses
+
+  - name: "Seer's Apprenticeship"
+    container: meta_trait
+    tags: [Advantage, Mental, Xenos, Aeldari]
+    children:
+      - name: Attribute Modifiers (Seer's Apprenticeship)
+        points: 25
+        attributes: {iq: 1, will: 1}
+        tags: [Physical]
+        design: >
+          Framework midpoint between the Guardian baseline (IQ 12, Will 12)
+          and the Farseer anchor (IQ 15, Will 17): a Warlock — still a
+          battle-line fighter and squad leader, not yet fully given over to
+          prophecy — sits partway there. Increased IQ +1 (B16, 20/level, 20)
+          for IQ 13. Increased Will +1 (B16, 5/level, 5) for Will 14. 20+5 =
+          25 points. Per stays IQ-equal (14) with no extra bonus: a Warlock's
+          gift runs inward, not outward, the same reasoning the Farseer
+          anchor's own Per == IQ line shows.
+    lore: >
+      A Warlock has stepped onto the Path of the Seer far enough to touch
+      the Runes of Battle in the middle of a fight, without (yet, or ever)
+      being lost to it the way a Farseer is — Codex background is explicit
+      that Warlocks remain warriors and squad leaders first, seers second.
+    design: >
+      25 points, added to the Aeldari Physiology package's 122 for 147
+      points of physiology before the psychic package and skills. See the
+      Warlock template.
+
+  - name: "Farseer's Mastery"
+    container: meta_trait
+    tags: [Advantage, Mental, Xenos, Aeldari]
+    children:
+      - name: Attribute Modifiers (Farseer)
+        points: 45
+        attributes: {iq: 2, will: 1}
+        tags: [Physical]
+        design: >
+          Framework target over the Seer's Apprenticeship baseline: IQ 15,
+          Will 17, Per 15 (free: IQ 15 + 0, matching the anchor table's own
+          Per == IQ line exactly). Increased IQ +2 (B16, 20/level, 40) for IQ
+          15 — "psyker of the highest grade." Increased Will +1 (B16,
+          5/level, 5) on top of Seer's Apprenticeship's own +1, for Will 17:
+          total Will bonus +2 over baseline IQ, the framework's own figure
+          for a mind strong enough to steer the strands of fate and survive
+          Perils of the Warp again and again across centuries. 40+5 = 45
+          points.
+    lore: >
+      What it costs, and what it grants, to be lost to the Path of the Seer
+      entirely: a Farseer walks the strands of the future so far and so
+      often that an ordinary Aeldari life — even an ordinary Warlock's life —
+      is no longer available to them, exactly as framework.md's anchor
+      table and Codex background both describe.
+    design: >
+      45 points, added to the Seer's Apprenticeship package's 147 for 192
+      points of physiology (before the Lost to the Path disadvantage, the
+      full psychic package, and skills). See the Farseer template.
+
+  # -------------------------------------------------------- Aeldari psychic chassis
+  # Reuses the Thaumatology: Sorcery model from Imperium/Psykers and the
+  # Warp.adq exactly (Warp Sorcery, -20%, applied unchanged: same
+  # detectability, same null-field/blank/Geller-field failure conditions),
+  # per framework.md's explicit direction. Only three things differ for
+  # Aeldari: the Unusual Background-equivalent prerequisite (Aeldari
+  # Psychic Sensitivity, above, universal rather than rare), the Talent and
+  # Empowerment traits below (identical cost math, reflavoured off the
+  # Adeptus Astra Telepathica's Imperium-specific Assignment scale), and the
+  # milder Perils variant immediately below that.
+
+  - name: "Perils of the Warp (Aeldari Runes)"
+    points: 0
+    tags: [Reference, Psyker, Xenos, Aeldari]
+    notes: |
+      Not purchased on its own. Apply "Perils of the Warp (Aeldari Runes),
+      -5%" (or the Severe variant, -10%, for the same tier of ritual/mass/
+      interstellar-scale working the human Severe variant covers) to every
+      Warp Sorcery-tagged Aeldari ability below, in place of the human
+      Standard (-10%) / Severe (-20%) values from Imperium/Psykers and the
+      Warp.adq. Otherwise identical: same failure-margin table, same
+      Pushing mechanic (up to 3 pushes, cumulative -2 each).
+    lore: >
+      Framework.md is explicit: Aeldari runecraft is far safer than
+      unsanctioned or even Sanctioned human psychic practice, because it
+      isn't raw, untrained talent reaching blind into the warp the way a
+      newly-discovered human psyker's is — every Rune a Warlock or Farseer
+      casts is shaped by millennia of accumulated craftworld runic
+      discipline and rune-warded wargear (runes worked into armour, weapons
+      and the spirit stone itself), refined and passed down since long
+      before the Fall. Codex: Craftworlds background and the Path trilogy
+      both play Aeldari psykers as controlled and precise where human
+      psykers are volatile and dangerous even to their own side.
+    design: >
+      Half the point-weight of the human variant (Standard -5% against
+      -10%, Severe -10% against -20%), justified the same way this
+      project's own human Perils entry justifies its Standard/Severe split
+      (double the weight for double the stakes): rune-warding doesn't
+      eliminate backlash risk, it roughly halves it, so the limitation's
+      point value halves too rather than dropping to zero — an Aeldari who
+      pushes hard enough can still trigger a Catastrophic failure, just
+      markedly less often than an untrained human psyker rolling the same
+      margin.
+
+  - name: "Aeldari Psyker (Talent)"
+    points: 0
+    per_level: 10
+    levels: 1
+    max_levels: 6
+    tags: [Advantage, Mental, Talent, Xenos, Aeldari, Psyker]
+    ref: TSOR5
+    notes: |
+      Identical chassis and cost to Imperium/Psykers and the Warp.adq's
+      Psyker (Talent, itself the Sorcery Talent analogue, TSOR5, 10/level):
+      adds its level to Psyniscience, Meditation, Hidden Lore (the Warp),
+      and the Will roll to resist Perils of the Warp (Aeldari Runes).
+      Reflavoured off the Adeptus Astra Telepathica's Imperium-specific
+      Assignment scale, which doesn't apply to a species with no Black Ships
+      and no Scholastia Psykana: Aeldari psychic strength is instead judged
+      by how far along the Path of the Seer someone has travelled.
+        Untrained latent (every Aeldari) — Talent 0
+        Path of the Seer apprentice — Talent 1-2
+        Warlock — Talent 2-3 (still primarily a warrior and squad leader)
+        Farseer — Talent 5 (Codex background's own "psyker of the highest grade")
+    design: >
+      Talent affecting four things (three skills plus the Perils resistance
+      roll), the same Medium Talent rate (B90, 10 points/level) Imperium's
+      Psyker (Talent) and this project's Ork Kunnin'/Mek Instinct/Painboy's
+      Eye all use for the same reason. Capped at level 6 for player
+      characters, matching the Imperium trait's own cap.
+
+  - name: "Aeldari Warp Empowerment"
+    points: 10
+    per_level: 10
+    levels: 1
+    tags: [Advantage, Mental, Talent, Xenos, Aeldari, Psyker]
+    ref: TSOR4
+    notes: |
+      Identical chassis and cost to Imperium/Psykers and the Warp.adq's
+      Warp Empowerment (itself the Sorcerous Empowerment analogue, TSOR4, 10
+      base + 10/level): the same cap rule applies unchanged — an Aeldari may
+      only know a Rune whose full, modified point cost is no greater than
+      the point cost of their own Aeldari Warp Empowerment. Requires Aeldari
+      Psychic Sensitivity.
+
+      Rough Path-of-the-Seer mapping, worked out the same way Imperium's
+      Warp Empowerment notes work out its own Assignment-grade table, from
+      this file's actual (Warp Sorcery -20% + Perils of the Warp, Aeldari
+      Runes) modified costs:
+        Level      | Cap (10+10/lvl) | What the cap reaches
+        1          | 20              | most Runes of Battle basics and most single-level Runes of Fate at their starting level
+        2-3        | 30-40           | Runes of Fate pushed to a second or third level; typical Warlock ceiling
+        5          | 60              | the full Runes of Fate and Runes of Battle roster, with real headroom to push a known leveled Rune higher — typical Farseer ceiling
+      A Warlock need not, and typically doesn't, buy this anywhere near a
+      Farseer's ceiling: see each template's own notes for the level it
+      actually buys.
+    design: >
+      Identical cost structure to Sorcerous Empowerment/Imperium's Warp
+      Empowerment (10 base + 10/level): the underlying mechanic — "how much
+      of the warp you can safely channel at all, gating which Runes you may
+      know by their modified cost" — is exactly the same chassis, just
+      judged by Path progress instead of an Imperial Assignment grade.
+
+  - name: Aeldari Soul-Sense
+    points: 10
+    modifiers:
+      - "Warp Sorcery, -20%"
+    tags: [Advantage, Mental, Xenos, Aeldari, Psyker]
+    lore: >
+      The Aeldari analogue of Witch-sight: an unlearned, passive prickling
+      awareness of psychic activity, daemonic taint and warp corruption,
+      sharpened rather than granted outright by walking the Path of the
+      Seer even partway.
+    design: >
+      Built exactly as Imperium/Psykers and the Warp.adq's Witch-sight:
+      Detect (Psychic Activity & Daemonic Taint), base 10 (B47-48), Warp
+      Sorcery -20% only (no Perils: involuntary background sense, not a
+      deliberate act). Full modified cost: 10 x 0.8 = 8 points; needs only
+      Aeldari Warp Empowerment level 1 (cap 20).
+
+  # --------------------------------------------------------- Runes of Fate
+  # The Farseer's own discipline: sight beyond the present, and the twin
+  # runes of Doom and Guide that turn fate itself against or for a target.
+  # Calibrated against Dark Heresy/Rogue Trader's Aeldari-adjacent Divination
+  # material for relative weight only, per framework.md's source order; the
+  # GURPS build is original, mirroring this project's own Imperium/Psykers
+  # and the Warp.adq Divination and Telepathy disciplines child-for-child.
+
+  - name: "Runes of Fate"
+    container: group
+    tags: [Advantage, Mental, Xenos, Aeldari, Psyker]
+    lore: >
+      The oldest and most feared runes a Farseer commands: the sight to read
+      a battle's outcome before it happens, and the will to bend that
+      outcome once read — marking one soldier for death, guiding another's
+      hand, or reaching directly into an enemy mind to break it.
+    design: Talent-linked group; see each child. All children take Warp Sorcery (-20%) and Perils of the Warp (Aeldari Runes) unless noted.
+    children:
+      - name: Doom
+        per_level: 20
+        levels: 1
+        tags: [Advantage, Mental, Xenos, Aeldari, Psyker]
+        modifiers:
+          - {name: Disadvantage Delivered (Doomed, approx. x1.5 to all incoming damage, -25 pts), cost: "+25%"}
+          - "Malediction 1, +100%"
+          - "Warp Sorcery, -20%"
+          - "Perils of the Warp (Aeldari Runes), -5%"
+        lore: >
+          Marks a single target as fated to die in the next few moments —
+          not a killing blow itself, but every blow against them lands
+          truer once Doom is cast, the signature setup for a Dark Reaper
+          volley or an Executioner-blessed strike.
+        design: >
+          Affliction (10/level) delivering an eyeballed -25 point
+          Vulnerability-style "Doomed" disadvantage (+25%, the same kind of
+          project-valued delivered disadvantage this project's Librarius:
+          Null Zone entry uses), Malediction (+100%, B36), Warp Sorcery
+          (-20%) and Perils (Aeldari Runes, -5%). Net +100%. Full modified
+          cost: 10 x 2.0 = 20 points/level; needs Aeldari Warp Empowerment
+          level 1 (cap 20), right at the cap with no headroom, marking Doom
+          as a Farseer's signature opening rune rather than something learned lightly.
+      - name: Guide
+        per_level: 20
+        levels: 1
+        tags: [Advantage, Mental, Xenos, Aeldari, Psyker]
+        modifiers:
+          - {name: Advantage Delivered (Guided, approx. +2 to hit, 25 pts), cost: "+25%"}
+          - "Malediction 1, +100%"
+          - "Warp Sorcery, -20%"
+          - "Perils of the Warp (Aeldari Runes), -5%"
+        lore: >
+          Doom's twin and opposite: guides a chosen ally's next strike
+          straight and true, the Farseer's own hand steadying theirs from a
+          distance.
+        design: >
+          Affliction (10/level) delivering a +25 point "Guided" combat
+          advantage to a willing recipient (Basic B35 allows either an
+          Advantage or a Disadvantage Delivered), Malediction (+100%, used
+          here for its "affects anyone you can see, no attack roll" reach
+          rather than its resistance clause, since the target volunteers),
+          Warp Sorcery (-20%), Perils (Aeldari Runes, -5%). Net +100%. Full
+          modified cost: 10 x 2.0 = 20 points/level; needs Aeldari Warp
+          Empowerment level 1 (cap 20), symmetric with Doom.
+      - name: Fortune
+        points: 14
+        tags: [Advantage, Mental, Xenos, Aeldari, Psyker]
+        modifiers:
+          - {name: Advantage Delivered (Fortune's Ward, 15 pts), cost: "+15%"}
+          - "Area Effect, +50%"
+          - "Warp Sorcery, -20%"
+          - "Perils of the Warp (Aeldari Runes, Severe), -10%"
+        lore: >
+          A ward cast over a squad that lets one failed save, in the
+          following moments, be quietly rerolled — the same kind of
+          battlefield luck this project's Sanctic Daemonology: Sanctuary
+          and Librarius: Might of Heroes entries deliver to Imperial squads,
+          reflavoured as the Farseer's own gift of fortune.
+        design: >
+          Affliction (10) delivering a +15 point Luck-tier advantage to
+          willing recipients, Area Effect (+50%, B102, 2-yard radius),
+          Warp Sorcery (-20%), Perils (Aeldari Runes, Severe, -10%, the same
+          tier this project's own ritual/squad-scale workings use). Net
+          +35%. Full modified cost: 10 x 1.35 = 13.5, rounded to 14 points;
+          needs Aeldari Warp Empowerment level 1 (cap 20).
+      - name: Executioner
+        per_level: 11
+        levels: 1
+        tags: [Advantage, Mental, Xenos, Aeldari, Psyker]
+        modifiers:
+          - "Malediction 1, +100%"
+          - "Armor Divisor (2), +50%"
+          - "Warp Sorcery, -20%"
+          - "Perils of the Warp (Aeldari Runes), -5%"
+        lore: >
+          A psychically-guided killing stroke, most often called on a target
+          already Doomed: the blow finds the gap in armour that pure skill
+          alone would have missed.
+        design: >
+          Innate Attack (Impaling, 5/die, B61) with Malediction (+100%),
+          Armor Divisor (2) (+50%, B103), Warp Sorcery (-20%), Perils
+          (Aeldari Runes, -5%). Net +125%. Full modified cost: 5 x 2.25 =
+          11.25, rounded to 11 points/level; needs Aeldari Warp Empowerment
+          level 1 (cap 20).
+      - name: Eldritch Storm
+        per_level: 11
+        levels: 1
+        tags: [Advantage, Mental, Xenos, Aeldari, Psyker]
+        modifiers:
+          - "Explosion, +150%"
+          - "Warp Sorcery, -20%"
+          - "Perils of the Warp (Aeldari Runes, Severe), -10%"
+        lore: >
+          A tearing storm of raw warp-force thrown out over a wide killing
+          ground — a Farseer's answer to a stalled advance or a densely
+          packed enemy line.
+        design: >
+          Innate Attack (Crushing, 5/die) with Explosion at the 8-yard tier
+          (+150%, B106), Warp Sorcery (-20%), Perils (Aeldari Runes, Severe,
+          -10%, matching this project's own area-bombardment tier
+          precedent). Net +120%. Full modified cost: 5 x 2.2 = 11
+          points/level; needs Aeldari Warp Empowerment level 1 (cap 20).
+      - name: Mind War
+        per_level: 20
+        levels: 1
+        tags: [Advantage, Mental, Xenos, Aeldari, Psyker]
+        modifiers:
+          - {name: Based on Will (rather than the default HT), cost: "+25%"}
+          - "Malediction 1, +100%"
+          - "Warp Sorcery, -20%"
+          - "Perils of the Warp (Aeldari Runes), -5%"
+        lore: >
+          A direct psychic duel: the Farseer's own force of will bears down
+          on an enemy mind until it breaks, no visible attack for the
+          target to dodge or block.
+        design: >
+          Affliction (10/level) delivering mental/FP damage, Based on Will
+          (+25%, B39, the attack is a battle of wills rather than a straight
+          HT roll — this project's Aeldari-specific enhancement value, not a
+          cited RAW figure), Malediction (+100%), Warp Sorcery (-20%),
+          Perils (Aeldari Runes, -5%). Net +100%. Full modified cost: 10 x
+          2.0 = 20 points/level; needs Aeldari Warp Empowerment level 1 (cap
+          20), the discipline's other cap-tight signature rune alongside Doom.
+      - name: Farsight
+        points: 19
+        tags: [Advantage, Mental, Xenos, Aeldari, Psyker]
+        modifiers:
+          - "Warp Sorcery, -20%"
+          - "Perils of the Warp (Aeldari Runes), -5%"
+        lore: >
+          True precognition: a flash of certainty about what is about to
+          happen, the same gift framework.md's Farseer anchor is named for.
+        design: >
+          Precognition, Basic's core advantage, flat 25, with Warp Sorcery
+          (-20%) and Perils (Aeldari Runes, -5%). Net -25%. Full modified
+          cost: 25 x 0.75 = 18.75, rounded to 19 points; needs Aeldari Warp
+          Empowerment level 1 (cap 20). The same notably-cheap-for-its-
+          narrative-weight case this project's own Imperium Foresight entry
+          flags: a flat Basic advantage whose cost doesn't scale with how
+          strong the fiction makes true precognition sound.
+
+  # ------------------------------------------------------- Runes of Battle
+  # The three paired basics every Warlock learns first: conceal or reveal,
+  # protect or curse, enhance or drain. Each pair is one alternative_abilities
+  # container, exactly as this project's Imperium Pyromancy: Inferno/Molten
+  # Beam and Telepathy: Mind Probe/Dominate entries build their own paired
+  # runes/powers.
+
+  - name: "Runes of Battle"
+    container: group
+    tags: [Advantage, Mental, Xenos, Aeldari, Psyker]
+    lore: >
+      The Runes of Battle are a Warlock's working repertoire: simpler, more
+      reliable than a Farseer's Runes of Fate, and cast in the thick of a
+      fight to protect the squad, blind the enemy, or turn either against
+      the foe instead. Every pair below is one Rune worked in two opposite
+      directions, per Codex background's own pairing of Conceal/Reveal,
+      Protect/Jinx, and Enhance/Drain.
+    design: Talent-linked group; see each child pair.
+    children:
+      - name: Conceal/Reveal
+        container: alternative_abilities
+        tags: [Advantage, Mental, Xenos, Aeldari, Psyker]
+        lore: >
+          The same Rune of Battle worked two ways: a soft shimmer that hides
+          a squad from sight, or the same working turned outward to strip a
+          hidden enemy's cover away.
+        design: Alternative_abilities container; full price for the costlier Reveal plus a fifth of the cheaper Conceal.
+        children:
+          - name: Conceal
+            points: 8
+            tags: [Advantage, Mental, Xenos, Aeldari, Psyker]
+            modifiers:
+              - {name: Advantage Delivered (Concealed, +10 pts), cost: "+10%"}
+              - "Warp Sorcery, -20%"
+              - "Perils of the Warp (Aeldari Runes), -5%"
+            lore: A shimmer of bent light and muffled sound over a willing ally, easing a squad's approach unseen.
+            design: >
+              Affliction (10) delivering a +10 point Stealth-boosting
+              advantage, Warp Sorcery (-20%), Perils (Aeldari Runes, -5%).
+              Net -15%. Full modified cost: 10 x 0.85 = 8.5, rounded to 8
+              points (discounted to a fifth as the cheaper alternative
+              ability); needs Aeldari Warp Empowerment level 1 (cap 20) at
+              its full-price rate.
+          - name: Reveal
+            points: 19
+            tags: [Advantage, Mental, Xenos, Aeldari, Psyker]
+            modifiers:
+              - {name: Disadvantage Delivered (Exposed, -10 pts), cost: "+10%"}
+              - "Malediction 1, +100%"
+              - "Warp Sorcery, -20%"
+              - "Perils of the Warp (Aeldari Runes), -5%"
+            lore: Strips an enemy's own concealment, camouflage, or holo-field away in an instant.
+            design: >
+              Affliction (10) delivering a -10 point "Exposed" disadvantage,
+              Malediction (+100%), Warp Sorcery (-20%), Perils (Aeldari
+              Runes, -5%). Net +85%. Full modified cost: 10 x 1.85 = 18.5,
+              rounded to 19 points (the costlier child, so it sets the
+              container's cap requirement); needs Aeldari Warp Empowerment
+              level 1 (cap 20).
+      - name: Protect/Jinx
+        container: alternative_abilities
+        tags: [Advantage, Mental, Xenos, Aeldari, Psyker]
+        lore: >
+          The same Rune worked as a shield for an ally, or a curse that
+          strips an enemy's own defences thin.
+        design: Alternative_abilities container; full price for the costlier Jinx plus a fifth of the cheaper Protect.
+        children:
+          - name: Protect
+            points: 8
+            tags: [Advantage, Mental, Xenos, Aeldari, Psyker]
+            modifiers:
+              - {name: Advantage Delivered (Warded, +10 pts DR), cost: "+10%"}
+              - "Warp Sorcery, -20%"
+              - "Perils of the Warp (Aeldari Runes), -5%"
+            lore: A brief, hardening ward of psychic force over a willing ally, thickening their guard for a few crucial seconds.
+            design: >
+              Affliction (10) delivering a +10 point DR-boosting advantage,
+              Warp Sorcery (-20%), Perils (Aeldari Runes, -5%). Net -15%.
+              Full modified cost: 8.5, rounded to 8 points (discounted to a
+              fifth as the cheaper alternative ability); needs Aeldari Warp
+              Empowerment level 1 (cap 20) at its full-price rate.
+          - name: Jinx
+            points: 19
+            tags: [Advantage, Mental, Xenos, Aeldari, Psyker]
+            modifiers:
+              - {name: Disadvantage Delivered (Jinxed, -10 pts to defenses), cost: "+10%"}
+              - "Malediction 1, +100%"
+              - "Warp Sorcery, -20%"
+              - "Perils of the Warp (Aeldari Runes), -5%"
+            lore: Curses an enemy's own guard thin at the worst possible moment.
+            design: >
+              Affliction (10) delivering a -10 point defense-penalty
+              disadvantage, Malediction (+100%), Warp Sorcery (-20%), Perils
+              (Aeldari Runes, -5%). Net +85%. Full modified cost: 18.5,
+              rounded to 19 points (the costlier child, so it sets the
+              container's cap requirement); needs Aeldari Warp Empowerment
+              level 1 (cap 20).
+      - name: Enhance/Drain
+        container: alternative_abilities
+        tags: [Advantage, Mental, Xenos, Aeldari, Psyker]
+        lore: >
+          The same Rune worked as a surge of strength for an ally, or a
+          draining curse that saps an enemy's own.
+        design: Alternative_abilities container; full price for the costlier Drain plus a fifth of the cheaper Enhance.
+        children:
+          - name: Enhance
+            points: 8
+            tags: [Advantage, Physical, Xenos, Aeldari, Psyker]
+            modifiers:
+              - {name: Advantage Delivered (Enhanced, +10 pts ST/DX), cost: "+10%"}
+              - "Warp Sorcery, -20%"
+              - "Perils of the Warp (Aeldari Runes), -5%"
+            lore: A surge of psychically-lent strength or speed into a willing ally's limbs.
+            design: >
+              Affliction (10) delivering a +10 point ST/DX-boosting
+              advantage, Warp Sorcery (-20%), Perils (Aeldari Runes, -5%).
+              Net -15%. Full modified cost: 8.5, rounded to 8 points
+              (discounted to a fifth as the cheaper alternative ability);
+              needs Aeldari Warp Empowerment level 1 (cap 20) at its
+              full-price rate.
+          - name: Drain
+            points: 19
+            tags: [Advantage, Mental, Xenos, Aeldari, Psyker]
+            modifiers:
+              - {name: Disadvantage Delivered (Drained, -10 pts ST/DX or FP), cost: "+10%"}
+              - "Malediction 1, +100%"
+              - "Warp Sorcery, -20%"
+              - "Perils of the Warp (Aeldari Runes), -5%"
+            lore: Saps the strength or endurance straight out of an enemy's limbs.
+            design: >
+              Affliction (10) delivering a -10 point ST/DX/FP-draining
+              disadvantage, Malediction (+100%), Warp Sorcery (-20%), Perils
+              (Aeldari Runes, -5%). Net +85%. Full modified cost: 18.5,
+              rounded to 19 points (the costlier child, so it sets the
+              container's cap requirement); needs Aeldari Warp Empowerment
+              level 1 (cap 20).
+
+  # ------------------------------------------------------------- Aspect lenses
+  # Small containers of skills/traits for the seven classic Aspect Warrior
+  # shrines, matching the Ork Klan lens pattern: disabled by default, enable
+  # one per character. Weapon and armour DR belong on each Aspect's wargear
+  # (a separate equipment file, out of this project's current scope), not
+  # duplicated here — these lenses model only what the character themselves
+  # (skill and reflex) brings to the shrine's signature role, the same split
+  # this project's Black Carapace entry draws between a physiology trait and
+  # the equipment it plugs into.
+
+  - name: "Aspect: Dire Avenger"
+    container: group
+    disabled: true
+    tags: [Xenos, Aeldari]
+    lore: >
+      The most numerous Aspect and every shrine-world's backbone: disciplined
+      shuriken-catapult skirmishers who hold a line and cover a retreat as
+      readily as they lead an assault.
+    design: Net 3 points, per-Aspect flavour lens, matching the Ork Klan lens pattern.
+    children:
+      - name: Shrine Discipline
+        points: 1
+        tags: [Perk, Xenos, Aeldari]
+        skill_bonuses: {"Guns (Rifle)": 1}
+        design: Perk (B9), +1 to Guns (Rifle) (shuriken catapult).
+        lore: Endless drilled volley-fire discipline.
+      - name: Unbroken Line
+        points: 2
+        per_level: 2
+        levels: 1
+        ref: B55
+        tags: [Advantage, Mental, Xenos, Aeldari]
+        design: Fearlessness 1 (B55, 2/level, 2 points).
+        lore: A Dire Avenger holds the line other Aspects break through from.
+
+  - name: "Aspect: Striking Scorpion"
+    container: group
+    disabled: true
+    tags: [Xenos, Aeldari]
+    lore: >
+      Ambush and infiltration specialists who wait, motionless, in cover for
+      an enemy column to pass before rising, silent, to butcher it from
+      behind.
+    design: Net 4 points, per-Aspect flavour lens.
+    children:
+      - name: Ambush Predator
+        points: 1
+        tags: [Perk, Xenos, Aeldari]
+        skill_bonuses: {Stealth: 1}
+        design: Perk (B9), +1 to Stealth.
+        lore: A lifetime's discipline of not being seen until it's too late.
+      - name: Mandiblasters
+        points: 3
+        weapons:
+          - usage: Mandiblasters
+            damage: 1d tox
+            reach: C
+            parry: "No"
+            skill: Brawling
+        tags: [Advantage, Physical, Xenos, Aeldari]
+        design: >
+          Innate Attack (Toxic, token 1d, melee reach C only, B61), the same
+          reduced-reach math this project's Betcher's Gland Corrosive Spit
+          entry uses, for the helmet-mounted neurotoxin mandiblasters every
+          Striking Scorpion wears as a guaranteed backup bite.
+        lore: A last, close-in bite from a helmet fitted with venomous, mechanical mandibles, used when the blade already has the kill in hand.
+
+  - name: "Aspect: Howling Banshee"
+    container: group
+    disabled: true
+    tags: [Xenos, Aeldari]
+    lore: >
+      The fastest Aspect: duelists whose war masks howl a shriek that
+      unsteadies an enemy line half a heartbeat before the blades arrive.
+    design: Net 6 points, per-Aspect flavour lens.
+    children:
+      - name: Banshee Mask
+        points: 1
+        tags: [Perk, Xenos, Aeldari]
+        skill_bonuses: {Intimidation: 1}
+        design: Perk (B9), +1 to Intimidation.
+        lore: The mask's shriek unsteadies a line before the charge lands.
+      - name: Quicksilver Charge
+        points: 5
+        attributes: {basic_speed: 0.25}
+        tags: [Advantage, Physical, Xenos, Aeldari]
+        design: Increased Basic Speed +0.25 (B17, 5 points/0.25 level).
+        lore: Howling Banshees are, consistently, the fastest Aspect on a charge.
+
+  - name: "Aspect: Fire Dragon"
+    container: group
+    disabled: true
+    tags: [Xenos, Aeldari]
+    lore: >
+      Close-assault tank hunters who close to point-blank range with a
+      fusion gun and burn through anything short of a Titan.
+    design: Net 3 points, per-Aspect flavour lens.
+    children:
+      - name: Tank Hunter's Eye
+        points: 1
+        tags: [Perk, Xenos, Aeldari]
+        skill_bonuses: {"Beam Weapons (Rifle)": 1}
+        design: Perk (B9), +1 to Beam Weapons (Rifle) (fusion gun, per the framework's las/plasma/melta weapon-skill table).
+        lore: An instinct for the exact range and angle a fusion gun needs.
+      - name: Suicide Run
+        points: 2
+        per_level: 2
+        levels: 1
+        ref: B55
+        tags: [Advantage, Mental, Xenos, Aeldari]
+        design: Fearlessness 1 (B55, 2/level, 2 points).
+        lore: Closing to melta range against a tank or a Wraithlord takes real, drilled nerve.
+
+  - name: "Aspect: Dark Reaper"
+    container: group
+    disabled: true
+    tags: [Xenos, Aeldari]
+    lore: >
+      Slow, deliberate heavy-weapons specialists who trade an Aspect's usual
+      speed for the range and firepower of the reaper launcher.
+    design: Net 1 point, per-Aspect flavour lens.
+    children:
+      - name: Patient Killer
+        points: 1
+        tags: [Perk, Xenos, Aeldari]
+        skill_bonuses: {"Gunner (Cannon)": 1}
+        design: Perk (B9), +1 to Gunner (Cannon) (reaper launcher, per the framework's braced/mounted heavy weapon-skill table).
+        lore: Death dealt at range, without haste, and without missing.
+
+  - name: "Aspect: Swooping Hawk"
+    container: group
+    disabled: true
+    tags: [Xenos, Aeldari]
+    lore: >
+      Jump-pack skirmishers who drop grenade packs from above before landing
+      to finish the fight, or simply vanishing again.
+    design: Net 2 points, per-Aspect flavour lens.
+    children:
+      - name: Sky-Hunter's Grace
+        points: 1
+        tags: [Perk, Xenos, Aeldari]
+        skill_bonuses: {Jumping: 1}
+        design: Perk (B9), +1 to Jumping.
+        lore: Landing a jump-pack drop under fire, again and again, without breaking an ankle.
+      - name: Aerial Poise
+        points: 1
+        tags: [Perk, Xenos, Aeldari]
+        skill_bonuses: {Acrobatics: 1}
+        design: Perk (B9), +1 to Acrobatics.
+        lore: Fighting from an unstable landing, the instant the boots touch down.
+
+  - name: "Aspect: Warp Spider"
+    container: group
+    disabled: true
+    tags: [Xenos, Aeldari]
+    lore: >
+      The strangest Aspect: warriors whose jump generators tear a short hole
+      in real space rather than merely leap it, blinking in and out of a
+      firefight where no jump pack could follow.
+    design: Net 1 point, per-Aspect flavour lens.
+    children:
+      - name: Displacement Sense
+        points: 1
+        tags: [Perk, Xenos, Aeldari]
+        skill_bonuses: {"Piloting (Jump Generator)": 1}
+        design: >
+          Perk (B9), +1 to Piloting (Jump Generator). The jump generator's
+          own short-range teleport effect is a wargear property (a warp-
+          technology item, not a psychic power the wearer casts) and belongs
+          on that item's own future equipment entry, per the same
+          equipment-vs-physiology split this project's Black Carapace entry
+          draws; this lens covers only the wearer's own trained reflex for
+          timing and steering a jump.
+        lore: >
+          A Warp Spider who has jumped a hundred times develops a real,
+          trained instinct for exactly when and where to trigger the next
+          one — the difference between landing behind an enemy line and
+          landing inside a wall.

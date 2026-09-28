@@ -1,0 +1,127 @@
+kind: template
+output: Xenos/Aeldari/Templates/Aeldari Guardian.gct
+notes: >
+  A Guardian: an ordinary adult Craftworld Aeldari called up to the citizen
+  militia between spells on the Path of the Artisan (or whichever Path they
+  currently walk) — issued a shuriken catapult and mesh armour and expected
+  to hold a line competently, without the centuries of shrine drilling an
+  Aspect Warrior has. Point math (see Xenos/Aeldari/Traits/Aeldari
+  Physiology.adq for the full derivation of every trait below): Aeldari
+  Physiology 122 + Keen Battle-Sense 5 + skills 27 = 154 points. Stats: ST
+  10, DX 14, IQ 12, HT 10, HP 10, Will 12, Per 13, Speed 6.25, Move 6, Dodge
+  9 — landing exactly on framework.md's Guardian anchor line. This sits
+  inside framework.md's "Trained soldier" tier (100-175) at its upper end,
+  clearly above a Guardsman's own 82 points (Imperium/Humans/Guardsman.yaml)
+  on the strength of DX 14 and IQ 12 alone, without any Path specialization
+  yet bought — exactly what "citizen militia, above a Guardsman" should look
+  like. Enable at most one Path lens (from Xenos/Aeldari/Traits/Aeldari
+  Physiology.adq, all disabled by default) to flavor which Path this
+  particular Guardian currently walks between musters.
+traits:
+  - include: "xenos/aeldari/traits.yaml#Aeldari Physiology"
+  - include: "xenos/aeldari/traits.yaml#Keen Battle-Sense"
+  - include: "xenos/aeldari/traits.yaml#Path of the Warrior"
+    disabled: true
+  - include: "xenos/aeldari/traits.yaml#Path of the Seer"
+    disabled: true
+  - include: "xenos/aeldari/traits.yaml#Path of the Outcast"
+    disabled: true
+  - include: "xenos/aeldari/traits.yaml#Path of the Artisan"
+    disabled: true
+skills:
+  - name: Guns
+    spec: Rifle
+    diff: DX/E
+    points: 4
+    tags: [Xenos, Aeldari]
+    lore: The shuriken catapult is standard Guardian issue, per framework.md's Aeldari gear anchor.
+    design: DX+2 (16) for 4 points, Easy (B170); this project's weapon-skill table treats shuriken catapults as autogun-pattern for skill purposes.
+  - name: Broadsword
+    diff: DX/A
+    points: 2
+    tags: [Xenos, Aeldari]
+    lore: A short blade or shock-baton carried as sidearm and drill weapon; a Guardian's melee training is real but secondary to the catapult.
+    design: DX+0 (14) for 2 points, Average (B208).
+  - name: Tactics
+    diff: IQ/H
+    points: 2
+    tags: [Xenos, Aeldari]
+    lore: Basic militia drill in holding a line and falling back in good order.
+    design: IQ-1 (11) for 2 points, Hard.
+  - name: Camouflage
+    diff: IQ/E
+    points: 1
+    tags: [Xenos, Aeldari]
+    lore: Field-craft drilled into every Guardian regardless of eventual Path.
+    design: IQ+0 (12) for 1 point, Easy.
+  - name: Piloting
+    spec: (Grav-Platform)
+    diff: DX/A
+    points: 2
+    tags: [Xenos, Aeldari]
+    lore: Guardian defense forces field grav-platforms and support weapon teams; every Guardian gets basic cross-training on one.
+    design: DX+0 (14) for 2 points, Average.
+  - name: Stealth
+    diff: DX/A
+    points: 2
+    tags: [Xenos, Aeldari]
+    lore: Even a citizen militia member moves quietly by human standards.
+    design: DX+0 (14) for 2 points, Average.
+  - name: Survival
+    spec: (Craftworld/Webway)
+    diff: Per/A
+    points: 2
+    tags: [Xenos, Aeldari]
+    lore: Enough practical knowledge to keep a squad alive inside a craftworld's own vast, half-wild interior spaces.
+    design: Per+0 (13) for 2 points, Average.
+  - name: First Aid
+    diff: IQ/E
+    points: 1
+    tags: [Xenos, Aeldari]
+    lore: Basic field medicine, drilled into every citizen militia member.
+    design: IQ+0 (12) for 1 point, Easy.
+  - name: Artist
+    spec: (any)
+    diff: IQ/H
+    points: 4
+    tags: [Xenos, Aeldari]
+    lore: Between musters, a Guardian is a craftworker, musician, or artisan first — the Path of the Artisan most Aeldari actually walk.
+    design: IQ+0 (12) for 4 points, Hard.
+  - name: Hidden Lore
+    spec: (the Warp)
+    diff: IQ/A
+    points: 1
+    tags: [Xenos, Aeldari, Psyker]
+    lore: Every Aeldari grows up with at least a folk understanding of the warp and Slaanesh's hunger for their souls.
+    design: IQ-1 (11) for 1 point, Average.
+  - name: Leadership
+    diff: IQ/A
+    points: 2
+    tags: [Xenos, Aeldari]
+    lore: A Guardian squad's senior member leads by consensus and long acquaintance, not formal rank.
+    design: IQ+0 (12) for 2 points, Average.
+  - name: Fast-Draw
+    spec: Ammo
+    diff: DX/E
+    points: 1
+    tags: [Xenos, Aeldari]
+    lore: Standard reload drill for the shuriken catapult's disc-magazine.
+    design: DX+0 (14) for 1 point, Easy.
+  - name: Jumping
+    diff: DX/E
+    points: 1
+    tags: [Xenos, Aeldari]
+    lore: Basic battlefield mobility drill.
+    design: DX+0 (14) for 1 point, Easy.
+  - name: Climbing
+    diff: DX/A
+    points: 2
+    tags: [Xenos, Aeldari]
+    lore: Craftworld interiors are as often vertical as horizontal.
+    design: DX+0 (14) for 2 points, Average.
+  - name: Fast-Talk
+    diff: IQ/A
+    points: 1
+    tags: [Xenos, Aeldari]
+    lore: A Guardian talking down a tense standoff with another Path's followers.
+    design: IQ-1 (11) for 1 point, Average.
