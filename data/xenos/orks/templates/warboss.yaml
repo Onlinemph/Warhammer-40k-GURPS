@@ -2,9 +2,9 @@ kind: template
 output: Xenos/Orks/Templates/Ork Warboss.gct
 notes: >
   A Warboss: the biggest, meanest, canniest Ork running a Waaagh. Point
-  math: Ork Physiology 179 + Growth Lens: Warboss 277 + skills 100 = 556
+  math: Ork Physiology 186 + Growth Lens: Warboss 265 + skills 96 = 547
   points. Stats: ST 32, DX 12, IQ 10, HT 15, HP 40, Will 10, Per 10, SM +1
-  — framework.md's Warboss anchor line exactly. This lands at the low end
+  — framework.md's Warboss anchor line exactly. This lands just under the low end
   of framework.md's Astartes tier (550-800): a solid, competent Warboss
   who genuinely out-muscles a Space Marine, built mostly from sheer
   physical scale, battlefield toughness and raw command presence (see
@@ -33,13 +33,12 @@ traits:
   - include: "xenos/orks/traits.yaml#Culture: Freebooterz"
     disabled: true
 skills:
-  - name: Two-Handed Axe/Mace
-    spec: Power Klaw
-    diff: DX/A
+  - name: Brawling
+    diff: DX/E
     points: 24
     tags: [Xenos, Orks]
-    lore: A Warboss's signature weapon — often a power klaw, built to the size only a Warboss can swing one-handed anyway.
-    design: DX+6 (18) for 24 points, Average.
+    lore: A Warboss's signature weapon is often a power klaw, and a klaw is a fist, so it is swung with Brawling (as the Power Klaw entry uses); decades of winning every fight, armed or not.
+    design: "DX+7 (19) for 24 points, Easy. Replaces a separate Two-Handed Axe/Mace (Power Klaw) and a 4-point Brawling: the Power Klaw weapon line uses Brawling, so the points now buy the skill the klaw actually uses."
   - name: Guns
     spec: Rifle
     diff: DX/E
@@ -47,12 +46,6 @@ skills:
     tags: [Xenos, Orks]
     lore: Even a Warboss carries a shoota or bigger for when the klaw isn't enough reach.
     design: DX+4 (16) for 12 points, Easy.
-  - name: Brawling
-    diff: DX/E
-    points: 4
-    tags: [Xenos, Orks]
-    lore: Decades of winning every fight, armed or not.
-    design: DX+2 (14) for 4 points, Easy.
   - name: Wrestling
     diff: DX/A
     points: 4

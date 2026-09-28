@@ -1,0 +1,63 @@
+kind: template
+output: Xenos/Orks/Templates/Ork Meganob.gct
+notes: >
+  A Meganob: a Nob wearing Mega Armour (Xenos/Orks/Armour/Ork Armour and
+  Gear.eqp, DR 150) and swinging a Power Klaw or Killsaw, the heavy shock
+  infantry of a Waaagh. Built as a Nob (Ork Physiology plus Growth Lens:
+  Nob) with a shock-fighter skill package; the armour and klaw are
+  equipment, not included in the points. Point math: Ork Physiology 186 +
+  Growth Lens: Nob 74 + skills 23 = 283 points. Stats: ST 26, DX 11, IQ 9,
+  HT 14, HP 32, Will 9, Per 9, SM 0 (before mega armour's servo ST). Sits
+  in framework.md's Elite human tier (200-350); the armour is what makes a
+  Meganob a match for Terminators, not the body inside it. Enable at most
+  one Klan lens for flavor.
+traits:
+  - include: "xenos/orks/traits.yaml#Ork Physiology"
+  - include: "xenos/orks/traits.yaml#Growth Lens: Nob"
+  - include: "xenos/orks/traits.yaml#Klan: Blood Axe"
+    disabled: true
+  - include: "xenos/orks/traits.yaml#Klan: Snakebite"
+    disabled: true
+  - include: "xenos/orks/traits.yaml#Klan: Evil Sunz"
+    disabled: true
+  - include: "xenos/orks/traits.yaml#Klan: Deathskulls"
+    disabled: true
+  - include: "xenos/orks/traits.yaml#Klan: Goffs"
+    disabled: true
+  - include: "xenos/orks/traits.yaml#Klan: Bad Moons"
+    disabled: true
+  - include: "xenos/orks/traits.yaml#Culture: Freebooterz"
+    disabled: true
+skills:
+  - name: Brawling
+    diff: DX/E
+    points: 12
+    tags: [Xenos, Orks]
+    lore: A Meganob's whole fighting style is the klaw, a fist the size of a man, swung as a punch.
+    design: DX+4 (15) for 12 points, Easy. The Power Klaw and Killsaw weapon lines use Brawling.
+  - name: Guns
+    spec: Pistol
+    diff: DX/E
+    points: 4
+    tags: [Xenos, Orks]
+    lore: A Kustom Mega-Slugga or heavy pistol in the off hand, for anything the klaw cannot reach.
+    design: DX+2 (13) for 4 points, Easy.
+  - name: Axe/Mace
+    spec: Choppa
+    diff: DX/A
+    points: 2
+    tags: [Xenos, Orks]
+    lore: A choppa as a backup for when the klaw is jammed or broken.
+    design: DX+0 (11) for 2 points, Average.
+  - name: Intimidation
+    diff: Will/A
+    points: 4
+    tags: [Xenos, Orks]
+    lore: A tank-sized Ork in tank-sized armour needs to say very little.
+    design: Will+1 (10) for 4 points, Average.
+  - name: Tactics
+    diff: IQ/H
+    points: 1
+    tags: [Xenos, Orks]
+    lore: Just enough small-unit sense to know which end of the line to hit.
+    design: IQ-2 (7) for 1 point, Hard; Ork Kunnin' adds +1 in practice.

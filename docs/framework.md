@@ -227,6 +227,9 @@ Mechanicus weapons are older and stranger than Astra Militarum ones. Scale each 
 | Transuranic arquebus | Heavy sniper: beats Astartes armour (DR 100) reliably at long range |
 | Volkite weapons | Burn ex that chains to nearby targets on a kill; volkite blaster sits between heavy bolter and plasma |
 | Eradication ray | Melta-like, short range, disintegrating |
+| Grav weapons | Crush by amplifying the target's own mass: listed divisor (4), rising to (5) against a living target in armour of torso DR 70 or more (the heavier the armour, the worse it gets) |
+
+Skitarii Doctrina Imperatives are Protector (bonus to shooting when stationary) and Conqueror (bonus when advancing), per the Codex; no others.
 
 ## Xenos
 

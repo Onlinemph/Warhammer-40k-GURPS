@@ -7,12 +7,20 @@ items:
   - name: Aegis Power Armour
     tl: "11^"
     lc: 0
-    cost: 90000
-    weight: 150
+    cost: 84000
+    weight: 146
     tags: [Body Armor, Imperium, Adeptus Astartes, Grey Knights]
     dr: {"torso,vitals,groin": 100, arm: 88, leg: 88, neck: 63, skull: 100, face: 75, eye: 40, hand: 63, foot: 75}
     weak_points: 4
     attributes: {lifting_st: 9, striking_st: 5}
+    children:
+      - name: Auto-senses Suite
+        weight: 4
+        cost: 6000
+        skill_bonuses: {Observation: 2}
+        notes: As the Mark VII Auto-senses Suite (threat auto-cueing, low-light and audio filtering); requires the black carapace interface for full effect.
+        lore: The Aegis plate is a warded Mark VII derivative and keeps the standard Astartes sensor package.
+        design: Same figures as the Mark VII child (Imperium/Armour/Imperial Armour.eqp); GCS adds a container's children to its own weight and cost, so the shell carries 146 lb and $84,000 and the assembled suit still totals 150 lb and $90,000.
     conditional:
       - situation: to resist Warp Sorcery-tagged Affliction, Mind Control, Mind Probe, and Fear effects, and to resist possession, directed at the wearer
         amount: 3
@@ -52,12 +60,20 @@ items:
   - name: Aegis Terminator Armour
     tl: "11^"
     lc: 0
-    cost: 170000
-    weight: 300
+    cost: 160000
+    weight: 294
     tags: [Body Armor, Imperium, Adeptus Astartes, Grey Knights]
     dr: {"torso,vitals,groin": 200, arm: 175, leg: 175, neck: 138, skull: 200, face: 150, eye: 60, hand: 125, foot: 150}
     weak_points: 3
     attributes: {lifting_st: 20, striking_st: 10, sm: 1, basic_move: -1}
+    children:
+      - name: Auto-senses Suite (Terminator Pattern)
+        weight: 6
+        cost: 10000
+        skill_bonuses: {Observation: 2}
+        notes: As the Indomitus Pattern Terminator Auto-senses Suite; requires the black carapace interface for full effect.
+        lore: Grey Knight Terminators keep the standard Terminator sensor package under the Aegis wards.
+        design: Same figures as the Terminator-pattern child (Imperium/Armour/Imperial Armour.eqp); the shell carries 294 lb and $160,000 so the assembled suit is still 300 lb and $170,000.
     conditional:
       - situation: to resist Warp Sorcery-tagged Affliction, Mind Control, Mind Probe, and Fear effects, and to resist possession, directed at the wearer
         amount: 4
@@ -133,10 +149,11 @@ items:
       (16) as that entry, since a Nemesis blade's extra sanctification and
       psychic attunement change what it can do to a daemon, not its
       physical mass or handling. Exact dice distribution at full Astartes
-      ST 30 (sw 6d per B16, so field-on totals 9d+1(10) cut): penetrates
-      carapace (DR 70), Sororitas power armour (DR 85), and Astartes power
-      armour (DR 100) essentially always (100% by exact distribution) and
-      Terminator plate (DR 200, eff. DR 20) 99.1% of the time — matching
+      ST 30 (sw 5d+2 per B16, so field-on totals 8d+3(10) cut, average 31):
+      penetrates carapace (DR 70), Sororitas power armour (DR 85), and
+      Astartes power armour (DR 100) essentially always (100% by exact
+      distribution) and Terminator plate (DR 200, eff. DR 20) 98.6% of the
+      time — matching
       "the disruption field shears power armour whoever holds it" at the
       high end of this project's power-weapon family. The Force Strike
       line reuses the Nemesis Force Halberd's waived-Perils convention
@@ -198,10 +215,10 @@ items:
       grip and shorter lever arm, keeping Shortsword rather than
       Broadsword as the family skill. The same power-field +3d/Armor
       Divisor (10) addition applies per blade. At full Astartes ST 30 (sw
-      6d), field-on per falchion totals 9d(10) cut — one point under the
-      Force Sword's 9d+1(10) from the one lower mundane pip, penetrating
-      every one of the framework's personal-armour anchors at effectively
-      the same rate as the Force Sword above. Priced level with the Force
+      5d+2), field-on per falchion totals 8d+2(10) cut — one point under
+      the Force Sword's 8d+3(10) from the one lower mundane pip,
+      penetrating every one of the framework's personal-armour anchors up
+      to Astartes plate always and Terminator plate 97.6% of the time. Priced level with the Force
       Sword (as a matched pair, not per blade) since a falchion set is no
       less a piece of sanctified Nemesis wargear for being lighter; weight
       given is per blade.
@@ -252,10 +269,10 @@ items:
       mechanically the same massive capacitor-headed maul in Astartes
       hands — what makes it a Nemesis weapon is the sanctification and
       permanent anti-daemon attunement carried in the Force Strike line,
-      not a heavier head. At full Astartes ST 30 (sw 6d, field-on 12d(10)
-      cr) it penetrates every anchor in the framework's personal-armour
-      table (carapace, Sororitas, Astartes, and Terminator plate alike)
-      essentially 100% of the time by exact dice distribution — a
+      not a heavier head. At full Astartes ST 30 (sw 5d+2, field-on 11d+2(10)
+      cr, average 40.5) it penetrates every anchor in the framework's
+      personal-armour table (carapace, Sororitas, Astartes, and Terminator
+      plate alike) essentially 100% of the time by exact dice distribution — a
       Terminator-killer even before the Force Strike line adds its
       anti-daemon DR-ignoring component, matching the weapon's reputation
       against the very worst things a Grey Knight fights. LC0 and
@@ -321,13 +338,14 @@ items:
       field-on sw+3d(10) cr) is instead scaled to the Power Stave's heavier
       profile (sw+2 cr/thr+2 cr, field-on sw+3d+2(10) cr, Imperium/Weapons/
       Melee Weapons.eqp) and then given Astartes-scale weight and min ST (9
-      lb/ST 14, matching the Nemesis Force Halberd's two-handed-haft
-      figures) rather than the human Force Staff's 5 lb/ST 10, since this
+      lb/ST 14, lighter than the Nemesis Force Halberd's 14 lb but the same
+      two-handed-haft class) rather than the human Force Staff's 5 lb/ST 10, since this
       is built for a Grey Knight's grip and strength like every other
-      Nemesis-family item on this page. At full Astartes ST 30 (sw 6d,
-      field-on swing totals 9d+2(10) cr) it penetrates every personal-armour
-      anchor in the framework essentially always, same order as the other
-      Nemesis melee weapons. The conditional bonus (+2, Area of reach
+      Nemesis-family item on this page. At full Astartes ST 30 (sw 5d+2,
+      field-on swing totals 8d+4(10) cr, thrust 6d+2(10) cr) the swing
+      penetrates every personal-armour anchor in the framework essentially
+      always (99.3% against Terminator plate); the thrust penetrates Astartes
+      plate 99.9% of the time but Terminator plate only 72.1%. The conditional bonus (+2, Area of reach
       rather than self-only, reflecting a stave actively held out to ward a
       companion rather than worn like the Aegis armour's inscriptions) uses
       the same conditional_modifier mechanic as the Psychic Hood and Aegis
@@ -418,7 +436,7 @@ items:
         st: 25
         bulk: -7
         rcl: 3
-        skill: Guns (Rifle)
+        skill: Gunner (Machine Gun)
       - usage: Follow-up (if bolt penetrates)
         damage: 6d cr ex
         acc: 4
@@ -428,7 +446,7 @@ items:
         st: 25
         bulk: -7
         rcl: 3
-        skill: Guns (Rifle)
+        skill: Gunner (Machine Gun)
     notes: >-
       Man-portable by a single Astartes (no tripod), or arm-mounted on
       Terminator armour in place of a storm bolter.
@@ -459,6 +477,14 @@ items:
       14.5%, AV12-14 (DR 200-350) 0.06% or less — an infantry- and
       daemon-killer, not a tank-killer, the same role this project already
       gives the Assault Cannon.
+      Dice: 6d rather than the Heavy Bolter's 7d (and a 6d rather than 8d
+      follow-up) because this is a 60 lb man-portable weapon, not an 85 lb
+      tripod gun; the armour divisor (3) does the work instead. Against
+      Astartes plate it penetrates 85.5% of hits against the Heavy Bolter's
+      41.4%, which is the role the fiction gives it (the answer to armoured
+      targets, not to crowds). Skill is Gunner (Machine Gun): it is a
+      braced heavy weapon (framework.md's braced/mounted-heavies rule), the
+      same skill the Purgation lens and Grey Knight template train.
       Handling: 60 lb loaded (heavier than the Storm Bolter's 40 lb for
       the reinforced barrel and larger sanctified-round mechanism, lighter
       than the tripod Heavy Bolter's 85 lb since it's meant to be carried
@@ -491,7 +517,7 @@ items:
         st: 21
         bulk: -6
         rcl: 2
-        skill: Guns (Rifle)
+        skill: Gunner (Machine Gun)
       - usage: Follow-up (if bolt penetrates)
         damage: 2d cr ex
         acc: 3
@@ -501,7 +527,7 @@ items:
         st: 21
         bulk: -6
         rcl: 2
-        skill: Guns (Rifle)
+        skill: Gunner (Machine Gun)
     notes: Man-portable by a single Astartes; carried by Purgation and Interceptor squads for close-in suppression where a psycannon's report would betray a kill-team's position.
     lore: >-
       A quieter Grey Knight support weapon, per Codex: Grey Knights
@@ -523,7 +549,8 @@ items:
       essentially never Terminator plate — a real but limited threat that
       trades the Psycannon's armour-cracking punch for volume of fire and
       a quiet report, exactly the "suppress rather than kill outright"
-      role Codex background gives it.
+      role Codex background gives it. Skill is Gunner (Machine Gun) for the
+      same reason as the Psycannon (braced 45 lb support weapon).
       Handling: 45 lb loaded (lighter than the Psycannon's 60 lb for a
       smaller-calibre mechanism and integral suppressor rather than a
       full reinforced barrel). Min ST 21 (sqrt(10x45)~21.2). Bulk -6

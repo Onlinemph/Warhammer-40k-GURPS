@@ -13,11 +13,11 @@ notes: >
   unless the player wants the Xenophase Blade instead of a chainsword.
 
   This add-on's own traits and skills, at their default (rank-and-file,
-  no optional lens enabled) settings, come to about 60 points — see the
+  no optional lens enabled) settings, come to 80 points — see the
   point math below. The Astartes Battle-Brother.gct template it layers
-  onto totals 791 points before equipment (Astartes package with ST 30
+  onto totals 821 points before equipment (Astartes package with ST 30
   and DX 16, plus training and skills), so a rank-and-file Deathwatch
-  Marine is about 855 (the add-on is 64 as GCS computes it). Enabling any of the disabled lenses below (Watch
+  Marine is about 901. Enabling any of the disabled lenses below (Watch
   Sergeant, Watch Master, Black Shield, Veteran, extra Deathwatch
   Authority) adds further points on top of that,
   per each lens's own note.
@@ -25,13 +25,13 @@ notes: >
   Point math for this add-on's default build: -10 (Duty: The Long Watch)
   - 1 (Vigil Oath quirk) - 5 (Sense of Duty, Kill-team, included from
   Imperial Traits.adq) - 1 (Chapter Rivalry quirk) = -17 of disadvantage;
-  + 20 (Xenos Hunter Talent 4) + 5 (Xenos Bane: Tyranids, enabled by
-  default as the archetypal Deathwatch specialisation — swap which child
-  is enabled for a different xenos focus) = 25 of advantage; + 52 of
+  + 40 (Xenos Hunter Talent 4 at 10/level) + 5 (Xenos Bane: Tyranids,
+  enabled by default as the archetypal Deathwatch specialisation — swap
+  which child is enabled for a different xenos focus) = 45 of advantage; + 52 of
   skills (Hidden Lore (Xenos) +8, Tactics +8, Survival (Any) +8, Tracking
   +8, Gesture +4, Soldier +8, and a new Guns (Shotgun) 8, all additive to
   the Battle-Brother's own entries of the same name where one already
-  exists, per each skill line's own note) = -17 + 25 + 52 = 60. The
+  exists, per each skill line's own note) = -17 + 45 + 52 = 80. The
   disabled Watch Sergeant, Watch Master, Black Shield, Veteran and extra
   Deathwatch Authority lenses below are not part of this baseline; each
   states what enabling it costs on top.
@@ -50,11 +50,11 @@ traits:
   - include: "imperium/deathwatch/traits.yaml#Xenos Bane"
     notes: >
       Alternative Abilities (B61): all five specialisations are listed,
-      but only one costs points at a time (5, the shared cost of every
-      child) — pick the xenos threat that fits the Marine's posting
-      history; a GM may let a long-serving Black Shield take a second at
-      the same rate (see the parent trait's own container note in
-      Deathwatch.adq).
+      but only Tyranids is enabled (5 points, the shared cost of every
+      child) — enable the child that fits the Marine's posting history
+      instead and disable Tyranids; a GM may let a long-serving Black
+      Shield enable a second for 1 more point (see the parent trait's own
+      container note in Deathwatch.adq).
   - name: "Watch Sergeant"
     container: meta_trait
     tags: [Imperium, Adeptus Astartes, Deathwatch]
@@ -119,13 +119,10 @@ traits:
     disabled: true
     notes: >
       Disabled lens for a Vanguard-tier or otherwise especially
-      experienced kill-team veteran. Enable for +25 points (a second Xenos
-      Bane specialisation at the GM-allowed exception rate, plus Combat
-      Reflexes-adjacent honed reactions already covered by the
-      Battle-Brother's own Hypno-Indoctrination — this lens intentionally
-      adds skill points rather than new combat advantages, since the
-      Astartes and Hypno-Indoctrination packages already cover reflexes
-      and pain tolerance).
+      experienced kill-team veteran. Enable for +25 points, all of it free skill
+      points (this lens intentionally adds skill points rather than new
+      combat advantages, since the Astartes and Hypno-Indoctrination
+      packages already cover reflexes and pain tolerance).
     children:
       - name: Veteran Skill Package
         points: 25

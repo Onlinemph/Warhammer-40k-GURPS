@@ -1,0 +1,78 @@
+kind: template
+output: Xenos/Orks/Templates/Ork Big Mek.gct
+notes: >
+  A Big Mek: an old, grown Mek who has survived long enough to become a
+  Nob-sized boss of engineers, carrying a Kustom Force Field or a
+  Kustom Mega-Blasta into battle (equipment, not included in the points).
+  Built as a Nob plus Mek Instinct 2, as the Mek template's own note
+  suggests. Point math: Ork Physiology 186 + Growth Lens: Nob 74 + Mek
+  Instinct (level 2) 20 + skills 30 = 310 points, inside framework.md's
+  Elite human tier (200-350). Stats: ST 26, DX 11, IQ 9, HT 14, HP 32, Will
+  9, Per 9, SM 0. Enable at most one Klan lens for flavor.
+traits:
+  - include: "xenos/orks/traits.yaml#Ork Physiology"
+  - include: "xenos/orks/traits.yaml#Growth Lens: Nob"
+  - include: "xenos/orks/traits.yaml#Mek Instinct"
+    levels: 2
+  - include: "xenos/orks/traits.yaml#Klan: Blood Axe"
+    disabled: true
+  - include: "xenos/orks/traits.yaml#Klan: Snakebite"
+    disabled: true
+  - include: "xenos/orks/traits.yaml#Klan: Evil Sunz"
+    disabled: true
+  - include: "xenos/orks/traits.yaml#Klan: Deathskulls"
+    disabled: true
+  - include: "xenos/orks/traits.yaml#Klan: Goffs"
+    disabled: true
+  - include: "xenos/orks/traits.yaml#Klan: Bad Moons"
+    disabled: true
+  - include: "xenos/orks/traits.yaml#Culture: Freebooterz"
+    disabled: true
+skills:
+  - name: Engineer
+    spec: (Ork Tech)
+    diff: IQ/H
+    points: 8
+    tags: [Xenos, Orks]
+    lore: Designing (in the loosest sense) walkers, battlewagons and the occasional accidental superweapon.
+    design: IQ+1 (10) for 8 points, Hard; +2 more in practice from Mek Instinct 2.
+  - name: Mechanic
+    spec: (Ork Tech)
+    diff: IQ/A
+    points: 8
+    tags: [Xenos, Orks]
+    lore: Keeping a whole mob's shootas, trukks and walkers running between battles.
+    design: IQ+2 (11) for 8 points, Average; +2 more in practice from Mek Instinct 2.
+  - name: Armoury
+    spec: (Ork Tech)
+    diff: IQ/A
+    points: 4
+    tags: [Xenos, Orks]
+    lore: Building and mending the mob's weapons and armour.
+    design: IQ+1 (10) for 4 points, Average; +2 more in practice from Mek Instinct 2.
+  - name: Explosives
+    spec: Demolition
+    diff: IQ/A
+    points: 2
+    tags: [Xenos, Orks]
+    lore: A Big Mek is as likely to blow something up on purpose as by accident.
+    design: IQ+0 (9) for 2 points, Average; +2 more in practice from Mek Instinct 2.
+  - name: Guns
+    spec: Pistol
+    diff: DX/E
+    points: 2
+    tags: [Xenos, Orks]
+    lore: A kustom pistol or Mega-Blasta for when the mob needs persuading.
+    design: DX+1 (12) for 2 points, Easy.
+  - name: Leadership
+    diff: IQ/A
+    points: 4
+    tags: [Xenos, Orks]
+    lore: A Big Mek bosses a crew of Meks and Grots by fist and reputation.
+    design: IQ+1 (10) for 4 points, Average.
+  - name: Intimidation
+    diff: Will/A
+    points: 2
+    tags: [Xenos, Orks]
+    lore: Keeps the Grots moving and the Meks honest.
+    design: Will+0 (9) for 2 points, Average.

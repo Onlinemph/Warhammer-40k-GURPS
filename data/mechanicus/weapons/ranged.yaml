@@ -1091,20 +1091,25 @@ items:
     design: >
       No framework.md anchor names graviton weapons directly, so this is built from the project's
       existing anti-armour design language (a high-damage, divisor-boosted crushing attack, the same
-      structural approach the Autocannon and Krak Missile entries use, rather than any new grav-
-      specific mechanic) instead of a 40k tabletop "ignores extra armour save" rule this project
-      doesn't reproduce. Checked by exact dice distribution against the vehicle AV table: 6dx4(4) cr
+      structural approach the Autocannon and Krak Missile entries use) plus one note-level grav
+      mechanic: gravity's grip scales with the mass it acts on, so against a living target in
+      torso DR 70+ armour the divisor improves to (5). This is a project extrapolation from the
+      tabletop weapon's reputation for punishing heavy armour (ordering evidence only, not a
+      sourced rule) and not a change to the vehicle figures below. Against personal armour, exact
+      dice distribution: at (4) it penetrates carapace (DR 70) 100%, Astartes power armour
+      (DR 100) 100%, Mk X Gravis (DR 130-150) about 99.8%, Terminator plate (DR 200) 98.0% and
+      Allarus plate (DR 250) 90.4%; at (5) those become 100%, 100%, 100%, 99.5% and 98.0%. Checked by exact dice distribution against the vehicle AV table: 6dx4(4) cr
       averages 84 and penetrates AV10-12 (DR 100-200, eff. 25-50) 98-100% of the time, AV13 (DR 275,
       eff. 68.8) 79.4% of the time, and AV14 (DR 350, eff. 87.5) 45.4% of the time - a hair below the
       Krak Missile anchor's own figures at the same tiers (90%/64%), appropriately positioning a
-      walker-mounted repeating weapon just under a disposable one-shot warhead's raw punch.
+      war-form-mounted repeating weapon just under a disposable one-shot warhead's raw punch.
       Handling stats: weight 150 lb reflects that this is bolted permanently to a war-engine's
       chassis, never carried; the raw formula, sqrt(10x150)=38.7, is not meaningful for a weapon no
       human ever shoulders, so ST is given as a nominal 30M (mounted) simply to flag that it cannot
       be fired unmounted. RoF 1 (the gravitic capacitor array must recharge between pulses) and
       shots 6(10) follow a heavy energy-weapon reload cycle. Bulk -8 is nominal, as with the
       Eradication Ray. Rcl 1: the "kick" of a gravity pulse is absorbed by the chassis mount, not
-      felt as conventional recoil. Acc 9: built for a fast walker platform engaging light vehicles
+      felt as conventional recoil. Acc 9: built for a mobile heavy platform engaging light vehicles
       and infantry at real range, this carries genuine targeting optics, matching the Lascannon's
       own Acc 14 scaled down for a lighter chassis and shorter range band. TL marked 12^ per
       framework.md's superscience notation, since graviton manipulation is warp-adjacent physics
@@ -1127,23 +1132,23 @@ items:
         bulk: -8
         rcl: 1
         skill: Gunner (Beams)
-        notes: As the Torsion Cannon's note: divisor (5) against a living target in torso DR 70+ armour.
+        notes: As the Torsion Cannon, divisor (5) against a living target in torso DR 70+ armour.
     lore: >
       The Kataphron Destroyer's own graviton weapon, background material distinguishing it from the
       Kataphron Breacher's torsion cannon as a shorter-ranged, closer-support pattern built into a
-      slower, more heavily armoured war-form rather than a fast walker's main gun.
+      slower, more heavily armoured war-form rather than a heavy platform's main gun.
     design: >
       One die down from the Torsion Cannon (5dx4(4) cr vs. 6dx4(4) cr), reflecting a smaller
-      reactor-fed unit on a close-support chassis rather than a walker's dedicated main gun: checked
+      reactor-fed unit on a close-support chassis rather than a dedicated main gun: checked
       by exact dice distribution, it averages 70 and penetrates AV10-12 90-100% of the time, falling
-      to 50% at AV13 and 15.2% at AV14 - meaningfully behind the Torsion Cannon at the top end of the
+      to 50% at AV13 and 15.2% at AV14 (vehicles never get the (5) divisor) - meaningfully behind the Torsion Cannon at the top end of the
       vehicle table, matching its "close-support, not a dedicated tank-hunter" role. Handling stats:
       weight 120 lb, lighter than the Torsion Cannon's 150 lb for the smaller unit; ST given as a
       nominal 28M (chassis-mounted, never carried) for the same reason as the Torsion Cannon's own
       figure. RoF 1 and shots 8(10) (a slightly larger, slower-cycling cell than the Torsion Cannon's,
       suited to a slower-moving chassis) follow the same graviton-recharge logic. Bulk -8 and Rcl 1
       as the Torsion Cannon. Acc 6, well below the Torsion Cannon's 9, reflecting a shorter-ranged,
-      close-support engagement profile rather than a fast walker's stand-off gunnery role.
+      close-support engagement profile rather than a stand-off gunnery role.
 
   - name: Grav-gun, Skitarii Pattern
     tl: "12^"
@@ -1162,18 +1167,20 @@ items:
         bulk: -6
         rcl: 1
         skill: Guns (Rifle)
-        notes: As the Torsion Cannon's note on how graviton crushing damage is modelled.
+        notes: As the Torsion Cannon, divisor (5) against a living target in torso DR 70+ armour.
     lore: >
-      A rare man-portable graviton weapon fielded by Skitarii heavy-support specialists rather than
-      a war-engine, scaling the Torsion Cannon and Heavy Grav-cannon's principle down to something a
-      single augmented human can shoulder and fire.
+      Invented, GM-optional entry: this project knows of no Mechanicus source for a man-portable
+      grav small arm (grav rifles are usually Primaris-era kit, and the Kataphron carry the
+      grav-cannon). It is included as a speculative scaling of the Torsion Cannon and Heavy Grav-cannon's
+      principle down to something a single augmented human can shoulder and fire.
     design: >
-      Continues the graviton family's established design (crushing damage, divisor (4), no bespoke
-      "ignores extra armour" rule beyond that divisor) scaled down to a genuinely man-portable
-      weapon: 4dx3(4) cr averages 42 and penetrates carapace (DR 70, eff. 17.5) 99.6% of the time,
-      Sororitas power armour (DR 85, eff. 21.2) 97.3% of the time and Astartes power armour (DR 100,
-      eff. 25) 94.6% of the time by exact dice distribution, falling to 66.4% against Mk X Gravis
-      plate (DR 150, eff. 37.5) - a real anti-armour threat at personal scale without approaching the
+      Continues the graviton family's established design (crushing damage, divisor (4), improving to
+      (5) against a living target in torso DR 70+ armour) scaled down to a genuinely man-portable
+      weapon: 4dx3(4) cr averages 42 and, by exact dice distribution at the (5) divisor these
+      targets trigger, penetrates carapace (DR 70, eff. 14) 99.9% of the time, Sororitas power
+      armour (DR 85, eff. 17) 99.6% and Astartes power armour (DR 100, eff. 20) 98.8%, falling to
+      84.1% against DR 150 plate (eff. 30); at the plain (4) it would be 99.6%, 97.3%, 94.6% and
+      66.4% - a real anti-armour threat at personal scale without approaching the
       Torsion Cannon or Heavy Grav-cannon's vehicle-wrecking output, appropriate for the smallest
       weapon in the family. Handling stats: weight 14 lb for a genuinely shoulder-fired support
       weapon, far below the chassis-mounted members of the family; min ST sqrt(10x14)=11.8, rounded
@@ -1217,11 +1224,12 @@ items:
           extinguished; does not apply against a hermetically sealed suit whose seal hasn't been
           breached that scene.
     lore: >
-      A wrist- or forearm-mounted incendiary projector built into the Sicarian Ruststalker's
-      chassis alongside its transonic blade, current Codex Adeptus Mechanicus background describing
-      it as a short, hot burst used to flush a target from cover or finish a wounded opponent at the
-      same close range the Ruststalker's melee weapons already operate in, rather than a
-      squad-support flame weapon in its own right.
+      A wrist- or forearm-mounted incendiary projector. As best this project can tell (tabletop
+      Codex level, moderate confidence) combustors are fitted to Kastelan Robots rather than
+      Sicarian Ruststalkers; this entry keeps the compact size and lets a GM mount it on a
+      Ruststalker-pattern chassis if wanted. It is a short, hot burst used to flush a target from
+      cover or finish a wounded opponent at close range, rather than a squad-support flame weapon
+      in its own right.
     design: >
       Built as a hand-flamer-class weapon on the Imperium Flame Weapons file's own established
       design logic (B412 area/cone attack, plus the B433 burning-target follow-up and its

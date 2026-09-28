@@ -14,13 +14,12 @@ items:
       Astartes Hypno-Indoctrination package already prices. A seconded
       Marine answers to two chains of command until his tour ends.
     lore: >
-      Every Chapter (bar a handful of holdouts and the notorious
-      exceptions the Inquisition has learned to work around) owes the
-      Deathwatch a tithe of Battle-Brothers under the ancient Pact of the
-      Long Vigil, sworn after the Horus Heresy so that no single Chapter
-      could again be turned against the Imperium unsupervised while the
-      Adeptus Astartes still pooled its expertise against the alien. A
-      seconded Marine takes a fresh oath at the Watch Fortress he reports
+      Chapters (bar a handful of holdouts and the notorious
+      exceptions the Inquisition has learned to work around) send the
+      Deathwatch Battle-Brothers under the ancient Pact of the
+      Long Vigil: the Watch was founded under the direction of the
+      Inquisition's Ordo Xenos to hunt the alien, and the Chapters
+      contribute Marines seconded to it. A seconded Marine takes a fresh oath at the Watch Fortress he reports
       to, serves a term of the Chapter Master's choosing (often years,
       sometimes a Marine's remaining service), and lives, trains and
       fights alongside strangers from other Chapters for its duration —
@@ -32,7 +31,7 @@ items:
     design: >
       Basic Set Duty (B133) at a lighter frequency and cost than the
       Chapter Duty it sits alongside (Quite Often rather than Almost
-      Always, -10 rather than -15): the danger is not less real, but the
+      All the Time, -10 rather than the Chapter Duty's -20): the danger is not less real, but the
       obligation is bounded to a term rather than lifelong, and unlike
       Chapter Duty it does not also carry the weight of "and Imperium" —
       that half is still covered by the Marine's own Chapter oath. This
@@ -97,7 +96,7 @@ items:
   # ------------------------------------------------------------ Xenos expertise
 
   - name: Xenos Hunter
-    per_level: 5
+    per_level: 10
     levels: 4
     tags: [Advantage, Mental, Imperium, Deathwatch, Talent]
     ref: B89
@@ -122,8 +121,9 @@ items:
     design: >
       Built as a Basic Set Talent (B89-90): a single leveled trait giving a
       flat bonus to a cluster of related skills (Hidden Lore (Xenos),
-      Tactics, Survival, Tracking — four skills, priced at the standard
-      5 points/level GURPS uses for a Talent covering that many abilities)
+      Tactics, Survival, Tracking — four skills, priced at the 10 points/level
+      GURPS uses for a Talent covering three to five skills, B89; the
+      Psyker Talent in Psykers and the Warp.adq uses the same rate)
       plus a modest reaction bonus from people who share or respect the
       specialty, per B90's Talent template. This is the "Talent" the
       framework's checklist asks for, honestly built rather than reusing
@@ -134,12 +134,15 @@ items:
     tags: [Advantage, Mental, Imperium, Deathwatch]
     notes: >
       Pick one specialisation per Marine (a kill-team specialist rarely
-      carries more than one live vendetta); a GM running a long-service
-      Black Shield may allow a second at the same total cost, split across
-      both.
+      carries more than one live vendetta): Tyranids is enabled here and
+      the other four are disabled, so the container costs 5. Swap by
+      disabling one and enabling another. A GM running a long-service
+      Black Shield may enable a second; as an alternative ability it then
+      adds 1 point (one fifth of its cost).
     children:
       - name: "Xenos Bane (Orks)"
         points: 5
+        disabled: true
         conditional:
           - situation: to hit, and to Tactics/Survival rolls made specifically against Orks and Ork-kin
             amount: 1
@@ -150,16 +153,19 @@ items:
             amount: 1
       - name: "Xenos Bane (Necrons)"
         points: 5
+        disabled: true
         conditional:
           - situation: to hit, and to Tactics/Survival rolls made specifically against Necrons
             amount: 1
-      - name: "Xenos Bane (Eldar/Drukhari)"
+      - name: "Xenos Bane (Aeldari/Drukhari)"
         points: 5
+        disabled: true
         conditional:
           - situation: to hit, and to Tactics/Survival rolls made specifically against Aeldari of any kind
             amount: 1
       - name: "Xenos Bane (T'au)"
         points: 5
+        disabled: true
         conditional:
           - situation: to hit, and to Tactics/Survival rolls made specifically against the T'au Empire's forces
             amount: 1
