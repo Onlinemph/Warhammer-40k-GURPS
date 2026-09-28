@@ -1,0 +1,362 @@
+{
+	"version": 5,
+	"rows": [
+		{
+			"id": "eiMqhL-2lWIqnY7X2",
+			"description": "Inferno Pistol",
+			"local_notes": "Lore: A pistol-format melta weapon carried by Astartes command squads, Inquisitors and Tempestus officers wanting a point-blank answer to armour without a full meltagun's bulk; background consistently frames it as devastating at arm's length and near-useless at any real distance.\n\nDesign: Scaled down two dice from the meltagun anchor (8dx3(10) burn) to 6dx3(10) burn for a pistol- sized fuel cell, on a very short 5/25 range band matching the anchor's \"vehicle-killer at short range, much less beyond\" description. See the Meltagun entry for the armour check; a pistol still comfortably beats carapace and power armour at point-blank range even though it falls short of a full meltagun against the heaviest vehicle armour.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium",
+				"Adeptus Astartes",
+				"Inquisition"
+			],
+			"tech_level": "11",
+			"legality_class": "1",
+			"base_value": "2600",
+			"base_weight": "6 lb",
+			"weapons": [
+				{
+					"id": "W0aABxNcP9RhF_bEV",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "6dx3",
+						"armor_divisor": 10
+					},
+					"accuracy": "1",
+					"range": "5/25",
+					"rate_of_fire": "1",
+					"shots": "3(5)",
+					"bulk": "-2",
+					"recoil": "1",
+					"strength": "9",
+					"usage": "Short range (up to ½D)",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "WY7TZb2W3seBct5jP",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "3dx3",
+						"armor_divisor": 5
+					},
+					"accuracy": "1",
+					"range": "5/25",
+					"rate_of_fire": "1",
+					"shots": "3(5)",
+					"bulk": "-2",
+					"recoil": "1",
+					"strength": "9",
+					"usage": "Beyond ½D",
+					"usage_notes": "Half damage past ½D (the usual GURPS rule) and the armour divisor falls from (10) to (5) as the fusion beam loses cohesion. Still dangerous to light and medium vehicles (meltagun: avg 42 vs AV12 DR 120/5 = 24), no longer a heavy-tank killer.\n",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "ePPyb3rkLMNLYLZOq",
+			"description": "Meltagun",
+			"local_notes": "Lore: The Imperium's dedicated close-range anti-armour infantry weapon, flash-vaporising the target's outer surface with a superheated fusion reaction; fiction across every era treats it as able to gut a tank at point-blank range and as nearly worthless at any distance, in sharp contrast to a lascannon's much longer reach.\n\nDesign: This is the project's fixed melta anchor: 8dx3(10) burn at ½D, \"much less beyond.\" Checked against the vehicle armour table: AV14 (DR 250, a Leman Russ or Land Raider's front) has effective DR 25 against the (10) armour divisor; 8dx3 averages 84, more than three times the effective DR, so it easily beats even the heaviest armour in the framework's table at ½D range, as the assignment requires. The sharp drop-off is modelled as a second weapon line rather than a formula: beyond ½D the round keeps only its base dice (4d burn), with neither the x3 multiplier nor the (10) armour divisor, representing the fusion reaction losing coherence in open air before it reaches the target. This is a deliberate departure from default GURPS range rules (which do not normally reduce damage with range) rather than an anchor conflict; it exists because the framework explicitly calls for \"much less beyond,\" and a flat halving of the anchor's own huge multiplier would still be an anti-tank weapon at any range, which the fiction does not support. ST 10 and a very short 10/50 range band (versus a boltgun's 200/1000) capture the weapon's role as a close-assault specialist, not a rifle.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium",
+				"Astra Militarum",
+				"Adeptus Astartes"
+			],
+			"tech_level": "11",
+			"legality_class": "1",
+			"base_value": "4200",
+			"base_weight": "17 lb",
+			"weapons": [
+				{
+					"id": "WFqU9PD0k13Gk4ogI",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "8dx3",
+						"armor_divisor": 10
+					},
+					"accuracy": "2",
+					"range": "10/50",
+					"rate_of_fire": "1",
+					"shots": "4(5)",
+					"bulk": "-4",
+					"recoil": "1",
+					"strength": "10",
+					"usage": "Short range (up to ½D)",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "W9F9bhFlbcSjBLWWK",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "4dx3",
+						"armor_divisor": 5
+					},
+					"accuracy": "2",
+					"range": "10/50",
+					"rate_of_fire": "1",
+					"shots": "4(5)",
+					"bulk": "-4",
+					"recoil": "1",
+					"strength": "10",
+					"usage": "Beyond ½D",
+					"usage_notes": "Half damage past ½D (the usual GURPS rule) and the armour divisor falls from (10) to (5) as the fusion beam loses cohesion. Still dangerous to light and medium vehicles (meltagun: avg 42 vs AV12 DR 120/5 = 24), no longer a heavy-tank killer.\n",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "e64ziIFBU5EcDC7Nz",
+			"description": "Multi-Melta",
+			"local_notes": "Lore: A tripod- or vehicle-mounted heavy melta weapon fielded by heavy weapon teams and as a common tank sponson/hull weapon; background treats it exactly as a bigger meltagun, killing the heaviest vehicles at short range and rapidly losing effect beyond it.\n\nDesign: Two dice over the meltagun anchor (10d vs 8d), matching this project's standard heavy-weapon progression, on a slightly longer 15/75 range band appropriate to a crew-served weapon with a bigger reactor. ST 13 and Gunner (Beams) reflect a support weapon needing a mount or a very strong user rather than a shoulder-fired arm; the same short-range/beyond-½D split as the meltagun models the identical sharp fall-off.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium",
+				"Astra Militarum",
+				"Adeptus Astartes"
+			],
+			"tech_level": "11",
+			"legality_class": "1",
+			"base_value": "8000",
+			"base_weight": "55 lb",
+			"weapons": [
+				{
+					"id": "WS4tBbPkhFzo3_JcE",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "10dx3",
+						"armor_divisor": 10
+					},
+					"accuracy": "3",
+					"range": "15/75",
+					"rate_of_fire": "1",
+					"shots": "6(5)",
+					"bulk": "-6",
+					"recoil": "1",
+					"strength": "13",
+					"usage": "Short range (up to ½D)",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Gunner"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Beams"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Gunner"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "WeoLD1b9HF6M8OP3l",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "5dx3",
+						"armor_divisor": 5
+					},
+					"accuracy": "3",
+					"range": "15/75",
+					"rate_of_fire": "1",
+					"shots": "6(5)",
+					"bulk": "-6",
+					"recoil": "1",
+					"strength": "13",
+					"usage": "Beyond ½D",
+					"usage_notes": "Half damage past ½D (the usual GURPS rule) and the armour divisor falls from (10) to (5) as the fusion beam loses cohesion. Still dangerous to light and medium vehicles (meltagun: avg 42 vs AV12 DR 120/5 = 24), no longer a heavy-tank killer.\n",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Gunner"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Beams"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Gunner"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		}
+	]
+}

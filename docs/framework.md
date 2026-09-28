@@ -81,7 +81,7 @@ Limbs are usually a few DR below torso. Specify every location explicitly.
 | Boltgun (Godwyn/standard) | 6d(2) pi+, follow-up 3d cr ex | Turns an unarmoured man to paste. Penetrates carapace easily. Against power armour (effective DR 20), penetrates sometimes: a Marine takes several bolts to kill another Marine. |
 | Heavy bolter | 8d(2) pi+, follow-up 4d cr ex | Chews light vehicles (AV10 ≈ DR 50). |
 | Plasma gun | 6d×2(3) burn ex | Kills Marines through power armour. Overheat risk (see Malfunction). |
-| Meltagun | 8d×3(10) burn at ½D, much less beyond | Vehicle-killer at short range. |
+| Meltagun | 8d×3(10) burn to ½D; beyond ½D 4d×3(5) | Vehicle-killer at short range. |
 | Lascannon | 8d×4(5) burn | Kills tanks and Terminators. |
 | Chainsword | sw+1d cut | Tears flesh, skids off power armour. |
 | Power sword | sw+1d+1(10) cut | The disruption field shears ceramite whoever holds it. |
