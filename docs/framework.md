@@ -302,6 +302,52 @@ Aeldari psychic powers use the same Sorcery model as Imperial psykers, but the A
 | Rune armour | Psychic ward: regenerating shield (see Personal force fields), pool scaling with the wearer's Warp Empowerment |
 | Holo-suit / domino field | Harlequins: large defence bonus from scattering the wearer's image, not DR |
 
+### Drukhari
+
+The Drukhari (Dark Eldar) are the Aeldari who never left for the craftworlds: raiders from Commorragh, the Dark City hidden in the webway. Physically they are Aeldari and share the same speed and precision (reuse the Aeldari Attribute Modifiers). What separates them is the soul. Slaanesh drains them constantly, and they have no spirit stones; they hold it off by feeding on the pain of others. A Drukhari who feeds well is ageless and grows stronger in the heat of slaughter (Power from Pain); one who starves withers. They shun psychic power entirely, since opening the mind to the warp invites Slaanesh in: no Drukhari template is a psyker. Death is often temporary: the Haemonculus Covens regrow the dead from a fragment, for a price.
+
+Society is three rival powers: the Kabals (Archons and their Kabalite Warriors), the Wych Cults (gladiators of the arenas: Succubi, Hekatrixes, Wyches) and the Haemonculus Covens (flesh-sculptors: Haemonculi, Wracks, Grotesques). Incubi are mercenary warrior-cultists sworn to Arhra, Mandrakes are shadow-things of Aelindrach, and Scourges are winged Drukhari who paid for their wings in surgery.
+
+| Drukhari | ST | DX | IQ | HT | HP | Per | Will | Move | Notes |
+|---|---|---|---|---|---|---|---|---|---|
+| Kabalite Warrior | 10 | 14 | 12 | 10 | 10 | 13 | 11 | 9 | The Guardian's physical equal; a raider, not a militiaman. |
+| Wych | 11 | 16 | 12 | 11 | 11 | 13 | 12 | 12 | Arena-trained, drug-fuelled acrobat; dodge is her armour. |
+| Succubus | 12 | 18 | 13 | 12 | 12 | 14 | 14 | 12 | Arena queen. |
+| Incubus | 12 | 17 | 12 | 12 | 12 | 13 | 14 | 10 | Heavily armoured blade-master. |
+| Archon | 12 | 18 | 15 | 12 | 12 | 15 | 17 | 10 | Ancient, paranoid, well-fed tyrant. |
+| Haemonculus | 13 | 13 | 16 | 15 | 18 | 14 | 17 | 8 | Self-sculpted body, hard to kill; master of pain and surgery. |
+| Wrack | 14 | 12 | 10 | 14 | 16 | 10 | 11 | 8 | Surgically bulked servant of a coven. |
+| Scourge | 11 | 15 | 12 | 11 | 11 | 14 | 12 | 9 (Air 20+) | Surgically grafted wings. |
+| Mandrake | 11 | 16 | 11 | 11 | 11 | 14 | 12 | 10 | Shadow-stepping killer, barely material. |
+
+Point targets: Kabalite Warrior about the Aeldari Guardian (180–220); Wych and Scourge 250–350; Wrack about 250; Mandrake and Incubus 400–550; Haemonculus, Succubus and Archon 600–850.
+
+Drukhari traits: the shared Aeldari body (via include), **Soul Thirst** (disadvantage: Slaanesh drains the soul; without regularly causing suffering the Drukhari weakens and ages; Dependency on others' suffering, with aging on failure), Unaging while fed (a modifier tied to Soul Thirst), **Power from Pain** (grows stronger as the fight goes on: build as staged bonuses gained after the Drukhari or their unit has caused real suffering in the scene, e.g. High Pain Threshold first, then melee and Fright Check bonuses, then Regeneration; built honestly with Accessibility limitations), Sadism and Callous as common mental traits (varying by template), and **Haemonculus regrowth** (Extra Life, B55, limited: needs a body fragment recovered and a coven paid; Archons and favoured servants only). No spirit stones, no Psyker talent.
+
+| Drukhari gear | Anchor |
+|---|---|
+| Splinter rifle | Toxic crystal shards: 4d(3) pi- with a 3d tox follow-up. Kills unarmoured and flak-armoured men; stopped by carapace except on a Weak Point. RoF about 5, range about 150/600 |
+| Splinter pistol | 3d(3) pi- + 2d tox follow-up, pistol range |
+| Shardcarbine | Rifle damage, higher RoF, shorter range |
+| Splinter cannon | 5d(3) pi- + 3d tox follow-up, RoF 15+ |
+| Blaster / blast pistol | Dark-lance tech in a hand weapon: 6d×3(10) burn / 6d×2(10) burn, short range |
+| Dark lance | As the bright lance: 6d×4(10) burn |
+| Disintegrator cannon | Plasma class like the starcannon, no overheating |
+| Shredder | Monofilament net: short-range area weapon that entangles and cuts (Binding plus cut damage) |
+| Haywire blaster | Anti-machine pulse: big damage to vehicles and electronics, near nothing to flesh |
+| Hexrifle / Liquifier / Stinger | Sniper toxin that no armour stops once a shard lands / close-range dissolving flamer / toxic dart |
+| Agoniser | Neural-whip or blade: a field weapon (10) plus a pain affliction; agony rather than cutting power |
+| Huskblade | Archon's power sword that desiccates: power-field rule plus a follow-up |
+| Power sword, klaive | Power-field rule; the Incubus klaive is two-handed |
+| Wych weapons | Hydra gauntlets, razorflails, shardnet and impaler: mundane weapons made lethal by the Wych's skill; no power fields |
+| Kabalite armour | Light segmented plate: DR 36, Weak Points 5 (as Guardian mesh) |
+| Wychsuit | Almost no armour: DR 12, flexible, leaves the Wych free to dodge |
+| Ghostplate | Archon's and Trueborn's: DR 60, very light, with a weak field |
+| Incubus warsuit | DR 85, Weak Points 4 (as Exarch armour) |
+| Shadow field | Archon's: a large shield that does **not** recharge; when breached it is gone for the fight |
+| Clone field | Illusory images: a Dodge bonus, not DR |
+| Combat drugs | Wych Cult dispensers: one drug per combat (Adrenalight, Grave Lotus, Hypex, Painbringer, Serpentin, Splintermind); each a modest, temporary boost to one attribute or skill set, with a Dependency |
+
 ### Necrons
 
 Necrons are ancient minds transferred into bodies of living metal (necrodermis) during the biotransference, then left to sleep for sixty million years. Most rank-and-file Necrons lost their minds in the process; nobles kept their personalities. Their armour is their body: necrodermis is natural DR in the ancestry, not equipment. Anchors:
