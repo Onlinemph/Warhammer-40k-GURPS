@@ -72,22 +72,22 @@ items:
     tags: [Missile Weapon, Imperium, Astra Militarum]
     weapons:
       - usage: Standard ball
-        damage: 5d+1 pi
+        damage: 7d pi
         acc: 4
         range: 500/2000
         rof: 10
         shots: 30(3)
-        st: 8
+        st: 9
         bulk: -4
         rcl: 2
         skill: Guns (Rifle)
       - usage: Dum-Dum rounds
-        damage: 5d+1(0.5) pi+
+        damage: 7d(0.5) pi+
         acc: 4
         range: 500/2000
         rof: 10
         shots: 30(3)
-        st: 8
+        st: 9
         bulk: -4
         rcl: 2
         skill: Guns (Rifle)
@@ -101,23 +101,24 @@ items:
       "poor cousin" of the lasgun, more common on low-priority garrison and
       PDF postings.
     design: >-
-      Fixed autogun anchor (5d+1 pi): calibrated to lasgun parity rather
-      than to flak. In the fiction autoguns kill as readily as lasguns, and
-      Only War gives both the same damage, so the autogun is set for the
-      same practical lethality as the lasgun anchor (5d(2) burn, avg 17.5)
-      without copying its armour divisor — a solid slug has no focusing
-      trick to help it through DR. Average roll 18.5 gets through flak
-      (DR 12) on 94.1% of hits and mesh (DR 15) on 77.9%, both comparable to
-      the lasgun's own flak/mesh numbers; against carapace (DR 45) it
-      penetrates 0% of hits, even worse than the lasgun's rare 9.8% since it
-      has no armour divisor to help it — confirming "stopped by carapace."
-      An earlier
-      draft used 2d+2 pi to make flak "stop stub rounds"; that framework
-      wording was about pistol calibres and has been corrected. Range
-      500/2000 fits an intermediate-calibre rifle. RoF 10, 30(3) follow
-      selective-fire rifle conventions. The Dum-Dum usage applies the same
-      expanding-round logic as the autopistol's Manstopper, bumped the same
-      +1 die as the ball round.
+      Fixed autogun anchor, now 7d pi to hold lasgun parity as both weapons
+      were rescaled together (per framework.md: "Lasgun parity against
+      flesh... stopped by carapace"). Average roll 24.5 gets through flak
+      (DR 30) on 9.4% of hits and mesh (DR 36) on 0.3% - notably worse than
+      the lasgun's own 97.8%/90.6% now that flak has been raised twice while
+      the autogun kept no armour divisor to compensate, since a solid slug
+      has no focusing trick to help it through DR the way a lasgun's beam
+      does; against carapace (DR 70) it penetrates 0% of hits, confirming
+      "stopped by carapace" even more emphatically than before. This is an
+      honest consequence of the user's armour-anchor changes landing on a
+      family with no divisor to absorb them, not a departure from the
+      lasgun-parity design goal, which is measured against flesh (HP), not
+      DR. Range 500/2000 fits an intermediate-calibre rifle. RoF 10, 30(3)
+      follow selective-fire rifle conventions. The Dum-Dum usage applies the
+      same expanding-round logic as the autopistol's Manstopper.
+      Handling: min ST corrected to 9 (√(10×8)≈8.9), matching the same
+      formula correction applied to the 8 lb lasgun patterns in this
+      project's las.yaml. Bulk -4 and Rcl 2 are unchanged.
 
   - name: Stub Revolver
     tl: 7
@@ -127,7 +128,7 @@ items:
     tags: [Missile Weapon, Imperium]
     weapons:
       - usage: Standard
-        damage: 3d pi
+        damage: 4d pi
         acc: 2
         range: 100/250
         rof: 1
@@ -146,14 +147,18 @@ items:
     design: >-
       Single-action cycling caps RoF at 1 — there's no autofire mechanism.
       A heavier, hand-loaded magnum-class round (GURPS real-world baseline:
-      a .44 Magnum runs about 3d pi) sits above the autopistol's 9mm-class
-      2d+2 pi, reflecting a larger-calibre, better-machined round fired from
-      a tighter, hand-fitted barrel — and stays well under the autogun's
-      5d+1 pi rifle round, the same gap the old 2d+1 kept below the old
-      4d+1 autogun. Average roll 10.5 penetrates flak (DR 12) on 25.9% of
-      hits (better than the autopistol's 8.3%), mesh (DR 15) on 4.6%, and
-      never beats carapace (DR 45: 0%). Low Rcl (1) follows from GURPS
-      convention for a heavier, well-balanced revolver.
+      a .44 Magnum runs about 3d pi, rescaled by the same ×1.32 ratio the
+      autogun itself moved to 4d pi, avg 14) sits above the autopistol's
+      3d+2 pi (avg 12.5), reflecting a larger-calibre, better-machined round
+      fired from a tighter, hand-fitted barrel — and stays well under the
+      autogun's 7d pi rifle round. Average roll 14 penetrates flak (DR 30)
+      on 0% of hits (worse than the autopistol's own 0% only in that neither
+      now threatens flak at all) and never beats carapace (DR 70: 0%); like
+      every stub pistol-calibre round in this file, the twice-raised flak
+      anchor has pushed it below the threshold where it threatens
+      military-grade armour, leaving it a threat to unarmoured targets only.
+      Low Rcl (1) follows from GURPS convention for a heavier, well-balanced
+      revolver.
 
   - name: Stub Automatic
     tl: 7
@@ -163,7 +168,7 @@ items:
     tags: [Missile Weapon, Imperium]
     weapons:
       - usage: Standard (ball)
-        damage: 2d+2 pi
+        damage: 3d+2 pi
         acc: 2
         range: 80/180
         rof: 3
@@ -178,11 +183,14 @@ items:
       distinguished in FFG-line background primarily by cost and magazine
       capacity rather than raw power.
     design: >-
-      Same round as the autopistol's standard ball ammunition (2d+2 pi),
+      Same round as the autopistol's standard ball ammunition (3d+2 pi),
       since both fire generic mass-produced pistol-calibre cartridges — the
       difference is a smaller magazine (10+1 vs. 16+1) and cheaper
       construction, reflected here in cost and weight rather than a
       duplicate damage figure, since GCS has no separate build-quality stat.
+      Handling: weight (2 lb), min ST (7), Bulk (-2) and Rcl (2) match the
+      Autopistol exactly, since it's the same cartridge and roughly the same
+      frame.
 
   - name: Heavy Stubber
     tl: 7
@@ -192,7 +200,7 @@ items:
     tags: [Missile Weapon, Imperium, Astra Militarum]
     weapons:
       - usage: Standard
-        damage: 6d+2 pi+
+        damage: 8d+2 pi+
         acc: 4
         range: 500/2000
         rof: 15
@@ -210,14 +218,21 @@ items:
     design: >-
       Scaled up from the autogun's pi rating to a true heavy-calibre weapon
       (pi+, the GURPS x1.5 wounding multiplier), landing close to GURPS's
-      own real-world .50-calibre benchmark (roughly 6d+2 pi+) rather than
-      any 40k catalogue entry. Deliberately pitched well below the heavy
-      bolter anchor (7d×2(2) pi++, which "chews light vehicles" at AV10):
-      6d+2 pi+ averages 23 with no armour divisor, penetrating 0% of hits
-      against AV10 (DR 100). That failure is intentional and total — the
-      fiction never shows a heavy stubber meaningfully hurting a vehicle,
-      only infantry, and this stat block reproduces that gap explicitly and
-      by a wider margin than the old DR 50 threshold did. Mounted per
+      own real-world .50-calibre benchmark, then rescaled by the same ×1.32
+      ratio the autogun itself moved to keep pace with the las/autogun
+      family: 6d+2 pi+ (avg 23) becomes 8d+2 pi+ (avg 30). Deliberately kept
+      well below the heavy bolter anchor (7d×2(2) pi++, which "chews light
+      vehicles" at AV10): 8d+2 pi+ averages 30 with no armour divisor,
+      penetrating 0% of hits against AV10 (DR 100, per framework.md's
+      vehicle-armour table, unaffected by the personal-armour rescale).
+      That failure is intentional and total — the fiction never shows a
+      heavy stubber meaningfully hurting a vehicle, only infantry, and this
+      stat block keeps reproducing that gap by a wide margin even after two
+      rounds of rescaling. It also now falls short of flak (DR 30, 46.0% of
+      hits) and mesh (DR 36, 9.1%), and fails outright against carapace
+      (DR 70: 0%) - a consequence of the user's armour-anchor changes
+      landing on an un-divisored solid-slug weapon, matching this file's
+      other stub-calibre entries. Mounted per
       framework.md's braced/mounted-heavies rule, hence Gunner (Machine
       Gun) rather than Guns.
       Handling: RoF corrected to 15 per framework.md's explicit "heavy
@@ -238,7 +253,7 @@ items:
     tags: [Missile Weapon, Imperium, Adeptus Arbites]
     weapons:
       - usage: Buckshot
-        damage: 4d+2 pi+
+        damage: 6d pi+
         acc: 2
         range: 20/70
         rof: 3
@@ -248,20 +263,20 @@ items:
         rcl: 1
         skill: Guns (Shotgun)
       - usage: Slug
-        damage: 6d pi+
+        damage: 8d pi+
         acc: 3
         range: 150/500
-        rof: 3
+        rof: 1
         shots: 8(3)
         st: 9
         bulk: -4
         rcl: 2
         skill: Guns (Shotgun)
       - usage: Executioner shell
-        damage: 5d(2) pi+
+        damage: 7d(2) pi+
         acc: 2
         range: 20/70
-        rof: 3
+        rof: 1
         shots: 8(3)
         st: 9
         bulk: -4
@@ -281,16 +296,26 @@ items:
       and hard-hitting versus long-ranged and precise — but are given single
       flat damage figures rather than the Basic Set's full range-banded
       pellet-spread rules, a deliberate simplification noted here for
-      transparency. Both are scaled up in proportion to the autogun's own
-      1.27x jump (old 4d+1 avg 15 to new 5d+1 avg 18.5): buckshot averages
-      16 and penetrates flak (DR 12) on 84.1% of hits at point-blank range;
-      slug averages 21 and still can't beat carapace (DR 45: 0% of hits),
-      matching a shotgun's real-world reputation against rigid plate. The
+      transparency. Both are rescaled by the same ×1.32 ratio the autogun
+      itself moved: buckshot (4d+2 pi+, avg 16) becomes 6d pi+ (avg 21) and
+      penetrates flak (DR 30) on just 1.0% of hits at point-blank range -
+      the twice-raised flak anchor now stops a shotgun blast almost
+      completely, matching a scattergun's real-world reputation against
+      rigid plate even at the "vest" tier; slug (6d pi+, avg 21) becomes
+      8d pi+ (avg 28) and still can't beat carapace (DR 70: 0% of hits). The
       Executioner shell keeps the buckshot's short range but adds an armour
-      divisor of (2), modelling a penetrator flechette payload that trades
-      general usefulness for beating armour at point-blank range: average 17.5,
-      penetrating carapace (DR 45, effective 22.5) on 9.8% of hits, the same
-      figure as a standard lasgun.
+      divisor of (2) and is rescaled to track the lasgun exactly (7d(2)
+      pi+, avg 24.5, per this entry's original design intent of "the same
+      figure as a standard lasgun"): 0.6% against carapace (DR 70, effective
+      35), the same figure as the current lasgun.
+      Handling: RoF is now per-mode rather than one blanket "3" copied
+      across every ammunition type: buckshot keeps RoF 3 (a genuinely
+      full-auto-capable close-range load, matching the lore's "full-auto-
+      capable military scattergun"), while slug and the rare Executioner
+      shell drop to RoF 1 - both are precision, longer-ranged or
+      armour-beating rounds a gunner fires deliberately, one at a time, not
+      sprayed on full auto, and neither pattern's lore ever shows it used
+      that way.
 
   - name: Pump Shotgun
     tl: 7
@@ -300,7 +325,7 @@ items:
     tags: [Missile Weapon, Imperium]
     weapons:
       - usage: Buckshot
-        damage: 4d pi+
+        damage: 5d+1 pi+
         acc: 2
         range: 15/60
         rof: 1
@@ -310,7 +335,7 @@ items:
         rcl: 1
         skill: Guns (Shotgun)
       - usage: Slug
-        damage: 5d+2 pi+
+        damage: 7d+1 pi+
         acc: 3
         range: 120/400
         rof: 1
@@ -328,9 +353,15 @@ items:
       Same buckshot/slug split as the Combat Shotgun, toned down roughly
       half a die (matching the Combat Shotgun's own new figures) and locked
       to RoF 1 (manual pump cycling, no autofire) to reflect civilian
-      manufacture rather than a military select-fire action: buckshot
-      averages 14 (66.4% through flak at point-blank range), slug averages
-      19.5 and still fails against carapace (0% of hits).
+      manufacture rather than a military select-fire action: buckshot (avg
+      18.5) penetrates flak (DR 30) on 0% of hits at point-blank range -
+      civilian buckshot no longer threatens military flak at all under the
+      current anchors - and slug (avg 25.5) still fails against carapace
+      (DR 70: 0% of hits).
+      Handling: RoF 1 for both modes is unchanged and correct as-is - a
+      pump-action shotgun has no autofire mechanism regardless of the load,
+      so unlike the Combat Shotgun above there was never a per-mode RoF
+      inconsistency to fix here. Weight, min ST, Bulk and Rcl are unchanged.
 
   - name: Hunting Rifle
     tl: 7
@@ -340,12 +371,12 @@ items:
     tags: [Missile Weapon, Imperium]
     weapons:
       - usage: Standard
-        damage: 7d pi
+        damage: 9d+1 pi
         acc: 7
         range: 600/2000
         rof: 1
         shots: 5(3)
-        st: 10
+        st: 11
         bulk: -6
         rcl: 2
         skill: Guns (Rifle)
@@ -355,15 +386,19 @@ items:
       marksmen and PDF units where a long-las isn't issued.
     design: >-
       Modelled as a realistic TL7 bolt-action big-game rifle (a real-world
-      analogue, not a renamed catalogue item), scaled up in the same
-      proportion as the other stub-tech weapons in this file: a large
-      single round for maximum penetration (average 24.5), RoF 1 for manual
-      bolt cycling between shots. Kept below the long-las (6d(2) burn) in
+      analogue, not a renamed catalogue item), rescaled by the same ×1.32
+      ratio the autogun itself moved (7d pi, avg 24.5, becomes 9d+1 pi, avg
+      32.5): a large single round for maximum penetration, RoF 1 for manual
+      bolt cycling between shots. Kept below the long-las (8d(2) burn) in
       practical terms — full pi wounding and no armour divisor mean it's
-      comparably lethal to an unarmoured target (99.7% through flak, DR 12)
+      comparably lethal to an unarmoured target (65.0% through flak, DR 30)
       but does nothing against carapace-or-better armour (0% of hits at
-      DR 45), in contrast to the long-las which at least keeps pace with a
+      DR 70), in contrast to the long-las which at least keeps pace with a
       standard lasgun there.
+      Handling: min ST corrected to 11 (√(10×9)≈9.5, bumped for a stiff-
+      recoiling big-game round rather than a light sporting rifle - real
+      hunting rifles chambered for genuinely large game run ST 10-11 in
+      GURPS convention). Bulk -6 and Rcl 2 are unchanged.
 
   - name: Autopistol Magazine, Standard Ball (spare, x3)
     tl: 7

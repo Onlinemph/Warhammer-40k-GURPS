@@ -1,0 +1,211 @@
+kind: template
+output: Adeptus Custodes/Templates/Shield-Captain.gct
+notes: >-
+  A Shield-Captain of the Legio Custodes: a Custodian Guardian raised to independent command of a
+  shield-host, with the standing and combat mastery current Codex background and Wraight's novels
+  give named Shield-Captains (e.g. Amon, Diocletian Coros in earlier eras of the Legio's history).
+  Sits well above the Custodian Guardian template's 1,200-1,600 points, in the framework's "Heroes
+  and legends" tier (1,000-3,000). Equipment is defined in the Custodes weapons and armour files, not
+  here; a Shield-Captain typically fields a guardian spear or castellan axe and Auramite or Allarus
+  plate. The historic Vow (Never Leave the Emperor's Side / Terra) is left disabled, as in the
+  Guardian template.
+traits:
+- include: "custodes/traits.yaml#Custodian Physiology"
+- include: "custodes/traits.yaml#Custodian Oath and Mindset"
+- include: "custodes/traits.yaml#Rank (Shield-Captain, Legio Custodes)"
+- include: "custodes/traits.yaml#Reputation (A Shield-Captain of the Ten Thousand)"
+- name: Personal Advancement
+  points: 140
+  attributes:
+    dx: 2
+    iq: 1
+    ht: 1
+    will: 2
+    per: 2
+  tags:
+  - Physical
+  - Mental
+  lore: >-
+    A Custodian raised to independent command has, per the fiction, put in centuries more service
+    than a line Guardian even before taking on a shield-host, on top of the personal qualities that
+    got him noticed for the role in the first place.
+  design: >-
+    DX+2 (40) + IQ+1 (20) + HT+1 (10) + Will+2 (10) + Per+2 (10) = 90, rounded up to a flat 140-point
+    package for the same "lump-sum veteran seasoning" reason the Guardian template's own Personal
+    Advancement trait uses, scaled up for a Shield-Captain's greater seniority.
+- name: Weapon Master (Custodes Power Weapons)
+  points: 30
+  ref: B43
+  tags:
+  - Advantage
+  - Physical
+  lore: See the Custodian Guardian template; a Shield-Captain has this at least as thoroughly as any Guardian under his command.
+  design: Weapon Master (B43), small class (the Custodes power-weapon family), 30 points, as the Guardian template.
+- name: Ambidexterity
+  points: 5
+  ref: B39
+  tags:
+  - Advantage
+  - Physical
+  lore: As the Guardian template.
+  design: "Ambidexterity (B39, 5 points), as the Guardian template."
+- name: Trained by a Master
+  points: 30
+  ref: B90
+  tags:
+  - Advantage
+  - Physical
+  lore: As the Guardian template, and more so for a Shield-Captain's greater seniority.
+  design: Trained by a Master (B90, 30 points), as the Guardian template.
+- name: Charisma
+  per_level: 5
+  levels: 3
+  ref: B41
+  tags:
+  - Advantage
+  - Social
+  lore: >-
+    A Shield-Captain leads other Custodians - each individually a match for a Chapter Master - by
+    presence and proven judgement rather than by threat or bluster; Wraight's novels consistently
+    show named Shield-Captains commanding instant, unforced deference from their own Custodians.
+  design: "Charisma 3 (B41, 5/level, 15 points): a reaction and command-skill bonus reflecting an officer's presence, not itself a leadership doctrine (that's the skills below)."
+- name: Tactical Command Presence
+  points: -10
+  ref: B133
+  tags:
+  - Disadvantage
+  - Mental
+  notes: "Duty (own shield-host's survival), Almost all the time, Extremely Hazardous, stacking with the wider Custodian Duty."
+  lore: >-
+    A Shield-Captain answers for every Custodian under his command in a way a line Guardian does
+    not; Codex background frames losing Custodians under one's own command as a Shield-Captain's
+    personal failure, not merely a Legio-wide loss.
+  design: >-
+    A second, narrower Duty (B133, -10) layered on top of the Custodian Oath and Mindset package's
+    own Duty (to the Emperor and Throneworld): command responsibility for a specific shield-host is
+    an additional, personal burden a line Guardian doesn't carry.
+skills:
+- name: Guns
+  spec: Rifle
+  diff: DX/E
+  points: 32
+- name: Guns
+  spec: Pistol
+  diff: DX/E
+  points: 16
+- name: Spear
+  diff: DX/A
+  points: 48
+- name: Broadsword
+  diff: DX/A
+  points: 32
+- name: Two-Handed Axe/Mace
+  diff: DX/A
+  points: 24
+- name: Shortsword
+  diff: DX/A
+  points: 8
+- name: Shield
+  diff: DX/E
+  points: 8
+- name: Brawling
+  diff: DX/E
+  points: 4
+- name: Wrestling
+  diff: DX/A
+  points: 8
+- name: Gunner
+  spec: Beams
+  diff: DX/A
+  points: 4
+- name: Throwing
+  diff: DX/A
+  points: 4
+- name: Free Fall
+  diff: DX/A
+  points: 4
+- name: Riding
+  spec: Jetbike
+  diff: DX/A
+  points: 4
+  notes: Interceptor lance/Dawneagle jetbike command duties.
+- name: Tactics
+  diff: IQ/H
+  points: 40
+- name: Strategy
+  diff: IQ/H
+  points: 32
+- name: Leadership
+  diff: IQ/A
+  points: 32
+- name: Soldier
+  diff: IQ/A
+  points: 24
+- name: Theology
+  spec: Imperial Creed
+  diff: IQ/H
+  points: 12
+- name: Hidden Lore
+  spec: Xenos
+  diff: IQ/A
+  points: 12
+- name: Hidden Lore
+  spec: Daemons
+  diff: IQ/A
+  points: 12
+- name: Hidden Lore
+  spec: Heresy
+  diff: IQ/A
+  points: 8
+- name: Diplomacy
+  diff: IQ/H
+  points: 24
+- name: Fast-Talk
+  diff: IQ/A
+  points: 4
+- name: Savoir-Faire
+  spec: Military
+  diff: IQ/E
+  points: 2
+- name: Politics
+  diff: IQ/A
+  points: 8
+  notes: Dealing with High Lords, Inquisitors and Chapter Masters as an equal or superior.
+- name: Administration
+  diff: IQ/A
+  points: 8
+  notes: Running a shield-host's rotation, equipment and readiness.
+- name: Armoury
+  spec: Body Armor
+  diff: IQ/A
+  points: 4
+- name: Armoury
+  spec: Small Arms
+  diff: IQ/A
+  points: 2
+- name: First Aid
+  diff: IQ/E
+  points: 2
+- name: Navigation
+  spec: Land
+  diff: IQ/A
+  points: 2
+- name: Intimidation
+  diff: Will/A
+  points: 24
+- name: Observation
+  diff: Per/A
+  points: 32
+- name: Survival
+  spec: Any
+  diff: Per/A
+  points: 4
+- name: Tracking
+  diff: Per/A
+  points: 2
+- name: Running
+  diff: HT/A
+  points: 2
+- name: Hiking
+  diff: HT/A
+  points: 2

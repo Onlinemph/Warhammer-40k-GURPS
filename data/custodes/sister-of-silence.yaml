@@ -1,0 +1,170 @@
+kind: template
+output: Adeptus Custodes/Templates/Sister of Silence.gct
+notes: >-
+  A Sister of Silence: an unaugmented human Pariah trained by the Silent Sisterhood to hunt rogue
+  psykers and stand ready against daemonic incursion, per framework.md's "Sisters of Silence are
+  unaugmented human Pariahs ... in Vratine armour." Point total (attributes + Pariah Gene + oath +
+  skills, no gear) sits inside the framework's 250-400 point target for this tier - well above the
+  "Elite human" bracket's own 200-350 midpoint, reflecting a Sister's specialised training, but
+  nowhere near Astartes or Custodes physiology, since a Sister of Silence carries no genetic
+  augmentation at all. Equipment (executioner greatblade, Vratine armour) is defined in the Custodes
+  weapons and armour files, not here.
+traits:
+- include: "imperium/psykers/warp.yaml#Pariah Gene (Blank)"
+- include: "custodes/traits.yaml#Vow of Silence (Oath of the Silent Sisterhood)"
+- include: "custodes/traits.yaml#Silent Sisterhood Battle-Sign"
+- include: "custodes/traits.yaml#Sense of Duty (The Silent Sisterhood)"
+- include: "custodes/traits.yaml#Intolerance (Psykers)"
+- name: Sisterhood Attribute Modifiers
+  points: 130
+  attributes: {st: 2, dx: 3, iq: 1, ht: 2, will: 2}
+  tags:
+  - Physical
+  - Mental
+  lore: >-
+    Sisters of Silence are drawn from across the Imperium and drilled from a young age to a
+    standard the fiction places well above an ordinary soldier's, though still recognizably human -
+    unlike Astartes or Custodes, no source claims any genetic rebuilding is involved.
+  design: >-
+    Increased Strength +2 (B14, 10/level, 20) for ST 12, Increased Dexterity +3 (B14, 20/level, 60)
+    for DX 13, Increased Intelligence +1 (B16, 20/level, 20) for IQ 11, Increased Health +2 (B15,
+    10/level, 20) for HT 12, Increased Will +2 (B16, 5/level, 10) for Will 13. 20+60+20+20+10 = 130
+    points: a genuinely elite human profile (comparable to the framework's Battle Sister/Stormtrooper
+    tier) without a single point spent on anything a training regimen alone couldn't produce.
+- name: Combat Reflexes
+  points: 15
+  ref: B43
+  tags:
+  - Advantage
+  - Mental
+  lore: Sisters of Silence fight daemons and rogue psykers for a living; background shows them unshaken by the kind of threat that breaks ordinary soldiers.
+  design: Combat Reflexes (B43, 15 points), as the Astartes and Custodes packages.
+- name: Fearlessness
+  per_level: 2
+  levels: 2
+  ref: B55
+  tags:
+  - Advantage
+  - Mental
+  lore: A Sister's own null nature and training leave her harder to frighten than an ordinary human, though the fiction doesn't support the total fear immunity a Custodian gets.
+  design: Fearlessness 2 (B55, 2/level, 4 points), a modest version of the Custodian package's full Unfazeable, matching "unaugmented human, extensively trained" rather than post-human.
+- name: Duty (The Silent Sisterhood's Hunt)
+  points: -10
+  ref: B133
+  tags:
+  - Disadvantage
+  - Mental
+  notes: "Almost all the time, Hazardous."
+  lore: A Sister of Silence's life is her Order's endless work hunting rogue psykers and warding against the warp; background gives her no life outside that duty.
+  design: Duty (B133), Almost all the time, Hazardous (rather than Extremely Hazardous, since a Sister isn't thrown at the very worst the Imperium fights as routinely as a Custodian is), -10 points.
+- name: Rank (Silent Sisterhood)
+  per_level: 5
+  levels: 2
+  ref: B29
+  tags:
+  - Advantage
+  - Social
+  lore: A senior Sister of Silence carries real authority within her own Order, though nothing approaching a Custodian's Imperium-wide standing.
+  design: Rank (B29), 5 points/level, 2 levels = 10 points - a small fraction of either Custodes Rank trait, reflecting standing within the Sisterhood alone.
+skills:
+- name: Two-Handed Sword
+  diff: DX/A
+  points: 24
+  notes: Executioner greatblade.
+- name: Liquid Projector
+  spec: Flamethrower
+  diff: DX/E
+  points: 8
+  notes: Vratine flamer.
+- name: Throwing
+  diff: DX/A
+  points: 8
+  notes: Psyk-out grenades.
+- name: Brawling
+  diff: DX/E
+  points: 2
+- name: Wrestling
+  diff: DX/A
+  points: 4
+- name: Stealth
+  diff: DX/A
+  points: 12
+- name: Shield
+  diff: DX/E
+  points: 2
+- name: Free Fall
+  diff: DX/A
+  points: 2
+- name: Tactics
+  diff: IQ/H
+  points: 12
+- name: Soldier
+  diff: IQ/A
+  points: 8
+- name: Leadership
+  diff: IQ/A
+  points: 4
+- name: Hidden Lore
+  spec: Daemons
+  diff: IQ/A
+  points: 12
+- name: Hidden Lore
+  spec: Psykers
+  diff: IQ/A
+  points: 12
+- name: Hidden Lore
+  spec: The Warp
+  diff: IQ/A
+  points: 8
+- name: Theology
+  spec: Imperial Creed
+  diff: IQ/H
+  points: 8
+- name: Psyniscience
+  diff: Per/H
+  points: 8
+  notes: >-
+    A Sister of Silence's Pariah nature makes her own reading of the warp unusual; a GM may rule she
+    senses psykers and warp activity as an absence rather than a presence, at the same effective
+    skill.
+- name: Fast-Talk
+  diff: IQ/A
+  points: 2
+- name: Interrogation
+  diff: IQ/A
+  points: 8
+  notes: Questioning suspected rogue psykers.
+- name: Armoury
+  spec: Body Armor
+  diff: IQ/A
+  points: 2
+- name: First Aid
+  diff: IQ/E
+  points: 1
+- name: Navigation
+  spec: Land
+  diff: IQ/A
+  points: 1
+- name: Savoir-Faire
+  spec: Military
+  diff: IQ/E
+  points: 1
+- name: Intimidation
+  diff: Will/A
+  points: 8
+- name: Observation
+  diff: Per/A
+  points: 12
+- name: Search
+  diff: Per/A
+  points: 4
+  notes: Rooting out a rogue psyker in hiding.
+- name: Tracking
+  diff: Per/A
+  points: 2
+- name: Running
+  diff: HT/A
+  points: 2
+- name: Hiking
+  diff: HT/A
+  points: 2
