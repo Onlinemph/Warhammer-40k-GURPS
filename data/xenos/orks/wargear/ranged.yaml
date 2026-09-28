@@ -1,0 +1,1018 @@
+kind: equipment
+output: Xenos/Orks/Weapons/Ork Ranged Weapons.eqp
+items:
+
+  # ---------------------------------------------------------------- pistols
+
+  - name: Slugga
+    tl: 5
+    lc: 0
+    cost: 60
+    weight: 4
+    tags: [Missile Weapon, Xenos, Orks]
+    weapons:
+      - usage: Standard
+        damage: 5d pi+
+        acc: 1
+        range: 80/200
+        rof: 3
+        shots: 18(3)
+        st: 8
+        bulk: -2
+        rcl: 2
+        skill: Guns (Pistol)
+        notes: Malf 14. Ork weapons never explode on the wielder's roll of 3; treat any Critical Failure as a jam instead (a Ready maneuver clears it).
+    lore: >-
+      The slugga is the Ork sidearm: a stamped, riveted, big-bore auto-pistol
+      every Boy carries alongside his choppa. Codex: Orks background and
+      Deathwatch's Mark of the Xenos both describe it as crude but powerful -
+      an oversized handgun firing a round more akin to a rifle cartridge than
+      a pistol round - and it is a constant visual in Black Library Ork
+      fiction (Nate Crowley's Ghazghkull Thraka: Prophet of the Waaagh! among
+      others) as the "boom" half of "choppa and shoota" Ork close-combat
+      doctrine.
+    design: >-
+      Matches the framework's Ork anchor directly ("Slugga | Big-bore pistol,
+      about 5d pi+, Acc 1"). Exact dice distribution: avg 17.5, penetrates
+      flak (DR 30) 0% of hits, so it never threatens military-grade Imperial
+      armour, only unarmoured or minimally-clad targets - consistent with
+      the fiction, which never shows a slugga bothering a Guardsman's flak
+      vest at range but reliably guts unarmoured mobs, gangers and other
+      Orks. Handling: weight 4 lb, heavier than a human service pistol for
+      the oversized cartridge and stamped-steel build; min ST 8 (raw formula
+      sqrt(10x4)=6.3, bumped for the big-bore round's kick on a crude,
+      unbalanced frame) is trivial for a Boy (ST 22) but a real handful for
+      an unaugmented human, matching every depiction of looted sluggas being
+      awkward in human hands. RoF 3 (a real, if crude, semi-auto action);
+      Shots 18(3), a big drum rather than a box magazine, per the weapon's
+      chunky silhouette in Codex art. Bulk -2 and Rcl 2 are ordinary pistol
+      figures. Malf 14 follows the framework's "Ork weapons are crude and
+      unreliable: Malf 14 for most" rule; the no-explosion house rule
+      reflects "it works 'cos we fink it does" - Ork gear jams and misfires
+      constantly but doesn't blow up in a Boy's hand the way a human weapon's
+      critical failure table would suggest, since the Ork simply doesn't
+      believe it will.
+
+  - name: Rokkit Pistol
+    tl: 6
+    lc: 0
+    cost: 500
+    weight: 10
+    tags: [Missile Weapon, Xenos, Orks]
+    weapons:
+      - usage: Standard
+        damage: 4dx4(3) cr ex
+        acc: 0
+        range: 100/300
+        rof: 1
+        shots: 1(6)
+        st: 12
+        bulk: -4
+        rcl: 1
+        skill: Guns (Pistol)
+        notes: Malf 14.
+    lore: >-
+      A rarer, one-handed rokkit tube favoured by Kommando Nobz and Freebooter
+      captains who want an anti-armour punch without giving up a choppa or
+      power klaw in the other hand; smaller and shorter-ranged than the
+      shoulder-fired rokkit launcha, and correspondingly less common in
+      background art, but a recurring "big pistol" silhouette in Ork Kommando
+      and Freebooter illustrations.
+    design: >-
+      Scaled down one size class from the rokkit launcha anchor (6dx4(3) cr
+      ex) the same way this project scales a pistol from its parent rifle
+      family elsewhere: two dice down, same mechanism and armour divisor,
+      giving 4dx4(3) cr ex (avg 56). Exact dice distribution: penetrates
+      carapace (DR 70, eff. 23.3) 99.6% of the time and Astartes power armour
+      (DR 100, eff. 33.3) 94.6% - still a real Marine-killer at short range -
+      but drops off hard against a Terminator (DR 200, eff. 66.7) to 23.9%,
+      and against vehicles clears AV10/AV11 (66.4%) but fails AV12 upward
+      (23.9%/0.4%/0%) - a real but weaker cousin of the full rokkit launcha,
+      matching its rarer, smaller-warhead depiction. Handling: 10 lb loaded
+      (a stubby tube and single warhead, no shoulder stock); min ST 12
+      (heavier than a slugga for the rocket motor and blast shield, light
+      work for a Nob at ST 26); RoF 1 and Shots 1(6) - a single-shot tube that
+      needs a fresh rocket socketed in by hand, slower even than the full
+      launcha's reload since there's no shoulder brace to steady the reload.
+      Bulk -4 (bulkier than any pistol, still one-handable) and Rcl 1 (the
+      rocket motor, not the launch charge, does the accelerating). Acc 0, per
+      the framework's Ork Acc bracket, worse even than the full launcha for
+      the shorter sighting length. Malf 14, standard Ork gear.
+
+  # ------------------------------------------------------------------ rifles
+
+  - name: Shoota
+    tl: 5
+    lc: 0
+    cost: 180
+    weight: 16
+    tags: [Missile Weapon, Xenos, Orks]
+    weapons:
+      - usage: Dakka (full auto)
+        damage: 7d pi+
+        acc: 1
+        range: 150/500
+        rof: 10
+        shots: 30(5)
+        st: 14
+        bulk: -5
+        rcl: 3
+        skill: Guns (Rifle)
+        notes: Malf 14. Ork critical failures jam (Ready to clear) rather than exploding; see Slugga.
+    lore: >-
+      The shoota is the Ork long arm: a heavy, crudely-stamped automatic
+      weapon built to spray "dakka" rather than aim, consistently described
+      across Codex: Orks and Deathwatch's Mark of the Xenos as more effective
+      in volume than in precision, and a constant background weapon in every
+      piece of Ork art and Black Library Ork fiction from the Waaagh!-era
+      novels onward. Ork tech-lore holds that a shoota fires better the
+      louder its owner shouts at it - a detail played for both humour and
+      genuine menace in the fiction, since the effect (whatever its cause)
+      is real in-universe.
+    design: >-
+      Matches the framework's Ork anchor exactly ("Shoota | Heavy slugs,
+      about 7d pi+, RoF 10, Acc 1-2, Malf 14"), set at the low end of the
+      Acc bracket per the anchor's own range. Exact dice distribution: avg
+      24.5, penetrating flak (DR 30) 9.4% of hits, matching the framework's
+      autogun-family figure at the same dice (a shoota is ballistically an
+      autogun-class weapon, just built by and for Orks) - it fails outright
+      against carapace or better, keeping it a horde weapon against
+      unarmoured infantry rather than a threat to real Imperial armour or
+      Astartes. Handling: 16 lb loaded, heavier than a human autogun (8 lb)
+      for the crude, over-built stamped-steel receiver every Ork weapon
+      carries; min ST 14 (raw formula sqrt(10x16)=12.6, bumped for a
+      badly-balanced, kicking action) - trivial for a Boy (ST 22) but far
+      beyond an unaugmented Guardsman's comfortable two-handed use. RoF 10 is
+      the framework's own "dakka" design goal: Orks compensate crude
+      accuracy with volume, not precision. Shots 30(5): a big drum, slower to
+      reload (5s) than a human magazine because the feed mechanism itself is
+      crude and prone to snagging. Bulk -5 (one step bulkier than a human
+      rifle of the same class, per the same "built heavier and cruder" logic
+      the framework applies to Astartes-pattern gear) and Rcl 3 (heavy,
+      crude ammunition with a hard kick). Acc 1, the low end of the anchor's
+      1-2 bracket - a shoota is a spray weapon, not a marksman's rifle. Malf
+      14 per the framework's explicit Ork-gear rule.
+
+  - name: Kustom Shoota
+    tl: 6
+    lc: 0
+    cost: 350
+    weight: 18
+    tags: [Missile Weapon, Xenos, Orks]
+    weapons:
+      - usage: Dakka (full auto)
+        damage: 8d pi+
+        acc: 1
+        range: 150/500
+        rof: 12
+        shots: 30(5)
+        st: 15
+        bulk: -5
+        rcl: 3
+        skill: Guns (Rifle)
+        notes: Malf 13 (kustom job; see design). Jams rather than explodes on a critical failure, as the Slugga.
+    lore: >-
+      A Mekboy-tuned shoota, its receiver welded over with extra plating,
+      a bigger ammo hopper and (usually) at least one more barrel than it
+      needs: Ork background material is consistent that a Mek's "kustom" work
+      makes a weapon hit harder at the direct cost of reliability, since the
+      Mek's improvements are guided by instinct and belief rather than any
+      real engineering discipline.
+    design: >-
+      One die over the plain Shoota (8d pi+, avg 28) for the Mekboy's
+      overbuilt action and bigger charge, per the framework's "compensate
+      with big calibres" note taken a step further by a Mek's own hand.
+      Exact dice distribution: 30.5% through flak (DR 30), still 0% against
+      carapace or better - a harder-hitting Shoota, not a different class of
+      weapon. Handling: 18 lb (2 lb of extra plating and a bigger drum over
+      the plain Shoota), min ST 15 (raw formula sqrt(10x18)=13.4, bumped to
+      match the heavier housing), RoF bumped to 12 for the reworked action
+      cycling faster (and rougher) than stock. Bulk and Rcl unchanged from
+      the plain Shoota - the extra weight and recoil roughly cancel out.
+      Malf corrected to 13, per the framework's explicit "13 for kustom
+      jobs" rule: a Mek's overclocked work hits harder but is meaningfully
+      less reliable than issue-standard Ork gear (Malf 14), the setting's
+      own logic that "kustom" means more power for more risk, not simply an
+      upgrade.
+
+  - name: Snazzgun
+    tl: 6
+    lc: 0
+    cost: 900
+    weight: 17
+    tags: [Missile Weapon, Xenos, Orks]
+    weapons:
+      - usage: Dakka (full auto)
+        damage: 8d pi+
+        acc: 2
+        range: 180/550
+        rof: 10
+        shots: 30(4)
+        st: 13
+        bulk: -5
+        rcl: 3
+        skill: Guns (Rifle)
+        notes: >-
+          Malf 15 (see design). Every snazzgun is individually built and
+          often carries an idiosyncratic extra effect (a muzzle flare that
+          briefly blinds, a second hidden barrel, a built-in gitfinda) left
+          to the GM to add for a specific named weapon rather than statted
+          generically here.
+    lore: >-
+      The snazzgun is the signature weapon of a Flash Git: a shoota rebuilt
+      from looted, salvaged and traded-for parts of real quality by an Ork
+      with more teef than sense, gaudily decorated and prized as much for
+      status as for firepower. Codex: Orks background is explicit that Flash
+      Gits' snazzguns are the best-made Ork small arms in general
+      circulation, precisely because Flash Gits can afford to demand a Mek
+      use good parts rather than whatever scrap is at hand.
+    design: >-
+      Kept at the Kustom Shoota's damage (8d pi+, avg 28) since both
+      represent an "improved shoota" tier, but built from genuinely
+      better-sourced parts rather than a Mek's rushed, overclocked bodge -
+      the difference this entry models is reliability and finish, not raw
+      power. Exact dice distribution is identical to the Kustom Shoota
+      (30.5% vs flak, 0% vs carapace or better). Handling: 17 lb (lighter
+      than the Kustom Shoota's welded-on plating, since a snazzgun's quality
+      comes from good components, not extra bulk); min ST 13 (raw formula
+      sqrt(10x17)=13.0, unmodified - a well-balanced weapon doesn't need the
+      recoil-handling bump a cruder gun does); Acc improved to 2, the top of
+      the framework's Ork bracket, for genuinely better sights than any other
+      entry on this page. Bulk -5 and Rcl 3 are unchanged from the Shoota
+      family; Shots 30(4), a slightly faster reload than the plain Shoota for
+      a better-fitted drum. Malf 15 - the best rating the framework allows
+      for Ork gear ("15 at best") - reflects a snazzgun's actual
+      craftsmanship rather than a Mek's kustom gamble: it is the one entry in
+      this file that is both harder-hitting and more reliable than a plain
+      Shoota, paid for in cost and the social capital of being a Flash Git.
+
+  - name: Big Shoota
+    tl: 6
+    lc: 0
+    cost: 700
+    weight: 32
+    tags: [Missile Weapon, Xenos, Orks]
+    weapons:
+      - usage: Dakka (full auto)
+        damage: 9d pi+
+        acc: 1
+        range: 200/600
+        rof: 15
+        shots: 60(6)
+        st: 22
+        bulk: -7
+        rcl: 3
+        skill: Guns (Rifle)
+        notes: Malf 14. Jams rather than explodes on a critical failure, as the Slugga.
+    lore: >-
+      A heavy-stubber-class weapon carried two-handed by a big Ork rather
+      than tripod-mounted by a human crew, common as a Nob's personal
+      weapon, a trukk or battlewagon pintle gun, and standard wargear for the
+      biggest Boyz in a mob. Codex: Orks background places it squarely in
+      the heavy-stubber weight class, and it is a recurring silhouette on
+      Ork vehicle art throughout the game's background material.
+    design: >-
+      Matches the framework's Ork anchor exactly ("Big shoota | Heavy stubber
+      class and up, about 9d pi+, RoF 15+"). Exact dice distribution: avg
+      31.5, 57.6% through flak (DR 30) - a genuinely dangerous horde weapon
+      against lightly-armoured infantry - but 0% against carapace or better
+      and 0% against every vehicle AV on the table (checked against AV10-14,
+      DR 100-350), matching the Imperium Heavy Stubber's own "never once
+      shown killing a tank" reputation at a comparable dice profile.
+      Handling: 32 lb loaded, lighter than the Imperium's tripod-mounted
+      heavy stubber (40 lb) since this is built to be carried and fired
+      two-handed by an Ork rather than braced on a mount; min ST 22 (raw
+      formula sqrt(10x32)=17.9, bumped to exactly a Boy's own ST per the
+      framework's "built for Ork hands" rule - any Boy can heft and fire it,
+      a human cannot without a mount). RoF 15, the anchor's own floor value.
+      Shots 60(6): a big drum or belt box, slower to reload than the Shoota's
+      for the larger ammunition. Bulk -7 and Rcl 3 mark a genuine support
+      weapon. Acc 1, unchanged from the Shoota family - more dakka, not
+      better aim. Malf 14, standard Ork gear.
+
+  - name: Twin Big Shoota
+    tl: 6
+    lc: 0
+    cost: 1300
+    weight: 60
+    tags: [Missile Weapon, Xenos, Orks]
+    weapons:
+      - usage: Dakka (both barrels)
+        damage: 9d pi+
+        acc: 1
+        range: 200/600
+        rof: 15x2
+        shots: 120(8)
+        st: 24
+        bulk: -8
+        rcl: 3
+        skill: Guns (Rifle)
+        notes: Malf 14 per barrel (roll separately if a GM wants one barrel to jam and not the other). Jams rather than explodes on a critical failure, as the Slugga.
+    lore: >-
+      Two big shootas bolted to a shared frame and fired together, most often
+      seen as a Deff Dread or battlewagon weapon mount but occasionally
+      wielded by an especially large Ork; Codex: Orks background treats
+      twin-linking as the standard Ork answer to "the first gun wasn't
+      enough dakka."
+    design: >-
+      Same per-barrel dice as the Big Shoota (9d pi+), "rof: 15x2" capturing
+      the doubled volume of fire per the standard GURPS convention for
+      linked weapons (used identically for the Imperium Storm Bolter).
+      Penetration odds per hit are unchanged from the single Big Shoota
+      (57.6% vs flak, 0% vs carapace or better and every vehicle AV).
+      Handling: 60 lb, roughly double a single big shoota's weight for the
+      shared mount and doubled ammunition feed; min ST 24 (above a Boy's own
+      22, matching the framework's Nob figure of 26 - built for the very
+      biggest Boyz and Nobz, or a vehicle mount) with the anchor's shot
+      count doubled to 120(8), a slightly slower per-shot reload than the
+      single gun for the more awkward twin feed. Bulk -8 and Rcl 3 as the
+      single Big Shoota's own figures, one step worse on Bulk for the
+      doubled frame. Malf 14 as the single gun; the note on rolling per
+      barrel is a GM option, not a mechanical requirement, since GCS has no
+      native way to track two independent Malf pools on one weapon line.
+
+  - name: Deffgun
+    tl: 6
+    lc: 0
+    cost: 1800
+    weight: 55
+    tags: [Missile Weapon, Xenos, Orks]
+    weapons:
+      - usage: Braced/mounted
+        damage: 10d+2 pi+
+        acc: 1
+        range: 250/800
+        rof: 10
+        shots: 80(8)
+        st: 20M
+        bulk: -8
+        rcl: 3
+        skill: Gunner (Machine Gun)
+        notes: Malf 14. Jams rather than explodes on a critical failure, as the Slugga.
+    lore: >-
+      A heavy support gun above the Big Shoota's weight class, mounted on
+      Gunwagons, Deff Dreads and Big Meks' own heavy-support loadouts;
+      background material (Codex: Orks, Forge World's Ork background) treats
+      it as the Ork parallel to a human heavy machine gun proper - bigger,
+      slower-cycling and harder-hitting than a shoota-family weapon, without
+      crossing into rokkit or zzap-gun anti-armour territory.
+    design: >-
+      Not covered by name in the framework's Ork anchor table, so it is
+      built one clear step above the Big Shoota on the same pi+ solid-slug
+      family (10d+2 pi+, avg 37) rather than copied from it, per the same
+      "each weapon's dice derived individually" rule the framework applies
+      project-wide. Exact dice distribution: 88.4% through flak (DR 30) -
+      genuinely lethal to lightly-armoured infantry at this weight class -
+      but still 0% against carapace or better and 0% against every vehicle
+      AV (checked AV10-14), keeping it an infantry-killer rather than a
+      vehicle-killer, the role Rokkits and the Zzap Gun fill instead.
+      Handling: 55 lb, heavier than the Big Shoota for the bigger receiver
+      and ammunition; the raw ST formula gives sqrt(10x55)=23.5, but the
+      weapon is mounted on a pintle or Deff Dread arm in every depiction
+      rather than carried loose, so it takes the M suffix at ST 20 the way
+      the Imperium Autocannon does - the mount bears the weight, not the
+      gunner's back. RoF 10, below the Big Shoota's 15, for a heavier-calibre
+      but slower-cycling action (bigger rounds, more mass to cycle per shot).
+      Shots 80(8): a large belt or hopper feed. Bulk -8 and Rcl 3 mark a
+      genuine crew-served or vehicle weapon. Acc 1, unchanged Ork-gear figure.
+      Malf 14, standard Ork gear.
+
+  # -------------------------------------------------------------- rokkits
+
+  - name: Rokkit Launcha
+    tl: 6
+    lc: 0
+    cost: 900
+    weight: 20
+    tags: [Missile Weapon, Xenos, Orks]
+    weapons:
+      - usage: Standard
+        damage: 6dx4(3) cr ex
+        acc: 1
+        range: 150/450
+        rof: 1
+        shots: 1(6)
+        st: 14
+        bulk: -7
+        rcl: 1
+        skill: Guns (Rifle)
+        notes: Malf 14.
+    lore: >-
+      The Ork anti-armour weapon of choice: a crude, shoulder-fired
+      rocket tube that Codex: Orks and Deathwatch's Mark of the Xenos both
+      describe as good enough to crack open light and medium Imperial armour
+      despite (or because of) its total lack of finesse - fiction across the
+      Ork range consistently shows rokkits cracking Chimeras, Sentinels and
+      Rhinos while struggling against a main battle tank's frontal glacis.
+    design: >-
+      Matches the framework's Ork anchor exactly ("Rokkit launcha |
+      Anti-armour, about 6d×4(3) cr ex, Acc 0-1, Malf 14"). Checked by exact
+      dice distribution against the personal-armour and vehicle-AV tables:
+      avg 84, penetrating every personal armour up to and including
+      Astartes power armour (100%, 100%, 100%, 99.9%) and even a Terminator
+      85.5% of the time - a real Marine- and Terminator-killer in enough
+      numbers, matching the fiction's Ork mobs grinding down Astartes
+      squads by weight of rokkit fire. Against the vehicle table it clears
+      AV10-11 (99.9%/98.0%) reliably, AV12 (85.5%) usually, but falls to
+      36.3% at AV13 and 2.0% at AV14 - reliably wrecks a Chimera, Rhino or
+      Sentinel, sometimes cracks a Predator-weight hull, and rarely beats a
+      Leman Russ or Land Raider outright, exactly the "crack open light and
+      medium armour" reputation the lore consistently gives it. Handling: 20
+      lb loaded (tube plus one rocket), min ST 14 (raw formula
+      sqrt(10x20)=14.1, unmodified - a Boy at ST 22 fires it one-handed in a
+      pinch, as the art shows). RoF 1 and Shots 1(6): single-shot, hand-
+      loaded between shots, slower than the Imperium Missile Launcher's 1(4)
+      for the cruder loading mechanism. Bulk -7 and Rcl 1 (the rocket motor
+      ignites clear of the tube, so felt recoil is light) match a shoulder-
+      fired tube weapon. Acc 1, the top of the anchor's 0-1 bracket - Orks
+      aim rokkits about as well as anything else they own. Malf 14, standard
+      Ork gear.
+
+  # -------------------------------------------------------------- kustom energy weapons
+
+  - name: Kustom Mega-Slugga
+    tl: 6
+    lc: 0
+    cost: 600
+    weight: 14
+    tags: [Missile Weapon, Xenos, Orks]
+    weapons:
+      - usage: Standard
+        damage: 8d pi+
+        acc: 1
+        range: 100/300
+        rof: 3
+        shots: 12(4)
+        st: 18
+        bulk: -4
+        rcl: 3
+        skill: Guns (Pistol)
+        notes: Malf 13 (kustom job).
+    lore: >-
+      A Meganob's sidearm: a slugga rebuilt to Meganob scale and Mekboy
+      "improvement," fired one-handed from inside a suit of mega armour
+      alongside a power klaw. Background material treats it as simply a
+      bigger, meaner slugga rather than a distinct weapon family, in keeping
+      with how a Meganob's entire loadout is everything a Boy carries, scaled
+      up and overbuilt.
+    design: >-
+      Built the same way the Kustom Shoota is built from the plain Shoota:
+      one die over the Slugga anchor's 5d pi+ becomes, at Meganob scale, an
+      8d pi+ weapon (avg 28), identical in penetration odds to the Kustom
+      Shoota (30.5% vs flak, 0% vs carapace or better) but delivered as a
+      pistol-profile weapon a Meganob can fire one-handed alongside a power
+      klaw. Handling: 14 lb, heavier than the plain Slugga's 4 lb for the
+      Meganob-scale frame (the same weight jump the Astartes-pattern bolt
+      pistol takes over the human one); min ST 18 (raw formula
+      sqrt(10x14)=11.8, bumped for the punishing recoil of a bigger
+      cartridge on a pistol frame, the same logic the Imperium bolt pistol's
+      ST bump uses) - well within a mega-armoured Meganob's servo-assisted
+      strength, out of reach for a bare Boy. RoF 3 and Shots 12(4) are scaled
+      pistol figures; Bulk -4 and Rcl 3 reflect the bigger frame and
+      cartridge. Malf 13, the framework's kustom-job rating, since this is a
+      Mek's overclocked rebuild rather than issue-standard kit.
+
+  - name: Kustom Mega-Blasta
+    tl: 7
+    lc: 0
+    cost: 4000
+    weight: 30
+    tags: [Missile Weapon, Xenos, Orks]
+    weapons:
+      - usage: Standard
+        damage: 6dx4(2) burn ex
+        acc: 1
+        range: 100/300
+        rof: 1
+        shots: 4(10)
+        st: 22
+        bulk: -6
+        rcl: 2
+        skill: Beam Weapons (Rifle)
+        notes: >-
+          Malf 13 (kustom job). On a malfunction the containment coil fails
+          catastrophically: the wielder immediately takes 3d(5) burn ex, and
+          the weapon is disabled until a Mek repairs it (Mechanic (Ork Tech)
+          roll, GM's discretion on time and difficulty).
+    lore: >-
+      The Big Mek's own signature weapon: a hand-built, unstable energy gun
+      that Codex: Orks background repeatedly describes in the same breath as
+      "as likely to explode as to work," yet devastating when it doesn't.
+      Widely depicted (Codex art, Black Library's Ghazghkull Thraka: Prophet
+      of the Waaagh!) as a one-of-a-kind weapon specific to the Mek who built
+      it, rather than a mass-produced pattern.
+    design: >-
+      No framework anchor covers this item by name, so it is built as an Ork
+      answer to the Imperium's plasma family - the closest real-world
+      analogue to "unstable energy weapon that occasionally kills its own
+      user" this project already has a design pattern for (see the Plasma
+      Gun's supercharged-mode Malf 14 rule) - but pushed further into Ork
+      unreliability territory. Checked by exact dice distribution: 6dx4(2)
+      burn ex averages 84 and penetrates Astartes power armour (DR 100, eff.
+      50) 98.0% of the time and even a Terminator (DR 200, eff. 100) 14.5% of
+      the time, putting it in the same tier as the Imperium Plasma Gun
+      against Astartes plate while falling well short of a lascannon against
+      the heaviest armour on the table - a Big Mek's toy is a real
+      Marine-killer, not a tank-killer. Against vehicles it clears AV10
+      (98.0%) and usually AV11 (72.1%) but fails AV12 upward. Handling: 30
+      lb, a genuinely heavy hand weapon reflecting a bulky, improvised
+      containment vessel; min ST 22 (a Boy's own strength, per the
+      framework's "built for Ork hands" rule, though in practice usually a
+      Big Mek or a burly Boy carries it). RoF 1 and Shots 4(10): a slow,
+      unstable capacitor that must fully recharge between shots and holds
+      only a handful of charges before needing a lengthy re-arm. Bulk -6 and
+      Rcl 2 fit a heavy two-handed energy weapon. Acc 1, the standard Ork
+      figure - a Mek's genius goes into raw power, never sights. Malf 13
+      (kustom job) with the explicit misfire-injury note, since "as likely
+      to explode as to work" is exactly the fiction's own description and
+      deserves a real mechanical consequence, not just a jam.
+
+  - name: Zzap Gun
+    tl: 7
+    lc: 0
+    cost: 6000
+    weight: 70
+    tags: [Missile Weapon, Xenos, Orks]
+    weapons:
+      - usage: Braced/mounted
+        damage: 6dx5(3) burn
+        acc: 0
+        range: 150/450
+        rof: 1
+        shots: 3(15)
+        st: 20M
+        bulk: -8
+        rcl: 1
+        skill: Gunner (Beams)
+        notes: >-
+          Malf 12, the worst reliability rating this project assigns to any
+          weapon. On a malfunction, the accumulated charge discharges
+          backward through the gubbinz: the gun is destroyed and every Ork
+          within 2 yards (including the gunner) takes 3d(5) burn ex. Some
+          Mekboyz claim a bigger Waaagh! nearby makes a Zzap Gun behave; a GM
+          running a large Ork force in full cry may rule that Malf improves
+          by 1 for every ten-plus Orks fighting within earshot, as pure
+          battlefield colour rather than a tracked mechanic.
+    lore: >-
+      A capacitor-and-lightning-rod contraption built by Meks who barely
+      understand the archeotech-adjacent principles they're copying, the
+      Zzap Gun charges up over a long, crackling moment before discharging a
+      bolt Codex: Orks background credits with punching clean through tank
+      armour and Terminator plate alike - when it doesn't simply detonate in
+      the crew's faces first, a risk the same background treats as an
+      accepted cost of owning one.
+    design: >-
+      No framework anchor covers this item by name, but the framework's
+      Ork-tech table explicitly calls out the Zzap Gun as a worked example
+      of "Malf 12, huge damage." Built as the single hardest-hitting
+      Ork energy weapon in this file: 6dx5(3) burn (avg 105, no "ex" -
+      it is a single coherent bolt, not a bursting warhead) clears every
+      personal armour on the table essentially always (100%/100%/100%/100%)
+      and still beats a Terminator 96.4% of the time - a genuine
+      Terminator-killer, as the anchor and lore both demand. Against
+      vehicles it clears AV10-12 at or above 96% and remains a real threat
+      even at AV13 (72.1%), only tailing off against AV14 (27.9%) -
+      "punches through tank armour," exactly as described, short of
+      guaranteeing a Land Raider kill the way a lascannon does. Handling: 70
+      lb, a genuinely huge weapon built around a charge coil and accumulator
+      rather than a compact reactor; the raw ST formula gives
+      sqrt(10x70)=26.5, but every depiction shows it braced on a mount or a
+      Big Mek's own reinforced frame, so it takes the M suffix at ST 20 the
+      way the Imperium Lascannon does. RoF 1 and a slow Shots 3(15): the
+      accumulator needs a genuinely long charge-up between shots, the
+      longest reload in this file, matching its "crackling for a long
+      moment before it fires" depiction. Bulk -8 and Rcl 1 (an energy
+      discharge, no propellant kick) fit a heavy support weapon. Acc 0: no
+      Ork ever built decent sights for this thing. Malf 12 is the
+      framework's own explicit worked figure for this weapon, with a real
+      misfire consequence (rather than a mere jam) reflecting "as likely to
+      kill the crew as the target," and the WAAAGH!-bonus note is written up
+      exactly as the assignment specifies: optional GM colour, not a tracked
+      mechanic.
+
+  # -------------------------------------------------------------- flame weapons
+
+  - name: Burna
+    tl: 6
+    lc: 0
+    cost: 400
+    weight: 15
+    tags: [Missile Weapon, Xenos, Orks]
+    weapons:
+      - usage: Flame jet (single burst)
+        damage: 3d burn
+        range: 4
+        rof: 1
+        shots: 1(4)
+        st: 12
+        bulk: -5
+        skill: Liquid Projector (Flamethrower)
+        notes: Malf 13 (kustom job). Cone attack out to the listed range; no Acc applies, per the Imperium flame-weapon rules this entry follows.
+      - usage: Flame jet, follow-up (per turn if target catches fire)
+        damage: 1d burn
+        range: 4
+        rof: 1
+        shots: 1(4)
+        st: 12
+        bulk: -5
+        skill: Liquid Projector (Flamethrower)
+        notes: Ignores DR; see Flame Weapons (Imperium) for the ignition rule.
+      - usage: Cutting torch (melee)
+        damage: thr+1d(2) burn
+        reach: C,1
+        parry: "No"
+        st: 12
+        skill: Axe/Mace
+        notes: >-
+          A Mek's actual tool: burnas are built to cut plate and weld
+          wreckage as much as to burn infantry, and Ork Boyz press them into
+          melee use constantly. Cannot parry with the lit torch head.
+    lore: >-
+      Originally a Mekboy's cutting and welding tool, the burna is pressed
+      into service as a crude flamethrower by any Ork strong enough to carry
+      one - background material (Codex: Orks) is explicit that its two uses
+      are the same piece of kit, not two separate items, and Ork fiction
+      shows Burna Boyz using the torch head to carve through both bulkheads
+      and enemies interchangeably.
+    design: >-
+      The flame-jet mode reuses the Imperium Flamer's own damage and
+      follow-up profile unchanged (3d burn / 1d burn ignoring DR - see the
+      Imperium flame-weapon file), since nothing in Ork background suggests
+      its raw output differs from a human-portable flamer's promethium jet,
+      only its build quality and reliability. The cutting-torch mode is
+      built as a short-range, DR-piercing melee tool rather than a weapon
+      with an anchor: thr+1d(2) burn represents a focused cutting flame at
+      point-blank range, armour divisor (2) for the way a torch head
+      concentrates heat through a seam rather than across a broad hit,
+      cannot parry since the wielder is holding a lit torch, not a blade.
+      Handling: 15 lb loaded, a heavy hand tool with an integral fuel tank;
+      min ST 12 for the ranged mode (a Boy manages it without difficulty).
+      Range 4, shorter than the Imperium flamer's, for a smaller, cruder
+      nozzle; Shots 1(4), one fuel charge per burst with a slow, jury-rigged
+      reload. Bulk -5 fits a bulky two-part device. Malf 13, the kustom-job
+      rating, since every burna is a Mek's individual, hand-modified tool
+      rather than a mass-produced pattern.
+
+  - name: Skorcha
+    tl: 6
+    lc: 0
+    cost: 1200
+    weight: 35
+    tags: [Missile Weapon, Xenos, Orks]
+    weapons:
+      - usage: Flame jet (single burst)
+        damage: 5d burn
+        range: 7
+        rof: 1
+        shots: 1(6)
+        st: 18
+        bulk: -6
+        skill: Liquid Projector (Flamethrower)
+        notes: Malf 14. Cone attack out to the listed range; no Acc applies.
+      - usage: Flame jet, follow-up (per turn if target catches fire)
+        damage: 1d+1 burn
+        range: 7
+        rof: 1
+        shots: 1(6)
+        st: 18
+        bulk: -6
+        skill: Liquid Projector (Flamethrower)
+        notes: Ignores DR; see the Burna's follow-up note.
+    lore: >-
+      A heavier, vehicle-scale burna carried by especially big Orks or
+      mounted as a Battlewagon and Deff Dread weapon; Codex: Orks background
+      places it a clear step above the hand-held burna in both reach and
+      fuel capacity, used for clearing entrenched infantry ahead of an Ork
+      advance rather than as a Mek's personal tool.
+    design: >-
+      One size class up from the Burna's flame-jet mode (no cutting-torch
+      mode - this is a dedicated infantry-clearing weapon, not a Mek's
+      multitool): 5d burn (avg 17.5) and a proportionally bigger follow-up
+      (1d+1 vs. the Burna's 1d). Like every flame weapon in this project it
+      has no armour divisor and is not checked against DR-heavy targets;
+      its role is unarmoured and lightly-armoured infantry, matching the
+      lore's "clearing entrenched infantry" framing. Handling: 35 lb, a
+      genuinely heavy two-handed or mounted weapon with a much bigger fuel
+      tank than the Burna's; min ST 18 (raw formula sqrt(10x35)=18.7,
+      essentially unmodified) sits above a Boy's own 22... no, below it -
+      comfortably within a Boy's strength and easy for a Nob. Range 7,
+      longer than the Burna's 4 for a proper nozzle rather than a
+      cutting-torch head. Shots 1(6), a bigger tank than the Burna's with a
+      correspondingly slower refill. Bulk -6 fits its size. Malf 14, plain
+      Ork-issue rather than a Mek's individual kustom job, since Skorchas
+      are built to a more consistent (if still crude) pattern for
+      squad-level issue.
+
+  # -------------------------------------------------------------- grot & kombi
+
+  - name: Grot Blasta
+    tl: 5
+    lc: 0
+    cost: 25
+    weight: 3
+    tags: [Missile Weapon, Xenos, Orks]
+    weapons:
+      - usage: Standard
+        damage: 2d+1 pi
+        acc: 0
+        range: 50/150
+        rof: 3
+        shots: 10(4)
+        st: 5
+        bulk: -2
+        rcl: 2
+        skill: Guns (Pistol)
+        notes: Malf 14.
+    lore: >-
+      A cut-down, simplified slugga built to a Gretchin's much smaller hands
+      and much smaller strength; Codex: Orks background and Ork army art
+      consistently show armed Grots carrying an obviously scaled-down,
+      even-more-slapdash version of Ork small arms rather than a full-sized
+      weapon they couldn't hope to lift or aim.
+    design: >-
+      Scaled down from the Slugga anchor (5d pi+) for a Gretchin's own frame
+      (ST 8 per the framework's Ork table) rather than simply re-issuing the
+      Slugga at a strength penalty: two dice down and dropping the pi+
+      wounding bonus for a genuinely lighter cartridge a Grot can actually
+      cycle, giving 2d+1 pi (avg 8) - a real threat only to an unarmoured
+      target, penetrating nothing on the personal-armour table by exact dice
+      distribution (0% vs flak and up), matching a Grot's role as expendable
+      support fire rather than a genuine combat threat. Handling: 3 lb, a
+      genuinely small pistol; min ST 5 (raw formula sqrt(10x3)=5.5, rounded
+      down to sit within a Grot's own ST 8, since even a poorly-made pistol
+      this light needs little strength) - a Grot fires it with no
+      difficulty, though the same crude Ork engineering that makes every
+      entry on this page unreliable still applies. RoF 3, Shots 10(4), Bulk
+      -2 and Rcl 2 are all scaled-down pistol figures. Acc 0, since even the
+      shoota family's already-low sights are further degraded on a Grot-built
+      copy. Malf 14, unchanged - Ork tech doesn't get more reliable just
+      because a Grot is holding it.
+
+  - name: Kombi-Weapon, Shoota/Rokkit
+    tl: 6
+    lc: 0
+    cost: 1100
+    weight: 34
+    tags: [Missile Weapon, Xenos, Orks]
+    weapons:
+      - usage: Shoota barrel
+        damage: 7d pi+
+        acc: 1
+        range: 150/500
+        rof: 10
+        shots: 20(5)
+        st: 16
+        bulk: -6
+        rcl: 3
+        skill: Guns (Rifle)
+        notes: Malf 14.
+      - usage: Rokkit barrel (single shot)
+        damage: 6dx4(3) cr ex
+        acc: 1
+        range: 150/450
+        rof: 1
+        shots: 1(8)
+        st: 16
+        bulk: -6
+        skill: Guns (Rifle)
+        notes: Malf 14. One rocket before the auxiliary tube must be reloaded by hand.
+    lore: >-
+      An Ork answer to the Imperium's combi-weapons: a shoota with a single
+      rokkit tube welded underneath or alongside the barrel, letting a Nob
+      or Mek carry an anti-armour answer without giving up a rifle's worth of
+      dakka; Ork army art and Codex background both show these improvised
+      combination weapons as a recurring, if unofficial, field modification.
+    design: >-
+      The shoota barrel is the plain Shoota's own profile (7d pi+) with a
+      slightly reduced magazine (20 vs. 30) to make room for the rokkit
+      tube's mounting hardware; the rokkit barrel reuses the Rokkit Launcha's
+      damage line unchanged (6dx4(3) cr ex) for a single shot, since welding
+      a second tube onto a shoota doesn't change the warhead inside it.
+      Handling: both barrels share one stock, so both usage lines carry the
+      same figures. 34 lb loaded, between the plain Shoota's 16 lb and the
+      Rokkit Launcha's 20 lb added together and then trimmed for a shared
+      stock rather than two complete weapons; min ST 16 (above the plain
+      Shoota's 14, for the added mass and unbalancing rocket tube, but well
+      within a Boy's or Nob's strength). RoF is per-mechanism, not
+      copy-pasted: the shoota barrel keeps RoF 10 (dakka), the rokkit barrel
+      RoF 1 (a single warhead that must be hand-loaded). Bulk -6, one step
+      worse than the plain Shoota's -5, for the awkward extra tube. Malf 14
+      on both barrels, standard Ork gear - this is a field-welded
+      combination, not a Mek's individually kustom job.
+
+  - name: Kombi-Weapon, Shoota/Burna
+    tl: 6
+    lc: 0
+    cost: 700
+    weight: 30
+    tags: [Missile Weapon, Xenos, Orks]
+    weapons:
+      - usage: Shoota barrel
+        damage: 7d pi+
+        acc: 1
+        range: 150/500
+        rof: 10
+        shots: 20(5)
+        st: 16
+        bulk: -6
+        rcl: 3
+        skill: Guns (Rifle)
+        notes: Malf 14.
+      - usage: Burna barrel (single burst)
+        damage: 3d burn
+        range: 4
+        rof: 1
+        shots: 1(4)
+        st: 16
+        bulk: -6
+        skill: Liquid Projector (Flamethrower)
+        notes: Malf 13 (kustom job, as the standalone Burna). Cone attack; no Acc applies.
+    lore: >-
+      As the Shoota/Rokkit above, with a cut-down burna nozzle and fuel tank
+      welded on in place of the rokkit tube, favoured where a mob expects
+      entrenched infantry rather than armour; the same field-modification
+      tradition Ork background attaches to every kombi pattern.
+    design: >-
+      Shoota barrel is the plain Shoota's profile, magazine trimmed to 20 as
+      the Shoota/Rokkit above. Burna barrel reuses the standalone Burna's
+      flame-jet damage unchanged (3d burn, with the same DR-ignoring 1d burn
+      follow-up on an ignited target) for a single fuel charge. Handling: 30
+      lb, lighter than the Shoota/Rokkit for a fuel tank instead of a heavier
+      rocket tube; min ST 16 and Bulk -6 as the Shoota/Rokkit, since both
+      kombi patterns share the same basic shoota-plus-auxiliary-tube
+      construction. Malf is per-barrel: the shoota half stays at plain
+      Ork-issue 14, while the burna half keeps the standalone Burna's kustom
+      rating of 13, since the flame nozzle is still an individual Mek's
+      hand-fitted work even when welded onto someone else's shoota.
+
+  # -------------------------------------------------------------- thrown
+
+  - name: Stikkbomb (Frag)
+    tl: 4
+    lc: 0
+    cost: 15
+    weight: 1
+    tags: [Missile Weapon, Xenos, Orks]
+    weapons:
+      - usage: Thrown
+        damage: 4d cr ex [4d]
+        acc: 0
+        range: "x1/x1.5 x ST"
+        rof: 1
+        shots: 1(3)
+        st: 8
+        skill: Throwing
+        notes: >-
+          A crude pin-and-tin-can bomb; GM's discretion whether a natural 17
+          on the throw roll represents a genuinely early or dud fuse rather
+          than simply a bad throw, in keeping with Ork gear's general
+          unreliability, though this project does not assign it a formal
+          Malf rating since it's a thrown weapon, not a mechanism that can
+          jam.
+    lore: >-
+      The Ork hand grenade: a tin can packed with whatever explosive and
+      scrap-metal shrapnel a Boy could get his hands on, thrown rather than
+      launched, and depicted throughout Codex: Orks and Ork army background
+      as a standard-issue Boy weapon alongside the choppa and slugga.
+    design: >-
+      Scaled from this project's own established "standard hand grenade"
+      baseline (3d cr ex [3d], used as the reference point for the Imperium
+      Missile Launcher's frag warhead) up by one die for a bigger, less
+      carefully packed charge - crude Ork munitions favour more explosive
+      filler over precision engineering - giving 4d cr ex [4d]. It carries no
+      armour divisor and is not checked against the personal-armour or
+      vehicle-AV tables, matching every other frag-grenade entry in this
+      project: its job is infantry and light cover, not armour. Handling:
+      thrown per Basic Set rules from the wielder's own ST and Throwing
+      skill rather than a weapon profile of its own; 1 lb per bomb, a
+      generic thrown-weapon weight. TL4 reflects that a fused explosive
+      charge in a tin can needs no real industry behind it, matching the
+      framework's "primitive/feral worlds" TL bracket even though it's
+      built and carried by a spacefaring greenskin empire.
+
+  - name: Tankbusta Bomb
+    tl: 6
+    lc: 0
+    cost: 120
+    weight: 6
+    tags: [Missile Weapon, Xenos, Orks]
+    weapons:
+      - usage: Thrown or planted
+        damage: 6dx3(3) cr ex
+        acc: 0
+        range: "x1/x1.5 x ST"
+        rof: 1
+        shots: 1(10)
+        st: 12
+        skill: Throwing
+        notes: >-
+          Planting the bomb directly against a vehicle's hull (a Committed
+          Attack against an adjacent or grappled target, GM's discretion)
+          removes the throwing roll's range and Acc penalties entirely -
+          Tankbustas favour sticking a bomb to the plate over lobbing it.
+    lore: >-
+      The signature weapon of Tankbusta mobs: a heavy, shaped-charge satchel
+      bomb thrown or slapped directly onto a vehicle's hull, magnetic clamps
+      and all; Codex: Orks background is explicit that Tankbustas exist
+      specifically to close with and personally wreck Imperial armour this
+      way when rokkits alone aren't enough.
+    design: >-
+      Built as a hand-thrown shaped charge between the Rokkit Launcha and
+      the Imperium Krak Missile on the anti-armour scale, sharing the same
+      armour divisor (3) as both: 6dx3(3) cr ex (avg 63). Checked by exact
+      dice distribution against the vehicle table: clears AV10 (99.0%) and
+      AV11 (85.5%) reliably, drops to 36.3% at AV12 and 1.0% at AV13,
+      failing outright at AV14 - a real threat to Chimeras, Rhinos and
+      Sentinels, an even bet against a Predator-weight hull, and no real
+      threat to a Leman Russ or Land Raider without a whole mob's worth of
+      charges, matching the fiction's Tankbusta mobs swarming a vehicle
+      rather than relying on one bomb. Against personal armour it also
+      clears Astartes power armour 99.0% of the time and a Terminator 36.3%
+      of the time - a genuine Marine-killer at melee range, matching its
+      "get close and blow it up" doctrine. Handling: thrown per Basic Set
+      rules; 6 lb per bomb (heavier than a stikkbomb for the real
+      shaped-charge liner and magnetic clamp); min ST 12 is the practical
+      minimum to throw the extra weight effectively, per Basic Set thrown-
+      weapon convention, though a Boy or Nob manages it easily. Shots 1(10):
+      a single-use charge with the long fuse-and-clamp setup counted as the
+      "reload" between uses in a squad's shared satchel.
+
+  # -------------------------------------------------------------- weird weapon
+
+  - name: Shokk Attack Gun
+    tl: "6^"
+    lc: 0
+    cost: 20000
+    weight: 90
+    tags: [Missile Weapon, Xenos, Orks]
+    weapons:
+      - usage: Standard (see design)
+        damage: 6dx3 cr [4d cr]
+        acc: 0
+        range: 200/600
+        rof: 1
+        shots: 1(10)
+        st: 24M
+        bulk: -8
+        rcl: 1
+        skill: Gunner (Beams)
+        notes: >-
+          Not a normal ranged weapon: see design for the full randomiser
+          rule. Malf 13, but a malfunction here does not merely jam the gun -
+          roll on the misfire table below instead of a normal malfunction
+          result.
+    lore: >-
+      Perhaps the strangest weapon in the Ork arsenal: a Mek jams a live
+      Snotling into a chamber, opens a hole into (or through) the warp with
+      a crude Waaagh!-powered field generator, and the Snotling is flung -
+      still alive, and usually furious about it - directly into the enemy at
+      the far end, materialising with enough violent, uncontrolled kinetic
+      energy to flatten whatever it lands on or near. Codex: Orks background
+      is explicit that the weapon is as dangerous to the Ork operating the
+      readied hopper of Snotlings as to the enemy, since a snatched Snotling
+      can just as easily reappear in the gun's own crew, or not reappear at
+      all, or reappear as something other than a Snotling, and older Ork
+      lore openly credits the whole process as barely-understood even by
+      the Meks who build it.
+    design: >-
+      No framework anchor exists for this weapon and none of the framework's
+      normal per-shot derivations (fixed Acc/RoF/Shots/Bulk figures feeding a
+      clean to-hit-then-damage resolution) actually fit its own fiction, so
+      this entry is built honestly as a deliberately weird weapon rather than
+      forced into the standard mould: the "damage" line above is a working
+      baseline for a Snotling's violent, uncontrolled materialisation (a
+      solid, unarmoured-scale impact, no armour divisor - the Snotling itself
+      does the hitting, not a penetrator) with a fragmentation-style spread
+      bracket standing in for "sometimes it lands short, or off to the side,
+      or on top of something else nearby" rather than a literal frag pattern.
+      A GM is expected to actually run the following table on the attack
+      roll rather than a plain hit/miss, per the fiction's own description
+      of the gun as unpredictable in principle, not merely low-Acc in
+      practice: on a normal hit, the Snotling appears on the target as the
+      damage line states; on a miss, roll 1d - on 1-2 the Snotling
+      materialises 1d yards short in a random direction and the attack still
+      resolves against whatever (or whoever) is there instead; on 3-4 it
+      fails to cross over at all (a wasted shot); on 5 it reappears
+      somewhere near the gun itself instead (treat the gunner's own mob as
+      the target); on 6 something other than the intended Snotling comes
+      through - a chunk of terrain, a very surprised animal, or worse, at the
+      GM's discretion, with no guaranteed damage at all. This is offered as
+      one honest, playable version of "warp-teleporting snotlings," not a
+      claim to a single canonical mechanic; no source this project uses gives
+      exact numbers for how the effect actually resolves, so none are
+      invented here beyond what's needed to put the weapon on a table.
+      Handling: 90 lb loaded (a heavy, backpack-and-hopper rig feeding live
+      Snotlings into the chamber) with the M suffix and a raw
+      sqrt(10x90)=30-adjacent ST 24, since it is always shown mounted on a
+      dedicated frame or carried by an unusually large Ork rather than
+      shouldered like a rifle. RoF 1 and Shots 1(10): one Snotling at a time,
+      with a slow, awkward reload as the next one is wrestled into the
+      chamber. Bulk -8 and Rcl 1 (there is no propellant charge, only the
+      warp-field discharge) fit a heavy, backpack-scale weapon. Acc 0: by
+      design, nobody aims a Shokk Attack Gun so much as points it and hopes.
+      Malf 13 with its own misfire table rather than a plain malfunction
+      result, since "it works 'cos we fink it does" is stretched to its
+      breaking point by a weapon that is trying to open a hole in reality -
+      a failure here should read as stranger and more dangerous than an
+      ordinary jam, without this project inventing a full warp-rift subsystem
+      the framework doesn't otherwise support.
