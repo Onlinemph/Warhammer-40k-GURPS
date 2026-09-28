@@ -108,19 +108,19 @@ items:
   - name: Shoota
     tl: 5
     lc: 0
-    cost: 180
-    weight: 16
+    cost: 220
+    weight: 20
     tags: [Missile Weapon, Xenos, Orks]
     weapons:
       - usage: Dakka (full auto)
-        damage: 7d pi+
+        damage: 9d pi+
         acc: 1
         range: 150/500
         rof: 10
-        shots: 30(5)
-        st: 14
+        shots: 24(5)
+        st: 16
         bulk: -5
-        rcl: 3
+        rcl: 4
         skill: Guns (Rifle)
         notes: Malf 14. Ork critical failures jam (Ready to clear) rather than exploding; see Slugga.
     lore: >-
@@ -134,45 +134,53 @@ items:
       genuine menace in the fiction, since the effect (whatever its cause)
       is real in-universe.
     design: >-
-      Matches the framework's Ork anchor exactly ("Shoota | Heavy slugs,
-      about 7d pi+, RoF 10, Acc 1-2, Malf 14"), set at the low end of the
-      Acc bracket per the anchor's own range. Exact dice distribution: avg
-      24.5, penetrating flak (DR 30) 9.4% of hits, matching the framework's
-      autogun-family figure at the same dice (a shoota is ballistically an
-      autogun-class weapon, just built by and for Orks) - it fails outright
-      against carapace or better, keeping it a horde weapon against
-      unarmoured infantry rather than a threat to real Imperial armour or
-      Astartes. Handling: 16 lb loaded, heavier than a human autogun (8 lb)
-      for the crude, over-built stamped-steel receiver every Ork weapon
-      carries; min ST 14 (raw formula sqrt(10x16)=12.6, bumped for a
-      badly-balanced, kicking action) - trivial for a Boy (ST 22) but far
-      beyond an unaugmented Guardsman's comfortable two-handed use. RoF 10 is
-      the framework's own "dakka" design goal: Orks compensate crude
-      accuracy with volume, not precision. Shots 30(5): a big drum, slower to
-      reload (5s) than a human magazine because the feed mechanism itself is
-      crude and prone to snagging. Bulk -5 (one step bulkier than a human
-      rifle of the same class, per the same "built heavier and cruder" logic
-      the framework applies to Astartes-pattern gear) and Rcl 3 (heavy,
-      crude ammunition with a hard kick). Acc 1, the low end of the anchor's
-      1-2 bracket - a shoota is a spray weapon, not a marksman's rifle. Malf
-      14 per the framework's explicit Ork-gear rule.
+      REVISED (lore fix): the framework's Ork anchor's own dice ("about 7d
+      pi+") made the shoota ballistically identical to the Imperium autogun,
+      penetrating flak (DR 30) only 9.4% of the time - flatly wrong for the
+      weapon the fiction shows mowing down entire Guard lines under weight
+      of fire. The anchor's own text calls shootas "heavy slugs," and Ork
+      background consistently describes shoota rounds as far bigger than a
+      human rifle's, so the dice are corrected upward rather than treated as
+      fixed: 9d pi+ (avg 31.5). Exact dice distribution now penetrates flak
+      57.6% of the time - genuinely dangerous to flak-armoured infantry, as
+      "dakka mows down Guard lines" requires - while still failing outright
+      against carapace or better (0%) and every vehicle AV on the table
+      (checked AV10-14), so a shoota still cannot threaten real Imperial
+      plate or armour, only unarmoured and flak-class targets, keeping the
+      family's own internal escalation (shoota < kustom shoota/snazzgun <
+      big shoota < deffgun) intact. Acc, RoF, Malf and the "dakka not
+      precision" identity are all unchanged, per the coordinator's
+      instruction - only the calibre moved. Handling re-derived for the
+      bigger round: weight up from 16 lb to 20 lb for a genuinely heavier
+      cartridge and reinforced receiver; min ST 16 (raw formula
+      sqrt(10x20)=14.1, bumped for the harder-kicking action, the same
+      recoil-handling logic used throughout this file) - a Boy (ST 22)
+      still fires it without difficulty, an unaugmented human now struggles
+      even more than before. Shots trimmed to 24(5) (fewer of the bigger
+      cartridges fit the same drum) and Rcl bumped to 4 (up from 3, a
+      genuinely heavier-calibre kick, matching the framework's own "heavy
+      bolter/heavy stubber 3-4" bracket) - real consequences of the bigger
+      round, not free changes. Bulk -5, RoF 10 and Acc 1 are unchanged: the
+      weapon's size class and its "dakka not precision" identity haven't
+      moved, only its stopping power. Malf 14 per the framework's explicit
+      Ork-gear rule, unchanged.
 
   - name: Kustom Shoota
     tl: 6
     lc: 0
-    cost: 350
-    weight: 18
+    cost: 400
+    weight: 22
     tags: [Missile Weapon, Xenos, Orks]
     weapons:
       - usage: Dakka (full auto)
-        damage: 8d pi+
+        damage: 10d pi+
         acc: 1
         range: 150/500
         rof: 12
-        shots: 30(5)
-        st: 15
+        shots: 24(5)
+        st: 17
         bulk: -5
-        rcl: 3
+        rcl: 4
         skill: Guns (Rifle)
         notes: Malf 13 (kustom job; see design). Jams rather than explodes on a critical failure, as the Slugga.
     lore: >-
@@ -183,38 +191,43 @@ items:
       Mek's improvements are guided by instinct and belief rather than any
       real engineering discipline.
     design: >-
-      One die over the plain Shoota (8d pi+, avg 28) for the Mekboy's
-      overbuilt action and bigger charge, per the framework's "compensate
-      with big calibres" note taken a step further by a Mek's own hand.
-      Exact dice distribution: 30.5% through flak (DR 30), still 0% against
-      carapace or better - a harder-hitting Shoota, not a different class of
-      weapon. Handling: 18 lb (2 lb of extra plating and a bigger drum over
-      the plain Shoota), min ST 15 (raw formula sqrt(10x18)=13.4, bumped to
-      match the heavier housing), RoF bumped to 12 for the reworked action
-      cycling faster (and rougher) than stock. Bulk and Rcl unchanged from
-      the plain Shoota - the extra weight and recoil roughly cancel out.
-      Malf corrected to 13, per the framework's explicit "13 for kustom
-      jobs" rule: a Mek's overclocked work hits harder but is meaningfully
-      less reliable than issue-standard Ork gear (Malf 14), the setting's
-      own logic that "kustom" means more power for more risk, not simply an
-      upgrade.
+      REVISED (lore fix): rebuilt one die over the now-corrected plain
+      Shoota (9d pi+, see that entry) rather than the old, too-weak baseline,
+      keeping the same relative "Mek's overbuilt action hits a step harder"
+      relationship: 10d pi+ (avg 35). Exact dice distribution: 79.5% through
+      flak (DR 30), a clear step up from the plain Shoota's own 57.6% and
+      genuinely closing on "beats flak easily," while still failing outright
+      against carapace or better (0%) - a harder-hitting Shoota, not a
+      different class of weapon, exactly as before. Handling re-derived for
+      the bigger charge: weight up from 18 lb to 22 lb (extra plating and a
+      bigger drum over the now-heavier plain Shoota's own 20 lb); min ST 17
+      (raw formula sqrt(10x22)=14.8, bumped to match the heavier housing and
+      harder kick, the same margin over the plain Shoota's own ST 16 as
+      before); Rcl bumped to 4, matching the plain Shoota's own correction.
+      RoF stays at 12 (the reworked action cycling faster than stock) and
+      Bulk stays at -5 - neither the mechanism nor the silhouette changed,
+      only the calibre, per the coordinator's instruction to keep Acc, Malf
+      and the "dakka not precision" identity intact. Shots trimmed to 24(5)
+      to match the plain Shoota's own bigger-cartridge correction. Malf
+      stays at 13, per the framework's explicit "13 for kustom jobs" rule,
+      unchanged by the rescale.
 
   - name: Snazzgun
     tl: 6
     lc: 0
-    cost: 900
-    weight: 17
+    cost: 1000
+    weight: 21
     tags: [Missile Weapon, Xenos, Orks]
     weapons:
       - usage: Dakka (full auto)
-        damage: 8d pi+
+        damage: 10d pi+
         acc: 2
         range: 180/550
         rof: 10
-        shots: 30(4)
-        st: 13
+        shots: 24(4)
+        st: 15
         bulk: -5
-        rcl: 3
+        rcl: 4
         skill: Guns (Rifle)
         notes: >-
           Malf 15 (see design). Every snazzgun is individually built and
@@ -231,41 +244,44 @@ items:
       circulation, precisely because Flash Gits can afford to demand a Mek
       use good parts rather than whatever scrap is at hand.
     design: >-
-      Kept at the Kustom Shoota's damage (8d pi+, avg 28) since both
-      represent an "improved shoota" tier, but built from genuinely
-      better-sourced parts rather than a Mek's rushed, overclocked bodge -
+      REVISED (lore fix): kept at the Kustom Shoota's now-corrected damage
+      (10d pi+, avg 35, see that entry) rather than the old, too-weak
+      baseline, since both still represent the same "improved shoota" tier -
       the difference this entry models is reliability and finish, not raw
       power. Exact dice distribution is identical to the Kustom Shoota
-      (30.5% vs flak, 0% vs carapace or better). Handling: 17 lb (lighter
-      than the Kustom Shoota's welded-on plating, since a snazzgun's quality
-      comes from good components, not extra bulk); min ST 13 (raw formula
-      sqrt(10x17)=13.0, unmodified - a well-balanced weapon doesn't need the
-      recoil-handling bump a cruder gun does); Acc improved to 2, the top of
-      the framework's Ork bracket, for genuinely better sights than any other
-      entry on this page. Bulk -5 and Rcl 3 are unchanged from the Shoota
-      family; Shots 30(4), a slightly faster reload than the plain Shoota for
-      a better-fitted drum. Malf 15 - the best rating the framework allows
-      for Ork gear ("15 at best") - reflects a snazzgun's actual
-      craftsmanship rather than a Mek's kustom gamble: it is the one entry in
-      this file that is both harder-hitting and more reliable than a plain
-      Shoota, paid for in cost and the social capital of being a Flash Git.
+      (79.5% vs flak, 0% vs carapace or better). Handling re-derived for the
+      bigger charge: weight up from 17 lb to 21 lb (lighter than the Kustom
+      Shoota's 22 lb welded-on plating, since a snazzgun's quality comes from
+      good components, not extra bulk); min ST 15 (raw formula
+      sqrt(10x21)=14.5, essentially unmodified - a well-balanced weapon
+      doesn't need the extra recoil-handling bump a cruder gun does, keeping
+      it two points below the Kustom Shoota's ST 17); Rcl bumped to 4,
+      matching the family-wide correction for the bigger round. Acc stays at
+      2 (the top of the framework's Ork bracket, for genuinely better sights
+      than any other entry on this page), Bulk stays at -5, RoF stays at 10
+      and Malf stays at 15 - the coordinator's instruction was to keep Acc,
+      Malf and the "dakka not precision" identity intact, and nothing about
+      a snazzgun's actual craftsmanship changed, only its cartridge. Shots
+      trimmed to 24(4), matching the family's bigger-cartridge correction
+      while keeping the snazzgun's faster reload edge over the Kustom
+      Shoota's 24(5).
 
   - name: Big Shoota
     tl: 6
     lc: 0
-    cost: 700
-    weight: 32
+    cost: 800
+    weight: 45
     tags: [Missile Weapon, Xenos, Orks]
     weapons:
       - usage: Dakka (full auto)
-        damage: 9d pi+
+        damage: 13d pi+
         acc: 1
         range: 200/600
         rof: 15
-        shots: 60(6)
-        st: 22
+        shots: 50(6)
+        st: 24
         bulk: -7
-        rcl: 3
+        rcl: 4
         skill: Guns (Rifle)
         notes: Malf 14. Jams rather than explodes on a critical failure, as the Slugga.
     lore: >-
@@ -276,40 +292,54 @@ items:
       the heavy-stubber weight class, and it is a recurring silhouette on
       Ork vehicle art throughout the game's background material.
     design: >-
-      Matches the framework's Ork anchor exactly ("Big shoota | Heavy stubber
-      class and up, about 9d pi+, RoF 15+"). Exact dice distribution: avg
-      31.5, 57.6% through flak (DR 30) - a genuinely dangerous horde weapon
-      against lightly-armoured infantry - but 0% against carapace or better
-      and 0% against every vehicle AV on the table (checked against AV10-14,
-      DR 100-350), matching the Imperium Heavy Stubber's own "never once
-      shown killing a tank" reputation at a comparable dice profile.
-      Handling: 32 lb loaded, lighter than the Imperium's tripod-mounted
-      heavy stubber (40 lb) since this is built to be carried and fired
-      two-handed by an Ork rather than braced on a mount; min ST 22 (raw
-      formula sqrt(10x32)=17.9, bumped to exactly a Boy's own ST per the
-      framework's "built for Ork hands" rule - any Boy can heft and fire it,
-      a human cannot without a mount). RoF 15, the anchor's own floor value.
-      Shots 60(6): a big drum or belt box, slower to reload than the Shoota's
-      for the larger ammunition. Bulk -7 and Rcl 3 mark a genuine support
-      weapon. Acc 1, unchanged from the Shoota family - more dakka, not
-      better aim. Malf 14, standard Ork gear.
+      REVISED (lore fix): the framework's own anchor text calls this a
+      "heavy stubber class and up" weapon, but at the old anchor dice
+      ("about 9d pi+") it penetrated flak (DR 30) only 57.6% of the time -
+      a real threat, but well short of the "and up" and short of what a Boy
+      mowing down a Guard firing line with a genuine heavy machine gun
+      should manage against flak-class infantry, especially once the plain
+      Shoota itself was corrected upward to that same 57.6% figure and a Big
+      Shoota needs real daylight above its own little brother. Set to 13d
+      pi+ (avg 45.5), the top of the coordinator's requested 12-13d range:
+      exact dice distribution now clears flak 99.3% of the time - it "beats
+      flak easily," exactly as instructed - while still failing against
+      carapace or better for all practical purposes (0.0006%, negligible -
+      "bounces off... mostly," per the instruction, read as "essentially
+      always") and against every vehicle AV on the table (checked AV10-14,
+      all 0%), so it still cannot hurt power armour or a vehicle, keeping
+      the Imperium Heavy Stubber's own "never once shown killing a tank"
+      reputation intact for the Ork equivalent. Handling re-derived for the
+      much heavier round: weight up from 32 lb to 45 lb for a genuinely
+      bigger receiver and ammunition (the "heavy machine gun" reading the
+      coordinator asked for, not a slightly-bigger shoota); min ST bumped to
+      24, above a bare Boy's own 22 (raw formula sqrt(10x45)=21.2, bumped
+      for the much harder recoil of a true heavy-calibre weapon) - any Boy
+      can still heft it with real effort, but it now genuinely favours a big
+      Boy or a Nob (ST 26), matching a heavier weapon class than before.
+      Shots trimmed to 50(6) for the bigger cartridges in the same drum;
+      Rcl bumped to 4 (up from 3) for the heavier kick, matching the
+      framework's own "heavy stubbers ... 3-4" bracket at its top end. RoF
+      15, Bulk -7 and Acc 1 are all unchanged, per the coordinator's
+      instruction to keep Acc and the "dakka not precision" identity intact
+      - only the calibre and its handling consequences moved. Malf 14,
+      standard Ork gear, unchanged.
 
   - name: Twin Big Shoota
     tl: 6
     lc: 0
-    cost: 1300
-    weight: 60
+    cost: 1500
+    weight: 85
     tags: [Missile Weapon, Xenos, Orks]
     weapons:
       - usage: Dakka (both barrels)
-        damage: 9d pi+
+        damage: 13d pi+
         acc: 1
         range: 200/600
         rof: 15x2
-        shots: 120(8)
-        st: 24
+        shots: 100(8)
+        st: 26
         bulk: -8
-        rcl: 3
+        rcl: 4
         skill: Guns (Rifle)
         notes: Malf 14 per barrel (roll separately if a GM wants one barrel to jam and not the other). Jams rather than explodes on a critical failure, as the Slugga.
     lore: >-
@@ -319,38 +349,42 @@ items:
       twin-linking as the standard Ork answer to "the first gun wasn't
       enough dakka."
     design: >-
-      Same per-barrel dice as the Big Shoota (9d pi+), "rof: 15x2" capturing
-      the doubled volume of fire per the standard GURPS convention for
-      linked weapons (used identically for the Imperium Storm Bolter).
-      Penetration odds per hit are unchanged from the single Big Shoota
-      (57.6% vs flak, 0% vs carapace or better and every vehicle AV).
-      Handling: 60 lb, roughly double a single big shoota's weight for the
-      shared mount and doubled ammunition feed; min ST 24 (above a Boy's own
-      22, matching the framework's Nob figure of 26 - built for the very
-      biggest Boyz and Nobz, or a vehicle mount) with the anchor's shot
-      count doubled to 120(8), a slightly slower per-shot reload than the
-      single gun for the more awkward twin feed. Bulk -8 and Rcl 3 as the
-      single Big Shoota's own figures, one step worse on Bulk for the
-      doubled frame. Malf 14 as the single gun; the note on rolling per
-      barrel is a GM option, not a mechanical requirement, since GCS has no
-      native way to track two independent Malf pools on one weapon line.
+      REVISED (lore fix): follows the Big Shoota's own corrected dice (13d
+      pi+, see that entry) rather than the old, too-weak baseline, since a
+      twin-link is still built as two of the same barrel, not a
+      re-derivation. "rof: 15x2" continues to capture the doubled volume of
+      fire per the standard GURPS convention for linked weapons (used
+      identically for the Imperium Storm Bolter). Penetration odds per hit
+      match the single Big Shoota exactly (99.3% vs flak, negligible vs
+      carapace or better, 0% vs every vehicle AV). Handling re-derived from
+      the heavier single gun: 85 lb, roughly double the single Big Shoota's
+      new 45 lb for the shared mount and doubled ammunition feed; min ST
+      bumped to 26 (above the single gun's own 24, matching the framework's
+      Nob figure exactly - built for the very biggest Boyz and Nobz, or a
+      vehicle mount) with Rcl matching the single gun's corrected 4. Shots
+      set to 100(8) (not simply double the single gun's 50, since a shared
+      twin feed is more cramped than two independent drums) with the same
+      slower per-shot reload as before for the more awkward twin feed. Bulk
+      -8, one step worse than the single gun's -7 for the doubled frame, is
+      unchanged. Malf 14 as the single gun, unchanged; the note on rolling
+      per barrel remains a GM option, not a mechanical requirement.
 
   - name: Deffgun
     tl: 6
     lc: 0
-    cost: 1800
-    weight: 55
+    cost: 2200
+    weight: 75
     tags: [Missile Weapon, Xenos, Orks]
     weapons:
       - usage: Braced/mounted
-        damage: 10d+2 pi+
+        damage: 15d pi+
         acc: 1
         range: 250/800
         rof: 10
-        shots: 80(8)
-        st: 20M
+        shots: 60(8)
+        st: 22M
         bulk: -8
-        rcl: 3
+        rcl: 4
         skill: Gunner (Machine Gun)
         notes: Malf 14. Jams rather than explodes on a critical failure, as the Slugga.
     lore: >-
@@ -361,25 +395,33 @@ items:
       slower-cycling and harder-hitting than a shoota-family weapon, without
       crossing into rokkit or zzap-gun anti-armour territory.
     design: >-
-      Not covered by name in the framework's Ork anchor table, so it is
-      built one clear step above the Big Shoota on the same pi+ solid-slug
-      family (10d+2 pi+, avg 37) rather than copied from it, per the same
-      "each weapon's dice derived individually" rule the framework applies
-      project-wide. Exact dice distribution: 88.4% through flak (DR 30) -
-      genuinely lethal to lightly-armoured infantry at this weight class -
-      but still 0% against carapace or better and 0% against every vehicle
-      AV (checked AV10-14), keeping it an infantry-killer rather than a
-      vehicle-killer, the role Rokkits and the Zzap Gun fill instead.
-      Handling: 55 lb, heavier than the Big Shoota for the bigger receiver
-      and ammunition; the raw ST formula gives sqrt(10x55)=23.5, but the
-      weapon is mounted on a pintle or Deff Dread arm in every depiction
-      rather than carried loose, so it takes the M suffix at ST 20 the way
-      the Imperium Autocannon does - the mount bears the weight, not the
-      gunner's back. RoF 10, below the Big Shoota's 15, for a heavier-calibre
-      but slower-cycling action (bigger rounds, more mass to cycle per shot).
-      Shots 80(8): a large belt or hopper feed. Bulk -8 and Rcl 3 mark a
-      genuine crew-served or vehicle weapon. Acc 1, unchanged Ork-gear figure.
-      Malf 14, standard Ork gear.
+      REVISED (lore fix): not covered by name in the framework's Ork anchor
+      table, so it remains built one clear step above the Big Shoota on the
+      same pi+ solid-slug family rather than copied from it, per the
+      framework's "each weapon's dice derived individually" rule - but "one
+      step above" now means one step above the Big Shoota's own corrected
+      13d pi+ (see that entry), not the old, too-weak 9d baseline. Set to
+      15d pi+ (avg 52.5): exact dice distribution clears flak (DR 30) 100%
+      of the time and even opens a small, genuine crack in carapace (DR 70)
+      at 0.3% of hits - still overwhelmingly an infantry-killer, but
+      correctly sitting a clear notch above the Big Shoota's own negligible
+      carapace chance, matching "above the Big Shoota" as instructed. Still
+      0% against every vehicle AV on the table (checked AV10-14), keeping it
+      an infantry-killer rather than a vehicle-killer, the role Rokkits and
+      the Zzap Gun fill instead - a genuine heavy machine gun, not a
+      light autocannon. Handling re-derived for the heavier round: weight up
+      from 55 lb to 75 lb for a genuinely bigger receiver and ammunition;
+      the raw ST formula gives sqrt(10x75)=27.4, but the weapon is mounted
+      on a pintle or Deff Dread arm in every depiction rather than carried
+      loose, so it takes the M suffix, bumped to ST 22 (up from 20) to
+      reflect the heavier mount and feed mechanism the mount itself now has
+      to manage - the mount still bears the weight, not the gunner's back.
+      RoF 10, below the Big Shoota's 15, is unchanged for the same
+      heavier-calibre-but-slower-cycling reasoning as before. Shots trimmed
+      to 60(8) for the bigger cartridges in the same belt/hopper. Bulk -8
+      unchanged; Rcl bumped to 4, matching the family-wide correction for
+      the bigger round. Acc 1, unchanged Ork-gear figure, per the
+      coordinator's instruction. Malf 14, standard Ork gear, unchanged.
 
   # -------------------------------------------------------------- rokkits
 
@@ -734,23 +776,27 @@ items:
       even-more-slapdash version of Ork small arms rather than a full-sized
       weapon they couldn't hope to lift or aim.
     design: >-
-      Scaled down from the Slugga anchor (5d pi+) for a Gretchin's own frame
-      (ST 8 per the framework's Ork table) rather than simply re-issuing the
-      Slugga at a strength penalty: two dice down and dropping the pi+
-      wounding bonus for a genuinely lighter cartridge a Grot can actually
-      cycle, giving 2d+1 pi (avg 8) - a real threat only to an unarmoured
-      target, penetrating nothing on the personal-armour table by exact dice
-      distribution (0% vs flak and up), matching a Grot's role as expendable
-      support fire rather than a genuine combat threat. Handling: 3 lb, a
-      genuinely small pistol; min ST 5 (raw formula sqrt(10x3)=5.5, rounded
-      down to sit within a Grot's own ST 8, since even a poorly-made pistol
-      this light needs little strength) - a Grot fires it with no
-      difficulty, though the same crude Ork engineering that makes every
-      entry on this page unreliable still applies. RoF 3, Shots 10(4), Bulk
-      -2 and Rcl 2 are all scaled-down pistol figures. Acc 0, since even the
-      shoota family's already-low sights are further degraded on a Grot-built
-      copy. Malf 14, unchanged - Ork tech doesn't get more reliable just
-      because a Grot is holding it.
+      Not simply scaled down from the Slugga - even the corrected Slugga (7d
+      pi+, see that entry) would make a Gretchin's own gun a real threat to
+      flak, which contradicts every depiction of an armed Grot as expendable
+      support fire rather than a combat threat in its own right. Built
+      instead for a Gretchin's own frame (ST 8 per the framework's Ork
+      table) from a genuinely smaller, lighter cartridge a Grot can actually
+      cycle: 2d+1 pi (avg 8), dropping the pi+ wounding bonus the bigger Ork
+      small arms all share. Exact dice distribution: 0% against flak (DR 30)
+      or better - a real threat only to an unarmoured target, keeping the
+      Grot Blasta the one deliberately weak entry in this file rather than a
+      miniature Slugga, per the coordinator's explicit "grot blasta a weak
+      pistol" instruction. Handling: 3 lb, a genuinely small pistol; min ST
+      5 (raw formula sqrt(10x3)=5.5, rounded down to sit within a Grot's own
+      ST 8, since even a poorly-made pistol this light needs little
+      strength) - a Grot fires it with no difficulty, though the same crude
+      Ork engineering that makes every entry on this page unreliable still
+      applies. RoF 3, Shots 10(4), Bulk -2 and Rcl 2 are all scaled-down
+      pistol figures, unchanged. Acc 0, since even the shoota family's
+      already-low sights are further degraded on a Grot-built copy. Malf 14,
+      unchanged - Ork tech doesn't get more reliable just because a Grot is
+      holding it.
 
   - name: Kombi-Weapon, Shoota/Rokkit
     tl: 6
