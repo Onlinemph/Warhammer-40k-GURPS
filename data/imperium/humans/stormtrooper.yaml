@@ -1,0 +1,255 @@
+kind: template
+output: Imperium/Templates/Militarum Tempestus Scion.gct
+notes: >
+  A Militarum Tempestus Scion: Schola Progenium-raised, hot-shot lasgun
+  ("hellgun") armed, an elite special-operations trooper rather than a
+  line Guardsman. Point math: ST 12 (+20), DX 14 (+80), IQ 11 (+20), HT 13
+  (+30) = 150; advantages +40; disadvantages -55; skills +71. Total 206
+  points, inside framework.md's "Elite human (200-350)" tier, toward its
+  lower end (a veteran Inquisitorial acolyte or Battle Sister should sit
+  higher). No psychic abilities here; add from the separate psyker power
+  library if a GM wants a Scion with sanctioned psyker support attached.
+traits:
+  - name: ST
+    points: 20
+    tags: [Attribute]
+    lore: Schola Progenium physical conditioning is harder than ordinary Guard basic training.
+    design: ST 12 (+2 from baseline), 10 pts/level (B15).
+  - name: DX
+    points: 80
+    tags: [Attribute]
+    lore: >
+      Scions are drilled from childhood in the Schola Progenium
+      specifically for weapons proficiency and small-unit special
+      operations; Only War and Dark Heresy both model Tempestus Scions
+      with noticeably better combat stats than a line Guardsman, used here
+      for relative calibration.
+    design: DX 14 (+4 from baseline), 20 pts/level (B15).
+  - name: IQ
+    points: 20
+    tags: [Attribute]
+    lore: Schola Progenium education is broader and more rigorous than Guard basic training's rote drilling.
+    design: IQ 11 (+1 from baseline), 20 pts/level (B15).
+  - name: HT
+    points: 30
+    tags: [Attribute]
+    lore: Selected and conditioned for endurance under Schola Progenium's harsher regimen.
+    design: HT 13 (+3 from baseline), 10 pts/level (B14).
+  - name: Combat Reflexes
+    points: 15
+    ref: B43
+    tags: [Advantage, Mental, Imperium]
+    lore: Special-operations conditioning against freezing under fire.
+    design: Basic Set Combat Reflexes (B43), 15 points.
+  - name: Very Fit
+    points: 15
+    ref: B55
+    tags: [Advantage, Physical, Imperium]
+    lore: Schola Progenium physical training exceeds ordinary Guard fitness standards.
+    design: Basic Set Very Fit (B55), 15 points.
+  - name: High Pain Threshold
+    points: 10
+    ref: B59
+    tags: [Advantage, Physical, Imperium]
+    lore: Conditioning and selection produce troopers who keep fighting through wounds that would drop a conscript.
+    design: Basic Set High Pain Threshold (B59), 10 points.
+  - name: Fanaticism (The God-Emperor)
+    points: -15
+    ref: B136
+    tags: [Disadvantage, Mental, Imperium]
+    lore: Schola Progenium indoctrination is, if anything, more thorough than a regular Guard upbringing.
+    design: Basic Set Fanaticism (B136), -15.
+  - name: Duty (Astra Militarum)
+    points: -15
+    ref: B133
+    tags: [Disadvantage, Social, Imperium, Astra Militarum]
+    lore: Militarum Tempestus is an Astra Militarum special-operations arm; the same near-absolute service obligation applies.
+    design: Basic Set Duty (B133), almost-always, hazardous, involuntary, -15.
+  - name: Sense of Duty (Squadmates)
+    points: -5
+    ref: B153
+    tags: [Disadvantage, Mental, Imperium]
+    lore: Scion kill-teams are small and tight-knit; Schola Progenium "siblings" bonds are a recurring Black Library and Only War beat.
+    design: Basic Set Sense of Duty (B153), small-group scope, -5.
+  - name: Intolerance (Xenos)
+    points: -10
+    ref: B140
+    tags: [Disadvantage, Mental, Imperium]
+    lore: Standard Imperial doctrine; see Imperium/Traits/Imperial Traits.adq.
+    design: Basic Set Intolerance (B140), broad-category, -10.
+  - name: Intolerance (Heretics)
+    points: -5
+    ref: B140
+    tags: [Disadvantage, Mental, Imperium]
+    lore: Schola-raised Scions are frequently used against internal Imperial threats (rogue PDF, cultists), and are indoctrinated accordingly.
+    design: Basic Set Intolerance (B140), narrow-category, -5.
+  - name: Overconfidence
+    points: -5
+    ref: B148
+    tags: [Disadvantage, Mental, Imperium]
+    lore: >
+      Scions are the Guard's acknowledged elite and are written (Only War's
+      Tempestus material, and their portrayal as an intervention force
+      called in when line infantry fails) as knowing it.
+    design: Basic Set Overconfidence (B148), -5.
+skills:
+  - name: Beam Weapons
+    spec: Rifle
+    diff: DX/E
+    points: 16
+    tags: [Imperium, Astra Militarum]
+    lore: The hot-shot lasgun ("hellgun") is the Scion's signature weapon.
+    design: DX+5 (19) for 16 points, Easy (B170).
+  - name: Beam Weapons
+    spec: Pistol
+    diff: DX/E
+    points: 4
+    tags: [Imperium, Astra Militarum]
+    lore: Hot-shot laspistol sidearm.
+    design: DX+1 (15) for 4 points, Easy.
+  - name: Guns
+    spec: Grenade Launcher
+    diff: DX/E
+    points: 2
+    tags: [Imperium, Astra Militarum]
+    lore: Frag/krak grenade use.
+    design: DX+1 (15) for 2 points, Easy.
+  - name: Brawling
+    diff: DX/E
+    points: 2
+    tags: [Imperium]
+    lore: Close-quarters fighting when a breach goes hand-to-hand.
+    design: DX+1 (15) for 2 points, Easy.
+  - name: Forced Entry
+    diff: DX/E
+    points: 4
+    tags: [Imperium]
+    lore: Scion kill-teams specialise in breach-and-clear operations.
+    design: DX+2 (16) for 4 points, Easy.
+  - name: Stealth
+    diff: DX/A
+    points: 4
+    tags: [Imperium]
+    lore: Deep strike infiltration doctrine requires real fieldcraft, not just a Guardsman's basics.
+    design: DX+1 (15) for 4 points, Average.
+  - name: Camouflage
+    diff: IQ/E
+    points: 2
+    tags: [Imperium]
+    lore: Concealment discipline for infiltration.
+    design: IQ+1 (12) for 2 points, Easy.
+  - name: Survival
+    spec: (choose deployment terrain)
+    diff: Per/A
+    points: 2
+    tags: [Imperium]
+    lore: Scions deploy across many worlds; pick the terrain most relevant to the character's recent postings.
+    design: Per+0 (11) for 2 points, Average.
+  - name: Tactics
+    diff: IQ/H
+    points: 8
+    tags: [Imperium]
+    lore: Small-unit special operations tactics, well above a line Guardsman's grasp.
+    design: IQ+1 (12) for 8 points, Hard.
+  - name: Soldier
+    diff: IQ/A
+    points: 8
+    tags: [Imperium]
+    lore: Broad military competence, including logistics for supporting operations far from the front.
+    design: IQ+3 (14) for 8 points, Average.
+  - name: Leadership
+    diff: IQ/A
+    points: 2
+    tags: [Imperium]
+    lore: Kill-team members are expected to take initiative and lead if their sergeant falls.
+    design: IQ+0 (11) for 2 points, Average.
+  - name: Interrogation
+    diff: IQ/A
+    points: 2
+    tags: [Imperium]
+    lore: Scions are frequently tasked with securing and interrogating prisoners for the Inquisition or Officio Prefectus.
+    design: IQ+0 (11) for 2 points, Average.
+  - name: Intimidation
+    diff: Will/A
+    points: 2
+    tags: [Imperium]
+    lore: A carapace-armoured, hellgun-carrying Scion is an intimidating sight by design.
+    design: Will+0 (11) for 2 points, Average.
+  - name: First Aid
+    diff: IQ/E
+    points: 2
+    tags: [Imperium]
+    lore: Combat medicine for small teams operating without immediate medicae support.
+    design: IQ+1 (12) for 2 points, Easy.
+  - name: Navigation
+    spec: Land
+    diff: IQ/A
+    points: 1
+    tags: [Imperium]
+    lore: Land navigation for infiltration routes.
+    design: IQ-1 (10) for 1 point, Average.
+  - name: Area Knowledge
+    spec: (home world)
+    diff: IQ/E
+    points: 1
+    tags: [Imperium]
+    lore: Knowledge of the Scion's Schola Progenium world of origin, if remembered at all.
+    design: IQ+0 (11) for 1 point, Easy.
+  - name: Savoir-Faire
+    spec: Military
+    diff: IQ/E
+    points: 1
+    tags: [Imperium]
+    lore: Military etiquette, reinforced by Schola Progenium's rigid discipline.
+    design: IQ+0 (11) for 1 point, Easy.
+  - name: Heraldry
+    spec: Regimental
+    diff: IQ/A
+    points: 1
+    tags: [Imperium, Astra Militarum]
+    lore: Recognising Guard and Tempestus unit markings.
+    design: IQ-1 (10) for 1 point, Average.
+  - name: Parachuting
+    diff: DX/E
+    points: 1
+    tags: [Imperium]
+    lore: Scions typically deploy by Valkyrie air-assault, including parachute and grav-chute insertion.
+    design: DX+0 (14) for 1 point, Easy.
+  - name: Climbing
+    diff: DX/A
+    points: 1
+    tags: [Imperium]
+    lore: Urban and vertical-assault fitness.
+    design: DX-1 (13) for 1 point, Average.
+  - name: Jumping
+    diff: DX/E
+    points: 1
+    tags: [Imperium]
+    lore: Obstacle and urban-assault fitness.
+    design: DX+0 (14) for 1 point, Easy.
+  - name: Running
+    diff: HT/A
+    points: 1
+    tags: [Imperium]
+    lore: Rapid-insertion conditioning.
+    design: HT-1 (12) for 1 point, Average.
+  - name: Hiking
+    diff: HT/A
+    points: 1
+    tags: [Imperium]
+    lore: Rapid-insertion conditioning.
+    design: HT-1 (12) for 1 point, Average.
+  - name: Theology
+    spec: Imperial Creed
+    diff: IQ/H
+    points: 1
+    tags: [Imperium]
+    lore: Schola Progenium catechisms, drilled alongside combat training.
+    design: IQ-2 (9) for 1 point, Hard.
+  - name: Current Affairs
+    spec: Imperium
+    diff: IQ/E
+    points: 1
+    tags: [Imperium]
+    lore: Basic awareness of Imperium-wide news relevant to deployments.
+    design: IQ+0 (11) for 1 point, Easy.

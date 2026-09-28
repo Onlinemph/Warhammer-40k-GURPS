@@ -1,0 +1,88 @@
+kind: template
+output: Imperium/Templates/Astartes Battle-Brother.gct
+notes: >
+  A Tactical Marine with some decades of service to his Chapter: fully
+  implanted, trained, and combat-proven, but not yet a squad Sergeant or
+  Chapter specialist. Point total (physiology + skills, no gear) lands at
+  the low end of the framework's 550-800 Astartes tier — a veteran with
+  more time in service, a command role, or a Chapter specialty (Apothecary,
+  Techmarine, Chaplain, Librarian) should cost more on top of this.
+  Equipment (bolter, power armour, chainsword) is defined in the armoury
+  files, not here.
+traits:
+  - name: Astartes
+    container: ancestry
+    ref: Imperium/Traits/Astartes Gene-Seed.adq
+    points: 293
+    notes: >
+      Full racial package: see Imperium/Traits/Astartes Gene-Seed.adq for
+      the complete breakdown (Attribute Modifiers, all nineteen gene-seed
+      organs, and Hypno-Indoctrination). Restated here as a flat 293-point
+      line so the template totals correctly; a GCS user should replace
+      this with the actual Astartes trait from that library once both are
+      loaded, or drag the real container in and delete this line.
+    design: "150 (attributes) + 140 (organs) + 3 (conditioning) = 293. See the Gene-Seed file for the full derivation."
+  - name: Personal Advancement
+    points: 60
+    attributes: {dx: 1, iq: 1, ht: 1, will: 1, per: 1}
+    tags: [Physical, Mental]
+    lore: >
+      No two Battle-Brothers are physiologically identical even off the
+      same gene-seed template — individual variation, plus what decades
+      of live combat does to a body and mind that heal and learn far
+      faster than baseline, are depicted throughout Black Library fiction
+      as making veterans noticeably sharper and tougher than newly-raised
+      Battle-Brothers.
+    design: "DX+1 (20) + IQ+1 (20) + HT+1 (10) + Will+1 (5) + Per+1 (5) = 60 points of personal growth on top of the racial baseline."
+  - name: Rank 2 (Battle-Brother, Line Squad)
+    points: 10
+    ref: B29
+    lore: >
+      Recognized standing within the squad and Chapter hierarchy — enough
+      seniority to be trusted with a fireteam in his Sergeant's absence,
+      short of holding a command role himself.
+    design: "Rank (B29), 5 points/level, 2 levels = 10 points."
+  - name: Reputation (Angel of Death)
+    points: 5
+    ref: B27
+    reactions: [{situation: "from Imperial citizens and Guard who recognize the Chapter's colors", amount: 2}]
+    lore: >
+      An Astartes in his Chapter's heraldry is instantly recognized by
+      Imperial citizens and soldiery, who react with awe, hope, or fear —
+      a constant, near-universal reaction shown wherever Marines appear
+      in the fiction.
+    design: "Small, reliably-recognized reaction bonus (+2), priced as a minor Reputation (B27): 5 points."
+skills:
+  - {name: Guns, spec: Rifle, diff: DX/E, points: 20, notes: "Bolter."}
+  - {name: Guns, spec: Pistol, diff: DX/E, points: 8, notes: "Bolt pistol."}
+  - {name: Broadsword, diff: DX/A, points: 20, notes: "Chainsword."}
+  - {name: Brawling, diff: DX/E, points: 8}
+  - {name: Wrestling, diff: DX/A, points: 4}
+  - {name: Knife, diff: DX/A, points: 2, notes: "Combat knife."}
+  - {name: Axe/Mace, diff: DX/A, points: 2, notes: "Chainaxe familiarity."}
+  - {name: Fast-Draw, spec: Ammo, diff: DX/E, points: 2}
+  - {name: Throwing, diff: DX/A, points: 2, notes: "Frag/krak grenades."}
+  - {name: Free Fall, diff: DX/A, points: 4, notes: "Drop-pod insertion."}
+  - {name: Climbing, diff: DX/A, points: 2}
+  - {name: Stealth, diff: DX/A, points: 4}
+  - {name: Tactics, diff: IQ/H, points: 20}
+  - {name: Strategy, diff: IQ/H, points: 4}
+  - {name: Soldier, diff: IQ/A, points: 8}
+  - {name: Leadership, diff: IQ/A, points: 8, notes: "Commanding a fireteam or combat squad."}
+  - {name: Theology, spec: Imperial Creed, diff: IQ/H, points: 16}
+  - {name: Hidden Lore, spec: Xenos, diff: IQ/A, points: 4}
+  - {name: Hidden Lore, spec: Heresy, diff: IQ/A, points: 2}
+  - {name: Armoury, spec: Body Armor, diff: IQ/A, points: 2, notes: "Field maintenance of power armour."}
+  - {name: Armoury, spec: Small Arms, diff: IQ/A, points: 2, notes: "Bolt weapons."}
+  - {name: Mechanic, spec: Bolt Weapons, diff: IQ/A, points: 2}
+  - {name: First Aid, diff: IQ/E, points: 2}
+  - {name: Navigation, spec: Land, diff: IQ/A, points: 2}
+  - {name: Gesture, diff: IQ/E, points: 1, notes: "Chapter battle-sign."}
+  - {name: Savoir-Faire, spec: Military, diff: IQ/E, points: 1}
+  - {name: Camouflage, diff: IQ/E, points: 2}
+  - {name: Intimidation, diff: Will/A, points: 4}
+  - {name: Survival, spec: Any, diff: Per/A, points: 4}
+  - {name: Observation, diff: Per/A, points: 8}
+  - {name: Tracking, diff: Per/A, points: 2}
+  - {name: Running, diff: HT/A, points: 2}
+  - {name: Hiking, diff: HT/A, points: 2}

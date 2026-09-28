@@ -1,0 +1,779 @@
+kind: traits
+output: Imperium/Traits/Astartes Gene-Seed.adq
+items:
+  # ------------------------------------------------------------------ organs
+  # The nineteen gene-seed implants, in the rough order Codex and Black
+  # Library background usually lists them. Each is also usable on its own
+  # (e.g. for a partially-implanted Scout, or a rescued gene-seed sample),
+  # which is why every one is a distinct top-level trait rather than folded
+  # silently into the Astartes package below.
+
+  - &secondary_heart
+    name: Secondary Heart
+    points: 4
+    tags: [Advantage, Physical, Imperium, Adeptus Astartes]
+    ref: B58
+    notes: "+2 to HT rolls made solely to avoid death (Hard to Kill 2)."
+    lore: >
+      A backup heart grown alongside the original, wired into the same
+      circulatory system so the body keeps pumping blood even if the primary
+      heart is destroyed or stops. Widely depicted in Black Library fiction
+      as one reason Astartes shrug off wounds that would drop a normal man
+      dead of shock or blood loss.
+    design: >
+      Modelled as Hard to Kill 2 (B58): +2 to HT rolls to avoid death only,
+      not a general toughness bonus, since the second heart is a redundancy
+      against cardiac failure specifically. 2 x 2 = 4 points.
+
+  - &ossmodula
+    name: Ossmodula
+    points: 1
+    tags: [Advantage, Physical, Imperium, Adeptus Astartes, Perk]
+    lore: >
+      Triggers a second, controlled growth spurt: the skeleton is
+      re-knitted around a denser mineral lattice, ribs fuse into an
+      armoured cage, and the whole frame roughly doubles in mass over the
+      following implantation. This is the organ that turns a recruit into
+      something the size and density baseline humans aren't built to be.
+    design: >
+      The actual ST/HT/HP payoff of the growth process is bought once, for
+      the whole gene-seed line, in the Astartes meta-trait's Attribute
+      Modifiers (below) — putting it here too would double-count it. Kept
+      as a 1-point Perk (B21) so the organ still exists as a purchasable,
+      removable line item, e.g. for a gene-seed sample missing this stage.
+
+  - &biscopea
+    name: Biscopea
+    points: 1
+    tags: [Advantage, Physical, Imperium, Adeptus Astartes, Perk]
+    lore: >
+      Works alongside the Ossmodula to pack the newly-grown frame with
+      dense, fast-twitch muscle, giving Astartes their characteristic bulk.
+    design: >
+      Same reasoning as Ossmodula: the muscle mass is paid for once as part
+      of the racial ST bonus, so this is a 1-point Perk marking the organ's
+      presence rather than a second helping of ST.
+
+  - &haemastamen
+    name: Haemastamen
+    points: 1
+    tags: [Advantage, Physical, Imperium, Adeptus Astartes, Perk]
+    lore: >
+      Regulates the chemistry of Astartes blood and produces the
+      genetically-tagged compounds an Apothecary tests for to confirm a
+      Marine's gene-seed lineage and general biochemical stability. Its
+      output is also the substrate Larraman's Organ acts on.
+    design: >
+      Pure physiology/plot-hook organ — no combat effect of its own.
+      1-point Perk (B21) so it stays a listed, removable trait.
+
+  - &larramans_organ
+    name: Larraman's Organ
+    points: 5
+    tags: [Advantage, Physical, Imperium, Adeptus Astartes]
+    ref: B79
+    notes: >
+      Wounds scab and scar over within seconds rather than minutes; treat
+      as Rapid Healing for recovery rolls (B424), and the GM should waive
+      ongoing blood-loss effects from an untreated wound after the first
+      turn.
+    lore: >
+      Floods the bloodstream with "Larraman's cells" that clot almost
+      instantly on exposure to air, so an open wound scabs over in
+      seconds. This is the single most commonly cited reason Astartes
+      soldier on through injuries that would leave a Guardsman bleeding
+      out; it is described across Black Library fiction from minor cuts up
+      to serious battlefield trauma.
+    design: >
+      Reflavoured Rapid Healing (B79, 5 points): the RAW effect (double
+      effective HT for recovery rolls) undersells "seals in seconds," so
+      the design also folds in automatic stabilization against ongoing
+      blood loss for the first turn after a wound, at no extra point cost
+      — it's the same underlying "clots fast" phenomenon at two timescales.
+
+  - &catalepsean_node
+    name: Catalepsean Node
+    points: 6
+    tags: [Advantage, Physical, Imperium, Adeptus Astartes]
+    ref: B65
+    lore: >
+      A brainstem structure that lets the two cerebral hemispheres rest in
+      alternation, so an Astartes only needs a couple of hours of true
+      sleep where a human needs eight, and can go without any for days at
+      a stretch on campaign. Distinct from the Sus-an Membrane, which is a
+      full metabolic shutdown rather than efficient rest.
+    design: >
+      Less Sleep 3 (B65, 2 points/level): reduces sleep need from 8 hours
+      to about 2. 3 x 2 = 6 points.
+
+  - &preomnor
+    name: Preomnor
+    points: 10
+    tags: [Advantage, Physical, Imperium, Adeptus Astartes]
+    ref: B81
+    lore: >
+      A supplementary "pre-stomach" that chemically breaks down and
+      neutralizes toxins and spoiled matter in food before it reaches the
+      true stomach, letting Astartes eat things — rotten rations, raw
+      feral-world game, toxic fungus — that would sicken or kill an
+      unaugmented human.
+    design: >
+      Resistant (B81), Occasional: Ingested Poison, Immunity — base 10,
+      x1 for Immunity = 10 points. Deliberately narrower than Oolitic
+      Kidney below: this organ only ever sees toxins that arrive through
+      the gut.
+
+  - &omophagea
+    name: Omophagea
+    points: 1
+    tags: [Advantage, Mental, Imperium, Adeptus Astartes, Perk]
+    lore: >
+      Lets an Astartes extract genetic and biochemical information by
+      consuming a portion of a creature's flesh or blood, surfacing it as
+      hazy instinctive knowledge — described in the fiction as ritual
+      consumption of a slain xenos to "know" something of it, rather than
+      a controllable database query.
+    design: >
+      No reliable, repeatable mechanical payoff to hang a point cost on —
+      the fiction treats it as evocative, not a reliable Analyze/Detect
+      power. Kept as a 1-point Perk (B21); a GM can hand out a one-off
+      Hidden Lore or skill bonus after an appropriate scene at their
+      discretion, with no fixed rule for it here.
+
+  - &multi_lung
+    name: Multi-lung
+    container: meta_trait
+    children:
+      - name: Filter Lungs
+        points: 5
+        ref: B55
+      - name: Breath-Holding
+        per_level: 2
+        levels: 3
+        ref: B41
+    tags: [Advantage, Physical, Imperium, Adeptus Astartes]
+    lore: >
+      A supplementary lung that scrubs smoke, gas, and thin or tainted
+      atmospheres, and banks extra oxygen for holding the breath through
+      vacuum exposure, drowning, or a gas attack.
+    design: >
+      Filter Lungs (B55, 5 points) for the "breathe filthy air safely"
+      half; Breath-Holding 3 (B41, 2/level, 6 points) for the "hold it a
+      long time" half. Container sums to 11 points.
+
+  - &occulobe
+    name: Occulobe
+    container: meta_trait
+    children:
+      - name: Acute Vision
+        per_level: 2
+        levels: 2
+        ref: B35
+      - name: Protected Sense (Vision)
+        points: 5
+        ref: B78
+    tags: [Advantage, Physical, Imperium, Adeptus Astartes]
+    lore: >
+      Rewires the optic nerve and visual cortex for much sharper acuity
+      and low-light performance, and hardens the eye against flash and
+      glare — Astartes are consistently shown spotting targets and reading
+      terrain at ranges no unaugmented eye could manage, and shrugging off
+      blinding light that would stagger a human.
+    design: >
+      Acute Vision 2 (B35, 2/level, 4 points) for the raw acuity; Protected
+      Sense (Vision) (B78, 5 points) so flash/glare can't blind the organ
+      outright. 9 points total.
+
+  - &lymans_ear
+    name: Lyman's Ear
+    container: meta_trait
+    children:
+      - name: Acute Hearing
+        per_level: 2
+        levels: 2
+        ref: B35
+      - name: Protected Sense (Hearing)
+        points: 5
+        ref: B78
+    tags: [Advantage, Physical, Imperium, Adeptus Astartes]
+    lore: >
+      Reinforces the inner ear against the constant concussion of bolter
+      fire and explosions while sharpening hearing and balance, so an
+      Astartes can still track sound and stay upright through the kind of
+      noise that would deafen and disorient an unaugmented soldier.
+    design: >
+      Acute Hearing 2 (B35, 2/level, 4 points) plus Protected Sense
+      (Hearing) (B78, 5 points) against deafening/concussive noise. 9
+      points total.
+
+  - &sus_an_membrane
+    name: Sus-an Membrane
+    points: 9
+    tags: [Advantage, Physical, Imperium, Adeptus Astartes]
+    lore: >
+      Lets an Astartes drop, on command, into a deep hibernation that
+      slows metabolism to near nothing — used for long void crossings in a
+      survival capsule, or to ride out wounds that would otherwise be
+      fatal by shutting down everything but core function. Depicted as
+      something that takes real time to enter and leave, not an instant
+      reflex.
+    design: >
+      Custom build shown for transparency rather than a straight RAW pull:
+      Doesn't Eat or Drink (B50, 10) + Doesn't Breathe (B49, 20) = 30
+      points of effect, but only while deliberately entering the trance,
+      which takes about a minute either way — an Accessibility-style
+      limitation worth roughly -70% (comparable to "Trance Only" in scope
+      and severity). 30 x 0.3 = 9 points.
+
+  - &melanchromic_organ
+    name: Melanchromic Organ
+    points: 11
+    tags: [Advantage, Physical, Imperium, Adeptus Astartes]
+    ref: B79
+    notes: "Radiation Tolerance (PF 5) plus a 1-point Perk for voluntary pigment control."
+    lore: >
+      Controls skin pigmentation and shields the body against radiation
+      and hard UV, letting Astartes operate on irradiated battlefields and
+      hostile worlds. Its baseline output varies by Chapter gene-seed —
+      most notably the Salamanders, whose Melanchromic Organ runs
+      permanently at full output (see the Chapter lens below).
+    design: >
+      Radiation Tolerance (B79), PF 5 (10 points) for the shielding
+      effect, plus a 1-point Perk for voluntary control over pigmentation
+      (camouflage/recognition flavor, no fixed numeric benefit). 11 points.
+
+  - &oolitic_kidney
+    name: Oolitic Kidney
+    points: 15
+    tags: [Advantage, Physical, Imperium, Adeptus Astartes]
+    ref: B81
+    lore: >
+      A backup kidney that aggressively filters toxins circulating in the
+      blood — venoms, industrial poisons, battlefield chemical agents —
+      rather than the ones Preomnor already caught at the gut.
+    design: >
+      Resistant (B81), Common: Poison, Immunity — base 15, x1 for Immunity
+      = 15 points. Priced above Preomnor because it covers poison from any
+      route of entry, not just food.
+
+  - &neuroglottis
+    name: Neuroglottis
+    container: meta_trait
+    children:
+      - name: Discriminatory Smell
+        points: 15
+        ref: B49
+      - name: Acute Taste & Smell
+        per_level: 2
+        levels: 3
+        ref: B35
+    tags: [Advantage, Physical, Imperium, Adeptus Astartes]
+    lore: >
+      Pushes taste and smell to a level that lets an Astartes identify an
+      individual, a poison, or a chemical trace by scent alone, and track
+      a quarry across terrain a hound couldn't follow.
+    design: >
+      Discriminatory Smell (B49, 15 points, identify/track individuals and
+      substances by scent) plus Acute Taste & Smell 3 (B35, 2/level, 6
+      points) for raw sensitivity. 21 points total.
+
+  - &mucranoid
+    name: Mucranoid
+    container: meta_trait
+    children:
+      - name: Sealed
+        points: 15
+        ref: B82
+      - name: Temperature Tolerance
+        per_level: 1
+        levels: 5
+        ref: B93
+    tags: [Advantage, Physical, Imperium, Adeptus Astartes]
+    lore: >
+      Secretes a waxy, oily film that can be triggered to seal pores and
+      orifices against vacuum, toxic atmosphere, and radiation, and that
+      also insulates against extreme heat and cold.
+    design: >
+      Sealed (B82, 15 points) covers vacuum/toxin/radiation sealing;
+      Temperature Tolerance 5 (B93, 1/level, 5 points) covers the thermal
+      insulation. 20 points total.
+
+  - &betchers_gland
+    name: Betcher's Gland
+    container: meta_trait
+    children:
+      - name: Corrosive Spit
+        points: 3
+        weapons:
+          - usage: Spit
+            damage: 1d cor
+            reach: C
+            parry: "No"
+            skill: Brawling
+      - name: Oral Poison Filter
+        points: 1
+    tags: [Advantage, Physical, Imperium, Adeptus Astartes]
+    lore: >
+      Produces a corrosive, mildly toxic saliva. Fiction plays this as a
+      minor, opportunistic weapon and a way to shrug off ingested poisons
+      and diseased food in the mouth — not a primary attack for a Marine
+      who has a bolter.
+    design: >
+      Innate Attack (Corrosion) at a token 1d, melee reach C only (B61,
+      roughly 3 points after the reach/range restriction) for the spit;
+      1-point Perk for the minor oral antitoxin effect (overlaps in
+      concept with Preomnor, so kept nominal). 4 points total.
+
+  - &progenoid_glands
+    name: Progenoid Glands
+    points: 1
+    tags: [Advantage, Physical, Imperium, Adeptus Astartes, Perk]
+    lore: >
+      Two glands that mature over years into a bank of "zygotes" —
+      genetic material an Apothecary harvests from the fallen to seed new
+      recruits. Central to how a Chapter perpetuates and safeguards its
+      gene-seed line, but they confer no combat benefit on the Marine who
+      carries them; their value is entirely to the Chapter after death.
+    design: >
+      1-point Perk (B21): a narrative/plot-hook organ (its condition can
+      matter for Apothecary rolls or a Chapter's gene-seed politics) with
+      no combat mechanic of its own.
+
+  - &black_carapace
+    name: Black Carapace
+    points: 1
+    tags: [Advantage, Physical, Imperium, Adeptus Astartes, Perk]
+    lore: >
+      A synthetic interface grafted under the skin across the torso and
+      spine and wired into the nervous system, grown last, only after a
+      Scout has proven himself and is elevated to full Battle-Brother. It
+      lets a suit of power armour read a Marine's nervous impulses
+      directly, so the armour moves as an extension of the body rather
+      than a piloted shell.
+    design: >
+      The mechanical payoff (full reflexes, no bulk/encumbrance penalty,
+      no clumsy manual controls) is a property of Astartes power armour
+      equipment and belongs on that equipment's entry, not duplicated
+      here, since a Marine without a suit to plug into gets nothing from
+      it in play. Kept as a 1-point Perk marking that the interface exists
+      and is a hard prerequisite for wearing power armour as intended.
+
+  # -------------------------------------------------------- conditioning
+
+  - &hypno_indoctrination
+    name: Hypno-Indoctrination / Psycho-Conditioning
+    container: meta_trait
+    children:
+      - name: Combat Reflexes
+        points: 15
+        ref: B43
+      - name: Fearlessness
+        per_level: 2
+        levels: 4
+        ref: B55
+      - name: High Pain Threshold
+        points: 10
+        ref: B59
+      - name: Single-Minded
+        points: 5
+        ref: B85
+        notes: "Represents relentless mission focus drilled in from the day of recruitment."
+      - name: Duty (Chapter and Imperium)
+        points: -15
+        ref: B133
+        notes: "Almost all the time, Extremely Hazardous."
+      - name: Sense of Duty (Battle-Brothers)
+        points: -10
+        ref: B153
+        notes: "Large group — the whole Chapter, not just one squad."
+      - name: Code of Honor (Codex Astartes)
+        points: -10
+        ref: B127
+        notes: "As Code of Honor (Soldier's): never abandon a Battle-Brother, never retreat without orders, uphold the Chapter's word."
+    tags: [Advantage, Mental, Imperium, Adeptus Astartes]
+    lore: >
+      Years of hypnotherapy, drugs, and ritualized indoctrination laid over
+      the biological changes, meant to produce a soldier who doesn't break
+      under fire and who puts Chapter and Emperor before self. Consistently
+      shown as psychological conditioning, not just training — Astartes
+      keep fighting past the point a merely well-trained human would
+      rout, and are bound by oaths to their Chapter that they do not
+      question.
+    design: >
+      Combat Reflexes (B43, 15) + Fearlessness 4 (B55, 2/level, 8) + High
+      Pain Threshold (B59, 10) + Single-Minded (B85, 5) = 38 points of
+      advantage, offset by Duty (B133, -15), Sense of Duty to the Chapter
+      (B153, -10), and Code of Honor (B127, -10) = -35. Net +3 points.
+      Intolerance is deliberately left out of the universal package —
+      lore doesn't support a blanket xenophobia disadvantage across every
+      Chapter; where a specific Chapter's fiction supports it, add it as
+      part of that Chapter's lens instead.
+
+  # ------------------------------------------------------------ the race
+
+  - name: Astartes
+    container: ancestry
+    tags: [Advantage, Physical, Imperium, Adeptus Astartes]
+    children:
+      - name: Attribute Modifiers
+        points: 150
+        attributes: {st: 8, ht: 4, basic_speed: 1, will: 2}
+        tags: [Physical]
+        design: >
+          Increased ST +8 (B14, 10/level, 80) for ST 18 — also raises HP to
+          18 for free, since HP tracks ST unless bought separately.
+          Increased HT +4 (B15, 10/level, 40) for HT 14. Increased Basic
+          Speed +1.00 (B17, 5 points per 0.25, 20) for "faster reflexes
+          than baseline humans" without inflating every DX-based skill the
+          way a straight DX buy would. Increased Will +2 (B16, 5/level,
+          10) for the iron discipline the fiction shows even before the
+          Hypno-Indoctrination package below. 80+40+20+10 = 150. Height
+          runs 2.1-2.4 m per the framework; SM stays 0 unarmoured.
+      - *secondary_heart
+      - *ossmodula
+      - *biscopea
+      - *haemastamen
+      - *larramans_organ
+      - *catalepsean_node
+      - *preomnor
+      - *omophagea
+      - *multi_lung
+      - *occulobe
+      - *lymans_ear
+      - *sus_an_membrane
+      - *melanchromic_organ
+      - *oolitic_kidney
+      - *neuroglottis
+      - *mucranoid
+      - *betchers_gland
+      - *progenoid_glands
+      - *black_carapace
+      - *hypno_indoctrination
+    lore: >
+      The Adeptus Astartes: a superhuman created by grafting nineteen
+      engineered organs onto a chosen human recruit and finishing the
+      process with years of training and psycho-indoctrination. This
+      trait is the baseline shared by every Chapter's gene-seed; Chapter
+      lenses below add or remove pieces where the fiction says a specific
+      lineage differs.
+    design: >
+      150 (Attribute Modifiers) + 140 (nineteen organs: 4+1+1+1+5+6+10+1
+      +11+9+9+9+11+15+21+20+4+1+1) + 3 (Hypno-Indoctrination) = 293
+      points. This is the physiology alone, before any skills; see the
+      Battle-Brother, Scout, and Primaris templates for full characters
+      built on top of it.
+
+  - name: Astartes Neophyte (Scout-Rank)
+    container: ancestry
+    tags: [Advantage, Physical, Imperium, Adeptus Astartes]
+    children:
+      - name: Attribute Modifiers (Neophyte)
+        points: 80
+        attributes: {st: 5, ht: 2, basic_speed: 0.5}
+        tags: [Physical]
+        design: >
+          Reduced version of the full package: Increased ST +5 (50) and
+          Increased HT +2 (20) reflect a Scout who has been through most,
+          but not the final, growth-triggering implantations, so he's
+          well above human norm but hasn't finished bulking out to a full
+          Battle-Brother's mass; Increased Basic Speed +0.50 (10) reflects
+          reflexes that are quick but not yet honed to a veteran's combat
+          tempo. 50+20+10 = 80.
+      - *secondary_heart
+      - *ossmodula
+      - *biscopea
+      - *haemastamen
+      - *larramans_organ
+      - *catalepsean_node
+      - *preomnor
+      - *omophagea
+      - *multi_lung
+      - *occulobe
+      - *lymans_ear
+      - *sus_an_membrane
+      - *melanchromic_organ
+      - *oolitic_kidney
+      - *neuroglottis
+      - *mucranoid
+      - *betchers_gland
+      - *progenoid_glands
+      - name: Hypno-Indoctrination (Neophyte)
+        container: meta_trait
+        children:
+          - name: Fearlessness
+            per_level: 2
+            levels: 2
+            ref: B55
+          - name: High Pain Threshold
+            points: 10
+            ref: B59
+          - name: Single-Minded
+            points: 5
+            ref: B85
+          - name: Duty (Chapter and Imperium)
+            points: -15
+            ref: B133
+            notes: "Almost all the time, Extremely Hazardous."
+          - name: Sense of Duty (Battle-Brothers)
+            points: -10
+            ref: B153
+          - name: Code of Honor (Codex Astartes)
+            points: -10
+            ref: B127
+        design: >
+          Fearlessness 2 (4) + High Pain Threshold (10) + Single-Minded
+          (5) = 19, minus the same Duty/Sense of Duty/Code of Honor a
+          Scout already swears (-35) = -16. Combat Reflexes is left out —
+          it represents thousands of hours of live-fire drilling a Scout
+          hasn't logged yet.
+    lore: >
+      The gene-seed organs are implanted well before a recruit is judged
+      ready for power armour and full Battle-Brother status; only the
+      Black Carapace is consistently described across sources as the
+      final implant, grafted at the end of a Scout's training. This
+      project treats that as the one organ safe to say every Scout lacks;
+      exactly how far along the other implants and the growth process are
+      at any given point in a Scout's years-long training varies between
+      sources, so the Attribute Modifiers and Hypno-Indoctrination here
+      are a reasoned midpoint rather than a claim about a fixed timetable.
+    design: >
+      80 (Attribute Modifiers) + 139 (eighteen organs, all but Black
+      Carapace: 140 - 1) + (-16) (reduced Hypno-Indoctrination) = 203
+      points. See the Scout template for the full character.
+
+  - name: Primaris Astartes
+    container: meta_trait
+    tags: [Advantage, Physical, Imperium, Adeptus Astartes, Primaris]
+    children:
+      - name: Sinew Coils
+        points: 25
+        attributes: {st: 2, basic_speed: 0.25}
+        tags: [Physical]
+        lore: >
+          Reinforces muscle fibre and tendon with denser, faster-cycling
+          tissue, giving Primaris Marines their somewhat greater size and
+          quicker reactions relative to Firstborn Astartes.
+        design: >
+          Increased ST +2 (B14, 10/level, 20) plus Increased Basic Speed
+          +0.25 (B17, 5) = 25 points, stacking with the base Astartes
+          Attribute Modifiers.
+      - name: Magnificat
+        container: meta_trait
+        children:
+          - name: Accelerated Recovery
+            points: 10
+            ref: B80
+            notes: "Regeneration (Slow): recover 1 HP per 12 hours even without rest or first aid."
+          - name: Hormonal Regulation
+            points: 1
+        lore: >
+          Boosts the endocrine system that governs growth and wound
+          repair, so a Primaris Marine's tissue knits measurably faster
+          between battles than a Firstborn Astartes' already-quick
+          healing.
+        design: >
+          Regeneration (Slow) (B80, 10 points) for the passive extra
+          healing, plus a 1-point Perk for general hormonal stability. 11
+          points.
+      - name: Belisarian Furnace
+        container: meta_trait
+        children:
+          - name: Metabolic Reserve
+            per_level: 3
+            levels: 3
+            ref: B16
+            notes: "Extra Fatigue Points +3."
+          - name: Efficient Metabolism
+            points: 1
+        lore: >
+          An additional organ, unique to the Primaris strain, that burns
+          fuel far more efficiently than a Firstborn Astartes' already
+          formidable metabolism, giving noticeably greater stamina on
+          extended campaigns.
+        design: >
+          Extra Fatigue Points +3 (B16, 3/level, 9 points) plus a 1-point
+          Perk for the general metabolic efficiency. 10 points.
+    lore: >
+      Cawl's Primaris strain adds three further organs on top of the
+      standard nineteen, developed to make a Marine somewhat larger,
+      tougher, and more enduring without changing what made the original
+      gene-seed work. This trait is added on top of the Astartes ancestry
+      trait above, not used in place of it.
+    design: >
+      25 (Sinew Coils) + 11 (Magnificat) + 10 (Belisarian Furnace) = 46
+      points, added to the base Astartes package's 293 for 339 points of
+      physiology before skills. See the Primaris Battle-Brother template.
+
+  # ------------------------------------------------------ chapter lenses
+  # Small containers layered on top of the Astartes trait to reflect a
+  # specific Chapter's known gene-seed quirks. Zero-cost entries are lore
+  # flags with nothing to mechanically add or remove; only include what
+  # the fiction actually supports for that Chapter.
+
+  - name: "Chapter Gene-Seed: Blood Angels"
+    container: meta_trait
+    tags: [Disadvantage, Mental, Imperium, Adeptus Astartes, Chapter Variant]
+    children:
+      - name: Red Thirst
+        points: -10
+        ref: B125
+        cr: 12
+        notes: "As Bloodlust, but specifically a craving to draw blood in battle."
+    lore: >
+      Every Blood Angel carries the Red Thirst, a battle-hunger for blood
+      inherited from Sanguinius's flawed gene-seed, usually kept in check
+      by discipline and ritual. A minority of Marines, generally older or
+      more battle-worn ones, eventually lose that check entirely and
+      fall to the Black Rage, refighting Sanguinius's death over and over
+      — a one-way, GM-adjudicated fate rather than a disadvantage a player
+      buys onto a character, so it isn't priced here.
+    design: >
+      Red Thirst as Bloodlust (B125, -10 points, self-control 12): a
+      craving that has to be managed, not a full berserker disadvantage.
+      Black Rage is deliberately left unmodelled as a purchasable trait —
+      it's a narrative endpoint, not a chargen option.
+
+  - name: "Chapter Gene-Seed: Space Wolves"
+    container: meta_trait
+    tags: [Advantage, Physical, Imperium, Adeptus Astartes, Chapter Variant]
+    children:
+      - name: Canis Helix Instincts
+        points: 1
+        tags: [Perk]
+        notes: "Keener aggression and pack-loyalty; flavor only."
+      - name: Latent Wulfen Curse
+        points: -1
+        tags: [Quirk]
+        notes: >
+          Occasionally must resist a minor feral urge (snarling at
+          insults, refusing to back down from a challenge) under GM
+          discretion. Represents gene-seed instability, not the Wulfen
+          mutation itself.
+    lore: >
+      The Canis Helix marks Space Wolves and their Successors with
+      wolflike traits — keen senses, yellow eyes, sometimes fangs — and a
+      fiercer, more feral temperament than most Chapters tolerate. In a
+      minority of Marines the same instability that produces those traits
+      can, under enough strain, tip into the Wulfen mutation: a violent,
+      lupine transformation described across Space Wolves background and
+      the Curse of the Wulfen material. As with the Blood Angels' Black
+      Rage, actually becoming Wulfen is a plot-level fate, not something
+      bought at chargen.
+    design: >
+      Canis Helix Instincts as a 1-point Perk (flavor, no fixed mechanic).
+      Latent Wulfen Curse as a -1 Quirk (B22) flagging the underlying
+      instability without pricing the mutation itself, which the GM
+      should run as a narrative consequence rather than a trait a
+      character buys.
+
+  - name: "Chapter Gene-Seed: Imperial Fists Line"
+    points: -13
+    tags: [Disadvantage, Physical, Imperium, Adeptus Astartes, Chapter Variant]
+    notes: >
+      Apply alongside the Astartes trait for Imperial Fists and their
+      Successors (Black Templars, Crimson Fists, and others descended
+      from the same line). Represents removing the Sus-an Membrane (9
+      points) and Betcher's Gland (4 points) from the base package rather
+      than editing those entries directly.
+    lore: >
+      Long-documented in Codex and background material: the Imperial
+      Fists gene-seed line does not express a working Sus-an Membrane or
+      Betcher's Gland. Marines of this line can't enter the hibernation
+      trance and lack the corrosive-spit/oral-antitoxin function, with no
+      compensating quirk described for it.
+    design: >
+      -9 (Sus-an Membrane) + -4 (Betcher's Gland) = -13 points, applied as
+      a flat deduction since this schema has no way to remove specific
+      children from another container.
+
+  - name: "Chapter Gene-Seed: Dark Angels"
+    points: 0
+    tags: [Imperium, Adeptus Astartes, Chapter Variant]
+    notes: "0-point lore flag; see design for the optional disabled child."
+    children:
+      - name: Secret (Order of the Fallen / Inner Circle)
+        points: -10
+        ref: B152
+        disabled: true
+        notes: >
+          Disabled by default. Enable only for a character initiated into
+          the Inner Circle and its hunt for the Fallen.
+    lore: >
+      No physical gene-seed quirk is described for the Dark Angels — their
+      defining trait is organizational secrecy, not physiology: the
+      Chapter (and its Successors) conceal the Order of the Fallen and the
+      millennia-long hunt for Lion El'Jonson's traitor Knights from
+      outsiders, including their own rank-and-file.
+    design: >
+      Kept at 0 points at the physiology level, matching the lore claim
+      that there's nothing biologically unusual here. The Secret trait
+      (B152) is included but disabled, for building an Inner Circle member
+      specifically rather than an ordinary Dark Angel.
+
+  - name: "Chapter Gene-Seed: Ultramarines"
+    points: 0
+    tags: [Imperium, Adeptus Astartes, Chapter Variant]
+    lore: >
+      Widely described as the most stable and "pure" gene-seed line in the
+      Imperium, free of the flaws that mark other Chapters — a large part
+      of why so many Successor Chapters from the Second Founding were
+      seeded from Ultramarines stock.
+    design: >
+      0-point lore flag: nothing to add or remove mechanically, since the
+      claim is precisely that this line has no quirks.
+
+  - name: "Chapter Gene-Seed: Salamanders"
+    container: meta_trait
+    tags: [Imperium, Adeptus Astartes, Chapter Variant]
+    children:
+      - name: Overactive Melanchromic Organ
+        points: -1
+        ref: B165
+        notes: >
+          Distinctive Features: soot-black to bronze skin and
+          glowing red or orange eyes, immediately marking the bearer as a
+          Salamander (or successor) to anyone who knows the signs.
+    lore: >
+      A Salamander's Melanchromic Organ runs at far higher output than
+      other Chapters', darkening the skin to near-black or bronze and
+      giving the eyes a distinctive glow — described consistently across
+      Black Library's Salamanders novels and Codex background. It's a
+      badge of the line, not a flaw.
+    design: >
+      The organ's shielding effect is already covered by the base
+      Melanchromic Organ entry; this lens only adds the visible
+      side-effect, as Distinctive Features (B165, -1 point) since it's
+      purely a recognizability cost, not a combat disadvantage.
+
+  - name: "Chapter Gene-Seed: Raven Guard"
+    points: -25
+    tags: [Disadvantage, Physical, Imperium, Adeptus Astartes, Chapter Variant]
+    notes: >
+      Apply alongside the Astartes trait. Removes Mucranoid (20 points)
+      and Betcher's Gland (4 points), and adds a 1-point Distinctive
+      Features-adjacent note for unusually pale skin.
+    lore: >
+      Chapter background describes the Raven Guard gene-seed line as
+      missing full function in the Mucranoid and Betcher's Gland, which
+      (among other things) leaves its Marines noticeably paler and
+      leaner than other Chapters' — fitting a line already prized for
+      stealth over brute durability. This project cites that as widely
+      repeated Chapter background rather than a specific, page-verified
+      source.
+    design: >
+      -20 (Mucranoid) + -4 (Betcher's Gland) + -1 (Distinctive Features,
+      B165: unusually pale) = -25 points.
+
+  - name: "Chapter Gene-Seed: White Scars"
+    points: 0
+    tags: [Imperium, Adeptus Astartes, Chapter Variant]
+    lore: >
+      No physiological gene-seed quirk is described for the White Scars;
+      what sets them apart is doctrine and culture — a steppe-nomad
+      identity built around speed, bike- and mounted-warfare, and hit-and-
+      run tactics rather than any known difference in the gene-seed
+      itself.
+    design: >
+      0-point lore flag. Their speed-focused fighting style belongs on
+      equipment and skill choices (bikes, Riding, etc.), not on a
+      physiology file.
