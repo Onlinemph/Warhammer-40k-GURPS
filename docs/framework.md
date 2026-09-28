@@ -287,6 +287,38 @@ Aeldari psychic powers use the same Sorcery model as Imperial psykers, but the A
 | Rune armour | Psychic ward: regenerating shield (see Personal force fields), pool scaling with the wearer's Warp Empowerment |
 | Holo-suit / domino field | Harlequins: large defence bonus from scattering the wearer's image, not DR |
 
+### Necrons
+
+Necrons are ancient souls transferred into bodies of living metal (necrodermis) during the biotransference, then left to sleep for sixty million years. Most rank-and-file Necrons lost their minds in the process; nobles kept their personalities. Their armour is their body: necrodermis is natural DR in the ancestry, not equipment. Anchors:
+
+| Necron | ST | DX | IQ | HT | HP | Natural DR (torso) | Mind |
+|---|---|---|---|---|---|---|---|
+| Warrior | 18 | 10 | 6 | 14 | 24 | 50 | Mindless automaton (Slave Mentality, Reprogrammable-style obedience) |
+| Immortal | 20 | 11 | 8 | 15 | 28 | 80 | Dim but capable of tactical thought |
+| Deathmark | 18 | 13 | 9 | 14 | 24 | 60 | Hunter; minimal personality |
+| Lychguard | 22 | 12 | 9 | 15 | 30 | 90 | Honour-bound bodyguard, some awareness |
+| Flayed One | 18 | 12 | 6 | 14 | 24 | 50 | Cursed by the flayer virus: madness and bloodlust |
+| Lord / Overlord | 22–25 | 13 | 14 | 15 | 32–36 | 100 | Full personality, often eccentric |
+| Cryptek | 18 | 12 | 16 | 14 | 24 | 60 | Technosorcerer, genius |
+
+Necron traits: Machine body (no need to breathe, eat or sleep; immune to disease, poison and pain-based effects), Injury Tolerance (Unliving: no blood, no vitals), living metal self-repair (Regeneration), and **Reanimation Protocols**: a Necron reduced below −1×HP is not destroyed unless the damage exceeds −5×HP; roll HT at the end of each of the next few turns to rise again with some HP restored, and on failure it phases out (teleports home to its tomb). Necrons are soulless: immune to psychic mind control and possession, and largely beneath daemons' notice. Weak Points on necrodermis are low (joints and eye-slits: Warriors 4, nobles and Lychguard 3), and glowing optics have eye DR about half the torso.
+
+| Necron gear | Anchor |
+|---|---|
+| Gauss flayer | Molecular disassembly beam: 6d(3) burn, RoF 2 (rapid fire), strips flak and carapace, only occasionally hurts power armour |
+| Gauss blaster | 7d(3) burn, RoF 3 |
+| Tesla carbine | 6d(2) burn with arcs that jump to nearby targets on a hit (like volkite chains) |
+| Synaptic disintegrator | Sniper, 8d(3) burn, very high Acc |
+| Gauss cannon | 6d×2(3) burn |
+| Heavy gauss cannon | Anti-armour: 6d×4(5) burn |
+| Particle beamer / caster | Particle weapons: burn ex, scale from plasma |
+| Warscythe | Two-handed power-field blade: sw+4d(10) cut |
+| Hyperphase sword | Phase blade: sw+3d(10) cut |
+| Voidblade | Entropic blade that ignores armour: sw+2d (ignores DR) cut, but only for a limited number of charged strikes |
+| Staff of light | Energy staff: ranged 6d(3) burn and a power-field melee strike |
+
+C'tan Shards are beyond play and GM-reference only.
+
 ## Psykers and the warp
 
 Psychic abilities in the fiction are the sort of thing GURPS Thaumatology:
