@@ -47,9 +47,12 @@ items:
       flame weapons: base damage and cone length scale down from the standard Flamer entry below in
       the same rough proportion the bolt and plasma families use for their pistol-scale members
       (2d+2 burn and a 3-yard cone versus the Flamer's 4d and 5 yards). Checked by exact dice
-      distribution: average roll 9 penetrates flak (DR 12) on only 8.3% of hits — a flamer is not
-      an armour-piercing weapon, its cone attack alone barely threatens even light armour, and the
-      real threat is the DR-ignoring follow-up below. The clinging, DR-ignoring follow-up and the
+      distribution: average roll 9 penetrates flak (now DR 30, up from DR 12 across two rounds of
+      the armour rescale) on essentially 0% of hits — a flamer was never an armour-piercing weapon
+      and the cone attack now cannot scratch even flak at all, so the real threat is entirely the
+      DR-ignoring follow-up below; this is an honest consequence of the armour rescale landing on a
+      family whose raw cone damage was never itself anchored high, not a departure from the flame
+      family's original design intent. The clinging, DR-ignoring follow-up and the
       cover-bypassing behaviour are the two lore properties the assignment calls out for the whole
       flame family; both are given the same treatment as the Flamer entry so they read identically
       across every weapon in this file. The follow-up's sealed-armour exemption is a deliberate new
@@ -57,6 +60,9 @@ items:
       would trivialise Astartes power armour turn after turn, which the fiction never shows — flame
       weapons are feared by infantry in flak, mesh or carapace, and by anyone whose suit isn't
       sealed, but a battle-brother who keeps his helmet locked shrugs off the fire itself.
+      Handling: weight (5 lb), min ST (8), Bulk (-2) and Shots 3(5) are unchanged; this is a
+      one-handed weapon and RoF/Rcl/Acc don't apply to a cone attack (B412), so there is no RoF
+      figure to correct here the way there is for the ranged weapons elsewhere in this project.
 
   - name: Flamer
     tl: 8
@@ -100,12 +106,13 @@ items:
       No anchor exists for flame weapons in the framework, so this entry is built from GURPS's own
       area/cone attack design language (B412) rather than from a catalogue item: an "always hits
       inside the cone, no Acc" ranged attack with a burning-target follow-up per the Fire rules
-      (B433). Base damage (4d burn, up from the pre-Rescale 3d to stay meaningful now flak DR has
-      risen to 12) and cone length (5 yards) are set to comfortably kill an unarmoured man and
-      threaten flak on the initial hit: average roll 14 penetrates DR 12 on 66.4% of hits and DR 15
-      mesh on 33.6%, by exact dice distribution — a real threat to unarmoured or flak-armoured
-      infantry, much less reliable against mesh, and the real killing power still comes from
-      repeated, DR-ignoring burning damage once a target catches fire. That follow-up is
+      (B433). Base damage (4d burn) and cone length (5 yards) were set to comfortably kill an
+      unarmoured man and threaten flak on the initial hit at the flak DR this entry was first built
+      against; against the current flak (DR 30) and mesh (DR 36) anchors, two rounds later, 4d
+      burn (avg 14) now penetrates neither (0% of hits by exact dice distribution) — the initial
+      cone hit is no longer a real armour threat at all, only an unarmoured-target killer, and the
+      real killing power comes entirely from repeated, DR-ignoring burning damage once a target
+      catches fire, more true now than when this entry was written. That follow-up is
       deliberately left unscaled and instead gated by a new sealed-armour exemption (see the Hand
       Flamer's design note): flame weapons are feared by infantry in any armour short of sealed
       power armour, and should do next to nothing to a battle-brother who keeps his helmet locked,
