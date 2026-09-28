@@ -4,7 +4,7 @@
 		{
 			"id": "eiMqhL-2lWIqnY7X2",
 			"description": "Inferno Pistol",
-			"local_notes": "Lore: A pistol-format melta weapon carried by Astartes command squads, Inquisitors and Tempestus officers wanting a point-blank answer to armour without a full meltagun's bulk; background consistently frames it as devastating at arm's length and near-useless at any real distance.\n\nDesign: Scaled down two dice from the meltagun anchor (8dx3(10) burn) to 6dx3(10) burn for a pistol- sized fuel cell, on a very short 5/25 range band matching the anchor's \"vehicle-killer at short range, much less beyond\" description. See the Meltagun entry for the armour check; a pistol still comfortably beats carapace and power armour at point-blank range even though it falls short of a full meltagun against the heaviest vehicle armour.",
+			"local_notes": "Lore: A pistol-format melta weapon carried by Astartes command squads, Inquisitors and Tempestus officers wanting a point-blank answer to armour without a full meltagun's bulk; background consistently frames it as devastating at arm's length and near-useless at any real distance.\n\nDesign: Scaled down two dice from the meltagun anchor (8dx6(10) burn) to 6dx6(10) burn for a pistol- sized fuel cell, on a very short 5/25 range band matching the anchor's \"vehicle-killer at short range, much less beyond\" description. At short range 6dx6 averages 126, which - like the full meltagun - penetrates every vehicle on the AV table and any personal armour outright (effective DR under the (10) divisor never exceeds 35, even against AV14's DR 350). See the Meltagun entry for the beyond-½D check; the pistol's beyond-½D line is one die lower than the meltagun's (3d vs 4d), the same one-die-down relationship as the old scale.",
 			"tags": [
 				"Missile Weapon",
 				"Imperium",
@@ -21,7 +21,7 @@
 					"sv": 1,
 					"damage": {
 						"type": "burn",
-						"base": "6dx3",
+						"base": "6dx6",
 						"armor_divisor": 10
 					},
 					"accuracy": "1",
@@ -75,8 +75,8 @@
 					"sv": 1,
 					"damage": {
 						"type": "burn",
-						"base": "3dx3",
-						"armor_divisor": 5
+						"base": "3dx6",
+						"armor_divisor": 3
 					},
 					"accuracy": "1",
 					"range": "5/25",
@@ -86,7 +86,7 @@
 					"recoil": "1",
 					"strength": "9",
 					"usage": "Beyond ½D",
-					"usage_notes": "Half damage past ½D (the usual GURPS rule) and the armour divisor falls from (10) to (5) as the fusion beam loses cohesion. Still dangerous to light and medium vehicles (meltagun: avg 42 vs AV12 DR 120/5 = 24), no longer a heavy-tank killer.\n",
+					"usage_notes": "Half damage past ½D (the usual GURPS rule) and the armour divisor falls from (10) to (3) as the fusion beam loses cohesion. Still dangerous to light and medium vehicles (avg 63 vs AV10 DR 100/3 = eff. 33, 95% penetration), tails off hard against a Leman Russ or Land Raider's frontal glacis.\n",
 					"defaults": [
 						{
 							"type": "dx",
@@ -131,7 +131,7 @@
 		{
 			"id": "ePPyb3rkLMNLYLZOq",
 			"description": "Meltagun",
-			"local_notes": "Lore: The Imperium's dedicated close-range anti-armour infantry weapon, flash-vaporising the target's outer surface with a superheated fusion reaction; fiction across every era treats it as able to gut a tank at point-blank range and as nearly worthless at any distance, in sharp contrast to a lascannon's much longer reach.\n\nDesign: This is the project's fixed melta anchor: 8dx3(10) burn at ½D, \"much less beyond.\" Checked against the vehicle armour table: AV14 (DR 250, a Leman Russ or Land Raider's front) has effective DR 25 against the (10) armour divisor; 8dx3 averages 84, more than three times the effective DR, so it easily beats even the heaviest armour in the framework's table at ½D range, as the assignment requires. The sharp drop-off is modelled as a second weapon line rather than a formula: beyond ½D the round keeps only its base dice (4d burn), with neither the x3 multiplier nor the (10) armour divisor, representing the fusion reaction losing coherence in open air before it reaches the target. This is a deliberate departure from default GURPS range rules (which do not normally reduce damage with range) rather than an anchor conflict; it exists because the framework explicitly calls for \"much less beyond,\" and a flat halving of the anchor's own huge multiplier would still be an anti-tank weapon at any range, which the fiction does not support. ST 10 and a very short 10/50 range band (versus a boltgun's 200/1000) capture the weapon's role as a close-assault specialist, not a rifle.",
+			"local_notes": "Lore: The Imperium's dedicated close-range anti-armour infantry weapon, flash-vaporising the target's outer surface with a superheated fusion reaction; fiction across every era treats it as able to gut a tank at point-blank range and as nearly worthless at any distance, in sharp contrast to a lascannon's much longer reach.\n\nDesign: This is the project's fixed melta anchor: 8dx6(10) burn at ½D, \"much less beyond\" 4dx6(3). Checked against the vehicle armour table with the exact dice distribution: AV14 (DR 350, a Leman Russ or Land Raider's front) has effective DR 35 against the (10) armour divisor; 8dx6 averages 168, always penetrating, so it easily beats even the heaviest armour in the framework's table at ½D range, as the assignment requires - the same holds at every lower AV on the table. The sharp drop-off is modelled as a second weapon line rather than a formula: beyond ½D the round keeps only half its dice (4d instead of 8d, the usual GURPS halving for range) but keeps a x6 multiplier and a much weaker (3) armour divisor instead of (10), representing the fusion reaction losing coherence and cohesion in open air before it reaches the target. Checked against the AV table: beyond ½D it averages 84 and still wrecks AV12 (DR 200, effective DR 66) 76% of the time and AV10-11 (DR 100/150) 94-100% of the time, but drops to 34% against AV13 (DR 275) and just 5% against AV14 (DR 350) - \"almost never beats\" the heaviest tanks, exactly as the framework specifies. ST 10 and a very short 10/50 range band (versus a boltgun's 200/1000) capture the weapon's role as a close-assault specialist, not a rifle.",
 			"tags": [
 				"Missile Weapon",
 				"Imperium",
@@ -148,7 +148,7 @@
 					"sv": 1,
 					"damage": {
 						"type": "burn",
-						"base": "8dx3",
+						"base": "8dx6",
 						"armor_divisor": 10
 					},
 					"accuracy": "2",
@@ -202,8 +202,8 @@
 					"sv": 1,
 					"damage": {
 						"type": "burn",
-						"base": "4dx3",
-						"armor_divisor": 5
+						"base": "4dx6",
+						"armor_divisor": 3
 					},
 					"accuracy": "2",
 					"range": "10/50",
@@ -213,7 +213,7 @@
 					"recoil": "1",
 					"strength": "10",
 					"usage": "Beyond ½D",
-					"usage_notes": "Half damage past ½D (the usual GURPS rule) and the armour divisor falls from (10) to (5) as the fusion beam loses cohesion. Still dangerous to light and medium vehicles (meltagun: avg 42 vs AV12 DR 120/5 = 24), no longer a heavy-tank killer.\n",
+					"usage_notes": "Half the dice past ½D (the usual GURPS rule) and the armour divisor falls from (10) to (3) as the fusion beam loses cohesion. Still wrecks light and medium vehicles (avg 84 vs AV12 DR 200/3 = eff. 66, 76% penetration), but rarely beats a Leman Russ or Land Raider's frontal glacis (AV14, 5%).\n",
 					"defaults": [
 						{
 							"type": "dx",
@@ -258,7 +258,7 @@
 		{
 			"id": "e64ziIFBU5EcDC7Nz",
 			"description": "Multi-Melta",
-			"local_notes": "Lore: A tripod- or vehicle-mounted heavy melta weapon fielded by heavy weapon teams and as a common tank sponson/hull weapon; background treats it exactly as a bigger meltagun, killing the heaviest vehicles at short range and rapidly losing effect beyond it.\n\nDesign: Two dice over the meltagun anchor (10d vs 8d), matching this project's standard heavy-weapon progression, on a slightly longer 15/75 range band appropriate to a crew-served weapon with a bigger reactor. ST 13 and Gunner (Beams) reflect a support weapon needing a mount or a very strong user rather than a shoulder-fired arm; the same short-range/beyond-½D split as the meltagun models the identical sharp fall-off.",
+			"local_notes": "Lore: A tripod- or vehicle-mounted heavy melta weapon fielded by heavy weapon teams and as a common tank sponson/hull weapon; background treats it exactly as a bigger meltagun, killing the heaviest vehicles at short range and rapidly losing effect beyond it.\n\nDesign: Two dice over the meltagun anchor (10dx6(10) vs 8dx6(10) short, 5dx6(3) vs 4dx6(3) beyond), matching this project's standard heavy-weapon progression, on a slightly longer 15/75 range band appropriate to a crew-served weapon with a bigger reactor. At short range it averages 210 and penetrates every vehicle and personal armour on the tables without exception, same as the meltagun; beyond ½D the extra die keeps it meaningfully ahead of the meltagun against the heaviest tanks (31% vs AV14, versus the meltagun's 5%) while still tailing off, matching the fiction's \"bigger meltagun\" framing rather than a full return to short-range lethality. ST 13 and Gunner (Beams) reflect a support weapon needing a mount or a very strong user rather than a shoulder-fired arm.",
 			"tags": [
 				"Missile Weapon",
 				"Imperium",
@@ -275,7 +275,7 @@
 					"sv": 1,
 					"damage": {
 						"type": "burn",
-						"base": "10dx3",
+						"base": "10dx6",
 						"armor_divisor": 10
 					},
 					"accuracy": "3",
@@ -317,8 +317,8 @@
 					"sv": 1,
 					"damage": {
 						"type": "burn",
-						"base": "5dx3",
-						"armor_divisor": 5
+						"base": "5dx6",
+						"armor_divisor": 3
 					},
 					"accuracy": "3",
 					"range": "15/75",
@@ -328,7 +328,7 @@
 					"recoil": "1",
 					"strength": "13",
 					"usage": "Beyond ½D",
-					"usage_notes": "Half damage past ½D (the usual GURPS rule) and the armour divisor falls from (10) to (5) as the fusion beam loses cohesion. Still dangerous to light and medium vehicles (meltagun: avg 42 vs AV12 DR 120/5 = 24), no longer a heavy-tank killer.\n",
+					"usage_notes": "Half the dice past ½D (the usual GURPS rule) and the armour divisor falls from (10) to (3) as the fusion beam loses cohesion. Unlike the shoulder-fired meltagun, this still wrecks AV13 (avg 105 vs DR 275/3 = eff. 91, 70%) and has a real chance against AV14 (31%), reflecting the bigger reactor's reserve of power.\n",
 					"defaults": [
 						{
 							"type": "dx",

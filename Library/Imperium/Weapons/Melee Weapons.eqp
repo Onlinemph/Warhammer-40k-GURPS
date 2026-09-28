@@ -941,7 +941,7 @@
 		{
 			"id": "eVRfiQB-FE280ejDP",
 			"description": "Chainsword",
-			"local_notes": "The motor and chain-teeth tear rather than cleanly cut; the framework anchor notes it \"skids off power armour\" - against DR 32+ targets, a GM may rule the chain simply fails to bite rather than dealing a grazing wound, at the table's discretion. A jammed or fouled chain (tangled cloth, bone, or a lucky parry) may stall the motor until cleared with a Ready maneuver.\n\nLore: The archetypal Imperial melee weapon: sergeants, veterans and officers across the Astra Militarum, plus most Chaos and Imperial cultist/human forces, carry a motorised chainblade; consistently shown butchering unarmoured infantry but failing to trouble power armour, matching the framework anchor's own description.\n\nDesign: Fixed anchor: sw+1d cut, reach 1, parry 0, min ST 10. This is a human-scale one-handed weapon, so weight (6 lb, heavier than a plain sword for the motor housing and chain loop) and min ST 10 (higher than a mundane broadsword's ST 9-10 band, again for the added mass) are the only free parameters; damage and defenses come straight from the anchor. TL10 and LC2 per the framework's own worked example (\"Standard Imperial manufacture: TL10 ... chainsword\").",
+			"local_notes": "The motor and chain-teeth tear rather than cleanly cut, hence the Armor Divisor (2) rather than a clean-edged blade's no-divisor cut; the framework anchor notes it \"skids off power armour\" - against DR 70+ targets it essentially never penetrates, at the table's discretion the GM may rule the chain simply fails to bite rather than dealing a grazing wound. A jammed or fouled chain (tangled cloth, bone, or a lucky parry) may stall the motor until cleared with a Ready maneuver.\n\nLore: The archetypal Imperial melee weapon: sergeants, veterans and officers across the Astra Militarum, plus most Chaos and Imperial cultist/human forces, carry a motorised chainblade; consistently shown butchering unarmoured infantry but failing to trouble power armour, matching the framework anchor's own description.\n\nDesign: Fixed anchor (Rescale): sw+2d(2) cut, reach 1, parry 0, min ST 10. The Rescale raised the chainsword from a flat sw+1d cut with no divisor to sw+2d(2): against carapace (DR 45) a Guardsman-strength swing (roughly 3d+1 total) essentially never gets through (eff. DR 22 well above the average roll), matching \"bites carapace\" only in an Astartes' hands, while it still guts an unarmoured man or a flak vest (DR 12, eff. 6) on nearly every hit and skids off power armour (eff. DR 50+) outright - exactly the framework's \"tears flesh and flak; bites carapace; skids off power armour.\" Weight (6 lb, heavier than a plain sword for the motor housing and chain loop) and min ST 10 (higher than a mundane broadsword's ST 9-10 band, again for the added mass) are the only free parameters. TL10 and LC2 per the framework's own worked example (\"Standard Imperial manufacture: TL10 ... chainsword\").",
 			"tags": [
 				"Melee Weapon",
 				"Imperium",
@@ -958,7 +958,8 @@
 					"damage": {
 						"type": "cut",
 						"st": "sw",
-						"base": "1d"
+						"base": "2d",
+						"armor_divisor": 2
 					},
 					"reach": "1",
 					"parry": "0",
@@ -1024,7 +1025,7 @@
 		{
 			"id": "eVbwU9PXZl3PRxoL7",
 			"description": "Chainsword, Astartes Pattern",
-			"local_notes": "Same rules as the human chainsword above (chain-vs-armour, jamming); scaled to a Marine's grip and strength.\n\nLore: The Adeptus Astartes issue a larger, heavier-toothed chainsword built to Astartes proportions - a recurring sidearm for Tactical and Assault Marines throughout Black Library fiction, distinct from (and more common than) power swords, which are reserved for veterans and officers.\n\nDesign: The sw+1d cut formula is unchanged from the human-scale anchor - GCS resolves \"sw\" from the wielder's own ST, so an Astartes swinging this weapon already rolls more dice than a human swinging the human-scale version without changing the weapon's damage line. What must change, per the framework's instruction that human- and Astartes-scale versions need different min ST and weight, is the housing itself: heavier chain loop and motor (14 lb vs. 6 lb) and a min ST (15) far above what an unaugmented human can bring to bear one-handed, so a human could not wield this pattern even though the damage formula looks identical on paper. LC1 (Astartes-issue), not LC0, since the framework's LC1 bracket explicitly covers Astartes-carried war-gear one tier below power-armour-integrated items.",
+			"local_notes": "Same rules as the human chainsword above (chain-vs-armour, jamming); scaled to a Marine's grip and strength.\n\nLore: The Adeptus Astartes issue a larger, heavier-toothed chainsword built to Astartes proportions - a recurring sidearm for Tactical and Assault Marines throughout Black Library fiction, distinct from (and more common than) power swords, which are reserved for veterans and officers.\n\nDesign: The sw+2d(2) cut formula is unchanged from the human-scale anchor - GCS resolves \"sw\" from the wielder's own ST, so an Astartes swinging this weapon already rolls more dice than a human swinging the human-scale version (a Marine's sw is 5d vs. a Guardsman's 3d+1, before the +2d chain bonus) without changing the weapon's damage line. This is exactly why an Astartes chainsword bites carapace (DR 45) roughly one swing in ten while a Guardsman's essentially never does, and still skids off power armour either way. What must change, per the framework's instruction that human- and Astartes- scale versions need different min ST and weight, is the housing itself: heavier chain loop and motor (14 lb vs. 6 lb) and a min ST (15) far above what an unaugmented human can bring to bear one-handed, so a human could not wield this pattern even though the damage formula looks identical on paper. LC1 (Astartes-issue), not LC0, since the framework's LC1 bracket explicitly covers Astartes-carried war-gear one tier below power-armour-integrated items.",
 			"tags": [
 				"Melee Weapon",
 				"Imperium",
@@ -1041,7 +1042,8 @@
 					"damage": {
 						"type": "cut",
 						"st": "sw",
-						"base": "1d"
+						"base": "2d",
+						"armor_divisor": 2
 					},
 					"reach": "1",
 					"parry": "0",
@@ -1107,7 +1109,7 @@
 		{
 			"id": "eW1c2EhdKNjhsZPPE",
 			"description": "Chainaxe",
-			"local_notes": "Chain-vs-armour and jamming rules as the chainsword; the single heavy blade makes it even more prone to sticking in a solid hit than a chainsword's finer teeth.\n\nLore: A heavier chain weapon favoured by close-combat specialists and several Chapters and warband traditions (most infamously World Eaters iconography, though Loyalist Astartes and some Guard veteran/ penal formations field it too); depicted as hitting harder but handling clumsier than a chainsword.\n\nDesign: Scaled from the chainsword anchor the way Basic Set/Low-Tech scale a one-handed axe over a one-handed sword of the same era: a single heavy, chain-driven axe-head carries more mass into the swing than a chainsword's full-length blade, for +2 damage over the chainsword's sw+1d, and axes are traditionally worse for defense, hence parry -1 instead of 0. Min ST 13 sits above the human chainsword's ST 10 and below the Astartes chainsword's ST 15, reflecting that it is normally an Astartes weapon but (per its fiction) occasionally wielded one-handed by an unusually strong or augmented human at a stiff strength penalty.",
+			"local_notes": "Chain-vs-armour and jamming rules as the chainsword; the single heavy blade makes it even more prone to sticking in a solid hit than a chainsword's finer teeth.\n\nLore: A heavier chain weapon favoured by close-combat specialists and several Chapters and warband traditions (most infamously World Eaters iconography, though Loyalist Astartes and some Guard veteran/ penal formations field it too); depicted as hitting harder but handling clumsier than a chainsword.\n\nDesign: Scaled from the chainsword anchor the way Basic Set/Low-Tech scale a one-handed axe over a one-handed sword of the same era: a single heavy, chain-driven axe-head carries more mass into the swing than a chainsword's full-length blade, for +2 damage over the chainsword's sw+2d, keeping the same Armor Divisor (2) since it's the same grinding chain-teeth mechanic; axes are traditionally worse for defense, hence parry -1 instead of 0. At Astartes ST an axe swing (5d+2(2)) bites carapace (DR 45) noticeably harder than a plain chainsword (about 1 hit in 5 vs. 1 in 10) but still skids off power armour, matching its \"hits harder but handles clumsier\" reputation. Min ST 13 sits above the human chainsword's ST 10 and below the Astartes chainsword's ST 15, reflecting that it is normally an Astartes weapon but (per its fiction) occasionally wielded one-handed by an unusually strong or augmented human at a stiff strength penalty.",
 			"tags": [
 				"Melee Weapon",
 				"Imperium",
@@ -1124,7 +1126,8 @@
 					"damage": {
 						"type": "cut",
 						"st": "sw",
-						"base": "1d+2"
+						"base": "2d+2",
+						"armor_divisor": 2
 					},
 					"reach": "1",
 					"parry": "-1",
@@ -1166,7 +1169,7 @@
 		{
 			"id": "e514r1ImDg5Gsn-Ka",
 			"description": "Eviscerator",
-			"local_notes": "Always wielded two-handed; treat as unready after a solid parry (the chain bucks in the user's grip) at the GM's discretion. Sisters Repentia below the listed min ST take the normal reduced-ST penalties to skill rather than being unable to lift it - their fervour, not raw strength, is what the fiction credits.\n\nLore: An oversized, double-handed chain weapon issued to Adepta Sororitas Repentia squads doing penance in battle; consistently drawn and described as a huge, brutal chainblade too large and heavy for ordinary one-handed use, swung by zealots who accept the personal risk of wielding something this unwieldy.\n\nDesign: One further step up the chain-weapon family from the chainaxe: a two-handed weapon gets Basic Set's two-handed bonus over a one-handed weapon of the same family (roughly +1 die over the one-handed chainaxe's sw+1d+2, rounded to a clean sw+2d cut), with reach extended to 1,2 and parry penalised further (-1) for its bulk. Min ST 13 is kept in the human range rather than pushed to Astartes levels, per its lore as human (if enhanced-by-faith) Sororitas wargear, not Astartes equipment - hence the notes on using it below min ST rather than simply barring human use outright.",
+			"local_notes": "Always wielded two-handed; treat as unready after a solid parry (the chain bucks in the user's grip) at the GM's discretion. Sisters Repentia below the listed min ST take the normal reduced-ST penalties to skill rather than being unable to lift it - their fervour, not raw strength, is what the fiction credits.\n\nLore: An oversized, double-handed chain weapon issued to Adepta Sororitas Repentia squads doing penance in battle; consistently drawn and described as a huge, brutal chainblade too large and heavy for ordinary one-handed use, swung by zealots who accept the personal risk of wielding something this unwieldy.\n\nDesign: One further step up the chain-weapon family from the chainaxe: a two-handed weapon gets Basic Set's two-handed bonus over a one-handed weapon of the same family (roughly +1 die over the one-handed chainaxe's sw+2d+2, rounded to a clean sw+3d cut), keeping the shared chain-family Armor Divisor (2), with reach extended to 1,2 and parry penalised further (-1) for its bulk. At a Sororitas-typical ST this still only scratches carapace occasionally and does nothing to power armour - fitting its role as an anti-personnel penance weapon, not an anti-Astartes one. Min ST 13 is kept in the human range rather than pushed to Astartes levels, per its lore as human (if enhanced-by-faith) Sororitas wargear, not Astartes equipment - hence the notes on using it below min ST rather than simply barring human use outright.",
 			"tags": [
 				"Melee Weapon",
 				"Imperium",
@@ -1183,7 +1186,8 @@
 					"damage": {
 						"type": "cut",
 						"st": "sw",
-						"base": "2d"
+						"base": "3d",
+						"armor_divisor": 2
 					},
 					"reach": "1,2",
 					"parry": "-1",
@@ -1225,7 +1229,7 @@
 		{
 			"id": "e-K1lh2RJjoVpgDVi",
 			"description": "Chainfist",
-			"local_notes": "Shares the power fist's servo-driven punch (see Power Fist below) but replaces the smooth crushing plates with a ring of high-speed chain teeth for gnawing through bulkheads, void-ship hulls and vehicle armour rather than just crushing flesh and ceramite; a hit that penetrates a vehicle's DR may be ruled to lodge the fist in the material, costing a Ready maneuver to wrench free (GM's discretion). Like the power fist, it is slow and clumsy in a defensive sense: -2 to parry, and it cannot be used to Feint.\n\nLore: A rarer, heavier variant of the power fist mounting a chainblade ring instead of a plain gauntlet, issued to Astartes and Imperial Knight pilots for boarding actions and siege-breaching where cutting through armour plate or a bulkhead matters as much as punching through a body; consistently shown as slower and more specialised than a plain power fist.\n\nDesign: Same servo-fist chassis and damage logic as the Power Fist entry below (thr plus a large flat die bonus from the hydraulic mechanism, not a multiplier on the wielder's own thrust - see that entry's design note for why), with the same (10) disruption-field divisor every Imperial power weapon shares (framework.md, power-field rule), and the die count is one step down (+3d vs. the power fist's +4d) because chain teeth trade some raw hitting power for penetration and add their own moving parts' weight and drag. TL11 (advanced Imperial/rare, shares the power-field-adjacent servo technology) and LC1 (Astartes power-weapon-tier legality per the framework).",
+			"local_notes": "Shares the power fist's servo-driven punch (see Power Fist below) but replaces the smooth crushing plates with a ring of high-speed chain teeth for gnawing through bulkheads, void-ship hulls and vehicle armour rather than just crushing flesh and ceramite; a hit that penetrates a vehicle's DR may be ruled to lodge the fist in the material, costing a Ready maneuver to wrench free (GM's discretion). Like the power fist, it is slow and clumsy in a defensive sense: -2 to parry, and it cannot be used to Feint.\n\nLore: A rarer, heavier variant of the power fist mounting a chainblade ring instead of a plain gauntlet, issued to Astartes and Imperial Knight pilots for boarding actions and siege-breaching where cutting through armour plate or a bulkhead matters as much as punching through a body; consistently shown as slower and more specialised than a plain power fist.\n\nDesign: Same servo-fist chassis and damage logic as the Power Fist entry below (thr plus a large flat die bonus from the hydraulic mechanism, not a multiplier on the wielder's own thrust - see that entry's design note for why), with the same (10) disruption-field divisor every Imperial power weapon shares (framework.md, power-field rule), and the die count is one step down (+7d vs. the power fist's +8d) because chain teeth trade some raw hitting power for penetration and add their own moving parts' weight and drag. At Astartes ST (thr+7d averaging around 30) it still penetrates Terminator plate (eff. DR 20) the large majority of the time, keeping it a credible boarding/ breaching weapon even though it hits slightly softer than a plain power fist. TL11 (advanced Imperial/rare, shares the power-field- adjacent servo technology) and LC1 (Astartes power-weapon-tier legality per the framework).",
 			"tags": [
 				"Melee Weapon",
 				"Imperium",
@@ -1242,7 +1246,7 @@
 					"damage": {
 						"type": "cut",
 						"st": "thr",
-						"base": "3d",
+						"base": "7d",
 						"armor_divisor": 10
 					},
 					"reach": "C",
@@ -1269,7 +1273,7 @@
 		{
 			"id": "e8KLfStwMXe219d4r",
 			"description": "Shock Maul",
-			"local_notes": "Draws from a small power cell; good for many dozens of charged strikes before a recharge is needed.\n\nLore: The standard Adeptus Arbites and hive-enforcer riot weapon: a shock-charged baton meant to subdue rather than kill, ubiquitous in Arbites background material and Necromunda-adjacent underhive fiction as the tool of choice for crowd control and arrests.\n\nDesign: Built as a plain club (sw+1 cr, matching the Guardsman's maul one step up for its denser Arbites-grade construction) plus a Basic Set electrical-stun effect layered on top as a secondary rules note (HT-3 or stunned) rather than a new damage type, since GURPS models \"shocked and dazed but not much hurt\" through the Stun rule, not through raw damage. TL10 for the power cell and stun generator; LC2 (enforcer/Arbites-issue, not general military) per the framework's \"military-issue heavy weapons, carapace, hellguns\" LC2 bracket.",
+			"local_notes": "Draws from a small power cell; good for many dozens of charged strikes before a recharge is needed.\n\nLore: The standard Adeptus Arbites and hive-enforcer riot weapon: a shock-charged baton meant to subdue rather than kill, ubiquitous in Arbites background material and Necromunda-adjacent underhive fiction as the tool of choice for crowd control and arrests.\n\nDesign: Built as a plain club (sw+1 cr, matching the Guardsman's maul one step up for its denser Arbites-grade construction) plus a Basic Set electrical-stun effect layered on top as a secondary rules note (HT-3 or stunned) rather than a new damage type, since GURPS models \"shocked and dazed but not much hurt\" through the Stun rule, not through raw damage. Rescale note: this weapon's raw damage is left unchanged, since it was never anchored to any armour DR figure - it's plain ST-scaled club damage, and its entire purpose (subduing a target, not penetrating armour) is carried by the Stun rule rather than by beating DR, so the armour-anchor rescale doesn't touch it. TL10 for the power cell and stun generator; LC2 (enforcer/Arbites- issue, not general military) per the framework's \"military-issue heavy weapons, carapace, hellguns\" LC2 bracket.",
 			"tags": [
 				"Melee Weapon",
 				"Imperium",
@@ -1329,7 +1333,7 @@
 		{
 			"id": "egq1n9N0VhpvqR6Nn",
 			"description": "Electro-flail",
-			"local_notes": "Flails cannot parry (Basic Set flail rule) and the head's momentum makes them awkward around allies at close range.\n\nLore: A heavier, multi-headed shock weapon seen in Ecclesiarchy penitent and some Arbites riot-control contexts, its swinging heads and crackling charge making it as much an instrument of intimidation as of subjugation; less common than the shock maul and depicted as harder to control.\n\nDesign: Standard Basic Set flail design logic (extra reach when extended, cannot parry, more damage than a rigid weapon of similar weight for the whipping strike) applied one step above the shock maul (sw+2 cr vs. sw+1 cr) since a multi-headed flail carries more striking mass, plus the same HT-3 stun note. TL/LC match the shock maul's bracket.",
+			"local_notes": "Flails cannot parry (Basic Set flail rule) and the head's momentum makes them awkward around allies at close range.\n\nLore: A heavier, multi-headed shock weapon seen in Ecclesiarchy penitent and some Arbites riot-control contexts, its swinging heads and crackling charge making it as much an instrument of intimidation as of subjugation; less common than the shock maul and depicted as harder to control.\n\nDesign: Standard Basic Set flail design logic (extra reach when extended, cannot parry, more damage than a rigid weapon of similar weight for the whipping strike) applied one step above the shock maul (sw+2 cr vs. sw+1 cr) since a multi-headed flail carries more striking mass, plus the same HT-3 stun note. As with the shock maul, raw damage is unaffected by the armour-DR rescale: this is a subdual weapon whose job is done by the Stun rule, not by beating DR. TL/LC match the shock maul's bracket.",
 			"tags": [
 				"Melee Weapon",
 				"Imperium",
@@ -1389,7 +1393,7 @@
 		{
 			"id": "e4vBdb97vpiJTvp11",
 			"description": "Shock Staff",
-			"local_notes": "The Staff skill's own active-defense bonus (see Basic Set) applies as normal; this entry adds no extra parry bonus beyond that.\n\nLore: A two-handed shock weapon issued where reach and crowd control matter more than portability - riot lines, cell-block patrols, and some Ecclesiarchy or penal-world guards; less iconic than the shock maul but built on the same principle.\n\nDesign: A quarterstaff profile (sw+1 cr/thr+1 cr, reach 1,2) carrying the same electro-stun note as the shock maul and electro-flail rather than a new mechanic; the two-handed reach trades the flail's extra damage for the Staff skill's superior defensive profile. TL/LC match the rest of the shock-weapon family.",
+			"local_notes": "The Staff skill's own active-defense bonus (see Basic Set) applies as normal; this entry adds no extra parry bonus beyond that.\n\nLore: A two-handed shock weapon issued where reach and crowd control matter more than portability - riot lines, cell-block patrols, and some Ecclesiarchy or penal-world guards; less iconic than the shock maul but built on the same principle.\n\nDesign: A quarterstaff profile (sw+1 cr/thr+1 cr, reach 1,2) carrying the same electro-stun note as the shock maul and electro-flail rather than a new mechanic; the two-handed reach trades the flail's extra damage for the Staff skill's superior defensive profile. Raw damage is left unchanged by the Rescale for the same reason as the rest of the shock-weapon family (it's a mundane, Stun-rule weapon, not one derived from any armour DR anchor). TL/LC match the rest of the shock-weapon family.",
 			"tags": [
 				"Melee Weapon",
 				"Imperium",
@@ -1492,7 +1496,7 @@
 		{
 			"id": "epCwfuGncQZF5UkaL",
 			"description": "Power Maul, Arbites Pattern",
-			"local_notes": "Toggling between settings is a free action; Arbitrators are trained and expected to keep the weapon on suppression setting for routine enforcement and switch to lethal only against a genuine threat.\n\nLore: A dual-mode maul issued to senior Arbites Judges and Marshals: an Adeptus Arbites badge of office as much as the shock maul is a street enforcer's tool, and background material is explicit that it can be dialled from a stunning baton up to a lethal power weapon.\n\nDesign: Suppression setting is the same maul-plus-stun-note logic as the shock maul family above, one step heavier (sw+2 cr) for the denser Arbites-issue head. Lethal setting applies this file's general power- field rule (see Power Sword below): the field adds +1d damage and Armor Divisor (10) to the weapon's base blow, so sw+2 cr (field off) becomes sw+1d+2(10) cr (field on) - the same +1d/(10) step used to build every other field-on/field-off pair in this file, keeping the Arbites maul consistent with the Chapter- and Sororitas-issue power weapons below it despite its different institutional owner.",
+			"local_notes": "Toggling between settings is a free action; Arbitrators are trained and expected to keep the weapon on suppression setting for routine enforcement and switch to lethal only against a genuine threat.\n\nLore: A dual-mode maul issued to senior Arbites Judges and Marshals: an Adeptus Arbites badge of office as much as the shock maul is a street enforcer's tool, and background material is explicit that it can be dialled from a stunning baton up to a lethal power weapon.\n\nDesign: Suppression setting is the same maul-plus-stun-note logic as the shock maul family above, one step heavier (sw+2 cr) for the denser Arbites-issue head; its damage is unaffected by the Rescale for the same reason as the mundane shock weapons. Lethal setting applies this file's general power-field rule (framework.md: field-on = mundane baseline +3d, Armor Divisor (10)): sw+2 cr (field off) becomes sw+3d+2(10) cr (field on) - the same +3d/(10) step used to build every other field-on/field-off pair in this file, keeping the Arbites maul consistent with the Chapter- and Sororitas-issue power weapons below it despite its different institutional owner.",
 			"tags": [
 				"Melee Weapon",
 				"Imperium",
@@ -1552,7 +1556,7 @@
 					"damage": {
 						"type": "cr",
 						"st": "sw",
-						"base": "1d+2",
+						"base": "3d+2",
 						"armor_divisor": 10
 					},
 					"reach": "1",
@@ -1595,7 +1599,7 @@
 		{
 			"id": "eTTPv9gti26dDXF6d",
 			"description": "Power Sword",
-			"local_notes": "The disruption field is a toggle (free action); with the field off, this is an unremarkable, if beautifully made, one-handed sword. A depleted or damaged power cell disables the field the same way.\n\nLore: The classic officer's and veteran's duelling and battle blade of the Imperium, from Guard colonels to Astartes veteran sergeants and Inquisitors; consistently shown shearing through flak, flesh and even power armour where a plain sword or chainsword would just bounce or skid, matching the framework anchor's own description.\n\nDesign: Fixed anchor: sw+1d+1(10) cut, reach 1, parry 0, min ST 10. This entry also establishes the general \"power field\" rule every other powered edged/blunt weapon in this file is built from: comparing the anchor to a plain one-handed sword's Basic Set baseline (sw+1 cut for a broadsword-class blade) shows the field itself contributes exactly +1d damage and Armor Divisor (10) over the same weapon with the field off - the \"field off\" line above is that same sw+1 cut baseline. This is why the field-off usage is included explicitly: the framework says power field on/off must be modelled as separate weapon lines, and this file applies the same +1d/(10) delta to every other \"power\" weapon below, scaled from each weapon's own mundane baseline rather than re-deriving the anchor each time. TL11 and LC1 per the framework's \"Advanced Imperial/rare\" and \"power weapons\" brackets.",
+			"local_notes": "The disruption field is a toggle (free action); with the field off, this is an unremarkable, if beautifully made, one-handed sword. A depleted or damaged power cell disables the field the same way.\n\nLore: The classic officer's and veteran's duelling and battle blade of the Imperium, from Guard colonels to Astartes veteran sergeants and Inquisitors; consistently shown shearing through flak, flesh and even power armour where a plain sword or chainsword would just bounce or skid, matching the framework anchor's own description.\n\nDesign: Fixed anchor (Rescale): sw+3d+1(10) cut, reach 1, parry 0, min ST 10. This entry also establishes the general \"power field\" rule every other powered edged/blunt weapon in this file is built from (framework.md, power-field rule): comparing the anchor to a plain one-handed sword's Basic Set baseline (sw+1 cut for a broadsword- class blade) shows the field itself contributes exactly +3d damage and Armor Divisor (10) over the same weapon with the field off - the \"field off\" line above is that same sw+1 cut baseline, unchanged by the Rescale (a plain sword's mundane edge doesn't care what DR anchors moved). This is why the field-off usage is included explicitly: the framework says power field on/off must be modelled as separate weapon lines, and this file applies the same +3d/(10) delta to every bladed/mace power weapon below (thunder hammers get +6d and power fists thr+8d instead, per the framework's own breakdown), scaled from each weapon's own mundane baseline rather than re-deriving the anchor each time. Checked against the new armour anchors: a Guardsman-strength blow (sw=1d+1, so field-on totals 4d+1) penetrates carapace (DR 45, eff. 4) essentially always, Astartes power armour (DR 100, eff. 10) about 90% of the time, and Terminator plate (DR 200, eff. 20) about 5% of the time; an Astartes-strength blow (sw=3d, field-on 6d) penetrates Astartes power armour better than 99% of the time and Terminator plate more than half the time. This matches the framework's \"the disruption field shears power armour whoever holds it\" - even a human's power sword reliably beats another human's power armour. TL11 and LC1 per the framework's \"Advanced Imperial/rare\" and \"power weapons\" brackets.",
 			"tags": [
 				"Melee Weapon",
 				"Imperium",
@@ -1613,7 +1617,7 @@
 					"damage": {
 						"type": "cut",
 						"st": "sw",
-						"base": "1d+1",
+						"base": "3d+1",
 						"armor_divisor": 10
 					},
 					"reach": "1",
@@ -1746,7 +1750,7 @@
 		{
 			"id": "e47s7JsiF3XBs0bI_",
 			"description": "Power Axe",
-			"local_notes": "Field toggle and depleted-cell rules as the power sword.\n\nLore: A heavier power weapon favoured where a wielder wants more raw hitting power than a power sword at the cost of some finesse - recurring wargear for Astartes veterans and Guard officers with a taste for a bigger blade.\n\nDesign: Applies the power-field rule established under Power Sword (+1d damage, Armor Divisor (10), field on vs. off) to a plain axe's Basic Set baseline (sw+2 cut, parry -1, per the same broadsword-vs-axe relationship used for the mundane weapons above) rather than to the power sword's own base line, since an axe and a sword are not the same mundane weapon with a field bolted on.",
+			"local_notes": "Field toggle and depleted-cell rules as the power sword.\n\nLore: A heavier power weapon favoured where a wielder wants more raw hitting power than a power sword at the cost of some finesse - recurring wargear for Astartes veterans and Guard officers with a taste for a bigger blade.\n\nDesign: Applies the power-field rule established under Power Sword (+3d damage, Armor Divisor (10), field on vs. off) to a plain axe's Basic Set baseline (sw+2 cut, parry -1, per the same broadsword-vs-axe relationship used for the mundane weapons above) rather than to the power sword's own base line, since an axe and a sword are not the same mundane weapon with a field bolted on.",
 			"tags": [
 				"Melee Weapon",
 				"Imperium",
@@ -1764,7 +1768,7 @@
 					"damage": {
 						"type": "cut",
 						"st": "sw",
-						"base": "1d+2",
+						"base": "3d+2",
 						"armor_divisor": 10
 					},
 					"reach": "1",
@@ -1849,7 +1853,7 @@
 		{
 			"id": "e2Cw2r_O9UaE6dp2G",
 			"description": "Power Maul",
-			"local_notes": "Field toggle and depleted-cell rules as the power sword; this is the general-issue pattern the Arbites power maul above is built from.\n\nLore: A power weapon built around a blunt head rather than an edge, issued to some Ministorum, Sororitas and Guard-officer wielders who favour crushing force; background material treats it as functionally equivalent to a power sword or axe, just blunt rather than edged.\n\nDesign: Same power-field rule as Power Sword and Power Axe, applied to a plain mace's Basic Set baseline (sw+2 cr); the field still applies Armor Divisor (10) and damage type stays crushing rather than switching to cut, since the field disrupts and shears at the point of impact regardless of whether the striking surface is an edge or a flat head - the wound is still blunt trauma amplified by the field, matching 40k depictions of power mauls caving in what they hit rather than slicing it.",
+			"local_notes": "Field toggle and depleted-cell rules as the power sword; this is the general-issue pattern the Arbites power maul above is built from.\n\nLore: A power weapon built around a blunt head rather than an edge, issued to some Ministorum, Sororitas and Guard-officer wielders who favour crushing force; background material treats it as functionally equivalent to a power sword or axe, just blunt rather than edged.\n\nDesign: Same power-field rule as Power Sword and Power Axe (+3d, field on vs. off), applied to a plain mace's Basic Set baseline (sw+2 cr); the field still applies Armor Divisor (10) and damage type stays crushing rather than switching to cut, since the field disrupts and shears at the point of impact regardless of whether the striking surface is an edge or a flat head - the wound is still blunt trauma amplified by the field, matching 40k depictions of power mauls caving in what they hit rather than slicing it.",
 			"tags": [
 				"Melee Weapon",
 				"Imperium",
@@ -1868,7 +1872,7 @@
 					"damage": {
 						"type": "cr",
 						"st": "sw",
-						"base": "1d+2",
+						"base": "3d+2",
 						"armor_divisor": 10
 					},
 					"reach": "1",
@@ -1953,7 +1957,7 @@
 		{
 			"id": "ed4fE40GZsmZqiqGS",
 			"description": "Power Lance",
-			"local_notes": "The full mounted-charge bonus (marked *) requires a mount at a gallop per the lance rules a GM is already using for cavalry combat; used from the ground it only reaches the braced profile.\n\nLore: Carried by Rough Rider-type Guard cavalry and some Sororitas Seraphim or mounted formations as an upgrade over a mundane hunting lance; depicted as punching through infantry and light vehicles alike on a charge.\n\nDesign: Baseline mundane lance follows Basic Set cavalry lance logic (thr+3 imp mounted at a charge, extra reach only while mounted and moving); the power-field rule adds its usual +1d and Armor Divisor (10) on top. The braced (dismounted) line drops one die of charge momentum but keeps the field's own bonus, since the field itself doesn't care whether the wielder is moving.",
+			"local_notes": "The full mounted-charge bonus (marked *) requires a mount at a gallop per the lance rules a GM is already using for cavalry combat; used from the ground it only reaches the braced profile.\n\nLore: Carried by Rough Rider-type Guard cavalry and some Sororitas Seraphim or mounted formations as an upgrade over a mundane hunting lance; depicted as punching through infantry and light vehicles alike on a charge.\n\nDesign: Baseline mundane lance follows Basic Set cavalry lance logic (thr+3 imp mounted at a charge, extra reach only while mounted and moving); the power-field rule adds its usual +3d and Armor Divisor (10) on top. The braced (dismounted) line drops one point of charge momentum but keeps the field's own +3d bonus, since the field itself doesn't care whether the wielder is moving.",
 			"tags": [
 				"Melee Weapon",
 				"Imperium",
@@ -1970,7 +1974,7 @@
 					"damage": {
 						"type": "imp",
 						"st": "thr",
-						"base": "1d+3",
+						"base": "3d+3",
 						"armor_divisor": 10
 					},
 					"reach": "1,2*,3*",
@@ -2013,7 +2017,7 @@
 					"damage": {
 						"type": "imp",
 						"st": "thr",
-						"base": "1d+2",
+						"base": "3d+2",
 						"armor_divisor": 10
 					},
 					"reach": "1,2",
@@ -2098,7 +2102,7 @@
 		{
 			"id": "eaFfu4gGs-496sdxf",
 			"description": "Power Stave",
-			"local_notes": "This is a mundane-but-powered stave (a two-handed power maul built long, for reach and the Staff skill's defensive bonus), not a psyker's force stave - a force weapon draws on the wielder's own Warp-touched abilities and is covered separately.\n\nLore: Issued to some Inquisitorial acolytes, tech-adepts and Ministorum enforcers who want a power weapon's bite with a quarterstaff's reach and two-handed control rather than a one-handed blade.\n\nDesign: Same power-field rule as Power Maul, applied to a two-handed quarterstaff's Basic Set baseline (sw+2 cr/thr+2 cr, reach 1,2) instead of a one-handed mace. Explicitly not the same item as a force stave (a Warp-powered weapon keyed to a psyker's own ability, per framework.md's psychic-power rules) - that variant belongs to the psyker-equipment file, not here.",
+			"local_notes": "This is a mundane-but-powered stave (a two-handed power maul built long, for reach and the Staff skill's defensive bonus), not a psyker's force stave - a force weapon draws on the wielder's own Warp-touched abilities and is covered separately.\n\nLore: Issued to some Inquisitorial acolytes, tech-adepts and Ministorum enforcers who want a power weapon's bite with a quarterstaff's reach and two-handed control rather than a one-handed blade.\n\nDesign: Same power-field rule as Power Maul (+3d, field on vs. off), applied to a two-handed quarterstaff's Basic Set baseline (sw+2 cr/thr+2 cr, reach 1,2) instead of a one-handed mace. Explicitly not the same item as a force stave (a Warp-powered weapon keyed to a psyker's own ability, per framework.md's psychic-power rules) - that variant belongs to the psyker-equipment file, not here.",
 			"tags": [
 				"Melee Weapon",
 				"Imperium",
@@ -2115,7 +2119,7 @@
 					"damage": {
 						"type": "cr",
 						"st": "sw",
-						"base": "1d+2",
+						"base": "3d+2",
 						"armor_divisor": 10
 					},
 					"reach": "1,2",
@@ -2158,7 +2162,7 @@
 					"damage": {
 						"type": "cr",
 						"st": "thr",
-						"base": "1d+2",
+						"base": "3d+2",
 						"armor_divisor": 10
 					},
 					"reach": "1,2",
@@ -2243,7 +2247,7 @@
 		{
 			"id": "eF_OQ6m0a85KklGzL",
 			"description": "Power Fist",
-			"local_notes": "Cannot be used to Feint, and the -2 parry reflects how slow and clumsy the servo-driven gauntlet is to reposition defensively; a GM may rule it takes a Ready maneuver to recover after a solid punch against a very hard surface (a wall, a vehicle hull). It is not a precision weapon: no combination of skill or luck lets it target a called shot at a meaningful bonus (GM's call).\n\nLore: One of the signature Astartes and Terminator melee weapons: a reinforced gauntlet with an internal power field and myo-fibre actuators, consistently shown punching clean through Astartes power armour, vehicle hulls and monstrous xenos alike - the framework's Tactical Dreadnought (DR80) armour table entry explicitly lists the power fist as one of the few things that still kills a Terminator.\n\nDesign: No framework anchor exists for the power fist directly, so it is built from first principles rather than borrowed from a catalogue \"power glove\": because the internal actuators (not the wielder's own swing) generate most of the force, its bonus is a large flat die addition to the wielder's own thrust (thr+4d) rather than a multiplier on that thrust (a \"thr x3\"-style multiplier was considered and rejected, since it would make the weapon nearly unusable in a human's hands and absurdly swingy in an Astartes', whereas a flat die bonus keeps it dangerous regardless of wielder and matches the fiction that the fist itself, not the arm behind it, is doing the killing). Armor Divisor (10) is the shared disruption-field divisor (framework.md, power-field rule). At Astartes ST 20, thr+4d (6d-1, avg ~20) against Terminator DR 80/10 = 8 penetrates by ~12 on average, matching \"power fist ... still kills\" against Tactical Dreadnought armour. Reach C, parry -2 and the no-Feint/ no-called-shot notes encode the framework's \"power fist ... unwieldy (hard to parry, slow)\" instruction without needing a bespoke game mechanic beyond existing GURPS defense penalties.",
+			"local_notes": "Cannot be used to Feint, and the -2 parry reflects how slow and clumsy the servo-driven gauntlet is to reposition defensively; a GM may rule it takes a Ready maneuver to recover after a solid punch against a very hard surface (a wall, a vehicle hull). It is not a precision weapon: no combination of skill or luck lets it target a called shot at a meaningful bonus (GM's call).\n\nLore: One of the signature Astartes and Terminator melee weapons: a reinforced gauntlet with an internal power field and myo-fibre actuators, consistently shown punching clean through Astartes power armour, vehicle hulls and monstrous xenos alike - the framework's Tactical Dreadnought (DR 200) armour table entry explicitly lists the power fist as one of the few things that still kills a Terminator.\n\nDesign: Fixed anchor (Rescale, framework.md): thr+8d(10) cr. It is built from first principles rather than borrowed from a catalogue \"power glove\": because the internal actuators (not the wielder's own swing) generate most of the force, its bonus is a large flat die addition to the wielder's own thrust (thr+8d) rather than a multiplier on that thrust (a \"thr x3\"-style multiplier was considered and rejected, since it would make the weapon nearly unusable in a human's hands and absurdly swingy in an Astartes', whereas a flat die bonus keeps it dangerous regardless of wielder and matches the fiction that the fist itself, not the arm behind it, is doing the killing). Armor Divisor (10) is the shared disruption-field divisor (framework.md, power-field rule). At Astartes ST 18, thr+8d (thr 1d+2, so 9d+2, avg ~33.5) against Terminator plate (DR 200, eff. DR 20) penetrates about 99.5% of the time and against Astartes power armour (DR 100, eff. 10) essentially always, matching \"power fist ... kills Terminators in Astartes hands\" cleanly. Reach C, parry -2 and the no-Feint/no-called-shot notes encode the framework's \"power fist ... unwieldy (hard to parry, slow)\" instruction without needing a bespoke game mechanic beyond existing GURPS defense penalties.",
 			"tags": [
 				"Melee Weapon",
 				"Imperium",
@@ -2260,7 +2264,7 @@
 					"damage": {
 						"type": "cr",
 						"st": "thr",
-						"base": "4d",
+						"base": "8d",
 						"armor_divisor": 10
 					},
 					"reach": "C",
@@ -2287,7 +2291,7 @@
 		{
 			"id": "eBltyt28dyV1HcMUa",
 			"description": "Relic Blade",
-			"local_notes": "Always a unique, named heirloom weapon in the fiction; a given relic blade may carry additional individual traits or a name-specific ability a GM adds on top of this baseline profile.\n\nLore: Ancient, master-crafted power swords carried by Chapter Masters and other Astartes heroes, oversized compared to a standard power sword and wielded one-handed only by Astartes-grade strength; a recurring \"hero weapon\" across Black Library Space Marine fiction (e.g. named blades carried by Chapter Masters and First Company veterans).\n\nDesign: Applies the power-field rule to a two-handed greatsword's Basic Set baseline (sw+3 cut) rather than the one-handed broadsword baseline used for the standard power sword, reflecting a longer, heavier blade; min ST 16 keeps it a firmly Astartes-only weapon (a human could not meet the strength requirement even one-handed), matching the fiction that ordinary humans do not wield relic blades.",
+			"local_notes": "Always a unique, named heirloom weapon in the fiction; a given relic blade may carry additional individual traits or a name-specific ability a GM adds on top of this baseline profile.\n\nLore: Ancient, master-crafted power swords carried by Chapter Masters and other Astartes heroes, oversized compared to a standard power sword and wielded one-handed only by Astartes-grade strength; a recurring \"hero weapon\" across Black Library Space Marine fiction (e.g. named blades carried by Chapter Masters and First Company veterans).\n\nDesign: Applies the power-field rule (+3d, field on vs. off) to a two-handed greatsword's Basic Set baseline (sw+3 cut) rather than the one-handed broadsword baseline used for the standard power sword, reflecting a longer, heavier blade; min ST 16 keeps it a firmly Astartes-only weapon (a human could not meet the strength requirement even one-handed), matching the fiction that ordinary humans do not wield relic blades. At Astartes ST (sw=3d, field-on 6d+3, avg ~24) it penetrates Astartes power armour (DR 100, eff. 10) essentially always and Terminator plate (DR 200, eff. 20) about 4 times in 5, a step above the standard power sword's own Astartes-hands figures, fitting its \"hero weapon\" status.",
 			"tags": [
 				"Melee Weapon",
 				"Imperium",
@@ -2304,7 +2308,7 @@
 					"damage": {
 						"type": "cut",
 						"st": "sw",
-						"base": "1d+3",
+						"base": "3d+3",
 						"armor_divisor": 10
 					},
 					"reach": "1,2",
@@ -2437,7 +2441,7 @@
 		{
 			"id": "eGSP4vxvePIoruuOW",
 			"description": "Thunder Hammer",
-			"local_notes": "Any hit that penetrates the target's DR also inflicts Knockback (B378) using the raw crushing damage rolled, even against a target too armoured to actually be wounded much - representing Astartes, Terminators and even light vehicles being physically hurled by the blow, per the weapon's fiction reputation.\n\nLore: A massive two-handed maul carrying a huge capacitor coil, issued to Astartes Terminator assault squads and veteran sergeants; consistently shown caving in Terminator armour and knocking opponents flying rather than cutting them, distinct in style from the disruption-field swords and axes above.\n\nDesign: Built as a two-handed great maul's Basic Set baseline (sw+3 cr) plus a power-field bonus, but the bonus is scaled up (+2d instead of the standard +1d used for the sword/axe/maul family) since a thunder hammer's coil is built into a much larger head than a sword's blade, with the shared (10) disruption-field divisor (framework.md). An earlier draft used (3) on the theory that a hammer beats armour by concussion, but that left a Marine's average blow (~22) unable to clear Terminator DR 80/3, contradicting the hammer's role as the Terminator-killer. At (10) it penetrates by ~14 on average and adds knockback. The knockback note captures the anchor-adjacent \"thunder hammer\" lore detail (send Marines and even light vehicles flying) using the existing Basic Set B378 knockback rule rather than a new mechanic, per this project's preference for built, not borrowed, but standard-rules design.",
+			"local_notes": "Any hit that penetrates the target's DR also inflicts Knockback (B378) using the raw crushing damage rolled, even against a target too armoured to actually be wounded much - representing Astartes, Terminators and even light vehicles being physically hurled by the blow, per the weapon's fiction reputation.\n\nLore: A massive two-handed maul carrying a huge capacitor coil, issued to Astartes Terminator assault squads and veteran sergeants; consistently shown caving in Terminator armour and knocking opponents flying rather than cutting them, distinct in style from the disruption-field swords and axes above.\n\nDesign: Fixed anchor (Rescale, framework.md): sw+6d(10) cr. A two-handed great maul's Basic Set baseline is sw+3 cr (unchanged, field off); the field's bonus is scaled up well past the standard +3d used for the sword/axe/maul family (framework.md: \"thunder hammers +6d\") since a thunder hammer's coil is built into a much larger head than a sword's blade, with the shared (10) disruption-field divisor. An earlier draft used (3) on the theory that a hammer beats armour by concussion, but that left a Marine's average blow unable to clear Terminator armour, contradicting the hammer's role as the Terminator-killer. At Astartes ST 18 (sw=3d, so 9d, avg ~31.5) against the Rescale's Terminator anchor (DR 200, eff. 20/10) it penetrates about 98-99% of the time and adds knockback. The knockback note captures the anchor-adjacent \"thunder hammer\" lore detail (send Marines and even light vehicles flying) using the existing Basic Set B378 knockback rule rather than a new mechanic, per this project's preference for built, not borrowed, but standard-rules design.",
 			"tags": [
 				"Melee Weapon",
 				"Imperium",
@@ -2454,7 +2458,7 @@
 					"damage": {
 						"type": "cr",
 						"st": "sw",
-						"base": "2d+3",
+						"base": "6d",
 						"armor_divisor": 10
 					},
 					"reach": "1",
@@ -2555,7 +2559,7 @@
 		{
 			"id": "e7h4D-DDgXX4POe39",
 			"description": "Lightning Claw",
-			"local_notes": "Worn as a gauntlet rather than swung as a separate object; treat attacks as unarmed strikes enhanced by the claw for skill purposes (Brawling or Karate per framework.md's weapon skill table). See Lightning Claws, Paired below for the two-claw fighting set.\n\nLore: A gauntlet mounting several short power-field blades, worn by specialist Astartes assault troops (Raven Guard and other Chapters with an assault-focused iconography feature prominently); individual claw strikes are lighter than a power sword's but the weapon is built around speed and repeated attacks rather than one heavy blow.\n\nDesign: Applies the power-field rule to a set of short knuckle-blades rather than a full sword: the mundane baseline is a light claw weapon (built one step below the plain knife's sw-2 cut on weight/reach grounds, since the blades are short and fixed to a glove rather than a full hilt), giving sw+1d-2(10) cut with the field on. Min ST (9) and weight (3 lb per claw) are deliberately lower than the power sword's, reflecting a lighter weapon meant to be worn in pairs rather than a single two-handed-capable blade.",
+			"local_notes": "Worn as a gauntlet rather than swung as a separate object; treat attacks as unarmed strikes enhanced by the claw for skill purposes (Brawling or Karate per framework.md's weapon skill table). See Lightning Claws, Paired below for the two-claw fighting set.\n\nLore: A gauntlet mounting several short power-field blades, worn by specialist Astartes assault troops (Raven Guard and other Chapters with an assault-focused iconography feature prominently); individual claw strikes are lighter than a power sword's but the weapon is built around speed and repeated attacks rather than one heavy blow.\n\nDesign: Applies the power-field rule (+3d, field on vs. off) to a set of short knuckle-blades rather than a full sword: the mundane baseline is a light claw weapon (built one step below the plain knife's sw-2 cut on weight/reach grounds, since the blades are short and fixed to a glove rather than a full hilt), giving sw+3d-2(10) cut with the field on. Even at its low min ST (9), a claw strike (sw+1d-1, so field-on totals 4d-1) beats carapace (DR 45, eff. 4) almost every time and Astartes power armour (DR 100, eff. 10) about three hits in four, though it drops off sharply against Terminator plate (DR 200, eff. 20, under 2%) - in an Astartes' hands (sw=3d, field-on 6d-2) it clears power armour almost always and Terminator plate better than a third of the time, reflecting a fast weapon built around repeated attacks rather than one heavy blow. Min ST (9) and weight (3 lb per claw) are deliberately lower than the power sword's, reflecting a lighter weapon meant to be worn in pairs rather than a single two-handed-capable blade.",
 			"tags": [
 				"Melee Weapon",
 				"Imperium",
@@ -2572,7 +2576,7 @@
 					"damage": {
 						"type": "cut",
 						"st": "sw",
-						"base": "1d-2",
+						"base": "3d-2",
 						"armor_divisor": 10
 					},
 					"reach": "C,1",
@@ -2642,7 +2646,7 @@
 					"damage": {
 						"type": "cut",
 						"st": "sw",
-						"base": "1d-2",
+						"base": "3d-2",
 						"armor_divisor": 10
 					},
 					"reach": "C,1",
@@ -2712,7 +2716,7 @@
 					"damage": {
 						"type": "cut",
 						"st": "sw",
-						"base": "1d+1",
+						"base": "3d+1",
 						"armor_divisor": 10
 					},
 					"reach": "1",

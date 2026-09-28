@@ -9,7 +9,7 @@ items:
     tags: [Missile Weapon, Imperium, Astra Militarum, Adeptus Astartes]
     weapons:
       - usage: Braced/mounted
-        damage: 8dx4(5) burn
+        damage: 8dx8(5) burn
         acc: 14
         range: 1500/4500
         rof: 1
@@ -32,16 +32,16 @@ items:
       cripple or kill a battle tank, and treats it as one of the few
       man-portable weapons that can bring down a Terminator or walker.
     design: >
-      Damage is the fixed anchor from framework.md: 8dx4(5) burn ("kills
-      tanks and Terminators"). Checked against the vehicle AV table: average
-      112 burn through an armor divisor of 5 gives an effective DR of 10
-      (AV10) to 50 (AV14). Even a worst-case minimum roll (8 dice all at
-      1, x4 = 32) clears every effective DR on the table, so the lascannon
-      reliably beats AV10 through AV14 (DR50-250) with the anchor's
-      divisor doing almost all the work; only the same DR80 that stops
-      most other man-portable weapons (Astartes power armor, Tactical
-      Dreadnought DR80) is trivial for it, matching "kills tanks and
-      Terminators" without exception. Acc, range, RoF, shots, Bulk and
+      Damage is the fixed anchor from framework.md: 8dx8(5) burn ("kills
+      tanks and Terminators"). Checked against the vehicle AV table with the
+      exact dice distribution: average 224 burn through an armor divisor of
+      5 gives an effective DR of 20 (AV10) to 70 (AV14). Even a worst-case
+      minimum roll (8 dice all at 1, x8 = 64) clears every effective DR on
+      the table, so the lascannon always beats AV10 through AV14 (DR
+      100-350) with the anchor's divisor doing almost all the work; against
+      a Terminator (DR 200, effective DR 40) or Astartes power armor (DR
+      100, effective DR 20) it is likewise a guaranteed penetration, matching
+      "kills tanks and Terminators" without exception. Acc, range, RoF, shots, Bulk and
       Rcl are not anchored by framework.md, so they're built from first
       principles: RoF 1 and Rcl 1 because a beam weapon has no recoil and
       the capacitor cycle time is the limiting factor; Acc 14 and a long
@@ -81,7 +81,7 @@ items:
     tags: [Missile Weapon, Imperium, Astra Militarum]
     weapons:
       - usage: Braced/mounted
-        damage: 5d burn
+        damage: 6dx2(2) burn
         acc: 8
         range: 900/2700
         rof: 3
@@ -93,22 +93,16 @@ items:
     notes: More commonly seen as a Sentinel or Rhino turret weapon than carried into the field; this is the static defensive-emplacement or bunker version issued to line regiments guarding a position.
     lore: Multi-lasers are the standard secondary and light-vehicle turret weapon across the Astra Militarum (Sentinels, Chimeras, Rhinos); fiction and background consistently treat them as good infantry-shredders that struggle to hurt anything with real armour plate.
     design: >
-      No framework anchor covers the multi-laser, so it's built by
-      extrapolating from the lasgun anchor (4d burn) rather than any
-      catalogue "laser cannon" entry: a multi-laser is several linked
-      lasgun-grade emitters cycling fast, so damage per shot only steps up
-      a little (5d, roughly one step above the lasgun the way a hellgun
-      steps up for penetration instead) while RoF 3 represents the linked
-      barrels. Checked against the vehicle AV table: even a maximum roll
-      (5d = 30) never reaches the AV10/DR50 effective threshold, so the
-      multi-laser cannot reliably beat any vehicle on that table - it has
-      no armor divisor to help it, unlike the lascannon or krak missile.
-      This matches the fiction, where multi-laser-armed Sentinels and
-      Rhinos support infantry and duel light, often open-topped raiders
-      and buggies (DR well under the AV10 line) rather than trade blows
-      with tanks. Acc, range and Bulk sit between the lasgun and lascannon
-      since the weapon is a scaled-up rifle on a mount, not a dedicated
-      tank-killer.
+      No framework anchor covers the multi-laser. It is several linked
+      lasgun-grade emitters cycling far faster and harder than any infantry
+      weapon, and the fiction treats it as a heavier anti-infantry weapon
+      than the heavy bolter, so each shot sits level with a bolter round at
+      6dx2(2) burn (avg 42). Exact odds per hit: always penetrates carapace
+      (DR 45); Sororitas plate (DR 70, eff. 35) 79%; Astartes power armour
+      (DR 100, eff. 50) 14%, same as a bolter; AV10 (DR 100) 14%, so it can
+      threaten a Chimera's flank with luck but no tank. RoF 3 represents the
+      linked barrels. Acc, range and Bulk sit between the lasgun and
+      lascannon.
 
   - name: Autocannon
     tl: 8
@@ -118,7 +112,7 @@ items:
     tags: [Missile Weapon, Imperium, Astra Militarum]
     weapons:
       - usage: Braced/mounted
-        damage: 6dx2(2) pi++
+        damage: 6dx3(3) pi++
         acc: 8
         range: 1000/3000
         rof: 3
@@ -139,20 +133,20 @@ items:
       "stub" weapon per the TL table (autogun/stubber bracket, scaled to
       artillery-grade tolerances) rather than borrowed from any GURPS
       catalogue cannon: a single heavy AP penetrator per round gives pi++
-      (full wound multiplier, no follow-up), with a light armor divisor
-      (2) for the hardened long-rod core, and a real cannon's low-teens
+      (full wound multiplier, no follow-up), with a moderate armor divisor
+      (3) for the hardened long-rod core, and a real cannon's low-teens
       RoF is dialed back to RoF 3 to keep it a burst weapon rather than a
-      chain-gun (that's the assault cannon's niche). Checked shot-by-shot
-      against the vehicle AV table using the average (6dx2 = 42) and the
-      full 6-36 spread of 6d before doubling: it clears AV10 (DR50, eff.
-      DR25) on the large majority of rolls - reliably beats; splits close
-      to even against AV11 (DR80, eff. DR40, needs 6d > 20 against a mean
-      of 21) - Rhino sides, matching "dents a Rhino"; only the top of the
-      6d range clears AV12 (DR120, eff. DR60, needs 6d > 30) - rarely
-      beats a Chimera's front; and it mathematically cannot clear AV13 or
-      AV14 (needs 6d > 45, impossible on 6d) - cannot beat a Leman Russ or
-      Land Raider's armour, matching every source that has autocannon fire
-      shrug off a main battle tank's frontal plate.
+      chain-gun (that's the assault cannon's niche). Checked with the exact
+      dice distribution (6dx3(3) pi++, avg 63) against the vehicle AV
+      table: it penetrates AV10 (DR 100, eff. DR 33) 99% of the time and
+      AV11 (DR 150, eff. DR 50, a Rhino's front/sides) 85% of the time -
+      reliably beats both, as required; against AV12 (DR 200, eff. DR 66,
+      a Chimera's front) that drops to 36% - sometimes beats it, matching
+      "dents a Rhino, sometimes cracks a Chimera"; and against AV13 (DR
+      275, eff. DR 91) it falls to 1% and AV14 (DR 350, eff. DR 116) to
+      effectively 0% - it does not beat a Leman Russ or Land Raider's
+      armour, matching every source that has autocannon fire shrug off a
+      main battle tank's frontal plate.
 
   - name: Autocannon Ammunition, Solid Shot (20)
     tl: 8
@@ -182,7 +176,7 @@ items:
         rcl: 1
         skill: Gunner (Rockets)
       - usage: Krak missile
-        damage: 6dx2(5) cr
+        damage: 6dx6(3) cr
         acc: 10
         range: 100/1800
         rof: 1
@@ -209,33 +203,31 @@ items:
       while frag loads are the squad's answer to entrenched infantry and
       light structures.
     design: >
-      No single framework anchor, so each warhead is derived separately.
-      Krak: built as a one-shot, disposable shaped charge, using the same
-      armor-divisor family as the lascannon's beam (5) rather than a
-      catalogue HEAT rocket, but with far fewer raw dice (6dx2, avg. 42)
-      since it's a single expendable warhead, not a capacitor weapon - the
-      framework's own description of it as "lascannon-lite vs. armour."
-      Checked against the AV table: it reliably beats AV10 (DR50, eff.
-      DR10) through AV12 (DR120, eff. DR24, needs only 6d > 12 against a
-      mean of 21); splits roughly even against AV13 (DR180, eff. DR36,
-      needs 6d > 18); and only the top of the 6d range clears AV14 (DR250,
-      eff. DR50, needs 6d > 25) - so it can reliably wreck Chimeras and
-      Rhinos, sometimes hurts a Leman Russ, and only rarely alone cracks a
-      Land Raider, which is why the fiction has missile teams engage such
-      targets in numbers rather than solo. Frag: scaled from the B414
-      fragmentation rules as a "big frag grenade" per the framework's own
-      description - roughly double the blast and fragmentation dice of a
-      standard hand grenade (3d[3d]) to reflect a much larger warhead,
-      giving 6d cr ex [6d]; it has no armor divisor and is not intended to
-      threaten anything on the vehicle AV table, only infantry and light
-      cover. Flakk: the frag warhead's dice with a proximity fuze instead
-      of impact/frag optimisation, at one die less since more of the
-      casing goes into the fuze and less into the frag liner; it is not
-      rated against ground DR at all. Acc/range/RoF/Bulk are shared
-      across usages since they describe the launcher, not the warhead,
-      and are built as a shoulder-fired tube (lower ST and Bulk penalty
-      than the tripod weapons above, since one Guardsman carries and fires
-      it solo).
+      No single framework anchor covers this launcher as a whole, but Krak
+      is itself one of the project's fixed anchors: 6dx6(3) cr, a one-shot,
+      disposable shaped charge. Checked with the exact dice distribution
+      (avg. 126) against the AV table: it beats AV10 (DR 100, eff. DR 33)
+      essentially always and AV11-12 (DR 150/200, eff. DR 50/66) 100%/99%
+      of the time - reliably wrecks Chimeras and Rhinos; against AV13 (DR
+      275, eff. DR 91) it's still 90% - reliable vs AV12-13 as the anchor
+      requires; and against AV14 (DR 350, eff. DR 116) it drops to 64% -
+      "about two in three" - so a Land Raider or Leman Russ's frontal
+      glacis is a real but not certain kill, which is why the fiction has
+      missile teams engage such targets in numbers rather than solo. Frag:
+      scaled from the B414 fragmentation rules as a "big frag grenade" per
+      the framework's own description - roughly double the blast and
+      fragmentation dice of a standard hand grenade (3d[3d]) to reflect a
+      much larger warhead, giving 6d cr ex [6d]; it has no armor divisor
+      and is not intended to threaten anything on the vehicle AV table,
+      only infantry and light cover, so it is not rescaled alongside Krak.
+      Flakk: the frag warhead's dice with a proximity fuze instead of
+      impact/frag optimisation, at one die less since more of the casing
+      goes into the fuze and less into the frag liner; it is not rated
+      against ground DR at all. Acc/range/RoF/Bulk are shared across
+      usages since they describe the launcher, not the warhead, and are
+      built as a shoulder-fired tube (lower ST and Bulk penalty than the
+      tripod weapons above, since one Guardsman carries and fires it
+      solo).
 
   - name: Frag Missile
     tl: 8
@@ -275,7 +267,7 @@ items:
     tags: [Missile Weapon, Imperium, Adeptus Astartes]
     weapons:
       - usage: Sustained fire
-        damage: 5d(2) pi+
+        damage: 5dx2(2) pi+
         acc: 5
         range: 500/1500
         rof: 10
@@ -296,22 +288,23 @@ items:
       against tanks.
     design: >
       No framework anchor, so it's built parallel to the heavy bolter
-      anchor (8d(2) pi+, follow-up 4d cr ex) rather than copied from it:
+      anchor (7dx2(2) pi++, follow-up 8d cr ex) rather than copied from it:
       the assault cannon fires solid rotary-autocannon-style rounds with
-      no explosive follow-up, so it drops the follow-up term and scales
-      the base damage down one step (5d instead of 8d) in exchange for a
-      much higher RoF (10 vs. the heavy bolter's typical squad-support
-      RoF), matching its fluff role as a horde-clearing hail of fire
-      rather than a hard-hitting single line of shots. Checked against the
-      vehicle AV table: even at RoF 10, no single round (max 5d(2) = 30,
-      eff. DR halved) reliably clears AV10's effective DR25, so it cannot
-      reliably beat any vehicle on the table - consistent with Astartes
-      fiction, where the assault cannon is a horde/infantry weapon and its
-      wielder relies on a paired melee weapon (power fist, thunder hammer)
-      or a squadmate's lascannon/missile launcher against real armour.
-      LC1 follows the framework's Astartes-gear bracket (alongside
-      bolters and plasma) rather than the Guard's LC2 heavy-weapon
-      bracket.
+      no explosive follow-up and a lower pi+ wound multiplier (dense solid
+      shot, not a mass-reactive bolt), so it drops the follow-up term and
+      scales the base damage down two dice (5d instead of 7d) in exchange
+      for a much higher RoF (10 vs. the heavy bolter's typical
+      squad-support RoF), matching its fluff role as a horde-clearing hail
+      of fire rather than a hard-hitting single line of shots. Checked
+      with the exact dice distribution (5dx2(2) pi+, avg 35) against the
+      vehicle AV table: even at RoF 10, no single round reliably clears
+      AV10's effective DR 50 (only 1.6% per shot), so it cannot reliably
+      beat any vehicle on the table - consistent with Astartes fiction,
+      where the assault cannon is a horde/infantry weapon and its wielder
+      relies on a paired melee weapon (power fist, thunder hammer) or a
+      squadmate's lascannon/missile launcher against real armour. LC1
+      follows the framework's Astartes-gear bracket (alongside bolters and
+      plasma) rather than the Guard's LC2 heavy-weapon bracket.
 
   - name: Assault Cannon Ammunition Hopper (200)
     tl: 10

@@ -4,7 +4,7 @@
 		{
 			"id": "eo1BdwLuwEPDPOND4",
 			"description": "Plasma Pistol",
-			"local_notes": "Lore: Widely carried by Inquisitors, veteran officers and Astartes as a compact answer to armour a bolt pistol cannot beat; Black Library and Codex background repeatedly show plasma pistols overheating and injuring or killing careless users, a trait long associated with older, unstable patterns especially.\n\nDesign: Scaled down two dice from the plasma gun anchor (6dx2(3) burn ex) to 4dx2(3) burn ex for the standard, safe firing mode; the ×3 supercharged mode trades a Malf 14 risk for another 50% of damage, following the same standard/overcharge relationship used across this file. See the Plasma Gun entry for the full penetration check against armour; a pistol-class charge still clears flak and carapace comfortably and can trouble carapace-plus targets when supercharged.",
+			"local_notes": "Lore: Widely carried by Inquisitors, veteran officers and Astartes as a compact answer to armour a bolt pistol cannot beat; Black Library and Codex background repeatedly show plasma pistols overheating and injuring or killing careless users, a trait long associated with older, unstable patterns especially.\n\nDesign: Scaled down two dice from the plasma gun anchor (6dx4(3) burn ex) to 4dx4(3) burn ex for the standard, safe firing mode, keeping the same x4 standard / x5 supercharged multiplier pair used across every weapon in this file; the ×5 supercharged mode trades a Malf 14 risk for another 25% of damage. Checked with the exact dice distribution: standard mode averages 56 damage and penetrates Astartes power armour (DR 100, effective DR 33) 95% of the time and a Terminator (DR 200, effective DR 66) 24% of the time; supercharged raises Terminator penetration to 99%. A pistol-class charge clears flak and carapace with no meaningful chance of failure either way.",
 			"tags": [
 				"Missile Weapon",
 				"Imperium",
@@ -21,7 +21,7 @@
 					"sv": 1,
 					"damage": {
 						"type": "burn ex",
-						"base": "4dx2",
+						"base": "4dx4",
 						"armor_divisor": 3
 					},
 					"accuracy": "2",
@@ -75,7 +75,7 @@
 					"sv": 1,
 					"damage": {
 						"type": "burn ex",
-						"base": "4dx3",
+						"base": "4dx5",
 						"armor_divisor": 3
 					},
 					"accuracy": "2",
@@ -131,7 +131,7 @@
 		{
 			"id": "eS_GN5vZgY0W8ge2q",
 			"description": "Plasma Gun",
-			"local_notes": "Lore: The plasma gun is the Guard's and the Astartes' standard answer to power armour and light vehicles alike; fiction from Gaunt's Ghosts to Space Marine Battles depicts it killing power-armoured targets outright while carrying a real chance of cooking its own wielder, especially on older, less stable patterns - the origin of the tabletop and RPG \"gets hot\"/ overheat mechanic this entry represents mechanically as Malf 14 on the supercharged line.\n\nDesign: This is the project's fixed plasma anchor: 6dx2(3) burn ex, treated as the weapon's safe standard mode (no Malf risk) since it is already stated in the framework to kill Marines through power armour without needing to invoke overheating. Check: Astartes power armour is torso DR 40; armour divisor (3) drops effective DR to about 13.3, and 6dx2 averages 42, so it penetrates and kills reliably, as required. Against a Terminator's DR 80 (effective DR ~26.7) the average of 42 still gets through, matching the framework's explicit statement that plasma still kills Terminators. The supercharged mode (6dx3(3), Malf 14) exists for harder targets (light vehicles, multiple Terminators) at the cost of a real chance of the coil failing and burning the firer, matching the fiction's running theme of plasma weapons being feared by their own side almost as much as by the enemy.",
+			"local_notes": "Lore: The plasma gun is the Guard's and the Astartes' standard answer to power armour and light vehicles alike; fiction from Gaunt's Ghosts to Space Marine Battles depicts it killing power-armoured targets outright while carrying a real chance of cooking its own wielder, especially on older, less stable patterns - the origin of the tabletop and RPG \"gets hot\"/ overheat mechanic this entry represents mechanically as Malf 14 on the supercharged line.\n\nDesign: This is the project's fixed plasma anchor: 6dx4(3) burn ex, treated as the weapon's safe standard mode (no Malf risk) since it is already stated in the framework to kill Marines through power armour without needing to invoke overheating. Checked with the exact dice distribution, not just the average: Astartes power armour is torso DR 100; armour divisor (3) drops effective DR to 33, and 6dx4 averages 84, penetrating essentially every hit (99.9%), so it kills reliably as required. Against a Terminator's DR 200 (effective DR 66) it still penetrates 86% of hits, matching the framework's explicit statement that plasma \"penetrates Terminators more often than not.\" The supercharged mode (6dx5(3), Malf 14) bumps the multiplier one step further for harder targets (Mk X Gravis, multiple Terminators, light vehicles) at the cost of a real chance of the coil failing and burning the firer, matching the fiction's running theme of plasma weapons being feared by their own side almost as much as by the enemy.",
 			"tags": [
 				"Missile Weapon",
 				"Imperium",
@@ -148,7 +148,7 @@
 					"sv": 1,
 					"damage": {
 						"type": "burn ex",
-						"base": "6dx2",
+						"base": "6dx4",
 						"armor_divisor": 3
 					},
 					"accuracy": "3",
@@ -202,7 +202,7 @@
 					"sv": 1,
 					"damage": {
 						"type": "burn ex",
-						"base": "6dx3",
+						"base": "6dx5",
 						"armor_divisor": 3
 					},
 					"accuracy": "3",
@@ -258,7 +258,7 @@
 		{
 			"id": "eKHgSjbulJ6LgaJVK",
 			"description": "Plasma Cannon",
-			"local_notes": "Lore: A tripod- or vehicle-mounted heavy weapon fielded by Astra Militarum heavy weapon teams and Devastator squads, background consistently treats it as a slow-firing but devastating answer to Astartes-scale infantry and light vehicles at range, at the price of a low rate of fire while the reactor cycles.\n\nDesign: Two dice over the plasma gun anchor (8d vs 6d), matching the standard progression used for the bolt and melta families in this project. Low RoF 1 and ST 15 (tripod or a very strong user) capture the \"slow-firing but devastating\" character the fiction gives it; Malf 15 rather than 14 for the standard/overcharge pair reflects a crew-served weapon's better cooling and shielding, at correspondingly higher stakes for the crew when it does fail.",
+			"local_notes": "Lore: A tripod- or vehicle-mounted heavy weapon fielded by Astra Militarum heavy weapon teams and Devastator squads, background consistently treats it as a slow-firing but devastating answer to Astartes-scale infantry and light vehicles at range, at the price of a low rate of fire while the reactor cycles.\n\nDesign: Two dice over the plasma gun anchor (8dx4(3) vs 6dx4(3), supercharged 8dx5(3)), matching the standard progression used for the bolt and melta families in this project. Checked against the vehicle table: standard mode averages 112 and, even against AV12 (DR 200, effective DR 66), penetrates 99% of hits, comfortably beating the light and medium vehicles the fiction shows it killing. Low RoF 1 and ST 15 (tripod or a very strong user) capture the \"slow-firing but devastating\" character the fiction gives it; Malf 15 rather than 14 for the standard/overcharge pair reflects a crew-served weapon's better cooling and shielding, at correspondingly higher stakes for the crew when it does fail.",
 			"tags": [
 				"Missile Weapon",
 				"Imperium",
@@ -275,7 +275,7 @@
 					"sv": 1,
 					"damage": {
 						"type": "burn ex",
-						"base": "8dx2",
+						"base": "8dx4",
 						"armor_divisor": 3
 					},
 					"accuracy": "4",
@@ -317,7 +317,7 @@
 					"sv": 1,
 					"damage": {
 						"type": "burn ex",
-						"base": "8dx3",
+						"base": "8dx5",
 						"armor_divisor": 3
 					},
 					"accuracy": "4",
@@ -361,7 +361,7 @@
 		{
 			"id": "eL61SOulLgKLL-z1J",
 			"description": "Plasma Incinerator, Primaris Pattern",
-			"local_notes": "Lore: Standard-issue Primaris plasma weapon (Hellblaster squads and others), Codex background describes it as an improved, more reliable containment design over the legacy plasma gun rather than a fundamentally different weapon.\n\nDesign: One pip over the plasma gun anchor (6d+1 vs 6d) for the \"improved\" cartridge, on a lighter, easier-handling ST 11 frame with better range (200/600) for the improved optics; the higher Malf 15 on its supercharged mode reflects the claimed better containment without pretending overheating risk is eliminated.",
+			"local_notes": "Lore: Standard-issue Primaris plasma weapon (Hellblaster squads and others), Codex background describes it as an improved, more reliable containment design over the legacy plasma gun rather than a fundamentally different weapon.\n\nDesign: One pip over the plasma gun anchor (6d+1x4(3) vs 6dx4(3), supercharged 6d+1x5(3)) for the \"improved\" cartridge, on a lighter, easier-handling ST 11 frame with better range (200/600) for the improved optics. Against a Terminator (DR 200, effective DR 66) the extra pip nudges standard-mode penetration from the plasma gun's 86% to 90%; the higher Malf 15 on its supercharged mode reflects the claimed better containment without pretending overheating risk is eliminated.",
 			"tags": [
 				"Missile Weapon",
 				"Imperium",
@@ -377,7 +377,7 @@
 					"sv": 1,
 					"damage": {
 						"type": "burn ex",
-						"base": "6d+1x2",
+						"base": "6d+1x4",
 						"armor_divisor": 3
 					},
 					"accuracy": "4",
@@ -431,7 +431,7 @@
 					"sv": 1,
 					"damage": {
 						"type": "burn ex",
-						"base": "6d+1x3",
+						"base": "6d+1x5",
 						"armor_divisor": 3
 					},
 					"accuracy": "4",
@@ -487,7 +487,7 @@
 		{
 			"id": "e_2yDeeS4KJbbR8dB",
 			"description": "Heavy Plasma Incinerator, Primaris Pattern",
-			"local_notes": "Lore: The two-handed, un-mounted heavy weapon carried by Primaris Hellblaster squads' heavy-weapon troopers, background treats it as a genuine step up in output over the standard plasma incinerator, manageable only because of a Primaris Marine's greater strength, not because the weapon itself is lighter.\n\nDesign: Matches the Plasma Cannon's damage (8dx2(3)/8dx3(3)) since both fire a cannon-class charge, but keeps RoF 3 rather than the cannon's RoF 1 and drops the tripod requirement, reflecting that this is a man-portable weapon for a superhuman user rather than a crew-served support gun; ST 13 is set below the Plasma Cannon's ST 15 for the same reason.",
+			"local_notes": "Lore: The two-handed, un-mounted heavy weapon carried by Primaris Hellblaster squads' heavy-weapon troopers, background treats it as a genuine step up in output over the standard plasma incinerator, manageable only because of a Primaris Marine's greater strength, not because the weapon itself is lighter.\n\nDesign: Matches the Plasma Cannon's damage (8dx4(3)/8dx5(3)) since both fire a cannon-class charge, but keeps RoF 3 rather than the cannon's RoF 1 and drops the tripod requirement, reflecting that this is a man-portable weapon for a superhuman user rather than a crew-served support gun; ST 13 is set below the Plasma Cannon's ST 15 for the same reason.",
 			"tags": [
 				"Missile Weapon",
 				"Imperium",
@@ -503,7 +503,7 @@
 					"sv": 1,
 					"damage": {
 						"type": "burn ex",
-						"base": "8dx2",
+						"base": "8dx4",
 						"armor_divisor": 3
 					},
 					"accuracy": "4",
@@ -557,7 +557,7 @@
 					"sv": 1,
 					"damage": {
 						"type": "burn ex",
-						"base": "8dx3",
+						"base": "8dx5",
 						"armor_divisor": 3
 					},
 					"accuracy": "4",

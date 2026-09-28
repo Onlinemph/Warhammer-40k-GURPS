@@ -109,7 +109,7 @@ Vehicle void shields will use the same rules at larger scale.
 | Lascannon | 8d×8(5) burn | Kills tanks (AV14 eff. DR 70) and Terminators. |
 | Krak missile | 6d×6(3) cr | Reliable vs AV12–13 (90%); about two in three vs AV14. |
 | Chainsword | sw+2d(2) cut | Tears flesh and flak; bites carapace; skids off power armour. |
-| Power sword | sw+3d(10) cut | The disruption field shears power armour whoever holds it. |
+| Power sword | sw+3d+1(10) cut | The disruption field shears power armour whoever holds it. |
 | Power fist | thr+8d(10) cr | Kills Terminators in Astartes hands. |
 | Thunder hammer | sw+6d(10) cr | The Terminator-killer; knockback. |
 

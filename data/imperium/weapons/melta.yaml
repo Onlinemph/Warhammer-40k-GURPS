@@ -55,7 +55,7 @@ items:
     tags: [Missile Weapon, Imperium, Astra Militarum, Adeptus Astartes]
     weapons:
       - usage: Short range (up to ½D)
-        damage: 8dx3(10) burn
+        damage: 8dx6(10) burn
         acc: 2
         range: 10/50
         rof: 1
@@ -65,7 +65,7 @@ items:
         rcl: 1
         skill: Beam Weapons (Rifle)
       - usage: Beyond ½D
-        damage: 4dx3(5) burn
+        damage: 4dx6(3) burn
         acc: 2
         range: 10/50
         rof: 1
@@ -75,28 +75,31 @@ items:
         rcl: 1
         skill: Beam Weapons (Rifle)
         notes: >
-          Half damage past ½D (the usual GURPS rule) and the armour divisor falls
-          from (10) to (5) as the fusion beam loses cohesion. Still dangerous to light and
-          medium vehicles (meltagun: avg 42 vs AV12 DR 120/5 = 24), no longer a heavy-tank killer.
+          Half the dice past ½D (the usual GURPS rule) and the armour divisor falls
+          from (10) to (3) as the fusion beam loses cohesion. Still wrecks light and
+          medium vehicles (avg 84 vs AV12 DR 200/3 = eff. 66, 76% penetration), but rarely
+          beats a Leman Russ or Land Raider's frontal glacis (AV14, 5%).
     lore: >
       The Imperium's dedicated close-range anti-armour infantry weapon, flash-vaporising the
       target's outer surface with a superheated fusion reaction; fiction across every era treats
       it as able to gut a tank at point-blank range and as nearly worthless at any distance, in
       sharp contrast to a lascannon's much longer reach.
     design: >
-      This is the project's fixed melta anchor: 8dx3(10) burn at ½D, "much less beyond." Checked
-      against the vehicle armour table: AV14 (DR 250, a Leman Russ or Land Raider's front) has
-      effective DR 25 against the (10) armour divisor; 8dx3 averages 84, more than three times the
-      effective DR, so it easily beats even the heaviest armour in the framework's table at ½D
-      range, as the assignment requires. The sharp drop-off is modelled as a second weapon line
-      rather than a formula: beyond ½D the round keeps only its base dice (4d burn), with neither
-      the x3 multiplier nor the (10) armour divisor, representing the fusion reaction losing
-      coherence in open air before it reaches the target. This is a deliberate departure from
-      default GURPS range rules (which do not normally reduce damage with range) rather than an
-      anchor conflict; it exists because the framework explicitly calls for "much less beyond," and
-      a flat halving of the anchor's own huge multiplier would still be an anti-tank weapon at any
-      range, which the fiction does not support. ST 10 and a very short 10/50 range band (versus a
-      boltgun's 200/1000) capture the weapon's role as a close-assault specialist, not a rifle.
+      This is the project's fixed melta anchor: 8dx6(10) burn at ½D, "much less beyond" 4dx6(3).
+      Checked against the vehicle armour table with the exact dice distribution: AV14 (DR 350, a
+      Leman Russ or Land Raider's front) has effective DR 35 against the (10) armour divisor; 8dx6
+      averages 168, always penetrating, so it easily beats even the heaviest armour in the
+      framework's table at ½D range, as the assignment requires - the same holds at every lower AV
+      on the table. The sharp drop-off is modelled as a second weapon line rather than a formula:
+      beyond ½D the round keeps only half its dice (4d instead of 8d, the usual GURPS halving for
+      range) but keeps a x6 multiplier and a much weaker (3) armour divisor instead of (10),
+      representing the fusion reaction losing coherence and cohesion in open air before it reaches
+      the target. Checked against the AV table: beyond ½D it averages 84 and still wrecks AV12 (DR
+      200, effective DR 66) 76% of the time and AV10-11 (DR 100/150) 94-100% of the time, but drops
+      to 34% against AV13 (DR 275) and just 5% against AV14 (DR 350) - "almost never beats" the
+      heaviest tanks, exactly as the framework specifies. ST 10 and a very short 10/50 range band
+      (versus a boltgun's 200/1000) capture the weapon's role as a close-assault specialist, not a
+      rifle.
 
   - name: Multi-Melta
     tl: 11
@@ -106,7 +109,7 @@ items:
     tags: [Missile Weapon, Imperium, Astra Militarum, Adeptus Astartes]
     weapons:
       - usage: Short range (up to ½D)
-        damage: 10dx3(10) burn
+        damage: 10dx6(10) burn
         acc: 3
         range: 15/75
         rof: 1
@@ -116,7 +119,7 @@ items:
         rcl: 1
         skill: Gunner (Beams)
       - usage: Beyond ½D
-        damage: 5dx3(5) burn
+        damage: 5dx6(3) burn
         acc: 3
         range: 15/75
         rof: 1
@@ -126,16 +129,21 @@ items:
         rcl: 1
         skill: Gunner (Beams)
         notes: >
-          Half damage past ½D (the usual GURPS rule) and the armour divisor falls
-          from (10) to (5) as the fusion beam loses cohesion. Still dangerous to light and
-          medium vehicles (meltagun: avg 42 vs AV12 DR 120/5 = 24), no longer a heavy-tank killer.
+          Half the dice past ½D (the usual GURPS rule) and the armour divisor falls
+          from (10) to (3) as the fusion beam loses cohesion. Unlike the shoulder-fired meltagun,
+          this still wrecks AV13 (avg 105 vs DR 275/3 = eff. 91, 70%) and has a real chance against
+          AV14 (31%), reflecting the bigger reactor's reserve of power.
     lore: >
       A tripod- or vehicle-mounted heavy melta weapon fielded by heavy weapon teams and as a common
       tank sponson/hull weapon; background treats it exactly as a bigger meltagun, killing the
       heaviest vehicles at short range and rapidly losing effect beyond it.
     design: >
-      Two dice over the meltagun anchor (10d vs 8d), matching this project's standard heavy-weapon
-      progression, on a slightly longer 15/75 range band appropriate to a crew-served weapon with a
-      bigger reactor. ST 13 and Gunner (Beams) reflect a support weapon needing a mount or a very
-      strong user rather than a shoulder-fired arm; the same short-range/beyond-½D split as the
-      meltagun models the identical sharp fall-off.
+      Two dice over the meltagun anchor (10dx6(10) vs 8dx6(10) short, 5dx6(3) vs 4dx6(3) beyond),
+      matching this project's standard heavy-weapon progression, on a slightly longer 15/75 range
+      band appropriate to a crew-served weapon with a bigger reactor. At short range it averages 210
+      and penetrates every vehicle and personal armour on the tables without exception, same as the
+      meltagun; beyond ½D the extra die keeps it meaningfully ahead of the meltagun against the
+      heaviest tanks (31% vs AV14, versus the meltagun's 5%) while still tailing off, matching the
+      fiction's "bigger meltagun" framing rather than a full return to short-range lethality. ST 13
+      and Gunner (Beams) reflect a support weapon needing a mount or a very strong user rather than
+      a shoulder-fired arm.
