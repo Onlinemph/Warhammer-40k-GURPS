@@ -28,3 +28,4 @@ Anchor and rule changes to `framework.md`, with the reason for each.
 - **Ork anchors added** (Boy ST 22/DX 11/HT 13/HP 26 up to Warboss ST 32/SM +1; Ork gear Malf 14, low Acc, crude armour Weak Points 7-8).
 - **Astartes and Custodes Basic Move +4; Custodes DX 20** (user direction). Marine Move 12, Custodian Move 14. Custodes package DX +9 (655 points), DX skills re-costed to hold levels. Sister of Silence gains Guns (Rifle/Pistol); her Psyniscience removed (a Pariah can't sense the warp).
 - **Enhanced Move (Ground)** (user direction: Marines and Custodes run very fast): Astartes 1/2 (sprint ×1.5, ~60 km/h), Custodes 1 (×2, ~90 km/h).
+- **Scouts get Enhanced Move (Ground) 1/2** (user direction), same as full Astartes.
