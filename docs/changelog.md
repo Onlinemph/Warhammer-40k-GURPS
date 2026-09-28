@@ -35,3 +35,4 @@ Anchor and rule changes to `framework.md`, with the reason for each.
 - **Gauss divisor (3) → (4)**: the anchor's own description (strips flak and carapace) needed (4); at (3) a gauss flayer got through carapace only 28% of the time.
 - **Aeldari speed** (user direction): ancestry Basic Move +3 and Enhanced Move 1/2; Aspect Training a further Basic Move +2. Guardian Move 9, Aspect Warrior and Exarch Move 12.
 - **Tyranid anchors added** (bioforms from Termagant to Carnifex; chitin DR 25-150; weapon-symbiotes as traits; synapse and Shadow in the Warp; rending claws).
+- **Termagant symbiotes raised for flak 30**: fleshborer 6d(2) pi+, devourer 5d(2) pi++, spinefists 3d(2) pi+ (burrowing beetles and worms); at the original anchors Termagants could barely hurt flak-armoured Guardsmen.

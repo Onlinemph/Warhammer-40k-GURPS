@@ -342,9 +342,9 @@ Weapon-symbiote anchors:
 
 | Symbiote | Anchor |
 |---|---|
-| Fleshborer | Fires flesh-eating beetles: 6d pi+, RoF 1, short range; kills unarmoured men, struggles against carapace |
-| Spinefists | 3d pi+ spines, RoF 6 |
-| Devourer | Brain-leech worms: 4d(2) pi++, RoF 8 |
+| Fleshborer | Fires flesh-eating beetles that burrow through armour: 6d(2) pi+, RoF 1, short range; punches flak, rarely carapace |
+| Spinefists | 3d(2) pi+ spines, RoF 6 |
+| Devourer | Brain-leech worms that bore into the target: 5d(2) pi++, RoF 8 |
 | Deathspitter | Acid maggots: 6d×2(2) cor |
 | Venom cannon | 6d×3(3) cr ex |
 | Barbed strangler | Seed pod that grows barbed vines: 4d cr ex [3d cut] area |
