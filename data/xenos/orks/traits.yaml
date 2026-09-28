@@ -279,6 +279,20 @@ items:
           soaks up more damage than its ST alone would suggest, matching
           how much punishment a Boy shrugs off in the fiction. 120+20-40
           +30+8 = 138 points.
+      - name: Increased Basic Move (Ork)
+        points: 15
+        attributes: {basic_move: 3}
+        tags: [Advantage, Physical, Xenos, Orks]
+        lore: >
+          Ork legs are short, but they cover ground at a lumbering,
+          relentless gallop: a mob at full charge outruns a marching
+          human line and is on top of it before it can reload. Codex
+          background and Ork fiction alike treat the onrushing
+          Waaagh! as a stampede, not a march.
+        design: >
+          Increased Basic Move +3 (B17, 5/level, 15 points): Basic Speed
+          6.0 gives a Boy Move 6, so +3 brings the Ork baseline to Move 9,
+          faster than a human's 6-7 without approaching an Eldar's.
       - *thick_hide
       - *high_pain_threshold
       - *hard_to_kill
@@ -314,12 +328,12 @@ items:
       Brooks' Brutal Kunnin', calibrated against Dark Heresy/Rogue
       Trader/Deathwatch/Only War Ork material for relative scale.
     design: >
-      138 (Attribute Modifiers) + 10 (Thick Hide) + 10 (High Pain
+      138 (Attribute Modifiers) + 15 (Basic Move +3) + 10 (Thick Hide) + 10 (High Pain
       Threshold) + 6 (Hard to Kill 3) + 5 (Rapid Healing) + 6 (Thick
       Skull) + 15 (Resistant to Disease and Toxins) + 0
       (Fungal Physiology) - 10 (Bloodlust) - 10 (Impulsiveness) - 5
       (Overconfidence) + 10 (Ork Kunnin' 1) + 5 (WAAAGH! Gestalt) + 6
-      (Fearlessness 3) = 186 points of physiology alone, before skills — see the Ork Boy template
+      (Fearlessness 3) = 201 points of physiology alone, before skills — see the Ork Boy template
       for a full character, and the growth lenses and Oddboy Talents below
       for Nobs, Warbosses, Meks, Painboyz and Weirdboyz built on top of it.
 
@@ -341,6 +355,17 @@ items:
           -1 is the framework's own figure for a Gretchin's small stature;
           it carries no independent point cost here since no ST is being
           bought above baseline for it to discount. -20+20-20 = -20 points.
+      - name: Increased Basic Move (Gretchin)
+        points: 10
+        attributes: {basic_move: 2}
+        tags: [Advantage, Physical, Xenos, Orks]
+        lore: >
+          Grots are small and scurrying: they bolt between the legs of
+          bigger Orks and away from trouble at a surprising pace.
+        design: >
+          Increased Basic Move +2 (B17, 5/level, 10 points): Basic Speed
+          5.25 gives Move 5, so +2 gives Move 7, quick for a small body
+          without matching a Boy's Move 9.
       - *fungal_physiology
       - name: Resistant to Disease and Toxins (Minor)
         points: 10
@@ -405,9 +430,9 @@ items:
       fiction, where a Grot's main survival strategy is staying near a
       bigger, meaner Ork and knowing when to vanish.
     design: >
-      -20 (Attribute Modifiers) + 0 (Fungal Physiology) + 10 (Resistant,
+      -20 (Attribute Modifiers) + 10 (Basic Move +2) + 0 (Fungal Physiology) + 10 (Resistant,
       Minor) + 5 (Grot Sneakiness) - 10 (Cowardice) - 5 (Social Stigma) - 1
-      (Squeals and Bolts) = -21 points of physiology alone — a genuinely
+      (Squeals and Bolts) = -11 points of physiology alone — a genuinely
       weak template before skills, matching Gretchin's place as the
       Imperium's most disposable enemy rather than a threat in its own
       right; see the Gretchin template for the full (still very modest)
@@ -430,7 +455,8 @@ items:
           HT +1 (B15, 10/level, 10) for HT 14. Extra Hit Points
           +2 (B16, 2/level, 4) on top of the Boy package's own +4, for a
           combined extra +6 over the new ST-26 base of 26, giving HP 32.
-          40+20+10+4 = 74 points.
+          40+20+10+4 = 74 points. Basic Move comes from the Ork Physiology
+          package (Move 9 with the Nob's Basic Speed 6.25).
       - name: "Big Nob (SM +1)"
         points: 0
         attributes: {sm: 1}
@@ -456,7 +482,7 @@ items:
       meaner, and canny enough to have picked up real tactical sense the
       hard way.
     design: >
-      74 points, added to the Ork Physiology package's 186 for 260 points
+      74 points, added to the Ork Physiology package's 201 for 275 points
       of physiology before skills. See the Ork Nob template.
 
   - name: "Growth Lens: Warboss"
@@ -551,6 +577,15 @@ items:
           of personality (backed by a fist the size of a Rhino) rather than
           any chain of command.
         design: Charisma 3 (B41, 5/level, 15 points), used in place of a formal Rank trait since Ork command has no such structure.
+      - name: Increased Basic Move (Warboss)
+        points: 5
+        attributes: {basic_move: 1}
+        tags: [Advantage, Physical, Xenos, Orks]
+        lore: A Warboss leads the charge from the front; nobody outruns the Ork who is chasing them personally.
+        design: >
+          Increased Basic Move +1 (B17, 5/level, 5 points), on top of the
+          Ork Physiology package's +3: Basic Speed 7.25 gives Move 7, so
+          +4 in total brings a Warboss to Move 11.
       - name: Increased Basic Speed
         points: 10
         attributes: {basic_speed: 0.5}
@@ -577,8 +612,8 @@ items:
     design: >
       166 (Attribute Modifiers) + 15 (Combat Reflexes) + 8 (Fearlessness 4)
       + 10 (Regeneration) + 6 (further Hard to Kill 3) + 15 (Reputation) +
-      15 (Charisma 3) + 10 (Basic Speed) + 20 (Wealth) = 265 points, added
-      to the Ork Physiology package's 186 for 451 points of physiology and
+      15 (Charisma 3) + 10 (Basic Speed) + 5 (Basic Move +1) + 20 (Wealth)
+      = 270 points, added to the Ork Physiology package's 201 for 471 points of physiology and
       command presence before skills. See the Ork Warboss template, which
       lands the full character just under the low end of framework.md's
       Astartes point tier (550-800) — appropriate for a solid, competent Warboss;

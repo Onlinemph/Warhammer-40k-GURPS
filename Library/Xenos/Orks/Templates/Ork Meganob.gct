@@ -1,12 +1,12 @@
 {
 	"version": 5,
 	"id": "BXEFD7B8D8O7iZaBp",
-	"notes": "A Meganob: a Nob wearing Mega Armour (Xenos/Orks/Armour/Ork Armour and Gear.eqp, DR 150) and swinging a Power Klaw or Killsaw, the heavy shock infantry of a Waaagh. Built as a Nob (Ork Physiology plus Growth Lens: Nob) with a shock-fighter skill package; the armour and klaw are equipment, not included in the points. Point math: Ork Physiology 186 + Growth Lens: Nob 74 + skills 23 = 283 points. Stats: ST 26, DX 11, IQ 9, HT 14, HP 32, Will 9, Per 9, SM 0 (before mega armour's servo ST). Sits in framework.md's Elite human tier (200-350); the armour is what makes a Meganob a match for Terminators, not the body inside it. Enable at most one Klan lens for flavor.\n",
+	"notes": "A Meganob: a Nob wearing Mega Armour (Xenos/Orks/Armour/Ork Armour and Gear.eqp, DR 150) and swinging a Power Klaw or Killsaw, the heavy shock infantry of a Waaagh. Built as a Nob (Ork Physiology plus Growth Lens: Nob) with a shock-fighter skill package; the armour and klaw are equipment, not included in the points. Point math: Ork Physiology 201 + Growth Lens: Nob 74 + skills 23 = 298 points. Stats: ST 26, DX 11, IQ 9, HT 14, HP 32, Will 9, Per 9, Move 9 unarmoured, about 6 in Mega Armour (SM 0; before mega armour's servo ST). Sits in framework.md's Elite human tier (200-350); the armour is what makes a Meganob a match for Terminators, not the body inside it. Enable at most one Klan lens for flavor.\n",
 	"traits": [
 		{
 			"id": "TrayJ9pmujhlAEjCz",
 			"name": "Ork Physiology",
-			"local_notes": "Lore: An Ork Boy: the baseline greenskin warrior, grown fast, fed on violence, and built to get bigger and meaner the longer it survives. This trait is the shared baseline every growth lens (Nob, Warboss) and every Oddboy specialisation (Mek, Painboy, Weirdboy) builds on top of. Primary sources: Codex: Orks background across editions, Nate Crowley's Ghazghkull Thraka: Prophet of the Waaagh! and Mike Brooks' Brutal Kunnin', calibrated against Dark Heresy/Rogue Trader/Deathwatch/Only War Ork material for relative scale.\n\nDesign: 138 (Attribute Modifiers) + 10 (Thick Hide) + 10 (High Pain Threshold) + 6 (Hard to Kill 3) + 5 (Rapid Healing) + 6 (Thick Skull) + 15 (Resistant to Disease and Toxins) + 0 (Fungal Physiology) - 10 (Bloodlust) - 10 (Impulsiveness) - 5 (Overconfidence) + 10 (Ork Kunnin' 1) + 5 (WAAAGH! Gestalt) + 6 (Fearlessness 3) = 186 points of physiology alone, before skills — see the Ork Boy template for a full character, and the growth lenses and Oddboy Talents below for Nobs, Warbosses, Meks, Painboyz and Weirdboyz built on top of it.",
+			"local_notes": "Lore: An Ork Boy: the baseline greenskin warrior, grown fast, fed on violence, and built to get bigger and meaner the longer it survives. This trait is the shared baseline every growth lens (Nob, Warboss) and every Oddboy specialisation (Mek, Painboy, Weirdboy) builds on top of. Primary sources: Codex: Orks background across editions, Nate Crowley's Ghazghkull Thraka: Prophet of the Waaagh! and Mike Brooks' Brutal Kunnin', calibrated against Dark Heresy/Rogue Trader/Deathwatch/Only War Ork material for relative scale.\n\nDesign: 138 (Attribute Modifiers) + 15 (Basic Move +3) + 10 (Thick Hide) + 10 (High Pain Threshold) + 6 (Hard to Kill 3) + 5 (Rapid Healing) + 6 (Thick Skull) + 15 (Resistant to Disease and Toxins) + 0 (Fungal Physiology) - 10 (Bloodlust) - 10 (Impulsiveness) - 5 (Overconfidence) + 10 (Ork Kunnin' 1) + 5 (WAAAGH! Gestalt) + 6 (Fearlessness 3) = 201 points of physiology alone, before skills — see the Ork Boy template for a full character, and the growth lenses and Oddboy Talents below for Nobs, Warbosses, Meks, Painboyz and Weirdboyz built on top of it.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -48,6 +48,25 @@
 							"type": "attribute_bonus",
 							"attribute": "hp",
 							"amount": 4
+						}
+					]
+				},
+				{
+					"id": "tX-jX6qDkqWMOIYx6",
+					"name": "Increased Basic Move (Ork)",
+					"local_notes": "Lore: Ork legs are short, but they cover ground at a lumbering, relentless gallop: a mob at full charge outruns a marching human line and is on top of it before it can reload. Codex background and Ork fiction alike treat the onrushing Waaagh! as a stampede, not a march.\n\nDesign: Increased Basic Move +3 (B17, 5/level, 15 points): Basic Speed 6.0 gives a Boy Move 6, so +3 brings the Ork baseline to Move 9, faster than a human's 6-7 without approaching an Eldar's.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Orks"
+					],
+					"base_points": 15,
+					"features": [
+						{
+							"type": "attribute_bonus",
+							"attribute": "basic_move",
+							"amount": 3
 						}
 					]
 				},
@@ -267,7 +286,7 @@
 		{
 			"id": "Tkvi_sZ5r9qqS2UT_",
 			"name": "Growth Lens: Nob",
-			"local_notes": "Lore: A Nob (short for \"Nobz,\" itself short for \"Nobber\") is a Boy who has survived enough fights, and eaten enough of the mob's best food, to keep growing well past where most Boyz stop. Nobs are the Ork mob's natural toughs, bodyguards and squad bosses — bigger, tougher and meaner, and canny enough to have picked up real tactical sense the hard way.\n\nDesign: 74 points, added to the Ork Physiology package's 186 for 260 points of physiology before skills. See the Ork Nob template.",
+			"local_notes": "Lore: A Nob (short for \"Nobz,\" itself short for \"Nobber\") is a Boy who has survived enough fights, and eaten enough of the mob's best food, to keep growing well past where most Boyz stop. Nobs are the Ork mob's natural toughs, bodyguards and squad bosses — bigger, tougher and meaner, and canny enough to have picked up real tactical sense the hard way.\n\nDesign: 74 points, added to the Ork Physiology package's 201 for 275 points of physiology before skills. See the Ork Nob template.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -279,7 +298,7 @@
 				{
 					"id": "t5AMmNalqI89Tu5fN",
 					"name": "Attribute Modifiers (Nob)",
-					"local_notes": "Design: Framework target over the Boy package: ST 26, DX 11 (unchanged), IQ 9, HT 14, HP 32, SM 0. Increased ST +4 (B14, 10/level, 40) for ST 26. Increased IQ +1 (B16, 20/level, 20) for IQ 9 — a Nob has learned a little sense surviving long enough to grow. Increased HT +1 (B15, 10/level, 10) for HT 14. Extra Hit Points +2 (B16, 2/level, 4) on top of the Boy package's own +4, for a combined extra +6 over the new ST-26 base of 26, giving HP 32. 40+20+10+4 = 74 points.",
+					"local_notes": "Design: Framework target over the Boy package: ST 26, DX 11 (unchanged), IQ 9, HT 14, HP 32, SM 0. Increased ST +4 (B14, 10/level, 40) for ST 26. Increased IQ +1 (B16, 20/level, 20) for IQ 9 — a Nob has learned a little sense surviving long enough to grow. Increased HT +1 (B15, 10/level, 10) for HT 14. Extra Hit Points +2 (B16, 2/level, 4) on top of the Boy package's own +4, for a combined extra +6 over the new ST-26 base of 26, giving HP 32. 40+20+10+4 = 74 points. Basic Move comes from the Ork Physiology package (Move 9 with the Nob's Basic Speed 6.25).",
 					"tags": [
 						"Physical"
 					],

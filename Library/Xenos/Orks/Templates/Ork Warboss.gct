@@ -1,12 +1,12 @@
 {
 	"version": 5,
 	"id": "B-IUUwtR-0P3cfOEr",
-	"notes": "A Warboss: the biggest, meanest, canniest Ork running a Waaagh. Point math: Ork Physiology 186 + Growth Lens: Warboss 265 + skills 96 = 547 points. Stats: ST 32, DX 12, IQ 10, HT 15, HP 40, Will 10, Per 10, SM +1 — framework.md's Warboss anchor line exactly. This lands just under the low end of framework.md's Astartes tier (550-800): a solid, competent Warboss who genuinely out-muscles a Space Marine, built mostly from sheer physical scale, battlefield toughness and raw command presence (see Charisma and Wealth in the Growth Lens) rather than the breadth of skill and equipment a Chapter gives its Battle-Brothers. A legendary, named Warboss (a Ghazghkull Thraka-tier figure) should be built as a bespoke NPC well above this template, in framework.md's Heroes and Legends tier (1,000-3,000) — this is the \"typical, dangerous Warboss\" baseline, not the biggest name in the setting. Enable at most one Klan lens for flavor.\n",
+	"notes": "A Warboss: the biggest, meanest, canniest Ork running a Waaagh. Point math: Ork Physiology 201 + Growth Lens: Warboss 270 + skills 96 = 567 points. Stats: ST 32, DX 12, IQ 10, HT 15, HP 40, Will 10, Per 10, Move 11, SM +1 — framework.md's Warboss anchor line exactly. This lands at the low end of framework.md's Astartes tier (550-800): a solid, competent Warboss who genuinely out-muscles a Space Marine, built mostly from sheer physical scale, battlefield toughness and raw command presence (see Charisma and Wealth in the Growth Lens) rather than the breadth of skill and equipment a Chapter gives its Battle-Brothers. A legendary, named Warboss (a Ghazghkull Thraka-tier figure) should be built as a bespoke NPC well above this template, in framework.md's Heroes and Legends tier (1,000-3,000) — this is the \"typical, dangerous Warboss\" baseline, not the biggest name in the setting. Enable at most one Klan lens for flavor.\n",
 	"traits": [
 		{
 			"id": "TShA_BBFEc8BY3gBK",
 			"name": "Ork Physiology",
-			"local_notes": "Lore: An Ork Boy: the baseline greenskin warrior, grown fast, fed on violence, and built to get bigger and meaner the longer it survives. This trait is the shared baseline every growth lens (Nob, Warboss) and every Oddboy specialisation (Mek, Painboy, Weirdboy) builds on top of. Primary sources: Codex: Orks background across editions, Nate Crowley's Ghazghkull Thraka: Prophet of the Waaagh! and Mike Brooks' Brutal Kunnin', calibrated against Dark Heresy/Rogue Trader/Deathwatch/Only War Ork material for relative scale.\n\nDesign: 138 (Attribute Modifiers) + 10 (Thick Hide) + 10 (High Pain Threshold) + 6 (Hard to Kill 3) + 5 (Rapid Healing) + 6 (Thick Skull) + 15 (Resistant to Disease and Toxins) + 0 (Fungal Physiology) - 10 (Bloodlust) - 10 (Impulsiveness) - 5 (Overconfidence) + 10 (Ork Kunnin' 1) + 5 (WAAAGH! Gestalt) + 6 (Fearlessness 3) = 186 points of physiology alone, before skills — see the Ork Boy template for a full character, and the growth lenses and Oddboy Talents below for Nobs, Warbosses, Meks, Painboyz and Weirdboyz built on top of it.",
+			"local_notes": "Lore: An Ork Boy: the baseline greenskin warrior, grown fast, fed on violence, and built to get bigger and meaner the longer it survives. This trait is the shared baseline every growth lens (Nob, Warboss) and every Oddboy specialisation (Mek, Painboy, Weirdboy) builds on top of. Primary sources: Codex: Orks background across editions, Nate Crowley's Ghazghkull Thraka: Prophet of the Waaagh! and Mike Brooks' Brutal Kunnin', calibrated against Dark Heresy/Rogue Trader/Deathwatch/Only War Ork material for relative scale.\n\nDesign: 138 (Attribute Modifiers) + 15 (Basic Move +3) + 10 (Thick Hide) + 10 (High Pain Threshold) + 6 (Hard to Kill 3) + 5 (Rapid Healing) + 6 (Thick Skull) + 15 (Resistant to Disease and Toxins) + 0 (Fungal Physiology) - 10 (Bloodlust) - 10 (Impulsiveness) - 5 (Overconfidence) + 10 (Ork Kunnin' 1) + 5 (WAAAGH! Gestalt) + 6 (Fearlessness 3) = 201 points of physiology alone, before skills — see the Ork Boy template for a full character, and the growth lenses and Oddboy Talents below for Nobs, Warbosses, Meks, Painboyz and Weirdboyz built on top of it.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -48,6 +48,25 @@
 							"type": "attribute_bonus",
 							"attribute": "hp",
 							"amount": 4
+						}
+					]
+				},
+				{
+					"id": "tfsklbqFyyDwfAqHl",
+					"name": "Increased Basic Move (Ork)",
+					"local_notes": "Lore: Ork legs are short, but they cover ground at a lumbering, relentless gallop: a mob at full charge outruns a marching human line and is on top of it before it can reload. Codex background and Ork fiction alike treat the onrushing Waaagh! as a stampede, not a march.\n\nDesign: Increased Basic Move +3 (B17, 5/level, 15 points): Basic Speed 6.0 gives a Boy Move 6, so +3 brings the Ork baseline to Move 9, faster than a human's 6-7 without approaching an Eldar's.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Orks"
+					],
+					"base_points": 15,
+					"features": [
+						{
+							"type": "attribute_bonus",
+							"attribute": "basic_move",
+							"amount": 3
 						}
 					]
 				},
@@ -267,7 +286,7 @@
 		{
 			"id": "TtyMfgW4qT8SiRD4t",
 			"name": "Growth Lens: Warboss",
-			"local_notes": "Lore: A Warboss is the biggest, meanest, canniest Ork in charge of a Waaagh — a Boy or Nob who kept fighting, kept winning, and kept growing until nothing short of a Space Marine or worse could reliably put him down. Ghazghkull Thraka: Prophet of the Waaagh! is the definitive Black Library portrait; current Codex: Orks background agrees a Warboss out-muscles a Space Marine on raw size and power alone.\n\nDesign: 166 (Attribute Modifiers) + 15 (Combat Reflexes) + 8 (Fearlessness 4) + 10 (Regeneration) + 6 (further Hard to Kill 3) + 15 (Reputation) + 15 (Charisma 3) + 10 (Basic Speed) + 20 (Wealth) = 265 points, added to the Ork Physiology package's 186 for 451 points of physiology and command presence before skills. See the Ork Warboss template, which lands the full character just under the low end of framework.md's Astartes point tier (550-800) — appropriate for a solid, competent Warboss; a legendary name like Ghazghkull himself would run well past this, into the framework's Heroes and Legends tier, and should be built as a bespoke NPC on top of this template rather than read off it directly.",
+			"local_notes": "Lore: A Warboss is the biggest, meanest, canniest Ork in charge of a Waaagh — a Boy or Nob who kept fighting, kept winning, and kept growing until nothing short of a Space Marine or worse could reliably put him down. Ghazghkull Thraka: Prophet of the Waaagh! is the definitive Black Library portrait; current Codex: Orks background agrees a Warboss out-muscles a Space Marine on raw size and power alone.\n\nDesign: 166 (Attribute Modifiers) + 15 (Combat Reflexes) + 8 (Fearlessness 4) + 10 (Regeneration) + 6 (further Hard to Kill 3) + 15 (Reputation) + 15 (Charisma 3) + 10 (Basic Speed) + 5 (Basic Move +1) + 20 (Wealth) = 270 points, added to the Ork Physiology package's 201 for 471 points of physiology and command presence before skills. See the Ork Warboss template, which lands the full character just under the low end of framework.md's Astartes point tier (550-800) — appropriate for a solid, competent Warboss; a legendary name like Ghazghkull himself would run well past this, into the framework's Heroes and Legends tier, and should be built as a bespoke NPC on top of this template rather than read off it directly.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -410,6 +429,25 @@
 					"can_level": true,
 					"levels": 3,
 					"base_points": 0
+				},
+				{
+					"id": "tmIee6sFnOMgSXLTx",
+					"name": "Increased Basic Move (Warboss)",
+					"local_notes": "Lore: A Warboss leads the charge from the front; nobody outruns the Ork who is chasing them personally.\n\nDesign: Increased Basic Move +1 (B17, 5/level, 5 points), on top of the Ork Physiology package's +3: Basic Speed 7.25 gives Move 7, so +4 in total brings a Warboss to Move 11.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Orks"
+					],
+					"base_points": 5,
+					"features": [
+						{
+							"type": "attribute_bonus",
+							"attribute": "basic_move",
+							"amount": 1
+						}
+					]
 				},
 				{
 					"id": "t07W9EJjWRAk9t41u",
