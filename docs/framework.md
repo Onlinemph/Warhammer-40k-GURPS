@@ -30,6 +30,7 @@ The Imperium doesn't have one TL; it has a TL it can *manufacture* and older TLs
 |---|---|---|
 | Primitive / feral worlds | 0–4 | Feral-world blades, black-powder |
 | Solid-projectile "stub" tech | 7–8 | Autogun, stubber, stub revolver, shotgun |
+| Crew-served support weapons | 6–8 | Mortar (6), autocannon, missile launcher (7–8) |
 | Standard Imperial manufacture | 10 | Lasgun, flak and carapace armour, chainsword, bolter, vox |
 | Advanced Imperial / rare | 11 | Plasma, melta, power weapons, power armour, hellgun |
 | Archeotech / STC-era | 12 | Dark Age relics, some Custodes and Mechanicus pieces |
