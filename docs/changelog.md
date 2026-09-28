@@ -18,4 +18,4 @@ Anchor and rule changes to `framework.md`, with the reason for each.
 ## Rescale (user direction)
 
 - **Every damage and armour anchor raised** to sit above GURPS's real-world baseline (modern plate ~DR 30–35, 5.56 mm ~5d pi). The first pass had Astartes power armour at DR 40, barely above a modern plate carrier. New anchors: flak 12, carapace 45, Sororitas 70, Astartes Mk VII 100 (the user's own table uses 86; they chose 100 for harder penetration), Gravis 130, Terminator 200; boltgun 6d×2(2) pi++ (user minimum); vehicles AV10–14 = DR 100/150/200/275/350; shields doubled. Lore matchups (lasgun vs flak, bolter vs Marine, plasma vs Terminator, lascannon vs tank) are re-checked at the new scale.
-- **Astartes ST 18 → 24** (user direction), HP 22 → 28; Neophyte ST 15 → 19. Keeps a single penetrating bolt (avg ~40 with follow-up) survivable at the new damage scale. Racial package 323 → 383 points.
+- **Astartes ST 18 → 30** (user direction), HP 22 → 34; Neophyte ST 15 → 24. Keeps a single penetrating bolt (avg ~40 with follow-up) survivable at the new damage scale. Racial package 323 → 443 points.
