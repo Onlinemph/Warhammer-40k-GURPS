@@ -194,11 +194,11 @@ Equipment is not included in these totals.
 
 ### Astartes physiology
 
-The nineteen gene-seed organs each become a trait (or several) inside an **Astartes** racial meta-trait, so a GM can remove or alter one for a Chapter's gene-seed (the Imperial Fists line lacks the Betcher's gland and Sus-an membrane; the Blood Angels carry the Red Thirst). Target physique: ~2.1–2.4 m unarmoured, heavily muscled, ST 30 (HP 34), DX 16 (package +5, plus training), Basic Move +4 (Move 12), HT 14+, faster reflexes than baseline humans, fused ribcage, no need to sleep for weeks. Stay at SM 0 unarmoured; a Terminator can be SM +1.
+The nineteen gene-seed organs each become a trait (or several) inside an **Astartes** racial meta-trait, so a GM can remove or alter one for a Chapter's gene-seed (the Imperial Fists line lacks the Betcher's gland and Sus-an membrane; the Blood Angels carry the Red Thirst). Target physique: ~2.1–2.4 m unarmoured, heavily muscled, ST 30 (HP 34), DX 16 (package +5, plus training), Basic Move +4 (Move 12) and Enhanced Move (Ground) 1/2, HT 14+, faster reflexes than baseline humans, fused ribcage, no need to sleep for weeks. Stay at SM 0 unarmoured; a Terminator can be SM +1.
 
 ### Adeptus Custodes physiology
 
-Each Custodian is individually gene-wrought from infancy, not built from gene-seed organs, and outclasses a Space Marine as far as a Marine outclasses a Guardsman. Targets: roughly 2.5–3 m tall, SM +1 unarmoured; ST 40 (with the SM +1 cost reduction), DX 20 (package 19 plus training), Basic Move +4, IQ 13, HT 16, Will 16, HP about 50, Basic Speed well above an Astartes; needs almost no sleep or food; immune to fear; lives for millennia. A Custodian Guardian template lands around 1,200–1,600 points without gear.
+Each Custodian is individually gene-wrought from infancy, not built from gene-seed organs, and outclasses a Space Marine as far as a Marine outclasses a Guardsman. Targets: roughly 2.5–3 m tall, SM +1 unarmoured; ST 40 (with the SM +1 cost reduction), DX 20 (package 19 plus training), Basic Move +4, Enhanced Move (Ground) 1, IQ 13, HT 16, Will 16, HP about 50, Basic Speed well above an Astartes; needs almost no sleep or food; immune to fear; lives for millennia. A Custodian Guardian template lands around 1,200–1,600 points without gear.
 
 Custodes armour and arms:
 
