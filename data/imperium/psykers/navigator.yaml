@@ -1,0 +1,96 @@
+kind: template
+output: Imperium/Templates/Navigator.gct
+notes: >
+  A House Navigator: minor interstellar nobility born with the third eye,
+  bred over millennia by the Navis Nobilite to survive and steer by it.
+  Deliberately does not include Psyker (Talent) or Unusual Background
+  (Latent Psychic Potential) — Navigators are not psykers drawing on the
+  disciplines in Imperium/Traits/Psykers and the Warp.adq, they carry a
+  single, fixed, inherited gift instead. Point math: 90 (attributes) + 18
+  (Navigator's Third Eye) + 10 (Status 2) + 20 (Wealthy) - 5 (Distinctive
+  Features) + skills, landing around 130+ points before a GM adds age,
+  House politics, or shipboard skills — a well-off specialist, not a line
+  combatant, fitting comfortably under framework.md's "Elite human
+  (200-350)" tier. A GM running a Navigator across centuries of service
+  should add escalating Unnatural Features levels as the character's own
+  mutation-with-age (see the parent trait's lore note); this template
+  leaves that as an open dial rather than a fixed cost.
+traits:
+  - name: ST
+    points: 0
+    tags: [Attribute]
+    lore: Navigators are physically unremarkable outside the third eye.
+    design: ST 10 (human baseline), 10 pts/level (B15).
+  - name: DX
+    points: 0
+    tags: [Attribute]
+    lore: Navigators are not trained fighters.
+    design: DX 10 (human baseline), 20 pts/level (B15).
+  - name: IQ
+    points: 40
+    tags: [Attribute]
+    lore: Centuries of selective breeding for the strength and control the third eye demands also selects for sharp, disciplined minds.
+    design: IQ 12 (+2 from baseline), 20 pts/level (B15).
+  - name: HT
+    points: 10
+    tags: [Attribute]
+    lore: A Navigator must survive years of continuous warp exposure; House bloodlines select for endurance.
+    design: HT 11 (+1 from baseline), 10 pts/level (B15).
+  - name: Will
+    points: 20
+    per_level: 5
+    levels: 4
+    tags: [Attribute]
+    lore: The will needed to hold a ship's course through the immaterium without being lost or consumed by it.
+    design: Will+4 (Basic's Increased Will, 5 pts/level, B15).
+  - include: "imperium/psykers/warp.yaml#Navigator's Third Eye"
+  - name: Status
+    points: 10
+    per_level: 5
+    levels: 2
+    tags: [Advantage, Social, Imperium, Navis Nobilite]
+    ref: B28
+    lore: A Navigator House is minor interstellar nobility in its own right, courted by Rogue Traders and Imperial Navy captains alike.
+    design: Status 2, Basic's standard 5 points/level (B28).
+  - name: Wealthy
+    points: 20
+    ref: B25
+    tags: [Advantage, Social, Imperium, Navis Nobilite]
+    lore: House Navigator income from trade-route monopolies and shipping contracts.
+    design: Basic Set Wealthy (B25), 20 points.
+  - name: Distinctive Features (Third Eye)
+    points: -5
+    tags: [Disadvantage, Physical, Imperium, Navis Nobilite]
+    lore: Even bound shut, the brow ridge and scar tissue of the third eye mark a Navigator as visibly inhuman to anyone who looks closely.
+    design: Basic's Distinctive Features (a fixed, minor -5 for a feature that is unusual but easily hidden under a wrap or hood).
+skills:
+  - name: Navigation
+    spec: Warp
+    diff: IQ/H
+    points: 8
+    tags: [Imperium, Psyker, Navis Nobilite]
+    lore: >
+      Navigation (Hyperspace) renamed and restricted per framework.md — the
+      specific, trained skill of reading the third eye's sight into a safe
+      course through the immaterium.
+    design: IQ+2 (14, including the Third Eye's racial +4 skill bonus baked into the racial trait) for 8 points, Hard.
+  - name: Piloting
+    spec: High-Performance Spacecraft
+    diff: DX/A
+    points: 2
+    tags: [Imperium, Navis Nobilite]
+    lore: A working knowledge of the bridge a Navigator serves on, even though astropathic and helm crews handle most direct piloting.
+    design: DX+0 (10) for 2 points, Average.
+  - name: Savoir-Faire
+    spec: High Society
+    diff: IQ/E
+    points: 1
+    tags: [Imperium, Navis Nobilite]
+    lore: A House Navigator is raised to court manners as much as to the eye's discipline.
+    design: IQ+0 (12) for 1 point, Easy.
+  - name: Merchant
+    diff: IQ/A
+    points: 1
+    tags: [Imperium, Navis Nobilite]
+    lore: Basic grounding in the trade politics a Navigator House lives on.
+    design: IQ-1 (11) for 1 point, Average.

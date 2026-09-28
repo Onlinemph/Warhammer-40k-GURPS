@@ -1,0 +1,81 @@
+kind: template
+output: Imperium/Templates/Astropath.gct
+notes: >
+  A full Astropath of the Adeptus Astra Telepathica: Beta-grade (Psyker
+  Talent 3), soul-bound to the Emperor's light and blinded in the binding
+  ritual, trained in Telepathy as their core discipline (which includes
+  Astrotelepathy, their signature interstellar-relay power). Point math: 90
+  (attributes) + 10 (Unusual Background) + 30 (Psyker 3) - 15 (Sanctioned
+  Psyker) - 55 (Soulbinding) + 9 (Witch-sight) + ~140 (Telepathy discipline
+  at default starting levels, dominated by Mind Probe/Dominate's
+  alternative-abilities cost) + skills. The Blindness and Soulbinding costs
+  pull the raw total down hard, which is intentional — an Astropath trades
+  an enormous amount for their gift, offset here by strong mental
+  attributes and a powerful, wide-ranging Telepathy list; total should land
+  in framework.md's "Elite human (200-350)" tier once skills and personal
+  equipment are added. GCS will compute the exact final total from the
+  included traits' own modifiers; treat the figures above as this
+  template's design-time estimate, not a promise of GCS's rounding.
+traits:
+  - name: ST
+    points: 0
+    tags: [Attribute]
+    lore: An Astropath's body is unremarkable; their mind and soul are what the Choir selects for.
+    design: ST 10 (human baseline), 10 pts/level (B15).
+  - name: DX
+    points: 0
+    tags: [Attribute]
+    lore: Astropaths are not soldiers, and rarely fight.
+    design: DX 10 (human baseline), 20 pts/level (B15).
+  - name: IQ
+    points: 40
+    tags: [Attribute]
+    lore: The Choir draws its strongest telepaths from unusually sharp, focused minds.
+    design: IQ 12 (+2 from baseline), 20 pts/level (B15).
+  - name: HT
+    points: 0
+    tags: [Attribute]
+    lore: Average endurance; the ritual that makes an Astropath costs the eyes, not the body's toughness.
+    design: HT 10 (human baseline), 10 pts/level (B15).
+  - name: Will
+    points: 20
+    per_level: 5
+    levels: 4
+    tags: [Attribute]
+    lore: An Astropath's entire function depends on an exceptionally strong will — to hold an interstellar link open, and to survive doing so.
+    design: Will+4 (Basic's Increased Will, 5 pts/level, B15).
+  - include: "imperium/psykers/warp.yaml#Unusual Background (Latent Psychic Potential)"
+  - include: "imperium/psykers/warp.yaml#Psyker"
+    levels: 3
+  - include: "imperium/psykers/warp.yaml#Sanctioned Psyker"
+  - include: "imperium/psykers/warp.yaml#Soulbinding (Astropathic Choir)"
+  - include: "imperium/psykers/warp.yaml#Witch-sight"
+  - include: "imperium/psykers/warp.yaml#Telepathy"
+skills:
+  - name: Meditation
+    diff: IQ/H
+    points: 4
+    tags: [Imperium, Psyker]
+    lore: The trance discipline an Astropath uses to hold an interstellar link open for hours.
+    design: IQ+0 (12) for 4 points, Hard.
+  - name: Hidden Lore
+    spec: the Warp
+    diff: IQ/A
+    points: 4
+    tags: [Imperium, Psyker]
+    lore: Deep doctrinal knowledge of the immaterium, taught to every soul-bound Astropath.
+    design: IQ+1 (13) for 4 points, Average.
+  - name: Theology
+    spec: Imperial Creed
+    diff: IQ/H
+    points: 2
+    tags: [Imperium]
+    lore: An Astropath's faith in the Emperor is, quite literally, load-bearing.
+    design: IQ-1 (11) for 2 points, Hard.
+  - name: Savoir-Faire
+    spec: Military
+    diff: IQ/E
+    points: 1
+    tags: [Imperium]
+    lore: Enough protocol to operate aboard a warship or at a command post.
+    design: IQ+0 (12) for 1 point, Easy.

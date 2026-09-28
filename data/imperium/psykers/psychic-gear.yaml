@@ -1,0 +1,281 @@
+kind: equipment
+output: Imperium/Gear/Psychic Gear.eqp
+items:
+  - name: Psychic Hood
+    tl: "10^"
+    lc: 1
+    cost: 4000
+    weight: 3
+    tags: [Imperium, Psyker]
+    conditional:
+      - situation: to resist Warp-tagged Affliction, Mind Control, Mind Probe, and Fear effects directed at the wearer or their unit
+        amount: 2
+    lore: >
+      A warded circlet built around a tiny, heavily sanctioned psychic node
+      (sometimes a bound, lobotomised psyker's brain-stem), worn by Astra
+      Militarum officers and Inquisitorial staff to blunt enemy sorcery
+      directed at their command. Consistent with Dark Heresy/Rogue Trader's
+      psychic hood/psy-focus items and Codex background on Imperial
+      command-squad wargear.
+    design: >
+      Modelled as a flat +2 conditional bonus (Basic's conditional_modifier
+      feature) to resist Warp-tagged mental attacks — comparable in size to
+      Basic's own Power Defense-type items, cheap enough to matter but never
+      a substitute for a trained anti-psyker.
+
+  - name: Force Sword
+    tl: "10^"
+    lc: 1
+    cost: 8000
+    weight: 3
+    tags: [Melee Weapon, Imperium, Psyker]
+    weapons:
+      - usage: Field off
+        damage: sw+1 cut
+        reach: "1"
+        parry: 0
+        st: 10
+        skill: Force Sword
+      - usage: Field on
+        damage: sw+1d+1(10) cut
+        reach: "1"
+        parry: 0
+        st: 10
+        skill: Force Sword
+      - usage: Force Strike (charged, vs. Warp-touched)
+        damage: sw+1d+1 cut (ignores DR)
+        notes: >
+          Usable only by a psyker (Psyker Talent 1+), field on. Requires a
+          Perils of the Warp check (see "Psykers and the Warp") as it is
+          channelled through the wielder's own gift; the ignores-DR
+          component only applies against daemons, Chaos Spawn, and other
+          Warp-touched creatures, representing a strike at the target's
+          soul rather than its body — an ordinary flak-armoured guardsman
+          still only takes the field-on line's armour divisor (10).
+        reach: "1"
+        parry: 0
+        st: 10
+        skill: Force Sword
+    lore: >
+      A disruption-field blade further warded and psychically attuned so a
+      trained mind can channel force directly through it — standard wargear
+      for Inquisitors, Sisters of the Ordo Hereticus with psychic gifts, and
+      any Astartes Librarian who favours a blade over a staff. Depicted
+      throughout Black Library (Eisenhorn's own force sword; Grey Knights'
+      force weapons) and Dark Heresy/Rogue Trader's force-weapon rules.
+    design: >
+      Built directly on the framework's power-field rule: field off is the
+      mundane fine blade (sw+1 cut), field on adds +1d and armour divisor
+      (10), landing exactly on the power sword anchor (sw+1d+1(10) cut) —
+      a force sword is mechanically a power sword that a trained mind can
+      also channel psychic force through. The Force Strike line shows that
+      channelling: same dice as field-on, but its ignores-DR component only
+      applies against Warp-touched targets, so it never trivialises
+      ordinary armour. Its damage scales narratively with the wielder's
+      Psyker Talent level (GM adds +1 die per two Talent levels above 2)
+      rather than as a fixed number, since the build tool's damage syntax
+      cannot encode a variable.
+
+  - name: Force Staff
+    tl: "10^"
+    lc: 1
+    cost: 7000
+    weight: 4
+    tags: [Melee Weapon, Imperium, Psyker]
+    weapons:
+      - usage: Field off
+        damage: sw+1 cr
+        reach: "1,2"
+        parry: 0
+        st: 9
+        skill: Staff
+      - usage: Field on
+        damage: sw+1d+1(10) cr
+        reach: "1,2"
+        parry: 0
+        st: 9
+        skill: Staff
+      - usage: Force Strike (charged, vs. Warp-touched)
+        damage: sw+1d+1 cr (ignores DR)
+        notes: As Force Sword's Force Strike; requires Psyker Talent, field on, and a Perils of the Warp check.
+        reach: "1,2"
+        parry: 0
+        st: 9
+        skill: Staff
+    lore: >
+      Many psykers prefer a staff to a blade: easier to carry openly as a
+      badge of office, and a familiar focus for channelling telekinetic and
+      biomantic workings. Common across Dark Heresy/Rogue Trader's force-weapon
+      options and depicted for Inquisitorial and Adeptus Astra Telepathica
+      psykers throughout Black Library.
+    design: >
+      Same power-field math as the Force Sword (field on adds +1d and
+      armour divisor (10) over the field-off mundane baseline), applied to
+      a plain hardwood-and-metal quarterstaff (sw+1 cr) instead of an edged
+      blade — a crushing rather than cutting power weapon, with the same
+      charged Force Strike option and scaling note.
+
+  - name: Force Axe
+    tl: "10^"
+    lc: 1
+    cost: 8000
+    weight: 5
+    tags: [Melee Weapon, Imperium, Psyker]
+    weapons:
+      - usage: Field off
+        damage: sw+2 cut
+        reach: "1"
+        parry: -1
+        st: 11
+        skill: Axe/Mace
+      - usage: Field on
+        damage: sw+1d+2(10) cut
+        reach: "1"
+        parry: -1
+        st: 11
+        skill: Axe/Mace
+      - usage: Force Strike (charged, vs. Warp-touched)
+        damage: sw+1d+2 cut (ignores DR)
+        notes: As Force Sword's Force Strike; requires Psyker Talent, field on, and a Perils of the Warp check.
+        reach: "1"
+        parry: -1
+        st: 11
+        skill: Axe/Mace
+    lore: >
+      A heavier disruption weapon, favoured by psykers who fight as heavily
+      as they cast — seen among Black Templars chaplaincy-adjacent
+      Librarians and some Ordo Malleus interrogators in Black Library
+      material, and offered as a standard force-weapon option in Dark
+      Heresy/Rogue Trader.
+    design: >
+      Scaled up from the Force Sword the same way the framework scales
+      chainaxes from chainswords: heavier mundane baseline (sw+2 cut), the
+      same +1d/armour divisor (10) power-field math, and a parry penalty
+      for the unbalanced swing.
+
+  - name: Nemesis Force Halberd
+    tl: "10^"
+    lc: 0
+    cost: 20000
+    weight: 8
+    tags: [Melee Weapon, Imperium, Psyker, Grey Knights]
+    weapons:
+      - usage: Field off
+        damage: sw+2 cut
+        reach: "1,2"
+        parry: 0
+        st: 12
+        skill: Polearm
+      - usage: Field on
+        damage: sw+1d+2(10) cut
+        reach: "1,2"
+        parry: 0
+        st: 12
+        skill: Polearm
+      - usage: Force Strike (charged, vs. daemons)
+        damage: sw+1d+2 cut (ignores DR)
+        notes: >
+          Every Nemesis weapon is permanently attuned for anti-daemon work;
+          Grey Knights need no Perils of the Warp check to use this line
+          against a Warp-touched target, field on (their Sanctic training
+          and armour wards absorb the backlash), though the GM may still
+          call for one against anything else it is used on.
+        reach: "1,2"
+        parry: 0
+        st: 12
+        skill: Polearm
+    lore: >
+      The signature weapon of the Grey Knights: a psychically-attuned
+      halberd that is, to a daemon, as lethal as a bolt round is to a man —
+      Codex: Grey Knights and its Black Library tie-ins (Ben Counter's Grey
+      Knights novels) are consistent on this. Nemesis weapons are built and
+      sanctified specifically to hurt things from the warp.
+    design: >
+      Same mundane baseline and power-field math (+1d, armour divisor (10))
+      as the Force Axe, reach 1-2 like other polearms, priced and LC0'd as
+      unique Chapter-restricted wargear per the framework's LC table
+      (Astartes/Inquisition-only warp-touched gear). Its Force Strike line
+      waives the normal Perils check as a narrative nod to how routinely
+      and safely Grey Knights use it against their signature enemy, unlike
+      a general-purpose force weapon.
+
+  - name: Null Rod
+    tl: "10^"
+    lc: 0
+    cost: 6000
+    weight: 4
+    tags: [Melee Weapon, Imperium, Psyker]
+    weapons:
+      - usage: Swung
+        damage: sw-1 cr
+        reach: "1"
+        parry: 0
+        st: 9
+        skill: Axe/Mace
+    notes: >
+      A carried or worn Null Rod projects a small, personal anti-psychic
+      field: any Warp-tagged ability used, or whose effect would pass,
+      within a yard of the rod must reroll a success as a failure (treat as
+      an automatic Perils of the Warp trigger at -5 to the roll); a psyker
+      touched by the rod itself has their active Warp-tagged abilities
+      immediately shut off for as long as contact is maintained.
+    lore: >
+      A grimly plain iron-bound rod, warded and often set with a captive
+      soul-shard, that is anathema to psykers — Inquisitorial and Ecclesiarchy
+      arming-chests keep them for exactly this reason. Widely and
+      consistently depicted across Black Library (interrogators' kit,
+      witch-hunter equipment) and Dark Heresy/Only War's Null Rod rules.
+    design: >
+      Modelled as a rules-text effect (the build tool has no "disable an
+      enemy trait" feature) rather than a coded bonus, since what it does is
+      binary and narrative: it does not merely penalise a psychic act, it
+      threatens to unmake it. Its own melee stats are a plain, slightly
+      underweight blunt weapon — it is carried as a ward and a badge of
+      office, not a proper weapon, hence sw-1 rather than a full sw+0 mace.
+
+  - name: Hexagrammic Ward Charm
+    tl: "10^"
+    lc: 1
+    cost: 500
+    weight: 0.5
+    tags: [Imperium, Psyker]
+    conditional:
+      - situation: to resist possession and Warp-based Affliction directed at the wearer
+        amount: 1
+    lore: >
+      A small charm inscribed with hexagrammic wards, worn by Imperial
+      soldiers and priests operating anywhere a warp-taint might be
+      encountered — a cheaper, weaker cousin of the wards painted across
+      whole ship-hulls and chapels to keep daemons at bay. Standard Imperial
+      Creed practice, referenced throughout Black Library and codified in
+      Dark Heresy/Only War's cheap ward-item rules.
+    design: >
+      A minor +1 conditional bonus, priced and weighted as a trinket rather
+      than real equipment — protection at the margin, not a substitute for a
+      Null Rod or a trained anti-psyker.
+
+  - name: Psyocculum (Psy-Track)
+    tl: "10^"
+    lc: 2
+    cost: 3000
+    weight: 4
+    tags: [Imperium, Psyker]
+    notes: >
+      A worn ocular rig that lets a non-psyker see psychic residue and
+      warp-taint the naked eye cannot: roll vs Optics/Electronics Operation
+      or a relevant Hidden Lore specialisation to spot a hidden psyker,
+      daemon, or recently-used Warp-tagged ability's afterglow within 20
+      yards. Functions as a wearable, skill-based substitute for the Witch-
+      sight advantage, usable by anyone trained on it, not only psykers.
+    lore: >
+      Inquisitorial witch-hunters and Officio Assassinorum operatives use
+      devices exactly like this to track psykers who have no wish to be
+      found — the "psyocculum" name and function are best known from
+      Rogue Trader/Dark Heresy-line Inquisitorial wargear lists; Black
+      Library depictions of witch-hunting technology (Eisenhorn's own
+      gadgetry) are consistent with the concept without naming the device.
+    design: >
+      Left as a skill-roll rules note rather than a coded feature, since it
+      grants a new use of an existing skill (a sensory check) rather than a
+      numeric bonus — the same approach the build tool's `notes` field is
+      meant for.

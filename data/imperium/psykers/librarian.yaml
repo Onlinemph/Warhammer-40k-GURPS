@@ -1,0 +1,50 @@
+kind: template
+output: Imperium/Templates/Astartes Librarian Add-On.gct
+notes: >
+  An add-on, not a full character: layer this over Imperium/Templates/
+  Astartes Battle-Brother.gct (plus a Chapter Gene-Seed lens) to build a
+  Librarian. It does not repeat the Battle-Brother's attributes, physiology,
+  Rank, or Reputation — only what a Librarian has beyond a Tactical Marine.
+  Point math for this add-on alone: 10 (Unusual Background) + 40 (Psyker 4)
+  - 15 (Sanctioned Psyker) + 9 (Witch-sight) + ~50 (Librarius: Null Zone +
+  Might of Heroes, at default starting levels) + ~25 (Telekinesis, secondary
+  discipline, at default starting levels) + skills + a force weapon, roughly
+  140-160 points on top of the Battle-Brother's own 550-800, matching
+  Codex/Black Library depictions of Librarians as notably more expensive and
+  capable than a line Battle-Brother, comfortably inside the framework's
+  "Heroes and legends" range once a senior Librarian's Rank and Reputation
+  are added on top. Vortex of Doom (Imperium/Traits/Psykers and the Warp.adq)
+  is deliberately not included here: it is a Great Power, priced in the
+  framework's "Beyond play" tier, meant only for a Chief Librarian/Epistolary
+  a GM is building as a named, high-tier NPC — add it separately if so.
+traits:
+  - include: "imperium/psykers/warp.yaml#Unusual Background (Latent Psychic Potential)"
+  - include: "imperium/psykers/warp.yaml#Psyker"
+    levels: 4
+  - include: "imperium/psykers/warp.yaml#Sanctioned Psyker"
+  - include: "imperium/psykers/warp.yaml#Witch-sight"
+  - include: "imperium/psykers/warp.yaml#Librarius"
+  - include: "imperium/psykers/warp.yaml#Telekinesis"
+skills:
+  - name: Meditation
+    diff: IQ/H
+    points: 4
+    tags: [Imperium, Psyker]
+    lore: The discipline every Librarian drills to hold their gift steady under fire.
+    design: Hard skill, a Librarian's IQ+0 or better; points left generic since this add-on does not know the base template's final IQ.
+  - name: Hidden Lore
+    spec: the Warp
+    diff: IQ/A
+    points: 4
+    tags: [Imperium, Psyker]
+    lore: A Librarian's formal training in the Chapter's Librarius doctrine on the immaterium.
+    design: Average skill; points as above.
+  - name: Force Sword
+    diff: DX/A
+    points: 12
+    tags: [Imperium, Psyker]
+    lore: Many Librarians favour a force weapon over a chainsword once raised to the Librarius.
+    design: Average skill, DX-based, bought up from the Battle-Brother's existing Broadsword/DX baseline.
+equipment:
+  - include: "imperium/psykers/psychic-gear.yaml#Force Sword"
+  - include: "imperium/psykers/psychic-gear.yaml#Psychic Hood"

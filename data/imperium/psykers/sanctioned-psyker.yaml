@@ -1,0 +1,86 @@
+kind: template
+output: Imperium/Templates/Sanctioned Psyker.gct
+notes: >
+  A Sanctioned Astra Militarum Primaris Psyker: Delta-grade on the Adeptus
+  Astra Telepathica's Assignment scale (Psyker Talent 2), issued a force
+  staff and trained in Pyromancy as a battlefield specialty. Point math: 80
+  (attributes) + 10 (Unusual Background) + 20 (Psyker 2) - 15 (Sanctioned
+  Psyker) + 9 (Witch-sight) + ~21 (Pyromancy discipline, at each power's
+  default starting level) + skills, landing in framework.md's "Elite human
+  (200-350)" tier once skills and equipment are added — well above a plain
+  Guardsman, matching how rare and valuable a Sanctioned Psyker is to a
+  regiment. For a weaker Wyrdvane conscript-psyker (Epsilon grade), drop
+  Psyker to level 1, remove the discipline's higher-level purchases (keep
+  each power at its base/level-1 cost), and add a Reputation or Social
+  Stigma reflecting how nervously line troopers treat them. Swap the
+  Pyromancy include for any other discipline in Imperium/Traits/Psykers
+  and the Warp.adq for a different specialty.
+traits:
+  - name: ST
+    points: 0
+    tags: [Attribute]
+    lore: A Sanctioned Psyker is an ordinary, unaugmented human body — the gift is mental, not physical.
+    design: ST 10 (human baseline), 10 pts/level (B15).
+  - name: DX
+    points: 20
+    tags: [Attribute]
+    lore: Basic training and battlefield survival instincts, roughly on par with a line Guardsman.
+    design: DX 11 (+1 from baseline), 20 pts/level (B15).
+  - name: IQ
+    points: 40
+    tags: [Attribute]
+    lore: Psychic potential correlates loosely with a sharp mind in Astra Telepathica selection; candidates are picked from the more capable conscripts and hive-scholam washouts alike.
+    design: IQ 12 (+2 from baseline), 20 pts/level (B15).
+  - name: HT
+    points: 10
+    tags: [Attribute]
+    lore: Average endurance; the gift, not the body, is what marks a Sanctioned Psyker.
+    design: HT 11 (+1 from baseline), 10 pts/level (B15).
+  - name: Will
+    points: 10
+    per_level: 5
+    levels: 2
+    tags: [Attribute]
+    lore: A strong will is what lets a psyker resist Perils of the Warp and hold a working steady under fire.
+    design: Will+2 (Basic's Increased Will, 5 pts/level, B15).
+  - include: "imperium/psykers/warp.yaml#Unusual Background (Latent Psychic Potential)"
+  - include: "imperium/psykers/warp.yaml#Psyker"
+    levels: 2
+  - include: "imperium/psykers/warp.yaml#Sanctioned Psyker"
+  - include: "imperium/psykers/warp.yaml#Witch-sight"
+  - include: "imperium/psykers/warp.yaml#Pyromancy"
+skills:
+  - name: Meditation
+    diff: IQ/H
+    points: 2
+    tags: [Imperium, Psyker]
+    lore: How a psyker learns to control, rather than merely survive, the gift.
+    design: IQ-2 (10) for 2 points, Hard (B ability skill list).
+  - name: Hidden Lore
+    spec: the Warp
+    diff: IQ/A
+    points: 2
+    tags: [Imperium, Psyker]
+    lore: Doctrinal and practical knowledge of the immaterium taught at the Scholastia Psykana.
+    design: IQ-1 (11) for 2 points, Average.
+  - name: Soldier
+    diff: IQ/A
+    points: 2
+    tags: [Imperium, Astra Militarum]
+    lore: Enough general military knowledge to operate attached to a Guard unit.
+    design: IQ-1 (11) for 2 points, Average.
+  - name: Theology
+    spec: Imperial Creed
+    diff: IQ/H
+    points: 1
+    tags: [Imperium]
+    lore: The same basic catechisms drilled into every Imperial soldier, doubly important for a psyker who must prove their faith.
+    design: IQ-2 (10) for 1 point, Hard.
+  - name: Staff
+    diff: DX/A
+    points: 4
+    tags: [Imperium, Psyker]
+    lore: Basic proficiency with the issued force staff.
+    design: DX+0 (11) for 4 points, Average.
+equipment:
+  - include: "imperium/psykers/psychic-gear.yaml#Force Staff"
