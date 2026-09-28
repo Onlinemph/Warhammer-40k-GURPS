@@ -87,8 +87,11 @@ Hit locations: skull, eye, face, neck, torso, vitals, groin, arm, hand, leg, foo
 ```yaml
 - name: Hidden Lore
   spec: Daemons
-  diff: IQ/A
-  defaults: ["IQ-5"]
+  diff: IQ/A            # no default (B199)
+- name: Area Knowledge
+  spec: Segmentum Obscurus
+  diff: IQ/E
+  defaults: ["IQ-4"]
 - name: Psyniscience
   diff: Per/H
 - name: Targeted Bolt Shot       # a technique

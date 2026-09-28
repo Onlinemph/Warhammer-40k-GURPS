@@ -6,7 +6,7 @@ notes: >
   reputation, which he insists is undeserved) supposed to lead from the
   front and be the last man standing. Point math: ST 11 (+10), DX 12
   (+40), IQ 12 (+40), HT 12 (+20) = 110, plus Will +2 (+10) = 120;
-  advantages +55; disadvantages -52; skills +78. Total 201 points, the
+  advantages +51; disadvantages -52; skills +82. Total 201 points, the
   low end of framework.md's "Elite human (200-350)" tier — a senior,
   experienced Commissar with a long record runs noticeably higher via
   more Rank and skill points. No psychic abilities here.
@@ -39,8 +39,19 @@ traits:
       break — Ciaphas Cain repeatedly notes that whatever else is true of
       him, his nerve under fire is genuine.
     design: Will 14 (+2 above IQ-derived default of 12), 5 pts/level (B16).
-  - include: "imperium/common/imperial-traits.yaml#Unfazeable"
-    lore: Little left to shock a Commissar who has already ordered executions and watched daemons take a trench line.
+  - include: "imperium/common/imperial-traits.yaml#Fearlessness"
+    levels: 3
+    lore: >
+      Resolve under fear rather than immunity to it: a Commissar who has
+      ordered executions and watched daemons take a trench line still
+      feels the dread, but holds (Will 14 + 3 = 17 on Fright Checks).
+      Ciaphas Cain's narration is all about mastering fear, not lacking it.
+  - name: Fit
+    points: 5
+    ref: B55
+    tags: [Advantage, Physical, Imperium]
+    lore: A Commissar who leads from the front keeps himself in condition.
+    design: Basic Set Fit (B55), 5 points.
   - name: Combat Reflexes
     points: 15
     ref: B43
@@ -49,8 +60,16 @@ traits:
     design: Basic Set Combat Reflexes (B43), 15 points.
   - include: "imperium/common/imperial-traits.yaml#Legal Enforcement Powers (Commissariat)"
   - include: "imperium/common/imperial-traits.yaml#Military Rank"
+    name: Rank (Officio Prefectus)
     levels: 2
     lore: Commissars hold an officer-equivalent rank within the Officio Prefectus chain, separate from the regiment's own command structure.
+    design: >
+      Basic Set Rank (B29), 5/level, 2 levels (10 points), taken as the
+      Commissariat's own hierarchy rather than the regiment's. The
+      Legal Enforcement Powers entry covers the power to enforce discipline;
+      this covers standing within the Officio Prefectus.
+  - include: "imperium/common/imperial-traits.yaml#Schola Progenium Origin"
+    disabled: true
   - include: "imperium/common/imperial-traits.yaml#Fanaticism (The God-Emperor)"
     lore: A Commissar's authority rests entirely on this belief being genuine, not performed.
   - include: "imperium/common/imperial-traits.yaml#Duty (Astra Militarum)"
@@ -77,10 +96,10 @@ skills:
   - name: Guns
     spec: Pistol
     diff: DX/E
-    points: 12
+    points: 16
     tags: [Imperium, Astra Militarum]
     lore: The bolt pistol is the Commissariat's signature sidearm.
-    design: DX+4 (16) for 12 points, Easy (B170).
+    design: DX+5 (17) for 16 points, Easy (B170).
   - name: Broadsword
     diff: DX/A
     points: 12

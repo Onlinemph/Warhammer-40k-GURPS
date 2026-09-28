@@ -64,7 +64,7 @@ items:
   - &reanimation_protocols
     name: Reanimation Protocols
     points: 25
-    ref: B60
+    ref: B55
     tags: [Advantage, Physical, Xenos, Necrons]
     modifiers:
       - {name: "Recurring (triggers every time the condition is met, not once ever)", cost: "+100%"}
@@ -97,7 +97,7 @@ items:
       showing that a thoroughly wrecked or disintegrated Necron stays
       down for good.
     design: >
-      Built on Basic Set's Extra Life (B60, base 25 points: you do not
+      Built on Basic Set's Extra Life (B55, base 25 points: you do not
       permanently die when killed, but eventually return to bodily
       function). Modified since this fires every time the trigger
       condition is met over a whole campaign rather than a fixed number
@@ -114,10 +114,9 @@ items:
     ref: B59
     tags: [Advantage, Physical, Xenos, Necrons]
     notes: >
-      House rule, priced at High Pain Threshold's rate but total: a
-      Necron's necrodermis has no pain receptors to speak of, so it never
-      takes a shock penalty or a reaction penalty from injury of any kind,
-      not merely a reduced chance of one.
+      As High Pain Threshold (B59): a Necron's necrodermis has no pain
+      receptors to speak of, so it takes no shock penalty from injury and
+      is not stunned by it.
     lore: >
       A Necron does not flinch, wince or slow down from injury short of
       outright incapacitation — it has nothing resembling a nervous
@@ -126,14 +125,10 @@ items:
       fiction, which never shows a Necron reacting to a wound the way a
       living creature would.
     design: >
-      Priced as Basic Set High Pain Threshold (B59, 10 points) rather than
-      inventing a new, uncosted "total" tier: the RAW trait already covers
-      "never affected by physical torture" and removes shock penalties
-      most of the time, and this project treats a Necron's complete lack
-      of a pain sense as the same trait applied without RAW's residual
-      chance of a shock penalty, the same kind of small honest
-      extrapolation this project's Larraman's Organ entry makes for
-      "seals in seconds."
+      Plain Basic Set High Pain Threshold (B59, 10 points). RAW High Pain
+      Threshold already removes shock penalties and the stun that injury
+      would otherwise cause, which is everything a Necron's lack of a pain
+      sense needs; an earlier "house rule total" version was redundant.
 
   - &metabolic_immunity
     name: "Resistant to Metabolic Hazards (Necrodermis)"
@@ -615,18 +610,17 @@ items:
     tags: [Disadvantage, Mental, Xenos, Necrons]
     children:
       - name: Slave Mentality
-        points: -20
-        cr: 12
-        ref: B152
+        points: -40
+        ref: B154
         tags: [Disadvantage, Mental, Xenos, Necrons]
-        notes: "As Slave Mentality (B152): defers to any perceived authority, cannot act on its own initiative against orders, and struggles to disobey even a bad order from its Overlord's court."
+        notes: "As Slave Mentality (B154), no self-control roll: defers to any perceived authority, cannot act on its own initiative against orders, and struggles to disobey even a bad order from its Overlord's court."
         lore: >
           A Warrior's mind is not merely dim, it is built to obey: Codex
           background treats Warriors as automatons that fight exactly as
           ordered and stop being useful in a fight the instant central
           command breaks down, per the tabletop convention that a Warrior
           unit without an active officer nearby is far less reliable.
-        design: Basic Set Slave Mentality (B152), self-control 12, -20 points.
+        design: Basic Set Slave Mentality (B154), -40 points, no self-control roll. For a softer obedience use Reprogrammable (-10, B150) plus Duty instead.
       - name: "Automaton Discipline"
         points: -1
         tags: [Quirk, Xenos, Necrons]
@@ -637,7 +631,7 @@ items:
       Most Necrons who went through the biotransference lost themselves
       almost entirely -- Warriors above all, who function as an obedient
       tool rather than a soldier with opinions.
-    design: -20 (Slave Mentality) - 1 (Automaton Discipline) = -21 points.
+    design: -40 (Slave Mentality) - 1 (Automaton Discipline) = -41 points.
 
   - name: "Mind: Immortal Discipline"
     container: meta_trait
@@ -735,13 +729,13 @@ items:
       - name: "Compulsive Behavior (Flesh-Taking)"
         points: -15
         cr: 12
-        ref: B145
+        ref: B128
         tags: [Disadvantage, Mental, Xenos, Necrons]
         notes: "Must wear or carry flayed skin taken personally; goes without it only under duress, and poorly."
         lore: >
           Flayed Ones are consistently shown draped in the skins of their
           victims, a compulsion rather than a fashion choice.
-        design: Basic Set Compulsive Behavior (B145), self-control 12, -15 points (Serious tier, since it is the caste's whole defining trait).
+        design: Basic Set Compulsive Behavior (B128), self-control 12, -15 points (Serious tier, since it is the caste's whole defining trait).
       - name: "Social Stigma (Cursed Outcast)"
         points: -10
         ref: B155
@@ -765,14 +759,14 @@ items:
       - name: Overconfidence
         points: -5
         cr: 12
-        ref: B94
+        ref: B148
         tags: [Disadvantage, Mental, Xenos, Necrons]
         lore: >
           A noble who ruled worlds before the Imperium existed rarely
           doubts that it can still do so -- Rath's The Infinite and the
           Divine builds an entire novel around exactly this flaw in two
           Necron nobles.
-        design: Basic Set Overconfidence (B94), self-control 12, -5 points.
+        design: Basic Set Overconfidence (B148), self-control 12, -5 points.
       - name: "Obsession (Restore the Dynasty's Glory)"
         points: -10
         cr: 12
@@ -815,13 +809,13 @@ items:
       - name: Curious
         points: -5
         cr: 12
-        ref: B131
+        ref: B129
         tags: [Disadvantage, Mental, Xenos, Necrons]
         lore: >
           A Cryptek investigates first and considers the consequences
           later -- every depiction of Crypteks in the fiction shows them
           unable to leave an interesting anomaly alone.
-        design: Basic Set Curious (B131), self-control 12, -5 points.
+        design: Basic Set Curious (B129), self-control 12, -5 points.
       - name: "Obsession (Unlock the Tomb-World's Secrets)"
         points: -10
         cr: 12

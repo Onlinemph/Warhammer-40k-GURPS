@@ -10,7 +10,7 @@ items:
     cost: 1200
     weight: 6
     tags: [Body Armor, Xenos, Aeldari]
-    dr: {"torso,vitals,groin,arm,leg": 36, "skull,face,neck": 30, eye: 25, "hand,foot": 0}
+    dr: {"torso,vitals,groin": 36, "arm,leg": 29, "skull,face,neck": 30, eye: 20, "hand,foot": 0}
     weak_points: 5
     notes: >-
       Flexible armour (B47): blunt-trauma rules apply — any attack that fails to penetrate this
@@ -41,9 +41,9 @@ items:
       plated garment, matching "far lighter and less restrictive" from the lore directly; full
       limb coverage (unlike the Imperium Flak Vest's torso-only coverage) reflects a full
       bodysuit rather than a vest. Weak Points 5, matching the framework's own anchor figure
-      exactly, one point tighter than the Imperium's own Guard-pattern carapace (7) — Guardian
-      mesh has fewer gaps than plate armour precisely because it has no rigid plates to leave
-      seams between.
+      exactly and equal to the Imperium's Guard-pattern carapace (5). Limbs sit seven DR under
+      the torso (29, as on the Imperium mesh), the eye lens is 20 (as on carapace visors), and
+      the hands and feet are left at 0 (fibre gloves and slippers, not armour).
 
   - name: Aspect Armour
     tl: "10^"
@@ -51,7 +51,7 @@ items:
     cost: 4500
     weight: 14
     tags: [Body Armor, Xenos, Aeldari]
-    dr: {"torso,vitals,groin,arm,leg": 70, "skull,face,neck": 60, eye: 35, "hand,foot": 0}
+    dr: {"torso,vitals,groin": 70, "arm,leg": 64, "skull,face,neck": 60, eye: 25, "hand,foot": 36}
     weak_points: 4
     notes: >-
       Flexible armour (B47) despite the high DR: it is built from layered thermoplas plates over
@@ -77,6 +77,9 @@ items:
       pi++) 20.6% of the time (79.4% get through) — an Aspect Warrior in full war-plate is
       genuinely hard to put down with small arms, but a boltgun still kills them about as readily
       as it kills a Guardsman in carapace.
+      Limbs are a few DR under the torso (64) as the framework asks, with gauntlets and
+      greaves at 36 and the helmet eye lens at 25, well under the helmet's own DR as with every
+      lens in this project.
       Handling: 14 lb, well under any Imperium rigid plate of comparable protection (carapace
       itself typically runs 20-25 lb in this project's own armour.yaml) for the same lighter
       Aeldari construction principle used throughout this file. Weak Points 4, one point tighter
@@ -91,7 +94,7 @@ items:
     cost: 6000
     weight: 20
     tags: [Body Armor, Xenos, Aeldari]
-    dr: {"torso,vitals,groin,arm,leg": 78, "skull,face,neck": 65, eye: 35, "hand,foot": 0}
+    dr: {"torso,vitals,groin": 78, "arm,leg": 72, "skull,face,neck": 65, eye: 25, "hand,foot": 40}
     weak_points: 4
     notes: >-
       Flexible armour (B47), the same blunt-trauma rule as standard Aspect Armour above.
@@ -110,6 +113,7 @@ items:
       Armour's 20.6%) and a shuriken catapult hit — its own kin weapon family — 99.3% of the time
       (up from 94.1%), a real, quantifiable step up in protection for a heavier-shrine warrior,
       not a cosmetic difference in name only.
+      Limbs 72, gauntlets and greaves 40, eye lens 25.
       Handling: 20 lb, six pounds over the standard Aspect Armour for the extra plating, and Weak
       Points 4 unchanged (this is still articulated Aeldari plate with an Aspect Warrior's own
       fit and finish, not a rigid Exarch-grade suit — the extra weight buys DR, not fewer gaps).
@@ -120,7 +124,7 @@ items:
     cost: 9000
     weight: 16
     tags: [Body Armor, Xenos, Aeldari]
-    dr: {"torso,vitals,groin,arm,leg": 85, "skull,face,neck": 70, eye: 40, "hand,foot": 0}
+    dr: {"torso,vitals,groin": 85, "arm,leg": 78, "skull,face,neck": 70, eye: 30, "hand,foot": 42}
     weak_points: 4
     notes: >-
       Flexible armour (B47), the same blunt-trauma rule as the other Aeldari plate in this file.
@@ -138,6 +142,7 @@ items:
       time (up from standard Aspect Armour's 20.6%), a real, meaningful step up matching an
       Exarch's status as an Aspect shrine's single deadliest and most experienced warrior, while
       still short of true immunity to boltguns the way full Astartes plate (DR 100) approaches.
+      Limbs 78, gauntlets and greaves 42, eye lens 30 (matching Sororitas plate).
       Handling: 16 lb, between the standard Aspect Armour's 14 lb and the Heavy Aspect variant's
       20 lb — a wraithbone-fused suit that is denser and tougher than ordinary Aspect plate
       without being bulked out with extra layers the way the heavy-shrine variant is. Weak Points
@@ -152,7 +157,7 @@ items:
     weight: 10
     uses: 60
     tags: [Xenos, Aeldari, Psyker, Force Field, Energy Shield]
-    dr: {"torso,vitals,groin,arm,leg": 40, "skull,face,neck": 35, eye: 25, "hand,foot": 0}
+    dr: {"torso,vitals,groin": 40, "arm,leg": 34, "skull,face,neck": 35, eye: 20, "hand,foot": 0}
     notes: >-
       A light protective shell (DR 40, flexible per B47) plus a psychic ward that works as a
       regenerating shield exactly per framework.md's "Personal force fields" rules: Shield 60 SP,
@@ -175,7 +180,7 @@ items:
       wearer's Warp Empowerment."
     design: >-
       Built on the exact regenerating-shield chassis in fields.yaml rather than as flat DR, per
-      the anchor's own instruction, with the DR line kept small (40, below even Guardian mesh)
+      the anchor's own instruction, with the DR line kept small (40, only just above Guardian mesh's 36)
       to represent the underlying robe rather than the ward itself — the ward, not the cloth, is
       what actually keeps a Farseer alive. The baseline pool (60 SP, 3-second delay, 10 SP/second
       recharge, all-attacks coverage) is set equal to the Imperium Rosarius, the field this
@@ -199,28 +204,24 @@ items:
     cost: 3500
     weight: 3
     tags: [Xenos, Aeldari]
-    skill_bonuses: {"Stealth": 4, "Camouflage": 6}
+    skill_bonuses: {"Stealth": 2, "Camouflage": 4}
     notes: >-
-      Also grants -6 to observers' Vision rolls to spot the wearer at range when stationary and
-      using the cloak's camouflage properties (per Camouflage, B47/B192), on top of the listed
-      skill bonuses. Does not stack with a second cameleoline garment.
+      The bonuses already stand for the cloak's light-bending; there is no separate penalty to
+      observers' Vision rolls. Does not stack with a second cameleoline garment.
     lore: >-
       Every Ranger wraps themselves in a cameleoline cloak woven to bend light around its wearer,
-      the signature garment of the Aeldari who walk the Path of the Outcast; Codex: Craftworlds,
-      Path of the Eldar's own Ranger-focused chapters, and Rogue Trader/Deathwatch's cameleoline
-      rules all treat it as best-in-setting personal camouflage technology, letting a Ranger
+      the signature garment of the Aeldari who walk the Path of the Outcast; Codex: Craftworlds and the
+      Path of the Eldar background (no specific rules entry) treat it as best-in-setting personal camouflage technology, letting a Ranger
       vanish against almost any backdrop while moving carefully.
     design: >-
       Modelled as a large, explicit Stealth and Camouflage skill bonus rather than DR, per the
       assignment's own call for "a strong Stealth/Camouflage bonus" — a cameleoline cloak's whole
       purpose is not being seen, not stopping a hit once found, so it carries no `dr` field at
-      all, the opposite design choice from every armour entry above it in this file. +4 Stealth
-      matches Basic Set's own high end for dedicated camouflage gear (comparable to a ghillie
-      suit, B287, but built from Aeldari technology a human tailor cannot replicate, hence the
-      extra Camouflage-skill bonus and the flat Vision-roll penalty layered on top rather than
-      folded into a single number) and +6 Camouflage reflects that Camouflage itself (the skill
-      used to actually set up concealment before combat, not just move stealthily during it) is
-      the cloak's real specialty.
+      all, the opposite design choice from every armour entry above it in this file. +2 Stealth
+      is a solid but unexceptional gear bonus, and +4 Camouflage reflects that Camouflage itself
+      (the skill used to actually set up concealment before combat, not just move stealthily
+      during it) is the cloak's real specialty. Two bonuses and no separate Vision penalty keeps
+      it strong without out-stacking the Imperium's camo cloaks.
       Handling: 3 lb, a garment rather than armour — it carries no ST requirement, Weak Points
       rating or coverage, since it protects by not being found rather than by stopping a hit.
 
@@ -242,9 +243,9 @@ items:
       A psychically-warded helm that partly shields its wearer's own mind from the backlash of
       channelling warp energy, worn by Aeldari psykers specifically to blunt the risk their own
       gift carries; Codex: Craftworlds background credits it with letting a Farseer or Warlock
-      push their power further and more safely than they otherwise could, and it is described in
-      Rogue Trader/Deathwatch's Aeldari-psyker rules as functionally reducing the psyker's own
-      Perils risk rather than granting any new power.
+      push their power further and more safely than they otherwise could, and it is best read as
+      reducing the psyker's own Perils risk rather than granting any new power (no specific
+      rules entry is cited).
     design: >-
       Modelled as a flat conditional bonus to the wearer's Perils of the Warp resistance roll,
       the same `conditional_modifier` feature the Imperium Psychic Hood already uses for a
@@ -264,12 +265,9 @@ items:
   - name: Spirit Stone (Waystone)
     tl: "12^"
     lc: 0
-    cost: 8000
+    cost: 300
     weight: 0.25
     tags: [Xenos, Aeldari]
-    conditional:
-      - situation: to resist the Slaanesh's Hunger disadvantage's soul-devouring trigger at the moment of death
-        amount: 4
     notes: >-
       Worn on the breast by every craftworld Aeldari from a young age. On the wearer's death, the
       GM should rule the stone catches the departing soul rather than leaving it to Slaanesh
@@ -290,11 +288,10 @@ items:
       mechanic GURPS's damage and defence system was never built to encode, so — following this
       project's own honest practice for the Null Rod and the Wraithcannon's warp-rift effect —
       it is written as rules text for the GM to apply at the moment of death rather than invented
-      as a combat statistic. The small conditional bonus given here is a minor, secondary effect
-      only: a partial ward against the Slaanesh's Hunger disadvantage's own worst trigger while
-      the wearer still lives (framework.md's Aeldari trait table lists Slaanesh's Hunger as a
-      disadvantage "a daemon-god waits for the soul; spirit stones shield it," which is read here
-      as applying while alive as well as at death), not the stone's whole purpose.
+      as a combat statistic. It carries no combat bonus: the stone itself catches
+      the soul automatically at death, and a Warlock or Spiritseer only retrieves it afterwards.
+      It is a common item, worn by every craftworld Aeldari from adolescence, so it is priced as
+      one ($300 for a wraithbone stone and its setting), not as a relic.
       Handling: 0.25 lb, a small worn stone rather than a weapon or armour piece — it carries no
       ST requirement, DR or Weak Points rating.
 
@@ -304,13 +301,13 @@ items:
     cost: 12000
     weight: 18
     tags: [Xenos, Aeldari]
-    attributes: {basic_move: 4}
     notes: >-
-      The Basic Move bonus applies only while airborne and using the wings actively (built on the
-      Jet Pack rules, B287, rather than true unassisted flight) and lasts for a burst of a few
-      seconds to a few dozen yards of travel before the grav-plates need to recharge — treat as a
-      short powered leap/glide, not sustained flight, and require a DX or Piloting (Aeldari Wings)
-      roll to land cleanly rather than tumble. Once per fight (GM's discretion on recharge), the
+      No flat Move bonus is written on the sheet, because the wings only help in bursts. While
+      airborne and using the wings actively the wearer moves at Basic Move +4 for a burst of a
+      few seconds to a few dozen yards before the grav-plates need to recharge (GM applies it
+      by hand, on the lines of the Jet Pack rules, B287) — treat as a short powered leap/glide,
+      not sustained flight, and require a DX or Acrobatics roll to land cleanly rather than
+      tumble. Once per fight (GM's discretion on recharge), the
       wearer may add a single "Skyleap": an extra +2 to Basic Move and immunity to falling damage
       for that one jump only, representing the wings' full-power vertical leap Swooping Hawks are
       shown using to clear an obstacle or a firing line entirely.
@@ -321,10 +318,12 @@ items:
       Hawks as skirmishers who are never on the ground for long, using bursts of grav-lift rather
       than continuous flight.
     design: >-
-      Modelled on GURPS's own Jet Pack rules (B287) rather than a bespoke flight mechanic, since a
-      jet pack is exactly what a Swooping Hawk's short, bursting grav-leaps are mechanically —
+      Modelled on GURPS's Jet Pack rules (B287) rather than a bespoke flight mechanic, since a
+      Swooping Hawk's short, bursting grav-leaps behave much like one (the wings are grav-plates
+      and a wing frame, not a jump pack) —
       a Basic Move bonus (+4, comparable to Enhanced Move (Ground) 1's own effective speed
-      increase, B52) usable in bursts rather than sustained, with the powered vertical "Skyleap"
+      increase, B52) usable in bursts rather than sustained and so applied by the GM in play
+      instead of as a permanent attribute on the sheet, with the powered vertical "Skyleap"
       the assignment implicitly calls for (Swooping Hawks are consistently shown clearing terrain
       or enemy lines in one bound) written as a once-per-fight special option rather than a
       constant bonus, since a repeatable no-cost extreme leap would make ground obstacles and

@@ -6,11 +6,17 @@ notes: >
   framework.md's "Heroes and legends" tier, well above this template).
   Point math: ST 11 (+10), DX 14 (+80), IQ 15 (+100), HT 12 (+20) = 210,
   plus Will +2 (+10) = 220; advantages +40 plus Inquisitorial Rank 6
-  (+60) and Status 5 (+25); disadvantages -37; skills +251. Total 559
-  points, top of framework.md's "Senior agents" tier. Authority comes from
+  (+60) and Status 5 (+25); disadvantages -37; skills +255. Total 563
+  points, upper end of framework.md's "Senior agents" tier. Authority comes from
   three traits together: the Rosette (Legal Enforcement Powers: arrest,
   search, execute), Inquisitorial Rank (overrides every Imperial
   hierarchy) and Status (social standing).
+
+  Retinue and means: the template does not price a retinue, Wealth or
+  requisition. An Inquisitor's rosette lets them requisition kit and
+  personnel, so treat retinue members as Allies (built from the
+  Inquisitorial Acolyte and Interrogator templates) and Wealth as
+  campaign purchases, added per character.
 
   Puritan vs. Radical: this template is written Puritan-neutral. A
   strict Puritan build should add Intolerance (Xenos) (-10, Imperium/
@@ -112,7 +118,7 @@ traits:
     disabled: true
     tags: [Imperium, Inquisition]
     lore: The Ordo Hereticus roots out heresy, corruption, and unsanctioned faith within the Imperium's own population and institutions.
-    design: Net 0 points, per-Ordo flavor lens (see framework.md, origin lenses).
+    design: Net 0 points, per-Ordo flavor lens (see this file's `notes`).
     children:
       - name: Witch Hunter's Eye
         points: 1
@@ -130,7 +136,7 @@ traits:
     disabled: true
     tags: [Imperium, Inquisition]
     lore: The Ordo Malleus hunts daemonic incursion and Chaos worship at its most dangerous, and trains extensively in countermeasures most Inquisitors never learn.
-    design: Net 0 points, per-Ordo flavor lens.
+    design: Net 0 points, per-Ordo flavor lens (see this file's `notes`).
     children:
       - name: Daemonhunter's Training
         points: 1
@@ -148,7 +154,7 @@ traits:
     disabled: true
     tags: [Imperium, Inquisition]
     lore: The Ordo Xenos studies and counters alien threats and Imperial-xenos contact, from open invasion to quiet infiltration.
-    design: Net 0 points, per-Ordo flavor lens.
+    design: Net 0 points, per-Ordo flavor lens (see this file's `notes`).
     children:
       - name: Xenos Threat Assessment
         points: 1
@@ -172,12 +178,25 @@ skills:
     tags: [Imperium, Inquisition]
     lore: A lifetime's proficiency with a sidearm, whatever the exact pattern.
     design: DX+6 (20) for 20 points, Easy (B170).
+  - name: Broadsword
+    diff: DX/A
+    points: 8
+    tags: [Imperium, Inquisition]
+    lore: Eisenhorn's power sword and force weapons and Ravenor's melee-capable retinue show Inquisitors and their agents fighting with blades.
+    design: DX+2 (16) for 8 points, Average.
+  - name: Theology
+    spec: Imperial Creed
+    diff: IQ/H
+    points: 4
+    tags: [Imperium]
+    lore: Ordo Hereticus work in particular is Theology-heavy; an Inquisitor hunting heresy needs the Creed well enough to spot its corruption.
+    design: IQ+0 (15) for 4 points, Hard.
   - name: Stealth
     diff: DX/A
-    points: 20
+    points: 12
     tags: [Imperium]
-    lore: Decades of investigative and undercover fieldwork.
-    design: DX+5 (19) for 20 points, Average.
+    lore: Decades of investigative and undercover fieldwork, though an Inquisitor leads and commands more than they skulk.
+    design: DX+3 (17) for 12 points, Average.
   - name: Streetwise
     diff: IQ/A
     points: 20

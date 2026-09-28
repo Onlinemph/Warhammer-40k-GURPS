@@ -33,7 +33,6 @@ items:
   - name: Hidden Lore
     spec: Daemons
     diff: IQ/A
-    defaults: ["IQ-6"]
     tags: [Mental, Knowledge, Imperium]
     ref: B199
     lore: >
@@ -43,11 +42,13 @@ items:
       depicted as dangerous knowledge in the Eisenhorn/Ravenor and Gaunt's
       Ghosts novels; Dark Heresy/Only War use an equivalent Forbidden Lore
       (Daemonology) skill for calibration.
-    design: Basic Set Hidden Lore (B199), specialisation per framework.md.
+    design: >
+      Basic Set Hidden Lore (B199), specialisation per framework.md. Hidden
+      Lore is IQ/Average with no default in the Basic Set, so none is listed
+      here or on the other Hidden Lore specialisations.
   - name: Hidden Lore
     spec: Xenos
     diff: IQ/A
-    defaults: ["IQ-6"]
     tags: [Mental, Knowledge, Imperium]
     ref: B199
     lore: >
@@ -60,7 +61,6 @@ items:
   - name: Hidden Lore
     spec: Heresy
     diff: IQ/A
-    defaults: ["IQ-6"]
     tags: [Mental, Knowledge, Imperium]
     ref: B199
     lore: >
@@ -72,7 +72,6 @@ items:
   - name: Hidden Lore
     spec: The Warp
     diff: IQ/A
-    defaults: ["IQ-6"]
     tags: [Mental, Knowledge, Imperium]
     ref: B199
     lore: >
@@ -84,7 +83,6 @@ items:
   - name: Hidden Lore
     spec: Inquisition
     diff: IQ/A
-    defaults: ["IQ-6"]
     tags: [Mental, Knowledge, Imperium, Inquisition]
     ref: B199
     lore: >
@@ -95,7 +93,6 @@ items:
   - name: Hidden Lore
     spec: Adeptus Astartes
     diff: IQ/A
-    defaults: ["IQ-6"]
     tags: [Mental, Knowledge, Imperium]
     ref: B199
     lore: >
@@ -107,7 +104,6 @@ items:
   - name: Hidden Lore
     spec: Archeotech
     diff: IQ/A
-    defaults: ["IQ-6"]
     tags: [Mental, Knowledge, Imperium, Adeptus Mechanicus]
     ref: B199
     lore: >
@@ -223,7 +219,7 @@ items:
       society — Explorator and Ordo Xenos work, not folk rumour (that's
       Hidden Lore (Xenos)). No default, as Basic Set's Expert Skill never
       has one: this is specialist training only.
-    design: Basic Set Expert Skill (B193).
+    design: Basic Set Expert Skill (B193), IQ/Hard as in the Basic Set library entry for Xenology.
   - name: Heraldry
     spec: Adeptus Astartes
     diff: IQ/A
@@ -256,13 +252,13 @@ items:
       for calibration only; the GURPS build is original.
     design: >
       New skill per framework.md ("New skills only when nothing fits").
-      Per/H, Talent-affected: characters with a Psyker Talent (see the
-      psyker power library — not part of this file) get it at a discount
-      per that trait's rules and may default it from Per at a penalty;
-      an unaugmented human without any psychic Talent cannot default into
-      it at all (there is nothing latent to sense with) and must buy it
-      as an unusual background purchase, if a GM allows it at all — most
-      unaugmented Imperial citizens simply never take this skill.
+      Per/H with no default: nobody can roll it untrained. Characters with
+      a Psyker Talent (see the psyker power library, not part of this
+      file) get it at a discount per that trait's rules. An unaugmented
+      human without any psychic Talent has nothing latent to sense with
+      and must buy it as an unusual background purchase, if a GM allows
+      it at all; most unaugmented Imperial citizens simply never take this
+      skill.
   # ------------------------------------------------------------ Scholarship
   - name: Research
     diff: IQ/A
@@ -277,6 +273,7 @@ items:
   - name: Cryptography
     spec: Inquisitorial Ciphers
     diff: IQ/H
+    defaults: ["Mathematics (Cryptology)-5"]
     tags: [Mental, Imperium, Inquisition]
     ref: B186
     lore: >
@@ -285,9 +282,9 @@ items:
       as much as from heretics — Inquisitors are famously as suspicious of
       their own kind as of their prey (Eisenhorn, Ravenor).
     design: >
-      Basic Set Cryptography (B186), specialised; defaults from Mathematics
-      (Cryptology) as normal, so no explicit default is listed here (it
-      depends on whether the character has that skill at all).
+      Basic Set Cryptography (B186), specialised; keeps the Basic Set
+      default of Mathematics (Cryptology)-5, listed explicitly because GCS
+      applies only the defaults written in the entry.
   - name: Forced Entry
     diff: DX/E
     tags: [Physical, Imperium]

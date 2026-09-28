@@ -9,13 +9,21 @@ items:
     weight: 30
     tags: [Melee Weapon, Xenos, Necrons]
     weapons:
-      - usage: Swing, two-handed
-        damage: sw+4d cut
+      - usage: Swing, two-handed (field on)
+        damage: sw+4d(10) cut
         reach: "1,2"
         parry: "-1"
         st: 20
         skill: Two-Handed Sword
-    notes: Field carries armour divisor (10), per the framework's power-field rule.
+      - usage: Swing, two-handed (field off)
+        damage: sw+1d cut
+        reach: "1,2"
+        parry: "-1"
+        st: 20
+        skill: Two-Handed Sword
+    notes: >-
+      Field on carries armour divisor (10), per the framework's power-field rule; the field is a
+      free-action toggle, and with it off the weapon is a heavy necrodermis blade (sw+1d cut).
     lore: >-
       The signature weapon of Necron Lychguard and many Overlords: a scythe-bladed, disruption-
       field-edged polearm that Codex: Necrons background, Black Library's Necron fiction (the
@@ -34,6 +42,8 @@ items:
       and Astartes power armour at 100% and a Terminator (DR 200, eff. 20) 93.9% of the time -
       matching the fiction's own claim that a warscythe cuts down even the most heavily armoured
       target it meets, not merely a Space Marine.
+      Field-off line: the mundane baseline is sw+1d cut (a 30 lb necrodermis blade), so the +3d
+      field step gives the anchor's sw+4d.
       Handling: 30 lb, a genuinely massive two-handed weapon even set against the rest of this
       armoury, per every depiction of a warscythe as a tall, imposing polearm rather than a
       sword; min ST 20 (heavier than the Imperium's own two-handed Eviscerator's ST 15, for the
@@ -50,16 +60,23 @@ items:
     weight: 8
     tags: [Melee Weapon, Xenos, Necrons]
     weapons:
-      - usage: Swing
-        damage: sw+3d cut
+      - usage: Swing (field on)
+        damage: sw+3d(10) cut
         reach: "1"
         parry: 0
         st: 14
         skill: Broadsword
-    notes: Field carries armour divisor (10), per the framework's power-field rule.
+      - usage: Swing (field off, plain blade)
+        damage: sw cut
+        reach: "1"
+        parry: 0
+        st: 14
+        skill: Broadsword
+    notes: >-
+      Field on carries armour divisor (10), per the framework's power-field rule; with the field
+      off it is a plain necrodermis blade (sw cut).
     lore: >-
-      A one-handed disruption-field blade carried by Necron Lords, Overlords and Triarch
-      Praetorians, most often paired with a sidearm or a dispersion shield rather than wielded
+      A one-handed disruption-field blade carried by Necron Lords and Overlords, most often paired with a sidearm or a dispersion shield rather than wielded
       two-handed like a warscythe; Codex: Necrons background and the RPG-line Necron-armoury
       material both treat it as this armoury's standard one-handed power weapon, mechanically
       equivalent in what it does to armour to the Imperium's own power sword.
@@ -75,6 +92,7 @@ items:
       own ST-30 figures against a Terminator (which this project's Imperium file puts lower),
       matching Necron hyperphase technology's reputation as at least the equal of Imperial
       disruption fields.
+      Field-off line: the mundane baseline is sw cut, so the +3d field step gives sw+3d.
       Handling: 8 lb, twice the weight of the Imperium Power Sword's 4 lb for the same "Necron
       gear runs heavier" convention; min ST 14 (above the Imperium sword's ST 10, for the denser
       necrodermis blade and hilt) still leaves it comfortably one-handed for any Necron noble at
@@ -178,27 +196,35 @@ items:
     weight: 40
     tags: [Melee Weapon, Xenos, Necrons]
     weapons:
-      - usage: Swing, two-handed
-        damage: sw+5d cut
+      - usage: Swing, two-handed (field on)
+        damage: sw+5d(10) cut
         reach: "1,2"
         parry: "-1"
         st: 24
         skill: Two-Handed Sword
-    notes: Field carries armour divisor (10), per the framework's power-field rule.
+      - usage: Swing, two-handed (field off)
+        damage: sw+2d cut
+        reach: "1,2"
+        parry: "-1"
+        st: 24
+        skill: Two-Handed Sword
+    notes: >-
+      Field on carries armour divisor (10), per the framework's power-field rule; with the field
+      off it is a huge plain scythe-blade (sw+2d cut).
     lore: >-
       One of the paired weapon-arms built into a Skorpekh Destroyer's own hunting-construct
       chassis, a massive scythe-bladed hyperphase weapon fought alongside the same construct's
       threshing talons; Codex: Necrons background describes the Skorpekh Destroyer cult as some
       of the deadliest close-combat troops the Necron armoury fields, built specifically to
-      close with and butcher whatever a Skorpekh's gauss reaper hasn't already killed at range.
+      close with and butcher living targets in a whirling, all-consuming melee.
     design: >-
       Built one die heavier than the Warscythe above, the same "Destroyer-cult chassis weapon
-      hits harder than the equivalent hand-carried pattern" relationship this project's own Gauss
-      Reaper entry establishes over a standard trooper's gauss weapon: sw+5d(10) cut. Checked by
+      hits harder than the equivalent hand-carried pattern" relationship: sw+5d(10) cut. Checked by
       exact dice distribution at a Skorpekh's own construct-scale ST 22 (sw=4d, giving 9d(10)):
       average 31.5 damage clears every personal-armour DR at 100%, including a Terminator (DR
       200, eff. 20) at 98.5% - the single hardest-hitting melee weapon in this file, matching the
       Skorpekh Destroyer's own reputation as the Necron armoury's premier close-combat killer.
+      Field-off line: baseline sw+2d cut (a 40 lb chassis-scale blade), +3d field step = sw+5d.
       Handling: 40 lb and min ST 24, both built into the Skorpekh's own weapon-arm rather than a
       carried grip (heavier again than the hand-wielded Warscythe's 30 lb/ST 20, for the bigger
       scythe-blade and its own integral chassis mounting); reach 1,2 and parry -1 are unchanged
@@ -211,13 +237,21 @@ items:
     weight: 18
     tags: [Melee Weapon, Xenos, Necrons]
     weapons:
-      - usage: Claw strike
-        damage: sw+3d cut
+      - usage: Claw strike (field on)
+        damage: sw+3d(10) cut
+        reach: "1"
+        parry: -1
+        st: 22
+        skill: Broadsword
+      - usage: Claw strike (field off)
+        damage: sw cut
         reach: "1"
         parry: -1
         st: 22
         skill: Broadsword
     notes: >-
+      Field on carries armour divisor (10), per the framework's power-field rule; field off is a
+      plain claw (sw cut).
       A Skorpekh Destroyer's paired weapon-arm to its own Hyperphase Reap-blade above; the
       construct fights with both, and the GM should let it make a genuine two-weapon attack each
       turn (GURPS Basic's Dual-Weapon Attack, B417) rather than treating the talons as a purely
@@ -238,6 +272,7 @@ items:
       derivation for its own sake. Parry is corrected to -1 (rather than the sword's 0) since a
       claw-shaped weapon-arm is built for offense, not defensive fencing, the same logic this
       project's Imperium Axe/Mace-class weapons use for a less sword-like profile.
+      Field-off line: baseline sw cut, +3d field step = sw+3d.
       Handling: 18 lb and min ST 22, lighter than the reap-blade for a claw-cluster rather than a
       full scythe-blade on the same construct chassis; reach 1 (shorter than the reap-blade's
       polearm reach, a close-in claw rather than a long blade) is the only other point of
@@ -251,42 +286,32 @@ items:
     tags: [Melee Weapon, Xenos, Necrons]
     weapons:
       - usage: Claw strike
-        damage: thr+1 cut
+        damage: thr+2d(3) cut
         reach: C,1
         parry: -1
         st: 18
         skill: Brawling
-      - usage: Follow-up (any wound inflicted)
-        damage: 1d(3) tox
-        reach: C,1
-        parry: -1
-        st: 18
-        skill: Brawling
-        notes: >-
-          Ignores DR, per the framework's Radium Pistol/Mandiblasters "the follow-up carries the
-          real threat" precedent for a DR-ignoring secondary effect. Represents the flayer virus
-          infecting the wound track: a target who fails the resulting HT roll doesn't merely take
-          the listed damage but is Afflicted with a spreading necrotic corruption (treat as
-          Terror per B428 layered with a worsening Bleeding condition each subsequent turn until
-          treated) as living necrodermis-flesh hybrid tissue tries to root itself in the victim -
-          the specific horror Flayed Ones are known for in the fiction, left as a narrative
-          affliction the GM adjudicates rather than a numeric disease-progression table this
-          project has no other precedent for.
+    notes: >-
+      Hooked necrodermis claws that peel flesh from bone. Armour divisor (3) is written into the
+      damage; the claws are wounding tools, not a power-field weapon.
     lore: >-
       Flayed Ones fight with wickedly hooked bone-metal claws grown from their own corrupted
       necrodermis, tearing the flesh from their victims in a compulsion the Codex: Necrons
-      background and Black Library's Necron fiction both attribute to the same "flayer virus"
-      that shattered their minds during biotransference - the Twice-Dead King trilogy and The
-      Infinite and the Divine both use Flayed Ones specifically for body-horror, skin-taking
-      dread rather than for any raw battlefield lethality their claws don't actually carry.
+      background and Black Library's Necron fiction both attribute to the "flayer virus" that
+      corrupted their reanimation matrices during biotransference. The Flayer Curse is a
+      degradation of the Necron's own mind, not a disease it passes on: the claws simply cut, and
+      the horror of a Flayed One lies in what it does with the skin afterwards. The Twice-Dead
+      King trilogy and The Infinite and the Divine both use Flayed Ones for body-horror,
+      skin-taking dread.
     design: >-
-      Deliberately weak as a raw wounding attack (thr+1 cut, checked by exact dice distribution
-      at ST 18 (thr=2d+2, giving 2d+3): average 10 damage rounds to 0% against flak or anything
-      heavier - a Flayed One's claws were never meant to threaten armour, only unprotected
-      flesh) with the real lethality and horror carried entirely by the DR-ignoring toxic/
-      infection follow-up, the same "the follow-up carries the real threat" design this project's
-      Imperium Radium Pistol and Aeldari Mandiblasters entries already use for a body-horror or
-      lingering-poison effect that doesn't map onto a single damage roll.
+      Built so the signature Necron ambusher can actually hurt a Guardsman in flak: thr+2d(3) cut
+      at ST 18 (thr 1d+2, giving 3d+2(3)), average 12.5. Checked by exact dice distribution:
+      penetrates flak (DR 30, eff. 10) 74.1% of the time, carapace (DR 70, eff. 23.3) essentially
+      never (0%), and Astartes power armour never. That leaves the claws a flesh-and-flak killer,
+      not an armour-breaker, which suits an ambusher that relies on stealth and the victim's
+      terror. An earlier draft added a DR-ignoring toxic "flayer virus" follow-up; that mechanic
+      is not in the fiction and has been removed. If dread is wanted at the table, use a Fright
+      Check on the Flayed One's appearance rather than a wound effect.
       Handling: 4 lb (light, built-in claws, not a carried weapon in the usual sense) and min ST
       18 matching a Flayed One's own base ST exactly, since these are part of the creature's body
       rather than an armoury-issued item; reach C,1 and parry -1 (Brawling's own convention for
@@ -369,11 +394,11 @@ items:
       hierarchy. This does not stack with the Resurrection Orb's own HT bonus (Gear.yaml); use
       whichever single figure is higher if a unit is somehow under the effect of both.
     lore: >-
-      A ceremonial staff of office carried by a Necron Overlord commanding a significant force -
+      A ceremonial staff of office carried by Triarch Praetorians and Royal Wardens (and by any Overlord who claims one) -
       Codex: Necrons background and older Necron material both frame it primarily as a symbol of
       authority and a tactical relay to the Tomb World's own command protocols rather than a
       dedicated weapon, though every depiction still shows an Overlord using it to brutal effect
-      in melee when the fighting reaches him directly.
+      in melee when the fighting reaches its bearer directly.
     design: >-
       No framework anchor names this item, so it is built as a plain, unenhanced Necron staff
       weapon (sw+1 cr, no power field or armour divisor at all - this project reserves the +3d/
@@ -449,8 +474,14 @@ items:
     weight: 10
     tags: [Melee Weapon, Missile Weapon, Xenos, Necrons]
     weapons:
-      - usage: Melee, power-field strike
-        damage: sw+2d cut
+      - usage: Melee, power-field strike (field on)
+        damage: sw+2d(10) cut
+        reach: "1"
+        parry: 0
+        st: 10
+        skill: Staff
+      - usage: Melee, field off (as plain staff)
+        damage: sw cr
         reach: "1"
         parry: 0
         st: 10
@@ -466,7 +497,8 @@ items:
         rcl: 1
         skill: Beam Weapons (Rifle)
     notes: >-
-      Melee line carries armour divisor (10), per the framework's power-field rule. This is one
+      Melee field-on line carries armour divisor (10), per the framework's power-field rule; with
+      the field off it is a plain staff (sw cr). This is one
       physical weapon with both a ranged and a melee mode; it is included wholesale into the
       Ranged Weapons file per data-format.md's `include` convention (the same pattern the
       Aeldari Singing Spear uses across melee.yaml and ranged.yaml) rather than defined twice.
@@ -485,8 +517,9 @@ items:
       against carapace (DR 70, eff. 23.3) and 0.06% against Astartes power armour, a real anti-
       infantry weapon and a poor anti-Astartes one, exactly what a Lord's sidearm should be next
       to a dedicated Warrior or Immortal weapon. The melee line applies this project's own power-
-      field rule (+3d over a mundane baseline at divisor (10)) one die lighter than the Hyperphase
-      Sword's own sw+3d, since a staff's melee mode is a secondary function of a primarily ranged
+      field rule (divisor (10) written into the damage string, with a field-off line at the plain
+      staff's sw cr) but with a smaller field step (+2d rather than the usual +3d), one die lighter
+      than the Hyperphase Sword's own sw+3d, since a staff's melee mode is a secondary function of a primarily ranged
       item rather than a dedicated blade: checked by exact dice distribution at ST 10 (sw=1d,
       giving 3d(10)): average 10.5 damage penetrates flak/carapace/Sororitas at 100%/99.6%/98.8%
       and Astartes power armour (DR 100, eff. 10) 94.6% of the time, and a Terminator (DR 200,

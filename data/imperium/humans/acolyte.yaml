@@ -8,8 +8,11 @@ notes: >
   a generalist investigator/field-agent baseline; individual acolytes
   should reskin the skill list toward their actual background. Point
   math: ST 10 (+0), DX 12 (+40), IQ 13 (+60), HT 11 (+10) = 110;
-  advantages +20; disadvantages -32; skills +100. Total 198 points, the
-  low end of framework.md's "Elite human (200-350)" tier. No psychic
+  advantages +30 (including Inquisitorial Rank 1); disadvantages -32;
+  skills +102. Total 210 points, the low end of framework.md's "Elite
+  human (200-350)" tier. An acolyte is a generalist investigator: a
+  sidearm and a blade, not a swordmaster; retinue, Contacts and Wealth
+  are campaign purchases, since the Inquisitor's requisition covers kit. No psychic
   abilities here — an acolyte with a sanctioned psyker gift should add
   traits from the separate psyker power library on top of this base.
 traits:
@@ -48,6 +51,10 @@ traits:
     tags: [Advantage, Mental, Imperium]
     lore: An acolyte who freezes under fire does not remain an acolyte for long.
     design: Basic Set Combat Reflexes (B43), 15 points.
+  - include: "imperium/common/imperial-traits.yaml#Inquisitorial Rank"
+    levels: 1
+    lore: An acolyte in formal service holds the lowest level of Inquisitorial authority, borrowed from their Inquisitor.
+    design: Inquisitorial Rank level 1 (5 x 2 = 10 points with the +100% enhancement), the "Acolyte in formal service" level in Imperial Traits.adq.
   - include: "imperium/common/imperial-traits.yaml#Duty (Inquisition)"
   - include: "imperium/common/imperial-traits.yaml#Intolerance (Heretics)"
     lore: An acolyte's entire job is hunting heresy; most come to share their Inquisitor's zeal for it.
@@ -70,6 +77,12 @@ skills:
     tags: [Imperium, Inquisition]
     lore: A concealable sidearm (autopistol, laspistol, or stub revolver) is standard acolyte kit.
     design: DX+4 (16) for 12 points, Easy (B170).
+  - name: Broadsword
+    diff: DX/A
+    points: 2
+    tags: [Imperium, Inquisition]
+    lore: A concealable blade or sword-cane; Eisenhorn's and Ravenor's retinues fight in melee often enough that an acolyte needs the basics.
+    design: DX+0 (12) for 2 points, Average.
   - name: Stealth
     diff: DX/A
     points: 12

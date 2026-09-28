@@ -17,9 +17,13 @@ items:
     points: 14
     tags: [Advantage, Physical, Imperium, Adeptus Mechanicus]
     ref: B40
+    attributes: {lifting_st: 2, striking_st: 2}
+    dr: {arm: 2}
     notes: >
-      Arm ST +2 (applies to lifting and to thrust/swing damage with this arm
-      only); DR 2 on this arm only.
+      Arm ST +2 (Lifting ST +2 and Striking ST +2, applied by the sheet);
+      DR 2 to the arm. GCS applies these to the whole character, so for a
+      single prosthetic arm use them for that arm only (the second arm has
+      no bonus, and DR covers only the augmetic arm's hit location).
     lore: >
       The cheap, mass-produced limb replacement issued to menial serfs,
       manufactorum labourers and low-ranking Mechanicus staff who have lost
@@ -35,9 +39,12 @@ items:
     points: 42
     tags: [Advantage, Physical, Imperium, Adeptus Mechanicus, Skitarii]
     ref: B40
+    attributes: {lifting_st: 6, striking_st: 6}
+    dr: {arm: 6}
     notes: >
-      Arm ST +6 (lifting and thrust/swing damage with this arm only); DR 6
-      on this arm only.
+      Arm ST +6 (Lifting ST +6 and Striking ST +6, applied by the sheet);
+      DR 6 to the arm. GCS applies these to the whole character, so for a
+      single prosthetic arm use them for that arm only.
     lore: >
       The heavier pattern carried by Skitarii, veteran Enginseers, and any
       Tech-Priest expecting to use the limb itself as a weapon: cabled
@@ -51,7 +58,8 @@ items:
     points: 5
     tags: [Advantage, Physical, Imperium, Adeptus Mechanicus]
     ref: B46
-    notes: DR 2 on this leg only; the prosthetic joint doesn't fatigue or cramp.
+    dr: {leg: 2}
+    notes: DR 2 to the leg (the sheet applies it to the leg location; use it for the augmetic leg only); the prosthetic joint doesn't fatigue or cramp.
     lore: >
       A basic replacement leg for a menial or low-ranking adept: functional,
       unglamorous, and common wherever industrial accidents are common.
@@ -67,6 +75,8 @@ items:
     points: 20
     tags: [Advantage, Physical, Imperium, Adeptus Mechanicus, Skitarii]
     ref: B46
+    dr: {leg: 6}
+    attributes: {basic_move: 1}
     notes: DR 6 on both legs; Basic Move +1 from servo-assisted stride.
     lore: >
       Skitarii Rangers and Vanguard are routinely fielded with both legs
@@ -86,7 +96,9 @@ items:
     points: 14
     tags: [Advantage, Physical, Imperium, Adeptus Mechanicus]
     ref: B60
-    notes: Infravision; Acute Vision +2.
+    raw_features:
+      - {type: attribute_bonus, attribute: vision, amount: 2}
+    notes: Infravision; Acute Vision +2 (a +2 to the Vision roll, applied by the sheet).
     lore: >
       The standard-issue ocular augmetic fitted to almost every Skitarii and
       forge-world menial: crude compared to a Magos' oculars, but enough to
@@ -97,7 +109,9 @@ items:
     points: 24
     tags: [Advantage, Physical, Imperium, Adeptus Mechanicus, Skitarii]
     ref: B60
-    notes: Infravision; Acute Vision +2; Telescopic Vision +2.
+    raw_features:
+      - {type: attribute_bonus, attribute: vision, amount: 2}
+    notes: Infravision; Acute Vision +2 (applied by the sheet); Telescopic Vision +2.
     lore: >
       Longer-focus oculars issued to Skitarii Rangers and Sicarian pattern
       infiltrators for target marking at range — the same augmetic family
@@ -110,7 +124,9 @@ items:
     points: 44
     tags: [Advantage, Physical, Imperium, Adeptus Mechanicus]
     ref: B60
-    notes: Infravision; Dark Vision; Acute Vision +2; Protected Sense (Vision).
+    raw_features:
+      - {type: attribute_bonus, attribute: vision, amount: 2}
+    notes: Infravision; Dark Vision; Acute Vision +2 (applied by the sheet); Protected Sense (Vision).
     lore: >
       A senior Tech-Priest's full ocular replacement: banks of interchangeable
       lenses that between them see by heat, by full dark, and by ordinary
@@ -167,16 +183,20 @@ items:
     levels: 2
     tags: [Advantage, Physical, Imperium, Adeptus Mechanicus]
     ref: B46
-    notes: DR, all locations; stacks with worn armor.
+    raw_features:
+      - {type: dr_bonus, locations: [all], amount: 1, per_level: true}
+    notes: DR 1 per level, all locations (2 levels = DR 2); stacks with worn armor.
     lore: >
       Ceramite or plasteel weave grafted beneath the skin across the whole
-      body, rather than replacing a specific organ or limb — the augmetic
-      equivalent of the Astartes' Ossmodula, bought by Tech-Priests who
-      expect to take a hit.
+      body, rather than replacing a specific organ or limb — a whole-body
+      counterpart to the Astartes' Ossmodula (which is DR 3 to torso and
+      vitals only), bought by Tech-Priests who expect to take a hit.
     design: >
       Plain Damage Resistance (B46), 5 points/level, no location
       restriction since it covers the whole body. Bought here at a default
-      2 levels (DR 10, 10 points); raise or lower the level to taste.
+      2 levels (DR 2, 10 points); raise or lower the level to taste. The
+      DR is a real per-level feature, so changing the level changes the
+      sheet. Suggested levels: Magos 2-3, Skitarii 3, Servitor 4.
 
   # ----------------------------------------------------------- neural links
   - &mind_impulse_unit
@@ -321,7 +341,13 @@ items:
     points: 50
     tags: [Advantage, Physical, Imperium, Adeptus Mechanicus]
     ref: B53
-    notes: Extra Arm; Lifting ST +8; Striking ST +3; Payload 1.
+    attributes: {lifting_st: 8, striking_st: 3}
+    notes: >
+      Extra Arm; Lifting ST +8; Striking ST +3 (both applied by the sheet);
+      Payload 1. This is the body-mounted implant; the Servo-arm and
+      Electroleech Stave in the melee weapons file are separate carried
+      tools, and a build using the implant should not also buy the gear
+      version for the same limb.
     lore: >
       The heavy, back-mounted tool-arm carried by Enginseers and Techmarines:
       strong enough to tear open a sealed hatch or wrench a fused component
@@ -677,34 +703,29 @@ items:
     tags: [Advantage, Mental, Imperium, Adeptus Mechanicus, Skitarii]
     children:
       - name: Protector Imperative
-        points: 10
-        ref: B51
-        notes: Enhanced Parry (All Parries) +1.
+        points: 5
+        ref: B90
+        notes: "+1 to Guns and Gunner skills when the Skitarii did not move this turn (Talent-style construction, holding position)."
       - name: Conqueror Imperative
         points: 5
         ref: B90
-        notes: "+1 to Guns and Gunner skills (Talent-style construction)."
-      - name: Hunter Imperative
-        points: 5
-        ref: B17
-        notes: Basic Move +1.
+        notes: "+1 to Guns and Gunner skills when the Skitarii moved this turn (Talent-style construction, advancing fire)." 
     lore: >
       A Skitarii Maniple's cranial implants take a battle-doctrina uploaded
       before an engagement, biasing every Skitarii in the maniple toward
-      one combat posture at a time: Protector for a defensive cordon,
-      Conqueror for an all-out firing advance, Hunter for pursuit and
-      encirclement. A Skitarii can only run one imperative at a time and
+      one combat posture at a time: Protector (hold ground and shoot) or
+      Conqueror (advance and shoot). The Codex names these two; the
+      earlier draft's third, Hunter, is not in the sources this project
+      could identify and has been dropped. A Skitarii can only run one imperative at a time and
       must be re-flashed (a Ready maneuver, or a scene break, at the GM's
       call) to switch.
     design: >
       Basic Set Alternative Abilities (B61): buy the most expensive ability
       at full price and the rest at 1/5 cost (round up), since only one can
-      be active. Full prices: Enhanced Parry, All Parries (B51, 10),
-      Conqueror Imperative as a narrow +1 combat Talent (B90-style, 5),
-      Hunter Imperative as Basic Move +1 (B17, 5). GCS applies the
+      be active. Full prices: Protector and Conqueror are each a narrow +1 combat
+      Talent (B90-style, 5). GCS applies the
       Alternative Abilities discount natively for this container type;
-      worked by hand, the effective total is 10 + ceil(5/5) + ceil(5/5) =
-      12 points.
+      worked by hand, the effective total is 5 + ceil(5/5) = 6 points.
 
   # -------------------------------------------------------- Vanguard field
   - &vanguard_rad_saturation

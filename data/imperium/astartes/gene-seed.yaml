@@ -63,16 +63,30 @@ items:
 
   - &haemastamen
     name: Haemastamen
-    points: 1
-    tags: [Advantage, Physical, Imperium, Adeptus Astartes, Perk]
+    container: meta_trait
+    children:
+      - name: Haemastamen (Gene-Seed Markers)
+        points: 1
+        tags: [Perk]
+        notes: Plot-hook marker; an Apothecary can confirm lineage and biochemical stability from the blood.
+      - name: Resistant to Disease
+        points: 5
+        ref: B81
+        round_down: true
+        notes: "+8 to HT rolls to resist disease (Occasional hazard, +8 tier)."
+    tags: [Advantage, Physical, Imperium, Adeptus Astartes]
     lore: >
       Regulates the chemistry of Astartes blood and produces the
       genetically-tagged compounds an Apothecary tests for to confirm a
       Marine's gene-seed lineage and general biochemical stability. Its
-      output is also the substrate Larraman's Organ acts on.
+      output is also the substrate Larraman's Organ acts on, and the same
+      tuned blood chemistry is why Astartes so seldom fall to ordinary
+      disease.
     design: >
-      Pure physiology/plot-hook organ — no combat effect of its own.
-      1-point Perk (B21) so it stays a listed, removable trait.
+      1-point Perk (B21) for the lineage-marker function, plus Resistant
+      (B81) to Disease: Occasional hazard 10, +8 tier x1/2 = 5 points. A
+      bonus rather than Immunity, because the fiction has Marines fall to
+      warp-spawned and engineered plagues. 6 points total.
 
   - &larramans_organ
     name: Larraman's Organ
@@ -92,7 +106,7 @@ items:
       out; it is described across Black Library fiction from minor cuts up
       to serious battlefield trauma.
     design: >
-      Reflavoured Rapid Healing (B79, 5 points): the RAW effect (double
+      Reflavoured Rapid Healing (B79, 5 points): the RAW effect (+5 to
       effective HT for recovery rolls) undersells "seals in seconds," so
       the design also folds in automatic stabilization against ongoing
       blood loss for the first turn after a wound, at no extra point cost
@@ -100,24 +114,35 @@ items:
 
   - &catalepsean_node
     name: Catalepsean Node
-    points: 6
+    points: 8
     tags: [Advantage, Physical, Imperium, Adeptus Astartes]
     ref: B65
+    notes: >
+      Needs about 4 hours of sleep. On campaign the GM may let a Marine
+      skip sleep entirely for days or weeks with no fatigue penalty
+      (the hemispheres rest in turn); this is the fictional "no sleep for
+      weeks" and is not bought as Doesn't Sleep.
     lore: >
       A brainstem structure that lets the two cerebral hemispheres rest in
-      alternation, so an Astartes only needs a couple of hours of true
-      sleep where a human needs eight, and can go without any for days at
-      a stretch on campaign. Distinct from the Sus-an Membrane, which is a
+      alternation, so an Astartes only needs a few hours of true sleep
+      where a human needs eight, and can go without any for days at a
+      stretch on campaign. Distinct from the Sus-an Membrane, which is a
       full metabolic shutdown rather than efficient rest.
     design: >
-      Less Sleep 3 (B65, 2 points/level): reduces sleep need from 8 hours
-      to about 2. 3 x 2 = 6 points.
+      Less Sleep 4 (B65, 2 points/level, the maximum of 4 levels): reduces
+      sleep need from 8 hours to 4. 4 x 2 = 8 points. Doesn't Sleep (B50,
+      20 points) would overshoot: a Marine does eventually rest, and the
+      weeks-awake feat is a campaign-length allowance, not a standing
+      trait.
 
   - &preomnor
     name: Preomnor
-    points: 10
+    points: 5
     tags: [Advantage, Physical, Imperium, Adeptus Astartes]
     ref: B81
+    notes: >
+      +8 to HT rolls to resist ingested poison and spoiled food. Not
+      Immunity: weaponised or exotic toxins can still poison a Marine.
     lore: >
       A supplementary "pre-stomach" that chemically breaks down and
       neutralizes toxins and spoiled matter in food before it reaches the
@@ -125,10 +150,11 @@ items:
       feral-world game, toxic fungus — that would sicken or kill an
       unaugmented human.
     design: >
-      Resistant (B81), Occasional: Ingested Poison, Immunity — base 10,
-      x1 for Immunity = 10 points. Deliberately narrower than Oolitic
-      Kidney below: this organ only ever sees toxins that arrive through
-      the gut.
+      Resistant (B81), Occasional: Ingested Poison, +8 to resist — base 10,
+      x1/2 for the +8 tier = 5 points. Taken as a bonus rather than
+      Immunity because the fiction has Marines poisoned by potent or
+      engineered agents. Deliberately narrower than Oolitic Kidney below:
+      this organ only ever sees toxins that arrive through the gut.
 
   - &omophagea
     name: Omophagea
@@ -176,6 +202,10 @@ items:
         per_level: 2
         levels: 2
         ref: B35
+      - name: Night Vision
+        per_level: 1
+        levels: 5
+        ref: B71
       - name: Protected Sense (Vision)
         points: 5
         ref: B78
@@ -187,9 +217,10 @@ items:
       terrain at ranges no unaugmented eye could manage, and shrugging off
       blinding light that would stagger a human.
     design: >
-      Acute Vision 2 (B35, 2/level, 4 points) for the raw acuity; Protected
-      Sense (Vision) (B78, 5 points) so flash/glare can't blind the organ
-      outright. 9 points total.
+      Acute Vision 2 (B35, 2/level, 4 points) for the raw acuity; Night
+      Vision 5 (B71, 1/level, 5 points) for the low-light performance;
+      Protected Sense (Vision) (B78, 5 points) so flash/glare can't blind
+      the organ outright. 14 points total.
 
   - &lymans_ear
     name: Lyman's Ear
@@ -251,17 +282,23 @@ items:
 
   - &oolitic_kidney
     name: Oolitic Kidney
-    points: 15
+    points: 7
     tags: [Advantage, Physical, Imperium, Adeptus Astartes]
     ref: B81
+    notes: >
+      +8 to HT rolls to resist poison from any route. Not Immunity:
+      exotic and weaponised agents (assassin toxins, Life-Eater, plague
+      vectors) can still kill a Marine.
     lore: >
       A backup kidney that aggressively filters toxins circulating in the
       blood — venoms, industrial poisons, battlefield chemical agents —
       rather than the ones Preomnor already caught at the gut.
     design: >
-      Resistant (B81), Common: Poison, Immunity — base 15, x1 for Immunity
-      = 15 points. Priced above Preomnor because it covers poison from any
-      route of entry, not just food.
+      Resistant (B81), Common: Poison, +8 to resist — base 15, x1/2 for the
+      +8 tier = 7.5, rounded down (Resistant rounds down) to 7 points.
+      Priced above Preomnor because it covers poison from any route of
+      entry, not just food. A bonus rather than Immunity because the
+      fiction repeatedly has Marines poisoned by potent agents.
 
   - &neuroglottis
     name: Neuroglottis
@@ -314,9 +351,11 @@ items:
         weapons:
           - usage: Spit
             damage: 1d cor
-            reach: C
-            parry: "No"
-            skill: Brawling
+            acc: 1
+            range: 1/3
+            rof: 1
+            skill: Innate Attack (Projectile)
+            defaults: ["Innate Attack (Projectile)", "DX-4"]
       - name: Oral Poison Filter
         points: 1
     tags: [Advantage, Physical, Imperium, Adeptus Astartes]
@@ -326,8 +365,9 @@ items:
       and diseased food in the mouth — not a primary attack for a Marine
       who has a bolter.
     design: >
-      Innate Attack (Corrosion) at a token 1d, melee reach C only (B61,
-      roughly 3 points after the reach/range restriction) for the spit;
+      Innate Attack (Corrosion) at a token 1d, range 1/3 yards (B61,
+      roughly 3 points after the range restriction) for the spit, rolled
+      against Innate Attack (Projectile) since spitting is a ranged act;
       1-point Perk for the minor oral antitoxin effect (overlaps in
       concept with Preomnor, so kept nominal). 4 points total.
 
@@ -386,9 +426,9 @@ items:
         ref: B85
         notes: "Represents relentless mission focus drilled in from the day of recruitment."
       - name: Duty (Chapter and Imperium)
-        points: -15
+        points: -20
         ref: B133
-        notes: "Almost all the time, Extremely Hazardous."
+        notes: "Almost all the time (-15), Extremely Hazardous (-5 more)."
       - name: Sense of Duty (Battle-Brothers)
         points: -10
         ref: B153
@@ -409,8 +449,9 @@ items:
     design: >
       Combat Reflexes (B43, 15) + Fearlessness 4 (B55, 2/level, 8) + High
       Pain Threshold (B59, 10) + Single-Minded (B85, 5) = 38 points of
-      advantage, offset by Duty (B133, -15), Sense of Duty to the Chapter
-      (B153, -10), and Code of Honor (B127, -10) = -35. Net +3 points.
+      advantage, offset by Duty (B133, -20: almost all the time -15,
+      Extremely Hazardous a further -5), Sense of Duty to the Chapter
+      (B153, -10), and Code of Honor (B127, -10) = -40. Net -2 points.
       Intolerance is deliberately left out of the universal package —
       lore doesn't support a blanket xenophobia disadvantage across every
       Chapter; where a specific Chapter's fiction supports it, add it as
@@ -464,6 +505,11 @@ items:
           user's direction that Marines run very fast; stacks with the
           package's Basic Move +4. Half a level, not a full one, keeps the
           Custodes (a full level) clearly faster.
+      - name: Extended Lifespan
+        per_level: 2
+        levels: 3
+        ref: B53
+        notes: Ages far more slowly; centuries of service are routine. A GM may remove it for a Chapter or campaign that treats Marines as short-lived.
       - *secondary_heart
       - *ossmodula
       - *biscopea
@@ -492,9 +538,9 @@ items:
       lenses below add or remove pieces where the fiction says a specific
       lineage differs.
     design: >
-      407 (Attribute Modifiers) + 153 (nineteen organs: 4+14+1+1+5+6+10+1
-      +11+9+9+9+11+15+21+20+4+1+1) + 3 (Hypno-Indoctrination) + 10 (Enhanced Move 1/2) = 573
-      points. This is the physiology alone, before any skills; see the
+      407 (Attribute Modifiers) + 152 (nineteen organs: 4+14+1+6+5+8+5+1
+      +11+14+9+9+11+7+21+20+4+1+1) + (-2) (Hypno-Indoctrination) + 10
+      (Enhanced Move 1/2) + 6 (Extended Lifespan 3) = 573 points. This is the physiology alone, before any skills; see the
       Battle-Brother, Scout, and Primaris templates for full characters
       built on top of it.
 
@@ -503,8 +549,8 @@ items:
     tags: [Advantage, Physical, Imperium, Adeptus Astartes]
     children:
       - name: Attribute Modifiers (Neophyte)
-        points: 230
-        attributes: {st: 14, dx: 3, ht: 2, basic_speed: 0.5}
+        points: 250
+        attributes: {st: 14, dx: 4, ht: 2, basic_speed: 0.5}
         tags: [Physical]
         design: >
           Reduced version of the full package: Increased ST +14 (140, ST 24) and
@@ -513,8 +559,9 @@ items:
           well above human norm but hasn't finished bulking out to a full
           Battle-Brother's mass; Increased Basic Speed +0.50 (10) reflects
           reflexes that are quick but not yet honed to a veteran's combat
-          tempo. Increased DX +3 (60): a Neophyte is part-way to the full
-          package's DX +5. 140+60+20+10 = 230. Scaled up with the full package's ST 30.
+          tempo. Increased DX +4 (80): a Neophyte is part-way to the full
+          package's DX +5, and never worse than a trained human elite
+          (DX 14, the Tempestus Scion's level). 140+80+20+10 = 250.
       - name: Enhanced Move (Ground)
         per_level: 20
         levels: 0.5
@@ -523,11 +570,17 @@ items:
         notes: Top sprinting speed x1.5. Combat Move unchanged.
         lore: >
           Scouts range ahead of their Chapter on foot, relying on speed as
-          much as stealth; their implants already give them a full
-          Battle-Brother's turn of pace even before the Black Carapace.
+          much as stealth; their implants already make them quick on their feet,
+          though not yet a Battle-Brother's full pace, even before the
+          Black Carapace.
         design: >
           Enhanced Move (Ground) 1/2 (B52, half level 10) at the user's
           direction, the same as the full Astartes package.
+      - name: Extended Lifespan
+        per_level: 2
+        levels: 3
+        ref: B53
+        notes: Ages far more slowly; centuries of service are routine. A GM may remove it for a Chapter or campaign that treats Marines as short-lived.
       - *secondary_heart
       - *ossmodula
       - *biscopea
@@ -560,9 +613,9 @@ items:
             points: 5
             ref: B85
           - name: Duty (Chapter and Imperium)
-            points: -15
+            points: -20
             ref: B133
-            notes: "Almost all the time, Extremely Hazardous."
+            notes: "Almost all the time (-15), Extremely Hazardous (-5 more)."
           - name: Sense of Duty (Battle-Brothers)
             points: -10
             ref: B153
@@ -572,7 +625,7 @@ items:
         design: >
           Fearlessness 2 (4) + High Pain Threshold (10) + Single-Minded
           (5) = 19, minus the same Duty/Sense of Duty/Code of Honor a
-          Scout already swears (-35) = -16. Combat Reflexes is left out —
+          Scout already swears (-40) = -21. Combat Reflexes is left out —
           it represents thousands of hours of live-fire drilling a Scout
           hasn't logged yet.
     lore: >
@@ -586,9 +639,10 @@ items:
       sources, so the Attribute Modifiers and Hypno-Indoctrination here
       are a reasoned midpoint rather than a claim about a fixed timetable.
     design: >
-      80 (Attribute Modifiers) + 139 (eighteen organs, all but Black
-      Carapace: 140 - 1) + (-16) (reduced Hypno-Indoctrination) = 203
-      points. See the Scout template for the full character.
+      250 (Attribute Modifiers) + 10 (Enhanced Move 1/2) + 6 (Extended
+      Lifespan 3) + 151 (eighteen organs, all but Black Carapace: 152 - 1)
+      + (-21) (reduced Hypno-Indoctrination) = 396 points. See the Scout
+      template for the full character.
 
   - name: Primaris Astartes
     container: meta_trait
@@ -808,7 +862,10 @@ items:
       leaner than other Chapters' — fitting a line already prized for
       stealth over brute durability. This project cites that as widely
       repeated Chapter background rather than a specific, page-verified
-      source.
+      source. Sources disagree on which organs are affected and pale skin
+      is more usually tied to the Melanchromic Organ, so treat this lens
+      as unverified and swap the affected organ for Melanchromic if a
+      campaign prefers that reading.
     design: >
       -20 (Mucranoid) + -4 (Betcher's Gland) + -1 (Distinctive Features,
       B165: unusually pale) = -25 points.

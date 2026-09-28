@@ -3,8 +3,9 @@ output: Imperium/Templates/Astartes Scout.gct
 notes: >-
   A neophyte in scout armour, still short of the final implantation and trials that make a full Battle-Brother:
   built on Astartes Neophyte (Scout-Rank) rather than the full Astartes trait. That deliberately lands
-  this template in the 200-350 'Elite human' band rather than the 550-800 Astartes tier -- a Scout is
-  meant to read as a cut above a Guardsman or Stormtrooper, not yet a Space Marine. He lacks the Black
+  this template at about 440 points, above the 200-350 'Elite human' band and well below the 550-800
+  Astartes tier -- a Scout is meant to read as far above a Guardsman or Stormtrooper (DX 14 and ST 24 put
+  him at or above a Tempestus Scion in every physical respect), not yet a Space Marine. He lacks the Black
   Carapace outright (see the Gene-Seed file for why that's the one implant this project treats as definitely
   missing), and his attribute boost and conditioning are toned down to reflect a recruit who hasn't finished
   growing into a Battle-Brother's frame or logged a veteran's years of drilling. Equipment (scout/sniper
@@ -12,23 +13,24 @@ notes: >-
 traits:
 - include: "imperium/astartes/gene-seed.yaml#Astartes Neophyte (Scout-Rank)"
 - name: Sniper's Eye
-  points: 5
-  ref: B51
+  per_level: 2
+  levels: 1
+  ref: B35
   notes: >-
-    A trained Acute Vision +1, kept separate from Occulobe's own bonus since this represents marksmanship
-    training rather than physiology.
+    A trained Acute Vision +1 (on top of the Occulobe's Acute Vision 2), kept separate from the organ since
+    this represents marksmanship training rather than physiology.
   lore: >-
     Scouts serve as a Chapter's snipers and infiltrators long before they're trusted with a Tactical squad's
     firepower, and that role is trained hard from day one.
   design: >-
-    A small trained visual-acuity bonus (B35-style pricing) representing marksmanship training rather
-    than another organ. 5 points.
+    Acute Vision +1 (B35, 2 points/level) representing marksmanship training rather than another organ.
+    2 points.
 skills:
 - name: Guns
   spec: Rifle
   diff: DX/E
-  points: 2
-  notes: Scout/sniper rifle.
+  points: 1
+  notes: Scout/sniper rifle. DX is now 14, so 1 point holds the old level.
 - name: Guns
   spec: Pistol
   diff: DX/E
@@ -53,8 +55,8 @@ skills:
   points: 1
 - name: Stealth
   diff: DX/A
-  points: 2
-  notes: Scouts are the Chapter's infiltrators.
+  points: 1
+  notes: Scouts are the Chapter's infiltrators. One point at DX 14 holds the previous level.
 - name: Camouflage
   diff: IQ/E
   points: 4

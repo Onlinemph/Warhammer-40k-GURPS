@@ -21,8 +21,8 @@ items:
     lore: >
       A Custodian stands 2.5-3 m tall, built from infancy on hormonal and
       surgical regimes far more individually tailored than a Chapter's
-      gene-seed batch process. Chris Wraight's Custodes novels (The
-      Emperor's Legion, Watchers of the Throne) and current Codex: Adeptus
+      gene-seed batch process. Chris Wraight's Custodes novels (chiefly
+      Watchers of the Throne: The Emperor's Legion) and current Codex: Adeptus
       Custodes background are consistent that a Custodian outclasses a
       Space Marine the way a Space Marine outclasses an unaugmented human -
       faster, stronger, more perceptive, and immeasurably more skilled from
@@ -56,7 +56,7 @@ items:
   - &custodian_fearlessness
     name: Unfazeable
     points: 15
-    ref: B99
+    ref: B95
     tags: [Advantage, Mental, Imperium, Adeptus Custodes]
     lore: >
       A Custodian has stood in the Sanctum Imperialis for ten thousand
@@ -65,15 +65,16 @@ items:
       Codex background never show a Custodian rattled, hesitant, or
       surprised by anything short of the direct will of the Emperor.
     design: >
-      Unfazeable (B99, 15 points): full immunity to Fear and to being
-      surprised, stronger than the Fearlessness the Astartes package uses,
-      matching the framework's flat "immune to fear" instruction rather
-      than a leveled resistance.
+      Unfazeable (B95, 15 points): exempt from Fright Checks, and reaction
+      modifiers do not affect the Custodian (it is the Basic Set trait that
+      grants outright fear immunity, which Fearlessness, being a leveled
+      bonus to Fright Checks, does not). This matches the framework's flat
+      "immune to fear" instruction rather than a leveled resistance.
 
   - &custodian_longevity
     name: Unaging
     points: 15
-    ref: B17
+    ref: B95
     tags: [Advantage, Physical, Imperium, Adeptus Custodes]
     lore: >
       The Ten Thousand have served since before the Imperium existed;
@@ -83,7 +84,7 @@ items:
       mechanism (whether it is a one-off transformation or an ongoing
       process) is not detailed in the fiction consulted for this build.
     design: >
-      Unaging (B17, 15 points): no HT penalties or death checks from old
+      Unaging (B95, 15 points): no HT penalties or death checks from old
       age, matching "lives for millennia" without claiming a specific
       immortality mechanism the sources don't describe.
 
@@ -103,6 +104,7 @@ items:
     per_level: 5
     levels: 4
     ref: B16
+    attributes: {per: 4}
     tags: [Advantage, Physical, Imperium, Adeptus Custodes]
     lore: >
       Codex background credits Custodians with reflexes and situational
@@ -114,7 +116,8 @@ items:
       Increased Perception +4 (B16, 5/level, 20 points): a broad
       "notices everything" bonus, deliberately not split into Astartes-
       style Acute Vision/Hearing/Smell packages since the fiction doesn't
-      describe Custodian senses that granularly.
+      describe Custodian senses that granularly. The +4 is a real
+      attribute bonus (Per 20 on a Guardian's Per 16 base), not a note.
 
   - &custodian_healing
     name: Custodian Regeneration
@@ -129,12 +132,12 @@ items:
         points: 15
         ref: B80
     lore: >
-      Custodians shrug off and recover from wounds that would permanently
-      cripple or kill an Astartes, a detail repeated across Wraight's
-      novels (Custodians returning to duty from injuries a Space Marine
-      would need months of Apothecarion care to survive). This project
-      reads that as healing markedly faster than the Astartes package's
-      Larraman's-Organ-based Rapid Healing, not as literal invulnerability.
+      No source gives a canonical recovery figure for a Custodian; the
+      working assumption here is that a gene-wrought body heals faster than
+      an Astartes', not that it is invulnerable. This project reads that as
+      healing markedly faster than the Astartes package's
+      Larraman's-Organ-based Rapid Healing. The Regeneration (Slow) piece
+      is small and rarely matters in play; a GM may drop it and refund 10.
     design: >
       Regeneration (Slow, B80, 10 points) for passive healing even without
       rest, plus Very Rapid Healing (B80, 15 points, quadruple effective
@@ -153,6 +156,16 @@ items:
       - name: High Pain Threshold
         points: 10
         ref: B59
+      - name: Less Sleep
+        per_level: 2
+        levels: 4
+        ref: B65
+        notes: Needs 4 hours less sleep per night (max level); a Custodian's vigil is near-constant.
+      - name: Reduced Consumption
+        per_level: 2
+        levels: 3
+        ref: B80
+        notes: Needs an eighth of normal food and water (level 3).
     lore: >
       No single source itemises separate anti-toxin organs for Custodians
       the way Codex Astartes background does for the Preomnor and Oolitic
@@ -167,7 +180,9 @@ items:
       10 + Oolitic Kidney 15 + part of Melanchromic Organ 11 = 36 split
       across three separate hazards): a Custodian's constitution doesn't
       have gaps between what different organs happen to cover. High Pain
-      Threshold (B59, 10 points) as the Astartes package. 40 points total.
+      Threshold (B59, 10 points) as the Astartes package. Less Sleep 4
+      (B65, 8 points) and Reduced Consumption 3 (B80, 6 points) model the
+      framework's "needs almost no sleep or food". 54 points total.
 
   - name: Custodian Physiology
     container: ancestry
@@ -205,8 +220,8 @@ items:
       not for anything this file treats as a hard number.
     design: >
       655 (Attribute Modifiers) + 15 (Unfazeable) + 15 (Unaging) + 15
-      (Combat Reflexes) + 20 (Custodian Senses) + 25 (Regeneration) + 40
-      (Constitution) + 20 (Enhanced Move 1) = 805 points of physiology alone, before oath, rank,
+      (Combat Reflexes) + 20 (Custodian Senses) + 25 (Regeneration) + 54
+      (Constitution) + 20 (Enhanced Move 1) = 819 points of physiology alone, before oath, rank,
       or skills - see the Custodian Guardian and Shield-Captain templates.
       This comfortably clears "outclasses a Space Marine the way a Space Marine outclasses a Guardsman" in raw
       point terms (an Astartes package is 563) as well as in the attribute
@@ -381,7 +396,7 @@ items:
       sign language, but doesn't prevent effective communication outright.
 
   - name: Silent Sisterhood Battle-Sign
-    points: 4
+    points: 2
     tags: [Advantage, Mental, Imperium, Sisters of Silence]
     ref: B24
     notes: "Language (Silent Sisterhood Battle-Sign): Sign-only, Accented."
@@ -393,7 +408,8 @@ items:
     design: >
       Built as a Language (B23-24) using the sign-language variant of the
       standard cost table rather than the spoken/written columns, at
-      Accented fluency (4 points): fluent enough for real tactical use
+      Accented fluency (2 points: a sign-only language has just the one
+      column, spoken-equivalent, at 2 points for Accented): fluent enough for real tactical use
       but, per the framework's citation-honesty rule, this project has no
       source claiming Sisters are drilled to native perfect fluency versus
       merely very good working fluency.

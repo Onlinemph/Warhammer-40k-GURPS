@@ -5,6 +5,7 @@ items:
 
   - name: Unusual Background (Latent Psychic Potential)
     points: 10
+    ref: B96
     tags: [Advantage, Mental, Psyker, Imperium]
     lore: >
       Psychic ability is a random, rare mutation of the human genome that lets its
@@ -15,8 +16,8 @@ items:
       rarer still. Treat any precise ratio as flavour, not census data.
     design: >
       Required to take Psyker (Talent), Warp Empowerment, or any trait
-      carrying the Warp Sorcery power modifier below. Basic Set B261 leaves
-      Unusual Background costs to the GM; 10 points reflects that the ability
+      carrying the Warp Sorcery power modifier below. Unusual Background (B96) leaves
+      its cost to the GM; 10 points reflects that the ability
       itself is not learned but grants access to an entire framework of
       further abilities, roughly the going rate other published settings use
       for "you may buy from this power list at all."
@@ -52,10 +53,10 @@ items:
       modified costs:
 
         Grade      | Empowerment level | Cap (10+10/lvl) | What the cap reaches
-        Iota       | 1                  | 20              | cheapest powers only: e.g. Smite (3), Endurance (2), Iron Arm (4), Fire Bolt (4), Assail (4), Mind Probe (14), Foresight (18) — register but rarely learn more than one or two
+        Iota       | 1                  | 20              | every power whose modified cost is 20 or less: Smite (3), Endurance (2), Iron Arm (4), Fire Bolt (4), Assail (4), Molten Beam (9), Crush (11), Psychic Scream (12), Heroic Feats of Strength (12), Sanctuary (13), Mind Probe (14), Foresight (18), Haemorrhage (19), Astrotelepathy (20) — register but rarely learn more than one or two
         Zeta       | 1                  | 20              | as Iota; low Psyker Talent limits skill use, not what they can know
         Eta        | 1                  | 20              | as Zeta
-        Theta      | 2                  | 30              | adds Molten Beam (9), Crush (11), Psychic Scream (12), Sanctuary (13), Null Zone (23), Terrify (28)
+        Theta      | 2                  | 30              | adds Mental Interrogation (21), Null Zone (23), Terrify (28)
         Epsilon    | 2                  | 30              | as Theta (typical Wyrdvane conscript)
         Delta      | 3                  | 40              | adds Scrier's Gaze (35), Dominate (35), Gate of Infinity (40) — the full non-Great-Power roster (typical Sanctioned Primaris Psyker)
         Gamma      | 3                  | 40              | as Delta, better skills from a higher Psyker Talent
@@ -73,6 +74,10 @@ items:
       Black Library uses the same grades in passing (e.g. Eisenhorn-cycle and
       Ciaphas Cain references to Alpha-class talents). "Alpha-Plus" specifically
       denotes the rarest, most dangerous talents the Black Ships process.
+      Only the Alpha/Beta/Gamma end of that ordering is well attested
+      outside the RPG lines; the full Iota-to-Theta ordering used in the
+      table above is Dark Heresy-line material and is not confirmed by the
+      fiction.
     design: >
       Sorcerous Empowerment (TSOR4) costs 10 base + 10/level (level 1 = 20
       points, each further level +10) in the GCS master Thaumatology data;
@@ -229,6 +234,7 @@ items:
       Black Library uses the same grades in passing (e.g. Eisenhorn-cycle and
       Ciaphas Cain references to Alpha-class talents). "Alpha-Plus" specifically
       denotes the rarest, most dangerous talents the Black Ships process.
+      Grade names beyond Alpha/Beta/Gamma are RPG-line material only.
     design: >
       Talent affecting four things (three skills plus the Perils resistance
       roll) sits at Basic's "Medium Talent" rate of 10 points/level (B90,
@@ -272,15 +278,16 @@ items:
       across the Gaunt's Ghosts and Ciaphas Cain series) and Dark Heresy's
       default assumption for any PC psyker who hasn't been Sanctioned.
     design: >
-      A single Secret (Basic B94-95) covers it: discovery is not rare (any
+      A single Secret (Basic B152) covers it: discovery is not rare (any
       strong emotional moment or unlucky witness can trigger it) and its
-      consequences are severe and often fatal, so it sits at -20 points,
-      toward the harsh end of Secret's usual range.
+      consequences are severe and often fatal (summary execution by any
+      Inquisitor, Sister or mob), so it takes the Possible Death tier,
+      -30 points.
     children:
       - name: Secret (Unsanctioned Psyker)
-        points: -20
+        points: -30
         tags: [Disadvantage, Social, Psyker, Imperium]
-        ref: B94
+        ref: B152
         notes: Exposure means the Black Ships, summary execution, or worse.
         lore: See parent trait.
         design: See parent trait.
@@ -397,10 +404,10 @@ items:
         tags: [Advantage, Mental, Psyker, Imperium]
         lore: Warp-based Affliction, Mind Control, Mind Probe, and Fear simply do not work on a Pariah.
         design: >
-          Resistant, Immunity tier (Basic B80: base rarity value x5). Warp-
-          based attacks are treated as an "occasional" specific hazard (base
-          2) for a Pariah, since it is their entire defining trait, giving
-          2 x 5 = 10.
+          Resistant (B81), Occasional hazard 10, Immunity x1 = 10. Warp-based
+          attacks are treated as an "occasional" specific hazard for a
+          Pariah, since it is their entire defining trait. Same "base x1"
+          convention as the Grey Knights' Incorruptible.
       - name: Unnatural Features (Unnerving Void)
         per_level: -1
         levels: 3
@@ -492,7 +499,8 @@ items:
       mutation, not a deliberately channelled act — though a GM is free to
       call for a one-off Perils-style check during an extreme event like
       flying blind through a warp storm. Net for
-      the package: 12 (Warp Sight) + 6 (Lethal Gaze) = 18.
+      the package: 13 (Warp Sight: 5 x 2.5 = 12.5, rounded up) + 9 (Lethal
+      Gaze: 10 x 0.9) = 22.
     children:
       - name: Warp Sight
         points: 5
@@ -605,7 +613,7 @@ items:
           disadvantage (+20%), Malediction (+100%, B36, resisted by HT
           instead of dodged), plus Warp Sorcery/Perils, net +90%. Full
           modified cost: 10 x 1.9 = 19 points/level; needs Warp Empowerment
-          level 2 (cap 30).
+          level 1 (cap 20).
 
   - name: Divination
     container: group
@@ -629,7 +637,7 @@ items:
           Warp Empowerment level 1 (cap 20). Notably cheap for how strong the
           fiction makes true precognition sound — a case where a flat Basic
           advantage's cost doesn't scale with narrative weight the way the
-          leveled Innate Attack-style powers do; see the file-level report.
+          leveled Innate Attack-style powers do.
       - name: Forewarning
         points: 15
         tags: [Advantage, Mental, Psyker, Imperium]
@@ -795,7 +803,7 @@ items:
           Innate Attack (Crushing, 5/die) with Malediction (+100%, B36) and
           Armor Divisor (2) (+50%, B103), plus Warp Sorcery/Perils, net
           +120%. Full modified cost: 5 x 2.2 = 11 points/level; needs Warp
-          Empowerment level 2 (cap 30).
+          Empowerment level 1 (cap 20).
       - name: Gate of Infinity
         points: 100
         tags: [Advantage, Mental, Psyker, Imperium]
@@ -862,8 +870,8 @@ items:
         design: >
           Affliction (10/level, delivering the default Stun effect) with Area
           Effect (+50%) plus Warp Sorcery/Perils, net +20%. Full modified
-          cost: 10 x 1.2 = 12 points/level; needs Warp Empowerment level 2
-          (cap 30).
+          cost: 10 x 1.2 = 12 points/level; needs Warp Empowerment level 1
+          (cap 20).
       - name: Terrify
         points: 30
         per_level: 10
@@ -959,7 +967,7 @@ items:
           willing allies rather than a disadvantage to a foe — Basic B35
           allows either) with Area Effect (+50%), Warp Sorcery, and Severe
           Perils, net +25%. Full modified cost: 10 x 1.25 = ~13 points; needs
-          Warp Empowerment level 2 (cap 30).
+          Warp Empowerment level 1 (cap 20).
 
   - name: Librarius
     container: group
@@ -1003,7 +1011,7 @@ items:
             design: >
               Basic's Heroic Feats of Strength (flat 10) with Area Effect
               plus Warp Sorcery/Perils, net +20%. Full modified cost:
-              10 x 1.2 = 12 points; needs Warp Empowerment level 2 (cap 30).
+              10 x 1.2 = 12 points; needs Warp Empowerment level 1 (cap 20).
           - name: Fearlessness
             per_level: 2
             levels: 2

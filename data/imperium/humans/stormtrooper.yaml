@@ -4,10 +4,10 @@ notes: >
   A Militarum Tempestus Scion: Schola Progenium-raised, hot-shot lasgun
   ("hellgun") armed, an elite special-operations trooper rather than a
   line Guardsman. Point math: ST 12 (+20), DX 14 (+80), IQ 11 (+20), HT 13
-  (+30) = 150; advantages +40; disadvantages -55; skills +71. Total 206
+  (+30) = 150; advantages +40; disadvantages -55; skills +73. Total 208
   points, inside framework.md's "Elite human (200-350)" tier, toward its
-  lower end (a veteran Inquisitorial acolyte or Battle Sister should sit
-  higher). No psychic abilities here; add from the separate psyker power
+  lower end (the Battle Sister and Inquisitorial acolyte sit in the same
+  band, a little above it). No psychic abilities here; add from the separate psyker power
   library if a GM wants a Scion with sanctioned psyker support attached.
 traits:
   - name: ST
@@ -21,9 +21,9 @@ traits:
     lore: >
       Scions are drilled from childhood in the Schola Progenium
       specifically for weapons proficiency and small-unit special
-      operations; Only War and Dark Heresy both model Tempestus Scions
-      with noticeably better combat stats than a line Guardsman, used here
-      for relative calibration.
+      operations. Fantasy Flight and Cubicle 7 material treats Scions as
+      elite, better than line troops; used here for relative calibration
+      only, since there is no single canonical stat line.
     design: DX 14 (+4 from baseline), 20 pts/level (B15).
   - name: IQ
     points: 20
@@ -51,7 +51,7 @@ traits:
     points: 10
     ref: B59
     tags: [Advantage, Physical, Imperium]
-    lore: Conditioning and selection produce troopers who keep fighting through wounds that would drop a conscript.
+    lore: Schola Progenium conditioning and brutal selection train recruits to keep fighting through pain; this is a design choice rather than a named fiction beat.
     design: Basic Set High Pain Threshold (B59), 10 points.
   - include: "imperium/common/imperial-traits.yaml#Fanaticism (The God-Emperor)"
     lore: Schola Progenium indoctrination is, if anything, more thorough than a regular Guard upbringing.
@@ -62,6 +62,8 @@ traits:
   - include: "imperium/common/imperial-traits.yaml#Intolerance (Xenos)"
   - include: "imperium/common/imperial-traits.yaml#Intolerance (Heretics)"
     lore: Schola-raised Scions are frequently used against internal Imperial threats (rogue PDF, cultists), and are indoctrinated accordingly.
+  - include: "imperium/common/imperial-traits.yaml#Schola Progenium Origin"
+    disabled: true
   - include: "imperium/common/imperial-traits.yaml#Overconfidence"
     lore: >
       Scions are the Guard's acknowledged elite and are written (Only War's
@@ -87,8 +89,15 @@ skills:
     diff: DX/E
     points: 2
     tags: [Imperium, Astra Militarum]
-    lore: Frag/krak grenade use.
+    lore: Launcher-fed frag and krak grenades only. Hand-thrown grenades use Throwing (below).
     design: DX+1 (15) for 2 points, Easy.
+  - name: Throwing
+    diff: DX/A
+    points: 2
+    tags: [Imperium]
+    ref: B226
+    lore: Hand-thrown frag and krak grenades, which use Throwing rather than Guns (Grenade Launcher).
+    design: DX+0 (14) for 2 points, Average (B226).
   - name: Brawling
     diff: DX/E
     points: 2
@@ -131,7 +140,7 @@ skills:
     points: 8
     tags: [Imperium]
     lore: Broad military competence, including logistics for supporting operations far from the front.
-    design: IQ+3 (14) for 8 points, Average.
+    design: IQ+2 (13) for 8 points, Average.
   - name: Leadership
     diff: IQ/A
     points: 2

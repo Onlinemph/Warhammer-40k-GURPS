@@ -5,9 +5,9 @@ notes: >
   rigorously trained and utterly devout human warrior-nun, wearing power
   armour but carrying none of the Astartes' gene-seed enhancements. Point
   math: ST 12 (+20), DX 13 (+60), IQ 11 (+20), HT 12 (+20) = 120, plus
-  Will +1 (+5) = 125; advantages +42; disadvantages -62; skills +95.
-  Total 200 points, the low end of framework.md's "Elite human (200-350)"
-  tier. No psychic abilities here: Sororitas Faith is explicitly not
+  Will +2 (+10) = 130; advantages +54; disadvantages -72; skills +102.
+  Total 214 points, inside framework.md's "Elite human (200-350)"
+  tier, a little above a Tempestus Scion. No psychic abilities here: Sororitas Faith is explicitly not
   psychic power in Black Library fiction and this template does not
   touch the separate psyker power library. Add Military/Religious Rank
   levels for a Sister Superior or Canoness built from this base.
@@ -33,10 +33,19 @@ traits:
     lore: Conditioned for endurance in power armour and prolonged campaigns.
     design: HT 12 (+2), 10 pts/level (B14).
   - name: Will
-    points: 5
+    points: 10
     tags: [Attribute]
     lore: Faith translates mechanically into exceptional force of will as much as raw intellect.
-    design: Will 12 (+1 above the IQ-derived default of 11), 5 pts/level (B16).
+    design: Will 13 (+2 above the IQ-derived default of 11), 5 pts/level (B16).
+  - name: Fit
+    points: 5
+    ref: B55
+    tags: [Advantage, Physical, Imperium]
+    lore: Convent training and a life in power armour keep a Sister in top condition.
+    design: Basic Set Fit (B55), 5 points.
+  - include: "imperium/common/imperial-traits.yaml#Fearlessness"
+    levels: 2
+    lore: A Sister's faith steadies her against the horrors she is sent to face; +2 to Fright Checks on top of her Will.
   - name: Combat Reflexes
     points: 15
     ref: B43
@@ -68,18 +77,23 @@ traits:
       Adepta Sororitas Orders are explicitly convents as much as regiments;
       Sisters take vows on joining, consistently depicted across Black
       Library's Sisters of Battle fiction.
-    design: Basic Set Vow (B160/B162's table), a moderate lifestyle-restricting vow, -10.
+    design: >
+      Basic Set Vow (B160), Major (-10, B161): the Order's rule of chastity
+      and self-denial. Poverty is not taken literally, since the Order
+      issues her armour and arms, so it reads as "owns nothing personally"
+      and is folded into the same -10 rather than priced as a separate
+      Great vow.
   - include: "imperium/common/imperial-traits.yaml#Intolerance (Xenos)"
   - include: "imperium/common/imperial-traits.yaml#Intolerance (Mutants)"
-  - name: Intolerance (Heretics and Psykers)
-    points: -10
-    ref: B140
-    tags: [Disadvantage, Mental, Imperium]
+  - include: "imperium/common/imperial-traits.yaml#Intolerance (Heretics)"
+  - include: "imperium/common/imperial-traits.yaml#Intolerance (Psykers)"
+    name: Intolerance (Unsanctioned Psykers)
     lore: >
-      Sororitas doctrine is openly hostile to unsanctioned psychic power as
-      well as heresy — the Orders reject psychic gifts as a temptation to
-      corruption, per their consistent portrayal in Black Library fiction.
-    design: Basic Set Intolerance (B140), a combined broad category, -10.
+      Sororitas doctrine is openly hostile to unsanctioned psychic power;
+      Sisters are shown tolerating and working alongside psykers who
+      operate under Inquisitorial or Ministorum mandate, while treating
+      rogue and untrained ones as a temptation to corruption (Sisters of
+      Battle fiction, Faith and Fire).
   - name: Marked by the Order's Habit
     points: -1
     tags: [Quirk, Imperium]
@@ -123,7 +137,7 @@ skills:
     points: 8
     tags: [Imperium]
     lore: A visor-faced, bolter-carrying Sister of Battle in power armour is a genuinely frightening sight.
-    design: Will+2 (14) for 8 points, Average.
+    design: Will+2 (15) for 8 points, Average.
   - name: Leadership
     diff: IQ/A
     points: 8
@@ -168,6 +182,20 @@ skills:
     tags: [Imperium]
     lore: See Imperium/Skills/Imperial Skills.skl.
     design: IQ+1 (12) for 4 points, Average.
+  - name: Guns
+    spec: Pistol
+    diff: DX/E
+    points: 4
+    tags: [Imperium, Adepta Sororitas]
+    lore: The bolt pistol is the Sister Superior's and Celestian's sidearm, and many Sisters carry a spare.
+    design: DX+2 (15) for 4 points, Easy (B170).
+  - name: Throwing
+    diff: DX/A
+    points: 2
+    tags: [Imperium]
+    ref: B226
+    lore: Hand-thrown frag and krak grenades.
+    design: DX+0 (13) for 2 points, Average (B226).
   - name: Stealth
     diff: DX/A
     points: 2
@@ -208,7 +236,7 @@ skills:
     design: IQ+0 (11) for 1 point, Easy.
   - name: Brawling
     diff: DX/E
-    points: 1
+    points: 2
     tags: [Imperium]
     lore: Unarmed and gauntlet fighting.
-    design: DX+0 (13) for 1 point, Easy.
+    design: DX+1 (14) for 2 points, Easy.
