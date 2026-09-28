@@ -17,7 +17,7 @@ items:
       his own Chapter actually issues him; this entry exists only so a
       Deathwatch character sheet can carry a correctly-named suit without
       restating the Mark VII stat block. Use the matching include from
-      Power Armour.eqp directly (any Mark) for a Marine whose Chapter
+      Imperial Armour.eqp directly (any Mark) for a Marine whose Chapter
       fields a different pattern.
     lore: >
       "Black plate, silver cross" is the single most consistent visual
@@ -311,7 +311,7 @@ items:
       names and effects are its own reasoned build on that idea, not a
       reprint of any single sourcebook's shell list.
     design: >
-      Built up from the human-scale Combat Shotgun (Stub Weapons.eqp,
+      Built up from the human-scale Combat Shotgun (Solid Projectile Weapons.eqp,
       6d pi+ buckshot / 8d pi+ slug) the same way the Astartes bolt
       pistols scale up from their human equivalents in Bolt Weapons.eqp:
       one clear step of dice for a bigger 8-gauge Astartes shell (buckshot
@@ -472,15 +472,13 @@ items:
     tags: [Melee Weapon, Imperium, Adeptus Astartes, Deathwatch]
     weapons:
       - usage: Thrust
-        damage: thr+1 imp
-        armor_divisor: "ignores DR"
+        damage: thr+1(inf) imp
         reach: C,1
         parry: 0
         st: 11
         skill: Shortsword
       - usage: Swing
-        damage: sw+1 cut
-        armor_divisor: "ignores DR"
+        damage: sw+1(inf) cut
         reach: C,1
         parry: 0
         st: 11
@@ -489,9 +487,8 @@ items:
       Phase field: good for 6 strikes before the generator needs about a
       minute to recharge (track with the item's Uses counter in GCS, per
       framework.md's shield-recharge convention); a depleted blade still
-      cuts as a plain, beautifully made knife (drop the "ignores DR" line
-      entirely and treat as thr+1 imp / sw+1 cut with no divisor) until it
-      recovers.
+      cuts as a plain, beautifully made knife (drop the (inf) armor
+      divisor and treat as thr+1 imp / sw+1 cut) until it recovers.
     lore: >
       A rare archeotech or Mechanicus-forged relic entrusted only to a
       handful of Deathwatch veterans: its blade briefly desynchronises
@@ -503,8 +500,8 @@ items:
       no kill-team is issued more than one or two.
     design: >
       Built, not borrowed: no catalogue "phase weapon" is copied here.
-      The phasing effect is modelled as Armor Divisor "ignores DR" (the
-      schema's B102-style total bypass) rather than a merely large
+      The phasing effect is modelled as Armor Divisor (inf) — the
+      schema's B102-style total bypass of DR — rather than a merely large
       numeric divisor, because the fiction's claim is a genuine bypass of
       matter, not "cuts unusually well" — a large-but-finite divisor like
       the disruption-field weapons' (10) would still be stopped cold by a
@@ -513,7 +510,7 @@ items:
       the best melee weapon in the game is entirely on the restriction
       side: a hard six-use limit before the field must recharge (this
       project's closest existing analogue, the personal force fields in
-      Fields.eqp, gate a similar low-single-digits-per-minute budget on a
+      Force Fields.eqp, gate a similar low-single-digits-per-minute budget on a
       timer rather than a point cost, so the same convention is reused
       here instead of inventing a new equipment-level limitation field the
       schema doesn't support) and a very high price/LC0 restricting it to

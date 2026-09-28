@@ -1,0 +1,247 @@
+kind: traits
+output: Imperium/Traits/Grey Knights.adq
+items:
+  # ---------------------------------------------------------- the soul
+
+  - name: Grey Knight Soul
+    container: meta_trait
+    tags: [Advantage, Mental, Physical, Imperium, Adeptus Astartes, Grey Knights]
+    children:
+      - name: Incorruptible (Daemonic Possession Immunity)
+        points: 15
+        ref: B81
+        tags: [Advantage, Mental, Imperium, Grey Knights]
+        modifiers:
+          - {name: "Common: Daemonic Possession", cost: "15"}
+          - {name: Immunity, cost: "x1"}
+        notes: A daemon cannot seize a Grey Knight's body outright, however hard it tries.
+        lore: >
+          Grey Knights are recruited, warded, and psycho-indoctrinated
+          specifically so that their souls cannot be taken from the inside —
+          Codex: Grey Knights background and Ben Counter's novels are
+          consistent that possession of a Grey Knight, even a wounded or
+          dying one, essentially never succeeds, in sharp contrast to how
+          readily lesser psykers and even other Astartes can be ridden by a
+          strong enough daemon.
+        design: >
+          Resistant (B81), Common category (daemonic possession is exactly
+          the hazard this Chapter exists to face down), taken as full
+          Immunity rather than a resistance bonus: 15 x 1 = 15 points, per
+          this project's own established convention for the Immunity tier
+          of Resistant (see Oolitic Kidney, Astartes Gene-Seed.adq).
+      - name: Rites of Sanctity (Hexagrammic Wards)
+        points: 10
+        ref: B81
+        tags: [Advantage, Mental, Imperium, Grey Knights]
+        modifiers:
+          - {name: "Very Common: Warp Sorcery-tagged effects directed at self", cost: "30"}
+          - {name: "+3 to all rolls to resist", cost: "x1/3"}
+        notes: >
+          +3 to resist any Warp Sorcery-tagged Affliction, Mind Control,
+          Mind Probe, Fear, or Terror effect directed at the bearer —
+          stacks with the Psychic Hood and Hexagrammic Ward Charm items
+          (Imperium/Gear/Psychic Gear.eqp) rather than duplicating them,
+          since this is a ward worked into the flesh and armour itself, not
+          a separate piece of kit.
+        lore: >
+          Every Grey Knight's body is inscribed, branded and anointed with
+          hexagrammic wards during his induction — the same symbols painted
+          across a ship's hull or an Inquisitor's cell to ward off the warp
+          — before a single implant is grafted; Codex background and Ben
+          Counter's novels both describe this as woven into the Chapter's
+          creation ritual, not applied after the fact like a charm.
+        design: >
+          Resistant (B81) again, but as the weaker "+3 to resist" tier
+          rather than Immunity, applied to the broader category of
+          Warp Sorcery-tagged effects generally (not just possession, which
+          the Incorruptible trait above already makes the Grey Knight
+          outright immune to): Very Common base 30, x1/3 for the +3 bonus
+          tier = 10 points.
+      - name: Indomitable Will
+        points: 15
+        ref: B60
+        tags: [Advantage, Mental, Imperium, Grey Knights]
+        notes: Impossible to influence through ordinary words or actions; immune to Mind Control and Emotion Control, warp-touched or otherwise.
+        lore: >
+          Beyond wardings against the warp specifically, a Grey Knight's
+          will is drilled to a hardness the fiction treats as absolute —
+          temptation, seduction, and coercion (daemonic or mundane) simply
+          do not work on a Grey Knight the way they might on another
+          Astartes, a theme Ben Counter's novels return to repeatedly
+          whenever a Grey Knight is offered a bargain by something in the
+          warp.
+        design: >
+          Basic Set Indomitable (B60, flat 15): immune to Mind Control and
+          Emotion Control from any source, not only Warp Sorcery-tagged
+          ones, covering the "cannot be turned" half of the Chapter's
+          incorruptibility that the possession- and ward-specific traits
+          above don't reach.
+    lore: >
+      What Codex: Grey Knights and its Black Library tie-ins (Ben Counter's
+      Grey Knights novels) treat as the Chapter's defining trait alongside
+      its powers: a Grey Knight's soul is built, from recruitment onward, to
+      be the hardest thing in the Imperium for the warp to touch.
+    design: >
+      15 (Incorruptible) + 10 (Rites of Sanctity) + 15 (Indomitable Will) =
+      40 points, layered on top of the standard Astartes Hypno-Indoctrination
+      package (Astartes Gene-Seed.adq) which already buys ordinary Fearlessness
+      and Duty/Code of Honor — this container is specifically the anti-warp
+      half of Grey Knight conditioning, not a replacement for it.
+
+  # ---------------------------------------------------------- the gift
+
+  - name: Grey Knight Psychic Gift
+    container: meta_trait
+    tags: [Advantage, Mental, Psyker, Imperium, Adeptus Astartes, Grey Knights]
+    children:
+      - include: "imperium/psykers/warp.yaml#Unusual Background (Latent Psychic Potential)"
+      - include: "imperium/psykers/warp.yaml#Psyker"
+        levels: 4
+      - include: "imperium/psykers/warp.yaml#Warp Empowerment"
+        levels: 3
+      - include: "imperium/psykers/warp.yaml#Witch-sight"
+    lore: >
+      Codex: Grey Knights and Ben Counter's novels are explicit that a Grey
+      Knight is not a warrior with a psyker occasionally attached to his
+      squad the way most Chapters use a Librarian: every Battle-Brother is
+      himself a trained psyker, drawn only from aspirant stock that already
+      tested psychically gifted, and fights that way from his first patrol.
+      Individual Grey Knights are consistently written as comparable in raw
+      psychic strength to another Chapter's Librarian, which this project's
+      own Assignment-grade table (Imperium/Traits/Psykers and the Warp.adq)
+      places at Beta-to-Alpha grade.
+    design: >
+      Psyker (Talent) 4 and Warp Empowerment 3 land a rank-and-file Grey
+      Knight at Beta grade (cap 50) on the warp.yaml Assignment table — one
+      step under the Alpha grade this project gives a full Astartes
+      Librarian (Talent 5 / Empowerment 3, Imperium/Templates/Astartes
+      Librarian Add-On.gct), reflecting "every brother is at least a strong
+      psyker" while leaving room for named Grey Knight heroes (Grand
+      Masters, Brother-Captains) to buy up to Alpha or beyond as an
+      individual advancement, exactly as a line Battle-Brother can buy up
+      Rank and Reputation on top of the shared racial package. Unusual
+      Background (10) and Witch-sight (8, 10 base x0.8 Warp Sorcery) are
+      unchanged from warp.yaml. Total: 10 + 40 (Psyker 4: 0 base + 10x4) +
+      40 (Warp Empowerment 3: 10 base + 10x3) + 8 = 98 points. This trait
+      does not include the Sanctic Daemonology powers themselves or the
+      skills that use them (Meditation, Hidden Lore (the Warp)) — those
+      belong to the full Grey Knight Add-On template
+      (Imperium/Templates/Grey Knight Add-On.gct), since a squad's Sanctic
+      training is a matter of what a brother has learned to do with this
+      shared gift, not the gift itself.
+
+  # ---------------------------------------------------------- the brotherhood
+
+  - name: Brotherhood
+    points: 0
+    tags: [Advantage, Mental, Imperium, Grey Knights]
+    ref: B70
+    modifiers:
+      - {name: "Squad (2-9 Grey Knights)", cost: "10", ref: B70}
+    notes: >
+      Shares surface thoughts, intent, and warnings silently with every
+      other linked Brother in the squad within Mindlink's normal range;
+      Sanctic Daemonology's Sanctuary (Imperium/Traits/Psykers and the
+      Warp.adq) rides on top of this same bond when a kill-team wards
+      itself as one during a purge.
+    lore: >
+      Codex: Grey Knights and its Black Library tie-ins describe Grey
+      Knight kill-teams fighting with a coordination beyond ordinary squad
+      drill — brothers who have trained and psychically bonded together for
+      years moving and striking as if of one mind, a "psychic gestalt" the
+      Chapter deliberately cultivates rather than the incidental telepathy
+      of a gifted individual.
+    design: >
+      Basic Set Mindlink (B70), Squad tier (2-9 people, the Basic Set
+      modifier for a small linked group rather than a single named
+      partner): base 0 points, +10 flat for the group-size modifier, per
+      the GCS master Basic Set data. Not Warp Sorcery-tagged: it is a
+      standing, always-on bond between initiated Brothers rather than a
+      power any one of them channels and risks Perils casting, matching
+      how the fiction never shows a Grey Knight's squad-sense failing a
+      roll or backfiring the way an active power can.
+
+  # ---------------------------------------------------------- duty and secrecy
+
+  - name: Duty (Chamber Militant of the Ordo Malleus)
+    points: -10
+    ref: B133
+    tags: [Disadvantage, Social, Imperium, Grey Knights]
+    notes: Quite Often (9 or less), Hazardous. Stacks with, and is separate from, the standard Astartes Duty (Chapter and Imperium) in Astartes Gene-Seed.adq's Hypno-Indoctrination package.
+    lore: >
+      Codex: Grey Knights background is explicit that the Chapter is the
+      Ordo Malleus's own Chamber Militant: an Inquisitor of that Ordo can
+      summon Grey Knight forces directly, overriding the Chapter's own
+      chain of command for a given operation, in a way no other Chapter's
+      Astartes are obligated to accept from an outside authority.
+    design: >
+      A second, narrower Duty (B133) alongside the standard Astartes one:
+      "Quite Often" rather than "Almost All the Time" (the Ordo Malleus
+      doesn't direct every Grey Knight mission, only calls on it), still
+      Hazardous, priced the same -10 this project already uses for the
+      Sanctioned Psyker's Duty to the Astra Telepathica/Inquisition
+      (Imperium/Traits/Psykers and the Warp.adq) for internal consistency
+      between "answers to an outside Inquisitorial authority" disadvantages.
+
+  - name: Secret (The Grey Knights)
+    points: -10
+    ref: B152
+    tags: [Disadvantage, Social, Imperium, Grey Knights]
+    notes: >
+      Almost no one outside the Inquisition and the Chapter itself knows
+      the Grey Knights exist, and the Chapter works to keep it that way:
+      survivors and witnesses of a Grey Knight action who are not already
+      cleared for that knowledge are, per Codex and Black Library
+      background, routinely mind-wiped of the encounter by the Chapter's
+      own Interrogator-Chaplains or an attending Inquisitor afterward. In
+      play this is the same Secret roll as any other (exposure risks
+      censure, reassignment, or worse from the Ordo Malleus), and it
+      doubles as the social cost the framework asks for: a Grey Knight
+      cannot let an ordinary ally remember fighting beside him, so no
+      Reputation, standing friendship, or reaction bonus with anyone
+      outside the Chapter and its Inquisitorial handlers ever accumulates
+      the way a line Chapter's Reputation (Angel of Death, Astartes Gene-
+      Seed.adq via the Battle-Brother template) does — the same trait
+      covers both the secrecy and its lonely price, rather than charging
+      for them twice.
+    lore: >
+      One of the most consistent beats across Codex: Grey Knights and Ben
+      Counter's novels: almost every mortal who learns the Grey Knights
+      exist and survives the encounter has their memory of it erased
+      before they leave Titan or the operation's theatre, so that even the
+      Imperium at large barely believes the Chapter is real.
+    design: >
+      A single Secret (B152) covers both the institutional risk (exposure
+      draws Ordo Malleus attention, at minimum, and at worst a body count)
+      and the personal cost described in the notes above, at -10 — the
+      same "Serious" tier this project already uses for the Dark Angels'
+      Inner Circle Secret (Astartes Gene-Seed.adq) — rather than a second,
+      separate disadvantage for the social isolation, since GURPS prices
+      one Secret to cover everything that particular secret costs its
+      keeper.
+
+  # ---------------------------------------------------------- gene-seed note
+
+  - name: "Gene-Seed Provenance: Unknown"
+    points: 0
+    tags: [Imperium, Grey Knights, Chapter Variant]
+    notes: 0-point lore flag; no mechanical effect.
+    lore: >
+      Unlike every other Chapter's gene-seed, whose founding Primarch and
+      broad lineage is a matter of public Imperial record even where the
+      exact quirks are secret, Codex: Grey Knights background is explicit
+      that the Grey Knights' own gene-seed provenance is not stated — the
+      Chapter's official founding legend credits Malcador the Sigillite and
+      the Emperor's own will rather than a named Primarch, and no source
+      this project treats as reliable confirms a specific genetic origin.
+      Widely repeated fan and background speculation ties it to the Emperor
+      directly; this project does not treat that as confirmed, only as the
+      honest state of what is and isn't said on the page.
+    design: >
+      0-point flag, matching the pattern this project already uses for
+      Chapter lenses with nothing mechanical to add (Ultramarines, White
+      Scars in Astartes Gene-Seed.adq): the Grey Knights' physiology is
+      built on the standard Astartes package like any other Chapter
+      (imperium/astartes/gene-seed.yaml#Astartes); what's unusual is that
+      this project can't honestly say where that gene-seed came from, and
+      says so here rather than inventing an answer.
