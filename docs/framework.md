@@ -256,6 +256,37 @@ Ork physiology traits: very high pain tolerance, Hard to Kill, fast healing and 
 | 'Eavy armour | Torso DR 45, Weak Points 7 |
 | Mega armour | Torso DR 150, Weak Points 6: an Ork answer to Terminator plate |
 
+### Aeldari
+
+The Aeldari are an ancient, dying race: slender, long-lived, emotionally intense, and all latently psychic. Craftworld Aeldari follow the Paths, devoting centuries to one discipline at a time. Their souls are hunted by Slaanesh; a spirit stone worn on the breast catches the soul at death. Anchors, relative to humans (DX 10–12) and Astartes (DX 16):
+
+| Aeldari | ST | DX | IQ | HT | HP | Per | Will | Notes |
+|---|---|---|---|---|---|---|---|---|
+| Guardian (citizen militia) | 10 | 14 | 12 | 10 | 10 | 13 | 12 | Faster and more precise than any human; fragile. |
+| Aspect Warrior | 11 | 16 | 12 | 11 | 11 | 13 | 13 | Matches a Marine's DX through centuries on one Path. |
+| Exarch | 12 | 18 | 13 | 12 | 12 | 14 | 15 | Lost forever to the Path of the Warrior. |
+| Farseer | 10 | 14 | 15 | 10 | 10 | 15 | 17 | Psyker of the highest grade. |
+
+Aeldari traits: superior reflexes (Basic Speed bonus, Enhanced Dodge for Aspect Warriors), acute senses, Extended Lifespan (millennia), Psyker talent latent in all (Warlocks and Farseers developed), Slaanesh's hunger (a disadvantage: a daemon-god waits for the soul; spirit stones shield it), emotional intensity (Path discipline keeps it in check), arrogance towards younger races.
+
+Aeldari psychic powers use the same Sorcery model as Imperial psykers, but the Aeldari's runes and training make them far safer: their Perils limitation is milder than a human's (their runic discipline is Perils of the Warp with rune-warding reducing the risk), and Farseers reach the top Warp Empowerment grades.
+
+| Aeldari gear | Anchor |
+|---|---|
+| Shuriken catapult | Monomolecular discs: 5d(3) cut, RoF 10, short range (about 12/60 yd ½D/Max). Shreds flesh and flak; bites carapace sometimes; can't hurt power armour except on a Weak Point. |
+| Avenger shuriken catapult | 5d(3) cut, longer range, higher RoF |
+| Shuriken cannon | 7d(3) cut, RoF 15 |
+| Lasblaster | 7d(2) burn, rapid |
+| Fusion gun | Melta class (meltagun anchor) |
+| Starcannon | Plasma class (plasma gun anchor) with no overheating |
+| Bright lance | Anti-armour lance: its focused beam penetrates any armour to the same depth, so give it a high armour divisor (10) and moderate damage: about 6d×4(10) burn |
+| Wraithcannon | D-weapon: tears the target into the warp. Build as an honest special effect with extreme damage, short range |
+| Guardian mesh armour | Flexible, DR 36 (the mesh anchor), Weak Points 5 |
+| Aspect armour | Flexible thermoplas plates, DR 70, Weak Points 4 |
+| Exarch armour | DR 85, Weak Points 4 |
+| Rune armour | Psychic ward: regenerating shield (see Personal force fields), pool scaling with the wearer's Warp Empowerment |
+| Holo-suit / domino field | Harlequins: large defence bonus from scattering the wearer's image, not DR |
+
 ## Psykers and the warp
 
 Psychic abilities in the fiction are the sort of thing GURPS Thaumatology:
