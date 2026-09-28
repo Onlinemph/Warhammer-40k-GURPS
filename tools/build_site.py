@@ -267,8 +267,11 @@ def character_stats(d):
     dr = {}
     names = set()
     skill_bonus = {}
+    enh_dodge = 0
     for t in active_traits(d.get("traits", [])):
         names.add(t.get("name", "").split(" (")[0])
+        if t.get("name") == "Enhanced Dodge":
+            enh_dodge += t.get("levels", 1)
         mods_on = [m for m in t.get("modifiers", []) if not m.get("disabled")]
         for f in t.get("features", []) + [f for m in mods_on for f in m.get("features", [])]:
             if f["type"] == "attribute_bonus":
@@ -286,7 +289,7 @@ def character_stats(d):
     hp, fp = st + b("hp"), ht + b("fp")
     speed = (dx + ht) / 4 + b("basic_speed")
     move = int(speed) + b("basic_move")
-    dodge = int(speed) + 3 + b("dodge") + (1 if "Combat Reflexes" in names else 0)
+    dodge = int(speed) + 3 + b("dodge") + enh_dodge + (1 if "Combat Reflexes" in names else 0)
     lift_st = st + b("lifting_st")
     thr, sw = dmg_for(st + b("striking_st"))
     attrs = {"st": st, "dx": dx, "iq": iq, "ht": ht, "will": will, "per": per}

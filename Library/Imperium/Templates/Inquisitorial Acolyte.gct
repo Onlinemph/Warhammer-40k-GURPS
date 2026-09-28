@@ -1,7 +1,7 @@
 {
 	"version": 5,
 	"id": "B6BPJfMBvS6K-jeik",
-	"notes": "A rank-and-file agent of an Inquisitor's retinue: ex-Guardsman, ex-Arbitrator, scholar, rogue trader scion, or reformed criminal — Inquisitorial acolytes are drawn from anywhere the Inquisition finds a useful skill set, per Eisenhorn's and Ravenor's ensemble casts. This is a generalist investigator/field-agent baseline; individual acolytes should reskin the skill list toward their actual background. Point math: ST 10 (+0), DX 12 (+40), IQ 13 (+60), HT 11 (+10) = 110; advantages +20; disadvantages -32; skills +100. Total 198 points, the low end of framework.md's \"Elite human (200-350)\" tier. No psychic abilities here — an acolyte with a sanctioned psyker gift should add traits from the separate psyker power library on top of this base.\n",
+	"notes": "A rank-and-file agent of an Inquisitor's retinue: ex-Guardsman, ex-Arbitrator, scholar, rogue trader scion, or reformed criminal — Inquisitorial acolytes are drawn from anywhere the Inquisition finds a useful skill set, per Eisenhorn's and Ravenor's ensemble casts. This is a generalist investigator/field-agent baseline; individual acolytes should reskin the skill list toward their actual background. Point math: ST 10 (+0), DX 12 (+40), IQ 13 (+60), HT 11 (+10) = 110; advantages +30 (including Inquisitorial Rank 1); disadvantages -32; skills +102. Total 210 points, the low end of framework.md's \"Elite human (200-350)\" tier. An acolyte is a generalist investigator: a sidearm and a blade, not a swordmaster; retinue, Contacts and Wealth are campaign purchases, since the Inquisitor's requisition covers kit. No psychic abilities here — an acolyte with a sanctioned psyker gift should add traits from the separate psyker power library on top of this base.\n",
 	"traits": [
 		{
 			"id": "t2MIVI8SooDm2gNC3",
@@ -85,6 +85,30 @@
 			"base_points": 15
 		},
 		{
+			"id": "tPU665nKtKFQUq01T",
+			"name": "Inquisitorial Rank",
+			"reference": "B29",
+			"local_notes": "Levels: 1 Acolyte in formal service, 3 Interrogator, 6 Inquisitor, 7 senior/renowned Inquisitor, 8 Lord Inquisitor (Grand Master of an Ordo or Inquisitorial Representative to the High Lords sit at the same ceiling; Basic Set Rank stops at 8, B29).\n\nLore: An acolyte in formal service holds the lowest level of Inquisitorial authority, borrowed from their Inquisitor.\n\nDesign: Inquisitorial Rank level 1 (5 x 2 = 10 points with the +100% enhancement), the \"Acolyte in formal service\" level in Imperial Traits.adq.",
+			"tags": [
+				"Advantage",
+				"Social",
+				"Imperium",
+				"Inquisition"
+			],
+			"modifiers": [
+				{
+					"id": "mG9Sae1fkzhUbyBzF",
+					"name": "Overrides all Imperial hierarchies",
+					"local_notes": "Every Imperial organisation (Astra Militarum, Administratum, Ecclesiarchy, Navy, planetary governments) treats this as a Rank higher than any of its own at the same or lower level. The Adeptus Astartes and Mechanicus are sovereign allies rather than subordinates: they are not bound by it, but in practice rarely defy it openly.\n",
+					"cost_adj": "+100%"
+				}
+			],
+			"points_per_level": 5,
+			"can_level": true,
+			"levels": 1,
+			"max_levels": 8
+		},
+		{
 			"id": "tmQDutFGduBL5akL0",
 			"name": "Duty (Inquisition)",
 			"reference": "B133",
@@ -155,6 +179,17 @@
 			"specialization": "Pistol",
 			"difficulty": "dx/e",
 			"points": 12
+		},
+		{
+			"id": "sk393r7hrCyTB-vna",
+			"name": "Broadsword",
+			"local_notes": "Lore: A concealable blade or sword-cane; Eisenhorn's and Ravenor's retinues fight in melee often enough that an acolyte needs the basics.\n\nDesign: DX+0 (12) for 2 points, Average.",
+			"tags": [
+				"Imperium",
+				"Inquisition"
+			],
+			"difficulty": "dx/a",
+			"points": 2
 		},
 		{
 			"id": "scZs_wk1UCjGNU-Uu",

@@ -1,12 +1,12 @@
 {
 	"version": 5,
 	"id": "B1t5nnPwFq3cIa1qq",
-	"notes": "A Primaris Marine of Cawl's design: the full Astartes gene-seed package plus the three Primaris-only organs (Sinew Coils, Magnificat, Belisarian Furnace). Skill investment matches the Firstborn Battle-Brother template rather than sitting below it -- Primaris training is compressed but thorough, and the strain's own combat record backs treating a rank-and-file Primaris Battle-Brother as roughly on par with, not junior to, a veteran of the old pattern. Equipment (Mk X bolt rifle, Mk X power armour) lives in the armoury files, not here.",
+	"notes": "A Primaris Marine of Cawl's design: the full Astartes gene-seed package plus the three Primaris-only organs (Sinew Coils, Magnificat, Belisarian Furnace). Skill investment (148 points) is close to the Firstborn Battle-Brother's 168, minus Strategy, Wrestling, Axe/Mace and Hidden Lore (Heresy) -- Primaris training is compressed but thorough, and the strain's own combat record backs treating a rank-and-file Primaris Battle-Brother as roughly on par with, not junior to, a veteran of the old pattern. Equipment (Mk X bolt rifle, Mk X power armour) lives in the armoury files, not here.",
 	"traits": [
 		{
 			"id": "TyJ_d5lcZ7mYQV-dx",
 			"name": "Astartes",
-			"local_notes": "Lore: The Adeptus Astartes: a superhuman created by grafting nineteen engineered organs onto a chosen human recruit and finishing the process with years of training and psycho-indoctrination. This trait is the baseline shared by every Chapter's gene-seed; Chapter lenses below add or remove pieces where the fiction says a specific lineage differs.\n\nDesign: 407 (Attribute Modifiers) + 153 (nineteen organs: 4+14+1+1+5+6+10+1 +11+9+9+9+11+15+21+20+4+1+1) + 3 (Hypno-Indoctrination) + 10 (Enhanced Move 1/2) = 573 points. This is the physiology alone, before any skills; see the Battle-Brother, Scout, and Primaris templates for full characters built on top of it.",
+			"local_notes": "Lore: The Adeptus Astartes: a superhuman created by grafting nineteen engineered organs onto a chosen human recruit and finishing the process with years of training and psycho-indoctrination. This trait is the baseline shared by every Chapter's gene-seed; Chapter lenses below add or remove pieces where the fiction says a specific lineage differs.\n\nDesign: 407 (Attribute Modifiers) + 152 (nineteen organs: 4+14+1+6+5+8+5+1 +11+14+9+9+11+7+21+20+4+1+1) + (-2) (Hypno-Indoctrination) + 10 (Enhanced Move 1/2) + 6 (Extended Lifespan 3) = 573 points. This is the physiology alone, before any skills; see the Battle-Brother, Scout, and Primaris templates for full characters built on top of it.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -81,6 +81,15 @@
 					"levels": 0.5
 				},
 				{
+					"id": "trBkT93ZlUM2xPqvK",
+					"name": "Extended Lifespan",
+					"reference": "B53",
+					"local_notes": "Ages far more slowly; centuries of service are routine. A GM may remove it for a Chapter or campaign that treats Marines as short-lived.",
+					"points_per_level": 2,
+					"can_level": true,
+					"levels": 3
+				},
+				{
 					"id": "t57eyPeBP2hIsQoGq",
 					"name": "Secondary Heart",
 					"reference": "B58",
@@ -130,23 +139,41 @@
 					"base_points": 1
 				},
 				{
-					"id": "tGc83wTfM7rmBnFFm",
+					"id": "TGc83wTfM7rmBnFFm",
 					"name": "Haemastamen",
-					"local_notes": "Lore: Regulates the chemistry of Astartes blood and produces the genetically-tagged compounds an Apothecary tests for to confirm a Marine's gene-seed lineage and general biochemical stability. Its output is also the substrate Larraman's Organ acts on.\n\nDesign: Pure physiology/plot-hook organ — no combat effect of its own. 1-point Perk (B21) so it stays a listed, removable trait.",
+					"local_notes": "Lore: Regulates the chemistry of Astartes blood and produces the genetically-tagged compounds an Apothecary tests for to confirm a Marine's gene-seed lineage and general biochemical stability. Its output is also the substrate Larraman's Organ acts on, and the same tuned blood chemistry is why Astartes so seldom fall to ordinary disease.\n\nDesign: 1-point Perk (B21) for the lineage-marker function, plus Resistant (B81) to Disease: Occasional hazard 10, +8 tier x1/2 = 5 points. A bonus rather than Immunity, because the fiction has Marines fall to warp-spawned and engineered plagues. 6 points total.",
 					"tags": [
 						"Advantage",
 						"Physical",
 						"Imperium",
-						"Adeptus Astartes",
-						"Perk"
+						"Adeptus Astartes"
 					],
-					"base_points": 1
+					"container_type": "meta_trait",
+					"children": [
+						{
+							"id": "tBSLpuU_fnxMmp_HR",
+							"name": "Haemastamen (Gene-Seed Markers)",
+							"local_notes": "Plot-hook marker; an Apothecary can confirm lineage and biochemical stability from the blood.",
+							"tags": [
+								"Perk"
+							],
+							"base_points": 1
+						},
+						{
+							"id": "tO1g9C7dDnjWLo_H0",
+							"name": "Resistant to Disease",
+							"reference": "B81",
+							"local_notes": "+8 to HT rolls to resist disease (Occasional hazard, +8 tier).",
+							"base_points": 5,
+							"round_down": true
+						}
+					]
 				},
 				{
 					"id": "tpP03H76dW83ibec4",
 					"name": "Larraman's Organ",
 					"reference": "B79",
-					"local_notes": "Wounds scab and scar over within seconds rather than minutes; treat as Rapid Healing for recovery rolls (B424), and the GM should waive ongoing blood-loss effects from an untreated wound after the first turn.\n\nLore: Floods the bloodstream with \"Larraman's cells\" that clot almost instantly on exposure to air, so an open wound scabs over in seconds. This is the single most commonly cited reason Astartes soldier on through injuries that would leave a Guardsman bleeding out; it is described across Black Library fiction from minor cuts up to serious battlefield trauma.\n\nDesign: Reflavoured Rapid Healing (B79, 5 points): the RAW effect (double effective HT for recovery rolls) undersells \"seals in seconds,\" so the design also folds in automatic stabilization against ongoing blood loss for the first turn after a wound, at no extra point cost — it's the same underlying \"clots fast\" phenomenon at two timescales.",
+					"local_notes": "Wounds scab and scar over within seconds rather than minutes; treat as Rapid Healing for recovery rolls (B424), and the GM should waive ongoing blood-loss effects from an untreated wound after the first turn.\n\nLore: Floods the bloodstream with \"Larraman's cells\" that clot almost instantly on exposure to air, so an open wound scabs over in seconds. This is the single most commonly cited reason Astartes soldier on through injuries that would leave a Guardsman bleeding out; it is described across Black Library fiction from minor cuts up to serious battlefield trauma.\n\nDesign: Reflavoured Rapid Healing (B79, 5 points): the RAW effect (+5 to effective HT for recovery rolls) undersells \"seals in seconds,\" so the design also folds in automatic stabilization against ongoing blood loss for the first turn after a wound, at no extra point cost — it's the same underlying \"clots fast\" phenomenon at two timescales.",
 					"tags": [
 						"Advantage",
 						"Physical",
@@ -159,27 +186,27 @@
 					"id": "tejDxFbceGffLGNDh",
 					"name": "Catalepsean Node",
 					"reference": "B65",
-					"local_notes": "Lore: A brainstem structure that lets the two cerebral hemispheres rest in alternation, so an Astartes only needs a couple of hours of true sleep where a human needs eight, and can go without any for days at a stretch on campaign. Distinct from the Sus-an Membrane, which is a full metabolic shutdown rather than efficient rest.\n\nDesign: Less Sleep 3 (B65, 2 points/level): reduces sleep need from 8 hours to about 2. 3 x 2 = 6 points.",
+					"local_notes": "Needs about 4 hours of sleep. On campaign the GM may let a Marine skip sleep entirely for days or weeks with no fatigue penalty (the hemispheres rest in turn); this is the fictional \"no sleep for weeks\" and is not bought as Doesn't Sleep.\n\nLore: A brainstem structure that lets the two cerebral hemispheres rest in alternation, so an Astartes only needs a few hours of true sleep where a human needs eight, and can go without any for days at a stretch on campaign. Distinct from the Sus-an Membrane, which is a full metabolic shutdown rather than efficient rest.\n\nDesign: Less Sleep 4 (B65, 2 points/level, the maximum of 4 levels): reduces sleep need from 8 hours to 4. 4 x 2 = 8 points. Doesn't Sleep (B50, 20 points) would overshoot: a Marine does eventually rest, and the weeks-awake feat is a campaign-length allowance, not a standing trait.",
 					"tags": [
 						"Advantage",
 						"Physical",
 						"Imperium",
 						"Adeptus Astartes"
 					],
-					"base_points": 6
+					"base_points": 8
 				},
 				{
 					"id": "tjItAgyOOM2NrAKFu",
 					"name": "Preomnor",
 					"reference": "B81",
-					"local_notes": "Lore: A supplementary \"pre-stomach\" that chemically breaks down and neutralizes toxins and spoiled matter in food before it reaches the true stomach, letting Astartes eat things — rotten rations, raw feral-world game, toxic fungus — that would sicken or kill an unaugmented human.\n\nDesign: Resistant (B81), Occasional: Ingested Poison, Immunity — base 10, x1 for Immunity = 10 points. Deliberately narrower than Oolitic Kidney below: this organ only ever sees toxins that arrive through the gut.",
+					"local_notes": "+8 to HT rolls to resist ingested poison and spoiled food. Not Immunity: weaponised or exotic toxins can still poison a Marine.\n\nLore: A supplementary \"pre-stomach\" that chemically breaks down and neutralizes toxins and spoiled matter in food before it reaches the true stomach, letting Astartes eat things — rotten rations, raw feral-world game, toxic fungus — that would sicken or kill an unaugmented human.\n\nDesign: Resistant (B81), Occasional: Ingested Poison, +8 to resist — base 10, x1/2 for the +8 tier = 5 points. Taken as a bonus rather than Immunity because the fiction has Marines poisoned by potent or engineered agents. Deliberately narrower than Oolitic Kidney below: this organ only ever sees toxins that arrive through the gut.",
 					"tags": [
 						"Advantage",
 						"Physical",
 						"Imperium",
 						"Adeptus Astartes"
 					],
-					"base_points": 10
+					"base_points": 5
 				},
 				{
 					"id": "txxBjqpqw_NoNxiLt",
@@ -225,7 +252,7 @@
 				{
 					"id": "Tqt9h7gvnJ7WHhs4e",
 					"name": "Occulobe",
-					"local_notes": "Lore: Rewires the optic nerve and visual cortex for much sharper acuity and low-light performance, and hardens the eye against flash and glare — Astartes are consistently shown spotting targets and reading terrain at ranges no unaugmented eye could manage, and shrugging off blinding light that would stagger a human.\n\nDesign: Acute Vision 2 (B35, 2/level, 4 points) for the raw acuity; Protected Sense (Vision) (B78, 5 points) so flash/glare can't blind the organ outright. 9 points total.",
+					"local_notes": "Lore: Rewires the optic nerve and visual cortex for much sharper acuity and low-light performance, and hardens the eye against flash and glare — Astartes are consistently shown spotting targets and reading terrain at ranges no unaugmented eye could manage, and shrugging off blinding light that would stagger a human.\n\nDesign: Acute Vision 2 (B35, 2/level, 4 points) for the raw acuity; Night Vision 5 (B71, 1/level, 5 points) for the low-light performance; Protected Sense (Vision) (B78, 5 points) so flash/glare can't blind the organ outright. 14 points total.",
 					"tags": [
 						"Advantage",
 						"Physical",
@@ -241,6 +268,14 @@
 							"points_per_level": 2,
 							"can_level": true,
 							"levels": 2
+						},
+						{
+							"id": "t9Ey4Zq9DkBPVtu81",
+							"name": "Night Vision",
+							"reference": "B71",
+							"points_per_level": 1,
+							"can_level": true,
+							"levels": 5
 						},
 						{
 							"id": "thEkWO7Ks-TWQ0uIO",
@@ -307,14 +342,14 @@
 					"id": "tQVTp_jgJb0yWReJd",
 					"name": "Oolitic Kidney",
 					"reference": "B81",
-					"local_notes": "Lore: A backup kidney that aggressively filters toxins circulating in the blood — venoms, industrial poisons, battlefield chemical agents — rather than the ones Preomnor already caught at the gut.\n\nDesign: Resistant (B81), Common: Poison, Immunity — base 15, x1 for Immunity = 15 points. Priced above Preomnor because it covers poison from any route of entry, not just food.",
+					"local_notes": "+8 to HT rolls to resist poison from any route. Not Immunity: exotic and weaponised agents (assassin toxins, Life-Eater, plague vectors) can still kill a Marine.\n\nLore: A backup kidney that aggressively filters toxins circulating in the blood — venoms, industrial poisons, battlefield chemical agents — rather than the ones Preomnor already caught at the gut.\n\nDesign: Resistant (B81), Common: Poison, +8 to resist — base 15, x1/2 for the +8 tier = 7.5, rounded down (Resistant rounds down) to 7 points. Priced above Preomnor because it covers poison from any route of entry, not just food. A bonus rather than Immunity because the fiction repeatedly has Marines poisoned by potent agents.",
 					"tags": [
 						"Advantage",
 						"Physical",
 						"Imperium",
 						"Adeptus Astartes"
 					],
-					"base_points": 15
+					"base_points": 7
 				},
 				{
 					"id": "TFMKuNOHNu3KA3WH6",
@@ -375,7 +410,7 @@
 				{
 					"id": "TNZSsGs6cnNYVbAJt",
 					"name": "Betcher's Gland",
-					"local_notes": "Lore: Produces a corrosive, mildly toxic saliva. Fiction plays this as a minor, opportunistic weapon and a way to shrug off ingested poisons and diseased food in the mouth — not a primary attack for a Marine who has a bolter.\n\nDesign: Innate Attack (Corrosion) at a token 1d, melee reach C only (B61, roughly 3 points after the reach/range restriction) for the spit; 1-point Perk for the minor oral antitoxin effect (overlaps in concept with Preomnor, so kept nominal). 4 points total.",
+					"local_notes": "Lore: Produces a corrosive, mildly toxic saliva. Fiction plays this as a minor, opportunistic weapon and a way to shrug off ingested poisons and diseased food in the mouth — not a primary attack for a Marine who has a bolter.\n\nDesign: Innate Attack (Corrosion) at a token 1d, range 1/3 yards (B61, roughly 3 points after the range restriction) for the spit, rolled against Innate Attack (Projectile) since spitting is a ranged act; 1-point Perk for the minor oral antitoxin effect (overlaps in concept with Preomnor, so kept nominal). 4 points total.",
 					"tags": [
 						"Advantage",
 						"Physical",
@@ -390,26 +425,31 @@
 							"base_points": 3,
 							"weapons": [
 								{
-									"id": "wfFsDRunZTMKGO7Tc",
+									"id": "WfFsDRunZTMKGO7Tc",
 									"sv": 1,
 									"damage": {
 										"type": "cor",
 										"base": "1d"
 									},
-									"reach": "C",
-									"parry": "No",
+									"accuracy": "1",
+									"range": "1/3",
+									"rate_of_fire": "1",
 									"usage": "Spit",
 									"defaults": [
-										{
-											"type": "dx",
-											"modifier": 0
-										},
 										{
 											"type": "skill",
 											"name": {
 												"compare": "is",
-												"qualifier": "Brawling"
+												"qualifier": "Innate Attack"
+											},
+											"specialization": {
+												"compare": "is",
+												"qualifier": "Projectile"
 											}
+										},
+										{
+											"type": "dx",
+											"modifier": -4
 										}
 									]
 								}
@@ -451,7 +491,7 @@
 				{
 					"id": "TLeSo6ii3RJK-oPsR",
 					"name": "Hypno-Indoctrination / Psycho-Conditioning",
-					"local_notes": "Lore: Years of hypnotherapy, drugs, and ritualized indoctrination laid over the biological changes, meant to produce a soldier who doesn't break under fire and who puts Chapter and Emperor before self. Consistently shown as psychological conditioning, not just training — Astartes keep fighting past the point a merely well-trained human would rout, and are bound by oaths to their Chapter that they do not question.\n\nDesign: Combat Reflexes (B43, 15) + Fearlessness 4 (B55, 2/level, 8) + High Pain Threshold (B59, 10) + Single-Minded (B85, 5) = 38 points of advantage, offset by Duty (B133, -15), Sense of Duty to the Chapter (B153, -10), and Code of Honor (B127, -10) = -35. Net +3 points. Intolerance is deliberately left out of the universal package — lore doesn't support a blanket xenophobia disadvantage across every Chapter; where a specific Chapter's fiction supports it, add it as part of that Chapter's lens instead.",
+					"local_notes": "Lore: Years of hypnotherapy, drugs, and ritualized indoctrination laid over the biological changes, meant to produce a soldier who doesn't break under fire and who puts Chapter and Emperor before self. Consistently shown as psychological conditioning, not just training — Astartes keep fighting past the point a merely well-trained human would rout, and are bound by oaths to their Chapter that they do not question.\n\nDesign: Combat Reflexes (B43, 15) + Fearlessness 4 (B55, 2/level, 8) + High Pain Threshold (B59, 10) + Single-Minded (B85, 5) = 38 points of advantage, offset by Duty (B133, -20: almost all the time -15, Extremely Hazardous a further -5), Sense of Duty to the Chapter (B153, -10), and Code of Honor (B127, -10) = -40. Net -2 points. Intolerance is deliberately left out of the universal package — lore doesn't support a blanket xenophobia disadvantage across every Chapter; where a specific Chapter's fiction supports it, add it as part of that Chapter's lens instead.",
 					"tags": [
 						"Advantage",
 						"Mental",
@@ -491,8 +531,8 @@
 							"id": "t3k87pkTA2BQPSCV8",
 							"name": "Duty (Chapter and Imperium)",
 							"reference": "B133",
-							"local_notes": "Almost all the time, Extremely Hazardous.",
-							"base_points": -15
+							"local_notes": "Almost all the time (-15), Extremely Hazardous (-5 more).",
+							"base_points": -20
 						},
 						{
 							"id": "tVim8QDlxwawmpB1j",

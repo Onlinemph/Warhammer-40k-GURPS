@@ -1,7 +1,7 @@
 {
 	"version": 5,
 	"id": "BEV7Ab6ThwDJtu8cW",
-	"notes": "A field Enginseer: an ordained Tech-Priest sent out from a Forge World or a Titan Legion's Adeptus Mechanicus detachment to keep an Imperial Guard regiment's vehicles, weapons, and vox-network running, rather than a combat specialist in their own right (that's the Skitarii templates) or a senior Magos directing a whole forge (Magos.gct). Point math: ST 11 (+10), DX 12 (+40), IQ 13 (+60), HT 11 (+10) = 120, plus Will +1 (+5) = 125; advantages +128; disadvantages -55; skills +57. Total 255 points, inside the ~250-350 band this project's brief sets for the Enginseer rank. Augmetics and faith traits are pulled in with `include` from Adeptus Mechanicus/Traits/Augmetics and the Cult Mechanicus.adq rather than copied, per docs/data-format.md.\n",
+	"notes": "A field Enginseer: an ordained Tech-Priest sent out from a Forge World or a Titan Legion's Adeptus Mechanicus detachment to keep an Imperial Guard regiment's vehicles, weapons, and vox-network running, rather than a combat specialist in their own right (that's the Skitarii templates) or a senior Magos directing a whole forge (Magos.gct). Point math: ST 11 (+10), DX 12 (+40), IQ 13 (+60), HT 11 (+10) = 120, plus Will +1 (+5) = 125; advantages +128; disadvantages -47; skills +59. Total 265 points, inside the ~250-350 band this project's brief sets for the Enginseer rank. Augmetics and faith traits are pulled in with `include` from Adeptus Mechanicus/Traits/Augmetics and the Cult Mechanicus.adq rather than copied, per docs/data-format.md.\n",
 	"traits": [
 		{
 			"id": "tKg8IJ4WLzy7MZoZM",
@@ -137,7 +137,7 @@
 			"id": "tPJKcbS_8y-Ufz-Lb",
 			"name": "Augmetic Arm, Combat Pattern",
 			"reference": "B40",
-			"local_notes": "Arm ST +6 (lifting and thrust/swing damage with this arm only); DR 6 on this arm only.\n\nLore: Enginseers are drawn from the ranks of the Cult Mechanicus after some years of service; an augmetic arm lost to accident or willingly offered up as an act of devotion is common enough by this rank that it is included in the baseline rather than left optional.\n\nDesign: Arm ST +6 (B40, 5/level, 30) + DR 6, Partial (single limb) -60% (6x5=30, x0.4=12) = 42 points.",
+			"local_notes": "Arm ST +6 (Lifting ST +6 and Striking ST +6, applied by the sheet); DR 6 to the arm. GCS applies these to the whole character, so for a single prosthetic arm use them for that arm only.\n\nLore: Enginseers are drawn from the ranks of the Cult Mechanicus after some years of service; an augmetic arm lost to accident or willingly offered up as an act of devotion is common enough by this rank that it is included in the baseline rather than left optional.\n\nDesign: Arm ST +6 (B40, 5/level, 30) + DR 6, Partial (single limb) -60% (6x5=30, x0.4=12) = 42 points.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -145,20 +145,51 @@
 				"Adeptus Mechanicus",
 				"Skitarii"
 			],
-			"base_points": 42
+			"base_points": 42,
+			"features": [
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"arm"
+					],
+					"amount": 6
+				},
+				{
+					"type": "attribute_bonus",
+					"attribute": "lifting_st",
+					"amount": 6
+				},
+				{
+					"type": "attribute_bonus",
+					"attribute": "striking_st",
+					"amount": 6
+				}
+			]
 		},
 		{
 			"id": "t8PvIxjHZ5Y0OQmv1",
 			"name": "Servo-Arm",
 			"reference": "B53",
-			"local_notes": "Extra Arm; Lifting ST +8; Striking ST +3; Payload 1.\n\nLore: The heavy, back-mounted tool-arm carried by Enginseers and Techmarines: strong enough to tear open a sealed hatch or wrench a fused component free, and — as more than one heretic has learned the hard way — strong enough to crush a skull if its bearer chooses.\n\nDesign: Extra Arm (B53, 10) + Lifting ST +8 (B65, 3/level, 24) for heavy lifting/grappling work + Striking ST +3 (B88, 5/level, 15) for its use as an improvised weapon + Payload 1 (B74, 1) for a small tool magazine = 50 points.",
+			"local_notes": "Extra Arm; Lifting ST +8; Striking ST +3 (both applied by the sheet); Payload 1. This is the body-mounted implant; the Servo-arm and Electroleech Stave in the melee weapons file are separate carried tools, and a build using the implant should not also buy the gear version for the same limb.\n\nLore: The heavy, back-mounted tool-arm carried by Enginseers and Techmarines: strong enough to tear open a sealed hatch or wrench a fused component free, and — as more than one heretic has learned the hard way — strong enough to crush a skull if its bearer chooses.\n\nDesign: Extra Arm (B53, 10) + Lifting ST +8 (B65, 3/level, 24) for heavy lifting/grappling work + Striking ST +3 (B88, 5/level, 15) for its use as an improvised weapon + Payload 1 (B74, 1) for a small tool magazine = 50 points.",
 			"tags": [
 				"Advantage",
 				"Physical",
 				"Imperium",
 				"Adeptus Mechanicus"
 			],
-			"base_points": 50
+			"base_points": 50,
+			"features": [
+				{
+					"type": "attribute_bonus",
+					"attribute": "lifting_st",
+					"amount": 8
+				},
+				{
+					"type": "attribute_bonus",
+					"attribute": "striking_st",
+					"amount": 3
+				}
+			]
 		},
 		{
 			"id": "tnXDafN442KDoCm5i",
@@ -315,13 +346,13 @@
 		{
 			"id": "svx58T58K0BoXV1OC",
 			"name": "Electronics Repair",
-			"local_notes": "Lore: Vox-network upkeep, a constant field task.\n\nDesign: IQ+0 (13) for 4 points, Hard.",
+			"local_notes": "Lore: Vox-network upkeep, a constant field task.\n\nDesign: IQ+1 (14) for 4 points, Average (B170).",
 			"tags": [
 				"Imperium",
 				"Adeptus Mechanicus"
 			],
 			"specialization": "Communications",
-			"difficulty": "iq/h",
+			"difficulty": "iq/a",
 			"points": 4
 		},
 		{
@@ -421,6 +452,17 @@
 				}
 			],
 			"points": 1
+		},
+		{
+			"id": "sY7apQPa1-rAw96MV",
+			"name": "Axe/Mace",
+			"local_notes": "Lore: The Omnissiah's axe is an Enginseer's signature melee tool (per the tabletop Codex, a moderate-confidence source): a technician's competence, not a warrior's.\n\nDesign: DX+0 (12) for 2 points, Average.",
+			"tags": [
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"difficulty": "dx/a",
+			"points": 2
 		},
 		{
 			"id": "sBJX4tk502oQDxzNC",

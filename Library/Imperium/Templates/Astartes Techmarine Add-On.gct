@@ -1,7 +1,7 @@
 {
 	"version": 5,
 	"id": "BgiVP6O2vd2XDuBkf",
-	"notes": "An add-on, not a full character: layer this over Imperium/Templates/ Astartes Battle-Brother.gct (plus a Chapter Gene-Seed lens) to build a Techmarine, exactly as Imperium/Templates/Astartes Librarian Add-On.gct builds a Librarian. It does not repeat the Battle-Brother's attributes, physiology, Chapter Rank, or Reputation -- only what a Techmarine has beyond a Tactical Marine: a full second apprenticeship on Mars (or a Chapter's own equivalent forge) inducted into the Cult Mechanicus, plus the servo-harness every Techmarine is known for. Augmetics and Mechanicus faith traits are pulled in with `include` from Adeptus Mechanicus/Traits/ Augmetics and the Cult Mechanicus.adq rather than copied.\nPoint math for this add-on alone: traits 1 (Cranial Circuitry) + 7 (Cortex Implant) + 8 (Noospheric Link) + 50 (Servo-Arm) + 1 (Mind Impulse Unit) + 9 (Mechadendrite, Utility Pattern) + 10 (Mechanicus Rank 2) - 10 (Disciplines of the Cult Mechanicus) - 10 (Duty, Adeptus Mechanicus) = 66, plus skills 8 (Engineer, Combat Engineering) + 8 (Engineer, Powered Armor) + 4 (Theology, Cult Mechanicus) + 4 (Language, Binharic) + 4 (Hidden Lore, Archeotech) + 1 (Savoir-Faire, Adeptus Mechanicus) = 29. 95 points on top of the Battle-Brother's own 751, landing at roughly 846 -- past the Astartes tier's normal 550-800 ceiling and into framework.md's \"Heroes and legends\" band, matching how the Librarian add-on (bringing a Battle-Brother to ~962) already treats a Chapter specialist as costing more than a line Marine. The servo-harness itself (the physical mount the Servo-Arm and Mechadendrite are built into) and any Techmarine-pattern weapon (servo-harness-mounted flamer, plasma cutter, etc.) are equipment, not covered here.\n",
+	"notes": "An add-on, not a full character: layer this over Imperium/Templates/ Astartes Battle-Brother.gct (plus a Chapter Gene-Seed lens) to build a Techmarine, exactly as Imperium/Templates/Astartes Librarian Add-On.gct builds a Librarian. It does not repeat the Battle-Brother's attributes, physiology, Chapter Rank, or Reputation -- only what a Techmarine has beyond a Tactical Marine: a full second apprenticeship on Mars (or a Chapter's own equivalent forge) inducted into the Cult Mechanicus, plus the servo-harness every Techmarine is known for. Augmetics and Mechanicus faith traits are pulled in with `include` from Adeptus Mechanicus/Traits/ Augmetics and the Cult Mechanicus.adq rather than copied.\nPoint math for this add-on alone: traits 1 (Cranial Circuitry) + 7 (Cortex Implant) + 8 (Noospheric Link) + 50 (Servo-Arm) + 1 (Mind Impulse Unit) + 9 (Mechadendrite, Utility Pattern) + 10 (Mechanicus Rank 2) - 10 (Disciplines of the Cult Mechanicus) - 10 (Duty, Adeptus Mechanicus) = 66, plus skills 8 (Engineer, Combat Engineering) + 8 (Engineer, Powered Armor) + 4 (Theology, Cult Mechanicus) + 4 (Language, Binharic) + 4 (Hidden Lore, Archeotech) + 1 (Savoir-Faire, Adeptus Mechanicus) = 29. 95 points on top of the Battle-Brother's own 821, landing at roughly 916 -- past the Astartes tier's 550-850 ceiling (the line Battle-Brother is already 821) and approaching framework.md's \"Heroes and legends\" band, matching how the Librarian add-on already treats a Chapter specialist as costing more than a line Marine. The servo-harness itself (the physical mount the Servo-Arm and Mechadendrite are built into) and any Techmarine-pattern weapon (servo-harness-mounted flamer, plasma cutter, etc.) are equipment, not covered here.\nThe Servo-Arm trait (50 points) now carries real attribute bonuses from the Mechanicus augmetics file: Lifting ST +8 and Striking ST +3, applied by the sheet. On a Battle-Brother's ST 30 that is Lifting ST 38 and Striking ST 33 for work done with the arm, before the power armour's own servo-motor bonus. The point total above already includes it (the add-on's cost is unchanged). Subdermal Armour Plating (per-level DR, 1 DR per level in the Mechanicus file) is not part of this add-on; if a GM adds it, it stacks with the Ossmodula's DR 3 (torso and vitals) and worn armour.\nThe Servo-Arm and Mechadendrite here are the implanted body (the trait); the carried servo-arm and other tools in the Mechanicus armoury are the gear. Do not buy both for the same limb: use the trait for a harness the Techmarine wears as part of himself, and the equipment entry only for a spare or a separate tool.\n",
 	"traits": [
 		{
 			"id": "tjBcJnu6Ea7300Nhd",
@@ -45,14 +45,26 @@
 			"id": "trKo_yd2vLkF7jMQJ",
 			"name": "Servo-Arm",
 			"reference": "B53",
-			"local_notes": "Extra Arm; Lifting ST +8; Striking ST +3; Payload 1.\n\nLore: Mounted on the servo-harness every Techmarine carries into battle alongside their bolter and chainsword.\n\nDesign: Extra Arm (B53, 10) + Lifting ST +8 (B65, 3/level, 24) for heavy lifting/grappling work + Striking ST +3 (B88, 5/level, 15) for its use as an improvised weapon + Payload 1 (B74, 1) for a small tool magazine = 50 points.",
+			"local_notes": "Extra Arm; Lifting ST +8; Striking ST +3 (both applied by the sheet); Payload 1. This is the body-mounted implant; the Servo-arm and Electroleech Stave in the melee weapons file are separate carried tools, and a build using the implant should not also buy the gear version for the same limb.\n\nLore: Mounted on the servo-harness every Techmarine carries into battle alongside their bolter and chainsword.\n\nDesign: Extra Arm (B53, 10) + Lifting ST +8 (B65, 3/level, 24) for heavy lifting/grappling work + Striking ST +3 (B88, 5/level, 15) for its use as an improvised weapon + Payload 1 (B74, 1) for a small tool magazine = 50 points.",
 			"tags": [
 				"Advantage",
 				"Physical",
 				"Imperium",
 				"Adeptus Mechanicus"
 			],
-			"base_points": 50
+			"base_points": 50,
+			"features": [
+				{
+					"type": "attribute_bonus",
+					"attribute": "lifting_st",
+					"amount": 8
+				},
+				{
+					"type": "attribute_bonus",
+					"attribute": "striking_st",
+					"amount": 3
+				}
+			]
 		},
 		{
 			"id": "tOnwxBqPiaivN3udP",

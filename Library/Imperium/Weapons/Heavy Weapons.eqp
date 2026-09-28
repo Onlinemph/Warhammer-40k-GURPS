@@ -4,7 +4,7 @@
 		{
 			"id": "e-DUQph2c9GclUDV2",
 			"description": "Lascannon",
-			"local_notes": "Needs a tripod or vehicle pit mount (ST 12M): an unmounted human cannot brace it, though Astartes ST lets a Space Marine fire it standing (treat as braced at ST 12 rather than mounted, GM's call). Draws from a dedicated power cell (see Lascannon Power Cell); swapping cells takes the 5-turn reload noted in shots.\n\nLore: The definitive Imperial anti-tank weapon: Guard heavy weapons squads, Space Marine Devastators and Predator/Rhino/Razorback sponsons and turrets all mount it, and Black Library fiction (Gaunt's Ghosts, Horus Heresy novels) consistently has a well-placed lascannon shot cripple or kill a battle tank, and treats it as one of the few man-portable weapons that can bring down a Terminator or walker.\n\nDesign: Damage is the fixed anchor from framework.md: 8dx8(5) burn (\"kills tanks and Terminators\"). Checked against the vehicle AV table with the exact dice distribution: average 224 burn through an armor divisor of 5 gives an effective DR of 20 (AV10) to 70 (AV14). Even a worst-case minimum roll (8 dice all at 1, x8 = 64) clears every effective DR on the table, so the lascannon always beats AV10 through AV14 (DR 100-350) with the anchor's divisor doing almost all the work; against a Terminator (DR 200, effective DR 40) or Astartes power armor (DR 100, effective DR 20) it is likewise a guaranteed penetration, matching \"kills tanks and Terminators\" without exception. Acc, range, RoF, shots, Bulk and Rcl are not anchored by framework.md, so they're built from first principles: RoF 1 and Rcl 1 because a beam weapon has no recoil and the capacitor cycle time is the limiting factor; Acc 14 and a long 1500/4500 range because the weapon's entire battlefield role is precision fire on distant armor, which demands better optics than a lasgun (Acc 10); Bulk -8 and ST 12M because the weapon and its cooling housing are backpack-sized and unwieldy without a brace. Cost and LC follow \"military-issue heavy weapons\" (LC2) and are priced well above a lasgun to reflect scarcity of the long-barrel focusing crystal.",
+			"local_notes": "Needs a tripod or vehicle pit mount (ST 14M): an unmounted human cannot brace it, though Astartes ST lets a Space Marine fire it standing (treat as braced at ST 14 rather than mounted, GM's call). The 80 lb is the weapon alone; the tripod (Heavy Weapon Tripod, 20 lb) is extra. Draws from a dedicated power cell (see Lascannon Power Cell); swapping cells takes the 5-turn reload noted in shots.\n\nLore: The definitive Imperial anti-tank weapon: Guard heavy weapons squads, Space Marine Devastators and Predator/Razorback/Land Raider sponsons and turrets all mount it, and Black Library fiction (Gaunt's Ghosts, Horus Heresy novels) consistently has a well-placed lascannon shot cripple or kill a battle tank, and treats it as one of the few man-portable weapons that can bring down a Terminator or walker.\n\nDesign: Damage is the fixed anchor from framework.md: 8dx8(5) burn (\"kills tanks and Terminators\"). Checked against the vehicle AV table with the exact dice distribution: average 224 burn through an armor divisor of 5 gives an effective DR of 20 (AV10) to 70 (AV14). Even the minimum roll (8 dice all at 1, x8 = 64) clears every effective DR on the table except AV14's 70, which it misses only when all eight dice show 1 (1 in 1.7 million), so the lascannon beats AV10 through AV14 (DR 100-350) essentially every time with the anchor's divisor doing almost all the work; against a Terminator (DR 200, effective DR 40) or Astartes power armor (DR 100, effective DR 20) it is a guaranteed penetration (minimum roll 64), matching \"kills tanks and Terminators\" without exception. Acc, range, RoF, shots, Bulk and Rcl are not anchored by framework.md, so they're built from first principles: RoF 1 and Rcl 1 because a beam weapon has no recoil and the capacitor cycle time is the limiting factor; Acc 14 and a long 1500/4500 range because the weapon's entire battlefield role is precision fire on distant armor, which demands better optics than a lasgun (Acc 6); Bulk -8 and ST 14M (sqrt(10x80)=28, mostly carried by the mount) because the weapon and its cooling housing are backpack-sized and unwieldy without a brace. Cost and LC follow \"military-issue heavy weapons\" (LC2) and are priced well above a lasgun to reflect scarcity of the long-barrel focusing crystal.",
 			"tags": [
 				"Missile Weapon",
 				"Imperium",
@@ -30,7 +30,7 @@
 					"shots": "5(5)",
 					"bulk": "-8",
 					"recoil": "1",
-					"strength": "12M",
+					"strength": "14M",
 					"usage": "Braced/mounted",
 					"defaults": [
 						{
@@ -80,7 +80,7 @@
 		{
 			"id": "e30vWMZlseagncPa7",
 			"description": "Heavy Weapon Tripod",
-			"local_notes": "Required to fire a mounted-only (M) heavy weapon without an Astartes-grade ST score. Setup/breakdown takes about a minute (Fast-Draw or GM discretion can shorten this).\n\nLore: Guard heavy weapons squads are built around a two- or three-man team - gunner, loader, and often an ammo carrier - who move the tripod between firing positions, a staple of Astra Militarum fiction from Gaunt's Ghosts onward.\n\nDesign: Not anchored; a generic piece of gear so lascannon, multi-laser, autocannon and mortar entries can all reference the same mount rather than each inventing one. Cost and weight are a plausible generic tripod, not derived from any weapon-specific figure.",
+			"local_notes": "Required to fire a mounted-only (M) heavy weapon without an Astartes-grade ST score. Setup/breakdown takes about a minute (Fast-Draw or GM discretion can shorten this). Weapons whose entry says the weight already includes the mount (Autocannon, Multi-laser) do not need a second tripod; the Lascannon, Plasma Cannon and Multi-Melta weights exclude it.\n\nLore: Guard heavy weapons squads are built around a two- or three-man team - gunner, loader, and often an ammo carrier - who move the tripod between firing positions, a staple of Astra Militarum fiction from Gaunt's Ghosts onward.\n\nDesign: Not anchored; a generic piece of gear so lascannon, multi-laser, autocannon and mortar entries can all reference the same mount rather than each inventing one. Cost and weight are a plausible generic tripod, not derived from any weapon-specific figure.",
 			"tags": [
 				"Imperium",
 				"Astra Militarum",
@@ -95,11 +95,12 @@
 		{
 			"id": "e4n2vn8WSqQOwmFOy",
 			"description": "Multi-laser, Tripod-Mounted",
-			"local_notes": "More commonly seen as a Sentinel or Rhino turret weapon than carried into the field; this is the static defensive-emplacement or bunker version issued to line regiments guarding a position.\n\nLore: Multi-lasers are the standard secondary and light-vehicle turret weapon across the Astra Militarum (Sentinels, Chimeras, Rhinos); fiction and background consistently treat them as good infantry-shredders that struggle to hurt anything with real armour plate.\n\nDesign: No framework anchor covers the multi-laser. It is several linked lasgun-grade emitters cycling far faster and harder than any infantry weapon, and the fiction treats it as a heavier anti-infantry weapon than the heavy bolter, so each shot sits level with a bolter round at 6dx2(2) burn (avg 42). Exact odds per hit: penetrates carapace (DR 70, eff. 35) 79%; Sororitas plate (DR 85, eff. 42.5) 45%; Astartes power armour (DR 100, eff. 50) 14%, same as a bolter; AV10 (DR 100) 14%, so it can threaten a Chimera's flank with luck but no tank. Handling: RoF corrected to 9 per framework.md's explicit \"multi-lasers are rapid emitters (8-10)\" rule - the previous RoF 3 copied the bolter's semi/burst rate onto a weapon the framework itself singles out as a fast-cycling linked-emitter array, understating exactly the \"several linked lasgun-grade emitters cycling far faster... than any infantry weapon\" description in this entry's own design note. Acc, range and Bulk sit between the lasgun and lascannon; ST 9M (mounted) is unchanged, the tripod bearing the 45 lb weight.",
+			"local_notes": "More commonly seen as a Sentinel, Chimera or Land Speeder weapon than carried into the field; this is the static defensive-emplacement or bunker version issued to line regiments guarding a position. The 45 lb includes its tripod.\n\nLore: Multi-lasers are the standard secondary and light-vehicle turret weapon across the Astra Militarum (Sentinels, Chimeras; Astartes Land Speeders carry it too); fiction and background consistently treat them as good infantry-shredders that struggle to hurt anything with real armour plate.\n\nDesign: No framework anchor covers the multi-laser. It is several linked lasgun-grade emitters cycling far faster and harder than any infantry weapon, and the fiction treats it as a heavier anti-infantry weapon than the heavy bolter, so each shot sits level with a bolter round at 6dx2(2) burn (avg 42). Exact odds per hit: penetrates carapace (DR 70, eff. 35) 79%; Sororitas plate (DR 85, eff. 42.5) 45%; Astartes power armour (DR 100, eff. 50) 14%, same as a bolter; AV10 (DR 100) 14%, so it can threaten a Chimera's flank with luck but no tank. Handling: RoF 9 follows framework.md's \"multi-lasers are rapid emitters (8-10)\" rule, matching the \"several linked lasgun-grade emitters cycling far faster... than any infantry weapon\" description above. Acc, range and Bulk sit between the lasgun and lascannon; ST 9M (mounted) is unchanged, the tripod bearing the 45 lb weight.",
 			"tags": [
 				"Missile Weapon",
 				"Imperium",
-				"Astra Militarum"
+				"Astra Militarum",
+				"Adeptus Astartes"
 			],
 			"tech_level": "10",
 			"legality_class": "2",
@@ -154,11 +155,12 @@
 		{
 			"id": "eGuN7Vv92kT-L1H3J",
 			"description": "Autocannon",
-			"local_notes": "Weight includes the tripod mount; a Heavy Weapons Squad crews it as gunner plus loader. The Predator battle tank's turret gun is the same weapon on a stabilised vehicle mount.\n\nLore: The autocannon is the Guard heavy weapons squad's and the Predator tank's main anti-light-vehicle gun throughout the fiction: reliably described tearing through Ork trukks, light xenos raiders and Sentinel-class walkers, denting Rhinos and Chimeras, and bouncing or only chipping a Leman Russ or Land Raider's frontal glacis.\n\nDesign: Not covered by a framework anchor, so it's built as a solid-projectile \"stub\" weapon per the TL table (autogun/stubber bracket, scaled to artillery-grade tolerances) rather than borrowed from any GURPS catalogue cannon: a single heavy AP penetrator per round gives pi++ (full wound multiplier, no follow-up), with a moderate armor divisor (3) for the hardened long-rod core. Checked with the exact dice distribution (6dx3(3) pi++, avg 63) against the vehicle AV table: it penetrates AV10 (DR 100, eff. DR 33) 99% of the time and AV11 (DR 150, eff. DR 50, a Rhino's front/sides) 85% of the time - reliably beats both, as required; against AV12 (DR 200, eff. DR 66, a Chimera's front) that drops to 36% - sometimes beats it, matching \"dents a Rhino, sometimes cracks a Chimera\"; and against AV13 (DR 275, eff. DR 91) it falls to 1% and AV14 (DR 350, eff. DR 116) to effectively 0% - it does not beat a Leman Russ or Land Raider's armour, matching every source that has autocannon fire shrug off a main battle tank's frontal plate. Handling: RoF corrected to 5 - a real chain-driven or revolver-cannon autoloader cycles noticeably faster than a bolter's semi/burst RoF 3, but this project keeps it well under the true chain-gun rate of the Assault Cannon (RoF 10) and the rapid-emitter Multi-laser (RoF 9), so the autocannon reads as a burst-fire cannon rather than a spray-weapon, matching its lore role of putting a few large, accurate rounds into a specific target rather than hosing an area. ST 14M (mounted) and Bulk -8 are unchanged.",
+			"local_notes": "Weight includes the tripod mount; a Heavy Weapons Squad crews it as gunner plus loader. The Predator battle tank's turret gun is the same weapon on a stabilised vehicle mount.\n\nLore: The autocannon is the Guard heavy weapons squad's and the Predator tank's main anti-light-vehicle gun throughout the fiction: reliably described tearing through Ork trukks, light xenos raiders and Sentinel-class walkers, denting Rhinos and Chimeras, and bouncing or only chipping a Leman Russ or Land Raider's frontal glacis.\n\nDesign: Not covered by a framework anchor, so it's built as a solid-projectile \"stub\" weapon per the TL table (autogun/stubber bracket, scaled to artillery-grade tolerances) rather than borrowed from any GURPS catalogue cannon: a single heavy AP penetrator per round gives pi++ (full wound multiplier, no follow-up), with a moderate armor divisor (3) for the hardened long-rod core. Checked with the exact dice distribution (6dx3(3) pi++, avg 63) against the vehicle AV table: it penetrates AV10 (DR 100, eff. DR 33) 99% of the time and AV11 (DR 150, eff. DR 50, a Rhino's front/sides) 85% of the time - reliably beats both, as required; against AV12 (DR 200, eff. DR 66, a Chimera's front) that drops to 36% - sometimes beats it, matching \"dents a Rhino, sometimes cracks a Chimera\"; and against AV13 (DR 275, eff. DR 91) it falls to 1% and AV14 (DR 350, eff. DR 116) to effectively 0% - it does not beat a Leman Russ or Land Raider's armour, matching every source that has autocannon fire shrug off a main battle tank's frontal plate. Handling: RoF 5 - a real chain-driven or revolver-cannon autoloader cycles noticeably faster than a bolter's semi/burst RoF 3, but this project keeps it well under the true chain-gun rate of the Assault Cannon (RoF 20) and the rapid-emitter Multi-laser (RoF 9), so the autocannon reads as a burst-fire cannon rather than a spray-weapon, matching its lore role of putting a few large, accurate rounds into a specific target rather than hosing an area. ST 14M (mounted) and Bulk -8 are unchanged.",
 			"tags": [
 				"Missile Weapon",
 				"Imperium",
-				"Astra Militarum"
+				"Astra Militarum",
+				"Adeptus Astartes"
 			],
 			"tech_level": "8",
 			"legality_class": "2",
@@ -228,11 +230,12 @@
 		{
 			"id": "eAhzkgNzbb4S-gf29",
 			"description": "Missile Launcher",
-			"local_notes": "Shoulder-fired, one missile loaded at a time; the gunner (or a loader) carries spares separately (see the missile entries below). Flakk missiles trade blast for a proximity fuze and are wasted against ground targets.\n\nLore: The Guard's man-portable answer to armour and aircraft when a lascannon isn't to hand: fiction repeatedly has missile teams crack light and medium vehicles and occasionally cripple a Leman Russ, while frag loads are the squad's answer to entrenched infantry and light structures.\n\nDesign: No single framework anchor covers this launcher as a whole, but Krak is itself one of the project's fixed anchors: 6dx6(3) cr, a one-shot, disposable shaped charge. Checked with the exact dice distribution (avg. 126) against the AV table: it beats AV10 (DR 100, eff. DR 33) essentially always and AV11-12 (DR 150/200, eff. DR 50/66) 100%/99% of the time - reliably wrecks Chimeras and Rhinos; against AV13 (DR 275, eff. DR 91) it's still 90% - reliable vs AV12-13 as the anchor requires; and against AV14 (DR 350, eff. DR 116) it drops to 64% - \"about two in three\" - so a Land Raider or Leman Russ's frontal glacis is a real but not certain kill, which is why the fiction has missile teams engage such targets in numbers rather than solo. Frag: scaled from the B414 fragmentation rules as a \"big frag grenade\" per the framework's own description - roughly double the blast and fragmentation dice of a standard hand grenade (3d[3d]) to reflect a much larger warhead, giving 6d cr ex [6d]; it has no armor divisor and is not intended to threaten anything on the vehicle AV table, only infantry and light cover, so it is not rescaled alongside Krak. Flakk: the frag warhead's dice with a proximity fuze instead of impact/frag optimisation, at one die less since more of the casing goes into the fuze and less into the frag liner; it is not rated against ground DR at all. Acc/range/RoF/Bulk are shared across usages since they describe the launcher, not the warhead, and are built as a shoulder-fired tube (lower ST and Bulk penalty than the tripod weapons above, since one Guardsman carries and fires it solo).",
+			"local_notes": "Shoulder-fired, one missile loaded at a time; the gunner (or a loader) carries spares separately (see the missile entries below). Flakk missiles trade blast for a proximity fuze and are wasted against ground targets.\n\nLore: The Guard's man-portable answer to armour and aircraft when a lascannon isn't to hand: fiction repeatedly has missile teams crack light and medium vehicles and occasionally cripple a Leman Russ, while frag loads are the squad's answer to entrenched infantry and light structures.\n\nDesign: No single framework anchor covers this launcher as a whole, but Krak is itself one of the project's fixed anchors: 6dx6(3) cr, a one-shot, disposable shaped charge. Checked with the exact dice distribution (avg. 126) against the AV table: it beats AV10 (DR 100, eff. DR 33) essentially always and AV11-12 (DR 150/200, eff. DR 50/66) 100%/99% of the time - reliably wrecks Chimeras and Rhinos; against AV13 (DR 275, eff. DR 91) it's still 90% - reliable vs AV12-13 as the anchor requires; and against AV14 (DR 350, eff. DR 116) it drops to 64% - \"about two in three\" - so a Land Raider or Leman Russ's frontal glacis is a real but not certain kill, which is why the fiction has missile teams engage such targets in numbers rather than solo. Frag: scaled from the B414 fragmentation rules as a \"big frag grenade\" per the framework's own description - double the concussion dice and 1.5x the fragmentation dice of a standard hand grenade (3d cr ex [6d cut]) to reflect a much larger warhead, giving 6d cr ex [9d cut]; it has no armor divisor and is not intended to threaten anything on the vehicle AV table, only infantry and light cover. Flakk: the frag warhead's dice with a proximity fuze instead of impact/frag optimisation, at one die less on each figure (5d cr ex [8d cut]) since more of the casing goes into the fuze and less into the frag liner; it is not rated against ground DR at all. Acc/range/RoF/Bulk are shared across usages since they describe the launcher, not the warhead, and are built as a shoulder-fired tube (lower ST and Bulk penalty than the tripod weapons above, since one Guardsman carries and fires it solo).",
 			"tags": [
 				"Missile Weapon",
 				"Imperium",
-				"Astra Militarum"
+				"Astra Militarum",
+				"Adeptus Astartes"
 			],
 			"tech_level": "8",
 			"legality_class": "2",
@@ -245,7 +248,7 @@
 					"damage": {
 						"type": "cr ex",
 						"base": "6d",
-						"fragmentation": "6d",
+						"fragmentation": "9d",
 						"fragmentation_type": "cut"
 					},
 					"accuracy": "10",
@@ -286,7 +289,7 @@
 					"id": "Wo5f8qCSWRw3FhEXU",
 					"sv": 1,
 					"damage": {
-						"type": "cr",
+						"type": "cr ex",
 						"base": "6dx6",
 						"armor_divisor": 3
 					},
@@ -330,7 +333,7 @@
 					"damage": {
 						"type": "cr ex",
 						"base": "5d",
-						"fragmentation": "5d",
+						"fragmentation": "8d",
 						"fragmentation_type": "cut"
 					},
 					"accuracy": "10",
@@ -416,9 +419,9 @@
 			"quantity": 1
 		},
 		{
-			"id": "eM4dDI14OtE0RKYeG",
-			"description": "Assault Cannon (Soulreaper Pattern)",
-			"local_notes": "Arm- or hip-socket mounted on Terminator armour, or carried and fired one-handed by an Astartes on a stabilising harness; ST 15 assumes Astartes-grade strength rather than a tripod.\n\nLore: Devastator squads and Terminators use the multi-barrelled assault cannon (also fielded by Chaos as the Soulreaper cannon) as a close-to-mid-range storm of solid shot for shredding infantry, light vehicles and swarms; it is fired solid rounds rather than bolts, which is why it sits outside the bolt-weapon family, and fiction almost always pairs it with a melee specialist (power fist, thunder hammer) on the same Terminator rather than relying on it against tanks.\n\nDesign: No framework anchor, so it's built parallel to the heavy bolter anchor (7dx2(2) pi++, follow-up 8d cr ex) rather than copied from it: the assault cannon fires solid rotary-autocannon-style rounds with no explosive follow-up and a lower pi+ wound multiplier (dense solid shot, not a mass-reactive bolt), so it drops the follow-up term and scales the base damage down two dice (5d instead of 7d) in exchange for a much higher RoF (10 vs. the heavy bolter's typical squad-support RoF), matching its fluff role as a horde-clearing hail of fire rather than a hard-hitting single line of shots. Checked with the exact dice distribution (5dx2(2) pi+, avg 35) against the vehicle AV table: even at RoF 10, no single round reliably clears AV10's effective DR 50 (only 1.6% per shot), so it cannot reliably beat any vehicle on the table - consistent with Astartes fiction, where the assault cannon is a horde/infantry weapon and its wielder relies on a paired melee weapon (power fist, thunder hammer) or a squadmate's lascannon/missile launcher against real armour. LC1 follows the framework's Astartes-gear bracket (alongside bolters and plasma) rather than the Guard's LC2 heavy-weapon bracket.",
+			"id": "el-umskU03aBp8pY3",
+			"description": "Assault Cannon",
+			"local_notes": "Arm- or hip-socket mounted on Terminator armour, or carried and fired one-handed by an Astartes on a stabilising harness; ST 15 assumes Astartes-grade strength rather than a tripod.\n\nLore: Terminators, Dreadnoughts and vehicle sponsons (Predators, Land Raiders) use the multi-barrelled assault cannon (the Chaos Soulreaper cannon is the same design) as a close-to-mid-range storm of solid shot for shredding infantry, light vehicles and swarms; it is fired solid rounds rather than bolts, which is why it sits outside the bolt-weapon family, and fiction almost always pairs it with a melee specialist (power fist, thunder hammer) on the same Terminator rather than relying on it against tanks.\n\nDesign: No framework anchor, so it's built parallel to the heavy bolter anchor (7dx2(2) pi++, follow-up 8d cr ex) rather than copied from it: the assault cannon fires solid rotary-autocannon-style rounds with no explosive follow-up and a lower pi+ wound multiplier (dense solid shot, not a mass-reactive bolt), so it drops the follow-up term and scales the base damage down two dice (5d instead of 7d) in exchange for a much higher RoF (20 vs. the heavy bolter's 8; framework.md puts assault cannons at 15-20+), matching its fluff role as a horde-clearing hail of fire rather than a hard-hitting single line of shots. Checked with the exact dice distribution (5dx2(2) pi+, avg 35) against the vehicle AV table: even at RoF 20, no single round reliably clears AV10's effective DR 50 (only 1.6% per shot), so it cannot reliably beat any vehicle on the table - consistent with Astartes fiction, where the assault cannon is a horde/infantry weapon and its wielder relies on a paired melee weapon (power fist, thunder hammer) or a squadmate's lascannon/missile launcher against real armour. LC1 follows the framework's Astartes-gear bracket (alongside bolters and plasma) rather than the Guard's LC2 heavy-weapon bracket.",
 			"tags": [
 				"Missile Weapon",
 				"Imperium",
@@ -430,7 +433,7 @@
 			"base_weight": "55 lb",
 			"weapons": [
 				{
-					"id": "W_-McUXf6RHwwFBTm",
+					"id": "WQa55z3Pw0ghCz0-x",
 					"sv": 1,
 					"damage": {
 						"type": "pi+",
@@ -439,7 +442,7 @@
 					},
 					"accuracy": "5",
 					"range": "500/1500",
-					"rate_of_fire": "10",
+					"rate_of_fire": "20",
 					"shots": "200(20)",
 					"bulk": "-6",
 					"recoil": "2",
@@ -492,7 +495,7 @@
 		{
 			"id": "epJ5arNy0SkduUU6Y",
 			"description": "Mortar",
-			"local_notes": "Baseplate, bipod and tube break down for a three-man crew to carry; minimum range reflects the bomb's arming distance, not a targeting limit. Uses the indirect-fire rules under Artillery, not a direct line of sight.\n\nLore: The mortar is the Guard's simplest and most ubiquitous indirect-fire support weapon, issued down to platoon level in Guard fiction for exactly the reason real-world mortars are: cheap, rugged, easy to manufacture on almost any forge world, and effective against dug-in infantry and soft targets beyond line of sight.\n\nDesign: No framework anchor, so it's placed at the bottom of the TL table deliberately - mortar tube technology is older and simpler than lasguns, stubbers or rockets, which is exactly why every regiment from a hive world to a feral-world levy can field one. Damage is built the same way as the missile launcher's frag warhead (B414 fragmentation, \"big frag grenade\" scaling) but roughly doubled again, since a mortar bomb is not weight-constrained by a rocket motor and can devote more of its mass to filler and casing, giving 6dx2 cr ex [6d]. It carries no armor divisor and is not intended to be checked against the vehicle AV table at all - its role in the fiction is area denial and infantry suppression, not armour-killing, so unlike the autocannon, krak missile or lascannon above it has no reliably/ sometimes/cannot-beat line against AV10-14.",
+			"local_notes": "Baseplate, bipod and tube break down for a three-man crew to carry; minimum range about 20 yd (the bomb's arming distance, not a targeting limit). Uses the indirect-fire rules under Artillery, not a direct line of sight.\n\nLore: The mortar is the Guard's simplest and most ubiquitous indirect-fire support weapon, issued down to platoon level in Guard fiction for exactly the reason real-world mortars are: cheap, rugged, easy to manufacture on almost any forge world, and effective against dug-in infantry and soft targets beyond line of sight.\n\nDesign: No framework anchor, so it's placed at the bottom of the TL table deliberately - mortar tube technology is older and simpler than lasguns, stubbers or rockets, which is exactly why every regiment from a hive world to a feral-world levy can field one. Damage is built the same way as the missile launcher's frag warhead (B414 fragmentation, \"big frag grenade\" scaling) with the fragmentation doubled again over a hand grenade's 6d (12d cut, against the missile's 9d), since a mortar bomb is not weight-constrained by a rocket motor and can devote more of its mass to filler and casing, giving 6dx2 cr ex [12d cut]. Basic Set Artillery specialties have no Mortar entry, so it uses Artillery (Cannon). It carries no armor divisor and is not intended to be checked against the vehicle AV table at all - its role in the fiction is area denial and infantry suppression, not armour-killing, so unlike the autocannon, krak missile or lascannon above it has no reliably/ sometimes/cannot-beat line against AV10-14.",
 			"tags": [
 				"Missile Weapon",
 				"Imperium",
@@ -509,7 +512,7 @@
 					"damage": {
 						"type": "cr ex",
 						"base": "6dx2",
-						"fragmentation": "6d",
+						"fragmentation": "12d",
 						"fragmentation_type": "cut"
 					},
 					"accuracy": "3",
@@ -533,7 +536,7 @@
 							},
 							"specialization": {
 								"compare": "is",
-								"qualifier": "Mortar"
+								"qualifier": "Cannon"
 							}
 						}
 					]

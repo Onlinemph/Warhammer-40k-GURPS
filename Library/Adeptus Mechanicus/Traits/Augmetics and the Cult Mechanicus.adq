@@ -5,20 +5,39 @@
 			"id": "tJ889kLqTnaAEabQB",
 			"name": "Augmetic Arm, Menial Pattern",
 			"reference": "B40",
-			"local_notes": "Arm ST +2 (applies to lifting and to thrust/swing damage with this arm only); DR 2 on this arm only.\n\nLore: The cheap, mass-produced limb replacement issued to menial serfs, manufactorum labourers and low-ranking Mechanicus staff who have lost an arm to an industrial accident: a servo-motor and a counterweight under a metal or plastek shell, strong enough for its job and no more.\n\nDesign: Arm ST +2 (B40, 5/level, 10 points) for the servo-assisted grip and lift, plus DR 2, Partial (single limb) -60% (2x5=10, x0.4=4). 14 points. This is a trait built from Basic Set abilities, not a renamed Ultra-Tech/Bio-Tech catalogue \"bionic arm.\"",
+			"local_notes": "Arm ST +2 (Lifting ST +2 and Striking ST +2, applied by the sheet); DR 2 to the arm. GCS applies these to the whole character, so for a single prosthetic arm use them for that arm only (the second arm has no bonus, and DR covers only the augmetic arm's hit location).\n\nLore: The cheap, mass-produced limb replacement issued to menial serfs, manufactorum labourers and low-ranking Mechanicus staff who have lost an arm to an industrial accident: a servo-motor and a counterweight under a metal or plastek shell, strong enough for its job and no more.\n\nDesign: Arm ST +2 (B40, 5/level, 10 points) for the servo-assisted grip and lift, plus DR 2, Partial (single limb) -60% (2x5=10, x0.4=4). 14 points. This is a trait built from Basic Set abilities, not a renamed Ultra-Tech/Bio-Tech catalogue \"bionic arm.\"",
 			"tags": [
 				"Advantage",
 				"Physical",
 				"Imperium",
 				"Adeptus Mechanicus"
 			],
-			"base_points": 14
+			"base_points": 14,
+			"features": [
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"arm"
+					],
+					"amount": 2
+				},
+				{
+					"type": "attribute_bonus",
+					"attribute": "lifting_st",
+					"amount": 2
+				},
+				{
+					"type": "attribute_bonus",
+					"attribute": "striking_st",
+					"amount": 2
+				}
+			]
 		},
 		{
 			"id": "tOH9ElLd49DM8z2M3",
 			"name": "Augmetic Arm, Combat Pattern",
 			"reference": "B40",
-			"local_notes": "Arm ST +6 (lifting and thrust/swing damage with this arm only); DR 6 on this arm only.\n\nLore: The heavier pattern carried by Skitarii, veteran Enginseers, and any Tech-Priest expecting to use the limb itself as a weapon: cabled myomer bundles under an armoured casing, powerful enough to break a man's grip or punch through a hab door.\n\nDesign: Arm ST +6 (B40, 5/level, 30) + DR 6, Partial (single limb) -60% (6x5=30, x0.4=12) = 42 points.",
+			"local_notes": "Arm ST +6 (Lifting ST +6 and Striking ST +6, applied by the sheet); DR 6 to the arm. GCS applies these to the whole character, so for a single prosthetic arm use them for that arm only.\n\nLore: The heavier pattern carried by Skitarii, veteran Enginseers, and any Tech-Priest expecting to use the limb itself as a weapon: cabled myomer bundles under an armoured casing, powerful enough to break a man's grip or punch through a hab door.\n\nDesign: Arm ST +6 (B40, 5/level, 30) + DR 6, Partial (single limb) -60% (6x5=30, x0.4=12) = 42 points.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -26,20 +45,48 @@
 				"Adeptus Mechanicus",
 				"Skitarii"
 			],
-			"base_points": 42
+			"base_points": 42,
+			"features": [
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"arm"
+					],
+					"amount": 6
+				},
+				{
+					"type": "attribute_bonus",
+					"attribute": "lifting_st",
+					"amount": 6
+				},
+				{
+					"type": "attribute_bonus",
+					"attribute": "striking_st",
+					"amount": 6
+				}
+			]
 		},
 		{
 			"id": "tdg8nm8BHr94dsqNZ",
 			"name": "Augmetic Leg, Menial Pattern",
 			"reference": "B46",
-			"local_notes": "DR 2 on this leg only; the prosthetic joint doesn't fatigue or cramp.\n\nLore: A basic replacement leg for a menial or low-ranking adept: functional, unglamorous, and common wherever industrial accidents are common.\n\nDesign: DR 2, Partial (single limb) -60% (2x5=10, x0.4=4) + a 1-point Perk (B9) for a joint that never tires or cramps the way a natural knee does over a long shift. 5 points. (Basic Set has no dedicated \"Leg ST\" advantage the way it has Arm ST for arms; a single prosthetic leg does not meaningfully raise Move or damage on its own, so this entry is DR plus a flavor Perk rather than an invented attribute bonus.)",
+			"local_notes": "DR 2 to the leg (the sheet applies it to the leg location; use it for the augmetic leg only); the prosthetic joint doesn't fatigue or cramp.\n\nLore: A basic replacement leg for a menial or low-ranking adept: functional, unglamorous, and common wherever industrial accidents are common.\n\nDesign: DR 2, Partial (single limb) -60% (2x5=10, x0.4=4) + a 1-point Perk (B9) for a joint that never tires or cramps the way a natural knee does over a long shift. 5 points. (Basic Set has no dedicated \"Leg ST\" advantage the way it has Arm ST for arms; a single prosthetic leg does not meaningfully raise Move or damage on its own, so this entry is DR plus a flavor Perk rather than an invented attribute bonus.)",
 			"tags": [
 				"Advantage",
 				"Physical",
 				"Imperium",
 				"Adeptus Mechanicus"
 			],
-			"base_points": 5
+			"base_points": 5,
+			"features": [
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"leg"
+					],
+					"amount": 2
+				}
+			]
 		},
 		{
 			"id": "t-qAZDx0JazQGiqlJ",
@@ -53,26 +100,47 @@
 				"Adeptus Mechanicus",
 				"Skitarii"
 			],
-			"base_points": 20
+			"base_points": 20,
+			"features": [
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"leg"
+					],
+					"amount": 6
+				},
+				{
+					"type": "attribute_bonus",
+					"attribute": "basic_move",
+					"amount": 1
+				}
+			]
 		},
 		{
 			"id": "tLfWvFYubauiPjP6l",
 			"name": "Auto-senses, Skitarii Pattern",
 			"reference": "B60",
-			"local_notes": "Infravision; Acute Vision +2.\n\nLore: The standard-issue ocular augmetic fitted to almost every Skitarii and forge-world menial: crude compared to a Magos' oculars, but enough to fight in smoke, dust, and near-total darkness without a lumen pack.\n\nDesign: Infravision (B60, 10) + Acute Vision +2 (B35, 2/level, 4) = 14 points.",
+			"local_notes": "Infravision; Acute Vision +2 (a +2 to the Vision roll, applied by the sheet).\n\nLore: The standard-issue ocular augmetic fitted to almost every Skitarii and forge-world menial: crude compared to a Magos' oculars, but enough to fight in smoke, dust, and near-total darkness without a lumen pack.\n\nDesign: Infravision (B60, 10) + Acute Vision +2 (B35, 2/level, 4) = 14 points.",
 			"tags": [
 				"Advantage",
 				"Physical",
 				"Imperium",
 				"Adeptus Mechanicus"
 			],
-			"base_points": 14
+			"base_points": 14,
+			"features": [
+				{
+					"type": "attribute_bonus",
+					"attribute": "vision",
+					"amount": 2
+				}
+			]
 		},
 		{
 			"id": "tnDcIt57X55mGMmLu",
 			"name": "Ballistic Auto-senses, Sicarian/Ranger Pattern",
 			"reference": "B60",
-			"local_notes": "Infravision; Acute Vision +2; Telescopic Vision +2.\n\nLore: Longer-focus oculars issued to Skitarii Rangers and Sicarian pattern infiltrators for target marking at range — the same augmetic family as the standard pattern, with an added zoom lens train.\n\nDesign: Infravision (B60, 10) + Acute Vision +2 (B35, 4) + Telescopic Vision +2 (B92, 5/level, 10) = 24 points.",
+			"local_notes": "Infravision; Acute Vision +2 (applied by the sheet); Telescopic Vision +2.\n\nLore: Longer-focus oculars issued to Skitarii Rangers and Sicarian pattern infiltrators for target marking at range — the same augmetic family as the standard pattern, with an added zoom lens train.\n\nDesign: Infravision (B60, 10) + Acute Vision +2 (B35, 4) + Telescopic Vision +2 (B92, 5/level, 10) = 24 points.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -80,20 +148,34 @@
 				"Adeptus Mechanicus",
 				"Skitarii"
 			],
-			"base_points": 24
+			"base_points": 24,
+			"features": [
+				{
+					"type": "attribute_bonus",
+					"attribute": "vision",
+					"amount": 2
+				}
+			]
 		},
 		{
 			"id": "tKy5Uaq0E4Bv6o_Vh",
 			"name": "Multi-lens Oculars, Magos Pattern",
 			"reference": "B60",
-			"local_notes": "Infravision; Dark Vision; Acute Vision +2; Protected Sense (Vision).\n\nLore: A senior Tech-Priest's full ocular replacement: banks of interchangeable lenses that between them see by heat, by full dark, and by ordinary light with equal clarity, behind housings hardened against flash and glare — the source of the characteristic red or augmetic-lensed stare Black Library repeatedly gives high-ranking Magi.\n\nDesign: Infravision (B60, 10) + Dark Vision (B60, 25) + Acute Vision +2 (B35, 4) + Protected Sense (Vision) (B78, 5) = 44 points.",
+			"local_notes": "Infravision; Dark Vision; Acute Vision +2 (applied by the sheet); Protected Sense (Vision).\n\nLore: A senior Tech-Priest's full ocular replacement: banks of interchangeable lenses that between them see by heat, by full dark, and by ordinary light with equal clarity, behind housings hardened against flash and glare — the source of the characteristic red or augmetic-lensed stare Black Library repeatedly gives high-ranking Magi.\n\nDesign: Infravision (B60, 10) + Dark Vision (B60, 25) + Acute Vision +2 (B35, 4) + Protected Sense (Vision) (B78, 5) = 44 points.",
 			"tags": [
 				"Advantage",
 				"Physical",
 				"Imperium",
 				"Adeptus Mechanicus"
 			],
-			"base_points": 44
+			"base_points": 44,
+			"features": [
+				{
+					"type": "attribute_bonus",
+					"attribute": "vision",
+					"amount": 2
+				}
+			]
 		},
 		{
 			"id": "tSz-kqrcr50uTYGAW",
@@ -137,7 +219,7 @@
 			"id": "t7S9zb_32qiB2Ck9J",
 			"name": "Subdermal Armour Plating",
 			"reference": "B46",
-			"local_notes": "DR, all locations; stacks with worn armor.\n\nLore: Ceramite or plasteel weave grafted beneath the skin across the whole body, rather than replacing a specific organ or limb — the augmetic equivalent of the Astartes' Ossmodula, bought by Tech-Priests who expect to take a hit.\n\nDesign: Plain Damage Resistance (B46), 5 points/level, no location restriction since it covers the whole body. Bought here at a default 2 levels (DR 10, 10 points); raise or lower the level to taste.",
+			"local_notes": "DR 1 per level, all locations (2 levels = DR 2); stacks with worn armor.\n\nLore: Ceramite or plasteel weave grafted beneath the skin across the whole body, rather than replacing a specific organ or limb — a whole-body counterpart to the Astartes' Ossmodula (which is DR 3 to torso and vitals only), bought by Tech-Priests who expect to take a hit.\n\nDesign: Plain Damage Resistance (B46), 5 points/level, no location restriction since it covers the whole body. Bought here at a default 2 levels (DR 2, 10 points); raise or lower the level to taste. The DR is a real per-level feature, so changing the level changes the sheet. Suggested levels: Magos 2-3, Skitarii 3, Servitor 4.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -146,7 +228,17 @@
 			],
 			"points_per_level": 5,
 			"can_level": true,
-			"levels": 2
+			"levels": 2,
+			"features": [
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"all"
+					],
+					"amount": 1,
+					"per_level": true
+				}
+			]
 		},
 		{
 			"id": "txNJTifpWn8cm6IMQ",
@@ -243,14 +335,26 @@
 			"id": "tJLA-akbV29ZL2YvU",
 			"name": "Servo-Arm",
 			"reference": "B53",
-			"local_notes": "Extra Arm; Lifting ST +8; Striking ST +3; Payload 1.\n\nLore: The heavy, back-mounted tool-arm carried by Enginseers and Techmarines: strong enough to tear open a sealed hatch or wrench a fused component free, and — as more than one heretic has learned the hard way — strong enough to crush a skull if its bearer chooses.\n\nDesign: Extra Arm (B53, 10) + Lifting ST +8 (B65, 3/level, 24) for heavy lifting/grappling work + Striking ST +3 (B88, 5/level, 15) for its use as an improvised weapon + Payload 1 (B74, 1) for a small tool magazine = 50 points.",
+			"local_notes": "Extra Arm; Lifting ST +8; Striking ST +3 (both applied by the sheet); Payload 1. This is the body-mounted implant; the Servo-arm and Electroleech Stave in the melee weapons file are separate carried tools, and a build using the implant should not also buy the gear version for the same limb.\n\nLore: The heavy, back-mounted tool-arm carried by Enginseers and Techmarines: strong enough to tear open a sealed hatch or wrench a fused component free, and — as more than one heretic has learned the hard way — strong enough to crush a skull if its bearer chooses.\n\nDesign: Extra Arm (B53, 10) + Lifting ST +8 (B65, 3/level, 24) for heavy lifting/grappling work + Striking ST +3 (B88, 5/level, 15) for its use as an improvised weapon + Payload 1 (B74, 1) for a small tool magazine = 50 points.",
 			"tags": [
 				"Advantage",
 				"Physical",
 				"Imperium",
 				"Adeptus Mechanicus"
 			],
-			"base_points": 50
+			"base_points": 50,
+			"features": [
+				{
+					"type": "attribute_bonus",
+					"attribute": "lifting_st",
+					"amount": 8
+				},
+				{
+					"type": "attribute_bonus",
+					"attribute": "striking_st",
+					"amount": 3
+				}
+			]
 		},
 		{
 			"id": "tPxo44b7VwLd3N6u4",
@@ -497,7 +601,7 @@
 		{
 			"id": "Tqx2Fb64sCGfaJuHv",
 			"name": "Skitarii Doctrina Imperatives",
-			"local_notes": "Lore: A Skitarii Maniple's cranial implants take a battle-doctrina uploaded before an engagement, biasing every Skitarii in the maniple toward one combat posture at a time: Protector for a defensive cordon, Conqueror for an all-out firing advance, Hunter for pursuit and encirclement. A Skitarii can only run one imperative at a time and must be re-flashed (a Ready maneuver, or a scene break, at the GM's call) to switch.\n\nDesign: Basic Set Alternative Abilities (B61): buy the most expensive ability at full price and the rest at 1/5 cost (round up), since only one can be active. Full prices: Enhanced Parry, All Parries (B51, 10), Conqueror Imperative as a narrow +1 combat Talent (B90-style, 5), Hunter Imperative as Basic Move +1 (B17, 5). GCS applies the Alternative Abilities discount natively for this container type; worked by hand, the effective total is 10 + ceil(5/5) + ceil(5/5) = 12 points.",
+			"local_notes": "Lore: A Skitarii Maniple's cranial implants take a battle-doctrina uploaded before an engagement, biasing every Skitarii in the maniple toward one combat posture at a time: Protector (hold ground and shoot) or Conqueror (advance and shoot). The Codex names these two; the earlier draft's third, Hunter, is not in the sources this project could identify and has been dropped. A Skitarii can only run one imperative at a time and must be re-flashed (a Ready maneuver, or a scene break, at the GM's call) to switch.\n\nDesign: Basic Set Alternative Abilities (B61): buy the most expensive ability at full price and the rest at 1/5 cost (round up), since only one can be active. Full prices: Protector and Conqueror are each a narrow +1 combat Talent (B90-style, 5). GCS applies the Alternative Abilities discount natively for this container type; worked by hand, the effective total is 5 + ceil(5/5) = 6 points.",
 			"tags": [
 				"Advantage",
 				"Mental",
@@ -510,22 +614,15 @@
 				{
 					"id": "tF309Vvog3x4CMciP",
 					"name": "Protector Imperative",
-					"reference": "B51",
-					"local_notes": "Enhanced Parry (All Parries) +1.",
-					"base_points": 10
+					"reference": "B90",
+					"local_notes": "+1 to Guns and Gunner skills when the Skitarii did not move this turn (Talent-style construction, holding position).",
+					"base_points": 5
 				},
 				{
 					"id": "tMk0JflvSFqrp1edM",
 					"name": "Conqueror Imperative",
 					"reference": "B90",
-					"local_notes": "+1 to Guns and Gunner skills (Talent-style construction).",
-					"base_points": 5
-				},
-				{
-					"id": "t6JjMwSeZ7h9IEdLW",
-					"name": "Hunter Imperative",
-					"reference": "B17",
-					"local_notes": "Basic Move +1.",
+					"local_notes": "+1 to Guns and Gunner skills when the Skitarii moved this turn (Talent-style construction, advancing fire).",
 					"base_points": 5
 				}
 			]

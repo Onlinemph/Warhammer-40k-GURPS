@@ -2,7 +2,7 @@
 	"version": 5,
 	"rows": [
 		{
-			"id": "eXkYcRq8UvP5CwcZ0",
+			"id": "EXkYcRq8UvP5CwcZ0",
 			"description": "Aegis Power Armour",
 			"local_notes": "Weak Points 4: when a hit on this armour fails to penetrate, roll 3d; on 4 or less it found a gap and DR is halved against it.\n\nRequires the black carapace interface, as Mark VII. The Aegis conditional bonus stacks with the wearer's own Rites of Sanctity (Imperium/Traits/Grey Knights.adq) and with a carried Psychic Hood or Hexagrammic Ward Charm (Imperium/Gear/Psychic Gear.eqp).\n\nLore: Codex: Grey Knights and Ben Counter's novels describe Grey Knight power armour as Mark VII-class plate every plate and seal of which is inlaid with silver hexagrammic wards, anointed and re-sanctified by the Chapter's own Interrogator-Chaplains, so that the armour itself resists possession and daemonic influence rather than relying on the wearer's own soul alone — a second line of defence on top of what a Grey Knight's body already is (see Grey Knight Soul, Imperium/Traits/ Grey Knights.adq).\n\nDesign: Torso DR, weak_points, eye-lens DR, and servo-motor ST bonus are taken unchanged from the Mark VII (Aquila Pattern) baseline (Imperium/ Armour/Imperial Armour.eqp): the anchor table lore is explicit that Grey Knight plate is a warded Mark VII derivative, not a physically thicker suit — the Chapter's edge against daemons is spiritual, not a bigger DR number, so this entry deliberately does not invent a new physical-DR anchor. What's added is the conditional_modifier feature (same mechanic as the Psychic Hood item, Imperium/Gear/Psychic Gear.eqp): a flat +3 to resist Warp Sorcery-tagged mental attacks and possession directed at the wearer, one point higher than the Psychic Hood's +2 since this is inscribed across an entire suit of plate rather than a single circlet. Cost is more than doubled over the Mark VII baseline (40000) to reflect the labour of a full-suit sanctification rite (Ordo Malleus- and Chapter-restricted, hence the LC0 and the superscience ^ TL tag alongside the standard TL11 power-armour bracket) rather than a material or servo upgrade; weight, attribute bonuses and every other figure are otherwise identical to Mark VII.",
 			"tags": [
@@ -13,8 +13,8 @@
 			],
 			"tech_level": "11^",
 			"legality_class": "0",
-			"base_value": "90000",
-			"base_weight": "150 lb",
+			"base_value": "84000",
+			"base_weight": "146 lb",
 			"features": [
 				{
 					"type": "dr_bonus",
@@ -97,10 +97,32 @@
 					"amount": 3
 				}
 			],
-			"quantity": 1
+			"quantity": 1,
+			"children": [
+				{
+					"id": "ewEZ2wrqjRQLB1PLF",
+					"description": "Auto-senses Suite",
+					"local_notes": "As the Mark VII Auto-senses Suite (threat auto-cueing, low-light and audio filtering); requires the black carapace interface for full effect.\n\nLore: The Aegis plate is a warded Mark VII derivative and keeps the standard Astartes sensor package.\n\nDesign: Same figures as the Mark VII child (Imperium/Armour/Imperial Armour.eqp); GCS adds a container's children to its own weight and cost, so the shell carries 146 lb and $84,000 and the assembled suit still totals 150 lb and $90,000.",
+					"base_value": "6000",
+					"base_weight": "4 lb",
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "Observation"
+							},
+							"amount": 2
+						}
+					],
+					"quantity": 1,
+					"equipped": true
+				}
+			]
 		},
 		{
-			"id": "epSlFR9WwS6GmeKJ0",
+			"id": "EpSlFR9WwS6GmeKJ0",
 			"description": "Aegis Terminator Armour",
 			"local_notes": "Weak Points 3: when a hit on this armour fails to penetrate, roll 3d; on 3 or less it found a gap and DR is halved against it.\n\nAs Tactical Dreadnought Armour, Indomitus Pattern (effective SM +1, -2 to fine DX work, unaided teleportation, black carapace required), plus the Aegis warding below.\n\nLore: Grey Knight Terminators — the Chapter's most senior Brothers, often called Grey Knight Paladins — fight daemons and other Terminator- grade threats in Tactical Dreadnought Armour warded the same way the Chapter's power armour is, per Codex: Grey Knights background; the teleport-strike doctrine this plate enables is the Chapter's signature way of bringing a kill-team directly into a daemon incursion.\n\nDesign: Torso DR, limb/head DR, weak_points, SM, Basic Move penalty and servo-motor ST bonus are taken unchanged from Tactical Dreadnought Armour, Indomitus Pattern (Imperium/Armour/Imperial Armour.eqp), for the same reason as the Aegis power armour above: the difference is warding, not thicker plate. The conditional bonus is raised to +4 (one point above the power-armour version) since a full Terminator shell carries proportionally more inscribed silver and ritual work across its much larger surface. Cost is raised well above the plain Indomitus baseline (120000) for the same full-suit sanctification labour reasoning as the power armour, and it carries the same LC0/TL11^ tagging.",
 			"tags": [
@@ -111,8 +133,8 @@
 			],
 			"tech_level": "11^",
 			"legality_class": "0",
-			"base_value": "170000",
-			"base_weight": "300 lb",
+			"base_value": "160000",
+			"base_weight": "294 lb",
 			"features": [
 				{
 					"type": "dr_bonus",
@@ -205,12 +227,34 @@
 					"amount": 4
 				}
 			],
-			"quantity": 1
+			"quantity": 1,
+			"children": [
+				{
+					"id": "e6B4YbZVjTzT-MNKw",
+					"description": "Auto-senses Suite (Terminator Pattern)",
+					"local_notes": "As the Indomitus Pattern Terminator Auto-senses Suite; requires the black carapace interface for full effect.\n\nLore: Grey Knight Terminators keep the standard Terminator sensor package under the Aegis wards.\n\nDesign: Same figures as the Terminator-pattern child (Imperium/Armour/Imperial Armour.eqp); the shell carries 294 lb and $160,000 so the assembled suit is still 300 lb and $170,000.",
+					"base_value": "10000",
+					"base_weight": "6 lb",
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "Observation"
+							},
+							"amount": 2
+						}
+					],
+					"quantity": 1,
+					"equipped": true
+				}
+			]
 		},
 		{
 			"id": "exgStSkV4pYG4U4s7",
 			"description": "Nemesis Force Sword",
-			"local_notes": "Lore: The standard one-handed Nemesis weapon pattern, carried where a Grey Knight favours reach and a guard over the Nemesis Force Halberd's two-handed heft; Ben Counter's Grey Knights novels show it as the Chapter's most common sidearm-grade Nemesis weapon after the halberd itself.\n\nDesign: Astartes Power Sword pattern (Imperium/Weapons/Melee Weapons.eqp): field-off is the plain Astartes-scale broadsword baseline (sw+1 cut), field-on adds the shared power-field rule's +3d and Armor Divisor (10) (framework.md), at the same weight (9 lb) and min ST (16) as that entry, since a Nemesis blade's extra sanctification and psychic attunement change what it can do to a daemon, not its physical mass or handling. Exact dice distribution at full Astartes ST 30 (sw 6d per B16, so field-on totals 9d+1(10) cut): penetrates carapace (DR 70), Sororitas power armour (DR 85), and Astartes power armour (DR 100) essentially always (100% by exact distribution) and Terminator plate (DR 200, eff. DR 20) 99.1% of the time — matching \"the disruption field shears power armour whoever holds it\" at the high end of this project's power-weapon family. The Force Strike line reuses the Nemesis Force Halberd's waived-Perils convention (Imperium/Gear/Psychic Gear.eqp): every Nemesis weapon is permanently attuned for anti-daemon work, so a Grey Knight needs no check to use it against the enemy this weapon exists for. LC0 (Grey Knights- and Ordo Malleus-restricted, per the framework's legality table) and superscience TL10^ (warp-attuned, like every other force weapon in Imperium/Gear/Psychic Gear.eqp), priced above the generic Force Sword (8000, Imperium/Gear/Psychic Gear.eqp) for the Chapter's own sanctification rites on top of the Astartes-scale housing.",
+			"local_notes": "Lore: The standard one-handed Nemesis weapon pattern, carried where a Grey Knight favours reach and a guard over the Nemesis Force Halberd's two-handed heft; Ben Counter's Grey Knights novels show it as the Chapter's most common sidearm-grade Nemesis weapon after the halberd itself.\n\nDesign: Astartes Power Sword pattern (Imperium/Weapons/Melee Weapons.eqp): field-off is the plain Astartes-scale broadsword baseline (sw+1 cut), field-on adds the shared power-field rule's +3d and Armor Divisor (10) (framework.md), at the same weight (9 lb) and min ST (16) as that entry, since a Nemesis blade's extra sanctification and psychic attunement change what it can do to a daemon, not its physical mass or handling. Exact dice distribution at full Astartes ST 30 (sw 5d+2 per B16, so field-on totals 8d+3(10) cut, average 31): penetrates carapace (DR 70), Sororitas power armour (DR 85), and Astartes power armour (DR 100) essentially always (100% by exact distribution) and Terminator plate (DR 200, eff. DR 20) 98.6% of the time — matching \"the disruption field shears power armour whoever holds it\" at the high end of this project's power-weapon family. The Force Strike line reuses the Nemesis Force Halberd's waived-Perils convention (Imperium/Gear/Psychic Gear.eqp): every Nemesis weapon is permanently attuned for anti-daemon work, so a Grey Knight needs no check to use it against the enemy this weapon exists for. LC0 (Grey Knights- and Ordo Malleus-restricted, per the framework's legality table) and superscience TL10^ (warp-attuned, like every other force weapon in Imperium/Gear/Psychic Gear.eqp), priced above the generic Force Sword (8000, Imperium/Gear/Psychic Gear.eqp) for the Chapter's own sanctification rites on top of the Astartes-scale housing.",
 			"tags": [
 				"Melee Weapon",
 				"Imperium",
@@ -428,7 +472,7 @@
 		{
 			"id": "eBPZkBXTGtGzYqCMQ",
 			"description": "Nemesis Force Falchions",
-			"local_notes": "Always carried and priced as a matched pair; a Grey Knight fighting with one in each hand uses the standard Basic Set rules for two weapons (B417, off-hand weapon training, extra attack at the usual multiple-attack penalties) rather than any special rule of this entry's own.\n\nLore: A shorter, lighter-bladed Nemesis pattern favoured by Grey Knights who fight with a blade in each hand rather than a single sword or the two-handed halberd — depicted in Codex: Grey Knights background and Ben Counter's novels as a rarer, more aggressive close-combat specialist's loadout than the standard Nemesis Force Sword.\n\nDesign: Scaled down one step from the Nemesis Force Sword's mundane baseline the way the human Catachan Fang sits one step below a full sabre (Imperium/Weapons/Melee Weapons.eqp): a shorter, single-edged blade gives sw+0 cut rather than sw+1, at a lighter weight (5 lb per blade vs. the Force Sword's 9) and lower min ST (13 vs. 16) for the smaller grip and shorter lever arm, keeping Shortsword rather than Broadsword as the family skill. The same power-field +3d/Armor Divisor (10) addition applies per blade. At full Astartes ST 30 (sw 6d), field-on per falchion totals 9d(10) cut — one point under the Force Sword's 9d+1(10) from the one lower mundane pip, penetrating every one of the framework's personal-armour anchors at effectively the same rate as the Force Sword above. Priced level with the Force Sword (as a matched pair, not per blade) since a falchion set is no less a piece of sanctified Nemesis wargear for being lighter; weight given is per blade.",
+			"local_notes": "Always carried and priced as a matched pair; a Grey Knight fighting with one in each hand uses the standard Basic Set rules for two weapons (B417, off-hand weapon training, extra attack at the usual multiple-attack penalties) rather than any special rule of this entry's own.\n\nLore: A shorter, lighter-bladed Nemesis pattern favoured by Grey Knights who fight with a blade in each hand rather than a single sword or the two-handed halberd — depicted in Codex: Grey Knights background and Ben Counter's novels as a rarer, more aggressive close-combat specialist's loadout than the standard Nemesis Force Sword.\n\nDesign: Scaled down one step from the Nemesis Force Sword's mundane baseline the way the human Catachan Fang sits one step below a full sabre (Imperium/Weapons/Melee Weapons.eqp): a shorter, single-edged blade gives sw+0 cut rather than sw+1, at a lighter weight (5 lb per blade vs. the Force Sword's 9) and lower min ST (13 vs. 16) for the smaller grip and shorter lever arm, keeping Shortsword rather than Broadsword as the family skill. The same power-field +3d/Armor Divisor (10) addition applies per blade. At full Astartes ST 30 (sw 5d+2), field-on per falchion totals 8d+2(10) cut — one point under the Force Sword's 8d+3(10) from the one lower mundane pip, penetrating every one of the framework's personal-armour anchors up to Astartes plate always and Terminator plate 97.6% of the time. Priced level with the Force Sword (as a matched pair, not per blade) since a falchion set is no less a piece of sanctified Nemesis wargear for being lighter; weight given is per blade.",
 			"tags": [
 				"Melee Weapon",
 				"Imperium",
@@ -694,7 +738,7 @@
 		{
 			"id": "ene24Da8Z18-HcIXu",
 			"description": "Nemesis Daemon Hammer",
-			"local_notes": "Lore: The Grey Knights' own thunder hammer pattern, further sanctified and permanently attuned against the warp; Codex: Grey Knights background and Ben Counter's novels show it wielded by the Chapter's Terminator- armoured Paladins against Greater Daemons and other Terminator-grade threats where the Nemesis Force Halberd's finesse matters less than raw, armour-caving force.\n\nDesign: Identical mundane baseline and power-field math to the Thunder Hammer (Imperium/Weapons/Melee Weapons.eqp: field off sw+3 cr, field on sw+6d(10) cr, the framework's own \"thunder hammers +6d\" figure) at the same weight (40 lb) and min ST (21), since a Daemon Hammer is mechanically the same massive capacitor-headed maul in Astartes hands — what makes it a Nemesis weapon is the sanctification and permanent anti-daemon attunement carried in the Force Strike line, not a heavier head. At full Astartes ST 30 (sw 6d, field-on 12d(10) cr) it penetrates every anchor in the framework's personal-armour table (carapace, Sororitas, Astartes, and Terminator plate alike) essentially 100% of the time by exact dice distribution — a Terminator-killer even before the Force Strike line adds its anti-daemon DR-ignoring component, matching the weapon's reputation against the very worst things a Grey Knight fights. LC0 and superscience TL11^ (an already-advanced Imperial power weapon made warp-touched by its sanctification) mark it Chapter-restricted, one tier above the mundane Thunder Hammer's plain TL11.",
+			"local_notes": "Lore: The Grey Knights' own thunder hammer pattern, further sanctified and permanently attuned against the warp; Codex: Grey Knights background and Ben Counter's novels show it wielded by the Chapter's Terminator- armoured Paladins against Greater Daemons and other Terminator-grade threats where the Nemesis Force Halberd's finesse matters less than raw, armour-caving force.\n\nDesign: Identical mundane baseline and power-field math to the Thunder Hammer (Imperium/Weapons/Melee Weapons.eqp: field off sw+3 cr, field on sw+6d(10) cr, the framework's own \"thunder hammers +6d\" figure) at the same weight (40 lb) and min ST (21), since a Daemon Hammer is mechanically the same massive capacitor-headed maul in Astartes hands — what makes it a Nemesis weapon is the sanctification and permanent anti-daemon attunement carried in the Force Strike line, not a heavier head. At full Astartes ST 30 (sw 5d+2, field-on 11d+2(10) cr, average 40.5) it penetrates every anchor in the framework's personal-armour table (carapace, Sororitas, Astartes, and Terminator plate alike) essentially 100% of the time by exact dice distribution — a Terminator-killer even before the Force Strike line adds its anti-daemon DR-ignoring component, matching the weapon's reputation against the very worst things a Grey Knight fights. LC0 and superscience TL11^ (an already-advanced Imperial power weapon made warp-touched by its sanctification) mark it Chapter-restricted, one tier above the mundane Thunder Hammer's plain TL11.",
 			"tags": [
 				"Melee Weapon",
 				"Imperium",
@@ -864,7 +908,7 @@
 		{
 			"id": "ek3viy1pJUeoP-nTy",
 			"description": "Warding Stave",
-			"local_notes": "Lore: Some Grey Knights — particularly Brother-Chaplains and those who lead a kill-team's wardings rather than its charge — carry a warding stave instead of a sword or hammer: a badge of office and a focus for Sanctic Daemonology's protective workings (see Sanctuary, Imperium/ Traits/Psykers and the Warp.adq) as much as a weapon, per Codex: Grey Knights background and its Black Library depictions of the Chapter's more ritual-focused Brothers.\n\nDesign: Built the same way the Nemesis Force Halberd scales up the generic Force Axe (Imperium/Gear/Psychic Gear.eqp) to Astartes proportions: here the generic Force Staff's mundane baseline (sw+1 cr/thr+1 cr, field-on sw+3d(10) cr) is instead scaled to the Power Stave's heavier profile (sw+2 cr/thr+2 cr, field-on sw+3d+2(10) cr, Imperium/Weapons/ Melee Weapons.eqp) and then given Astartes-scale weight and min ST (9 lb/ST 14, matching the Nemesis Force Halberd's two-handed-haft figures) rather than the human Force Staff's 5 lb/ST 10, since this is built for a Grey Knight's grip and strength like every other Nemesis-family item on this page. At full Astartes ST 30 (sw 6d, field-on swing totals 9d+2(10) cr) it penetrates every personal-armour anchor in the framework essentially always, same order as the other Nemesis melee weapons. The conditional bonus (+2, Area of reach rather than self-only, reflecting a stave actively held out to ward a companion rather than worn like the Aegis armour's inscriptions) uses the same conditional_modifier mechanic as the Psychic Hood and Aegis armour, one point below the Aegis power armour's self-only +3 since it depends on being physically near the bearer rather than inscribed across a whole suit. LC0/TL10^ as every Nemesis and force weapon in this project.",
+			"local_notes": "Lore: Some Grey Knights — particularly Brother-Chaplains and those who lead a kill-team's wardings rather than its charge — carry a warding stave instead of a sword or hammer: a badge of office and a focus for Sanctic Daemonology's protective workings (see Sanctuary, Imperium/ Traits/Psykers and the Warp.adq) as much as a weapon, per Codex: Grey Knights background and its Black Library depictions of the Chapter's more ritual-focused Brothers.\n\nDesign: Built the same way the Nemesis Force Halberd scales up the generic Force Axe (Imperium/Gear/Psychic Gear.eqp) to Astartes proportions: here the generic Force Staff's mundane baseline (sw+1 cr/thr+1 cr, field-on sw+3d(10) cr) is instead scaled to the Power Stave's heavier profile (sw+2 cr/thr+2 cr, field-on sw+3d+2(10) cr, Imperium/Weapons/ Melee Weapons.eqp) and then given Astartes-scale weight and min ST (9 lb/ST 14, lighter than the Nemesis Force Halberd's 14 lb but the same two-handed-haft class) rather than the human Force Staff's 5 lb/ST 10, since this is built for a Grey Knight's grip and strength like every other Nemesis-family item on this page. At full Astartes ST 30 (sw 5d+2, field-on swing totals 8d+4(10) cr, thrust 6d+2(10) cr) the swing penetrates every personal-armour anchor in the framework essentially always (99.3% against Terminator plate); the thrust penetrates Astartes plate 99.9% of the time but Terminator plate only 72.1%. The conditional bonus (+2, Area of reach rather than self-only, reflecting a stave actively held out to ward a companion rather than worn like the Aegis armour's inscriptions) uses the same conditional_modifier mechanic as the Psychic Hood and Aegis armour, one point below the Aegis power armour's self-only +3 since it depends on being physically near the bearer rather than inscribed across a whole suit. LC0/TL10^ as every Nemesis and force weapon in this project.",
 			"tags": [
 				"Melee Weapon",
 				"Imperium",
@@ -1355,7 +1399,7 @@
 		{
 			"id": "eUlYHRfg92GsfZzDX",
 			"description": "Psycannon",
-			"local_notes": "Man-portable by a single Astartes (no tripod), or arm-mounted on Terminator armour in place of a storm bolter.\n\nLore: The Grey Knights' signature heavy weapon: Codex: Grey Knights background describes the psycannon as firing large-calibre sanctified penetrator rounds built specifically to bring down heavily armoured foes and tear through daemonic flesh that shrugs off ordinary weapons, carried by Purgation squads and mounted on Grey Knight Dreadknights and Terminators alike.\n\nDesign: Built as a dedicated anti-armour bolt weapon rather than copied from the Heavy Bolter or Assault Cannon anchors: same .75-calibre bolt and 6d cr ex frag follow-up as the standard Godwyn round (Imperium/ Weapons/Bolt Weapons.eqp), but firing permanently Psybolt-grade ammunition, so the armour divisor is (3) rather than the standard bolter's (2) as standard issue, not an optional load — reflecting \"designed specifically to punch through heavily armoured foes.\" Exact dice distribution: penetrates carapace (DR 70, eff. 23.3) 99.0% of hits, Sororitas power armour (DR 85, eff. 28.3) 93.9%, and full Astartes power armour (DR 100, eff. 33.3) 85.5% — reliably drops power-armoured heretics and traitor Astartes alike, matching the psycannon's reputation as the answer to targets a storm bolter can't touch — while still essentially never beating Terminator plate (DR 200, eff. 66.7) at 0.1%. Checked against the vehicle AV table for completeness though the psycannon is not an anti-tank weapon in the fiction: AV10 (DR 100, eff. 33.3) 85.5%, AV11 (DR 150, eff. 50) 14.5%, AV12-14 (DR 200-350) 0.06% or less — an infantry- and daemon-killer, not a tank-killer, the same role this project already gives the Assault Cannon. Handling: 60 lb loaded (heavier than the Storm Bolter's 40 lb for the reinforced barrel and larger sanctified-round mechanism, lighter than the tripod Heavy Bolter's 85 lb since it's meant to be carried and fired by one Astartes). Min ST 25 (sqrt(10x60)~24.5): an Astartes at ST 30 handles it two-handed without penalty, but it sits above even Astartes ST x1.5 thresholds for one-handed use, matching every depiction of the psycannon as a braced, two-handed weapon (or forearm-mounted on Terminator plate) rather than a one-handed gun. RoF 4 sits between the standard boltgun's semi/burst RoF 3 and the Storm Bolter's twin-linked 3x2, reflecting a single heavier-cycling barrel rather than paired guns. Bulk -7 and Rcl 3 mark a large, two-handed support weapon in line with this project's other Astartes heavy bolt weapons; Acc 4 and the 250/1200 range are a modest step up from the standard boltgun's 200/1000 for the longer, reinforced barrel.",
+			"local_notes": "Man-portable by a single Astartes (no tripod), or arm-mounted on Terminator armour in place of a storm bolter.\n\nLore: The Grey Knights' signature heavy weapon: Codex: Grey Knights background describes the psycannon as firing large-calibre sanctified penetrator rounds built specifically to bring down heavily armoured foes and tear through daemonic flesh that shrugs off ordinary weapons, carried by Purgation squads and mounted on Grey Knight Dreadknights and Terminators alike.\n\nDesign: Built as a dedicated anti-armour bolt weapon rather than copied from the Heavy Bolter or Assault Cannon anchors: same .75-calibre bolt and 6d cr ex frag follow-up as the standard Godwyn round (Imperium/ Weapons/Bolt Weapons.eqp), but firing permanently Psybolt-grade ammunition, so the armour divisor is (3) rather than the standard bolter's (2) as standard issue, not an optional load — reflecting \"designed specifically to punch through heavily armoured foes.\" Exact dice distribution: penetrates carapace (DR 70, eff. 23.3) 99.0% of hits, Sororitas power armour (DR 85, eff. 28.3) 93.9%, and full Astartes power armour (DR 100, eff. 33.3) 85.5% — reliably drops power-armoured heretics and traitor Astartes alike, matching the psycannon's reputation as the answer to targets a storm bolter can't touch — while still essentially never beating Terminator plate (DR 200, eff. 66.7) at 0.1%. Checked against the vehicle AV table for completeness though the psycannon is not an anti-tank weapon in the fiction: AV10 (DR 100, eff. 33.3) 85.5%, AV11 (DR 150, eff. 50) 14.5%, AV12-14 (DR 200-350) 0.06% or less — an infantry- and daemon-killer, not a tank-killer, the same role this project already gives the Assault Cannon. Dice: 6d rather than the Heavy Bolter's 7d (and a 6d rather than 8d follow-up) because this is a 60 lb man-portable weapon, not an 85 lb tripod gun; the armour divisor (3) does the work instead. Against Astartes plate it penetrates 85.5% of hits against the Heavy Bolter's 41.4%, which is the role the fiction gives it (the answer to armoured targets, not to crowds). Skill is Gunner (Machine Gun): it is a braced heavy weapon (framework.md's braced/mounted-heavies rule), the same skill the Purgation lens and Grey Knight template train. Handling: 60 lb loaded (heavier than the Storm Bolter's 40 lb for the reinforced barrel and larger sanctified-round mechanism, lighter than the tripod Heavy Bolter's 85 lb since it's meant to be carried and fired by one Astartes). Min ST 25 (sqrt(10x60)~24.5): an Astartes at ST 30 handles it two-handed without penalty, but it sits above even Astartes ST x1.5 thresholds for one-handed use, matching every depiction of the psycannon as a braced, two-handed weapon (or forearm-mounted on Terminator plate) rather than a one-handed gun. RoF 4 sits between the standard boltgun's semi/burst RoF 3 and the Storm Bolter's twin-linked 3x2, reflecting a single heavier-cycling barrel rather than paired guns. Bulk -7 and Rcl 3 mark a large, two-handed support weapon in line with this project's other Astartes heavy bolt weapons; Acc 4 and the 250/1200 range are a modest step up from the standard boltgun's 200/1000 for the longer, reinforced barrel.",
 			"tags": [
 				"Missile Weapon",
 				"Imperium",
@@ -1392,94 +1436,18 @@
 							"type": "skill",
 							"name": {
 								"compare": "is",
-								"qualifier": "Guns"
+								"qualifier": "Gunner"
 							},
 							"specialization": {
 								"compare": "is",
-								"qualifier": "Rifle"
+								"qualifier": "Machine Gun"
 							}
 						},
 						{
 							"type": "skill",
 							"name": {
 								"compare": "is",
-								"qualifier": "Guns"
-							},
-							"specialization": {
-								"compare": "is",
-								"qualifier": "Pistol"
-							},
-							"modifier": -2
-						},
-						{
-							"type": "skill",
-							"name": {
-								"compare": "is",
-								"qualifier": "Guns"
-							},
-							"specialization": {
-								"compare": "is",
-								"qualifier": "Shotgun"
-							},
-							"modifier": -2
-						},
-						{
-							"type": "skill",
-							"name": {
-								"compare": "is",
-								"qualifier": "Guns"
-							},
-							"specialization": {
-								"compare": "is",
-								"qualifier": "Light Machine Gun"
-							},
-							"modifier": -2
-						},
-						{
-							"type": "skill",
-							"name": {
-								"compare": "is",
-								"qualifier": "Guns"
-							},
-							"specialization": {
-								"compare": "is",
-								"qualifier": "Submachine Gun"
-							},
-							"modifier": -2
-						},
-						{
-							"type": "skill",
-							"name": {
-								"compare": "is",
-								"qualifier": "Guns"
-							},
-							"specialization": {
-								"compare": "is",
-								"qualifier": "Grenade Launcher"
-							},
-							"modifier": -4
-						},
-						{
-							"type": "skill",
-							"name": {
-								"compare": "is",
-								"qualifier": "Guns"
-							},
-							"specialization": {
-								"compare": "is",
-								"qualifier": "Gyroc"
-							},
-							"modifier": -4
-						},
-						{
-							"type": "skill",
-							"name": {
-								"compare": "is",
-								"qualifier": "Guns"
-							},
-							"specialization": {
-								"compare": "is",
-								"qualifier": "Light Anti-Armor Weapon"
+								"qualifier": "Gunner"
 							},
 							"modifier": -4
 						}
@@ -1509,94 +1477,18 @@
 							"type": "skill",
 							"name": {
 								"compare": "is",
-								"qualifier": "Guns"
+								"qualifier": "Gunner"
 							},
 							"specialization": {
 								"compare": "is",
-								"qualifier": "Rifle"
+								"qualifier": "Machine Gun"
 							}
 						},
 						{
 							"type": "skill",
 							"name": {
 								"compare": "is",
-								"qualifier": "Guns"
-							},
-							"specialization": {
-								"compare": "is",
-								"qualifier": "Pistol"
-							},
-							"modifier": -2
-						},
-						{
-							"type": "skill",
-							"name": {
-								"compare": "is",
-								"qualifier": "Guns"
-							},
-							"specialization": {
-								"compare": "is",
-								"qualifier": "Shotgun"
-							},
-							"modifier": -2
-						},
-						{
-							"type": "skill",
-							"name": {
-								"compare": "is",
-								"qualifier": "Guns"
-							},
-							"specialization": {
-								"compare": "is",
-								"qualifier": "Light Machine Gun"
-							},
-							"modifier": -2
-						},
-						{
-							"type": "skill",
-							"name": {
-								"compare": "is",
-								"qualifier": "Guns"
-							},
-							"specialization": {
-								"compare": "is",
-								"qualifier": "Submachine Gun"
-							},
-							"modifier": -2
-						},
-						{
-							"type": "skill",
-							"name": {
-								"compare": "is",
-								"qualifier": "Guns"
-							},
-							"specialization": {
-								"compare": "is",
-								"qualifier": "Grenade Launcher"
-							},
-							"modifier": -4
-						},
-						{
-							"type": "skill",
-							"name": {
-								"compare": "is",
-								"qualifier": "Guns"
-							},
-							"specialization": {
-								"compare": "is",
-								"qualifier": "Gyroc"
-							},
-							"modifier": -4
-						},
-						{
-							"type": "skill",
-							"name": {
-								"compare": "is",
-								"qualifier": "Guns"
-							},
-							"specialization": {
-								"compare": "is",
-								"qualifier": "Light Anti-Armor Weapon"
+								"qualifier": "Gunner"
 							},
 							"modifier": -4
 						}
@@ -1608,7 +1500,7 @@
 		{
 			"id": "evURRAMUtR7vbi_hK",
 			"description": "Psilencer",
-			"local_notes": "Man-portable by a single Astartes; carried by Purgation and Interceptor squads for close-in suppression where a psycannon's report would betray a kill-team's position.\n\nLore: A quieter Grey Knight support weapon, per Codex: Grey Knights background: a lighter, subsonic-round autoloader traded for near- silence, used to suppress and cull lesser threats while a kill-team moves in on a psychic phenomenon or daemon incursion without announcing itself the way a psycannon or bolter volley would.\n\nDesign: Scaled down from the Psycannon the same way the Stalker Bolt Rifle scales down from a standard boltgun (Imperium/Weapons/Bolt Weapons.eqp): subsonic rounds keep a smaller pi+ wound multiplier (5dx2 rather than 6dx2) and a reduced 2d cr ex follow-up (a subsonic round carries less kinetic energy at impact to trigger a full-yield detonation), but a much higher sustained RoF (8, a light autoloader rather than the Psycannon's heavier single-barrel action) matching its suppression role. Exact dice distribution: penetrates carapace (DR 70, eff. 35) 50.0% of hits, Sororitas power armour (DR 85, eff. 42.5) 15.2%, Astartes power armour (DR 100, eff. 50) 1.6%, and essentially never Terminator plate — a real but limited threat that trades the Psycannon's armour-cracking punch for volume of fire and a quiet report, exactly the \"suppress rather than kill outright\" role Codex background gives it. Handling: 45 lb loaded (lighter than the Psycannon's 60 lb for a smaller-calibre mechanism and integral suppressor rather than a full reinforced barrel). Min ST 21 (sqrt(10x45)~21.2). Bulk -6 (one step better than the Psycannon's -7 for the lighter housing) and Rcl 2 (down from the Psycannon's 3, the subsonic load kicking less). Acc 3 and a shorter 150/700 range reflect the suppressor's shrouded sight line and the subsonic round's shorter effective reach, and Shots 60(4) matches the higher sustained RoF with a bigger magazine than the Psycannon's 40.",
+			"local_notes": "Man-portable by a single Astartes; carried by Purgation and Interceptor squads for close-in suppression where a psycannon's report would betray a kill-team's position.\n\nLore: A quieter Grey Knight support weapon, per Codex: Grey Knights background: a lighter, subsonic-round autoloader traded for near- silence, used to suppress and cull lesser threats while a kill-team moves in on a psychic phenomenon or daemon incursion without announcing itself the way a psycannon or bolter volley would.\n\nDesign: Scaled down from the Psycannon the same way the Stalker Bolt Rifle scales down from a standard boltgun (Imperium/Weapons/Bolt Weapons.eqp): subsonic rounds keep a smaller pi+ wound multiplier (5dx2 rather than 6dx2) and a reduced 2d cr ex follow-up (a subsonic round carries less kinetic energy at impact to trigger a full-yield detonation), but a much higher sustained RoF (8, a light autoloader rather than the Psycannon's heavier single-barrel action) matching its suppression role. Exact dice distribution: penetrates carapace (DR 70, eff. 35) 50.0% of hits, Sororitas power armour (DR 85, eff. 42.5) 15.2%, Astartes power armour (DR 100, eff. 50) 1.6%, and essentially never Terminator plate — a real but limited threat that trades the Psycannon's armour-cracking punch for volume of fire and a quiet report, exactly the \"suppress rather than kill outright\" role Codex background gives it. Skill is Gunner (Machine Gun) for the same reason as the Psycannon (braced 45 lb support weapon). Handling: 45 lb loaded (lighter than the Psycannon's 60 lb for a smaller-calibre mechanism and integral suppressor rather than a full reinforced barrel). Min ST 21 (sqrt(10x45)~21.2). Bulk -6 (one step better than the Psycannon's -7 for the lighter housing) and Rcl 2 (down from the Psycannon's 3, the subsonic load kicking less). Acc 3 and a shorter 150/700 range reflect the suppressor's shrouded sight line and the subsonic round's shorter effective reach, and Shots 60(4) matches the higher sustained RoF with a bigger magazine than the Psycannon's 40.",
 			"tags": [
 				"Missile Weapon",
 				"Imperium",
@@ -1645,94 +1537,18 @@
 							"type": "skill",
 							"name": {
 								"compare": "is",
-								"qualifier": "Guns"
+								"qualifier": "Gunner"
 							},
 							"specialization": {
 								"compare": "is",
-								"qualifier": "Rifle"
+								"qualifier": "Machine Gun"
 							}
 						},
 						{
 							"type": "skill",
 							"name": {
 								"compare": "is",
-								"qualifier": "Guns"
-							},
-							"specialization": {
-								"compare": "is",
-								"qualifier": "Pistol"
-							},
-							"modifier": -2
-						},
-						{
-							"type": "skill",
-							"name": {
-								"compare": "is",
-								"qualifier": "Guns"
-							},
-							"specialization": {
-								"compare": "is",
-								"qualifier": "Shotgun"
-							},
-							"modifier": -2
-						},
-						{
-							"type": "skill",
-							"name": {
-								"compare": "is",
-								"qualifier": "Guns"
-							},
-							"specialization": {
-								"compare": "is",
-								"qualifier": "Light Machine Gun"
-							},
-							"modifier": -2
-						},
-						{
-							"type": "skill",
-							"name": {
-								"compare": "is",
-								"qualifier": "Guns"
-							},
-							"specialization": {
-								"compare": "is",
-								"qualifier": "Submachine Gun"
-							},
-							"modifier": -2
-						},
-						{
-							"type": "skill",
-							"name": {
-								"compare": "is",
-								"qualifier": "Guns"
-							},
-							"specialization": {
-								"compare": "is",
-								"qualifier": "Grenade Launcher"
-							},
-							"modifier": -4
-						},
-						{
-							"type": "skill",
-							"name": {
-								"compare": "is",
-								"qualifier": "Guns"
-							},
-							"specialization": {
-								"compare": "is",
-								"qualifier": "Gyroc"
-							},
-							"modifier": -4
-						},
-						{
-							"type": "skill",
-							"name": {
-								"compare": "is",
-								"qualifier": "Guns"
-							},
-							"specialization": {
-								"compare": "is",
-								"qualifier": "Light Anti-Armor Weapon"
+								"qualifier": "Gunner"
 							},
 							"modifier": -4
 						}
@@ -1762,94 +1578,18 @@
 							"type": "skill",
 							"name": {
 								"compare": "is",
-								"qualifier": "Guns"
+								"qualifier": "Gunner"
 							},
 							"specialization": {
 								"compare": "is",
-								"qualifier": "Rifle"
+								"qualifier": "Machine Gun"
 							}
 						},
 						{
 							"type": "skill",
 							"name": {
 								"compare": "is",
-								"qualifier": "Guns"
-							},
-							"specialization": {
-								"compare": "is",
-								"qualifier": "Pistol"
-							},
-							"modifier": -2
-						},
-						{
-							"type": "skill",
-							"name": {
-								"compare": "is",
-								"qualifier": "Guns"
-							},
-							"specialization": {
-								"compare": "is",
-								"qualifier": "Shotgun"
-							},
-							"modifier": -2
-						},
-						{
-							"type": "skill",
-							"name": {
-								"compare": "is",
-								"qualifier": "Guns"
-							},
-							"specialization": {
-								"compare": "is",
-								"qualifier": "Light Machine Gun"
-							},
-							"modifier": -2
-						},
-						{
-							"type": "skill",
-							"name": {
-								"compare": "is",
-								"qualifier": "Guns"
-							},
-							"specialization": {
-								"compare": "is",
-								"qualifier": "Submachine Gun"
-							},
-							"modifier": -2
-						},
-						{
-							"type": "skill",
-							"name": {
-								"compare": "is",
-								"qualifier": "Guns"
-							},
-							"specialization": {
-								"compare": "is",
-								"qualifier": "Grenade Launcher"
-							},
-							"modifier": -4
-						},
-						{
-							"type": "skill",
-							"name": {
-								"compare": "is",
-								"qualifier": "Guns"
-							},
-							"specialization": {
-								"compare": "is",
-								"qualifier": "Gyroc"
-							},
-							"modifier": -4
-						},
-						{
-							"type": "skill",
-							"name": {
-								"compare": "is",
-								"qualifier": "Guns"
-							},
-							"specialization": {
-								"compare": "is",
-								"qualifier": "Light Anti-Armor Weapon"
+								"qualifier": "Gunner"
 							},
 							"modifier": -4
 						}

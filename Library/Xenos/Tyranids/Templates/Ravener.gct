@@ -1,12 +1,12 @@
 {
 	"version": 5,
 	"id": "BE_i24vUxDbmrrdL6",
-	"notes": "NPC creature stat block, not a player-facing race. Point math: Tyranid Biology 15 + Body Lens: Ravener 468 + Scything Talons 28 + skills 8 = 519 points. Stats: SM +1, ST 22, DX 14, IQ 5, HT 14, HP 26, Will 5, Per 5, natural chitin torso DR 60 (Weak Points 5, eye DR 30), Tunnelling, Shadow in the Warp (8 yards) — framework.md's Ravener anchor line exactly. This sits at the top of framework.md's Senior Agents tier (350-600): a burrowing ambush predator whose whole value is erupting where it is least expected, not standing toe-to-toe once found. The point total is for GM reference only.\nWeapon-symbiote: carries Scything Talons, the classic Ravener close-combat loadout, built as a natural-attack trait in data/xenos/tyranids/bio-weapons.yaml.\n",
+	"notes": "NPC creature stat block, not a player-facing race. Point math: Tyranid Biology 20 + Body Lens: Ravener 495 + Scything Talons 28 + skills 8 = 551 points. Stats: SM +1, ST 22, DX 14, IQ 5, HT 14, HP 26, Will 5, Per 5, natural chitin torso DR 60 (Weak Points 5, eye DR 30), Tunnelling, Shadow in the Warp (8 yards) — framework.md's Ravener anchor line exactly. This sits at the top of framework.md's Senior Agents tier (350-600): a burrowing ambush predator whose whole value is erupting where it is least expected, not standing toe-to-toe once found. The point total is for GM reference only.\nWeapon-symbiote: carries Scything Talons, the classic Ravener close-combat loadout, built as a natural-attack trait in data/xenos/tyranids/bio-weapons.yaml.\n",
 	"traits": [
 		{
 			"id": "TsJ0WwfHeibZPH1Zb",
 			"name": "Tyranid Biology",
-			"local_notes": "Lore: The Tyranid Biology shared by every bioform in a Hive Fleet: bound to the Hive Mind from the moment it is grown, disciplined and fearless only so long as a synapse creature's link holds, mute and without individual culture, and adapted to digest or shrug off almost anything a target world can throw at it. This is the baseline every body-type lens below (Termagant through Carnifex) builds on top of; the lens supplies the bioform's own attributes, chitin DR, and any special biology (leaping legs, rending claws, psychic organs, wings) that role calls for.\n\nDesign: 5 (Hive Mind Link) - 10 (Synapse Dependence) + 5 (Synapse Discipline) - 15 (Cannot Speak) + 0 (No Independent Society) + 30 (Adapted Biology) = 15 points of shared physiology before attributes, chitin DR, special biology, or skills. See each template for a full stat block built on top of this plus a body- type lens.",
+			"local_notes": "Lore: The Tyranid Biology shared by every bioform in a Hive Fleet: bound to the Hive Mind from the moment it is grown, disciplined and fearless only so long as a synapse creature's link holds, mute and without individual culture, and adapted to digest or shrug off almost anything a target world can throw at it. This is the baseline every body-type lens below (Termagant through Carnifex) builds on top of; the lens supplies the bioform's own attributes, chitin DR, and any special biology (leaping legs, rending claws, psychic organs, wings) that role calls for.\n\nDesign: 5 (Hive Mind Link) - 10 (Synapse Dependence) + 10 (Synapse Discipline) - 15 (Cannot Speak) + 0 (No Independent Society) + 30 (Adapted Biology) = 20 points of shared physiology before attributes, chitin DR, special biology, or skills. See each template for a full stat block built on top of this plus a body- type lens.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -52,21 +52,22 @@
 				{
 					"id": "tUJ-Z4Z8YpiDWqZLV",
 					"name": "Synapse Discipline",
-					"local_notes": "While linked, Synapse Dependence's instinctive-behaviour effects are fully suppressed: the organism fights with total discipline, no fear, and follows the Hive Mind's tactical intent through the nearest synapse creature exactly as ordered. The moment the link breaks (the synapse creature dies, moves out of range, or is itself cut off from a larger synapse creature further up the chain), Synapse Dependence resumes immediately.\n\nLore: A swarm fighting under a synapse creature's watch is unrecognisable from the same swarm cut loose — utterly fearless, perfectly coordinated, and willing to press an attack to the last organism. This is the other half of the same well-documented Codex mechanic that makes synapse creatures the Imperium's priority targets.\n\nDesign: A narrow conditional Will/Fright Check bonus, built the same way this project's Ork WAAAGH! Gestalt prices an equivalent situational bonus (5 points) rather than a flat, always-on Fearlessness — here the \"always on\" case is Synapse Dependence's disadvantage instead, and this trait is the paired benefit that replaces it under a synapse creature's link.",
+					"reference": "B55",
+					"local_notes": "Fearlessness 5 (+5 to Fright Checks and to Will rolls to resist fear, intimidation and Bestial) and High Pain Threshold (no shock penalty, no stun from injury), both only while within the range of a Synapse Creature's link (see that trait). While linked, Synapse Dependence's instinctive-behaviour effects are fully suppressed: the organism fights with total discipline, no fear, and follows the Hive Mind's tactical intent through the nearest synapse creature exactly as ordered. The moment the link breaks (the synapse creature dies, moves out of range, or is itself cut off from a larger synapse creature further up the chain), Synapse Dependence resumes immediately and the fearlessness and pain immunity go with it.\n\nLore: A swarm fighting under a synapse creature's watch is unrecognisable from the same swarm cut loose: utterly fearless, feeling no pain, perfectly coordinated, and willing to press an attack to the last organism. This is the other half of the same well-documented Codex mechanic that makes synapse creatures the Imperium's priority targets, and matches framework.md's \"no fear or pain within synapse.\"\n\nDesign: Fearlessness 5 (B55, 2 points/level = 10) plus High Pain Threshold (B59, 10) = 20 points, with Accessibility (only while linked to a synapse creature, -50%): 20 x 0.5 = 10 points. Earlier drafts priced a 5-point conditional Will bonus that never delivered the fearlessness and pain immunity the framework and the fiction give Tyranids in synapse.",
 					"tags": [
 						"Advantage",
 						"Mental",
 						"Xenos",
 						"Tyranids"
 					],
-					"base_points": 5,
-					"features": [
+					"modifiers": [
 						{
-							"type": "conditional_modifier",
-							"situation": "to Will rolls and Fright Checks, and to resist Bestial's effects, while within the range of a Synapse Creature's link (see that trait)",
-							"amount": 4
+							"id": "mXkNEQ2qF7DHS-edy",
+							"name": "Accessibility (only while linked to a synapse creature)",
+							"cost_adj": "-50%"
 						}
-					]
+					],
+					"base_points": 20
 				},
 				{
 					"id": "t5BjJP2DqVTkKDt3P",
@@ -122,7 +123,7 @@
 		{
 			"id": "TjFIVyDCig3IL7ECc",
 			"name": "Body Lens: Ravener",
-			"local_notes": "Lore: The Ravener: a serpentine burrowing predator that erupts from beneath a defensive line rather than crossing open ground to reach it. Codex background across editions is explicit that this ambush capability, not raw combat stats, is the Ravener's whole purpose.\n\nDesign: 136 (Attribute Modifiers) + 300 (Chitin DR 60) + 12 (Tunnelling) + 20 (Shadow in the Warp) = 468 points, added to Tyranid Biology's 15 for 483 points of physiology alone before skills and its weapon- symbiote. See the Ravener template. NPC creature stat block only.",
+			"local_notes": "Lore: The Ravener: a serpentine burrowing predator that erupts from beneath a defensive line rather than crossing open ground to reach it. Codex background across editions is explicit that this ambush capability, not raw combat stats, is the Ravener's whole purpose.\n\nDesign: 136 (Attribute Modifiers) + 300 (Chitin DR 60) + 39 (Tunnelling) + 20 (Shadow in the Warp) = 495 points, added to Tyranid Biology's 20 for 515 points of physiology alone before skills and its weapon- symbiote. See the Ravener template. NPC creature stat block only.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -199,20 +200,31 @@
 				{
 					"id": "tHbIuw6twshZeXI-r",
 					"name": "Tunnelling",
-					"local_notes": "Through loose earth, sand, or similar soft ground only (never solid rock or a hardened floor), the Ravener may move at its full Basic Move underground, submerging and re-surfacing as a single Move action; it may not attack while submerged. The moment it erupts from the ground it is treated as attacking from ambush for that turn's initial attack.\n\nLore: Raveners burrow beneath the battlefield and erupt without warning beneath their target, the signature ambush Codex background gives the bioform and a recurring beat in Black Library's Hive Fleet material and Deathwatch's own Mark of the Xenos description of the species.\n\nDesign: Built from Basic Set Enhanced Move (Ground) (B52, 20 points/level, the same base rate this file's Genestealer Speed and this project's Astartes/Custodes/Aeldari files all use) with an Accessibility limitation restricting the whole trait to a new, narrow movement mode (through soft earth only, never on open ground or hard rock, -40%, an eyeballed percentage in line with this project's own Accessibility convention): 20 x 0.6 = 12 points. This grants the underground Move itself rather than doubling an existing one, a reasoned adaptation of the same mechanic rather than a renamed catalogue trait, per framework.md's \"built, not borrowed\" rule.",
+					"reference": "B94",
+					"local_notes": "Tunnel Move 7 (the Ravener's current Basic Move) through loose earth, sand, or similar soft ground only (never solid rock or a hardened floor), submerging and re-surfacing as a single Move action; it may not attack while submerged. The moment it erupts from the ground it is treated as attacking from ambush for that turn's initial attack.\n\nLore: Raveners burrow beneath the battlefield and erupt without warning beneath their target, the signature ambush Codex background gives the bioform and a recurring beat in Black Library's Hive Fleet material and Deathwatch's own Mark of the Xenos description of the species.\n\nDesign: Basic Set Tunneling (B94, 30 base + 5/level of Tunnel Move) at Tunnel Move 7 = 65, with an Accessibility limitation restricting it to soft earth only (-40%, an eyeballed percentage in line with this project's own Accessibility convention): 65 x 0.6 = 39 points. This replaces an earlier Enhanced Move build (12 points), which doubled an existing Move rather than granting a burrowing mode at all. If the Ravener's Basic Move is later changed, set the Tunnel Move level to match.",
 					"tags": [
 						"Advantage",
 						"Physical",
 						"Xenos",
 						"Tyranids"
 					],
-					"base_points": 12
+					"modifiers": [
+						{
+							"id": "mRRB14fQnfVvb7TVH",
+							"name": "Accessibility (soft earth, sand and similar loose ground only)",
+							"cost_adj": "-40%"
+						}
+					],
+					"points_per_level": 5,
+					"can_level": true,
+					"levels": 7,
+					"base_points": 30
 				},
 				{
 					"id": "thHGUmg15bE1MV390",
 					"name": "Shadow in the Warp (Ravener)",
 					"reference": "B35",
-					"local_notes": "Any psyker (or other warp-sensitive mind) within 8 yards suffers -3 to Psyniscience, Warp Sorcery-tagged skill rolls, and the Will roll to resist Perils of the Warp, and must make an immediate Fright Check the first time they come within range of this creature. Non-psychic minds are unaffected.\n\nLore: The Hive Mind's raw psychic mass smothers the immaterium around any Tyranid bioform large enough to carry a fraction of it — Codex background describes Imperial and Aeldari psykers alike going deaf, blind, or outright panicking the moment a large Tyranid force (never just the smallest gaunts) comes close enough to sense. Deathwatch's Mark of the Xenos material treats Shadow in the Warp as a standing hazard for any Librarian escorting a kill-team against Tyranids.\n\nDesign: Affliction (B35) base 10; Disadvantage Delivered (a compound -30 point disadvantage — the skill/Empowerment penalty plus the forced Fright Check — valued per this project's own eyeballed Disadvantage Delivered convention, +30%); Area Effect at the 8-yard tier (+150%, B102); Always On (-40%); Emanation (-20%); Accessibility, limited to warp-sensitive targets only (-20%, the same kind of narrowing this project's Grey Knights Banishment entry uses for a daemon-only target restriction). Net: +30+150-40-20-20 = +100%. 10 x 2.0 = 20 points. Included on Raveners and other bioforms framework.md calls out as \"larger bioforms,\" never on the small swarm forms.",
+					"local_notes": "Any psyker (or other warp-sensitive mind) within 8 yards suffers -3 to Psyniscience, Warp Sorcery-tagged skill rolls, and the Will roll to resist Perils of the Warp, and must make an immediate Fright Check the first time they come within range of this creature. Non-psychic minds are unaffected.\n\nLore: The Hive Mind's raw psychic mass smothers the immaterium around any Tyranid bioform large enough to carry a fraction of it — Codex background describes Imperial and Aeldari psykers alike going deaf, blind, or outright panicking the moment a large Tyranid force (never just the smallest gaunts) comes close enough to sense. Deathwatch's Mark of the Xenos material treats Shadow in the Warp as a standing hazard for any Librarian escorting a kill-team against Tyranids.\n\nDesign: Affliction (B35) base 10; Disadvantage Delivered (a compound -30 point disadvantage — the skill/Empowerment penalty plus the forced Fright Check — valued per this project's own eyeballed Disadvantage Delivered convention, +30%); Area Effect at the 8-yard tier (+150%, B102); Always On (-40%); Emanation (-20%); Accessibility, limited to warp-sensitive targets only (-20%, the same kind of narrowing this project's Grey Knights Banishment entry uses for a daemon-only target restriction). Net: +30+150-40-20-20 = +100%. 10 x 2.0 = 20 points. Carried by the Ravener and Lictor as this project's own house choice (framework.md lists Shadow in the Warp as a Tyranid trait without saying which bioforms carry it); the Codex ties it to synapse creatures and the Hive Mind's psychic presence, which is why the Warrior, Zoanthrope and Hive Tyrant carry it and the mindless Carnifex does not.",
 					"tags": [
 						"Advantage",
 						"Mental",
@@ -253,8 +265,8 @@
 		{
 			"id": "tgQTf0TWV_E_uJtdH",
 			"name": "Scything Talons",
-			"reference": "B271",
-			"local_notes": "Lore: A pair of long, chitinous cutting blades grown from the forearms — the single most common melee symbiote in the swarm, carried by everything from Genestealers to Hive Tyrants in one form or another. Codex: Tyranids background across editions treats scything talons as the baseline killing weapon: not the swarm's hardest-hitting blade, but reliable, always-on, and lethal against anything short of the heaviest personal armour.\n\nDesign: Framework.md's own anchor: \"Scything talons | sw+2d(2) cut.\" Built at a Tyranid Warrior's own ST 24 (sw 4d+2, framework's bioform table): Cutting Striker (B271, 7 points) with Armor Divisor (2) (B102, +50%) = 7x1.5=10.5, rounded to 11, for the bare sw+0(2) cut baseline the wielder's own ST already provides for free; the anchor's own +2d on top is bought separately as Innate Attack (Cut) (B61, 7/die) at 2 dice = 14, with Armor Divisor (2) (+50%) and Melee Attack, Reach C (B112, -30%): net +20%, 14x1.2=16.8, rounded to 17. Total 11+17=28. Checked by exact dice distribution at ST 24 (sw+2d(2) = 6d+2(2)): averages 23 and penetrates flak (DR 30, eff. 15) 96.4% of the time, carapace (DR 70, eff. 35) 0.06%, and rounds to 0% against anything heavier — a real killer of unarmoured and flak-armoured targets and essentially no threat to rigid plate, matching \"lethal against anything short of the heaviest personal armour\" without overstating it against carapace. Skill: Brawling, per framework.md's own weapon- skill table for natural close-combat weapons (power fist/lightning claws use the same skill).",
+			"reference": "B88",
+			"local_notes": "Lore: A pair of long, chitinous cutting blades grown from the forearms — the single most common melee symbiote in the swarm, carried by everything from Genestealers to Hive Tyrants in one form or another. Codex: Tyranids background across editions treats scything talons as the baseline killing weapon: not the swarm's hardest-hitting blade, but reliable, always-on, and lethal against anything short of the heaviest personal armour.\n\nDesign: Framework.md's own anchor: \"Scything talons | sw+2d(2) cut.\" Built at a Tyranid Warrior's own ST 24 (sw 4d+2, framework's bioform table): Cutting Striker (B88, 7 points) with Armor Divisor (2) (B102, +50%) = 7x1.5=10.5, rounded to 11, for the bare sw+0(2) cut baseline the wielder's own ST already provides for free; the anchor's own +2d on top is bought separately as Innate Attack (Cut) (B61, 7/die) at 2 dice = 14, with Armor Divisor (2) (+50%) and Melee Attack, Reach C (B112, -30%): net +20%, 14x1.2=16.8, rounded to 17. Total 11+17=28. Checked by exact dice distribution at ST 24 (sw+2d(2) = 6d+2(2)): averages 23 and penetrates flak (DR 30, eff. 15) 96.4% of the time, carapace (DR 70, eff. 35) 0.06%, and rounds to 0% against anything heavier — a real killer of unarmoured and flak-armoured targets and essentially no threat to rigid plate, matching \"lethal against anything short of the heaviest personal armour\" without overstating it against carapace. Skill: Brawling, per framework.md's own weapon- skill table for natural close-combat weapons (power fist/lightning claws use the same skill).",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -297,7 +309,7 @@
 		{
 			"id": "sbcXR6vlzXJPCqC24",
 			"name": "Brawling",
-			"local_notes": "Lore: A Ravener erupts from the ground already lashing out with its scything talons.\n\nDesign: DX+1 (15) for 4 points, Easy.",
+			"local_notes": "Lore: A Ravener erupts from the ground already lashing out with its scything talons.\n\nDesign: DX+2 (16) for 4 points, Easy.",
 			"tags": [
 				"Xenos",
 				"Tyranids"

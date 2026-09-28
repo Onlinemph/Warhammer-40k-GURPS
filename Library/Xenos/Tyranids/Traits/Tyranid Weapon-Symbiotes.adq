@@ -485,8 +485,8 @@
 		{
 			"id": "tOmXCuCURbajG8Je-",
 			"name": "Scything Talons",
-			"reference": "B271",
-			"local_notes": "Lore: A pair of long, chitinous cutting blades grown from the forearms — the single most common melee symbiote in the swarm, carried by everything from Genestealers to Hive Tyrants in one form or another. Codex: Tyranids background across editions treats scything talons as the baseline killing weapon: not the swarm's hardest-hitting blade, but reliable, always-on, and lethal against anything short of the heaviest personal armour.\n\nDesign: Framework.md's own anchor: \"Scything talons | sw+2d(2) cut.\" Built at a Tyranid Warrior's own ST 24 (sw 4d+2, framework's bioform table): Cutting Striker (B271, 7 points) with Armor Divisor (2) (B102, +50%) = 7x1.5=10.5, rounded to 11, for the bare sw+0(2) cut baseline the wielder's own ST already provides for free; the anchor's own +2d on top is bought separately as Innate Attack (Cut) (B61, 7/die) at 2 dice = 14, with Armor Divisor (2) (+50%) and Melee Attack, Reach C (B112, -30%): net +20%, 14x1.2=16.8, rounded to 17. Total 11+17=28. Checked by exact dice distribution at ST 24 (sw+2d(2) = 6d+2(2)): averages 23 and penetrates flak (DR 30, eff. 15) 96.4% of the time, carapace (DR 70, eff. 35) 0.06%, and rounds to 0% against anything heavier — a real killer of unarmoured and flak-armoured targets and essentially no threat to rigid plate, matching \"lethal against anything short of the heaviest personal armour\" without overstating it against carapace. Skill: Brawling, per framework.md's own weapon- skill table for natural close-combat weapons (power fist/lightning claws use the same skill).",
+			"reference": "B88",
+			"local_notes": "Lore: A pair of long, chitinous cutting blades grown from the forearms — the single most common melee symbiote in the swarm, carried by everything from Genestealers to Hive Tyrants in one form or another. Codex: Tyranids background across editions treats scything talons as the baseline killing weapon: not the swarm's hardest-hitting blade, but reliable, always-on, and lethal against anything short of the heaviest personal armour.\n\nDesign: Framework.md's own anchor: \"Scything talons | sw+2d(2) cut.\" Built at a Tyranid Warrior's own ST 24 (sw 4d+2, framework's bioform table): Cutting Striker (B88, 7 points) with Armor Divisor (2) (B102, +50%) = 7x1.5=10.5, rounded to 11, for the bare sw+0(2) cut baseline the wielder's own ST already provides for free; the anchor's own +2d on top is bought separately as Innate Attack (Cut) (B61, 7/die) at 2 dice = 14, with Armor Divisor (2) (+50%) and Melee Attack, Reach C (B112, -30%): net +20%, 14x1.2=16.8, rounded to 17. Total 11+17=28. Checked by exact dice distribution at ST 24 (sw+2d(2) = 6d+2(2)): averages 23 and penetrates flak (DR 30, eff. 15) 96.4% of the time, carapace (DR 70, eff. 35) 0.06%, and rounds to 0% against anything heavier — a real killer of unarmoured and flak-armoured targets and essentially no threat to rigid plate, matching \"lethal against anything short of the heaviest personal armour\" without overstating it against carapace. Skill: Brawling, per framework.md's own weapon- skill table for natural close-combat weapons (power fist/lightning claws use the same skill).",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -525,10 +525,52 @@
 			]
 		},
 		{
+			"id": "tcVy31Wk6tIy7s9Ps",
+			"name": "Scything Talons (Hormagaunt)",
+			"reference": "B88",
+			"local_notes": "Lore: The Hormagaunt's own scything talons: a leaping killer's blades, swung in a frenzy by a body built to close on prey and shred it. Codex: Tyranids background treats the Hormagaunt as the swarm's melee shock troop, whose whole purpose is to cut down infantry in the open; a Hormagaunt brood that cannot hurt a flak-armoured Guardsman would not be worth growing.\n\nDesign: Framework.md's Scything Talons anchor (sw+2d(2) cut) is written at a Tyranid Warrior's ST 24; at a Hormagaunt's ST 10 (sw 1d) it yields only 3d(2), which penetrates flak (DR 30, eff. 15) 4.6% of the time and left the swarm's leaping killer unable to hurt the Guardsmen it exists to shred (weaker than a Termagant's fleshborer, 6d(2) at 90%). This entry keeps the same build with four dice of Innate Attack instead of two: Cutting Striker (B88, 7 points) with Armor Divisor (2) (B102, +50%) = 10.5, rounded to 11, for the bare sw(2) baseline; Innate Attack (Cut) (B61, 7/die) at 4 dice = 28, with Armor Divisor (2) (+50%) and Melee Attack, Reach C (-30%): net +20%, 28x1.2=33.6, rounded to 34. Total 11+34 = 45. Checked by exact dice distribution at ST 10 (sw+4d(2) = 5d(2)): averages 17.5 and penetrates flak 69.5% of the time, carapace (DR 70, eff. 35) 0%, and nothing heavier - a real killer of unarmoured and flak-armoured infantry (a brood of them certainly is) and no threat to rigid plate.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Tyranids"
+			],
+			"base_points": 45,
+			"weapons": [
+				{
+					"id": "w4xtCWNxaL5Pl9Muj",
+					"sv": 1,
+					"damage": {
+						"type": "cut",
+						"st": "sw",
+						"base": "4d",
+						"armor_divisor": 2
+					},
+					"reach": "1",
+					"parry": "0",
+					"usage": "Standard",
+					"usage_notes": "Written for a Hormagaunt-scale bearer (ST 10, sw 1d, giving a total of 5d(2) cut). The +4d Innate Attack component is what makes a small, weak bioform a threat to flak; rebuild it for any other bearer's own ST per this file's header note.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": 0
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Brawling"
+							}
+						}
+					]
+				}
+			]
+		},
+		{
 			"id": "tBJJ_RDML2KDme4Zi",
 			"name": "Rending Claws",
-			"reference": "B271",
-			"local_notes": "Lore: The Genestealer's signature weapon: claws sharp and strong enough to punch clean through ceramite and plasteel on a solid hit, not merely cut flesh. Codex: Tyranids background and the Deathwatch RPG's own Genestealer material both single out rending claws as capable of shearing through power armour where an ordinary scything talon cannot — precisely the divisor-swap-on-a-good-hit this project's \"rending\" house rule (framework.md) exists to model.\n\nDesign: Framework.md's own anchor: \"Rending claws | sw+2d(3) cut; rending: a hit that succeeds by 5+ or is a critical uses armour divisor (10) instead.\" Built at a Genestealer's own ST 18 (sw 3d, framework's bioform table): Cutting Striker (B271, 7 points) with Armor Divisor (3) (B102, +100%) = 14 for the sw+0(3) baseline; the anchor's own +2d is bought as Innate Attack (Cut) (B61, 7/die) at 2 dice = 14, with Armor Divisor (3) (+100%) and Melee Attack, Reach C (-30%): net +70%, 14x1.7=23.8, rounded to 24. Total 14+24=38. The Rending hit line costs nothing extra: it is the same attack, the same dice, and the same points already paid above — only the armour divisor applied to a hit that already succeeded well changes, exactly as framework.md's own rule describes it (a chance-based crit effect, not a bought capability). Checked by exact dice distribution at ST 18 (sw+2d = 5d): the ordinary (3) line averages 17.5 and penetrates flak 96.8%, carapace (eff. 23.3) 5.9%, Sororitas (eff. 28.3) 0.08%, and 0% against Astartes plate or heavier — a solid but unremarkable melee weapon on an ordinary hit. The Rending hit's (10) line, same 5d average 17.5: flak 100%, carapace (eff. 7) 99.7%, Sororitas (eff. 8.5) 99.3%, Astartes plate (eff. 10) 96.8%, and even a Terminator (eff. 20) 22.2% — genuinely \"shears through ceramite,\" exactly what the anchor's own text claims, and only on the hits the rending rule says should count.",
+			"reference": "B88",
+			"local_notes": "Lore: The Genestealer's signature weapon: claws sharp and strong enough to punch clean through ceramite and plasteel on a solid hit, not merely cut flesh. Codex: Tyranids background and the Deathwatch RPG's own Genestealer material both single out rending claws as capable of shearing through power armour where an ordinary scything talon cannot — precisely the divisor-swap-on-a-good-hit this project's \"rending\" house rule (framework.md) exists to model.\n\nDesign: Framework.md's own anchor: \"Rending claws | sw+2d(3) cut; rending: a hit that succeeds by 5+ or is a critical uses armour divisor (10) instead.\" Built at a Genestealer's own ST 18 (sw 3d, framework's bioform table): Cutting Striker (B88, 7 points) with Armor Divisor (3) (B102, +100%) = 14 for the sw+0(3) baseline; the anchor's own +2d is bought as Innate Attack (Cut) (B61, 7/die) at 2 dice = 14, with Armor Divisor (3) (+100%) and Melee Attack, Reach C (-30%): net +70%, 14x1.7=23.8, rounded to 24. Total 14+24=38. The Rending hit line costs nothing extra: it is the same attack, the same dice, and the same points already paid above — only the armour divisor applied to a hit that already succeeded well changes, exactly as framework.md's own rule describes it (a chance-based crit effect, not a bought capability). Checked by exact dice distribution at ST 18 (sw+2d = 5d): the ordinary (3) line averages 17.5 and penetrates flak 96.8%, carapace (eff. 23.3) 5.9%, Sororitas (eff. 28.3) 0.08%, and 0% against Astartes plate or heavier — a solid but unremarkable melee weapon on an ordinary hit. The Rending hit's (10) line, same 5d average 17.5: flak 100%, carapace (eff. 7) 99.7%, Sororitas (eff. 8.5) 99.3%, Astartes plate (eff. 10) 96.8%, and even a Terminator (eff. 20) 22.2% — genuinely \"shears through ceramite,\" exactly what the anchor's own text claims, and only on the hits the rending rule says should count.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -595,8 +637,8 @@
 		{
 			"id": "tI6sK-ZFYqx4aUi8I",
 			"name": "Bonesword",
-			"reference": "B271",
-			"local_notes": "Lore: A blade of psychically-hardened bone, carried by Tyranid Warriors and Primes and charged with a disruptive field the Hive Mind itself sustains — the swarm's own answer to a power weapon, shearing through armour a plain scything talon or rending claw cannot touch. Codex: Tyranids background places boneswords firmly in the same armour-shredding tier as an Astartes power sword, usually wielded alongside a Lash Whip that pins a target still for the killing blow.\n\nDesign: Framework.md's own anchor: \"Bonesword | Psychically charged bone blade: sw+3d(10) cut (power-field class).\" Built at a Tyranid Warrior's own ST 24 (sw 4d+2): Cutting Striker (B271, 7 points) with Armor Divisor (10) (B102, +200%) = 21 for the sw+0(10) baseline; the anchor's own +3d is bought as Innate Attack (Cut) (B61, 7/die) at 3 dice = 21, with Armor Divisor (10) (+200%) and Melee Attack, Reach C (-30%): net +170%, 21x2.7=56.7, rounded to 57. Total 21+57=78 — priced in the same tier as this project's Custodes power weapons for the same reason: a divisor-(10) weapon is always expensive to buy as a character trait, whatever grows or forges it. Checked by exact dice distribution at ST 24 (sw+3d(10) = 7d+2(10)): averages 26.5 and clears every personal-armour DR at 100%, including Astartes plate (DR 100, eff. 10) at 100%, and a Terminator (DR 200, eff. 20) at 90.6% — a genuine Marine-and-near-Terminator killer, matching \"same armour-shredding tier as a power sword\" (framework's own power sword anchor, sw+3d+1(10), sits almost exactly here) without exceeding it.",
+			"reference": "B88",
+			"local_notes": "Lore: A blade of psychically-hardened bone, carried by Tyranid Warriors and Primes and charged with a disruptive field the Hive Mind itself sustains — the swarm's own answer to a power weapon, shearing through armour a plain scything talon or rending claw cannot touch. Codex: Tyranids background places boneswords firmly in the same armour-shredding tier as an Astartes power sword, usually wielded alongside a Lash Whip that pins a target still for the killing blow.\n\nDesign: Framework.md's own anchor: \"Bonesword | Psychically charged bone blade: sw+3d(10) cut (power-field class).\" Built at a Tyranid Warrior's own ST 24 (sw 4d+2): Cutting Striker (B88, 7 points) with Armor Divisor (10) (B102, +200%) = 21 for the sw+0(10) baseline; the anchor's own +3d is bought as Innate Attack (Cut) (B61, 7/die) at 3 dice = 21, with Armor Divisor (10) (+200%) and Melee Attack, Reach C (-30%): net +170%, 21x2.7=56.7, rounded to 57. Total 21+57=78 — priced in the same tier as this project's Custodes power weapons for the same reason: a divisor-(10) weapon is always expensive to buy as a character trait, whatever grows or forges it. Checked by exact dice distribution at ST 24 (sw+3d(10) = 7d+2(10)): averages 26.5 and clears every personal-armour DR at 100%, including Astartes plate (DR 100, eff. 10) at 100%, and a Terminator (DR 200, eff. 20) at 90.6% — a genuine Marine-and-near-Terminator killer, matching \"same armour-shredding tier as a power sword\" (framework's own power sword anchor, sw+3d+1(10), sits almost exactly here) without exceeding it.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -638,7 +680,7 @@
 			"id": "tlhsytd0UhxZRJ5xe",
 			"name": "Lash Whip",
 			"reference": "B41",
-			"local_notes": "Lore: A long, muscular, whip-like limb almost always carried alongside a Bonesword: not primarily a killing weapon, but a control one, lashing out to entangle and unbalance a target so the blade in the creature's other limb can land a clean, undefended blow. Codex: Tyranids background is explicit that Lash Whip and Bonesword are a matched pair on Tyranid Warriors and Primes, one pinning while the other kills.\n\nDesign: No framework anchor gives this weapon exact numbers, only its control-weapon role, so it is built directly on that role: Binding (B41, 2 points/level) at level 20, matching a Tyranid Warrior/Prime's own ST 24 minus some slack for the whip's own flexibility versus a solid limb's grip = 40 points, plus a minor Crushing Striker (B271, 5 points) with the Long 1 enhancement for its extra reach (this project's own estimated +40%/level, since Basic Set's core rules don't tabulate a Claws/Striker reach extension and this project's Necron/Ork files already document similar own-estimate percentages for un-tabled Basic Set options): 5x1.4=7. Total 40+7=47. No exact- dice penetration check applies to a Binding-based control weapon in the way it does to a damage-dealing one; its function is to set up the Bonesword's own (10)-divisor hit, not to punch through armour itself. Reach 1-2 and Parry -1 reflect a long, flexible limb that reaches further than a talon but is a worse parrying tool for it.",
+			"local_notes": "Lore: A long, muscular, whip-like limb almost always carried alongside a Bonesword: not primarily a killing weapon, but a control one, lashing out to entangle and unbalance a target so the blade in the creature's other limb can land a clean, undefended blow. Codex: Tyranids background is explicit that Lash Whip and Bonesword are a matched pair on Tyranid Warriors and Primes, one pinning while the other kills.\n\nDesign: No framework anchor gives this weapon exact numbers, only its control-weapon role, so it is built directly on that role: Binding (B41, 2 points/level) at level 20, matching a Tyranid Warrior/Prime's own ST 24 minus some slack for the whip's own flexibility versus a solid limb's grip = 40 points, plus a minor Crushing Striker (B88, 5 points) with the Long 1 enhancement for its extra reach (this project's own estimated +40%/level, since Basic Set's core rules don't tabulate a Claws/Striker reach extension and this project's Necron/Ork files already document similar own-estimate percentages for un-tabled Basic Set options): 5x1.4=7. Total 40+7=47. No exact- dice penetration check applies to a Binding-based control weapon in the way it does to a damage-dealing one; its function is to set up the Bonesword's own (10)-divisor hit, not to punch through armour itself. Reach 1-2 and Parry -1 reflect a long, flexible limb that reaches further than a talon but is a worse parrying tool for it.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -676,8 +718,8 @@
 		{
 			"id": "t8I4ndQjg_dgeUeQQ",
 			"name": "Monstrous Scything Talons",
-			"reference": "B271",
-			"local_notes": "Lore: Scything talons grown to Carnifex or Hive Tyrant scale: blades the size of a man, capable of shearing clean through a light vehicle's hull as easily as a Marine's plate. Codex: Tyranids background treats monstrous scything talons as one of the Carnifex's signature close-combat options, a genuine threat to armour that would shrug off a Warrior's own scything talons entirely.\n\nDesign: Framework.md's own anchor: \"Monstrous scything talons | sw+4d(3) cut.\" Built at a Carnifex's own ST 60 (sw 13d+2): Cutting Striker (B271, 7 points) with Armor Divisor (3) (+100%) = 14 for the sw+0(3) baseline; the anchor's own +4d is bought as Innate Attack (Cut) (B61, 7/die) at 4 dice = 28, with Armor Divisor (3) (+100%) and Melee Attack, Reach C (-30%): net +70%, 28x1.7=47.6, rounded to 48. Total 14+48=62. Checked by exact dice distribution at ST 60 (sw+4d(3) = 17d+2(3)): averages 61.5 and clears every personal-armour DR up to and including Astartes plate at 100%, dropping to 24.0% against a Terminator (DR 200, eff. 66.7) — a decisive Marine-killer and a real, if not certain, Terminator-killer. Against vehicles: AV10 100%, AV11 94.1%, AV12 24.0%, AV13-14 0% — shears through light vehicles and struggles against a main battle tank's own frontal armour, exactly the \"would shrug off a Warrior's own talons entirely\" step up the anchor implies.",
+			"reference": "B88",
+			"local_notes": "Lore: Scything talons grown to Carnifex or Hive Tyrant scale: blades the size of a man, capable of shearing clean through a light vehicle's hull as easily as a Marine's plate. Codex: Tyranids background treats monstrous scything talons as one of the Carnifex's signature close-combat options, a genuine threat to armour that would shrug off a Warrior's own scything talons entirely.\n\nDesign: Framework.md's own anchor: \"Monstrous scything talons | sw+4d(3) cut.\" Built at a Carnifex's own ST 60 (sw 9d): Cutting Striker (B88, 7 points) with Armor Divisor (3) (+100%) = 14 for the sw+0(3) baseline; the anchor's own +4d is bought as Innate Attack (Cut) (B61, 7/die) at 4 dice = 28, with Armor Divisor (3) (+100%) and Melee Attack, Reach C (-30%): net +70%, 28x1.7=47.6, rounded to 48. Total 14+48=62. Checked by exact dice distribution at ST 60 (sw+4d(3) = 13d(3)): averages 45.5 and penetrates Astartes plate (DR 100, eff. 33.3) 97.5% of the time, Gravis (DR 130) 62.6%, and a Terminator (DR 200, eff. 66.7) 0%. A Hive Tyrant at ST 45 (11d+1(3)) gets 85.3% against Astartes plate, 24.2% against Gravis and 0% against a Terminator. Against vehicles at ST 60: AV10 97.5%, AV11 21.0%, AV12 and up 0%. That is a decisive Marine-killer and a light-vehicle cracker, but not a Terminator-killer: the crushing claws below are the swarm's armour-buster.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -698,7 +740,7 @@
 					"reach": "1,2",
 					"parry": "0",
 					"usage": "Standard",
-					"usage_notes": "Written for a Carnifex-scale bearer (ST 60, sw 13d+2, giving a total of 17d+2(3) cut); rebuild the +4d Innate Attack component for any other bearer's own ST (e.g. a Hive Tyrant, ST 45) per this file's header note.",
+					"usage_notes": "Written for a Carnifex-scale bearer (ST 60, sw 9d, giving a total of 13d(3) cut); a Hive Tyrant (ST 45, sw 7d+1) totals 11d+1(3). Rebuild the +4d Innate Attack component for any other bearer's own ST per this file's header note.",
 					"defaults": [
 						{
 							"type": "dx",
@@ -718,8 +760,8 @@
 		{
 			"id": "tGDANVDVgSsGkrRbG",
 			"name": "Monstrous Crushing Claws",
-			"reference": "B271",
-			"local_notes": "Lore: A pair of massive crushing pincers grown in place of scything talons on some Carnifexes and Hive Tyrants, built to pulp armour and machinery outright rather than cut through it — the bio-weapon most often shown in Codex: Tyranids background and Black Library's Tyranid-focused fiction alike caving in a Dreadnought's hull or snapping a Rhino's axle in one blow.\n\nDesign: Framework.md's own anchor: \"Monstrous crushing claws | thr+6d(5) cr.\" Built at a Carnifex's own ST 60 (thr 7d-1): Crushing Striker (B271, 5 points) with Armor Divisor (5) (B102, +150%) = 5x2.5=12.5, rounded to 13, for the thr+0(5) baseline; the anchor's own +6d is bought as Innate Attack (Crush) (B61, 5/die) at 6 dice = 30, with Armor Divisor (5) (+150%) and Melee Attack, Reach C (-30%): net +120%, 30x2.2=66. Total 13+66=79. Checked by exact dice distribution at ST 60 (thr+6d(5) = 13d-1(5)): averages 44.5 and clears every personal-armour DR up to and including Astartes plate at 100%, dropping to 74.0% against a Terminator (DR 200, eff. 40) — the hardest-hitting personal-scale melee weapon in this file against the very heaviest infantry armour. Against vehicles: AV10 100%, AV11 98.9%, AV12 74.0%, AV13 3.7%, AV14 0% — genuinely \"cracks a Dreadnought or a Rhino,\" matching the anchor and the fiction, while still falling short of a main battle tank's frontal glacis, which is exactly the gap between this and a true anti-tank symbiote (the Heavy Venom Cannon or Stranglethorn Cannon above).",
+			"reference": "B88",
+			"local_notes": "Lore: A pair of massive crushing pincers grown in place of scything talons on some Carnifexes and Hive Tyrants, built to pulp armour and machinery outright rather than cut through it — the bio-weapon most often shown in Codex: Tyranids background and Black Library's Tyranid-focused fiction alike caving in a Dreadnought's hull or snapping a Rhino's axle in one blow.\n\nDesign: Framework.md's own anchor: \"Monstrous crushing claws | thr+6d(5) cr.\" Built at a Carnifex's own ST 60 (thr 7d-1): Crushing Striker (B88, 5 points) with Armor Divisor (5) (B102, +150%) = 5x2.5=12.5, rounded to 13, for the thr+0(5) baseline; the anchor's own +6d is bought as Innate Attack (Crush) (B61, 5/die) at 6 dice = 30, with Armor Divisor (5) (+150%) and Melee Attack, Reach C (-30%): net +120%, 30x2.2=66. Total 13+66=79. Checked by exact dice distribution at ST 60 (thr+6d(5) = 13d-1(5)): averages 44.5 and clears every personal-armour DR up to and including Astartes plate at 100%, dropping to 74.0% against a Terminator (DR 200, eff. 40) — the hardest-hitting personal-scale melee weapon in this file against the very heaviest infantry armour. Against vehicles: AV10 100%, AV11 98.9%, AV12 74.0%, AV13 3.7%, AV14 0% — genuinely \"cracks a Dreadnought or a Rhino,\" matching the anchor and the fiction, while still falling short of a main battle tank's frontal glacis, which is exactly the gap between this and a true anti-tank symbiote (the Heavy Venom Cannon or Stranglethorn Cannon above).",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -760,8 +802,8 @@
 		{
 			"id": "tfaTxHsog69AAB24f",
 			"name": "Flesh Hooks",
-			"reference": "B271",
-			"local_notes": "Lore: A cluster of long, backward-curved hooks grown from the forearms of Raveners and some Tyranid Primes, built less to kill outright than to snag a fleeing target or drag an objective-holder out of cover and into the swarm's reach. Codex: Tyranids background and the current tabletop's own objective-control rules for Flesh Hooks agree on this grab-and-drag role over a purely offensive one.\n\nDesign: No framework anchor names Flesh Hooks by dice, only by role (grapple and drag), so it is built as a plain natural weapon at a Ravener's own ST 22 (thr 2d) with no bonus dice bought on top, since its point is the grab, not the kill: Impaling Striker (B271, 8 points, the hooked-barb reading of a Piercing Striker's family) with the Long 1 enhancement (this project's own estimated +40%/level, as the Lash Whip above) for the extra reach the hooks need to snag at range 2: 8x1.4=11.2, rounded to 11. No exact-dice penetration table is given since Flesh Hooks are not built or priced as an armour-cracking weapon; thr imp at ST 22 (2d imp) is a believable puncture against flesh and unarmoured targets, and the grapple note above is the symbiote's actual battlefield function.",
+			"reference": "B88",
+			"local_notes": "Lore: A cluster of long, backward-curved hooks grown from the forearms of Raveners and some Tyranid Primes, built less to kill outright than to snag a fleeing target or drag an objective-holder out of cover and into the swarm's reach. Codex: Tyranids background and the current tabletop's own objective-control rules for Flesh Hooks agree on this grab-and-drag role over a purely offensive one.\n\nDesign: No framework anchor names Flesh Hooks by dice, only by role (grapple and drag), so it is built as a plain natural weapon at a Ravener's own ST 22 (thr 2d) with no bonus dice bought on top, since its point is the grab, not the kill: Impaling Striker (B88, 8 points, the hooked-barb reading of a Piercing Striker's family) with the Long 1 enhancement (this project's own estimated +40%/level, as the Lash Whip above) for the extra reach the hooks need to snag at range 2: 8x1.4=11.2, rounded to 11. No exact-dice penetration table is given since Flesh Hooks are not built or priced as an armour-cracking weapon; thr imp at ST 22 (2d imp) is a believable puncture against flesh and unarmoured targets, and the grapple note above is the symbiote's actual battlefield function.",
 			"tags": [
 				"Advantage",
 				"Physical",

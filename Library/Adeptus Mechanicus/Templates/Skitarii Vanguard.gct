@@ -1,7 +1,7 @@
 {
 	"version": 5,
 	"id": "Bnu_dpwPGxu6UDAjX",
-	"notes": "A Skitarii Vanguard: the close-range counterpart to the Skitarii Ranger (Adeptus Mechanicus/Templates/Skitarii Ranger.gct), built around the radium carbine and the ambient radiation field its support gear leaks. Point math: ST 12 (+20), DX 13 (+60), IQ 10 (+0), HT 12 (+20) = 100; advantages +80 (Combat Reflexes 15 + Auto-senses, Skitarii Pattern 14 + Augmetic Legs, Combat Pattern 20 + Respirator Plugs 5 + Subdermal Armour Plating 5 + Noospheric Link 8 + Rad-Saturation Field's own near-zero net cost 1 + Skitarii Doctrina Imperatives' GCS-discounted effective 12 points, exactly as the Ranger template uses); disadvantages -71; skills +63. Mechanicus Rank is included disabled by default. Total 172 points: the same \"between Trained Soldier and Elite Human\" band as the Ranger. Weapons (radium carbine, etc.) are equipment, not covered here.\n",
+	"notes": "A Skitarii Vanguard: the close-range counterpart to the Skitarii Ranger (Adeptus Mechanicus/Templates/Skitarii Ranger.gct), built around the radium carbine and the ambient radiation field its support gear leaks. Point math: ST 12 (+20), DX 13 (+60), IQ 10 (+0), HT 12 (+20) = 100; advantages +84 (Combat Reflexes 15 + Auto-senses, Skitarii Pattern 14 + Augmetic Legs, Combat Pattern 20 + Respirator Plugs 5 + Subdermal Armour Plating (3 levels, DR 3) 15 + Noospheric Link 8 + Rad-Saturation Field's own near-zero net cost 1 + Skitarii Doctrina Imperatives' GCS-discounted effective 6 points, exactly as the Ranger template uses); disadvantages -72; skills +63. Mechanicus Rank is included disabled by default. Total 175 points: the same \"between Trained Soldier and Elite Human\" band as the Ranger. Weapons (radium carbine, etc.) are equipment, not covered here.\n",
 	"traits": [
 		{
 			"id": "tnpsNmYdywKEdz2DE",
@@ -76,14 +76,21 @@
 			"id": "tFvfsWjdsIMjIpdvI",
 			"name": "Auto-senses, Skitarii Pattern",
 			"reference": "B60",
-			"local_notes": "Infravision; Acute Vision +2.\n\nLore: Vanguard close-range doctrine doesn't need the Ranger's long zoom train, so they're issued the cheaper standard-pattern auto-senses instead of Ballistic Auto-senses.\n\nDesign: Infravision (B60, 10) + Acute Vision +2 (B35, 2/level, 4) = 14 points.",
+			"local_notes": "Infravision; Acute Vision +2 (a +2 to the Vision roll, applied by the sheet).\n\nLore: Vanguard close-range doctrine doesn't need the Ranger's long zoom train, so they're issued the cheaper standard-pattern auto-senses instead of Ballistic Auto-senses.\n\nDesign: Infravision (B60, 10) + Acute Vision +2 (B35, 2/level, 4) = 14 points.",
 			"tags": [
 				"Advantage",
 				"Physical",
 				"Imperium",
 				"Adeptus Mechanicus"
 			],
-			"base_points": 14
+			"base_points": 14,
+			"features": [
+				{
+					"type": "attribute_bonus",
+					"attribute": "vision",
+					"amount": 2
+				}
+			]
 		},
 		{
 			"id": "tzsj64Xc01KHDfGsj",
@@ -97,7 +104,21 @@
 				"Adeptus Mechanicus",
 				"Skitarii"
 			],
-			"base_points": 20
+			"base_points": 20,
+			"features": [
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"leg"
+					],
+					"amount": 6
+				},
+				{
+					"type": "attribute_bonus",
+					"attribute": "basic_move",
+					"amount": 1
+				}
+			]
 		},
 		{
 			"id": "t9i1J2o1gj4qxKhvB",
@@ -116,7 +137,7 @@
 			"id": "tDin5ka9m1KYkY61W",
 			"name": "Subdermal Armour Plating",
 			"reference": "B46",
-			"local_notes": "DR, all locations; stacks with worn armor.\n\nLore: Ceramite or plasteel weave grafted beneath the skin across the whole body, rather than replacing a specific organ or limb — the augmetic equivalent of the Astartes' Ossmodula, bought by Tech-Priests who expect to take a hit.\n\nDesign: Plain Damage Resistance (B46), 5 points/level, no location restriction since it covers the whole body. Bought here at a default 2 levels (DR 10, 10 points); raise or lower the level to taste.",
+			"local_notes": "DR 1 per level, all locations (2 levels = DR 2); stacks with worn armor.\n\nLore: Ceramite or plasteel weave grafted beneath the skin across the whole body, rather than replacing a specific organ or limb — a whole-body counterpart to the Astartes' Ossmodula (which is DR 3 to torso and vitals only), bought by Tech-Priests who expect to take a hit.\n\nDesign: Plain Damage Resistance (B46), 5 points/level, no location restriction since it covers the whole body. Bought here at a default 2 levels (DR 2, 10 points); raise or lower the level to taste. The DR is a real per-level feature, so changing the level changes the sheet. Suggested levels: Magos 2-3, Skitarii 3, Servitor 4.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -125,7 +146,17 @@
 			],
 			"points_per_level": 5,
 			"can_level": true,
-			"levels": 1
+			"levels": 3,
+			"features": [
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"all"
+					],
+					"amount": 1,
+					"per_level": true
+				}
+			]
 		},
 		{
 			"id": "tjZ0ukiE8tNiTo9qi",
@@ -173,7 +204,7 @@
 		{
 			"id": "Trqh-X_4_F9yPg1E3",
 			"name": "Skitarii Doctrina Imperatives",
-			"local_notes": "Lore: A Skitarii Maniple's cranial implants take a battle-doctrina uploaded before an engagement, biasing every Skitarii in the maniple toward one combat posture at a time: Protector for a defensive cordon, Conqueror for an all-out firing advance, Hunter for pursuit and encirclement. A Skitarii can only run one imperative at a time and must be re-flashed (a Ready maneuver, or a scene break, at the GM's call) to switch.\n\nDesign: Basic Set Alternative Abilities (B61): buy the most expensive ability at full price and the rest at 1/5 cost (round up), since only one can be active. Full prices: Enhanced Parry, All Parries (B51, 10), Conqueror Imperative as a narrow +1 combat Talent (B90-style, 5), Hunter Imperative as Basic Move +1 (B17, 5). GCS applies the Alternative Abilities discount natively for this container type; worked by hand, the effective total is 10 + ceil(5/5) + ceil(5/5) = 12 points.",
+			"local_notes": "Lore: A Skitarii Maniple's cranial implants take a battle-doctrina uploaded before an engagement, biasing every Skitarii in the maniple toward one combat posture at a time: Protector (hold ground and shoot) or Conqueror (advance and shoot). The Codex names these two; the earlier draft's third, Hunter, is not in the sources this project could identify and has been dropped. A Skitarii can only run one imperative at a time and must be re-flashed (a Ready maneuver, or a scene break, at the GM's call) to switch.\n\nDesign: Basic Set Alternative Abilities (B61): buy the most expensive ability at full price and the rest at 1/5 cost (round up), since only one can be active. Full prices: Protector and Conqueror are each a narrow +1 combat Talent (B90-style, 5). GCS applies the Alternative Abilities discount natively for this container type; worked by hand, the effective total is 5 + ceil(5/5) = 6 points.",
 			"tags": [
 				"Advantage",
 				"Mental",
@@ -186,22 +217,15 @@
 				{
 					"id": "tjn5IX2noZfpdKNE8",
 					"name": "Protector Imperative",
-					"reference": "B51",
-					"local_notes": "Enhanced Parry (All Parries) +1.",
-					"base_points": 10
+					"reference": "B90",
+					"local_notes": "+1 to Guns and Gunner skills when the Skitarii did not move this turn (Talent-style construction, holding position).",
+					"base_points": 5
 				},
 				{
 					"id": "tryAK8ywM8aPqZnHE",
 					"name": "Conqueror Imperative",
 					"reference": "B90",
-					"local_notes": "+1 to Guns and Gunner skills (Talent-style construction).",
-					"base_points": 5
-				},
-				{
-					"id": "t1fOWs4G5eMNE6ZE3",
-					"name": "Hunter Imperative",
-					"reference": "B17",
-					"local_notes": "Basic Move +1.",
+					"local_notes": "+1 to Guns and Gunner skills when the Skitarii moved this turn (Talent-style construction, advancing fire).",
 					"base_points": 5
 				}
 			]

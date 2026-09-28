@@ -1,12 +1,12 @@
 {
 	"version": 5,
 	"id": "BK4fiyK6zThrwhzSk",
-	"notes": "NPC creature stat block, not a player-facing race — a Termagant is disposable swarm biomass, not an individual worth building as a PC. Point math: Tyranid Biology 15 + Body Lens: Termagant 25 + Fleshborer 54 + skills 6 = 100 points. Stats: SM -1, ST 9, DX 11, IQ 4, HT 11, HP 9, Will 4, Per 4, natural chitin torso DR 25 (Weak Points 7, eye DR 12) — framework.md's Termagant anchor line exactly. This lands at the bottom of framework.md's Trained Soldier tier (100-175), most of it spent on its fleshborer symbiote rather than the animal underneath: a cheap, mass-produced gun-beast that is only dangerous in numbers and only disciplined while a synapse creature holds its leash. The point total is for GM reference (how much a Termagant \"costs\" relative to other bioforms), never a measure of individual threat or party balance.\nWeapon-symbiote: carries a Fleshborer, built as a natural-attack trait in data/xenos/tyranids/bio-weapons.yaml.\n",
+	"notes": "NPC creature stat block, not a player-facing race — a Termagant is disposable swarm biomass, not an individual worth building as a PC. Point math: Tyranid Biology 20 + Body Lens: Termagant 25 + Fleshborer 54 + skills 6 = 105 points. Stats: SM -1, ST 9, DX 11, IQ 4, HT 11, HP 9, Will 4, Per 4, natural chitin torso DR 25 (Weak Points 7, eye DR 12) — framework.md's Termagant anchor line exactly. This lands at the bottom of framework.md's Trained Soldier tier (100-175), most of it spent on its fleshborer symbiote rather than the animal underneath: a cheap, mass-produced gun-beast that is only dangerous in numbers and only disciplined while a synapse creature holds its leash. The point total is for GM reference (how much a Termagant \"costs\" relative to other bioforms), never a measure of individual threat or party balance.\nWeapon-symbiote: carries a Fleshborer, built as a natural-attack trait in data/xenos/tyranids/bio-weapons.yaml.\n",
 	"traits": [
 		{
 			"id": "TYQB32op6-HFBISjW",
 			"name": "Tyranid Biology",
-			"local_notes": "Lore: The Tyranid Biology shared by every bioform in a Hive Fleet: bound to the Hive Mind from the moment it is grown, disciplined and fearless only so long as a synapse creature's link holds, mute and without individual culture, and adapted to digest or shrug off almost anything a target world can throw at it. This is the baseline every body-type lens below (Termagant through Carnifex) builds on top of; the lens supplies the bioform's own attributes, chitin DR, and any special biology (leaping legs, rending claws, psychic organs, wings) that role calls for.\n\nDesign: 5 (Hive Mind Link) - 10 (Synapse Dependence) + 5 (Synapse Discipline) - 15 (Cannot Speak) + 0 (No Independent Society) + 30 (Adapted Biology) = 15 points of shared physiology before attributes, chitin DR, special biology, or skills. See each template for a full stat block built on top of this plus a body- type lens.",
+			"local_notes": "Lore: The Tyranid Biology shared by every bioform in a Hive Fleet: bound to the Hive Mind from the moment it is grown, disciplined and fearless only so long as a synapse creature's link holds, mute and without individual culture, and adapted to digest or shrug off almost anything a target world can throw at it. This is the baseline every body-type lens below (Termagant through Carnifex) builds on top of; the lens supplies the bioform's own attributes, chitin DR, and any special biology (leaping legs, rending claws, psychic organs, wings) that role calls for.\n\nDesign: 5 (Hive Mind Link) - 10 (Synapse Dependence) + 10 (Synapse Discipline) - 15 (Cannot Speak) + 0 (No Independent Society) + 30 (Adapted Biology) = 20 points of shared physiology before attributes, chitin DR, special biology, or skills. See each template for a full stat block built on top of this plus a body- type lens.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -52,21 +52,22 @@
 				{
 					"id": "tuD6_-ZoVSfsxEeAh",
 					"name": "Synapse Discipline",
-					"local_notes": "While linked, Synapse Dependence's instinctive-behaviour effects are fully suppressed: the organism fights with total discipline, no fear, and follows the Hive Mind's tactical intent through the nearest synapse creature exactly as ordered. The moment the link breaks (the synapse creature dies, moves out of range, or is itself cut off from a larger synapse creature further up the chain), Synapse Dependence resumes immediately.\n\nLore: A swarm fighting under a synapse creature's watch is unrecognisable from the same swarm cut loose — utterly fearless, perfectly coordinated, and willing to press an attack to the last organism. This is the other half of the same well-documented Codex mechanic that makes synapse creatures the Imperium's priority targets.\n\nDesign: A narrow conditional Will/Fright Check bonus, built the same way this project's Ork WAAAGH! Gestalt prices an equivalent situational bonus (5 points) rather than a flat, always-on Fearlessness — here the \"always on\" case is Synapse Dependence's disadvantage instead, and this trait is the paired benefit that replaces it under a synapse creature's link.",
+					"reference": "B55",
+					"local_notes": "Fearlessness 5 (+5 to Fright Checks and to Will rolls to resist fear, intimidation and Bestial) and High Pain Threshold (no shock penalty, no stun from injury), both only while within the range of a Synapse Creature's link (see that trait). While linked, Synapse Dependence's instinctive-behaviour effects are fully suppressed: the organism fights with total discipline, no fear, and follows the Hive Mind's tactical intent through the nearest synapse creature exactly as ordered. The moment the link breaks (the synapse creature dies, moves out of range, or is itself cut off from a larger synapse creature further up the chain), Synapse Dependence resumes immediately and the fearlessness and pain immunity go with it.\n\nLore: A swarm fighting under a synapse creature's watch is unrecognisable from the same swarm cut loose: utterly fearless, feeling no pain, perfectly coordinated, and willing to press an attack to the last organism. This is the other half of the same well-documented Codex mechanic that makes synapse creatures the Imperium's priority targets, and matches framework.md's \"no fear or pain within synapse.\"\n\nDesign: Fearlessness 5 (B55, 2 points/level = 10) plus High Pain Threshold (B59, 10) = 20 points, with Accessibility (only while linked to a synapse creature, -50%): 20 x 0.5 = 10 points. Earlier drafts priced a 5-point conditional Will bonus that never delivered the fearlessness and pain immunity the framework and the fiction give Tyranids in synapse.",
 					"tags": [
 						"Advantage",
 						"Mental",
 						"Xenos",
 						"Tyranids"
 					],
-					"base_points": 5,
-					"features": [
+					"modifiers": [
 						{
-							"type": "conditional_modifier",
-							"situation": "to Will rolls and Fright Checks, and to resist Bestial's effects, while within the range of a Synapse Creature's link (see that trait)",
-							"amount": 4
+							"id": "mGWxr4bf7geGkMb8L",
+							"name": "Accessibility (only while linked to a synapse creature)",
+							"cost_adj": "-50%"
 						}
-					]
+					],
+					"base_points": 20
 				},
 				{
 					"id": "tH0D7lL7D3LpRFg8H",
@@ -122,7 +123,7 @@
 		{
 			"id": "TnnBxqxRlY4XjX0J1",
 			"name": "Body Lens: Termagant",
-			"local_notes": "Lore: The Termagant: the Hive Fleet's basic gun-beast, grown cheaply and in huge numbers to advance in a firing line ahead of, or alongside, heavier bioforms. Consistent across Codex background and Black Library's Hive Fleet fiction as the swarm's most disposable ranged infantry.\n\nDesign: -100 (Attribute Modifiers) + 125 (Chitin DR 25, 5/level) = 25 points, added to Tyranid Biology's 15 for 40 points of physiology alone before skills and its weapon-symbiote. See the Termagant template. NPC creature stat block only, not a player-facing race; the point total below is for GM reference, not party balance.",
+			"local_notes": "Lore: The Termagant: the Hive Fleet's basic gun-beast, grown cheaply and in huge numbers to advance in a firing line ahead of, or alongside, heavier bioforms. Consistent across Codex background and Black Library's Hive Fleet fiction as the swarm's most disposable ranged infantry.\n\nDesign: -100 (Attribute Modifiers) + 125 (Chitin DR 25, 5/level) = 25 points, added to Tyranid Biology's 20 for 45 points of physiology alone before skills and its weapon-symbiote. See the Termagant template. NPC creature stat block only, not a player-facing race; the point total below is for GM reference, not party balance.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -245,7 +246,7 @@
 		{
 			"id": "s0TOnlWnXEVvgQAYZ",
 			"name": "Innate Attack",
-			"local_notes": "Lore: A Termagant's fleshborer beetles are loosed with a simple, drilled reflex rather than any real marksmanship — the gun-beast points and the Hive Mind's instinct does the rest.\n\nDesign: Innate Attack (Projectile) (DX/E, B269) at DX+2 (13) for 4 points, the skill that governs any Innate Attack-built natural weapon's to-hit roll, matching the fleshborer's own build once bio-weapons.yaml defines it.",
+			"local_notes": "Lore: A Termagant's fleshborer beetles are loosed with a simple, drilled reflex rather than any real marksmanship — the gun-beast points and the Hive Mind's instinct does the rest.\n\nDesign: Innate Attack (Projectile) (DX/E, B201) at DX+2 (13) for 4 points, the skill that governs any Innate Attack-built natural weapon's to-hit roll, matching the fleshborer's own build once bio-weapons.yaml defines it.",
 			"tags": [
 				"Xenos",
 				"Tyranids"

@@ -1,7 +1,7 @@
 {
 	"version": 5,
 	"id": "B2t-Wmr_zvm9g-PF8",
-	"notes": "A Militarum Tempestus Scion: Schola Progenium-raised, hot-shot lasgun (\"hellgun\") armed, an elite special-operations trooper rather than a line Guardsman. Point math: ST 12 (+20), DX 14 (+80), IQ 11 (+20), HT 13 (+30) = 150; advantages +40; disadvantages -55; skills +71. Total 206 points, inside framework.md's \"Elite human (200-350)\" tier, toward its lower end (a veteran Inquisitorial acolyte or Battle Sister should sit higher). No psychic abilities here; add from the separate psyker power library if a GM wants a Scion with sanctioned psyker support attached.\n",
+	"notes": "A Militarum Tempestus Scion: Schola Progenium-raised, hot-shot lasgun (\"hellgun\") armed, an elite special-operations trooper rather than a line Guardsman. Point math: ST 12 (+20), DX 14 (+80), IQ 11 (+20), HT 13 (+30) = 150; advantages +40; disadvantages -55; skills +73. Total 208 points, inside framework.md's \"Elite human (200-350)\" tier, toward its lower end (the Battle Sister and Inquisitorial acolyte sit in the same band, a little above it). No psychic abilities here; add from the separate psyker power library if a GM wants a Scion with sanctioned psyker support attached.\n",
 	"traits": [
 		{
 			"id": "tJInSkJlHvRSxqkpE",
@@ -22,7 +22,7 @@
 		{
 			"id": "t3QSqepfbRUdZ_Iow",
 			"name": "DX",
-			"local_notes": "Lore: Scions are drilled from childhood in the Schola Progenium specifically for weapons proficiency and small-unit special operations; Only War and Dark Heresy both model Tempestus Scions with noticeably better combat stats than a line Guardsman, used here for relative calibration.\n\nDesign: DX 14 (+4 from baseline), 20 pts/level (B15).",
+			"local_notes": "Lore: Scions are drilled from childhood in the Schola Progenium specifically for weapons proficiency and small-unit special operations. Fantasy Flight and Cubicle 7 material treats Scions as elite, better than line troops; used here for relative calibration only, since there is no single canonical stat line.\n\nDesign: DX 14 (+4 from baseline), 20 pts/level (B15).",
 			"tags": [
 				"Attribute"
 			],
@@ -95,7 +95,7 @@
 			"id": "t7C943CaWsZWkiAoW",
 			"name": "High Pain Threshold",
 			"reference": "B59",
-			"local_notes": "Lore: Conditioning and selection produce troopers who keep fighting through wounds that would drop a conscript.\n\nDesign: Basic Set High Pain Threshold (B59), 10 points.",
+			"local_notes": "Lore: Schola Progenium conditioning and brutal selection train recruits to keep fighting through pain; this is a design choice rather than a named fiction beat.\n\nDesign: Basic Set High Pain Threshold (B59), 10 points.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -107,7 +107,7 @@
 			"id": "tHbTmFemmnbk1-gWm",
 			"name": "Fanaticism (The God-Emperor)",
 			"reference": "B136",
-			"local_notes": "Lore: Schola Progenium indoctrination is, if anything, more thorough than a regular Guard upbringing.\n\nDesign: Basic Set Fanaticism (B136), flat -15, taken for \"the Emperor/the Imperial Creed\" as the group/ideal. Not leveled in Basic Set.",
+			"local_notes": "Lore: Schola Progenium indoctrination is, if anything, more thorough than a regular Guard upbringing.\n\nDesign: Basic Set Fanaticism (B136), flat -15, taken for \"the Emperor/the Imperial Creed\" as the group/ideal. Not leveled in Basic Set. The Guardsman template carries it disabled: enable it for zealot regiments or characters, and conscript, penal and feral troops leave it off.",
 			"tags": [
 				"Disadvantage",
 				"Mental",
@@ -165,6 +165,53 @@
 			"base_points": -5
 		},
 		{
+			"id": "TXlwin6XhydaGMjQT",
+			"name": "Schola Progenium Origin",
+			"local_notes": "Lore: Raised as a ward of the state in the Schola Progenium, the orphanage and academy system that feeds the Commissariat, the Militarum Tempestus and the Sororitas with doctrinally reliable recruits: rote catechism, hard drill, and no family but the institution.\n\nDesign: Net 0 points, two Basic Set perks/quirks. Disabled by default; GM/player enables it. Fills the gap the Scion and Commissar templates leave when they cite Schola upbringing.",
+			"tags": [
+				"Imperium",
+				"Ecclesiarchy"
+			],
+			"children": [
+				{
+					"id": "tj85hBjVKkEVOUO3t",
+					"name": "Schola Catechism",
+					"local_notes": "Lore: Years of daily doctrine leave the Creed as second nature.\n\nDesign: Perk (B9), +1 to Theology (Imperial Creed).",
+					"tags": [
+						"Perk",
+						"Imperium"
+					],
+					"base_points": 1,
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "Theology"
+							},
+							"amount": 1,
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Imperial Creed"
+							}
+						}
+					]
+				},
+				{
+					"id": "tUG2CyFY_TcmKxPmj",
+					"name": "Raised as a Ward of the State",
+					"local_notes": "Lore: No family, no home world worth the name; the institution was the only parent.\n\nDesign: Quirk (B9), roleplaying flag only.",
+					"tags": [
+						"Quirk",
+						"Imperium"
+					],
+					"base_points": -1
+				}
+			],
+			"disabled": true
+		},
+		{
 			"id": "tQ9yz3mcPzfClWU-N",
 			"name": "Overconfidence",
 			"reference": "B148",
@@ -205,13 +252,24 @@
 		{
 			"id": "sNH6d2-DMwhL4xeog",
 			"name": "Guns",
-			"local_notes": "Lore: Frag/krak grenade use.\n\nDesign: DX+1 (15) for 2 points, Easy.",
+			"local_notes": "Lore: Launcher-fed frag and krak grenades only. Hand-thrown grenades use Throwing (below).\n\nDesign: DX+1 (15) for 2 points, Easy.",
 			"tags": [
 				"Imperium",
 				"Astra Militarum"
 			],
 			"specialization": "Grenade Launcher",
 			"difficulty": "dx/e",
+			"points": 2
+		},
+		{
+			"id": "sT_8_pbpG20c7KZ8E",
+			"name": "Throwing",
+			"reference": "B226",
+			"local_notes": "Lore: Hand-thrown frag and krak grenades, which use Throwing rather than Guns (Grenade Launcher).\n\nDesign: DX+0 (14) for 2 points, Average (B226).",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "dx/a",
 			"points": 2
 		},
 		{
@@ -278,7 +336,7 @@
 		{
 			"id": "s_gygSI3aXL-3_GLI",
 			"name": "Soldier",
-			"local_notes": "Lore: Broad military competence, including logistics for supporting operations far from the front.\n\nDesign: IQ+3 (14) for 8 points, Average.",
+			"local_notes": "Lore: Broad military competence, including logistics for supporting operations far from the front.\n\nDesign: IQ+2 (13) for 8 points, Average.",
 			"tags": [
 				"Imperium"
 			],

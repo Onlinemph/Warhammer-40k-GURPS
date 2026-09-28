@@ -1,7 +1,7 @@
 {
 	"version": 5,
 	"id": "BXVwIS29m3vgaJjbp",
-	"notes": "A Sicarian Ruststalker: a melee-specialist Skitarii variant built around raw speed and chordclaw/transonic blade work rather than firepower, fielded to close distance fast and shred whatever's waiting at the other end. Point math: ST 12 (+20), DX 15 (+100), IQ 9 (-20), HT 12 (+20) = 120; advantages +77 (Combat Reflexes 15 + Auto-senses, Skitarii Pattern 14 + Augmetic Legs, Combat Pattern 20 + Respirator Plugs 5 + Subdermal Armour Plating 5 + Enhanced Parry, All Parries 10 + Noospheric Link 8); disadvantages -72; skills +49. Total 174 points, in the same between-tiers band as the Skitarii Ranger/Vanguard, with the points shifted hard from IQ into DX to match a Ruststalker's role. Enable the disabled \"Sicarian Infiltrator Conversion\" lens below to reflavor this template as an Infiltrator instead (see that lens for what it changes). Weapons (chordclawss, transonic blades, flechette blasters, etc.) are equipment, not covered here.\n",
+	"notes": "A Sicarian Ruststalker: a melee-specialist Skitarii variant built around raw speed and chordclaw/transonic blade work rather than firepower, fielded to close distance fast and shred whatever's waiting at the other end. Point math: ST 12 (+20), DX 15 (+100), IQ 9 (-20), HT 12 (+20) = 120; advantages +87 (Combat Reflexes 15 + Auto-senses, Skitarii Pattern 14 + Augmetic Legs, Combat Pattern 20 + Respirator Plugs 5 + Subdermal Armour Plating (3 levels, DR 3) 15 + Enhanced Parry, All Parries 10 + Noospheric Link 8); disadvantages -72; skills +51. Total 186 points, in the same between-tiers band as the Skitarii Ranger/Vanguard, with the points shifted hard from IQ into DX to match a Ruststalker's role. Enable the disabled \"Sicarian Infiltrator Conversion\" lens below to reflavor this template as an Infiltrator instead (see that lens for what it changes). Weapons (chordclawss, transonic blades, flechette blasters, etc.) are equipment, not covered here.\n",
 	"traits": [
 		{
 			"id": "tueRYulJ5JTeuedUV",
@@ -83,14 +83,21 @@
 			"id": "tY-LQp9GQuQuzzVqx",
 			"name": "Auto-senses, Skitarii Pattern",
 			"reference": "B60",
-			"local_notes": "Infravision; Acute Vision +2.\n\nLore: The standard-issue ocular augmetic fitted to almost every Skitarii and forge-world menial: crude compared to a Magos' oculars, but enough to fight in smoke, dust, and near-total darkness without a lumen pack.\n\nDesign: Infravision (B60, 10) + Acute Vision +2 (B35, 2/level, 4) = 14 points.",
+			"local_notes": "Infravision; Acute Vision +2 (a +2 to the Vision roll, applied by the sheet).\n\nLore: The standard-issue ocular augmetic fitted to almost every Skitarii and forge-world menial: crude compared to a Magos' oculars, but enough to fight in smoke, dust, and near-total darkness without a lumen pack.\n\nDesign: Infravision (B60, 10) + Acute Vision +2 (B35, 2/level, 4) = 14 points.",
 			"tags": [
 				"Advantage",
 				"Physical",
 				"Imperium",
 				"Adeptus Mechanicus"
 			],
-			"base_points": 14
+			"base_points": 14,
+			"features": [
+				{
+					"type": "attribute_bonus",
+					"attribute": "vision",
+					"amount": 2
+				}
+			]
 		},
 		{
 			"id": "tphHSfojuAy4XYw6q",
@@ -104,7 +111,21 @@
 				"Adeptus Mechanicus",
 				"Skitarii"
 			],
-			"base_points": 20
+			"base_points": 20,
+			"features": [
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"leg"
+					],
+					"amount": 6
+				},
+				{
+					"type": "attribute_bonus",
+					"attribute": "basic_move",
+					"amount": 1
+				}
+			]
 		},
 		{
 			"id": "tvlIaYA8EzqPR-EfS",
@@ -123,7 +144,7 @@
 			"id": "tzV5w6YuOrFA70Ldz",
 			"name": "Subdermal Armour Plating",
 			"reference": "B46",
-			"local_notes": "DR, all locations; stacks with worn armor.\n\nLore: Ceramite or plasteel weave grafted beneath the skin across the whole body, rather than replacing a specific organ or limb — the augmetic equivalent of the Astartes' Ossmodula, bought by Tech-Priests who expect to take a hit.\n\nDesign: Plain Damage Resistance (B46), 5 points/level, no location restriction since it covers the whole body. Bought here at a default 2 levels (DR 10, 10 points); raise or lower the level to taste.",
+			"local_notes": "DR 1 per level, all locations (2 levels = DR 2); stacks with worn armor.\n\nLore: Ceramite or plasteel weave grafted beneath the skin across the whole body, rather than replacing a specific organ or limb — a whole-body counterpart to the Astartes' Ossmodula (which is DR 3 to torso and vitals only), bought by Tech-Priests who expect to take a hit.\n\nDesign: Plain Damage Resistance (B46), 5 points/level, no location restriction since it covers the whole body. Bought here at a default 2 levels (DR 2, 10 points); raise or lower the level to taste. The DR is a real per-level feature, so changing the level changes the sheet. Suggested levels: Magos 2-3, Skitarii 3, Servitor 4.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -132,7 +153,17 @@
 			],
 			"points_per_level": 5,
 			"can_level": true,
-			"levels": 1
+			"levels": 3,
+			"features": [
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"all"
+					],
+					"amount": 1,
+					"per_level": true
+				}
+			]
 		},
 		{
 			"id": "t-MGtKBvmsrAqht0e",
@@ -246,7 +277,7 @@
 		{
 			"id": "TVcm21e0F5Cm1VLFt",
 			"name": "Lens: Sicarian Infiltrator Conversion",
-			"local_notes": "Lore: Sicarian Infiltrators trade the Ruststalker's close-in chordclaw assault role for ranged ambush work with flechette blasters and taser goads: less pure melee speed, more patience and fieldcraft. Enabling this lens is a flag for that choice; rebalance the skill list by hand (shift points from Broadsword into Guns (Rifle) and Stealth) to match — this lens itself only carries the flavor perks that don't depend on the specific weapon loadout.\n\nDesign: Net 0 points, per-pattern flavor lens (see framework.md, origin lenses, for the pattern this follows).",
+			"local_notes": "Lore: Sicarian Infiltrators trade the Ruststalker's close-in chordclaw assault role for ranged ambush work with flechette blasters and taser goads: less pure melee speed, more patience and fieldcraft. Enabling this lens is a flag for that choice; rebalance the skill list by hand (shift points from Shortsword into Guns (Rifle) and Stealth) to match — this lens itself only carries the flavor perks that don't depend on the specific weapon loadout.\n\nDesign: Net +1 point (+1 Ambush Discipline, +1 Neurostatic Aura, -1 quirk), a per-pattern flavor lens (see framework.md, origin lenses, for the pattern this follows).",
 			"tags": [
 				"Imperium",
 				"Adeptus Mechanicus",
@@ -275,6 +306,16 @@
 					]
 				},
 				{
+					"id": "tQdpD1Giclr0QfI81",
+					"name": "Neurostatic Aura",
+					"local_notes": "Enemies within 5 yards take -1 on Fright Checks while the Infiltrator is in sight.\n\nLore: Sicarian Infiltrators are known for a neurostatic aura that saps the nerve of enemies close by (Codex: Adeptus Mechanicus, a tabletop source; moderate confidence).\n\nDesign: Perk (B9), a small tabletop-derived flavour effect.",
+					"tags": [
+						"Perk",
+						"Imperium"
+					],
+					"base_points": 1
+				},
+				{
 					"id": "tmEefnlIMktZJeHsa",
 					"name": "Prefers the Kill at Range",
 					"local_notes": "Lore: An Infiltrator's conditioning steers it away from melee engagement whenever a shot is available instead.\n\nDesign: Quirk (B9), roleplaying flag only.",
@@ -290,9 +331,9 @@
 	],
 	"skills": [
 		{
-			"id": "sTdXYaVDCn27bHoQF",
-			"name": "Broadsword",
-			"local_notes": "Lore: Chordclaws and transonic blades are disruption-field-adjacent melee weapons per framework.md's weapon-skill table (Broadsword covers power/disruption-field blades generally).\n\nDesign: DX+5 (20) for 20 points, Average (B170).",
+			"id": "sZ0W4uSEU961VeVr4",
+			"name": "Shortsword",
+			"local_notes": "Lore: The transonic razor and transonic blades are short blades, so they use Shortsword (the weapons file lists them under it).\n\nDesign: DX+5 (20) for 20 points, Average (B170).",
 			"tags": [
 				"Imperium",
 				"Adeptus Mechanicus",
@@ -300,6 +341,18 @@
 			],
 			"difficulty": "dx/a",
 			"points": 20
+		},
+		{
+			"id": "sPDyc8k1Os4LfRiCF",
+			"name": "Spear",
+			"local_notes": "Lore: The chordclaw (weapons file) is a spear-pattern weapon, a secondary skill for the Ruststalker.\n\nDesign: DX+0 (15) for 2 points, Average.",
+			"tags": [
+				"Imperium",
+				"Adeptus Mechanicus",
+				"Skitarii"
+			],
+			"difficulty": "dx/a",
+			"points": 2
 		},
 		{
 			"id": "snerIfTSGsQp5DuSq",

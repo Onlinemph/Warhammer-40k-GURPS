@@ -1,12 +1,12 @@
 {
 	"version": 5,
 	"id": "BvkuEX6vpQaVvCRoG",
-	"notes": "NPC creature stat block, not a player-facing race. Point math: Tyranid Biology 15 + Body Lens: Hormagaunt 85 + Scything Talons 28 + skills 4 = 132 points. Stats: SM -1, ST 10, DX 13, IQ 4, HT 11, HP 10, Will 4, Per 4, natural chitin torso DR 25 (Weak Points 7, eye DR 12), Super Jump 1 (leaping musculature) — framework.md's Hormagaunt anchor line exactly. This lands at the low end of framework.md's Trained Soldier tier (100-175): a genuinely fast, dangerous close-combat swarm killer, but still disposable biomass rather than an individual threat outside a swarm. The point total is for GM reference only.\nWeapon-symbiote: carries Scything Talons, built as a natural-attack trait in data/xenos/tyranids/bio-weapons.yaml.\n",
+	"notes": "NPC creature stat block, not a player-facing race. Point math: Tyranid Biology 20 + Body Lens: Hormagaunt 85 + Scything Talons (Hormagaunt) 45 + skills 4 = 154 points. Stats: SM -1, ST 10, DX 13, IQ 4, HT 11, HP 10, Will 4, Per 4, natural chitin torso DR 25 (Weak Points 7, eye DR 12), Super Jump 1 (leaping musculature) — framework.md's Hormagaunt anchor line exactly. This lands in the middle of framework.md's Trained Soldier tier (100-175): a genuinely fast, dangerous close-combat swarm killer, but still disposable biomass rather than an individual threat outside a swarm. The point total is for GM reference only.\nWeapon-symbiote: carries Scything Talons (Hormagaunt), 5d(2) cut at its ST 10 (the ST-24 anchor version would give only 3d(2) and could not hurt flak), built as a natural-attack trait in data/xenos/tyranids/bio-weapons.yaml.\n",
 	"traits": [
 		{
 			"id": "TDC2AU70ysgAE2WL7",
 			"name": "Tyranid Biology",
-			"local_notes": "Lore: The Tyranid Biology shared by every bioform in a Hive Fleet: bound to the Hive Mind from the moment it is grown, disciplined and fearless only so long as a synapse creature's link holds, mute and without individual culture, and adapted to digest or shrug off almost anything a target world can throw at it. This is the baseline every body-type lens below (Termagant through Carnifex) builds on top of; the lens supplies the bioform's own attributes, chitin DR, and any special biology (leaping legs, rending claws, psychic organs, wings) that role calls for.\n\nDesign: 5 (Hive Mind Link) - 10 (Synapse Dependence) + 5 (Synapse Discipline) - 15 (Cannot Speak) + 0 (No Independent Society) + 30 (Adapted Biology) = 15 points of shared physiology before attributes, chitin DR, special biology, or skills. See each template for a full stat block built on top of this plus a body- type lens.",
+			"local_notes": "Lore: The Tyranid Biology shared by every bioform in a Hive Fleet: bound to the Hive Mind from the moment it is grown, disciplined and fearless only so long as a synapse creature's link holds, mute and without individual culture, and adapted to digest or shrug off almost anything a target world can throw at it. This is the baseline every body-type lens below (Termagant through Carnifex) builds on top of; the lens supplies the bioform's own attributes, chitin DR, and any special biology (leaping legs, rending claws, psychic organs, wings) that role calls for.\n\nDesign: 5 (Hive Mind Link) - 10 (Synapse Dependence) + 10 (Synapse Discipline) - 15 (Cannot Speak) + 0 (No Independent Society) + 30 (Adapted Biology) = 20 points of shared physiology before attributes, chitin DR, special biology, or skills. See each template for a full stat block built on top of this plus a body- type lens.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -52,21 +52,22 @@
 				{
 					"id": "tonZZP4fYaVh8W14P",
 					"name": "Synapse Discipline",
-					"local_notes": "While linked, Synapse Dependence's instinctive-behaviour effects are fully suppressed: the organism fights with total discipline, no fear, and follows the Hive Mind's tactical intent through the nearest synapse creature exactly as ordered. The moment the link breaks (the synapse creature dies, moves out of range, or is itself cut off from a larger synapse creature further up the chain), Synapse Dependence resumes immediately.\n\nLore: A swarm fighting under a synapse creature's watch is unrecognisable from the same swarm cut loose — utterly fearless, perfectly coordinated, and willing to press an attack to the last organism. This is the other half of the same well-documented Codex mechanic that makes synapse creatures the Imperium's priority targets.\n\nDesign: A narrow conditional Will/Fright Check bonus, built the same way this project's Ork WAAAGH! Gestalt prices an equivalent situational bonus (5 points) rather than a flat, always-on Fearlessness — here the \"always on\" case is Synapse Dependence's disadvantage instead, and this trait is the paired benefit that replaces it under a synapse creature's link.",
+					"reference": "B55",
+					"local_notes": "Fearlessness 5 (+5 to Fright Checks and to Will rolls to resist fear, intimidation and Bestial) and High Pain Threshold (no shock penalty, no stun from injury), both only while within the range of a Synapse Creature's link (see that trait). While linked, Synapse Dependence's instinctive-behaviour effects are fully suppressed: the organism fights with total discipline, no fear, and follows the Hive Mind's tactical intent through the nearest synapse creature exactly as ordered. The moment the link breaks (the synapse creature dies, moves out of range, or is itself cut off from a larger synapse creature further up the chain), Synapse Dependence resumes immediately and the fearlessness and pain immunity go with it.\n\nLore: A swarm fighting under a synapse creature's watch is unrecognisable from the same swarm cut loose: utterly fearless, feeling no pain, perfectly coordinated, and willing to press an attack to the last organism. This is the other half of the same well-documented Codex mechanic that makes synapse creatures the Imperium's priority targets, and matches framework.md's \"no fear or pain within synapse.\"\n\nDesign: Fearlessness 5 (B55, 2 points/level = 10) plus High Pain Threshold (B59, 10) = 20 points, with Accessibility (only while linked to a synapse creature, -50%): 20 x 0.5 = 10 points. Earlier drafts priced a 5-point conditional Will bonus that never delivered the fearlessness and pain immunity the framework and the fiction give Tyranids in synapse.",
 					"tags": [
 						"Advantage",
 						"Mental",
 						"Xenos",
 						"Tyranids"
 					],
-					"base_points": 5,
-					"features": [
+					"modifiers": [
 						{
-							"type": "conditional_modifier",
-							"situation": "to Will rolls and Fright Checks, and to resist Bestial's effects, while within the range of a Synapse Creature's link (see that trait)",
-							"amount": 4
+							"id": "m77lFopuxHkoOvov8",
+							"name": "Accessibility (only while linked to a synapse creature)",
+							"cost_adj": "-50%"
 						}
-					]
+					],
+					"base_points": 20
 				},
 				{
 					"id": "tAmL2FPcInDKR4DeC",
@@ -122,7 +123,7 @@
 		{
 			"id": "TzpM4G03Mz1oCUJae",
 			"name": "Body Lens: Hormagaunt",
-			"local_notes": "Lore: The Hormagaunt: a close-combat swarm killer bred for speed over firepower, closing on its target in long bounding leaps rather than a flat sprint before its scything talons go to work. Codex background across editions and Black Library's Hive Fleet fiction both treat Hormagaunts as the swarm's fastest melee threat at this tier.\n\nDesign: -50 (Attribute Modifiers) + 125 (Chitin DR 25) + 10 (Leaping Musculature) = 85 points, added to Tyranid Biology's 15 for 100 points of physiology alone before skills and its weapon-symbiote. See the Hormagaunt template. NPC creature stat block only.",
+			"local_notes": "Lore: The Hormagaunt: a close-combat swarm killer bred for speed over firepower, closing on its target in long bounding leaps rather than a flat sprint before its scything talons go to work. Codex background across editions and Black Library's Hive Fleet fiction both treat Hormagaunts as the swarm's fastest melee threat at this tier.\n\nDesign: -50 (Attribute Modifiers) + 125 (Chitin DR 25) + 10 (Leaping Musculature) = 85 points, added to Tyranid Biology's 20 for 105 points of physiology alone before skills and its weapon-symbiote. See the Hormagaunt template. NPC creature stat block only.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -204,31 +205,31 @@
 			]
 		},
 		{
-			"id": "t4pR_vyrRwTIb5rZU",
-			"name": "Scything Talons",
-			"reference": "B271",
-			"local_notes": "Lore: A pair of long, chitinous cutting blades grown from the forearms — the single most common melee symbiote in the swarm, carried by everything from Genestealers to Hive Tyrants in one form or another. Codex: Tyranids background across editions treats scything talons as the baseline killing weapon: not the swarm's hardest-hitting blade, but reliable, always-on, and lethal against anything short of the heaviest personal armour.\n\nDesign: Framework.md's own anchor: \"Scything talons | sw+2d(2) cut.\" Built at a Tyranid Warrior's own ST 24 (sw 4d+2, framework's bioform table): Cutting Striker (B271, 7 points) with Armor Divisor (2) (B102, +50%) = 7x1.5=10.5, rounded to 11, for the bare sw+0(2) cut baseline the wielder's own ST already provides for free; the anchor's own +2d on top is bought separately as Innate Attack (Cut) (B61, 7/die) at 2 dice = 14, with Armor Divisor (2) (+50%) and Melee Attack, Reach C (B112, -30%): net +20%, 14x1.2=16.8, rounded to 17. Total 11+17=28. Checked by exact dice distribution at ST 24 (sw+2d(2) = 6d+2(2)): averages 23 and penetrates flak (DR 30, eff. 15) 96.4% of the time, carapace (DR 70, eff. 35) 0.06%, and rounds to 0% against anything heavier — a real killer of unarmoured and flak-armoured targets and essentially no threat to rigid plate, matching \"lethal against anything short of the heaviest personal armour\" without overstating it against carapace. Skill: Brawling, per framework.md's own weapon- skill table for natural close-combat weapons (power fist/lightning claws use the same skill).",
+			"id": "tnpHmBbZRXo30hwaa",
+			"name": "Scything Talons (Hormagaunt)",
+			"reference": "B88",
+			"local_notes": "Lore: The Hormagaunt's own scything talons: a leaping killer's blades, swung in a frenzy by a body built to close on prey and shred it. Codex: Tyranids background treats the Hormagaunt as the swarm's melee shock troop, whose whole purpose is to cut down infantry in the open; a Hormagaunt brood that cannot hurt a flak-armoured Guardsman would not be worth growing.\n\nDesign: Framework.md's Scything Talons anchor (sw+2d(2) cut) is written at a Tyranid Warrior's ST 24; at a Hormagaunt's ST 10 (sw 1d) it yields only 3d(2), which penetrates flak (DR 30, eff. 15) 4.6% of the time and left the swarm's leaping killer unable to hurt the Guardsmen it exists to shred (weaker than a Termagant's fleshborer, 6d(2) at 90%). This entry keeps the same build with four dice of Innate Attack instead of two: Cutting Striker (B88, 7 points) with Armor Divisor (2) (B102, +50%) = 10.5, rounded to 11, for the bare sw(2) baseline; Innate Attack (Cut) (B61, 7/die) at 4 dice = 28, with Armor Divisor (2) (+50%) and Melee Attack, Reach C (-30%): net +20%, 28x1.2=33.6, rounded to 34. Total 11+34 = 45. Checked by exact dice distribution at ST 10 (sw+4d(2) = 5d(2)): averages 17.5 and penetrates flak 69.5% of the time, carapace (DR 70, eff. 35) 0%, and nothing heavier - a real killer of unarmoured and flak-armoured infantry (a brood of them certainly is) and no threat to rigid plate.",
 			"tags": [
 				"Advantage",
 				"Physical",
 				"Xenos",
 				"Tyranids"
 			],
-			"base_points": 28,
+			"base_points": 45,
 			"weapons": [
 				{
-					"id": "wb8BFjartOkHM-WDG",
+					"id": "wQUIXvmGluXxipHgY",
 					"sv": 1,
 					"damage": {
 						"type": "cut",
 						"st": "sw",
-						"base": "2d",
+						"base": "4d",
 						"armor_divisor": 2
 					},
 					"reach": "1",
 					"parry": "0",
 					"usage": "Standard",
-					"usage_notes": "Written for a Tyranid Warrior-scale bearer (ST 24, sw 4d+2, giving a total of 6d+2(2) cut); rebuild the +2d Innate Attack component for any other bearer's own ST per this file's header note.",
+					"usage_notes": "Written for a Hormagaunt-scale bearer (ST 10, sw 1d, giving a total of 5d(2) cut). The +4d Innate Attack component is what makes a small, weak bioform a threat to flak; rebuild it for any other bearer's own ST per this file's header note.",
 					"defaults": [
 						{
 							"type": "dx",

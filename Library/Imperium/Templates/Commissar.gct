@@ -1,7 +1,7 @@
 {
 	"version": 5,
 	"id": "B4xF2LOko9Dr10jTm",
-	"notes": "A veteran Commissar of the Officio Prefectus: political officer, battlefield disciplinarian, and (per Ciaphas Cain's narration of his own reputation, which he insists is undeserved) supposed to lead from the front and be the last man standing. Point math: ST 11 (+10), DX 12 (+40), IQ 12 (+40), HT 12 (+20) = 110, plus Will +2 (+10) = 120; advantages +55; disadvantages -52; skills +78. Total 201 points, the low end of framework.md's \"Elite human (200-350)\" tier — a senior, experienced Commissar with a long record runs noticeably higher via more Rank and skill points. No psychic abilities here.\n",
+	"notes": "A veteran Commissar of the Officio Prefectus: political officer, battlefield disciplinarian, and (per Ciaphas Cain's narration of his own reputation, which he insists is undeserved) supposed to lead from the front and be the last man standing. Point math: ST 11 (+10), DX 12 (+40), IQ 12 (+40), HT 12 (+20) = 110, plus Will +2 (+10) = 120; advantages +51; disadvantages -52; skills +82. Total 201 points, the low end of framework.md's \"Elite human (200-350)\" tier — a senior, experienced Commissar with a long record runs noticeably higher via more Rank and skill points. No psychic abilities here.\n",
 	"traits": [
 		{
 			"id": "tKpXg4_kRp2p5T8bu",
@@ -84,16 +84,30 @@
 			]
 		},
 		{
-			"id": "tcQpVNq4kGlfoGbu0",
-			"name": "Unfazeable",
-			"reference": "B95",
-			"local_notes": "Lore: Little left to shock a Commissar who has already ordered executions and watched daemons take a trench line.\n\nDesign: Basic Set Unfazeable (B95), flat 15 points.",
+			"id": "to_3dcxuwJKtT7qC5",
+			"name": "Fearlessness",
+			"reference": "B55",
+			"local_notes": "Lore: Resolve under fear rather than immunity to it: a Commissar who has ordered executions and watched daemons take a trench line still feels the dread, but holds (Will 14 + 3 = 17 on Fright Checks). Ciaphas Cain's narration is all about mastering fear, not lacking it.\n\nDesign: Basic Set Fearlessness (B55), 2/level, max 5 levels as usual; buy the level that fits the character. Each level adds +1 to Fright Checks; it is the right trait for a Commissar's resolve under fear.",
 			"tags": [
 				"Advantage",
 				"Mental",
 				"Imperium"
 			],
-			"base_points": 15
+			"points_per_level": 2,
+			"can_level": true,
+			"levels": 3
+		},
+		{
+			"id": "tSRncJgUygdmWa5N_",
+			"name": "Fit",
+			"reference": "B55",
+			"local_notes": "Lore: A Commissar who leads from the front keeps himself in condition.\n\nDesign: Basic Set Fit (B55), 5 points.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Imperium"
+			],
+			"base_points": 5
 		},
 		{
 			"id": "tC1iDcdVAhEtF2-sC",
@@ -123,10 +137,10 @@
 			"levels": 3
 		},
 		{
-			"id": "thO8vWvSUAc6Na4FV",
-			"name": "Military Rank",
+			"id": "t7H4HsJAgoEYN1mzt",
+			"name": "Rank (Officio Prefectus)",
 			"reference": "B29",
-			"local_notes": "Lore: Commissars hold an officer-equivalent rank within the Officio Prefectus chain, separate from the regiment's own command structure.\n\nDesign: Basic Set Rank (B29), 5/level, generic \"Military Rank\" naming per that trait's own convention.",
+			"local_notes": "Lore: Commissars hold an officer-equivalent rank within the Officio Prefectus chain, separate from the regiment's own command structure.\n\nDesign: Basic Set Rank (B29), 5/level, 2 levels (10 points), taken as the Commissariat's own hierarchy rather than the regiment's. The Legal Enforcement Powers entry covers the power to enforce discipline; this covers standing within the Officio Prefectus.",
 			"tags": [
 				"Advantage",
 				"Social",
@@ -138,10 +152,57 @@
 			"levels": 2
 		},
 		{
+			"id": "Tkf1DEgrRB-yC0qKs",
+			"name": "Schola Progenium Origin",
+			"local_notes": "Lore: Raised as a ward of the state in the Schola Progenium, the orphanage and academy system that feeds the Commissariat, the Militarum Tempestus and the Sororitas with doctrinally reliable recruits: rote catechism, hard drill, and no family but the institution.\n\nDesign: Net 0 points, two Basic Set perks/quirks. Disabled by default; GM/player enables it. Fills the gap the Scion and Commissar templates leave when they cite Schola upbringing.",
+			"tags": [
+				"Imperium",
+				"Ecclesiarchy"
+			],
+			"children": [
+				{
+					"id": "tzQmEWBUHvnYFhFJZ",
+					"name": "Schola Catechism",
+					"local_notes": "Lore: Years of daily doctrine leave the Creed as second nature.\n\nDesign: Perk (B9), +1 to Theology (Imperial Creed).",
+					"tags": [
+						"Perk",
+						"Imperium"
+					],
+					"base_points": 1,
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "Theology"
+							},
+							"amount": 1,
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Imperial Creed"
+							}
+						}
+					]
+				},
+				{
+					"id": "tD22cWqRy-W_9GbZ_",
+					"name": "Raised as a Ward of the State",
+					"local_notes": "Lore: No family, no home world worth the name; the institution was the only parent.\n\nDesign: Quirk (B9), roleplaying flag only.",
+					"tags": [
+						"Quirk",
+						"Imperium"
+					],
+					"base_points": -1
+				}
+			],
+			"disabled": true
+		},
+		{
 			"id": "tBT8vDeC-yoLFFoaf",
 			"name": "Fanaticism (The God-Emperor)",
 			"reference": "B136",
-			"local_notes": "Lore: A Commissar's authority rests entirely on this belief being genuine, not performed.\n\nDesign: Basic Set Fanaticism (B136), flat -15, taken for \"the Emperor/the Imperial Creed\" as the group/ideal. Not leveled in Basic Set.",
+			"local_notes": "Lore: A Commissar's authority rests entirely on this belief being genuine, not performed.\n\nDesign: Basic Set Fanaticism (B136), flat -15, taken for \"the Emperor/the Imperial Creed\" as the group/ideal. Not leveled in Basic Set. The Guardsman template carries it disabled: enable it for zealot regiments or characters, and conscript, penal and feral troops leave it off.",
 			"tags": [
 				"Disadvantage",
 				"Mental",
@@ -223,14 +284,14 @@
 		{
 			"id": "s1bgMXwEGCHTkt-BJ",
 			"name": "Guns",
-			"local_notes": "Lore: The bolt pistol is the Commissariat's signature sidearm.\n\nDesign: DX+4 (16) for 12 points, Easy (B170).",
+			"local_notes": "Lore: The bolt pistol is the Commissariat's signature sidearm.\n\nDesign: DX+5 (17) for 16 points, Easy (B170).",
 			"tags": [
 				"Imperium",
 				"Astra Militarum"
 			],
 			"specialization": "Pistol",
 			"difficulty": "dx/e",
-			"points": 12
+			"points": 16
 		},
 		{
 			"id": "sFhCpTCcEpLENr0o6",

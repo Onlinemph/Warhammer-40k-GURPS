@@ -1,12 +1,12 @@
 {
 	"version": 5,
 	"id": "BhuKCe17ExKZB_fbL",
-	"notes": "A Guardian: an ordinary adult Craftworld Aeldari called up to the citizen militia between spells on the Path of the Artisan (or whichever Path they currently walk) — issued a shuriken catapult and mesh armour and expected to hold a line competently, without the centuries of shrine drilling an Aspect Warrior has. Point math (see Xenos/Aeldari/Traits/Aeldari Physiology.adq for the full derivation of every trait below): Aeldari Physiology + Keen Battle-Sense (traits, 131 points) + skills (28 points) = 159 points. Stats: ST 10, DX 14, IQ 12, HT 10, HP 10, Will 12, Per 13, Speed 6.25, Move 6, Dodge 9 — landing exactly on framework.md's Guardian anchor line. This sits inside framework.md's \"Trained soldier\" tier (100-175) at its upper end, clearly above a Guardsman's own 82 points (Imperium/Humans/Guardsman.yaml) on the strength of DX 14 and IQ 12 alone, without any Path specialization yet bought — exactly what \"citizen militia, above a Guardsman\" should look like. Enable at most one Path lens (from Xenos/Aeldari/Traits/Aeldari Physiology.adq, all disabled by default) to flavor which Path this particular Guardian currently walks between musters.\n",
+	"notes": "A Guardian: an ordinary adult Craftworld Aeldari called up to the citizen militia between spells on the Path of the Artisan (or whichever Path they currently walk) — issued a shuriken catapult and mesh armour and expected to hold a line competently, without the centuries of shrine drilling an Aspect Warrior has. Point math (see Xenos/Aeldari/Traits/Aeldari Physiology.adq for the full derivation of every trait below): Aeldari Physiology + Keen Battle-Sense (traits, 159 points) + skills (28 points) = 187 points. Stats: ST 10, DX 14, IQ 12, HT 10, HP 10, Will 12, Per 13, Speed 6.25, Move 9 (sprint x1.5 with Enhanced Move 1/2), Dodge 9 — landing exactly on framework.md's Guardian anchor line. This sits just above framework.md's \"Trained soldier\" tier (100-175) and short of the \"Elite human\" floor (200), clearly above a Guardsman's own 82 points (Imperium/Humans/Guardsman.yaml) on the strength of DX 14 and IQ 12 alone, without any Path specialization yet bought — exactly what \"citizen militia, above a Guardsman\" should look like. Enable at most one Path lens (from Xenos/Aeldari/Traits/Aeldari Physiology.adq, all disabled by default) to flavor which Path this particular Guardian currently walks between musters.\n",
 	"traits": [
 		{
 			"id": "Tm0zcL345wcscJhf1",
 			"name": "Aeldari Physiology",
-			"local_notes": "Lore: The Aeldari: an ancient, dying, near-immortal species, slender and swift, all born with a latent thread into the warp and all hunted, in the end, by the god their own species' fall gave birth to. This trait is the baseline shared by every Craftworld Aeldari; Path lenses and Aspect lenses below layer specialization on top of it, exactly as the Astartes gene-seed file's Chapter lenses and the Ork Physiology file's Klan lenses do for their own species.\n\nDesign: 125 (Attribute Modifiers) + 8 (Acute Senses) + 4 (Aeldari Grace) + 0 (Slender Frame) + 4 (Extended Lifespan) + 10 (Psychic Sensitivity) + 1 (Spirit Stone) - 10 (Emotional Intensity) - 5 (Arrogance) - 15 (Slaanesh's Hunger) = 122 points of physiology alone, before Path, Aspect, or skills — landing ST 10, DX 14, IQ 12, HT 10, HP 10, Will 12, Per 12 (Per 13 once Keen Battle-Sense is added by a warrior-path template). See the Guardian template for the first full character built on this package.",
+			"local_notes": "Lore: The Aeldari: an ancient, dying, near-immortal species, slender and swift, all born with a latent thread into the warp and all hunted, in the end, by the god their own species' fall gave birth to. This trait is the baseline shared by every Craftworld Aeldari; Path lenses and Aspect lenses below layer specialization on top of it, exactly as the Astartes gene-seed file's Chapter lenses and the Ork Physiology file's Klan lenses do for their own species.\n\nDesign: 140 (Attribute Modifiers) + 10 (Enhanced Move 1/2) + 8 (Acute Senses) + 4 (Aeldari Grace) + 0 (Slender Frame) + 12 (Extended Lifespan 6) + 10 (Psychic Sensitivity) + 0 (Spirit Stone) - 10 (Emotional Intensity) - 5 (Arrogance) - 15 (Slaanesh's Hunger) = 154 points of physiology alone, before Path, Aspect, or skills — landing ST 10, DX 14, IQ 12, HT 10, HP 10, Will 12, Per 12 (Per 13 once Keen Battle-Sense is added by a warrior-path template), Basic Speed 6.25 and Basic Move 9 (Move 6 plus 3, with Enhanced Move 1/2 for sprinting). See the Guardian template for the first full character built on this package.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -117,8 +117,8 @@
 				{
 					"id": "tiavQCmunG51is80h",
 					"name": "Extended Lifespan",
-					"reference": "B17",
-					"local_notes": "x100 natural lifespan (roughly 8,000 years before natural death).\n\nLore: Aeldari live for millennia baseline, and the oldest craftworld seers and named heroes (Eldrad Ulthran chief among them) are shown outlasting even that by a wide margin — treated here as an exceptional, GM-adjudicated extension on top of this baseline rather than a fixed higher purchase every Aeldari makes.\n\nDesign: Basic Set Extended Lifespan 2 (B17, 2/level, x100 natural lifespan), 4 points.",
+					"reference": "B53",
+					"local_notes": "x64 natural lifespan (roughly 5,000 years before natural death; each level doubles it).\n\nLore: Aeldari live for millennia baseline, and the oldest craftworld seers and named heroes (Eldrad Ulthran chief among them) are shown outlasting even that by a wide margin — treated here as an exceptional, GM-adjudicated extension on top of this baseline rather than a fixed higher purchase every Aeldari makes.\n\nDesign: Basic Set Extended Lifespan (B53, 2 points/level, each level doubling natural lifespan) at level 6: x64 (about 5,000 years for an 80-year baseline), 12 points. Level 6 gives the \"millennia\" the lore asks for; levels 1-2 would only reach x2-x4 (a few centuries). No base cost: the whole price is the levels.",
 					"tags": [
 						"Advantage",
 						"Physical",
@@ -127,8 +127,7 @@
 					],
 					"points_per_level": 2,
 					"can_level": true,
-					"levels": 2,
-					"base_points": 4
+					"levels": 6
 				},
 				{
 					"id": "tYd5ofdHNuZri2dl7",
@@ -146,28 +145,18 @@
 				{
 					"id": "tqz_M2NH3xY4QEOE4",
 					"name": "Spirit Stone",
-					"local_notes": "Worn on the breast from childhood. At its bearer's death, an attending psyker (a Warlock, Farseer, or another spirit-stone-bearer) must draw the escaping soul into the stone within moments, or it is lost to Slaanesh (see Slaanesh's Hunger, below) — a rite, not an automatic save, and one that can fail on a battlefield in chaos or far from help.\n\nLore: Every Craftworld Aeldari wears a spirit stone: a small, wraithbone- cored gem that anchors the soul against the warp and, at death, can catch it before Slaanesh does — from which it may later be interred in a craftworld's Infinity Circuit to live on, disembodied, among its ancestors. Consistent, foundational Aeldari background across every edition of Codex: Craftworlds and the Path trilogy.\n\nDesign: A 1-point Perk (B21): the stone's real narrative weight — catching a soul at death — is a rite the GM adjudicates in the moment (see Slaanesh's Hunger below for exactly what it's warding against), not a combat-turn mechanic worth a bigger purchase. The one live-play effect it's worth pricing is a small, steadying +1 to the wearer's own Will roll against Perils of the Warp (Aeldari Runes) — the stone's ward dampens backlash the same way it will one day catch the soul itself.",
+					"local_notes": "Worn on the breast from childhood. At its bearer's death the stone itself catches the escaping soul (automatically, so long as it is worn and intact); a Warlock, Farseer or Spiritseer later retrieves it and carries it to a craftworld's Infinity Circuit. A stone lost, shattered or left behind leaves the soul to Slaanesh (see Slaanesh's Hunger, below). It carries no combat bonus.\n\nLore: Every Craftworld Aeldari wears a spirit stone: a small, wraithbone- cored gem that anchors the soul against the warp and, at death, catches it before Slaanesh does, from which it may later be interred in a craftworld's Infinity Circuit to live on, disembodied, among its ancestors. Consistent, foundational Aeldari background across every edition of Codex: Craftworlds and the Path trilogy.\n\nDesign: A 0-point flag recording that the character wears one (the item is Spirit Stone (Waystone) in wargear/armour.yaml, $300). The stone's real narrative weight, catching a soul at death, is a GM-adjudicated death-and-afterlife outcome and not a combat-turn mechanic, so it is not priced and grants no conditional bonus.",
 					"tags": [
-						"Advantage",
-						"Mental",
 						"Xenos",
 						"Aeldari",
-						"Psyker",
-						"Perk"
+						"Psyker"
 					],
-					"base_points": 1,
-					"features": [
-						{
-							"type": "conditional_modifier",
-							"situation": "on the Will roll to resist Perils of the Warp",
-							"amount": 1
-						}
-					]
+					"base_points": 0
 				},
 				{
 					"id": "tNYuYcdPsjlyWPN-k",
 					"name": "Emotional Intensity",
-					"local_notes": "As Bad Temper (B125), but the triggering emotion can be grief, joy, desire or artistic rapture as easily as anger — whatever the moment's strongest feeling is, not anger specifically. On a failed self-control roll the Aeldari acts on the emotion, not on reason, for the rest of the scene.\n\nLore: Aeldari feel everything more sharply than a human does — joy, grief, desire, fury — and the fiction is explicit that this, not any weakness of will, is why the Path exists at all: without the discipline of devoting centuries to one narrow art at a time, an Aeldari mind burns out or turns inward on itself. Path of the Warrior and Path of the Seer both open on exactly this problem.\n\nDesign: Built as Bad Temper (B125, self-control 12, -10 points) with a broadened trigger, the same \"as Bloodlust, but...\" reflavoring this project's Chapter Gene-Seed: Blood Angels entry uses for Red Thirst: same cost and self-control math, different triggering emotion.",
+					"local_notes": "As Bad Temper (B124), but the triggering emotion can be grief, joy, desire or artistic rapture as easily as anger — whatever the moment's strongest feeling is, not anger specifically. On a failed self-control roll the Aeldari acts on the emotion, not on reason, for the rest of the scene.\n\nLore: Aeldari feel everything more sharply than a human does — joy, grief, desire, fury — and the fiction is explicit that this, not any weakness of will, is why the Path exists at all: without the discipline of devoting centuries to one narrow art at a time, an Aeldari mind burns out or turns inward on itself. Path of the Warrior and Path of the Seer both open on exactly this problem.\n\nDesign: Built as Bad Temper (B124, self-control 12, -10 points) with a broadened trigger, the same \"as Bloodlust, but...\" reflavoring this project's Chapter Gene-Seed: Blood Angels entry uses for Red Thirst: same cost and self-control math, different triggering emotion.",
 					"tags": [
 						"Disadvantage",
 						"Mental",
@@ -193,8 +182,8 @@
 				{
 					"id": "tenvCu2CkijIR3ORv",
 					"name": "Slaanesh's Hunger",
-					"reference": "B160",
-					"local_notes": "As Weirdness Magnet, but the \"weirdness\" is specifically Chaos and warp phenomena drawn to an Aeldari soul's exceptional flavour: Chaos cultists, daemons (Slaaneshi ones above all), and warp-touched omens/hauntings single an Aeldari out over other bystanders, at the GM's discretion, roughly as often as Weirdness Magnet's own frequency guidance suggests.\nThis is also the mechanical flag for the larger, unpriced stake behind it: an Aeldari who dies with no spirit stone drawing their soul clear (see Spirit Stone, above) is devoured by Slaanesh, GM's call on the exact fate — endless torment, absorption into the Dark Prince's being, or worse. Like this project's Black Rage and Wulfen Curse entries, this fate is a narrative endpoint the GM adjudicates when it's dramatically earned, not a disadvantage bought and rolled against at chargen. A functioning Spirit Stone worn at time of death, and recovered promptly, avoids it outright.\n\nLore: Slaanesh, the youngest Chaos god, was born screaming from the psychic shockwave of the Aeldari's own Fall, and has hungered for Aeldari souls above all others' ever since — this is one of the single most consistent, foundational beats of Aeldari background across every edition of Codex: Craftworlds and Codex: Drukhari, and the entire reason spirit stones and the Infinity Circuit exist.\n\nDesign: Weirdness Magnet (B160, -15 points) reused for its \"supernatural trouble finds you more often\" mechanic, standing in for the fact that an Aeldari's soul draws Chaos's attention the way a bright light draws moths. The GM-adjudicated death fate it flags is deliberately not separately priced, per the framework's own guidance to build this honestly rather than as a combat-relevant stat; the Spirit Stone above is what actually buys it off.",
+					"reference": "B161",
+					"local_notes": "As Weirdness Magnet, but the \"weirdness\" is specifically Chaos and warp phenomena drawn to an Aeldari soul's exceptional flavour: Chaos cultists, daemons (Slaaneshi ones above all), and warp-touched omens/hauntings single an Aeldari out over other bystanders, at the GM's discretion, roughly as often as Weirdness Magnet's own frequency guidance suggests.\nThis is also the mechanical flag for the larger, unpriced stake behind it: an Aeldari who dies with no spirit stone drawing their soul clear (see Spirit Stone, above) is devoured by Slaanesh, GM's call on the exact fate — endless torment, absorption into the Dark Prince's being, or worse. Like this project's Black Rage and Wulfen Curse entries, this fate is a narrative endpoint the GM adjudicates when it's dramatically earned, not a disadvantage bought and rolled against at chargen. A functioning Spirit Stone worn at time of death, and recovered promptly, avoids it outright.\n\nLore: Slaanesh, the youngest Chaos god, was born screaming from the psychic shockwave of the Aeldari's own Fall, and has hungered for Aeldari souls above all others' ever since — this is one of the single most consistent, foundational beats of Aeldari background across every edition of Codex: Craftworlds and Codex: Drukhari, and the entire reason spirit stones and the Infinity Circuit exist.\n\nDesign: Weirdness Magnet (B161, -15 points) reused for its \"supernatural trouble finds you more often\" mechanic, standing in for the fact that an Aeldari's soul draws Chaos's attention the way a bright light draws moths. The GM-adjudicated death fate it flags is deliberately not separately priced, per the framework's own guidance to build this honestly rather than as a combat-relevant stat; the Spirit Stone above is what actually buys it off.",
 					"tags": [
 						"Disadvantage",
 						"Mental",

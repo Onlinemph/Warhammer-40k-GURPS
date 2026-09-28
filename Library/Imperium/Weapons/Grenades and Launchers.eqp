@@ -4,7 +4,7 @@
 		{
 			"id": "ewHVmXbmr8GN43NIj",
 			"description": "Frag Grenade",
-			"local_notes": "Lore: The standard fragmentation grenade of the Departmento Munitorum, a fist-sized charge issued to virtually every Guardsman; a background constant across Black Library Guard fiction from Gaunt's Ghosts to the Ciaphas Cain novels.\n\nDesign: No framework.md anchor covers grenades, so this is built independently using GURPS's own explosive-damage convention — a concussion \"cr ex\" figure plus a bracketed fragmentation die, exactly the pattern data-format.md's own schema example uses. Concussion is set to a modest 3d cr ex (enough to injure at the centre, nowhere near a demolition charge) with a 6d cut fragmentation cloud as the real threat to exposed infantry within a few yards. Checked by exact dice distribution against the current armour anchors (flak has since been raised twice, from DR 8 to DR 12 to DR 18 to the user's current DR 30): 6d cut (avg 21, no armour divisor) now penetrates flak on just 1.0% of hits and carapace (DR 70) on 0% — frag fragmentation no longer reliably clears even flak the way it originally did, an honest consequence of the armour anchors moving well past this un-divisored weapon's own dice, not a design change to the grenade itself. It remains lethal to unarmoured troops in the open and useless against armour or fortifications, just with a narrower window against flak-class targets than earlier rescales assumed.",
+			"local_notes": "Lore: The standard fragmentation grenade of the Departmento Munitorum, a fist-sized charge issued to virtually every Guardsman; a background constant across Black Library Guard fiction from Gaunt's Ghosts to the Ciaphas Cain novels.\n\nDesign: No framework.md anchor covers grenades, so this is built independently using GURPS's own explosive-damage convention — a concussion \"cr ex\" figure plus a bracketed fragmentation die, exactly the pattern data-format.md's own schema example uses. Concussion is set to a modest 3d cr ex (enough to injure at the centre, nowhere near a demolition charge) with a 6d cut fragmentation cloud as the real threat to exposed infantry within a few yards. Checked by exact dice distribution against the armour anchors: 6d cut (avg 21, no armour divisor) penetrates flak (DR 30) on just 1.0% of hits and carapace (DR 70) on 0%, an honest consequence of an un-divisored weapon's dice sitting well below the armour anchors. It is lethal to unarmoured troops in the open and useless against armour or fortifications.",
 			"tags": [
 				"Missile Weapon",
 				"Imperium",
@@ -49,7 +49,8 @@
 			"tags": [
 				"Missile Weapon",
 				"Imperium",
-				"Astra Militarum"
+				"Astra Militarum",
+				"Adeptus Astartes"
 			],
 			"tech_level": "8",
 			"legality_class": "2",
@@ -86,11 +87,13 @@
 		{
 			"id": "e8kIcbTj8cSMlP-1z",
 			"description": "Melta Bomb",
-			"local_notes": "Lore: A hefty demolition charge with an integral melta-coil detonator, carried by sappers and Techmarines to crack void-hull bulkheads, bunkers and vehicle hulls when a meltagun isn't available or isn't enough; Black Library fiction shows melta bombs destroying Land Raiders and fortifications when a Space Marine or Guard sapper can get one physically onto the target.\n\nDesign: Uses the same superheated thermal-lance principle as the meltagun anchor (8dx6(10) burn to ½D) and keeps its armour divisor of (10) unchanged — it's the same fuel-air/thermic mechanism, just a bigger charge. The satchel-sized reservoir carries proportionally more fuel than a meltagun's cell, kept at the same ratio the pre-Rescale draft used above its own meltagun figure (roughly 1.25x by average damage): 6dx10 averages 210, about 1.25x the meltagun's own 8dx6 average of 168. Sanity check against the toughest anchor, by exact dice distribution: Land Raider frontal armour (AV14, DR 350) is reduced to an effective DR 35 by the divisor, and even the minimum possible roll (6 dice all showing 1, x10 = 60) clears that — a melta bomb beats AV14 on 100% of hits, guaranteed. That's stronger than \"usually\" and is deliberate: a hand-placed, contact-fused charge doesn't suffer a meltagun's range falloff, so it should be the single most reliable anti-tank tool in the Imperium's arsenal, consistent with it being a dedicated, single-use, last-resort tank-killer rather than a weapon anyone carries casually (LC1, high cost).",
+			"local_notes": "Lore: A hefty demolition charge with an integral melta-coil detonator, carried by sappers and Techmarines to crack void-hull bulkheads, bunkers and vehicle hulls when a meltagun isn't available or isn't enough; Black Library fiction shows melta bombs destroying Land Raiders and fortifications when a Space Marine or Guard sapper can get one physically onto the target.\n\nDesign: Uses the same superheated thermal-lance principle as the meltagun anchor (8dx6(10) burn to ½D) and keeps its armour divisor of (10) unchanged — it's the same fuel-air/thermic mechanism, just a bigger charge. The satchel-sized reservoir carries proportionally more fuel than a meltagun's cell, set roughly 1.25x above the meltagun's figure by average damage: 6dx10 averages 210, about 1.25x the meltagun's own 8dx6 average of 168. Sanity check against the toughest anchor, by exact dice distribution: Land Raider frontal armour (AV14, DR 350) is reduced to an effective DR 35 by the divisor, and even the minimum possible roll (6 dice all showing 1, x10 = 60) clears that — a melta bomb beats AV14 on 100% of hits, guaranteed. That's stronger than \"usually\" and is deliberate: a hand-placed, contact-fused charge doesn't suffer a meltagun's range falloff, so it should be the single most reliable anti-tank tool in the Imperium's arsenal, consistent with it being a dedicated, single-use, last-resort tank-killer rather than a weapon anyone carries casually (LC1, high cost).",
 			"tags": [
 				"Missile Weapon",
 				"Imperium",
-				"Astra Militarum"
+				"Astra Militarum",
+				"Adeptus Astartes",
+				"Inquisition"
 			],
 			"tech_level": "11",
 			"legality_class": "1",
@@ -106,11 +109,34 @@
 						"armor_divisor": 10
 					},
 					"usage": "Placed charge (contact, timed or remote-detonated)",
-					"usage_notes": "Hand-placed against a hull, hatch or wall; not thrown and not usable at range. Arming and placing it well enough to guarantee the shot is a demolitions task, not a weapon skill.",
+					"usage_notes": "Hand-placed against a hull, hatch or wall; not thrown and not usable at range. Arming and placing it well enough to guarantee the shot is a demolitions task, rolled against Explosives (Demolition).",
 					"defaults": [
 						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Explosives"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Demolition"
+							}
+						},
+						{
 							"type": "iq",
-							"modifier": -4
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Engineer"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Combat"
+							},
+							"modifier": -3
 						}
 					]
 				}
@@ -251,7 +277,7 @@
 		{
 			"id": "eOcvBZwcsZ9d3EELb",
 			"description": "Plasma Grenade",
-			"local_notes": "Lore: A rare, expensive superheated-plasma grenade, more commonly referenced in Horus Heresy-era and elite Inquisitorial/Deathwatch matériel than standard Guard issue; included here as the thrown cousin of the plasma gun, honestly noted as an uncommon item rather than standard-issue wargear.\n\nDesign: Scaled down from the plasma gun anchor (6dx4(3) burn ex) at half the base dice count, the same relationship the earlier draft used (half of 6d, keeping the x4 multiplier and the (3) divisor unchanged): a hand-thrown plasma charge has an even smaller containment cell than a plasma pistol's, but it's still the same superheated-plasma penetration principle, so the divisor carries over unmodified. Average roll 42 comfortably beats carapace (DR 70, effective 23.3: 95.4% of hits) and Sororitas plate (DR 85, effective 28.3: 83.8%), and still gets through Astartes power armour (DR 100, effective 33.3, unchanged by the armour rescales) on 74.1% of hits — a rare grenade that can seriously hurt a Space Marine, matching plasma's place as the one small-arms family that reliably threatens power armour. The canonical containment-failure/overheat hazard of plasma technology is noted as flavour rather than modelled numerically, matching how the plasma gun anchor itself just references \"Malfunction\" without a schema field for it.",
+			"local_notes": "Lore: A rare, expensive superheated-plasma grenade, more commonly referenced in Horus Heresy-era and elite Inquisitorial/Deathwatch matériel than standard Guard issue; included here as the thrown cousin of the plasma gun, honestly noted as an uncommon item rather than standard-issue wargear.\n\nDesign: Scaled down from the plasma gun anchor (6dx4(3) burn ex) at half the base dice count (3d of the anchor's 6d, keeping the x4 multiplier and the (3) divisor unchanged): a hand-thrown plasma charge has an even smaller containment cell than a plasma pistol's, but it's still the same superheated-plasma penetration principle, so the divisor carries over unmodified. Average roll 42 comfortably beats carapace (DR 70, effective 23.3: 95.4% of hits) and Sororitas plate (DR 85, effective 28.3: 83.8%), and still gets through Astartes power armour (DR 100, effective 33.3) on 74.1% of hits — a rare grenade that can seriously hurt a Space Marine, matching plasma's place as the one small-arms family that reliably threatens power armour. The canonical containment-failure/overheat hazard of plasma technology is noted as flavour rather than modelled numerically, matching how the plasma gun anchor itself just references \"Malfunction\" without a schema field for it.",
 			"tags": [
 				"Missile Weapon",
 				"Imperium"
@@ -328,7 +354,7 @@
 		{
 			"id": "eO34j8A2iKkdmo5eI",
 			"description": "Grenade Launcher",
-			"local_notes": "Lore: A break-action or revolver-cylinder launcher used by Guard grenadiers and heavy-weapon teams to put frag or krak payloads well past throwing range; a mainstay support weapon across Astra Militarum background art and fiction.\n\nDesign: The damage lines are identical to the hand-thrown Frag and Krak Grenade entries above — same warhead, delivered by a launcher tube instead of an arm, which is the standard GURPS approach (B412: a launched grenade uses the grenade's own damage, not a new figure). Acc/range/RoF/shots are new here, since a thrown weapon doesn't carry those stats, and are built as a simple single-shot break-action or revolver launcher: modest accuracy, a much longer practical reach than a throwing arm, and slow reloading between shots.",
+			"local_notes": "Lore: A break-action or revolver-cylinder launcher used by Guard grenadiers and heavy-weapon teams to put frag or krak payloads well past throwing range; a mainstay support weapon across Astra Militarum background art and fiction.\n\nDesign: The damage lines are identical to the hand-thrown Frag and Krak Grenade entries above — same warhead, delivered by a launcher tube instead of an arm, which is the standard GURPS approach (a launched grenade uses the grenade's own damage, not a new figure). Acc/range/RoF/shots are new here, since a thrown weapon doesn't carry those stats, and are built as a simple single-shot break-action or revolver launcher: modest accuracy, a much longer practical reach than a throwing arm, and slow reloading between shots.",
 			"tags": [
 				"Missile Weapon",
 				"Imperium",

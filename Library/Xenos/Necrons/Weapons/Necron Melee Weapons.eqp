@@ -4,7 +4,7 @@
 		{
 			"id": "eNIXosVZtKfn0Dp8P",
 			"description": "Warscythe",
-			"local_notes": "Field carries armour divisor (10), per the framework's power-field rule.\n\nLore: The signature weapon of Necron Lychguard and many Overlords: a scythe-bladed, disruption- field-edged polearm that Codex: Necrons background, Black Library's Necron fiction (the Twice-Dead King trilogy in particular gives Lychguard and their warscythes real page time) and every RPG-line Necron-armoury write-up agree can shear straight through a Space Marine's power armour and, in enough hands, cut down even a Terminator - the closest thing the Necron armoury has to the Imperium's thunder hammer or power fist in terms of what it is known to be able to kill.\n\nDesign: Framework.md's own anchor: \"Warscythe | Two-handed power-field blade: sw+4d(10) cut.\" Built on the project's own power-field rule (armour divisor (10) with the field on), one die heavier than the Imperium Power Axe/Astartes weapons' own two-handed baseline per the anchor's explicit dice, reflecting a weapon this project treats as this armoury's clear Terminator-killer. Checked by exact dice distribution at a Lychguard's own ST 22 (sw=4d, giving a full swing of 8d(10)): average 28 damage clears flak, carapace, Sororitas plate and Astartes power armour at 100% and a Terminator (DR 200, eff. 20) 93.9% of the time - matching the fiction's own claim that a warscythe cuts down even the most heavily armoured target it meets, not merely a Space Marine. Handling: 30 lb, a genuinely massive two-handed weapon even set against the rest of this armoury, per every depiction of a warscythe as a tall, imposing polearm rather than a sword; min ST 20 (heavier than the Imperium's own two-handed Eviscerator's ST 15, for the same \"Necron weapons run heavier\" convention this project's ranged file establishes) sits comfortably under a Lychguard's own ST 22 and an Overlord's ST 22-25. Reach 1,2 and parry -1 follow Basic Set's own Two-Handed Sword conventions for a long, primarily offensive blade - not the deeper -1U some Imperium chain weapons carry, since a warscythe's disruption field doesn't foul or jam the way a physical chain edge does.",
+			"local_notes": "Field on carries armour divisor (10), per the framework's power-field rule; the field is a free-action toggle, and with it off the weapon is a heavy necrodermis blade (sw+1d cut).\n\nLore: The signature weapon of Necron Lychguard and many Overlords: a scythe-bladed, disruption- field-edged polearm that Codex: Necrons background, Black Library's Necron fiction (the Twice-Dead King trilogy in particular gives Lychguard and their warscythes real page time) and every RPG-line Necron-armoury write-up agree can shear straight through a Space Marine's power armour and, in enough hands, cut down even a Terminator - the closest thing the Necron armoury has to the Imperium's thunder hammer or power fist in terms of what it is known to be able to kill.\n\nDesign: Framework.md's own anchor: \"Warscythe | Two-handed power-field blade: sw+4d(10) cut.\" Built on the project's own power-field rule (armour divisor (10) with the field on), one die heavier than the Imperium Power Axe/Astartes weapons' own two-handed baseline per the anchor's explicit dice, reflecting a weapon this project treats as this armoury's clear Terminator-killer. Checked by exact dice distribution at a Lychguard's own ST 22 (sw=4d, giving a full swing of 8d(10)): average 28 damage clears flak, carapace, Sororitas plate and Astartes power armour at 100% and a Terminator (DR 200, eff. 20) 93.9% of the time - matching the fiction's own claim that a warscythe cuts down even the most heavily armoured target it meets, not merely a Space Marine. Field-off line: the mundane baseline is sw+1d cut (a 30 lb necrodermis blade), so the +3d field step gives the anchor's sw+4d. Handling: 30 lb, a genuinely massive two-handed weapon even set against the rest of this armoury, per every depiction of a warscythe as a tall, imposing polearm rather than a sword; min ST 20 (heavier than the Imperium's own two-handed Eviscerator's ST 15, for the same \"Necron weapons run heavier\" convention this project's ranged file establishes) sits comfortably under a Lychguard's own ST 22 and an Overlord's ST 22-25. Reach 1,2 and parry -1 follow Basic Set's own Two-Handed Sword conventions for a long, primarily offensive blade - not the deeper -1U some Imperium chain weapons carry, since a warscythe's disruption field doesn't foul or jam the way a physical chain edge does.",
 			"tags": [
 				"Melee Weapon",
 				"Xenos",
@@ -21,12 +21,55 @@
 					"damage": {
 						"type": "cut",
 						"st": "sw",
-						"base": "4d"
+						"base": "4d",
+						"armor_divisor": 10
 					},
 					"reach": "1,2",
 					"parry": "-1",
 					"strength": "20",
-					"usage": "Swing, two-handed",
+					"usage": "Swing, two-handed (field on)",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Two-Handed Sword"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Broadsword"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Force Sword"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "wNhvpCrYUqQ07NdjQ",
+					"sv": 1,
+					"damage": {
+						"type": "cut",
+						"st": "sw",
+						"base": "1d"
+					},
+					"reach": "1,2",
+					"parry": "-1",
+					"strength": "20",
+					"usage": "Swing, two-handed (field off)",
 					"defaults": [
 						{
 							"type": "dx",
@@ -63,7 +106,7 @@
 		{
 			"id": "eO_gN_w0v6V0FIcR7",
 			"description": "Hyperphase Sword",
-			"local_notes": "Field carries armour divisor (10), per the framework's power-field rule.\n\nLore: A one-handed disruption-field blade carried by Necron Lords, Overlords and Triarch Praetorians, most often paired with a sidearm or a dispersion shield rather than wielded two-handed like a warscythe; Codex: Necrons background and the RPG-line Necron-armoury material both treat it as this armoury's standard one-handed power weapon, mechanically equivalent in what it does to armour to the Imperium's own power sword.\n\nDesign: Framework.md's own anchor: \"Hyperphase sword | Phase blade: sw+3d(10) cut.\" Built on the same power-field rule as the Warscythe, one die lighter for a one-handed blade rather than a two-handed polearm - the identical \"bladed power weapon adds +3d\" figure the framework gives the Imperium Power Sword, since the underlying disruption-field mechanic is the same regardless of who built it. Checked by exact dice distribution at ST 22 (sw=4d, giving 7d (10)): average 24.5 damage clears flak through Sororitas plate at 100%, Astartes power armour (DR 100, eff. 10) 99.96% of the time, and a Terminator (DR 200, eff. 20) 80.8% of the time - a genuinely fearsome one-handed weapon, well ahead of the Imperium Power Sword's own ST-30 figures against a Terminator (which this project's Imperium file puts lower), matching Necron hyperphase technology's reputation as at least the equal of Imperial disruption fields. Handling: 8 lb, twice the weight of the Imperium Power Sword's 4 lb for the same \"Necron gear runs heavier\" convention; min ST 14 (above the Imperium sword's ST 10, for the denser necrodermis blade and hilt) still leaves it comfortably one-handed for any Necron noble at ST 20+. Reach 1 and parry 0 (Broadsword) are unchanged, the standard figures for a guarded, one-handed blade.",
+			"local_notes": "Field on carries armour divisor (10), per the framework's power-field rule; with the field off it is a plain necrodermis blade (sw cut).\n\nLore: A one-handed disruption-field blade carried by Necron Lords and Overlords, most often paired with a sidearm or a dispersion shield rather than wielded two-handed like a warscythe; Codex: Necrons background and the RPG-line Necron-armoury material both treat it as this armoury's standard one-handed power weapon, mechanically equivalent in what it does to armour to the Imperium's own power sword.\n\nDesign: Framework.md's own anchor: \"Hyperphase sword | Phase blade: sw+3d(10) cut.\" Built on the same power-field rule as the Warscythe, one die lighter for a one-handed blade rather than a two-handed polearm - the identical \"bladed power weapon adds +3d\" figure the framework gives the Imperium Power Sword, since the underlying disruption-field mechanic is the same regardless of who built it. Checked by exact dice distribution at ST 22 (sw=4d, giving 7d (10)): average 24.5 damage clears flak through Sororitas plate at 100%, Astartes power armour (DR 100, eff. 10) 99.96% of the time, and a Terminator (DR 200, eff. 20) 80.8% of the time - a genuinely fearsome one-handed weapon, well ahead of the Imperium Power Sword's own ST-30 figures against a Terminator (which this project's Imperium file puts lower), matching Necron hyperphase technology's reputation as at least the equal of Imperial disruption fields. Field-off line: the mundane baseline is sw cut, so the +3d field step gives sw+3d. Handling: 8 lb, twice the weight of the Imperium Power Sword's 4 lb for the same \"Necron gear runs heavier\" convention; min ST 14 (above the Imperium sword's ST 10, for the denser necrodermis blade and hilt) still leaves it comfortably one-handed for any Necron noble at ST 20+. Reach 1 and parry 0 (Broadsword) are unchanged, the standard figures for a guarded, one-handed blade.",
 			"tags": [
 				"Melee Weapon",
 				"Xenos",
@@ -80,12 +123,78 @@
 					"damage": {
 						"type": "cut",
 						"st": "sw",
-						"base": "3d"
+						"base": "3d",
+						"armor_divisor": 10
 					},
 					"reach": "1",
 					"parry": "0",
 					"strength": "14",
-					"usage": "Swing",
+					"usage": "Swing (field on)",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Broadsword"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Force Sword"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Rapier"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Saber"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Shortsword"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Two-Handed Sword"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "wSMeKta6Goi1n0C89",
+					"sv": 1,
+					"damage": {
+						"type": "cut",
+						"st": "sw"
+					},
+					"reach": "1",
+					"parry": "0",
+					"strength": "14",
+					"usage": "Swing (field off, plain blade)",
 					"defaults": [
 						{
 							"type": "dx",
@@ -338,7 +447,7 @@
 		{
 			"id": "eBQyvoti3HzeURPcO",
 			"description": "Hyperphase Reap-blade",
-			"local_notes": "Field carries armour divisor (10), per the framework's power-field rule.\n\nLore: One of the paired weapon-arms built into a Skorpekh Destroyer's own hunting-construct chassis, a massive scythe-bladed hyperphase weapon fought alongside the same construct's threshing talons; Codex: Necrons background describes the Skorpekh Destroyer cult as some of the deadliest close-combat troops the Necron armoury fields, built specifically to close with and butcher whatever a Skorpekh's gauss reaper hasn't already killed at range.\n\nDesign: Built one die heavier than the Warscythe above, the same \"Destroyer-cult chassis weapon hits harder than the equivalent hand-carried pattern\" relationship this project's own Gauss Reaper entry establishes over a standard trooper's gauss weapon: sw+5d(10) cut. Checked by exact dice distribution at a Skorpekh's own construct-scale ST 22 (sw=4d, giving 9d(10)): average 31.5 damage clears every personal-armour DR at 100%, including a Terminator (DR 200, eff. 20) at 98.5% - the single hardest-hitting melee weapon in this file, matching the Skorpekh Destroyer's own reputation as the Necron armoury's premier close-combat killer. Handling: 40 lb and min ST 24, both built into the Skorpekh's own weapon-arm rather than a carried grip (heavier again than the hand-wielded Warscythe's 30 lb/ST 20, for the bigger scythe-blade and its own integral chassis mounting); reach 1,2 and parry -1 are unchanged from the Warscythe's own two-handed figures, the same weapon class on a bigger frame.",
+			"local_notes": "Field on carries armour divisor (10), per the framework's power-field rule; with the field off it is a huge plain scythe-blade (sw+2d cut).\n\nLore: One of the paired weapon-arms built into a Skorpekh Destroyer's own hunting-construct chassis, a massive scythe-bladed hyperphase weapon fought alongside the same construct's threshing talons; Codex: Necrons background describes the Skorpekh Destroyer cult as some of the deadliest close-combat troops the Necron armoury fields, built specifically to close with and butcher living targets in a whirling, all-consuming melee.\n\nDesign: Built one die heavier than the Warscythe above, the same \"Destroyer-cult chassis weapon hits harder than the equivalent hand-carried pattern\" relationship: sw+5d(10) cut. Checked by exact dice distribution at a Skorpekh's own construct-scale ST 22 (sw=4d, giving 9d(10)): average 31.5 damage clears every personal-armour DR at 100%, including a Terminator (DR 200, eff. 20) at 98.5% - the single hardest-hitting melee weapon in this file, matching the Skorpekh Destroyer's own reputation as the Necron armoury's premier close-combat killer. Field-off line: baseline sw+2d cut (a 40 lb chassis-scale blade), +3d field step = sw+5d. Handling: 40 lb and min ST 24, both built into the Skorpekh's own weapon-arm rather than a carried grip (heavier again than the hand-wielded Warscythe's 30 lb/ST 20, for the bigger scythe-blade and its own integral chassis mounting); reach 1,2 and parry -1 are unchanged from the Warscythe's own two-handed figures, the same weapon class on a bigger frame.",
 			"tags": [
 				"Melee Weapon",
 				"Xenos",
@@ -355,12 +464,55 @@
 					"damage": {
 						"type": "cut",
 						"st": "sw",
-						"base": "5d"
+						"base": "5d",
+						"armor_divisor": 10
 					},
 					"reach": "1,2",
 					"parry": "-1",
 					"strength": "24",
-					"usage": "Swing, two-handed",
+					"usage": "Swing, two-handed (field on)",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Two-Handed Sword"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Broadsword"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Force Sword"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "we-fRrssijQlW-IsL",
+					"sv": 1,
+					"damage": {
+						"type": "cut",
+						"st": "sw",
+						"base": "2d"
+					},
+					"reach": "1,2",
+					"parry": "-1",
+					"strength": "24",
+					"usage": "Swing, two-handed (field off)",
 					"defaults": [
 						{
 							"type": "dx",
@@ -397,7 +549,7 @@
 		{
 			"id": "ezV5GYI3aoCqecQ-S",
 			"description": "Threshing Talons",
-			"local_notes": "A Skorpekh Destroyer's paired weapon-arm to its own Hyperphase Reap-blade above; the construct fights with both, and the GM should let it make a genuine two-weapon attack each turn (GURPS Basic's Dual-Weapon Attack, B417) rather than treating the talons as a purely decorative second arm.\n\nLore: The Skorpekh Destroyer's other weapon-arm: a set of hyperphase-edged claws fought alongside the reap-blade rather than instead of it, per Codex: Necrons background's consistent depiction of Skorpekh Destroyers tearing into an enemy line with both arms at once rather than favouring one over the other.\n\nDesign: Built at the same disruption-field math as the Hyperphase Sword above (sw+3d(10) cut) since the talons are a one-handed-equivalent hyperphase weapon in their own right, just shaped as claws rather than a blade, mounted on a construct-scale arm: checked by exact dice distribution at the Skorpekh's own ST 22 (sw=4d, giving 7d(10)), the figures are identical to the Hyperphase Sword's own verified numbers (100% through Sororitas plate, 99.96% vs. Astartes power armour, 80.8% vs. a Terminator) - the honest result of the talons sharing the same hyperphase-edge technology and the same wielder's strength, not a separate derivation for its own sake. Parry is corrected to -1 (rather than the sword's 0) since a claw-shaped weapon-arm is built for offense, not defensive fencing, the same logic this project's Imperium Axe/Mace-class weapons use for a less sword-like profile. Handling: 18 lb and min ST 22, lighter than the reap-blade for a claw-cluster rather than a full scythe-blade on the same construct chassis; reach 1 (shorter than the reap-blade's polearm reach, a close-in claw rather than a long blade) is the only other point of difference.",
+			"local_notes": "Field on carries armour divisor (10), per the framework's power-field rule; field off is a plain claw (sw cut). A Skorpekh Destroyer's paired weapon-arm to its own Hyperphase Reap-blade above; the construct fights with both, and the GM should let it make a genuine two-weapon attack each turn (GURPS Basic's Dual-Weapon Attack, B417) rather than treating the talons as a purely decorative second arm.\n\nLore: The Skorpekh Destroyer's other weapon-arm: a set of hyperphase-edged claws fought alongside the reap-blade rather than instead of it, per Codex: Necrons background's consistent depiction of Skorpekh Destroyers tearing into an enemy line with both arms at once rather than favouring one over the other.\n\nDesign: Built at the same disruption-field math as the Hyperphase Sword above (sw+3d(10) cut) since the talons are a one-handed-equivalent hyperphase weapon in their own right, just shaped as claws rather than a blade, mounted on a construct-scale arm: checked by exact dice distribution at the Skorpekh's own ST 22 (sw=4d, giving 7d(10)), the figures are identical to the Hyperphase Sword's own verified numbers (100% through Sororitas plate, 99.96% vs. Astartes power armour, 80.8% vs. a Terminator) - the honest result of the talons sharing the same hyperphase-edge technology and the same wielder's strength, not a separate derivation for its own sake. Parry is corrected to -1 (rather than the sword's 0) since a claw-shaped weapon-arm is built for offense, not defensive fencing, the same logic this project's Imperium Axe/Mace-class weapons use for a less sword-like profile. Field-off line: baseline sw cut, +3d field step = sw+3d. Handling: 18 lb and min ST 22, lighter than the reap-blade for a claw-cluster rather than a full scythe-blade on the same construct chassis; reach 1 (shorter than the reap-blade's polearm reach, a close-in claw rather than a long blade) is the only other point of difference.",
 			"tags": [
 				"Melee Weapon",
 				"Xenos",
@@ -414,12 +566,78 @@
 					"damage": {
 						"type": "cut",
 						"st": "sw",
-						"base": "3d"
+						"base": "3d",
+						"armor_divisor": 10
 					},
 					"reach": "1",
 					"parry": "-1",
 					"strength": "22",
-					"usage": "Claw strike",
+					"usage": "Claw strike (field on)",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Broadsword"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Force Sword"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Rapier"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Saber"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Shortsword"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Two-Handed Sword"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "wuas-rB88mebm3m5t",
+					"sv": 1,
+					"damage": {
+						"type": "cut",
+						"st": "sw"
+					},
+					"reach": "1",
+					"parry": "-1",
+					"strength": "22",
+					"usage": "Claw strike (field off)",
 					"defaults": [
 						{
 							"type": "dx",
@@ -480,7 +698,7 @@
 		{
 			"id": "eRYeousijwwlPWfbU",
 			"description": "Flayed One Claws",
-			"local_notes": "Lore: Flayed Ones fight with wickedly hooked bone-metal claws grown from their own corrupted necrodermis, tearing the flesh from their victims in a compulsion the Codex: Necrons background and Black Library's Necron fiction both attribute to the same \"flayer virus\" that shattered their minds during biotransference - the Twice-Dead King trilogy and The Infinite and the Divine both use Flayed Ones specifically for body-horror, skin-taking dread rather than for any raw battlefield lethality their claws don't actually carry.\n\nDesign: Deliberately weak as a raw wounding attack (thr+1 cut, checked by exact dice distribution at ST 18 (thr=2d+2, giving 2d+3): average 10 damage rounds to 0% against flak or anything heavier - a Flayed One's claws were never meant to threaten armour, only unprotected flesh) with the real lethality and horror carried entirely by the DR-ignoring toxic/ infection follow-up, the same \"the follow-up carries the real threat\" design this project's Imperium Radium Pistol and Aeldari Mandiblasters entries already use for a body-horror or lingering-poison effect that doesn't map onto a single damage roll. Handling: 4 lb (light, built-in claws, not a carried weapon in the usual sense) and min ST 18 matching a Flayed One's own base ST exactly, since these are part of the creature's body rather than an armoury-issued item; reach C,1 and parry -1 (Brawling's own convention for an unarmed-style claw weapon) are the standard figures for a close-in natural weapon.",
+			"local_notes": "Hooked necrodermis claws that peel flesh from bone. Armour divisor (3) is written into the damage; the claws are wounding tools, not a power-field weapon.\n\nLore: Flayed Ones fight with wickedly hooked bone-metal claws grown from their own corrupted necrodermis, tearing the flesh from their victims in a compulsion the Codex: Necrons background and Black Library's Necron fiction both attribute to the \"flayer virus\" that corrupted their reanimation matrices during biotransference. The Flayer Curse is a degradation of the Necron's own mind, not a disease it passes on: the claws simply cut, and the horror of a Flayed One lies in what it does with the skin afterwards. The Twice-Dead King trilogy and The Infinite and the Divine both use Flayed Ones for body-horror, skin-taking dread.\n\nDesign: Built so the signature Necron ambusher can actually hurt a Guardsman in flak: thr+2d(3) cut at ST 18 (thr 1d+2, giving 3d+2(3)), average 12.5. Checked by exact dice distribution: penetrates flak (DR 30, eff. 10) 74.1% of the time, carapace (DR 70, eff. 23.3) essentially never (0%), and Astartes power armour never. That leaves the claws a flesh-and-flak killer, not an armour-breaker, which suits an ambusher that relies on stealth and the victim's terror. An earlier draft added a DR-ignoring toxic \"flayer virus\" follow-up; that mechanic is not in the fiction and has been removed. If dread is wanted at the table, use a Fright Check on the Flayed One's appearance rather than a wound effect. Handling: 4 lb (light, built-in claws, not a carried weapon in the usual sense) and min ST 18 matching a Flayed One's own base ST exactly, since these are part of the creature's body rather than an armoury-issued item; reach C,1 and parry -1 (Brawling's own convention for an unarmed-style claw weapon) are the standard figures for a close-in natural weapon.",
 			"tags": [
 				"Melee Weapon",
 				"Xenos",
@@ -497,39 +715,13 @@
 					"damage": {
 						"type": "cut",
 						"st": "thr",
-						"base": "1"
-					},
-					"reach": "C,1",
-					"parry": "-1",
-					"strength": "18",
-					"usage": "Claw strike",
-					"defaults": [
-						{
-							"type": "dx",
-							"modifier": 0
-						},
-						{
-							"type": "skill",
-							"name": {
-								"compare": "is",
-								"qualifier": "Brawling"
-							}
-						}
-					]
-				},
-				{
-					"id": "w4HwxKWk3An0QqsAv",
-					"sv": 1,
-					"damage": {
-						"type": "tox",
-						"base": "1d",
+						"base": "2d",
 						"armor_divisor": 3
 					},
 					"reach": "C,1",
 					"parry": "-1",
 					"strength": "18",
-					"usage": "Follow-up (any wound inflicted)",
-					"usage_notes": "Ignores DR, per the framework's Radium Pistol/Mandiblasters \"the follow-up carries the real threat\" precedent for a DR-ignoring secondary effect. Represents the flayer virus infecting the wound track: a target who fails the resulting HT roll doesn't merely take the listed damage but is Afflicted with a spreading necrotic corruption (treat as Terror per B428 layered with a worsening Bleeding condition each subsequent turn until treated) as living necrodermis-flesh hybrid tissue tries to root itself in the victim - the specific horror Flayed Ones are known for in the fiction, left as a narrative affliction the GM adjudicates rather than a numeric disease-progression table this project has no other precedent for.",
+					"usage": "Claw strike",
 					"defaults": [
 						{
 							"type": "dx",
@@ -648,7 +840,7 @@
 		{
 			"id": "ePg6sFCcNbKREP5ew",
 			"description": "Rod of Covenant",
-			"local_notes": "Command aura: while the bearer is conscious and active, every ordinary (non-Nemesor, non-Overlord) Necron construct within 10 yards adds +1 to its Reanimation Protocols HT roll (see the Necron ancestry's own Reanimation Protocols trait) and gets +1 to resist Fright Checks and any morale-equivalent roll, representing the Rod steadying nearby obedience-circuits and reinforcing the tactical link back to a Tomb World's command hierarchy. This does not stack with the Resurrection Orb's own HT bonus (Gear.yaml); use whichever single figure is higher if a unit is somehow under the effect of both.\n\nLore: A ceremonial staff of office carried by a Necron Overlord commanding a significant force - Codex: Necrons background and older Necron material both frame it primarily as a symbol of authority and a tactical relay to the Tomb World's own command protocols rather than a dedicated weapon, though every depiction still shows an Overlord using it to brutal effect in melee when the fighting reaches him directly.\n\nDesign: No framework anchor names this item, so it is built as a plain, unenhanced Necron staff weapon (sw+1 cr, no power field or armour divisor at all - this project reserves the +3d/ divisor(10) treatment for weapons the lore actually calls disruption- or hyperphase-edged, and nothing in the Rod's own background does) whose real value is the command aura, modelled as a flat HT/Fright bonus to nearby Necron constructs rather than a numeric combat bonus of its own - the same honest choice this project's Banshee War-Mask entry makes for a lore effect (there, a scream; here, a tactical-command signal) that doesn't map onto a damage or defence roll. Checked by exact dice distribution at ST 16 (sw=2d+2, giving 3d+3): average 13.5 rounds to 0% against flak or better - deliberately unremarkable in a straight fight, matching its role as a badge of command an Overlord happens to also swing rather than a combat relic in its own right. Handling: 10 lb and min ST 16, a plain staff-class weight and strength requirement with no \"Necron gear runs heavy\" bump, since nothing in the lore singles the Rod out as an unusually dense construct - it is meant to be carried and displayed as much as fought with. Reach 1 and parry 0 (Staff's own Basic Set convention) are standard.",
+			"local_notes": "Command aura: while the bearer is conscious and active, every ordinary (non-Nemesor, non-Overlord) Necron construct within 10 yards adds +1 to its Reanimation Protocols HT roll (see the Necron ancestry's own Reanimation Protocols trait) and gets +1 to resist Fright Checks and any morale-equivalent roll, representing the Rod steadying nearby obedience-circuits and reinforcing the tactical link back to a Tomb World's command hierarchy. This does not stack with the Resurrection Orb's own HT bonus (Gear.yaml); use whichever single figure is higher if a unit is somehow under the effect of both.\n\nLore: A ceremonial staff of office carried by Triarch Praetorians and Royal Wardens (and by any Overlord who claims one) - Codex: Necrons background and older Necron material both frame it primarily as a symbol of authority and a tactical relay to the Tomb World's own command protocols rather than a dedicated weapon, though every depiction still shows an Overlord using it to brutal effect in melee when the fighting reaches its bearer directly.\n\nDesign: No framework anchor names this item, so it is built as a plain, unenhanced Necron staff weapon (sw+1 cr, no power field or armour divisor at all - this project reserves the +3d/ divisor(10) treatment for weapons the lore actually calls disruption- or hyperphase-edged, and nothing in the Rod's own background does) whose real value is the command aura, modelled as a flat HT/Fright bonus to nearby Necron constructs rather than a numeric combat bonus of its own - the same honest choice this project's Banshee War-Mask entry makes for a lore effect (there, a scream; here, a tactical-command signal) that doesn't map onto a damage or defence roll. Checked by exact dice distribution at ST 16 (sw=2d+2, giving 3d+3): average 13.5 rounds to 0% against flak or better - deliberately unremarkable in a straight fight, matching its role as a badge of command an Overlord happens to also swing rather than a combat relic in its own right. Handling: 10 lb and min ST 16, a plain staff-class weight and strength requirement with no \"Necron gear runs heavy\" bump, since nothing in the lore singles the Rod out as an unusually dense construct - it is meant to be carried and displayed as much as fought with. Reach 1 and parry 0 (Staff's own Basic Set convention) are standard.",
 			"tags": [
 				"Melee Weapon",
 				"Xenos",
@@ -808,7 +1000,7 @@
 		{
 			"id": "eqZno_LFXvr-Sgn6B",
 			"description": "Staff of Light",
-			"local_notes": "Melee line carries armour divisor (10), per the framework's power-field rule. This is one physical weapon with both a ranged and a melee mode; it is included wholesale into the Ranged Weapons file per data-format.md's `include` convention (the same pattern the Aeldari Singing Spear uses across melee.yaml and ranged.yaml) rather than defined twice.\n\nLore: A dual-purpose energy staff carried by Necron Lords, Overlords and Crypteks as both a badge of authority and a working weapon: Codex: Necrons background and older Necron material both describe it firing a bolt of disintegrating energy at range, then serving as a power-field melee weapon when its wielder is forced into close combat - a generalist's tool rather than either family's dedicated specialist.\n\nDesign: Framework.md's own anchor: \"Staff of light | Energy staff: ranged 6d(3) burn and a power- field melee strike.\" The ranged line is held at the anchor's literal dice and divisor (3) rather than the Gauss Flayer's bumped (4), since this is deliberately a generalist's badge weapon rather than a front-line infantry rifle - checked by exact dice distribution, 6d(3) burn averages 21 and penetrates flak (DR 30, eff. 10) 99.6% of the time but only 27.9% against carapace (DR 70, eff. 23.3) and 0.06% against Astartes power armour, a real anti- infantry weapon and a poor anti-Astartes one, exactly what a Lord's sidearm should be next to a dedicated Warrior or Immortal weapon. The melee line applies this project's own power- field rule (+3d over a mundane baseline at divisor (10)) one die lighter than the Hyperphase Sword's own sw+3d, since a staff's melee mode is a secondary function of a primarily ranged item rather than a dedicated blade: checked by exact dice distribution at ST 10 (sw=1d, giving 3d(10)): average 10.5 damage penetrates flak/carapace/Sororitas at 100%/99.6%/98.8% and Astartes power armour (DR 100, eff. 10) 94.6% of the time, and a Terminator (DR 200, eff. 20) 9.7% - genuinely dangerous in a pinch, well below the Hyperphase Sword's own figures at the higher ST a dedicated melee wielder would bring, an honest consequence of a Lord's own more modest ST when caught fighting with a badge weapon rather than a proper blade in hand. Handling: 10 lb and min ST 10 for a staff meant to be genuinely comfortable in a Necron Lord's hand rather than built heavy like a rank-and-file trooper's weapon - the one item in this file with no \"no ergonomic concession\" bump, since a Lord's own staff is exactly the item a Necron would bother to make comfortable. RoF 2 and Shots 100(1800) (a half-hour recharge) sit between the Tesla Carbine's rapid pulses and the Gauss Cannon's slow single shots, matching a generalist weapon's middling cycle rate. Bulk -4 and Rcl 1 are unchanged from the rest of this armoury; Acc 5 sits at the low end of the rifle bracket for a weapon not built primarily as a marksman's tool. Reach 1 and parry 0 (Staff's own Basic Set convention) fit the melee mode.",
+			"local_notes": "Melee field-on line carries armour divisor (10), per the framework's power-field rule; with the field off it is a plain staff (sw cr). This is one physical weapon with both a ranged and a melee mode; it is included wholesale into the Ranged Weapons file per data-format.md's `include` convention (the same pattern the Aeldari Singing Spear uses across melee.yaml and ranged.yaml) rather than defined twice.\n\nLore: A dual-purpose energy staff carried by Necron Lords, Overlords and Crypteks as both a badge of authority and a working weapon: Codex: Necrons background and older Necron material both describe it firing a bolt of disintegrating energy at range, then serving as a power-field melee weapon when its wielder is forced into close combat - a generalist's tool rather than either family's dedicated specialist.\n\nDesign: Framework.md's own anchor: \"Staff of light | Energy staff: ranged 6d(3) burn and a power- field melee strike.\" The ranged line is held at the anchor's literal dice and divisor (3) rather than the Gauss Flayer's bumped (4), since this is deliberately a generalist's badge weapon rather than a front-line infantry rifle - checked by exact dice distribution, 6d(3) burn averages 21 and penetrates flak (DR 30, eff. 10) 99.6% of the time but only 27.9% against carapace (DR 70, eff. 23.3) and 0.06% against Astartes power armour, a real anti- infantry weapon and a poor anti-Astartes one, exactly what a Lord's sidearm should be next to a dedicated Warrior or Immortal weapon. The melee line applies this project's own power- field rule (divisor (10) written into the damage string, with a field-off line at the plain staff's sw cr) but with a smaller field step (+2d rather than the usual +3d), one die lighter than the Hyperphase Sword's own sw+3d, since a staff's melee mode is a secondary function of a primarily ranged item rather than a dedicated blade: checked by exact dice distribution at ST 10 (sw=1d, giving 3d(10)): average 10.5 damage penetrates flak/carapace/Sororitas at 100%/99.6%/98.8% and Astartes power armour (DR 100, eff. 10) 94.6% of the time, and a Terminator (DR 200, eff. 20) 9.7% - genuinely dangerous in a pinch, well below the Hyperphase Sword's own figures at the higher ST a dedicated melee wielder would bring, an honest consequence of a Lord's own more modest ST when caught fighting with a badge weapon rather than a proper blade in hand. Handling: 10 lb and min ST 10 for a staff meant to be genuinely comfortable in a Necron Lord's hand rather than built heavy like a rank-and-file trooper's weapon - the one item in this file with no \"no ergonomic concession\" bump, since a Lord's own staff is exactly the item a Necron would bother to make comfortable. RoF 2 and Shots 100(1800) (a half-hour recharge) sit between the Tesla Carbine's rapid pulses and the Gauss Cannon's slow single shots, matching a generalist weapon's middling cycle rate. Bulk -4 and Rcl 1 are unchanged from the rest of this armoury; Acc 5 sits at the low end of the rifle bracket for a weapon not built primarily as a marksman's tool. Reach 1 and parry 0 (Staff's own Basic Set convention) fit the melee mode.",
 			"tags": [
 				"Melee Weapon",
 				"Missile Weapon",
@@ -826,12 +1018,13 @@
 					"damage": {
 						"type": "cut",
 						"st": "sw",
-						"base": "2d"
+						"base": "2d",
+						"armor_divisor": 10
 					},
 					"reach": "1",
 					"parry": "0",
 					"strength": "10",
-					"usage": "Melee, power-field strike",
+					"usage": "Melee, power-field strike (field on)",
 					"defaults": [
 						{
 							"type": "dx",
@@ -863,7 +1056,48 @@
 					]
 				},
 				{
-					"id": "WsnTNaKh9mPlXt0me",
+					"id": "wsnTNaKh9mPlXt0me",
+					"sv": 1,
+					"damage": {
+						"type": "cr",
+						"st": "sw"
+					},
+					"reach": "1",
+					"parry": "0",
+					"strength": "10",
+					"usage": "Melee, field off (as plain staff)",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Staff"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Polearm"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Spear"
+							},
+							"modifier": -2
+						}
+					]
+				},
+				{
+					"id": "Wfi79GO3LjTePu5if",
 					"sv": 1,
 					"damage": {
 						"type": "burn",

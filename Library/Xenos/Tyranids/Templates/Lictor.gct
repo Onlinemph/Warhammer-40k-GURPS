@@ -1,12 +1,12 @@
 {
 	"version": 5,
 	"id": "Bzsl-h5nDGyAkxL3K",
-	"notes": "NPC creature stat block, not a player-facing race. Point math: Tyranid Biology 15 + Body Lens: Lictor 547 + Flesh Hooks 11 + Lash Whip 47 + Rending Claws 38 + skills 12 = 670 points. Stats: SM +1, ST 22, DX 15, IQ 8, HT 13, HP 26, Will 8, Per 8, natural chitin torso DR 60 (Weak Points 5, eye DR 30), Chameleonic Hide (-4/-2 to others' Vision rolls), Pheromone Trail, Shadow in the Warp (8 yards) — framework.md's Lictor anchor line exactly. This lands on a par with the Tyranid Warrior template, deep in framework.md's Astartes point tier (550-800): a solitary ambush predator built to scout, terrorise and mark a kill zone rather than to hold a line. The point total is for GM reference only; do not read it as a measure of how a lone Lictor performs in a stand-up fight, which is never its role in the fiction.\nWeapon-symbiotes: carries Flesh Hooks (a ranged grapple/snare) and a Lash Whip (a disabling reach weapon), per framework.md's own symbiote list, plus Rending Claws for its actual kill — all built as natural-attack traits in data/xenos/tyranids/bio-weapons.yaml.\n",
+	"notes": "NPC creature stat block, not a player-facing race. Point math: Tyranid Biology 20 + Body Lens: Lictor 547 + Flesh Hooks 11 + Rending Claws 38 + skills 12 = 628 points. Stats: SM +1, ST 22, DX 15, IQ 8, HT 13, HP 26, Will 8, Per 8, natural chitin torso DR 60 (Weak Points 5, eye DR 30), Chameleonic Hide (-4/-2 to others' Vision rolls), Pheromone Trail, Shadow in the Warp (8 yards) — framework.md's Lictor anchor line exactly. This lands on a par with the Tyranid Warrior template, deep in framework.md's Astartes point tier (550-800): a solitary ambush predator built to scout, terrorise and mark a kill zone rather than to hold a line. The point total is for GM reference only; do not read it as a measure of how a lone Lictor performs in a stand-up fight, which is never its role in the fiction.\nWeapon-symbiotes: carries Flesh Hooks (a ranged grapple/snare) plus Rending Claws for its actual kill, both built as natural-attack traits in data/xenos/tyranids/bio-weapons.yaml. The Lash Whip (a Bonesword companion carried by Warriors) was removed from the Lictor; the Codex gives Lictors flesh hooks, grasping talons and rending claws. There is no Grasping Talons entry yet.\n",
 	"traits": [
 		{
 			"id": "TamW7k7hQJE7T5Dsy",
 			"name": "Tyranid Biology",
-			"local_notes": "Lore: The Tyranid Biology shared by every bioform in a Hive Fleet: bound to the Hive Mind from the moment it is grown, disciplined and fearless only so long as a synapse creature's link holds, mute and without individual culture, and adapted to digest or shrug off almost anything a target world can throw at it. This is the baseline every body-type lens below (Termagant through Carnifex) builds on top of; the lens supplies the bioform's own attributes, chitin DR, and any special biology (leaping legs, rending claws, psychic organs, wings) that role calls for.\n\nDesign: 5 (Hive Mind Link) - 10 (Synapse Dependence) + 5 (Synapse Discipline) - 15 (Cannot Speak) + 0 (No Independent Society) + 30 (Adapted Biology) = 15 points of shared physiology before attributes, chitin DR, special biology, or skills. See each template for a full stat block built on top of this plus a body- type lens.",
+			"local_notes": "Lore: The Tyranid Biology shared by every bioform in a Hive Fleet: bound to the Hive Mind from the moment it is grown, disciplined and fearless only so long as a synapse creature's link holds, mute and without individual culture, and adapted to digest or shrug off almost anything a target world can throw at it. This is the baseline every body-type lens below (Termagant through Carnifex) builds on top of; the lens supplies the bioform's own attributes, chitin DR, and any special biology (leaping legs, rending claws, psychic organs, wings) that role calls for.\n\nDesign: 5 (Hive Mind Link) - 10 (Synapse Dependence) + 10 (Synapse Discipline) - 15 (Cannot Speak) + 0 (No Independent Society) + 30 (Adapted Biology) = 20 points of shared physiology before attributes, chitin DR, special biology, or skills. See each template for a full stat block built on top of this plus a body- type lens.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -52,21 +52,22 @@
 				{
 					"id": "t7FWgNxr8ohUSnhEY",
 					"name": "Synapse Discipline",
-					"local_notes": "While linked, Synapse Dependence's instinctive-behaviour effects are fully suppressed: the organism fights with total discipline, no fear, and follows the Hive Mind's tactical intent through the nearest synapse creature exactly as ordered. The moment the link breaks (the synapse creature dies, moves out of range, or is itself cut off from a larger synapse creature further up the chain), Synapse Dependence resumes immediately.\n\nLore: A swarm fighting under a synapse creature's watch is unrecognisable from the same swarm cut loose — utterly fearless, perfectly coordinated, and willing to press an attack to the last organism. This is the other half of the same well-documented Codex mechanic that makes synapse creatures the Imperium's priority targets.\n\nDesign: A narrow conditional Will/Fright Check bonus, built the same way this project's Ork WAAAGH! Gestalt prices an equivalent situational bonus (5 points) rather than a flat, always-on Fearlessness — here the \"always on\" case is Synapse Dependence's disadvantage instead, and this trait is the paired benefit that replaces it under a synapse creature's link.",
+					"reference": "B55",
+					"local_notes": "Fearlessness 5 (+5 to Fright Checks and to Will rolls to resist fear, intimidation and Bestial) and High Pain Threshold (no shock penalty, no stun from injury), both only while within the range of a Synapse Creature's link (see that trait). While linked, Synapse Dependence's instinctive-behaviour effects are fully suppressed: the organism fights with total discipline, no fear, and follows the Hive Mind's tactical intent through the nearest synapse creature exactly as ordered. The moment the link breaks (the synapse creature dies, moves out of range, or is itself cut off from a larger synapse creature further up the chain), Synapse Dependence resumes immediately and the fearlessness and pain immunity go with it.\n\nLore: A swarm fighting under a synapse creature's watch is unrecognisable from the same swarm cut loose: utterly fearless, feeling no pain, perfectly coordinated, and willing to press an attack to the last organism. This is the other half of the same well-documented Codex mechanic that makes synapse creatures the Imperium's priority targets, and matches framework.md's \"no fear or pain within synapse.\"\n\nDesign: Fearlessness 5 (B55, 2 points/level = 10) plus High Pain Threshold (B59, 10) = 20 points, with Accessibility (only while linked to a synapse creature, -50%): 20 x 0.5 = 10 points. Earlier drafts priced a 5-point conditional Will bonus that never delivered the fearlessness and pain immunity the framework and the fiction give Tyranids in synapse.",
 					"tags": [
 						"Advantage",
 						"Mental",
 						"Xenos",
 						"Tyranids"
 					],
-					"base_points": 5,
-					"features": [
+					"modifiers": [
 						{
-							"type": "conditional_modifier",
-							"situation": "to Will rolls and Fright Checks, and to resist Bestial's effects, while within the range of a Synapse Creature's link (see that trait)",
-							"amount": 4
+							"id": "m9XDu0vzFeqC3DcMx",
+							"name": "Accessibility (only while linked to a synapse creature)",
+							"cost_adj": "-50%"
 						}
-					]
+					],
+					"base_points": 20
 				},
 				{
 					"id": "tOBMR4jZVpEjdpyse",
@@ -122,7 +123,7 @@
 		{
 			"id": "TaQgnWzvB4Sj64Jud",
 			"name": "Body Lens: Lictor",
-			"local_notes": "Lore: The Lictor: a solitary, chameleonic stalker sent ahead of a landing to scout, terrorise, and mark a kill zone for the swarm that follows -- consistent Codex background across editions, and the basis for the classic \"something was watching, then it wasn't\" Black Library beat.\n\nDesign: 206 (Attribute Modifiers) + 300 (Chitin DR 60) + 20 (Chameleonic Hide) + 1 (Pheromone Trail) + 20 (Shadow in the Warp) = 547 points, added to Tyranid Biology's 15 for 562 points of physiology alone before skills and its weapon-symbiotes, on a par with the Tyranid Warrior lens. See the Lictor template. NPC creature stat block only.",
+			"local_notes": "Lore: The Lictor: a solitary, chameleonic stalker sent ahead of a landing to scout, terrorise, and mark a kill zone for the swarm that follows -- consistent Codex background across editions, and the basis for the classic \"something was watching, then it wasn't\" Black Library beat.\n\nDesign: 206 (Attribute Modifiers) + 300 (Chitin DR 60) + 20 (Chameleonic Hide) + 1 (Pheromone Trail) + 20 (Shadow in the Warp) = 547 points, added to Tyranid Biology's 20 for 567 points of physiology alone before skills and its weapon-symbiotes, on a par with the Tyranid Warrior lens. See the Lictor template. NPC creature stat block only.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -267,8 +268,8 @@
 		{
 			"id": "tdKmCARClPbvwgG8W",
 			"name": "Flesh Hooks",
-			"reference": "B271",
-			"local_notes": "Lore: A cluster of long, backward-curved hooks grown from the forearms of Raveners and some Tyranid Primes, built less to kill outright than to snag a fleeing target or drag an objective-holder out of cover and into the swarm's reach. Codex: Tyranids background and the current tabletop's own objective-control rules for Flesh Hooks agree on this grab-and-drag role over a purely offensive one.\n\nDesign: No framework anchor names Flesh Hooks by dice, only by role (grapple and drag), so it is built as a plain natural weapon at a Ravener's own ST 22 (thr 2d) with no bonus dice bought on top, since its point is the grab, not the kill: Impaling Striker (B271, 8 points, the hooked-barb reading of a Piercing Striker's family) with the Long 1 enhancement (this project's own estimated +40%/level, as the Lash Whip above) for the extra reach the hooks need to snag at range 2: 8x1.4=11.2, rounded to 11. No exact-dice penetration table is given since Flesh Hooks are not built or priced as an armour-cracking weapon; thr imp at ST 22 (2d imp) is a believable puncture against flesh and unarmoured targets, and the grapple note above is the symbiote's actual battlefield function.",
+			"reference": "B88",
+			"local_notes": "Lore: A cluster of long, backward-curved hooks grown from the forearms of Raveners and some Tyranid Primes, built less to kill outright than to snag a fleeing target or drag an objective-holder out of cover and into the swarm's reach. Codex: Tyranids background and the current tabletop's own objective-control rules for Flesh Hooks agree on this grab-and-drag role over a purely offensive one.\n\nDesign: No framework anchor names Flesh Hooks by dice, only by role (grapple and drag), so it is built as a plain natural weapon at a Ravener's own ST 22 (thr 2d) with no bonus dice bought on top, since its point is the grab, not the kill: Impaling Striker (B88, 8 points, the hooked-barb reading of a Piercing Striker's family) with the Long 1 enhancement (this project's own estimated +40%/level, as the Lash Whip above) for the extra reach the hooks need to snag at range 2: 8x1.4=11.2, rounded to 11. No exact-dice penetration table is given since Flesh Hooks are not built or priced as an armour-cracking weapon; thr imp at ST 22 (2d imp) is a believable puncture against flesh and unarmoured targets, and the grapple note above is the symbiote's actual battlefield function.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -305,49 +306,10 @@
 			]
 		},
 		{
-			"id": "tP5IF8-T3StTUzrsK",
-			"name": "Lash Whip",
-			"reference": "B41",
-			"local_notes": "Lore: A long, muscular, whip-like limb almost always carried alongside a Bonesword: not primarily a killing weapon, but a control one, lashing out to entangle and unbalance a target so the blade in the creature's other limb can land a clean, undefended blow. Codex: Tyranids background is explicit that Lash Whip and Bonesword are a matched pair on Tyranid Warriors and Primes, one pinning while the other kills.\n\nDesign: No framework anchor gives this weapon exact numbers, only its control-weapon role, so it is built directly on that role: Binding (B41, 2 points/level) at level 20, matching a Tyranid Warrior/Prime's own ST 24 minus some slack for the whip's own flexibility versus a solid limb's grip = 40 points, plus a minor Crushing Striker (B271, 5 points) with the Long 1 enhancement for its extra reach (this project's own estimated +40%/level, since Basic Set's core rules don't tabulate a Claws/Striker reach extension and this project's Necron/Ork files already document similar own-estimate percentages for un-tabled Basic Set options): 5x1.4=7. Total 40+7=47. No exact- dice penetration check applies to a Binding-based control weapon in the way it does to a damage-dealing one; its function is to set up the Bonesword's own (10)-divisor hit, not to punch through armour itself. Reach 1-2 and Parry -1 reflect a long, flexible limb that reaches further than a talon but is a worse parrying tool for it.",
-			"tags": [
-				"Advantage",
-				"Physical",
-				"Xenos",
-				"Tyranids"
-			],
-			"base_points": 47,
-			"weapons": [
-				{
-					"id": "w0Nuf360W1KpvKtf5",
-					"sv": 1,
-					"damage": {
-						"type": "cr"
-					},
-					"reach": "1,2",
-					"parry": "-1",
-					"usage": "Standard (entangle)",
-					"usage_notes": "Binding 20 (B41): a successful hit entangles rather than damages by default; the target must beat the Lash Whip's own Binding 20 (as an effective ST/DX contest per B41) to break free before its bearer's Bonesword or Scything Talons finish the job. The listed cr damage is what a Lash Whip does if its bearer chooses to lash rather than bind on a given hit.",
-					"defaults": [
-						{
-							"type": "dx",
-							"modifier": 0
-						},
-						{
-							"type": "skill",
-							"name": {
-								"compare": "is",
-								"qualifier": "Brawling"
-							}
-						}
-					]
-				}
-			]
-		},
-		{
 			"id": "tkdqGkkRftZoqnyaP",
 			"name": "Rending Claws",
-			"reference": "B271",
-			"local_notes": "Lore: The Genestealer's signature weapon: claws sharp and strong enough to punch clean through ceramite and plasteel on a solid hit, not merely cut flesh. Codex: Tyranids background and the Deathwatch RPG's own Genestealer material both single out rending claws as capable of shearing through power armour where an ordinary scything talon cannot — precisely the divisor-swap-on-a-good-hit this project's \"rending\" house rule (framework.md) exists to model.\n\nDesign: Framework.md's own anchor: \"Rending claws | sw+2d(3) cut; rending: a hit that succeeds by 5+ or is a critical uses armour divisor (10) instead.\" Built at a Genestealer's own ST 18 (sw 3d, framework's bioform table): Cutting Striker (B271, 7 points) with Armor Divisor (3) (B102, +100%) = 14 for the sw+0(3) baseline; the anchor's own +2d is bought as Innate Attack (Cut) (B61, 7/die) at 2 dice = 14, with Armor Divisor (3) (+100%) and Melee Attack, Reach C (-30%): net +70%, 14x1.7=23.8, rounded to 24. Total 14+24=38. The Rending hit line costs nothing extra: it is the same attack, the same dice, and the same points already paid above — only the armour divisor applied to a hit that already succeeded well changes, exactly as framework.md's own rule describes it (a chance-based crit effect, not a bought capability). Checked by exact dice distribution at ST 18 (sw+2d = 5d): the ordinary (3) line averages 17.5 and penetrates flak 96.8%, carapace (eff. 23.3) 5.9%, Sororitas (eff. 28.3) 0.08%, and 0% against Astartes plate or heavier — a solid but unremarkable melee weapon on an ordinary hit. The Rending hit's (10) line, same 5d average 17.5: flak 100%, carapace (eff. 7) 99.7%, Sororitas (eff. 8.5) 99.3%, Astartes plate (eff. 10) 96.8%, and even a Terminator (eff. 20) 22.2% — genuinely \"shears through ceramite,\" exactly what the anchor's own text claims, and only on the hits the rending rule says should count.",
+			"reference": "B88",
+			"local_notes": "Lore: The Genestealer's signature weapon: claws sharp and strong enough to punch clean through ceramite and plasteel on a solid hit, not merely cut flesh. Codex: Tyranids background and the Deathwatch RPG's own Genestealer material both single out rending claws as capable of shearing through power armour where an ordinary scything talon cannot — precisely the divisor-swap-on-a-good-hit this project's \"rending\" house rule (framework.md) exists to model.\n\nDesign: Framework.md's own anchor: \"Rending claws | sw+2d(3) cut; rending: a hit that succeeds by 5+ or is a critical uses armour divisor (10) instead.\" Built at a Genestealer's own ST 18 (sw 3d, framework's bioform table): Cutting Striker (B88, 7 points) with Armor Divisor (3) (B102, +100%) = 14 for the sw+0(3) baseline; the anchor's own +2d is bought as Innate Attack (Cut) (B61, 7/die) at 2 dice = 14, with Armor Divisor (3) (+100%) and Melee Attack, Reach C (-30%): net +70%, 14x1.7=23.8, rounded to 24. Total 14+24=38. The Rending hit line costs nothing extra: it is the same attack, the same dice, and the same points already paid above — only the armour divisor applied to a hit that already succeeded well changes, exactly as framework.md's own rule describes it (a chance-based crit effect, not a bought capability). Checked by exact dice distribution at ST 18 (sw+2d = 5d): the ordinary (3) line averages 17.5 and penetrates flak 96.8%, carapace (eff. 23.3) 5.9%, Sororitas (eff. 28.3) 0.08%, and 0% against Astartes plate or heavier — a solid but unremarkable melee weapon on an ordinary hit. The Rending hit's (10) line, same 5d average 17.5: flak 100%, carapace (eff. 7) 99.7%, Sororitas (eff. 8.5) 99.3%, Astartes plate (eff. 10) 96.8%, and even a Terminator (eff. 20) 22.2% — genuinely \"shears through ceramite,\" exactly what the anchor's own text claims, and only on the hits the rending rule says should count.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -416,7 +378,7 @@
 		{
 			"id": "sMFEU6cKCi1egtY6J",
 			"name": "Brawling",
-			"local_notes": "Lore: A Lictor's rending claws finish whatever its ambush started.\n\nDesign: DX+1 (16) for 4 points, Easy.",
+			"local_notes": "Lore: A Lictor's rending claws finish whatever its ambush started.\n\nDesign: DX+2 (17) for 4 points, Easy.",
 			"tags": [
 				"Xenos",
 				"Tyranids"

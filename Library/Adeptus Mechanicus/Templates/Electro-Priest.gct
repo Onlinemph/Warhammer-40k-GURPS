@@ -1,7 +1,7 @@
 {
 	"version": 5,
 	"id": "Bq7zsp-EBrvcul5hb",
-	"notes": "An Electro-Priest: a fanatical warrior-priest of the Motive Force who chose this transformation to serve the Cult Mechanicus body and soul (Codex: Adeptus Mechanicus background) -- devoted, doctrinally certain, and dangerous in a fight, not the near-mindless temple slave a Servitor is (Adeptus Mechanicus/Templates/Combat Servitor.gct is that template instead). Baseline below is the Corpuscarii pattern (ranged electrostatic gauntlets); enable the disabled \"Lens: Fulgurite Conversion\" for the melee electroleech-staff pattern instead. Point math: ST 12 (+20), DX 11 (+20), IQ 10 (+0), HT 12 (+20) = 60, plus Will +2 (+10) = 70; advantages +126 (Voltagheist Field 49 + Electrostatic Gauntlets, Corpuscarii Pattern 56 + Respirator Plugs 5 + Potentia Coil 2 + High Pain Threshold 10 + Fearlessness x2 4); disadvantages -40; skills +36. Total 192 points, inside framework.md's \"Elite human (200-350)\" tier's lower approach and comfortably above \"Trained soldier\" -- a devoted zealot-warrior, tougher and better-defended than a Guardsman but not as broadly trained as a Battle Sister or Inquisitorial acolyte. The electro-flail/staff itself (the physical weapon a Fulgurite carries) and any other equipment are not covered here; the attack traits below are the augmetic/bio-electric ability, not a separate weapon purchase.\n",
+	"notes": "An Electro-Priest: a fanatical warrior-priest of the Motive Force who chose this transformation to serve the Cult Mechanicus body and soul (Codex: Adeptus Mechanicus background) -- devoted, doctrinally certain, and dangerous in a fight, not the near-mindless temple slave a Servitor is (Adeptus Mechanicus/Templates/Combat Servitor.gct is that template instead). Baseline below is the Corpuscarii pattern (ranged electrostatic gauntlets); enable the disabled \"Lens: Fulgurite Conversion\" for the melee electroleech-staff pattern instead. Point math: ST 12 (+20), DX 11 (+20), IQ 10 (+0), HT 12 (+20) = 60, plus Will +2 (+10) = 70; advantages +127 (Electoo Inductors 1 + Voltagheist Field 49 + Electrostatic Gauntlets, Corpuscarii Pattern 56 + Respirator Plugs 5 + Potentia Coil 2 + High Pain Threshold 10 + Fearlessness x2 4); disadvantages -40; skills +28. Total 185 points, just above framework.md's \"Trained soldier (100-175)\" tier and just under \"Elite human (200-350)\" -- a devoted zealot-warrior, tougher and better-defended than a Guardsman but not as broadly trained as a Battle Sister or Inquisitorial acolyte. The electro-flail/staff itself (the physical weapon a Fulgurite carries) and any other equipment are not covered here; the attack traits below are the augmetic/bio-electric ability, not a separate weapon purchase.\n",
 	"traits": [
 		{
 			"id": "tXWkazPIWktyEnW3G",
@@ -252,7 +252,7 @@
 		{
 			"id": "TntUc9oHL2pA7wNgr",
 			"name": "Lens: Fulgurite Conversion",
-			"local_notes": "Lore: Fulgurite Electro-Priests trade the Corpuscarii's ranged electrostatic gauntlets for a melee electroleech staff that drains a target's own vitality to fuel the wielder -- a different weapon pattern built on the same Voltagheist Field and Cult conditioning, not a stronger version of the same thing.\n\nDesign: Disable Electrostatic Gauntlets, Corpuscarii Pattern (-56 points) and enable this lens's Electroleech Staff, Fulgurite Pattern (+52 points) instead: a net -4 points relative to the baseline template (188 total). Also move the 16 points this template spends on Innate Attack (Beam) onto the Staff skill instead (see this template's skill list), since the Fulgurite pattern's staff is a melee weapon resolved with its own weapon skill, not the Innate Attack skill a ranged gauntlet-bolt needs.",
+			"local_notes": "Lore: Fulgurite Electro-Priests trade the Corpuscarii's ranged electrostatic gauntlets for a melee electroleech staff that drains a target's own vitality to fuel the wielder -- a different weapon pattern built on the same Voltagheist Field and Cult conditioning, not a stronger version of the same thing.\n\nDesign: Disable Electrostatic Gauntlets, Corpuscarii Pattern (-56 points) and enable this lens's Electroleech Staff, Fulgurite Pattern (+52 points) instead: a net -4 points on traits, +4 more on skills once Staff is raised to 12 (the same total as the baseline template). Also move the 8 points this template spends on Innate Attack (Beam) onto the Staff skill instead, raised to 12 (see below) (see this template's skill list), since the Fulgurite pattern's staff is a melee weapon resolved with its own weapon skill, not the Innate Attack skill a ranged gauntlet-bolt needs.",
 			"tags": [
 				"Imperium",
 				"Adeptus Mechanicus",
@@ -283,15 +283,15 @@
 		{
 			"id": "s4SB6uEtSwlg4cnsC",
 			"name": "Innate Attack",
-			"local_notes": "Lore: The skill that resolves an Electrostatic Gauntlets shot (B61); a Fulgurite build should move these points to Staff instead (see the Fulgurite lens above).\n\nDesign: DX+3 (14) for 16 points, Hard (B170).",
+			"local_notes": "Lore: The skill that resolves an Electrostatic Gauntlets shot (B61); a Fulgurite build should move these points to Staff instead (see the Fulgurite lens above).\n\nDesign: DX+3 (14) for 8 points, Easy (B170).",
 			"tags": [
 				"Imperium",
 				"Adeptus Mechanicus",
 				"Electro-Priest"
 			],
 			"specialization": "Beam",
-			"difficulty": "dx/h",
-			"points": 16
+			"difficulty": "dx/e",
+			"points": 8
 		},
 		{
 			"id": "sIOVVqM00kXWkM69g",
@@ -368,17 +368,18 @@
 		{
 			"id": "sxgFCohxs-MCArGZJ",
 			"name": "Meditation",
-			"local_notes": "Lore: The trance-discipline that keeps a permanently electrified body and an equally charged faith both under control.\n\nDesign: IQ-1 (9) for 2 points, Hard.",
+			"reference": "B207",
+			"local_notes": "Lore: The trance-discipline that keeps a permanently electrified body and an equally charged faith both under control.\n\nDesign: Will-1 for 2 points, Hard; Meditation is Will-based (B207).",
 			"tags": [
 				"Imperium"
 			],
-			"difficulty": "iq/h",
+			"difficulty": "will/h",
 			"points": 2
 		},
 		{
 			"id": "sNrySgWpHjUiL30JE",
 			"name": "Staff",
-			"local_notes": "Lore: The electroleech staff's weapon skill, per framework.md's weapon-skill table (Staff covers polearm-length two-handed staves). Bought at 0 points in the Corpuscarii baseline; a Fulgurite build moves the 16 points off Innate Attack (Beam) above onto this skill instead (DX+3, 14, for 16 points, Average).\n\nDesign: Listed here so a Fulgurite conversion has an obvious line to raise; contributes 0 points to this template's baseline total.",
+			"local_notes": "Lore: The electroleech staff's weapon skill, per framework.md's weapon-skill table (Staff covers polearm-length two-handed staves). Bought at 0 points in the Corpuscarii baseline; a Fulgurite build moves the 8 points off Innate Attack (Beam) above onto this skill, raised to 12 points (DX+3, 14, Average), leaving the Fulgurite total at the baseline figure.\n\nDesign: Listed here so a Fulgurite conversion has an obvious line to raise; contributes 0 points to this template's baseline total.",
 			"tags": [
 				"Imperium",
 				"Adeptus Mechanicus",

@@ -4,7 +4,7 @@
 		{
 			"id": "eNZc8zqoPOSFOrJLY",
 			"description": "Guardian Mesh Armour",
-			"local_notes": "Weak Points 5: when a hit on this armour fails to penetrate, roll 3d; on 5 or less it found a gap and DR is halved against it.\n\nFlexible armour (B47): blunt-trauma rules apply — any attack that fails to penetrate this DR still delivers (damage/10, rounded down, minimum 1) crushing injury to the wearer, per the flexible-armour rule for mesh, cloth and similarly soft-plate protection.\n\nLore: Worn by the Guardian militia every craftworld calls up when threatened: a fine mesh of psychoplastic and wraithbone fibres woven into a bodysuit, described throughout Codex: Craftworlds and Path of the Eldar as far lighter and less restrictive than Imperial armour of similar protection, letting a Guardian move and fight as freely as if unarmoured. framework.md's own Aeldari anchor fixes it directly: \"Flexible, DR 36 (the mesh anchor), Weak Points 5.\"\n\nDesign: This is the project's fixed anchor figure: DR 36, matching (and directly justified by cross-reference to) the Imperium's own Mesh Armour entry in armour.yaml — the framework explicitly calls this \"the mesh anchor,\" so Guardian mesh is built to be mechanically identical in what it stops, honestly reflecting that mesh-class protection is mesh-class protection regardless of which culture wove it, while everything else about the entry (weight, cost, coverage, flexible-armour note) is derived independently for an Aeldari garment rather than copied wholesale. Checked with the exact dice distribution: it stops a lasgun or lasblaster hit (7d(2) burn) 9.4% of the time (90.6% get through) and a shuriken catapult hit (5d(3) cut, its own kin weapon) 9.8% of the time (90.2% get through) — genuinely thin protection against dedicated small arms, matching a Guardian militia's own status as citizen part-timers rather than dedicated soldiers, while still meaningfully better than nothing against an autogun's stub rounds (99.7% stopped) or a stray blade. Handling: 6 lb, far lighter than the Imperium's own Mesh Armour (which the Imperium entry lists heavier, being metal-reinforced) since this is a woven fibre suit rather than a plated garment, matching \"far lighter and less restrictive\" from the lore directly; full limb coverage (unlike the Imperium Flak Vest's torso-only coverage) reflects a full bodysuit rather than a vest. Weak Points 5, matching the framework's own anchor figure exactly, one point tighter than the Imperium's own Guard-pattern carapace (7) — Guardian mesh has fewer gaps than plate armour precisely because it has no rigid plates to leave seams between.",
+			"local_notes": "Weak Points 5: when a hit on this armour fails to penetrate, roll 3d; on 5 or less it found a gap and DR is halved against it.\n\nFlexible armour (B47): blunt-trauma rules apply — any attack that fails to penetrate this DR still delivers (damage/10, rounded down, minimum 1) crushing injury to the wearer, per the flexible-armour rule for mesh, cloth and similarly soft-plate protection.\n\nLore: Worn by the Guardian militia every craftworld calls up when threatened: a fine mesh of psychoplastic and wraithbone fibres woven into a bodysuit, described throughout Codex: Craftworlds and Path of the Eldar as far lighter and less restrictive than Imperial armour of similar protection, letting a Guardian move and fight as freely as if unarmoured. framework.md's own Aeldari anchor fixes it directly: \"Flexible, DR 36 (the mesh anchor), Weak Points 5.\"\n\nDesign: This is the project's fixed anchor figure: DR 36, matching (and directly justified by cross-reference to) the Imperium's own Mesh Armour entry in armour.yaml — the framework explicitly calls this \"the mesh anchor,\" so Guardian mesh is built to be mechanically identical in what it stops, honestly reflecting that mesh-class protection is mesh-class protection regardless of which culture wove it, while everything else about the entry (weight, cost, coverage, flexible-armour note) is derived independently for an Aeldari garment rather than copied wholesale. Checked with the exact dice distribution: it stops a lasgun or lasblaster hit (7d(2) burn) 9.4% of the time (90.6% get through) and a shuriken catapult hit (5d(3) cut, its own kin weapon) 9.8% of the time (90.2% get through) — genuinely thin protection against dedicated small arms, matching a Guardian militia's own status as citizen part-timers rather than dedicated soldiers, while still meaningfully better than nothing against an autogun's stub rounds (99.7% stopped) or a stray blade. Handling: 6 lb, far lighter than the Imperium's own Mesh Armour (which the Imperium entry lists heavier, being metal-reinforced) since this is a woven fibre suit rather than a plated garment, matching \"far lighter and less restrictive\" from the lore directly; full limb coverage (unlike the Imperium Flak Vest's torso-only coverage) reflects a full bodysuit rather than a vest. Weak Points 5, matching the framework's own anchor figure exactly and equal to the Imperium's Guard-pattern carapace (5). Limbs sit seven DR under the torso (29, as on the Imperium mesh), the eye lens is 20 (as on carapace visors), and the hands and feet are left at 0 (fibre gloves and slippers, not armour).",
 			"tags": [
 				"Body Armor",
 				"Xenos",
@@ -20,11 +20,17 @@
 					"locations": [
 						"torso",
 						"vitals",
-						"groin",
+						"groin"
+					],
+					"amount": 36
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
 						"arm",
 						"leg"
 					],
-					"amount": 36
+					"amount": 29
 				},
 				{
 					"type": "dr_bonus",
@@ -40,7 +46,7 @@
 					"locations": [
 						"eye"
 					],
-					"amount": 25
+					"amount": 20
 				},
 				{
 					"type": "dr_bonus",
@@ -56,7 +62,7 @@
 		{
 			"id": "es2ogCSIcmag3ekgJ",
 			"description": "Aspect Armour",
-			"local_notes": "Weak Points 4: when a hit on this armour fails to penetrate, roll 3d; on 4 or less it found a gap and DR is halved against it.\n\nFlexible armour (B47) despite the high DR: it is built from layered thermoplas plates over a flexible weave rather than rigid ceramite, so the blunt-trauma rule applies exactly as for Guardian mesh above — any attack that fails to penetrate still delivers (damage/10, rounded down, minimum 1) crushing injury.\n\nLore: The war-plate every Aspect Warrior dons on entering their shrine, distinct in look and construction between shrines (a Dire Avenger's sleek plate differs visibly from a Striking Scorpion's) but consistent in what it does: Codex: Craftworlds background and Path of the Eldar both frame Aspect armour as protection on par with a rigid suit despite being far lighter and more flexible than anything Imperial, letting an Aspect Warrior fight with an Astartes-like intensity without an Astartes's bulk. framework.md's own Aeldari anchor fixes it directly: \"Flexible thermoplas plates, DR 70, Weak Points 4.\"\n\nDesign: Held exactly at the project's fixed anchor: DR 70, deliberately equal to the Imperium carapace anchor rather than lower, because the framework is explicit this is genuinely rigid-plate-equivalent protection despite being built and worn completely differently — the flexible-armour note above is what actually distinguishes it mechanically from Imperium carapace, not a lower DR figure. Checked with the exact dice distribution: it stops a lasgun or lasblaster hit 99.4% of the time (0.6% get through, identical to the Imperium carapace-vs-lasgun figure since both sit at DR 70) and a bolter round (6dx2(2) pi++) 20.6% of the time (79.4% get through) — an Aspect Warrior in full war-plate is genuinely hard to put down with small arms, but a boltgun still kills them about as readily as it kills a Guardsman in carapace. Handling: 14 lb, well under any Imperium rigid plate of comparable protection (carapace itself typically runs 20-25 lb in this project's own armour.yaml) for the same lighter Aeldari construction principle used throughout this file. Weak Points 4, one point tighter than Imperium Guard-pattern carapace's WP 5 and matching the Tempestus/Arbites-grade WP 4 instead — an Aspect Warrior's plate is master-crafted to their own body, with fewer gaps than mass-produced Guard carapace, but it's still articulated, flexible plate and not the near-seamless WP 3 of a Terminator's sealed suit.",
+			"local_notes": "Weak Points 4: when a hit on this armour fails to penetrate, roll 3d; on 4 or less it found a gap and DR is halved against it.\n\nFlexible armour (B47) despite the high DR: it is built from layered thermoplas plates over a flexible weave rather than rigid ceramite, so the blunt-trauma rule applies exactly as for Guardian mesh above — any attack that fails to penetrate still delivers (damage/10, rounded down, minimum 1) crushing injury.\n\nLore: The war-plate every Aspect Warrior dons on entering their shrine, distinct in look and construction between shrines (a Dire Avenger's sleek plate differs visibly from a Striking Scorpion's) but consistent in what it does: Codex: Craftworlds background and Path of the Eldar both frame Aspect armour as protection on par with a rigid suit despite being far lighter and more flexible than anything Imperial, letting an Aspect Warrior fight with an Astartes-like intensity without an Astartes's bulk. framework.md's own Aeldari anchor fixes it directly: \"Flexible thermoplas plates, DR 70, Weak Points 4.\"\n\nDesign: Held exactly at the project's fixed anchor: DR 70, deliberately equal to the Imperium carapace anchor rather than lower, because the framework is explicit this is genuinely rigid-plate-equivalent protection despite being built and worn completely differently — the flexible-armour note above is what actually distinguishes it mechanically from Imperium carapace, not a lower DR figure. Checked with the exact dice distribution: it stops a lasgun or lasblaster hit 99.4% of the time (0.6% get through, identical to the Imperium carapace-vs-lasgun figure since both sit at DR 70) and a bolter round (6dx2(2) pi++) 20.6% of the time (79.4% get through) — an Aspect Warrior in full war-plate is genuinely hard to put down with small arms, but a boltgun still kills them about as readily as it kills a Guardsman in carapace. Limbs are a few DR under the torso (64) as the framework asks, with gauntlets and greaves at 36 and the helmet eye lens at 25, well under the helmet's own DR as with every lens in this project. Handling: 14 lb, well under any Imperium rigid plate of comparable protection (carapace itself typically runs 20-25 lb in this project's own armour.yaml) for the same lighter Aeldari construction principle used throughout this file. Weak Points 4, one point tighter than Imperium Guard-pattern carapace's WP 5 and matching the Tempestus/Arbites-grade WP 4 instead — an Aspect Warrior's plate is master-crafted to their own body, with fewer gaps than mass-produced Guard carapace, but it's still articulated, flexible plate and not the near-seamless WP 3 of a Terminator's sealed suit.",
 			"tags": [
 				"Body Armor",
 				"Xenos",
@@ -72,11 +78,17 @@
 					"locations": [
 						"torso",
 						"vitals",
-						"groin",
+						"groin"
+					],
+					"amount": 70
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
 						"arm",
 						"leg"
 					],
-					"amount": 70
+					"amount": 64
 				},
 				{
 					"type": "dr_bonus",
@@ -92,7 +104,7 @@
 					"locations": [
 						"eye"
 					],
-					"amount": 35
+					"amount": 25
 				},
 				{
 					"type": "dr_bonus",
@@ -100,7 +112,7 @@
 						"hand",
 						"foot"
 					],
-					"amount": 0
+					"amount": 36
 				}
 			],
 			"quantity": 1
@@ -108,7 +120,7 @@
 		{
 			"id": "eFSdSA5ong-DKgrrf",
 			"description": "Heavy Aspect Armour",
-			"local_notes": "Weak Points 4: when a hit on this armour fails to penetrate, roll 3d; on 4 or less it found a gap and DR is halved against it.\n\nFlexible armour (B47), the same blunt-trauma rule as standard Aspect Armour above.\n\nLore: A bulkier, more heavily plated version of Aspect armour worn by Dark Reaper and Fire Dragon shrines, whose members carry the heaviest personal weapons (the Reaper Launcher and Fusion Gun) and, per Codex: Craftworlds background, correspondingly need — and are issued — sturdier protection than the lighter, faster shrines like the Dire Avengers or Striking Scorpions.\n\nDesign: No framework anchor names this variant directly, so it is interpolated between the two anchors that do exist for Aeldari plate: roughly halfway between the standard Aspect Armour anchor (DR 70) and the Exarch Armour anchor (DR 85), landing on DR 78 — extra plating for a shrine that stands and fires heavy weapons rather than closing at speed, but not the unique, individually-fitted wraithbone-fused suit an Exarch alone wears. Checked with the exact dice distribution: it stops a bolter round 36.3% of the time (up from standard Aspect Armour's 20.6%) and a shuriken catapult hit — its own kin weapon family — 99.3% of the time (up from 94.1%), a real, quantifiable step up in protection for a heavier-shrine warrior, not a cosmetic difference in name only. Handling: 20 lb, six pounds over the standard Aspect Armour for the extra plating, and Weak Points 4 unchanged (this is still articulated Aeldari plate with an Aspect Warrior's own fit and finish, not a rigid Exarch-grade suit — the extra weight buys DR, not fewer gaps).",
+			"local_notes": "Weak Points 4: when a hit on this armour fails to penetrate, roll 3d; on 4 or less it found a gap and DR is halved against it.\n\nFlexible armour (B47), the same blunt-trauma rule as standard Aspect Armour above.\n\nLore: A bulkier, more heavily plated version of Aspect armour worn by Dark Reaper and Fire Dragon shrines, whose members carry the heaviest personal weapons (the Reaper Launcher and Fusion Gun) and, per Codex: Craftworlds background, correspondingly need — and are issued — sturdier protection than the lighter, faster shrines like the Dire Avengers or Striking Scorpions.\n\nDesign: No framework anchor names this variant directly, so it is interpolated between the two anchors that do exist for Aeldari plate: roughly halfway between the standard Aspect Armour anchor (DR 70) and the Exarch Armour anchor (DR 85), landing on DR 78 — extra plating for a shrine that stands and fires heavy weapons rather than closing at speed, but not the unique, individually-fitted wraithbone-fused suit an Exarch alone wears. Checked with the exact dice distribution: it stops a bolter round 36.3% of the time (up from standard Aspect Armour's 20.6%) and a shuriken catapult hit — its own kin weapon family — 99.3% of the time (up from 94.1%), a real, quantifiable step up in protection for a heavier-shrine warrior, not a cosmetic difference in name only. Limbs 72, gauntlets and greaves 40, eye lens 25. Handling: 20 lb, six pounds over the standard Aspect Armour for the extra plating, and Weak Points 4 unchanged (this is still articulated Aeldari plate with an Aspect Warrior's own fit and finish, not a rigid Exarch-grade suit — the extra weight buys DR, not fewer gaps).",
 			"tags": [
 				"Body Armor",
 				"Xenos",
@@ -124,11 +136,17 @@
 					"locations": [
 						"torso",
 						"vitals",
-						"groin",
+						"groin"
+					],
+					"amount": 78
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
 						"arm",
 						"leg"
 					],
-					"amount": 78
+					"amount": 72
 				},
 				{
 					"type": "dr_bonus",
@@ -144,7 +162,7 @@
 					"locations": [
 						"eye"
 					],
-					"amount": 35
+					"amount": 25
 				},
 				{
 					"type": "dr_bonus",
@@ -152,7 +170,7 @@
 						"hand",
 						"foot"
 					],
-					"amount": 0
+					"amount": 40
 				}
 			],
 			"quantity": 1
@@ -160,7 +178,7 @@
 		{
 			"id": "e5RmEmUbpWX1GDZUP",
 			"description": "Exarch Armour",
-			"local_notes": "Weak Points 4: when a hit on this armour fails to penetrate, roll 3d; on 4 or less it found a gap and DR is halved against it.\n\nFlexible armour (B47), the same blunt-trauma rule as the other Aeldari plate in this file.\n\nLore: The unique suit an Exarch is fused into on taking up their shrine's relic weapon and losing themselves to the Path of the Warrior forever; Codex: Craftworlds background is explicit that Exarch armour is wraithbone-bonded to its wearer in a way standard Aspect armour is not, part of what makes reverting to another Path effectively impossible for an Exarch. framework.md's own Aeldari anchor fixes the DR directly: \"DR 85, Weak Points 4.\"\n\nDesign: Held exactly at the project's fixed anchor: DR 85, one step above standard Aspect Armour and equal to the Imperium's own Sororitas power armour anchor — deliberately so, since both sit above ordinary rigid plate as an elite step up without reaching full Astartes-grade protection. Checked with the exact dice distribution: it stops a bolter round 54.6% of the time (up from standard Aspect Armour's 20.6%), a real, meaningful step up matching an Exarch's status as an Aspect shrine's single deadliest and most experienced warrior, while still short of true immunity to boltguns the way full Astartes plate (DR 100) approaches. Handling: 16 lb, between the standard Aspect Armour's 14 lb and the Heavy Aspect variant's 20 lb — a wraithbone-fused suit that is denser and tougher than ordinary Aspect plate without being bulked out with extra layers the way the heavy-shrine variant is. Weak Points 4, unchanged from standard Aspect armour: an Exarch's suit is fused and unique, but it's still articulated plate built to the same joints and seams as any other Aspect armour, not a sealed Terminator-class shell.",
+			"local_notes": "Weak Points 4: when a hit on this armour fails to penetrate, roll 3d; on 4 or less it found a gap and DR is halved against it.\n\nFlexible armour (B47), the same blunt-trauma rule as the other Aeldari plate in this file.\n\nLore: The unique suit an Exarch is fused into on taking up their shrine's relic weapon and losing themselves to the Path of the Warrior forever; Codex: Craftworlds background is explicit that Exarch armour is wraithbone-bonded to its wearer in a way standard Aspect armour is not, part of what makes reverting to another Path effectively impossible for an Exarch. framework.md's own Aeldari anchor fixes the DR directly: \"DR 85, Weak Points 4.\"\n\nDesign: Held exactly at the project's fixed anchor: DR 85, one step above standard Aspect Armour and equal to the Imperium's own Sororitas power armour anchor — deliberately so, since both sit above ordinary rigid plate as an elite step up without reaching full Astartes-grade protection. Checked with the exact dice distribution: it stops a bolter round 54.6% of the time (up from standard Aspect Armour's 20.6%), a real, meaningful step up matching an Exarch's status as an Aspect shrine's single deadliest and most experienced warrior, while still short of true immunity to boltguns the way full Astartes plate (DR 100) approaches. Limbs 78, gauntlets and greaves 42, eye lens 30 (matching Sororitas plate). Handling: 16 lb, between the standard Aspect Armour's 14 lb and the Heavy Aspect variant's 20 lb — a wraithbone-fused suit that is denser and tougher than ordinary Aspect plate without being bulked out with extra layers the way the heavy-shrine variant is. Weak Points 4, unchanged from standard Aspect armour: an Exarch's suit is fused and unique, but it's still articulated plate built to the same joints and seams as any other Aspect armour, not a sealed Terminator-class shell.",
 			"tags": [
 				"Body Armor",
 				"Xenos",
@@ -176,11 +194,17 @@
 					"locations": [
 						"torso",
 						"vitals",
-						"groin",
+						"groin"
+					],
+					"amount": 85
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
 						"arm",
 						"leg"
 					],
-					"amount": 85
+					"amount": 78
 				},
 				{
 					"type": "dr_bonus",
@@ -196,7 +220,7 @@
 					"locations": [
 						"eye"
 					],
-					"amount": 40
+					"amount": 30
 				},
 				{
 					"type": "dr_bonus",
@@ -204,7 +228,7 @@
 						"hand",
 						"foot"
 					],
-					"amount": 0
+					"amount": 42
 				}
 			],
 			"quantity": 1
@@ -212,7 +236,7 @@
 		{
 			"id": "eVt0Tg8Y4utYEFQzq",
 			"description": "Rune Armour",
-			"local_notes": "A light protective shell (DR 40, flexible per B47) plus a psychic ward that works as a regenerating shield exactly per framework.md's \"Personal force fields\" rules: Shield 60 SP, recharge after 3 seconds without taking damage at 10 SP/second, covering all attacks (as a Rosarius). Scaling: the pool given here is the baseline for a Warlock-grade wearer (Warp Empowerment 1-2); add 20 SP per level of Warp Empowerment above that baseline (so a Farseer at Warp Empowerment 5+ carries a pool closer to 120-160 SP, in Iron Halo-to-Storm Shield territory) — the build tool's Uses counter cannot itself scale with a trait level, so the GM sets the actual pool from the wearer's own Warp Empowerment and tracks it with Uses exactly as for any other field in fields.yaml.\n\nLore: Worn by Farseers, Warlocks and Spiritseers rather than Aspect Warriors: a suit of light robes reinforced with rune-inscribed plates that wards its wearer with their own psychic strength rather than a fixed mechanism, so a more powerful psyker's rune armour holds against far more punishment than a novice Warlock's. Codex: Craftworlds background and Path of the Eldar both describe Farseers shrugging off blows and shots that should have killed them outright, consistent with a shield that scales with the wearer rather than a flat suit of plate. framework.md's own Aeldari anchor fixes the mechanism directly: \"Psychic ward: regenerating shield (see Personal force fields), pool scaling with the wearer's Warp Empowerment.\"\n\nDesign: Built on the exact regenerating-shield chassis in fields.yaml rather than as flat DR, per the anchor's own instruction, with the DR line kept small (40, below even Guardian mesh) to represent the underlying robe rather than the ward itself — the ward, not the cloth, is what actually keeps a Farseer alive. The baseline pool (60 SP, 3-second delay, 10 SP/second recharge, all-attacks coverage) is set equal to the Imperium Rosarius, the field this project already builds for a similarly mid-tier, faith/discipline-warded wearer rather than a dedicated soldier's field, as the honest baseline for a newly-invested Warlock; the explicit per-level scaling note (+20 SP per Warp Empowerment level above that) is how the lore's own \"more powerful psyker, tougher ward\" relationship is captured given that GCS equipment has no mechanism to read a wearer's trait level automatically — the same \"write the scaling in notes, since the build tool can't encode a variable\" approach this project already uses for the Force Sword's Psyker Talent-scaled Force Strike line. Handling: 10 lb, lighter than any of the Aspect-class armour above since this is primarily a robe with a psychic ward, not war-plate; carries no Weak Points rating, since the ward (not physical armour) is what actually turns most hits aside, matching how the Imperium's own force-field items in fields.yaml carry no Weak Points rating either.",
+			"local_notes": "A light protective shell (DR 40, flexible per B47) plus a psychic ward that works as a regenerating shield exactly per framework.md's \"Personal force fields\" rules: Shield 60 SP, recharge after 3 seconds without taking damage at 10 SP/second, covering all attacks (as a Rosarius). Scaling: the pool given here is the baseline for a Warlock-grade wearer (Warp Empowerment 1-2); add 20 SP per level of Warp Empowerment above that baseline (so a Farseer at Warp Empowerment 5+ carries a pool closer to 120-160 SP, in Iron Halo-to-Storm Shield territory) — the build tool's Uses counter cannot itself scale with a trait level, so the GM sets the actual pool from the wearer's own Warp Empowerment and tracks it with Uses exactly as for any other field in fields.yaml.\n\nLore: Worn by Farseers, Warlocks and Spiritseers rather than Aspect Warriors: a suit of light robes reinforced with rune-inscribed plates that wards its wearer with their own psychic strength rather than a fixed mechanism, so a more powerful psyker's rune armour holds against far more punishment than a novice Warlock's. Codex: Craftworlds background and Path of the Eldar both describe Farseers shrugging off blows and shots that should have killed them outright, consistent with a shield that scales with the wearer rather than a flat suit of plate. framework.md's own Aeldari anchor fixes the mechanism directly: \"Psychic ward: regenerating shield (see Personal force fields), pool scaling with the wearer's Warp Empowerment.\"\n\nDesign: Built on the exact regenerating-shield chassis in fields.yaml rather than as flat DR, per the anchor's own instruction, with the DR line kept small (40, only just above Guardian mesh's 36) to represent the underlying robe rather than the ward itself — the ward, not the cloth, is what actually keeps a Farseer alive. The baseline pool (60 SP, 3-second delay, 10 SP/second recharge, all-attacks coverage) is set equal to the Imperium Rosarius, the field this project already builds for a similarly mid-tier, faith/discipline-warded wearer rather than a dedicated soldier's field, as the honest baseline for a newly-invested Warlock; the explicit per-level scaling note (+20 SP per Warp Empowerment level above that) is how the lore's own \"more powerful psyker, tougher ward\" relationship is captured given that GCS equipment has no mechanism to read a wearer's trait level automatically — the same \"write the scaling in notes, since the build tool can't encode a variable\" approach this project already uses for the Force Sword's Psyker Talent-scaled Force Strike line. Handling: 10 lb, lighter than any of the Aspect-class armour above since this is primarily a robe with a psychic ward, not war-plate; carries no Weak Points rating, since the ward (not physical armour) is what actually turns most hits aside, matching how the Imperium's own force-field items in fields.yaml carry no Weak Points rating either.",
 			"tags": [
 				"Xenos",
 				"Aeldari",
@@ -230,11 +254,17 @@
 					"locations": [
 						"torso",
 						"vitals",
-						"groin",
+						"groin"
+					],
+					"amount": 40
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
 						"arm",
 						"leg"
 					],
-					"amount": 40
+					"amount": 34
 				},
 				{
 					"type": "dr_bonus",
@@ -250,7 +280,7 @@
 					"locations": [
 						"eye"
 					],
-					"amount": 25
+					"amount": 20
 				},
 				{
 					"type": "dr_bonus",
@@ -268,7 +298,7 @@
 		{
 			"id": "e-vrTnJx83t5CTfGn",
 			"description": "Ranger Cameleoline Cloak",
-			"local_notes": "Also grants -6 to observers' Vision rolls to spot the wearer at range when stationary and using the cloak's camouflage properties (per Camouflage, B47/B192), on top of the listed skill bonuses. Does not stack with a second cameleoline garment.\n\nLore: Every Ranger wraps themselves in a cameleoline cloak woven to bend light around its wearer, the signature garment of the Aeldari who walk the Path of the Outcast; Codex: Craftworlds, Path of the Eldar's own Ranger-focused chapters, and Rogue Trader/Deathwatch's cameleoline rules all treat it as best-in-setting personal camouflage technology, letting a Ranger vanish against almost any backdrop while moving carefully.\n\nDesign: Modelled as a large, explicit Stealth and Camouflage skill bonus rather than DR, per the assignment's own call for \"a strong Stealth/Camouflage bonus\" — a cameleoline cloak's whole purpose is not being seen, not stopping a hit once found, so it carries no `dr` field at all, the opposite design choice from every armour entry above it in this file. +4 Stealth matches Basic Set's own high end for dedicated camouflage gear (comparable to a ghillie suit, B287, but built from Aeldari technology a human tailor cannot replicate, hence the extra Camouflage-skill bonus and the flat Vision-roll penalty layered on top rather than folded into a single number) and +6 Camouflage reflects that Camouflage itself (the skill used to actually set up concealment before combat, not just move stealthily during it) is the cloak's real specialty. Handling: 3 lb, a garment rather than armour — it carries no ST requirement, Weak Points rating or coverage, since it protects by not being found rather than by stopping a hit.",
+			"local_notes": "The bonuses already stand for the cloak's light-bending; there is no separate penalty to observers' Vision rolls. Does not stack with a second cameleoline garment.\n\nLore: Every Ranger wraps themselves in a cameleoline cloak woven to bend light around its wearer, the signature garment of the Aeldari who walk the Path of the Outcast; Codex: Craftworlds and the Path of the Eldar background (no specific rules entry) treat it as best-in-setting personal camouflage technology, letting a Ranger vanish against almost any backdrop while moving carefully.\n\nDesign: Modelled as a large, explicit Stealth and Camouflage skill bonus rather than DR, per the assignment's own call for \"a strong Stealth/Camouflage bonus\" — a cameleoline cloak's whole purpose is not being seen, not stopping a hit once found, so it carries no `dr` field at all, the opposite design choice from every armour entry above it in this file. +2 Stealth is a solid but unexceptional gear bonus, and +4 Camouflage reflects that Camouflage itself (the skill used to actually set up concealment before combat, not just move stealthily during it) is the cloak's real specialty. Two bonuses and no separate Vision penalty keeps it strong without out-stacking the Imperium's camo cloaks. Handling: 3 lb, a garment rather than armour — it carries no ST requirement, Weak Points rating or coverage, since it protects by not being found rather than by stopping a hit.",
 			"tags": [
 				"Xenos",
 				"Aeldari"
@@ -285,7 +315,7 @@
 						"compare": "is",
 						"qualifier": "Stealth"
 					},
-					"amount": 4
+					"amount": 2
 				},
 				{
 					"type": "skill_bonus",
@@ -294,7 +324,7 @@
 						"compare": "is",
 						"qualifier": "Camouflage"
 					},
-					"amount": 6
+					"amount": 4
 				}
 			],
 			"quantity": 1
@@ -302,7 +332,7 @@
 		{
 			"id": "ecUVYlyvNOSeXgHZj",
 			"description": "Ghosthelm",
-			"local_notes": "Worn by Aeldari psykers (Warlocks, Farseers, Spiritseers) beneath or in place of a helmet; does not stack with the Aeldari's own milder runic-warding limitation on Perils of the Warp (framework.md's \"Psykers and the Warp\" section) — it is an additional layer on top of that baseline, not a replacement for it.\n\nLore: A psychically-warded helm that partly shields its wearer's own mind from the backlash of channelling warp energy, worn by Aeldari psykers specifically to blunt the risk their own gift carries; Codex: Craftworlds background credits it with letting a Farseer or Warlock push their power further and more safely than they otherwise could, and it is described in Rogue Trader/Deathwatch's Aeldari-psyker rules as functionally reducing the psyker's own Perils risk rather than granting any new power.\n\nDesign: Modelled as a flat conditional bonus to the wearer's Perils of the Warp resistance roll, the same `conditional_modifier` feature the Imperium Psychic Hood already uses for a related but distinct effect (resisting an enemy's Warp Sorcery-tagged attack, not the wearer's own backlash) — per the assignment's own \"reduces Perils\" instruction, this entry targets the wearer's own Perils check specifically rather than reusing the Psychic Hood's wording verbatim, since the two items protect against different things even though both are small numeric wards against warp-related danger. +4 sits one step above the Psychic Hood's own +2, reflecting that a ghosthelm is a psyker's dedicated, personally-attuned item, not a generic command-squad relic. Handling: 2 lb, a light circlet or helm insert rather than full head armour — it carries no DR of its own; a psyker who wants physical head protection as well layers it under a standard Aspect or Guardian helmet.",
+			"local_notes": "Worn by Aeldari psykers (Warlocks, Farseers, Spiritseers) beneath or in place of a helmet; does not stack with the Aeldari's own milder runic-warding limitation on Perils of the Warp (framework.md's \"Psykers and the Warp\" section) — it is an additional layer on top of that baseline, not a replacement for it.\n\nLore: A psychically-warded helm that partly shields its wearer's own mind from the backlash of channelling warp energy, worn by Aeldari psykers specifically to blunt the risk their own gift carries; Codex: Craftworlds background credits it with letting a Farseer or Warlock push their power further and more safely than they otherwise could, and it is best read as reducing the psyker's own Perils risk rather than granting any new power (no specific rules entry is cited).\n\nDesign: Modelled as a flat conditional bonus to the wearer's Perils of the Warp resistance roll, the same `conditional_modifier` feature the Imperium Psychic Hood already uses for a related but distinct effect (resisting an enemy's Warp Sorcery-tagged attack, not the wearer's own backlash) — per the assignment's own \"reduces Perils\" instruction, this entry targets the wearer's own Perils check specifically rather than reusing the Psychic Hood's wording verbatim, since the two items protect against different things even though both are small numeric wards against warp-related danger. +4 sits one step above the Psychic Hood's own +2, reflecting that a ghosthelm is a psyker's dedicated, personally-attuned item, not a generic command-squad relic. Handling: 2 lb, a light circlet or helm insert rather than full head armour — it carries no DR of its own; a psyker who wants physical head protection as well layers it under a standard Aspect or Guardian helmet.",
 			"tags": [
 				"Xenos",
 				"Aeldari",
@@ -324,28 +354,21 @@
 		{
 			"id": "ef67pFfKJr19XFBR6",
 			"description": "Spirit Stone (Waystone)",
-			"local_notes": "Worn on the breast by every craftworld Aeldari from a young age. On the wearer's death, the GM should rule the stone catches the departing soul rather than leaving it to Slaanesh outright, holding it until it can be laid to rest in a craftworld's Infinity Circuit (or, for an unusually gifted soul, drawn on for guidance or reincarnation as a Wraithguard/Wraithblade pilot) — an essentially guaranteed narrative outcome for a named character rather than a combat-time defence roll, since what the stone actually does happens after the character sheet's combat math is finished.\n\nLore: The single most universal piece of Aeldari wargear: every craftworld Aeldari wears a spirit stone from adolescence, meant to catch their soul the instant they die so it is not lost to Slaanesh, the \"Prince of Chaos\" that has hunted Aeldari souls since the Fall. Codex: Craftworlds background, Path of the Eldar, and every piece of Black Library Aeldari fiction agree on this without exception — it is not a rare relic but a basic, near-universal item of Aeldari life and death.\n\nDesign: The stone's real function (catching a departing soul) is a narrative death-and-afterlife mechanic GURPS's damage and defence system was never built to encode, so — following this project's own honest practice for the Null Rod and the Wraithcannon's warp-rift effect — it is written as rules text for the GM to apply at the moment of death rather than invented as a combat statistic. The small conditional bonus given here is a minor, secondary effect only: a partial ward against the Slaanesh's Hunger disadvantage's own worst trigger while the wearer still lives (framework.md's Aeldari trait table lists Slaanesh's Hunger as a disadvantage \"a daemon-god waits for the soul; spirit stones shield it,\" which is read here as applying while alive as well as at death), not the stone's whole purpose. Handling: 0.25 lb, a small worn stone rather than a weapon or armour piece — it carries no ST requirement, DR or Weak Points rating.",
+			"local_notes": "Worn on the breast by every craftworld Aeldari from a young age. On the wearer's death, the GM should rule the stone catches the departing soul rather than leaving it to Slaanesh outright, holding it until it can be laid to rest in a craftworld's Infinity Circuit (or, for an unusually gifted soul, drawn on for guidance or reincarnation as a Wraithguard/Wraithblade pilot) — an essentially guaranteed narrative outcome for a named character rather than a combat-time defence roll, since what the stone actually does happens after the character sheet's combat math is finished.\n\nLore: The single most universal piece of Aeldari wargear: every craftworld Aeldari wears a spirit stone from adolescence, meant to catch their soul the instant they die so it is not lost to Slaanesh, the \"Prince of Chaos\" that has hunted Aeldari souls since the Fall. Codex: Craftworlds background, Path of the Eldar, and every piece of Black Library Aeldari fiction agree on this without exception — it is not a rare relic but a basic, near-universal item of Aeldari life and death.\n\nDesign: The stone's real function (catching a departing soul) is a narrative death-and-afterlife mechanic GURPS's damage and defence system was never built to encode, so — following this project's own honest practice for the Null Rod and the Wraithcannon's warp-rift effect — it is written as rules text for the GM to apply at the moment of death rather than invented as a combat statistic. It carries no combat bonus: the stone itself catches the soul automatically at death, and a Warlock or Spiritseer only retrieves it afterwards. It is a common item, worn by every craftworld Aeldari from adolescence, so it is priced as one ($300 for a wraithbone stone and its setting), not as a relic. Handling: 0.25 lb, a small worn stone rather than a weapon or armour piece — it carries no ST requirement, DR or Weak Points rating.",
 			"tags": [
 				"Xenos",
 				"Aeldari"
 			],
 			"tech_level": "12^",
 			"legality_class": "0",
-			"base_value": "8000",
+			"base_value": "300",
 			"base_weight": "0.25 lb",
-			"features": [
-				{
-					"type": "conditional_modifier",
-					"situation": "to resist the Slaanesh's Hunger disadvantage's soul-devouring trigger at the moment of death",
-					"amount": 4
-				}
-			],
 			"quantity": 1
 		},
 		{
 			"id": "e6h1DVyogBnu89UdQ",
 			"description": "Swooping Hawk Wings",
-			"local_notes": "The Basic Move bonus applies only while airborne and using the wings actively (built on the Jet Pack rules, B287, rather than true unassisted flight) and lasts for a burst of a few seconds to a few dozen yards of travel before the grav-plates need to recharge — treat as a short powered leap/glide, not sustained flight, and require a DX or Piloting (Aeldari Wings) roll to land cleanly rather than tumble. Once per fight (GM's discretion on recharge), the wearer may add a single \"Skyleap\": an extra +2 to Basic Move and immunity to falling damage for that one jump only, representing the wings' full-power vertical leap Swooping Hawks are shown using to clear an obstacle or a firing line entirely.\n\nLore: Worn by Swooping Hawk Aspect Warriors, a grav-assisted wing harness that lets them leap and glide across a battlefield far faster than any foot soldier, striking from above before leaping clear again; Codex: Craftworlds background and Path of the Eldar both depict Swooping Hawks as skirmishers who are never on the ground for long, using bursts of grav-lift rather than continuous flight.\n\nDesign: Modelled on GURPS's own Jet Pack rules (B287) rather than a bespoke flight mechanic, since a jet pack is exactly what a Swooping Hawk's short, bursting grav-leaps are mechanically — a Basic Move bonus (+4, comparable to Enhanced Move (Ground) 1's own effective speed increase, B52) usable in bursts rather than sustained, with the powered vertical \"Skyleap\" the assignment implicitly calls for (Swooping Hawks are consistently shown clearing terrain or enemy lines in one bound) written as a once-per-fight special option rather than a constant bonus, since a repeatable no-cost extreme leap would make ground obstacles and falls meaningless for the rest of the fight. Handling: 18 lb for the grav-plate harness and wing frame, heavier than any armour piece in this file since it's a powered device rather than passive protection, but light enough for an Aspect Warrior to fight in rather than merely fly with.",
+			"local_notes": "No flat Move bonus is written on the sheet, because the wings only help in bursts. While airborne and using the wings actively the wearer moves at Basic Move +4 for a burst of a few seconds to a few dozen yards before the grav-plates need to recharge (GM applies it by hand, on the lines of the Jet Pack rules, B287) — treat as a short powered leap/glide, not sustained flight, and require a DX or Acrobatics roll to land cleanly rather than tumble. Once per fight (GM's discretion on recharge), the wearer may add a single \"Skyleap\": an extra +2 to Basic Move and immunity to falling damage for that one jump only, representing the wings' full-power vertical leap Swooping Hawks are shown using to clear an obstacle or a firing line entirely.\n\nLore: Worn by Swooping Hawk Aspect Warriors, a grav-assisted wing harness that lets them leap and glide across a battlefield far faster than any foot soldier, striking from above before leaping clear again; Codex: Craftworlds background and Path of the Eldar both depict Swooping Hawks as skirmishers who are never on the ground for long, using bursts of grav-lift rather than continuous flight.\n\nDesign: Modelled on GURPS's Jet Pack rules (B287) rather than a bespoke flight mechanic, since a Swooping Hawk's short, bursting grav-leaps behave much like one (the wings are grav-plates and a wing frame, not a jump pack) — a Basic Move bonus (+4, comparable to Enhanced Move (Ground) 1's own effective speed increase, B52) usable in bursts rather than sustained and so applied by the GM in play instead of as a permanent attribute on the sheet, with the powered vertical \"Skyleap\" the assignment implicitly calls for (Swooping Hawks are consistently shown clearing terrain or enemy lines in one bound) written as a once-per-fight special option rather than a constant bonus, since a repeatable no-cost extreme leap would make ground obstacles and falls meaningless for the rest of the fight. Handling: 18 lb for the grav-plate harness and wing frame, heavier than any armour piece in this file since it's a powered device rather than passive protection, but light enough for an Aspect Warrior to fight in rather than merely fly with.",
 			"tags": [
 				"Xenos",
 				"Aeldari"
@@ -354,13 +377,6 @@
 			"legality_class": "0",
 			"base_value": "12000",
 			"base_weight": "18 lb",
-			"features": [
-				{
-					"type": "attribute_bonus",
-					"attribute": "basic_move",
-					"amount": 4
-				}
-			],
 			"quantity": 1
 		},
 		{

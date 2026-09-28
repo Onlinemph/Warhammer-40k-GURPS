@@ -1,12 +1,12 @@
 {
 	"version": 5,
 	"id": "BoMXY1dnvni8g8Je0",
-	"notes": "NPC creature stat block, not a player-facing race. Point math: Tyranid Biology 15 + Body Lens: Genestealer 459 + Rending Claws 38 + skills 12 = 524 points. Stats: SM 0, ST 18, DX 16, IQ 6, HT 13, HP 20, Will 6, Per 6, natural chitin torso DR 50 (Weak Points 5, eye DR 25), Enhanced Move (Ground) 1, Infravision, Extra Attack (second claw) — framework.md's Genestealer anchor line exactly. This sits in framework.md's Senior Agents tier (350-600): the fastest and most dangerous single killer the swarm fields below a Warrior, though still without any independent tactical will outside a broodline's own infiltration plans. The point total is for GM reference only; a Genestealer's broodline-infestation hook is a GM plot tool, not a purchased trait.\nWeapon-symbiote: carries Rending Claws, built as a natural-attack trait in data/xenos/tyranids/bio-weapons.yaml (the Extra Attack trait above lets a Genestealer make two such attacks per turn).\n",
+	"notes": "NPC creature stat block, not a player-facing race. Point math: Tyranid Biology 20 + Body Lens: Genestealer 459 + Rending Claws 38 + skills 12 = 529 points. Stats: SM 0, ST 18, DX 16, IQ 6, HT 13, HP 20, Will 6, Per 6, natural chitin torso DR 50 (Weak Points 5, eye DR 25), Enhanced Move (Ground) 1, Infravision, Extra Attack (second claw) — framework.md's Genestealer anchor line exactly. This sits in framework.md's Senior Agents tier (350-600): the fastest and most dangerous single killer the swarm fields below a Warrior, though still without any independent tactical will outside a broodline's own infiltration plans. The point total is for GM reference only; a Genestealer's broodline-infestation hook is a GM plot tool, not a purchased trait.\nWeapon-symbiote: carries Rending Claws, built as a natural-attack trait in data/xenos/tyranids/bio-weapons.yaml (the Extra Attack trait above lets a Genestealer make two such attacks per turn).\n",
 	"traits": [
 		{
 			"id": "T1PQ-A01meI4z4R5Q",
 			"name": "Tyranid Biology",
-			"local_notes": "Lore: The Tyranid Biology shared by every bioform in a Hive Fleet: bound to the Hive Mind from the moment it is grown, disciplined and fearless only so long as a synapse creature's link holds, mute and without individual culture, and adapted to digest or shrug off almost anything a target world can throw at it. This is the baseline every body-type lens below (Termagant through Carnifex) builds on top of; the lens supplies the bioform's own attributes, chitin DR, and any special biology (leaping legs, rending claws, psychic organs, wings) that role calls for.\n\nDesign: 5 (Hive Mind Link) - 10 (Synapse Dependence) + 5 (Synapse Discipline) - 15 (Cannot Speak) + 0 (No Independent Society) + 30 (Adapted Biology) = 15 points of shared physiology before attributes, chitin DR, special biology, or skills. See each template for a full stat block built on top of this plus a body- type lens.",
+			"local_notes": "Lore: The Tyranid Biology shared by every bioform in a Hive Fleet: bound to the Hive Mind from the moment it is grown, disciplined and fearless only so long as a synapse creature's link holds, mute and without individual culture, and adapted to digest or shrug off almost anything a target world can throw at it. This is the baseline every body-type lens below (Termagant through Carnifex) builds on top of; the lens supplies the bioform's own attributes, chitin DR, and any special biology (leaping legs, rending claws, psychic organs, wings) that role calls for.\n\nDesign: 5 (Hive Mind Link) - 10 (Synapse Dependence) + 10 (Synapse Discipline) - 15 (Cannot Speak) + 0 (No Independent Society) + 30 (Adapted Biology) = 20 points of shared physiology before attributes, chitin DR, special biology, or skills. See each template for a full stat block built on top of this plus a body- type lens.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -52,21 +52,22 @@
 				{
 					"id": "th6WstK86odR1TiMu",
 					"name": "Synapse Discipline",
-					"local_notes": "While linked, Synapse Dependence's instinctive-behaviour effects are fully suppressed: the organism fights with total discipline, no fear, and follows the Hive Mind's tactical intent through the nearest synapse creature exactly as ordered. The moment the link breaks (the synapse creature dies, moves out of range, or is itself cut off from a larger synapse creature further up the chain), Synapse Dependence resumes immediately.\n\nLore: A swarm fighting under a synapse creature's watch is unrecognisable from the same swarm cut loose — utterly fearless, perfectly coordinated, and willing to press an attack to the last organism. This is the other half of the same well-documented Codex mechanic that makes synapse creatures the Imperium's priority targets.\n\nDesign: A narrow conditional Will/Fright Check bonus, built the same way this project's Ork WAAAGH! Gestalt prices an equivalent situational bonus (5 points) rather than a flat, always-on Fearlessness — here the \"always on\" case is Synapse Dependence's disadvantage instead, and this trait is the paired benefit that replaces it under a synapse creature's link.",
+					"reference": "B55",
+					"local_notes": "Fearlessness 5 (+5 to Fright Checks and to Will rolls to resist fear, intimidation and Bestial) and High Pain Threshold (no shock penalty, no stun from injury), both only while within the range of a Synapse Creature's link (see that trait). While linked, Synapse Dependence's instinctive-behaviour effects are fully suppressed: the organism fights with total discipline, no fear, and follows the Hive Mind's tactical intent through the nearest synapse creature exactly as ordered. The moment the link breaks (the synapse creature dies, moves out of range, or is itself cut off from a larger synapse creature further up the chain), Synapse Dependence resumes immediately and the fearlessness and pain immunity go with it.\n\nLore: A swarm fighting under a synapse creature's watch is unrecognisable from the same swarm cut loose: utterly fearless, feeling no pain, perfectly coordinated, and willing to press an attack to the last organism. This is the other half of the same well-documented Codex mechanic that makes synapse creatures the Imperium's priority targets, and matches framework.md's \"no fear or pain within synapse.\"\n\nDesign: Fearlessness 5 (B55, 2 points/level = 10) plus High Pain Threshold (B59, 10) = 20 points, with Accessibility (only while linked to a synapse creature, -50%): 20 x 0.5 = 10 points. Earlier drafts priced a 5-point conditional Will bonus that never delivered the fearlessness and pain immunity the framework and the fiction give Tyranids in synapse.",
 					"tags": [
 						"Advantage",
 						"Mental",
 						"Xenos",
 						"Tyranids"
 					],
-					"base_points": 5,
-					"features": [
+					"modifiers": [
 						{
-							"type": "conditional_modifier",
-							"situation": "to Will rolls and Fright Checks, and to resist Bestial's effects, while within the range of a Synapse Creature's link (see that trait)",
-							"amount": 4
+							"id": "mgKltmFcVVthfvPy4",
+							"name": "Accessibility (only while linked to a synapse creature)",
+							"cost_adj": "-50%"
 						}
-					]
+					],
+					"base_points": 20
 				},
 				{
 					"id": "tkd-Fdo42XjxRcRl-",
@@ -122,7 +123,7 @@
 		{
 			"id": "TSGW7bi6im8cTmRYJ",
 			"name": "Body Lens: Genestealer",
-			"local_notes": "Lore: The Genestealer: the fastest, most dangerous close-quarters killer the swarm fields at this tier, and the origin point of a broodline infestation that can subvert a whole world before the main Hive Fleet arrives. Consistent Codex background across editions and a recurring Black Library horror-fiction staple (an infiltrating Genestealer moving faster than anyone in the room can react).\n\nDesign: 154 (Attribute Modifiers) + 250 (Chitin DR 50) + 20 (Genestealer Speed) + 10 (Infravision) + 25 (Extra Attack) = 459 points, added to Tyranid Biology's 15 for 474 points of physiology alone before skills and its weapon-symbiote. See the Genestealer template. NPC creature stat block only; a Genestealer's broodline-infestation role is a GM plot hook, not a point-costed trait.",
+			"local_notes": "Lore: The Genestealer: the fastest, most dangerous close-quarters killer the swarm fields at this tier, and the origin point of a broodline infestation that can subvert a whole world before the main Hive Fleet arrives. Consistent Codex background across editions and a recurring Black Library horror-fiction staple (an infiltrating Genestealer moving faster than anyone in the room can react).\n\nDesign: 154 (Attribute Modifiers) + 250 (Chitin DR 50) + 20 (Genestealer Speed) + 10 (Infravision) + 25 (Extra Attack) = 459 points, added to Tyranid Biology's 20 for 479 points of physiology alone before skills and its weapon-symbiote. See the Genestealer template. NPC creature stat block only; a Genestealer's broodline-infestation role is a GM plot hook, not a point-costed trait.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -236,8 +237,8 @@
 		{
 			"id": "tZIAvLoxtxPZmYtjT",
 			"name": "Rending Claws",
-			"reference": "B271",
-			"local_notes": "Lore: The Genestealer's signature weapon: claws sharp and strong enough to punch clean through ceramite and plasteel on a solid hit, not merely cut flesh. Codex: Tyranids background and the Deathwatch RPG's own Genestealer material both single out rending claws as capable of shearing through power armour where an ordinary scything talon cannot — precisely the divisor-swap-on-a-good-hit this project's \"rending\" house rule (framework.md) exists to model.\n\nDesign: Framework.md's own anchor: \"Rending claws | sw+2d(3) cut; rending: a hit that succeeds by 5+ or is a critical uses armour divisor (10) instead.\" Built at a Genestealer's own ST 18 (sw 3d, framework's bioform table): Cutting Striker (B271, 7 points) with Armor Divisor (3) (B102, +100%) = 14 for the sw+0(3) baseline; the anchor's own +2d is bought as Innate Attack (Cut) (B61, 7/die) at 2 dice = 14, with Armor Divisor (3) (+100%) and Melee Attack, Reach C (-30%): net +70%, 14x1.7=23.8, rounded to 24. Total 14+24=38. The Rending hit line costs nothing extra: it is the same attack, the same dice, and the same points already paid above — only the armour divisor applied to a hit that already succeeded well changes, exactly as framework.md's own rule describes it (a chance-based crit effect, not a bought capability). Checked by exact dice distribution at ST 18 (sw+2d = 5d): the ordinary (3) line averages 17.5 and penetrates flak 96.8%, carapace (eff. 23.3) 5.9%, Sororitas (eff. 28.3) 0.08%, and 0% against Astartes plate or heavier — a solid but unremarkable melee weapon on an ordinary hit. The Rending hit's (10) line, same 5d average 17.5: flak 100%, carapace (eff. 7) 99.7%, Sororitas (eff. 8.5) 99.3%, Astartes plate (eff. 10) 96.8%, and even a Terminator (eff. 20) 22.2% — genuinely \"shears through ceramite,\" exactly what the anchor's own text claims, and only on the hits the rending rule says should count.",
+			"reference": "B88",
+			"local_notes": "Lore: The Genestealer's signature weapon: claws sharp and strong enough to punch clean through ceramite and plasteel on a solid hit, not merely cut flesh. Codex: Tyranids background and the Deathwatch RPG's own Genestealer material both single out rending claws as capable of shearing through power armour where an ordinary scything talon cannot — precisely the divisor-swap-on-a-good-hit this project's \"rending\" house rule (framework.md) exists to model.\n\nDesign: Framework.md's own anchor: \"Rending claws | sw+2d(3) cut; rending: a hit that succeeds by 5+ or is a critical uses armour divisor (10) instead.\" Built at a Genestealer's own ST 18 (sw 3d, framework's bioform table): Cutting Striker (B88, 7 points) with Armor Divisor (3) (B102, +100%) = 14 for the sw+0(3) baseline; the anchor's own +2d is bought as Innate Attack (Cut) (B61, 7/die) at 2 dice = 14, with Armor Divisor (3) (+100%) and Melee Attack, Reach C (-30%): net +70%, 14x1.7=23.8, rounded to 24. Total 14+24=38. The Rending hit line costs nothing extra: it is the same attack, the same dice, and the same points already paid above — only the armour divisor applied to a hit that already succeeded well changes, exactly as framework.md's own rule describes it (a chance-based crit effect, not a bought capability). Checked by exact dice distribution at ST 18 (sw+2d = 5d): the ordinary (3) line averages 17.5 and penetrates flak 96.8%, carapace (eff. 23.3) 5.9%, Sororitas (eff. 28.3) 0.08%, and 0% against Astartes plate or heavier — a solid but unremarkable melee weapon on an ordinary hit. The Rending hit's (10) line, same 5d average 17.5: flak 100%, carapace (eff. 7) 99.7%, Sororitas (eff. 8.5) 99.3%, Astartes plate (eff. 10) 96.8%, and even a Terminator (eff. 20) 22.2% — genuinely \"shears through ceramite,\" exactly what the anchor's own text claims, and only on the hits the rending rule says should count.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -306,7 +307,7 @@
 		{
 			"id": "sXGOdldAKlGo7idpu",
 			"name": "Brawling",
-			"local_notes": "Lore: A Genestealer's four clawed limbs strike faster and more precisely than almost anything else the swarm fields.\n\nDesign: DX+2 (18) for 8 points, Easy — matching the rending claws' own natural-weapon attack roll, used for both of its Extra Attack strikes.",
+			"local_notes": "Lore: A Genestealer's four clawed limbs strike faster and more precisely than almost anything else the swarm fields.\n\nDesign: DX+3 (19) for 8 points, Easy — matching the rending claws' own natural-weapon attack roll, used for both of its Extra Attack strikes.",
 			"tags": [
 				"Xenos",
 				"Tyranids"

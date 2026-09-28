@@ -1,7 +1,7 @@
 {
 	"version": 5,
 	"id": "Bj0PABWgeKYCL2-iE",
-	"notes": "An NPC template, not a player-character build: a Combat Servitor, a lobotomized criminal or debtor grafted with a mounted weapon and heavy augmetic reinforcement, fielded as expendable, utterly obedient battlefield muscle by the Cult Mechanicus and any Militarum force it attaches to. Point math: ST 14 (+40), DX 9 (-20), IQ 6 (-80), HT 12 (+20) = -40 (Will and Per both default to IQ 6 at no extra cost); advantages +74; disadvantages -110; skills +9. Total -67 points. A negative total is expected and correct for this kind of construct-NPC stat block (the same way some GURPS bestiary write-ups price a creature built almost entirely out of disadvantages below zero): a Servitor isn't a character anyone plays, it's a thing the Mechanicus builds, and the disadvantages of having had most of a person surgically removed genuinely outweigh what's left. GMs should treat the listed HP/ST/etc. as the real numbers to fight and should not expect a player to \"buy\" this template. The mounted weapon itself (heavy bolter, flamer, etc.) is equipment, not covered here.\n",
+	"notes": "An NPC template, not a player-character build: a Combat Servitor, a lobotomized criminal or debtor grafted with a mounted weapon and heavy augmetic reinforcement, fielded as expendable, utterly obedient battlefield muscle by the Cult Mechanicus and any Militarum force it attaches to. Point math: ST 14 (+40), DX 9 (-20), IQ 6 (-80), HT 12 (+20) = -40 (Will and Per both default to IQ 6 at no extra cost); advantages +84 (Subdermal Armour Plating 4 levels, DR 4); disadvantages -110; skills +9. Total -57 points. A negative total is expected and correct for this kind of construct-NPC stat block (the same way some GURPS bestiary write-ups price a creature built almost entirely out of disadvantages below zero): a Servitor isn't a character anyone plays, it's a thing the Mechanicus builds, and the disadvantages of having had most of a person surgically removed genuinely outweigh what's left. GMs should treat the listed HP/ST/etc. as the real numbers to fight and should not expect a player to \"buy\" this template. The mounted weapon itself (heavy bolter, flamer, etc.) is equipment, not covered here.\n",
 	"traits": [
 		{
 			"id": "trjZQDSHArTEFusH-",
@@ -84,7 +84,7 @@
 			"id": "tJlozS12bny-DEscc",
 			"name": "Augmetic Arm, Combat Pattern",
 			"reference": "B40",
-			"local_notes": "Arm ST +6 (lifting and thrust/swing damage with this arm only); DR 6 on this arm only.\n\nLore: The Servitor's other arm, reinforced for melee and heavy lifting when the mounted weapon isn't the answer.\n\nDesign: Arm ST +6 (B40, 5/level, 30) + DR 6, Partial (single limb) -60% (6x5=30, x0.4=12) = 42 points.",
+			"local_notes": "Arm ST +6 (Lifting ST +6 and Striking ST +6, applied by the sheet); DR 6 to the arm. GCS applies these to the whole character, so for a single prosthetic arm use them for that arm only.\n\nLore: The Servitor's other arm, reinforced for melee and heavy lifting when the mounted weapon isn't the answer.\n\nDesign: Arm ST +6 (B40, 5/level, 30) + DR 6, Partial (single limb) -60% (6x5=30, x0.4=12) = 42 points.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -92,13 +92,32 @@
 				"Adeptus Mechanicus",
 				"Skitarii"
 			],
-			"base_points": 42
+			"base_points": 42,
+			"features": [
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"arm"
+					],
+					"amount": 6
+				},
+				{
+					"type": "attribute_bonus",
+					"attribute": "lifting_st",
+					"amount": 6
+				},
+				{
+					"type": "attribute_bonus",
+					"attribute": "striking_st",
+					"amount": 6
+				}
+			]
 		},
 		{
 			"id": "tuYLaajueplXnDXmK",
 			"name": "Subdermal Armour Plating",
 			"reference": "B46",
-			"local_notes": "DR, all locations; stacks with worn armor.\n\nLore: Ceramite or plasteel weave grafted beneath the skin across the whole body, rather than replacing a specific organ or limb — the augmetic equivalent of the Astartes' Ossmodula, bought by Tech-Priests who expect to take a hit.\n\nDesign: Plain Damage Resistance (B46), 5 points/level, no location restriction since it covers the whole body. Bought here at a default 2 levels (DR 10, 10 points); raise or lower the level to taste.",
+			"local_notes": "DR 1 per level, all locations (2 levels = DR 2); stacks with worn armor.\n\nLore: Ceramite or plasteel weave grafted beneath the skin across the whole body, rather than replacing a specific organ or limb — a whole-body counterpart to the Astartes' Ossmodula (which is DR 3 to torso and vitals only), bought by Tech-Priests who expect to take a hit.\n\nDesign: Plain Damage Resistance (B46), 5 points/level, no location restriction since it covers the whole body. Bought here at a default 2 levels (DR 2, 10 points); raise or lower the level to taste. The DR is a real per-level feature, so changing the level changes the sheet. Suggested levels: Magos 2-3, Skitarii 3, Servitor 4.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -107,7 +126,17 @@
 			],
 			"points_per_level": 5,
 			"can_level": true,
-			"levels": 2
+			"levels": 4,
+			"features": [
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"all"
+					],
+					"amount": 1,
+					"per_level": true
+				}
+			]
 		},
 		{
 			"id": "tuv3XuI8Dk_PC0sBp",

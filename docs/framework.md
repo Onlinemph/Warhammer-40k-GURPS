@@ -304,7 +304,7 @@ Aeldari psychic powers use the same Sorcery model as Imperial psykers, but the A
 
 ### Necrons
 
-Necrons are ancient souls transferred into bodies of living metal (necrodermis) during the biotransference, then left to sleep for sixty million years. Most rank-and-file Necrons lost their minds in the process; nobles kept their personalities. Their armour is their body: necrodermis is natural DR in the ancestry, not equipment. Anchors:
+Necrons are ancient minds transferred into bodies of living metal (necrodermis) during the biotransference, then left to sleep for sixty million years. Most rank-and-file Necrons lost their minds in the process; nobles kept their personalities. Their armour is their body: necrodermis is natural DR in the ancestry, not equipment. Anchors:
 
 | Necron | ST | DX | IQ | HT | HP | Natural DR (torso) | Mind |
 |---|---|---|---|---|---|---|---|
@@ -317,7 +317,7 @@ Necrons are ancient souls transferred into bodies of living metal (necrodermis) 
 | Cryptek | 18 | 12 | 16 | 14 | 24 | 60 | Technosorcerer, genius |
 | Skorpekh Destroyer | 26 | 12 | 6 | 16 | 34 | 100 | War-form rebuilt for slaughter; nihilistic, fractured mind |
 
-Necron traits: Machine body (no need to breathe, eat or sleep; immune to disease, poison and pain-based effects), Injury Tolerance (Unliving: no blood, no vitals), living metal self-repair (Regeneration), and **Reanimation Protocols**: a Necron reduced below −1×HP is not destroyed unless the damage exceeds −5×HP; roll HT at the end of each of the next few turns to rise again with some HP restored, and on failure it phases out (teleports home to its tomb). Necrons are soulless: immune to psychic mind control and possession, and largely beneath daemons' notice. Weak Points on necrodermis are low (joints and eye-slits: Warriors 4, nobles and Lychguard 3), and glowing optics have eye DR about half the torso.
+Necron traits: Machine body (no need to breathe, eat or sleep; immune to disease and poison; pain resistance is plain High Pain Threshold), Injury Tolerance (Unliving: no blood, no vitals), living metal self-repair (Regeneration), and **Reanimation Protocols**: a Necron reduced below −1×HP is not destroyed unless the damage exceeds −5×HP; roll HT at the end of each of the next few turns to rise again with some HP restored, and on failure it phases out (teleports home to its tomb). Biotransference bound their consciousness into metal and burned out the soul, so Necrons are invisible to the warp: immune to psychic mind control and possession, and largely beneath daemons' notice. Weak Points on necrodermis are low (joints and eye-slits: Warriors 4, nobles and Lychguard 3), and glowing optics have eye DR about half the torso.
 
 | Necron gear | Anchor |
 |---|---|
@@ -351,7 +351,7 @@ The Tyranids are a galaxy-devouring swarm of bio-engineered organisms directed b
 | Hive Tyrant | +2 | 45 | 13 | 12 | 16 | 60 | 120 | Synapse lord, psyker |
 | Carnifex | +2 | 60 | 10 | 4 | 16 | 70 | 150 | Living battering ram |
 
-Tyranid traits: Hive Mind link and **synapse** (within range of a synapse creature, Tyranids fight with total discipline and no fear; outside it they revert to instinct: feeding or fleeing, a disadvantage built honestly), **Shadow in the Warp** (the Hive Mind's presence smothers nearby psykers: a penalty to psychic power and a Fright Check risk, built as an aura), no fear or pain within synapse, immunity to disease and toxins, adapted biology (regeneration on larger forms), no language or society. Tyranid psychic powers use the Sorcery model with the Hive Mind as the source; they suffer Perils like other psykers but with Hive Mind flavour.
+Tyranid traits: Hive Mind link and **synapse** (within range of a synapse creature, Tyranids fight with total discipline and no fear; outside it they revert to instinct: feeding or fleeing, a disadvantage built honestly), **Shadow in the Warp** (the Hive Mind's presence smothers nearby psykers: a penalty to psychic power and a Fright Check risk, built as an aura; carried by synapse creatures (Warrior, Zoanthrope, Hive Tyrant) and, as a house choice, the Ravener and Lictor, but not the Carnifex), no fear or pain within synapse, immunity to disease and toxins, adapted biology (regeneration on larger forms), no language or society. Tyranid psychic powers use the Sorcery model with the Hive Mind as the source; they suffer Perils like other psykers but with Hive Mind flavour.
 
 Weapon-symbiote anchors:
 
