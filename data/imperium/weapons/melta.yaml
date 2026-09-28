@@ -46,6 +46,12 @@ items:
       (effective DR under the (10) divisor never exceeds 35, even against AV14's DR 350). See the
       Meltagun entry for the beyond-½D check; the pistol's beyond-½D line is one die lower than the
       meltagun's (3d vs 4d), the same one-die-down relationship as the old scale.
+      Handling: min ST 9 (√(10×6)≈7.7, bumped for the bulky coil and reservoir a fusion weapon
+      needs even at pistol scale, the same treatment the Plasma Pistol gets) already matches this
+      project's formula and needs no correction. RoF 1 at both range bands is correct as given -
+      melta weapons must vent and recharge between shots per framework.md, so there was never a
+      RoF-3 error to fix here the way there was on the plasma and bolt-pistol families. Shots 3(5),
+      Bulk -2 and Rcl 1 are unchanged.
 
   - name: Meltagun
     tl: 11
@@ -60,7 +66,7 @@ items:
         range: 10/50
         rof: 1
         shots: 4(5)
-        st: 10
+        st: 13
         bulk: -4
         rcl: 1
         skill: Beam Weapons (Rifle)
@@ -70,7 +76,7 @@ items:
         range: 10/50
         rof: 1
         shots: 4(5)
-        st: 10
+        st: 13
         bulk: -4
         rcl: 1
         skill: Beam Weapons (Rifle)
@@ -97,9 +103,14 @@ items:
       the target. Checked against the AV table: beyond ½D it averages 84 and still wrecks AV12 (DR
       200, effective DR 66) 76% of the time and AV10-11 (DR 100/150) 94-100% of the time, but drops
       to 34% against AV13 (DR 275) and just 5% against AV14 (DR 350) - "almost never beats" the
-      heaviest tanks, exactly as the framework specifies. ST 10 and a very short 10/50 range band
-      (versus a boltgun's 200/1000) capture the weapon's role as a close-assault specialist, not a
+      heaviest tanks, exactly as the framework specifies. A very short 10/50 range band
+      (versus a boltgun's 200/1000) captures the weapon's role as a close-assault specialist, not a
       rifle.
+      Handling: min ST corrected to 13 (√(10×17)≈13.04, matching framework.md's own sqrt formula
+      almost exactly) from a previous flat 10 that undersold a 17 lb weapon's real handling
+      difficulty by three points - the same correction applied to the lasgun family in this
+      project's las.yaml. RoF 1 (melta weapons must vent and recharge between shots) was already
+      correct. Bulk -4 and Rcl 1 are unchanged.
 
   - name: Multi-Melta
     tl: 11
@@ -144,6 +155,8 @@ items:
       and penetrates every vehicle and personal armour on the tables without exception, same as the
       meltagun; beyond ½D the extra die keeps it meaningfully ahead of the meltagun against the
       heaviest tanks (31% vs AV14, versus the meltagun's 5%) while still tailing off, matching the
-      fiction's "bigger meltagun" framing rather than a full return to short-range lethality. ST 13
-      and Gunner (Beams) reflect a support weapon needing a mount or a very strong user rather than
-      a shoulder-fired arm.
+      fiction's "bigger meltagun" framing rather than a full return to short-range lethality.
+      Handling: ST 13 (unmounted, unlike the tripod-marked heavy weapons in heavy.yaml) and Gunner
+      (Beams) reflect a support weapon needing a brace or a very strong user rather than a
+      shoulder-fired arm; RoF 1 is unchanged, per the family-wide melta vent/recharge rule. Bulk -6
+      and Rcl 1 are unchanged.
