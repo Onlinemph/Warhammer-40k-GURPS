@@ -1,0 +1,47 @@
+kind: template
+output: Xenos/Necrons/Templates/Lychguard.gct
+notes: >
+  A Lychguard: the personal, ritually-honour-bound bodyguard of a
+  dynasty's nobility. Point math: Necron Physiology 134 + Body Lens:
+  Lychguard 656 + Mind: Lychguard Honour -15 + skills 25 = 800 points.
+  Stats: ST 22, DX 12, IQ 9, HT 15, HP 30, Will 9, Per 9, natural torso DR
+  90 (Weak Points 3, eye DR 45) — framework.md's Lychguard anchor line
+  exactly. This lands at the top of framework.md's Astartes tier
+  (550-800): a Lychguard is built to stand between its charge and
+  anything short of a Custodian or a Warboss and simply not fall over.
+traits:
+  - include: "xenos/necrons/traits.yaml#Necron Physiology"
+  - include: "xenos/necrons/traits.yaml#Body Lens: Lychguard"
+  - include: "xenos/necrons/traits.yaml#Mind: Lychguard Honour"
+skills:
+  - name: Two-Handed Sword
+    spec: Warscythe
+    diff: DX/A
+    points: 16
+    tags: [Xenos, Necrons]
+    lore: A Lychguard's warscythe is a two-handed power-field blade, wielded with real skill rather than a Warrior's blunt drilling.
+    design: Two-Handed Sword (DX/A). DX+4 (16) for 16 points, Average.
+  - name: Shield
+    diff: DX/E
+    points: 4
+    tags: [Xenos, Necrons]
+    lore: A Lychguard equipped with a dispersion shield and hyperphase sword instead of a warscythe is drilled just as hard with it.
+    design: Shield (DX/E). DX+2 (14) for 4 points, Easy.
+  - name: Brawling
+    diff: DX/E
+    points: 2
+    tags: [Xenos, Necrons]
+    lore: A last-resort fallback if a Lychguard's weapon is somehow lost.
+    design: DX+1 (13) for 2 points, Easy.
+  - name: Tactics
+    diff: IQ/H
+    points: 2
+    tags: [Xenos, Necrons]
+    lore: Enough grasp of a fight's shape to place itself correctly around its charge.
+    design: IQ-1 (8) for 2 points, Hard.
+  - name: Heraldry
+    diff: IQ/A
+    points: 1
+    tags: [Xenos, Necrons]
+    lore: Lychguard know the ritual forms, ranks and grudges of the nobility they guard.
+    design: IQ+0 (9) for 1 point, Average.

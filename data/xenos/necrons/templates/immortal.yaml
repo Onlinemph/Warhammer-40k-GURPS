@@ -1,0 +1,42 @@
+kind: template
+output: Xenos/Necrons/Templates/Necron Immortal.gct
+notes: >
+  An Immortal: a dynasty's elite guard, built to a sturdier pattern than a
+  Warrior and trusted with real (if narrow) tactical judgement. Point
+  math: Necron Physiology 134 + Body Lens: Immortal 546 + Mind: Immortal
+  Discipline -6 + skills 26 = 700 points. Stats: ST 20, DX 11, IQ 8, HT
+  15, HP 28, Will 8, Per 8, natural torso DR 80 (Weak Points 3, eye DR
+  40) — framework.md's Immortal anchor line exactly. This lands within
+  framework.md's Astartes tier (550-800): an Immortal genuinely fights on
+  a level with a Battle-Brother, built from raw durability and heavy
+  weaponry rather than an Astartes' training and equipment.
+traits:
+  - include: "xenos/necrons/traits.yaml#Necron Physiology"
+  - include: "xenos/necrons/traits.yaml#Body Lens: Immortal"
+  - include: "xenos/necrons/traits.yaml#Mind: Immortal Discipline"
+skills:
+  - name: Beam Weapons
+    spec: Rifle
+    diff: DX/E
+    points: 12
+    tags: [Xenos, Necrons]
+    lore: An Immortal's gauss blaster (or tesla carbine) is a heavier weapon than a Warrior's, and drilled with far more care.
+    design: Beam Weapons (Rifle) (DX/E), the same family as the Warrior template. DX+3 (14) for 12 points, Easy.
+  - name: Brawling
+    diff: DX/E
+    points: 4
+    tags: [Xenos, Necrons]
+    lore: An Immortal is built heavy enough to trade blows directly when a fight closes to melee.
+    design: DX+2 (13) for 4 points, Easy.
+  - name: Tactics
+    diff: IQ/H
+    points: 8
+    tags: [Xenos, Necrons]
+    lore: Immortals hold their line and adjust formation on their own initiative far better than a Warrior's rote obedience allows.
+    design: IQ+2 (10) for 8 points, Hard.
+  - name: Soldier
+    diff: IQ/A
+    points: 2
+    tags: [Xenos, Necrons]
+    lore: General battlefield know-how -- logistics, drills, standing orders -- of the dynasty's professional guard.
+    design: IQ+0 (8) for 2 points, Average.

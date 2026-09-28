@@ -32,3 +32,4 @@ Anchor and rule changes to `framework.md`, with the reason for each.
 - **Orks: Thick Skull replaces Injury Tolerance (No Brain)** (user direction): DR 4 skull-only (6 points); headshots work normally once they penetrate.
 - **Aeldari anchors added** (Guardian DX 14, Aspect Warrior DX 16, Exarch DX 18; shuriken 5d(3) cut; Aspect armour DR 70 flexible).
 - **Necron anchors added** (natural necrodermis DR from Warrior 50 to Overlord 100; Reanimation Protocols; gauss flayer 6d(3) burn).
+- **Gauss divisor (3) → (4)**: the anchor's own description (strips flak and carapace) needed (4); at (3) a gauss flayer got through carapace only 28% of the time.

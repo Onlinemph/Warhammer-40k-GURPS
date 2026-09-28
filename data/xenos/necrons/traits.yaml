@@ -1,0 +1,1020 @@
+kind: traits
+output: Xenos/Necrons/Traits/Necron Physiology.adq
+items:
+  # ------------------------------------------------------------------ organs
+  # Necron biology (such as it is) is a body of self-repairing living
+  # metal wrapped around a soul bound out of an ancient, biotransferred
+  # personality, then left to sleep for sixty million years. Calibrated to
+  # framework.md's "Xenos > Necrons" anchor table. Primary sources: Codex:
+  # Necrons background across editions (biotransference, the Triarch, the
+  # Silent King), Robert Rath's The Infinite and the Divine and Nate
+  # Crowley's The Twice-Dead King duology for characterisation of nobles,
+  # Crypteks and the Flayer Curse, with Dark Heresy/Rogue Trader/Deathwatch
+  # Necron material used per framework.md's source order for relative
+  # calibration only.
+
+  - &necron_injury_tolerance
+    name: Injury Tolerance (Unliving)
+    ref: B60
+    tags: [Advantage, Physical, Xenos, Necrons]
+    modifiers:
+      - {name: Unliving, cost: "20", ref: B61}
+      - {name: No Blood, cost: "5", ref: B61}
+      - {name: No Vitals, cost: "5", ref: B61}
+    notes: >
+      Unliving wound multipliers (imp and pi++ x1, pi+ x1/2, pi x1/3, pi-
+      x1/5); attacks to the vitals or groin are treated as attacks to the
+      torso; does not bleed and is unaffected by blood-borne toxins.
+    lore: >
+      A Necron body is living metal animated by a bound soul, not flesh
+      wrapped around organs — there is nothing inside it to bleed or to
+      target with a called shot to the "vitals," and impaling or small-
+      calibre fire that would drop a man does comparatively little to a
+      chassis with no soft tissue to wound. Consistent across Codex
+      background and both Rath's and Crowley's novels, which repeatedly
+      show las-fire and small arms punching clean through a Necron with
+      no effect beyond cosmetic damage until something heavier lands.
+    design: >
+      Injury Tolerance (Unliving) (B60-61): Unliving 20 + No Blood 5 + No
+      Vitals 5 = 30 points. No Brain/No Eyes/No Neck/No Head are
+      deliberately left off: a Necron does have a reanimation-critical
+      core the framework's Weak Points rule targets, and a called shot to
+      the eye-slit is handled through the Necrodermis trait's notes
+      below rather than by removing the eye as a target.
+
+  - &necron_regeneration
+    name: Regeneration (Necrodermis Self-Repair)
+    points: 10
+    ref: B80
+    tags: [Advantage, Physical, Xenos, Necrons]
+    notes: "Regeneration (Slow): recovers 1 HP per 12 hours even without rest or first aid, on top of Reanimation Protocols' active battlefield recovery."
+    lore: >
+      Necrodermis is self-repairing: dents smooth out, gouges knit shut,
+      and severed plating slowly reknits given time undisturbed, the same
+      passive process both Codex background and Crowley's Twice-Dead King
+      describe for a Necron left standing quietly after a fight. It is
+      much slower than the active, on-the-spot recovery Reanimation
+      Protocols below provides mid-battle.
+    design: >
+      Regeneration (Slow) (B80, 10 points), the same tier and cost this
+      project's Ork Warboss entry uses for "recovers 1 HP per 12 hours
+      even without rest," reused here for the analogous living-metal
+      mending rather than biological healing.
+
+  - &reanimation_protocols
+    name: Reanimation Protocols
+    points: 25
+    ref: B60
+    tags: [Advantage, Physical, Xenos, Necrons]
+    modifiers:
+      - {name: "Recurring (triggers every time the condition is met, not once ever)", cost: "+100%"}
+      - {name: "Delayed Return (HT roll over several turns, not instant)", cost: "-20%"}
+      - {name: "Partial Restoration (returns at half HP, not full)", cost: "-10%"}
+    notes: >
+      When damage reduces a Necron below -1xHP, it is not destroyed
+      outright unless a single injury exceeds -5xHP (the normal instant-
+      kill threshold still applies past that point). Otherwise its body
+      drops, inert. At the end of each of the next three turns, roll HT:
+      on a success the Necron reanimates then and there, rising with HP
+      restored to half its full total (round down, minimum 1) and fully
+      combat-capable. Three failures in a row, or any critical failure,
+      and it phases out instead: teleported home to its tomb complex or
+      the nearest active node in a flash of green light, removed from the
+      fight but not destroyed, and available to return in a later scene
+      at the GM's discretion. A Necron whose remains are physically
+      destroyed past -5xHP, disintegrated, or whose reanimation matrix is
+      separately wrecked (a GM-adjudicated called shot, per the fiction's
+      "destroy the core" solution) does not come back at all.
+    lore: >
+      Reanimation Protocols are the signature Necron trick that makes
+      Necron armies so dangerous to fight to a standstill: a Warrior cut
+      down one moment can be back on its feet the next, teleported away
+      only when the protocols themselves fail. Codex background across
+      editions describes exactly this two-stage process (reanimate in
+      place, or phase out to a tomb on failure), and both Rath's The
+      Infinite and the Divine and Crowley's Twice-Dead King show Necrons
+      shrugging off "kills" that would end any other soldier, while also
+      showing that a thoroughly wrecked or disintegrated Necron stays
+      down for good.
+    design: >
+      Built on Basic Set's Extra Life (B60, base 25 points: you do not
+      permanently die when killed, but eventually return to bodily
+      function). Modified since this fires every time the trigger
+      condition is met over a whole campaign rather than a fixed number
+      of one-shot lives (Recurring, eyeballed at +100%, the same kind of
+      judged percentage this project's Reputation and Accessibility
+      entries use rather than a strict RAW calculation), Delayed Return
+      (-20%, the multi-turn HT-roll window instead of an instant pop-up)
+      and Partial Restoration (-10%, half HP rather than full). Net
+      +100-20-10 = +70%. 25 x 1.7 = 42.5, rounded up to 43 points.
+
+  - &no_pain_receptors
+    name: No Pain Receptors
+    points: 10
+    ref: B59
+    tags: [Advantage, Physical, Xenos, Necrons]
+    notes: >
+      House rule, priced at High Pain Threshold's rate but total: a
+      Necron's necrodermis has no pain receptors to speak of, so it never
+      takes a shock penalty or a reaction penalty from injury of any kind,
+      not merely a reduced chance of one.
+    lore: >
+      A Necron does not flinch, wince or slow down from injury short of
+      outright incapacitation — it has nothing resembling a nervous
+      system built to register pain in the first place. Consistently
+      background across Codex material and Black Library's Necron
+      fiction, which never shows a Necron reacting to a wound the way a
+      living creature would.
+    design: >
+      Priced as Basic Set High Pain Threshold (B59, 10 points) rather than
+      inventing a new, uncosted "total" tier: the RAW trait already covers
+      "never affected by physical torture" and removes shock penalties
+      most of the time, and this project treats a Necron's complete lack
+      of a pain sense as the same trait applied without RAW's residual
+      chance of a shock penalty, the same kind of small honest
+      extrapolation this project's Larraman's Organ entry makes for
+      "seals in seconds."
+
+  - &metabolic_immunity
+    name: "Resistant to Metabolic Hazards (Necrodermis)"
+    ref: B81
+    tags: [Advantage, Physical, Xenos, Necrons]
+    modifiers:
+      - {name: "Metabolic Hazards (disease, poison, radiation, suffocation, aging)", cost: "30", ref: B80}
+      - {name: Immunity, cost: "x1", ref: B81}
+    notes: "Resistant (Metabolic Hazards), Immunity."
+    lore: >
+      A body of living metal has no metabolism for disease, poison,
+      radiation or asphyxiation to act on, and it does not age in any
+      biological sense — a Necron's chassis wears out mechanically over
+      deep time rather than growing old. Universal, unremarked-on Codex
+      background.
+    design: >
+      Resistant (Metabolic Hazards), Immunity tier (B80-81): base value 30
+      for the broad Metabolic Hazards category, x1 for full Immunity = 30
+      points, the same base-value component this project's Basic Set
+      "Machine" reference build (see the Basic Set library's own Machine
+      meta-trait) uses for the same reason.
+
+  - &soulless
+    name: Soulless
+    ref: B80
+    tags: [Advantage, Mental, Xenos, Necrons]
+    modifiers:
+      - {name: "Mind Control, Possession and Emotion Control simply do not work", cost: "10", ref: B81}
+    notes: "Resistant (Mind Control, Possession and Emotion Control), Immunity."
+    lore: >
+      Whatever a Necron's soul is now, it is bound into the necrodermis
+      by Necrontyr technology rather than carried the way a living
+      creature's is, and it registers as flatly uninteresting to the
+      predators of the warp: daemons ignore Necrons in the fiction unless
+      given a specific reason not to, and no depiction shows a Necron
+      possessed, charmed or emotionally manipulated by psychic or
+      daemonic means. This is consistent Codex background rather than a
+      specific cited scene.
+    design: >
+      Resistant, Immunity tier (B80-81: base rarity value x5), following
+      this project's own Pariah Gene "Immunity to Warp-Based Effects"
+      entry (data/imperium/psykers/warp.yaml) for the identical math:
+      Mind Control/Possession/Emotion Control treated as an "occasional"
+      hazard category (base 2) for a race this is definitional for, 2 x 5
+      = 10 points.
+
+  - &beneath_a_daemons_notice
+    name: "Beneath a Daemon's Notice"
+    points: 1
+    tags: [Perk, Xenos, Necrons]
+    notes: "Roleplaying/GM-adjudication flag: daemons default to ignoring a Necron target unless it is actively fighting them or blocking something they want."
+    lore: >
+      A soulless construct is not worth a daemon's attention the way a
+      mortal's soul is: Codex background and both Rath's and Crowley's
+      novels play Necrons and daemons as largely talking past each other
+      or fighting for territory rather than as predator and prey the way
+      daemons treat the living.
+    design: >
+      Perk (B21, 1 point): a narrow, GM-adjudicated targeting-priority
+      flag rather than a numeric combat bonus, since "usually ignored
+      unless it's in the way" is not the kind of reliable effect Basic
+      Set prices as a full reaction bonus.
+
+  - &necron_machine_body
+    name: "Necrodermis Machine-Body"
+    points: 0
+    tags: [Xenos, Necrons]
+    notes: >
+      0-point lore flag, the same convention this project's Ork Fungal
+      Physiology entry uses: a Necron does not need to breathe, eat,
+      drink or sleep, and its chassis wears out over millennia rather
+      than ageing — all inherent to being a machine body under GURPS's
+      own Machine meta-trait guidance (see the Basic Set library's
+      Machine.gct for the same 0-point treatment of these same facts),
+      not separately purchased advantages.
+    lore: >
+      A Necron does not need food, water, air or rest, and the Tomb
+      Worlds' sixty-million-year sleep is exactly this: a body that
+      simply does not wear down the way a living one does, left inert
+      rather than fed or rested.
+    design: >
+      0 points, documentation only; see notes for why this is not a
+      priced Doesn't Breathe/Doesn't Eat or Drink purchase.
+
+  - &necrodermis
+    name: Necrodermis
+    per_level: 5
+    levels: 0
+    ref: B46
+    tags: [Advantage, Physical, Xenos, Necrons]
+    notes: >
+      Placeholder entry at level 0. Every body-type lens below includes
+      this trait with `levels` and `dr` overridden to its own anchor
+      figure, and documents that lens's Weak Points rating and eye-lens
+      DR in its own copy of these notes, per framework.md's "Weak Points
+      and eye lenses" rule (halve DR on a 3d Weak Points roll against a
+      hit that failed to penetrate; eye-slit optics run at about half the
+      body's torso DR).
+    lore: >
+      Necrodermis is a Necron's body and its armour at once: a skin of
+      near-indestructible living metal with no separate suit to strip
+      away. Universal across Codex background and every piece of Black
+      Library Necron fiction.
+    design: >
+      Damage Resistance (B46, 5/level, all locations): natural DR bought
+      directly on the body, per framework.md's explicit instruction that
+      necrodermis is a character trait, not equipment. Each body-type
+      lens overrides `levels`/`dr` to its own figure from framework.md's
+      Necron anchor table; see that lens's own copy of this trait for its
+      point cost.
+
+  - name: Necron Physiology
+    container: ancestry
+    tags: [Advantage, Physical, Xenos, Necrons]
+    children:
+      - *necron_injury_tolerance
+      - *necron_regeneration
+      - *reanimation_protocols
+      - *no_pain_receptors
+      - *metabolic_immunity
+      - *soulless
+      - *beneath_a_daemons_notice
+      - *necron_machine_body
+    lore: >
+      The Necron Physiology shared by every caste of the species: a body
+      of living necrodermis animated by a soul drawn out of a long-dead
+      Necrontyr and bound into the metal during the biotransference, self-
+      repairing, near-unkillable in the field thanks to Reanimation
+      Protocols, and untouched by disease, poison, pain or the warp's
+      usual tricks. This trait is the baseline every body-type lens below
+      (Warrior, Immortal, Deathmark, Lychguard, Flayed One, Noble, Cryptek)
+      builds on top of; the lens supplies the caste's own attributes and
+      necrodermis DR, and a separate mind package supplies its
+      personality (or lack of one).
+    design: >
+      30 (Injury Tolerance) + 10 (Regeneration) + 43 (Reanimation
+      Protocols) + 10 (No Pain Receptors) + 30 (Resistant to Metabolic
+      Hazards) + 10 (Soulless) + 1 (Beneath a Daemon's Notice) + 0
+      (Machine-Body flavor) = 134 points of shared physiology before
+      attributes, necrodermis DR, personality or skills. See each
+      template for a full character built on top of this plus a body
+      lens and a mind package.
+
+  # --------------------------------------------------------------- body lenses
+  # Each lens sets ST/DX/IQ/HT/HP to framework.md's anchor line for that
+  # caste and includes Necrodermis at the matching DR, Weak Points rating
+  # and eye-lens figure. Unlike the Ork growth lenses these do not stack on
+  # each other -- a Necron is built to a caste, not grown into one -- so
+  # a template includes exactly one body lens.
+
+  - name: "Body Lens: Warrior"
+    container: meta_trait
+    tags: [Advantage, Physical, Xenos, Necrons]
+    children:
+      - name: Attribute Modifiers (Warrior)
+        points: 52
+        attributes: {st: 8, ht: 4, hp: 6, iq: -4}
+        tags: [Physical]
+        design: >
+          Framework target: ST 18, DX 10, IQ 6, HT 14, HP 24. Increased
+          ST +8 (B14, 10/level, 80) for ST 18. DX left at human baseline
+          10 (0 points): a Warrior is a mass-produced soldier-chassis, not
+          a precise one. Decreased IQ -4 (B16, 20/level, -80) for IQ 6 --
+          barely above animal cunning, offset by the Slave Mentality mind
+          package rather than by any Talent, since a Warrior genuinely
+          has none. Increased HT +4 (B15, 10/level, 40) for HT 14. Extra
+          Hit Points +6 (B16, 2/level, 12) on top of the ST-18 base of 18,
+          for HP 24. 80-80+40+12 = 52.
+      - name: Necrodermis (Warrior)
+        <<: *necrodermis
+        levels: 50
+        dr: {all: 50}
+        notes: >
+          DR 50, all locations. Weak Points 4 (per framework.md): on a
+          hit that fails to penetrate, roll 3d; 4 or less means it found
+          a joint or seam and DR is halved (25) against that hit. Eye-
+          slit optics run at DR 25 (half the body DR) rather than 50 --
+          treat a called or random shot to the eye as hitting DR 25.
+    lore: >
+      The Necron Warrior: the mass-produced rank-and-file soldier of a
+      Necron dynasty's legions, built for cheap, reliable numbers rather
+      than individual skill. Codex background across editions and both
+      Rath's and Crowley's novels play Warriors as an implacable, faceless
+      tide rather than as individuals.
+    design: >
+      52 (Attribute Modifiers) + 250 (Necrodermis DR 50, 5/level) = 302
+      points, added to Necron Physiology's 134 for 436 points of
+      physiology and body alone, before the Mind: Slave Mentality package
+      and skills. See the Necron Warrior template.
+
+  - name: "Body Lens: Immortal"
+    container: meta_trait
+    tags: [Advantage, Physical, Xenos, Necrons]
+    children:
+      - name: Attribute Modifiers (Immortal)
+        points: 146
+        attributes: {st: 10, dx: 1, ht: 5, hp: 8, iq: -2}
+        tags: [Physical]
+        design: >
+          Framework target: ST 20, DX 11, IQ 8, HT 15, HP 28. Increased ST
+          +10 (100) for ST 20. Increased DX +1 (B15, 20/level, 20) for DX
+          11 -- an Immortal is built with noticeably tighter tolerances
+          than a Warrior. Decreased IQ -2 (B16, 20/level, -40) for IQ 8 --
+          dim but genuinely capable of following tactics, matching
+          framework.md's own description. Increased HT +5 (B15, 10/level,
+          50) for HT 15. Extra Hit Points +8 (B16, 2/level, 16) on top of
+          the ST-20 base of 20, for HP 28. 100+20-40+50+16 = 146.
+      - name: Necrodermis (Immortal)
+        <<: *necrodermis
+        levels: 80
+        dr: {all: 80}
+        notes: >
+          DR 80, all locations. Weak Points 3 (per framework.md's "nobles
+          and Lychguard" figure -- an Immortal's heavier-pattern plate
+          fits this tighter than a Warrior's): on a hit that fails to
+          penetrate, roll 3d; 3 or less halves DR (40) against that hit.
+          Eye-slit optics run at DR 40 (half the body DR) rather than 80.
+    lore: >
+      Immortals are a Necron dynasty's elite guard: built to a sturdier,
+      more expensive pattern than a Warrior and trusted with real tactical
+      initiative rather than pure rote obedience. Consistently described
+      across Codex background as a step up from Warriors in every respect.
+    design: >
+      146 (Attribute Modifiers) + 400 (Necrodermis DR 80, 5/level) = 546
+      points, added to Necron Physiology's 134 for 680 points of
+      physiology and body alone. See the Necron Immortal template.
+
+  - name: "Body Lens: Deathmark"
+    container: meta_trait
+    tags: [Advantage, Physical, Xenos, Necrons]
+    children:
+      - name: Attribute Modifiers (Deathmark)
+        points: 172
+        attributes: {st: 8, dx: 3, ht: 4, hp: 6, iq: -1}
+        tags: [Physical]
+        design: >
+          Framework target: ST 18, DX 13, IQ 9, HT 14, HP 24. Increased ST
+          +8 (80) for ST 18. Increased DX +3 (B15, 20/level, 60) for DX 13
+          -- a hunter-pattern chassis built for marksmanship over brute
+          plating. Decreased IQ -1 (B16, 20/level, -20) for IQ 9 --
+          sharper than an Immortal, enough for solo infiltration work.
+          Increased HT +4 (40) for HT 14. Extra Hit Points +6 (12) on top
+          of the ST-18 base of 18, for HP 24. 80+60-20+40+12 = 172.
+      - name: Necrodermis (Deathmark)
+        <<: *necrodermis
+        levels: 60
+        dr: {all: 60}
+        notes: >
+          DR 60, all locations. Weak Points 4 (a Warrior-pattern base
+          chassis lightened for stealth, per framework.md): on a hit that
+          fails to penetrate, roll 3d; 4 or less halves DR (30). Eye-slit
+          optics (including the targeting lens) run at DR 30 rather than
+          60.
+    lore: >
+      Deathmarks are the dynasty's snipers and infiltrators, phased out of
+      reality between shots and reappearing to deliver a single, precise
+      kill. Codex background is explicit that a Deathmark carries far
+      more individual initiative than a Warrior, but is still built as a
+      specialised tool rather than a full personality.
+    design: >
+      172 (Attribute Modifiers) + 300 (Necrodermis DR 60, 5/level) = 472
+      points, added to Necron Physiology's 134 for 606 points of
+      physiology and body alone. See the Deathmark template.
+
+  - name: "Body Lens: Lychguard"
+    container: meta_trait
+    tags: [Advantage, Physical, Xenos, Necrons]
+    children:
+      - name: Attribute Modifiers (Lychguard)
+        points: 206
+        attributes: {st: 12, dx: 2, ht: 5, hp: 8, iq: -1}
+        tags: [Physical]
+        design: >
+          Framework target: ST 22, DX 12, IQ 9, HT 15, HP 30. Increased ST
+          +12 (B14, 10/level, 120) for ST 22 -- the heaviest rank-and-file
+          chassis outside a Lord's own guard. Increased DX +2 (B15, 20/
+          level, 40) for DX 12. Decreased IQ -1 (-20) for IQ 9, the same
+          modest tactical sense as a Deathmark. Increased HT +5 (50) for
+          HT 15. Extra Hit Points +8 (16) on top of the ST-22 base of 22,
+          for HP 30. 120+40-20+50+16 = 206.
+      - name: Necrodermis (Lychguard)
+        <<: *necrodermis
+        levels: 90
+        dr: {all: 90}
+        notes: >
+          DR 90, all locations. Weak Points 3 (per framework.md's "nobles
+          and Lychguard" figure): on a hit that fails to penetrate, roll
+          3d; 3 or less halves DR (45). Eye-slit optics run at DR 45
+          rather than 90.
+    lore: >
+      Lychguard are the personal bodyguards of a dynasty's nobility --
+      hand-picked, heavily armoured, and sworn to interpose themselves
+      between their charge and any threat with an honour that borders on
+      ritual. Codex background and Crowley's Twice-Dead King both treat
+      Lychguard as visibly more "present" and dutiful than a rank-and-file
+      Warrior, without the full personality of a Lord.
+    design: >
+      206 (Attribute Modifiers) + 450 (Necrodermis DR 90, 5/level) = 656
+      points, added to Necron Physiology's 134 for 790 points of
+      physiology and body alone. See the Lychguard template.
+
+  - name: "Body Lens: Flayed One"
+    container: meta_trait
+    tags: [Advantage, Physical, Xenos, Necrons]
+    children:
+      - name: Attribute Modifiers (Flayed One)
+        points: 92
+        attributes: {st: 8, dx: 2, ht: 4, hp: 6, iq: -4}
+        tags: [Physical]
+        design: >
+          Framework target: ST 18, DX 12, IQ 6, HT 14, HP 24. Increased ST
+          +8 (80) for ST 18. Increased DX +2 (40) for DX 12 -- a Flayed
+          One is built (or has degraded) for stealth and close murder
+          over a Warrior's flat rote combat. Decreased IQ -4 (-80) for IQ
+          6, as debased as a Warrior's but for entirely different reasons
+          (below, in the Mind: Flayer Curse package). Increased HT +4
+          (40) for HT 14. Extra Hit Points +6 (12) on top of the ST-18
+          base of 18, for HP 24. 80+40-80+40+12 = 92.
+      - name: Necrodermis (Flayed One)
+        <<: *necrodermis
+        levels: 50
+        dr: {all: 50}
+        notes: >
+          DR 50, all locations. Weak Points 4 (a Warrior-tier chassis, per
+          framework.md): on a hit that fails to penetrate, roll 3d; 4 or
+          less halves DR (25). Eye-slit optics run at DR 25 rather than
+          50.
+    lore: >
+      Flayed Ones were once ordinary Necrons whose reanimation matrices
+      degraded into a compulsion to flay and wear the flesh of the living
+      -- the Flayer Curse. Their necrodermis is unremarkable, the same
+      tier as a Warrior's; what sets them apart is entirely psychological
+      (see the Mind: Flayer Curse package) and behavioural (stealth and
+      murder over line-infantry combat).
+    design: >
+      92 (Attribute Modifiers) + 250 (Necrodermis DR 50, 5/level) = 342
+      points, added to Necron Physiology's 134 for 476 points of
+      physiology and body alone. See the Flayed One template.
+
+  - name: "Body Lens: Noble (Lord/Overlord)"
+    container: meta_trait
+    tags: [Advantage, Physical, Xenos, Necrons]
+    children:
+      - name: Attribute Modifiers (Noble)
+        points: 350
+        attributes: {st: 14, dx: 3, ht: 5, hp: 10, iq: 4}
+        tags: [Physical]
+        design: >
+          Framework target: ST 22-25, HT 15, HP 32-36, DX 13, IQ 14. This
+          template takes the midpoint, ST 24 / HP 34, as the typical
+          Overlord rather than the extremes; a GM building a specific,
+          especially large or small Lord should adjust ST directly.
+          Increased ST +14 (B14, 10/level, 140) for ST 24. Increased DX +3
+          (B15, 20/level, 60) for DX 13. Increased IQ +4 (B16, 20/level,
+          80) for IQ 14 -- a full, cunning personality, on a par with a
+          human genius. Increased HT +5 (50) for HT 15. Extra Hit Points
+          +10 (B16, 2/level, 20) on top of the ST-24 base of 24, for HP
+          34. 140+60+80+50+20 = 350.
+      - name: Necrodermis (Noble)
+        <<: *necrodermis
+        levels: 100
+        dr: {all: 100}
+        notes: >
+          DR 100, all locations -- the anchor's own top figure, matching
+          the finest necrodermis a dynasty can craft. Weak Points 3 (per
+          framework.md's "nobles" figure): on a hit that fails to
+          penetrate, roll 3d; 3 or less halves DR (50). Eye-slit optics
+          run at DR 50 rather than 100.
+    lore: >
+      A Necron Lord or Overlord kept a full personality through the
+      biotransference and the long sleep, for better or worse: Codex
+      background, Rath's The Infinite and the Divine and Crowley's Twice-
+      Dead King all portray Necron nobility as vividly individual --
+      scheming, proud, sometimes darkly funny -- in a way the lesser
+      castes simply are not.
+    design: >
+      350 (Attribute Modifiers) + 500 (Necrodermis DR 100, 5/level) = 850
+      points, added to Necron Physiology's 134 for 984 points of
+      physiology and body alone, before the Mind: Noble Personality
+      package and skills -- already above framework.md's Astartes tier
+      (550-800) before either are added, matching the instruction that an
+      Overlord belongs at or above that band. See the Necron Overlord
+      template.
+
+  - name: "Body Lens: Cryptek"
+    container: meta_trait
+    tags: [Advantage, Physical, Xenos, Necrons]
+    children:
+      - name: Attribute Modifiers (Cryptek)
+        points: 292
+        attributes: {st: 8, dx: 2, ht: 4, hp: 6, iq: 6}
+        tags: [Physical]
+        design: >
+          Framework target: ST 18, DX 12, IQ 16, HT 14, HP 24. Increased
+          ST +8 (80) for ST 18. Increased DX +2 (40) for DX 12. Increased
+          IQ +6 (B16, 20/level, 120) for IQ 16 -- a Cryptek's genius is
+          the whole point of the caste, well past even a Necron noble's
+          own sharp mind. Increased HT +4 (40) for HT 14. Extra Hit Points
+          +6 (12) on top of the ST-18 base of 18, for HP 24.
+          80+40+120+40+12 = 292.
+      - name: Necrodermis (Cryptek)
+        <<: *necrodermis
+        levels: 60
+        dr: {all: 60}
+        notes: >
+          DR 60, all locations. Weak Points 3 (a Cryptek's robes and
+          arcana are laced through the necrodermis rather than bolted
+          over it, per framework.md's "nobles" figure): on a hit that
+          fails to penetrate, roll 3d; 3 or less halves DR (30). Eye-slit
+          optics run at DR 30 rather than 60.
+    lore: >
+      Crypteks are the dynasty's technosorcerers -- keepers of half-
+      understood pre-biotransference science that looks, to everyone
+      else, exactly like sorcery. Codex background, Rath's and Crowley's
+      novels alike treat Cryptek genius as real and dangerous, and their
+      necrodermis is built lighter than a soldier's to leave room for the
+      arcana they carry.
+    design: >
+      292 (Attribute Modifiers) + 300 (Necrodermis DR 60, 5/level) = 592
+      points, added to Necron Physiology's 134 for 726 points of
+      physiology and body alone, before a Discipline lens, the Mind:
+      Cryptek Genius package and skills. See the Cryptek template.
+
+  - name: "Body Lens: Destroyer"
+    container: meta_trait
+    tags: [Advantage, Physical, Xenos, Necrons]
+    children:
+      - name: Attribute Modifiers (Destroyer)
+        points: 196
+        attributes: {st: 16, dx: 2, ht: 6, hp: 8, iq: -4}
+        tags: [Physical]
+        design: >
+          Not one of framework.md's own anchor rows -- the framework's
+          Necron table stops at Cryptek, and Skorpekh Destroyers are
+          extrapolated here rather than anchored: a Warrior- or Immortal-
+          grade mind fused permanently into a heavy, scything mechanised
+          war-form, so its body should sit above Lychguard on raw ST and
+          HT (a bigger chassis than any biped) while its mind stays as
+          debased as a Warrior's or worse (the Destroyer Cult mind
+          package below). Increased ST +16 (B14, 10/level, 160) for ST 26.
+          Increased DX +2 (40) for DX 12, matching a Lychguard's precision
+          despite the bulk. Decreased IQ -4 (-80) for IQ 6, as fractured
+          as a Warrior's mind, per the framework's own description of
+          Destroyer Cultists as having lost themselves to hatred.
+          Increased HT +6 (B15, 10/level, 60) for HT 16 -- a war-engine's
+          resilience. Extra Hit Points +8 (16) on top of the ST-26 base of
+          26, for HP 34. 160+40-80+60+16 = 196.
+      - name: Necrodermis (Destroyer)
+        <<: *necrodermis
+        levels: 100
+        dr: {all: 100}
+        notes: >
+          DR 100, all locations -- as heavy as a Lord's own plate, per the
+          fiction's treatment of Destroyers as very hard to put down.
+          Weak Points 3 (a fused mechanised war-form has far fewer
+          exposed seams than a humanoid chassis): on a hit that fails to
+          penetrate, roll 3d; 3 or less halves DR (50). Eye-slit optics
+          run at DR 50 rather than 100.
+    lore: >
+      Destroyers (and the more radically converted Skorpekh Destroyers)
+      are Necrons whose minds fractured, during or after the biotransfer-
+      ence, into a consuming hatred of all organic life; in exchange their
+      bodies were rebuilt into heavy, part-mechanised war-forms far
+      removed from a humanoid chassis. Codex background across editions
+      is consistent that Destroyers are shunned even by other Necrons and
+      answer only reluctantly to central dynastic authority.
+    design: >
+      196 (Attribute Modifiers) + 500 (Necrodermis DR 100, 5/level) = 696
+      points, added to Necron Physiology's 134 for 830 points of
+      physiology and body alone, before the Mind: Destroyer Cult package
+      and skills. See the Skorpekh Destroyer template. This lens is a
+      reasoned extrapolation between the Lychguard and Noble anchors, not
+      a framework.md table row; a future framework update that adds an
+      explicit Destroyer anchor should supersede it.
+
+  # --------------------------------------------------------------- mind packages
+  - name: "Mind: Slave Mentality"
+    container: meta_trait
+    tags: [Disadvantage, Mental, Xenos, Necrons]
+    children:
+      - name: Slave Mentality
+        points: -20
+        cr: 12
+        ref: B152
+        tags: [Disadvantage, Mental, Xenos, Necrons]
+        notes: "As Slave Mentality (B152): defers to any perceived authority, cannot act on its own initiative against orders, and struggles to disobey even a bad order from its Overlord's court."
+        lore: >
+          A Warrior's mind is not merely dim, it is built to obey: Codex
+          background treats Warriors as automatons that fight exactly as
+          ordered and stop being useful in a fight the instant central
+          command breaks down, per the tabletop convention that a Warrior
+          unit without an active officer nearby is far less reliable.
+        design: Basic Set Slave Mentality (B152), self-control 12, -20 points.
+      - name: "Automaton Discipline"
+        points: -1
+        tags: [Quirk, Xenos, Necrons]
+        notes: Roleplaying flag only.
+        lore: A Warrior defaults to its last-given order or a simple guard/patrol drill rather than improvising, even when improvising would obviously serve better.
+        design: Quirk (B9), roleplaying flag only.
+    lore: >
+      Most Necrons who went through the biotransference lost themselves
+      almost entirely -- Warriors above all, who function as an obedient
+      tool rather than a soldier with opinions.
+    design: -20 (Slave Mentality) - 1 (Automaton Discipline) = -21 points.
+
+  - name: "Mind: Immortal Discipline"
+    container: meta_trait
+    tags: [Disadvantage, Mental, Xenos, Necrons]
+    children:
+      - name: "Sense of Duty (The Dynasty)"
+        points: -5
+        ref: B153
+        tags: [Disadvantage, Mental, Xenos, Necrons]
+        notes: "Small group -- the dynasty's ruling court and its stated goals, not the whole species."
+        lore: >
+          Immortals hold enough of themselves to serve with real, if
+          narrow, loyalty rather than pure programmed obedience --
+          Codex background's usual framing of Immortals as trusted,
+          disciplined elite guard.
+        design: Basic Set Sense of Duty (B153), small group, -5 points.
+      - name: "Rote Thinker"
+        points: -1
+        tags: [Quirk, Xenos, Necrons]
+        notes: Roleplaying flag only.
+        lore: An Immortal follows doctrine to the letter and is visibly uncomfortable improvising outside it.
+        design: Quirk (B9), roleplaying flag only.
+    lore: >
+      Immortals are dim but capable of real tactical thought, one step up
+      from a Warrior's blank obedience and nowhere near a noble's full
+      personality.
+    design: -5 (Sense of Duty) - 1 (Rote Thinker) = -6 points.
+
+  - name: "Mind: Deathmark Focus"
+    container: meta_trait
+    tags: [Advantage, Disadvantage, Mental, Xenos, Necrons]
+    children:
+      - name: Single-Minded
+        points: 5
+        ref: B85
+        tags: [Advantage, Mental, Xenos, Necrons]
+        notes: "Represents a Deathmark's total, undistractable focus on its assigned target."
+        lore: >
+          A Deathmark exists to track and kill one target with total
+          commitment, undistracted by anything else on the battlefield --
+          the defining trait of the caste across Codex background.
+        design: Basic Set Single-Minded (B85), 5 points, the same entry this project's Astartes Hypno-Indoctrination package uses.
+      - name: "No Sense of Humor"
+        points: -10
+        ref: B146
+        tags: [Disadvantage, Mental, Xenos, Necrons]
+        lore: A Deathmark has essentially no personality left to banter with -- minimal, cold, purpose-built.
+        design: Basic Set No Sense of Humor (B146), -10 points.
+    lore: >
+      Deathmarks keep just enough of a mind to hunt alone and adapt to a
+      single target, and nothing resembling a social self beyond that.
+    design: 5 (Single-Minded) - 10 (No Sense of Humor) = -5 points.
+
+  - name: "Mind: Lychguard Honour"
+    container: meta_trait
+    tags: [Disadvantage, Mental, Xenos, Necrons]
+    children:
+      - name: "Code of Honor (Necron Nobility)"
+        points: -10
+        ref: B127
+        tags: [Disadvantage, Mental, Xenos, Necrons]
+        notes: "Never abandon your charge; never break formation without leave; settle any grudge against another Lychguard through ritual challenge, not the battlefield."
+        lore: >
+          Lychguard fight and die by an ancient bodyguard's code as old as
+          the dynasties themselves -- Crowley's Twice-Dead King plays this
+          as genuine, not decorative.
+        design: Basic Set Code of Honor (Soldier's)-style build (B127), -10 points, reflavored to the Necron nobility's own ancient code.
+      - name: "Sense of Duty (Their Charge)"
+        points: -5
+        ref: B153
+        tags: [Disadvantage, Mental, Xenos, Necrons]
+        notes: "Single individual -- the specific Lord or Overlord this Lychguard is bound to protect."
+        lore: A Lychguard's loyalty is bound to one noble, not the dynasty in the abstract.
+        design: Basic Set Sense of Duty (B153), single individual, -5 points.
+    lore: >
+      Lychguard kept enough of themselves to serve with real, ritualised
+      devotion, without the full independent personality of a noble.
+    design: -10 (Code of Honor) - 5 (Sense of Duty) = -15 points.
+
+  - name: "Mind: Flayer Curse"
+    container: meta_trait
+    tags: [Disadvantage, Mental, Xenos, Necrons]
+    children:
+      - name: Bloodlust
+        points: -10
+        cr: 12
+        ref: B125
+        tags: [Disadvantage, Mental, Xenos, Necrons]
+        notes: "As Bloodlust, but specifically the compulsion to flay and take the flesh of a defeated foe."
+        lore: >
+          The Flayer Curse turns a Necron's reanimation-matrix corruption
+          into a compulsion to kill and flay, over and over -- Codex
+          background's core description of Flayed Ones.
+        design: Basic Set Bloodlust (B125), self-control 12, -10 points.
+      - name: "Compulsive Behavior (Flesh-Taking)"
+        points: -15
+        cr: 12
+        ref: B145
+        tags: [Disadvantage, Mental, Xenos, Necrons]
+        notes: "Must wear or carry flayed skin taken personally; goes without it only under duress, and poorly."
+        lore: >
+          Flayed Ones are consistently shown draped in the skins of their
+          victims, a compulsion rather than a fashion choice.
+        design: Basic Set Compulsive Behavior (B145), self-control 12, -15 points (Serious tier, since it is the caste's whole defining trait).
+      - name: "Social Stigma (Cursed Outcast)"
+        points: -10
+        ref: B155
+        tags: [Disadvantage, Social, Xenos, Necrons]
+        notes: "Shunned and quarantined by other Necrons, including their own dynasty, as a contamination risk."
+        lore: >
+          Even other Necrons keep Flayed Ones at arm's length, Codex
+          background treating the Flayer Curse as a contagion-like
+          degeneration rather than a lifestyle choice.
+        design: Basic Set Social Stigma (B155), -10 points.
+    lore: >
+      The Flayer Curse is a degeneration of a Necron's reanimation matrix
+      that erases whatever personality survived the biotransference and
+      replaces it with a single, murderous compulsion.
+    design: -10 (Bloodlust) - 15 (Compulsive Behavior) - 10 (Social Stigma) = -35 points.
+
+  - name: "Mind: Noble Personality"
+    container: meta_trait
+    tags: [Advantage, Disadvantage, Mental, Xenos, Necrons]
+    children:
+      - name: Overconfidence
+        points: -5
+        cr: 12
+        ref: B94
+        tags: [Disadvantage, Mental, Xenos, Necrons]
+        lore: >
+          A noble who ruled worlds before the Imperium existed rarely
+          doubts that it can still do so -- Rath's The Infinite and the
+          Divine builds an entire novel around exactly this flaw in two
+          Necron nobles.
+        design: Basic Set Overconfidence (B94), self-control 12, -5 points.
+      - name: "Obsession (Restore the Dynasty's Glory)"
+        points: -10
+        cr: 12
+        ref: B146
+        tags: [Disadvantage, Mental, Xenos, Necrons]
+        lore: >
+          Nearly every Necron noble in the fiction is driven by some
+          version of the same goal: reclaim what the dynasty lost across
+          sixty million years of sleep, whether that means territory,
+          artefacts, or simple respect.
+        design: Basic Set Obsession (B146), self-control 12, -10 points.
+      - name: "Code of Honor (Necron Nobility)"
+        points: -10
+        ref: B127
+        tags: [Disadvantage, Mental, Xenos, Necrons]
+        notes: "Honour debts and grudges are settled personally and openly; a noble does not go back on a given word to another noble, whatever it costs."
+        lore: >
+          The old dynastic codes of conduct predate the Imperium and are
+          still observed, however cynically, by nobles across the
+          fiction.
+        design: Basic Set Code of Honor (B127), -10 points, the same base entry as the Lychguard's own Code, reflavored for a ruler rather than a bodyguard.
+      - name: "Status (Necron Nobility)"
+        per_level: 5
+        levels: 3
+        ref: B28
+        tags: [Advantage, Social, Xenos, Necrons]
+        lore: A Lord or Overlord genuinely outranks everything around it, in a hierarchy far older than any human institution.
+        design: Basic Set Status 3 (B28, 5/level, 15 points).
+    lore: >
+      Necron nobility kept its personality through the biotransference
+      intact, for better or worse: proud, scheming, often eccentric after
+      sixty million years alone with its own thoughts, and bound by codes
+      of honour and duty as old as the dynasty itself.
+    design: -5 (Overconfidence) - 10 (Obsession) - 10 (Code of Honor) + 15 (Status 3) = -10 points.
+
+  - name: "Mind: Cryptek Genius"
+    container: meta_trait
+    tags: [Advantage, Disadvantage, Mental, Xenos, Necrons]
+    children:
+      - name: Curious
+        points: -5
+        cr: 12
+        ref: B131
+        tags: [Disadvantage, Mental, Xenos, Necrons]
+        lore: >
+          A Cryptek investigates first and considers the consequences
+          later -- every depiction of Crypteks in the fiction shows them
+          unable to leave an interesting anomaly alone.
+        design: Basic Set Curious (B131), self-control 12, -5 points.
+      - name: "Obsession (Unlock the Tomb-World's Secrets)"
+        points: -10
+        cr: 12
+        ref: B146
+        tags: [Disadvantage, Mental, Xenos, Necrons]
+        lore: >
+          Whatever a specific Cryptek's discipline, the underlying drive
+          in the fiction is the same: recover and master pre-
+          biotransference science the rest of the dynasty has lost or
+          forgotten.
+        design: Basic Set Obsession (B146), self-control 12, -10 points.
+    lore: >
+      A Cryptek kept its full mind and sharpened it further -- genuinely
+      brilliant, and single-mindedly curious about the half-understood
+      technology it wields.
+    design: -5 (Curious) - 10 (Obsession) = -15 points.
+
+  - name: "Mind: Destroyer Cult"
+    container: meta_trait
+    tags: [Disadvantage, Mental, Xenos, Necrons]
+    children:
+      - name: "Intolerance (All Organic Life)"
+        points: -10
+        ref: B140
+        tags: [Disadvantage, Mental, Xenos, Necrons]
+        lore: >
+          Destroyer Cultists have fractured into a hatred that does not
+          distinguish one living species from another -- Codex background
+          across editions treats this as total and undiscriminating.
+        design: Basic Set Intolerance (B140), broad category, -10 points.
+      - name: Berserk
+        points: -15
+        cr: 12
+        ref: B124
+        tags: [Disadvantage, Mental, Xenos, Necrons]
+        lore: >
+          A Destroyer that gets a clear shot at organic life is consist-
+          ently shown pressing the attack past the point of sense, per
+          the caste's core fictional identity.
+        design: Basic Set Berserk (B124), self-control 12, -15 points.
+      - name: Bloodlust
+        points: -10
+        cr: 12
+        ref: B125
+        tags: [Disadvantage, Mental, Xenos, Necrons]
+        notes: "As Bloodlust, but omnicidal rather than personal: any living thing will do."
+        lore: A Destroyer does not need a reason to kill a living target, only an opportunity.
+        design: Basic Set Bloodlust (B125), self-control 12, -10 points.
+    lore: >
+      The Destroyer Cult is what remains of a Necron mind that broke, not
+      into obedience like a Warrior's or a compulsion like a Flayed One's,
+      but into a pure, undifferentiated hatred of every living thing --
+      shunned by the rest of the dynasty and only loosely answerable to
+      central command.
+    design: -10 (Intolerance) - 15 (Berserk) - 10 (Bloodlust) = -35 points.
+
+  # ---------------------------------------------------------- Cryptek disciplines
+  # Signature abilities, one or two per discipline, built from Basic Set
+  # chassis advantages. Every discipline lens is disabled by default in
+  # the Cryptek template; enable exactly one per character.
+
+  - name: "Cryptek Discipline: Technomancy"
+    container: group
+    disabled: true
+    tags: [Xenos, Necrons]
+    lore: >
+      Technomancers specialise in the half-understood engineering side of
+      Necron science: reweaving damaged necrodermis, jury-rigging
+      constructs, and keeping a dynasty's ancient machines running.
+    design: Net cost below, per-discipline lens matching the Cryptek template's own pattern.
+    children:
+      - name: "Mending Field"
+        per_level: 10
+        levels: 2
+        ref: B59
+        tags: [Advantage, Xenos, Necrons]
+        modifiers:
+          - {name: "Accessibility (necrodermis and other constructs only)", cost: "-30%"}
+        notes: "Touch-range repair, restoring HP-equivalent structural damage to necrodermis or other machines only; has no effect on living tissue."
+        lore: >
+          A Technomancer's signature trick: laying a hand on damaged
+          necrodermis (a comrade's or their own) and knitting the metal
+          back into shape well beyond its own passive self-repair rate.
+        design: >
+          Healing (B59, 10 points/level) at level 2 (20 points) with
+          Accessibility (constructs/necrodermis only, -30%, an eyeballed
+          percentage per this project's own Accessibility convention):
+          20 x 0.7 = 14 points.
+      - name: "Artificer's Eye"
+        per_level: 10
+        levels: 1
+        ref: B90
+        tags: [Advantage, Mental, Talent, Xenos, Necrons]
+        notes: "Adds its level to Engineer (Necrodermis), Mechanic (Necron Constructs) and Armoury (Necron Weapons)."
+        lore: A Technomancer's instinct for Necron machinery runs deeper than formal training could teach a human engineer.
+        design: Talent affecting three skills, Medium Talent rate (B90, 10/level, 3-5 skill bracket), the same rate this project's Mek Instinct entry uses. Level 1, 10 points.
+    lore: >
+      Technomancers specialise in the half-understood engineering side of
+      Necron science: reweaving damaged necrodermis, jury-rigging
+      constructs, and keeping a dynasty's ancient machines running.
+    design: 14 (Mending Field, level 2) + 10 (Artificer's Eye, level 1) = 24 points at default levels.
+
+  - name: "Cryptek Discipline: Plasmancy"
+    container: group
+    disabled: true
+    tags: [Xenos, Necrons]
+    children:
+      - name: "Channelled Discharge"
+        per_level: 5
+        levels: 4
+        ref: B61
+        tags: [Advantage, Xenos, Necrons]
+        notes: "Bare-handed emergency discharge; a Plasmancer normally releases this through a staff or rod (built separately as equipment), not empty-handed."
+        lore: >
+          Plasmancers store and release raw particle/plasma energy through
+          their staves, and can (if disarmed) still discharge a
+          dangerous burst directly from their own hands as a last resort.
+        design: >
+          Innate Attack (Burning) (B61, 5 points/die), the same anchor
+          this project's 'Eadbanger and Betcher's Gland entries use. Level
+          4, 20 points.
+    lore: >
+      Plasmancers are Necron energy-weapons specialists, channelling the
+      same particle science behind gauss weaponry into more focused,
+      more destructive bursts.
+    design: 20 points (Channelled Discharge, level 4) at default level.
+
+  - name: "Cryptek Discipline: Psychomancy"
+    container: group
+    disabled: true
+    tags: [Xenos, Necrons]
+    children:
+      - name: "Aura of Dread"
+        points: 10
+        ref: B35
+        tags: [Advantage, Mental, Xenos, Necrons]
+        modifiers:
+          - {name: "Disadvantage Delivered (Fright Check -2)", cost: "+30%"}
+          - {name: "Area Effect, 2 yards", cost: "+50%"}
+          - {name: "Emanation (no ranged attack roll, proximity only)", cost: "-20%"}
+        notes: "Anyone within 2 yards of the Psychomancer's despair-generator scarabs suffers -2 to Fright Checks. Technological, not psychic: unaffected by Warp Sorcery countermeasures."
+        lore: >
+          Psychomancers carry technology (usually swarms of tiny despair-
+          generator scarabs) that projects a crushing dread rather than
+          any true psychic power -- Codex background is explicit that
+          Necron "psychic" effects are engineered, not warp-born.
+        design: >
+          Affliction (B35) base 10, Disadvantage Delivered (Fright Check
+          -2, valued at +30% per this project's own Null Aura precedent
+          in data/imperium/psykers/warp.yaml), Area Effect (2 yards, +50%,
+          B102) and Emanation (-20%, B111): net +60%. 10 x 1.6 = 16 points.
+    lore: >
+      Psychomancers weaponise dread and despair through Necron tech rather
+      than the warp -- close to a psyker's toolkit in effect, nothing like
+      one in mechanism.
+    design: 16 points (Aura of Dread) at default level.
+
+  - name: "Cryptek Discipline: Chronomancy"
+    container: group
+    disabled: true
+    tags: [Xenos, Necrons]
+    children:
+      - name: "Chronal Precognition"
+        points: 15
+        ref: B47
+        tags: [Advantage, Mental, Xenos, Necrons]
+        notes: "Reflavored Danger Sense: a Chronomancer reads the immediate probability-stream around itself for incoming danger a fraction of a second before it happens."
+        lore: >
+          Chronomancers manipulate probability and localised time rather
+          than true prophecy, and the most reliable payoff of that is
+          knowing danger is coming an instant before it arrives.
+        design: Basic Set Danger Sense (B47, 15 points), reflavored.
+      - name: "Temporal Distortion Field"
+        points: 10
+        ref: B35
+        tags: [Advantage, Xenos, Necrons]
+        modifiers:
+          - {name: "Disadvantage Delivered (Decreased Basic Speed 1)", cost: "+5%"}
+          - {name: "Melee Attack, Reach C only", cost: "-20%"}
+        notes: "A touch that locally slows a target's passage through time: -1 to Basic Speed (and so to Dodge and Move) for the rest of the encounter unless removed by a GM-adjudicated effect."
+        lore: >
+          A Chronomancer's staff can pin a small volume of space slightly
+          out of step with the current moment, dragging on anyone caught
+          in it. Codex background frames Chronomancer power as subtle
+          battlefield-tempo manipulation rather than flashy destruction.
+        design: >
+          Affliction (B35) base 10, Disadvantage Delivered (Decreased
+          Basic Speed 1, valued at roughly +5% per this project's own
+          eyeballed Disadvantage Delivered convention) and Melee Attack,
+          Reach C only (-20%, a touch-range limitation): net -15%. 10 x
+          0.85 = 8.5, rounded up to 9 points.
+    lore: >
+      Chronomancers are the rarest and strangest Cryptek discipline,
+      manipulating probability and small pockets of local time rather
+      than matter or energy directly.
+    design: 15 (Chronal Precognition) + 9 (Temporal Distortion Field) = 24 points at default levels.

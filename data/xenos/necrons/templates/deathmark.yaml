@@ -1,0 +1,42 @@
+kind: template
+output: Xenos/Necrons/Templates/Deathmark.gct
+notes: >
+  A Deathmark: a dynasty's sniper and infiltrator, phased partly out of
+  reality between shots. Point math: Necron Physiology 134 + Body Lens:
+  Deathmark 472 + Mind: Deathmark Focus -5 + skills 28 = 629 points.
+  Stats: ST 18, DX 13, IQ 9, HT 14, HP 24, Will 9, Per 9, natural torso DR
+  60 (Weak Points 4, eye DR 30) — framework.md's Deathmark anchor line
+  exactly. This lands within framework.md's Astartes tier (550-800): a
+  Deathmark is a dedicated one-target killer whose whole build (DX,
+  stealth and marksmanship skills, minimal social skills) reflects a
+  specialist rather than a line trooper or an all-rounder.
+traits:
+  - include: "xenos/necrons/traits.yaml#Necron Physiology"
+  - include: "xenos/necrons/traits.yaml#Body Lens: Deathmark"
+  - include: "xenos/necrons/traits.yaml#Mind: Deathmark Focus"
+skills:
+  - name: Beam Weapons
+    spec: Rifle
+    diff: DX/E
+    points: 16
+    tags: [Xenos, Necrons]
+    lore: A Deathmark's synaptic disintegrator is built for one perfect shot, not sustained fire.
+    design: Beam Weapons (Rifle) (DX/E), the same family as the Warrior and Immortal templates. DX+4 (17) for 16 points, Easy.
+  - name: Stealth
+    diff: DX/A
+    points: 8
+    tags: [Xenos, Necrons]
+    lore: A Deathmark's whole purpose is to be somewhere it shouldn't be able to reach, unnoticed, until it's too late.
+    design: DX+2 (15) for 8 points, Average.
+  - name: Camouflage
+    diff: IQ/E
+    points: 2
+    tags: [Xenos, Necrons]
+    lore: A Deathmark settles into cover as though it were part of the terrain.
+    design: IQ+1 (10) for 2 points, Easy.
+  - name: Tracking
+    diff: Per/A
+    points: 2
+    tags: [Xenos, Necrons]
+    lore: Once assigned a target, a Deathmark does not lose the trail.
+    design: Per+0 (9) for 2 points, Average.
