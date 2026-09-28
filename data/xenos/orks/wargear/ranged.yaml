@@ -7,19 +7,19 @@ items:
   - name: Slugga
     tl: 5
     lc: 0
-    cost: 60
-    weight: 4
+    cost: 70
+    weight: 5
     tags: [Missile Weapon, Xenos, Orks]
     weapons:
       - usage: Standard
-        damage: 5d pi+
+        damage: 7d pi+
         acc: 1
-        range: 80/200
+        range: 90/220
         rof: 3
-        shots: 18(3)
-        st: 8
+        shots: 14(3)
+        st: 9
         bulk: -2
-        rcl: 2
+        rcl: 3
         skill: Guns (Pistol)
         notes: Malf 14. Ork weapons never explode on the wielder's roll of 3; treat any Critical Failure as a jam instead (a Ready maneuver clears it).
     lore: >-
@@ -32,26 +32,30 @@ items:
       others) as the "boom" half of "choppa and shoota" Ork close-combat
       doctrine.
     design: >-
-      Matches the framework's Ork anchor directly ("Slugga | Big-bore pistol,
-      about 5d pi+, Acc 1"). Exact dice distribution: avg 17.5, penetrates
-      flak (DR 30) 0% of hits, so it never threatens military-grade Imperial
-      armour, only unarmoured or minimally-clad targets - consistent with
-      the fiction, which never shows a slugga bothering a Guardsman's flak
-      vest at range but reliably guts unarmoured mobs, gangers and other
-      Orks. Handling: weight 4 lb, heavier than a human service pistol for
-      the oversized cartridge and stamped-steel build; min ST 8 (raw formula
-      sqrt(10x4)=6.3, bumped for the big-bore round's kick on a crude,
-      unbalanced frame) is trivial for a Boy (ST 22) but a real handful for
-      an unaugmented human, matching every depiction of looted sluggas being
-      awkward in human hands. RoF 3 (a real, if crude, semi-auto action);
-      Shots 18(3), a big drum rather than a box magazine, per the weapon's
-      chunky silhouette in Codex art. Bulk -2 and Rcl 2 are ordinary pistol
-      figures. Malf 14 follows the framework's "Ork weapons are crude and
-      unreliable: Malf 14 for most" rule; the no-explosion house rule
-      reflects "it works 'cos we fink it does" - Ork gear jams and misfires
-      constantly but doesn't blow up in a Boy's hand the way a human weapon's
-      critical failure table would suggest, since the Ork simply doesn't
-      believe it will.
+      REVISED (lore fix): the framework's Ork anchor reads "about 5d pi+,"
+      but at that dice count the slugga penetrated flak (DR 30) 0% of the
+      time by exact dice distribution - flatly at odds with Ork dakka being
+      able to chew through Guard lines at all, since even the sidearm should
+      threaten flak-armoured infantry when Ork small arms are consistently
+      described firing rounds far bigger than a human pistol's. Bumped two
+      dice to 7d pi+ (avg 24.5) to actually earn "big-bore": exact dice
+      distribution now penetrates flak 9.4% of the time (a real, if
+      unreliable, threat rather than none at all) while still failing
+      outright against carapace or better (0%), keeping the slugga clearly
+      below the shoota in this file's own family and nowhere near a threat
+      to real Imperial plate - a sidearm should hit meaningfully harder than
+      "no threat whatsoever," not compete with the family's own rifle.
+      Handling re-derived for the bigger cartridge: weight up from 4 lb to 5
+      lb for the heavier case and stiffer frame; min ST 9 (raw formula
+      sqrt(10x5)=7.1, bumped for a genuinely punishing pistol-frame round,
+      the same logic the Imperium Bolt Pistol's ST bump uses) - still
+      trivial for a Boy (ST 22) but a serious handful for an unaugmented
+      human. Shots trimmed to 14(3) (a bigger cartridge means fewer rounds
+      in the same drum) and Rcl bumped to 3 (up from 2) for the harder kick,
+      both real handling consequences of the bigger round rather than
+      cosmetic changes. Bulk -2 and Acc 1 are unchanged - the frame and
+      sights aren't any different, only the ammunition. Malf 14 and the
+      no-explosion house rule are unchanged from before.
 
   - name: Rokkit Pistol
     tl: 6
