@@ -1,12 +1,12 @@
 {
 	"version": 5,
 	"id": "BVcGPfa2Iz9bfbTVp",
-	"notes": "An add-on, not a full character: layer this over Imperium/Templates/ Astartes Battle-Brother.gct (plus a Chapter Gene-Seed lens) to build a Librarian. It does not repeat the Battle-Brother's attributes, physiology, Rank, or Reputation — only what a Librarian has beyond a Tactical Marine. Point math for this add-on alone: 10 (Unusual Background) + 40 (Psyker 4) - 15 (Sanctioned Psyker) + 9 (Witch-sight) + ~50 (Librarius: Null Zone + Might of Heroes, at default starting levels) + ~25 (Telekinesis, secondary discipline, at default starting levels) + skills + a force weapon, roughly 140-160 points on top of the Battle-Brother's own 550-800, matching Codex/Black Library depictions of Librarians as notably more expensive and capable than a line Battle-Brother, comfortably inside the framework's \"Heroes and legends\" range once a senior Librarian's Rank and Reputation are added on top. Vortex of Doom (Imperium/Traits/Psykers and the Warp.adq) is deliberately not included here: it is a Great Power, priced in the framework's \"Beyond play\" tier, meant only for a Chief Librarian/Epistolary a GM is building as a named, high-tier NPC — add it separately if so.\n",
+	"notes": "An add-on, not a full character: layer this over Imperium/Templates/ Astartes Battle-Brother.gct (plus a Chapter Gene-Seed lens) to build a Librarian. It does not repeat the Battle-Brother's attributes, physiology, Rank, or Reputation — only what a Librarian has beyond a Tactical Marine. Built on the Thaumatology: Sorcery model (see framework.md and Imperium/ Traits/Psykers and the Warp.adq). Bumped from a Gamma-equivalent Psyker Talent 4 to full Alpha-grade (Psyker Talent 5) to match the Assignment table's own note that Astartes Librarians are Alpha-tier, fixing a mismatch in this project's earlier draft.\nThe Telekinesis include pulls in the whole discipline, including Gate of Infinity (full modified cost 40) — the single most expensive non-Great- Power ability in the file. That forces Warp Empowerment up to level 3 (cap 40) even though the rest of this loadout (Assail, Force Dome/Kinetic Shield, Crush, Null Zone, Might of Heroes) only needs level 2 (cap 30). A GM building a leaner, younger Librarian who hasn't earned Gate of Infinity yet should disable that one child trait on the character sheet after copying it in and drop Warp Empowerment to level 2, saving 10+10=20 points between the two changes. Vortex of Doom (Imperium/Traits/Psykers and the Warp.adq) is deliberately not included here at all: it is a Great Power, priced in the framework's \"Beyond play\" tier and explicitly exempt from the Warp Empowerment cap, meant only for a Chief Librarian/Epistolary a GM is building as a named, high-tier NPC — add it separately if so.\nPoint math for this add-on alone: 10 (Unusual Background) + 50 (Psyker 5) + 40 (Warp Empowerment 3) - 15 (Sanctioned Psyker) + 8 (Witch-sight, 10 base x 0.8 Warp Sorcery) + 40 (Librarius: Null Zone 23 + Heroic Feats of Strength 12 + Fearlessness x2 ~5, at default starting levels) + 62 (Telekinesis: Assail 4 + Force Dome/Kinetic Shield alt 6+1 + Crush 11 + Gate of Infinity 40) + 16 (skills) = 211 points on top of the Battle-Brother's own 550-800, matching Codex/Black Library depictions of Librarians as notably more expensive and capable than a line Battle- Brother, comfortably inside the framework's \"Heroes and legends\" range once a senior Librarian's Rank and Reputation are added on top.\n",
 	"traits": [
 		{
 			"id": "tckwj5Lk104hlUNgO",
 			"name": "Unusual Background (Latent Psychic Potential)",
-			"local_notes": "Lore: Psychic ability is a random, rare mutation of the human genome that lets its bearer perceive and touch the immaterium (the warp). Sources disagree on exact frequency — Imperial administrative texts and Dark Heresy-line background both describe it as \"rare but not vanishingly so,\" on the order of a handful of latent potentials per hive-sized population, with usably strong psykers far rarer still. Treat any precise ratio as flavour, not census data.\n\nDesign: Required to take Psyker (Talent) or any trait carrying the Warp power modifier below. Basic Set B261 leaves Unusual Background costs to the GM; 10 points reflects that the ability itself is not learned but grants access to an entire framework of further abilities, roughly the going rate other published settings use for \"you may buy from this power list at all.\"",
+			"local_notes": "Lore: Psychic ability is a random, rare mutation of the human genome that lets its bearer perceive and touch the immaterium (the warp). Sources disagree on exact frequency — Imperial administrative texts and Dark Heresy-line background both describe it as \"rare but not vanishingly so,\" on the order of a handful of latent potentials per hive-sized population, with usably strong psykers far rarer still. Treat any precise ratio as flavour, not census data.\n\nDesign: Required to take Psyker (Talent), Warp Empowerment, or any trait carrying the Warp Sorcery power modifier below. Basic Set B261 leaves Unusual Background costs to the GM; 10 points reflects that the ability itself is not learned but grants access to an entire framework of further abilities, roughly the going rate other published settings use for \"you may buy from this power list at all.\"",
 			"tags": [
 				"Advantage",
 				"Mental",
@@ -18,8 +18,8 @@
 		{
 			"id": "tSBzWVax2tcazwWcW",
 			"name": "Psyker",
-			"reference": "B89",
-			"local_notes": "Applies to: Meditation, Hidden Lore (the Warp), and the Will roll to\nresist Perils of the Warp (see above) — a house extension of Talent's\nnormal \"add to listed skills\" rule, precedented by Magery's own habit of\naiding related rolls beyond pure spellcasting. Reaction bonus: +1/level\nfrom other sanctioned psykers and the Astra Telepathica.\n\nImperial Assignment scale (Adeptus Astra Telepathica / Black Ships),\nweakest to strongest, mapped to Talent level and the practical ceiling on\nany single ability's level/dice bought with it:\n  Iota    — Talent 0 (latent; register but rarely take Psyker traits at all)\n  Zeta    — Talent 1, ability cap ~2\n  Eta     — Talent 1, ability cap ~2\n  Theta   — Talent 2, ability cap ~3\n  Epsilon — Talent 2, ability cap ~4  (typical Wyrdvane conscript)\n  Delta   — Talent 3, ability cap ~5  (typical Sanctioned Primaris Psyker)\n  Gamma   — Talent 4, ability cap ~6\n  Beta    — Talent 4, ability cap ~7  (many Astropaths)\n  Alpha   — Talent 5, ability cap ~8  (Astartes Librarians, Black Ship candidates)\n  Alpha-Plus — Talent 6+, ability cap 9+ (beyond-play tier: Primarchs,\n    the most powerful Inquisitors, the worst Chaos sorcerers)\n\nLore: The Iota-to-Alpha-Plus assignment scale is drawn from the Adeptus Astra Telepathica's own grading of psychic potential as depicted across Dark Heresy-line material and repeated in Codex/Imperial Armour background; Black Library uses the same grades in passing (e.g. Eisenhorn-cycle and Ciaphas Cain references to Alpha-class talents). \"Alpha-Plus\" specifically denotes the rarest, most dangerous talents the Black Ships process.\n\nDesign: Talent affecting three things (two skills plus the Perils resistance roll) sits at Basic's \"Medium Talent\" rate of 10 points/level (B90, three-to-five-skill bracket) rather than 5 (one-two skills) or 15 (six-nine skills). Capped at level 6 for player characters; higher grades are GM-reference only, per the framework's \"Beyond play\" tier.",
+			"reference": "TSOR5",
+			"local_notes": "This project's Sorcery Talent (Thaumatology: Sorcery, TSOR5) analogue:\napplies as Sorcery Talent applies to a sorcerer's skills in TSOR, just\nto a 40k-specific list — Psyniscience, Meditation, Hidden Lore (the\nWarp), and the Will roll to resist Perils of the Warp (see above) — a\nhouse extension of Talent's normal \"add to listed skills\" rule,\nprecedented by Magery's and Sorcery Talent's own habit of aiding\nrelated rolls beyond pure spellcasting. Reaction bonus: +1/level from\nother sanctioned psykers and the Astra Telepathica.\n\nPsyker (Talent) and Warp Empowerment are separate purchases on separate\naxes, exactly as Sorcery Talent and Sorcerous Empowerment are in TSOR:\nthis trait only sharpens related skills and Perils resistance, while\nWarp Empowerment (above) is what actually gates which powers a psyker\nmay know. A high-Talent, low-Empowerment psyker is a sharp, well-drilled\nmind who simply hasn't learned much yet; the reverse is a raw prodigy\nwho is clumsy with the skills around their gift.\n\nImperial Assignment scale (Adeptus Astra Telepathica / Black Ships),\nweakest to strongest, mapped to Talent level. See Warp Empowerment above\nfor the matching Empowerment level/point-cap column, which is the real\ngate on ability selection:\n  Iota    — Talent 0 (latent; register but rarely take Psyker traits at all)\n  Zeta    — Talent 1\n  Eta     — Talent 1\n  Theta   — Talent 2\n  Epsilon — Talent 2  (typical Wyrdvane conscript)\n  Delta   — Talent 3  (typical Sanctioned Primaris Psyker)\n  Gamma   — Talent 4\n  Beta    — Talent 4  (many Astropaths)\n  Alpha   — Talent 5  (Astartes Librarians, Black Ship candidates)\n  Alpha-Plus — Talent 6+ (beyond-play tier: Primarchs,\n    the most powerful Inquisitors, the worst Chaos sorcerers)\n\nLore: The Iota-to-Alpha-Plus assignment scale is drawn from the Adeptus Astra Telepathica's own grading of psychic potential as depicted across Dark Heresy-line material and repeated in Codex/Imperial Armour background; Black Library uses the same grades in passing (e.g. Eisenhorn-cycle and Ciaphas Cain references to Alpha-class talents). \"Alpha-Plus\" specifically denotes the rarest, most dangerous talents the Black Ships process.\n\nDesign: Talent affecting four things (three skills plus the Perils resistance roll) sits at Basic's \"Medium Talent\" rate of 10 points/level (B90, three-to-five-skill bracket) rather than 5 (one-two skills) or 15 (six-nine skills) — the same rate Sorcery Talent itself uses (TSOR5, 10/level). Capped at level 6 for player characters; higher grades are GM-reference only, per the framework's \"Beyond play\" tier.",
 			"tags": [
 				"Advantage",
 				"Mental",
@@ -29,9 +29,26 @@
 			],
 			"points_per_level": 10,
 			"can_level": true,
-			"levels": 4,
+			"levels": 5,
 			"base_points": 0,
 			"max_levels": 6
+		},
+		{
+			"id": "tZoAf-roEek9Ks050",
+			"name": "Warp Empowerment",
+			"reference": "TSOR4",
+			"local_notes": "A direct reskin of Sorcerous Empowerment (Thaumatology: Sorcery, TSOR4):\nthe psyker's raw, trained capacity to draw on and shape the warp, as\ndistinct from Psyker (Talent, TSOR5's Sorcery Talent analogue, below)\nwhich only sharpens related skills. Requires Unusual Background (Latent\nPsychic Potential). It is the prerequisite for every Warp Sorcery-tagged\nability in this file (see Witch-sight and each discipline below); the\nNavigator's Third Eye and the Pariah/Untouchable genes carry no Warp\nSorcery modifier and so need no Warp Empowerment.\n\nCap, cast per Thaumatology: Sorcery (TSOR): a psyker may only know a\npower whose full, modified point cost is no greater than the point cost\nof their own Warp Empowerment (10 + 10/level). A power bought at a\nhigher level (more dice, more range, etc.) costs proportionally more and\nmay outgrow a psyker's Empowerment even after they first learned it at a\ncheaper level — raising the level, and cost, of Warp Empowerment is how\na psyker \"grows into\" costlier or higher-level workings.\n\nImperial Assignment scale (Adeptus Astra Telepathica / Black Ships)\nmapped to Warp Empowerment level and the point cap that gives, worked\nout from this file's actual (Warp Sorcery -20% + Perils of the Warp)\nmodified costs:\n\n  Grade      | Empowerment level | Cap (10+10/lvl) | What the cap reaches\n  Iota       | 1                  | 20              | cheapest powers only: e.g. Smite (3), Endurance (2), Iron Arm (4), Fire Bolt (4), Assail (4), Mind Probe (14), Foresight (18) — register but rarely learn more than one or two\n  Zeta       | 1                  | 20              | as Iota; low Psyker Talent limits skill use, not what they can know\n  Eta        | 1                  | 20              | as Zeta\n  Theta      | 2                  | 30              | adds Molten Beam (9), Crush (11), Psychic Scream (12), Sanctuary (13), Null Zone (23), Terrify (28)\n  Epsilon    | 2                  | 30              | as Theta (typical Wyrdvane conscript)\n  Delta      | 3                  | 40              | adds Scrier's Gaze (35), Dominate (35), Gate of Infinity (40) — the full non-Great-Power roster (typical Sanctioned Primaris Psyker)\n  Gamma      | 3                  | 40              | as Delta, better skills from a higher Psyker Talent\n  Beta       | 4                  | 50              | full roster, with headroom to push a known leveled power to a higher level/more dice (many Astropaths)\n  Alpha      | 5                  | 60              | full roster, generous headroom for high-level workings (Astartes Librarians, Black Ship candidates)\n  Alpha-Plus | 7+ (GM only)       | 80+             | approaching Great Power territory; Vortex of Doom (280+ as usually bought) is still normally out of reach even here\n\nA character need not buy Warp Empowerment up to their grade's full\nceiling: templates in this project buy only the level their actually-\nknown powers need, and note the grade's theoretical ceiling separately.\n\nLore: The Iota-to-Alpha-Plus assignment scale is drawn from the Adeptus Astra Telepathica's own grading of psychic potential as depicted across Dark Heresy-line material and repeated in Codex/Imperial Armour background; Black Library uses the same grades in passing (e.g. Eisenhorn-cycle and Ciaphas Cain references to Alpha-class talents). \"Alpha-Plus\" specifically denotes the rarest, most dangerous talents the Black Ships process.\n\nDesign: Sorcerous Empowerment (TSOR4) costs 10 base + 10/level (level 1 = 20 points, each further level +10) in the GCS master Thaumatology data; reused verbatim here under a 40k-appropriate name, since the underlying mechanic — \"how much warp-power you can channel at all, gating which spells/powers you may know by their modified cost\" — is exactly what an Imperial Assignment grade represents. The level-to-grade mapping above is derived, not asserted: it walks every power in this file's actual modified cost (recomputed under the new Warp Sorcery -20% modifier, see below) and finds the cheapest Empowerment level whose cap clears it, so \"Iota can only cast minor powers\" and \"Alpha can cast the biggest non-Great-Power ability\" are literally true of the numbers, not just flavour text.",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Talent",
+				"Psyker",
+				"Imperium"
+			],
+			"points_per_level": 10,
+			"can_level": true,
+			"levels": 3,
+			"base_points": 10
 		},
 		{
 			"id": "T2ogSMv1u65svjPEg",
@@ -75,7 +92,7 @@
 		{
 			"id": "tlRxK74jM6dkrJzH_",
 			"name": "Witch-sight",
-			"local_notes": "Lore: The first, mildest sign of the gift: an unlearned, passive prickling sense of daemonic taint, psychic activity, and warp corruption — how unsanctioned psykers are so often found, and how veteran Inquisitors and Space Marines notice a place has gone wrong before anything visible happens. Widely depicted; no single canonical source, consistent across Black Library and Dark Heresy-line material alike.\n\nDesign: Built as Detect (Psychic Activity & Daemonic Taint), an uncommon but not vanishingly rare category, base 10 per Basic's Detect cost table (B47-48). No Perils of the Warp: it is involuntary background sense, not a deliberate act of channelling.",
+			"local_notes": "Lore: The first, mildest sign of the gift: an unlearned, passive prickling sense of daemonic taint, psychic activity, and warp corruption — how unsanctioned psykers are so often found, and how veteran Inquisitors and Space Marines notice a place has gone wrong before anything visible happens. Widely depicted; no single canonical source, consistent across Black Library and Dark Heresy-line material alike.\n\nDesign: Built as Detect (Psychic Activity & Daemonic Taint), an uncommon but not vanishingly rare category, base 10 per Basic's Detect cost table (B47-48). No Perils of the Warp: it is involuntary background sense, not a deliberate act of channelling. Full modified cost: 10 x 0.8 = 8 points; needs only Warp Empowerment level 1 (cap 20) — even an Iota-grade latent can have it, matching how often unsanctioned psykers are found by exactly this unlearned sense.",
 			"tags": [
 				"Advantage",
 				"Mental",
@@ -84,9 +101,9 @@
 			],
 			"modifiers": [
 				{
-					"id": "mOEEkuAjfH7DpFIct",
-					"name": "Warp",
-					"cost_adj": "-15%"
+					"id": "mHdQL9bbKkXDRyMmh",
+					"name": "Warp Sorcery",
+					"cost_adj": "-20%"
 				}
 			],
 			"base_points": 10
@@ -106,7 +123,7 @@
 				{
 					"id": "th-C3jduEhyo-Ncc1",
 					"name": "Null Zone",
-					"local_notes": "Lore: Strips the warp's protection from everything nearby — invulnerable saves falter, toughened hides thin.\n\nDesign: Affliction (10/level) delivering a Vulnerability-style disadvantage valued (by this project, not a cited RAW table entry) at roughly -20 points, +100% Malediction, +50% Area Effect, then Warp and Severe Perils — the setting's single most dangerous debuff, priced to match.",
+					"local_notes": "Lore: Strips the warp's protection from everything nearby — invulnerable saves falter, toughened hides thin.\n\nDesign: Affliction (10/level) delivering a Vulnerability-style disadvantage valued (by this project, not a cited RAW table entry) at roughly -20 points, +100% Malediction, +50% Area Effect, then Warp Sorcery and Severe Perils, net +130% — the setting's single most dangerous debuff, priced to match. Full modified cost: 10 x 2.3 = 23 points/level; needs Warp Empowerment level 2 (cap 30).",
 					"tags": [
 						"Advantage",
 						"Mental",
@@ -130,9 +147,9 @@
 							"cost_adj": "+50%"
 						},
 						{
-							"id": "mCm_lZ5WBWrZLWBSC",
-							"name": "Warp",
-							"cost_adj": "-15%"
+							"id": "mGQC_WtprC3dg4zwj",
+							"name": "Warp Sorcery",
+							"cost_adj": "-20%"
 						},
 						{
 							"id": "mLoEvXbjrEiOTsHae",
@@ -147,7 +164,7 @@
 				{
 					"id": "TOi0VDrFs14r8sx_8",
 					"name": "Might of Heroes",
-					"local_notes": "Lore: A Librarian's traditional pre-charge blessing, filling a squad with unnatural strength and courage.\n\nDesign: Grouped Basic advantages, each carrying Area Effect (squad-wide) plus Warp/Perils; GCS sums the children.",
+					"local_notes": "Lore: A Librarian's traditional pre-charge blessing, filling a squad with unnatural strength and courage.\n\nDesign: Grouped Basic advantages, each carrying Area Effect (squad-wide) plus Warp Sorcery/Perils; GCS sums the children.",
 					"tags": [
 						"Advantage",
 						"Mental",
@@ -158,7 +175,7 @@
 						{
 							"id": "t9QgmnwfLXlz089V0",
 							"name": "Heroic Feats of Strength",
-							"local_notes": "Lore: See parent trait.\n\nDesign: Basic's Heroic Feats of Strength (flat 10) with Area Effect plus Warp/Perils.",
+							"local_notes": "Lore: See parent trait.\n\nDesign: Basic's Heroic Feats of Strength (flat 10) with Area Effect plus Warp Sorcery/Perils, net +20%. Full modified cost: 10 x 1.2 = 12 points; needs Warp Empowerment level 2 (cap 30).",
 							"tags": [
 								"Advantage",
 								"Physical",
@@ -172,9 +189,9 @@
 									"cost_adj": "+50%"
 								},
 								{
-									"id": "m46j4LmtBceiErKf8",
-									"name": "Warp",
-									"cost_adj": "-15%"
+									"id": "ma8oFdGZKdo68bdoC",
+									"name": "Warp Sorcery",
+									"cost_adj": "-20%"
 								},
 								{
 									"id": "m8S6pBoTfWv7Qy7mw",
@@ -187,7 +204,7 @@
 						{
 							"id": "tlCuvmVTxsETV8Tp-",
 							"name": "Fearlessness",
-							"local_notes": "Lore: See parent trait.\n\nDesign: Basic's Fearlessness (2/level) with Area Effect plus Warp/Perils.",
+							"local_notes": "Lore: See parent trait.\n\nDesign: Basic's Fearlessness (2/level) with Area Effect plus Warp Sorcery/Perils, net +20%. Full modified cost: 2 x 1.2 = ~2 points/level; needs Warp Empowerment level 1 (cap 20).",
 							"tags": [
 								"Advantage",
 								"Mental",
@@ -201,9 +218,9 @@
 									"cost_adj": "+50%"
 								},
 								{
-									"id": "mbn_-QgXuVPhMGjGs",
-									"name": "Warp",
-									"cost_adj": "-15%"
+									"id": "mrBgLdyIKGUS5tN0i",
+									"name": "Warp Sorcery",
+									"cost_adj": "-20%"
 								},
 								{
 									"id": "mUlsJntMIETVRQ6yr",
@@ -233,7 +250,7 @@
 				{
 					"id": "t3EomEBLToWhqA0m1",
 					"name": "Assail",
-					"local_notes": "Lore: Hurls the nearest loose object, or the target themselves, with bruising force.\n\nDesign: Innate Attack (Crushing, 5/die, B61) with Warp/Perils.",
+					"local_notes": "Lore: Hurls the nearest loose object, or the target themselves, with bruising force.\n\nDesign: Innate Attack (Crushing, 5/die, B61) with Warp Sorcery/Perils, net -30%. Full modified cost: 5 x 0.7 = ~4 points/level; needs Warp Empowerment level 1 (cap 20).",
 					"tags": [
 						"Advantage",
 						"Mental",
@@ -242,9 +259,9 @@
 					],
 					"modifiers": [
 						{
-							"id": "mEgcd_QEOQ9giyvYq",
-							"name": "Warp",
-							"cost_adj": "-15%"
+							"id": "md4jUsyKYC_kdcpFb",
+							"name": "Warp Sorcery",
+							"cost_adj": "-20%"
 						},
 						{
 							"id": "mmtge0tB9Da0DQhlc",
@@ -271,7 +288,7 @@
 						{
 							"id": "tJZ70qAUS5X--Q2hs",
 							"name": "Kinetic Shield",
-							"local_notes": "Lore: A tight telekinetic skin around the caster alone.\n\nDesign: Damage Resistance (5/level, B), self only, with Warp/Perils.",
+							"local_notes": "Lore: A tight telekinetic skin around the caster alone.\n\nDesign: Damage Resistance (5/level, B), self only, with Warp Sorcery/ Perils, net -30%. Full modified cost: 5 x 0.7 = ~4 points/level (discounted to a fifth as the cheaper alternative ability); needs Warp Empowerment level 1 (cap 20) at its full-price rate.",
 							"tags": [
 								"Advantage",
 								"Mental",
@@ -280,9 +297,9 @@
 							],
 							"modifiers": [
 								{
-									"id": "mxh0RnURz0PbkqXGx",
-									"name": "Warp",
-									"cost_adj": "-15%"
+									"id": "mk73qiquQxgyas1zO",
+									"name": "Warp Sorcery",
+									"cost_adj": "-20%"
 								},
 								{
 									"id": "mzv0fcfFqmm4oRe7B",
@@ -297,7 +314,7 @@
 						{
 							"id": "txH__VTkuVNmlZ7AK",
 							"name": "Force Dome",
-							"local_notes": "Lore: A dome of solid force wide enough to cover the caster's whole fireteam.\n\nDesign: Damage Resistance (5/level) with Area Effect (+50%, B102, 2-yard radius) plus Warp/Perils.",
+							"local_notes": "Lore: A dome of solid force wide enough to cover the caster's whole fireteam.\n\nDesign: Damage Resistance (5/level) with Area Effect (+50%, B102, 2-yard radius) plus Warp Sorcery/Perils, net +20%. Full modified cost: 5 x 1.2 = 6 points/level (the costlier child, so it sets the container's cap requirement); needs Warp Empowerment level 1 (cap 20).",
 							"tags": [
 								"Advantage",
 								"Mental",
@@ -311,9 +328,9 @@
 									"cost_adj": "+50%"
 								},
 								{
-									"id": "mDhcaShp8Fnu9_pMR",
-									"name": "Warp",
-									"cost_adj": "-15%"
+									"id": "msF_b7bIaEt3mv7B9",
+									"name": "Warp Sorcery",
+									"cost_adj": "-20%"
 								},
 								{
 									"id": "m3wrSYz1oMbGuWIjc",
@@ -330,7 +347,7 @@
 				{
 					"id": "tr03rkGdRCt821j2O",
 					"name": "Crush",
-					"local_notes": "Lore: An invisible telekinetic grip that closes on a target's throat or chest, ignoring armour and impossible to dodge.\n\nDesign: Innate Attack (Crushing, 5/die) with Malediction (+100%, B36) and Armor Divisor (2) (+50%, B103), plus Warp/Perils.",
+					"local_notes": "Lore: An invisible telekinetic grip that closes on a target's throat or chest, ignoring armour and impossible to dodge.\n\nDesign: Innate Attack (Crushing, 5/die) with Malediction (+100%, B36) and Armor Divisor (2) (+50%, B103), plus Warp Sorcery/Perils, net +120%. Full modified cost: 5 x 2.2 = 11 points/level; needs Warp Empowerment level 2 (cap 30).",
 					"tags": [
 						"Advantage",
 						"Mental",
@@ -349,9 +366,9 @@
 							"cost_adj": "+50%"
 						},
 						{
-							"id": "mkqSnAoo7w6yHdQqs",
-							"name": "Warp",
-							"cost_adj": "-15%"
+							"id": "m7zJX8fWz2T5HV0fZ",
+							"name": "Warp Sorcery",
+							"cost_adj": "-20%"
 						},
 						{
 							"id": "mzel64o2iNbZ453ga",
@@ -366,7 +383,7 @@
 				{
 					"id": "tA-smJrMuhZZXT4Pg",
 					"name": "Gate of Infinity",
-					"local_notes": "Lore: Tears a hole between two points in real space and steps through — the rarest and most feared telekinetic feat, since a botched Gate can open into the warp itself instead.\n\nDesign: Built on Basic's own Warp advantage (B99, instant travel to any place you have seen/visualized, flat 100), with Preparation Required (-20%, B113, a few seconds' concentration) and the Severe Perils tier, reflecting the setting's specific fear of a failed Gate opening into the immaterium.",
+					"local_notes": "Lore: Tears a hole between two points in real space and steps through — the rarest and most feared telekinetic feat, since a botched Gate can open into the warp itself instead.\n\nDesign: Built on Basic's own Warp advantage (B99, instant travel to any place you have seen/visualized, flat 100), with Preparation Required (-20%, B113, a few seconds' concentration) and the Severe Perils tier, reflecting the setting's specific fear of a failed Gate opening into the immaterium. Net -60%. Full modified cost: 100 x 0.4 = 40 points — the single most expensive non-Great-Power ability in this file; needs Warp Empowerment level 3 (cap 40), the minimum at which \"Delta and up\" can cast the full non-Great-Power roster, exactly on the cap with no headroom to spare.",
 					"tags": [
 						"Advantage",
 						"Mental",
@@ -380,9 +397,9 @@
 							"cost_adj": "-20%"
 						},
 						{
-							"id": "mpelff3SDWlboiDnA",
-							"name": "Warp",
-							"cost_adj": "-15%"
+							"id": "mup-BAHqN509X3TVX",
+							"name": "Warp Sorcery",
+							"cost_adj": "-20%"
 						},
 						{
 							"id": "mnuW03io683O_svNR",
@@ -447,7 +464,7 @@
 		{
 			"id": "e1qCNzxXbhYpTQZxE",
 			"description": "Force Sword",
-			"local_notes": "Lore: A disruption-field blade further warded and psychically attuned so a trained mind can channel force directly through it — standard wargear for Inquisitors, Sisters of the Ordo Hereticus with psychic gifts, and any Astartes Librarian who favours a blade over a staff. Depicted throughout Black Library (Eisenhorn's own force sword; Grey Knights' force weapons) and Dark Heresy/Rogue Trader's force-weapon rules.\n\nDesign: Built directly on the framework's power-field rule: field off is the mundane fine blade (sw+1 cut), field on adds +1d and armour divisor (10), landing exactly on the power sword anchor (sw+1d+1(10) cut) — a force sword is mechanically a power sword that a trained mind can also channel psychic force through. The Force Strike line shows that channelling: same dice as field-on, but its ignores-DR component only applies against Warp-touched targets, so it never trivialises ordinary armour. Its damage scales narratively with the wielder's Psyker Talent level (GM adds +1 die per two Talent levels above 2) rather than as a fixed number, since the build tool's damage syntax cannot encode a variable.",
+			"local_notes": "Lore: A disruption-field blade further warded and psychically attuned so a trained mind can channel force directly through it — standard wargear for Inquisitors, Sisters of the Ordo Hereticus with psychic gifts, and any Astartes Librarian who favours a blade over a staff. Depicted throughout Black Library (Eisenhorn's own force sword; Grey Knights' force weapons) and Dark Heresy/Rogue Trader's force-weapon rules.\n\nDesign: Built directly on the framework's rescaled power-field rule: field off is the mundane fine blade (sw+1 cut), field on adds +3d and armour divisor (10) per the updated rule (\"Bladed/mace power weapons add +3d over the mundane weapon\"), landing exactly on the rescaled power sword anchor (sw+3d(10) cut) — a force sword is mechanically a power sword that a trained mind can also channel psychic force through. The Force Strike line shows that channelling: same dice as field-on minus the armour divisor, but its ignores-DR component only applies against Warp-touched targets, so it never trivialises ordinary armour. Its damage scales narratively with the wielder's Psyker Talent level (+1d per Psyker Talent level on top of the base 3d, GM's call above level 2) rather than as a fixed number, since the build tool's damage syntax cannot encode a variable.",
 			"tags": [
 				"Melee Weapon",
 				"Imperium",
@@ -530,7 +547,7 @@
 					"damage": {
 						"type": "cut",
 						"st": "sw",
-						"base": "1d+1",
+						"base": "3d",
 						"armor_divisor": 10
 					},
 					"reach": "1",
@@ -597,7 +614,7 @@
 					"damage": {
 						"type": "cut (ignores DR)",
 						"st": "sw",
-						"base": "1d+1"
+						"base": "3d"
 					},
 					"reach": "1",
 					"parry": "0",
@@ -665,7 +682,7 @@
 		{
 			"id": "eCLDTboBcmrBFHw1Y",
 			"description": "Psychic Hood",
-			"local_notes": "Lore: A warded circlet built around a tiny, heavily sanctioned psychic node (sometimes a bound, lobotomised psyker's brain-stem), worn by Astra Militarum officers and Inquisitorial staff to blunt enemy sorcery directed at their command. Consistent with Dark Heresy/Rogue Trader's psychic hood/psy-focus items and Codex background on Imperial command-squad wargear.\n\nDesign: Modelled as a flat +2 conditional bonus (Basic's conditional_modifier feature) to resist Warp-tagged mental attacks — comparable in size to Basic's own Power Defense-type items, cheap enough to matter but never a substitute for a trained anti-psyker.",
+			"local_notes": "Lore: A warded circlet built around a tiny, heavily sanctioned psychic node (sometimes a bound, lobotomised psyker's brain-stem), worn by Astra Militarum officers and Inquisitorial staff to blunt enemy sorcery directed at their command. Consistent with Dark Heresy/Rogue Trader's psychic hood/psy-focus items and Codex background on Imperial command-squad wargear.\n\nDesign: Modelled as a flat +2 conditional bonus (Basic's conditional_modifier feature) to resist Warp Sorcery-tagged mental attacks — comparable in size to Basic's own Power Defense-type items, cheap enough to matter but never a substitute for a trained anti-psyker.",
 			"tags": [
 				"Imperium",
 				"Psyker"
@@ -677,7 +694,7 @@
 			"features": [
 				{
 					"type": "conditional_modifier",
-					"situation": "to resist Warp-tagged Affliction, Mind Control, Mind Probe, and Fear effects directed at the wearer or their unit",
+					"situation": "to resist Warp Sorcery-tagged Affliction, Mind Control, Mind Probe, and Fear effects directed at the wearer or their unit",
 					"amount": 2
 				}
 			],
