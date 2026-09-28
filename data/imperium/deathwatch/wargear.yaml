@@ -1,0 +1,531 @@
+kind: equipment
+output: Imperium/Deathwatch/Deathwatch Wargear.eqp
+items:
+
+  # --------------------------------------------------------------- Armour note
+
+  - include: "imperium/armour/armour.yaml#Power Armour, Mark VII (Aquila Pattern)"
+    name: Power Armour, Deathwatch Livery
+    notes: >
+      Mechanically identical to the Chapter-issue Mark VII plate it is
+      built from (see that entry's own notes for the black-carapace
+      requirement); the only real difference is cosmetic — the suit is
+      stripped, reforged black and marked with the Deathwatch's silver
+      Chapter-agnostic iconography over the wearer's own Chapter heraldry,
+      per essentially every visual depiction of the Deathwatch in current
+      Codex and Black Library art. A seconded Marine keeps whatever Mark
+      his own Chapter actually issues him; this entry exists only so a
+      Deathwatch character sheet can carry a correctly-named suit without
+      restating the Mark VII stat block. Use the matching include from
+      Power Armour.eqp directly (any Mark) for a Marine whose Chapter
+      fields a different pattern.
+    lore: >
+      "Black plate, silver cross" is the single most consistent visual
+      signature of the Deathwatch across every source: Codex: Deathwatch,
+      the Deathwatch RPG's cover art and interior illustrations, and
+      Black Library's Deathwatch-focused fiction all describe or depict
+      the same reforging ritual — a Chapter's colours stripped away and
+      replaced with unbroken black and the aquila-and-arrow badge, a
+      visible sign that the wearer now answers to the Long Watch first.
+    design: >
+      Deliberately not a new armour entry: the framework and
+      data-format.md both prefer an `include` over restating a DR block
+      that hasn't changed, and nothing about Deathwatch service alters a
+      suit's protection, weak points, or eye-lens DR. Cost is carried over
+      unchanged from the Mark VII entry (the reforging is a Chapter-level
+      or Watch Fortress-level expense assumed already spent before play,
+      not something a player buys again); a GM wanting to price the
+      reforging ritual itself as a one-off Chapter favour can do so
+      narratively without touching this stat block.
+
+  # ------------------------------------------------------------------ Boltgun
+
+  - name: Boltgun, Stalker Pattern (Deathwatch)
+    tl: 10
+    lc: 1
+    cost: 1700
+    weight: 40
+    tags: [Missile Weapon, Imperium, Adeptus Astartes, Deathwatch]
+    weapons:
+      - usage: Subsonic bolt
+        damage: 6dx2(2) pi++
+        acc: 5
+        range: 200/1000
+        rof: 1
+        shots: 24(3)
+        st: 19
+        bulk: -6
+        rcl: 3
+        skill: Guns (Rifle)
+        notes: >
+          Integral suppressor and low-flash propellant charge; halves the
+          effective range at which a Hearing-based roll can pick out the
+          shot compared with a standard boltgun (GM's call on the exact
+          distance).
+      - usage: Subsonic bolt, follow-up (if bolt penetrates)
+        damage: 4d cr ex
+        acc: 5
+        range: 200/1000
+        rof: 1
+        shots: 24(3)
+        st: 19
+        bulk: -6
+        rcl: 3
+        skill: Guns (Rifle)
+      - usage: "Dragonfire round (SIA)"
+        damage: 5dx2(2) pi
+        acc: 5
+        range: 200/1000
+        rof: 1
+        shots: 24(3)
+        st: 19
+        bulk: -6
+        rcl: 3
+        skill: Guns (Rifle)
+        notes: >
+          Incendiary penetrator; unlike Hellfire (Boltgun, Godwyn
+          Pattern.eqp) its burn payload isn't limited to organic targets.
+      - usage: "Dragonfire round, follow-up (if bolt penetrates)"
+        damage: 5d burn ex
+        acc: 5
+        range: 200/1000
+        rof: 1
+        shots: 24(3)
+        st: 19
+        bulk: -6
+        rcl: 3
+        skill: Guns (Rifle)
+      - usage: "Tempest round (SIA)"
+        damage: 6dx2(2) pi++
+        acc: 5
+        range: 200/1000
+        rof: 1
+        shots: 24(3)
+        st: 19
+        bulk: -6
+        rcl: 3
+        skill: Guns (Rifle)
+        notes: >
+          Ballistically identical to a standard bolt; its casing is tuned
+          to punch clean through dense natural cover (jungle canopy,
+          fungal growth, a xenos hive-wall's membranous inner layers)
+          without deflecting or detonating early. GM's call to waive an
+          intervening light-cover DR bonus entirely when this round is
+          used against a target behind that kind of obstruction.
+      - usage: "Tempest round, follow-up (if bolt penetrates)"
+        damage: 6d cr ex
+        acc: 5
+        range: 200/1000
+        rof: 1
+        shots: 24(3)
+        st: 19
+        bulk: -6
+        rcl: 3
+        skill: Guns (Rifle)
+      - usage: "Stalker Silenced round (SIA)"
+        damage: 6dx2(2) pi++
+        acc: 4
+        range: 200/1000
+        rof: 1
+        shots: 24(3)
+        st: 19
+        bulk: -5
+        rcl: 3
+        skill: Guns (Rifle)
+        notes: >
+          A reduced-charge shell meant for a standard (non-Stalker)
+          boltgun body: it trades this weapon's own integral suppressor
+          bonus for compatibility with any Godwyn-anchor Astartes boltgun
+          (Boltgun, Godwyn/Umbra/Phobos/Mk IV Pattern), quieting the report
+          at the cost of the RoF 3 semi-auto cycling those guns normally
+          use — loaded into this Stalker-pattern body it is redundant with
+          the Subsonic bolt usage above and included here only for
+          completeness.
+      - usage: "Stalker Silenced round, follow-up (if bolt penetrates)"
+        damage: 6d cr ex
+        acc: 4
+        range: 200/1000
+        rof: 1
+        shots: 24(3)
+        st: 19
+        bulk: -5
+        rcl: 3
+        skill: Guns (Rifle)
+    lore: >
+      The Stalker-pattern boltgun is a Deathwatch-specific legacy build:
+      a standard-calibre Astartes boltgun re-machined for a fully
+      semi-automatic-only action, an integral suppressor and subsonic
+      loads, issued to kill-teams that need to put down a target quietly
+      before the rest of a xenos brood notices. Special Issue Ammunition
+      more broadly (Dragonfire, Tempest, Stalker Silenced rounds among
+      them, alongside Kraken, Hellfire, Metal Storm and Vengeance already
+      covered in Boltgun, Godwyn Pattern.eqp) is the Deathwatch RPG line's
+      own signature contribution to boltgun lore; this project's specific
+      division of which round does what is a reasoned approximation built
+      from that line's general design intent, not a verbatim reprint of
+      any single FFG weapon-ammunition table, and no page number is cited
+      because none is confidently known.
+    design: >
+      Handling is derived fresh from the Godwyn anchor (Boltgun, Godwyn
+      Pattern.eqp), not copied: same loaded weight class (40 lb, 2 lb over
+      the Godwyn anchor's 38 lb for the suppressor shroud and stiffened
+      barrel a subsonic load needs) and the same min ST 19 the anchor
+      established for a 38-40 lb Astartes-pattern receiver. RoF drops to 1
+      (semi-automatic only, per its role as a precision/stealth weapon —
+      the same logic the Primaris Stalker Bolt Rifle uses in Bolt
+      Weapons.eqp) rather than the Godwyn anchor's RoF 3. Acc rises to 5
+      (one over the Godwyn anchor's 4) for the integrated optics a
+      stealth-role weapon needs; Bulk drops one further step to -6 (worse
+      than the Godwyn anchor's -5) for the suppressor's added length. The
+      standard subsonic bolt keeps the Godwyn anchor's full penetrator
+      dice (6dx2(2) pi++ — going quiet doesn't need to cost penetration)
+      but its follow-up shrinks from the anchor's 6d cr ex to 4d cr ex,
+      the same one-third cut the Primaris Stalker Bolt Rifle uses for
+      exactly the same reason (a subsonic round carries less kinetic
+      energy at impact to trigger a full-yield detonation of the internal
+      charge). Dragonfire scales down from the standard round the same
+      way Hellfire does in the Godwyn entry (fewer dice, pi instead of
+      pi++, to make room for payload), but keeps a burn ex follow-up
+      useable against anything flammable rather than Hellfire's
+      organic-only tox follow-up: exact dice distribution, 5dx2(2) pi
+      averages 35 and penetrates carapace (DR 70, eff. DR 35) on 50.0% of
+      hits, Sororitas power armour (DR 85, eff. DR 42.5) on 15.2%, and
+      Astartes power armour (DR 100, eff. DR 50) on 1.6% — identical
+      figures to the Godwyn-family Bolt Pistol's own 5dx2(2) line, since
+      it is the same reduced-mass penetrator core in a different housing.
+      Tempest and Stalker Silenced rounds are ballistically unchanged from
+      the standard bolt (6dx2(2) pi++ / 6d cr ex, matching the Godwyn
+      anchor's own 79%/45%/14% figures against carapace/Sororitas/
+      Astartes), with their special property carried entirely as a
+      notes-level rule, the same treatment the Godwyn entry gives
+      Vengeance and Sanctified rounds — Stalker Silenced additionally
+      loses the Acc/Bulk bonus this gun's own integral suppressor
+      provides, since that bonus is the Stalker body's, not the shell's.
+
+  # ------------------------------------------------------------------ Shotgun
+
+  - name: Deathwatch Shotgun
+    tl: 10
+    lc: 1
+    cost: 1200
+    weight: 15
+    tags: [Missile Weapon, Imperium, Adeptus Astartes, Deathwatch]
+    weapons:
+      - usage: Buckshot
+        damage: 8d pi+
+        acc: 2
+        range: 25/90
+        rof: 3
+        shots: 10(3)
+        st: 12†
+        bulk: -5
+        rcl: 2
+        skill: Guns (Shotgun)
+      - usage: Slug
+        damage: 10d pi+
+        acc: 3
+        range: 180/600
+        rof: 1
+        shots: 10(3)
+        st: 12†
+        bulk: -5
+        rcl: 3
+        skill: Guns (Shotgun)
+      - usage: "Cryptclearer shell"
+        damage: 9d pi+
+        acc: 1
+        range: 15/50
+        rof: 1
+        shots: 10(3)
+        st: 12†
+        bulk: -5
+        rcl: 2
+        skill: Guns (Shotgun)
+        notes: >
+          Tight-choke, high-density load built for firing down a cramped
+          tunnel, tomb-shaft or hab-corridor at point-blank range, where a
+          standard buckshot spread would be wasted against the walls;
+          poor accuracy and short range reflect the extreme choke, not a
+          weaker charge.
+      - usage: "Xenopurge shell"
+        damage: 6d pi+
+        acc: 2
+        range: 25/90
+        rof: 1
+        shots: 10(3)
+        st: 12†
+        bulk: -5
+        rcl: 2
+        skill: Guns (Shotgun)
+        notes: >
+          Bio-toxin payload in place of some of the shot; see the
+          follow-up line below (organic targets only).
+      - usage: "Xenopurge shell, follow-up (if shell penetrates; organic targets only)"
+        damage: 3d(5) tox
+        acc: 2
+        range: 25/90
+        rof: 1
+        shots: 10(3)
+        st: 12†
+        bulk: -5
+        rcl: 2
+        skill: Guns (Shotgun)
+      - usage: "Wyrmsbreath shell"
+        damage: 6d pi
+        acc: 2
+        range: 25/90
+        rof: 1
+        shots: 10(3)
+        st: 12†
+        bulk: -5
+        rcl: 2
+        skill: Guns (Shotgun)
+        notes: >
+          Incendiary compound in place of most of the shot; the follow-up
+          fire is what actually stops a regenerating xenos threat from
+          knitting a wound shut, not the initial pellet strike.
+      - usage: "Wyrmsbreath shell, follow-up (if shell penetrates)"
+        damage: 4d burn ex
+        acc: 2
+        range: 25/90
+        rof: 1
+        shots: 10(3)
+        st: 12†
+        bulk: -5
+        rcl: 2
+        skill: Guns (Shotgun)
+        notes: >
+          GM's discretion to rule this follow-up also suppresses a
+          regenerating xenos' natural healing for the scene, per the
+          shell's design intent — the framework doesn't otherwise model
+          monster regeneration.
+    lore: >
+      An Astartes-scale combat shotgun favoured by kill-teams expecting
+      close-quarters xenos-clearance work — boarding actions, hive-tunnel
+      sweeps, void-ship breaches — where a boltgun's penetrator round is
+      wasted overkill and a wider, close-range spread matters more than
+      range or armour penetration. Its family of specialist shells
+      (named here Cryptclearer, Xenopurge and Wyrmsbreath) follows the
+      Deathwatch RPG line's own tradition of purpose-built shotgun Special
+      Issue Ammunition for exactly this role; this project's specific
+      names and effects are its own reasoned build on that idea, not a
+      reprint of any single sourcebook's shell list.
+    design: >
+      Built up from the human-scale Combat Shotgun (Stub Weapons.eqp,
+      6d pi+ buckshot / 8d pi+ slug) the same way the Astartes bolt
+      pistols scale up from their human equivalents in Bolt Weapons.eqp:
+      one clear step of dice for a bigger 8-gauge Astartes shell (buckshot
+      8d pi+, slug 10d pi+) rather than the same shell in a bigger housing.
+      Exact dice distribution: buckshot penetrates flak (DR 30) on 30.5%
+      of hits and never beats carapace (DR 70); slug penetrates flak on
+      79.5% of hits and likewise never beats carapace — this remains
+      firmly an anti-infantry/anti-swarm weapon, not a power-armour
+      threat, matching every source's treatment of shotguns in this
+      setting. Cryptclearer trades range and Acc for one more die at
+      point-blank choke (9d pi+, 57.6% vs flak at that range) rather than
+      a wider spread; Xenopurge and Wyrmsbreath both sacrifice two dice of
+      base shot (6d, matching the human Combat Shotgun's own buckshot
+      figure) to carry a bio-toxin or incendiary payload, following the
+      same "reduced penetrator, added follow-up" logic the Godwyn
+      boltgun's Hellfire round uses, with Wyrmsbreath's burn ex follow-up
+      built to answer the specific "kills things that just grow back"
+      niche its name implies.
+      Handling: an Astartes-scale weapon per the framework's rule that
+      Astartes-pattern gear runs one step heavier and bulkier than its
+      human counterpart — 15 lb loaded (vs. the human Combat Shotgun's
+      9 lb) and Bulk -5 (vs. -4). Min ST 12† (√(10×15)≈12.2) is far below
+      the Astartes boltguns' ST 19+, reflecting that a shotgun's recoil,
+      unlike a boosted mass-reactive bolt round, doesn't scale with the
+      shooter's raw strength the same way — an Astartes at ST 30 fires it
+      essentially unencumbered, while a very strong, augmented human could
+      still shoulder it two-handed at a real but survivable penalty.
+      Buckshot keeps the human Combat Shotgun's full-auto-capable RoF 3;
+      every precision or specialist shell drops to RoF 1, the same
+      per-mode logic the human Combat Shotgun entry already uses. Rcl is
+      bumped one point above the human weapon's figures (2/3 vs. 1/2) for
+      the bigger shell's added kick; Shots 10(3) sits one round above the
+      human gun's 8-round tube for the larger frame.
+
+  # ------------------------------------------------------------ Heavy bolter
+
+  - name: Infernus Heavy Bolter
+    tl: 10
+    lc: 1
+    cost: 4200
+    weight: 85
+    tags: [Missile Weapon, Imperium, Adeptus Astartes, Deathwatch]
+    weapons:
+      - usage: Standard bolt
+        damage: 7dx2(2) pi++
+        acc: 5
+        range: 400/2000
+        rof: 8
+        shots: 60(5)
+        st: 14B
+        bulk: -7
+        rcl: 4
+        skill: Gunner (Machine Gun)
+      - usage: "Follow-up (if bolt penetrates)"
+        damage: 10d burn ex
+        acc: 5
+        range: 400/2000
+        rof: 8
+        shots: 60(5)
+        st: 14B
+        bulk: -7
+        rcl: 4
+        skill: Gunner (Machine Gun)
+    lore: >
+      The Infernus pattern is a Deathwatch-specific loadout for the
+      standard heavy bolter, packing a phosphex-and-promethium secondary
+      charge behind each round instead of the usual fragmentation filler —
+      the Deathwatch's answer to swarming, regenerating or bio-armoured
+      xenos (Tyranids above all) where burning a target out matters more
+      than the frag concussion of a standard heavy bolter round.
+    design: >
+      The penetrator itself is untouched — identical dice, mechanism and
+      handling to the plain Heavy Bolter (Bolt Weapons.eqp): 85 lb loaded,
+      min ST 14B (mount-borne, not shoulder-borne), RoF 8 per the
+      framework's explicit "heavy bolter around 8" rule, Bulk -7 and Rcl
+      4. Exact dice distribution for the shared penetrator, 7dx2(2)
+      pi++ (avg 49): penetrates carapace (DR 70, eff. DR 35) on 93.9% of
+      hits, Sororitas power armour (DR 85, eff. DR 42.5) on 74.3%,
+      Astartes power armour (DR 100, eff. DR 50) on 41.4%, and vehicle
+      AV10 (DR 100) at the same 41.4% while AV11-14 (DR 150-350) fall to
+      0.1% or less — identical to the plain Heavy Bolter's own figures,
+      since this pattern changes the payload behind a penetrating round,
+      not the round itself. What changes is the follow-up: applying the
+      same ratio the Godwyn boltgun's own Inferno bolt uses over its
+      standard round's follow-up (8d burn ex over a 6d cr ex baseline,
+      a ~1.33x scale-up for "swap frag concussion for incendiary yield")
+      to the Heavy Bolter's own larger 8d cr ex follow-up gives
+      8 x 1.33 ≈ 10.7, rounded down to a clean 10d burn ex — a bigger
+      incendiary punch than the infantry-scale Inferno bolt, in proportion
+      to the bigger case the heavy bolter's own anchor already uses.
+
+  # -------------------------------------------------------------- Frag cannon
+
+  - name: Frag Cannon
+    tl: 10
+    lc: 1
+    cost: 6500
+    weight: 50
+    tags: [Missile Weapon, Imperium, Adeptus Astartes, Deathwatch]
+    weapons:
+      - usage: Close-range blast
+        damage: 6dx2 cr ex [4d]
+        acc: 2
+        range: 15/50
+        rof: 1
+        shots: 6(5)
+        st: 19
+        bulk: -7
+        rcl: 3
+        skill: Gunner (Cannon)
+        notes: >
+          No armour divisor: this is a horde/anti-personnel weapon, not
+          an anti-armour one. Treat the bracketed dice as fragmentation
+          per B414, exactly as the Missile Launcher's frag warhead.
+    lore: >
+      The frag cannon is a Deathwatch signature heavy weapon: a
+      short-ranged, six-shot revolving cannon that throws a devastating
+      cloud of fragmentation at whatever's closest, built specifically for
+      the moment a kill-team is overrun by a Tyranid swarm, an ork mob or
+      a genestealer brood and needs to clear a killing field in front of
+      itself immediately rather than pick targets. Consistently described
+      in Deathwatch-focused background as one of the most destructive
+      close-range weapons an Astartes can carry, at the cost of being all
+      but useless past point-blank range.
+    design: >
+      No framework anchor covers this weapon directly, so it's built by
+      doubling the Missile Launcher's own frag-warhead design logic
+      (Heavy Weapons.eqp: "roughly double the blast and fragmentation
+      dice of a standard hand grenade" for that launcher's 6d cr ex [6d])
+      a second time for a purpose-built horde-clearing cannon rather than
+      a general-purpose support weapon: base blast doubled to 6dx2 cr ex
+      (avg 42) while the fragmentation term is dialled back to 4d (avg
+      14, below the missile launcher's own 6d) since the frag cannon
+      trades blast radius for raw close-range stopping power rather than
+      area denial. It carries no armour divisor and isn't checked against
+      the vehicle AV table, exactly like the missile launcher's own frag
+      load and the mortar in Heavy Weapons.eqp — its entire lore role is
+      infantry and swarm clearance, not armour-killing.
+      Handling: a six-chambered revolving cannon built for an Astartes
+      grip, not a tripod — 50 lb loaded (lighter than the Heavy Bolter's
+      85 lb, since it has no long barrel or sustained-fire cooling jacket
+      to carry) and min ST 19, matching the Godwyn boltgun anchor's own
+      figure for a similarly Astartes-only handful of a weapon. RoF 1 (one
+      chamber discharged per trigger pull; per the fiction's emphasis on
+      single devastating blasts rather than sustained fire) and Shots
+      6(5) reflect the six-round cylinder; Bulk -7 and Rcl 3 mark a heavy,
+      hard-kicking weapon that only Astartes-grade strength manages
+      without a mount, matching the Assault Cannon and Heavy Bolter's own
+      Astartes-only handling on this project's heavy-weapons pages.
+
+  # ----------------------------------------------------------------- Melee
+
+  - name: Xenophase Blade
+    tl: 12
+    lc: 0
+    cost: 25000
+    weight: 3
+    tags: [Melee Weapon, Imperium, Adeptus Astartes, Deathwatch]
+    weapons:
+      - usage: Thrust
+        damage: thr+1 imp
+        armor_divisor: "ignores DR"
+        reach: C,1
+        parry: 0
+        st: 11
+        skill: Shortsword
+      - usage: Swing
+        damage: sw+1 cut
+        armor_divisor: "ignores DR"
+        reach: C,1
+        parry: 0
+        st: 11
+        skill: Shortsword
+    notes: >
+      Phase field: good for 6 strikes before the generator needs about a
+      minute to recharge (track with the item's Uses counter in GCS, per
+      framework.md's shield-recharge convention); a depleted blade still
+      cuts as a plain, beautifully made knife (drop the "ignores DR" line
+      entirely and treat as thr+1 imp / sw+1 cut with no divisor) until it
+      recovers.
+    lore: >
+      A rare archeotech or Mechanicus-forged relic entrusted only to a
+      handful of Deathwatch veterans: its blade briefly desynchronises
+      from realspace on impact, letting the edge pass through conventional
+      matter — including armour plate — as if it weren't there, before
+      resynchronising to deliver the cut. Consistently described across
+      Deathwatch background as devastating against otherwise
+      armour-proof xenos and constructs, and consistently rare enough that
+      no kill-team is issued more than one or two.
+    design: >
+      Built, not borrowed: no catalogue "phase weapon" is copied here.
+      The phasing effect is modelled as Armor Divisor "ignores DR" (the
+      schema's B102-style total bypass) rather than a merely large
+      numeric divisor, because the fiction's claim is a genuine bypass of
+      matter, not "cuts unusually well" — a large-but-finite divisor like
+      the disruption-field weapons' (10) would still be stopped cold by a
+      Terminator's DR 200 half the time, which undersells "passes through
+      armour as if it weren't there." What keeps this from being simply
+      the best melee weapon in the game is entirely on the restriction
+      side: a hard six-use limit before the field must recharge (this
+      project's closest existing analogue, the personal force fields in
+      Fields.eqp, gate a similar low-single-digits-per-minute budget on a
+      timer rather than a point cost, so the same convention is reused
+      here instead of inventing a new equipment-level limitation field the
+      schema doesn't support) and a very high price/LC0 restricting it to
+      named relics rather than standard-issue kit. Base profile is the
+      plain Astartes Combat Knife/Shortsword baseline (Melee Weapons.eqp:
+      thr+1 imp / sw+1 cut, reach C,1, parry 0) rather than a bigger blade,
+      since the weapon's threat is entirely the phase field, not raw
+      mass — exact odds are unnecessary against DR the weapon is built to
+      ignore, but for reference an Astartes-strength blow (thr 3d-1) still
+      only averages about 8-9 points of raw cutting/impaling damage before
+      the divisor even applies, so this is a precision, one-target-at-a-
+      time relic, not a way to one-shot a Terminator. Weight (3 lb) and
+      min ST (11) match a real one-handed long knife; TL12 (archeotech/
+      STC-era, per the framework's TL table) and LC0 (Astartes/xenos-tech-
+      adjacent relic) are both at the top of their respective brackets.
