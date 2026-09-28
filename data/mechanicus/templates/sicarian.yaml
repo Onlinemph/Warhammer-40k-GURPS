@@ -1,0 +1,166 @@
+kind: template
+output: Adeptus Mechanicus/Templates/Sicarian Ruststalker.gct
+notes: >
+  A Sicarian Ruststalker: a melee-specialist Skitarii variant built around
+  raw speed and chordclaw/transonic blade work rather than firepower,
+  fielded to close distance fast and shred whatever's waiting at the other
+  end. Point math: ST 12 (+20), DX 15 (+100), IQ 9 (-20), HT 12 (+20) = 120;
+  advantages +77 (Combat Reflexes 15 + Auto-senses, Skitarii Pattern 14 +
+  Augmetic Legs, Combat Pattern 20 + Respirator Plugs 5 + Subdermal Armour
+  Plating 5 + Enhanced Parry, All Parries 10 + Noospheric Link 8);
+  disadvantages -72; skills +49. Total 174 points, in the same
+  between-tiers band as the Skitarii Ranger/Vanguard, with the points shifted
+  hard from IQ into DX to match a Ruststalker's role. Enable the disabled
+  "Sicarian Infiltrator Conversion" lens below to reflavor this template as
+  an Infiltrator instead (see that lens for what it changes). Weapons
+  (chordclawss, transonic blades, flechette blasters, etc.) are equipment,
+  not covered here.
+traits:
+  - name: ST
+    points: 20
+    tags: [Attribute]
+    lore: Skitarii physical conditioning and augmetic reinforcement, as with any Skitarii pattern.
+    design: ST 12 (+2), 10 pts/level (B15).
+  - name: DX
+    points: 100
+    tags: [Attribute]
+    lore: Sicarian conditioning and cortex replacement prioritize reflex and blade-work above everything else, at real cost to the higher reasoning a Ranger or Vanguard keeps.
+    design: DX 15 (+5), 20 pts/level (B15).
+  - name: IQ
+    points: -20
+    tags: [Attribute]
+    lore: Codex background consistently describes Sicarian patterns as having sacrificed still more of their humanity and independent judgement than an already-conditioned Ranger or Vanguard.
+    design: IQ 9 (-1), 20 pts/level (B15).
+  - name: HT
+    points: 20
+    tags: [Attribute]
+    lore: Augmetic reinforcement and conditioning produce real battlefield endurance.
+    design: HT 12 (+2), 10 pts/level (B14).
+  - name: Combat Reflexes
+    points: 15
+    ref: B43
+    tags: [Advantage, Mental, Imperium]
+    lore: Drilled, doctrina-reinforced reactions under fire.
+    design: Basic Set Combat Reflexes (B43), 15 points.
+  - include: "mechanicus/traits/augmetics.yaml#Auto-senses, Skitarii Pattern"
+  - include: "mechanicus/traits/augmetics.yaml#Augmetic Legs, Combat Pattern (Matched Pair)"
+  - include: "mechanicus/traits/augmetics.yaml#Respirator Plugs (Filtration Lungs)"
+  - include: "mechanicus/traits/augmetics.yaml#Subdermal Armour Plating"
+    levels: 1
+  - name: Enhanced Parry
+    spec: All Parries
+    points: 10
+    ref: B51
+    tags: [Advantage, Physical, Imperium, Adeptus Mechanicus]
+    lore: >
+      A Ruststalker's chordclaws and transonic blades are built for a
+      whirling, evasive dueling style rather than a single locked-in
+      stance; the pattern's conditioning and reflex augmetics make it
+      unnervingly hard to land a solid counter-hit on one.
+    design: Basic Set Enhanced Parry, All Parries (B51), 10 points.
+  - include: "mechanicus/traits/augmetics.yaml#Noospheric Link"
+  - include: "mechanicus/traits/augmetics.yaml#Skitarii Conditioning"
+  - include: "mechanicus/traits/augmetics.yaml#Fanaticism (The Omnissiah)"
+  - include: "mechanicus/traits/augmetics.yaml#Duty (Adeptus Mechanicus)"
+    points: -15
+    notes: Overridden to -15 (almost always hazardous): Sicarian service is combat service.
+  - include: "imperium/common/imperial-traits.yaml#Intolerance (Xenos)"
+  - name: Even a Skitarii Finds Them Unsettling
+    points: -1
+    tags: [Quirk, Imperium]
+    design: Quirk (B9), roleplaying flag only.
+    lore: Codex and Black Library background both single out Sicarian patterns as disquieting even to their fellow Skitarii.
+  - name: "Lens: Sicarian Infiltrator Conversion"
+    container: group
+    disabled: true
+    tags: [Imperium, Adeptus Mechanicus, Skitarii]
+    lore: >
+      Sicarian Infiltrators trade the Ruststalker's close-in chordclaw
+      assault role for ranged ambush work with flechette blasters and taser
+      goads: less pure melee speed, more patience and fieldcraft. Enabling
+      this lens is a flag for that choice; rebalance the skill list by hand
+      (shift points from Broadsword into Guns (Rifle) and Stealth) to match
+      — this lens itself only carries the flavor perks that don't depend on
+      the specific weapon loadout.
+    design: Net 0 points, per-pattern flavor lens (see framework.md, origin lenses, for the pattern this follows).
+    children:
+      - name: Ambush Discipline
+        points: 1
+        tags: [Perk, Imperium]
+        design: Perk (B9), +1 to Stealth.
+        lore: Infiltrators are drilled to hold a covered firing position rather than close to blade range.
+        skill_bonuses: {Stealth: 1}
+      - name: Prefers the Kill at Range
+        points: -1
+        tags: [Quirk, Imperium]
+        design: Quirk (B9), roleplaying flag only.
+        lore: An Infiltrator's conditioning steers it away from melee engagement whenever a shot is available instead.
+skills:
+  - name: Broadsword
+    diff: DX/A
+    points: 20
+    tags: [Imperium, Adeptus Mechanicus, Skitarii]
+    lore: >
+      Chordclaws and transonic blades are disruption-field-adjacent melee
+      weapons per framework.md's weapon-skill table (Broadsword covers
+      power/disruption-field blades generally).
+    design: DX+5 (20) for 20 points, Average (B170).
+  - name: Acrobatics
+    diff: DX/H
+    points: 8
+    tags: [Imperium]
+    lore: The evasive, leaping fighting style Ruststalkers are consistently depicted using.
+    design: DX+0 (15) for 8 points, Hard.
+  - name: Stealth
+    diff: DX/A
+    points: 8
+    tags: [Imperium]
+    lore: Closing to blade range without being cut down first.
+    design: DX+2 (17) for 8 points, Average.
+  - name: Climbing
+    diff: DX/A
+    points: 2
+    tags: [Imperium]
+    lore: Scaling obstacles to flank a target.
+    design: DX+0 (15) for 2 points, Average.
+  - name: Jumping
+    diff: DX/E
+    points: 2
+    tags: [Imperium]
+    lore: Closing distance fast.
+    design: DX+1 (16) for 2 points, Easy.
+  - name: Brawling
+    diff: DX/E
+    points: 1
+    tags: [Imperium]
+    lore: Unarmed back-up when a blade is knocked away.
+    design: DX+0 (15) for 1 point, Easy.
+  - name: Camouflage
+    diff: IQ/E
+    points: 1
+    tags: [Imperium]
+    lore: Basic concealment discipline.
+    design: IQ+0 (9) for 1 point, Easy.
+  - name: Tactics
+    diff: IQ/H
+    points: 2
+    tags: [Imperium]
+    lore: Enough small-unit tactics to coordinate a flanking rush.
+    design: IQ-1 (8) for 2 points, Hard.
+  - name: Theology
+    spec: Cult Mechanicus
+    diff: IQ/H
+    points: 2
+    tags: [Imperium, Adeptus Mechanicus]
+    lore: A Sicarian's much-reduced grasp of doctrine, retained more as ritual than understanding; see Imperium/Skills/Imperial Skills.skl.
+    design: IQ-2 (7) for 2 points, Hard.
+  - include: "mechanicus/skills/skills.yaml#Savoir-Faire"
+    spec: Adeptus Mechanicus
+    points: 1
+    design: IQ+0 (9) for 1 point, Easy.
+  - name: Intimidation
+    diff: Will/A
+    points: 2
+    tags: [Imperium]
+    lore: A rushing, augmetic-clawed Ruststalker is intimidating before it even reaches you.
+    design: Will+0 (9) for 2 points, Average.

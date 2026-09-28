@@ -1,0 +1,142 @@
+kind: template
+output: Adeptus Mechanicus/Templates/Electro-Priest.gct
+notes: >
+  An Electro-Priest: one of the Cult Mechanicus' lowest-caste devotees,
+  volunteers or the destitute remade as living batteries and melee/ranged
+  shock troops for temple guard duty and forge-world security. Baseline
+  below is the Corpuscarii pattern (a continuous, unpowered electrical
+  jolt); enable the disabled "Lens: Fulgurite Conversion" for the
+  heavier-hitting, charge-up pattern instead. Point math: ST 11 (+10),
+  DX 11 (+20), IQ 8 (-40), HT 11 (+10) = 0, plus Will +1 (+5) = 5;
+  advantages +27; disadvantages -35; skills +26. Total 23 points --
+  solidly inside framework.md's "Ordinary citizen (0-50)" tier, and by
+  design cheaper and more expendable even than a Skitarii Ranger: an
+  Electro-Priest is barely a person by the time the Cult is finished with
+  them. Weapons (electro-flail, voltaic staff) are equipment or use the
+  Electoo Inductors/Luminen Capacitor traits directly; nothing else is
+  covered here.
+traits:
+  - name: ST
+    points: 10
+    tags: [Attribute]
+    lore: Chosen for endurance under the augmentation process as much as for any prior fitness.
+    design: ST 11 (+1), 10 pts/level (B15).
+  - name: DX
+    points: 20
+    tags: [Attribute]
+    lore: Enough reflex to swing an electro-flail without electrocuting themselves.
+    design: DX 11 (+1), 20 pts/level (B15).
+  - name: IQ
+    points: -40
+    tags: [Attribute]
+    lore: >
+      Electro-Priests are recruited from the desperate and the destitute
+      and given minimal instruction beyond simple ritual and combat drill;
+      Black Library and codex background alike depict them as dim and
+      near-automatic compared to an ordained Tech-Priest or even a
+      Skitarii.
+    design: IQ 8 (-2), 20 pts/level (B15).
+  - name: HT
+    points: 10
+    tags: [Attribute]
+    lore: The augmentation and the constant electrical load both select for raw endurance.
+    design: HT 11 (+1), 10 pts/level (B14).
+  - name: Will
+    points: 5
+    tags: [Attribute]
+    lore: What little independent thought remains is bent entirely toward doctrinal certainty.
+    design: Will 9 (+1 above the IQ-derived default of 8), 5 pts/level (B16).
+  - include: "mechanicus/traits/augmetics.yaml#Electoo Inductors"
+    levels: 2
+  - include: "mechanicus/traits/augmetics.yaml#Respirator Plugs (Filtration Lungs)"
+  - include: "mechanicus/traits/augmetics.yaml#Potentia Coil"
+    levels: 1
+  - name: High Pain Threshold
+    points: 10
+    ref: B59
+    tags: [Advantage, Physical, Imperium]
+    lore: Between the augmentation process and temple discipline, an Electro-Priest has learned to ignore pain that would stop most people cold.
+    design: Basic Set High Pain Threshold (B59), 10 points.
+  - name: Fearlessness
+    per_level: 2
+    levels: 2
+    ref: B55
+    tags: [Advantage, Mental, Imperium]
+    lore: A mind narrowed this far by doctrine and augmentation has little room left for self-preservation.
+    design: Basic Set Fearlessness (B55), 2/level, 2 levels bought.
+  - include: "mechanicus/traits/augmetics.yaml#Fanaticism (The Omnissiah)"
+  - include: "mechanicus/traits/augmetics.yaml#Disciplines of the Cult Mechanicus"
+  - include: "mechanicus/traits/augmetics.yaml#Duty (Adeptus Mechanicus)"
+    points: -5
+    notes: >
+      Overridden to -5: most Electro-Priests serve out their whole
+      existence within a single temple-forge and are rarely deployed far
+      afield, unlike a field Enginseer or a Skitarii.
+  - name: Odious Personal Habit (Visibly Crackles and Sparks)
+    points: -5
+    ref: B22
+    tags: [Disadvantage, Social, Imperium]
+    lore: >
+      An active Electro-Priest is never quite silent or still: their
+      electoo-lined skin hums, sparks, and occasionally arcs, which
+      unnerves almost everyone who isn't Mechanicus-trained.
+    design: Basic Set Odious Personal Habit (B22), minor, -5.
+  - name: "Lens: Fulgurite Conversion"
+    container: group
+    disabled: true
+    tags: [Imperium, Adeptus Mechanicus, Electro-Priest]
+    lore: >
+      Fulgurite Electro-Priests trade the Corpuscarii's steady, unpowered
+      jolt for a much heavier discharge built up over a moment's visible,
+      crackling charge — a harder hit at the cost of a telegraphed wind-up.
+    design: >
+      Adds Luminen Capacitor (Adeptus Mechanicus/Traits/Augmetics and the
+      Cult Mechanicus.adq), 2 levels, +4 points on top of this template's
+      baseline 23 (27 points total) — not a net-zero flavor lens like the
+      regimental/Chapter lenses elsewhere in this project, since a
+      Fulgurite genuinely hits harder than a Corpuscarii for the points.
+    children:
+      - include: "mechanicus/traits/augmetics.yaml#Luminen Capacitor"
+        levels: 2
+skills:
+  - name: Flail
+    diff: DX/H
+    points: 12
+    tags: [Imperium, Adeptus Mechanicus, Electro-Priest]
+    lore: The electro-flail, an Electro-Priest's standard-issue weapon; per framework.md's weapon-skill table, flails use the Flail skill.
+    design: DX+2 (13) for 12 points, Hard (B170).
+  - name: Theology
+    spec: Cult Mechanicus
+    diff: IQ/H
+    points: 8
+    tags: [Imperium, Adeptus Mechanicus]
+    lore: Simple, deeply drilled doctrine rather than genuine theological understanding; see Imperium/Skills/Imperial Skills.skl.
+    design: IQ+1 (9) for 8 points, Hard.
+  - include: "mechanicus/skills/skills.yaml#Savoir-Faire"
+    spec: Adeptus Mechanicus
+    points: 1
+    design: IQ+0 (8) for 1 point, Easy.
+  - name: Intimidation
+    diff: Will/A
+    points: 2
+    tags: [Imperium]
+    lore: A crackling, sparking, blank-eyed zealot needs no words to be threatening.
+    design: Will+0 (9) for 2 points, Average.
+  - name: Brawling
+    diff: DX/E
+    points: 1
+    tags: [Imperium]
+    lore: Unarmed and improvised fighting.
+    design: DX+0 (11) for 1 point, Easy.
+  - name: Climbing
+    diff: DX/A
+    points: 1
+    tags: [Imperium]
+    lore: Basic temple-guard fitness.
+    design: DX-1 (10) for 1 point, Average.
+  - name: Running
+    diff: HT/A
+    points: 1
+    tags: [Imperium]
+    lore: Basic conditioning.
+    design: HT-1 (10) for 1 point, Average.

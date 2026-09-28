@@ -9,7 +9,7 @@ items:
     tags: [Missile Weapon, Imperium]
     weapons:
       - usage: Standard (ball)
-        damage: 2d+2 pi
+        damage: 3d+2 pi
         acc: 2
         range: 80/180
         rof: 3
@@ -19,7 +19,7 @@ items:
         rcl: 2
         skill: Guns (Pistol)
       - usage: Manstopper rounds
-        damage: 2d+3(0.5) pi+
+        damage: 3d+3(0.5) pi+
         acc: 2
         range: 80/180
         rof: 3
@@ -38,22 +38,26 @@ items:
       fiction as the low-status "poor man's laspistol."
     design: >-
       No framework anchor covers stub weapons directly, but they must stay
-      consistent with the autogun anchor (5d+1 pi) they're built alongside.
-      GURPS's own real-world pistol-calibre baseline (a modern 9mm Parabellum
-      ball round, roughly 2d+2 pi) already sits at almost exactly the same
-      fraction of the new autogun that the old 2d pi- sat below the old
-      autogun (avg 9 / avg 18.5 = 49%, versus the old 7 / 15 = 47%), so the
-      autopistol is set to that real 9mm figure rather than derived by pure
-      arithmetic scaling: full pi wounding (not pi-) reflects a modern
-      jacketed round rather than the crude ball ammo the earlier pass
-      assumed. Against flak (DR 12) it penetrates just 8.3% of hits — a real
+      proportional to the autogun anchor (7d pi) they're built alongside.
+      GURPS's own real-world pistol-calibre baseline sits at roughly the
+      same fraction of the autogun the earlier pass used (avg 9/avg 18.5 =
+      49% pre-rescale), so the autopistol is rescaled by the same ratio the
+      autogun itself moved (5d+1→7d, avg 18.5→24.5, ×1.32): 2d+2 pi (avg 9)
+      becomes 3d+2 pi (avg 12.5), keeping full pi wounding for a modern
+      jacketed round rather than the crude ball ammo an earlier pass
+      assumed. Against flak (DR 18) it penetrates just 1.9% of hits — a real
       but unimpressive threat, matching the autopistol's reputation as a
       backup weapon rather than a main-line arm. The Manstopper usage keeps
-      the same pi+/divisor(0.5) shape as before, bumped by the same +2
-      average as the ball round (2d+3, avg 10): it never penetrates flak or
-      better (0% of hits, effective DR doubled by the divisor) but hits
+      the same pi+/divisor(0.5) shape and the same +1 die/+1 over the ball
+      round relationship (3d+3(0.5) pi+, avg 13.5): it never penetrates flak
+      or better (0% of hits, effective DR doubled by the divisor) but hits
       unarmoured flesh harder, the standard GURPS way to model an expanding
       round — more damage to flesh, worse against any DR.
+      Handling: weight (2 lb) and min ST (7) are unchanged - GURPS's own
+      pistol-weight convention (roughly ST 7 for a service-calibre autoloader
+      this size) already applies here rather than the shoulder-arm sqrt
+      formula, which this project reserves for rifles and heavier weapons.
+      Bulk -2 and Rcl 2 are ordinary pistol figures.
 
   - name: Autogun
     tl: 7

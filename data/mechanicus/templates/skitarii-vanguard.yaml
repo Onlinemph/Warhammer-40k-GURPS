@@ -1,23 +1,18 @@
 kind: template
-output: Adeptus Mechanicus/Templates/Skitarii Ranger.gct
+output: Adeptus Mechanicus/Templates/Skitarii Vanguard.gct
 notes: >
-  A Skitarii Ranger: rank-and-file line infantry of a Forge World's Legio
-  Cybernetica-adjacent Skitarii maniples, armed with galvanic rifles and
-  built for sustained firefights at range (their Vanguard counterparts,
-  Adeptus Mechanicus/Templates/Skitarii Vanguard.gct, favor close-range
-  radium weapons instead). Point math: ST 12 (+20), DX 13 (+60), IQ 10
-  (+0), HT 12 (+20) = 100; advantages +89 (Combat Reflexes 15 + Ballistic
-  Auto-senses 24 + Augmetic Legs, Combat Pattern 20 + Respirator Plugs 5 +
-  Subdermal Armour Plating 5 + Noospheric Link 8 + Skitarii Doctrina
-  Imperatives, effective 12 once GCS applies its native Alternative
-  Abilities discount rather than the 20 its full-price children would sum
-  to in a plain container); disadvantages -71; skills +63. Mechanicus Rank
-  is included disabled by default (see that trait for when to enable it).
-  Total 181 points: between framework.md's "Trained soldier (100-175)" and
-  "Elite human (200-350)" tiers, matching Skitarii's place in the fiction
-  as tougher and better-equipped than a Guardsman but still treated as
-  expendable line infantry by their own Priesthood. Weapons (galvanic
-  rifle, radium carbine, etc.) are equipment, not covered here.
+  A Skitarii Vanguard: the close-range counterpart to the Skitarii Ranger
+  (Adeptus Mechanicus/Templates/Skitarii Ranger.gct), built around the
+  radium carbine and the ambient radiation field its support gear leaks.
+  Point math: ST 12 (+20), DX 13 (+60), IQ 10 (+0), HT 12 (+20) = 100;
+  advantages +80 (Combat Reflexes 15 + Auto-senses, Skitarii Pattern 14 +
+  Augmetic Legs, Combat Pattern 20 + Respirator Plugs 5 + Subdermal Armour
+  Plating 5 + Noospheric Link 8 + Rad-Saturation Field's own near-zero net
+  cost 1 + Skitarii Doctrina Imperatives' GCS-discounted effective 12
+  points, exactly as the Ranger template uses); disadvantages -71; skills
+  +63. Mechanicus Rank is included disabled by default. Total 172 points:
+  the same "between Trained Soldier and Elite Human" band as the Ranger.
+  Weapons (radium carbine, etc.) are equipment, not covered here.
 traits:
   - name: ST
     points: 20
@@ -45,18 +40,23 @@ traits:
     tags: [Advantage, Mental, Imperium]
     lore: Drilled, doctrina-reinforced reactions under fire.
     design: Basic Set Combat Reflexes (B43), 15 points.
-  - include: "mechanicus/traits/augmetics.yaml#Ballistic Auto-senses, Sicarian/Ranger Pattern"
+  - include: "mechanicus/traits/augmetics.yaml#Auto-senses, Skitarii Pattern"
+    lore: >
+      Vanguard close-range doctrine doesn't need the Ranger's long zoom
+      train, so they're issued the cheaper standard-pattern auto-senses
+      instead of Ballistic Auto-senses.
   - include: "mechanicus/traits/augmetics.yaml#Augmetic Legs, Combat Pattern (Matched Pair)"
   - include: "mechanicus/traits/augmetics.yaml#Respirator Plugs (Filtration Lungs)"
   - include: "mechanicus/traits/augmetics.yaml#Subdermal Armour Plating"
     levels: 1
   - include: "mechanicus/traits/augmetics.yaml#Noospheric Link"
+  - include: "mechanicus/traits/augmetics.yaml#Rad-Saturation Field"
   - include: "mechanicus/traits/augmetics.yaml#Skitarii Doctrina Imperatives"
   - include: "mechanicus/traits/augmetics.yaml#Mechanicus Rank"
     levels: 1
     disabled: true
     lore: >
-      Disabled by default: most Rangers hold no formal Mechanicus rank at
+      Disabled by default: most Vanguard hold no formal Mechanicus rank at
       all. Enable at level 1 (+5 points) for a Skitarii Alpha or veteran
       squad leader.
   - include: "mechanicus/traits/augmetics.yaml#Skitarii Conditioning"
@@ -79,7 +79,10 @@ skills:
     diff: DX/E
     points: 20
     tags: [Imperium, Adeptus Mechanicus, Skitarii]
-    lore: The galvanic rifle, a Ranger's standard-issue weapon (framework.md's Mechanicus weapon anchor table).
+    lore: >
+      The radium carbine, a Vanguard's standard-issue weapon (framework.md's
+      Mechanicus weapon anchor table); short-ranged compared to a Ranger's
+      galvanic rifle but devastating against unsealed targets.
     design: DX+5 (18) for 20 points, Easy (B170).
   - name: Guns
     spec: Pistol
@@ -109,10 +112,12 @@ skills:
     design: IQ+0 (10) for 4 points, Hard.
   - name: Stealth
     diff: DX/A
-    points: 8
+    points: 4
     tags: [Imperium]
-    lore: Fire-and-maneuver fieldcraft; less emphasized than a Ranger's marksmanship but still drilled.
-    design: DX+2 (15) for 8 points, Average.
+    lore: >
+      Enough fieldcraft to close to radium-carbine range; less emphasized
+      than a Ranger's overwatch discipline, so bought at half the level.
+    design: DX+0 (13) for 4 points, Average.
   - name: Camouflage
     diff: IQ/E
     points: 1
@@ -128,22 +133,24 @@ skills:
     design: Per+0 (10) for 2 points, Average.
   - name: Brawling
     diff: DX/E
-    points: 1
+    points: 4
     tags: [Imperium]
-    lore: Unarmed and improvised-weapon fighting when ammunition runs out.
-    design: DX+0 (13) for 1 point, Easy.
+    lore: >
+      Vanguard close to contact range far more often than Rangers do, and
+      are drilled accordingly in melee back-up skill.
+    design: DX+1 (14) for 4 points, Easy.
   - name: Forced Entry
     diff: DX/E
-    points: 1
+    points: 2
     tags: [Imperium]
-    lore: Breaching doors and barricades under fire.
-    design: DX+0 (13) for 1 point, Easy.
+    lore: Breaching doors and barricades in close-quarters actions.
+    design: DX+1 (14) for 2 points, Easy.
   - name: Theology
     spec: Cult Mechanicus
     diff: IQ/H
     points: 4
     tags: [Imperium, Adeptus Mechanicus]
-    lore: A Ranger's basic catechisms of the Machine God; see Imperium/Skills/Imperial Skills.skl.
+    lore: A Vanguard's basic catechisms of the Machine God; see Imperium/Skills/Imperial Skills.skl.
     design: IQ-1 (9) for 4 points, Hard.
   - include: "mechanicus/skills/skills.yaml#Savoir-Faire"
     spec: Adeptus Mechanicus
@@ -153,7 +160,7 @@ skills:
     diff: Will/A
     points: 2
     tags: [Imperium]
-    lore: An unnervingly flat, augmetic-eyed stare goes a long way.
+    lore: A visibly rad-scarred Vanguard is a frightening thing to stand near.
     design: Will+0 (10) for 2 points, Average.
   - name: First Aid
     diff: IQ/E
@@ -171,7 +178,7 @@ skills:
     diff: HT/A
     points: 1
     tags: [Imperium]
-    lore: Conditioning for advancing under fire.
+    lore: Conditioning for closing distance under fire.
     design: HT-1 (11) for 1 point, Average.
   - name: Jumping
     diff: DX/E
@@ -191,7 +198,7 @@ skills:
     diff: IQ/E
     points: 1
     tags: [Imperium]
-    lore: Knowledge of the Ranger's home Forge World or current deployment.
+    lore: Knowledge of the Vanguard's home Forge World or current deployment.
     design: IQ+0 (10) for 1 point, Easy.
   - include: "imperium/common/skills.yaml#Current Affairs"
     spec: Imperium
@@ -201,7 +208,7 @@ skills:
     diff: Per/A
     points: 2
     tags: [Imperium]
-    lore: Following a target across terrain, aided by auto-sense oculars.
+    lore: Closing on a target across terrain.
     design: Per+0 (10) for 2 points, Average.
   - name: Electronics Operation
     spec: Sensors
