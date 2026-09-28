@@ -1,0 +1,204 @@
+kind: template
+output: Xenos/Tau/Templates/Fire Warrior Veteran (Shas'ui).gct
+notes: >-
+  A Shas'ui: a Fire Warrior who has survived enough war to lead a fire team, and who may
+  be chosen to pilot a battlesuit. Same armour and weapons as a Shas'la, and a team's-worth
+  of drones. Point math (see Xenos/Tau/Traits/T'au Traits.adq): T'au Physiology (17) +
+  Fire Caste Lens (70) + Fire Warrior Training (6) + Veteran Lens (Shas'ui) (50) + Military
+  Rank (Fire Caste) (5) + The Greater Good (-15) + Devotion to the Ethereals (-1) = 132
+  points of traits, plus skills (62 points) = 194 points. Stats: ST 11, DX 13, IQ 11,
+  HT 12, HP 11, Will 12, Per 12, Speed 6.25, Move 6, Dodge 9. Tier: between trained soldier
+  (100-175) and elite human (200-350).
+
+
+  Framework.md: 'team leader; often a battlesuit pilot' (Shas'ui who pilot are built as
+  a Shas'vre, below). Military Rank 1 (5 points) marks the team-leader step. Weapon skills
+  as for the Shas'la.
+traits:
+- {include: xenos/tau/traits.yaml#T'au Physiology}
+- {include: xenos/tau/traits.yaml#Fire Caste Lens}
+- {include: xenos/tau/traits.yaml#Fire Warrior Training}
+- {include: xenos/tau/traits.yaml#Veteran Lens (Shas'ui)}
+- {include: xenos/tau/traits.yaml#Military Rank (Fire Caste), levels: 1}
+- {include: xenos/tau/traits.yaml#The Greater Good}
+- {include: xenos/tau/traits.yaml#Devotion to the Ethereals}
+skills:
+- name: Beam Weapons
+  spec: Rifle
+  diff: DX/E
+  points: 16
+  tags: [Xenos, T'au]
+  ref: B179
+  defaults: [DX-4, Beam Weapons-4, Guns (Rifle)-4]
+  lore: Pulse rifle or carbine; a Shas'ui is the best shot in his team.
+  design: DX+5 (18) for 16 points, Easy.
+- name: Beam Weapons
+  spec: Pistol
+  diff: DX/E
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B179
+  defaults: [DX-4, Beam Weapons-4, Guns (Pistol)-4]
+  lore: Pulse pistol sidearm.
+  design: DX+1 (14) for 2 points, Easy.
+- name: Gunner
+  spec: Beams
+  diff: DX/E
+  points: 4
+  tags: [Xenos, T'au]
+  ref: B198
+  defaults: [DX-4, Gunner-4]
+  lore: Mounted burst cannons and vehicle guns.
+  design: DX+2 (15) for 4 points, Easy.
+- name: Brawling
+  diff: DX/E
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B182
+  lore: A little more than a Shas'la, still no melee weapon.
+  design: DX+1 (14) for 2 points, Easy.
+- name: Throwing
+  diff: DX/A
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B226
+  defaults: [DX-3, Dropping-4]
+  lore: Grenades.
+  design: DX+0 (13) for 2 points, Average.
+- name: Tactics
+  diff: IQ/H
+  points: 4
+  tags: [Xenos, T'au]
+  ref: B224
+  defaults: [IQ-6, Strategy-6]
+  lore: Leading a fire team in the field.
+  design: IQ+0 (11) for 4 points, Hard.
+- name: Leadership
+  diff: IQ/A
+  points: 4
+  tags: [Xenos, T'au]
+  ref: B204
+  defaults: [IQ-5]
+  lore: Commanding a team of Shas'la.
+  design: IQ+1 (12) for 4 points, Average.
+- name: Observation
+  diff: Per/A
+  points: 4
+  tags: [Xenos, T'au]
+  ref: B211
+  defaults: [Per-5, Shadowing-5]
+  lore: Reading the battlefield for his team.
+  design: Per+1 (13) for 4 points, Average.
+- name: Stealth
+  diff: DX/A
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B222
+  defaults: [IQ-5, DX-5]
+  lore: Fieldcraft.
+  design: DX+0 (13) for 2 points, Average.
+- name: Camouflage
+  diff: IQ/E
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B183
+  defaults: [IQ-4, Survival-2]
+  lore: Fieldcraft.
+  design: IQ+1 (12) for 2 points, Easy.
+- name: Electronics Operation
+  spec: Communications
+  diff: IQ/A
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B189
+  defaults: [IQ-5, Electronics Operation-4, Electronics Repair (Communications)-5, Engineer
+      (Electronics)-5]
+  lore: Team comms and the network.
+  design: IQ+0 (11) for 2 points, Average.
+- name: Electronics Operation
+  spec: Sensors
+  diff: IQ/A
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B189
+  defaults: [IQ-5, Electronics Repair (Sensors)-5, Engineer (Electronics)-5, Electronics
+      Operation-4]
+  lore: Drone and markerlight sensor networks.
+  design: IQ+0 (11) for 2 points, Average.
+- name: First Aid
+  diff: IQ/E
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B195
+  defaults: [IQ-4, Esoteric Medicine, Physician, Veterinary-4]
+  lore: Field medicine.
+  design: IQ+1 (12) for 2 points, Easy.
+- name: Hiking
+  diff: HT/A
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B200
+  defaults: [HT-5]
+  lore: Endurance.
+  design: HT+0 (12) for 2 points, Average.
+- name: Savoir-Faire
+  spec: Military
+  diff: IQ/E
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B218
+  defaults: [IQ-4]
+  lore: Rank etiquette to Shas'el and Shas'o.
+  design: IQ+1 (12) for 2 points, Easy.
+- name: Navigation
+  spec: Land
+  diff: IQ/A
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B211
+  defaults: [IQ-5, Cartography-4, Mathematics (Surveying)-4, Navigation (Air)-2, Navigation
+      (Sea)-2, Navigation (Underground)-2]
+  lore: Land navigation.
+  design: IQ+0 (11) for 2 points, Average.
+- name: Armoury
+  spec: Small Arms
+  diff: IQ/A
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B178
+  defaults: [IQ-5, Engineer (Small Arms)-4, Machinist-5]
+  lore: Maintaining the team's guns.
+  design: IQ+0 (11) for 2 points, Average.
+- name: Piloting
+  spec: Contragravity
+  diff: DX/A
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B214
+  defaults: [IQ-6, Piloting (Vertol)-3, Piloting-5]
+  lore: Devilfish and Piranha.
+  design: DX+0 (13) for 2 points, Average.
+- name: Teaching
+  diff: IQ/A
+  points: 1
+  tags: [Xenos, T'au]
+  ref: B224
+  defaults: [IQ-5]
+  lore: Training new Shas'la.
+  design: IQ-1 (10) for 1 point, Average.
+- name: Fast-Draw
+  spec: Ammo
+  diff: DX/E
+  points: 1
+  tags: [Xenos, T'au]
+  ref: B194
+  lore: Reload drill.
+  design: DX+0 (13) for 1 point, Easy.
+- name: Running
+  diff: HT/A
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B218
+  defaults: [HT-5]
+  lore: Conditioning.
+  design: HT+0 (12) for 2 points, Average.

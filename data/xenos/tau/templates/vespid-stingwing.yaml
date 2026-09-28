@@ -1,0 +1,91 @@
+kind: template
+output: Xenos/Tau/Templates/Vespid Stingwing.gct
+notes: >-
+  A Vespid Stingwing: a winged insectoid mercenary who strafes and skirmishes for the
+  T'au with a neutron blaster, under its Strain Leader. Point math (see Xenos/Tau/Traits/T'au
+  Traits.adq): Vespid Physiology (110) + Vespid Strain (-5) = 105 points of traits, plus
+  skills (54 points) = 159 points. Stats: ST 11, DX 13, IQ 8, HT 11, HP 11, Will 10, Per
+  12, Speed 6.0, Move 6, Dodge 9. Tier: trained soldier (100-175).
+
+
+  The neutron blaster is a Beam Weapons (Rifle) skill. Vespid natural armour is deliberately
+  left out (no confident source); see the Vespid Physiology trait. Flight is bought at
+  HT/A (B195), rated at HT 11.
+traits:
+- {include: xenos/tau/traits.yaml#Vespid Physiology}
+- {include: xenos/tau/traits.yaml#Vespid Strain}
+skills:
+- name: Beam Weapons
+  spec: Rifle
+  diff: DX/E
+  points: 12
+  tags: [Xenos, T'au, Vespid]
+  ref: B179
+  defaults: [DX-4, Beam Weapons-4, Guns (Rifle)-4]
+  lore: >-
+    The neutron blaster: a crystal-charged beam weapon, so Beam Weapons (Rifle).
+  design: DX+4 (17) for 12 points, Easy.
+- name: Flight
+  diff: HT/A
+  points: 16
+  tags: [Xenos, T'au, Vespid]
+  ref: B195
+  defaults: [HT-5]
+  lore: Aerial manoeuvre on real wings (Flight is HT/A).
+  design: HT+4 (15) for 16 points, Average.
+- name: Acrobatics
+  diff: DX/H
+  points: 4
+  tags: [Xenos, T'au, Vespid]
+  ref: B174
+  defaults: [DX-6, Aerobatics-4, Aquabatics-4]
+  lore: Air combat manoeuvre.
+  design: DX+0 (13) for 4 points, Hard.
+- name: Observation
+  diff: Per/A
+  points: 8
+  tags: [Xenos, T'au, Vespid]
+  ref: B211
+  defaults: [Per-5, Shadowing-5]
+  lore: A strafing scout.
+  design: Per+2 (14) for 8 points, Average.
+- name: Stealth
+  diff: DX/A
+  points: 4
+  tags: [Xenos, T'au, Vespid]
+  ref: B222
+  defaults: [IQ-5, DX-5]
+  lore: Approach.
+  design: DX+1 (14) for 4 points, Average.
+- name: Brawling
+  diff: DX/E
+  points: 2
+  tags: [Xenos, T'au, Vespid]
+  ref: B182
+  lore: Close quarters.
+  design: DX+1 (14) for 2 points, Easy.
+- name: Navigation
+  spec: Air
+  diff: IQ/A
+  points: 4
+  tags: [Xenos, T'au, Vespid]
+  ref: B211
+  defaults: [Astronomy-5, Navigation (Land)-2, Navigation (Sea)-2]
+  lore: Aerial navigation.
+  design: IQ+1 (9) for 4 points, Average.
+- name: Throwing
+  diff: DX/A
+  points: 2
+  tags: [Xenos, T'au, Vespid]
+  ref: B226
+  defaults: [DX-3, Dropping-4]
+  lore: Thrown objects.
+  design: DX+0 (13) for 2 points, Average.
+- name: Climbing
+  diff: DX/A
+  points: 2
+  tags: [Xenos, T'au, Vespid]
+  ref: B183
+  defaults: [DX-5]
+  lore: Landing and climbing.
+  design: DX+0 (13) for 2 points, Average.

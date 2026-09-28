@@ -1,0 +1,192 @@
+kind: template
+output: Xenos/Tau/Templates/Fire Warrior (Shas'la).gct
+notes: >-
+  A Fire Warrior (Shas'la): the rank-and-file soldier of the Fire caste, drilled to fight
+  as part of a networked fire team and trained to stand off and shoot, not to close. Armed
+  in the field with a pulse rifle or carbine and combat armour. Point math (see Xenos/Tau/Traits/T'au
+  Traits.adq): T'au Physiology (17) + Fire Caste Lens (70) + Fire Warrior Training (6)
+  + The Greater Good (-15) + Devotion to the Ethereals (-1) = 77 points of traits, plus
+  skills (53 points) = 130 points. Stats: ST 10, DX 12, IQ 11, HT 11, HP 10, Will 11,
+  Per 11, Speed 5.75, Move 5, Dodge 8. Tier: trained soldier (100-175).
+
+
+  The framework calls Fire Warriors 'better drilled than a Guardsman; poor in melee'.
+  The drill shows in Beam Weapons (Rifle) 17 (Guardsman 15) and Tactics; the melee gap
+  shows in Brawling at DX. Unlike the Guardsman there is no Combat Reflexes: T'au doctrine
+  is to fall back and let the guns work, not to fight through surprise. Weapon skills
+  follow the T'au armoury as framework.md's Skills table reads it: pulse weapons are Beam
+  Weapons (Pistol/Rifle), burst cannons and other mounted guns are Gunner (Beams), rail
+  rifles are Guns (Rifle) and are not carried by the rank and file. Language and Cultural
+  Familiarity are left to the campaign.
+traits:
+- {include: xenos/tau/traits.yaml#T'au Physiology}
+- {include: xenos/tau/traits.yaml#Fire Caste Lens}
+- {include: xenos/tau/traits.yaml#Fire Warrior Training}
+- {include: xenos/tau/traits.yaml#The Greater Good}
+- {include: xenos/tau/traits.yaml#Devotion to the Ethereals}
+skills:
+- name: Beam Weapons
+  spec: Rifle
+  diff: DX/E
+  points: 16
+  tags: [Xenos, T'au]
+  ref: B179
+  defaults: [DX-4, Beam Weapons-4, Guns (Rifle)-4]
+  lore: >-
+    The pulse rifle and pulse carbine: induction-launched plasma pulses, so Beam Weapons
+    (Rifle) by the framework's weapon-skill table. This is the Fire Warrior's whole craft.
+  design: DX+5 (17) for 16 points, Easy.
+- name: Beam Weapons
+  spec: Pistol
+  diff: DX/E
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B179
+  defaults: [DX-4, Beam Weapons-4, Guns (Pistol)-4]
+  lore: Pulse pistol as a sidearm.
+  design: DX+1 (13) for 2 points, Easy.
+- name: Gunner
+  spec: Beams
+  diff: DX/E
+  points: 4
+  tags: [Xenos, T'au]
+  ref: B198
+  defaults: [DX-4, Gunner-4]
+  lore: Crewing a Devilfish's or a Piranha's burst cannons and pulse mounts.
+  design: DX+2 (14) for 4 points, Easy.
+- name: Brawling
+  diff: DX/E
+  points: 1
+  tags: [Xenos, T'au]
+  ref: B182
+  lore: >-
+    Fire caste doctrine avoids close combat; this is a survival skill only, deliberately
+    a gap.
+  design: DX+0 (12) for 1 point, Easy.
+- name: Throwing
+  diff: DX/A
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B226
+  defaults: [DX-3, Dropping-4]
+  lore: Photon and EMP grenades.
+  design: DX+0 (12) for 2 points, Average.
+- name: Tactics
+  diff: IQ/H
+  points: 4
+  tags: [Xenos, T'au]
+  ref: B224
+  defaults: [IQ-6, Strategy-6]
+  lore: 'Fire-team drill: fields of fire, cover, when to fall back.'
+  design: IQ+0 (11) for 4 points, Hard.
+- name: Observation
+  diff: Per/A
+  points: 4
+  tags: [Xenos, T'au]
+  ref: B211
+  defaults: [Per-5, Shadowing-5]
+  lore: Spotting for the networked line.
+  design: Per+1 (12) for 4 points, Average.
+- name: Stealth
+  diff: DX/A
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B222
+  defaults: [IQ-5, DX-5]
+  lore: Advancing from cover to cover.
+  design: DX+0 (12) for 2 points, Average.
+- name: Camouflage
+  diff: IQ/E
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B183
+  defaults: [IQ-4, Survival-2]
+  lore: Fieldcraft.
+  design: IQ+1 (12) for 2 points, Easy.
+- name: Electronics Operation
+  spec: Communications
+  diff: IQ/A
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B189
+  defaults: [IQ-5, Electronics Operation-4, Electronics Repair (Communications)-5, Engineer
+      (Electronics)-5]
+  lore: Squad comms and the drone and markerlight network.
+  design: IQ+0 (11) for 2 points, Average.
+- name: First Aid
+  diff: IQ/E
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B195
+  defaults: [IQ-4, Esoteric Medicine, Physician, Veterinary-4]
+  lore: Field medicine.
+  design: IQ+1 (12) for 2 points, Easy.
+- name: Hiking
+  diff: HT/A
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B200
+  defaults: [HT-5]
+  lore: Endurance on the march.
+  design: HT+0 (11) for 2 points, Average.
+- name: Savoir-Faire
+  spec: Military
+  diff: IQ/E
+  points: 1
+  tags: [Xenos, T'au]
+  ref: B218
+  defaults: [IQ-4]
+  lore: Fire caste rank etiquette.
+  design: IQ+0 (11) for 1 point, Easy.
+- name: Navigation
+  spec: Land
+  diff: IQ/A
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B211
+  defaults: [IQ-5, Cartography-4, Mathematics (Surveying)-4, Navigation (Air)-2, Navigation
+      (Sea)-2, Navigation (Underground)-2]
+  lore: Finding the way to the objective.
+  design: IQ+0 (11) for 2 points, Average.
+- name: Armoury
+  spec: Small Arms
+  diff: IQ/A
+  points: 1
+  tags: [Xenos, T'au]
+  ref: B178
+  defaults: [IQ-5, Engineer (Small Arms)-4, Machinist-5]
+  lore: Cleaning and maintaining a pulse rifle.
+  design: IQ-1 (10) for 1 point, Average.
+- name: Piloting
+  spec: Contragravity
+  diff: DX/A
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B214
+  defaults: [IQ-6, Piloting (Vertol)-3, Piloting-5]
+  lore: Devilfish and Piranha grav-vehicles are driven by Fire caste crews.
+  design: DX+0 (12) for 2 points, Average.
+- name: Running
+  diff: HT/A
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B218
+  defaults: [HT-5]
+  lore: Conditioning.
+  design: HT+0 (11) for 2 points, Average.
+- name: Fast-Draw
+  spec: Ammo
+  diff: DX/E
+  points: 1
+  tags: [Xenos, T'au]
+  ref: B194
+  lore: Reload drill.
+  design: DX+0 (12) for 1 point, Easy.
+- name: Climbing
+  diff: DX/A
+  points: 1
+  tags: [Xenos, T'au]
+  ref: B183
+  defaults: [DX-5]
+  lore: Basic athletics.
+  design: DX-1 (11) for 1 point, Average.

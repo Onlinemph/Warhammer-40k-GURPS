@@ -1,0 +1,953 @@
+kind: traits
+output: Xenos/Tau/Traits/T'au Traits.adq
+# T'au Empire racial traits, caste lenses, training packages and auxiliaries (Kroot, Vespid) plus the
+# drone chassis. Calibrated to framework.md's "Xenos > T'au Empire" stat table and point targets. The T'au
+# body is deliberately thin (Warp-Faint, nothing else): every caste and training lens carries its own
+# attribute line so each template lands on the framework's exact stats. Sources: Codex: T'au Empire
+# background across editions; Black Library only where noted. Where the lore is thin or unsourced
+# (T'au lifespan, Vespid armour, exact Ethereal mechanism) the entry says so and leaves it unpriced.
+items:
+- &warp_faint
+  name: Warp-Faint
+  container: meta_trait
+  tags: [Advantage, Mental, Xenos, T'au]
+  notes: >-
+    Psychic mind-reading, mind-control and emotion-control powers used on a T'au suffer
+    -3; the T'au gets +8 to HT rolls against possession, warp-taint and daemonic influence.
+    No T'au is ever a psyker: no template in this file carries Psyker (Talent), Warp Empowerment
+    or any Warp Sorcery, and none should be given one.
+  lore: >-
+    The T'au have almost no presence in the warp. Psykers have trouble reading or dominating
+    them, daemons find little to grip, and no T'au has ever been shown to be a psyker.
+    This is consistent background across Codex: T'au Empire editions; how strong the effect
+    is is left vague, and the fiction shows T'au dying to daemons and to psychic assault,
+    so it is priced as a real but partial defence, not the total immunity a Pariah or
+    a Necron has.
+  design: >-
+    Mind Shield 3 (B70, 4/level) = 12, plus Resistant (B81) at the Occasional hazard base
+    of 10 with the +8 bonus (x1/2) = 5, for 17 points. Deliberately not Immunity: a Pariah's
+    Immunity to Warp-Based Effects (data/imperium/psykers/warp.yaml) costs 10 for a total
+    shield and the Necron Soulless trait does the same, but the T'au are only faint in
+    the warp, not absent from it. 'Cannot be a psyker' is a rule of the setting rather
+    than a priced disadvantage: nothing in a T'au build ever buys a psychic advantage,
+    so there is nothing to price.
+  children:
+  - name: Mind Shield (Warp-Faint)
+    per_level: 4
+    levels: 3
+    ref: B70
+    tags: [Advantage, Mental, Xenos, T'au]
+    notes: >-
+      Mind Shield 3: -3 to mind-reading, mind-control and emotion-control powers used
+      on this character.
+    lore: >-
+      Psykers find a T'au's mind slippery and dim: hard to read, harder to seize.
+    design: Mind Shield 3 (B70, 4/level) = 12 points.
+  - name: Resistant (Warp Influence)
+    ref: B81
+    tags: [Advantage, Mental, Xenos, T'au]
+    modifiers:
+    - {name: 'Occasional hazard: possession, warp-taint and daemonic influence', cost: '10',
+      ref: B81}
+    - {name: +8 to all HT rolls to resist, cost: x0.5, ref: B81}
+    notes: >-
+      +8 to HT rolls to resist possession, warp-taint mutation and daemonic influence.
+    lore: >-
+      A soul that barely registers in the warp gives a daemon little to take hold of.
+    design: 'Resistant (B81): Occasional hazard 10, +8 to resist (x1/2) = 5 points.'
+- &short_lifespan_t_au_optional
+  name: Short Lifespan (T'au, optional)
+  per_level: -10
+  levels: 1
+  ref: B154
+  disabled: true
+  tags: [Disadvantage, Physical, Xenos, T'au]
+  notes: >-
+    Disabled: charged nothing. A GM who wants the T'au to age faster than baseline humans
+    can enable this (-10 for one level, B154).
+  lore: >-
+    Background describes the T'au as shorter-lived than humans, with Ethereals said to
+    live longer, but the drafter could not pin a figure or a citation to that, and the
+    framework asks for Short Lifespan only where the drafter is confident. So: left out
+    of the price.
+  design: >-
+    Short Lifespan is -10 per level (B154). Not charged, so no T'au template carries the
+    discount and the racial totals are not padded by an unsourced disadvantage.
+- name: T'au Physiology
+  container: ancestry
+  tags: [Advantage, Physical, Xenos, T'au]
+  lore: >-
+    The T'au are a young race of about human size: blue-grey skin, reverse-jointed hooved
+    legs, blunt features and a stocky-to-slender range depending on caste. They are no
+    stronger than humans and no faster; the differences between them are made by caste
+    and training, not by biology, so this package is deliberately thin (attributes, Warp-Faint
+    and nothing else) and each caste lens carries its own attribute line. Codex: T'au
+    Empire background.
+  design: >-
+    Warp-Faint 17, plus a disabled optional Short Lifespan (0). Total 17 points, no attribute
+    change: ST 10, DX 10, IQ 10, HT 10 as human, so that framework.md's non-Fire castes
+    (Water caste DX 10, Ethereal DX 11) come out exactly from their lenses. Left out:
+    any hoof or leg-shape trait (no rules effect the drafter is confident of), Language
+    and Cultural Familiarity (0-point when native; campaign-dependent).
+  children:
+  - *warp_faint
+  - *short_lifespan_t_au_optional
+- name: The Greater Good
+  container: meta_trait
+  tags: [Disadvantage, Mental, Xenos, T'au]
+  notes: >-
+    T'au'va. Sense of Duty to the T'au Empire and everyone in it, auxiliaries included,
+    and a professional code: obey the chain of command and the Ethereals, do not leave
+    a comrade or ally behind, offer terms before slaughter. This is duty, not fanaticism
+    in the Imperial sense: a T'au can be argued with, and can change sides of a policy
+    if the Ethereals do.
+  lore: >-
+    The Greater Good (T'au'va) is the founding creed of the Empire: every caste, and every
+    race that joins, serves the whole. It is a philosophy and a political programme, and
+    it is offered before it is imposed. Codex: T'au Empire background across editions.
+  design: >-
+    Sense of Duty (Large Group: the Empire) -10 (B153) + Code of Honor (Professional)
+    -5 (B127) = -15 points. Code of Honor is priced as the lightest B127 tier, not the
+    Soldier's -10: the T'au are not depicted as glorying in combat or in personal honour,
+    only in discharge of duty. Entire Race (-15) was rejected because the Greater Good
+    extends past the T'au.
+  children:
+  - name: Sense of Duty (T'au Empire)
+    ref: B153
+    tags: [Disadvantage, Mental, Xenos, T'au]
+    modifiers:
+    - {name: Large Group (the T'au Empire and its allied races), cost: '-10', ref: B153}
+    notes: >-
+      Will not knowingly act against the Empire's good; roll self-control to put personal
+      interest first.
+    lore: The Greater Good is a duty to a whole civilisation, not a single master.
+    design: Sense of Duty (B153), Large Group -10.
+  - name: Code of Honor (Greater Good)
+    points: -5
+    ref: B127
+    tags: [Disadvantage, Mental, Xenos, T'au]
+    notes: >-
+      Obey caste duty and the Ethereals; do not abandon comrades or allies; offer terms
+      before annihilation. Breaking it is a reaction penalty from other T'au and a self-esteem
+      crisis.
+    lore: >-
+      Each caste has its own code; the Fire caste's is a soldier's, close to B127's Professional
+      code but with a duty to offer surrender first. Background.
+    design: Code of Honor (Professional) -5 (B127).
+- name: Devotion to the Ethereals
+  container: meta_trait
+  tags: [Disadvantage, Mental, Xenos, T'au]
+  notes: >-
+    Near an Ethereal, T'au hold and fight harder. The Ethereal's half of this is Inspiring
+    Presence. Non-Ethereal T'au carry this; Ethereals do not.
+  lore: >-
+    T'au follow their Ethereals with a devotion that goes far past discipline: Fire Warriors
+    fight to the last around one, and it is unheard of for a T'au to raise a hand against
+    one. Whether the cause is culture or, as often speculated in the fiction, an Ethereal-borne
+    pheromone, is left unresolved (Codex: T'au Empire background), so this is built as
+    belief and morale, not as a compulsion.
+  design: >-
+    Sense of Duty (Small Group: the Ethereal caste) -5, Fearlessness 2 (4/level 2 = 4,
+    Accessibility -50%) = 2, Higher Purpose 1 (5, Accessibility -60%) = 2: net -1 point.
+    The package is nearly free because the bonuses (2 points) roughly cancel the duty
+    (-5): it is a matched pair, not a sacrifice.
+  children:
+  - name: Sense of Duty (Ethereals)
+    ref: B153
+    tags: [Disadvantage, Mental, Xenos, T'au]
+    modifiers:
+    - {name: Small Group (the Ethereal caste), cost: '-5', ref: B153}
+    notes: >-
+      Cannot knowingly disobey or endanger an Ethereal; roll self-control when told to.
+    lore: An Ethereal's word is very nearly law to every other caste.
+    design: Sense of Duty (B153), Small Group -5.
+  - name: Fearlessness (Ethereal's Presence)
+    per_level: 2
+    levels: 2
+    ref: B55
+    tags: [Advantage, Mental, Xenos, T'au]
+    modifiers:
+    - name: Accessibility
+      cost: -50%
+      ref: B110
+      notes: >-
+        Only while an Ethereal is in sight or hearing, or the T'au is acting on one's
+        direct order.
+    notes: +2 to Fright Checks near an Ethereal or acting on one's order.
+    lore: T'au hold the line around an Ethereal long after others would break.
+    design: Fearlessness 2 (B55, 2/level = 4), Accessibility -50% = 2 points.
+  - name: Higher Purpose (The Ethereal's Word)
+    per_level: 5
+    levels: 1
+    ref: B59
+    tags: [Advantage, Mental, Xenos, T'au]
+    modifiers:
+    - name: Accessibility
+      cost: -60%
+      ref: B110
+      notes: >-
+        Only while an Ethereal is present or the T'au is carrying out an Ethereal's order.
+    conditional:
+    - situation: >-
+        to skill rolls made to carry out an Ethereal's order, or to defend or avenge one
+      amount: 1
+    notes: >-
+      +1 to skill rolls made to carry out an Ethereal's order, or to defend or avenge
+      one.
+    lore: The Fire Warrior fights harder under an Ethereal's eye.
+    design: Higher Purpose 1 (B59, 5/level), Accessibility -60% = 2 points.
+- &inspiring_presence
+  name: Inspiring Presence
+  container: meta_trait
+  tags: [Advantage, Social, Xenos, T'au]
+  notes: >-
+    The Ethereal's half of the Devotion pairing. T'au and T'au auxiliaries in sight or
+    hearing of an Ethereal satisfy the Accessibility on Devotion to the Ethereals (Fearlessness
+    +2, Higher Purpose +1) and react to the Ethereal at +4; non-T'au see only the Social
+    Regard.
+  lore: >-
+    An Ethereal calms and steels the T'au around them: Fire Warriors under fire stay in
+    place, and envoys see counsel followed. Many in the fiction suspect a pheromonal effect;
+    it is never confirmed. Codex: T'au Empire background.
+  design: >-
+    Charisma 4 (B41, 5/level = 20) with Accessibility -20% (only T'au and their auxiliaries)
+    = 16, plus Social Regard (Venerated) 3 (B87, 5/level) = 15: 31 points. Social Regard
+    is separate because even foreign envoys treat an Ethereal with care; the Charisma
+    is the aura proper. A true area buff was rejected as unbuildable from Basic Set traits
+    without inventing new modifiers.
+  children:
+  - name: Charisma (T'au and Auxiliaries)
+    per_level: 5
+    levels: 4
+    ref: B41
+    tags: [Advantage, Social, Xenos, T'au]
+    modifiers:
+    - name: Accessibility
+      cost: -20%
+      ref: B110
+      notes: >-
+        Only affects T'au and T'au auxiliaries (Kroot, Vespid, Gue'vesa), not other species.
+    notes: >-
+      +4 to reactions and to Diplomacy, Leadership, Public Speaking, Politics and similar
+      Influence rolls with T'au and their auxiliaries.
+    lore: The Ethereal's pull on T'au society.
+    design: Charisma 4 (B41, 5/level = 20), Accessibility -20% = 16 points.
+  - name: Social Regard (Venerated Ethereal)
+    per_level: 5
+    levels: 3
+    ref: B87
+    tags: [Advantage, Social, Xenos, T'au]
+    notes: 'Venerated: +3 reactions from those who hold Ethereals in awe.'
+    lore: To most T'au, and to many others, an Ethereal is very nearly sacred.
+    design: Social Regard (Venerated) 3 (B87, 5/level) = 15 points.
+- name: Military Rank (Fire Caste)
+  per_level: 5
+  levels: 1
+  ref: B29
+  tags: [Advantage, Social, Xenos, T'au]
+  notes: >-
+    Fire caste command ladder: Shas'la (0), Shas'ui team leader (1), Shas'vre veteran
+    pilot (2), Shas'el cadre leader (3), Shas'o commander (5). Templates override the
+    levels.
+  lore: >-
+    Fire caste ranks are named for role and seniority (Shas'la, Shas'ui, Shas'vre, Shas'el,
+    Shas'o, Shas'ar'tol). Codex: T'au Empire background.
+  design: >-
+    Military Rank (B29, 5/level). The ladder is compressed against the Basic Set's 0-8
+    scale: a Shas'o commands a cadre or more, so 5; the levels below are spaced by role.
+    Status is not replaced (the T'au have no high-status warrior aristocracy; that is
+    the Ethereals' place).
+- &fit
+  name: Fit
+  points: 5
+  ref: B55
+  tags: [Advantage, Physical, Xenos, T'au]
+  notes: >-
+    +1 to HT rolls to stay conscious or avoid dying; recovers lost FP faster (B55).
+  lore: >-
+    Fire caste and Earth caste both spend their lives on their feet and in kit.
+  design: Fit (B55), 5 points.
+- name: Fire Caste Lens
+  container: meta_trait
+  tags: [Advantage, Physical, Xenos, T'au]
+  lore: >-
+    The Fire caste are the warriors of the Empire: raised to soldiering, disciplined,
+    better trained than most of what they will meet. They are not a martial aristocracy;
+    the caste exists to hold the line while Earth's guns and Air's ships do the work.
+    Codex: T'au Empire background.
+  design: Attribute Modifiers (Fire Caste) 70 points.
+  children:
+  - name: Attribute Modifiers (Fire Caste)
+    points: 70
+    attributes: {dx: 2, iq: 1, ht: 1}
+    tags: [Physical, Xenos, T'au]
+    notes: DX +2, IQ +1, HT +1 (Per and Will follow IQ).
+    design: >-
+      Framework Fire Warrior line: ST 10, DX 12, IQ 11, HT 11, HP 10, Per 11, Will 11,
+      Move 5. Increased DX +2 (B15, 20/level) = 40, Increased IQ +1 (B15, 20/level) =
+      20, Increased HT +1 (B15, 10/level) = 10: 70 points. Per and Will track IQ 11 with
+      no separate bonus; Basic Speed (12+11)/4 = 5.75, Move 5 with no Basic Move purchase;
+      HP 10 = ST 10.
+- name: Fire Warrior Training
+  container: meta_trait
+  tags: [Advantage, Physical, Xenos, T'au]
+  lore: >-
+    Fire Warrior training is shooting, drill and fire-team discipline, and very little
+    else. T'au doctrine avoids close combat, so the training buys nothing in melee: that
+    gap is in the skill list, not a disadvantage. Codex: T'au Empire background.
+  design: Fit 5 + Fire Team Drill 1 = 6 points.
+  children:
+  - *fit
+  - name: Fire Team Drill
+    points: 1
+    ref: B100
+    tags: [Perk, Xenos, T'au]
+    conditional:
+    - situation: >-
+        to hit with a ranged attack when two or more fire-team mates are firing at the
+        same target
+      amount: 1
+    notes: >-
+      +1 to hit with a ranged attack when two or more fire-team mates are firing at the
+      same target.
+    lore: Fire Warriors are drilled to volley fire and to focus on a single mark.
+    design: >-
+      Perk (B100), 1 point: a narrow, conditional +1, in the same spirit as the Basic
+      Set's skill perks.
+- name: Veteran Lens (Shas'ui)
+  container: meta_trait
+  tags: [Advantage, Physical, Xenos, T'au]
+  lore: >-
+    A Shas'ui is a Fire Warrior who has survived enough battles to lead a fire team: physically
+    no different in kind, but tougher, sharper and trusted. Many go on to pilot battlesuits.
+    Codex: T'au Empire background.
+  design: Attribute Modifiers (Veteran) 50 points; Military Rank comes separately.
+  children:
+  - name: Attribute Modifiers (Veteran)
+    points: 50
+    attributes: {st: 1, dx: 1, ht: 1, per: 1, will: 1}
+    tags: [Physical, Xenos, T'au]
+    notes: ST +1, DX +1, HT +1, Per +1, Will +1.
+    design: >-
+      Over the Fire Caste Lens: ST 11, DX 13, IQ 11, HT 12, HP 11, Per 12, Will 12, Move
+      6. ST +1 (10), DX +1 (20), HT +1 (10), Per +1 (5), Will +1 (5) = 50. Basic Speed
+      (13+12)/4 = 6.25, Move 6, HP 11 = ST 11.
+- name: Pathfinder Training
+  container: meta_trait
+  tags: [Advantage, Physical, Xenos, T'au]
+  lore: >-
+    Pathfinders are the Fire caste's scouts and forward observers: volunteers from the
+    ranks who trade the line for an ahead-of-the-army life of stealth, long-range shooting
+    and marking targets with markerlights for the guns behind them. Codex: T'au Empire
+    background.
+  design: Attribute Modifiers (Pathfinder) 30 + Steady Designator 1 = 31 points.
+  children:
+  - name: Attribute Modifiers (Pathfinder)
+    points: 30
+    attributes: {dx: 1, per: 2}
+    tags: [Physical, Xenos, T'au]
+    notes: DX +1, Per +2.
+    design: >-
+      Over the Fire Caste Lens: ST 10, DX 13, IQ 11, HT 11, HP 10, Per 13, Will 11, Move
+      6. DX +1 (20), Per +2 (10) = 30. Basic Speed (13+11)/4 = 6.0, Move 6.
+  - name: Steady Designator
+    points: 1
+    ref: B100
+    tags: [Perk, Xenos, T'au]
+    conditional:
+    - {situation: to Beam Weapons (Rifle) rolls made to paint a target with a markerlight,
+      amount: 1}
+    notes: +1 to Beam Weapons (Rifle) rolls made with a markerlight.
+    lore: >-
+      A Pathfinder's whole craft is holding a beam on a target long enough for the guns
+      behind to lock.
+    design: 'Perk (B100), 1 point: a narrow +1 limited to the designator.'
+- name: Battlesuit Pilot Training
+  container: meta_trait
+  tags: [Advantage, Physical, Xenos, T'au]
+  lore: >-
+    A Shas'vre is a veteran Fire Warrior who has been selected to wear a battlesuit: years
+    of neural interface drill and marked physical and mental discipline. The stat line
+    is the pilot's; the suit is equipment. Codex: T'au Empire background.
+  design: >-
+    Attribute Modifiers (Battlesuit Pilot) 85 + Suit Familiarity 1 = 86 points.
+  children:
+  - name: Attribute Modifiers (Battlesuit Pilot)
+    points: 85
+    attributes: {st: 1, dx: 2, iq: 1, ht: 1, will: 1}
+    tags: [Physical, Xenos, T'au]
+    notes: ST +1, DX +2, IQ +1, HT +1, Will +1.
+    design: >-
+      Over the Fire Caste Lens: ST 11, DX 14, IQ 12, HT 12, HP 11, Per 12, Will 13. ST
+      +1 (10), DX +2 (40), IQ +1 (20), HT +1 (10), Will +1 (5) = 85. Basic Speed (14+12)/4
+      = 6.5, Move 6. Framework.md lists Move 5 for this line, which is not reachable honestly:
+      a higher DX than the Shas'ui with the same HT cannot have lower Move without a paid
+      Decreased Basic Move, and none is warranted. Move 6 it is.
+  - name: Suit Familiarity
+    points: 1
+    ref: B100
+    tags: [Perk, Xenos, T'au]
+    notes: >-
+      No unfamiliarity penalty between T'au battlesuit patterns (Crisis, Stealth, Broadside).
+    lore: >-
+      T'au suits share a pilot interface; a veteran moves between patterns easily.
+    design: Perk (B100), 1 point.
+- name: Commander Lens (Shas'o)
+  container: meta_trait
+  tags: [Advantage, Mental, Xenos, T'au]
+  notes: >-
+    Kauyon and Mont'ka are the two T'au doctrines a Commander plans a campaign around.
+    Both are house adaptations of the Codex's army rules to a personal scale: each perk
+    is a plan the Commander must actually set up (a Tactics roll before the fight), and
+    the bonus applies to allied ranged attacks in the Commander's network only at the
+    times described.
+  lore: >-
+    A Shas'o is a Fire caste commander of decades' standing: a master of Kauyon, the Patient
+    Hunter (lure, wait, and strike when the enemy has committed), and Mont'ka, the Killing
+    Blow (strike fast and hard at a chosen moment). Codex: T'au Empire background for
+    both doctrines.
+  design: >-
+    Attribute Modifiers (Commander) 145 + Kauyon 1 + Mont'ka 1 = 147 points; Military
+    Rank 5 (25) is added separately in the template. Kauyon and Mont'ka are Perks (B100),
+    not skills or techniques: a technique would cost more than the effect is worth, and
+    Tactics already covers planning. The bonuses are conditional so they do not show as
+    a stat.
+  children:
+  - name: Attribute Modifiers (Commander)
+    points: 145
+    attributes: {st: 1, dx: 3, iq: 3, ht: 1, will: 1}
+    tags: [Physical, Xenos, T'au]
+    notes: ST +1, DX +3, IQ +3, HT +1, Will +1.
+    design: >-
+      Over the Fire Caste Lens: ST 11, DX 15, IQ 14, HT 12, HP 11, Per 14, Will 15, Move
+      6. ST +1 (10), DX +3 (60), IQ +3 (60), HT +1 (10), Will +1 (5) = 145. Basic Speed
+      (15+12)/4 = 6.75, Move 6, Per 14 = IQ 14.
+  - name: Kauyon (The Patient Hunter)
+    points: 1
+    ref: B100
+    tags: [Perk, Xenos, T'au]
+    conditional:
+    - {situation: 'to Tactics rolls to plan a lure, ambush or defence in depth', amount: 2}
+    notes: >-
+      +2 to Tactics to plan a Kauyon lure or ambush. On a success by 3+, T'au and auxiliary
+      ranged attacks in the Commander's network get +1 to hit once the enemy has committed
+      to the trap (GM's call, roughly the fourth turn on).
+    lore: >-
+      The Patient Hunter: hold back, bait the enemy in, and close the trap when it has
+      committed.
+    design: >-
+      Perk (B100), 1 point: a narrow planning bonus. Chosen per engagement, not both.
+  - name: Mont'ka (The Killing Blow)
+    points: 1
+    ref: B100
+    tags: [Perk, Xenos, T'au]
+    conditional:
+    - {situation: to Tactics rolls to plan a sudden strike at a chosen weak point, amount: 2}
+    notes: >-
+      +2 to Tactics to plan a Mont'ka strike. On a success by 3+, T'au and auxiliary ranged
+      attacks in the Commander's network get +1 to hit during the assault's first three
+      turns.
+    lore: 'The Killing Blow: strike fast and hard while the enemy is unprepared.'
+    design: Perk (B100), 1 point. Chosen per engagement, not both.
+- name: Ethereal Caste Lens
+  container: meta_trait
+  tags: [Advantage, Mental, Xenos, T'au]
+  lore: >-
+    The Ethereals are the Empire's rulers: physically frail, mentally formidable, and
+    treated by the other castes with something between reverence and worship. They seldom
+    fight; their weapon is presence. Aun is the caste's name for itself (Aun'va was the
+    Supreme Ruler). Codex: T'au Empire background.
+  design: >-
+    Attribute Modifiers (Ethereal) 85 + Status 5 (25) + Inspiring Presence 31 = 141 points.
+    Status 5 because Ethereals sit at the top of a society ruled by them, as a monarch
+    or a high priest would; a lower Status would understate how thoroughly the other castes
+    defer.
+  children:
+  - name: Attribute Modifiers (Ethereal)
+    points: 85
+    attributes: {st: -1, dx: 1, iq: 3, per: -1, will: 4}
+    tags: [Physical, Xenos, T'au]
+    notes: ST -1, DX +1, IQ +3, Per -1, Will +4.
+    design: >-
+      Framework Aun line: ST 9, DX 11, IQ 13, HT 10, HP 9, Per 12, Will 17, Move 5. ST
+      -1 (-10), DX +1 (20), IQ +3 (60), Per -1 (-5, so Per 12 with IQ 13), Will +4 (20,
+      so Will 17 with IQ 13) = 85. Basic Speed (11+10)/4 = 5.25, Move 5, HP 9 = ST 9.
+  - name: Status (Ethereal Caste)
+    per_level: 5
+    levels: 5
+    ref: B28
+    tags: [Advantage, Social, Xenos, T'au]
+    notes: 'Status 5: rulers and near-sacred figures to most T''au.'
+    lore: The Ethereals govern the Empire; the other castes serve.
+    design: Status (B28, 5/level), 5 levels = 25 points.
+  - *inspiring_presence
+- name: Earth Caste Lens
+  container: meta_trait
+  tags: [Advantage, Physical, Xenos, T'au]
+  lore: >-
+    Earth caste are the Empire's engineers, builders and technologists: shorter, broader
+    and stockier than the other castes, patient and practical. Their work built the Empire's
+    drones, suits and vehicles. Codex: T'au Empire background.
+  design: Attribute Modifiers (Earth Caste) 95 + Fit 5 = 100 points.
+  children:
+  - name: Attribute Modifiers (Earth Caste)
+    points: 95
+    attributes: {st: 1, dx: 1, iq: 3, ht: 2, per: -1, will: -2}
+    tags: [Physical, Xenos, T'au]
+    notes: ST +1, DX +1, IQ +3, HT +2, Per -1, Will -2.
+    design: >-
+      Framework Fio line: ST 11, DX 11, IQ 13, HT 12, HP 11, Per 12, Will 11, Move 5.
+      ST +1 (10), DX +1 (20), IQ +3 (60), HT +2 (20), Per -1 (-5), Will -2 (-10) = 95.
+      Basic Speed (11+12)/4 = 5.75, Move 5, HP 11 = ST 11.
+  - *fit
+- name: Water Caste Lens
+  container: meta_trait
+  tags: [Advantage, Social, Xenos, T'au]
+  lore: >-
+    Water caste are the Empire's diplomats, merchants and administrators: the caste that
+    carries the Greater Good to other worlds and other species. They are lightly built,
+    persuasive and practised at reading and adapting to strangers. Codex: T'au Empire
+    background.
+  design: >-
+    Attribute Modifiers (Water Caste) 45 + Cultural Adaptability 10 + Language Talent
+    10 = 65 points. 'Tongue as weapon' is these two traits and the Diplomacy-heavy skill
+    list, not a Charisma purchase.
+  children:
+  - name: Attribute Modifiers (Water Caste)
+    points: 45
+    attributes: {st: -1, iq: 3, per: -1}
+    tags: [Physical, Xenos, T'au]
+    notes: ST -1, IQ +3, Per -1.
+    design: >-
+      Framework Por line: ST 9, DX 10, IQ 13, HT 10, HP 9, Per 12, Will 13, Move 5. ST
+      -1 (-10), IQ +3 (60), Per -1 (-5) = 45. Will 13 = IQ 13 with no separate bonus.
+      Basic Speed (10+10)/4 = 5.0, Move 5, HP 9 = ST 9.
+  - name: Cultural Adaptability
+    points: 10
+    ref: B46
+    tags: [Advantage, Social, Xenos, T'au]
+    notes: No unfamiliarity penalty in any culture; the Water caste's trade.
+    lore: Water caste envoys are trained to be at home wherever they are sent.
+    design: Cultural Adaptability (B46), 10 points.
+  - name: Language Talent
+    points: 10
+    ref: B65
+    tags: [Advantage, Mental, Xenos, T'au]
+    notes: +2 to learning and using languages (B65).
+    lore: T'au diplomacy runs on speaking the other side's tongue.
+    design: Language Talent (B65), 10 points.
+- name: Air Caste Lens
+  container: meta_trait
+  tags: [Advantage, Physical, Xenos, T'au]
+  lore: >-
+    Air caste are the Empire's pilots, navigators and couriers: tall, slender and light-boned,
+    adapted to life aloft and in low gravity, and at ease in a cockpit or free fall in
+    a way other castes are not. They bear high gravity badly. Codex: T'au Empire background.
+  design: >-
+    Attribute Modifiers (Air Caste) 75 + Skinny -5 + G-Experience 2 - G-Intolerance 10
+    = 62 points. Hollow bones are built as Skinny plus ST 8 / HP 8; the Basic Set has
+    no 'hollow bones' trait and Fragile (Brittle) at -15 would be too harsh for a species
+    that does not shatter. G-Intolerance uses B137's 0.1G-increment tier; the drafter
+    could not reproduce the exact B137 text from memory, so the GM should apply B137's
+    own rule for the penalty size.
+  children:
+  - name: Attribute Modifiers (Air Caste)
+    points: 75
+    attributes: {st: -2, dx: 3, iq: 2, will: -1}
+    tags: [Physical, Xenos, T'au]
+    notes: ST -2, DX +3, IQ +2, Will -1.
+    design: >-
+      Framework Kor line: ST 8, DX 13, IQ 12, HT 10, HP 8, Per 12, Will 11, Move 5. ST
+      -2 (-20), DX +3 (60), IQ +2 (40), Will -1 (-5) = 75. Basic Speed (13+10)/4 = 5.75,
+      Move 5, HP 8 = ST 8.
+  - name: Skinny (Slender Frame)
+    points: -5
+    ref: B18
+    tags: [Disadvantage, Physical, Xenos, T'au]
+    notes: >-
+      Tall, light-boned and narrow: -2 to Disguise and Shadowing, -2 ST against knockback
+      (B18).
+    lore: Air caste are noticeably tall and slight.
+    design: Skinny (B18), -5 points.
+  - name: G-Experience (Zero-G and Low Gravity)
+    per_level: 1
+    levels: 2
+    ref: B57
+    tags: [Advantage, Physical, Xenos, T'au]
+    notes: No skill penalties in zero gravity or in low gravity.
+    lore: Air caste train and live in low-gravity habitats and free fall.
+    design: >-
+      G-Experience (B57), 1 point per gravity band, 2 bands (zero-G, low-G) = 2 points.
+  - name: G-Intolerance (High Gravity)
+    points: -10
+    ref: B137
+    tags: [Disadvantage, Physical, Xenos, T'au]
+    notes: >-
+      Suffers in gravity above Earth-normal; apply B137's rules for the penalty size.
+    lore: Air caste bodies are poorly suited to high gravity and heavy loads.
+    design: G-Intolerance (0.1G increment) (B137), -10 points.
+- name: Kroot Physiology
+  container: ancestry
+  tags: [Advantage, Physical, Xenos, T'au, Kroot]
+  lore: >-
+    The Kroot are lean, avian-looking carnivores: hunched, long-limbed, beaked and quilled.
+    They fight for the Empire as mercenaries, live in nomadic kindreds led by Shapers,
+    and are best known for genetic absorption: by eating what they kill they slowly take
+    on its traits over generations. Codex: T'au Empire background, Kroot Mercenaries.
+  design: >-
+    Attribute Modifiers (Kroot) 105 + Sharp Beak 1 + Acute Taste & Smell 2 (4) + Born
+    Climber 1 + Born Tracker 1 + Genetic Absorption 0 = 112 points, giving framework.md's
+    Kroot Carnivore line before training. Not priced: Low TL (Kroot culture is primitive
+    but Kroot use T'au and their own guns competently; the drafter is not confident enough
+    to charge -5), Carnivore diet (no ancestry trait; handled in the Kindred trait as
+    a habit).
+  children:
+  - name: Attribute Modifiers (Kroot)
+    points: 105
+    attributes: {st: 2, dx: 3, iq: -1, ht: 1, per: 4, will: 1, basic_move: 2}
+    tags: [Physical, Xenos, T'au, Kroot]
+    notes: ST +2, DX +3, IQ -1, HT +1, Per +4, Will +1, Basic Move +2.
+    design: >-
+      Framework Kroot Carnivore line: ST 12, DX 13, IQ 9, HT 11, HP 12, Per 13, Will 10,
+      Move 8. ST +2 (20), DX +3 (60), IQ -1 (-20), HT +1 (10), Per +4 (20, so Per 13 with
+      IQ 9), Will +1 (5), Basic Move +2 (B17, 5/level = 10) = 105. Basic Speed (13+11)/4
+      = 6.0, Move 6 + 2 = 8, HP 12 = ST 12.
+  - name: Sharp Beak (Kroot)
+    points: 1
+    ref: B91
+    tags: [Advantage, Physical, Xenos, T'au, Kroot]
+    weapons:
+    - {usage: Peck, damage: thr-1 pi+, reach: C, skill: Brawling}
+    notes: 'Peck: thr-1 piercing+ (B91).'
+    lore: Kroot have a hard, hooked beak that tears meat.
+    design: >-
+      Sharp Beak (B91), 1 point. The framework calls this 'Sharp Teeth'; a beak is its
+      Basic Set equivalent.
+  - name: Acute Taste & Smell (Kroot)
+    per_level: 2
+    levels: 2
+    ref: B35
+    tags: [Advantage, Physical, Xenos, T'au, Kroot]
+    notes: +2 to Taste/Smell rolls, including tracking by scent.
+    lore: Kroot are hunters that follow scent trails and judge meat by taste.
+    design: Acute Taste & Smell 2 (B35, 2/level) = 4 points.
+  - name: Born Climber
+    points: 1
+    ref: B100
+    tags: [Perk, Xenos, T'au, Kroot]
+    skill_bonuses: {Climbing: 1}
+    notes: +1 to Climbing.
+    lore: Kroot are agile climbers and ambushers.
+    design: Perk (B100), +1 to Climbing, 1 point.
+  - name: Born Tracker
+    points: 1
+    ref: B100
+    tags: [Perk, Xenos, T'au, Kroot]
+    skill_bonuses: {Tracking: 1}
+    notes: +1 to Tracking.
+    lore: Kroot are famed as trackers and scouts.
+    design: Perk (B100), +1 to Tracking, 1 point.
+  - name: Genetic Absorption
+    points: 0
+    tags: [Feature, Xenos, T'au, Kroot]
+    notes: >-
+      No per-meal stat change. Over a campaign a kindred that has eaten a strong enemy's
+      flesh may gain a small trait (GM's call and story-driven); Shapers guide which.
+    lore: >-
+      Kroot absorb genetic traits from the flesh they eat: over generations a kindred
+      takes on the strengths of what it kills. Codex: T'au Empire background.
+    design: >-
+      A 0-point feature at the kindred level, per framework.md's direction: not a mechanical
+      per-meal effect but a story lever.
+- name: Kroot Kindred
+  container: meta_trait
+  tags: [Disadvantage, Mental, Xenos, T'au, Kroot]
+  lore: >-
+    Kroot live and fight in kindreds: extended clans that move as a body, led by a Shaper,
+    who hire out to the T'au for payment and the chance to eat the strong. Kroot eating
+    habits, including eating the slain, are the most commented-on thing about them. Codex:
+    T'au Empire background.
+  design: Sense of Duty (Kindred) -5 + Odious Personal Habit -5 = -10 points.
+  children:
+  - name: Sense of Duty (Kindred)
+    ref: B153
+    tags: [Disadvantage, Mental, Xenos, T'au, Kroot]
+    modifiers:
+    - {name: Small Group (the kindred), cost: '-5', ref: B153}
+    notes: >-
+      Will not leave kin behind or betray the kindred; self-control roll to put self first.
+    lore: A Kroot's loyalty is to the kindred first.
+    design: Sense of Duty (B153), Small Group -5.
+  - name: Odious Personal Habit (Eats the Slain)
+    per_level: -5
+    levels: 1
+    ref: B22
+    tags: [Disadvantage, Social, Xenos, T'au, Kroot]
+    notes: >-
+      -1 reaction from those who find it disgusting (most non-Kroot, including many T'au).
+    lore: Kroot eat their kills, including the dead of other species.
+    design: Odious Personal Habit 1 level (B22, -5/level) = -5 points.
+- name: Kroot Shaper Lens
+  container: meta_trait
+  tags: [Advantage, Mental, Xenos, T'au, Kroot]
+  lore: >-
+    A Shaper is a Kroot kindred's leader and priest of its evolution: it decides what
+    the kindred eats, and so what it will become. Shapers are larger and sharper than
+    their kin. Codex: T'au Empire background.
+  design: Attribute Modifiers (Kroot Shaper) 50 + Status 1 (5) = 55 points.
+  children:
+  - name: Attribute Modifiers (Kroot Shaper)
+    points: 50
+    attributes: {st: 1, iq: 2, ht: 1, per: -2}
+    tags: [Physical, Xenos, T'au, Kroot]
+    notes: ST +1, IQ +2, HT +1, Per -2 (net of the Kroot Physiology bonus).
+    design: >-
+      Over Kroot Physiology: ST 13, DX 13, IQ 11, HT 12, HP 13, Per 13, Will 12, Move
+      8. ST +1 (10), IQ +2 (40), HT +1 (10), Per -2 (-10, cancelling the rise from IQ
+      so Per stays 13) = 50. Basic Speed (13+12)/4 = 6.25, Move 6 + 2 = 8, HP 13 = ST
+      13.
+  - name: Status (Kroot Shaper)
+    per_level: 5
+    levels: 1
+    ref: B28
+    tags: [Advantage, Social, Xenos, T'au, Kroot]
+    notes: Status 1 among the kindred; Shapers' word decides.
+    lore: A Shaper leads the kindred and speaks for it.
+    design: Status (B28, 5/level), 1 level = 5 points.
+- name: Vespid Physiology
+  container: ancestry
+  tags: [Advantage, Physical, Xenos, T'au, Vespid]
+  lore: >-
+    The Vespid are winged, insectoid mercenaries from a distant world whom the T'au hire
+    for their flight and firepower. They are led by Strain Leaders, and their Stingwings
+    fire neutron blasters powered by crystals from their homeworld, reportedly hard for
+    others to use. Codex: T'au Empire background, Vespid Stingwings.
+  design: >-
+    Attribute Modifiers (Vespid) 70 + Flight (Winged) 30 + Enhanced Move (Air) 1/2 10
+    = 110 points, framework.md's Vespid Stingwing line before training. Not priced, for
+    lack of lore confidence: chitin armour (a Vespid may well have natural DR; Damage
+    Resistance is 5/level and adding a guess would push the template past its 150-220
+    target), compound-eye vision (Peripheral Vision), and language limits. The crystal
+    link to the neutron blaster is equipment, not a trait.
+  children:
+  - name: Attribute Modifiers (Vespid)
+    points: 70
+    attributes: {st: 1, dx: 3, iq: -2, ht: 1, per: 4, will: 2}
+    tags: [Physical, Xenos, T'au, Vespid]
+    notes: ST +1, DX +3, IQ -2, HT +1, Per +4, Will +2.
+    design: >-
+      Framework Vespid line: ST 11, DX 13, IQ 8, HT 11, HP 11, Per 12, Will 10, Move 6.
+      ST +1 (10), DX +3 (60), IQ -2 (-40), HT +1 (10), Per +4 (20, so Per 12 with IQ 8),
+      Will +2 (10) = 70. Basic Speed (13+11)/4 = 6.0, Move 6, HP 11 = ST 11.
+  - name: Flight (Vespid Wings)
+    points: 40
+    ref: B56
+    tags: [Advantage, Physical, Xenos, T'au, Vespid]
+    modifiers:
+    - {name: Winged, cost: -25%, ref: B56, notes: Needs room to spread the wings; a wing
+        hit can ground them.}
+    notes: Air Move is Basic Speed x 2, 12 for a Stingwing.
+    lore: Vespid fly on real wings.
+    design: 'Flight (B56, 40 points) with Winged -25%: 40 x 0.75 = 30 points.'
+  - name: Enhanced Move (Air) (Vespid)
+    per_level: 20
+    levels: 0.5
+    ref: B52
+    tags: [Advantage, Physical, Xenos, T'au, Vespid]
+    notes: 'Top speed in flight x1.5: 18 for a Stingwing.'
+    lore: Vespid dive and strafe at speed.
+    design: >-
+      Enhanced Move (Air) 1/2 (B52, 20/level = 10 points). Air Move 12, top speed 18,
+      meeting framework.md's 'Air 16+'.
+- name: Vespid Strain
+  container: meta_trait
+  tags: [Disadvantage, Mental, Xenos, T'au, Vespid]
+  lore: >-
+    Vespid fight in strains under a Strain Leader and answer to it before any employer.
+    Codex: T'au Empire background.
+  design: Sense of Duty (Strain) -5 points.
+  children:
+  - name: Sense of Duty (Strain)
+    ref: B153
+    tags: [Disadvantage, Mental, Xenos, T'au, Vespid]
+    modifiers:
+    - {name: Small Group (the strain), cost: '-5', ref: B153}
+    notes: >-
+      Will not desert or endanger the strain; self-control roll to put self first.
+    lore: A Vespid's first loyalty is to its strain and Strain Leader.
+    design: Sense of Duty (B153), Small Group -5.
+- name: Drone Chassis
+  container: ancestry
+  tags: [Advantage, Physical, Xenos, T'au, Drone]
+  notes: >-
+    Small hovering machine with a simple, obedient AI, built and tended by the Earth caste
+    and controlled by a Shas'ui or battlesuit pilot. No hands, no legs, no sleep, no fear,
+    no initiative. Ground Move does not apply: use Air Move. A drone's armour is its casing
+    (Drone Casing).
+  lore: >-
+    T'au drones are small anti-gravity machines with simple learning intelligence: gun,
+    marker, shield and recon drones, and more. They are not persons: they follow orders,
+    learn slowly, and have no will of their own, and the T'au treat them as tools and
+    comrades in equal measure. Background across Codex: T'au Empire editions (the drone
+    AI is described as non-sentient).
+  design: >-
+    Attribute Modifiers -62 + Machine Body 25 + Flight (Grav) 40 + No Legs (Aerial) 0
+    + No Manipulators -50 + Machine Mind -90 = -137 points, following the Combat Servitor
+    precedent for construct NPCs (negative subtotals are expected; see the Servitor template).
+    Built from the Basic Set's own Machine (B263) and Automaton (B263) meta-traits, with
+    Slave Mentality and Reprogrammable for the T'au's obedient, controller-driven AI.
+  children:
+  - name: Attribute Modifiers (Drone)
+    points: -62
+    attributes: {sm: -2, st: -2, iq: -4, per: 4, will: 2}
+    tags: [Physical, Xenos, T'au, Drone]
+    notes: SM -2, ST -2, IQ -4, Per +4, Will +2.
+    design: >-
+      Gun drone line (drafter's, no framework figure): ST 8, DX 10, IQ 6, HT 10, HP 8,
+      Per 10, Will 8. SM -2 (a drone about a yard across, carries no point cost, as for
+      Gretchin and Termagants), ST -2 (10/level, with the 40% discount No Manipulators
+      grants to ST and DX (B145): -20 x 0.6 = -12), IQ -4 (-80), Per +4 over IQ (20, sensors),
+      Will +2 over IQ (10) = -62. DX and HT stay 10; HP 8 = ST 8.
+  - name: Machine Body
+    container: meta_trait
+    tags: [Advantage, Physical, Xenos, T'au, Drone]
+    notes: >-
+      No blood, unliving wound modifiers, immune to metabolic hazards (disease, poison,
+      suffocation), no FP, cannot heal on its own; repaired by Mechanic or Armoury rolls.
+      Power cell gives about eight hours of operation.
+    lore: A drone is a machine, not an animal.
+    design: >-
+      Machine (B263) built as its three costed parts: Injury Tolerance 25, Resistant 30,
+      Unhealing -30 = 25.
+    children:
+    - name: Injury Tolerance (No Blood, Unliving)
+      ref: B60
+      tags: [Advantage, Physical, Xenos, T'au, Drone]
+      modifiers:
+      - {name: No Blood, cost: '5', ref: B61}
+      - {name: Unliving, cost: '20', ref: B61}
+      notes: >-
+        No blood; wound modifiers as unliving (impaling and pi++ x1, pi+ x1/2, pi x1/3,
+        pi- x1/5).
+      lore: A machine does not bleed or suffer shock.
+      design: Injury Tolerance (B60), No Blood 5 + Unliving 20 = 25 points.
+    - name: Resistant to Metabolic Hazards (Machine)
+      ref: B81
+      tags: [Advantage, Physical, Xenos, T'au, Drone]
+      modifiers:
+      - {name: Metabolic Hazards, cost: '30', ref: B80}
+      - {name: Immunity, cost: x1, ref: B81}
+      notes: Immune to disease, poison, suffocation and other metabolic hazards.
+      lore: Nothing here has a metabolism.
+      design: >-
+        Resistant (B81), Metabolic Hazards 30, Immunity x1 = 30 points, same as the Basic
+        Set Machine.
+    - name: Unhealing (Total)
+      points: -30
+      ref: B160
+      tags: [Disadvantage, Physical, Xenos, T'au, Drone]
+      notes: Never heals on its own; repair is a Mechanic or Armoury job.
+      lore: Drones are fixed by Earth caste, not by rest.
+      design: Unhealing (Total) (B160), -30 points.
+  - name: Flight (Grav Repulsors)
+    points: 40
+    ref: B56
+    tags: [Advantage, Physical, Xenos, T'au, Drone]
+    notes: >-
+      Air Move is Basic Speed x 2: 10 for a gun drone. Hovers; superscience (^) grav repulsors.
+    lore: >-
+      T'au drones hover on grav repulsors; the framework marks grav systems as the T'au's
+      one superscience exception.
+    design: >-
+      Flight (B56), 40 points, no Winged limitation (grav, not wings). Marked ^ by the
+      framework rule for T'au grav technology.
+  - name: No Legs (Aerial)
+    points: 0
+    ref: B145
+    tags: [Feature, Xenos, T'au, Drone]
+    notes: No legs; it flies. Ground Move does not apply.
+    lore: A drone is a hovering shell.
+    design: No Legs (Aerial) (B145), 0 points.
+  - name: No Manipulators
+    points: -50
+    ref: B145
+    tags: [Disadvantage, Physical, Xenos, T'au, Drone]
+    notes: >-
+      Cannot manipulate objects; guns are built in. ST and DX cost 40% less (B145).
+    lore: A gun drone has weapons but no hands.
+    design: >-
+      No Manipulators (B145), -50 points; the ST cost reduction is applied in Attribute
+      Modifiers (Drone).
+  - name: Machine Mind (Drone AI)
+    container: meta_trait
+    tags: [Disadvantage, Mental, Xenos, T'au, Drone]
+    notes: >-
+      Takes orders, does nothing on its own initiative, cannot improvise, feels nothing.
+      Follows its controller (a Shas'ui or pilot, or the fire team's network); another
+      controller can be slotted in.
+    lore: >-
+      Drones are simple learning AIs: obedient, unimaginative, and without emotions the
+      T'au recognise as their own. Codex: T'au Empire background.
+    design: >-
+      Slave Mentality -40 + Hidebound -5 + Incurious -5 + Low Empathy -20 + No Sense of
+      Humor -10 + Reprogrammable -10 = -90. Slave Mentality replaces the Automaton's Heteronomy
+      (same cost, B154); Incurious is priced at the library's -5 base rather than -10.
+    children:
+    - name: Slave Mentality
+      points: -40
+      ref: B154
+      tags: [Disadvantage, Mental, Xenos, T'au, Drone]
+      notes: Cannot act without orders; obeys its controller.
+      lore: Drones do what they are told.
+      design: Slave Mentality (B154), -40 points.
+    - name: Hidebound
+      points: -5
+      ref: B138
+      tags: [Disadvantage, Mental, Xenos, T'au, Drone]
+      notes: -2 on any task needing creativity.
+      lore: Drones follow their programming.
+      design: Hidebound (B138), -5.
+    - name: Incurious
+      points: -5
+      ref: B140
+      tags: [Disadvantage, Mental, Xenos, T'au, Drone]
+      notes: Ignores the strange unless ordered otherwise.
+      lore: Drones have no curiosity.
+      design: Incurious (B140), -5.
+    - name: Low Empathy
+      points: -20
+      ref: B142
+      tags: [Disadvantage, Mental, Xenos, T'au, Drone]
+      notes: Cannot read or care about others' feelings.
+      lore: Drones do not understand emotion.
+      design: Low Empathy (B142), -20.
+    - name: No Sense of Humor
+      points: -10
+      ref: B146
+      tags: [Disadvantage, Mental, Xenos, T'au, Drone]
+      notes: Does not get jokes.
+      lore: Drones have no humour.
+      design: No Sense of Humor (B146), -10.
+    - name: Reprogrammable
+      points: -10
+      ref: B150
+      tags: [Disadvantage, Mental, Xenos, T'au, Drone]
+      notes: Another controller or a hostile hacker can rewrite its orders.
+      lore: Drone control networks can be re-slaved.
+      design: Reprogrammable (B150), -10.
+- name: Drone Casing (Light)
+  per_level: 5
+  levels: 30
+  ref: B46
+  dr: {all: 30}
+  tags: [Advantage, Physical, Xenos, T'au, Drone]
+  notes: >-
+    DR 30 all round, flak-class. Sensor eyes are not armoured separately (treat as DR
+    15).
+  lore: >-
+    A gun drone's casing is light composite: tougher than a Fire Warrior's flesh, less
+    than his armour. Background: the drone is meant to be expendable.
+  design: >-
+    Damage Resistance (B46-47, 5/level), 30 levels = 150 points. DR 30 matches the framework's
+    flak anchor; the drone is designed to be cheap, so it is not carapace. Other drone
+    types override the levels.

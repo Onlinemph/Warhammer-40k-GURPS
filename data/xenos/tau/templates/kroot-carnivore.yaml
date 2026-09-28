@@ -1,0 +1,139 @@
+kind: template
+output: Xenos/Tau/Templates/Kroot Carnivore.gct
+notes: >-
+  A Kroot Carnivore: a lean, beaked, quilled mercenary who tracks and ambushes for the
+  T'au, armed with a Kroot rifle whose stock ends in a blade. Point math (see Xenos/Tau/Traits/T'au
+  Traits.adq): Kroot Physiology (112) + Kroot Kindred (-10) = 102 points of traits, plus
+  skills (57 points) = 159 points. Stats: ST 12, DX 13, IQ 9, HT 11, HP 12, Will 10, Per
+  13, Speed 6.0, Move 8, Dodge 9. Tier: trained soldier (100-175).
+
+
+  Weapon skills as framework.md's Skills table and the Kroot rifle entry: Guns (Rifle)
+  for the rifle, Staff for the blade-fitted stock. The Kroot's culture is not priced (no
+  Low TL): the Kroot use T'au technology and their own long guns competently, and the
+  drafter is not confident enough of a technology penalty. No T'au traits (no Greater
+  Good, no Warp-Faint): the Kroot are not T'au, and there is no evidence they share the
+  T'au's thin warp presence.
+traits:
+- {include: xenos/tau/traits.yaml#Kroot Physiology}
+- {include: xenos/tau/traits.yaml#Kroot Kindred}
+skills:
+- name: Guns
+  spec: Rifle
+  diff: DX/E
+  points: 12
+  tags: [Xenos, T'au, Kroot]
+  ref: B198
+  defaults: [DX-4, Guns (Grenade Launcher)-4, Guns (Gyroc)-4, Guns (Light Anti-Armor Weapon)-4,
+    Guns (Light Machine Gun)-2, Guns (Musket)-2, Guns (Pistol)-2, Beam Weapons (Rifle)-4,
+    Guns (Shotgun)-2, Guns (Submachine Gun)-2]
+  lore: >-
+    The Kroot rifle: a T'au-made charged slug in a Kroot-built long gun; a solid projectile,
+    so Guns (Rifle).
+  design: DX+4 (17) for 12 points, Easy.
+- name: Staff
+  diff: DX/A
+  points: 8
+  tags: [Xenos, T'au, Kroot]
+  ref: B208
+  defaults: [DX-5, Polearm-4, Spear-2]
+  lore: >-
+    The rifle's blade-fitted stock is swung like a staff: Staff (DX/A, defaults to Polearm
+    and Spear).
+  design: DX+2 (15) for 8 points, Average.
+- name: Brawling
+  diff: DX/E
+  points: 2
+  tags: [Xenos, T'au, Kroot]
+  ref: B182
+  lore: Beak and fist.
+  design: DX+1 (14) for 2 points, Easy.
+- name: Stealth
+  diff: DX/A
+  points: 4
+  tags: [Xenos, T'au, Kroot]
+  ref: B222
+  defaults: [IQ-5, DX-5]
+  lore: Ambush and infiltration.
+  design: DX+1 (14) for 4 points, Average.
+- name: Tracking
+  diff: Per/A
+  points: 8
+  tags: [Xenos, T'au, Kroot]
+  ref: B226
+  defaults: [Per-5, Naturalist-5]
+  lore: The Kroot's signature skill.
+  design: Per+2 (15) for 8 points, Average.
+- name: Survival
+  spec: Jungle
+  diff: Per/A
+  points: 4
+  tags: [Xenos, T'au, Kroot]
+  ref: B223
+  defaults: [Per-5, Naturalist-3, Survival (Arctic)-3, Survival (Desert)-3, Survival (Mountain)-3,
+    Survival (Plains)-3, Survival (Swampland)-3, Survival (Island/Beach)-3, Survival (Woodlands)-3]
+  lore: Kroot kindreds range over many worlds; change to match.
+  design: Per+1 (14) for 4 points, Average.
+- name: Camouflage
+  diff: IQ/E
+  points: 2
+  tags: [Xenos, T'au, Kroot]
+  ref: B183
+  defaults: [IQ-4, Survival-2]
+  lore: Fieldcraft.
+  design: IQ+1 (10) for 2 points, Easy.
+- name: Climbing
+  diff: DX/A
+  points: 4
+  tags: [Xenos, T'au, Kroot]
+  ref: B183
+  defaults: [DX-5]
+  lore: Tree and cliff.
+  design: DX+1 (14) for 4 points, Average.
+- name: Observation
+  diff: Per/A
+  points: 4
+  tags: [Xenos, T'au, Kroot]
+  ref: B211
+  defaults: [Per-5, Shadowing-5]
+  lore: Watching prey.
+  design: Per+1 (14) for 4 points, Average.
+- name: Jumping
+  diff: DX/E
+  points: 1
+  tags: [Xenos, T'au, Kroot]
+  ref: B203
+  lore: Agility.
+  design: DX+0 (13) for 1 point, Easy.
+- name: Throwing
+  diff: DX/A
+  points: 2
+  tags: [Xenos, T'au, Kroot]
+  ref: B226
+  defaults: [DX-3, Dropping-4]
+  lore: Thrown weapons and rocks.
+  design: DX+0 (13) for 2 points, Average.
+- name: Running
+  diff: HT/A
+  points: 2
+  tags: [Xenos, T'au, Kroot]
+  ref: B218
+  defaults: [HT-5]
+  lore: Endurance.
+  design: HT+0 (11) for 2 points, Average.
+- name: Knife
+  diff: DX/E
+  points: 2
+  tags: [Xenos, T'au, Kroot]
+  ref: B208
+  defaults: [Force Sword-3, Main-Gauche-3, Shortsword-3, DX-4]
+  lore: Butchery blade.
+  design: DX+1 (14) for 2 points, Easy.
+- name: Hiking
+  diff: HT/A
+  points: 2
+  tags: [Xenos, T'au, Kroot]
+  ref: B200
+  defaults: [HT-5]
+  lore: Endurance.
+  design: HT+0 (11) for 2 points, Average.

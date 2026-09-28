@@ -1,0 +1,167 @@
+kind: template
+output: Xenos/Tau/Templates/Kroot Shaper.gct
+notes: >-
+  A Kroot Shaper: the leader of a kindred, who decides what it eats and so what it becomes.
+  Larger and sharper than its kin, armed like them. Point math (see Xenos/Tau/Traits/T'au
+  Traits.adq): Kroot Physiology (112) + Kroot Kindred (-10) + Kroot Shaper Lens (55) =
+  157 points of traits, plus skills (101 points) = 258 points. Stats: ST 13, DX 13, IQ
+  11, HT 12, HP 13, Will 12, Per 13, Speed 6.25, Move 8, Dodge 9. Tier: elite human (200-350).
+
+
+  Framework.md: 'Kindred leader; decides what the kindred eats.' Genetic Absorption is
+  a 0-point feature of the ancestry and the Shaper is its steward; Hidden Lore (Xenos)
+  is the mechanical proxy.
+traits:
+- {include: xenos/tau/traits.yaml#Kroot Physiology}
+- {include: xenos/tau/traits.yaml#Kroot Kindred}
+- {include: xenos/tau/traits.yaml#Kroot Shaper Lens}
+skills:
+- name: Guns
+  spec: Rifle
+  diff: DX/E
+  points: 12
+  tags: [Xenos, T'au, Kroot]
+  ref: B198
+  defaults: [DX-4, Guns (Grenade Launcher)-4, Guns (Gyroc)-4, Guns (Light Anti-Armor Weapon)-4,
+    Guns (Light Machine Gun)-2, Guns (Musket)-2, Guns (Pistol)-2, Beam Weapons (Rifle)-4,
+    Guns (Shotgun)-2, Guns (Submachine Gun)-2]
+  lore: The Kroot rifle.
+  design: DX+4 (17) for 12 points, Easy.
+- name: Staff
+  diff: DX/A
+  points: 12
+  tags: [Xenos, T'au, Kroot]
+  ref: B208
+  defaults: [DX-5, Polearm-4, Spear-2]
+  lore: The blade-fitted stock of the rifle.
+  design: DX+3 (16) for 12 points, Average.
+- name: Brawling
+  diff: DX/E
+  points: 2
+  tags: [Xenos, T'au, Kroot]
+  ref: B182
+  lore: Beak and fist.
+  design: DX+1 (14) for 2 points, Easy.
+- name: Stealth
+  diff: DX/A
+  points: 4
+  tags: [Xenos, T'au, Kroot]
+  ref: B222
+  defaults: [IQ-5, DX-5]
+  lore: Ambush and infiltration.
+  design: DX+1 (14) for 4 points, Average.
+- name: Tracking
+  diff: Per/A
+  points: 12
+  tags: [Xenos, T'au, Kroot]
+  ref: B226
+  defaults: [Per-5, Naturalist-5]
+  lore: The Kroot's signature skill.
+  design: Per+3 (16) for 12 points, Average.
+- name: Survival
+  spec: Jungle
+  diff: Per/A
+  points: 4
+  tags: [Xenos, T'au, Kroot]
+  ref: B223
+  defaults: [Per-5, Naturalist-3, Survival (Arctic)-3, Survival (Desert)-3, Survival (Mountain)-3,
+    Survival (Plains)-3, Survival (Swampland)-3, Survival (Island/Beach)-3, Survival (Woodlands)-3]
+  lore: Kindred range over many worlds.
+  design: Per+1 (14) for 4 points, Average.
+- name: Leadership
+  diff: IQ/A
+  points: 16
+  tags: [Xenos, T'au, Kroot]
+  ref: B204
+  defaults: [IQ-5]
+  lore: Leading a kindred.
+  design: IQ+4 (15) for 16 points, Average.
+- name: Tactics
+  diff: IQ/H
+  points: 12
+  tags: [Xenos, T'au, Kroot]
+  ref: B224
+  defaults: [IQ-6, Strategy-6]
+  lore: Leading kindreds in battle.
+  design: IQ+2 (13) for 12 points, Hard.
+- name: Animal Handling
+  spec: Krootox
+  diff: IQ/A
+  points: 2
+  tags: [Xenos, T'au, Kroot]
+  ref: B175
+  defaults: [IQ-5]
+  lore: Krootox are the Kroot's beasts of burden and war.
+  design: IQ+0 (11) for 2 points, Average.
+- name: Hidden Lore
+  spec: Xenos
+  diff: IQ/A
+  points: 4
+  tags: [Xenos, T'au, Kroot]
+  ref: B199
+  lore: The Shaper knows what has been eaten and what it may do.
+  design: IQ+1 (12) for 4 points, Average.
+- name: Diplomacy
+  diff: IQ/H
+  points: 4
+  tags: [Xenos, T'au, Kroot]
+  ref: B187
+  defaults: [IQ-6, Politics-6]
+  lore: Negotiating contracts with the T'au.
+  design: IQ+0 (11) for 4 points, Hard.
+- name: Climbing
+  diff: DX/A
+  points: 4
+  tags: [Xenos, T'au, Kroot]
+  ref: B183
+  defaults: [DX-5]
+  lore: Tree and cliff.
+  design: DX+1 (14) for 4 points, Average.
+- name: Observation
+  diff: Per/A
+  points: 4
+  tags: [Xenos, T'au, Kroot]
+  ref: B211
+  defaults: [Per-5, Shadowing-5]
+  lore: Watching prey.
+  design: Per+1 (14) for 4 points, Average.
+- name: Camouflage
+  diff: IQ/E
+  points: 2
+  tags: [Xenos, T'au, Kroot]
+  ref: B183
+  defaults: [IQ-4, Survival-2]
+  lore: Fieldcraft.
+  design: IQ+1 (12) for 2 points, Easy.
+- name: Throwing
+  diff: DX/A
+  points: 2
+  tags: [Xenos, T'au, Kroot]
+  ref: B226
+  defaults: [DX-3, Dropping-4]
+  lore: Thrown weapons.
+  design: DX+0 (13) for 2 points, Average.
+- name: Jumping
+  diff: DX/E
+  points: 1
+  tags: [Xenos, T'au, Kroot]
+  ref: B203
+  lore: Agility.
+  design: DX+0 (13) for 1 point, Easy.
+- name: Running
+  diff: HT/A
+  points: 2
+  tags: [Xenos, T'au, Kroot]
+  ref: B218
+  defaults: [HT-5]
+  lore: Endurance.
+  design: HT+0 (12) for 2 points, Average.
+- name: Naturalist
+  spec: Earthlike
+  diff: IQ/H
+  points: 2
+  tags: [Xenos, T'au, Kroot]
+  ref: B211
+  defaults: [IQ-6, Biology-3]
+  lore: Judging prey.
+  design: IQ-1 (10) for 2 points, Hard.

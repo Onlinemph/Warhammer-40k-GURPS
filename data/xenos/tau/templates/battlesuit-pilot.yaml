@@ -1,0 +1,196 @@
+kind: template
+output: Xenos/Tau/Templates/Battlesuit Pilot (Shas'vre).gct
+notes: >-
+  A Shas'vre: a veteran Fire caste pilot who wears a battlesuit. This is the pilot's stat
+  line; the suit (DR, servo ST, jump jets, hardpoints) is equipment and is not counted
+  here, nor is his drone escort. Point math (see Xenos/Tau/Traits/T'au Traits.adq): T'au
+  Physiology (17) + Fire Caste Lens (70) + Fire Warrior Training (6) + Battlesuit Pilot
+  Training (86) + Military Rank (Fire Caste) (10) + The Greater Good (-15) + Devotion
+  to the Ethereals (-1) = 173 points of traits, plus skills (72 points) = 245 points.
+  Stats: ST 11, DX 14, IQ 12, HT 12, HP 11, Will 13, Per 12, Speed 6.5, Move 6, Dodge
+  9. Tier: elite human (200-350).
+
+
+  Framework.md lists Move 5 for the Shas'vre line; that is not honestly reachable. DX
+  14 and HT 12 give Basic Speed 6.5, so the pilot's Move is 6, the same as a Shas'ui;
+  only a paid Decreased Basic Move would lower it, and nothing in the fiction warrants
+  one. Every other stat is exact. Suit weapons are Gunner (Beams) and Gunner (Rockets),
+  following the framework's rule for mounted guns; Battlesuit (B192) is the only Basic
+  Set skill for the suit itself. The Basic Set gives Battlesuit at B192 (not B184).
+traits:
+- {include: xenos/tau/traits.yaml#T'au Physiology}
+- {include: xenos/tau/traits.yaml#Fire Caste Lens}
+- {include: xenos/tau/traits.yaml#Fire Warrior Training}
+- {include: xenos/tau/traits.yaml#Battlesuit Pilot Training}
+- {include: xenos/tau/traits.yaml#Military Rank (Fire Caste), levels: 2}
+- {include: xenos/tau/traits.yaml#The Greater Good}
+- {include: xenos/tau/traits.yaml#Devotion to the Ethereals}
+skills:
+- name: Battlesuit
+  diff: DX/A
+  points: 16
+  tags: [Xenos, T'au]
+  ref: B192
+  defaults: [DX-5, Diving Suit-4, Vacc Suit-2, NBC Suit-2]
+  lore: >-
+    Piloting an XV8 Crisis, XV25 Stealth or XV88 Broadside suit; Battlesuit (B192) is
+    the Basic Set's powered-suit skill.
+  design: DX+4 (18) for 16 points, Average.
+- name: Gunner
+  spec: Beams
+  diff: DX/E
+  points: 12
+  tags: [Xenos, T'au]
+  ref: B198
+  defaults: [DX-4, Gunner-4]
+  lore: >-
+    Suit-mounted burst cannons, plasma rifles and fusion blasters: mounted weapons, per
+    the framework's Skills table.
+  design: DX+4 (18) for 12 points, Easy.
+- name: Gunner
+  spec: Rockets
+  diff: DX/E
+  points: 4
+  tags: [Xenos, T'au]
+  ref: B198
+  defaults: [DX-4, Gunner-4]
+  lore: Missile pods, smart missile systems and seeker missiles.
+  design: DX+2 (16) for 4 points, Easy.
+- name: Beam Weapons
+  spec: Rifle
+  diff: DX/E
+  points: 8
+  tags: [Xenos, T'au]
+  ref: B179
+  defaults: [DX-4, Beam Weapons-4, Guns (Rifle)-4]
+  lore: Pulse rifle when dismounted.
+  design: DX+3 (17) for 8 points, Easy.
+- name: Beam Weapons
+  spec: Pistol
+  diff: DX/E
+  points: 1
+  tags: [Xenos, T'au]
+  ref: B179
+  defaults: [DX-4, Beam Weapons-4, Guns (Pistol)-4]
+  lore: Sidearm.
+  design: DX+0 (14) for 1 point, Easy.
+- name: Liquid Projector
+  spec: Flamethrower
+  diff: DX/E
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B205
+  defaults: [DX-4, Liquid Projector-4]
+  lore: The T'au flamer, a suit hardpoint choice.
+  design: DX+1 (15) for 2 points, Easy.
+- name: Brawling
+  diff: DX/E
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B182
+  lore: Suit or unarmoured, a pilot still avoids melee.
+  design: DX+1 (15) for 2 points, Easy.
+- name: Tactics
+  diff: IQ/H
+  points: 4
+  tags: [Xenos, T'au]
+  ref: B224
+  defaults: [IQ-6, Strategy-6]
+  lore: Leading a suit team.
+  design: IQ+0 (12) for 4 points, Hard.
+- name: Leadership
+  diff: IQ/A
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B204
+  defaults: [IQ-5]
+  lore: Commanding drones and a Shas'ui or two.
+  design: IQ+0 (12) for 2 points, Average.
+- name: Observation
+  diff: Per/A
+  points: 4
+  tags: [Xenos, T'au]
+  ref: B211
+  defaults: [Per-5, Shadowing-5]
+  lore: Situational awareness through suit sensors.
+  design: Per+1 (13) for 4 points, Average.
+- name: Electronics Operation
+  spec: Sensors
+  diff: IQ/A
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B189
+  defaults: [IQ-5, Electronics Repair (Sensors)-5, Engineer (Electronics)-5, Electronics
+      Operation-4]
+  lore: Suit sensors and drone links.
+  design: IQ+0 (12) for 2 points, Average.
+- name: Electronics Operation
+  spec: Communications
+  diff: IQ/A
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B189
+  defaults: [IQ-5, Electronics Operation-4, Electronics Repair (Communications)-5, Engineer
+      (Electronics)-5]
+  lore: The network.
+  design: IQ+0 (12) for 2 points, Average.
+- name: Armoury
+  spec: Battlesuits
+  diff: IQ/A
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B178
+  defaults: [IQ-5, Engineer (Battlesuits)-4]
+  lore: Field maintenance of the suit.
+  design: IQ+0 (12) for 2 points, Average.
+- name: First Aid
+  diff: IQ/E
+  points: 1
+  tags: [Xenos, T'au]
+  ref: B195
+  defaults: [IQ-4, Esoteric Medicine, Physician, Veterinary-4]
+  lore: Basic care.
+  design: IQ+0 (12) for 1 point, Easy.
+- name: Stealth
+  diff: DX/A
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B222
+  defaults: [IQ-5, DX-5]
+  lore: Stealth suit teams especially.
+  design: DX+0 (14) for 2 points, Average.
+- name: Savoir-Faire
+  spec: Military
+  diff: IQ/E
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B218
+  defaults: [IQ-4]
+  lore: Rank etiquette.
+  design: IQ+1 (13) for 2 points, Easy.
+- name: Navigation
+  spec: Land
+  diff: IQ/A
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B211
+  defaults: [IQ-5, Cartography-4, Mathematics (Surveying)-4, Navigation (Air)-2, Navigation
+      (Sea)-2, Navigation (Underground)-2]
+  lore: Land navigation.
+  design: IQ+0 (12) for 2 points, Average.
+- name: Hiking
+  diff: HT/A
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B200
+  defaults: [HT-5]
+  lore: Endurance.
+  design: HT+0 (12) for 2 points, Average.
+- name: Throwing
+  diff: DX/A
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B226
+  defaults: [DX-3, Dropping-4]
+  lore: Grenades.
+  design: DX+0 (14) for 2 points, Average.

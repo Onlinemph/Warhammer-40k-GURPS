@@ -1,0 +1,912 @@
+{
+	"version": 5,
+	"id": "BOzko5N7sSTdzdfbu",
+	"notes": "A Kroot Shaper: the leader of a kindred, who decides what it eats and so what it becomes. Larger and sharper than its kin, armed like them. Point math (see Xenos/Tau/Traits/T'au Traits.adq): Kroot Physiology (112) + Kroot Kindred (-10) + Kroot Shaper Lens (55) = 157 points of traits, plus skills (101 points) = 258 points. Stats: ST 13, DX 13, IQ 11, HT 12, HP 13, Will 12, Per 13, Speed 6.25, Move 8, Dodge 9. Tier: elite human (200-350).\n\nFramework.md: 'Kindred leader; decides what the kindred eats.' Genetic Absorption is a 0-point feature of the ancestry and the Shaper is its steward; Hidden Lore (Xenos) is the mechanical proxy.",
+	"traits": [
+		{
+			"id": "TFBsCisBSRC6pXktE",
+			"name": "Kroot Physiology",
+			"local_notes": "Lore: The Kroot are lean, avian-looking carnivores: hunched, long-limbed, beaked and quilled. They fight for the Empire as mercenaries, live in nomadic kindreds led by Shapers, and are best known for genetic absorption: by eating what they kill they slowly take on its traits over generations. Codex: T'au Empire background, Kroot Mercenaries.\n\nDesign: Attribute Modifiers (Kroot) 105 + Sharp Beak 1 + Acute Taste & Smell 2 (4) + Born Climber 1 + Born Tracker 1 + Genetic Absorption 0 = 112 points, giving framework.md's Kroot Carnivore line before training. Not priced: Low TL (Kroot culture is primitive but Kroot use T'au and their own guns competently; the drafter is not confident enough to charge -5), Carnivore diet (no ancestry trait; handled in the Kindred trait as a habit).",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"T'au",
+				"Kroot"
+			],
+			"container_type": "ancestry",
+			"children": [
+				{
+					"id": "tV3BHaxcH4x57Y3Ab",
+					"name": "Attribute Modifiers (Kroot)",
+					"local_notes": "ST +2, DX +3, IQ -1, HT +1, Per +4, Will +1, Basic Move +2.\n\nDesign: Framework Kroot Carnivore line: ST 12, DX 13, IQ 9, HT 11, HP 12, Per 13, Will 10, Move 8. ST +2 (20), DX +3 (60), IQ -1 (-20), HT +1 (10), Per +4 (20, so Per 13 with IQ 9), Will +1 (5), Basic Move +2 (B17, 5/level = 10) = 105. Basic Speed (13+11)/4 = 6.0, Move 6 + 2 = 8, HP 12 = ST 12.",
+					"tags": [
+						"Physical",
+						"Xenos",
+						"T'au",
+						"Kroot"
+					],
+					"base_points": 105,
+					"features": [
+						{
+							"type": "attribute_bonus",
+							"attribute": "st",
+							"amount": 2
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "dx",
+							"amount": 3
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "iq",
+							"amount": -1
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "ht",
+							"amount": 1
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "per",
+							"amount": 4
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "will",
+							"amount": 1
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "basic_move",
+							"amount": 2
+						}
+					]
+				},
+				{
+					"id": "tTUSKdNmvR26zzVoN",
+					"name": "Sharp Beak (Kroot)",
+					"reference": "B91",
+					"local_notes": "Peck: thr-1 piercing+ (B91).\n\nLore: Kroot have a hard, hooked beak that tears meat.\n\nDesign: Sharp Beak (B91), 1 point. The framework calls this 'Sharp Teeth'; a beak is its Basic Set equivalent.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"T'au",
+						"Kroot"
+					],
+					"base_points": 1,
+					"weapons": [
+						{
+							"id": "wnEAM1F9SLQEbdsPF",
+							"sv": 1,
+							"damage": {
+								"type": "pi+",
+								"st": "thr",
+								"base": "-1"
+							},
+							"reach": "C",
+							"usage": "Peck",
+							"defaults": [
+								{
+									"type": "dx",
+									"modifier": 0
+								},
+								{
+									"type": "skill",
+									"name": {
+										"compare": "is",
+										"qualifier": "Brawling"
+									}
+								}
+							]
+						}
+					]
+				},
+				{
+					"id": "tEDOBvSiL57igEn-m",
+					"name": "Acute Taste & Smell (Kroot)",
+					"reference": "B35",
+					"local_notes": "+2 to Taste/Smell rolls, including tracking by scent.\n\nLore: Kroot are hunters that follow scent trails and judge meat by taste.\n\nDesign: Acute Taste & Smell 2 (B35, 2/level) = 4 points.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"T'au",
+						"Kroot"
+					],
+					"points_per_level": 2,
+					"can_level": true,
+					"levels": 2
+				},
+				{
+					"id": "tjtm0Xf-VzXZGQt_z",
+					"name": "Born Climber",
+					"reference": "B100",
+					"local_notes": "+1 to Climbing.\n\nLore: Kroot are agile climbers and ambushers.\n\nDesign: Perk (B100), +1 to Climbing, 1 point.",
+					"tags": [
+						"Perk",
+						"Xenos",
+						"T'au",
+						"Kroot"
+					],
+					"base_points": 1,
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "Climbing"
+							},
+							"amount": 1
+						}
+					]
+				},
+				{
+					"id": "toQiuxxRJ6VS3-5nz",
+					"name": "Born Tracker",
+					"reference": "B100",
+					"local_notes": "+1 to Tracking.\n\nLore: Kroot are famed as trackers and scouts.\n\nDesign: Perk (B100), +1 to Tracking, 1 point.",
+					"tags": [
+						"Perk",
+						"Xenos",
+						"T'au",
+						"Kroot"
+					],
+					"base_points": 1,
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "Tracking"
+							},
+							"amount": 1
+						}
+					]
+				},
+				{
+					"id": "tnKSZi7FX2-C5SnmG",
+					"name": "Genetic Absorption",
+					"local_notes": "No per-meal stat change. Over a campaign a kindred that has eaten a strong enemy's flesh may gain a small trait (GM's call and story-driven); Shapers guide which.\n\nLore: Kroot absorb genetic traits from the flesh they eat: over generations a kindred takes on the strengths of what it kills. Codex: T'au Empire background.\n\nDesign: A 0-point feature at the kindred level, per framework.md's direction: not a mechanical per-meal effect but a story lever.",
+					"tags": [
+						"Feature",
+						"Xenos",
+						"T'au",
+						"Kroot"
+					],
+					"base_points": 0
+				}
+			]
+		},
+		{
+			"id": "T_uDF-0hOoHE2CMsd",
+			"name": "Kroot Kindred",
+			"local_notes": "Lore: Kroot live and fight in kindreds: extended clans that move as a body, led by a Shaper, who hire out to the T'au for payment and the chance to eat the strong. Kroot eating habits, including eating the slain, are the most commented-on thing about them. Codex: T'au Empire background.\n\nDesign: Sense of Duty (Kindred) -5 + Odious Personal Habit -5 = -10 points.",
+			"tags": [
+				"Disadvantage",
+				"Mental",
+				"Xenos",
+				"T'au",
+				"Kroot"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "t_YVBedTgh9kj86e5",
+					"name": "Sense of Duty (Kindred)",
+					"reference": "B153",
+					"local_notes": "Will not leave kin behind or betray the kindred; self-control roll to put self first.\n\nLore: A Kroot's loyalty is to the kindred first.\n\nDesign: Sense of Duty (B153), Small Group -5.",
+					"tags": [
+						"Disadvantage",
+						"Mental",
+						"Xenos",
+						"T'au",
+						"Kroot"
+					],
+					"modifiers": [
+						{
+							"id": "muYQRF8acVSEhTtg9",
+							"name": "Small Group (the kindred)",
+							"reference": "B153",
+							"cost_adj": "-5"
+						}
+					]
+				},
+				{
+					"id": "tfZFK0-dUqnALNejj",
+					"name": "Odious Personal Habit (Eats the Slain)",
+					"reference": "B22",
+					"local_notes": "-1 reaction from those who find it disgusting (most non-Kroot, including many T'au).\n\nLore: Kroot eat their kills, including the dead of other species.\n\nDesign: Odious Personal Habit 1 level (B22, -5/level) = -5 points.",
+					"tags": [
+						"Disadvantage",
+						"Social",
+						"Xenos",
+						"T'au",
+						"Kroot"
+					],
+					"points_per_level": -5,
+					"can_level": true,
+					"levels": 1
+				}
+			]
+		},
+		{
+			"id": "TtW-GBSu33Hu93-cZ",
+			"name": "Kroot Shaper Lens",
+			"local_notes": "Lore: A Shaper is a Kroot kindred's leader and priest of its evolution: it decides what the kindred eats, and so what it will become. Shapers are larger and sharper than their kin. Codex: T'au Empire background.\n\nDesign: Attribute Modifiers (Kroot Shaper) 50 + Status 1 (5) = 55 points.",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Xenos",
+				"T'au",
+				"Kroot"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "tVVPjrTQMqm2Zercf",
+					"name": "Attribute Modifiers (Kroot Shaper)",
+					"local_notes": "ST +1, IQ +2, HT +1, Per -2 (net of the Kroot Physiology bonus).\n\nDesign: Over Kroot Physiology: ST 13, DX 13, IQ 11, HT 12, HP 13, Per 13, Will 12, Move 8. ST +1 (10), IQ +2 (40), HT +1 (10), Per -2 (-10, cancelling the rise from IQ so Per stays 13) = 50. Basic Speed (13+12)/4 = 6.25, Move 6 + 2 = 8, HP 13 = ST 13.",
+					"tags": [
+						"Physical",
+						"Xenos",
+						"T'au",
+						"Kroot"
+					],
+					"base_points": 50,
+					"features": [
+						{
+							"type": "attribute_bonus",
+							"attribute": "st",
+							"amount": 1
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "iq",
+							"amount": 2
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "ht",
+							"amount": 1
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "per",
+							"amount": -2
+						}
+					]
+				},
+				{
+					"id": "tNE234drhaIJ4EUSx",
+					"name": "Status (Kroot Shaper)",
+					"reference": "B28",
+					"local_notes": "Status 1 among the kindred; Shapers' word decides.\n\nLore: A Shaper leads the kindred and speaks for it.\n\nDesign: Status (B28, 5/level), 1 level = 5 points.",
+					"tags": [
+						"Advantage",
+						"Social",
+						"Xenos",
+						"T'au",
+						"Kroot"
+					],
+					"points_per_level": 5,
+					"can_level": true,
+					"levels": 1
+				}
+			]
+		}
+	],
+	"skills": [
+		{
+			"id": "s2XI34DLTw2IUxqX5",
+			"name": "Guns",
+			"reference": "B198",
+			"local_notes": "Lore: The Kroot rifle.\n\nDesign: DX+4 (17) for 12 points, Easy.",
+			"tags": [
+				"Xenos",
+				"T'au",
+				"Kroot"
+			],
+			"specialization": "Rifle",
+			"difficulty": "dx/e",
+			"defaults": [
+				{
+					"type": "dx",
+					"modifier": -4
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Guns"
+					},
+					"specialization": {
+						"compare": "is",
+						"qualifier": "Grenade Launcher"
+					},
+					"modifier": -4
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Guns"
+					},
+					"specialization": {
+						"compare": "is",
+						"qualifier": "Gyroc"
+					},
+					"modifier": -4
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Guns"
+					},
+					"specialization": {
+						"compare": "is",
+						"qualifier": "Light Anti-Armor Weapon"
+					},
+					"modifier": -4
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Guns"
+					},
+					"specialization": {
+						"compare": "is",
+						"qualifier": "Light Machine Gun"
+					},
+					"modifier": -2
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Guns"
+					},
+					"specialization": {
+						"compare": "is",
+						"qualifier": "Musket"
+					},
+					"modifier": -2
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Guns"
+					},
+					"specialization": {
+						"compare": "is",
+						"qualifier": "Pistol"
+					},
+					"modifier": -2
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Beam Weapons"
+					},
+					"specialization": {
+						"compare": "is",
+						"qualifier": "Rifle"
+					},
+					"modifier": -4
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Guns"
+					},
+					"specialization": {
+						"compare": "is",
+						"qualifier": "Shotgun"
+					},
+					"modifier": -2
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Guns"
+					},
+					"specialization": {
+						"compare": "is",
+						"qualifier": "Submachine Gun"
+					},
+					"modifier": -2
+				}
+			],
+			"points": 12
+		},
+		{
+			"id": "s97wkRZDlUb3L1tYt",
+			"name": "Staff",
+			"reference": "B208",
+			"local_notes": "Lore: The blade-fitted stock of the rifle.\n\nDesign: DX+3 (16) for 12 points, Average.",
+			"tags": [
+				"Xenos",
+				"T'au",
+				"Kroot"
+			],
+			"difficulty": "dx/a",
+			"defaults": [
+				{
+					"type": "dx",
+					"modifier": -5
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Polearm"
+					},
+					"modifier": -4
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Spear"
+					},
+					"modifier": -2
+				}
+			],
+			"points": 12
+		},
+		{
+			"id": "sIw9_I08Pv7xpwNHO",
+			"name": "Brawling",
+			"reference": "B182",
+			"local_notes": "Lore: Beak and fist.\n\nDesign: DX+1 (14) for 2 points, Easy.",
+			"tags": [
+				"Xenos",
+				"T'au",
+				"Kroot"
+			],
+			"difficulty": "dx/e",
+			"points": 2
+		},
+		{
+			"id": "s2LIlBdZYGcawzCrE",
+			"name": "Stealth",
+			"reference": "B222",
+			"local_notes": "Lore: Ambush and infiltration.\n\nDesign: DX+1 (14) for 4 points, Average.",
+			"tags": [
+				"Xenos",
+				"T'au",
+				"Kroot"
+			],
+			"difficulty": "dx/a",
+			"defaults": [
+				{
+					"type": "iq",
+					"modifier": -5
+				},
+				{
+					"type": "dx",
+					"modifier": -5
+				}
+			],
+			"points": 4
+		},
+		{
+			"id": "s9lGD3INx1Z8qEn3q",
+			"name": "Tracking",
+			"reference": "B226",
+			"local_notes": "Lore: The Kroot's signature skill.\n\nDesign: Per+3 (16) for 12 points, Average.",
+			"tags": [
+				"Xenos",
+				"T'au",
+				"Kroot"
+			],
+			"difficulty": "per/a",
+			"defaults": [
+				{
+					"type": "per",
+					"modifier": -5
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Naturalist"
+					},
+					"modifier": -5
+				}
+			],
+			"points": 12
+		},
+		{
+			"id": "sBW00tzp-7nt6feMs",
+			"name": "Survival",
+			"reference": "B223",
+			"local_notes": "Lore: Kindred range over many worlds.\n\nDesign: Per+1 (14) for 4 points, Average.",
+			"tags": [
+				"Xenos",
+				"T'au",
+				"Kroot"
+			],
+			"specialization": "Jungle",
+			"difficulty": "per/a",
+			"defaults": [
+				{
+					"type": "per",
+					"modifier": -5
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Naturalist"
+					},
+					"modifier": -3
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Survival"
+					},
+					"specialization": {
+						"compare": "is",
+						"qualifier": "Arctic"
+					},
+					"modifier": -3
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Survival"
+					},
+					"specialization": {
+						"compare": "is",
+						"qualifier": "Desert"
+					},
+					"modifier": -3
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Survival"
+					},
+					"specialization": {
+						"compare": "is",
+						"qualifier": "Mountain"
+					},
+					"modifier": -3
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Survival"
+					},
+					"specialization": {
+						"compare": "is",
+						"qualifier": "Plains"
+					},
+					"modifier": -3
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Survival"
+					},
+					"specialization": {
+						"compare": "is",
+						"qualifier": "Swampland"
+					},
+					"modifier": -3
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Survival"
+					},
+					"specialization": {
+						"compare": "is",
+						"qualifier": "Island/Beach"
+					},
+					"modifier": -3
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Survival"
+					},
+					"specialization": {
+						"compare": "is",
+						"qualifier": "Woodlands"
+					},
+					"modifier": -3
+				}
+			],
+			"points": 4
+		},
+		{
+			"id": "sIo0u0LgkstQDqucx",
+			"name": "Leadership",
+			"reference": "B204",
+			"local_notes": "Lore: Leading a kindred.\n\nDesign: IQ+4 (15) for 16 points, Average.",
+			"tags": [
+				"Xenos",
+				"T'au",
+				"Kroot"
+			],
+			"difficulty": "iq/a",
+			"defaults": [
+				{
+					"type": "iq",
+					"modifier": -5
+				}
+			],
+			"points": 16
+		},
+		{
+			"id": "s4fDjh9ftlHQ_kbkT",
+			"name": "Tactics",
+			"reference": "B224",
+			"local_notes": "Lore: Leading kindreds in battle.\n\nDesign: IQ+2 (13) for 12 points, Hard.",
+			"tags": [
+				"Xenos",
+				"T'au",
+				"Kroot"
+			],
+			"difficulty": "iq/h",
+			"defaults": [
+				{
+					"type": "iq",
+					"modifier": -6
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Strategy"
+					},
+					"modifier": -6
+				}
+			],
+			"points": 12
+		},
+		{
+			"id": "scX3hyclJ_7qHDf7h",
+			"name": "Animal Handling",
+			"reference": "B175",
+			"local_notes": "Lore: Krootox are the Kroot's beasts of burden and war.\n\nDesign: IQ+0 (11) for 2 points, Average.",
+			"tags": [
+				"Xenos",
+				"T'au",
+				"Kroot"
+			],
+			"specialization": "Krootox",
+			"difficulty": "iq/a",
+			"defaults": [
+				{
+					"type": "iq",
+					"modifier": -5
+				}
+			],
+			"points": 2
+		},
+		{
+			"id": "szeLw9TaA01XS7yQt",
+			"name": "Hidden Lore",
+			"reference": "B199",
+			"local_notes": "Lore: The Shaper knows what has been eaten and what it may do.\n\nDesign: IQ+1 (12) for 4 points, Average.",
+			"tags": [
+				"Xenos",
+				"T'au",
+				"Kroot"
+			],
+			"specialization": "Xenos",
+			"difficulty": "iq/a",
+			"points": 4
+		},
+		{
+			"id": "sxyraHQ2fZDxlOA6e",
+			"name": "Diplomacy",
+			"reference": "B187",
+			"local_notes": "Lore: Negotiating contracts with the T'au.\n\nDesign: IQ+0 (11) for 4 points, Hard.",
+			"tags": [
+				"Xenos",
+				"T'au",
+				"Kroot"
+			],
+			"difficulty": "iq/h",
+			"defaults": [
+				{
+					"type": "iq",
+					"modifier": -6
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Politics"
+					},
+					"modifier": -6
+				}
+			],
+			"points": 4
+		},
+		{
+			"id": "sA30tuk5PVhqd5cQ2",
+			"name": "Climbing",
+			"reference": "B183",
+			"local_notes": "Lore: Tree and cliff.\n\nDesign: DX+1 (14) for 4 points, Average.",
+			"tags": [
+				"Xenos",
+				"T'au",
+				"Kroot"
+			],
+			"difficulty": "dx/a",
+			"defaults": [
+				{
+					"type": "dx",
+					"modifier": -5
+				}
+			],
+			"points": 4
+		},
+		{
+			"id": "sHYlDrQz_zovrd77r",
+			"name": "Observation",
+			"reference": "B211",
+			"local_notes": "Lore: Watching prey.\n\nDesign: Per+1 (14) for 4 points, Average.",
+			"tags": [
+				"Xenos",
+				"T'au",
+				"Kroot"
+			],
+			"difficulty": "per/a",
+			"defaults": [
+				{
+					"type": "per",
+					"modifier": -5
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Shadowing"
+					},
+					"modifier": -5
+				}
+			],
+			"points": 4
+		},
+		{
+			"id": "srGCQc1GCbbhT84pX",
+			"name": "Camouflage",
+			"reference": "B183",
+			"local_notes": "Lore: Fieldcraft.\n\nDesign: IQ+1 (12) for 2 points, Easy.",
+			"tags": [
+				"Xenos",
+				"T'au",
+				"Kroot"
+			],
+			"difficulty": "iq/e",
+			"defaults": [
+				{
+					"type": "iq",
+					"modifier": -4
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Survival"
+					},
+					"modifier": -2
+				}
+			],
+			"points": 2
+		},
+		{
+			"id": "sJ3tFxwXwNrwNT0cr",
+			"name": "Throwing",
+			"reference": "B226",
+			"local_notes": "Lore: Thrown weapons.\n\nDesign: DX+0 (13) for 2 points, Average.",
+			"tags": [
+				"Xenos",
+				"T'au",
+				"Kroot"
+			],
+			"difficulty": "dx/a",
+			"defaults": [
+				{
+					"type": "dx",
+					"modifier": -3
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Dropping"
+					},
+					"modifier": -4
+				}
+			],
+			"points": 2
+		},
+		{
+			"id": "scD4swZKxPIcpnvAY",
+			"name": "Jumping",
+			"reference": "B203",
+			"local_notes": "Lore: Agility.\n\nDesign: DX+0 (13) for 1 point, Easy.",
+			"tags": [
+				"Xenos",
+				"T'au",
+				"Kroot"
+			],
+			"difficulty": "dx/e",
+			"points": 1
+		},
+		{
+			"id": "sm1HjQ6xTxNj3iRJq",
+			"name": "Running",
+			"reference": "B218",
+			"local_notes": "Lore: Endurance.\n\nDesign: HT+0 (12) for 2 points, Average.",
+			"tags": [
+				"Xenos",
+				"T'au",
+				"Kroot"
+			],
+			"difficulty": "ht/a",
+			"defaults": [
+				{
+					"type": "ht",
+					"modifier": -5
+				}
+			],
+			"points": 2
+		},
+		{
+			"id": "srdxN46Epg2aqZrq2",
+			"name": "Naturalist",
+			"reference": "B211",
+			"local_notes": "Lore: Judging prey.\n\nDesign: IQ-1 (10) for 2 points, Hard.",
+			"tags": [
+				"Xenos",
+				"T'au",
+				"Kroot"
+			],
+			"specialization": "Earthlike",
+			"difficulty": "iq/h",
+			"defaults": [
+				{
+					"type": "iq",
+					"modifier": -6
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Biology"
+					},
+					"modifier": -3
+				}
+			],
+			"points": 2
+		}
+	],
+	"equipment": []
+}

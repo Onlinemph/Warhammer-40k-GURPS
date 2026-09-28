@@ -1,0 +1,151 @@
+kind: template
+output: Xenos/Tau/Templates/Earth Caste Engineer (Fio).gct
+notes: >-
+  An Earth caste engineer (Fio): a stocky, practical technician who builds and tends the
+  Empire's drones, vehicles and battlesuits, and sometimes deploys with the army as a
+  field engineer. Point math (see Xenos/Tau/Traits/T'au Traits.adq): T'au Physiology (17)
+  + Earth Caste Lens (100) + The Greater Good (-15) + Devotion to the Ethereals (-1) =
+  101 points of traits, plus skills (46 points) = 147 points. Stats: ST 11, DX 11, IQ
+  13, HT 12, HP 11, Will 11, Per 12, Speed 5.75, Move 5, Dodge 8. Tier: trained soldier
+  (100-175).
+
+
+  Drone AI is Computer Programming (AI) (IQ/H). Earth caste weapon skill is a sidearm
+  at DX only: the caste supports the army, it does not fight in it.
+traits:
+- {include: xenos/tau/traits.yaml#T'au Physiology}
+- {include: xenos/tau/traits.yaml#Earth Caste Lens}
+- {include: xenos/tau/traits.yaml#The Greater Good}
+- {include: xenos/tau/traits.yaml#Devotion to the Ethereals}
+skills:
+- name: Engineer
+  spec: Electronics
+  diff: IQ/H
+  points: 8
+  tags: [Xenos, T'au]
+  ref: B190
+  defaults: [Electronics Repair-6]
+  lore: Earth caste build the Empire's drones, comms and sensors.
+  design: IQ+1 (14) for 8 points, Hard.
+- name: Engineer
+  spec: Robotics
+  diff: IQ/H
+  points: 4
+  tags: [Xenos, T'au]
+  ref: B190
+  defaults: [Mechanic (Robotics)-6]
+  lore: Drones and battlesuit servos.
+  design: IQ+0 (13) for 4 points, Hard.
+- name: Engineer
+  spec: Materials
+  diff: IQ/H
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B190
+  defaults: [Chemistry-6, Metallurgy-6]
+  lore: Composites and ceramics.
+  design: IQ-1 (12) for 2 points, Hard.
+- name: Mechanic
+  spec: Robotics
+  diff: IQ/A
+  points: 4
+  tags: [Xenos, T'au]
+  ref: B207
+  defaults: [IQ-5, Engineer (Robotics)-4, Machinist-5, Mechanic-4]
+  lore: Repairing drones and suit servos.
+  design: IQ+1 (14) for 4 points, Average.
+- name: Mechanic
+  spec: Contragravity
+  diff: IQ/A
+  points: 4
+  tags: [Xenos, T'au]
+  ref: B207
+  defaults: [IQ-5, Engineer (Contragravity)-4, Machinist-5, Mechanic-4]
+  lore: Grav vehicles and grav drones.
+  design: IQ+1 (14) for 4 points, Average.
+- name: Armoury
+  spec: Battlesuits
+  diff: IQ/A
+  points: 4
+  tags: [Xenos, T'au]
+  ref: B178
+  defaults: [IQ-5, Engineer (Battlesuits)-4]
+  lore: Suit maintenance and refit.
+  design: IQ+1 (14) for 4 points, Average.
+- name: Armoury
+  spec: Small Arms
+  diff: IQ/A
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B178
+  defaults: [IQ-5, Engineer (Small Arms)-4, Machinist-5]
+  lore: Pulse weapons and rail rifles.
+  design: IQ+0 (13) for 2 points, Average.
+- name: Electronics Repair
+  spec: Computers
+  diff: IQ/A
+  points: 4
+  tags: [Xenos, T'au]
+  ref: B190
+  defaults: [IQ-5, Computer Operation-5, Engineer (Electronics)-3, Electronics Repair-4]
+  lore: Drone and vehicle computers.
+  design: IQ+1 (14) for 4 points, Average.
+- name: Electronics Operation
+  spec: Sensors
+  diff: IQ/A
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B189
+  defaults: [IQ-5, Electronics Repair (Sensors)-5, Engineer (Electronics)-5, Electronics
+      Operation-4]
+  lore: Field sensor tools.
+  design: IQ+0 (13) for 2 points, Average.
+- name: Computer Programming
+  spec: AI
+  diff: IQ/H
+  points: 4
+  tags: [Xenos, T'au]
+  ref: B184
+  lore: Drone AI is the Earth caste's craft.
+  design: IQ+0 (13) for 4 points, Hard.
+- name: Physics
+  diff: IQ/VH
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B213
+  defaults: [Physics-2, IQ-6]
+  lore: Grav and pulse physics.
+  design: IQ-2 (11) for 2 points, Very Hard.
+- name: Mathematics
+  spec: Applied
+  diff: IQ/H
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B207
+  defaults: [IQ-6, Physics-5, Engineer-5]
+  lore: Engineering maths.
+  design: IQ-1 (12) for 2 points, Hard.
+- name: Machinist
+  diff: IQ/A
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B206
+  defaults: [IQ-5, Mechanic-5]
+  lore: Fabrication.
+  design: IQ+0 (13) for 2 points, Average.
+- name: Beam Weapons
+  spec: Pistol
+  diff: DX/E
+  points: 1
+  tags: [Xenos, T'au]
+  ref: B179
+  defaults: [DX-4, Beam Weapons-4, Guns (Pistol)-4]
+  lore: Sidearm.
+  design: DX+0 (11) for 1 point, Easy.
+- name: Brawling
+  diff: DX/E
+  points: 1
+  tags: [Xenos, T'au]
+  ref: B182
+  lore: A last resort.
+  design: DX+0 (11) for 1 point, Easy.

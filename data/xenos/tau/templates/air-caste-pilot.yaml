@@ -1,0 +1,145 @@
+kind: template
+output: Xenos/Tau/Templates/Air Caste Pilot (Kor).gct
+notes: >-
+  An Air caste pilot (Kor): a tall, light-boned pilot and navigator at home in a cockpit
+  or in free fall, who flies the Empire's aircraft and grav vehicles. Point math (see
+  Xenos/Tau/Traits/T'au Traits.adq): T'au Physiology (17) + Air Caste Lens (62) + The
+  Greater Good (-15) + Devotion to the Ethereals (-1) = 63 points of traits, plus skills
+  (50 points) = 113 points. Stats: ST 8, DX 13, IQ 12, HT 10, HP 8, Will 11, Per 12, Speed
+  5.75, Move 5, Dodge 8. Tier: trained soldier (100-175).
+
+
+  Hollow bones are built as Skinny and ST 8 / HP 8; G-Intolerance gives the 'poor in high
+  gravity' of the framework (see the Air Caste Lens for the caveat on the exact B137 penalty).
+  The Flight skill (HT/A) is deliberately not bought: the T'au fly craft, not wings.
+traits:
+- {include: xenos/tau/traits.yaml#T'au Physiology}
+- {include: xenos/tau/traits.yaml#Air Caste Lens}
+- {include: xenos/tau/traits.yaml#The Greater Good}
+- {include: xenos/tau/traits.yaml#Devotion to the Ethereals}
+skills:
+- name: Piloting
+  spec: Aerospace
+  diff: DX/A
+  points: 12
+  tags: [Xenos, T'au]
+  ref: B214
+  defaults: [IQ-6, Piloting (High-Performance Airplane)-2, Piloting-4]
+  lore: 'T''au aircraft: Barracuda and Tiger Shark fighter-bombers.'
+  design: DX+3 (16) for 12 points, Average.
+- name: Piloting
+  spec: Contragravity
+  diff: DX/A
+  points: 8
+  tags: [Xenos, T'au]
+  ref: B214
+  defaults: [IQ-6, Piloting (Vertol)-3, Piloting-5]
+  lore: Grav vehicles and atmospheric craft.
+  design: DX+2 (15) for 8 points, Average.
+- name: Piloting
+  spec: Low-Performance Spacecraft
+  diff: DX/A
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B214
+  defaults: [IQ-6, Piloting (Aerospace)-4, Piloting (High-Performance Spacecraft)-2]
+  lore: Transports and shuttles.
+  design: DX+0 (13) for 2 points, Average.
+- name: Gunner
+  spec: Beams
+  diff: DX/E
+  points: 4
+  tags: [Xenos, T'au]
+  ref: B198
+  defaults: [DX-4, Gunner-4]
+  lore: Aircraft-mounted burst cannons.
+  design: DX+2 (15) for 4 points, Easy.
+- name: Gunner
+  spec: Rockets
+  diff: DX/E
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B198
+  defaults: [DX-4, Gunner-4]
+  lore: Missiles and seekers.
+  design: DX+1 (14) for 2 points, Easy.
+- name: Electronics Operation
+  spec: Sensors
+  diff: IQ/A
+  points: 4
+  tags: [Xenos, T'au]
+  ref: B189
+  defaults: [IQ-5, Electronics Repair (Sensors)-5, Engineer (Electronics)-5, Electronics
+      Operation-4]
+  lore: Cockpit sensor and targeting suites.
+  design: IQ+1 (13) for 4 points, Average.
+- name: Electronics Operation
+  spec: Communications
+  diff: IQ/A
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B189
+  defaults: [IQ-5, Electronics Operation-4, Electronics Repair (Communications)-5, Engineer
+      (Electronics)-5]
+  lore: Cockpit comms.
+  design: IQ+0 (12) for 2 points, Average.
+- name: Navigation
+  spec: Air
+  diff: IQ/A
+  points: 4
+  tags: [Xenos, T'au]
+  ref: B211
+  defaults: [Astronomy-5, Navigation (Land)-2, Navigation (Sea)-2]
+  lore: Flight navigation.
+  design: IQ+1 (13) for 4 points, Average.
+- name: Navigation
+  spec: Space
+  diff: IQ/A
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B211
+  defaults: [Astronomy-4, Mathematics (Applied)-4, Navigation (Hyperspace)-5]
+  lore: System navigation.
+  design: IQ+0 (12) for 2 points, Average.
+- name: Mechanic
+  spec: Contragravity
+  diff: IQ/A
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B207
+  defaults: [IQ-5, Engineer (Contragravity)-4, Machinist-5, Mechanic-4]
+  lore: Field repair.
+  design: IQ+0 (12) for 2 points, Average.
+- name: Free Fall
+  diff: DX/A
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B197
+  defaults: [HT-5, DX-5]
+  lore: At home in zero gravity.
+  design: DX+0 (13) for 2 points, Average.
+- name: Beam Weapons
+  spec: Pistol
+  diff: DX/E
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B179
+  defaults: [DX-4, Beam Weapons-4, Guns (Pistol)-4]
+  lore: Sidearm.
+  design: DX+1 (14) for 2 points, Easy.
+- name: Tactics
+  diff: IQ/H
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B224
+  defaults: [IQ-6, Strategy-6]
+  lore: Air-to-ground coordination.
+  design: IQ-1 (11) for 2 points, Hard.
+- name: Observation
+  diff: Per/A
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B211
+  defaults: [Per-5, Shadowing-5]
+  lore: Spotting from the air.
+  design: Per+0 (12) for 2 points, Average.

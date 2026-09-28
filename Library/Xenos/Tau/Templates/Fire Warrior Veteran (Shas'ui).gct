@@ -1,0 +1,1028 @@
+{
+	"version": 5,
+	"id": "B0pDTB5u0Mihg67BI",
+	"notes": "A Shas'ui: a Fire Warrior who has survived enough war to lead a fire team, and who may be chosen to pilot a battlesuit. Same armour and weapons as a Shas'la, and a team's-worth of drones. Point math (see Xenos/Tau/Traits/T'au Traits.adq): T'au Physiology (17) + Fire Caste Lens (70) + Fire Warrior Training (6) + Veteran Lens (Shas'ui) (50) + Military Rank (Fire Caste) (5) + The Greater Good (-15) + Devotion to the Ethereals (-1) = 132 points of traits, plus skills (62 points) = 194 points. Stats: ST 11, DX 13, IQ 11, HT 12, HP 11, Will 12, Per 12, Speed 6.25, Move 6, Dodge 9. Tier: between trained soldier (100-175) and elite human (200-350).\n\nFramework.md: 'team leader; often a battlesuit pilot' (Shas'ui who pilot are built as a Shas'vre, below). Military Rank 1 (5 points) marks the team-leader step. Weapon skills as for the Shas'la.",
+	"traits": [
+		{
+			"id": "TA_woc8Dj-bC_UUoM",
+			"name": "T'au Physiology",
+			"local_notes": "Lore: The T'au are a young race of about human size: blue-grey skin, reverse-jointed hooved legs, blunt features and a stocky-to-slender range depending on caste. They are no stronger than humans and no faster; the differences between them are made by caste and training, not by biology, so this package is deliberately thin (attributes, Warp-Faint and nothing else) and each caste lens carries its own attribute line. Codex: T'au Empire background.\n\nDesign: Warp-Faint 17, plus a disabled optional Short Lifespan (0). Total 17 points, no attribute change: ST 10, DX 10, IQ 10, HT 10 as human, so that framework.md's non-Fire castes (Water caste DX 10, Ethereal DX 11) come out exactly from their lenses. Left out: any hoof or leg-shape trait (no rules effect the drafter is confident of), Language and Cultural Familiarity (0-point when native; campaign-dependent).",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"T'au"
+			],
+			"container_type": "ancestry",
+			"children": [
+				{
+					"id": "Tti1SjVD8cFs_FKaZ",
+					"name": "Warp-Faint",
+					"local_notes": "Psychic mind-reading, mind-control and emotion-control powers used on a T'au suffer -3; the T'au gets +8 to HT rolls against possession, warp-taint and daemonic influence. No T'au is ever a psyker: no template in this file carries Psyker (Talent), Warp Empowerment or any Warp Sorcery, and none should be given one.\n\nLore: The T'au have almost no presence in the warp. Psykers have trouble reading or dominating them, daemons find little to grip, and no T'au has ever been shown to be a psyker. This is consistent background across Codex: T'au Empire editions; how strong the effect is is left vague, and the fiction shows T'au dying to daemons and to psychic assault, so it is priced as a real but partial defence, not the total immunity a Pariah or a Necron has.\n\nDesign: Mind Shield 3 (B70, 4/level) = 12, plus Resistant (B81) at the Occasional hazard base of 10 with the +8 bonus (x1/2) = 5, for 17 points. Deliberately not Immunity: a Pariah's Immunity to Warp-Based Effects (data/imperium/psykers/warp.yaml) costs 10 for a total shield and the Necron Soulless trait does the same, but the T'au are only faint in the warp, not absent from it. 'Cannot be a psyker' is a rule of the setting rather than a priced disadvantage: nothing in a T'au build ever buys a psychic advantage, so there is nothing to price.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Xenos",
+						"T'au"
+					],
+					"container_type": "meta_trait",
+					"children": [
+						{
+							"id": "tyreT8Xia-DupwVLv",
+							"name": "Mind Shield (Warp-Faint)",
+							"reference": "B70",
+							"local_notes": "Mind Shield 3: -3 to mind-reading, mind-control and emotion-control powers used on this character.\n\nLore: Psykers find a T'au's mind slippery and dim: hard to read, harder to seize.\n\nDesign: Mind Shield 3 (B70, 4/level) = 12 points.",
+							"tags": [
+								"Advantage",
+								"Mental",
+								"Xenos",
+								"T'au"
+							],
+							"points_per_level": 4,
+							"can_level": true,
+							"levels": 3
+						},
+						{
+							"id": "t-k4-P3wmz4fP7lrL",
+							"name": "Resistant (Warp Influence)",
+							"reference": "B81",
+							"local_notes": "+8 to HT rolls to resist possession, warp-taint mutation and daemonic influence.\n\nLore: A soul that barely registers in the warp gives a daemon little to take hold of.\n\nDesign: Resistant (B81): Occasional hazard 10, +8 to resist (x1/2) = 5 points.",
+							"tags": [
+								"Advantage",
+								"Mental",
+								"Xenos",
+								"T'au"
+							],
+							"modifiers": [
+								{
+									"id": "mFfWs2twsUlf4d06c",
+									"name": "Occasional hazard: possession, warp-taint and daemonic influence",
+									"reference": "B81",
+									"cost_adj": "10"
+								},
+								{
+									"id": "mZk_kydUNxjsXWbZs",
+									"name": "+8 to all HT rolls to resist",
+									"reference": "B81",
+									"cost_adj": "x0.5"
+								}
+							]
+						}
+					]
+				},
+				{
+					"id": "tQlg55VBucHr2B77o",
+					"name": "Short Lifespan (T'au, optional)",
+					"reference": "B154",
+					"local_notes": "Disabled: charged nothing. A GM who wants the T'au to age faster than baseline humans can enable this (-10 for one level, B154).\n\nLore: Background describes the T'au as shorter-lived than humans, with Ethereals said to live longer, but the drafter could not pin a figure or a citation to that, and the framework asks for Short Lifespan only where the drafter is confident. So: left out of the price.\n\nDesign: Short Lifespan is -10 per level (B154). Not charged, so no T'au template carries the discount and the racial totals are not padded by an unsourced disadvantage.",
+					"tags": [
+						"Disadvantage",
+						"Physical",
+						"Xenos",
+						"T'au"
+					],
+					"points_per_level": -10,
+					"can_level": true,
+					"levels": 1,
+					"disabled": true
+				}
+			]
+		},
+		{
+			"id": "T0tPZs32IXJVGowVk",
+			"name": "Fire Caste Lens",
+			"local_notes": "Lore: The Fire caste are the warriors of the Empire: raised to soldiering, disciplined, better trained than most of what they will meet. They are not a martial aristocracy; the caste exists to hold the line while Earth's guns and Air's ships do the work. Codex: T'au Empire background.\n\nDesign: Attribute Modifiers (Fire Caste) 70 points.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"T'au"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "tJQJZwDeGI6QbXpSc",
+					"name": "Attribute Modifiers (Fire Caste)",
+					"local_notes": "DX +2, IQ +1, HT +1 (Per and Will follow IQ).\n\nDesign: Framework Fire Warrior line: ST 10, DX 12, IQ 11, HT 11, HP 10, Per 11, Will 11, Move 5. Increased DX +2 (B15, 20/level) = 40, Increased IQ +1 (B15, 20/level) = 20, Increased HT +1 (B15, 10/level) = 10: 70 points. Per and Will track IQ 11 with no separate bonus; Basic Speed (12+11)/4 = 5.75, Move 5 with no Basic Move purchase; HP 10 = ST 10.",
+					"tags": [
+						"Physical",
+						"Xenos",
+						"T'au"
+					],
+					"base_points": 70,
+					"features": [
+						{
+							"type": "attribute_bonus",
+							"attribute": "dx",
+							"amount": 2
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "iq",
+							"amount": 1
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "ht",
+							"amount": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"id": "T77amigLZpJba9riz",
+			"name": "Fire Warrior Training",
+			"local_notes": "Lore: Fire Warrior training is shooting, drill and fire-team discipline, and very little else. T'au doctrine avoids close combat, so the training buys nothing in melee: that gap is in the skill list, not a disadvantage. Codex: T'au Empire background.\n\nDesign: Fit 5 + Fire Team Drill 1 = 6 points.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"T'au"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "t2virLg1-FmFoerRC",
+					"name": "Fit",
+					"reference": "B55",
+					"local_notes": "+1 to HT rolls to stay conscious or avoid dying; recovers lost FP faster (B55).\n\nLore: Fire caste and Earth caste both spend their lives on their feet and in kit.\n\nDesign: Fit (B55), 5 points.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"T'au"
+					],
+					"base_points": 5
+				},
+				{
+					"id": "tIAI_mJ-EI73Ab4NA",
+					"name": "Fire Team Drill",
+					"reference": "B100",
+					"local_notes": "+1 to hit with a ranged attack when two or more fire-team mates are firing at the same target.\n\nLore: Fire Warriors are drilled to volley fire and to focus on a single mark.\n\nDesign: Perk (B100), 1 point: a narrow, conditional +1, in the same spirit as the Basic Set's skill perks.",
+					"tags": [
+						"Perk",
+						"Xenos",
+						"T'au"
+					],
+					"base_points": 1,
+					"features": [
+						{
+							"type": "conditional_modifier",
+							"situation": "to hit with a ranged attack when two or more fire-team mates are firing at the same target",
+							"amount": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"id": "Ta91nhmDSH3ylFyi6",
+			"name": "Veteran Lens (Shas'ui)",
+			"local_notes": "Lore: A Shas'ui is a Fire Warrior who has survived enough battles to lead a fire team: physically no different in kind, but tougher, sharper and trusted. Many go on to pilot battlesuits. Codex: T'au Empire background.\n\nDesign: Attribute Modifiers (Veteran) 50 points; Military Rank comes separately.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"T'au"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "tMbEoKf16LuHRexGM",
+					"name": "Attribute Modifiers (Veteran)",
+					"local_notes": "ST +1, DX +1, HT +1, Per +1, Will +1.\n\nDesign: Over the Fire Caste Lens: ST 11, DX 13, IQ 11, HT 12, HP 11, Per 12, Will 12, Move 6. ST +1 (10), DX +1 (20), HT +1 (10), Per +1 (5), Will +1 (5) = 50. Basic Speed (13+12)/4 = 6.25, Move 6, HP 11 = ST 11.",
+					"tags": [
+						"Physical",
+						"Xenos",
+						"T'au"
+					],
+					"base_points": 50,
+					"features": [
+						{
+							"type": "attribute_bonus",
+							"attribute": "st",
+							"amount": 1
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "dx",
+							"amount": 1
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "ht",
+							"amount": 1
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "per",
+							"amount": 1
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "will",
+							"amount": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"id": "tM3Mpio3y1haLY9ig",
+			"name": "Military Rank (Fire Caste)",
+			"reference": "B29",
+			"local_notes": "Fire caste command ladder: Shas'la (0), Shas'ui team leader (1), Shas'vre veteran pilot (2), Shas'el cadre leader (3), Shas'o commander (5). Templates override the levels.\n\nLore: Fire caste ranks are named for role and seniority (Shas'la, Shas'ui, Shas'vre, Shas'el, Shas'o, Shas'ar'tol). Codex: T'au Empire background.\n\nDesign: Military Rank (B29, 5/level). The ladder is compressed against the Basic Set's 0-8 scale: a Shas'o commands a cadre or more, so 5; the levels below are spaced by role. Status is not replaced (the T'au have no high-status warrior aristocracy; that is the Ethereals' place).",
+			"tags": [
+				"Advantage",
+				"Social",
+				"Xenos",
+				"T'au"
+			],
+			"points_per_level": 5,
+			"can_level": true,
+			"levels": 1
+		},
+		{
+			"id": "TPgFYVZm7IE53hP9W",
+			"name": "The Greater Good",
+			"local_notes": "T'au'va. Sense of Duty to the T'au Empire and everyone in it, auxiliaries included, and a professional code: obey the chain of command and the Ethereals, do not leave a comrade or ally behind, offer terms before slaughter. This is duty, not fanaticism in the Imperial sense: a T'au can be argued with, and can change sides of a policy if the Ethereals do.\n\nLore: The Greater Good (T'au'va) is the founding creed of the Empire: every caste, and every race that joins, serves the whole. It is a philosophy and a political programme, and it is offered before it is imposed. Codex: T'au Empire background across editions.\n\nDesign: Sense of Duty (Large Group: the Empire) -10 (B153) + Code of Honor (Professional) -5 (B127) = -15 points. Code of Honor is priced as the lightest B127 tier, not the Soldier's -10: the T'au are not depicted as glorying in combat or in personal honour, only in discharge of duty. Entire Race (-15) was rejected because the Greater Good extends past the T'au.",
+			"tags": [
+				"Disadvantage",
+				"Mental",
+				"Xenos",
+				"T'au"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "t3LWGGA8Wu6kNhEgO",
+					"name": "Sense of Duty (T'au Empire)",
+					"reference": "B153",
+					"local_notes": "Will not knowingly act against the Empire's good; roll self-control to put personal interest first.\n\nLore: The Greater Good is a duty to a whole civilisation, not a single master.\n\nDesign: Sense of Duty (B153), Large Group -10.",
+					"tags": [
+						"Disadvantage",
+						"Mental",
+						"Xenos",
+						"T'au"
+					],
+					"modifiers": [
+						{
+							"id": "mjgko0pZHfCV9t3wP",
+							"name": "Large Group (the T'au Empire and its allied races)",
+							"reference": "B153",
+							"cost_adj": "-10"
+						}
+					]
+				},
+				{
+					"id": "tx-sNj_Lic7U477bl",
+					"name": "Code of Honor (Greater Good)",
+					"reference": "B127",
+					"local_notes": "Obey caste duty and the Ethereals; do not abandon comrades or allies; offer terms before annihilation. Breaking it is a reaction penalty from other T'au and a self-esteem crisis.\n\nLore: Each caste has its own code; the Fire caste's is a soldier's, close to B127's Professional code but with a duty to offer surrender first. Background.\n\nDesign: Code of Honor (Professional) -5 (B127).",
+					"tags": [
+						"Disadvantage",
+						"Mental",
+						"Xenos",
+						"T'au"
+					],
+					"base_points": -5
+				}
+			]
+		},
+		{
+			"id": "T03EJuN4Wx6OJjRL3",
+			"name": "Devotion to the Ethereals",
+			"local_notes": "Near an Ethereal, T'au hold and fight harder. The Ethereal's half of this is Inspiring Presence. Non-Ethereal T'au carry this; Ethereals do not.\n\nLore: T'au follow their Ethereals with a devotion that goes far past discipline: Fire Warriors fight to the last around one, and it is unheard of for a T'au to raise a hand against one. Whether the cause is culture or, as often speculated in the fiction, an Ethereal-borne pheromone, is left unresolved (Codex: T'au Empire background), so this is built as belief and morale, not as a compulsion.\n\nDesign: Sense of Duty (Small Group: the Ethereal caste) -5, Fearlessness 2 (4/level 2 = 4, Accessibility -50%) = 2, Higher Purpose 1 (5, Accessibility -60%) = 2: net -1 point. The package is nearly free because the bonuses (2 points) roughly cancel the duty (-5): it is a matched pair, not a sacrifice.",
+			"tags": [
+				"Disadvantage",
+				"Mental",
+				"Xenos",
+				"T'au"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "tgweXMpVH1yI0Lmqr",
+					"name": "Sense of Duty (Ethereals)",
+					"reference": "B153",
+					"local_notes": "Cannot knowingly disobey or endanger an Ethereal; roll self-control when told to.\n\nLore: An Ethereal's word is very nearly law to every other caste.\n\nDesign: Sense of Duty (B153), Small Group -5.",
+					"tags": [
+						"Disadvantage",
+						"Mental",
+						"Xenos",
+						"T'au"
+					],
+					"modifiers": [
+						{
+							"id": "mmM-GChe0xc5_a-cw",
+							"name": "Small Group (the Ethereal caste)",
+							"reference": "B153",
+							"cost_adj": "-5"
+						}
+					]
+				},
+				{
+					"id": "tP_IF9jnAvjHy6Mhj",
+					"name": "Fearlessness (Ethereal's Presence)",
+					"reference": "B55",
+					"local_notes": "+2 to Fright Checks near an Ethereal or acting on one's order.\n\nLore: T'au hold the line around an Ethereal long after others would break.\n\nDesign: Fearlessness 2 (B55, 2/level = 4), Accessibility -50% = 2 points.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Xenos",
+						"T'au"
+					],
+					"modifiers": [
+						{
+							"id": "mLYqjGoOakQhsYWyO",
+							"name": "Accessibility",
+							"reference": "B110",
+							"local_notes": "Only while an Ethereal is in sight or hearing, or the T'au is acting on one's direct order.",
+							"cost_adj": "-50%"
+						}
+					],
+					"points_per_level": 2,
+					"can_level": true,
+					"levels": 2
+				},
+				{
+					"id": "tgVJjxlPaIsLjyKCv",
+					"name": "Higher Purpose (The Ethereal's Word)",
+					"reference": "B59",
+					"local_notes": "+1 to skill rolls made to carry out an Ethereal's order, or to defend or avenge one.\n\nLore: The Fire Warrior fights harder under an Ethereal's eye.\n\nDesign: Higher Purpose 1 (B59, 5/level), Accessibility -60% = 2 points.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Xenos",
+						"T'au"
+					],
+					"modifiers": [
+						{
+							"id": "mEFFPdEwNNgqG0qCH",
+							"name": "Accessibility",
+							"reference": "B110",
+							"local_notes": "Only while an Ethereal is present or the T'au is carrying out an Ethereal's order.",
+							"cost_adj": "-60%"
+						}
+					],
+					"points_per_level": 5,
+					"can_level": true,
+					"levels": 1,
+					"features": [
+						{
+							"type": "conditional_modifier",
+							"situation": "to skill rolls made to carry out an Ethereal's order, or to defend or avenge one",
+							"amount": 1
+						}
+					]
+				}
+			]
+		}
+	],
+	"skills": [
+		{
+			"id": "sktAJUEbgEP8A2B8d",
+			"name": "Beam Weapons",
+			"reference": "B179",
+			"local_notes": "Lore: Pulse rifle or carbine; a Shas'ui is the best shot in his team.\n\nDesign: DX+5 (18) for 16 points, Easy.",
+			"tags": [
+				"Xenos",
+				"T'au"
+			],
+			"specialization": "Rifle",
+			"difficulty": "dx/e",
+			"defaults": [
+				{
+					"type": "dx",
+					"modifier": -4
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Beam Weapons"
+					},
+					"modifier": -4
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Guns"
+					},
+					"specialization": {
+						"compare": "is",
+						"qualifier": "Rifle"
+					},
+					"modifier": -4
+				}
+			],
+			"points": 16
+		},
+		{
+			"id": "sgPdr7S1KBPtL-IRK",
+			"name": "Beam Weapons",
+			"reference": "B179",
+			"local_notes": "Lore: Pulse pistol sidearm.\n\nDesign: DX+1 (14) for 2 points, Easy.",
+			"tags": [
+				"Xenos",
+				"T'au"
+			],
+			"specialization": "Pistol",
+			"difficulty": "dx/e",
+			"defaults": [
+				{
+					"type": "dx",
+					"modifier": -4
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Beam Weapons"
+					},
+					"modifier": -4
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Guns"
+					},
+					"specialization": {
+						"compare": "is",
+						"qualifier": "Pistol"
+					},
+					"modifier": -4
+				}
+			],
+			"points": 2
+		},
+		{
+			"id": "sxWxz9Buij0vRwYqr",
+			"name": "Gunner",
+			"reference": "B198",
+			"local_notes": "Lore: Mounted burst cannons and vehicle guns.\n\nDesign: DX+2 (15) for 4 points, Easy.",
+			"tags": [
+				"Xenos",
+				"T'au"
+			],
+			"specialization": "Beams",
+			"difficulty": "dx/e",
+			"defaults": [
+				{
+					"type": "dx",
+					"modifier": -4
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Gunner"
+					},
+					"modifier": -4
+				}
+			],
+			"points": 4
+		},
+		{
+			"id": "stDecBPFG0YLykfyi",
+			"name": "Brawling",
+			"reference": "B182",
+			"local_notes": "Lore: A little more than a Shas'la, still no melee weapon.\n\nDesign: DX+1 (14) for 2 points, Easy.",
+			"tags": [
+				"Xenos",
+				"T'au"
+			],
+			"difficulty": "dx/e",
+			"points": 2
+		},
+		{
+			"id": "slT1VY818AZGHBSIg",
+			"name": "Throwing",
+			"reference": "B226",
+			"local_notes": "Lore: Grenades.\n\nDesign: DX+0 (13) for 2 points, Average.",
+			"tags": [
+				"Xenos",
+				"T'au"
+			],
+			"difficulty": "dx/a",
+			"defaults": [
+				{
+					"type": "dx",
+					"modifier": -3
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Dropping"
+					},
+					"modifier": -4
+				}
+			],
+			"points": 2
+		},
+		{
+			"id": "sRYQY-GwbdN0dd5tJ",
+			"name": "Tactics",
+			"reference": "B224",
+			"local_notes": "Lore: Leading a fire team in the field.\n\nDesign: IQ+0 (11) for 4 points, Hard.",
+			"tags": [
+				"Xenos",
+				"T'au"
+			],
+			"difficulty": "iq/h",
+			"defaults": [
+				{
+					"type": "iq",
+					"modifier": -6
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Strategy"
+					},
+					"modifier": -6
+				}
+			],
+			"points": 4
+		},
+		{
+			"id": "sd2C2lBsHuwWfAETW",
+			"name": "Leadership",
+			"reference": "B204",
+			"local_notes": "Lore: Commanding a team of Shas'la.\n\nDesign: IQ+1 (12) for 4 points, Average.",
+			"tags": [
+				"Xenos",
+				"T'au"
+			],
+			"difficulty": "iq/a",
+			"defaults": [
+				{
+					"type": "iq",
+					"modifier": -5
+				}
+			],
+			"points": 4
+		},
+		{
+			"id": "srRScKtXgFEs6Ef9s",
+			"name": "Observation",
+			"reference": "B211",
+			"local_notes": "Lore: Reading the battlefield for his team.\n\nDesign: Per+1 (13) for 4 points, Average.",
+			"tags": [
+				"Xenos",
+				"T'au"
+			],
+			"difficulty": "per/a",
+			"defaults": [
+				{
+					"type": "per",
+					"modifier": -5
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Shadowing"
+					},
+					"modifier": -5
+				}
+			],
+			"points": 4
+		},
+		{
+			"id": "sC47nKtFT6xb7tLOR",
+			"name": "Stealth",
+			"reference": "B222",
+			"local_notes": "Lore: Fieldcraft.\n\nDesign: DX+0 (13) for 2 points, Average.",
+			"tags": [
+				"Xenos",
+				"T'au"
+			],
+			"difficulty": "dx/a",
+			"defaults": [
+				{
+					"type": "iq",
+					"modifier": -5
+				},
+				{
+					"type": "dx",
+					"modifier": -5
+				}
+			],
+			"points": 2
+		},
+		{
+			"id": "sB3cK4wGEJuyJLsBQ",
+			"name": "Camouflage",
+			"reference": "B183",
+			"local_notes": "Lore: Fieldcraft.\n\nDesign: IQ+1 (12) for 2 points, Easy.",
+			"tags": [
+				"Xenos",
+				"T'au"
+			],
+			"difficulty": "iq/e",
+			"defaults": [
+				{
+					"type": "iq",
+					"modifier": -4
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Survival"
+					},
+					"modifier": -2
+				}
+			],
+			"points": 2
+		},
+		{
+			"id": "sYi9TvV-LGjiPf8Cy",
+			"name": "Electronics Operation",
+			"reference": "B189",
+			"local_notes": "Lore: Team comms and the network.\n\nDesign: IQ+0 (11) for 2 points, Average.",
+			"tags": [
+				"Xenos",
+				"T'au"
+			],
+			"specialization": "Communications",
+			"difficulty": "iq/a",
+			"defaults": [
+				{
+					"type": "iq",
+					"modifier": -5
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Electronics Operation"
+					},
+					"modifier": -4
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Electronics Repair"
+					},
+					"specialization": {
+						"compare": "is",
+						"qualifier": "Communications"
+					},
+					"modifier": -5
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Engineer"
+					},
+					"specialization": {
+						"compare": "is",
+						"qualifier": "Electronics"
+					},
+					"modifier": -5
+				}
+			],
+			"points": 2
+		},
+		{
+			"id": "s-e1SFYXxvFDVo4_X",
+			"name": "Electronics Operation",
+			"reference": "B189",
+			"local_notes": "Lore: Drone and markerlight sensor networks.\n\nDesign: IQ+0 (11) for 2 points, Average.",
+			"tags": [
+				"Xenos",
+				"T'au"
+			],
+			"specialization": "Sensors",
+			"difficulty": "iq/a",
+			"defaults": [
+				{
+					"type": "iq",
+					"modifier": -5
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Electronics Repair"
+					},
+					"specialization": {
+						"compare": "is",
+						"qualifier": "Sensors"
+					},
+					"modifier": -5
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Engineer"
+					},
+					"specialization": {
+						"compare": "is",
+						"qualifier": "Electronics"
+					},
+					"modifier": -5
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Electronics Operation"
+					},
+					"modifier": -4
+				}
+			],
+			"points": 2
+		},
+		{
+			"id": "s7k9u0hP3fMdfVeBa",
+			"name": "First Aid",
+			"reference": "B195",
+			"local_notes": "Lore: Field medicine.\n\nDesign: IQ+1 (12) for 2 points, Easy.",
+			"tags": [
+				"Xenos",
+				"T'au"
+			],
+			"difficulty": "iq/e",
+			"defaults": [
+				{
+					"type": "iq",
+					"modifier": -4
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Esoteric Medicine"
+					}
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Physician"
+					}
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Veterinary"
+					},
+					"modifier": -4
+				}
+			],
+			"points": 2
+		},
+		{
+			"id": "s4LfS844muAv8LIXa",
+			"name": "Hiking",
+			"reference": "B200",
+			"local_notes": "Lore: Endurance.\n\nDesign: HT+0 (12) for 2 points, Average.",
+			"tags": [
+				"Xenos",
+				"T'au"
+			],
+			"difficulty": "ht/a",
+			"defaults": [
+				{
+					"type": "ht",
+					"modifier": -5
+				}
+			],
+			"points": 2
+		},
+		{
+			"id": "scBfIGOdOHBWGziKk",
+			"name": "Savoir-Faire",
+			"reference": "B218",
+			"local_notes": "Lore: Rank etiquette to Shas'el and Shas'o.\n\nDesign: IQ+1 (12) for 2 points, Easy.",
+			"tags": [
+				"Xenos",
+				"T'au"
+			],
+			"specialization": "Military",
+			"difficulty": "iq/e",
+			"defaults": [
+				{
+					"type": "iq",
+					"modifier": -4
+				}
+			],
+			"points": 2
+		},
+		{
+			"id": "sUQfaDIx7gYNAfXwq",
+			"name": "Navigation",
+			"reference": "B211",
+			"local_notes": "Lore: Land navigation.\n\nDesign: IQ+0 (11) for 2 points, Average.",
+			"tags": [
+				"Xenos",
+				"T'au"
+			],
+			"specialization": "Land",
+			"difficulty": "iq/a",
+			"defaults": [
+				{
+					"type": "iq",
+					"modifier": -5
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Cartography"
+					},
+					"modifier": -4
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Mathematics"
+					},
+					"specialization": {
+						"compare": "is",
+						"qualifier": "Surveying"
+					},
+					"modifier": -4
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Navigation"
+					},
+					"specialization": {
+						"compare": "is",
+						"qualifier": "Air"
+					},
+					"modifier": -2
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Navigation"
+					},
+					"specialization": {
+						"compare": "is",
+						"qualifier": "Sea"
+					},
+					"modifier": -2
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Navigation"
+					},
+					"specialization": {
+						"compare": "is",
+						"qualifier": "Underground"
+					},
+					"modifier": -2
+				}
+			],
+			"points": 2
+		},
+		{
+			"id": "swIRuwUkJruDbhOAA",
+			"name": "Armoury",
+			"reference": "B178",
+			"local_notes": "Lore: Maintaining the team's guns.\n\nDesign: IQ+0 (11) for 2 points, Average.",
+			"tags": [
+				"Xenos",
+				"T'au"
+			],
+			"specialization": "Small Arms",
+			"difficulty": "iq/a",
+			"defaults": [
+				{
+					"type": "iq",
+					"modifier": -5
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Engineer"
+					},
+					"specialization": {
+						"compare": "is",
+						"qualifier": "Small Arms"
+					},
+					"modifier": -4
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Machinist"
+					},
+					"modifier": -5
+				}
+			],
+			"points": 2
+		},
+		{
+			"id": "sTY95nBFffUdOI4u8",
+			"name": "Piloting",
+			"reference": "B214",
+			"local_notes": "Lore: Devilfish and Piranha.\n\nDesign: DX+0 (13) for 2 points, Average.",
+			"tags": [
+				"Xenos",
+				"T'au"
+			],
+			"specialization": "Contragravity",
+			"difficulty": "dx/a",
+			"defaults": [
+				{
+					"type": "iq",
+					"modifier": -6
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Piloting"
+					},
+					"specialization": {
+						"compare": "is",
+						"qualifier": "Vertol"
+					},
+					"modifier": -3
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Piloting"
+					},
+					"modifier": -5
+				}
+			],
+			"points": 2
+		},
+		{
+			"id": "sU75fk59YSLWP-8vj",
+			"name": "Teaching",
+			"reference": "B224",
+			"local_notes": "Lore: Training new Shas'la.\n\nDesign: IQ-1 (10) for 1 point, Average.",
+			"tags": [
+				"Xenos",
+				"T'au"
+			],
+			"difficulty": "iq/a",
+			"defaults": [
+				{
+					"type": "iq",
+					"modifier": -5
+				}
+			],
+			"points": 1
+		},
+		{
+			"id": "swjhgtesfE9dy-yZj",
+			"name": "Fast-Draw",
+			"reference": "B194",
+			"local_notes": "Lore: Reload drill.\n\nDesign: DX+0 (13) for 1 point, Easy.",
+			"tags": [
+				"Xenos",
+				"T'au"
+			],
+			"specialization": "Ammo",
+			"difficulty": "dx/e",
+			"points": 1
+		},
+		{
+			"id": "sdZkvN29jM3s_LJuO",
+			"name": "Running",
+			"reference": "B218",
+			"local_notes": "Lore: Conditioning.\n\nDesign: HT+0 (12) for 2 points, Average.",
+			"tags": [
+				"Xenos",
+				"T'au"
+			],
+			"difficulty": "ht/a",
+			"defaults": [
+				{
+					"type": "ht",
+					"modifier": -5
+				}
+			],
+			"points": 2
+		}
+	],
+	"equipment": []
+}

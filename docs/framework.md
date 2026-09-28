@@ -357,7 +357,7 @@ The T'au are a young, fast-rising empire bound by the Greater Good (T'au'va) and
 | Fire Warrior (Shas'la) | 10 | 12 | 11 | 11 | 10 | 11 | 11 | 5 | Better drilled than a Guardsman; poor in melee. |
 | Fire Warrior veteran (Shas'ui) | 11 | 13 | 11 | 12 | 11 | 12 | 12 | 6 | Team leader; often a battlesuit pilot. |
 | Pathfinder | 10 | 13 | 11 | 11 | 10 | 13 | 11 | 6 | Forward scout, markerlight specialist. |
-| Battlesuit pilot (Shas'vre) | 11 | 14 | 12 | 12 | 11 | 12 | 13 | 5 | Stat line is the pilot; the suit is equipment. |
+| Battlesuit pilot (Shas'vre) | 11 | 14 | 12 | 12 | 11 | 12 | 13 | 6 | Stat line is the pilot; the suit is equipment. |
 | Commander (Shas'o) | 11 | 15 | 14 | 12 | 11 | 14 | 15 | 6 | Veteran of decades; master of Kauyon and Mont'ka. |
 | Ethereal (Aun) | 9 | 11 | 13 | 10 | 9 | 12 | 17 | 5 | Absolute authority; T'au around them fight harder. |
 | Earth caste (Fio) | 11 | 11 | 13 | 12 | 11 | 12 | 11 | 5 | Stocky engineer. |

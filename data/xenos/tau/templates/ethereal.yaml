@@ -1,0 +1,184 @@
+kind: template
+output: Xenos/Tau/Templates/Ethereal (Aun).gct
+notes: >-
+  An Ethereal (Aun): a member of the ruling caste: physically frail, mentally formidable,
+  and treated by the other castes with reverence. Rarely armed; his weapon is Inspiring
+  Presence, and a Fire caste Honour Guard stands around him. Point math (see Xenos/Tau/Traits/T'au
+  Traits.adq): T'au Physiology (17) + Ethereal Caste Lens (141) + The Greater Good (-15)
+  = 143 points of traits, plus skills (156 points) = 299 points. Stats: ST 9, DX 11, IQ
+  13, HT 10, HP 9, Will 17, Per 12, Speed 5.25, Move 5, Dodge 8. Tier: elite human (200-350).
+
+
+  The Ethereal is built without Devotion to the Ethereals (he is its object) and without
+  weapon skills: an Ethereal is not a fighter, and a GM who needs one can add Beam Weapons
+  (Pistol) at DX. Honour Guard and starting wealth are not priced here; a GM who wants
+  the Honour Guard as an Ally Group can add it.
+traits:
+- {include: xenos/tau/traits.yaml#T'au Physiology}
+- {include: xenos/tau/traits.yaml#Ethereal Caste Lens}
+- {include: xenos/tau/traits.yaml#The Greater Good}
+skills:
+- name: Diplomacy
+  diff: IQ/H
+  points: 20
+  tags: [Xenos, T'au]
+  ref: B187
+  defaults: [IQ-6, Politics-6]
+  lore: Governance is negotiation between castes, sects and species.
+  design: IQ+4 (17) for 20 points, Hard.
+- name: Leadership
+  diff: IQ/A
+  points: 16
+  tags: [Xenos, T'au]
+  ref: B204
+  defaults: [IQ-5]
+  lore: Ruling and inspiring.
+  design: IQ+4 (17) for 16 points, Average.
+- name: Politics
+  diff: IQ/A
+  points: 16
+  tags: [Xenos, T'au]
+  ref: B215
+  defaults: [IQ-5, Diplomacy-5]
+  lore: The internal politics of the caste and the Empire.
+  design: IQ+4 (17) for 16 points, Average.
+- name: Public Speaking
+  diff: IQ/A
+  points: 12
+  tags: [Xenos, T'au]
+  ref: B216
+  defaults: [Public Speaking-2, IQ-5, Acting-5, Performance-2, Politics-5]
+  lore: Addressing a sept or an army.
+  design: IQ+3 (16) for 12 points, Average.
+- name: Psychology
+  diff: IQ/H
+  points: 12
+  tags: [Xenos, T'au]
+  ref: B216
+  defaults: [IQ-6, Sociology-4]
+  lore: Reading and guiding people.
+  design: IQ+2 (15) for 12 points, Hard.
+- name: Administration
+  diff: IQ/A
+  points: 8
+  tags: [Xenos, T'au]
+  ref: B174
+  defaults: [Merchant-3, IQ-5]
+  lore: Running a sept.
+  design: IQ+2 (15) for 8 points, Average.
+- name: Savoir-Faire
+  spec: Ethereal Court
+  diff: IQ/E
+  points: 8
+  tags: [Xenos, T'au]
+  ref: B218
+  defaults: [IQ-4, Games-3]
+  lore: The etiquette of the ruling caste.
+  design: IQ+3 (16) for 8 points, Easy.
+- name: Propaganda
+  diff: IQ/A
+  points: 8
+  tags: [Xenos, T'au]
+  ref: B216
+  defaults: [IQ-5, Merchant-5, Psychology-4]
+  lore: Shaping the Greater Good's message.
+  design: IQ+2 (15) for 8 points, Average.
+- name: Strategy
+  spec: Land
+  diff: IQ/H
+  points: 8
+  tags: [Xenos, T'au]
+  ref: B222
+  defaults: [IQ-6, Intelligence Analysis-6, Tactics-6, Strategy-4]
+  lore: Setting the aims of a war.
+  design: IQ+1 (14) for 8 points, Hard.
+- name: Tactics
+  diff: IQ/H
+  points: 4
+  tags: [Xenos, T'au]
+  ref: B224
+  defaults: [IQ-6, Strategy-6]
+  lore: Understanding what a Commander proposes.
+  design: IQ+0 (13) for 4 points, Hard.
+- name: Detect Lies
+  diff: Per/H
+  points: 8
+  tags: [Xenos, T'au]
+  ref: B187
+  defaults: [Per-6, Body Language-4, Psychology-4]
+  lore: Reading envoys and subordinates.
+  design: Per+1 (13) for 8 points, Hard.
+- name: Body Language
+  diff: Per/A
+  points: 4
+  tags: [Xenos, T'au]
+  ref: B181
+  defaults: [Detect Lies-4, Psychology-4]
+  lore: Reading people.
+  design: Per+1 (13) for 4 points, Average.
+- name: Sociology
+  diff: IQ/H
+  points: 4
+  tags: [Xenos, T'au]
+  ref: B221
+  defaults: [IQ-6, Anthropology-3, Psychology-4]
+  lore: Understanding castes and alien societies.
+  design: IQ+0 (13) for 4 points, Hard.
+- name: Teaching
+  diff: IQ/A
+  points: 4
+  tags: [Xenos, T'au]
+  ref: B224
+  defaults: [IQ-5]
+  lore: Instructing younger Ethereals.
+  design: IQ+1 (14) for 4 points, Average.
+- name: Current Affairs
+  spec: Politics
+  diff: IQ/E
+  points: 4
+  tags: [Xenos, T'au]
+  ref: B186
+  defaults: [IQ-4, Research-4, Current Affairs-4]
+  lore: Knowing what other worlds are doing.
+  design: IQ+2 (15) for 4 points, Easy.
+- name: Hidden Lore
+  spec: Xenos
+  diff: IQ/A
+  points: 4
+  tags: [Xenos, T'au]
+  ref: B199
+  lore: Knowledge of other species.
+  design: IQ+1 (14) for 4 points, Average.
+- name: History
+  spec: T'au Empire
+  diff: IQ/H
+  points: 4
+  tags: [Xenos, T'au]
+  ref: B200
+  defaults: [IQ-6]
+  lore: The Empire's history.
+  design: IQ+0 (13) for 4 points, Hard.
+- name: Intelligence Analysis
+  diff: IQ/H
+  points: 4
+  tags: [Xenos, T'au]
+  ref: B201
+  defaults: [Intelligence Analysis-2, IQ-6, Strategy-6]
+  lore: Reading reports.
+  design: IQ+0 (13) for 4 points, Hard.
+- name: Writing
+  diff: IQ/A
+  points: 4
+  tags: [Xenos, T'au]
+  ref: B228
+  defaults: [IQ-5]
+  lore: Decrees and letters.
+  design: IQ+1 (14) for 4 points, Average.
+- name: Expert Skill
+  spec: Xenology
+  diff: IQ/H
+  points: 4
+  tags: [Xenos, T'au]
+  ref: B193
+  lore: Understanding the species the Greater Good invites.
+  design: IQ+0 (13) for 4 points, Hard.

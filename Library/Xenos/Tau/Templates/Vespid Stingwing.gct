@@ -1,0 +1,395 @@
+{
+	"version": 5,
+	"id": "B1zyPkR_otof0E90J",
+	"notes": "A Vespid Stingwing: a winged insectoid mercenary who strafes and skirmishes for the T'au with a neutron blaster, under its Strain Leader. Point math (see Xenos/Tau/Traits/T'au Traits.adq): Vespid Physiology (110) + Vespid Strain (-5) = 105 points of traits, plus skills (54 points) = 159 points. Stats: ST 11, DX 13, IQ 8, HT 11, HP 11, Will 10, Per 12, Speed 6.0, Move 6, Dodge 9. Tier: trained soldier (100-175).\n\nThe neutron blaster is a Beam Weapons (Rifle) skill. Vespid natural armour is deliberately left out (no confident source); see the Vespid Physiology trait. Flight is bought at HT/A (B195), rated at HT 11.",
+	"traits": [
+		{
+			"id": "TOXI-BitGjiVRVVQU",
+			"name": "Vespid Physiology",
+			"local_notes": "Lore: The Vespid are winged, insectoid mercenaries from a distant world whom the T'au hire for their flight and firepower. They are led by Strain Leaders, and their Stingwings fire neutron blasters powered by crystals from their homeworld, reportedly hard for others to use. Codex: T'au Empire background, Vespid Stingwings.\n\nDesign: Attribute Modifiers (Vespid) 70 + Flight (Winged) 30 + Enhanced Move (Air) 1/2 10 = 110 points, framework.md's Vespid Stingwing line before training. Not priced, for lack of lore confidence: chitin armour (a Vespid may well have natural DR; Damage Resistance is 5/level and adding a guess would push the template past its 150-220 target), compound-eye vision (Peripheral Vision), and language limits. The crystal link to the neutron blaster is equipment, not a trait.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"T'au",
+				"Vespid"
+			],
+			"container_type": "ancestry",
+			"children": [
+				{
+					"id": "tKKIM0GQOe35H4kVZ",
+					"name": "Attribute Modifiers (Vespid)",
+					"local_notes": "ST +1, DX +3, IQ -2, HT +1, Per +4, Will +2.\n\nDesign: Framework Vespid line: ST 11, DX 13, IQ 8, HT 11, HP 11, Per 12, Will 10, Move 6. ST +1 (10), DX +3 (60), IQ -2 (-40), HT +1 (10), Per +4 (20, so Per 12 with IQ 8), Will +2 (10) = 70. Basic Speed (13+11)/4 = 6.0, Move 6, HP 11 = ST 11.",
+					"tags": [
+						"Physical",
+						"Xenos",
+						"T'au",
+						"Vespid"
+					],
+					"base_points": 70,
+					"features": [
+						{
+							"type": "attribute_bonus",
+							"attribute": "st",
+							"amount": 1
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "dx",
+							"amount": 3
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "iq",
+							"amount": -2
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "ht",
+							"amount": 1
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "per",
+							"amount": 4
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "will",
+							"amount": 2
+						}
+					]
+				},
+				{
+					"id": "txY-jyR4_sKP0KB55",
+					"name": "Flight (Vespid Wings)",
+					"reference": "B56",
+					"local_notes": "Air Move is Basic Speed x 2, 12 for a Stingwing.\n\nLore: Vespid fly on real wings.\n\nDesign: Flight (B56, 40 points) with Winged -25%: 40 x 0.75 = 30 points.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"T'au",
+						"Vespid"
+					],
+					"modifiers": [
+						{
+							"id": "mkDpRqakMfbsUgDsR",
+							"name": "Winged",
+							"reference": "B56",
+							"local_notes": "Needs room to spread the wings; a wing hit can ground them.",
+							"cost_adj": "-25%"
+						}
+					],
+					"base_points": 40
+				},
+				{
+					"id": "tLJLWW3oGo_Woo3Sx",
+					"name": "Enhanced Move (Air) (Vespid)",
+					"reference": "B52",
+					"local_notes": "Top speed in flight x1.5: 18 for a Stingwing.\n\nLore: Vespid dive and strafe at speed.\n\nDesign: Enhanced Move (Air) 1/2 (B52, 20/level = 10 points). Air Move 12, top speed 18, meeting framework.md's 'Air 16+'.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"T'au",
+						"Vespid"
+					],
+					"points_per_level": 20,
+					"can_level": true,
+					"levels": 0.5
+				}
+			]
+		},
+		{
+			"id": "T0iyQXRexirTjOUP6",
+			"name": "Vespid Strain",
+			"local_notes": "Lore: Vespid fight in strains under a Strain Leader and answer to it before any employer. Codex: T'au Empire background.\n\nDesign: Sense of Duty (Strain) -5 points.",
+			"tags": [
+				"Disadvantage",
+				"Mental",
+				"Xenos",
+				"T'au",
+				"Vespid"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "tsmrmxUYaBsGrnlJE",
+					"name": "Sense of Duty (Strain)",
+					"reference": "B153",
+					"local_notes": "Will not desert or endanger the strain; self-control roll to put self first.\n\nLore: A Vespid's first loyalty is to its strain and Strain Leader.\n\nDesign: Sense of Duty (B153), Small Group -5.",
+					"tags": [
+						"Disadvantage",
+						"Mental",
+						"Xenos",
+						"T'au",
+						"Vespid"
+					],
+					"modifiers": [
+						{
+							"id": "mL9gCGrIvhmFLhVUN",
+							"name": "Small Group (the strain)",
+							"reference": "B153",
+							"cost_adj": "-5"
+						}
+					]
+				}
+			]
+		}
+	],
+	"skills": [
+		{
+			"id": "sJkmsKSB2dKGQBqU2",
+			"name": "Beam Weapons",
+			"reference": "B179",
+			"local_notes": "Lore: The neutron blaster: a crystal-charged beam weapon, so Beam Weapons (Rifle).\n\nDesign: DX+4 (17) for 12 points, Easy.",
+			"tags": [
+				"Xenos",
+				"T'au",
+				"Vespid"
+			],
+			"specialization": "Rifle",
+			"difficulty": "dx/e",
+			"defaults": [
+				{
+					"type": "dx",
+					"modifier": -4
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Beam Weapons"
+					},
+					"modifier": -4
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Guns"
+					},
+					"specialization": {
+						"compare": "is",
+						"qualifier": "Rifle"
+					},
+					"modifier": -4
+				}
+			],
+			"points": 12
+		},
+		{
+			"id": "sVChjzoaizL-RQeqM",
+			"name": "Flight",
+			"reference": "B195",
+			"local_notes": "Lore: Aerial manoeuvre on real wings (Flight is HT/A).\n\nDesign: HT+4 (15) for 16 points, Average.",
+			"tags": [
+				"Xenos",
+				"T'au",
+				"Vespid"
+			],
+			"difficulty": "ht/a",
+			"defaults": [
+				{
+					"type": "ht",
+					"modifier": -5
+				}
+			],
+			"points": 16
+		},
+		{
+			"id": "s-U8sIb_15l9Ctx_9",
+			"name": "Acrobatics",
+			"reference": "B174",
+			"local_notes": "Lore: Air combat manoeuvre.\n\nDesign: DX+0 (13) for 4 points, Hard.",
+			"tags": [
+				"Xenos",
+				"T'au",
+				"Vespid"
+			],
+			"difficulty": "dx/h",
+			"defaults": [
+				{
+					"type": "dx",
+					"modifier": -6
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Aerobatics"
+					},
+					"modifier": -4
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Aquabatics"
+					},
+					"modifier": -4
+				}
+			],
+			"points": 4
+		},
+		{
+			"id": "sTQkkYTXe18A5IFLj",
+			"name": "Observation",
+			"reference": "B211",
+			"local_notes": "Lore: A strafing scout.\n\nDesign: Per+2 (14) for 8 points, Average.",
+			"tags": [
+				"Xenos",
+				"T'au",
+				"Vespid"
+			],
+			"difficulty": "per/a",
+			"defaults": [
+				{
+					"type": "per",
+					"modifier": -5
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Shadowing"
+					},
+					"modifier": -5
+				}
+			],
+			"points": 8
+		},
+		{
+			"id": "sEGcv_Q5gZLYwEbQB",
+			"name": "Stealth",
+			"reference": "B222",
+			"local_notes": "Lore: Approach.\n\nDesign: DX+1 (14) for 4 points, Average.",
+			"tags": [
+				"Xenos",
+				"T'au",
+				"Vespid"
+			],
+			"difficulty": "dx/a",
+			"defaults": [
+				{
+					"type": "iq",
+					"modifier": -5
+				},
+				{
+					"type": "dx",
+					"modifier": -5
+				}
+			],
+			"points": 4
+		},
+		{
+			"id": "sUq0vZuh17dOpF6ES",
+			"name": "Brawling",
+			"reference": "B182",
+			"local_notes": "Lore: Close quarters.\n\nDesign: DX+1 (14) for 2 points, Easy.",
+			"tags": [
+				"Xenos",
+				"T'au",
+				"Vespid"
+			],
+			"difficulty": "dx/e",
+			"points": 2
+		},
+		{
+			"id": "shTkvZo97Wpm29OWa",
+			"name": "Navigation",
+			"reference": "B211",
+			"local_notes": "Lore: Aerial navigation.\n\nDesign: IQ+1 (9) for 4 points, Average.",
+			"tags": [
+				"Xenos",
+				"T'au",
+				"Vespid"
+			],
+			"specialization": "Air",
+			"difficulty": "iq/a",
+			"defaults": [
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Astronomy"
+					},
+					"modifier": -5
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Navigation"
+					},
+					"specialization": {
+						"compare": "is",
+						"qualifier": "Land"
+					},
+					"modifier": -2
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Navigation"
+					},
+					"specialization": {
+						"compare": "is",
+						"qualifier": "Sea"
+					},
+					"modifier": -2
+				}
+			],
+			"points": 4
+		},
+		{
+			"id": "sIh854podp69EHahT",
+			"name": "Throwing",
+			"reference": "B226",
+			"local_notes": "Lore: Thrown objects.\n\nDesign: DX+0 (13) for 2 points, Average.",
+			"tags": [
+				"Xenos",
+				"T'au",
+				"Vespid"
+			],
+			"difficulty": "dx/a",
+			"defaults": [
+				{
+					"type": "dx",
+					"modifier": -3
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Dropping"
+					},
+					"modifier": -4
+				}
+			],
+			"points": 2
+		},
+		{
+			"id": "sJeiA-TFkeNKTtO3G",
+			"name": "Climbing",
+			"reference": "B183",
+			"local_notes": "Lore: Landing and climbing.\n\nDesign: DX+0 (13) for 2 points, Average.",
+			"tags": [
+				"Xenos",
+				"T'au",
+				"Vespid"
+			],
+			"difficulty": "dx/a",
+			"defaults": [
+				{
+					"type": "dx",
+					"modifier": -5
+				}
+			],
+			"points": 2
+		}
+	],
+	"equipment": []
+}

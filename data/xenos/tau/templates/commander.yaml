@@ -1,0 +1,201 @@
+kind: template
+output: Xenos/Tau/Templates/Commander (Shas'o).gct
+notes: >-
+  A Shas'o: a Fire caste commander of decades' standing, a master of Kauyon and Mont'ka,
+  who leads a cadre of Shas'la, Shas'ui and Shas'vre and their drones. Most command from
+  a battlesuit. Point math (see Xenos/Tau/Traits/T'au Traits.adq): T'au Physiology (17)
+  + Fire Caste Lens (70) + Fire Warrior Training (6) + Commander Lens (Shas'o) (147) +
+  Military Rank (Fire Caste) (25) + The Greater Good (-15) + Devotion to the Ethereals
+  (-1) = 249 points of traits, plus skills (146 points) = 395 points. Stats: ST 11, DX
+  15, IQ 14, HT 12, HP 11, Will 15, Per 14, Speed 6.75, Move 6, Dodge 9. Tier: senior
+  agent (350-600).
+
+
+  Commander Lens carries the two doctrines as Perks (see the trait). Military Rank 5 (25
+  points) is the Shas'o rung. Weapon skills as for the Shas'vre; suit and drone are equipment.
+traits:
+- {include: xenos/tau/traits.yaml#T'au Physiology}
+- {include: xenos/tau/traits.yaml#Fire Caste Lens}
+- {include: xenos/tau/traits.yaml#Fire Warrior Training}
+- {include: xenos/tau/traits.yaml#Commander Lens (Shas'o)}
+- {include: xenos/tau/traits.yaml#Military Rank (Fire Caste), levels: 5}
+- {include: xenos/tau/traits.yaml#The Greater Good}
+- {include: xenos/tau/traits.yaml#Devotion to the Ethereals}
+skills:
+- name: Tactics
+  diff: IQ/H
+  points: 24
+  tags: [Xenos, T'au]
+  ref: B224
+  defaults: [IQ-6, Strategy-6]
+  lore: 'Decades of war: planning and executing Kauyon and Mont''ka.'
+  design: IQ+5 (19) for 24 points, Hard.
+- name: Strategy
+  spec: Land
+  diff: IQ/H
+  points: 16
+  tags: [Xenos, T'au]
+  ref: B222
+  defaults: [IQ-6, Intelligence Analysis-6, Tactics-6, Strategy-4]
+  lore: Campaign planning.
+  design: IQ+3 (17) for 16 points, Hard.
+- name: Leadership
+  diff: IQ/A
+  points: 20
+  tags: [Xenos, T'au]
+  ref: B204
+  defaults: [IQ-5]
+  lore: Commanding a cadre and its Shas'ui and Shas'vre.
+  design: IQ+5 (19) for 20 points, Average.
+- name: Battlesuit
+  diff: DX/A
+  points: 12
+  tags: [Xenos, T'au]
+  ref: B192
+  defaults: [DX-5, Diving Suit-4, Vacc Suit-2, NBC Suit-2]
+  lore: A Shas'o commonly commands from a battlesuit.
+  design: DX+3 (18) for 12 points, Average.
+- name: Gunner
+  spec: Beams
+  diff: DX/E
+  points: 8
+  tags: [Xenos, T'au]
+  ref: B198
+  defaults: [DX-4, Gunner-4]
+  lore: Suit-mounted weapons.
+  design: DX+3 (18) for 8 points, Easy.
+- name: Beam Weapons
+  spec: Rifle
+  diff: DX/E
+  points: 8
+  tags: [Xenos, T'au]
+  ref: B179
+  defaults: [DX-4, Beam Weapons-4, Guns (Rifle)-4]
+  lore: Pulse rifle.
+  design: DX+3 (18) for 8 points, Easy.
+- name: Beam Weapons
+  spec: Pistol
+  diff: DX/E
+  points: 4
+  tags: [Xenos, T'au]
+  ref: B179
+  defaults: [DX-4, Beam Weapons-4, Guns (Pistol)-4]
+  lore: Pulse pistol.
+  design: DX+2 (17) for 4 points, Easy.
+- name: Gunner
+  spec: Rockets
+  diff: DX/E
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B198
+  defaults: [DX-4, Gunner-4]
+  lore: Missile systems.
+  design: DX+1 (16) for 2 points, Easy.
+- name: Diplomacy
+  diff: IQ/H
+  points: 12
+  tags: [Xenos, T'au]
+  ref: B187
+  defaults: [IQ-6, Politics-6]
+  lore: A commander deals with Ethereals, Water caste and allies.
+  design: IQ+2 (16) for 12 points, Hard.
+- name: Savoir-Faire
+  spec: Military
+  diff: IQ/E
+  points: 4
+  tags: [Xenos, T'au]
+  ref: B218
+  defaults: [IQ-4]
+  lore: Rank and protocol.
+  design: IQ+2 (16) for 4 points, Easy.
+- name: Administration
+  diff: IQ/A
+  points: 4
+  tags: [Xenos, T'au]
+  ref: B174
+  defaults: [Merchant-3, IQ-5]
+  lore: Running a cadre.
+  design: IQ+1 (15) for 4 points, Average.
+- name: Intelligence Analysis
+  diff: IQ/H
+  points: 4
+  tags: [Xenos, T'au]
+  ref: B201
+  defaults: [Intelligence Analysis-2, IQ-6, Strategy-6]
+  lore: Reading the picture from scouts and drones.
+  design: IQ+0 (14) for 4 points, Hard.
+- name: Psychology
+  diff: IQ/H
+  points: 4
+  tags: [Xenos, T'au]
+  ref: B216
+  defaults: [IQ-6, Sociology-4]
+  lore: Reading subordinates and enemies.
+  design: IQ+0 (14) for 4 points, Hard.
+- name: Observation
+  diff: Per/A
+  points: 4
+  tags: [Xenos, T'au]
+  ref: B211
+  defaults: [Per-5, Shadowing-5]
+  lore: Awareness.
+  design: Per+1 (15) for 4 points, Average.
+- name: Teaching
+  diff: IQ/A
+  points: 4
+  tags: [Xenos, T'au]
+  ref: B224
+  defaults: [IQ-5]
+  lore: Training the next Shas'ui.
+  design: IQ+1 (15) for 4 points, Average.
+- name: Electronics Operation
+  spec: Communications
+  diff: IQ/A
+  points: 4
+  tags: [Xenos, T'au]
+  ref: B189
+  defaults: [IQ-5, Electronics Operation-4, Electronics Repair (Communications)-5, Engineer
+      (Electronics)-5]
+  lore: Command network.
+  design: IQ+1 (15) for 4 points, Average.
+- name: Public Speaking
+  diff: IQ/A
+  points: 4
+  tags: [Xenos, T'au]
+  ref: B216
+  defaults: [Public Speaking-2, IQ-5, Acting-5, Performance-2, Politics-5]
+  lore: Addressing his cadre.
+  design: IQ+1 (15) for 4 points, Average.
+- name: Brawling
+  diff: DX/E
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B182
+  lore: A last resort.
+  design: DX+1 (16) for 2 points, Easy.
+- name: Hidden Lore
+  spec: Xenos
+  diff: IQ/A
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B199
+  lore: Knowledge of other species.
+  design: IQ+0 (14) for 2 points, Average.
+- name: Navigation
+  spec: Land
+  diff: IQ/A
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B211
+  defaults: [IQ-5, Cartography-4, Mathematics (Surveying)-4, Navigation (Air)-2, Navigation
+      (Sea)-2, Navigation (Underground)-2]
+  lore: Land navigation.
+  design: IQ+0 (14) for 2 points, Average.
+- name: Politics
+  diff: IQ/A
+  points: 2
+  tags: [Xenos, T'au]
+  ref: B215
+  defaults: [IQ-5, Diplomacy-5]
+  lore: The politics of caste and command.
+  design: IQ+0 (14) for 2 points, Average.

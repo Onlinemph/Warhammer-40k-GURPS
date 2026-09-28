@@ -1,0 +1,39 @@
+kind: template
+output: Xenos/Tau/Templates/Gun Drone.gct
+notes: >-
+  A Gun Drone: a small, hovering AI machine carrying twin pulse carbines, built by the
+  Earth caste and controlled by a Shas'ui or a battlesuit pilot's network. Point math
+  (see Xenos/Tau/Traits/T'au Traits.adq): Drone Chassis (-137) + Drone Casing (Light)
+  (150) = 13 points of traits, plus skills (10 points) = 23 points. Stats: ST 8, DX 10,
+  IQ 6, HT 10, HP 8, Will 8, Per 10, Speed 5.0, Move 5, Dodge 8. Tier: ordinary citizen
+  (0-50).
+
+
+  There is no framework line for drones, so the stats are the drafter's: small (SM -2),
+  weak (ST 8), clumsy (DX 10), simple AI (IQ 6), better sensors than a man (Per 10) and
+  flak-class casing (DR 30). Ground Move does not apply: use Air Move 10 (Basic Speed
+  5, x2). A negative or near-zero point total is expected for a machine NPC (see the Combat
+  Servitor) and is not a character to buy. The weapon itself is equipment (the wargear
+  agent's pulse carbine).
+traits:
+- {include: xenos/tau/traits.yaml#Drone Chassis}
+- {include: xenos/tau/traits.yaml#Drone Casing (Light)}
+skills:
+- name: Gunner
+  spec: Beams
+  diff: DX/E
+  points: 8
+  tags: [Xenos, T'au, Drone]
+  ref: B198
+  defaults: [DX-4, Gunner-4]
+  lore: >-
+    The twin pulse carbines built into the drone's body; mounted, so Gunner (Beams).
+  design: DX+3 (13) for 8 points, Easy.
+- name: Observation
+  diff: Per/A
+  points: 2
+  tags: [Xenos, T'au, Drone]
+  ref: B211
+  defaults: [Per-5, Shadowing-5]
+  lore: Sensor sweep.
+  design: Per+0 (10) for 2 points, Average.

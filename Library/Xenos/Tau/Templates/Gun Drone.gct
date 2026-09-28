@@ -1,0 +1,367 @@
+{
+	"version": 5,
+	"id": "Bf7ub5NDl649GR280",
+	"notes": "A Gun Drone: a small, hovering AI machine carrying twin pulse carbines, built by the Earth caste and controlled by a Shas'ui or a battlesuit pilot's network. Point math (see Xenos/Tau/Traits/T'au Traits.adq): Drone Chassis (-137) + Drone Casing (Light) (150) = 13 points of traits, plus skills (10 points) = 23 points. Stats: ST 8, DX 10, IQ 6, HT 10, HP 8, Will 8, Per 10, Speed 5.0, Move 5, Dodge 8. Tier: ordinary citizen (0-50).\n\nThere is no framework line for drones, so the stats are the drafter's: small (SM -2), weak (ST 8), clumsy (DX 10), simple AI (IQ 6), better sensors than a man (Per 10) and flak-class casing (DR 30). Ground Move does not apply: use Air Move 10 (Basic Speed 5, x2). A negative or near-zero point total is expected for a machine NPC (see the Combat Servitor) and is not a character to buy. The weapon itself is equipment (the wargear agent's pulse carbine).",
+	"traits": [
+		{
+			"id": "TdMAWjSB5DTnTEzZo",
+			"name": "Drone Chassis",
+			"local_notes": "Small hovering machine with a simple, obedient AI, built and tended by the Earth caste and controlled by a Shas'ui or battlesuit pilot. No hands, no legs, no sleep, no fear, no initiative. Ground Move does not apply: use Air Move. A drone's armour is its casing (Drone Casing).\n\nLore: T'au drones are small anti-gravity machines with simple learning intelligence: gun, marker, shield and recon drones, and more. They are not persons: they follow orders, learn slowly, and have no will of their own, and the T'au treat them as tools and comrades in equal measure. Background across Codex: T'au Empire editions (the drone AI is described as non-sentient).\n\nDesign: Attribute Modifiers -62 + Machine Body 25 + Flight (Grav) 40 + No Legs (Aerial) 0 + No Manipulators -50 + Machine Mind -90 = -137 points, following the Combat Servitor precedent for construct NPCs (negative subtotals are expected; see the Servitor template). Built from the Basic Set's own Machine (B263) and Automaton (B263) meta-traits, with Slave Mentality and Reprogrammable for the T'au's obedient, controller-driven AI.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"T'au",
+				"Drone"
+			],
+			"container_type": "ancestry",
+			"children": [
+				{
+					"id": "t_rp5MacJJXrGY3HD",
+					"name": "Attribute Modifiers (Drone)",
+					"local_notes": "SM -2, ST -2, IQ -4, Per +4, Will +2.\n\nDesign: Gun drone line (drafter's, no framework figure): ST 8, DX 10, IQ 6, HT 10, HP 8, Per 10, Will 8. SM -2 (a drone about a yard across, carries no point cost, as for Gretchin and Termagants), ST -2 (10/level, with the 40% discount No Manipulators grants to ST and DX (B145): -20 x 0.6 = -12), IQ -4 (-80), Per +4 over IQ (20, sensors), Will +2 over IQ (10) = -62. DX and HT stay 10; HP 8 = ST 8.",
+					"tags": [
+						"Physical",
+						"Xenos",
+						"T'au",
+						"Drone"
+					],
+					"base_points": -62,
+					"features": [
+						{
+							"type": "attribute_bonus",
+							"attribute": "sm",
+							"amount": -2
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "st",
+							"amount": -2
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "iq",
+							"amount": -4
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "per",
+							"amount": 4
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "will",
+							"amount": 2
+						}
+					]
+				},
+				{
+					"id": "Te4_YkeacnFkIyPFq",
+					"name": "Machine Body",
+					"local_notes": "No blood, unliving wound modifiers, immune to metabolic hazards (disease, poison, suffocation), no FP, cannot heal on its own; repaired by Mechanic or Armoury rolls. Power cell gives about eight hours of operation.\n\nLore: A drone is a machine, not an animal.\n\nDesign: Machine (B263) built as its three costed parts: Injury Tolerance 25, Resistant 30, Unhealing -30 = 25.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"T'au",
+						"Drone"
+					],
+					"container_type": "meta_trait",
+					"children": [
+						{
+							"id": "tLtMl0xVX7t608E_0",
+							"name": "Injury Tolerance (No Blood, Unliving)",
+							"reference": "B60",
+							"local_notes": "No blood; wound modifiers as unliving (impaling and pi++ x1, pi+ x1/2, pi x1/3, pi- x1/5).\n\nLore: A machine does not bleed or suffer shock.\n\nDesign: Injury Tolerance (B60), No Blood 5 + Unliving 20 = 25 points.",
+							"tags": [
+								"Advantage",
+								"Physical",
+								"Xenos",
+								"T'au",
+								"Drone"
+							],
+							"modifiers": [
+								{
+									"id": "mciQmVbWYBPzPZWp9",
+									"name": "No Blood",
+									"reference": "B61",
+									"cost_adj": "5"
+								},
+								{
+									"id": "m5uEOtTkwm3xCnJkg",
+									"name": "Unliving",
+									"reference": "B61",
+									"cost_adj": "20"
+								}
+							]
+						},
+						{
+							"id": "tAaHZqxjnAlrh9dr8",
+							"name": "Resistant to Metabolic Hazards (Machine)",
+							"reference": "B81",
+							"local_notes": "Immune to disease, poison, suffocation and other metabolic hazards.\n\nLore: Nothing here has a metabolism.\n\nDesign: Resistant (B81), Metabolic Hazards 30, Immunity x1 = 30 points, same as the Basic Set Machine.",
+							"tags": [
+								"Advantage",
+								"Physical",
+								"Xenos",
+								"T'au",
+								"Drone"
+							],
+							"modifiers": [
+								{
+									"id": "m3xXdpJfMVFW84rXj",
+									"name": "Metabolic Hazards",
+									"reference": "B80",
+									"cost_adj": "30"
+								},
+								{
+									"id": "mp-JvISRPu1H5XJZq",
+									"name": "Immunity",
+									"reference": "B81",
+									"cost_adj": "x1"
+								}
+							]
+						},
+						{
+							"id": "tDyroExvJMn0HtR8I",
+							"name": "Unhealing (Total)",
+							"reference": "B160",
+							"local_notes": "Never heals on its own; repair is a Mechanic or Armoury job.\n\nLore: Drones are fixed by Earth caste, not by rest.\n\nDesign: Unhealing (Total) (B160), -30 points.",
+							"tags": [
+								"Disadvantage",
+								"Physical",
+								"Xenos",
+								"T'au",
+								"Drone"
+							],
+							"base_points": -30
+						}
+					]
+				},
+				{
+					"id": "t-Gc80KwUwcGgv6a2",
+					"name": "Flight (Grav Repulsors)",
+					"reference": "B56",
+					"local_notes": "Air Move is Basic Speed x 2: 10 for a gun drone. Hovers; superscience (^) grav repulsors.\n\nLore: T'au drones hover on grav repulsors; the framework marks grav systems as the T'au's one superscience exception.\n\nDesign: Flight (B56), 40 points, no Winged limitation (grav, not wings). Marked ^ by the framework rule for T'au grav technology.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"T'au",
+						"Drone"
+					],
+					"base_points": 40
+				},
+				{
+					"id": "tlqjbbRfCg9UtxSXy",
+					"name": "No Legs (Aerial)",
+					"reference": "B145",
+					"local_notes": "No legs; it flies. Ground Move does not apply.\n\nLore: A drone is a hovering shell.\n\nDesign: No Legs (Aerial) (B145), 0 points.",
+					"tags": [
+						"Feature",
+						"Xenos",
+						"T'au",
+						"Drone"
+					],
+					"base_points": 0
+				},
+				{
+					"id": "tg3-agvr-M3ByabfZ",
+					"name": "No Manipulators",
+					"reference": "B145",
+					"local_notes": "Cannot manipulate objects; guns are built in. ST and DX cost 40% less (B145).\n\nLore: A gun drone has weapons but no hands.\n\nDesign: No Manipulators (B145), -50 points; the ST cost reduction is applied in Attribute Modifiers (Drone).",
+					"tags": [
+						"Disadvantage",
+						"Physical",
+						"Xenos",
+						"T'au",
+						"Drone"
+					],
+					"base_points": -50
+				},
+				{
+					"id": "TRxHiQOkF9hIqQdj-",
+					"name": "Machine Mind (Drone AI)",
+					"local_notes": "Takes orders, does nothing on its own initiative, cannot improvise, feels nothing. Follows its controller (a Shas'ui or pilot, or the fire team's network); another controller can be slotted in.\n\nLore: Drones are simple learning AIs: obedient, unimaginative, and without emotions the T'au recognise as their own. Codex: T'au Empire background.\n\nDesign: Slave Mentality -40 + Hidebound -5 + Incurious -5 + Low Empathy -20 + No Sense of Humor -10 + Reprogrammable -10 = -90. Slave Mentality replaces the Automaton's Heteronomy (same cost, B154); Incurious is priced at the library's -5 base rather than -10.",
+					"tags": [
+						"Disadvantage",
+						"Mental",
+						"Xenos",
+						"T'au",
+						"Drone"
+					],
+					"container_type": "meta_trait",
+					"children": [
+						{
+							"id": "tJ8O92Fxs1wIzJhLy",
+							"name": "Slave Mentality",
+							"reference": "B154",
+							"local_notes": "Cannot act without orders; obeys its controller.\n\nLore: Drones do what they are told.\n\nDesign: Slave Mentality (B154), -40 points.",
+							"tags": [
+								"Disadvantage",
+								"Mental",
+								"Xenos",
+								"T'au",
+								"Drone"
+							],
+							"base_points": -40
+						},
+						{
+							"id": "tGxZX4-CVQ10voiKo",
+							"name": "Hidebound",
+							"reference": "B138",
+							"local_notes": "-2 on any task needing creativity.\n\nLore: Drones follow their programming.\n\nDesign: Hidebound (B138), -5.",
+							"tags": [
+								"Disadvantage",
+								"Mental",
+								"Xenos",
+								"T'au",
+								"Drone"
+							],
+							"base_points": -5
+						},
+						{
+							"id": "tqiyDXw7ezkRcIRx-",
+							"name": "Incurious",
+							"reference": "B140",
+							"local_notes": "Ignores the strange unless ordered otherwise.\n\nLore: Drones have no curiosity.\n\nDesign: Incurious (B140), -5.",
+							"tags": [
+								"Disadvantage",
+								"Mental",
+								"Xenos",
+								"T'au",
+								"Drone"
+							],
+							"base_points": -5
+						},
+						{
+							"id": "t8HacKaP2D13pWDZP",
+							"name": "Low Empathy",
+							"reference": "B142",
+							"local_notes": "Cannot read or care about others' feelings.\n\nLore: Drones do not understand emotion.\n\nDesign: Low Empathy (B142), -20.",
+							"tags": [
+								"Disadvantage",
+								"Mental",
+								"Xenos",
+								"T'au",
+								"Drone"
+							],
+							"base_points": -20
+						},
+						{
+							"id": "tjGqhhMi8-bo9g8yT",
+							"name": "No Sense of Humor",
+							"reference": "B146",
+							"local_notes": "Does not get jokes.\n\nLore: Drones have no humour.\n\nDesign: No Sense of Humor (B146), -10.",
+							"tags": [
+								"Disadvantage",
+								"Mental",
+								"Xenos",
+								"T'au",
+								"Drone"
+							],
+							"base_points": -10
+						},
+						{
+							"id": "tG19N0qKU0_lcxbOD",
+							"name": "Reprogrammable",
+							"reference": "B150",
+							"local_notes": "Another controller or a hostile hacker can rewrite its orders.\n\nLore: Drone control networks can be re-slaved.\n\nDesign: Reprogrammable (B150), -10.",
+							"tags": [
+								"Disadvantage",
+								"Mental",
+								"Xenos",
+								"T'au",
+								"Drone"
+							],
+							"base_points": -10
+						}
+					]
+				}
+			]
+		},
+		{
+			"id": "tF5zZ8N2DsWbJZ_fN",
+			"name": "Drone Casing (Light)",
+			"reference": "B46",
+			"local_notes": "DR 30 all round, flak-class. Sensor eyes are not armoured separately (treat as DR 15).\n\nLore: A gun drone's casing is light composite: tougher than a Fire Warrior's flesh, less than his armour. Background: the drone is meant to be expendable.\n\nDesign: Damage Resistance (B46-47, 5/level), 30 levels = 150 points. DR 30 matches the framework's flak anchor; the drone is designed to be cheap, so it is not carapace. Other drone types override the levels.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"T'au",
+				"Drone"
+			],
+			"points_per_level": 5,
+			"can_level": true,
+			"levels": 30,
+			"features": [
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"all"
+					],
+					"amount": 30
+				}
+			]
+		}
+	],
+	"skills": [
+		{
+			"id": "sVmhjZpJ2hlrwzZ-_",
+			"name": "Gunner",
+			"reference": "B198",
+			"local_notes": "Lore: The twin pulse carbines built into the drone's body; mounted, so Gunner (Beams).\n\nDesign: DX+3 (13) for 8 points, Easy.",
+			"tags": [
+				"Xenos",
+				"T'au",
+				"Drone"
+			],
+			"specialization": "Beams",
+			"difficulty": "dx/e",
+			"defaults": [
+				{
+					"type": "dx",
+					"modifier": -4
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Gunner"
+					},
+					"modifier": -4
+				}
+			],
+			"points": 8
+		},
+		{
+			"id": "sGtDbyb9AYtEJptE9",
+			"name": "Observation",
+			"reference": "B211",
+			"local_notes": "Lore: Sensor sweep.\n\nDesign: Per+0 (10) for 2 points, Average.",
+			"tags": [
+				"Xenos",
+				"T'au",
+				"Drone"
+			],
+			"difficulty": "per/a",
+			"defaults": [
+				{
+					"type": "per",
+					"modifier": -5
+				},
+				{
+					"type": "skill",
+					"name": {
+						"compare": "is",
+						"qualifier": "Shadowing"
+					},
+					"modifier": -5
+				}
+			],
+			"points": 2
+		}
+	],
+	"equipment": []
+}
