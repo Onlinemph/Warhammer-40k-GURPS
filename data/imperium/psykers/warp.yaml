@@ -14,21 +14,89 @@ items:
       latent potentials per hive-sized population, with usably strong psykers far
       rarer still. Treat any precise ratio as flavour, not census data.
     design: >
-      Required to take Psyker (Talent) or any trait carrying the Warp power
-      modifier below. Basic Set B261 leaves Unusual Background costs to the GM;
-      10 points reflects that the ability itself is not learned but grants access
-      to an entire framework of further abilities, roughly the going rate other
-      published settings use for "you may buy from this power list at all."
+      Required to take Psyker (Talent), Warp Empowerment, or any trait
+      carrying the Warp Sorcery power modifier below. Basic Set B261 leaves
+      Unusual Background costs to the GM; 10 points reflects that the ability
+      itself is not learned but grants access to an entire framework of
+      further abilities, roughly the going rate other published settings use
+      for "you may buy from this power list at all."
 
-  - name: Warp (Power Modifier)
+  - name: Warp Empowerment
+    points: 10
+    per_level: 10
+    levels: 1
+    tags: [Advantage, Mental, Talent, Psyker, Imperium]
+    ref: TSOR4
+    notes: |
+      A direct reskin of Sorcerous Empowerment (Thaumatology: Sorcery, TSOR4):
+      the psyker's raw, trained capacity to draw on and shape the warp, as
+      distinct from Psyker (Talent, TSOR5's Sorcery Talent analogue, below)
+      which only sharpens related skills. Requires Unusual Background (Latent
+      Psychic Potential). It is the prerequisite for every Warp Sorcery-tagged
+      ability in this file (see Witch-sight and each discipline below); the
+      Navigator's Third Eye and the Pariah/Untouchable genes carry no Warp
+      Sorcery modifier and so need no Warp Empowerment.
+
+      Cap, cast per Thaumatology: Sorcery (TSOR): a psyker may only know a
+      power whose full, modified point cost is no greater than the point cost
+      of their own Warp Empowerment (10 + 10/level). A power bought at a
+      higher level (more dice, more range, etc.) costs proportionally more and
+      may outgrow a psyker's Empowerment even after they first learned it at a
+      cheaper level — raising the level, and cost, of Warp Empowerment is how
+      a psyker "grows into" costlier or higher-level workings.
+
+      Imperial Assignment scale (Adeptus Astra Telepathica / Black Ships)
+      mapped to Warp Empowerment level and the point cap that gives, worked
+      out from this file's actual (Warp Sorcery -20% + Perils of the Warp)
+      modified costs:
+
+        Grade      | Empowerment level | Cap (10+10/lvl) | What the cap reaches
+        Iota       | 1                  | 20              | cheapest powers only: e.g. Smite (3), Endurance (2), Iron Arm (4), Fire Bolt (4), Assail (4), Mind Probe (14), Foresight (18) — register but rarely learn more than one or two
+        Zeta       | 1                  | 20              | as Iota; low Psyker Talent limits skill use, not what they can know
+        Eta        | 1                  | 20              | as Zeta
+        Theta      | 2                  | 30              | adds Molten Beam (9), Crush (11), Psychic Scream (12), Sanctuary (13), Null Zone (23), Terrify (28)
+        Epsilon    | 2                  | 30              | as Theta (typical Wyrdvane conscript)
+        Delta      | 3                  | 40              | adds Scrier's Gaze (35), Dominate (35), Gate of Infinity (40) — the full non-Great-Power roster (typical Sanctioned Primaris Psyker)
+        Gamma      | 3                  | 40              | as Delta, better skills from a higher Psyker Talent
+        Beta       | 4                  | 50              | full roster, with headroom to push a known leveled power to a higher level/more dice (many Astropaths)
+        Alpha      | 5                  | 60              | full roster, generous headroom for high-level workings (Astartes Librarians, Black Ship candidates)
+        Alpha-Plus | 7+ (GM only)       | 80+             | approaching Great Power territory; Vortex of Doom (280+ as usually bought) is still normally out of reach even here
+
+      A character need not buy Warp Empowerment up to their grade's full
+      ceiling: templates in this project buy only the level their actually-
+      known powers need, and note the grade's theoretical ceiling separately.
+    lore: >
+      The Iota-to-Alpha-Plus assignment scale is drawn from the Adeptus Astra
+      Telepathica's own grading of psychic potential as depicted across Dark
+      Heresy-line material and repeated in Codex/Imperial Armour background;
+      Black Library uses the same grades in passing (e.g. Eisenhorn-cycle and
+      Ciaphas Cain references to Alpha-class talents). "Alpha-Plus" specifically
+      denotes the rarest, most dangerous talents the Black Ships process.
+    design: >
+      Sorcerous Empowerment (TSOR4) costs 10 base + 10/level (level 1 = 20
+      points, each further level +10) in the GCS master Thaumatology data;
+      reused verbatim here under a 40k-appropriate name, since the underlying
+      mechanic — "how much warp-power you can channel at all, gating which
+      spells/powers you may know by their modified cost" — is exactly what an
+      Imperial Assignment grade represents. The level-to-grade mapping above
+      is derived, not asserted: it walks every power in this file's actual
+      modified cost (recomputed under the new Warp Sorcery -20% modifier, see
+      below) and finds the cheapest Empowerment level whose cap clears it, so
+      "Iota can only cast minor powers" and "Alpha can cast the biggest
+      non-Great-Power ability" are literally true of the numbers, not just
+      flavour text.
+
+  - name: Warp Sorcery (Power Modifier)
     points: 0
     tags: [Reference, Psyker, Imperium]
     notes: >
-      Not purchased on its own. Apply "Warp, -15%" as a modifier to every advantage
-      built as a psychic ability in this file (Innate Attack, Affliction, Mind
-      Control, Mind Probe, Mind Reading, Telekinesis-based traits, Terror, etc.).
-      It does not apply to the Blank/Pariah gene or the Navigator's third eye,
-      which are inborn mutations, not channelled acts.
+      Not purchased on its own. Apply "Warp Sorcery, -20%" as a modifier to
+      every advantage built as a psychic ability in this file (Innate Attack,
+      Affliction, Mind Control, Mind Probe, Mind Reading, Telekinesis-based
+      traits, Terror, etc.), cast per Thaumatology: Sorcery (TSOR) — casting
+      any such power costs 1 FP, exactly as a Sorcery spell does. It does not
+      apply to the Blank/Pariah gene or the Navigator's third eye, which are
+      inborn mutations, not channelled acts.
     lore: >
       Every psychic act in the fiction shares three traits: it can be shut down by
       a null field (Culexus Assassins, Officio Assassinorum "blanks," null rods,
@@ -40,19 +108,24 @@ items:
       Ahriman, the Horus Heresy Librarius material) and Dark Heresy/Rogue
       Trader's psychic-power rules agree on all three points.
     design: >
-      Built as two stacked limitations on a single -15% power modifier, shown
-      separately for clarity:
-      (1) Nullified, -10% — the power fails outright in a null field/near a
-      blank, comparable in weight to Basic's own Mana Sensitive limitation
-      (-10%, B112) for a power that simply stops working under specific,
-      uncommon but real battlefield conditions.
-      (2) Detectable, -5% — other warp-sensitive beings (psykers, daemons, the
-      Astronomican-attuned) can sense the use, roughly the mirror of Basic's No
-      Signature enhancement (+20%, B111) which buys detectability away entirely;
-      here only a narrow audience can detect it, so removing that audience's
-      free ability to sense you is worth a smaller -5%.
-      Net: -15%, applied identically to every Warp-tagged ability so their
-      relative costs stay comparable.
+      Sorcery (-15%, Thaumatology: Sorcery, TSOR) is Basic's own Mana
+      Sensitive-weight power modifier for spells cast from the caster's own
+      inner power rather than ambient mana: it fails against blanks/pariahs,
+      null rods, hexagrammic and psychic wards, and inside a Geller field, as
+      appropriate to the scene — the mechanical equivalent of Sorcery's own
+      "no mana, no spell" clause re-read for the 40k setting's specific null
+      sources. Stacked with Detectable, -5% (kept from this project's own
+      original design): other warp-sensitive beings (psykers, daemons, the
+      Astronomican-attuned) can sense the use, roughly the mirror of Basic's
+      No Signature enhancement (+20%, B111) which buys detectability away
+      entirely; here only a narrow audience can detect it, so removing that
+      audience's free ability to sense you is worth a smaller -5%.
+      Net: -20%, applied identically to every Warp Sorcery-tagged ability so
+      their relative costs stay comparable. This replaces the project's
+      earlier bespoke -15% "Warp" modifier now that the whole framework is
+      rebuilt on Thaumatology: Sorcery's chassis; Perils of the Warp (below)
+      still stacks on top as the setting-specific risk Sorcery itself doesn't
+      model.
 
   - name: Perils of the Warp (Limitation)
     points: 0
@@ -114,27 +187,39 @@ items:
     levels: 1
     max_levels: 6
     tags: [Advantage, Mental, Talent, Psyker, Imperium]
-    ref: B89
+    ref: TSOR5
     notes: |
-      Applies to: Meditation, Hidden Lore (the Warp), and the Will roll to
-      resist Perils of the Warp (see above) — a house extension of Talent's
-      normal "add to listed skills" rule, precedented by Magery's own habit of
-      aiding related rolls beyond pure spellcasting. Reaction bonus: +1/level
-      from other sanctioned psykers and the Astra Telepathica.
+      This project's Sorcery Talent (Thaumatology: Sorcery, TSOR5) analogue:
+      applies as Sorcery Talent applies to a sorcerer's skills in TSOR, just
+      to a 40k-specific list — Psyniscience, Meditation, Hidden Lore (the
+      Warp), and the Will roll to resist Perils of the Warp (see above) — a
+      house extension of Talent's normal "add to listed skills" rule,
+      precedented by Magery's and Sorcery Talent's own habit of aiding
+      related rolls beyond pure spellcasting. Reaction bonus: +1/level from
+      other sanctioned psykers and the Astra Telepathica.
+
+      Psyker (Talent) and Warp Empowerment are separate purchases on separate
+      axes, exactly as Sorcery Talent and Sorcerous Empowerment are in TSOR:
+      this trait only sharpens related skills and Perils resistance, while
+      Warp Empowerment (above) is what actually gates which powers a psyker
+      may know. A high-Talent, low-Empowerment psyker is a sharp, well-drilled
+      mind who simply hasn't learned much yet; the reverse is a raw prodigy
+      who is clumsy with the skills around their gift.
 
       Imperial Assignment scale (Adeptus Astra Telepathica / Black Ships),
-      weakest to strongest, mapped to Talent level and the practical ceiling on
-      any single ability's level/dice bought with it:
+      weakest to strongest, mapped to Talent level. See Warp Empowerment above
+      for the matching Empowerment level/point-cap column, which is the real
+      gate on ability selection:
         Iota    — Talent 0 (latent; register but rarely take Psyker traits at all)
-        Zeta    — Talent 1, ability cap ~2
-        Eta     — Talent 1, ability cap ~2
-        Theta   — Talent 2, ability cap ~3
-        Epsilon — Talent 2, ability cap ~4  (typical Wyrdvane conscript)
-        Delta   — Talent 3, ability cap ~5  (typical Sanctioned Primaris Psyker)
-        Gamma   — Talent 4, ability cap ~6
-        Beta    — Talent 4, ability cap ~7  (many Astropaths)
-        Alpha   — Talent 5, ability cap ~8  (Astartes Librarians, Black Ship candidates)
-        Alpha-Plus — Talent 6+, ability cap 9+ (beyond-play tier: Primarchs,
+        Zeta    — Talent 1
+        Eta     — Talent 1
+        Theta   — Talent 2
+        Epsilon — Talent 2  (typical Wyrdvane conscript)
+        Delta   — Talent 3  (typical Sanctioned Primaris Psyker)
+        Gamma   — Talent 4
+        Beta    — Talent 4  (many Astropaths)
+        Alpha   — Talent 5  (Astartes Librarians, Black Ship candidates)
+        Alpha-Plus — Talent 6+ (beyond-play tier: Primarchs,
           the most powerful Inquisitors, the worst Chaos sorcerers)
     lore: >
       The Iota-to-Alpha-Plus assignment scale is drawn from the Adeptus Astra
@@ -144,17 +229,18 @@ items:
       Ciaphas Cain references to Alpha-class talents). "Alpha-Plus" specifically
       denotes the rarest, most dangerous talents the Black Ships process.
     design: >
-      Talent affecting three things (two skills plus the Perils resistance
+      Talent affecting four things (three skills plus the Perils resistance
       roll) sits at Basic's "Medium Talent" rate of 10 points/level (B90,
       three-to-five-skill bracket) rather than 5 (one-two skills) or 15
-      (six-nine skills). Capped at level 6 for player characters; higher grades
+      (six-nine skills) — the same rate Sorcery Talent itself uses (TSOR5,
+      10/level). Capped at level 6 for player characters; higher grades
       are GM-reference only, per the framework's "Beyond play" tier.
 
   - name: Witch-sight
     points: 10
     tags: [Advantage, Mental, Psyker, Imperium]
     modifiers:
-      - "Warp, -15%"
+      - "Warp Sorcery, -20%"
     lore: >
       The first, mildest sign of the gift: an unlearned, passive prickling
       sense of daemonic taint, psychic activity, and warp corruption — how
@@ -166,7 +252,10 @@ items:
       Built as Detect (Psychic Activity & Daemonic Taint), an uncommon but not
       vanishingly rare category, base 10 per Basic's Detect cost table (B47-48).
       No Perils of the Warp: it is involuntary background sense, not a
-      deliberate act of channelling.
+      deliberate act of channelling. Full modified cost: 10 x 0.8 = 8 points;
+      needs only Warp Empowerment level 1 (cap 20) — even an Iota-grade
+      latent can have it, matching how often unsanctioned psykers are found
+      by exactly this unlearned sense.
 
   # ------------------------------------------------------- legal status & fate
 
@@ -277,10 +366,10 @@ items:
       "Untouchables," Cain-series and Eisenhorn-cycle blanks) and Dark
       Heresy/Only War's Untouchable career.
     design: >
-      Deliberately carries no Warp or Perils of the Warp modifier: a Pariah's
-      field is the *absence* of the warp, not a channelled act, so none of
-      the framework's activation risk applies. See each child trait for its
-      own derivation. Net for the package: +12 (Null Aura) +10 (Immunity)
+      Deliberately carries no Warp Sorcery or Perils of the Warp modifier,
+      and needs no Warp Empowerment: a Pariah's field is the *absence* of the
+      warp, not a channelled act, so none of the framework's activation risk
+      or spell-cost cap applies. See each child trait for its own derivation. Net for the package: +12 (Null Aura) +10 (Immunity)
       -3 (Unnerving Void) -10 (Social Stigma) = +9.
     children:
       - name: Null Aura
@@ -397,10 +486,11 @@ items:
       disadvantage for very old Navigators — e.g. escalating Unnatural
       Features — rather than a fixed cost baked into this trait).
     design: >
-      Deliberately carries no Warp or Perils of the Warp modifier: the third
-      eye is an always-on inherited mutation, not a deliberately channelled
-      act — though a GM is free to call for a one-off Perils-style check
-      during an extreme event like flying blind through a warp storm. Net for
+      Deliberately carries no Warp Sorcery or Perils of the Warp modifier,
+      and needs no Warp Empowerment: the third eye is an always-on inherited
+      mutation, not a deliberately channelled act — though a GM is free to
+      call for a one-off Perils-style check during an extreme event like
+      flying blind through a warp storm. Net for
       the package: 12 (Warp Sight) + 6 (Lethal Gaze) = 18.
     children:
       - name: Warp Sight
@@ -455,39 +545,50 @@ items:
       Warp Speed, Haemorrhage all appear there under close-to-these names)
       and Black Library depictions of Biomancer-Librarians and Chaos
       "physicians."
-    design: Talent-linked group; see each child for build math. All children take Warp (-15%) and Perils of the Warp (-10%) unless noted.
+    design: Talent-linked group; see each child for build math. All children take Warp Sorcery (-20%) and Perils of the Warp (-10%) unless noted.
     children:
       - name: Smite
         per_level: 4
         levels: 1
         tags: [Advantage, Mental, Psyker, Imperium]
-        modifiers: ["Warp, -15%", "Perils of the Warp, -10%"]
+        modifiers: ["Warp Sorcery, -20%", "Perils of the Warp, -10%"]
         lore: A short-ranged bolt of biomantic force that ruptures vessels and boils blood.
-        design: Innate Attack (Toxic, 4/die, B61) with the standard Warp/Perils pair, net -25%.
+        design: >
+          Innate Attack (Toxic, 4/die, B61) with the standard Warp Sorcery/
+          Perils pair, net -30%. Full modified cost: 4 x 0.7 = ~3 points/level;
+          needs Warp Empowerment level 1 (cap 20).
       - name: Endurance
         per_level: 3
         levels: 1
         tags: [Advantage, Mental, Psyker, Imperium]
-        modifiers: ["Warp, -15%", "Perils of the Warp, -10%"]
+        modifiers: ["Warp Sorcery, -20%", "Perils of the Warp, -10%"]
         lore: Wards off fatigue and pain in battle by forcing the body past its limits.
-        design: Extra Fatigue Points (3/level, B ~power-ups table) with Warp/Perils.
+        design: >
+          Extra Fatigue Points (3/level, B ~power-ups table) with Warp
+          Sorcery/Perils, net -30%. Full modified cost: ~2 points/level; needs
+          Warp Empowerment level 1 (cap 20).
       - name: Warp Speed
         per_level: 5
         levels: 1
         tags: [Advantage, Physical, Psyker, Imperium]
-        modifiers: ["Warp, -15%", "Perils of the Warp, -10%"]
+        modifiers: ["Warp Sorcery, -20%", "Perils of the Warp, -10%"]
         lore: Quickens the caster's own nervous system and reflexes to a blur.
         design: >
-          Increased Basic Speed (5 points per +0.25, B) with Warp/Perils; the
-          resulting Dodge increase comes free from Basic's normal Speed-to-
-          Dodge derivation, no separate purchase needed.
+          Increased Basic Speed (5 points per +0.25, B) with Warp Sorcery/
+          Perils, net -30%; the resulting Dodge increase comes free from
+          Basic's normal Speed-to-Dodge derivation, no separate purchase
+          needed. Full modified cost: ~4 points/level; needs Warp Empowerment
+          level 1 (cap 20).
       - name: Iron Arm
         per_level: 5
         levels: 1
         tags: [Advantage, Physical, Psyker, Imperium]
-        modifiers: ["Warp, -15%", "Perils of the Warp, -10%"]
+        modifiers: ["Warp Sorcery, -20%", "Perils of the Warp, -10%"]
         lore: Hardens flesh and bone into something closer to ceramite for a few seconds.
-        design: Damage Resistance (5/level, B) with Warp/Perils.
+        design: >
+          Damage Resistance (5/level, B) with Warp Sorcery/Perils, net -30%.
+          Full modified cost: ~4 points/level; needs Warp Empowerment level 1
+          (cap 20).
       - name: Haemorrhage
         per_level: 10
         levels: 1
@@ -495,13 +596,15 @@ items:
         modifiers:
           - {name: Disadvantage Delivered (Bleeding/Nauseated, -20 pts), cost: "+20%"}
           - "Malediction 1, +100%"
-          - "Warp, -15%"
+          - "Warp Sorcery, -20%"
           - "Perils of the Warp, -10%"
         lore: Ruptures blood vessels inside a target from a distance, with no visible attack to dodge.
         design: >
           Affliction (10/level, B35) delivering a -20 point bleeding/nauseated
           disadvantage (+20%), Malediction (+100%, B36, resisted by HT
-          instead of dodged), plus Warp/Perils.
+          instead of dodged), plus Warp Sorcery/Perils, net +90%. Full
+          modified cost: 10 x 1.9 = 19 points/level; needs Warp Empowerment
+          level 2 (cap 30).
 
   - name: Divination
     container: group
@@ -517,15 +620,24 @@ items:
       - name: Foresight
         points: 25
         tags: [Advantage, Mental, Psyker, Imperium]
-        modifiers: ["Warp, -15%", "Perils of the Warp, -10%"]
+        modifiers: ["Warp Sorcery, -20%", "Perils of the Warp, -10%"]
         lore: A flash of true precognition — a moment's warning of what is about to happen.
-        design: Precognition, Basic's core advantage, flat 25, with Warp/Perils.
+        design: >
+          Precognition, Basic's core advantage, flat 25, with Warp Sorcery/
+          Perils, net -30%. Full modified cost: 25 x 0.7 = ~18 points; needs
+          Warp Empowerment level 1 (cap 20). Notably cheap for how strong the
+          fiction makes true precognition sound — a case where a flat Basic
+          advantage's cost doesn't scale with narrative weight the way the
+          leveled Innate Attack-style powers do; see the file-level report.
       - name: Forewarning
         points: 15
         tags: [Advantage, Mental, Psyker, Imperium]
-        modifiers: ["Warp, -15%", "Perils of the Warp, -10%"]
+        modifiers: ["Warp Sorcery, -20%", "Perils of the Warp, -10%"]
         lore: An unbidden sense that danger is close, before it strikes.
-        design: Danger Sense, Basic's core advantage, flat 15, with Warp/Perils.
+        design: >
+          Danger Sense, Basic's core advantage, flat 15, with Warp Sorcery/
+          Perils, net -30%. Full modified cost: 15 x 0.7 = ~11 points; needs
+          Warp Empowerment level 1 (cap 20).
       - name: Misfortune
         per_level: 10
         levels: 1
@@ -533,16 +645,24 @@ items:
         modifiers:
           - {name: Disadvantage Delivered (Unluckiness, -10 pts), cost: "+10%"}
           - "Malediction 1, +100%"
-          - "Warp, -15%"
+          - "Warp Sorcery, -20%"
           - "Perils of the Warp, -10%"
         lore: Turns an enemy's own luck against them — the misfire, the missed step, the wrong turn.
-        design: Affliction (10/level) delivering Unluckiness (-10 points, +10%, matching Basic's own Unluckiness cost), Malediction (+100%), Warp/Perils.
+        design: >
+          Affliction (10/level) delivering Unluckiness (-10 points, +10%,
+          matching Basic's own Unluckiness cost), Malediction (+100%), Warp
+          Sorcery/Perils, net +80%. Full modified cost: 10 x 1.8 = 18
+          points/level; needs Warp Empowerment level 1 (cap 20).
       - name: Scrier's Gaze
         points: 50
         tags: [Advantage, Mental, Psyker, Imperium]
-        modifiers: ["Warp, -15%", "Perils of the Warp, -10%"]
+        modifiers: ["Warp Sorcery, -20%", "Perils of the Warp, -10%"]
         lore: Projects the caster's sight to a distant or hidden place.
-        design: Clairsentience, Basic's core advantage, flat 50, with Warp/Perils.
+        design: >
+          Clairsentience, Basic's core advantage, flat 50, with Warp Sorcery/
+          Perils, net -30%. Full modified cost: 50 x 0.7 = 35 points; needs
+          Warp Empowerment level 3 (cap 40) — one of the pricier single-flat
+          Divination powers.
 
   - name: Pyromancy
     container: group
@@ -558,9 +678,12 @@ items:
         per_level: 5
         levels: 1
         tags: [Advantage, Mental, Psyker, Imperium]
-        modifiers: ["Warp, -15%", "Perils of the Warp, -10%"]
+        modifiers: ["Warp Sorcery, -20%", "Perils of the Warp, -10%"]
         lore: A thrown bolt of raw fire, the pyromancer's most basic attack.
-        design: Innate Attack (Burning, 5/die, B61) with Warp/Perils.
+        design: >
+          Innate Attack (Burning, 5/die, B61) with Warp Sorcery/Perils, net
+          -30%. Full modified cost: 5 x 0.7 = ~4 points/level; needs Warp
+          Empowerment level 1 (cap 20).
       - name: Inferno/Molten Beam
         container: alternative_abilities
         tags: [Advantage, Mental, Psyker, Imperium]
@@ -578,23 +701,36 @@ items:
             per_level: 5
             levels: 1
             tags: [Advantage, Mental, Psyker, Imperium]
-            modifiers: ["Explosion, +50%", "Warp, -15%", "Perils of the Warp, -10%"]
+            modifiers: ["Explosion, +50%", "Warp Sorcery, -20%", "Perils of the Warp, -10%"]
             lore: A bursting fireball that engulfs a small area.
-            design: Innate Attack (Burning, 5/die) with Explosion (+50%, B106, 2-yard burst) plus Warp/Perils.
+            design: >
+              Innate Attack (Burning, 5/die) with Explosion (+50%, B106,
+              2-yard burst) plus Warp Sorcery/Perils, net +20%. Full modified
+              cost: 5 x 1.2 = 6 points/level (discounted to a fifth as the
+              cheaper alternative ability); needs Warp Empowerment level 1
+              (cap 20) at its full-price rate.
           - name: Molten Beam
             per_level: 5
             levels: 1
             tags: [Advantage, Mental, Psyker, Imperium]
-            modifiers: ["Armor Divisor (3), +100%", "Warp, -15%", "Perils of the Warp, -10%"]
+            modifiers: ["Armor Divisor (3), +100%", "Warp Sorcery, -20%", "Perils of the Warp, -10%"]
             lore: A focused beam of molten matter that burns straight through armour.
-            design: Innate Attack (Burning, 5/die) with Armor Divisor (3) (+100%, B103) plus Warp/Perils.
+            design: >
+              Innate Attack (Burning, 5/die) with Armor Divisor (3) (+100%,
+              B103) plus Warp Sorcery/Perils, net +70%. Full modified cost:
+              5 x 1.7 = ~9 points/level (the costlier child, so it sets the
+              alternative_abilities container's cap requirement); needs Warp
+              Empowerment level 1 (cap 20).
       - name: Flame Breath
         per_level: 5
         levels: 1
         tags: [Advantage, Mental, Psyker, Imperium]
-        modifiers: ["Cone, +50%", "Warp, -15%", "Perils of the Warp, -10%"]
+        modifiers: ["Cone, +50%", "Warp Sorcery, -20%", "Perils of the Warp, -10%"]
         lore: A gout of fire breathed out in a cone in front of the caster.
-        design: Innate Attack (Burning, 5/die) with Cone (+50%, B103) plus Warp/Perils.
+        design: >
+          Innate Attack (Burning, 5/die) with Cone (+50%, B103) plus Warp
+          Sorcery/Perils, net +20%. Full modified cost: 5 x 1.2 = 6
+          points/level; needs Warp Empowerment level 1 (cap 20).
 
   - name: Telekinesis
     container: group
@@ -611,9 +747,12 @@ items:
         per_level: 5
         levels: 1
         tags: [Advantage, Mental, Psyker, Imperium]
-        modifiers: ["Warp, -15%", "Perils of the Warp, -10%"]
+        modifiers: ["Warp Sorcery, -20%", "Perils of the Warp, -10%"]
         lore: Hurls the nearest loose object, or the target themselves, with bruising force.
-        design: Innate Attack (Crushing, 5/die, B61) with Warp/Perils.
+        design: >
+          Innate Attack (Crushing, 5/die, B61) with Warp Sorcery/Perils, net
+          -30%. Full modified cost: 5 x 0.7 = ~4 points/level; needs Warp
+          Empowerment level 1 (cap 20).
       - name: Force Dome/Kinetic Shield
         container: alternative_abilities
         tags: [Advantage, Mental, Psyker, Imperium]
@@ -626,27 +765,40 @@ items:
             per_level: 5
             levels: 1
             tags: [Advantage, Mental, Psyker, Imperium]
-            modifiers: ["Warp, -15%", "Perils of the Warp, -10%"]
+            modifiers: ["Warp Sorcery, -20%", "Perils of the Warp, -10%"]
             lore: A tight telekinetic skin around the caster alone.
-            design: Damage Resistance (5/level, B), self only, with Warp/Perils.
+            design: >
+              Damage Resistance (5/level, B), self only, with Warp Sorcery/
+              Perils, net -30%. Full modified cost: 5 x 0.7 = ~4 points/level
+              (discounted to a fifth as the cheaper alternative ability);
+              needs Warp Empowerment level 1 (cap 20) at its full-price rate.
           - name: Force Dome
             per_level: 5
             levels: 1
             tags: [Advantage, Mental, Psyker, Imperium]
-            modifiers: ["Area Effect, +50%", "Warp, -15%", "Perils of the Warp, -10%"]
+            modifiers: ["Area Effect, +50%", "Warp Sorcery, -20%", "Perils of the Warp, -10%"]
             lore: A dome of solid force wide enough to cover the caster's whole fireteam.
-            design: Damage Resistance (5/level) with Area Effect (+50%, B102, 2-yard radius) plus Warp/Perils.
+            design: >
+              Damage Resistance (5/level) with Area Effect (+50%, B102,
+              2-yard radius) plus Warp Sorcery/Perils, net +20%. Full
+              modified cost: 5 x 1.2 = 6 points/level (the costlier child,
+              so it sets the container's cap requirement); needs Warp
+              Empowerment level 1 (cap 20).
       - name: Crush
         per_level: 5
         levels: 1
         tags: [Advantage, Mental, Psyker, Imperium]
-        modifiers: ["Malediction 1, +100%", "Armor Divisor (2), +50%", "Warp, -15%", "Perils of the Warp, -10%"]
+        modifiers: ["Malediction 1, +100%", "Armor Divisor (2), +50%", "Warp Sorcery, -20%", "Perils of the Warp, -10%"]
         lore: An invisible telekinetic grip that closes on a target's throat or chest, ignoring armour and impossible to dodge.
-        design: Innate Attack (Crushing, 5/die) with Malediction (+100%, B36) and Armor Divisor (2) (+50%, B103), plus Warp/Perils.
+        design: >
+          Innate Attack (Crushing, 5/die) with Malediction (+100%, B36) and
+          Armor Divisor (2) (+50%, B103), plus Warp Sorcery/Perils, net
+          +120%. Full modified cost: 5 x 2.2 = 11 points/level; needs Warp
+          Empowerment level 2 (cap 30).
       - name: Gate of Infinity
         points: 100
         tags: [Advantage, Mental, Psyker, Imperium]
-        modifiers: ["Preparation Required, -20%", "Warp, -15%", "Perils of the Warp (Severe), -20%"]
+        modifiers: ["Preparation Required, -20%", "Warp Sorcery, -20%", "Perils of the Warp (Severe), -20%"]
         lore: >
           Tears a hole between two points in real space and steps through —
           the rarest and most feared telekinetic feat, since a botched Gate
@@ -656,7 +808,11 @@ items:
           place you have seen/visualized, flat 100), with Preparation
           Required (-20%, B113, a few seconds' concentration) and the Severe
           Perils tier, reflecting the setting's specific fear of a failed
-          Gate opening into the immaterium.
+          Gate opening into the immaterium. Net -60%. Full modified cost:
+          100 x 0.4 = 40 points — the single most expensive non-Great-Power
+          ability in this file; needs Warp Empowerment level 3 (cap 40), the
+          minimum at which "Delta and up" can cast the full non-Great-Power
+          roster, exactly on the cap with no headroom to spare.
 
   - name: Telepathy
     container: group
@@ -679,40 +835,59 @@ items:
           - name: Mind Probe
             points: 20
             tags: [Advantage, Mental, Psyker, Imperium]
-            modifiers: ["Warp, -15%", "Perils of the Warp, -10%"]
+            modifiers: ["Warp Sorcery, -20%", "Perils of the Warp, -10%"]
             lore: Tears buried memories and secrets from an unwilling subject.
-            design: Mind Probe, Basic's core advantage, flat 20, with Warp/Perils.
+            design: >
+              Mind Probe, Basic's core advantage, flat 20, with Warp Sorcery/
+              Perils, net -30%. Full modified cost: 20 x 0.7 = 14 points
+              (discounted to a fifth as the cheaper alternative ability);
+              needs Warp Empowerment level 1 (cap 20) at its full-price rate.
           - name: Dominate
             points: 50
             tags: [Advantage, Mental, Psyker, Imperium]
-            modifiers: ["Warp, -15%", "Perils of the Warp, -10%"]
+            modifiers: ["Warp Sorcery, -20%", "Perils of the Warp, -10%"]
             lore: Seizes outright control of a target's body and actions.
-            design: Mind Control, Basic's core advantage, flat 50, with Warp/Perils.
+            design: >
+              Mind Control, Basic's core advantage, flat 50, with Warp
+              Sorcery/Perils, net -30%. Full modified cost: 50 x 0.7 = 35
+              points (the costlier child, so it sets the container's cap
+              requirement); needs Warp Empowerment level 3 (cap 40).
       - name: Psychic Scream
         per_level: 10
         levels: 1
         tags: [Advantage, Mental, Psyker, Imperium]
-        modifiers: ["Area Effect, +50%", "Warp, -15%", "Perils of the Warp, -10%"]
+        modifiers: ["Area Effect, +50%", "Warp Sorcery, -20%", "Perils of the Warp, -10%"]
         lore: A silent, mind-shattering shout that stuns everyone nearby.
-        design: Affliction (10/level, delivering the default Stun effect) with Area Effect (+50%) plus Warp/Perils.
+        design: >
+          Affliction (10/level, delivering the default Stun effect) with Area
+          Effect (+50%) plus Warp Sorcery/Perils, net +20%. Full modified
+          cost: 10 x 1.2 = 12 points/level; needs Warp Empowerment level 2
+          (cap 30).
       - name: Terrify
         points: 30
         per_level: 10
         levels: 1
         tags: [Advantage, Mental, Psyker, Imperium]
-        modifiers: ["Warp, -15%", "Perils of the Warp, -10%"]
+        modifiers: ["Warp Sorcery, -20%", "Perils of the Warp, -10%"]
         lore: Projects raw, focused fear straight into a target's mind.
-        design: Terror, Basic's core advantage (flat 30 + 10/level for extra range), with Warp/Perils.
+        design: >
+          Terror, Basic's core advantage (flat 30 + 10/level for extra
+          range), with Warp Sorcery/Perils, net -30%. Full modified cost:
+          (30+10) x 0.7 = 28 points at its default first extra-range level;
+          needs Warp Empowerment level 2 (cap 30).
       - name: Mental Interrogation
         points: 30
         tags: [Advantage, Mental, Psyker, Imperium]
-        modifiers: ["Warp, -15%", "Perils of the Warp, -10%"]
+        modifiers: ["Warp Sorcery, -20%", "Perils of the Warp, -10%"]
         lore: Reads surface thoughts, willing or not — an Inquisitorial interrogator's favourite tool.
-        design: Mind Reading, Basic's core advantage, flat 30, with Warp/Perils.
+        design: >
+          Mind Reading, Basic's core advantage, flat 30, with Warp Sorcery/
+          Perils, net -30%. Full modified cost: 30 x 0.7 = 21 points; needs
+          Warp Empowerment level 2 (cap 30).
       - name: Astrotelepathy
         points: 20
         tags: [Advantage, Mental, Psyker, Imperium]
-        modifiers: ["Increased Range x100, +60%", "Preparation Required, -20%", "Warp, -15%", "Perils of the Warp (Severe), -20%"]
+        modifiers: ["Increased Range x100, +60%", "Preparation Required, -20%", "Warp Sorcery, -20%", "Perils of the Warp (Severe), -20%"]
         lore: >
           The astropath's signature act: sending and receiving thought across
           interstellar distances, relayed choir to choir and, ultimately,
@@ -726,7 +901,13 @@ items:
           internal consistency rather than cited to a page); Increased Range
           at the highest tabled step (+60%) for interstellar reach,
           Preparation Required (-20%, a ritual trance), and the Severe Perils
-          tier for the real danger of transmitting through the warp.
+          tier for the real danger of transmitting through the warp. Net
+          +60-20-20-20=0%. Full modified cost: 20 x 1.0 = 20 points; needs
+          only Warp Empowerment level 1 (cap 20) — cheap in raw points despite
+          the interstellar range, since Increased Range's +60% roughly
+          cancels the Preparation Required/Warp Sorcery/Severe Perils
+          discounts; the real cost of Astrotelepathy is the Severe Perils
+          roll, not the point price.
 
   - name: Sanctic Daemonology
     container: group
@@ -744,34 +925,40 @@ items:
         tags: [Advantage, Mental, Psyker, Imperium, Grey Knights]
         modifiers:
           - {name: Accessibility (only vs. Warp-touched/daemonic creatures), cost: "-10%"}
-          - "Warp, -15%"
+          - "Warp Sorcery, -20%"
           - "Perils of the Warp (Severe), -20%"
         lore: A bolt of purifying anti-warp force that tears a daemon's physical anchor apart.
         design: >
           Innate Attack (Impaling, 8/die, B61) restricted to warp-touched
           targets (Accessibility -10%, kept small since daemons are this
-          unit's routine enemy, not a rare case) plus Warp and the Severe
-          Perils tier.
+          unit's routine enemy, not a rare case) plus Warp Sorcery and the
+          Severe Perils tier, net -50%. Full modified cost: 8 x 0.5 = 4
+          points/level; needs Warp Empowerment level 1 (cap 20).
       - name: Hammerhand
         per_level: 5
         levels: 1
         tags: [Advantage, Physical, Psyker, Imperium, Grey Knights]
-        modifiers: ["Warp, -15%", "Perils of the Warp, -10%"]
+        modifiers: ["Warp Sorcery, -20%", "Perils of the Warp, -10%"]
         lore: Channels psychic force into a Grey Knight's blow, letting even blunt strikes crack a daemon's hide.
-        design: Striking ST (5/level, B) with Warp/Perils.
+        design: >
+          Striking ST (5/level, B) with Warp Sorcery/Perils, net -30%. Full
+          modified cost: 5 x 0.7 = ~4 points/level; needs Warp Empowerment
+          level 1 (cap 20).
       - name: Sanctuary
         points: 10
         tags: [Advantage, Mental, Psyker, Imperium, Grey Knights]
         modifiers:
           - {name: Advantage Delivered (+2 vs. Fright Checks, possession, and Warp-based Affliction, 15 pts), cost: "+15%"}
           - "Area Effect, +50%"
-          - "Warp, -15%"
+          - "Warp Sorcery, -20%"
           - "Perils of the Warp (Severe), -20%"
         lore: Wards a Grey Knight kill-team against fear, corruption, and possession during a purge.
         design: >
           Affliction (10, delivering a +15-point protective advantage to
           willing allies rather than a disadvantage to a foe — Basic B35
-          allows either) with Area Effect (+50%), Warp, and Severe Perils.
+          allows either) with Area Effect (+50%), Warp Sorcery, and Severe
+          Perils, net +25%. Full modified cost: 10 x 1.25 = ~13 points; needs
+          Warp Empowerment level 2 (cap 30).
 
   - name: Librarius
     container: group
@@ -791,34 +978,41 @@ items:
           - {name: Disadvantage Delivered (Vulnerability, approx. x1.5 to all attacks, -20 pts), cost: "+20%"}
           - "Malediction 1, +100%"
           - "Area Effect, +50%"
-          - "Warp, -15%"
+          - "Warp Sorcery, -20%"
           - "Perils of the Warp (Severe), -20%"
         lore: Strips the warp's protection from everything nearby — invulnerable saves falter, toughened hides thin.
         design: >
           Affliction (10/level) delivering a Vulnerability-style disadvantage
           valued (by this project, not a cited RAW table entry) at roughly
-          -20 points, +100% Malediction, +50% Area Effect, then Warp and
-          Severe Perils — the setting's single most dangerous debuff, priced
-          to match.
+          -20 points, +100% Malediction, +50% Area Effect, then Warp Sorcery
+          and Severe Perils, net +130% — the setting's single most dangerous
+          debuff, priced to match. Full modified cost: 10 x 2.3 = 23
+          points/level; needs Warp Empowerment level 2 (cap 30).
       - name: Might of Heroes
         container: group
         tags: [Advantage, Mental, Psyker, Imperium]
         lore: A Librarian's traditional pre-charge blessing, filling a squad with unnatural strength and courage.
-        design: Grouped Basic advantages, each carrying Area Effect (squad-wide) plus Warp/Perils; GCS sums the children.
+        design: Grouped Basic advantages, each carrying Area Effect (squad-wide) plus Warp Sorcery/Perils; GCS sums the children.
         children:
           - name: Heroic Feats of Strength
             points: 10
             tags: [Advantage, Physical, Psyker, Imperium]
-            modifiers: ["Area Effect, +50%", "Warp, -15%", "Perils of the Warp, -10%"]
+            modifiers: ["Area Effect, +50%", "Warp Sorcery, -20%", "Perils of the Warp, -10%"]
             lore: See parent trait.
-            design: Basic's Heroic Feats of Strength (flat 10) with Area Effect plus Warp/Perils.
+            design: >
+              Basic's Heroic Feats of Strength (flat 10) with Area Effect
+              plus Warp Sorcery/Perils, net +20%. Full modified cost:
+              10 x 1.2 = 12 points; needs Warp Empowerment level 2 (cap 30).
           - name: Fearlessness
             per_level: 2
             levels: 2
             tags: [Advantage, Mental, Psyker, Imperium]
-            modifiers: ["Area Effect, +50%", "Warp, -15%", "Perils of the Warp, -10%"]
+            modifiers: ["Area Effect, +50%", "Warp Sorcery, -20%", "Perils of the Warp, -10%"]
             lore: See parent trait.
-            design: Basic's Fearlessness (2/level) with Area Effect plus Warp/Perils.
+            design: >
+              Basic's Fearlessness (2/level) with Area Effect plus Warp
+              Sorcery/Perils, net +20%. Full modified cost: 2 x 1.2 = ~2
+              points/level; needs Warp Empowerment level 1 (cap 20).
 
   - name: Vortex of Doom (Great Power)
     per_level: 5
@@ -829,7 +1023,7 @@ items:
       - "Explosion, +200%"
       - "Armor Divisor (2), +50%"
       - "Preparation Required, -30%"
-      - "Warp, -15%"
+      - "Warp Sorcery, -20%"
       - "Perils of the Warp (Severe), -20%"
     lore: >
       A Librarius Great Power: a tearing vortex of raw warp-force that can
@@ -844,6 +1038,13 @@ items:
       Innate Attack (Crushing, 5/die), 20d starting suggestion, with
       Explosion at the 16-yard tier (+200%, B106), Armor Divisor (2)
       (+50%), Preparation Required (-30%, a full turn's channelling),
-      Warp, and Severe Perils. At 20 levels this alone totals in the
-      hundreds of points, deliberately priced in the framework's
-      "Beyond play" tier rather than toward ordinary Librarian play.
+      Warp Sorcery, and Severe Perils, net +180%. Full modified cost:
+      5 x 2.8 = 14 points/level, and this Great Power's minimum purchase is
+      20 levels (280 points) — deliberately priced in the framework's
+      "Beyond play" tier. Even Alpha-Plus's GM-only Warp Empowerment ceiling
+      (cap ~80+) falls well short of 280: per the framework, Great Powers may
+      exceed any PC's (or ordinary NPC's) Warp Empowerment outright. A GM
+      allowing a named NPC to cast it at all should treat the cap rule as
+      waived for this entry specifically, exactly as Thaumatology: Sorcery's
+      own greater rituals routinely exceed an individual sorcerer's own
+      Empowerment and require a working circle instead.

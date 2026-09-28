@@ -5,22 +5,42 @@ notes: >
   Astartes Battle-Brother.gct (plus a Chapter Gene-Seed lens) to build a
   Librarian. It does not repeat the Battle-Brother's attributes, physiology,
   Rank, or Reputation — only what a Librarian has beyond a Tactical Marine.
-  Point math for this add-on alone: 10 (Unusual Background) + 40 (Psyker 4)
-  - 15 (Sanctioned Psyker) + 9 (Witch-sight) + ~50 (Librarius: Null Zone +
-  Might of Heroes, at default starting levels) + ~25 (Telekinesis, secondary
-  discipline, at default starting levels) + skills + a force weapon, roughly
-  140-160 points on top of the Battle-Brother's own 550-800, matching
-  Codex/Black Library depictions of Librarians as notably more expensive and
-  capable than a line Battle-Brother, comfortably inside the framework's
-  "Heroes and legends" range once a senior Librarian's Rank and Reputation
-  are added on top. Vortex of Doom (Imperium/Traits/Psykers and the Warp.adq)
-  is deliberately not included here: it is a Great Power, priced in the
-  framework's "Beyond play" tier, meant only for a Chief Librarian/Epistolary
-  a GM is building as a named, high-tier NPC — add it separately if so.
+  Built on the Thaumatology: Sorcery model (see framework.md and Imperium/
+  Traits/Psykers and the Warp.adq). Bumped from a Gamma-equivalent Psyker
+  Talent 4 to full Alpha-grade (Psyker Talent 5) to match the Assignment
+  table's own note that Astartes Librarians are Alpha-tier, fixing a mismatch
+  in this project's earlier draft.
+
+  The Telekinesis include pulls in the whole discipline, including Gate of
+  Infinity (full modified cost 40) — the single most expensive non-Great-
+  Power ability in the file. That forces Warp Empowerment up to level 3 (cap
+  40) even though the rest of this loadout (Assail, Force Dome/Kinetic
+  Shield, Crush, Null Zone, Might of Heroes) only needs level 2 (cap 30). A
+  GM building a leaner, younger Librarian who hasn't earned Gate of Infinity
+  yet should disable that one child trait on the character sheet after
+  copying it in and drop Warp Empowerment to level 2, saving 10+10=20 points
+  between the two changes. Vortex of Doom (Imperium/Traits/Psykers and the
+  Warp.adq) is deliberately not included here at all: it is a Great Power,
+  priced in the framework's "Beyond play" tier and explicitly exempt from the
+  Warp Empowerment cap, meant only for a Chief Librarian/Epistolary a GM is
+  building as a named, high-tier NPC — add it separately if so.
+
+  Point math for this add-on alone: 10 (Unusual Background) + 50 (Psyker 5)
+  + 40 (Warp Empowerment 3) - 15 (Sanctioned Psyker) + 8 (Witch-sight, 10
+  base x 0.8 Warp Sorcery) + 40 (Librarius: Null Zone 23 + Heroic Feats of
+  Strength 12 + Fearlessness x2 ~5, at default starting levels) + 62
+  (Telekinesis: Assail 4 + Force Dome/Kinetic Shield alt 6+1 + Crush 11 +
+  Gate of Infinity 40) + 16 (skills) = 211 points on top of the
+  Battle-Brother's own 550-800, matching Codex/Black Library depictions of
+  Librarians as notably more expensive and capable than a line Battle-
+  Brother, comfortably inside the framework's "Heroes and legends" range
+  once a senior Librarian's Rank and Reputation are added on top.
 traits:
   - include: "imperium/psykers/warp.yaml#Unusual Background (Latent Psychic Potential)"
   - include: "imperium/psykers/warp.yaml#Psyker"
-    levels: 4
+    levels: 5
+  - include: "imperium/psykers/warp.yaml#Warp Empowerment"
+    levels: 3
   - include: "imperium/psykers/warp.yaml#Sanctioned Psyker"
   - include: "imperium/psykers/warp.yaml#Witch-sight"
   - include: "imperium/psykers/warp.yaml#Librarius"

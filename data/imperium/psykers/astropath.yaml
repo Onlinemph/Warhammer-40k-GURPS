@@ -2,20 +2,31 @@ kind: template
 output: Imperium/Templates/Astropath.gct
 notes: >
   A full Astropath of the Adeptus Astra Telepathica: Beta-grade (Psyker
-  Talent 3), soul-bound to the Emperor's light and blinded in the binding
+  Talent 4), soul-bound to the Emperor's light and blinded in the binding
   ritual, trained in Telepathy as their core discipline (which includes
-  Astrotelepathy, their signature interstellar-relay power). Point math: 90
-  (attributes) + 10 (Unusual Background) + 30 (Psyker 3) - 15 (Sanctioned
-  Psyker) - 55 (Soulbinding) + 9 (Witch-sight) + ~140 (Telepathy discipline
-  at default starting levels, dominated by Mind Probe/Dominate's
-  alternative-abilities cost) + skills. The Blindness and Soulbinding costs
-  pull the raw total down hard, which is intentional — an Astropath trades
-  an enormous amount for their gift, offset here by strong mental
-  attributes and a powerful, wide-ranging Telepathy list; total should land
-  in framework.md's "Elite human (200-350)" tier once skills and personal
-  equipment are added. GCS will compute the exact final total from the
-  included traits' own modifiers; treat the figures above as this
-  template's design-time estimate, not a promise of GCS's rounding.
+  Astrotelepathy, their signature interstellar-relay power). Built on the
+  Thaumatology: Sorcery model (see framework.md and Imperium/Traits/Psykers
+  and the Warp.adq): Psyker (Talent) sharpens skills; Warp Empowerment gates
+  which powers can be known. This loadout's costliest known power is
+  Dominate (full modified cost 35), so it needs Warp Empowerment level 3
+  (cap 40) — one level short of Beta's own official ceiling of level 4 (cap
+  50); the spare headroom at level 4 is there for a GM who wants this
+  Astropath to later push a leveled Telepathy power (Psychic Scream, Terrify)
+  higher, matching Beta's "many Astropaths" note in the Assignment table.
+
+  Point math: 90 (attributes) + 10 (Unusual Background) + 40 (Psyker 4) + 40
+  (Warp Empowerment 3) - 15 (Sanctioned Psyker) - 55 (Soulbinding) + 8
+  (Witch-sight, 10 base x 0.8 Warp Sorcery) + 119 (Telepathy discipline at
+  default starting levels: Mind Probe/Dominate alt 35+3, Psychic Scream 12,
+  Terrify 28, Mental Interrogation 21, Astrotelepathy 20) + 19 (skills) =
+  256 points. The Blindness and Soulbinding costs pull the raw total down
+  hard, which is intentional — an Astropath trades an enormous amount for
+  their gift, offset here by strong mental attributes and a powerful,
+  wide-ranging Telepathy list; total lands at the top of framework.md's
+  "Elite human (200-350)" tier once personal equipment is added. GCS will
+  compute the exact final total from the included traits' own modifiers;
+  treat the figures above as this template's design-time estimate, not a
+  promise of GCS's rounding.
 traits:
   - name: ST
     points: 0
@@ -46,6 +57,8 @@ traits:
     design: Will+4 (Basic's Increased Will, 5 pts/level, B15).
   - include: "imperium/psykers/warp.yaml#Unusual Background (Latent Psychic Potential)"
   - include: "imperium/psykers/warp.yaml#Psyker"
+    levels: 4
+  - include: "imperium/psykers/warp.yaml#Warp Empowerment"
     levels: 3
   - include: "imperium/psykers/warp.yaml#Sanctioned Psyker"
   - include: "imperium/psykers/warp.yaml#Soulbinding (Astropathic Choir)"
