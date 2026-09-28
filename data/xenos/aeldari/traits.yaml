@@ -16,8 +16,8 @@ items:
 
   - &attribute_modifiers
     name: Attribute Modifiers
-    points: 125
-    attributes: {dx: 4, iq: 2, basic_speed: 0.25}
+    points: 140
+    attributes: {dx: 4, iq: 2, basic_speed: 0.25, basic_move: 3}
     tags: [Physical]
     design: >
       Framework target (Guardian anchor line, the ancestry baseline every
@@ -32,7 +32,10 @@ items:
       Basic Speed +0.25 (B17, 5 points per 0.25 level, 5) for reflexes a
       shade faster even than DX 14 alone implies — the same design choice
       this project's Astartes Attribute Modifiers makes for "faster reflexes
-      than baseline humans" without inflating every DX skill. 80+40+5 = 125.
+      than baseline humans" without inflating every DX skill. Basic Move +3
+      (B17, 5/level, 15) at the user's direction: the Aeldari are the
+      fastest-moving people in the galaxy, and even a Guardian outpaces a
+      human (Move 9). 80+40+5+15 = 140.
       Will and Per are left untouched here (both track IQ 12 with no
       separate bonus): the Guardian anchor's own Per 13 and Aspect Warrior's
       Will 13 come from Keen Battle-Sense and Aspect Training below, not
@@ -269,6 +272,19 @@ items:
     tags: [Advantage, Physical, Xenos, Aeldari]
     children:
       - *attribute_modifiers
+      - name: Enhanced Move (Ground)
+        per_level: 20
+        levels: 0.5
+        ref: B52
+        tags: [Advantage, Physical, Xenos, Aeldari]
+        notes: Top sprinting speed x1.5. Combat Move unchanged.
+        lore: >
+          Aeldari run with a lightness and speed no human can match; in the
+          fiction they cross open ground before an enemy can bring guns to
+          bear.
+        design: >
+          Enhanced Move (Ground) 1/2 (B52, half level 10) at the user's
+          direction, matching the Astartes half level.
       - *acute_senses
       - *aeldari_grace
       - *slender_frame
@@ -436,8 +452,8 @@ items:
     tags: [Advantage, Physical, Xenos, Aeldari]
     children:
       - name: Attribute Modifiers (Aspect Training)
-        points: 65
-        attributes: {st: 1, dx: 2, ht: 1, will: 1}
+        points: 75
+        attributes: {st: 1, dx: 2, ht: 1, will: 1, basic_move: 2}
         tags: [Physical]
         design: >
           Framework target over the Aeldari Physiology + Keen Battle-Sense
@@ -451,7 +467,9 @@ items:
           level with a Space Marine's own DX. Increased HT +1 (B15,
           10/level, 10) for HT 11. Increased Will +1 (B16, 5/level, 5) for
           Will 13, the discipline of the shrine holding Emotional Intensity
-          firmly in check. 10+40+10+5 = 65 points.
+          firmly in check. Basic Move +2 (B17, 5/level, 10) at the user's
+          direction, so an Aspect Warrior (Move 12) matches a Battle-Brother.
+          10+40+10+5+10 = 75 points.
       - name: Enhanced Dodge
         per_level: 15
         levels: 1
