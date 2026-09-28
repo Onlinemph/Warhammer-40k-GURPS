@@ -120,3 +120,10 @@ traits:
 ```
 
 The path is relative to `data/`; the part after `#` is the entry's `name`. Templates should always include racial packages and shared traits this way, so a fix to the source updates every template on rebuild.
+
+## Build checks
+
+`build_gcs.py --check` also catches two recurring mistakes:
+
+- A leveled trait whose `points` equals `per_level × levels`. `points` is the base cost added on top of the levels, so this charges twice. If a real base cost happens to equal one level (e.g. Warp Empowerment, 10 + 10/level), mark the entry `base_cost_intended: true`.
+- A weapon line whose usage says "field on" or "power-field" but whose damage has no armour divisor.

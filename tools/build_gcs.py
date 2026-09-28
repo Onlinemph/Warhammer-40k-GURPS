@@ -180,6 +180,12 @@ MELEE_KEYS = {"reach": "reach", "parry": "parry", "block": "block", "st": "stren
 
 def build_weapon(w, ctx, path, idx):
     melee = "reach" in w
+    usage = str(w.get("usage", "")).lower()
+    dmg = str(w.get("damage", ""))
+    if (("field on" in usage or "field-on" in usage or "power-field" in usage)
+            and "off" not in usage and "(" not in dmg.split(" ")[0] and "ignores DR" not in dmg):
+        err(ctx, f"'{w.get('usage')}' is a power-field line but damage '{dmg}' has no armour divisor "
+                 "(framework power-field rule: (10))")
     wid = make_id("w" if melee else "W", path, ctx, idx)
     out = {"id": wid, "sv": 1, "damage": parse_damage(str(w["damage"]), ctx)}
     for k, gk in (MELEE_KEYS if melee else RANGED_KEYS).items():
@@ -329,7 +335,7 @@ def build_equipment(item, path, trail):
 
 TRAIT_KEYS = {"name", "points", "per_level", "levels", "tags", "ref", "notes", "lore", "design", "modifiers",
               "weapons", "dr", "attributes", "skill_bonuses", "reactions", "conditional", "raw_features",
-              "children", "container", "cr", "round_down", "disabled", "max_levels"}
+              "children", "container", "cr", "round_down", "disabled", "max_levels", "base_cost_intended"}
 
 
 def parse_cost_adj(c):
@@ -399,6 +405,10 @@ def build_trait(item, path, trail):
         out["children"] = [build_trait(c, path, trail + [item["name"]]) for c in kids]
     else:
         if "per_level" in item:
+            if (item.get("points") and item["points"] == item["per_level"] * item.get("levels", 1)
+                    and not item.get("base_cost_intended")):
+                err(ctx, f"points {item['points']} equals per_level x levels: `points` is the BASE cost "
+                         "added on top of the levels, so this charges twice (drop `points` or set it to the base)")
             out["points_per_level"] = item["per_level"]
             out["can_level"] = True
             out["levels"] = item.get("levels", 1)
