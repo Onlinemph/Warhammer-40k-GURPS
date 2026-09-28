@@ -228,6 +228,34 @@ Mechanicus weapons are older and stranger than Astra Militarum ones. Scale each 
 | Volkite weapons | Burn ex that chains to nearby targets on a kill; volkite blaster sits between heavy bolter and plasma |
 | Eradication ray | Melta-like, short range, disintegrating |
 
+## Xenos
+
+### Orks
+
+Orks are fungal-based greenskins who grow bigger, stronger and tougher the longer they live and the more they fight, and whose technology works partly because they believe it will. Anchors, relative to an Astartes Battle-Brother (ST 30, DX 16, HT 15, HP 34):
+
+| Ork | ST | DX | IQ | HT | HP | SM | Notes |
+|---|---|---|---|---|---|---|---|
+| Gretchin | 8 | 11 | 9 | 10 | 8 | −1 | Cowardly, sneaky, expendable. |
+| Boy | 22 | 11 | 8 | 13 | 26 | 0 | Stooped but heavy; brawnier than a man, far clumsier than a Marine. |
+| Nob | 26 | 11 | 9 | 14 | 32 | 0 (+1 for big ones) | A Boy who survived long enough to grow. |
+| Warboss | 32 | 12 | 10 | 15 | 40 | +1 | Out-muscles a Space Marine; sheer bulk. |
+
+Ork physiology traits: very high pain tolerance, Hard to Kill, fast healing and survivability of wounds that kill other species (heads sewn back on by Painboyz), love of violence (Bloodlust, Impulsiveness), growth with age as template lenses. Orks reproduce by spores, have no fear to speak of, and the Weirdboy's psychic power is fed by nearby Orks' WAAAGH! energy.
+
+**Ork tech.** Mekboyz build by instinct (a genetic Talent for Engineer/Mechanic/Armoury). Ork weapons are crude and unreliable: Malf 14 for most, 15 at best, and low Acc (shootas Acc 1–2). They compensate with big calibres and high RoF (dakka). Ork armour is thick scrap plate with many gaps: high Weak Points ratings (7–8).
+
+| Ork gear | Anchor |
+|---|---|
+| Slugga | Big-bore pistol, about 5d pi+, Acc 1 |
+| Shoota | Heavy slugs, about 7d pi+, RoF 10, Acc 1–2, Malf 14 |
+| Big shoota | Heavy stubber class and up, about 9d pi+, RoF 15+ |
+| Rokkit launcha | Anti-armour, about 6d×4(3) cr ex, Acc 0–1, Malf 14 |
+| Choppa | Crude cleaver, sw+3 cut, parry −1U |
+| Power klaw | Power-field weapon: thr+8d(10) cr, like a power fist but cruder |
+| 'Eavy armour | Torso DR 45, Weak Points 7 |
+| Mega armour | Torso DR 150, Weak Points 6: an Ork answer to Terminator plate |
+
 ## Psykers and the warp
 
 Psychic abilities in the fiction are the sort of thing GURPS Thaumatology:
