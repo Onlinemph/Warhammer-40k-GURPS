@@ -1,0 +1,2615 @@
+{
+	"version": 5,
+	"id": "B-InkK53lOmsXJ0Vh",
+	"notes": "An add-on, not a full character: layer this over Imperium/Templates/ Astartes Battle-Brother.gct plus the Marine's own Chapter Gene-Seed lens from Astartes Gene-Seed.adq (keep that lens — a Deathwatch posting changes nothing about a Marine's physiology or Chapter of origin, and a seconded Marine's gene-seed quirks, Chapter Rank and Chapter-side Duty are all still in force underneath the traits below). Swap the Battle-Brother's own Boltgun, Godwyn Pattern and Bolt Pistol, Mk II Phobos-Pattern for whichever of this add-on's own Deathwatch Wargear.eqp weapons the kill-team's mission calls for; keep the Battle-Brother's chainsword, combat knife and grenades unless the player wants the Xenophase Blade instead of a chainsword.\nThis add-on's own traits and skills, at their default (rank-and-file, no optional lens enabled) settings, come to about 60 points — see the point math below. The Astartes Battle-Brother.gct template it layers onto totals 791 points before equipment (Astartes package with ST 30 and DX 16, plus training and skills), so a rank-and-file Deathwatch Marine is about 855 (the add-on is 64 as GCS computes it). Enabling any of the disabled lenses below (Watch Sergeant, Watch Master, Black Shield, Veteran, extra Deathwatch Authority) adds further points on top of that, per each lens's own note.\nPoint math for this add-on's default build: -10 (Duty: The Long Watch) - 1 (Vigil Oath quirk) - 5 (Sense of Duty, Kill-team, included from Imperial Traits.adq) - 1 (Chapter Rivalry quirk) = -17 of disadvantage; + 20 (Xenos Hunter Talent 4) + 5 (Xenos Bane: Tyranids, enabled by default as the archetypal Deathwatch specialisation — swap which child is enabled for a different xenos focus) = 25 of advantage; + 52 of skills (Hidden Lore (Xenos) +8, Tactics +8, Survival (Any) +8, Tracking +8, Gesture +4, Soldier +8, and a new Guns (Shotgun) 8, all additive to the Battle-Brother's own entries of the same name where one already exists, per each skill line's own note) = -17 + 25 + 52 = 60. The disabled Watch Sergeant, Watch Master, Black Shield, Veteran and extra Deathwatch Authority lenses below are not part of this baseline; each states what enabling it costs on top.\n",
+	"traits": [
+		{
+			"id": "tRTApox_z3u8AUlwZ",
+			"name": "Deathwatch Oath: The Long Watch",
+			"reference": "B133",
+			"local_notes": "Quite Often, Hazardous. Covers only the Battle-Brother's secondment to the Deathwatch itself; it is layered on top of (not a replacement for) his own Chapter's Duty (Chapter and Imperium), which the Astartes Hypno-Indoctrination package already prices. A seconded Marine answers to two chains of command until his tour ends.\n\nLore: Every Chapter (bar a handful of holdouts and the notorious exceptions the Inquisition has learned to work around) owes the Deathwatch a tithe of Battle-Brothers under the ancient Pact of the Long Vigil, sworn after the Horus Heresy so that no single Chapter could again be turned against the Imperium unsupervised while the Adeptus Astartes still pooled its expertise against the alien. A seconded Marine takes a fresh oath at the Watch Fortress he reports to, serves a term of the Chapter Master's choosing (often years, sometimes a Marine's remaining service), and lives, trains and fights alongside strangers from other Chapters for its duration — Black Library's Deathwatch-focused fiction (notably Steve Parker's Deathwatch novel and the Deathwatch anthologies) and Codex: Deathwatch background both treat the tour's end as a real, if sometimes delayed by circumstance, event: a Marine can and does go home.\n\nDesign: Basic Set Duty (B133) at a lighter frequency and cost than the Chapter Duty it sits alongside (Quite Often rather than Almost Always, -10 rather than -15): the danger is not less real, but the obligation is bounded to a term rather than lifelong, and unlike Chapter Duty it does not also carry the weight of \"and Imperium\" — that half is still covered by the Marine's own Chapter oath. This project deliberately does not fold Deathwatch service into a single bigger Duty trait; keeping the two separate lets a GM show a character's tour ending (drop this trait, keep the Chapter one) without touching the racial package.",
+			"tags": [
+				"Disadvantage",
+				"Social",
+				"Imperium",
+				"Adeptus Astartes",
+				"Deathwatch"
+			],
+			"base_points": -10
+		},
+		{
+			"id": "tgL1a5OyTZ3mHJDFd",
+			"name": "Vigil Oath (Silence of the Long Watch)",
+			"reference": "B22",
+			"local_notes": "Lore: Every kill-team brother swears never to speak, outside the Watch Fortress, of what he learns there — xenobiology, captured wargear, Ordo Xenos intelligence, the failures as well as the victories. A recurring beat in Deathwatch fiction is a Marine's visible discomfort when a well-meaning ally or debriefing officer pushes for details he has sworn not to give.\n\nDesign: Basic Set Quirk (B22): a specific, roleplayable behavioural restriction rather than a fresh Vow (which would be redundant with the Duty trait above and the Chapter's existing Code of Honor); priced at the flat -1 every quirk in this project uses.",
+			"tags": [
+				"Quirk",
+				"Mental",
+				"Imperium",
+				"Adeptus Astartes",
+				"Deathwatch"
+			],
+			"base_points": -1
+		},
+		{
+			"id": "t0qqB0VrFxW2y1ZHu",
+			"name": "Sense of Duty (Squadmates)",
+			"reference": "B153",
+			"local_notes": "The kill-team, not the squad — see Deathwatch.adq's own copy of this entry for the full note; referenced directly from Imperial Traits.adq here rather than chained through Deathwatch.adq, since this project's build tool does not resolve an include-of-an-include.\n\nLore: Small combat units live and die by cohesion; abandoning a wounded comrade is the one thing that reliably gets a soldier shunned by their own side, per how Guard squads and Sororitas/Militarum Tempestus kill-teams are consistently written in Black Library fiction.\n\nDesign: Basic Set Sense of Duty (B153), small-group scope, -5.",
+			"tags": [
+				"Disadvantage",
+				"Mental",
+				"Imperium"
+			],
+			"base_points": -5
+		},
+		{
+			"id": "tURPwWiyg30JYkaiy",
+			"name": "Chapter Rivalry",
+			"reference": "B22",
+			"local_notes": "Lore: Centuries of doctrinal friction don't evaporate because two Marines now share a kill-team badge: a White Scar's impatience with a Dark Angel's secrecy, an Imperial Fist's dim view of a Space Wolf's informality, old grudges between Successor lines. Deathwatch fiction treats this as background texture the kill-team works through or around, not a fight that breaks the squad — Watch Sergeants exist precisely to keep it that way.\n\nDesign: Basic Set Quirk (B22): a specific, GM-adjudicated friction with one other Chapter (player's or GM's choice) that never rises to a combat-relevant penalty, distinct from the Sense of Duty above (which is what actually governs whether the character risks himself for the squad) and from any one Chapter's own gene-seed quirks in Astartes Gene-Seed.adq, which are unaffected.",
+			"tags": [
+				"Quirk",
+				"Mental",
+				"Imperium",
+				"Adeptus Astartes",
+				"Deathwatch"
+			],
+			"base_points": -1
+		},
+		{
+			"id": "tzU6cjdu1T0c8CLPJ",
+			"name": "Xenos Hunter",
+			"reference": "B89",
+			"local_notes": "Lore: Years spent studying, hunting and killing a rotating cast of alien threats give a Deathwatch veteran a working, cross-species battlefield expertise no single-Chapter Astartes accumulates: reading an unfamiliar xenos' tactics fast enough to counter them, tracking quarry across terrain built for another biology, and pattern-matching captured wargear or physiology against Ordo Xenos archives from memory. This is the throughline of Deathwatch's Kill Team-focused fiction and Codex: Deathwatch background alike: the kill-team's edge is knowing the enemy, not just outgunning it.\n\nDesign: Built as a Basic Set Talent (B89-90): a single leveled trait giving a flat bonus to a cluster of related skills (Hidden Lore (Xenos), Tactics, Survival, Tracking — four skills, priced at the standard 5 points/level GURPS uses for a Talent covering that many abilities) plus a modest reaction bonus from people who share or respect the specialty, per B90's Talent template. This is the \"Talent\" the framework's checklist asks for, honestly built rather than reusing Sorcery Talent or any other book Talent under a new name.",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Imperium",
+				"Deathwatch",
+				"Talent"
+			],
+			"points_per_level": 5,
+			"can_level": true,
+			"levels": 4,
+			"features": [
+				{
+					"type": "skill_bonus",
+					"selection_type": "skills_with_name",
+					"name": {
+						"compare": "is",
+						"qualifier": "Hidden Lore"
+					},
+					"amount": 1,
+					"specialization": {
+						"compare": "is",
+						"qualifier": "Xenos"
+					}
+				},
+				{
+					"type": "skill_bonus",
+					"selection_type": "skills_with_name",
+					"name": {
+						"compare": "is",
+						"qualifier": "Tactics"
+					},
+					"amount": 1
+				},
+				{
+					"type": "skill_bonus",
+					"selection_type": "skills_with_name",
+					"name": {
+						"compare": "is",
+						"qualifier": "Survival"
+					},
+					"amount": 1,
+					"specialization": {
+						"compare": "is",
+						"qualifier": "Any"
+					}
+				},
+				{
+					"type": "skill_bonus",
+					"selection_type": "skills_with_name",
+					"name": {
+						"compare": "is",
+						"qualifier": "Tracking"
+					},
+					"amount": 1
+				},
+				{
+					"type": "reaction_bonus",
+					"situation": "from other Ordo Xenos and Deathwatch personnel who recognize the expertise",
+					"amount": 1
+				}
+			]
+		},
+		{
+			"id": "TNn9GJ4CsTHfHmMso",
+			"name": "Xenos Bane",
+			"local_notes": "Alternative Abilities (B61): all five specialisations are listed, but only one costs points at a time (5, the shared cost of every child) — pick the xenos threat that fits the Marine's posting history; a GM may let a long-serving Black Shield take a second at the same rate (see the parent trait's own container note in Deathwatch.adq).\n\nLore: Deathwatch kill-teams are built and briefed around a specific, known threat far more often than a Chapter-side Marine ever is; a veteran who has hunted the same xenos race across a dozen postings develops a narrow, hard-won edge against it specifically, distinct from the broader Xenos Hunter Talent above. The Deathwatch RPG line builds an entire background/specialisation system around exactly this (a kill-team specialist's chosen xenological focus); this project's own division into five named banes is a reasoned approximation of that idea in GURPS terms, not a page-for-page reprint of any FFG table.\n\nDesign: Each bane is a small conditional combat/skill bonus (data-format.md's `conditional` feature) restricted to one named threat: +1 is a genuinely useful edge in exactly the fights this project's fiction says a specialist has trained for, without becoming a blanket combat bonus the way a general \"+1 to hit\" advantage would. Priced at 5 points by analogy with this project's other narrow, situational bonuses (compare the Ecclesiarchy's Social Regard at 2/level for a reaction bonus valid with one group only) — a combat-relevant +1 restricted to one enemy type earns a somewhat higher per-point rate than a reaction bonus, but nowhere near a general Weapon Master-style trait's cost. Built as alternative_abilities (data-format.md) since picking more than one at full price double-dips on the same specialist-training justification; the container's own notes cover the GM exception for a genuinely veteran Black Shield.",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Imperium",
+				"Deathwatch"
+			],
+			"container_type": "alternative_abilities",
+			"children": [
+				{
+					"id": "tKebeXAex52OrKlTV",
+					"name": "Xenos Bane (Orks)",
+					"base_points": 5,
+					"features": [
+						{
+							"type": "conditional_modifier",
+							"situation": "to hit, and to Tactics/Survival rolls made specifically against Orks and Ork-kin",
+							"amount": 1
+						}
+					]
+				},
+				{
+					"id": "t17KqNVzQ4N_xy6dn",
+					"name": "Xenos Bane (Tyranids)",
+					"base_points": 5,
+					"features": [
+						{
+							"type": "conditional_modifier",
+							"situation": "to hit, and to Tactics/Survival rolls made specifically against Tyranids and Genestealer broods",
+							"amount": 1
+						}
+					]
+				},
+				{
+					"id": "tSiIwl2n2wGGQZaWs",
+					"name": "Xenos Bane (Necrons)",
+					"base_points": 5,
+					"features": [
+						{
+							"type": "conditional_modifier",
+							"situation": "to hit, and to Tactics/Survival rolls made specifically against Necrons",
+							"amount": 1
+						}
+					]
+				},
+				{
+					"id": "tWOSrB5t7p0tWVteb",
+					"name": "Xenos Bane (Eldar/Drukhari)",
+					"base_points": 5,
+					"features": [
+						{
+							"type": "conditional_modifier",
+							"situation": "to hit, and to Tactics/Survival rolls made specifically against Aeldari of any kind",
+							"amount": 1
+						}
+					]
+				},
+				{
+					"id": "tH2MNwtbCYRXpSV_5",
+					"name": "Xenos Bane (T'au)",
+					"base_points": 5,
+					"features": [
+						{
+							"type": "conditional_modifier",
+							"situation": "to hit, and to Tactics/Survival rolls made specifically against the T'au Empire's forces",
+							"amount": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"id": "TF2njHY5SwrkunVgy",
+			"name": "Watch Sergeant",
+			"local_notes": "Disabled lens for a Marine who leads his own kill-team. Enable for +10 points (Deathwatch Rank 2).\n\nLore: A Battle-Brother trusted to lead a mixed-Chapter kill-team in the field answers to the Watch Fortress as a Watch Sergeant — the most common command rank an active Deathwatch Marine actually holds, per Codex: Deathwatch and the wider Deathwatch RPG line's own kill-team structure.\n\nDesign: Deathwatch Rank at level 2 (10 points), reusing the leveled trait from Deathwatch.adq rather than restating Basic Set Rank math here.",
+			"tags": [
+				"Imperium",
+				"Adeptus Astartes",
+				"Deathwatch"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "td4VQAqkHGXlpKMOc",
+					"name": "Deathwatch Rank",
+					"reference": "B29",
+					"local_notes": "Levels: 2 Watch Sergeant (leads one kill-team), 4 Watch Captain (commands a Watch Fortress's worth of kill-teams and answers directly to that fortress's Ordo Xenos liaison), 6 Watch Master (head of the entire Deathwatch, one of the very few Astartes officers who reports to the Inquisition, in practice, as something closer to a peer than a subordinate). Levels 1, 3 and 5 cover intermediate seniority with no distinct title in the sources consulted. This Rank governs standing within the Deathwatch's own chain of command only; it neither replaces nor outranks a Marine's Chapter Rank back home.\n\nLore: The Deathwatch runs a rank structure parallel to, and largely independent of, every founding Chapter's own: a seconded Battle-Brother answers first to his kill-team's Watch Sergeant, Watch Sergeants to a Watch Fortress's Watch Captain, and Watch Captains (however many the Deathwatch currently fields) to a single Watch Master, per Codex: Deathwatch background and its consistent portrayal across Black Library's Deathwatch line. A Watch Master's authority to requisition matériel and troops for a xenos-hunting mission is, in practice, backed by the Inquisition's own Ordo Xenos.\n\nDesign: Basic Set Rank (B29), 5 points/level, built the same way as this project's existing Military Rank and Religious Rank entries (Imperial Traits.adq) rather than inventing a new mechanic: one leveled trait covers the whole ladder, and the notes field does the work of mapping levels to the named offices the framework asks for (Watch Master and Watch Captain) instead of splitting them into separate un-leveled traits that would have to be kept in sync by hand.",
+					"tags": [
+						"Advantage",
+						"Social",
+						"Imperium",
+						"Deathwatch"
+					],
+					"points_per_level": 5,
+					"can_level": true,
+					"levels": 2
+				}
+			],
+			"disabled": true
+		},
+		{
+			"id": "TOCEUfJJUmdyJbNj1",
+			"name": "Watch Master",
+			"local_notes": "Disabled lens for the single Astartes who commands the entire Deathwatch. Enable for +30 points (Deathwatch Rank 6) plus, at a GM's discretion, several levels of Deathwatch Authority above this add-on's own baseline — a Watch Master's writ reaches further than a single kill-team's. Firmly a \"Heroes and legends\" character once enabled, not a rank-and-file kill-team build; see framework.md's point-scale table.\n\nLore: The Deathwatch's single overall commander, one of the very few Astartes officers who deals with the Inquisition as something close to a peer rather than a subordinate; see Deathwatch.adq's own Rank entry for the sourcing.\n\nDesign: Deathwatch Rank at level 6 (30 points), reused from Deathwatch.adq.",
+			"tags": [
+				"Imperium",
+				"Adeptus Astartes",
+				"Deathwatch"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "t-1ksYtSmU9OUbBpz",
+					"name": "Deathwatch Rank",
+					"reference": "B29",
+					"local_notes": "Levels: 2 Watch Sergeant (leads one kill-team), 4 Watch Captain (commands a Watch Fortress's worth of kill-teams and answers directly to that fortress's Ordo Xenos liaison), 6 Watch Master (head of the entire Deathwatch, one of the very few Astartes officers who reports to the Inquisition, in practice, as something closer to a peer than a subordinate). Levels 1, 3 and 5 cover intermediate seniority with no distinct title in the sources consulted. This Rank governs standing within the Deathwatch's own chain of command only; it neither replaces nor outranks a Marine's Chapter Rank back home.\n\nLore: The Deathwatch runs a rank structure parallel to, and largely independent of, every founding Chapter's own: a seconded Battle-Brother answers first to his kill-team's Watch Sergeant, Watch Sergeants to a Watch Fortress's Watch Captain, and Watch Captains (however many the Deathwatch currently fields) to a single Watch Master, per Codex: Deathwatch background and its consistent portrayal across Black Library's Deathwatch line. A Watch Master's authority to requisition matériel and troops for a xenos-hunting mission is, in practice, backed by the Inquisition's own Ordo Xenos.\n\nDesign: Basic Set Rank (B29), 5 points/level, built the same way as this project's existing Military Rank and Religious Rank entries (Imperial Traits.adq) rather than inventing a new mechanic: one leveled trait covers the whole ladder, and the notes field does the work of mapping levels to the named offices the framework asks for (Watch Master and Watch Captain) instead of splitting them into separate un-leveled traits that would have to be kept in sync by hand.",
+					"tags": [
+						"Advantage",
+						"Social",
+						"Imperium",
+						"Deathwatch"
+					],
+					"points_per_level": 5,
+					"can_level": true,
+					"levels": 6
+				}
+			],
+			"disabled": true
+		},
+		{
+			"id": "TWb-mA7j6CDWBVcIr",
+			"name": "Black Shield",
+			"local_notes": "Disabled lens for a Marine who serves with no Chapter badge. Enable for -11 points (Black Shield, Deathwatch.adq) and, at the table's discretion, disable/replace the Marine's own Chapter Gene-Seed lens with the plain Astartes ancestry trait if the character's true Chapter is meant to be unknown even to the player — this project leaves that choice to the GM rather than assuming it, since Black Shields in the fiction sometimes do know their own origin even when no one else does.\n\nLore: See Deathwatch.adq's own Black Shield entry for full sourcing.\n\nDesign: Thin wrapper so this template can list Black Shield as a lens alongside the Rank lenses, matching the Chapter Gene-Seed lenses' own container pattern in Astartes Gene-Seed.adq.",
+			"tags": [
+				"Imperium",
+				"Adeptus Astartes",
+				"Deathwatch",
+				"Chapter Variant"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "Tod57f-tKt4scCqJK",
+					"name": "Black Shield",
+					"local_notes": "Lore: A minority of Deathwatch Marines serve with no Chapter badge at all beneath the Deathwatch cross — \"Black Shields\" whose origin is known, if at all, only to the Watch Master who accepted their oath. Black Library's Deathwatch fiction treats the reasons as varied and often left unresolved on the page: a Chapter destroyed to the last man, a Marine whose Chapter disowned him, an Inquisitorial placement too sensitive to badge, or simply personal choice. What's consistent across sources is that other Astartes find a badgeless brother unsettling, and the Deathwatch itself is one of the very few institutions in the Imperium that will take such a Marine at all.\n\nDesign: A meta-trait lens exactly like the Chapter Gene-Seed lenses in Astartes Gene-Seed.adq, but for concealed origin rather than physiology: Secret (B152) at a moderate cost since what's actually at risk varies by the individual's backstory (a GM ruling this session's specific Black Shield's secret is more dangerous should raise the cost accordingly, per B152's own guidance), plus a 1-point Quirk flagging the in-fiction \"other Marines find this unsettling\" beat as a roleplaying hook rather than a mechanical reaction penalty (which would double-count against the Sense of Duty and Chapter Rivalry quirks above).",
+					"tags": [
+						"Imperium",
+						"Adeptus Astartes",
+						"Deathwatch",
+						"Chapter Variant"
+					],
+					"container_type": "meta_trait",
+					"children": [
+						{
+							"id": "tf9A3lKRhOsBvqmPC",
+							"name": "Secret (True Chapter of Origin)",
+							"reference": "B152",
+							"local_notes": "Moderate exposure: discovery risks anything from Chapter reprisal to an Inquisitorial recall, depending on why the Marine left his Chapter unnamed in the first place — left deliberately vague, per the fiction's own refusal to give a single answer.",
+							"base_points": -10
+						},
+						{
+							"id": "touOWsM_ZoLk4hmf3",
+							"name": "No Chapter Badge",
+							"local_notes": "Wears plain, unmarked black plate with no Chapter iconography beneath the Deathwatch's own heraldry; instantly recognisable as a Black Shield to anyone who knows the sign, and quietly distrusted by the superstitious for it.",
+							"tags": [
+								"Quirk"
+							],
+							"base_points": -1
+						}
+					]
+				}
+			],
+			"disabled": true
+		},
+		{
+			"id": "T0h2AdipWjn1cpCf5",
+			"name": "Veteran (Kill-team Specialist)",
+			"local_notes": "Disabled lens for a Vanguard-tier or otherwise especially experienced kill-team veteran. Enable for +25 points (a second Xenos Bane specialisation at the GM-allowed exception rate, plus Combat Reflexes-adjacent honed reactions already covered by the Battle-Brother's own Hypno-Indoctrination — this lens intentionally adds skill points rather than new combat advantages, since the Astartes and Hypno-Indoctrination packages already cover reflexes and pain tolerance).\n\nLore: Deathwatch fiction (the Deathwatch anthologies in particular) consistently shows its named Vanguard-tier veterans as the ones a Watch Captain assigns to the hardest postings, not because they hit harder in an absolute sense but because they've simply done this longer.\n\nDesign: A flat skill-point lens rather than a new combat trait, per the note above.",
+			"tags": [
+				"Imperium",
+				"Adeptus Astartes",
+				"Deathwatch"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "tNjHT0M_ROS7aArzM",
+					"name": "Veteran Skill Package",
+					"local_notes": "Lore: A Marine who has run enough kill-team postings picks up a second specialisation and sharper all-round battlefield judgement than a first-tour secondee, matching how Deathwatch fiction treats its long-serving Vanguard veterans as noticeably more capable than a newly-arrived Battle-Brother, without making them a different kind of soldier.\n\nDesign: 25 points of free skill-point improvement (GM/player allocates across this add-on's own skills below, or the Battle-Brother's), rather than a second Xenos Hunter Talent level or a new combat trait, so a \"veteran\" build stays a better-trained version of the same Marine instead of quietly becoming a Librarian-tier specialist through the back door.",
+					"tags": [
+						"Imperium",
+						"Deathwatch"
+					],
+					"base_points": 25
+				}
+			],
+			"disabled": true
+		},
+		{
+			"id": "TExmEJp_-9ikeT4vE",
+			"name": "Deathwatch Authority (Ordo Xenos Writ)",
+			"local_notes": "Disabled by default (see this file's own point-math note above). Enable at level 1 for +5, level 2 for +10, or the full level 3 for +15 (Deathwatch.adq).\n\nLore: See Deathwatch.adq's own entry for sourcing.\n\nDesign: Thin wrapper, same pattern as the Black Shield lens above.",
+			"tags": [
+				"Imperium",
+				"Deathwatch",
+				"Inquisition"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "t413JCz89HW3GUxCY",
+					"name": "Deathwatch Authority (Ordo Xenos Writ)",
+					"reference": "B65",
+					"local_notes": "Scoped to xenos-threat operations specifically: commandeering local Imperial forces and matériel, overriding a planetary commander's order to disengage, and demanding logistical priority from the Departmento Munitorum when a kill-team is in the field. It does not extend to policing the Inquisition's own internal affairs (that remains Inquisitorial Rank in Imperial Traits.adq) and, per the Deathwatch's own founding compact, is never turned against another Chapter's internal discipline.\n\nLore: A Deathwatch kill-team operates under a writ the Inquisition's Ordo Xenos backs to the hilt whenever a confirmed alien threat is in play: Codex: Deathwatch and Black Library's Deathwatch fiction both show planetary governors, Naval officers and even Astra Militarum generals stepping aside for a kill-team's Watch Sergeant once the writ is shown, precisely because the Ordo Xenos has learned that hesitation in the face of a genuine xenos incursion gets worlds lost.\n\nDesign: Basic Set Legal Enforcement Powers (B65), 5/level, at 3 levels (15 points) — the same shape as Imperial Traits.adq's Legal Enforcement Powers (Commissariat), reused as a template rather than invented fresh, but scoped narrower in the notes (xenos operations only) to keep it distinct from an actual Inquisitorial rosette, which this trait deliberately does not grant.",
+					"tags": [
+						"Advantage",
+						"Social",
+						"Imperium",
+						"Deathwatch",
+						"Inquisition"
+					],
+					"points_per_level": 5,
+					"can_level": true,
+					"levels": 1,
+					"max_levels": 3
+				}
+			],
+			"disabled": true
+		}
+	],
+	"skills": [
+		{
+			"id": "sMlXgTTFTnLVZCser",
+			"name": "Hidden Lore",
+			"reference": "B199",
+			"local_notes": "Add these 8 points to the Battle-Brother's own Hidden Lore (Xenos) 8 points (already on that template, for 16 total) rather than tracking a second entry — a seconded Marine's xenos-lore training deepens what he already studied at the Chapter, it doesn't start over.\n\nLore: What the Inquisition and the more paranoid chaplains know of daemonic nature, names, and countermeasures: pict-evidence, interrogation transcripts and forbidden grimoires rather than fieldcraft. Widely depicted as dangerous knowledge in the Eisenhorn/Ravenor and Gaunt's Ghosts novels; Dark Heresy/Only War use an equivalent Forbidden Lore (Daemonology) skill for calibration.\n\nDesign: Basic Set Hidden Lore (B199), specialisation per framework.md.",
+			"tags": [
+				"Mental",
+				"Knowledge",
+				"Imperium"
+			],
+			"specialization": "Xenos",
+			"difficulty": "iq/a",
+			"defaults": [
+				{
+					"type": "iq",
+					"modifier": -6
+				}
+			],
+			"points": 8
+		},
+		{
+			"id": "s2Q0Onkt2TKpoQVOV",
+			"name": "Tactics",
+			"local_notes": "Lore: Add to the Battle-Brother's own Tactics 24 points (for 32 total): cross-Chapter kill-team doctrine specifically, on top of the single-Chapter combat doctrine the base template already covers.\n\nDesign: 8 points of Tactics improvement, same additive-to-the-base-template pattern the Hidden Lore (Xenos) line above uses, rather than a second stand-alone Tactics entry on the character sheet.",
+			"tags": [
+				"Imperium",
+				"Deathwatch"
+			],
+			"difficulty": "iq/h",
+			"points": 8
+		},
+		{
+			"id": "sShEzydGz70Cx4ozZ",
+			"name": "Survival",
+			"local_notes": "Lore: Add to the Battle-Brother's own Survival (Any) 8 points (for 16 total): tracking and surviving across whatever terrain a mission demands, on worlds no single Chapter trains for.\n\nDesign: Additive-to-the-base-template pattern, as above.",
+			"tags": [
+				"Imperium",
+				"Deathwatch"
+			],
+			"specialization": "Any",
+			"difficulty": "per/a",
+			"points": 8
+		},
+		{
+			"id": "sO_hQuZ4rVRb9dwrg",
+			"name": "Tracking",
+			"local_notes": "Lore: Add to the Battle-Brother's own Tracking 2 points (for 10 total): following unfamiliar xenos quarry across terrain built for another biology, a routine kill-team task per Deathwatch fiction.\n\nDesign: Additive-to-the-base-template pattern, as above.",
+			"tags": [
+				"Imperium",
+				"Deathwatch"
+			],
+			"difficulty": "per/a",
+			"points": 8
+		},
+		{
+			"id": "sAM516bwRNvatxeUW",
+			"name": "Gesture",
+			"local_notes": "Lore: Add to the Battle-Brother's own Gesture 1 point (for 5 total): a kill-team drills a shared battle-sign that has to work across Chapters with no common signing tradition, not just within one Chapter's own squads.\n\nDesign: Additive-to-the-base-template pattern, as above.",
+			"tags": [
+				"Imperium",
+				"Deathwatch"
+			],
+			"difficulty": "iq/e",
+			"points": 4
+		},
+		{
+			"id": "s9Dodpi0LuK7SfHp-",
+			"name": "Soldier",
+			"local_notes": "Lore: Add to the Battle-Brother's own Soldier 12 points (for 20 total): Deathwatch field protocols, Watch Fortress procedure and Ordo Xenos liaison work on top of a Marine's own Chapter soldiering.\n\nDesign: Additive-to-the-base-template pattern, as above.",
+			"tags": [
+				"Imperium",
+				"Deathwatch"
+			],
+			"difficulty": "iq/a",
+			"points": 8
+		},
+		{
+			"id": "s_2_OTyWEPKUSHUsW",
+			"name": "Guns",
+			"local_notes": "Lore: A Deathwatch Marine training on the kill-team's own shotgun and its specialist shells, a weapon type the standard Battle-Brother template doesn't otherwise train.\n\nDesign: New skill line (the base template has no Guns (Shotgun) entry to add to), Easy difficulty per the framework's own weapon-skill table; priced at a full 8 points (not the 1-2 point \"familiarity\" level) since the shotgun is this add-on's own primary breaching weapon, not a rarely-touched sidearm.",
+			"tags": [
+				"Imperium",
+				"Deathwatch"
+			],
+			"specialization": "Shotgun",
+			"difficulty": "dx/e",
+			"points": 8
+		}
+	],
+	"equipment": [
+		{
+			"id": "E5NQwBxGyCg_vrbYI",
+			"description": "Power Armour, Deathwatch Livery",
+			"local_notes": "Weak Points 4: when a hit on this armour fails to penetrate, roll 3d; on 4 or less it found a gap and DR is halved against it.\n\nReferenced directly from Imperial Armour.eqp rather than chained through Deathwatch Wargear.eqp's own copy of this entry, since this project's build tool does not resolve an include-of-an-include; see Deathwatch Wargear.eqp for the full note on why this is the same suit repainted, not a new one.\n\nLore: Mark VII \"Aquila Armour\" is the standardised post-Heresy pattern issued across the newly re-formed Chapters and remains, per current Codex Space Marines background and countless 41st-millennium Black Library novels, the most commonly depicted Astartes plate to this day.\n\nDesign: Torso DR and eye-lens DR are both taken directly from the fixed anchor (\"Astartes power armour (Mk VII baseline) | 100 ... Eye lenses DR 40\", framework.md); every other Mark in this file is derived relative to this entry. Limb/head DR use the standard proportional offsets (roughly torso minus 12 for arms/legs, minus 25 for hands/feet/face, minus 37 for neck) applied consistently across the whole Astartes power-armour family. Servo ST bonus is the reference value the other marks scale from.",
+			"tags": [
+				"Body Armor",
+				"Imperium",
+				"Adeptus Astartes"
+			],
+			"tech_level": "11",
+			"legality_class": "0",
+			"base_value": "40000",
+			"base_weight": "150 lb",
+			"features": [
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"torso",
+						"vitals",
+						"groin"
+					],
+					"amount": 100
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"arm"
+					],
+					"amount": 88
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"leg"
+					],
+					"amount": 88
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"neck"
+					],
+					"amount": 63
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"skull"
+					],
+					"amount": 100
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"face"
+					],
+					"amount": 75
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"eye"
+					],
+					"amount": 40
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"hand"
+					],
+					"amount": 63
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"foot"
+					],
+					"amount": 75
+				},
+				{
+					"type": "attribute_bonus",
+					"attribute": "lifting_st",
+					"amount": 9
+				},
+				{
+					"type": "attribute_bonus",
+					"attribute": "striking_st",
+					"amount": 5
+				}
+			],
+			"quantity": 1,
+			"equipped": true,
+			"children": [
+				{
+					"id": "ewl2Q-TPu7h0zk-zl",
+					"description": "Auto-senses Suite",
+					"local_notes": "Threat auto-cueing, low-light and audio filtering, and passive proximity warning feeding directly into the wearer's helmet display. Requires the black carapace interface to use at full effect.\n\nLore: Depicted throughout Astartes-viewpoint fiction (the Horus Heresy series, Space Marine Battles line) as a constant background hum of tactical data most Astartes barely consciously notice.\n\nDesign: No numeric anchor; modelled as a flat Observation bonus, deliberately larger than the Sororitas suite's, reflecting the fuller sensor package and the neural bandwidth the black carapace provides to use it.",
+					"base_value": "6000",
+					"base_weight": "4 lb",
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "Observation"
+							},
+							"amount": 2
+						}
+					],
+					"quantity": 1,
+					"equipped": true
+				},
+				{
+					"id": "exzyW8owoYylRS3Ix",
+					"description": "Vox-Link (Integrated)",
+					"local_notes": "Squad- and Chapter-band encrypted vox built into the gorget.\n\nLore: Every depiction of Astartes small-unit tactics assumes constant, reliable vox discipline.\n\nDesign: Flavour/utility subsystem; no DR or attribute effect.",
+					"base_value": "2000",
+					"base_weight": "2 lb",
+					"quantity": 1,
+					"equipped": true
+				},
+				{
+					"id": "eHLFCGzBJ5hoTdvtF",
+					"description": "Autoreactive Shoulder Plates",
+					"local_notes": "Pauldrons that shift and stiffen a fraction of a second before an incoming blow lands; this reactive behaviour is already folded into the suit's listed arm and torso DR above, not an additional bonus.\n\nLore: A detail repeatedly mentioned in Astartes armour background as part of what makes the suit \"fight with\" its wearer rather than merely cover them.\n\nDesign: Modelled as flavour/explanation for part of the parent item's existing DR rather than a separate bonus, to avoid double-counting protection.",
+					"base_value": "3000",
+					"base_weight": "8 lb",
+					"quantity": 1,
+					"equipped": true
+				},
+				{
+					"id": "eDTbtySY8nmZ5tQgK",
+					"description": "Respirator & Void Seal",
+					"local_notes": "Full atmospheric independence; immune to inhaled toxins and gas while sealed, vacuum-rated for extended operations.\n\nLore: Astartes routinely fight in void war, toxic hive-scum, and daemon-tainted atmospheres in sealed plate across the setting's fiction.\n\nDesign: Standard sealed-armour assumption; no separate anchor.",
+					"base_value": "3000",
+					"base_weight": "6 lb",
+					"quantity": 1,
+					"equipped": true
+				},
+				{
+					"id": "ebAB6v1HEigE_IWmN",
+					"description": "Recyclers",
+					"local_notes": "Reclaims water and scrubs air, and in conjunction with an Astartes's own physiology allows sealed operation for many days.\n\nLore: Consistent with Astartes physiology background (framework.md notes Astartes \"no need to sleep for weeks\"); the suit's recyclers are the mundane counterpart to that endurance.\n\nDesign: Flavour subsystem, no mechanical bonus.",
+					"base_value": "2000",
+					"base_weight": "5 lb",
+					"quantity": 1,
+					"equipped": true
+				},
+				{
+					"id": "eDCDn89s5cMrwYANY",
+					"description": "Servo-Motor Actuators",
+					"local_notes": "The bulk of the suit's weight and cost; converts the wearer's black-carapace-transmitted movements into full-body powered assistance.\n\nLore: The core of what makes power armour \"powered\" rather than simple plate, referenced constantly wherever Astartes strength in combat is described.\n\nDesign: ST bonus is the reference figure every other Astartes-pattern suit in this file scales from.",
+					"base_value": "14000",
+					"base_weight": "65 lb",
+					"features": [
+						{
+							"type": "attribute_bonus",
+							"attribute": "lifting_st",
+							"amount": 9
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "striking_st",
+							"amount": 5
+						}
+					],
+					"quantity": 1,
+					"equipped": true
+				}
+			]
+		},
+		{
+			"id": "erRtwXoJf5-WcIeD4",
+			"description": "Boltgun, Stalker Pattern (Deathwatch)",
+			"local_notes": "Not equipped by default; swap in for the Battle-Brother's own Boltgun, Godwyn Pattern for a stealth-role loadout.\n\nLore: The Stalker-pattern boltgun is a Deathwatch-specific legacy build: a standard-calibre Astartes boltgun re-machined for a fully semi-automatic-only action, an integral suppressor and subsonic loads, issued to kill-teams that need to put down a target quietly before the rest of a xenos brood notices. Special Issue Ammunition more broadly (Dragonfire, Tempest, Stalker Silenced rounds among them, alongside Kraken, Hellfire, Metal Storm and Vengeance already covered in Boltgun, Godwyn Pattern.eqp) is the Deathwatch RPG line's own signature contribution to boltgun lore; this project's specific division of which round does what is a reasoned approximation built from that line's general design intent, not a verbatim reprint of any single FFG weapon-ammunition table, and no page number is cited because none is confidently known.\n\nDesign: Handling is derived fresh from the Godwyn anchor (Boltgun, Godwyn Pattern.eqp), not copied: same loaded weight class (40 lb, 2 lb over the Godwyn anchor's 38 lb for the suppressor shroud and stiffened barrel a subsonic load needs) and the same min ST 19 the anchor established for a 38-40 lb Astartes-pattern receiver. RoF drops to 1 (semi-automatic only, per its role as a precision/stealth weapon — the same logic the Primaris Stalker Bolt Rifle uses in Bolt Weapons.eqp) rather than the Godwyn anchor's RoF 3. Acc rises to 5 (one over the Godwyn anchor's 4) for the integrated optics a stealth-role weapon needs; Bulk drops one further step to -6 (worse than the Godwyn anchor's -5) for the suppressor's added length. The standard subsonic bolt keeps the Godwyn anchor's full penetrator dice (6dx2(2) pi++ — going quiet doesn't need to cost penetration) but its follow-up shrinks from the anchor's 6d cr ex to 4d cr ex, the same one-third cut the Primaris Stalker Bolt Rifle uses for exactly the same reason (a subsonic round carries less kinetic energy at impact to trigger a full-yield detonation of the internal charge). Dragonfire scales down from the standard round the same way Hellfire does in the Godwyn entry (fewer dice, pi instead of pi++, to make room for payload), but keeps a burn ex follow-up useable against anything flammable rather than Hellfire's organic-only tox follow-up: exact dice distribution, 5dx2(2) pi averages 35 and penetrates carapace (DR 70, eff. DR 35) on 50.0% of hits, Sororitas power armour (DR 85, eff. DR 42.5) on 15.2%, and Astartes power armour (DR 100, eff. DR 50) on 1.6% — identical figures to the Godwyn-family Bolt Pistol's own 5dx2(2) line, since it is the same reduced-mass penetrator core in a different housing. Tempest and Stalker Silenced rounds are ballistically unchanged from the standard bolt (6dx2(2) pi++ / 6d cr ex, matching the Godwyn anchor's own 79%/45%/14% figures against carapace/Sororitas/ Astartes), with their special property carried entirely as a notes-level rule, the same treatment the Godwyn entry gives Vengeance and Sanctified rounds — Stalker Silenced additionally loses the Acc/Bulk bonus this gun's own integral suppressor provides, since that bonus is the Stalker body's, not the shell's.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium",
+				"Adeptus Astartes",
+				"Deathwatch"
+			],
+			"tech_level": "10",
+			"legality_class": "1",
+			"base_value": "1700",
+			"base_weight": "40 lb",
+			"weapons": [
+				{
+					"id": "W7ZOLe_T4EUX1wdcj",
+					"sv": 1,
+					"damage": {
+						"type": "pi++",
+						"base": "6dx2",
+						"armor_divisor": 2
+					},
+					"accuracy": "5",
+					"range": "200/1000",
+					"rate_of_fire": "1",
+					"shots": "24(3)",
+					"bulk": "-6",
+					"recoil": "3",
+					"strength": "19",
+					"usage": "Subsonic bolt",
+					"usage_notes": "Integral suppressor and low-flash propellant charge; halves the effective range at which a Hearing-based roll can pick out the shot compared with a standard boltgun (GM's call on the exact distance).\n",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "WLZkAxt_c0ibLBkld",
+					"sv": 1,
+					"damage": {
+						"type": "cr ex",
+						"base": "4d"
+					},
+					"accuracy": "5",
+					"range": "200/1000",
+					"rate_of_fire": "1",
+					"shots": "24(3)",
+					"bulk": "-6",
+					"recoil": "3",
+					"strength": "19",
+					"usage": "Subsonic bolt, follow-up (if bolt penetrates)",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "WK6RRtPExuudQNLg0",
+					"sv": 1,
+					"damage": {
+						"type": "pi",
+						"base": "5dx2",
+						"armor_divisor": 2
+					},
+					"accuracy": "5",
+					"range": "200/1000",
+					"rate_of_fire": "1",
+					"shots": "24(3)",
+					"bulk": "-6",
+					"recoil": "3",
+					"strength": "19",
+					"usage": "Dragonfire round (SIA)",
+					"usage_notes": "Incendiary penetrator; unlike Hellfire (Boltgun, Godwyn Pattern.eqp) its burn payload isn't limited to organic targets.\n",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "WwPMV9y18gEc31Lxi",
+					"sv": 1,
+					"damage": {
+						"type": "burn ex",
+						"base": "5d"
+					},
+					"accuracy": "5",
+					"range": "200/1000",
+					"rate_of_fire": "1",
+					"shots": "24(3)",
+					"bulk": "-6",
+					"recoil": "3",
+					"strength": "19",
+					"usage": "Dragonfire round, follow-up (if bolt penetrates)",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "Wcb4klGM71BLbrlJO",
+					"sv": 1,
+					"damage": {
+						"type": "pi++",
+						"base": "6dx2",
+						"armor_divisor": 2
+					},
+					"accuracy": "5",
+					"range": "200/1000",
+					"rate_of_fire": "1",
+					"shots": "24(3)",
+					"bulk": "-6",
+					"recoil": "3",
+					"strength": "19",
+					"usage": "Tempest round (SIA)",
+					"usage_notes": "Ballistically identical to a standard bolt; its casing is tuned to punch clean through dense natural cover (jungle canopy, fungal growth, a xenos hive-wall's membranous inner layers) without deflecting or detonating early. GM's call to waive an intervening light-cover DR bonus entirely when this round is used against a target behind that kind of obstruction.\n",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "WmO4wdLSwj0NNsXb1",
+					"sv": 1,
+					"damage": {
+						"type": "cr ex",
+						"base": "6d"
+					},
+					"accuracy": "5",
+					"range": "200/1000",
+					"rate_of_fire": "1",
+					"shots": "24(3)",
+					"bulk": "-6",
+					"recoil": "3",
+					"strength": "19",
+					"usage": "Tempest round, follow-up (if bolt penetrates)",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "WNeCUAyTZUgVt0hHV",
+					"sv": 1,
+					"damage": {
+						"type": "pi++",
+						"base": "6dx2",
+						"armor_divisor": 2
+					},
+					"accuracy": "4",
+					"range": "200/1000",
+					"rate_of_fire": "1",
+					"shots": "24(3)",
+					"bulk": "-5",
+					"recoil": "3",
+					"strength": "19",
+					"usage": "Stalker Silenced round (SIA)",
+					"usage_notes": "A reduced-charge shell meant for a standard (non-Stalker) boltgun body: it trades this weapon's own integral suppressor bonus for compatibility with any Godwyn-anchor Astartes boltgun (Boltgun, Godwyn/Umbra/Phobos/Mk IV Pattern), quieting the report at the cost of the RoF 3 semi-auto cycling those guns normally use — loaded into this Stalker-pattern body it is redundant with the Subsonic bolt usage above and included here only for completeness.\n",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "WMweTryYS_HgQEaMv",
+					"sv": 1,
+					"damage": {
+						"type": "cr ex",
+						"base": "6d"
+					},
+					"accuracy": "4",
+					"range": "200/1000",
+					"rate_of_fire": "1",
+					"shots": "24(3)",
+					"bulk": "-5",
+					"recoil": "3",
+					"strength": "19",
+					"usage": "Stalker Silenced round, follow-up (if bolt penetrates)",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1,
+			"equipped": false
+		},
+		{
+			"id": "efWTSEA7ulfk3sG_v",
+			"description": "Deathwatch Shotgun",
+			"local_notes": "Not equipped by default; swap in for a close-quarters/breaching loadout.\n\nLore: An Astartes-scale combat shotgun favoured by kill-teams expecting close-quarters xenos-clearance work — boarding actions, hive-tunnel sweeps, void-ship breaches — where a boltgun's penetrator round is wasted overkill and a wider, close-range spread matters more than range or armour penetration. Its family of specialist shells (named here Cryptclearer, Xenopurge and Wyrmsbreath) follows the Deathwatch RPG line's own tradition of purpose-built shotgun Special Issue Ammunition for exactly this role; this project's specific names and effects are its own reasoned build on that idea, not a reprint of any single sourcebook's shell list.\n\nDesign: Built up from the human-scale Combat Shotgun (Solid Projectile Weapons.eqp, 6d pi+ buckshot / 8d pi+ slug) the same way the Astartes bolt pistols scale up from their human equivalents in Bolt Weapons.eqp: one clear step of dice for a bigger 8-gauge Astartes shell (buckshot 8d pi+, slug 10d pi+) rather than the same shell in a bigger housing. Exact dice distribution: buckshot penetrates flak (DR 30) on 30.5% of hits and never beats carapace (DR 70); slug penetrates flak on 79.5% of hits and likewise never beats carapace — this remains firmly an anti-infantry/anti-swarm weapon, not a power-armour threat, matching every source's treatment of shotguns in this setting. Cryptclearer trades range and Acc for one more die at point-blank choke (9d pi+, 57.6% vs flak at that range) rather than a wider spread; Xenopurge and Wyrmsbreath both sacrifice two dice of base shot (6d, matching the human Combat Shotgun's own buckshot figure) to carry a bio-toxin or incendiary payload, following the same \"reduced penetrator, added follow-up\" logic the Godwyn boltgun's Hellfire round uses, with Wyrmsbreath's burn ex follow-up built to answer the specific \"kills things that just grow back\" niche its name implies. Handling: an Astartes-scale weapon per the framework's rule that Astartes-pattern gear runs one step heavier and bulkier than its human counterpart — 15 lb loaded (vs. the human Combat Shotgun's 9 lb) and Bulk -5 (vs. -4). Min ST 12† (√(10×15)≈12.2) is far below the Astartes boltguns' ST 19+, reflecting that a shotgun's recoil, unlike a boosted mass-reactive bolt round, doesn't scale with the shooter's raw strength the same way — an Astartes at ST 30 fires it essentially unencumbered, while a very strong, augmented human could still shoulder it two-handed at a real but survivable penalty. Buckshot keeps the human Combat Shotgun's full-auto-capable RoF 3; every precision or specialist shell drops to RoF 1, the same per-mode logic the human Combat Shotgun entry already uses. Rcl is bumped one point above the human weapon's figures (2/3 vs. 1/2) for the bigger shell's added kick; Shots 10(3) sits one round above the human gun's 8-round tube for the larger frame.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium",
+				"Adeptus Astartes",
+				"Deathwatch"
+			],
+			"tech_level": "10",
+			"legality_class": "1",
+			"base_value": "1200",
+			"base_weight": "15 lb",
+			"weapons": [
+				{
+					"id": "WcHuZsh4j70ssV7uI",
+					"sv": 1,
+					"damage": {
+						"type": "pi+",
+						"base": "8d"
+					},
+					"accuracy": "2",
+					"range": "25/90",
+					"rate_of_fire": "3",
+					"shots": "10(3)",
+					"bulk": "-5",
+					"recoil": "2",
+					"strength": "12†",
+					"usage": "Buckshot",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "W3Ug7gMV4aWNOYCGa",
+					"sv": 1,
+					"damage": {
+						"type": "pi+",
+						"base": "10d"
+					},
+					"accuracy": "3",
+					"range": "180/600",
+					"rate_of_fire": "1",
+					"shots": "10(3)",
+					"bulk": "-5",
+					"recoil": "3",
+					"strength": "12†",
+					"usage": "Slug",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "WpX_F6plry0zaV7nT",
+					"sv": 1,
+					"damage": {
+						"type": "pi+",
+						"base": "9d"
+					},
+					"accuracy": "1",
+					"range": "15/50",
+					"rate_of_fire": "1",
+					"shots": "10(3)",
+					"bulk": "-5",
+					"recoil": "2",
+					"strength": "12†",
+					"usage": "Cryptclearer shell",
+					"usage_notes": "Tight-choke, high-density load built for firing down a cramped tunnel, tomb-shaft or hab-corridor at point-blank range, where a standard buckshot spread would be wasted against the walls; poor accuracy and short range reflect the extreme choke, not a weaker charge.\n",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "W3eQCxFjaXO35WC7l",
+					"sv": 1,
+					"damage": {
+						"type": "pi+",
+						"base": "6d"
+					},
+					"accuracy": "2",
+					"range": "25/90",
+					"rate_of_fire": "1",
+					"shots": "10(3)",
+					"bulk": "-5",
+					"recoil": "2",
+					"strength": "12†",
+					"usage": "Xenopurge shell",
+					"usage_notes": "Bio-toxin payload in place of some of the shot; see the follow-up line below (organic targets only).\n",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "W6z_KWsKJjpaufu_b",
+					"sv": 1,
+					"damage": {
+						"type": "tox",
+						"base": "3d",
+						"armor_divisor": 5
+					},
+					"accuracy": "2",
+					"range": "25/90",
+					"rate_of_fire": "1",
+					"shots": "10(3)",
+					"bulk": "-5",
+					"recoil": "2",
+					"strength": "12†",
+					"usage": "Xenopurge shell, follow-up (if shell penetrates; organic targets only)",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "WuY5B8ifnF4PFJKzN",
+					"sv": 1,
+					"damage": {
+						"type": "pi",
+						"base": "6d"
+					},
+					"accuracy": "2",
+					"range": "25/90",
+					"rate_of_fire": "1",
+					"shots": "10(3)",
+					"bulk": "-5",
+					"recoil": "2",
+					"strength": "12†",
+					"usage": "Wyrmsbreath shell",
+					"usage_notes": "Incendiary compound in place of most of the shot; the follow-up fire is what actually stops a regenerating xenos threat from knitting a wound shut, not the initial pellet strike.\n",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "W4ob2qyYh7NocLToB",
+					"sv": 1,
+					"damage": {
+						"type": "burn ex",
+						"base": "4d"
+					},
+					"accuracy": "2",
+					"range": "25/90",
+					"rate_of_fire": "1",
+					"shots": "10(3)",
+					"bulk": "-5",
+					"recoil": "2",
+					"strength": "12†",
+					"usage": "Wyrmsbreath shell, follow-up (if shell penetrates)",
+					"usage_notes": "GM's discretion to rule this follow-up also suppresses a regenerating xenos' natural healing for the scene, per the shell's design intent — the framework doesn't otherwise model monster regeneration.\n",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1,
+			"equipped": false
+		},
+		{
+			"id": "epcG63SgUrKZsZQkq",
+			"description": "Xenophase Blade",
+			"local_notes": "Not equipped by default, relic-tier gear; swap in only with GM permission in place of the Battle-Brother's own chainsword or combat knife.\n\nLore: A rare archeotech or Mechanicus-forged relic entrusted only to a handful of Deathwatch veterans: its blade briefly desynchronises from realspace on impact, letting the edge pass through conventional matter — including armour plate — as if it weren't there, before resynchronising to deliver the cut. Consistently described across Deathwatch background as devastating against otherwise armour-proof xenos and constructs, and consistently rare enough that no kill-team is issued more than one or two.\n\nDesign: Built, not borrowed: no catalogue \"phase weapon\" is copied here. The phasing effect is modelled as Armor Divisor (inf) — the schema's B102-style total bypass of DR — rather than a merely large numeric divisor, because the fiction's claim is a genuine bypass of matter, not \"cuts unusually well\" — a large-but-finite divisor like the disruption-field weapons' (10) would still be stopped cold by a Terminator's DR 200 half the time, which undersells \"passes through armour as if it weren't there.\" What keeps this from being simply the best melee weapon in the game is entirely on the restriction side: a hard six-use limit before the field must recharge (this project's closest existing analogue, the personal force fields in Force Fields.eqp, gate a similar low-single-digits-per-minute budget on a timer rather than a point cost, so the same convention is reused here instead of inventing a new equipment-level limitation field the schema doesn't support) and a very high price/LC0 restricting it to named relics rather than standard-issue kit. Base profile is the plain Astartes Combat Knife/Shortsword baseline (Melee Weapons.eqp: thr+1 imp / sw+1 cut, reach C,1, parry 0) rather than a bigger blade, since the weapon's threat is entirely the phase field, not raw mass — exact odds are unnecessary against DR the weapon is built to ignore, but for reference an Astartes-strength blow (thr 3d-1) still only averages about 8-9 points of raw cutting/impaling damage before the divisor even applies, so this is a precision, one-target-at-a- time relic, not a way to one-shot a Terminator. Weight (3 lb) and min ST (11) match a real one-handed long knife; TL12 (archeotech/ STC-era, per the framework's TL table) and LC0 (Astartes/xenos-tech- adjacent relic) are both at the top of their respective brackets.",
+			"tags": [
+				"Melee Weapon",
+				"Imperium",
+				"Adeptus Astartes",
+				"Deathwatch"
+			],
+			"tech_level": "12",
+			"legality_class": "0",
+			"base_value": "25000",
+			"base_weight": "3 lb",
+			"weapons": [
+				{
+					"id": "wafTsvPCN0S4oVNLF",
+					"sv": 1,
+					"damage": {
+						"type": "imp",
+						"st": "thr",
+						"base": "1",
+						"armor_divisor": -1
+					},
+					"reach": "C,1",
+					"parry": "0",
+					"strength": "11",
+					"usage": "Thrust",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Shortsword"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Broadsword"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Force Sword"
+							},
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Jitte/Sai"
+							},
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Knife"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Saber"
+							},
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Smallsword"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Tonfa"
+							},
+							"modifier": -3
+						}
+					]
+				},
+				{
+					"id": "wfd-LRWPS1nu9xcOK",
+					"sv": 1,
+					"damage": {
+						"type": "cut",
+						"st": "sw",
+						"base": "1",
+						"armor_divisor": -1
+					},
+					"reach": "C,1",
+					"parry": "0",
+					"strength": "11",
+					"usage": "Swing",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Shortsword"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Broadsword"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Force Sword"
+							},
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Jitte/Sai"
+							},
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Knife"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Saber"
+							},
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Smallsword"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Tonfa"
+							},
+							"modifier": -3
+						}
+					]
+				}
+			],
+			"quantity": 1,
+			"equipped": false
+		}
+	]
+}
