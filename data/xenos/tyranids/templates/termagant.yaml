@@ -1,0 +1,47 @@
+kind: template
+output: Xenos/Tyranids/Templates/Termagant.gct
+notes: >
+  NPC creature stat block, not a player-facing race — a Termagant is
+  disposable swarm biomass, not an individual worth building as a PC.
+  Point math: Tyranid Biology 15 + Body Lens: Termagant 25 + skills 6 =
+  46 points. Stats: SM -1, ST 9, DX 11, IQ 4, HT 11, HP 9, Will 4, Per 4,
+  natural chitin torso DR 25 (Weak Points 7, eye DR 12) — framework.md's
+  Termagant anchor line exactly. This sits at the bottom of framework.md's
+  Ordinary Citizen tier (0-50): a cheap, mass-produced gun-beast that is
+  only dangerous in numbers and only disciplined while a synapse
+  creature holds its leash. The point total is for GM reference (how
+  much a Termagant "costs" relative to other bioforms), never a measure
+  of individual threat or party balance.
+
+  Weapon-symbiote: carries a Fleshborer (fires flesh-eating beetles,
+  framework.md's own anchor: 6d pi+, RoF 1, short range). This is being
+  built as a natural-attack trait named "Fleshborer" in
+  data/xenos/tyranids/bio-weapons.yaml by another pass on this project;
+  that file did not exist yet when this template was written, so the
+  weapon is not `include`d here. Once it exists, add:
+    - include: "xenos/tyranids/bio-weapons.yaml#Fleshborer"
+  to the traits list below.
+traits:
+  - include: "xenos/tyranids/traits.yaml#Tyranid Biology"
+  - include: "xenos/tyranids/traits.yaml#Body Lens: Termagant"
+skills:
+  - name: Innate Attack
+    spec: Projectile
+    diff: DX/E
+    points: 4
+    tags: [Xenos, Tyranids]
+    lore: >
+      A Termagant's fleshborer beetles are loosed with a simple, drilled
+      reflex rather than any real marksmanship — the gun-beast points and
+      the Hive Mind's instinct does the rest.
+    design: >
+      Innate Attack (Projectile) (DX/E, B269) at DX+2 (13) for 4 points,
+      the skill that governs any Innate Attack-built natural weapon's
+      to-hit roll, matching the fleshborer's own build once
+      bio-weapons.yaml defines it.
+  - name: Brawling
+    diff: DX/E
+    points: 2
+    tags: [Xenos, Tyranids]
+    lore: A Termagant falls back on tooth and claw only when its fleshborer is spent or the fight closes past ranged distance.
+    design: DX+1 (12) for 2 points, Easy.

@@ -1,0 +1,41 @@
+kind: template
+output: Xenos/Tyranids/Templates/Genestealer.gct
+notes: >
+  NPC creature stat block, not a player-facing race. Point math: Tyranid
+  Biology 15 + Body Lens: Genestealer 459 + skills 8 = 482 points. Stats:
+  SM 0, ST 18, DX 16, IQ 6, HT 13, HP 20, Will 6, Per 6, natural chitin
+  torso DR 50 (Weak Points 5, eye DR 25), Enhanced Move (Ground) 1,
+  Infravision, Extra Attack (second claw) — framework.md's Genestealer
+  anchor line exactly. This sits in framework.md's Senior Agents tier
+  (350-600): the fastest and most dangerous single killer the swarm
+  fields below a Warrior, though still without any independent
+  tactical will outside a broodline's own infiltration plans. The point
+  total is for GM reference only; a Genestealer's broodline-infestation
+  hook is a GM plot tool, not a purchased trait.
+
+  Weapon-symbiote: carries Rending Claws (framework.md's own anchor:
+  sw+2d(3) cut; rending — a hit that succeeds by 5+ or is a critical
+  uses armour divisor (10) instead). This is being built as a
+  natural-attack trait named "Rending Claws" in
+  data/xenos/tyranids/bio-weapons.yaml by another pass on this project;
+  that file did not exist yet when this template was written, so the
+  weapon is not `include`d here. Once it exists, add:
+    - include: "xenos/tyranids/bio-weapons.yaml#Rending Claws"
+  to the traits list below (the Extra Attack trait above lets a
+  Genestealer make two such attacks per turn).
+traits:
+  - include: "xenos/tyranids/traits.yaml#Tyranid Biology"
+  - include: "xenos/tyranids/traits.yaml#Body Lens: Genestealer"
+skills:
+  - name: Brawling
+    diff: DX/E
+    points: 8
+    tags: [Xenos, Tyranids]
+    lore: A Genestealer's four clawed limbs strike faster and more precisely than almost anything else the swarm fields.
+    design: DX+2 (18) for 8 points, Easy — matching the rending claws' own natural-weapon attack roll, used for both of its Extra Attack strikes.
+  - name: Stealth
+    diff: DX/A
+    points: 4
+    tags: [Xenos, Tyranids]
+    lore: A Genestealer infiltrates ahead of the Hive Fleet's main force, moving through ducts, crawlspaces and shadow without being seen until it is already in the room.
+    design: DX+1 (17) for 4 points, Average.

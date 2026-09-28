@@ -1,0 +1,890 @@
+kind: traits
+output: Xenos/Tyranids/Traits/Tyranid Weapon-Symbiotes.adq
+items:
+  # ------------------------------------------------------------------------
+  # Every entry below is a grown weapon-symbiote, not equipment: it is part
+  # of the bioform's own body, fused to it in the Norn Queens' spawning
+  # pools and regrown/regenerated rather than issued, repaired or reloaded
+  # in any human sense (framework.md, "Xenos > Tyranids"). Two build
+  # patterns are used throughout, both from Basic Set:
+  #
+  #   RANGED symbiotes (Fleshborer, Spinefists, Devourer, Deathspitter,
+  #   Venom Cannon, Barbed Strangler, Heavy Venom Cannon, Stranglethorn
+  #   Cannon, Bio-plasma) are Innate Attack (B61) of the matching damage
+  #   type, at that type's own per-die Basic Set rate, with Armor Divisor
+  #   (B102), Rapid Fire (B105, for RoF>1) and Explosion/Area Effect
+  #   (B102/B105, for the "ex"/area entries) stacked as ordinary Innate
+  #   Attack modifiers. Where the anchor's damage uses a "NdxM" multiplier
+  #   (a bigger single discharge rather than more, smaller pellets), the
+  #   multiplied total is priced as if that many dice had been bought
+  #   outright (dice x multiplier = the "effective dice" the per-die rate is
+  #   charged against) — Basic Set has no separate multiplier mechanic for
+  #   Innate Attack, so this is this project's own transparent equivalence,
+  #   consistent with how a multiplied weapon's average damage actually
+  #   compares to an equal-average unmultiplied one.
+  #
+  #   MELEE symbiotes whose damage the anchor gives as "sw+Nd" or "thr+Nd"
+  #   (Scything Talons, Rending Claws, Bonesword, Monstrous Scything Talons,
+  #   Monstrous Crushing Claws) are built in two pieces so a bigger bioform
+  #   really does hit harder: a flat-cost Striker (B271: Crushing/Cutting/
+  #   Piercing/Impaling Striker) supplies the wielder's own bare swing or
+  #   thrust for free — GCS computes that automatically from the character's
+  #   ST, exactly as for an unarmed strike — and the "+Nd" on top is bought
+  #   separately as Innate Attack dice of the matching type with the Melee
+  #   Attack (Reach C) limitation (B112, -30%), added to the same weapon
+  #   line. Armor Divisor is charged against both pieces, since divisor and
+  #   Striker together describe one physical claw or blade. This is worked
+  #   out at one representative wielder per entry (Genestealer ST18,
+  #   Tyranid Warrior ST24, Carnifex ST60, Ravener ST22 — framework.md's own
+  #   bioform table) and stated plainly in each `design` field; a template
+  #   that hands the same symbiote to a different-ST bioform should rebuild
+  #   the bonus-dice Innate Attack component for that ST rather than reuse
+  #   this file's numbers unmodified.
+  #
+  # Penetration odds below are computed by exact dice-distribution
+  # enumeration (not simulation) against framework.md's armour anchors
+  # (Flak 30, Carapace 70, Sororitas 85, Astartes 100, Terminator 200) and,
+  # for the anti-armour entries, its vehicle table (AV10-14 = DR 100-350).
+  # Lore sources follow framework.md's order: Codex: Tyranids background
+  # across editions is the primary source for what each weapon is and does;
+  # Black Library's Tyranid-focused fiction and the Deathwatch RPG's own
+  # Tyranid/Hive Fleet material (which devotes real space to calibrating
+  # bio-weapons against human- and Astartes-scale armour) are used for
+  # relative scale, per this project's own source-order rule. Tyranids are
+  # not a well-documented species in named Black Library novels the way
+  # Space Marines or the Guard are, so several notes below say "widely
+  # depicted" rather than citing a single book, per framework.md's citation
+  # honesty rule.
+
+  # ============================================================ ranged
+
+  - name: Fleshborer
+    points: 54
+    ref: B61
+    tags: [Advantage, Physical, Xenos, Tyranids]
+    weapons:
+      - usage: Standard
+        damage: 6d(2) pi+
+        acc: 2
+        range: 80/240
+        rof: 1
+        shots: "6(60)"
+        skill: Innate Attack (Projectile)
+        defaults: ["Innate Attack (Projectile)", "DX-4"]
+        notes: >-
+          ST-independent: grown fused to the bearer's arm, not carried, so
+          any Termagant or Hormagaunt fires it at full effect regardless of
+          its own ST. Shots regrow: the beetle brood living in the weapon's
+          bio-mass regenerates over the listed time rather than being
+          reloaded; a Fleshborer that has just emptied its brood is out of
+          the fight for about a minute, not permanently disarmed.
+    lore: >-
+      The most common weapon in the swarm: a fused, fleshy launcher that
+      fires a swarm of ravenous, flesh-eating beetles at the target, where
+      they burrow in and devour tissue from the inside. Codex: Tyranids
+      background across editions treats the Fleshborer as the baseline
+      Termagant/Hormagaunt-carried gun, present in overwhelming numbers
+      rather than individually deadly — what makes a gaunt brood dangerous
+      is weight of fire, not any one shot's punch.
+    design: >-
+      Framework.md's own anchor (updated after flak went to DR 30, replacing
+      an earlier 6d pi+ that left a Termagant brood unable to hurt a
+      flak-armoured Guardsman at all — 0.99% per hit): "Fleshborer | Fires
+      burrowing beetles: 6d(2) pi+." Innate Attack (Large Pierce) (B61,
+      6/die) at 6 dice = 36, with Armor Divisor (2) (B102, +50%):
+      36x1.5=54. Checked by exact dice distribution: 6d(2) pi+ averages 21
+      and penetrates flak (DR 30, eff. 15) 90.4% of the time, and rounds to
+      0% against carapace (DR 70, eff. 35) or anything heavier — now a
+      real threat to flak, per the anchor's own "kills unarmoured men,
+      struggles against carapace" wording, while carapace (and everything
+      above it) remains untouched, exactly the gap the divisor correction
+      exists to fix. Handling: Acc
+      2 (an organic launcher with no sights, between an Ork shoota's crude
+      1-2 and a proper Imperial rifle's 4-5, since a Tyranid's own instinct
+      aims better than a Boy's guesswork even without optics) and range
+      80/240 (the anchor's own "short range," read as roughly submachine-gun
+      reach) are this project's own estimate, since no anchor gives exact
+      figures; Shots 6(60), a one-minute brood-regrowth, reflects the
+      symbiote's living ammunition rather than a magazine.
+
+  - name: Spinefists
+    points: 31
+    ref: B61
+    tags: [Advantage, Physical, Xenos, Tyranids]
+    weapons:
+      - usage: Standard
+        damage: 3d pi+
+        acc: 1
+        range: 60/180
+        rof: 6
+        shots: "20(30)"
+        skill: Innate Attack (Projectile)
+        defaults: ["Innate Attack (Projectile)", "DX-4"]
+        notes: >-
+          ST-independent, fused to the arm. Shots regrow from the bearer's
+          own spine-glands; treat "reload" as a half-minute of not firing
+          rather than a magazine change.
+    lore: >-
+      A pair of chitinous launchers, one on each forearm, that spray a
+      hail of stiff, needle-like bio-spines — a swarm weapon built to
+      saturate a target with volume rather than land one telling hit,
+      carried by Hormagaunts and lesser gaunt broods that close fast and
+      shoot on the move. Codex: Tyranids background consistently frames
+      Spinefists as a "spray and pray" weapon rather than a precision one.
+    design: >-
+      Framework.md's own anchor: "Spinefists | 3d pi+ spines, RoF 6."
+      Innate Attack (Large Pierce) (B61, 6/die) at 3 dice = 18, with Rapid
+      Fire (B105, RoF 5-8 bracket, +70%): 18x1.7=30.6, rounded to 31.
+      Checked by exact dice distribution: 3d pi+ averages 10.5 and rounds
+      to 0% against flak (DR 30) or anything heavier on any single spine —
+      exactly the "sprays a swarm of weak hits" role the anchor's own low
+      dice count implies; the weapon's actual threat at the table comes
+      from RoF 6 giving several rolls to fish for an unarmoured hit or a
+      Weak Points chink, not from any one spine's own punch. Handling: Acc
+      1 (a spray weapon, the lowest bracket this project uses, matching an
+      Ork shoota's own crude accuracy for the same reason: volume over
+      precision) and a short 60/180 range, both this project's own estimate
+      for a close-assault arm-launcher. Shots 20(30), a half-minute
+      regrowth for the lighter, faster-cycling spine-glands.
+
+  - name: Devourer
+    points: 70
+    ref: B61
+    tags: [Advantage, Physical, Xenos, Tyranids]
+    weapons:
+      - usage: Standard
+        damage: 4d(2) pi++
+        acc: 3
+        range: 150/450
+        rof: 8
+        shots: "12(20)"
+        skill: Innate Attack (Projectile)
+        defaults: ["Innate Attack (Projectile)", "DX-4"]
+        notes: >-
+          ST-independent, fused to the arm. Shots regrow from the bearer's
+          brain-leech glands over the listed time.
+    lore: >-
+      A heavier gun-arm that hurls squirming, brain-leech-like worms deep
+      into a wound at automatic-weapon speed, favoured by Tyranid Warriors
+      and Hive Tyrants who want sustained close-range firepower rather than
+      a single hard-hitting shot. Codex: Tyranids background places it a
+      clear step above the Fleshborer/Spinefists family and roughly level
+      with an Astra Militarum autogun in raw stopping power, made up for by
+      its far higher rate of fire.
+    design: >-
+      Framework.md's own anchor: "Devourer | Brain-leech worms: 4d(2)
+      pi++, RoF 8." Innate Attack (Huge Pierce) (B61, 8/die) at 4 dice = 32,
+      with Armor Divisor (2) (B102, +50%) and Rapid Fire (B105, RoF 5-8
+      bracket, +70%): net +120%, 32x2.2=70.4, rounded to 70. Checked by
+      exact dice distribution: 4d(2) pi++ averages 14 and penetrates flak
+      (DR 30, eff. 15) 33.6% of the time and rounds to 0% against carapace
+      (DR 70, eff. 35) or heavier — a real but unspectacular threat to
+      lightly-armoured infantry per shot, exactly matching "roughly autogun-
+      class" (framework's own autogun anchor penetrates flak 9% per shot);
+      RoF 8 is what makes a Warrior's Devourer a genuine threat in practice.
+      Handling: Acc 3 and 150/450 range, this project's own rifle-class
+      estimate for a Warrior-scale gun-arm; Shots 12(20), a shorter,
+      20-second regrowth for the faster-cycling brood.
+
+  - name: Deathspitter
+    points: 180
+    ref: B61
+    tags: [Advantage, Physical, Xenos, Tyranids]
+    weapons:
+      - usage: Standard
+        damage: 6dx2(2) cor
+        acc: 4
+        range: 150/450
+        rof: 1
+        shots: "8(30)"
+        skill: Innate Attack (Projectile)
+        defaults: ["Innate Attack (Projectile)", "DX-4"]
+        notes: >-
+          ST-independent, fused to the arm. Shots regrow from the bearer's
+          acid-maggot sac over the listed time.
+    lore: >-
+      A rifle-class gun-arm that spits a single, heavy globule of acid
+      maggots in place of the Devourer's rapid worm-stream: a slower,
+      much harder-hitting bio-weapon carried by Tyranid Warriors who need
+      to bring down an armoured target rather than saturate a firing line.
+      Codex: Tyranids background and Deathwatch RPG bio-weapon material both
+      treat it as the swarm's answer to a rifle-class corrosive weapon,
+      genuinely dangerous to carapace and a real if inconsistent threat to
+      power armour.
+    design: >-
+      Framework.md's own anchor: "Deathspitter | Acid maggots: 6d×2(2)
+      cor." Innate Attack (Corrosion) (B61, 10/die) at an effective 12 dice
+      (6 base dice x2 multiplier, priced per this file's header convention)
+      = 120, with Armor Divisor (2) (B102, +50%): 120x1.5=180. Checked by
+      exact dice distribution: 6dx2(2) cor averages 42 and penetrates flak
+      (DR 30, eff. 15) 99.98%, carapace (DR 70, eff. 35) 79.4%, Sororitas
+      plate (DR 85, eff. 42.5) 45.4%, Astartes plate (DR 100, eff. 50)
+      14.5%, and rounds to 0% against a Terminator — a real, reliable
+      threat to carapace and a genuine if inconsistent one to power armour,
+      matching the anchor's own implied step up from the Devourer.
+      Handling: Acc 4 and 150/450 range, this project's own rifle-class
+      estimate matching the Devourer's own range at a slower cycle; Shots
+      8(30), fewer but bigger globules per regrowth than the Devourer's
+      worm-stream.
+
+  - name: Venom Cannon
+    points: 225
+    ref: B61
+    tags: [Advantage, Physical, Xenos, Tyranids]
+    weapons:
+      - usage: Standard
+        damage: 6dx3(3) cr ex
+        acc: 4
+        range: 200/600
+        rof: 1
+        shots: "4(60)"
+        skill: Innate Attack (Projectile)
+        defaults: ["Innate Attack (Projectile)", "DX-4"]
+        notes: >-
+          ST-independent, grown as a torso- or arm-mounted organ (Tyranid
+          Warrior/Carnifex-scale bioforms only). Shots regrow over the
+          listed time as the bearer's bile-gland refills.
+    lore: >-
+      A heavy bio-cannon that hurls a dense, explosive mass of caustic
+      bile at a single target hard enough to crack light armour outright —
+      the swarm's first real answer to armoured infantry and light
+      vehicles, most often seen mounted on Tyranid Warriors and Carnifexes.
+      Codex: Tyranids background across editions and Deathwatch RPG material
+      both describe it as capable of blowing an unarmoured target apart and
+      staggering even power-armoured targets with a solid hit.
+    design: >-
+      Framework.md's own anchor: "Venom cannon | 6d×3(3) cr ex." Innate
+      Attack (Crush) (B61, 5/die) at an effective 18 dice (6 base x3
+      multiplier) = 90, with Explosion (B102, +50%, for the "ex" bursting
+      bile) and Armor Divisor (3) (B102, +100%): net +150%, 90x2.5=225.
+      Checked by exact dice distribution: 6dx3(3) averages 63 and
+      penetrates flak (DR 30, eff. 10) 100%, carapace (DR 70, eff. 23.3)
+      100%, Sororitas plate (DR 85, eff. 28.3) 99.8%, Astartes plate (DR
+      100, eff. 33.3) 99.0%, and Terminator plate (DR 200, eff. 66.7) 36.3%
+      — genuinely "cracks armour," including a real chance against
+      Terminator-grade plate. Against vehicles: AV10 99.0%, AV11 85.5%,
+      AV12 36.3%, AV13 0.99%, AV14 0% — a real light-vehicle killer, no
+      threat at all to a main battle tank, exactly the light-anti-armour
+      niche the anchor implies without inflating it into a lascannon.
+      Handling: Acc 4 and 200/600 range, this project's own heavy-symbiote
+      estimate; Shots 4(60), a one-minute regrowth for the biggest single
+      discharge in the venom-gland family.
+
+  - name: Barbed Strangler
+    points: 44
+    ref: B61
+    tags: [Advantage, Physical, Xenos, Tyranids]
+    weapons:
+      - usage: Standard
+        damage: 4d cr ex
+        acc: 3
+        range: 100/300
+        rof: 1
+        shots: "3(120)"
+        skill: Innate Attack (Projectile)
+        defaults: ["Innate Attack (Projectile)", "DX-4"]
+        notes: >-
+          Area Effect, 2-yard radius (B102): everyone in the burst radius,
+          not only the hit target, takes 3d cut as the pod's barbed vines
+          burst outward and lash the area — resolve as a single Innate
+          Attack roll against the primary target, then 3d cut to everyone
+          else caught in the radius, per this project's follow-up
+          convention. ST-independent, grown as a torso-mounted organ.
+          Shots regrow over the listed time.
+      - usage: Vine burst (area, secondary)
+        damage: 3d cut
+        acc: 3
+        range: 100/300
+        rof: 1
+        shots: "3(120)"
+        skill: Innate Attack (Projectile)
+        defaults: ["Innate Attack (Projectile)", "DX-4"]
+    lore: >-
+      Fires a bulbous seed pod that bursts on impact into a tangle of
+      whipping, barbed vines, tearing at everyone nearby rather than
+      punching through one target's armour — an area-denial weapon rather
+      than an armour-cracker, most often carried by Tyranid Warriors
+      screening a swarm's advance. Codex: Tyranids background describes it
+      explicitly as an anti-infantry, area-covering weapon distinct from
+      the venom cannon's single-target punch.
+    design: >-
+      Framework.md's own anchor: "Barbed strangler | Seed pod that grows
+      barbed vines: 4d cr ex [3d cut] area." Innate Attack (Crush) (B61,
+      5/die) at 4 dice = 20, with Explosion (B102, +50%), Area Effect
+      (B102, +50%, 2-yard radius) and Fragmentation (B105; no exact
+      published percentage covers "spawns a separate cutting attack across
+      the same radius," so this project prices it at an estimated +20%, by
+      the same "eyeball a documented departure" practice this project uses
+      elsewhere for un-tabled Basic Set options): net +120%, 20x2.2=44.
+      Checked by exact dice distribution: both the 4d cr ex primary and the
+      3d cut vine-burst round to 0% against flak (DR 30) or anything
+      heavier — correctly weak against any real armour, since the anchor's
+      whole point is area coverage against unarmoured or lightly-armoured
+      infantry, not penetration. Handling: Acc 3 and a shorter 100/300
+      range (a lobbed pod, not a direct-fire cannon), this project's own
+      estimate; Shots 3(120), a two-minute regrowth for the biggest single
+      pod in the gland.
+
+  - name: Heavy Venom Cannon
+    points: 300
+    ref: B61
+    tags: [Advantage, Physical, Xenos, Tyranids]
+    weapons:
+      - usage: Standard
+        damage: 6dx4(3) cr ex
+        acc: 4
+        range: 250/750
+        rof: 1
+        shots: "3(90)"
+        skill: Innate Attack (Projectile)
+        defaults: ["Innate Attack (Projectile)", "DX-4"]
+        notes: >-
+          ST-independent; grown only on Carnifex-scale bioforms with a
+          torso large enough to house the gland. Shots regrow over the
+          listed time.
+    lore: >-
+      The Carnifex's own up-gunned venom cannon: the same bursting-bile
+      mechanism as the standard weapon, grown far larger in a bioform built
+      as a living battering ram. Codex: Tyranids background treats the
+      Carnifex's cannon as a genuine tank-and-Terminator threat where a
+      Warrior's own venom cannon is only a light-vehicle killer, matching
+      the Carnifex's role as the swarm's dedicated heavy-support beast.
+    design: >-
+      No framework anchor names this pattern by dice; it is built one size
+      class above the Venom Cannon the same way this project's own Necron
+      Gauss Cannon steps up from the Gauss Blaster: the Venom Cannon's dice
+      pushed one multiplier step further (6dx3 to 6dx4) at the same divisor.
+      Innate Attack (Crush) (B61, 5/die) at an effective 24 dice (6 base x4
+      multiplier) = 120, with Explosion (+50%) and Armor Divisor (3)
+      (+100%): net +150%, 120x2.5=300. Checked by exact dice distribution:
+      6dx4(3) averages 84 and clears every personal-armour DR at 99.9%+,
+      including a Terminator (DR 200, eff. 66.7) at 85.5%. Against
+      vehicles: AV10 99.9%, AV11 98.0%, AV12 85.5%, AV13 36.3%, AV14 2.0% —
+      a genuine tank-and-Terminator threat at the light-to-medium end,
+      dropping off hard against a Leman Russ or Land Raider's own frontal
+      glacis, exactly matching "cracks tanks and Terminators, doesn't
+      reliably crack the very heaviest armour" for a Carnifex-scale weapon
+      rather than a dedicated lascannon-class one. Handling: Acc 4 and
+      250/750 range, one step past the standard Venom Cannon; Shots
+      3(90), fewer shots and a shorter regrowth than the lighter weapon for
+      the much bigger single discharge.
+
+  - name: Stranglethorn Cannon
+    points: 132
+    ref: B61
+    tags: [Advantage, Physical, Xenos, Tyranids]
+    weapons:
+      - usage: Standard
+        damage: 6dx2 cr ex
+        acc: 3
+        range: 150/450
+        rof: 1
+        shots: "3(120)"
+        skill: Innate Attack (Projectile)
+        defaults: ["Innate Attack (Projectile)", "DX-4"]
+        notes: >-
+          Area Effect, 4-yard radius (B102): as the Barbed Strangler's own
+          burst above, at a much larger radius and heavier throw weight.
+          Everyone else in the radius takes the secondary line's damage.
+          ST-independent; grown only on Tyrannofex-scale bioforms. Shots
+          regrow over the listed time.
+      - usage: Vine burst (area, secondary)
+        damage: 4d cut
+        acc: 3
+        range: 150/450
+        rof: 1
+        shots: "3(120)"
+        skill: Innate Attack (Projectile)
+        defaults: ["Innate Attack (Projectile)", "DX-4"]
+    lore: >-
+      The Tyrannofex's own bio-titan-scale strangler gland: the same
+      barbed-vine-pod mechanism as the standard Barbed Strangler, grown to
+      a size that saturates a much wider killing ground rather than hitting
+      any harder against real armour. Codex: Tyranids background is
+      explicit that the Tyrannofex's strangler arm is an anti-infantry
+      area weapon, not the anti-tank one — that job belongs to its other,
+      rupture-cannon arm, which this project does not build here since it
+      is a fixed-effect weapon this file's Innate Attack build cannot
+      honestly represent without inventing new mechanics.
+    design: >-
+      No framework anchor names this pattern; built one size class above
+      the Barbed Strangler the same relationship the Heavy Venom Cannon
+      uses over the standard Venom Cannon: dice doubled (4d to 6dx2), radius
+      doubled (2 to 4 yards), divisor left at (1) since the anchor's own
+      Barbed Strangler has none either — this is an area-saturation weapon,
+      not an armour-cracker, and giving it a divisor would misrepresent its
+      actual battlefield role. Innate Attack (Crush) (B61, 5/die) at an
+      effective 12 dice (6 base x2 multiplier) = 60, with Explosion (+50%),
+      Area Effect (+50%, 4-yard radius) and the same estimated Fragmentation
+      +20% the Barbed Strangler uses: net +120%, 60x2.2=132. Checked by
+      exact dice distribution: 6dx2 cr ex averages 42 and penetrates flak
+      (DR 30) 90.4% of the time but rounds to 0% against carapace (DR 70)
+      or anything heavier, and 0% against every vehicle DR in the table —
+      a real killer of unarmoured and lightly-armoured infantry over a wide
+      area, and honestly no threat at all to real armour, exactly matching
+      the anchor's own division of labour between the strangler (area,
+      anti-infantry) and rupture cannon (anti-tank) arms. Handling: Acc 3
+      and 150/450 range (a lobbed, area-covering weapon, not a
+      direct-fire cannon, so range is kept modest despite the bioform's
+      huge size); Shots 3(120), matching the standard strangler's own
+      figures at bio-titan scale.
+
+  - name: Bio-plasma
+    points: 300
+    ref: B61
+    tags: [Advantage, Physical, Xenos, Tyranids]
+    weapons:
+      - usage: Standard
+        damage: 6dx4(3) burn ex
+        acc: 3
+        range: 150/450
+        rof: 1
+        shots: "3(90)"
+        skill: Innate Attack (Projectile)
+        defaults: ["Innate Attack (Projectile)", "DX-4"]
+        notes: >-
+          ST-independent; grown only on Carnifex-scale bioforms. No
+          overheat risk: unlike an Imperial plasma weapon's unstable
+          containment coil, this is a living organ regulating its own
+          reaction, so it never has a Malfunction roll for the discharge
+          itself. Shots regrow over the listed time.
+    lore: >-
+      A bio-cannon that spits a searing, self-sustaining ball of superheated
+      bile — the Carnifex's answer to an Imperial plasma weapon, grown
+      rather than engineered, and just as capable of punching through
+      power armour. Codex: Tyranids background across editions singles out
+      bio-plasma as one of the most dangerous ranged weapons a Carnifex can
+      be grown to carry, a real threat to Terminator-grade plate rather
+      than merely power armour.
+    design: >-
+      No framework anchor names this weapon by dice, only by role ("a
+      Carnifex spit" capable of matching Imperial plasma per this project's
+      brief); it is built directly on framework.md's own Plasma Gun anchor
+      (6d×4(3) burn ex) rather than a re-derived figure, the same judgement
+      this project's Necron Particle Beamer entry makes against the same
+      anchor, since bio-plasma's fictional role — kills Marines through
+      power armour, a real if inconsistent threat to Terminators — is
+      identical to plasma's own. Innate Attack (Burn) (B61, 5/die) at an
+      effective 24 dice (6 base x4 multiplier) = 120, with Explosion
+      (+50%) and Armor Divisor (3) (+100%): net +150%, 120x2.5=300 —
+      identical cost math to the Heavy Venom Cannon above, since both use
+      the same 5-point-per-die type rate and the same modifier stack; only
+      the damage type (burn vs. crush) differs. Checked by exact dice
+      distribution (identical to the Heavy Venom Cannon's own figures,
+      since the dice and divisor match): clears every personal-armour DR
+      at 99.9%+, Terminator plate (DR 200, eff. 66.7) at 85.5%, and the
+      vehicle table at 2.0%-99.9% across AV10-14 — a genuine, reliable
+      threat to power armour and a real (if not overwhelming) one to
+      Terminator plate, exactly matching bio-plasma's fictional reputation.
+      Handling: Acc 3 and 150/450 range, shorter than the Heavy Venom
+      Cannon's own reach since a spat globule of bile doesn't fly as flat
+      or as far as a solid mass; Shots 3(90), matching the Heavy Venom
+      Cannon's own regrowth figures for a comparably huge single organ.
+
+  # ============================================================= melee
+
+  - name: Scything Talons
+    points: 28
+    ref: B271
+    tags: [Advantage, Physical, Xenos, Tyranids]
+    weapons:
+      - usage: Standard
+        damage: sw+2d(2) cut
+        reach: "1"
+        parry: 0
+        skill: Brawling
+        notes: >-
+          Written for a Tyranid Warrior-scale bearer (ST 24, sw 4d+2, giving
+          a total of 6d+2(2) cut); rebuild the +2d Innate Attack component
+          for any other bearer's own ST per this file's header note.
+    lore: >-
+      A pair of long, chitinous cutting blades grown from the forearms —
+      the single most common melee symbiote in the swarm, carried by
+      everything from Genestealers to Hive Tyrants in one form or another.
+      Codex: Tyranids background across editions treats scything talons as
+      the baseline killing weapon: not the swarm's hardest-hitting blade,
+      but reliable, always-on, and lethal against anything short of the
+      heaviest personal armour.
+    design: >-
+      Framework.md's own anchor: "Scything talons | sw+2d(2) cut." Built at
+      a Tyranid Warrior's own ST 24 (sw 4d+2, framework's bioform table):
+      Cutting Striker (B271, 7 points) with Armor Divisor (2) (B102, +50%)
+      = 7x1.5=10.5, rounded to 11, for the bare sw+0(2) cut baseline the
+      wielder's own ST already provides for free; the anchor's own +2d on
+      top is bought separately as Innate Attack (Cut) (B61, 7/die) at 2
+      dice = 14, with Armor Divisor (2) (+50%) and Melee Attack, Reach C
+      (B112, -30%): net +20%, 14x1.2=16.8, rounded to 17. Total 11+17=28.
+      Checked by exact dice distribution at ST 24 (sw+2d(2) = 6d+2(2)):
+      averages 23 and penetrates flak (DR 30, eff. 15) 96.4% of the time,
+      carapace (DR 70, eff. 35) 0.06%, and rounds to 0% against anything
+      heavier — a real killer of unarmoured and flak-armoured targets and
+      essentially no threat to rigid plate, matching "lethal against
+      anything short of the heaviest personal armour" without overstating
+      it against carapace. Skill: Brawling, per framework.md's own weapon-
+      skill table for natural close-combat weapons (power fist/lightning
+      claws use the same skill).
+
+  - name: Rending Claws
+    points: 38
+    ref: B271
+    tags: [Advantage, Physical, Xenos, Tyranids]
+    weapons:
+      - usage: Standard
+        damage: sw+2d(3) cut
+        reach: "1"
+        parry: 0
+        skill: Brawling
+        notes: >-
+          Rending: on a hit that succeeds by 5 or more, or on a critical
+          hit, use the Rending hit line below instead of this one (roll
+          the same damage dice, but apply divisor (10)) — framework.md's
+          own rending rule, priced here as a conditional reinterpretation
+          of an already-bought hit rather than a separately-purchased
+          ability, since it never triggers without this weapon's own attack
+          roll succeeding well in the first place.
+      - usage: Rending hit (success by 5+ or critical)
+        damage: sw+2d(10) cut
+        reach: "1"
+        parry: 0
+        skill: Brawling
+    lore: >-
+      The Genestealer's signature weapon: claws sharp and strong enough to
+      punch clean through ceramite and plasteel on a solid hit, not merely
+      cut flesh. Codex: Tyranids background and the Deathwatch RPG's own
+      Genestealer material both single out rending claws as capable of
+      shearing through power armour where an ordinary scything talon
+      cannot — precisely the divisor-swap-on-a-good-hit this project's
+      "rending" house rule (framework.md) exists to model.
+    design: >-
+      Framework.md's own anchor: "Rending claws | sw+2d(3) cut; rending: a
+      hit that succeeds by 5+ or is a critical uses armour divisor (10)
+      instead." Built at a Genestealer's own ST 18 (sw 3d, framework's
+      bioform table): Cutting Striker (B271, 7 points) with Armor Divisor
+      (3) (B102, +100%) = 14 for the sw+0(3) baseline; the anchor's own +2d
+      is bought as Innate Attack (Cut) (B61, 7/die) at 2 dice = 14, with
+      Armor Divisor (3) (+100%) and Melee Attack, Reach C (-30%): net
+      +70%, 14x1.7=23.8, rounded to 24. Total 14+24=38. The Rending hit
+      line costs nothing extra: it is the same attack, the same dice, and
+      the same points already paid above — only the armour divisor applied
+      to a hit that already succeeded well changes, exactly as
+      framework.md's own rule describes it (a chance-based crit effect, not
+      a bought capability). Checked by exact dice distribution at ST 18
+      (sw+2d = 5d): the ordinary (3) line averages 17.5 and penetrates flak
+      96.8%, carapace (eff. 23.3) 5.9%, Sororitas (eff. 28.3) 0.08%, and 0%
+      against Astartes plate or heavier — a solid but unremarkable melee
+      weapon on an ordinary hit. The Rending hit's (10) line, same 5d
+      average 17.5: flak 100%, carapace (eff. 7) 99.7%, Sororitas (eff.
+      8.5) 99.3%, Astartes plate (eff. 10) 96.8%, and even a Terminator
+      (eff. 20) 22.2% — genuinely "shears through ceramite," exactly what
+      the anchor's own text claims, and only on the hits the rending rule
+      says should count.
+
+  - name: Bonesword
+    points: 78
+    ref: B271
+    tags: [Advantage, Physical, Xenos, Tyranids]
+    weapons:
+      - usage: Standard
+        damage: sw+3d(10) cut
+        reach: "1"
+        parry: 0
+        skill: Brawling
+        notes: >-
+          Written for a Tyranid Warrior/Prime-scale bearer (ST 24, sw
+          4d+2, giving a total of 7d+2(10) cut); rebuild the +3d Innate
+          Attack component for any other bearer's own ST per this file's
+          header note.
+    lore: >-
+      A blade of psychically-hardened bone, carried by Tyranid Warriors and
+      Primes and charged with a disruptive field the Hive Mind itself
+      sustains — the swarm's own answer to a power weapon, shearing through
+      armour a plain scything talon or rending claw cannot touch. Codex:
+      Tyranids background places boneswords firmly in the same
+      armour-shredding tier as an Astartes power sword, usually wielded
+      alongside a Lash Whip that pins a target still for the killing blow.
+    design: >-
+      Framework.md's own anchor: "Bonesword | Psychically charged bone
+      blade: sw+3d(10) cut (power-field class)." Built at a Tyranid
+      Warrior's own ST 24 (sw 4d+2): Cutting Striker (B271, 7 points) with
+      Armor Divisor (10) (B102, +200%) = 21 for the sw+0(10) baseline; the
+      anchor's own +3d is bought as Innate Attack (Cut) (B61, 7/die) at 3
+      dice = 21, with Armor Divisor (10) (+200%) and Melee Attack, Reach C
+      (-30%): net +170%, 21x2.7=56.7, rounded to 57. Total 21+57=78 —
+      priced in the same tier as this project's Custodes power weapons for
+      the same reason: a divisor-(10) weapon is always expensive to buy as
+      a character trait, whatever grows or forges it. Checked by exact
+      dice distribution at ST 24 (sw+3d(10) = 7d+2(10)): averages 26.5 and
+      clears every personal-armour DR at 100%, including Astartes plate
+      (DR 100, eff. 10) at 100%, and a Terminator (DR 200, eff. 20) at
+      90.6% — a genuine Marine-and-near-Terminator killer, matching "same
+      armour-shredding tier as a power sword" (framework's own power sword
+      anchor, sw+3d+1(10), sits almost exactly here) without exceeding it.
+
+  - name: Lash Whip
+    points: 47
+    ref: B41
+    tags: [Advantage, Physical, Xenos, Tyranids]
+    weapons:
+      - usage: Standard (entangle)
+        damage: cr
+        reach: "1,2"
+        parry: -1
+        skill: Brawling
+        notes: >-
+          Binding 20 (B41): a successful hit entangles rather than damages
+          by default; the target must beat the Lash Whip's own Binding 20
+          (as an effective ST/DX contest per B41) to break free before its
+          bearer's Bonesword or Scything Talons finish the job. The listed
+          cr damage is what a Lash Whip does if its bearer chooses to lash
+          rather than bind on a given hit.
+    lore: >-
+      A long, muscular, whip-like limb almost always carried alongside a
+      Bonesword: not primarily a killing weapon, but a control one, lashing
+      out to entangle and unbalance a target so the blade in the creature's
+      other limb can land a clean, undefended blow. Codex: Tyranids
+      background is explicit that Lash Whip and Bonesword are a matched
+      pair on Tyranid Warriors and Primes, one pinning while the other
+      kills.
+    design: >-
+      No framework anchor gives this weapon exact numbers, only its
+      control-weapon role, so it is built directly on that role: Binding
+      (B41, 2 points/level) at level 20, matching a Tyranid Warrior/Prime's
+      own ST 24 minus some slack for the whip's own flexibility versus a
+      solid limb's grip = 40 points, plus a minor Crushing Striker (B271,
+      5 points) with the Long 1 enhancement for its extra reach (this
+      project's own estimated +40%/level, since Basic Set's core rules
+      don't tabulate a Claws/Striker reach extension and this project's
+      Necron/Ork files already document similar own-estimate percentages
+      for un-tabled Basic Set options): 5x1.4=7. Total 40+7=47. No exact-
+      dice penetration check applies to a Binding-based control weapon in
+      the way it does to a damage-dealing one; its function is to set up
+      the Bonesword's own (10)-divisor hit, not to punch through armour
+      itself. Reach 1-2 and Parry -1 reflect a long, flexible limb that
+      reaches further than a talon but is a worse parrying tool for it.
+
+  - name: Monstrous Scything Talons
+    points: 62
+    ref: B271
+    tags: [Advantage, Physical, Xenos, Tyranids]
+    weapons:
+      - usage: Standard
+        damage: sw+4d(3) cut
+        reach: "1,2"
+        parry: 0
+        skill: Brawling
+        notes: >-
+          Written for a Carnifex-scale bearer (ST 60, sw 13d+2, giving a
+          total of 17d+2(3) cut); rebuild the +4d Innate Attack component
+          for any other bearer's own ST (e.g. a Hive Tyrant, ST 45) per
+          this file's header note.
+    lore: >-
+      Scything talons grown to Carnifex or Hive Tyrant scale: blades the
+      size of a man, capable of shearing clean through a light vehicle's
+      hull as easily as a Marine's plate. Codex: Tyranids background treats
+      monstrous scything talons as one of the Carnifex's signature
+      close-combat options, a genuine threat to armour that would shrug off
+      a Warrior's own scything talons entirely.
+    design: >-
+      Framework.md's own anchor: "Monstrous scything talons | sw+4d(3)
+      cut." Built at a Carnifex's own ST 60 (sw 13d+2): Cutting Striker
+      (B271, 7 points) with Armor Divisor (3) (+100%) = 14 for the
+      sw+0(3) baseline; the anchor's own +4d is bought as Innate Attack
+      (Cut) (B61, 7/die) at 4 dice = 28, with Armor Divisor (3) (+100%)
+      and Melee Attack, Reach C (-30%): net +70%, 28x1.7=47.6, rounded to
+      48. Total 14+48=62. Checked by exact dice distribution at ST 60
+      (sw+4d(3) = 17d+2(3)): averages 61.5 and clears every personal-armour
+      DR up to and including Astartes plate at 100%, dropping to 24.0%
+      against a Terminator (DR 200, eff. 66.7) — a decisive Marine-killer
+      and a real, if not certain, Terminator-killer. Against vehicles:
+      AV10 100%, AV11 94.1%, AV12 24.0%, AV13-14 0% — shears through
+      light vehicles and struggles against a main battle tank's own frontal
+      armour, exactly the "would shrug off a Warrior's own talons entirely"
+      step up the anchor implies.
+
+  - name: Monstrous Crushing Claws
+    points: 79
+    ref: B271
+    tags: [Advantage, Physical, Xenos, Tyranids]
+    weapons:
+      - usage: Standard
+        damage: thr+6d(5) cr
+        reach: "1"
+        parry: 0
+        skill: Brawling
+        notes: >-
+          Written for a Carnifex-scale bearer (ST 60, thr 7d-1, giving a
+          total of 13d-1(5) cr); rebuild the +6d Innate Attack component
+          for any other bearer's own ST per this file's header note.
+    lore: >-
+      A pair of massive crushing pincers grown in place of scything talons
+      on some Carnifexes and Hive Tyrants, built to pulp armour and
+      machinery outright rather than cut through it — the bio-weapon most
+      often shown in Codex: Tyranids background and Black Library's
+      Tyranid-focused fiction alike caving in a Dreadnought's hull or
+      snapping a Rhino's axle in one blow.
+    design: >-
+      Framework.md's own anchor: "Monstrous crushing claws | thr+6d(5)
+      cr." Built at a Carnifex's own ST 60 (thr 7d-1): Crushing Striker
+      (B271, 5 points) with Armor Divisor (5) (B102, +150%) = 5x2.5=12.5,
+      rounded to 13, for the thr+0(5) baseline; the anchor's own +6d is
+      bought as Innate Attack (Crush) (B61, 5/die) at 6 dice = 30, with
+      Armor Divisor (5) (+150%) and Melee Attack, Reach C (-30%): net
+      +120%, 30x2.2=66. Total 13+66=79. Checked by exact dice distribution
+      at ST 60 (thr+6d(5) = 13d-1(5)): averages 44.5 and clears every
+      personal-armour DR up to and including Astartes plate at 100%,
+      dropping to 74.0% against a Terminator (DR 200, eff. 40) — the
+      hardest-hitting personal-scale melee weapon in this file against the
+      very heaviest infantry armour. Against vehicles: AV10 100%, AV11
+      98.9%, AV12 74.0%, AV13 3.7%, AV14 0% — genuinely "cracks a
+      Dreadnought or a Rhino," matching the anchor and the fiction, while
+      still falling short of a main battle tank's frontal glacis, which is
+      exactly the gap between this and a true anti-tank symbiote (the
+      Heavy Venom Cannon or Stranglethorn Cannon above).
+
+  - name: Flesh Hooks
+    points: 11
+    ref: B271
+    tags: [Advantage, Physical, Xenos, Tyranids]
+    weapons:
+      - usage: Standard
+        damage: thr imp
+        reach: "1,2"
+        parry: "No"
+        skill: Brawling
+        notes: >-
+          Grapple: a solid hit lets the bearer make an immediate Wrestling-
+          or ST-based grapple attempt against the same target at no extra
+          attack, per the GM's usual grappling rules (B370) — a house
+          ruling on how the hooks' snag-and-drag function plays at the
+          table, not a separately priced ability, since it only ever
+          follows a hit this weapon's own attack roll already paid for.
+    lore: >-
+      A cluster of long, backward-curved hooks grown from the forearms of
+      Raveners and some Tyranid Primes, built less to kill outright than to
+      snag a fleeing target or drag an objective-holder out of cover and
+      into the swarm's reach. Codex: Tyranids background and the current
+      tabletop's own objective-control rules for Flesh Hooks agree on this
+      grab-and-drag role over a purely offensive one.
+    design: >-
+      No framework anchor names Flesh Hooks by dice, only by role (grapple
+      and drag), so it is built as a plain natural weapon at a Ravener's
+      own ST 22 (thr 2d) with no bonus dice bought on top, since its point
+      is the grab, not the kill: Impaling Striker (B271, 8 points, the
+      hooked-barb reading of a Piercing Striker's family) with the Long 1
+      enhancement (this project's own estimated +40%/level, as the Lash
+      Whip above) for the extra reach the hooks need to snag at range 2:
+      8x1.4=11.2, rounded to 11. No exact-dice penetration table is given
+      since Flesh Hooks are not built or priced as an armour-cracking
+      weapon; thr imp at ST 22 (2d imp) is a believable puncture against
+      flesh and unarmoured targets, and the grapple note above is the
+      symbiote's actual battlefield function.
+
+  # ==================================================== enhancements & other
+
+  - name: Toxin Sacs
+    points: 6
+    ref: B61
+    tags: [Advantage, Physical, Xenos, Tyranids]
+    weapons:
+      - usage: Toxic follow-up (on a hit with the bearer's own melee symbiote)
+        damage: 2d tox
+        reach: "1"
+        parry: "No"
+        skill: Brawling
+    lore: >-
+      Venom glands laced through a bioform's claws or fangs, so that any
+      solid melee hit also injects a fast-acting neurotoxin on top of
+      whatever the blade or claw itself did — a common upgrade on
+      Genestealers and Tyranid Warriors whose base melee symbiote might not
+      finish an armoured target outright. Codex: Tyranids background is
+      explicit that Tyranid toxins are potent enough to drop a human in a
+      single dose and give even an Astartes' superhuman physiology real
+      trouble.
+    design: >-
+      Innate Attack (Toxic) (B61, 4/die) at 2 dice = 8, with Melee Attack,
+      Reach C (-30%): 8x0.7=5.6, rounded to 6. Bought as a Follow-Up
+      (B105) to whichever melee symbiote the bearer already carries — per
+      Basic Set's own rule, Follow-Up carries no separate cost modifier of
+      its own, since the restriction (it can only trigger when the carrier
+      attack lands) is already priced into the low, flat dice count here
+      rather than into a percentage. Framework.md's own follow-up
+      convention (B414: follow-up damage applies only once the carrier
+      attack has itself penetrated the target's DR) is used as written: a
+      Toxin Sacs hit only matters once the accompanying claw or fang has
+      already got through armour, so it adds real danger against anything
+      the bearer can already wound, and nothing at all against anything it
+      can't.
+
+  - name: Adrenal Glands
+    points: 20
+    ref: B17
+    tags: [Advantage, Physical, Xenos, Tyranids]
+    attributes: {basic_speed: 0.5}
+    notes: Basic Speed +0.5; Striking ST +2 (thrust/swing damage only).
+    lore: >-
+      A cluster of hormonal glands wired directly into a Tyranid's nervous
+      system, keeping it primed for violence at all times rather than
+      needing a fight-or-flight trigger the way a human's own adrenaline
+      does — Codex: Tyranids background across editions describes
+      Adrenal Glands as a straightforward, always-on upgrade that makes a
+      bioform faster and hits harder in melee, common on Genestealers,
+      Warriors and Hive Tyrants alike.
+    design: >-
+      Increased Basic Speed +0.50 (B17, 5 points per 0.25 level, 10 points),
+      matching this project's own Ork Warboss precedent for the same
+      advantage, plus Striking ST +2 (B88, 5 points/level, 10 points) for
+      the extra melee punch. 20 points total. Built as a flat, always-on
+      trait rather than a conditional/triggered bonus (contrast this
+      project's Ork WAAAGH! Gestalt or Warpath, which are explicitly
+      situational): the fiction shows Adrenal Glands working continuously
+      rather than switching on under threat, matching a species whose whole
+      biology the Hive Mind keeps at a permanent combat pitch.
+
+  - name: Acid Maw
+    points: 306
+    ref: B61
+    tags: [Advantage, Physical, Xenos, Tyranids]
+    weapons:
+      - usage: Standard
+        damage: 6dx3(3) cor
+        reach: "1"
+        parry: "No"
+        skill: Brawling
+        notes: >-
+          Grown only on the largest burrowing bioforms (Trygon/Mawloc
+          scale, beyond framework.md's own bioform table, hence the fixed,
+          non-ST-scaled build below rather than a sw/thr one). ST-
+          independent: this is the whole creature's own crushing, dissolving
+          bite, not a limb attack a smaller or larger version of the same
+          bioform would deliver differently.
+    lore: >-
+      A gaping maw ringed with dissolving digestive acid rather than
+      ordinary teeth, carried by the biggest burrowing terrors of the
+      swarm — Trygons and Mawlocs erupting from the earth to close their
+      jaws on a Rhino or a squad of Guardsmen alike. Codex: Tyranids
+      background and Black Library's Tyranid-focused fiction (widely
+      depicted; no single canonical figure for this specific bite) both
+      show an Acid Maw shearing through light vehicle armour as readily as
+      flesh.
+    design: >-
+      No framework anchor names this weapon; it is built one size class
+      above the Deathspitter's own corrosive-acid family (the same
+      "maggots vs. digestive acid" mechanism, scaled to a bio-titan's own
+      bite rather than a Warrior's gun-arm) and fixed rather than sw/thr-
+      based, since Trygons and Mawlocs sit above framework.md's own bioform
+      table and inventing an ST figure for them would be a bigger,
+      unstated departure than pricing the bite directly. Innate Attack
+      (Corrosion) (B61, 10/die) at an effective 18 dice (6 base x3
+      multiplier) = 180, with Armor Divisor (3) (+100%) and Melee Attack,
+      Reach C (-30%): net +70%, 180x1.7=306. Checked by exact dice
+      distribution: 6dx3(3) cor averages 63 and clears flak, carapace,
+      Sororitas and Astartes plate at 99%+, dropping to 36.3% against a
+      Terminator. Against vehicles: AV10 99.0%, AV11 85.5%, AV12 36.3%,
+      AV13 0.99%, AV14 0% — a real light-vehicle killer (a Rhino's side
+      armour, AV11, goes down more often than not) and a serious personal-
+      armour threat, matching "shears through light vehicle armour as
+      readily as flesh" without claiming it cracks a main battle tank
+      outright. The high point cost is deliberate: framework.md ranks lore
+      accuracy over playability, and a bio-titan's own tank-cracking bite
+      should cost accordingly, in the same spirit as this project's most
+      expensive Necron relic weapons and Custodes packages.

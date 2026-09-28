@@ -1,0 +1,30 @@
+kind: template
+output: Xenos/Tyranids/Templates/Hormagaunt.gct
+notes: >
+  NPC creature stat block, not a player-facing race. Point math: Tyranid
+  Biology 15 + Body Lens: Hormagaunt 85 + skills 4 = 104 points. Stats:
+  SM -1, ST 10, DX 13, IQ 4, HT 11, HP 10, Will 4, Per 4, natural chitin
+  torso DR 25 (Weak Points 7, eye DR 12), Super Jump 1 (leaping
+  musculature) — framework.md's Hormagaunt anchor line exactly. This
+  lands at the low end of framework.md's Trained Soldier tier (100-175):
+  a genuinely fast, dangerous close-combat swarm killer, but still
+  disposable biomass rather than an individual threat outside a swarm.
+  The point total is for GM reference only.
+
+  Weapon-symbiote: carries Scything Talons (framework.md's own anchor:
+  sw+2d(2) cut). This is being built as a natural-attack trait named
+  "Scything Talons" in data/xenos/tyranids/bio-weapons.yaml by another
+  pass on this project; that file did not exist yet when this template
+  was written, so the weapon is not `include`d here. Once it exists, add:
+    - include: "xenos/tyranids/bio-weapons.yaml#Scything Talons"
+  to the traits list below.
+traits:
+  - include: "xenos/tyranids/traits.yaml#Tyranid Biology"
+  - include: "xenos/tyranids/traits.yaml#Body Lens: Hormagaunt"
+skills:
+  - name: Brawling
+    diff: DX/E
+    points: 4
+    tags: [Xenos, Tyranids]
+    lore: A Hormagaunt closes the last few yards to a kill in a leaping bound before its scything talons go to work.
+    design: DX+2 (15) for 4 points, Easy — matching the talons' own natural-weapon attack roll.

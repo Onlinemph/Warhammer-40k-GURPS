@@ -1,0 +1,188 @@
+kind: traits
+output: Xenos/Tyranids/Traits/Hive Mind Powers.adq
+items:
+  # Tyranid psychic powers are drawn from the same well as an Imperial
+  # psyker's — the Hive Mind is a genuinely psychic intelligence, not a
+  # Necron-style technological imitation — so this file builds every
+  # power on the same Thaumatology: Sorcery chassis
+  # (data/imperium/psykers/warp.yaml) framework.md's "Psykers and the
+  # warp" section specifies: Psyker (Talent) sharpens the caster's
+  # related skills and Perils resistance; Warp Empowerment gates which
+  # powers a given bioform may know by point cost; Warp Sorcery (-20%)
+  # and Perils of the Warp (-10%/-20%) are applied to every power exactly
+  # as for a human or Aeldari psyker. A Zoanthrope or Hive Tyrant's
+  # psychic ability is channelled through the same immaterium every other
+  # psyker draws on — Shadow in the Warp and Synapse (traits.yaml) are
+  # separate, non-Warp-Sorcery auras built on Affliction instead, per
+  # framework.md's own distinction between the two.
+  #
+  # Sources: Codex: Tyranids background across editions (Zoanthrope
+  # psychic disciplines, the Hive Mind's Biomancy/telepathic powers),
+  # Black Library's Hive Fleet fiction (chiefly the Deathwatch novels)
+  # wherever a Zoanthrope or a Hive Tyrant's psychic act appears on the
+  # page, and Deathwatch RPG's The Achilus Assault / Mark of the Xenos
+  # Tyranid calibration section, used per framework.md's source order for
+  # relative scale rather than absolute numbers — none of these sources
+  # give a Zoanthrope a named power list as detailed as Dark Heresy's own
+  # human disciplines, so several of the entries below (Catalyst,
+  # Onslaught, Paroxysm) are this project's own reasoned scaling from the
+  # Hive Mind's well-documented raw effects (buffing nearby bioforms,
+  # blasting or crippling a single target, mass fear) rather than a
+  # named, cited Codex ability.
+
+  - name: "Warp Blast"
+    per_level: 5
+    levels: 1
+    tags: [Advantage, Mental, Xenos, Tyranids]
+    modifiers:
+      - {name: "Armor Divisor (2), +50%", cost: "50%"}
+      - {name: "Warp Sorcery, -20%", cost: "-20%"}
+      - {name: "Perils of the Warp, -10%", cost: "-10%"}
+    lore: >
+      A Zoanthrope's signature attack: a crackling bolt of raw psychic
+      force hurled from its forehead that burns through armour as
+      readily as flesh — the bioform's entire battlefield purpose across
+      every Codex edition and the reason a Zoanthrope brood is treated as
+      priority artillery in Black Library's Hive Fleet fiction.
+    design: >
+      Innate Attack (Burning, 5/die, B61) with Armor Divisor (2) (+50%,
+      B103, matching this project's Necron gauss-tier armour-piercing
+      convention) plus the standard Warp Sorcery/Perils pair, net +20%.
+      Full modified cost: 5 x 1.2 = 6 points/level; needs Warp Empowerment
+      level 1 (cap 20).
+
+  - name: "Catalyst"
+    per_level: 5
+    levels: 1
+    tags: [Advantage, Physical, Xenos, Tyranids]
+    modifiers:
+      - "Area Effect, +50%"
+      - "Warp Sorcery, -20%"
+      - "Perils of the Warp, -10%"
+    lore: >
+      Floods a group of nearby bioforms with the Hive Mind's own
+      regenerative biomass, accelerating wound closure mid-fight — Codex
+      background's explanation for why a synapse creature's brood
+      sometimes shrugs off damage that should have dropped it, and this
+      project's own reasoned scaling of that effect into a named,
+      castable power (no single cited scene names "Catalyst" as such;
+      the underlying effect — a Zoanthrope-cast healing buff on nearby
+      Tyranids — is well documented across editions).
+    design: >
+      Basic Set Healing (10 points/level, B59) at the leveled rate used
+      throughout this project's own Biomancy entries, with Area Effect
+      (+50%, B102, a squad-wide buff matching this project's own
+      Librarius: Might of Heroes build) plus Warp Sorcery/Perils, net
+      +20%; scaled to this file's 5/level baseline to keep it in line
+      with the file's other single-target-scale powers rather than a
+      full Basic Healing die-for-die cost. Full modified cost: 5 x 1.2 =
+      6 points/level; needs Warp Empowerment level 1 (cap 20).
+
+  - name: "The Horror"
+    points: 30
+    per_level: 10
+    levels: 1
+    tags: [Advantage, Mental, Xenos, Tyranids]
+    modifiers: ["Warp Sorcery, -20%", "Perils of the Warp, -10%"]
+    lore: >
+      A wave of pure, alien wrongness projected directly into a target's
+      mind, distinct from Shadow in the Warp's constant background hum —
+      a focused psychic terror-strike the Hive Mind can direct at a
+      single dangerous enemy (an officer, a Librarian) rather than
+      merely radiating outward. Consistent with Codex background's
+      framing of the Hive Mind as capable of directed as well as
+      ambient psychic effects.
+    design: >
+      Terror, Basic's core advantage (flat 30 + 10/level for extra
+      range, B), with Warp Sorcery/Perils, net -30%, identical build to
+      this project's own Telepathy: Terrify entry. Full modified cost:
+      (30+10) x 0.7 = 28 points at its default first extra-range level;
+      needs Warp Empowerment level 2 (cap 30).
+
+  - name: "Dominion"
+    per_level: 10
+    levels: 1
+    tags: [Advantage, Mental, Xenos, Tyranids]
+    modifiers:
+      - {name: "Disadvantage Delivered (Vulnerability x1.5, -20 pts)", cost: "20%"}
+      - "Malediction 1, +100%"
+      - "Warp Sorcery, -20%"
+      - "Perils of the Warp (Severe), -20%"
+    lore: >
+      A Hive Tyrant's own signature working: it reaches into a target
+      with the same crushing psychic weight it uses to hold its own
+      swarm together, stripping away whatever protects them and leaving
+      them more vulnerable to everything that follows — Codex background
+      names this kind of debuff among a synapse lord's psychic gifts,
+      and this project's own reasoned scaling of it onto the Hive Mind's
+      known telepathic dominance theme, on the model of this project's
+      Librarius: Null Zone (the closest published analogue for "strip an
+      enemy's defences from a distance").
+    design: >
+      Affliction (10/level) delivering a Vulnerability-style disadvantage
+      valued at roughly -20 points (+20%, matching this project's own
+      Null Zone valuation), Malediction (+100%, B36), Warp Sorcery and
+      the Severe Perils tier (a Hive Tyrant-scale psychic push, matching
+      Null Zone's own Severe tier), net +80%. Full modified cost: 10 x
+      1.8 = 18 points/level; needs Warp Empowerment level 2 (cap 30).
+
+  - name: "Onslaught"
+    per_level: 5
+    levels: 1
+    tags: [Advantage, Physical, Xenos, Tyranids]
+    modifiers: ["Area Effect, +50%", "Warp Sorcery, -20%", "Perils of the Warp, -10%"]
+    lore: >
+      A burst of psychic urgency that drives a brood of nearby bioforms
+      to move and strike faster than their bodies alone would allow — the
+      Hive Mind's answer to a Librarian's pre-charge blessing, and this
+      project's own reasoned scaling of the well-documented "the swarm
+      surges forward all at once" beat into a named, castable power (no
+      single cited scene names "Onslaught" specifically).
+    design: >
+      Increased Basic Speed (5 points per +0.25, B) with Area Effect
+      (+50%) plus Warp Sorcery/Perils, net +20%, the same build this
+      project's Ork Warpath: Warp Speed (Mob) entry uses for an
+      equivalent squad-wide speed buff. Full modified cost: 5 x 1.2 = 6
+      points/level; needs Warp Empowerment level 1 (cap 20).
+
+  - name: "Paroxysm"
+    per_level: 10
+    levels: 1
+    tags: [Advantage, Mental, Xenos, Tyranids]
+    modifiers:
+      - {name: "Disadvantage Delivered (Blindness or Klutz, -20 pts)", cost: "20%"}
+      - "Malediction 1, +100%"
+      - "Warp Sorcery, -20%"
+      - "Perils of the Warp, -10%"
+    lore: >
+      Scrambles a single enemy's senses and coordination from a distance,
+      leaving them stumbling and half-blind for a few crucial seconds —
+      Codex background across editions gives this kind of debilitating
+      single-target effect to Zoanthrope-tier psykers as an alternative
+      to outright blasting a hard target.
+    design: >
+      Affliction (10/level) delivering a Blindness/Klutz-style
+      disadvantage valued at roughly -20 points (+20%), Malediction
+      (+100%, B36), plus Warp Sorcery/Perils, net +90%. Full modified
+      cost: 10 x 1.9 = 19 points/level; needs Warp Empowerment level 2
+      (cap 30) — the same math this project's own Biomancy: Haemorrhage
+      entry uses for an equivalent single-target debuff.
+
+  - name: "Psychic Scream (Hive Mind)"
+    per_level: 10
+    levels: 1
+    tags: [Advantage, Mental, Xenos, Tyranids]
+    modifiers: ["Area Effect, +50%", "Warp Sorcery, -20%", "Perils of the Warp, -10%"]
+    lore: >
+      The Hive Mind's own version of a psyker's mind-shattering shout: a
+      silent wave of alien horror and noise that stuns everyone nearby,
+      distinct from — and stackable with — Shadow in the Warp's constant
+      ambient dread. Consistent Codex background naming Psychic Scream
+      as a Zoanthrope-tier ability across several editions.
+    design: >
+      Affliction (10/level, delivering the default Stun effect) with
+      Area Effect (+50%) plus Warp Sorcery/Perils, net +20% — identical
+      build to this project's own Telepathy: Psychic Scream entry,
+      reused here under the Hive Mind's own name per that entry's own
+      "Hive Mind flavour" note in framework.md. Full modified cost: 10 x
+      1.2 = 12 points/level; needs Warp Empowerment level 2 (cap 30).

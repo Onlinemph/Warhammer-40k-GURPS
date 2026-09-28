@@ -1,0 +1,37 @@
+kind: template
+output: Xenos/Tyranids/Templates/Ravener.gct
+notes: >
+  NPC creature stat block, not a player-facing race. Point math: Tyranid
+  Biology 15 + Body Lens: Ravener 468 + skills 8 = 491 points. Stats: SM
+  +1, ST 22, DX 14, IQ 5, HT 14, HP 26, Will 5, Per 5, natural chitin
+  torso DR 60 (Weak Points 5, eye DR 30), Tunnelling, Shadow in the Warp
+  (8 yards) — framework.md's Ravener anchor line exactly. This sits at
+  the top of framework.md's Senior Agents tier (350-600): a burrowing
+  ambush predator whose whole value is erupting where it is least
+  expected, not standing toe-to-toe once found. The point total is for
+  GM reference only.
+
+  Weapon-symbiote: carries Scything Talons (framework.md's own anchor:
+  sw+2d(2) cut), the classic Ravener close-combat loadout. This is being
+  built as a natural-attack trait named "Scything Talons" in
+  data/xenos/tyranids/bio-weapons.yaml by another pass on this project;
+  that file did not exist yet when this template was written, so the
+  weapon is not `include`d here. Once it exists, add:
+    - include: "xenos/tyranids/bio-weapons.yaml#Scything Talons"
+  to the traits list below.
+traits:
+  - include: "xenos/tyranids/traits.yaml#Tyranid Biology"
+  - include: "xenos/tyranids/traits.yaml#Body Lens: Ravener"
+skills:
+  - name: Brawling
+    diff: DX/E
+    points: 4
+    tags: [Xenos, Tyranids]
+    lore: A Ravener erupts from the ground already lashing out with its scything talons.
+    design: DX+1 (15) for 4 points, Easy.
+  - name: Stealth
+    diff: DX/A
+    points: 4
+    tags: [Xenos, Tyranids]
+    lore: A Ravener's ambush depends on approaching unseen beneath the ground until the moment it erupts.
+    design: DX+1 (15) for 4 points, Average.

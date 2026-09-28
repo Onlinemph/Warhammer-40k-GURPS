@@ -1,0 +1,39 @@
+kind: template
+output: Xenos/Tyranids/Templates/Zoanthrope.gct
+notes: >
+  NPC creature stat block, not a player-facing race. Point math: Tyranid
+  Biology 15 + Body Lens: Zoanthrope 289 + Unusual Background 10 + Warp
+  Empowerment 1 (20) + Psyker (Talent) 2 (20) + Warp Blast 3 (18) +
+  skills 4 = 376 points. Stats: SM +1, ST 8, DX 10, IQ 10, HT 12, HP 20,
+  Will 10 (+2 from Psyker Talent, see Psyniscience/Perils notes on that
+  trait), Per 10, natural chitin torso DR 40 (Weak Points 6, eye DR 20)
+  plus a regenerating psychic Warp Field, Synapse Creature (16 yards),
+  Shadow in the Warp (16 yards) — framework.md's Zoanthrope anchor line
+  exactly. This sits in the middle of framework.md's Elite Human tier
+  (200-350) reaching into Senior Agents (350-600): dedicated psychic
+  artillery, physically frail (its ST 8 and thin chitin are well below
+  any melee bioform's) and escorted rather than fielded alone, exactly
+  as Codex background treats it. The point total is for GM reference
+  only.
+
+  No physical weapon-symbiote: a Zoanthrope fights purely with Warp
+  Blast, below, and its Warp Field's protection rather than any
+  bio-weapon.
+traits:
+  - include: "xenos/tyranids/traits.yaml#Tyranid Biology"
+  - include: "xenos/tyranids/traits.yaml#Body Lens: Zoanthrope"
+  - include: "imperium/psykers/warp.yaml#Unusual Background (Latent Psychic Potential)"
+  - include: "imperium/psykers/warp.yaml#Warp Empowerment"
+    levels: 1
+  - include: "imperium/psykers/warp.yaml#Psyker"
+    levels: 2
+  - include: "xenos/tyranids/psychic.yaml#Warp Blast"
+    levels: 3
+skills:
+  - name: Innate Attack
+    spec: Beam
+    diff: DX/E
+    points: 4
+    tags: [Xenos, Tyranids]
+    lore: A Zoanthrope's forehead crackles with the psychic bolt it is about to release, aimed with the same drilled precision as any trained psyker's Innate Attack skill.
+    design: Innate Attack (Beam) (DX/E, B269) at DX+2 (12) for 4 points, Easy — the skill Warp Blast's Burning-type Innate Attack build calls for.

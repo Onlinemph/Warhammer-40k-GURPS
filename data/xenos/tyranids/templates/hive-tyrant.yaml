@@ -1,0 +1,60 @@
+kind: template
+output: Xenos/Tyranids/Templates/Hive Tyrant.gct
+notes: >
+  NPC creature stat block, not a player-facing race. Point math: Tyranid
+  Biology 15 + Body Lens: Hive Tyrant 1155 (Wings disabled by default;
+  +30 if a winged variant is enabled) + Unusual Background 10 + Warp
+  Empowerment 2 (20) + Psyker (Talent) 3 (30) + The Horror (28) +
+  Dominion 1 (18) + skills 10 = 1286 points. Stats: SM +2, ST 45, DX 13,
+  IQ 12, HT 16, HP 60, Will 12 (+3 from Psyker Talent's Perils bonus, see
+  that trait's notes), Per 12, natural chitin torso DR 120 (Weak Points
+  4, eye DR 60), Regeneration (Regular), Synapse Creature (32 yards),
+  Shadow in the Warp (32 yards) — framework.md's Hive Tyrant anchor line
+  exactly. This lands squarely in framework.md's Heroes and Legends tier
+  (1,000-3,000): the swarm's synapse lord and its own psyker, matching
+  Codex background's treatment of a confirmed Hive Tyrant kill as a
+  campaign-level victory. The point total is for GM reference only, not
+  party balance.
+
+  Weapon-symbiotes: carries Monstrous Scything Talons (framework.md's
+  own anchor: sw+4d(3) cut) and a Venom Cannon (6d×3(3) cr ex) — a
+  classic Hive Tyrant loadout of one melee and one heavy ranged
+  symbiote. These are being built as natural-attack traits named
+  "Monstrous Scything Talons" and "Venom Cannon" in
+  data/xenos/tyranids/bio-weapons.yaml by another pass on this project;
+  that file did not exist yet when this template was written, so the
+  weapons are not `include`d here. Once it exists, add:
+    - include: "xenos/tyranids/bio-weapons.yaml#Monstrous Scything Talons"
+    - include: "xenos/tyranids/bio-weapons.yaml#Venom Cannon"
+  to the traits list below.
+traits:
+  - include: "xenos/tyranids/traits.yaml#Tyranid Biology"
+  - include: "xenos/tyranids/traits.yaml#Body Lens: Hive Tyrant"
+  - include: "imperium/psykers/warp.yaml#Unusual Background (Latent Psychic Potential)"
+  - include: "imperium/psykers/warp.yaml#Warp Empowerment"
+    levels: 2
+  - include: "imperium/psykers/warp.yaml#Psyker"
+    levels: 3
+  - include: "xenos/tyranids/psychic.yaml#The Horror"
+  - include: "xenos/tyranids/psychic.yaml#Dominion"
+    levels: 1
+skills:
+  - name: Brawling
+    diff: DX/E
+    points: 2
+    tags: [Xenos, Tyranids]
+    lore: A Hive Tyrant's monstrous scything talons can gut a tank crew or a Terminator with equal ease.
+    design: DX+1 (14) for 2 points, Easy.
+  - name: Innate Attack
+    spec: Projectile
+    diff: DX/E
+    points: 4
+    tags: [Xenos, Tyranids]
+    lore: A Hive Tyrant's venom cannon is fired with a synapse lord's own tactical precision, not a lesser bioform's blind reflex.
+    design: Innate Attack (Projectile) (DX/E, B269) at DX+2 (15) for 4 points, Easy.
+  - name: Tactics
+    diff: IQ/H
+    points: 4
+    tags: [Xenos, Tyranids]
+    lore: A Hive Tyrant commands the local swarm's actual strategy, not merely its discipline.
+    design: IQ (12) for 4 points, Hard.

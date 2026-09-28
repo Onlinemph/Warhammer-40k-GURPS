@@ -1,0 +1,43 @@
+kind: template
+output: Xenos/Tyranids/Templates/Carnifex.gct
+notes: >
+  NPC creature stat block, not a player-facing race. Point math: Tyranid
+  Biology 15 + Body Lens: Carnifex 1180 + skills 8 = 1203 points. Stats:
+  SM +2, ST 60, DX 10, IQ 4, HT 16, HP 70, Will 4, Per 4, natural chitin
+  torso DR 150 (Weak Points 3, eye DR 75), Regeneration (Fast), Shadow
+  in the Warp (8 yards) — framework.md's Carnifex anchor line exactly.
+  This lands squarely in framework.md's Heroes and Legends tier
+  (1,000-3,000), matching a Hive Tyrant's own physiology cost almost
+  exactly despite the very different build (raw ST and DR rather than
+  IQ, synapse range and psychic power): a living battering ram bred to
+  soak up and deal out damage nothing else on the battlefield can match.
+  The point total is for GM reference only, not party balance.
+
+  Weapon-symbiotes: carries Monstrous Crushing Claws (framework.md's own
+  anchor: thr+6d(5) cr) and a Venom Cannon (6d×3(3) cr ex) — a classic
+  Carnifex loadout of one melee and one heavy ranged symbiote. These are
+  being built as natural-attack traits named "Monstrous Crushing Claws"
+  and "Venom Cannon" in data/xenos/tyranids/bio-weapons.yaml by another
+  pass on this project; that file did not exist yet when this template
+  was written, so the weapons are not `include`d here. Once it exists,
+  add:
+    - include: "xenos/tyranids/bio-weapons.yaml#Monstrous Crushing Claws"
+    - include: "xenos/tyranids/bio-weapons.yaml#Venom Cannon"
+  to the traits list below.
+traits:
+  - include: "xenos/tyranids/traits.yaml#Tyranid Biology"
+  - include: "xenos/tyranids/traits.yaml#Body Lens: Carnifex"
+skills:
+  - name: Brawling
+    diff: DX/E
+    points: 4
+    tags: [Xenos, Tyranids]
+    lore: A Carnifex's monstrous crushing claws can pulp a light vehicle or a squad's cover in a single blow.
+    design: DX+2 (12) for 4 points, Easy.
+  - name: Innate Attack
+    spec: Projectile
+    diff: DX/E
+    points: 4
+    tags: [Xenos, Tyranids]
+    lore: A Carnifex's venom cannon is aimed with as little finesse as everything else about it, but at its size that scarcely matters.
+    design: Innate Attack (Projectile) (DX/E, B269) at DX+2 (12) for 4 points, Easy.

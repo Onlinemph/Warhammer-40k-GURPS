@@ -1,0 +1,52 @@
+kind: template
+output: Xenos/Tyranids/Templates/Tyranid Warrior.gct
+notes: >
+  NPC creature stat block, not a player-facing race. Point math: Tyranid
+  Biology 15 + Body Lens: Tyranid Warrior 548 + skills 10 = 573 points.
+  Stats: SM +1, ST 24, DX 13, IQ 8, HT 14, HP 30, Will 8, Per 8, natural
+  chitin torso DR 60 (Weak Points 5, eye DR 30), Synapse Creature (16
+  yards), Shadow in the Warp (16 yards) — framework.md's Tyranid Warrior
+  anchor line exactly. This sits deep in framework.md's Astartes point
+  tier (550-800): the swarm's officer caste, genuinely dangerous both in
+  its own right and as the link that keeps lesser bioforms fighting with
+  purpose. Do not read this total as a measure of individual threat the
+  way a similarly-costed human character would be — a lone Warrior
+  separated from both its swarm and any synapse backup is a smaller
+  problem than the number suggests, exactly as this project's Necron
+  templates note for their own high-cost, low-individual-agency
+  bioforms.
+
+  Weapon-symbiotes: carries a Devourer (framework.md's own anchor:
+  brain-leech worms, 4d(2) pi++, RoF 8) and Scything Talons (sw+2d(2)
+  cut) for melee — a Warrior is commonly built with one ranged and one
+  melee symbiote. These are being built as natural-attack traits named
+  "Devourer" and "Scything Talons" in
+  data/xenos/tyranids/bio-weapons.yaml by another pass on this project;
+  that file did not exist yet when this template was written, so the
+  weapons are not `include`d here. Once it exists, add:
+    - include: "xenos/tyranids/bio-weapons.yaml#Devourer"
+    - include: "xenos/tyranids/bio-weapons.yaml#Scything Talons"
+  to the traits list below.
+traits:
+  - include: "xenos/tyranids/traits.yaml#Tyranid Biology"
+  - include: "xenos/tyranids/traits.yaml#Body Lens: Tyranid Warrior"
+skills:
+  - name: Innate Attack
+    spec: Projectile
+    diff: DX/E
+    points: 4
+    tags: [Xenos, Tyranids]
+    lore: A Warrior's Devourer is aimed with real, drilled tactical intent rather than a gaunt's blind reflex.
+    design: Innate Attack (Projectile) (DX/E, B269) at DX+2 (15) for 4 points, Easy.
+  - name: Brawling
+    diff: DX/E
+    points: 2
+    tags: [Xenos, Tyranids]
+    lore: A Warrior falls back on its scything talons the instant a fight closes to melee range.
+    design: DX+1 (14) for 2 points, Easy.
+  - name: Tactics
+    diff: IQ/H
+    points: 4
+    tags: [Xenos, Tyranids]
+    lore: A Warrior is the swarm's officer caste, canny enough to direct lesser bioforms rather than merely link them to the Hive Mind's discipline.
+    design: IQ (8) for 4 points, Hard.
