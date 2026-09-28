@@ -211,12 +211,103 @@ def skill_entry(s):
             "ref": s.get("reference"), **split_notes(s.get("local_notes")), "feat": features(s.get("features"))}
 
 
+# ------------------------------------------------------------ character stats
+
+DMG = {1: ("1d-6", "1d-5"), 2: ("1d-6", "1d-5"), 3: ("1d-5", "1d-4"), 4: ("1d-5", "1d-4"), 5: ("1d-4", "1d-3"),
+       6: ("1d-4", "1d-3"), 7: ("1d-3", "1d-2"), 8: ("1d-3", "1d-2"), 9: ("1d-2", "1d-1"), 10: ("1d-2", "1d"),
+       11: ("1d-1", "1d+1"), 12: ("1d-1", "1d+2"), 13: ("1d", "2d-1"), 14: ("1d", "2d"), 15: ("1d+1", "2d+1"),
+       16: ("1d+1", "2d+2"), 17: ("1d+2", "3d-1"), 18: ("1d+2", "3d"), 19: ("2d-1", "3d+1"), 20: ("2d-1", "3d+2"),
+       21: ("2d", "4d-1"), 22: ("2d", "4d"), 23: ("2d+1", "4d+1"), 24: ("2d+1", "4d+2"), 25: ("2d+2", "5d-1"),
+       26: ("2d+2", "5d"), 27: ("3d-1", "5d+1"), 28: ("3d-1", "5d+1"), 29: ("3d", "5d+2"), 30: ("3d", "5d+2"),
+       31: ("3d+1", "6d-1"), 32: ("3d+1", "6d-1"), 33: ("3d+2", "6d"), 34: ("3d+2", "6d"), 35: ("4d-1", "6d+1"),
+       36: ("4d-1", "6d+1"), 37: ("4d", "6d+2"), 38: ("4d", "6d+2"), 39: ("4d+1", "7d-1"), 40: ("4d+1", "7d-1"),
+       45: ("5d", "7d+1"), 50: ("5d+2", "8d-1"), 55: ("6d", "8d+1"), 60: ("7d-1", "9d"), 65: ("7d+1", "9d+2"),
+       70: ("8d", "10d")}
+
+
+def dmg_for(st):
+    st = max(1, int(st))
+    key = st if st in DMG else max(k for k in DMG if k <= st)
+    return DMG[key]
+
+
+def active_traits(ts):
+    """Yield enabled leaf traits (and containers) recursively, skipping disabled branches."""
+    for t in ts:
+        if t.get("disabled"):
+            continue
+        yield t
+        if t.get("children") is not None:
+            yield from active_traits(t["children"])
+
+
+SKILL_BASE = {"e": 0, "a": -1, "h": -2, "vh": -3}
+
+
+def skill_level(pts, diff):
+    if pts <= 0:
+        return None
+    rel = SKILL_BASE[diff] + (0 if pts < 2 else 1 if pts < 4 else 1 + pts // 4)
+    return rel
+
+
+def character_stats(d):
+    bonus = {}
+    dr = {}
+    names = set()
+    skill_bonus = {}
+    for t in active_traits(d.get("traits", [])):
+        names.add(t.get("name", "").split(" (")[0])
+        mods_on = [m for m in t.get("modifiers", []) if not m.get("disabled")]
+        for f in t.get("features", []) + [f for m in mods_on for f in m.get("features", [])]:
+            if f["type"] == "attribute_bonus":
+                bonus[f["attribute"]] = bonus.get(f["attribute"], 0) + f["amount"] * (
+                    t.get("levels", 1) if f.get("per_level") else 1)
+            elif f["type"] == "dr_bonus" and not f.get("specialization"):
+                for loc in f.get("locations", []):
+                    dr[loc] = dr.get(loc, 0) + f["amount"]
+            elif f["type"] == "skill_bonus":
+                k = f["name"]["qualifier"]
+                skill_bonus[k] = skill_bonus.get(k, 0) + f["amount"]
+    b = lambda k: bonus.get(k, 0)
+    st, dx, iq, ht = 10 + b("st"), 10 + b("dx"), 10 + b("iq"), 10 + b("ht")
+    will, per = iq + b("will"), iq + b("per")
+    hp, fp = st + b("hp"), ht + b("fp")
+    speed = (dx + ht) / 4 + b("basic_speed")
+    move = int(speed) + b("basic_move")
+    dodge = int(speed) + 3 + b("dodge") + (1 if "Combat Reflexes" in names else 0)
+    lift_st = st + b("lifting_st")
+    thr, sw = dmg_for(st + b("striking_st"))
+    attrs = {"st": st, "dx": dx, "iq": iq, "ht": ht, "will": will, "per": per}
+    skills = []
+    def walk(ss):
+        for sk in ss:
+            if sk.get("children") is not None:
+                walk(sk["children"]); continue
+            diff = sk.get("difficulty", "")
+            if "default" in sk:  # technique: show relative level only
+                skills.append({"name": sk["name"], "level": None, "points": sk.get("points", 0)})
+                continue
+            a, _, lv = diff.partition("/")
+            rel = skill_level(sk.get("points", 0), lv) if lv in SKILL_BASE else None
+            base = attrs.get(a)
+            lvl = None if rel is None or base is None else base + rel + skill_bonus.get(sk["name"], 0)
+            nm = sk["name"] + (f" ({sk['specialization']})" if sk.get("specialization") else "")
+            skills.append({"name": nm, "level": lvl, "points": sk.get("points", 0)})
+    walk(d.get("skills", []))
+    return {"st": st, "dx": dx, "iq": iq, "ht": ht, "hp": hp, "will": will, "per": per, "fp": fp,
+            "speed": round(speed, 2), "move": move, "dodge": dodge, "sm": b("sm"),
+            "bl": round(lift_st * lift_st / 5), "thr": thr, "sw": sw,
+            "dr": dr, "skills": skills, "bonus": bonus}
+
+
 def template_entry(d, title):
     traits = [trait_entry(t) for t in d.get("traits", [])]
     skills = [skill_entry(s) for s in d.get("skills", [])]
     tp = sum(trait_cost(t) for t in d.get("traits", []))
     sp = sum(skill_cost(s) for s in d.get("skills", []))
     return {"name": title, "notes": d.get("notes", ""), "traitPoints": tp, "skillPoints": sp,
+            "stats": character_stats(d), "addon": "add-on" in title.lower(),
             "points": tp + sp, "traits": traits, "skills": skills,
             "equipment": [eq_entry(e) for e in d.get("equipment", [])]}
 

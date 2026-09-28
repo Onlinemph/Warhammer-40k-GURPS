@@ -100,6 +100,13 @@ h2{font-family:var(--display);font-size:1.05rem;letter-spacing:.08em;margin:28px
 .empty{color:var(--muted);font-style:italic}
 .hit{background:var(--brass-soft);border-radius:2px}
 .menubtn{display:none}
+.statblock{max-width:1100px;background:var(--panel);border:1px solid var(--line);border-top:3px solid var(--accent);border-radius:4px;padding:16px 20px;margin:0 0 22px;font-size:.95rem}
+.statgrid{display:grid;grid-template-columns:repeat(3,minmax(0,max-content));column-gap:40px;row-gap:6px;font-family:var(--mono);font-size:.9rem;font-variant-numeric:tabular-nums}
+.statgrid span b{font-family:var(--body);font-weight:700;font-size:.8rem;letter-spacing:.06em;color:var(--muted);margin-right:6px}
+.statgrid span.hl{color:var(--accent);font-weight:600}
+.statline{margin:12px 0 0;line-height:1.55}
+.statline b{font-family:var(--display);font-size:.8rem;letter-spacing:.08em;color:var(--brass);margin-right:4px}
+.statline .p{font-family:var(--mono);font-size:.8rem;color:var(--muted)}
 @media (max-width:760px){
   .app{grid-template-columns:1fr;grid-template-rows:auto 1fr}
   aside{border-right:0;border-bottom:1px solid var(--line);padding:14px 16px;max-height:none;overflow:visible}
@@ -222,11 +229,45 @@ function treeNode(t){
     : `<div class="leaf${t.disabled?" off":""}">${label}</div>`;
 }
 
+const ATTR_NAMES = new Set(["ST","DX","IQ","HT","Will","Per","Perception","HP","FP","Basic Speed","Basic Move"]);
+function statBlock(t){
+  const s = t.stats;
+  if(t.addon){
+    const b = s.bonus||{}, keys = Object.keys(b).filter(k=>b[k]);
+    const deltas = keys.map(k=>`${k.replace("_"," ").toUpperCase()} ${b[k]>0?"+":""}${b[k]}`).join(", ") || "no attribute changes";
+    return `<section class="statblock"><div class="statline"><b>ADD-ON</b>Apply on top of the Astartes Battle-Brother template. Attribute changes: ${esc(deltas)}.</div>${traitLines(t)}${skillLine(s)}</section>`;
+  }
+  const dr = Object.entries(s.dr||{}).map(([k,v])=>`${v} (${k})`).join(", ");
+  const cell=(k,v,hl)=>`<span${hl?' class="hl"':""}><b>${k}</b>${v}</span>`;
+  return `<section class="statblock" aria-label="Stat block"><div class="statgrid">
+    ${cell("ST",s.st,1)}${cell("HP",s.hp)}${cell("Speed",s.speed.toFixed(2))}
+    ${cell("DX",s.dx,1)}${cell("Will",s.will)}${cell("Move",s.move)}
+    ${cell("IQ",s.iq,1)}${cell("Per",s.per)}${cell("Dodge",s.dodge)}
+    ${cell("HT",s.ht,1)}${cell("FP",s.fp)}${cell("SM",(s.sm>0?"+":"")+s.sm)}
+    ${cell("Dmg",`${s.thr}/${s.sw}`)}${cell("BL",s.bl+" lb")}${cell("DR",dr||"0")}
+  </div>${traitLines(t)}${skillLine(s)}</section>`;
+}
+function traitLines(t){
+  const top = t.traits.filter(x=>!x.disabled && !ATTR_NAMES.has(x.name));
+  const fmt = x=>`${esc(x.name)}${x.levels!=null&&!x.children?" "+x.levels:""} <span class="p">[${x.points}]</span>`;
+  const adv = top.filter(x=>x.points>0), dis = top.filter(x=>x.points< -1), q = top.filter(x=>x.points===-1||x.points===0&&!x.children);
+  const off = t.traits.filter(x=>x.disabled);
+  return (adv.length?`<p class="statline"><b>Advantages</b>${adv.map(fmt).join("; ")}.</p>`:"") +
+    (dis.length?`<p class="statline"><b>Disadvantages</b>${dis.map(fmt).join("; ")}.</p>`:"") +
+    (q.length?`<p class="statline"><b>Quirks and features</b>${q.map(fmt).join("; ")}.</p>`:"") +
+    (off.length?`<p class="statline"><b>Optional lenses</b>${off.map(fmt).join("; ")}.</p>`:"");
+}
+function skillLine(s){
+  const sk=(s.skills||[]).filter(x=>x.points>0);
+  if(!sk.length) return "";
+  return `<p class="statline"><b>Skills</b>${sk.map(x=>`${esc(x.name)}${x.level!=null?"-"+x.level:""} <span class="p">[${x.points}]</span>`).join("; ")}.</p>`;
+}
 function templateView(t){
   const sk = t.skills.flatMap(s=>s.children?s.children:[s]);
   return `<div class="tsum"><div>Total<b>${t.points}</b></div><div>Traits<b>${t.traitPoints}</b></div><div>Skills<b>${t.skillPoints}</b></div></div>
+    ${statBlock(t)}
     ${t.notes?`<p class="tnotes">${esc(t.notes)}</p>`:""}
-    <h2>Traits</h2><div class="tree">${t.traits.map(treeNode).join("")}</div>
+    <h2>Trait breakdown</h2><div class="tree">${t.traits.map(treeNode).join("")}</div>
     ${sk.length?`<h2>Skills</h2><div class="tablewrap" style="max-width:1100px"><table><thead><tr><th>Skill</th><th>Difficulty</th><th>Points</th></tr></thead><tbody>${
       sk.map(s=>`<tr><td>${esc(s.name)}</td><td class="n">${esc(s.diff||"")}</td><td class="n">${s.points}</td></tr>`).join("")}</tbody></table></div>`:""}
     ${t.equipment.length?`<h2>Equipment</h2><div class="entries">${t.equipment.map(e=>eqCard(e)).join("")}</div>`:""}`;

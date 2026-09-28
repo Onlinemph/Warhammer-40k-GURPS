@@ -358,8 +358,30 @@ def build_modifier(m, path, trail, idx):
     return out
 
 
+# A trait named after an attribute with points but no `attributes:` becomes a real bonus,
+# so GCS raises the attribute instead of just charging for it.
+ATTR_COST = {"ST": ("st", 10), "DX": ("dx", 20), "IQ": ("iq", 20), "HT": ("ht", 10), "Will": ("will", 5),
+             "Per": ("per", 5), "Perception": ("per", 5), "HP": ("hp", 2), "Hit Points": ("hp", 2),
+             "FP": ("fp", 3), "Fatigue Points": ("fp", 3), "Basic Speed": ("basic_speed", 20),
+             "Basic Move": ("basic_move", 5)}
+
+
+def auto_attribute(item, ctx):
+    name = item.get("name", "")
+    if name not in ATTR_COST or item.get("attributes") or item.get("children") is not None:
+        return item
+    attr, per = ATTR_COST[name]
+    pts = item.get("points", 0) + item.get("per_level", 0) * item.get("levels", 0)
+    lvl = pts / per
+    if attr != "basic_speed" and lvl != int(lvl):
+        err(ctx, f"{name} [{pts}] is not a whole number of levels at {per}/level")
+    lvl = lvl if attr == "basic_speed" else int(lvl)
+    return {**item, "attributes": {attr: lvl}} if lvl else item
+
+
 def build_trait(item, path, trail):
     ctx = f"{path} :: {item.get('name', '?')}"
+    item = auto_attribute(item, ctx)
     unknown = set(item) - TRAIT_KEYS
     if unknown:
         err(ctx, f"unknown keys {sorted(unknown)}")
