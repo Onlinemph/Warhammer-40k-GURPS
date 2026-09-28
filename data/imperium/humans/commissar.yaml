@@ -39,63 +39,30 @@ traits:
       break — Ciaphas Cain repeatedly notes that whatever else is true of
       him, his nerve under fire is genuine.
     design: Will 14 (+2 above IQ-derived default of 12), 5 pts/level (B16).
-  - name: Unfazeable
-    points: 15
-    ref: B95
-    tags: [Advantage, Mental, Imperium]
+  - include: "imperium/common/imperial-traits.yaml#Unfazeable"
     lore: Little left to shock a Commissar who has already ordered executions and watched daemons take a trench line.
-    design: Basic Set Unfazeable (B95), 15 points.
   - name: Combat Reflexes
     points: 15
     ref: B43
     tags: [Advantage, Mental, Imperium]
     lore: A Commissar cannot afford to freeze; the regiment is watching.
     design: Basic Set Combat Reflexes (B43), 15 points.
-  - name: Legal Enforcement Powers (Commissariat)
-    points: 15
-    ref: B65
-    tags: [Advantage, Social, Imperium, Astra Militarum]
-    lore: See Imperium/Traits/Imperial Traits.adq for sourcing.
-    design: Basic Set Legal Enforcement Powers (B65), 3 levels, 15 points.
-  - name: Military Rank
-    points: 10
-    ref: B29
-    tags: [Advantage, Social, Imperium, Astra Militarum]
+  - include: "imperium/common/imperial-traits.yaml#Legal Enforcement Powers (Commissariat)"
+  - include: "imperium/common/imperial-traits.yaml#Military Rank"
+    levels: 2
     lore: Commissars hold an officer-equivalent rank within the Officio Prefectus chain, separate from the regiment's own command structure.
-    design: Basic Set Rank (B29), 2 levels, 10 points.
-  - name: Fanaticism (The God-Emperor)
-    points: -15
-    ref: B136
-    tags: [Disadvantage, Mental, Imperium]
+  - include: "imperium/common/imperial-traits.yaml#Fanaticism (The God-Emperor)"
     lore: A Commissar's authority rests entirely on this belief being genuine, not performed.
-    design: Basic Set Fanaticism (B136), -15.
-  - name: Duty (Astra Militarum)
-    points: -15
-    ref: B133
-    tags: [Disadvantage, Social, Imperium, Astra Militarum]
+  - include: "imperium/common/imperial-traits.yaml#Duty (Astra Militarum)"
     lore: Commissars are themselves Munitorum-bound, answerable to the Officio Prefectus for their conduct.
-    design: Basic Set Duty (B133), almost-always, hazardous, involuntary, -15.
-  - name: Intolerance (Heretics)
-    points: -5
-    ref: B140
-    tags: [Disadvantage, Mental, Imperium]
+  - include: "imperium/common/imperial-traits.yaml#Intolerance (Heretics)"
     lore: The Commissariat exists specifically to root out heresy, cowardice and defeatism in the ranks.
-    design: Basic Set Intolerance (B140), narrow-category, -5.
-  - name: Intolerance (Xenos)
-    points: -10
-    ref: B140
-    tags: [Disadvantage, Mental, Imperium]
-    lore: See Imperium/Traits/Imperial Traits.adq for sourcing.
-    design: Basic Set Intolerance (B140), broad-category, -10.
-  - name: Callous
-    points: -5
-    ref: B125
-    tags: [Disadvantage, Mental, Imperium]
+  - include: "imperium/common/imperial-traits.yaml#Intolerance (Xenos)"
+  - include: "imperium/common/imperial-traits.yaml#Callous"
     lore: >
       The Commissariat's reputation (which Ciaphas Cain's novels explicitly
       play against, making him an exception) is one of willingness to
       execute one's own troops without much hesitation.
-    design: Basic Set Callous (B125), -5.
   - name: Feared, Not Loved
     points: -1
     tags: [Quirk, Imperium]

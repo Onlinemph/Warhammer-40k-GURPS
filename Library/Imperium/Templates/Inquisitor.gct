@@ -1,0 +1,598 @@
+{
+	"version": 5,
+	"id": "BX9dfyvPvEZHBgAUB",
+	"notes": "A working field Inquisitor — Eisenhorn or Ravenor in their prime, not a centuries-old Lord Inquisitor running whole sub-sectors (that belongs in framework.md's \"Heroes and legends\" tier, well above this template). Point math: ST 11 (+10), DX 14 (+80), IQ 15 (+100), HT 12 (+20) = 210, plus Will +2 (+10) = 220; advantages +40; disadvantages -37; skills +251. Total 474 points. Framework.md's tier table has a gap between \"Elite human (200-350)\" and \"Heroes and legends (1,000-3,000)\" with nothing named in between; a veteran field Inquisitor genuinely belongs in that gap — clearly beyond an elite specialist, well short of a living legend — so this template deliberately sits there rather than being forced into either tier. Flagged in this project's report as a possible anchor gap worth a deliberate decision (see framework.md, \"Changing an anchor\") if more Inquisition-tier templates are built.\nPuritan vs. Radical: this template is written Puritan-neutral. A strict Puritan build should add Intolerance (Xenos) (-10, Imperium/ Traits/Imperial Traits.adq) and lean on the Ordo Hereticus/Malleus lenses; a Radical build (xenotech users, daemonhosts, etc.) should drop or reinterpret Intolerance (Heretics) and is otherwise unrestricted by this template — Radicalism is a stance on methods and sanctioned lore, not a separate stat block, per how Eisenhorn's own arc treats it.\nNo psychic abilities here; many Inquisitors are sanctioned psykers, but that is a separate purchase from the psyker power library, not part of this baseline.\nEnable at most one Ordo lens (all disabled by default); an Inquisitor belongs to exactly one Ordo. They are small flavor packages, not full specialisations — a real Ordo Malleus Inquisitor's daemon-hunting expertise should mostly show up as bought-up Hidden Lore (Daemons) and Hidden Lore (The Warp) levels, not a lens.\n",
+	"traits": [
+		{
+			"id": "tPpi9FJrFAwD7P08t",
+			"name": "ST",
+			"local_notes": "Lore: Inquisitors survive long enough to reach this rank partly through personal fitness.\n\nDesign: ST 11 (+1), 10 pts/level (B15).",
+			"tags": [
+				"Attribute"
+			],
+			"base_points": 10
+		},
+		{
+			"id": "tM2sCIdMNzsW9JY49",
+			"name": "DX",
+			"local_notes": "Lore: A veteran of countless personal confrontations, armed and otherwise.\n\nDesign: DX 14 (+4), 20 pts/level (B15).",
+			"tags": [
+				"Attribute"
+			],
+			"base_points": 80
+		},
+		{
+			"id": "t9wz4EVxqxxFz-Gn1",
+			"name": "IQ",
+			"local_notes": "Lore: Eisenhorn and Ravenor are both written as formidably intelligent, solving cases that defeat entire Arbites precincts and Ordo cells.\n\nDesign: IQ 15 (+5), 20 pts/level (B15).",
+			"tags": [
+				"Attribute"
+			],
+			"base_points": 100
+		},
+		{
+			"id": "tScJBdHOyfB9nXqly",
+			"name": "HT",
+			"local_notes": "Lore: Decades of fieldwork, often ending in violence, demand real endurance.\n\nDesign: HT 12 (+2), 10 pts/level (B14).",
+			"tags": [
+				"Attribute"
+			],
+			"base_points": 20
+		},
+		{
+			"id": "tS3ksVcjOo0vzxFJ3",
+			"name": "Will",
+			"local_notes": "Lore: An Inquisitor's will has to outlast interrogation, daemonic influence, and their own doubts.\n\nDesign: Will 17 (+2 above the IQ-derived default of 15), 5 pts/level (B16).",
+			"tags": [
+				"Attribute"
+			],
+			"base_points": 10
+		},
+		{
+			"id": "txM7GK5eCW4eQVdrI",
+			"name": "Fit",
+			"reference": "B55",
+			"local_notes": "Lore: Kept sharp by a career that regularly turns violent.\n\nDesign: Basic Set Fit (B55), 5 points.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Imperium"
+			],
+			"base_points": 5
+		},
+		{
+			"id": "tdAvzztkuxiyal_Hu",
+			"name": "Combat Reflexes",
+			"reference": "B43",
+			"local_notes": "Lore: A survivor of more ambushes and firefights than almost anyone outside the Astartes.\n\nDesign: Basic Set Combat Reflexes (B43), 15 points.",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Imperium"
+			],
+			"base_points": 15
+		},
+		{
+			"id": "tYsNbKKyXs6xq4Y6R",
+			"name": "Legal Enforcement Powers (Inquisitorial Rosette)",
+			"reference": "B65",
+			"local_notes": "Lore: \"I have the authority of the Emperor Himself\" — an Inquisitor can commandeer Imperial Guard regiments, override a planetary governor's orders, or execute an Astartes Chapter Master's aide without trial, per repeated scenes across Eisenhorn, Ravenor, and countless codex vignettes.\n\nDesign: Basic Set Legal Enforcement Powers (B65) at its maximum, 4 levels (20 points): the trait's own ceiling. Note the honest mismatch — fiction gives an Inquisitor authority well beyond what 20 points of LEP models (they can, in principle, override anyone up to and including a Space Marine Chapter). That narrative scope isn't something a point-bought trait should try to fully price; GMs run it as near-absolute in-fiction authority backed by this trait for the mechanical bits (arrest, search, requisition) and by roleplaying otherwise, exactly as Dark Heresy handles it with a non-numeric \"Inquisitorial authority\" rule instead of a stat.",
+			"tags": [
+				"Advantage",
+				"Social",
+				"Imperium",
+				"Inquisition"
+			],
+			"points_per_level": 5,
+			"can_level": true,
+			"levels": 4
+		},
+		{
+			"id": "tCLK5yO804HUNHBMV",
+			"name": "Sense of Duty (The Imperium)",
+			"reference": "B153",
+			"local_notes": "Lore: Unlike an acolyte's enforced Duty, an Inquisitor answers mostly to their own conscience and their Ordo's mandate — but that mandate (\"protect humanity, whatever it costs\") is still a real, large-scope obligation, per how both Eisenhorn and Ravenor are written as unable to simply walk away from a case.\n\nDesign: Basic Set Sense of Duty (B153), very large scope (humanity/the Imperium), -10.",
+			"tags": [
+				"Disadvantage",
+				"Mental",
+				"Imperium"
+			],
+			"base_points": -10
+		},
+		{
+			"id": "tzjzHe39XiqUuLEbu",
+			"name": "Fanaticism (The God-Emperor)",
+			"reference": "B136",
+			"local_notes": "Lore: The default assumption for a loyalist Inquisitor. A Radical build that has drifted from orthodox faith (rare, but present in the fiction) may drop this with GM agreement — see the Puritan/Radical note above.\n\nDesign: Basic Set Fanaticism (B136), flat -15, taken for \"the Emperor/the Imperial Creed\" as the group/ideal. Not leveled in Basic Set.",
+			"tags": [
+				"Disadvantage",
+				"Mental",
+				"Imperium"
+			],
+			"base_points": -15
+		},
+		{
+			"id": "t_I38wNQ6VXl54ou6",
+			"name": "Intolerance (Heretics)",
+			"reference": "B140",
+			"local_notes": "Lore: Even a Radical Inquisitor is still, definitionally, opposed to Chaos.\n\nDesign: Basic Set Intolerance (B140), narrow-category cost (-5).",
+			"tags": [
+				"Disadvantage",
+				"Mental",
+				"Imperium"
+			],
+			"base_points": -5
+		},
+		{
+			"id": "tDk5V1sweD5IWB_hn",
+			"name": "Callous",
+			"reference": "B125",
+			"local_notes": "Lore: \"The Emperor Protects\" is frequently shown, in Eisenhorn especially, to mean acolytes, bystanders, and whole populations are expendable against the mission.\n\nDesign: Basic Set Callous (B125), -5.",
+			"tags": [
+				"Disadvantage",
+				"Mental",
+				"Imperium"
+			],
+			"base_points": -5
+		},
+		{
+			"id": "tooBD48tJ2rsmOaMN",
+			"name": "Trusts No One Completely, Including Their Own Retinue",
+			"local_notes": "Lore: A recurring Eisenhorn/Ravenor beat — even loyal acolytes get investigated eventually.\n\nDesign: Quirk (B9), roleplaying flag only.",
+			"tags": [
+				"Quirk",
+				"Imperium"
+			],
+			"base_points": -1
+		},
+		{
+			"id": "txAwzzviqR6ycEYkH",
+			"name": "Carries the Weight of Every Call Made Alone",
+			"local_notes": "Lore: Inquisitorial authority is effectively unchecked in the field, which both novels treat as a burden as much as a privilege.\n\nDesign: Quirk (B9), roleplaying flag only.",
+			"tags": [
+				"Quirk",
+				"Imperium"
+			],
+			"base_points": -1
+		},
+		{
+			"id": "TMqAY-ZzIovdcYQ7Y",
+			"name": "Ordo: Hereticus",
+			"local_notes": "Lore: The Ordo Hereticus roots out heresy, corruption, and unsanctioned faith within the Imperium's own population and institutions.\n\nDesign: Net 0 points, per-Ordo flavor lens (see framework.md, origin lenses).",
+			"tags": [
+				"Imperium",
+				"Inquisition"
+			],
+			"children": [
+				{
+					"id": "tb0O2xmU7OgYgAm95",
+					"name": "Witch Hunter's Eye",
+					"local_notes": "Lore: A career built around finding heresy before it spreads.\n\nDesign: Perk (B9), +1 to Hidden Lore (Heresy).",
+					"tags": [
+						"Perk",
+						"Imperium"
+					],
+					"base_points": 1,
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "Hidden Lore"
+							},
+							"amount": 1,
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Heresy"
+							}
+						}
+					]
+				},
+				{
+					"id": "tEDeKvcqsO2JTlRo-",
+					"name": "Sees Taint Everywhere",
+					"local_notes": "Lore: Hereticus Inquisitors are written as suspicious of even their own allies' loyalty.\n\nDesign: Quirk (B9), roleplaying flag only.",
+					"tags": [
+						"Quirk",
+						"Imperium"
+					],
+					"base_points": -1
+				}
+			],
+			"disabled": true
+		},
+		{
+			"id": "TMPPC9eE28ho0is4h",
+			"name": "Ordo: Malleus",
+			"local_notes": "Lore: The Ordo Malleus hunts daemonic incursion and Chaos worship at its most dangerous, and trains extensively in countermeasures most Inquisitors never learn.\n\nDesign: Net 0 points, per-Ordo flavor lens.",
+			"tags": [
+				"Imperium",
+				"Inquisition"
+			],
+			"children": [
+				{
+					"id": "txTSI-UOAwjsNXUF_",
+					"name": "Daemonhunter's Training",
+					"local_notes": "Lore: Ordo Malleus training is built entirely around understanding and countering the warp's worst predators.\n\nDesign: Perk (B9), +1 to Hidden Lore (Daemons).",
+					"tags": [
+						"Perk",
+						"Imperium"
+					],
+					"base_points": 1,
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "Hidden Lore"
+							},
+							"amount": 1,
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Daemons"
+							}
+						}
+					]
+				},
+				{
+					"id": "tPPmio5MfcRzsOGXE",
+					"name": "Never Lets Their Guard Down Near the Warp",
+					"local_notes": "Lore: Ordo Malleus agents are written as unable to fully relax around anything warp-touched, including sanctioned psykers.\n\nDesign: Quirk (B9), roleplaying flag only.",
+					"tags": [
+						"Quirk",
+						"Imperium"
+					],
+					"base_points": -1
+				}
+			],
+			"disabled": true
+		},
+		{
+			"id": "TNDiUAihr3N6HnoFr",
+			"name": "Ordo: Xenos",
+			"local_notes": "Lore: The Ordo Xenos studies and counters alien threats and Imperial-xenos contact, from open invasion to quiet infiltration.\n\nDesign: Net 0 points, per-Ordo flavor lens.",
+			"tags": [
+				"Imperium",
+				"Inquisition"
+			],
+			"children": [
+				{
+					"id": "teAZS14mLDrIxbu9K",
+					"name": "Xenos Threat Assessment",
+					"local_notes": "Lore: Ordo Xenos work demands real, working xenology, not folklore.\n\nDesign: Perk (B9), +1 to Expert Skill (Xenology).",
+					"tags": [
+						"Perk",
+						"Imperium"
+					],
+					"base_points": 1,
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "Expert Skill"
+							},
+							"amount": 1,
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Xenology"
+							}
+						}
+					]
+				},
+				{
+					"id": "tMEcGxAO3-UkY_1If",
+					"name": "Studies the Enemy Too Closely for Some Tastes",
+					"local_notes": "Lore: Ordo Xenos Inquisitors are the ones most often suspected (fairly or not) of Radical sympathies, simply for taking xenos capability seriously enough to study it in depth.\n\nDesign: Quirk (B9), roleplaying flag only.",
+					"tags": [
+						"Quirk",
+						"Imperium"
+					],
+					"base_points": -1
+				}
+			],
+			"disabled": true
+		}
+	],
+	"skills": [
+		{
+			"id": "sAmxr7uk-JO2SvT0d",
+			"name": "Guns",
+			"local_notes": "Lore: A lifetime's proficiency with a sidearm, whatever the exact pattern.\n\nDesign: DX+6 (20) for 20 points, Easy (B170).",
+			"tags": [
+				"Imperium",
+				"Inquisition"
+			],
+			"specialization": "Pistol",
+			"difficulty": "dx/e",
+			"points": 20
+		},
+		{
+			"id": "smIkZfQ_-_qBTZ1GP",
+			"name": "Stealth",
+			"local_notes": "Lore: Decades of investigative and undercover fieldwork.\n\nDesign: DX+5 (19) for 20 points, Average.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "dx/a",
+			"points": 20
+		},
+		{
+			"id": "sn3HTHIYEGdVfslcN",
+			"name": "Streetwise",
+			"local_notes": "Lore: An extensive personal network built over a long, dangerous career.\n\nDesign: IQ+5 (20) for 20 points, Average.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "iq/a",
+			"points": 20
+		},
+		{
+			"id": "s3hKDpc2_Yzf_vYkS",
+			"name": "Fast-Talk",
+			"local_notes": "Lore: Talking past anyone short of another Inquisitor.\n\nDesign: IQ+4 (19) for 16 points, Average.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "iq/a",
+			"points": 16
+		},
+		{
+			"id": "saFrDNWZlUrQa_H22",
+			"name": "Interrogation",
+			"local_notes": "Lore: A career's worth of extracting truth from the unwilling.\n\nDesign: IQ+4 (19) for 16 points, Average.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "iq/a",
+			"points": 16
+		},
+		{
+			"id": "srvLupMJLhGLW9Jfb",
+			"name": "Research",
+			"local_notes": "Lore: Deep archival and investigative research across Administratum and Mechanicus records alike.\n\nDesign: IQ+4 (19) for 16 points, Average.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "iq/a",
+			"points": 16
+		},
+		{
+			"id": "sGvkLbjo28oSVBBEf",
+			"name": "Hidden Lore",
+			"local_notes": "Lore: See Imperium/Skills/Imperial Skills.skl.\n\nDesign: IQ+4 (19) for 16 points, Average.",
+			"tags": [
+				"Imperium"
+			],
+			"specialization": "Heresy",
+			"difficulty": "iq/a",
+			"points": 16
+		},
+		{
+			"id": "sodx54gjNa49m0T6s",
+			"name": "Hidden Lore",
+			"local_notes": "Lore: See Imperium/Skills/Imperial Skills.skl.\n\nDesign: IQ+3 (18) for 12 points, Average.",
+			"tags": [
+				"Imperium"
+			],
+			"specialization": "Xenos",
+			"difficulty": "iq/a",
+			"points": 12
+		},
+		{
+			"id": "sMS9TpsQzUrqJxokF",
+			"name": "Hidden Lore",
+			"local_notes": "Lore: See Imperium/Skills/Imperial Skills.skl.\n\nDesign: IQ+3 (18) for 12 points, Average.",
+			"tags": [
+				"Imperium"
+			],
+			"specialization": "Daemons",
+			"difficulty": "iq/a",
+			"points": 12
+		},
+		{
+			"id": "s-Y64qEh9THAVhP-W",
+			"name": "Hidden Lore",
+			"local_notes": "Lore: An Inquisitor knows the Inquisition's internal workings, rivalries, and blind spots intimately.\n\nDesign: IQ+2 (17) for 8 points, Average.",
+			"tags": [
+				"Imperium",
+				"Inquisition"
+			],
+			"specialization": "Inquisition",
+			"difficulty": "iq/a",
+			"points": 8
+		},
+		{
+			"id": "s56X-Bex07NU1RL0-",
+			"name": "Law",
+			"local_notes": "Lore: An Inquisitor bends the Lex Imperialis deliberately and needs to know exactly how far.\n\nDesign: IQ+2 (17) for 12 points, Hard.",
+			"tags": [
+				"Imperium"
+			],
+			"specialization": "Imperial",
+			"difficulty": "iq/h",
+			"points": 12
+		},
+		{
+			"id": "sIEEZINnLgMSKFfF_",
+			"name": "Cryptography",
+			"local_notes": "Lore: See Imperium/Skills/Imperial Skills.skl.\n\nDesign: IQ+1 (16) for 8 points, Hard.",
+			"tags": [
+				"Imperium",
+				"Inquisition"
+			],
+			"specialization": "Inquisitorial Ciphers",
+			"difficulty": "iq/h",
+			"points": 8
+		},
+		{
+			"id": "s-Xuj4MY7m3gkJEJz",
+			"name": "Disguise",
+			"local_notes": "Lore: Undercover identity work, still occasionally necessary even with a rosette in hand.\n\nDesign: IQ+2 (17) for 8 points, Average.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "iq/a",
+			"points": 8
+		},
+		{
+			"id": "swx9GcKg2N4RuC617",
+			"name": "Shadowing",
+			"local_notes": "Lore: Surveillance tradecraft.\n\nDesign: IQ+1 (16) for 4 points, Average.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "iq/a",
+			"points": 4
+		},
+		{
+			"id": "sqnTJos38OMRDgmLD",
+			"name": "Intimidation",
+			"local_notes": "Lore: An Inquisitor's word alone is often the entire threat.\n\nDesign: Will+3 (20) for 12 points, Average.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "will/a",
+			"points": 12
+		},
+		{
+			"id": "soLDA77ZnKTw5Xxgq",
+			"name": "Leadership",
+			"local_notes": "Lore: Commanding a retinue, and occasionally borrowed Guard or Arbites units.\n\nDesign: IQ+2 (17) for 8 points, Average.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "iq/a",
+			"points": 8
+		},
+		{
+			"id": "s177Cm4Lq1F7A_CBn",
+			"name": "Tactics",
+			"local_notes": "Lore: Enough tactical grasp to direct larger operations than a single raid.\n\nDesign: IQ+1 (16) for 8 points, Hard.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "iq/h",
+			"points": 8
+		},
+		{
+			"id": "s-AJxCXduPXl-U-wy",
+			"name": "Strategy",
+			"local_notes": "Lore: Sector- or campaign-level awareness when a case grows that large.\n\nDesign: IQ+0 (15) for 4 points, Hard.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "iq/h",
+			"points": 4
+		},
+		{
+			"id": "smQvL70G0gE0CeDT1",
+			"name": "First Aid",
+			"local_notes": "Lore: Field first aid.\n\nDesign: IQ+1 (16) for 2 points, Easy.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "iq/e",
+			"points": 2
+		},
+		{
+			"id": "sDjKs4dtOwVqjdLkp",
+			"name": "Area Knowledge",
+			"local_notes": "Lore: Knowledge of wherever the current case is centered.\n\nDesign: IQ+0 (15) for 1 point, Easy.",
+			"tags": [
+				"Imperium"
+			],
+			"specialization": "(current assignment / sector)",
+			"difficulty": "iq/e",
+			"points": 1
+		},
+		{
+			"id": "sLeenSvHab3BWc1zC",
+			"name": "Current Affairs",
+			"local_notes": "Lore: Broad awareness of Imperium-wide news.\n\nDesign: IQ+0 (15) for 1 point, Easy.",
+			"tags": [
+				"Imperium"
+			],
+			"specialization": "Imperium",
+			"difficulty": "iq/e",
+			"points": 1
+		},
+		{
+			"id": "s3Si2CQ2bG-sRCKFk",
+			"name": "Savoir-Faire",
+			"local_notes": "Lore: Moving through noble and high-Ecclesiarchy circles without friction.\n\nDesign: IQ+1 (16) for 2 points, Easy.",
+			"tags": [
+				"Imperium"
+			],
+			"specialization": "High Society",
+			"difficulty": "iq/e",
+			"points": 2
+		},
+		{
+			"id": "s3uOKrsgRt-s0B5la",
+			"name": "Savoir-Faire",
+			"local_notes": "Lore: Coordinating with borrowed Guard, Arbites, or (rarely) Astartes liaisons.\n\nDesign: IQ+0 (15) for 1 point, Easy.",
+			"tags": [
+				"Imperium"
+			],
+			"specialization": "Military",
+			"difficulty": "iq/e",
+			"points": 1
+		},
+		{
+			"id": "sSkheBCL9m_L29Mr_",
+			"name": "Brawling",
+			"local_notes": "Lore: Unarmed fighting.\n\nDesign: DX+1 (15) for 2 points, Easy.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "dx/e",
+			"points": 2
+		},
+		{
+			"id": "syKv2KMtP8cRJP8wc",
+			"name": "Forgery",
+			"local_notes": "Lore: Faking documents and credentials, still occasionally faster than pulling rank.\n\nDesign: IQ-1 (14) for 2 points, Hard.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "iq/h",
+			"points": 2
+		},
+		{
+			"id": "s0wX1bdqwAljeoyoG",
+			"name": "Acting",
+			"local_notes": "Lore: Sustaining a cover identity, including sometimes posing as a lesser official to avoid tipping off a target.\n\nDesign: IQ+2 (17) for 8 points, Average.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "iq/a",
+			"points": 8
+		},
+		{
+			"id": "s3fzRjSDo3AoqUv34",
+			"name": "Expert Skill",
+			"local_notes": "Lore: See Imperium/Skills/Imperial Skills.skl.\n\nDesign: IQ+1 (16) for 8 points, Hard.",
+			"tags": [
+				"Imperium"
+			],
+			"specialization": "Xenology",
+			"difficulty": "iq/h",
+			"points": 8
+		},
+		{
+			"id": "si-BEMMbA4hU5XUdF",
+			"name": "Administration",
+			"local_notes": "Lore: Running a retinue, a requisitioned vessel, and the paperwork that keeps both provisioned.\n\nDesign: IQ+1 (16) for 4 points, Average.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "iq/a",
+			"points": 4
+		}
+	],
+	"equipment": []
+}

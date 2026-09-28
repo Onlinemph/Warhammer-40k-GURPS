@@ -49,32 +49,17 @@ traits:
     tags: [Advantage, Physical, Imperium]
     lore: Sororitas are consistently written as fighting on through wounds that would stop lesser soldiers.
     design: Basic Set High Pain Threshold (B59), 10 points.
-  - name: Act of Faith
-    points: 12
-    tags: [Advantage, Imperium, Adepta Sororitas]
-    lore: See Imperium/Traits/Imperial Traits.adq for sourcing and design rationale.
-    design: 2 levels of the homebrew Act of Faith advantage (6 pts/level), 12 points.
-  - name: Religious Rank
-    points: 5
-    ref: B29
-    tags: [Advantage, Social, Imperium, Ecclesiarchy]
+  - include: "imperium/common/imperial-traits.yaml#Act of Faith"
+    levels: 2
+  - include: "imperium/common/imperial-traits.yaml#Religious Rank"
+    levels: 1
     lore: A Sister of Battle holds rank within her Order's hierarchy from the day she takes vows.
-    design: Basic Set Rank (B29), 1 level, 5 points.
-  - name: Fanaticism (The God-Emperor)
-    points: -15
-    ref: B136
-    tags: [Disadvantage, Mental, Imperium]
+  - include: "imperium/common/imperial-traits.yaml#Fanaticism (The God-Emperor)"
     lore: >
       Sororitas devotion is, if anything, the most absolute in the
       Imperium — the Orders are the Ecclesiarchy's own military arm and
       recruit specifically for unshakeable faith.
-    design: Basic Set Fanaticism (B136), -15.
-  - name: Duty (Ecclesiarchy)
-    points: -10
-    ref: B133
-    tags: [Disadvantage, Social, Imperium, Ecclesiarchy]
-    lore: See Imperium/Traits/Imperial Traits.adq for sourcing.
-    design: Basic Set Duty (B133), frequent but not universally lethal-on-every-posting, -10.
+  - include: "imperium/common/imperial-traits.yaml#Duty (Ecclesiarchy)"
   - name: Vow (Chastity and Poverty)
     points: -10
     ref: B160
@@ -84,18 +69,8 @@ traits:
       Sisters take vows on joining, consistently depicted across Black
       Library's Sisters of Battle fiction.
     design: Basic Set Vow (B160/B162's table), a moderate lifestyle-restricting vow, -10.
-  - name: Intolerance (Xenos)
-    points: -10
-    ref: B140
-    tags: [Disadvantage, Mental, Imperium]
-    lore: See Imperium/Traits/Imperial Traits.adq for sourcing.
-    design: Basic Set Intolerance (B140), broad-category, -10.
-  - name: Intolerance (Mutants)
-    points: -10
-    ref: B140
-    tags: [Disadvantage, Mental, Imperium]
-    lore: See Imperium/Traits/Imperial Traits.adq for sourcing.
-    design: Basic Set Intolerance (B140), broad-category, -10.
+  - include: "imperium/common/imperial-traits.yaml#Intolerance (Xenos)"
+  - include: "imperium/common/imperial-traits.yaml#Intolerance (Mutants)"
   - name: Intolerance (Heretics and Psykers)
     points: -10
     ref: B140

@@ -120,6 +120,7 @@ Attributes 10, HP 10. Imperial citizens are human; abhumans (Ogryn, Ratling, Squ
 | Ordinary citizen | 0–50 | Hive worker, scribe |
 | Trained soldier | 100–175 | Guardsman, PDF trooper, Arbitrator |
 | Elite human | 200–350 | Stormtrooper, veteran Commissar, Battle Sister, Inquisitorial acolyte |
+| Senior agents | 350–550 | Field Inquisitor, veteran Interrogator, Canoness, Lord Commissar |
 | Astartes | 550–800 | Battle-Brother, veteran, Primaris adds more |
 | Heroes and legends | 1,000–3,000 | Chapter Master, Custodian, Living Saint, Lord Inquisitor |
 | Beyond play | 5,000+ | Primarchs, Greater Daemons, C'tan shards. Built for GM reference only. |

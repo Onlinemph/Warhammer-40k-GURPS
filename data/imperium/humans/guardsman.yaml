@@ -13,10 +13,14 @@ notes: >
   here — a Guardsman almost never has them, and if a GM wants a
   battlefield psyker attached to a squad, add traits from the separate
   psyker power library, not this file.
-  Enable exactly one regimental lens (all disabled by default) to flavor
-  a specific regiment; they are small, net-zero-point packages, not
-  full racial templates, per framework.md's "lore accuracy over
-  mechanical weight" for background flavor.
+  Enable exactly one regimental lens and, optionally, one world-of-origin
+  lens (all disabled by default) to flavor a specific regiment/background;
+  they are small, net-zero-point packages, not full racial templates, per
+  framework.md's "lore accuracy over mechanical weight" for background
+  flavor. Shared traits (Fanaticism, Duty, Intolerance, the origin lenses)
+  are pulled in with `include` from Imperium/Traits/Imperial Traits.adq
+  rather than copied, per docs/data-format.md's "Reusing entries across
+  files".
 traits:
   - name: ST
     points: 10
@@ -57,34 +61,10 @@ traits:
       don't freeze at their first firefight, since most won't survive a
       second chance to learn.
     design: Basic Set Combat Reflexes (B43), 15 points.
-  - name: Fanaticism (The God-Emperor)
-    points: -15
-    ref: B136
-    tags: [Disadvantage, Mental, Imperium]
-    lore: See Imperium/Traits/Imperial Traits.adq for sourcing.
-    design: Basic Set Fanaticism (B136), -15.
-  - name: Duty (Astra Militarum)
-    points: -15
-    ref: B133
-    tags: [Disadvantage, Social, Imperium, Astra Militarum]
-    lore: See Imperium/Traits/Imperial Traits.adq for sourcing.
-    design: Basic Set Duty (B133), almost-always, hazardous, involuntary, -15.
-  - name: Sense of Duty (Squadmates)
-    points: -5
-    ref: B153
-    tags: [Disadvantage, Mental, Imperium]
-    lore: >
-      Guard squads live and die by cohesion; abandoning a wounded
-      squadmate is the one thing that will get a trooper shunned by his
-      own side, per how Guard units are consistently written in Gaunt's
-      Ghosts and Ciaphas Cain.
-    design: Basic Set Sense of Duty (B153), small-group scope, -5.
-  - name: Intolerance (Xenos)
-    points: -10
-    ref: B140
-    tags: [Disadvantage, Mental, Imperium]
-    lore: See Imperium/Traits/Imperial Traits.adq for sourcing.
-    design: Basic Set Intolerance (B140), broad-category, -10.
+  - include: "imperium/common/imperial-traits.yaml#Fanaticism (The God-Emperor)"
+  - include: "imperium/common/imperial-traits.yaml#Duty (Astra Militarum)"
+  - include: "imperium/common/imperial-traits.yaml#Sense of Duty (Squadmates)"
+  - include: "imperium/common/imperial-traits.yaml#Intolerance (Xenos)"
   - name: Fatalistic About the Front
     points: -1
     tags: [Quirk, Imperium]
@@ -95,6 +75,21 @@ traits:
     tags: [Quirk, Imperium]
     lore: Universal soldier's grumbling about rations, kit, and paperwork — never about the Emperor.
     design: Quirk (B9), roleplaying flag only.
+  # ------------------------------------------------ world-of-origin lenses (flavor only, disabled by default)
+  - include: "imperium/common/imperial-traits.yaml#Hive World Origin"
+    disabled: true
+  - include: "imperium/common/imperial-traits.yaml#Death World Origin"
+    disabled: true
+  - include: "imperium/common/imperial-traits.yaml#Feral World Origin"
+    disabled: true
+  - include: "imperium/common/imperial-traits.yaml#Forge World Origin"
+    disabled: true
+  - include: "imperium/common/imperial-traits.yaml#Agri World Origin"
+    disabled: true
+  - include: "imperium/common/imperial-traits.yaml#Shrine World Origin"
+    disabled: true
+  - include: "imperium/common/imperial-traits.yaml#Void-Born Origin"
+    disabled: true
   # ------------------------------------------------ regimental lenses (flavor only, disabled by default)
   - name: "Regiment: Cadian"
     container: group

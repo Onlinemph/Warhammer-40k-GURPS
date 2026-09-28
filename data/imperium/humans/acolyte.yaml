@@ -48,28 +48,10 @@ traits:
     tags: [Advantage, Mental, Imperium]
     lore: An acolyte who freezes under fire does not remain an acolyte for long.
     design: Basic Set Combat Reflexes (B43), 15 points.
-  - name: Duty (Inquisition)
-    points: -15
-    ref: B133
-    tags: [Disadvantage, Social, Imperium, Inquisition]
-    lore: See Imperium/Traits/Imperial Traits.adq for sourcing.
-    design: Basic Set Duty (B133), hazardous and frequent, -15.
-  - name: Intolerance (Heretics)
-    points: -5
-    ref: B140
-    tags: [Disadvantage, Mental, Imperium]
+  - include: "imperium/common/imperial-traits.yaml#Duty (Inquisition)"
+  - include: "imperium/common/imperial-traits.yaml#Intolerance (Heretics)"
     lore: An acolyte's entire job is hunting heresy; most come to share their Inquisitor's zeal for it.
-    design: Basic Set Intolerance (B140), narrow-category, -5.
-  - name: Secret (Works for the Inquisition)
-    points: -10
-    ref: B152
-    tags: [Disadvantage, Social, Imperium, Inquisition]
-    lore: >
-      Inquisitorial agents routinely operate under cover identities; being
-      identified as Inquisition staff can get an acolyte killed by exactly
-      the people they are investigating, or by a hostile Imperial official
-      who resents being investigated at all.
-    design: Basic Set Secret (B152), moderate exposure risk, -10.
+  - include: "imperium/common/imperial-traits.yaml#Secret (Works for the Inquisition)"
   - name: Nobody Trusts an Inquisitor's Agent
     points: -1
     tags: [Quirk, Imperium]
