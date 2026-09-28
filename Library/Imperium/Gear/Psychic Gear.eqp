@@ -1,0 +1,797 @@
+{
+	"version": 5,
+	"rows": [
+		{
+			"id": "e2gnPma9Epi8-PgFa",
+			"description": "Psychic Hood",
+			"local_notes": "Lore: A warded circlet built around a tiny, heavily sanctioned psychic node (sometimes a bound, lobotomised psyker's brain-stem), worn by Astra Militarum officers and Inquisitorial staff to blunt enemy sorcery directed at their command. Consistent with Dark Heresy/Rogue Trader's psychic hood/psy-focus items and Codex background on Imperial command-squad wargear.\n\nDesign: Modelled as a flat +2 conditional bonus (Basic's conditional_modifier feature) to resist Warp-tagged mental attacks — comparable in size to Basic's own Power Defense-type items, cheap enough to matter but never a substitute for a trained anti-psyker.",
+			"tags": [
+				"Imperium",
+				"Psyker"
+			],
+			"tech_level": "10^",
+			"legality_class": "1",
+			"base_value": "4000",
+			"base_weight": "3 lb",
+			"features": [
+				{
+					"type": "conditional_modifier",
+					"situation": "to resist Warp-tagged Affliction, Mind Control, Mind Probe, and Fear effects directed at the wearer or their unit",
+					"amount": 2
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eLLWNnk4MyzhdOmLh",
+			"description": "Force Sword",
+			"local_notes": "Lore: A disruption-field blade further warded and psychically attuned so a trained mind can channel force directly through it — standard wargear for Inquisitors, Sisters of the Ordo Hereticus with psychic gifts, and any Astartes Librarian who favours a blade over a staff. Depicted throughout Black Library (Eisenhorn's own force sword; Grey Knights' force weapons) and Dark Heresy/Rogue Trader's force-weapon rules.\n\nDesign: Built directly on the framework's power-field rule: field off is the mundane fine blade (sw+1 cut), field on adds +1d and armour divisor (10), landing exactly on the power sword anchor (sw+1d+1(10) cut) — a force sword is mechanically a power sword that a trained mind can also channel psychic force through. The Force Strike line shows that channelling: same dice as field-on, but its ignores-DR component only applies against Warp-touched targets, so it never trivialises ordinary armour. Its damage scales narratively with the wielder's Psyker Talent level (GM adds +1 die per two Talent levels above 2) rather than as a fixed number, since the build tool's damage syntax cannot encode a variable.",
+			"tags": [
+				"Melee Weapon",
+				"Imperium",
+				"Psyker"
+			],
+			"tech_level": "10^",
+			"legality_class": "1",
+			"base_value": "8000",
+			"base_weight": "3 lb",
+			"weapons": [
+				{
+					"id": "wudp3BEd9GIIE5sUI",
+					"sv": 1,
+					"damage": {
+						"type": "cut",
+						"st": "sw",
+						"base": "1"
+					},
+					"reach": "1",
+					"parry": "0",
+					"strength": "10",
+					"usage": "Field off",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Broadsword"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Force Sword"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Rapier"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Saber"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Shortsword"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Two-Handed Sword"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "wIDgEuQFTCl0y0ha2",
+					"sv": 1,
+					"damage": {
+						"type": "cut",
+						"st": "sw",
+						"base": "1d+1",
+						"armor_divisor": 10
+					},
+					"reach": "1",
+					"parry": "0",
+					"strength": "10",
+					"usage": "Field on",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Broadsword"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Force Sword"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Rapier"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Saber"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Shortsword"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Two-Handed Sword"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "wcxs13HRX_iBxbyU1",
+					"sv": 1,
+					"damage": {
+						"type": "cut (ignores DR)",
+						"st": "sw",
+						"base": "1d+1"
+					},
+					"reach": "1",
+					"parry": "0",
+					"strength": "10",
+					"usage": "Force Strike (charged, vs. Warp-touched)",
+					"usage_notes": "Add +1d per level of Psyker Talent to this line (GCS can't scale it automatically; edit the damage on the sheet). Usable only by a psyker (Psyker Talent 1+), field on. Requires a Perils of the Warp check (see \"Psykers and the Warp\") as it is channelled through the wielder's own gift; the ignores-DR component only applies against daemons, Chaos Spawn, and other Warp-touched creatures, representing a strike at the target's soul rather than its body — an ordinary flak-armoured guardsman still only takes the field-on line's armour divisor (10).\n",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Broadsword"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Force Sword"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Rapier"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Saber"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Shortsword"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Two-Handed Sword"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "exf7yaBVOBBNPiiNA",
+			"description": "Force Staff",
+			"local_notes": "Lore: Many psykers prefer a staff to a blade: easier to carry openly as a badge of office, and a familiar focus for channelling telekinetic and biomantic workings. Common across Dark Heresy/Rogue Trader's force-weapon options and depicted for Inquisitorial and Adeptus Astra Telepathica psykers throughout Black Library.\n\nDesign: Same power-field math as the Force Sword (field on adds +1d and armour divisor (10) over the field-off mundane baseline), applied to a plain hardwood-and-metal quarterstaff (sw+1 cr) instead of an edged blade — a crushing rather than cutting power weapon, with the same charged Force Strike option and scaling note.",
+			"tags": [
+				"Melee Weapon",
+				"Imperium",
+				"Psyker"
+			],
+			"tech_level": "10^",
+			"legality_class": "1",
+			"base_value": "7000",
+			"base_weight": "4 lb",
+			"weapons": [
+				{
+					"id": "w0LhlhAJYUFEg8esr",
+					"sv": 1,
+					"damage": {
+						"type": "cr",
+						"st": "sw",
+						"base": "1"
+					},
+					"reach": "1,2",
+					"parry": "0",
+					"strength": "9",
+					"usage": "Field off",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Staff"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Polearm"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Spear"
+							},
+							"modifier": -2
+						}
+					]
+				},
+				{
+					"id": "wRDdTPc1bjeH8xy7w",
+					"sv": 1,
+					"damage": {
+						"type": "cr",
+						"st": "sw",
+						"base": "1d+1",
+						"armor_divisor": 10
+					},
+					"reach": "1,2",
+					"parry": "0",
+					"strength": "9",
+					"usage": "Field on",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Staff"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Polearm"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Spear"
+							},
+							"modifier": -2
+						}
+					]
+				},
+				{
+					"id": "wkb8dkxvII4fT7kSx",
+					"sv": 1,
+					"damage": {
+						"type": "cr (ignores DR)",
+						"st": "sw",
+						"base": "1d+1"
+					},
+					"reach": "1,2",
+					"parry": "0",
+					"strength": "9",
+					"usage": "Force Strike (charged, vs. Warp-touched)",
+					"usage_notes": "As Force Sword's Force Strike; +1d per level of Psyker Talent, requires field on and a Perils of the Warp check.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Staff"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Polearm"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Spear"
+							},
+							"modifier": -2
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "e5EDY0dwSW1DSXuPl",
+			"description": "Force Axe",
+			"local_notes": "Lore: A heavier disruption weapon, favoured by psykers who fight as heavily as they cast — seen among Black Templars chaplaincy-adjacent Librarians and some Ordo Malleus interrogators in Black Library material, and offered as a standard force-weapon option in Dark Heresy/Rogue Trader.\n\nDesign: Scaled up from the Force Sword the same way the framework scales chainaxes from chainswords: heavier mundane baseline (sw+2 cut), the same +1d/armour divisor (10) power-field math, and a parry penalty for the unbalanced swing.",
+			"tags": [
+				"Melee Weapon",
+				"Imperium",
+				"Psyker"
+			],
+			"tech_level": "10^",
+			"legality_class": "1",
+			"base_value": "8000",
+			"base_weight": "5 lb",
+			"weapons": [
+				{
+					"id": "wZHAhXSiRVXVYh18n",
+					"sv": 1,
+					"damage": {
+						"type": "cut",
+						"st": "sw",
+						"base": "2"
+					},
+					"reach": "1",
+					"parry": "-1",
+					"strength": "11",
+					"usage": "Field off",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Axe/Mace"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Flail"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Two-Handed Axe/Mace"
+							},
+							"modifier": -3
+						}
+					]
+				},
+				{
+					"id": "w7NtSXJcr0tXRu98P",
+					"sv": 1,
+					"damage": {
+						"type": "cut",
+						"st": "sw",
+						"base": "1d+2",
+						"armor_divisor": 10
+					},
+					"reach": "1",
+					"parry": "-1",
+					"strength": "11",
+					"usage": "Field on",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Axe/Mace"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Flail"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Two-Handed Axe/Mace"
+							},
+							"modifier": -3
+						}
+					]
+				},
+				{
+					"id": "w37cBMUQ_gmkb0Vg5",
+					"sv": 1,
+					"damage": {
+						"type": "cut (ignores DR)",
+						"st": "sw",
+						"base": "1d+2"
+					},
+					"reach": "1",
+					"parry": "-1",
+					"strength": "11",
+					"usage": "Force Strike (charged, vs. Warp-touched)",
+					"usage_notes": "As Force Sword's Force Strike; +1d per level of Psyker Talent, requires field on and a Perils of the Warp check.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Axe/Mace"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Flail"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Two-Handed Axe/Mace"
+							},
+							"modifier": -3
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eIUNZAJPG2HTP8g3L",
+			"description": "Nemesis Force Halberd",
+			"local_notes": "Lore: The signature weapon of the Grey Knights: a psychically-attuned halberd that is, to a daemon, as lethal as a bolt round is to a man — Codex: Grey Knights and its Black Library tie-ins (Ben Counter's Grey Knights novels) are consistent on this. Nemesis weapons are built and sanctified specifically to hurt things from the warp.\n\nDesign: Same mundane baseline and power-field math (+1d, armour divisor (10)) as the Force Axe, reach 1-2 like other polearms, priced and LC0'd as unique Chapter-restricted wargear per the framework's LC table (Astartes/Inquisition-only warp-touched gear). Its Force Strike line waives the normal Perils check as a narrative nod to how routinely and safely Grey Knights use it against their signature enemy, unlike a general-purpose force weapon.",
+			"tags": [
+				"Melee Weapon",
+				"Imperium",
+				"Psyker",
+				"Grey Knights"
+			],
+			"tech_level": "10^",
+			"legality_class": "0",
+			"base_value": "20000",
+			"base_weight": "8 lb",
+			"weapons": [
+				{
+					"id": "wWs66Ju4U6vrShLra",
+					"sv": 1,
+					"damage": {
+						"type": "cut",
+						"st": "sw",
+						"base": "2"
+					},
+					"reach": "1,2",
+					"parry": "0",
+					"strength": "12",
+					"usage": "Field off",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Polearm"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Spear"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Staff"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Two-Handed Axe/Mace"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "wMWRhyrm0AG1j4awJ",
+					"sv": 1,
+					"damage": {
+						"type": "cut",
+						"st": "sw",
+						"base": "1d+2",
+						"armor_divisor": 10
+					},
+					"reach": "1,2",
+					"parry": "0",
+					"strength": "12",
+					"usage": "Field on",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Polearm"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Spear"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Staff"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Two-Handed Axe/Mace"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "wYw2U7CWwkOOuMy9P",
+					"sv": 1,
+					"damage": {
+						"type": "cut (ignores DR)",
+						"st": "sw",
+						"base": "1d+2"
+					},
+					"reach": "1,2",
+					"parry": "0",
+					"strength": "12",
+					"usage": "Force Strike (charged, vs. daemons)",
+					"usage_notes": "Every Nemesis weapon is permanently attuned for anti-daemon work; Grey Knights need no Perils of the Warp check to use this line against a Warp-touched target, field on (their Sanctic training and armour wards absorb the backlash), though the GM may still call for one against anything else it is used on.\n",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Polearm"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Spear"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Staff"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Two-Handed Axe/Mace"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eYAl7B87HeOQZ8Bw7",
+			"description": "Null Rod",
+			"local_notes": "A carried or worn Null Rod projects a small, personal anti-psychic field: any Warp-tagged ability used, or whose effect would pass, within a yard of the rod must reroll a success as a failure (treat as an automatic Perils of the Warp trigger at -5 to the roll); a psyker touched by the rod itself has their active Warp-tagged abilities immediately shut off for as long as contact is maintained.\n\nLore: A grimly plain iron-bound rod, warded and often set with a captive soul-shard, that is anathema to psykers — Inquisitorial and Ecclesiarchy arming-chests keep them for exactly this reason. Widely and consistently depicted across Black Library (interrogators' kit, witch-hunter equipment) and Dark Heresy/Only War's Null Rod rules.\n\nDesign: Modelled as a rules-text effect (the build tool has no \"disable an enemy trait\" feature) rather than a coded bonus, since what it does is binary and narrative: it does not merely penalise a psychic act, it threatens to unmake it. Its own melee stats are a plain, slightly underweight blunt weapon — it is carried as a ward and a badge of office, not a proper weapon, hence sw-1 rather than a full sw+0 mace.",
+			"tags": [
+				"Melee Weapon",
+				"Imperium",
+				"Psyker"
+			],
+			"tech_level": "10^",
+			"legality_class": "0",
+			"base_value": "6000",
+			"base_weight": "4 lb",
+			"weapons": [
+				{
+					"id": "wIfyJYrU9a-UUphXp",
+					"sv": 1,
+					"damage": {
+						"type": "cr",
+						"st": "sw",
+						"base": "-1"
+					},
+					"reach": "1",
+					"parry": "0",
+					"strength": "9",
+					"usage": "Swung",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Axe/Mace"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Flail"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Two-Handed Axe/Mace"
+							},
+							"modifier": -3
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "epRzzWqYAywY3lG76",
+			"description": "Hexagrammic Ward Charm",
+			"local_notes": "Lore: A small charm inscribed with hexagrammic wards, worn by Imperial soldiers and priests operating anywhere a warp-taint might be encountered — a cheaper, weaker cousin of the wards painted across whole ship-hulls and chapels to keep daemons at bay. Standard Imperial Creed practice, referenced throughout Black Library and codified in Dark Heresy/Only War's cheap ward-item rules.\n\nDesign: A minor +1 conditional bonus, priced and weighted as a trinket rather than real equipment — protection at the margin, not a substitute for a Null Rod or a trained anti-psyker.",
+			"tags": [
+				"Imperium",
+				"Psyker"
+			],
+			"tech_level": "10^",
+			"legality_class": "1",
+			"base_value": "500",
+			"base_weight": "0.5 lb",
+			"features": [
+				{
+					"type": "conditional_modifier",
+					"situation": "to resist possession and Warp-based Affliction directed at the wearer",
+					"amount": 1
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eJJpia-etC4bcZWeg",
+			"description": "Psyocculum (Psy-Track)",
+			"local_notes": "A worn ocular rig that lets a non-psyker see psychic residue and warp-taint the naked eye cannot: roll vs Optics/Electronics Operation or a relevant Hidden Lore specialisation to spot a hidden psyker, daemon, or recently-used Warp-tagged ability's afterglow within 20 yards. Functions as a wearable, skill-based substitute for the Witch- sight advantage, usable by anyone trained on it, not only psykers.\n\nLore: Inquisitorial witch-hunters and Officio Assassinorum operatives use devices exactly like this to track psykers who have no wish to be found — the \"psyocculum\" name and function are best known from Rogue Trader/Dark Heresy-line Inquisitorial wargear lists; Black Library depictions of witch-hunting technology (Eisenhorn's own gadgetry) are consistent with the concept without naming the device.\n\nDesign: Left as a skill-roll rules note rather than a coded feature, since it grants a new use of an existing skill (a sensory check) rather than a numeric bonus — the same approach the build tool's `notes` field is meant for.",
+			"tags": [
+				"Imperium",
+				"Psyker"
+			],
+			"tech_level": "10^",
+			"legality_class": "2",
+			"base_value": "3000",
+			"base_weight": "4 lb",
+			"quantity": 1
+		}
+	]
+}

@@ -26,6 +26,8 @@ traits:
   - include: "imperium/psykers/warp.yaml#Librarius"
   - include: "imperium/psykers/warp.yaml#Telekinesis"
 skills:
+  - include: "imperium/common/skills.yaml#Psyniscience"
+    points: 4
   - name: Meditation
     diff: IQ/H
     points: 4
@@ -39,12 +41,15 @@ skills:
     tags: [Imperium, Psyker]
     lore: A Librarian's formal training in the Chapter's Librarius doctrine on the immaterium.
     design: Average skill; points as above.
-  - name: Force Sword
+  - name: Broadsword
     diff: DX/A
-    points: 12
+    points: 4
     tags: [Imperium, Psyker]
     lore: Many Librarians favour a force weapon over a chainsword once raised to the Librarius.
-    design: Average skill, DX-based, bought up from the Battle-Brother's existing Broadsword/DX baseline.
+    design: >
+      Force swords use Broadsword (framework weapon-skill table), which the
+      Battle-Brother template already has. These 4 points are added on top
+      of it; merge the two Broadsword entries on the sheet.
 equipment:
   - include: "imperium/psykers/psychic-gear.yaml#Force Sword"
   - include: "imperium/psykers/psychic-gear.yaml#Psychic Hood"

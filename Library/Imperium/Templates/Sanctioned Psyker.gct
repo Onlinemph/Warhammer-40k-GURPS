@@ -1,0 +1,507 @@
+{
+	"version": 5,
+	"id": "B6_W7ZjH5Ei4JS-9M",
+	"notes": "A Sanctioned Astra Militarum Primaris Psyker: Delta-grade on the Adeptus Astra Telepathica's Assignment scale (Psyker Talent 2), issued a force staff and trained in Pyromancy as a battlefield specialty. Point math: 80 (attributes) + 10 (Unusual Background) + 20 (Psyker 2) - 15 (Sanctioned Psyker) + 9 (Witch-sight) + ~21 (Pyromancy discipline, at each power's default starting level) + skills, landing in framework.md's \"Elite human (200-350)\" tier once skills and equipment are added — well above a plain Guardsman, matching how rare and valuable a Sanctioned Psyker is to a regiment. For a weaker Wyrdvane conscript-psyker (Epsilon grade), drop Psyker to level 1, remove the discipline's higher-level purchases (keep each power at its base/level-1 cost), and add a Reputation or Social Stigma reflecting how nervously line troopers treat them. Swap the Pyromancy include for any other discipline in Imperium/Traits/Psykers and the Warp.adq for a different specialty.\n",
+	"traits": [
+		{
+			"id": "t8X0BevUtg4Fw-tu5",
+			"name": "ST",
+			"local_notes": "Lore: A Sanctioned Psyker is an ordinary, unaugmented human body — the gift is mental, not physical.\n\nDesign: ST 10 (human baseline), 10 pts/level (B15).",
+			"tags": [
+				"Attribute"
+			],
+			"base_points": 0
+		},
+		{
+			"id": "tnoSQ5YsuxoKwFc8u",
+			"name": "DX",
+			"local_notes": "Lore: Basic training and battlefield survival instincts, roughly on par with a line Guardsman.\n\nDesign: DX 11 (+1 from baseline), 20 pts/level (B15).",
+			"tags": [
+				"Attribute"
+			],
+			"base_points": 20
+		},
+		{
+			"id": "tmkNB2edPQi8GaXT9",
+			"name": "IQ",
+			"local_notes": "Lore: Psychic potential correlates loosely with a sharp mind in Astra Telepathica selection; candidates are picked from the more capable conscripts and hive-scholam washouts alike.\n\nDesign: IQ 12 (+2 from baseline), 20 pts/level (B15).",
+			"tags": [
+				"Attribute"
+			],
+			"base_points": 40
+		},
+		{
+			"id": "tDtR3hWTz0JvEDfPv",
+			"name": "HT",
+			"local_notes": "Lore: Average endurance; the gift, not the body, is what marks a Sanctioned Psyker.\n\nDesign: HT 11 (+1 from baseline), 10 pts/level (B15).",
+			"tags": [
+				"Attribute"
+			],
+			"base_points": 10
+		},
+		{
+			"id": "tTBh65y66GACr3XTn",
+			"name": "Will",
+			"local_notes": "Lore: A strong will is what lets a psyker resist Perils of the Warp and hold a working steady under fire.\n\nDesign: Will+2 (Basic's Increased Will, 5 pts/level, B15).",
+			"tags": [
+				"Attribute"
+			],
+			"points_per_level": 5,
+			"can_level": true,
+			"levels": 2,
+			"base_points": 10
+		},
+		{
+			"id": "t1vaZ8HY7vBExOnd8",
+			"name": "Unusual Background (Latent Psychic Potential)",
+			"local_notes": "Lore: Psychic ability is a random, rare mutation of the human genome that lets its bearer perceive and touch the immaterium (the warp). Sources disagree on exact frequency — Imperial administrative texts and Dark Heresy-line background both describe it as \"rare but not vanishingly so,\" on the order of a handful of latent potentials per hive-sized population, with usably strong psykers far rarer still. Treat any precise ratio as flavour, not census data.\n\nDesign: Required to take Psyker (Talent) or any trait carrying the Warp power modifier below. Basic Set B261 leaves Unusual Background costs to the GM; 10 points reflects that the ability itself is not learned but grants access to an entire framework of further abilities, roughly the going rate other published settings use for \"you may buy from this power list at all.\"",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Psyker",
+				"Imperium"
+			],
+			"base_points": 10
+		},
+		{
+			"id": "t7y2FBqiZ6JjFvX0T",
+			"name": "Psyker",
+			"reference": "B89",
+			"local_notes": "Applies to: Meditation, Hidden Lore (the Warp), and the Will roll to\nresist Perils of the Warp (see above) — a house extension of Talent's\nnormal \"add to listed skills\" rule, precedented by Magery's own habit of\naiding related rolls beyond pure spellcasting. Reaction bonus: +1/level\nfrom other sanctioned psykers and the Astra Telepathica.\n\nImperial Assignment scale (Adeptus Astra Telepathica / Black Ships),\nweakest to strongest, mapped to Talent level and the practical ceiling on\nany single ability's level/dice bought with it:\n  Iota    — Talent 0 (latent; register but rarely take Psyker traits at all)\n  Zeta    — Talent 1, ability cap ~2\n  Eta     — Talent 1, ability cap ~2\n  Theta   — Talent 2, ability cap ~3\n  Epsilon — Talent 2, ability cap ~4  (typical Wyrdvane conscript)\n  Delta   — Talent 3, ability cap ~5  (typical Sanctioned Primaris Psyker)\n  Gamma   — Talent 4, ability cap ~6\n  Beta    — Talent 4, ability cap ~7  (many Astropaths)\n  Alpha   — Talent 5, ability cap ~8  (Astartes Librarians, Black Ship candidates)\n  Alpha-Plus — Talent 6+, ability cap 9+ (beyond-play tier: Primarchs,\n    the most powerful Inquisitors, the worst Chaos sorcerers)\n\nLore: The Iota-to-Alpha-Plus assignment scale is drawn from the Adeptus Astra Telepathica's own grading of psychic potential as depicted across Dark Heresy-line material and repeated in Codex/Imperial Armour background; Black Library uses the same grades in passing (e.g. Eisenhorn-cycle and Ciaphas Cain references to Alpha-class talents). \"Alpha-Plus\" specifically denotes the rarest, most dangerous talents the Black Ships process.\n\nDesign: Talent affecting three things (two skills plus the Perils resistance roll) sits at Basic's \"Medium Talent\" rate of 10 points/level (B90, three-to-five-skill bracket) rather than 5 (one-two skills) or 15 (six-nine skills). Capped at level 6 for player characters; higher grades are GM-reference only, per the framework's \"Beyond play\" tier.",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Talent",
+				"Psyker",
+				"Imperium"
+			],
+			"points_per_level": 10,
+			"can_level": true,
+			"levels": 2,
+			"base_points": 0,
+			"max_levels": 6
+		},
+		{
+			"id": "TsWyeY5XuXlwRBOpX",
+			"name": "Sanctioned Psyker",
+			"local_notes": "Lore: A Sanctioned psyker has passed through the Scholastia Psykana or an equivalent rite, is legally registered, and typically serves the Astra Militarum, an Inquisitor, or their Chapter's Librarius. They are watched, bound by oath and duty, and — even legally protected — are still called \"witch\" behind their back by the citizens they defend. Consistent across Dark Heresy/Only War's Sanctioned-psyker rules and Black Library's depiction of Primaris Psykers and Astartes Librarians alike.\n\nDesign: Duty to the Astra Telepathica/Inquisition (Basic B133 Duty table, hazardous, 12 or less) at -10, plus a mild, legally-protected Social Stigma (\"sanctioned witch,\" -5, lighter than Basic's Minority Group tier because the law is nominally on their side). Net -15.",
+			"tags": [
+				"Disadvantage",
+				"Mental",
+				"Social",
+				"Psyker",
+				"Imperium"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "tU04-8KPMMr12iDq0",
+					"name": "Duty (Astra Telepathica/Inquisition, 12 or less)",
+					"local_notes": "Lore: See parent trait.\n\nDesign: See parent trait.",
+					"tags": [
+						"Disadvantage",
+						"Social",
+						"Psyker",
+						"Imperium"
+					],
+					"base_points": -10
+				},
+				{
+					"id": "tZpwXVIHAbn2LIxfk",
+					"name": "Social Stigma (Sanctioned Psyker)",
+					"local_notes": "Lore: See parent trait.\n\nDesign: See parent trait.",
+					"tags": [
+						"Disadvantage",
+						"Social",
+						"Psyker",
+						"Imperium"
+					],
+					"base_points": -5
+				}
+			]
+		},
+		{
+			"id": "tlzWtfXCogyStyt6K",
+			"name": "Witch-sight",
+			"local_notes": "Lore: The first, mildest sign of the gift: an unlearned, passive prickling sense of daemonic taint, psychic activity, and warp corruption — how unsanctioned psykers are so often found, and how veteran Inquisitors and Space Marines notice a place has gone wrong before anything visible happens. Widely depicted; no single canonical source, consistent across Black Library and Dark Heresy-line material alike.\n\nDesign: Built as Detect (Psychic Activity & Daemonic Taint), an uncommon but not vanishingly rare category, base 10 per Basic's Detect cost table (B47-48). No Perils of the Warp: it is involuntary background sense, not a deliberate act of channelling.",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Psyker",
+				"Imperium"
+			],
+			"modifiers": [
+				{
+					"id": "mwVR21KEUKMczMT2C",
+					"name": "Warp",
+					"cost_adj": "-15%"
+				}
+			],
+			"base_points": 10
+		},
+		{
+			"id": "TpEbp8mr7S0jOwEVz",
+			"name": "Pyromancy",
+			"local_notes": "Lore: Fire called from nothing, or matter itself set alight and melted. Calibrated against Dark Heresy's Pyromancy list (Fire Bolt, Fire Storm, Molten Beam all appear near-verbatim) and the recurring Black Library image of a pyromancer's target simply combusting.\n\nDesign: Talent-linked group; see each child.",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Psyker",
+				"Imperium"
+			],
+			"children": [
+				{
+					"id": "tk-PL4uEr-5rfv0T8",
+					"name": "Fire Bolt",
+					"local_notes": "Lore: A thrown bolt of raw fire, the pyromancer's most basic attack.\n\nDesign: Innate Attack (Burning, 5/die, B61) with Warp/Perils.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Psyker",
+						"Imperium"
+					],
+					"modifiers": [
+						{
+							"id": "m5mo4Cb9MbPBN_aO4",
+							"name": "Warp",
+							"cost_adj": "-15%"
+						},
+						{
+							"id": "mo0C8DYEFp9HaPes7",
+							"name": "Perils of the Warp",
+							"cost_adj": "-10%"
+						}
+					],
+					"points_per_level": 5,
+					"can_level": true,
+					"levels": 1
+				},
+				{
+					"id": "TTgbjqSi9sxGBrZPI",
+					"name": "Inferno/Molten Beam",
+					"local_notes": "Lore: Two faces of the same power over fire and molten matter: a bursting fireball for a crowd, or a focused, armour-melting beam for a single hard target. A pyromancer trains both together and switches between them freely, never both at once.\n\nDesign: Built as GCS's alternative_abilities container: full price for the costlier child (Molten Beam) plus a fifth the cost of the cheaper one (Inferno), per Basic's Alternate Abilities rule.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Psyker",
+						"Imperium"
+					],
+					"container_type": "alternative_abilities",
+					"children": [
+						{
+							"id": "tfI8hZSoVabr-0aFO",
+							"name": "Inferno",
+							"local_notes": "Lore: A bursting fireball that engulfs a small area.\n\nDesign: Innate Attack (Burning, 5/die) with Explosion (+50%, B106, 2-yard burst) plus Warp/Perils.",
+							"tags": [
+								"Advantage",
+								"Mental",
+								"Psyker",
+								"Imperium"
+							],
+							"modifiers": [
+								{
+									"id": "maGjWs1-mfM5zKXAY",
+									"name": "Explosion",
+									"cost_adj": "+50%"
+								},
+								{
+									"id": "mzSYC09vmdCiJEles",
+									"name": "Warp",
+									"cost_adj": "-15%"
+								},
+								{
+									"id": "mQcfuohbGtaweNF2d",
+									"name": "Perils of the Warp",
+									"cost_adj": "-10%"
+								}
+							],
+							"points_per_level": 5,
+							"can_level": true,
+							"levels": 1
+						},
+						{
+							"id": "tWc7mFP_NElJ9s_IB",
+							"name": "Molten Beam",
+							"local_notes": "Lore: A focused beam of molten matter that burns straight through armour.\n\nDesign: Innate Attack (Burning, 5/die) with Armor Divisor (3) (+100%, B103) plus Warp/Perils.",
+							"tags": [
+								"Advantage",
+								"Mental",
+								"Psyker",
+								"Imperium"
+							],
+							"modifiers": [
+								{
+									"id": "mkDK5LP8srWTaEviR",
+									"name": "Armor Divisor (3)",
+									"cost_adj": "+100%"
+								},
+								{
+									"id": "mNl9_wNwuHHNYsDfP",
+									"name": "Warp",
+									"cost_adj": "-15%"
+								},
+								{
+									"id": "m__oxQyKYKXLQ_Qqo",
+									"name": "Perils of the Warp",
+									"cost_adj": "-10%"
+								}
+							],
+							"points_per_level": 5,
+							"can_level": true,
+							"levels": 1
+						}
+					]
+				},
+				{
+					"id": "tTLYArTJEUr045H1f",
+					"name": "Flame Breath",
+					"local_notes": "Lore: A gout of fire breathed out in a cone in front of the caster.\n\nDesign: Innate Attack (Burning, 5/die) with Cone (+50%, B103) plus Warp/Perils.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Psyker",
+						"Imperium"
+					],
+					"modifiers": [
+						{
+							"id": "miBOjrI-9IKW6dKv4",
+							"name": "Cone",
+							"cost_adj": "+50%"
+						},
+						{
+							"id": "mQlGOWzJoogh_RIPh",
+							"name": "Warp",
+							"cost_adj": "-15%"
+						},
+						{
+							"id": "mJdMJWCBlpz8KjnG9",
+							"name": "Perils of the Warp",
+							"cost_adj": "-10%"
+						}
+					],
+					"points_per_level": 5,
+					"can_level": true,
+					"levels": 1
+				}
+			]
+		}
+	],
+	"skills": [
+		{
+			"id": "sw38Vts20SgZAaMa8",
+			"name": "Psyniscience",
+			"local_notes": "Lore: The trained (or instinctive) sense of \"something wrong\" in a presence, place, or object touched by the warp — a chill in a corridor, a servitor's dead eyes going wrong. Named for the Dark Heresy/Only War skill of the same purpose (Psyniscience), used here for calibration only; the GURPS build is original.\n\nDesign: New skill per framework.md (\"New skills only when nothing fits\"). Per/H, Talent-affected: characters with a Psyker Talent (see the psyker power library — not part of this file) get it at a discount per that trait's rules and may default it from Per at a penalty; an unaugmented human without any psychic Talent cannot default into it at all (there is nothing latent to sense with) and must buy it as an unusual background purchase, if a GM allows it at all — most unaugmented Imperial citizens simply never take this skill.",
+			"tags": [
+				"Mental",
+				"Imperium",
+				"Psionic"
+			],
+			"difficulty": "per/h",
+			"points": 4
+		},
+		{
+			"id": "sbTELMr53VJfDfWPt",
+			"name": "Meditation",
+			"local_notes": "Lore: How a psyker learns to control, rather than merely survive, the gift.\n\nDesign: IQ-2 (10) for 2 points, Hard (B ability skill list).",
+			"tags": [
+				"Imperium",
+				"Psyker"
+			],
+			"difficulty": "iq/h",
+			"points": 2
+		},
+		{
+			"id": "snvBKZC4EJMAYzmsY",
+			"name": "Hidden Lore",
+			"local_notes": "Lore: Doctrinal and practical knowledge of the immaterium taught at the Scholastia Psykana.\n\nDesign: IQ-1 (11) for 2 points, Average.",
+			"tags": [
+				"Imperium",
+				"Psyker"
+			],
+			"specialization": "the Warp",
+			"difficulty": "iq/a",
+			"points": 2
+		},
+		{
+			"id": "sJBFdc-wpHuKk09_s",
+			"name": "Soldier",
+			"local_notes": "Lore: Enough general military knowledge to operate attached to a Guard unit.\n\nDesign: IQ-1 (11) for 2 points, Average.",
+			"tags": [
+				"Imperium",
+				"Astra Militarum"
+			],
+			"difficulty": "iq/a",
+			"points": 2
+		},
+		{
+			"id": "sa6GwsyuVZ_vBwK57",
+			"name": "Theology",
+			"local_notes": "Lore: The same basic catechisms drilled into every Imperial soldier, doubly important for a psyker who must prove their faith.\n\nDesign: IQ-2 (10) for 1 point, Hard.",
+			"tags": [
+				"Imperium"
+			],
+			"specialization": "Imperial Creed",
+			"difficulty": "iq/h",
+			"points": 1
+		},
+		{
+			"id": "sckzvxXyv0xQbEKWy",
+			"name": "Staff",
+			"local_notes": "Lore: Basic proficiency with the issued force staff.\n\nDesign: DX+0 (11) for 4 points, Average.",
+			"tags": [
+				"Imperium",
+				"Psyker"
+			],
+			"difficulty": "dx/a",
+			"points": 4
+		}
+	],
+	"equipment": [
+		{
+			"id": "ejMJP2wi8GH75XMVG",
+			"description": "Force Staff",
+			"local_notes": "Lore: Many psykers prefer a staff to a blade: easier to carry openly as a badge of office, and a familiar focus for channelling telekinetic and biomantic workings. Common across Dark Heresy/Rogue Trader's force-weapon options and depicted for Inquisitorial and Adeptus Astra Telepathica psykers throughout Black Library.\n\nDesign: Same power-field math as the Force Sword (field on adds +1d and armour divisor (10) over the field-off mundane baseline), applied to a plain hardwood-and-metal quarterstaff (sw+1 cr) instead of an edged blade — a crushing rather than cutting power weapon, with the same charged Force Strike option and scaling note.",
+			"tags": [
+				"Melee Weapon",
+				"Imperium",
+				"Psyker"
+			],
+			"tech_level": "10^",
+			"legality_class": "1",
+			"base_value": "7000",
+			"base_weight": "4 lb",
+			"weapons": [
+				{
+					"id": "wCEvtpWa-b7M8BsrT",
+					"sv": 1,
+					"damage": {
+						"type": "cr",
+						"st": "sw",
+						"base": "1"
+					},
+					"reach": "1,2",
+					"parry": "0",
+					"strength": "9",
+					"usage": "Field off",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Staff"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Polearm"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Spear"
+							},
+							"modifier": -2
+						}
+					]
+				},
+				{
+					"id": "wQjtRyS6P2zxJIS3_",
+					"sv": 1,
+					"damage": {
+						"type": "cr",
+						"st": "sw",
+						"base": "1d+1",
+						"armor_divisor": 10
+					},
+					"reach": "1,2",
+					"parry": "0",
+					"strength": "9",
+					"usage": "Field on",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Staff"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Polearm"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Spear"
+							},
+							"modifier": -2
+						}
+					]
+				},
+				{
+					"id": "wuAGFMyme6oCuCYA_",
+					"sv": 1,
+					"damage": {
+						"type": "cr (ignores DR)",
+						"st": "sw",
+						"base": "1d+1"
+					},
+					"reach": "1,2",
+					"parry": "0",
+					"strength": "9",
+					"usage": "Force Strike (charged, vs. Warp-touched)",
+					"usage_notes": "As Force Sword's Force Strike; +1d per level of Psyker Talent, requires field on and a Perils of the Warp check.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Staff"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Polearm"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Spear"
+							},
+							"modifier": -2
+						}
+					]
+				}
+			],
+			"quantity": 1,
+			"equipped": true
+		}
+	]
+}
