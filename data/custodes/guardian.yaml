@@ -1,0 +1,212 @@
+kind: template
+output: Adeptus Custodes/Templates/Custodian Guardian.gct
+notes: >-
+  A rank-and-file member of the Custodian Guard: still individually the equal of a Chapter Master
+  in raw capability, per the framework's Adeptus Custodes physiology section. Point total (physiology
+  + oath + rank + skills, no gear) sits inside the framework's 1,200-1,600 point target for the
+  Custodian Guardian tier. Equipment (guardian spear, Auramite armour) is defined in the Custodes
+  weapons and armour files, not here. The historic Vow (Never Leave the Emperor's Side / Terra) is
+  left disabled, per current post-Indomitus-Crusade Codex background; a GM running an earlier era
+  or a Terra-bound Custodian should enable it (-10 points).
+traits:
+- include: "custodes/traits.yaml#Custodian Physiology"
+- include: "custodes/traits.yaml#Custodian Oath and Mindset"
+- include: "custodes/traits.yaml#Rank (Legio Custodes)"
+- include: "custodes/traits.yaml#Reputation (The Emperor's Companions)"
+- name: Personal Advancement
+  points: 100
+  attributes:
+    dx: 1
+    iq: 1
+    ht: 1
+    will: 1
+    per: 2
+  tags:
+  - Physical
+  - Mental
+  lore: >-
+    Even among the Ten Thousand, centuries or millennia of live combat against the Imperium's worst
+    threats leave individual Custodians measurably sharper than the day they were raised to full
+    service; Wraight's novels distinguish named, veteran Custodians from newly-elevated ones in
+    exactly these terms.
+  design: >-
+    DX+1 (20) + IQ+1 (20) + HT+1 (10) + Will+1 (5) + Per+2 (10) = 65, plus a further Talent-style
+    Per+1 folded in at the same rate for 10 more (10) to reflect a Custodian's perception outpacing
+    even his other advances after centuries of duty = 75, rounded up to a flat 100-point package to
+    also cover the several centuries of DX/IQ/HT drilling the fiction implies beyond a single +1 each
+    without pricing every point individually; treated the same way the Astartes Battle-Brother
+    template's own Personal Advancement trait is treated (a lump-sum "veteran seasoning" cost).
+- name: Weapon Master (Custodes Power Weapons)
+  points: 30
+  ref: B43
+  tags:
+  - Advantage
+  - Physical
+  lore: >-
+    Custodian Guard train on nothing but the Legio's own master-crafted arms for centuries before
+    ever taking the field; Wraight's novels and current Codex background both treat that training as
+    qualitatively different from even an Astartes veteran's, not merely longer.
+  design: >-
+    Weapon Master (B43), small class of weapons (guardian spear, sentinel blade, castellan axe,
+    misericordia, pyrithite/adrasite spear, interceptor lance - the Custodes power-weapon family), 30
+    points: adds extra damage with those weapons and removes the reduced-ST-below-minimum penalty,
+    matching centuries of dedicated drilling with the Legio's own signature arms rather than general
+    competence with any blade.
+- name: Ambidexterity
+  points: 5
+  ref: B39
+  tags:
+  - Advantage
+  - Physical
+  lore: >-
+    Custodian Guard are frequently shown fighting two-handed (a blade and a shield, or paired
+    sentinel blades) with no favoured hand, a small but recurring visual detail in Codex art.
+  design: Ambidexterity (B39, 5 points): no off-hand penalty for two-weapon or shield-and-blade fighting.
+- name: Trained by a Master
+  points: 30
+  ref: B90
+  tags:
+  - Advantage
+  - Physical
+  lore: >-
+    A Custodian's training is described as without peer in the Imperium - centuries under
+    instructors who are themselves the Legio's most experienced warriors, a step beyond even an
+    Astartes Chapter's own training cadre.
+  design: >-
+    Trained by a Master (B90, 30 points): the GURPS advantage for training so complete it grants
+    bonus defenses and combat options no amount of ordinary skill points buys, reserved in Basic Set
+    for exactly this kind of "best in the setting" martial pedigree.
+skills:
+- name: Guns
+  spec: Rifle
+  diff: DX/E
+  points: 32
+  notes: Guardian spear bolt caster.
+- name: Guns
+  spec: Pistol
+  diff: DX/E
+  points: 16
+  notes: Sentinel blade bolt caster.
+- name: Spear
+  diff: DX/A
+  points: 40
+  notes: Guardian spear, pyrithite/adrasite spear.
+- name: Broadsword
+  diff: DX/A
+  points: 24
+  notes: Sentinel blade.
+- name: Two-Handed Axe/Mace
+  diff: DX/A
+  points: 16
+  notes: Castellan axe.
+- name: Shortsword
+  diff: DX/A
+  points: 8
+  notes: Misericordia.
+- name: Shield
+  diff: DX/E
+  points: 8
+  notes: Praesidium/storm shield.
+- name: Brawling
+  diff: DX/E
+  points: 4
+- name: Wrestling
+  diff: DX/A
+  points: 8
+- name: Gunner
+  spec: Beams
+  diff: DX/A
+  points: 2
+  notes: Twin adrathic destructor, when crewing Custodes armour.
+- name: Guns
+  spec: Grenade Launcher
+  diff: DX/A
+  points: 4
+  notes: Balistus grenade launcher.
+- name: Throwing
+  diff: DX/A
+  points: 4
+- name: Free Fall
+  diff: DX/A
+  points: 4
+- name: Jumping
+  diff: DX/E
+  points: 1
+- name: Tactics
+  diff: IQ/H
+  points: 24
+- name: Strategy
+  diff: IQ/H
+  points: 12
+- name: Leadership
+  diff: IQ/A
+  points: 16
+- name: Soldier
+  diff: IQ/A
+  points: 12
+- name: Theology
+  spec: Imperial Creed
+  diff: IQ/H
+  points: 12
+- name: Hidden Lore
+  spec: Xenos
+  diff: IQ/A
+  points: 8
+- name: Hidden Lore
+  spec: Daemons
+  diff: IQ/A
+  points: 8
+- name: Hidden Lore
+  spec: Heresy
+  diff: IQ/A
+  points: 4
+- name: Savoir-Faire
+  spec: Military
+  diff: IQ/E
+  points: 1
+- name: Diplomacy
+  diff: IQ/H
+  points: 8
+  notes: Custodians routinely deal with High Lords and Chapter Masters as equals or superiors.
+- name: Fast-Talk
+  diff: IQ/A
+  points: 2
+- name: Armoury
+  spec: Body Armor
+  diff: IQ/A
+  points: 4
+  notes: Auramite/Allarus armour maintenance.
+- name: Armoury
+  spec: Small Arms
+  diff: IQ/A
+  points: 2
+- name: Mechanic
+  spec: Bolt Weapons
+  diff: IQ/A
+  points: 2
+- name: First Aid
+  diff: IQ/E
+  points: 2
+- name: Navigation
+  spec: Land
+  diff: IQ/A
+  points: 2
+- name: Intimidation
+  diff: Will/A
+  points: 12
+- name: Observation
+  diff: Per/A
+  points: 16
+- name: Survival
+  spec: Any
+  diff: Per/A
+  points: 4
+- name: Tracking
+  diff: Per/A
+  points: 2
+- name: Running
+  diff: HT/A
+  points: 2
+- name: Hiking
+  diff: HT/A
+  points: 2

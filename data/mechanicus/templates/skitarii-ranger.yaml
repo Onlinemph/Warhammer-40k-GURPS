@@ -1,0 +1,223 @@
+kind: template
+output: Adeptus Mechanicus/Templates/Skitarii Ranger.gct
+notes: >
+  A Skitarii Ranger: rank-and-file line infantry of a Forge World's Legio
+  Cybernetica-adjacent Skitarii maniples, armed with galvanic rifles and
+  built for sustained firefights at range (their Vanguard counterparts,
+  Adeptus Mechanicus/Templates/Skitarii Vanguard.gct, favor close-range
+  radium weapons instead). Point math: ST 12 (+20), DX 13 (+60), IQ 10
+  (+0), HT 12 (+20) = 100; advantages +94 (Skitarii Doctrina Imperatives'
+  effective cost, once GCS applies its native Alternative Abilities
+  discount, is 12 rather than the 20 its full-price children would sum to
+  in a plain container — see that trait's own design note); disadvantages
+  -71; skills +63. Total 186 points: between framework.md's "Trained
+  soldier (100-175)" and "Elite human (200-350)" tiers, matching Skitarii's
+  place in the fiction as tougher and better-equipped than a Guardsman but
+  still treated as expendable line infantry by their own Priesthood.
+  Weapons (galvanic rifle, radium carbine, etc.) are equipment, not covered
+  here.
+traits:
+  - name: ST
+    points: 20
+    tags: [Attribute]
+    lore: Skitarii physical conditioning and augmetic reinforcement together produce a soldier stronger than an ordinary Guardsman.
+    design: ST 12 (+2), 10 pts/level (B15).
+  - name: DX
+    points: 60
+    tags: [Attribute]
+    lore: Cybernetic reflex conditioning and constant live-fire drilling.
+    design: DX 13 (+3), 20 pts/level (B15).
+  - name: IQ
+    points: 0
+    tags: [Attribute]
+    lore: Average intelligence; Skitarii conditioning narrows initiative and affect, not raw intellect.
+    design: IQ 10 (baseline), 20 pts/level (B15).
+  - name: HT
+    points: 20
+    tags: [Attribute]
+    lore: Augmetic reinforcement and conditioning produce real battlefield endurance.
+    design: HT 12 (+2), 10 pts/level (B14).
+  - name: Combat Reflexes
+    points: 15
+    ref: B43
+    tags: [Advantage, Mental, Imperium]
+    lore: Drilled, doctrina-reinforced reactions under fire.
+    design: Basic Set Combat Reflexes (B43), 15 points.
+  - include: "mechanicus/traits/augmetics.yaml#Ballistic Auto-senses, Sicarian/Ranger Pattern"
+  - include: "mechanicus/traits/augmetics.yaml#Augmetic Legs, Combat Pattern (Matched Pair)"
+  - include: "mechanicus/traits/augmetics.yaml#Respirator Plugs (Filtration Lungs)"
+  - include: "mechanicus/traits/augmetics.yaml#Subdermal Armour Plating"
+    levels: 1
+  - include: "mechanicus/traits/augmetics.yaml#Noospheric Link"
+  - include: "mechanicus/traits/augmetics.yaml#Skitarii Doctrina Imperatives"
+  - include: "mechanicus/traits/augmetics.yaml#Mechanicus Rank"
+    levels: 1
+    disabled: true
+    lore: >
+      Disabled by default: most Rangers hold no formal Mechanicus rank at
+      all. Enable at level 1 (+5 points) for a Skitarii Alpha or veteran
+      squad leader.
+  - include: "mechanicus/traits/augmetics.yaml#Skitarii Conditioning"
+  - include: "mechanicus/traits/augmetics.yaml#Fanaticism (The Omnissiah)"
+  - include: "mechanicus/traits/augmetics.yaml#Duty (Adeptus Mechanicus)"
+    points: -15
+    notes: >
+      Overridden to -15 (almost always hazardous) rather than this trait's
+      -10 baseline: a Skitarii's Duty is combat service, not a workshop
+      posting.
+  - include: "imperium/common/imperial-traits.yaml#Intolerance (Xenos)"
+  - name: Doesn't Question a Doctrina Imperative
+    points: -1
+    tags: [Quirk, Imperium]
+    design: Quirk (B9), roleplaying flag only.
+    lore: A Skitarii obeys the uploaded battle-doctrina without hesitation, for good or ill.
+skills:
+  - name: Guns
+    spec: Rifle
+    diff: DX/E
+    points: 20
+    tags: [Imperium, Adeptus Mechanicus, Skitarii]
+    lore: The galvanic rifle, a Ranger's standard-issue weapon (framework.md's Mechanicus weapon anchor table).
+    design: DX+5 (18) for 20 points, Easy (B170).
+  - name: Guns
+    spec: Pistol
+    diff: DX/E
+    points: 2
+    tags: [Imperium, Adeptus Mechanicus]
+    lore: A radium pistol or similar sidearm.
+    design: DX+1 (14) for 2 points, Easy.
+  - name: Gunner
+    spec: Beams
+    diff: DX/A
+    points: 2
+    tags: [Imperium, Adeptus Mechanicus]
+    lore: Squad-mounted arc weapon familiarity.
+    design: DX+0 (13) for 2 points, Average.
+  - name: Soldier
+    diff: IQ/A
+    points: 2
+    tags: [Imperium]
+    lore: Maniple procedure, logistics, and rank structure.
+    design: IQ+0 (10) for 2 points, Average.
+  - name: Tactics
+    diff: IQ/H
+    points: 4
+    tags: [Imperium]
+    lore: Squad- and maniple-level small-unit tactics.
+    design: IQ+0 (10) for 4 points, Hard.
+  - name: Stealth
+    diff: DX/A
+    points: 8
+    tags: [Imperium]
+    lore: Fire-and-maneuver fieldcraft; less emphasized than a Ranger's marksmanship but still drilled.
+    design: DX+2 (15) for 8 points, Average.
+  - name: Camouflage
+    diff: IQ/E
+    points: 1
+    tags: [Imperium]
+    lore: Breaking up a firing position's silhouette.
+    design: IQ+0 (10) for 1 point, Easy.
+  - name: Survival
+    spec: (choose deployment terrain)
+    diff: Per/A
+    points: 2
+    tags: [Imperium]
+    lore: Field survival in whatever terrain the maniple is deployed to.
+    design: Per+0 (10) for 2 points, Average.
+  - name: Brawling
+    diff: DX/E
+    points: 1
+    tags: [Imperium]
+    lore: Unarmed and improvised-weapon fighting when ammunition runs out.
+    design: DX+0 (13) for 1 point, Easy.
+  - name: Forced Entry
+    diff: DX/E
+    points: 1
+    tags: [Imperium]
+    lore: Breaching doors and barricades under fire.
+    design: DX+0 (13) for 1 point, Easy.
+  - name: Theology
+    spec: Cult Mechanicus
+    diff: IQ/H
+    points: 4
+    tags: [Imperium, Adeptus Mechanicus]
+    lore: A Ranger's basic catechisms of the Machine God; see Imperium/Skills/Imperial Skills.skl.
+    design: IQ-1 (9) for 4 points, Hard.
+  - include: "mechanicus/skills/skills.yaml#Savoir-Faire"
+    spec: Adeptus Mechanicus
+    points: 1
+    design: IQ+0 (10) for 1 point, Easy.
+  - name: Intimidation
+    diff: Will/A
+    points: 2
+    tags: [Imperium]
+    lore: An unnervingly flat, augmetic-eyed stare goes a long way.
+    design: Will+0 (10) for 2 points, Average.
+  - name: First Aid
+    diff: IQ/E
+    points: 1
+    tags: [Imperium]
+    lore: Basic combat first aid.
+    design: IQ+0 (10) for 1 point, Easy.
+  - name: Climbing
+    diff: DX/A
+    points: 1
+    tags: [Imperium]
+    lore: Assault-position fitness.
+    design: DX-1 (12) for 1 point, Average.
+  - name: Running
+    diff: HT/A
+    points: 1
+    tags: [Imperium]
+    lore: Conditioning for advancing under fire.
+    design: HT-1 (11) for 1 point, Average.
+  - name: Jumping
+    diff: DX/E
+    points: 1
+    tags: [Imperium]
+    lore: Obstacle-course fitness.
+    design: DX+0 (13) for 1 point, Easy.
+  - name: Navigation
+    spec: Land
+    diff: IQ/A
+    points: 1
+    tags: [Imperium]
+    lore: Basic land navigation.
+    design: IQ-1 (9) for 1 point, Average.
+  - name: Area Knowledge
+    spec: (home Forge World or deployment sector)
+    diff: IQ/E
+    points: 1
+    tags: [Imperium]
+    lore: Knowledge of the Ranger's home Forge World or current deployment.
+    design: IQ+0 (10) for 1 point, Easy.
+  - include: "imperium/common/skills.yaml#Current Affairs"
+    spec: Imperium
+    points: 1
+    design: IQ+0 (10) for 1 point, Easy.
+  - name: Tracking
+    diff: Per/A
+    points: 2
+    tags: [Imperium]
+    lore: Following a target across terrain, aided by auto-sense oculars.
+    design: Per+0 (10) for 2 points, Average.
+  - name: Electronics Operation
+    spec: Sensors
+    diff: IQ/A
+    points: 2
+    tags: [Imperium, Adeptus Mechanicus]
+    lore: Field auspex and sensor-suite operation.
+    design: IQ+0 (10) for 2 points, Average.
+  - name: Hiking
+    diff: HT/A
+    points: 1
+    tags: [Imperium]
+    lore: Long-march conditioning between deployments.
+    design: HT-1 (11) for 1 point, Average.
+  - name: Fast-Draw
+    spec: Ammo
+    diff: DX/E
+    points: 1
+    tags: [Imperium]
+    lore: Reloading without breaking a firing stance.
+    design: DX+0 (13) for 1 point, Easy.

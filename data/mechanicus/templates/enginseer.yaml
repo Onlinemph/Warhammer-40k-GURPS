@@ -1,0 +1,178 @@
+kind: template
+output: Adeptus Mechanicus/Templates/Tech-Priest Enginseer.gct
+notes: >
+  A field Enginseer: an ordained Tech-Priest sent out from a Forge World or
+  a Titan Legion's Adeptus Mechanicus detachment to keep an Imperial Guard
+  regiment's vehicles, weapons, and vox-network running, rather than a
+  combat specialist in their own right (that's the Skitarii templates) or a
+  senior Magos directing a whole forge (Magos.gct). Point math: ST 11 (+10),
+  DX 12 (+40), IQ 13 (+60), HT 11 (+10) = 120, plus Will +1 (+5) = 125;
+  advantages +128; disadvantages -55; skills +57. Total 255 points, inside
+  the ~250-350 band this project's brief sets for the Enginseer rank.
+  Augmetics and faith traits are pulled in with `include` from Adeptus
+  Mechanicus/Traits/Augmetics and the Cult Mechanicus.adq rather than
+  copied, per docs/data-format.md.
+traits:
+  - name: ST
+    points: 10
+    tags: [Attribute]
+    lore: An Enginseer is not chosen for physical prowess; most of that comes from the Servo-Arm instead.
+    design: ST 11 (+1), 10 pts/level (B15).
+  - name: DX
+    points: 40
+    tags: [Attribute]
+    lore: Steady hands for delicate repair work and enough reflex to not die the first time a Guardsman's line breaks.
+    design: DX 12 (+2), 20 pts/level (B15).
+  - name: IQ
+    points: 60
+    tags: [Attribute]
+    lore: A working Tech-Priest is, at minimum, a genuinely capable engineer and archivist.
+    design: IQ 13 (+3), 20 pts/level (B15).
+  - name: HT
+    points: 10
+    tags: [Attribute]
+    lore: Field postings mean irregular meals and worse sleep, offset only partly by augmetic upkeep.
+    design: HT 11 (+1), 10 pts/level (B14).
+  - name: Will
+    points: 5
+    tags: [Attribute]
+    lore: Doctrinal certainty steadies the nerve past what raw intellect alone would give.
+    design: Will 14 (+1 above the IQ-derived default of 13), 5 pts/level (B16).
+  - name: Fit
+    points: 5
+    ref: B55
+    tags: [Advantage, Physical, Imperium]
+    lore: Field service keeps an Enginseer from the sedentary decline of a forge-bound archivist.
+    design: Basic Set Fit (B55), 5 points.
+  - include: "mechanicus/traits/augmetics.yaml#Cranial Circuitry"
+  - include: "mechanicus/traits/augmetics.yaml#Cortex Implant, Logis Pattern"
+  - include: "mechanicus/traits/augmetics.yaml#Respirator Plugs (Filtration Lungs)"
+  - include: "mechanicus/traits/augmetics.yaml#Augmetic Arm, Combat Pattern"
+    lore: >
+      Enginseers are drawn from the ranks of the Cult Mechanicus after some
+      years of service; an augmetic arm lost to accident or willingly
+      offered up as an act of devotion is common enough by this rank that
+      it is included in the baseline rather than left optional.
+  - include: "mechanicus/traits/augmetics.yaml#Servo-Arm"
+  - include: "mechanicus/traits/augmetics.yaml#Noospheric Link"
+  - include: "mechanicus/traits/augmetics.yaml#Mechanicus Rank"
+    levels: 2
+    lore: An ordained Enginseer, several years past their Skitarii-adjacent novitiate but well below a Magos.
+  - include: "mechanicus/traits/augmetics.yaml#Disciplines of the Cult Mechanicus"
+  - include: "mechanicus/traits/augmetics.yaml#Duty (Adeptus Mechanicus)"
+    notes: >
+      An Enginseer's posting to a specific Guard regiment or garrison is
+      binding and long-term, but not "almost always hazardous" the way
+      front-line Guard service is.
+  - include: "mechanicus/traits/augmetics.yaml#Distrust of Flesh"
+  - include: "mechanicus/traits/augmetics.yaml#Dependency (Maintenance Rites and Sacred Unguents)"
+  - include: "mechanicus/traits/augmetics.yaml#Social Stigma (Heavily Augmented)"
+  - name: Mutters Litanies Over Balky Machinery
+    points: -1
+    tags: [Quirk, Imperium]
+    design: Quirk (B9), roleplaying flag only.
+    lore: The line between diagnostics and prayer is not one an Enginseer draws.
+  - name: Keeps a Ledger of Every Component Ever Replaced
+    points: -1
+    tags: [Quirk, Imperium]
+    design: Quirk (B9), roleplaying flag only.
+    lore: Meticulous record-keeping is doctrine, not merely habit.
+skills:
+  - name: Engineer
+    spec: Combat Engineering
+    diff: IQ/H
+    points: 12
+    tags: [Imperium, Adeptus Mechanicus]
+    lore: Field repair and modification of vehicles, weapons, and fortifications; a Guard regiment's main reason to have an Enginseer attached at all.
+    design: IQ+2 (15) for 12 points, Hard (B170).
+  - name: Mechanic
+    spec: Ground Vehicles
+    diff: IQ/A
+    points: 8
+    tags: [Imperium, Adeptus Mechanicus]
+    lore: Keeping Chimeras, Leman Russ tanks, and Sentinels running between engagements.
+    design: IQ+2 (15) for 8 points, Average.
+  - name: Armoury
+    spec: Small Arms
+    diff: IQ/A
+    points: 2
+    tags: [Imperium, Adeptus Mechanicus]
+    lore: Servicing lasguns and bolters at the standard, sanctioned Imperial TL.
+    design: IQ+0 (13) for 2 points, Average.
+  - name: Electronics Repair
+    spec: Communications
+    diff: IQ/H
+    points: 4
+    tags: [Imperium, Adeptus Mechanicus]
+    lore: Vox-network upkeep, a constant field task.
+    design: IQ+0 (13) for 4 points, Hard.
+  - name: Theology
+    spec: Cult Mechanicus
+    diff: IQ/H
+    points: 8
+    tags: [Imperium, Adeptus Mechanicus]
+    lore: The Motive Force catechisms and binary liturgies; see Imperium/Skills/Imperial Skills.skl.
+    design: IQ+1 (14) for 8 points, Hard.
+  - name: Hidden Lore
+    spec: Archeotech
+    diff: IQ/A
+    points: 4
+    tags: [Imperium, Adeptus Mechanicus]
+    lore: Recognising STC fragments and Dark Age relics; see Imperium/Skills/Imperial Skills.skl.
+    design: IQ+1 (14) for 4 points, Average.
+  - include: "mechanicus/skills/skills.yaml#Language"
+    spec: Binharic
+    points: 4
+    design: IQ+1 (14) for 4 points, Average — comfortably fluent in the liturgical cant.
+  - include: "mechanicus/skills/skills.yaml#Savoir-Faire"
+    spec: Adeptus Mechanicus
+    points: 1
+    design: IQ+0 (13) for 1 point, Easy.
+  - name: First Aid
+    diff: IQ/E
+    points: 1
+    tags: [Imperium]
+    lore: Battlefield first aid, more habit from working around wounded troopers than a specialty.
+    design: IQ+0 (13) for 1 point, Easy.
+  - name: Research
+    diff: IQ/A
+    points: 2
+    tags: [Imperium]
+    lore: Archive and STC-fragment cross-referencing.
+    design: IQ+0 (13) for 2 points, Average.
+  - include: "imperium/common/skills.yaml#Current Affairs"
+    spec: Imperium
+    points: 1
+    design: IQ+0 (13) for 1 point, Easy.
+  - name: Guns
+    spec: Pistol
+    diff: DX/E
+    points: 2
+    tags: [Imperium]
+    lore: A laspistol for self-defense; an Enginseer is a technician first.
+    design: DX+1 (13) for 2 points, Easy.
+  - name: Physician
+    diff: IQ/H
+    points: 4
+    tags: [Imperium]
+    lore: Basic biological repair, useful when a wounded trooper needs more than First Aid and no proper medicae is at hand.
+    design: IQ+0 (13) for 4 points, Hard.
+  - name: Traps
+    diff: IQ/A
+    points: 2
+    tags: [Imperium]
+    lore: Rigging and disarming demolition charges and improvised hazards.
+    design: IQ+0 (13) for 2 points, Average.
+  - name: Navigation
+    spec: Land
+    diff: IQ/A
+    points: 1
+    tags: [Imperium]
+    lore: Basic land navigation without void or hyperspace instruments.
+    design: IQ-1 (12) for 1 point, Average.
+  - name: Stealth
+    diff: DX/A
+    points: 1
+    tags: [Imperium]
+    lore: Enough fieldcraft not to be the first target singled out.
+    design: DX-1 (11) for 1 point, Average.

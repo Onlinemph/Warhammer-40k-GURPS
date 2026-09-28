@@ -36,6 +36,10 @@ items:
       roughly half the lasgun's shot count (30 vs. 60), and the short
       emitter keeps Bulk and ST modest. RoF 3 represents the selector's
       rapid-pulse setting rather than a sustained full-auto mode.
+      Handling: min ST 5 matches framework.md's √(10×weight) formula almost
+      exactly for a 2.5 lb pistol (√25=5), so it needs no adjustment - a
+      low-recoil beam sidearm this light sits right at the formula's
+      baseline. Bulk -2 and Rcl 1 are ordinary low-recoil pistol figures.
 
   - name: Laspistol, Compact "Hostile Environment" Pattern
     tl: 10
@@ -50,7 +54,7 @@ items:
         range: 80/240
         rof: 3
         shots: 20(3)
-        st: 5
+        st: 4
         bulk: -1
         rcl: 1
         skill: Beam Weapons (Pistol)
@@ -68,6 +72,10 @@ items:
       the shot count to 20 and shortens effective range; the shorter barrel
       worsens Acc by 1 but improves Bulk to -1, which is the standard GURPS
       trade a concealable pistol makes against a full-size one.
+      Handling: min ST corrected to 4 (√(10×2)≈4.5, rounded down) from a
+      previous flat 5 copied from the full-size pistol above - a lighter,
+      shorter housing needs a hair less strength to control even though the
+      lasing chemistry is unchanged. Bulk -1 and Rcl 1 are unchanged.
 
   - name: Lasgun, Kantrael Pattern
     tl: 10
@@ -82,7 +90,7 @@ items:
         range: 300/900
         rof: 10
         shots: 60(3)
-        st: 6
+        st: 9
         bulk: -4
         rcl: 1
         skill: Beam Weapons (Rifle)
@@ -92,7 +100,7 @@ items:
         range: 300/900
         rof: 1
         shots: 1(3)
-        st: 6
+        st: 9
         bulk: -4
         rcl: 1
         skill: Beam Weapons (Rifle)
@@ -107,7 +115,7 @@ items:
         range: 300/900
         rof: 1
         shots: 10(3)
-        st: 6
+        st: 9
         bulk: -4
         rcl: 1
         skill: Beam Weapons (Rifle)
@@ -145,6 +153,19 @@ items:
       limited shots — it still only clears flak (98.0% of hits) and fails
       against carapace (0% of hits), because the whole point of the divisor
       is what an overcharge pack doesn't add.
+      Handling: min ST corrected to 9 for all three usages (standard,
+      hot-shot pack, overcharge shot - it's the same physical rifle, so
+      they share one ST figure), matching framework.md's own worked example
+      of √(10×8)≈9 for an 8 lb rifle almost exactly. The previous ST 6 on
+      this and every other lasgun pattern in this file understated the
+      handling of a shoulder rifle by three whole points against the
+      framework's explicit guidance - it has been corrected here and on
+      every pattern below. RoF 10 (full-auto) and RoF 1 (single fire, hot-
+      shot and overcharge, since neither the hot-shot pack nor the
+      overcharge cell is rated for autofire) reflect the lasgun's actual
+      fire-selector modes rather than a single blanket value; Bulk -4 and
+      Rcl 1 are unchanged, appropriate for a full-length rifle with almost
+      no felt recoil.
 
   - name: Lasgun, Mars Pattern
     tl: 10
@@ -159,7 +180,7 @@ items:
         range: 300/900
         rof: 10
         shots: 60(3)
-        st: 7
+        st: 10
         bulk: -4
         rcl: 1
         skill: Beam Weapons (Rifle)
@@ -176,6 +197,10 @@ items:
       baseline and justify the higher cost. GCS has no reliability/
       malfunction stat, so the pattern's noted ruggedness is left as lore
       flavour rather than a mechanical bonus.
+      Handling: min ST corrected to 10 (√(10×9.5)≈9.7, rounded up), one
+      point over the corrected Kantrael figure of 9, matching the extra
+      shielding and reinforced housing this pattern is built with. RoF,
+      Bulk and Rcl are unchanged from the Kantrael baseline.
 
   - name: Lasgun, Accatran Pattern
     tl: 10
@@ -190,7 +215,7 @@ items:
         range: 280/840
         rof: 10
         shots: 60(3)
-        st: 6
+        st: 9
         bulk: -4
         rcl: 1
         skill: Beam Weapons (Rifle)
@@ -204,6 +229,10 @@ items:
       that keeps mud and gas out marginally shortens the beam path, modelled
       as a small range reduction (280/840 vs. the Kantrael's 300/900) rather
       than any change to the fixed damage figure.
+      Handling: min ST corrected to 9, matching the Kantrael's corrected
+      figure (√(10×8.5)≈9.2) - the sealed shroud changes range, not the
+      rifle's actual mass enough to move the rounded ST. RoF, Bulk and Rcl
+      are unchanged.
 
   - name: Lasgun, Lucius Pattern
     tl: 10
@@ -218,7 +247,7 @@ items:
         range: 300/900
         rof: 10
         shots: 60(3)
-        st: 5
+        st: 8
         bulk: -3
         rcl: 1
         skill: Beam Weapons (Rifle)
@@ -234,6 +263,11 @@ items:
       Accatran patterns), reflecting the more compact, less rugged design.
       Its documented fragility in mud has no GCS reliability stat to hang
       on, so it's recorded here as flavour only.
+      Handling: min ST corrected to 8 (√(10×6.5)≈8.1), a point below the
+      corrected Kantrael figure of 9, for the lighter, slimmer frame Gaunt's
+      Ghosts describes - still following the framework's sqrt formula, just
+      from a lower starting weight. RoF and Rcl are unchanged; Bulk stays
+      one step better than the standard pattern's -4.
 
   - name: Lasgun, Triplex Pattern
     tl: 10
@@ -248,7 +282,7 @@ items:
         range: 300/900
         rof: 3
         shots: 60(3)
-        st: 6
+        st: 9
         bulk: -4
         rcl: 1
         skill: Beam Weapons (Rifle)
@@ -258,7 +292,7 @@ items:
         range: 300/900
         rof: 10
         shots: 60(3)
-        st: 6
+        st: 9
         bulk: -4
         rcl: 1
         skill: Beam Weapons (Rifle)
@@ -272,6 +306,12 @@ items:
       The controlled 3-round burst gets a +1 Acc bump over the full-auto
       line (7 vs. 6) to represent the tighter grouping a mechanical burst
       limiter gives compared to unrestrained full-auto fire.
+      Handling: min ST corrected to 9 for both modes (√(10×8.5)≈9.2, same
+      weight class as the Accatran pattern), sharing one figure since it's
+      the same physical rifle on two fire-selector settings. RoF 3 for the
+      controlled burst and RoF 10 for full-auto correctly reflect two
+      different mechanical modes rather than one blanket rate copied across
+      both lines. Bulk -4 and Rcl 1 are unchanged.
 
   - name: Lascarbine
     tl: 10
@@ -286,7 +326,7 @@ items:
         range: 200/600
         rof: 10
         shots: 60(3)
-        st: 5
+        st: 8
         bulk: -2
         rcl: 1
         skill: Beam Weapons (Rifle)
@@ -302,6 +342,10 @@ items:
       costs Acc and effective range (5/200-600 vs. the full lasgun's
       6/300-900) while buying a much better Bulk (-2) for cramped vehicle
       interiors.
+      Handling: min ST corrected to 8 (√(10×6)≈7.75), following the same
+      formula as every other lasgun pattern in this file rather than the
+      previous flat 5 shared with the pistols. RoF 10 and Rcl 1 are
+      unchanged.
 
   - name: Long-Las
     tl: 10
@@ -316,7 +360,7 @@ items:
         range: 600/1800
         rof: 1
         shots: 20(3)
-        st: 7
+        st: 10
         bulk: -6
         rcl: 1
         skill: Beam Weapons (Rifle)
@@ -338,6 +382,11 @@ items:
       holds fewer shots than a stock lasgun. Acc rises to 9 for the integral
       scope, and Bulk worsens to -6 for the longer, heavier weapon, following
       the usual GURPS convention for a dedicated sniper rifle.
+      Handling: min ST corrected to 10 (√(10×11)≈10.5), following the
+      framework formula for an 11 lb rifle rather than the previous flat 7 -
+      a heavier barrel and stock for stability costs more strength to
+      shoulder, not less, than a standard lasgun. RoF 1, Bulk -6 and Rcl 1
+      are unchanged.
 
   - name: Hellpistol
     tl: 11
@@ -370,6 +419,11 @@ items:
       full-size hellgun's 90.4%. Shot count is lower than an ordinary
       laspistol's because a hot-shot cell packs more energy per shot into
       the same volume, so it burns out faster.
+      Handling: min ST 6 (√(10×3)≈5.5, rounded up for the reinforced
+      housing a hot-shot cell needs even at pistol scale) sits a point
+      above an ordinary laspistol's ST 5 for the same reason the full
+      hellgun needs more ST than a standard lasgun. RoF 3, Bulk -2 and Rcl
+      1 are ordinary pistol figures.
 
   - name: Hellgun
     tl: 11
@@ -384,7 +438,7 @@ items:
         range: 280/840
         rof: 10
         shots: 40(3)
-        st: 7
+        st: 9
         bulk: -4
         rcl: 1
         skill: Beam Weapons (Rifle)
@@ -404,8 +458,13 @@ items:
       armour (DR 100, effective 33.3) that drops to 0.1%, essentially none,
       matching hellgun's place below the boltgun as an infantry-scale
       weapon. Shot count (40) is lower than a standard lasgun's 60 to
-      reflect the hungrier, hotter cell; ST is bumped to 7 for the heavier
-      housing needed to safely contain the higher-energy discharge.
+      reflect the hungrier, hotter cell.
+      Handling: min ST corrected to 9 (√(10×9)≈9.5, rounded down), matching
+      the framework formula for a 9 lb rifle - a point above a standard
+      lasgun's corrected ST of 9 at the same nominal weight would suggest,
+      reflecting the extra containment shielding an overcharged cell needs;
+      the previous flat ST 7 undersold how much of a handful a hellgun
+      actually is. RoF 10, Bulk -4 and Rcl 1 are unchanged.
 
   - name: Hot-Shot Volley Gun
     tl: 11
@@ -438,6 +497,11 @@ items:
       tripod or pintle) and uses Gunner (Beams) per framework.md's rule that
       braced/mounted heavies use the Gunner skill family rather than Beam
       Weapons.
+      Handling: ST 10B (bipod/tripod) is unchanged - the mount bears most of
+      the 30 lb loaded weight, so the ST figure covers aim and recoil rather
+      than the raw √(10×30)≈17.3 a shoulder-fired weapon this heavy would
+      need, consistent with the other mounted weapons in this project's
+      heavy-weapons file. RoF 6, Bulk -6 and Rcl 1 are unchanged.
 
   - name: Charge Pack, Laspistol
     tl: 10

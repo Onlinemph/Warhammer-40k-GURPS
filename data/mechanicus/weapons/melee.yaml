@@ -1,0 +1,579 @@
+kind: equipment
+output: Adeptus Mechanicus/Weapons/Mechanicus Melee Weapons.eqp
+items:
+
+  # -------------------------------------------------------------- Tech-Priest ritual weapons
+
+  - name: Omnissian Axe
+    tl: 11
+    lc: 1
+    cost: 6000
+    weight: 6
+    tags: [Melee Weapon, Imperium, Adeptus Mechanicus]
+    weapons:
+      - usage: Field on
+        damage: sw+3d+2(10) cut
+        reach: 1
+        parry: -1
+        st: 12
+        skill: Axe/Mace
+      - usage: Field off (as plain axe)
+        damage: sw+2 cut
+        reach: 1
+        parry: -1
+        st: 12
+        skill: Axe/Mace
+    notes: Field toggle and depleted-cell rules as the Imperium Power Sword.
+    lore: >
+      A ceremonial axe carried by senior Tech-Priests as a badge of office and a functional close
+      combat weapon in equal measure, current Codex Adeptus Mechanicus background depicting it
+      wreathed in a disruption field identical in effect to an Astartes or Militarum power weapon -
+      the Cult Mechanicus reveres the technology behind the field as much as it uses the weapon
+      itself.
+    design: >
+      Per framework.md's own instruction that a bolter built for the Astartes armoury and one
+      carried by a Sister of Battle are the same weapon with the same numbers, this is mechanically
+      identical to the Imperium Power Axe (sw+3d+2(10) cut field on / sw+2 cut field off, the
+      power-field rule established under Power Sword) rather than a re-derived Mechanicus-specific
+      disruption field - nothing in the lore suggests a Tech-Priest's field works any differently
+      from an Astartes officer's, only that the Cult Mechanicus treats the underlying technology as
+      a sacred mystery rather than standard-issue wargear, which is reflected in cost and
+      legality (LC1, Mechanicus-restricted) rather than a different damage line.
+
+  - name: Omnissian Staff
+    tl: 11
+    lc: 1
+    cost: 5000
+    weight: 5
+    tags: [Melee Weapon, Imperium, Adeptus Mechanicus]
+    weapons:
+      - usage: Field on, swing
+        damage: sw+3d+2(10) cr
+        reach: "1,2"
+        parry: 0
+        st: 10
+        skill: Staff
+      - usage: Field on, thrust
+        damage: thr+3d+2(10) cr
+        reach: "1,2"
+        parry: 0
+        st: 10
+        skill: Staff
+      - usage: Field off
+        damage: sw+2 cr
+        reach: "1,2"
+        parry: 0
+        st: 10
+        skill: Staff
+    notes: >
+      This is a powered ritual staff, not a psyker's force stave; the psyker variant belongs to the
+      psychic-gear file, not here.
+    lore: >
+      A two-handed ritual staff carried by Magi and senior Tech-Priests who favour reach and a
+      quarterstaff's defensive profile over a one-handed blade; depicted throughout current Codex
+      Adeptus Mechanicus background as functionally interchangeable with the Omnissian Axe in
+      combat effect, the choice between the two being a matter of the individual Tech-Priest's
+      training and station.
+    design: >
+      Mechanically identical to the Imperium Power Stave (same power-field rule applied to a
+      two-handed quarterstaff baseline), for the same reason the Omnissian Axe above matches the
+      Power Axe: this project treats the disruption field itself as a fixed, faction-neutral
+      technology once established, so the only things that vary between an Ecclesiarchy Power Stave
+      and this Mechanicus-forged Omnissian Staff are cost, legality and the ritual it's blessed
+      with, not its numbers.
+
+  # -------------------------------------------------------------- Goads
+
+  - name: Power Goad
+    tl: 11
+    lc: 2
+    cost: 900
+    weight: 4
+    tags: [Melee Weapon, Imperium, Adeptus Mechanicus]
+    weapons:
+      - usage: Thrust
+        damage: thr cr
+        reach: "1,2"
+        parry: -1
+        st: 8
+        skill: Spear
+        notes: >
+          A hit that does any HP of damage forces the target to roll HT-2 or be stunned (B420), as
+          the Imperium Shock Maul's electro-stun rule at a milder setting - a goad is built to
+          discipline and herd, not to kill.
+    lore: >
+      A long-handled prod used by Tech-Priests and Magos-overseers to administer correction to
+      servitors, indentured menials and disobedient Kataphron husks; background material treats it
+      as a tool of discipline within the Cult Mechanicus hierarchy rather than a war weapon, closer
+      in spirit to a cattle-prod than to a power weapon.
+    design: >
+      Not built from the power-field rule at all, despite the name: framework.md's power-field rule
+      is reserved for genuine disruption-field weapons meant to kill (the Omnissian Axe/Staff above),
+      and nothing in the goad's lore suggests it is meant to. Instead it follows the Imperium Shock
+      Maul/Staff family's own design (a plain thrusting weapon, thr cr, plus a Basic Set HT-roll stun
+      effect layered on top rather than extra damage), at a milder HT-2 rather than the Shock
+      Maul's HT-3, reflecting a tool built to correct rather than to incapacitate outright. TL11 for
+      the internal charge cell; LC2 (Mechanicus/enforcement-tier, matching the framework's Shock
+      Maul bracket) rather than LC1, since this is disciplinary rather than combat-restricted gear.
+
+  - name: Arc Goad
+    tl: 11
+    lc: 2
+    cost: 1400
+    weight: 5
+    tags: [Melee Weapon, Imperium, Adeptus Mechanicus]
+    weapons:
+      - usage: Thrust
+        damage: thr cr
+        reach: "1,2"
+        parry: -1
+        st: 8
+        skill: Spear
+        notes: >
+          A hit against a machine target (vehicle, servitor, robot, cyborg limb, or a powered-armour
+          suit's servo/sensor systems) forces that target's HT roll at -3 to avoid a short-circuit,
+          exactly as the Adeptus Mechanicus Arc Pistol's surge effect, regardless of whether the raw
+          damage penetrated DR.
+    lore: >
+      A goad built around the same capacitor-discharge principle as an arc weapon rather than a
+      simple electro-shock cell, used specifically to correct and discipline the Cult Mechanicus's
+      own cybernetic servants - a rogue servitor or an under-performing Kataphron husk - by shocking
+      its internal systems directly rather than merely hurting whatever flesh remains.
+    design: >
+      Combines the Power Goad's plain thr cr baseline with the Arc Pistol's own machine-disabling
+      surge rule rather than its raw damage line, since the whole point of this variant is
+      correcting machines, not people: the HT-3 penalty sits at the lower end of the arc-weapon
+      family's escalating penalties (pistol -2, rifle -4, heavy rifle -6), appropriate for a
+      melee-range prod rather than a dedicated ranged weapon. No organic-target stun note is
+      included, unlike the Power Goad or Taser Goad, since an arc discharge's whole design purpose
+      in this project is to be "weak against flesh," per framework.md's arc-weapon anchor.
+
+  - name: Taser Goad
+    tl: 11
+    lc: 2
+    cost: 1000
+    weight: 4
+    tags: [Melee Weapon, Imperium, Adeptus Mechanicus]
+    weapons:
+      - usage: Thrust
+        damage: thr cr
+        reach: "1,2"
+        parry: -1
+        st: 8
+        skill: Spear
+        notes: >
+          A hit that does any HP of damage forces the target to roll HT-3 or be stunned (B420), as
+          the Imperium Shock Maul - a stronger organic-targeted jolt than the plain Power Goad's.
+    lore: >
+      The organic-focused counterpart to the arc goad, built to incapacitate an unruly menial or a
+      heretic under interrogation rather than to correct machinery; depicted in Inquisitorial and
+      Mechanicus background as standard-issue crowd-control and discipline gear wherever the Cult
+      Mechanicus polices its own.
+    design: >
+      Identical thr cr baseline to the Power Goad and Arc Goad, but with the full HT-3 stun setting
+      the Imperium Shock Maul uses (rather than the Power Goad's milder HT-2), reflecting a
+      purpose-built taser rather than a general correctional prod - this project treats "taser" and
+      "shock" as the same underlying electro-stun mechanic wherever it appears, per the Shock Maul's
+      own precedent, rather than inventing a new effect for each named variant.
+
+  - name: Taser Lance
+    tl: 11
+    lc: 1
+    cost: 3500
+    weight: 12
+    tags: [Melee Weapon, Imperium, Adeptus Mechanicus]
+    weapons:
+      - usage: Mounted charge
+        damage: thr+2 cr
+        reach: "1,2*,3*"
+        parry: -1
+        st: 11
+        skill: Spear
+        notes: >
+          A hit that does any HP of damage forces the target to roll HT-3 or be stunned (B420), as
+          the Taser Goad. The full mounted-charge reach and damage bonus (marked *) requires a
+          Sydonian Dragoon or Ironstrider-class walker chassis (or an actual mount) moving at speed,
+          per the Imperium Power Lance's own charge rule.
+      - usage: Braced (dismounted/stationary)
+        damage: thr+1 cr
+        reach: "1,2"
+        parry: -1
+        st: 11
+        skill: Spear
+        notes: As the mounted charge usage's stun note.
+    lore: >
+      A lance-length taser weapon mounted on Skitarii Dragoon walker chassis, current Codex Adeptus
+      Mechanicus background depicting a Dragoon's charge as smashing infantry aside with a paralysing
+      jolt rather than a piercing thrust - the walker's own momentum, not the weapon's own field,
+      supplying most of the damage.
+    design: >
+      Built on the Imperium Power Lance's own mounted-charge/braced structure (a plain cavalry-lance
+      baseline that gets extra reach and damage only while the mount is moving) but without that
+      entry's power-field bonus, since a taser lance is explicitly an electro-stun weapon, not a
+      disruption-field one: the charge bonus is the mundane momentum bonus alone (thr+2 cr charging,
+      thr+1 cr braced) plus the same HT-3 stun effect as the Taser Goad, reflecting a weapon whose
+      real threat is a walker-speed collision punctuated by a paralysing shock, not a blade that
+      shears through armour. TL11/LC1 (Skitarii walker wargear, one step more restricted than the
+      goads' enforcement-tier LC2).
+
+  # -------------------------------------------------------------- Sicarian Ruststalker weapons
+
+  - name: Transonic Razor
+    tl: 11
+    lc: 0
+    cost: 9000
+    weight: 5
+    tags: [Melee Weapon, Imperium, Adeptus Mechanicus]
+    weapons:
+      - usage: Field on
+        damage: sw+2d+1(5) cut
+        reach: 1
+        parry: 0
+        st: 10
+        skill: Shortsword
+      - usage: Field off (as plain blade)
+        damage: sw+1 cut
+        reach: 1
+        parry: 0
+        st: 10
+        skill: Shortsword
+    notes: >
+      The transonic field is a toggle (free action), exactly as an Imperial power weapon's
+      disruption field; a depleted or damaged power cell disables it the same way.
+    lore: >
+      The signature weapon of the Sicarian Ruststalker: a blade vibrating at a resonant frequency
+      current Codex Adeptus Mechanicus background describes as letting it part armour plate almost
+      without resistance, distinct in the fiction from an Astartes or Militarum disruption-field
+      weapon's shearing, disintegrating bite.
+    design: >
+      Deliberately not built as another disruption-field weapon under framework.md's power-field
+      rule (Armor Divisor (10)): the lore describes a mechanically different effect - a resonant
+      vibration that shears through matter cleanly along its own weak points, rather than a field
+      that disrupts molecular bonds outright - so this project gives transonic weapons their own,
+      lesser armour divisor (5) rather than reusing the power-field number wholesale, exactly the
+      kind of "own derivation, not a renamed catalogue entry" step framework.md's goals call for.
+      The mundane baseline (sw+1 cut, field off) matches the Power Sword's own one-handed-blade
+      baseline, since underneath the resonant emitter this is still an ordinary well-made blade; the
+      field itself adds +2d+1 rather than the Power Sword's +3d+1, one step down, reflecting a
+      genuinely different (and, per Mechanicus doctrine, less spiritually significant) technology
+      rather than a cut-rate power sword. Checked by exact dice distribution at a representative
+      Sicarian Ruststalker ST of 13 (a cybernetically reinforced combat chassis, sw=2d, giving a
+      field-on total of 4d+1(5), avg 15): it penetrates carapace (DR 45, eff. 9) 94.6% of the time -
+      genuinely armour-shredding against rigid infantry plate, matching "parts armour plate almost
+      without resistance" - but only 5.4% of the time against Astartes power armour (DR 100, eff.
+      20) and effectively never against Terminator plate (DR 200, eff. 40), keeping it a
+      devastating anti-infantry weapon without quietly becoming an Astartes-killer, which no
+      depiction supports. TL11 (advanced but not archeotech - Ruststalkers are current-production
+      Cult Mechanicus wargear) and LC0 (Sicarian-pattern kit, chapter-restricted per the Phosphor
+      Serpenta's own LC0 reasoning).
+
+  - name: Transonic Blades
+    tl: 11
+    lc: 0
+    cost: 8500
+    weight: 4
+    tags: [Melee Weapon, Imperium, Adeptus Mechanicus]
+    weapons:
+      - usage: Field on (either blade)
+        damage: sw+1d+3(5) cut
+        reach: "C,1"
+        parry: -1
+        st: 9
+        skill: Shortsword
+      - usage: Field off (either blade)
+        damage: sw-1 cut
+        reach: "C,1"
+        parry: -1
+        st: 9
+        skill: Shortsword
+    notes: >
+      One blade worn per hand, mirroring the Imperium Lightning Claws' pairing convention: a
+      Ruststalker trained in two-weapon fighting attacks with both under the standard Basic Set
+      dual-weapon rules, with no bespoke "paired blades" mechanic added on top.
+    lore: >
+      The alternative Ruststalker loadout to a razor-and-chordclaw pairing: two shorter transonic
+      blades worn as a matched set, background depicting Ruststalkers so equipped as trading the
+      razor's single heavier cut for a faster flurry from both hands, in keeping with their role as
+      an ambush unit that overwhelms a position in a single, brief melee before withdrawing.
+    design: >
+      Built the same way the Imperium Lightning Claw is built relative to the Power Sword: a
+      shorter-reach, paired weapon with a smaller field bonus than the family's main blade, applying
+      the Transonic Razor's own +2d+1(5)-over-mundane-baseline logic to a lighter starting weapon
+      (sw-1 cut, one step below the Razor's sw+1, reflecting a shorter blade meant to be worn in
+      pairs) for a total +1d+3 field-on bonus over that baseline (5) armour divisor, unchanged from
+      the Razor's since it's the same underlying resonant technology at a smaller scale. Checked by
+      exact dice distribution at the same representative Ruststalker ST 13 (sw=2d, giving 3d+3(5),
+      avg 13.5): 90.7% against carapace, 0.5% against Astartes power armour - a hair below the
+      single Razor's own figures at each tier, matching "trades the razor's single heavier cut for a
+      faster flurry" rather than simply doubling its damage output, which this project's Basic Set
+      two-weapon-fighting rules already handle for the "flurry" part without a new mechanic. TL11/LC0
+      as the Transonic Razor.
+
+  - name: Chordclaw
+    tl: 11
+    lc: 0
+    cost: 4000
+    weight: 6
+    tags: [Melee Weapon, Imperium, Adeptus Mechanicus]
+    weapons:
+      - usage: Grapple strike
+        damage: thr-1 cr
+        reach: "1,2*"
+        parry: 0
+        st: 9
+        skill: Spear
+        notes: >
+          A hit (whether or not it does enough damage to matter) lets the wielder immediately
+          attempt a Grapple (B370) as a free follow-up, using this weapon's own skill roll in place
+          of DX for the Quick Contest against the target's ST or DX (target's choice); a target
+          successfully grappled this way suffers the normal -4 to active defenses and must win a
+          Committed Attack (Strong) or an ST-based Escape roll to break free (B378), exactly as an
+          ordinary GURPS grapple. The claw's own reach (marked *) extends to 2 yards only while
+          reeling a grappled target in or holding them at range on the cable; once closed to grip
+          range, treat reach as C for the purposes of the hold.
+    lore: >
+      The Sicarian Ruststalker's off-hand weapon, a piston-driven claw on a retractable cable used
+      to snag, entangle and drag a target off-balance or into range of the Ruststalker's transonic
+      blade, background material consistently depicting it as a grip-and-control tool rather than a
+      killing weapon in its own right.
+    design: >
+      Built entirely from GURPS's own existing Grapple/Committed Attack rules (B370, B378) rather
+      than a bespoke "entangle" mechanic, since GURPS already has exactly the tool this weapon's lore
+      calls for: a low, deliberately unthreatening raw-damage baseline (thr-1 cr, avg 3.5 at a
+      Sicarian ST 9-13 range, never intended to beat any meaningful DR on its own) paired with an
+      automatic grapple attempt on any hit, reflecting a weapon whose entire purpose is to open a
+      target up for the transonic blade rather than to hurt them directly. TL11/LC0 as the rest of
+      the Sicarian Ruststalker's kit.
+
+  # -------------------------------------------------------------- Arc and electro melee
+
+  - name: Arc Maul
+    tl: 11
+    lc: 1
+    cost: 2200
+    weight: 6
+    tags: [Melee Weapon, Imperium, Adeptus Mechanicus]
+    weapons:
+      - usage: Swing
+        damage: sw+3 cr
+        reach: 1
+        parry: -1
+        st: 9
+        skill: Axe/Mace
+        notes: >
+          As the Arc Pistol's surge note: a hit against a machine target (vehicle, servitor, robot,
+          cyborg limb, or powered-armour system) forces that target's HT roll at -3 to avoid a
+          short-circuit, regardless of whether the raw damage penetrated DR.
+    lore: >
+      A heavier arc weapon built as a maul rather than a goad or pistol, issued to Skitarii heavy
+      support elements and Mechanicus explorator security teams for close-range work against war
+      machines, cortex-hubs and powered armour rather than infantry - background treats it as a
+      genuine melee weapon rather than the goads' disciplinary tool, but still built around the same
+      "weak against flesh, strong against machines" principle as every other arc weapon.
+    design: >
+      One step heavier than the Imperium Power Maul's own mundane baseline (sw+2 cr): a built-in
+      coil housing adds enough head mass to justify sw+3 cr even with the field-generation
+      hardware doing none of the cutting, since (per the Arc Pistol/Rifle's own design note) this
+      project does not model the arc-weapon surge as bonus raw damage. The HT-3 surge penalty sits
+      at the goad-and-pistol tier of the family's escalating scale (pistol -2, this maul and the arc
+      goad -3, rifle -4, heavy rifle -6), reflecting a hand weapon's single heavy hit rather than a
+      sustained rifle discharge. Checked by exact dice distribution at a representative Skitarii ST
+      of 12 (sw=2d-1, giving 2d+2, avg 9): only 2.8% penetration against even flak (DR 12) - a real,
+      if unimpressive, threat to flesh, exactly the "weak against flesh" half of the family anchor,
+      with its actual combat value entirely in the surge effect against machines. TL11/LC1
+      (Skitarii combat-issue, one step more restricted than the enforcement-tier goads' LC2).
+
+  - name: Electroleech Stave
+    tl: 11
+    lc: 1
+    cost: 1800
+    weight: 6
+    tags: [Melee Weapon, Imperium, Adeptus Mechanicus]
+    weapons:
+      - usage: Swing
+        damage: sw+2 cr
+        reach: "1,2"
+        parry: 0
+        st: 10
+        skill: Staff
+        notes: >
+          A hit that does any HP of damage forces the target to roll HT-4 or be stunned (B420), a
+          heavier jolt than the Imperium Shock Staff's HT-3.
+      - usage: Thrust
+        damage: thr+2 cr
+        reach: "1,2"
+        parry: 0
+        st: 10
+        skill: Staff
+        notes: As the swing usage above.
+    notes: >
+      This entry covers only the physical stave and its built-in electro-stun charge. Current
+      background credits a Fulgurite Electro-Priest's own bio-electric implants (the "Flesh is
+      Weak" doctrine and its associated grafts) with letting a charged Electro-Priest turn a hit
+      from this weapon into something far more lethal than the stave's own listed damage - that
+      capability is a character-level trait, not a property of the stave itself, and belongs in a
+      traits file rather than here, per the same separation of concerns this project already applies
+      to the Storm Shield's force-field component and the Blessed Blade's consecration.
+    lore: >
+      The Fulgurite Electro-Priest's iconic weapon: a metal-shod stave built to conduct and
+      discharge massive current into whatever it strikes, current Codex Adeptus Mechanicus
+      background describing Electro-Priests as capable of frying a target to component ash when
+      fully charged - a reputation this project attributes chiefly to the Electro-Priest's own
+      bio-electric physiology rather than to the stave as a mundane object.
+    design: >
+      Built on the Imperium Power Stave/Shock Staff's own quarterstaff baseline (sw+2 cr/thr+2 cr,
+      reach 1,2) with the electro-stun note bumped one step past the Shock Staff's own HT-3 to HT-4,
+      reflecting a purpose-built high-current weapon rather than a simple riot tool - but
+      deliberately not given the Power Stave's disruption-field damage bonus, since nothing in the
+      lore suggests the stave itself is a power weapon in the framework.md sense; the devastating
+      "fries a man to ash" reputation instead belongs, as the notes above explain, to the
+      Electro-Priest's own trait-level physiology (the "Flesh is Weak" implants), keeping this
+      equipment entry an honestly modest metal stave with a strong stun charge, the same way the
+      Storm Shield's physical component is "just" a very large plate until its trait-level force
+      field is added on top. TL11 for the charge cell; LC1 (Cult Mechanicus cultist-tier wargear,
+      one step more restricted than the general-issue goads).
+
+  # -------------------------------------------------------------- Mundane crushing tools
+
+  - name: Hydraulic Claw
+    tl: 11
+    lc: 1
+    cost: 3500
+    weight: 25
+    tags: [Melee Weapon, Imperium, Adeptus Mechanicus]
+    weapons:
+      - usage: Crush
+        damage: thr+3d cr
+        reach: C
+        parry: -2
+        st: 13
+        skill: Brawling
+    notes: >
+      Slow and clumsy in a defensive sense, as the Imperium Power Fist: cannot be used to Feint, and
+      the -2 parry reflects the actuator's poor reaction speed compared to a natural limb.
+    lore: >
+      A heavy mechanical grasping claw built for prying open bulkheads and hauling wreckage, carried
+      by some Skitarii and Mechanicus combat-menials as an improvised or secondary crushing weapon
+      when a proper melee weapon isn't at hand; background material is consistent that it is
+      fundamentally an industrial tool pressed into service rather than a dedicated war-weapon.
+    design: >
+      Deliberately not built on the power-field rule or given any armour divisor at all, unlike the
+      Power Fist it superficially resembles: the Power Fist's whole design note explains that its
+      Armor Divisor (10) comes from an internal disruption field, and nothing in the hydraulic
+      claw's lore or name suggests one - this is pure mechanical leverage, hydraulics compressing
+      rather than a field disrupting, so it stays a flat thr+3d cr with no divisor, following the
+      same "own derivation, not a renamed catalogue entry" principle the Power Fist's own design note
+      sets out. Checked by exact dice distribution at a representative Skitarii/Sicarian ST of 14
+      (thr=1d+2, giving 4d+2 cr, avg 16): it beats flak (DR 12) 84.1% of the time and crushes an
+      unarmoured target outright, but 0% of hits get through carapace (DR 45) or better - a real
+      threat to unarmoured infantry and light material (matching its lore role prying open
+      bulkheads) but no threat at all to rigid plate, exactly what "an industrial tool, not a war
+      weapon" should mean mechanically. TL11/LC1.
+
+  - name: Servo-arm
+    tl: 11
+    lc: 2
+    cost: 2200
+    weight: 20
+    tags: [Melee Weapon, Imperium, Adeptus Mechanicus]
+    weapons:
+      - usage: Crush
+        damage: thr+2 cr
+        reach: C,1
+        parry: -3
+        st: 10
+        skill: Brawling
+    notes: >
+      Primarily a repair and maintenance tool (its actual function - fine manipulation, welding and
+      heavy lifting for field repairs - is gear, not a weapon, and belongs in a Mechanicus gear file
+      rather than here); this entry covers only its use as an improvised crushing weapon in a pinch,
+      the way the Imperium Entrenching Tool is priced and statted as a weapon despite being a digging
+      implement first.
+    lore: >
+      Every Tech-Priest's servo-arm - the heavy mechanical limb mounted over one shoulder for repair
+      work - is occasionally shown in Black Library fiction and Codex background swatting an
+      attacker aside or crushing a skull when a Tech-Priest is caught without a proper weapon, always
+      framed as an improvised, clumsy use of a tool built for an entirely different purpose.
+    design: >
+      Follows the Imperium Entrenching Tool's own precedent exactly: a mundane tool that is "already
+      priced and statted as [a weapon], no further penalty needed when used as intended," at a
+      correspondingly heavy -3 parry (worse than the Power Fist's -2, since the arm is built for
+      delicate manipulation and heavy static lifting, not for reacting quickly in a fight) and reach
+      C,1 for its long but slow reach. The listed thr+2 cr and ST 10 describe the servo-motor's own
+      modest crushing assist over an unaugmented Tech-Priest's own thrust, not a combat-grade
+      actuator - this is not the Power Fist's disruption-field gauntlet, and does not pretend to
+      threaten anything beyond an unarmoured target. TL11 for the servo-motor itself; LC2 since it is
+      general Mechanicus tech-adept gear rather than Skitarii combat-issue.
+
+  - name: Mechadendrite, Combat Tip
+    tl: 11
+    lc: 1
+    cost: 1200
+    weight: 4
+    tags: [Melee Weapon, Imperium, Adeptus Mechanicus]
+    weapons:
+      - usage: Thrust
+        damage: thr+1 imp
+        reach: "C,1"
+        parry: -2
+        st: 8
+        skill: Spear
+    notes: >
+      This entry is the weapon fitting only - a hardened, piston-driven puncturing spike or hooked
+      blade swapped onto a mechadendrite's mount. The mechadendrite limb itself (an Extra Arm with
+      appropriate reach/DX limitations) is a trait, not equipment, and is defined in a traits file by
+      the traits agent, not here; this item exists so that file's Extra Arms trait has a concrete
+      weapon profile to plug into when a Tech-Priest chooses a combat tip over a manipulator claw or
+      tool interface.
+    lore: >
+      Many Tech-Priests carry one mechadendrite fitted with a combat-capable tip rather than a purely
+      utilitarian manipulator or tool head, background material depicting this as an option chosen by
+      Tech-Priests who expect to see combat (Enginseers and Secutors especially) rather than as
+      universal Mechanicus practice.
+    design: >
+      A light, awkward weapon by design: reach C,1 and a poor -2 parry reflect a limb built primarily
+      for fine manipulation rather than combat, with min ST 8 and thr+1 imp describing only the
+      piston-driven spike's own bite, not any augmentation of the wielder's own body (that
+      augmentation, if any, lives in the Extra Arms trait's own ST value, not here). No armour
+      divisor or power field: this is a mundane hardened spike, one clear step below any of the
+      dedicated melee weapons in this file, existing to give a baseline "what does a combat
+      mechadendrite actually do in a fight" answer rather than to be anyone's primary weapon. TL11/LC1.
+
+  # -------------------------------------------------------------- Kataphron
+
+  - name: Kataphron Arc Claw
+    tl: 12
+    lc: 0
+    cost: 8000
+    weight: 60
+    tags: [Melee Weapon, Imperium, Adeptus Mechanicus]
+    weapons:
+      - usage: Crush
+        damage: thr+6d cr
+        reach: C,1
+        parry: -3
+        st: 20
+        skill: Brawling
+        notes: >
+          As the Arc Maul's surge note, at a heavier HT-6 penalty for a qualifying machine target
+          hit by this weapon's much larger built-in capacitor discharge - a Kataphron's own reactor
+          feeds far more current into the strike than a hand-held arc weapon's cell ever could.
+    lore: >
+      The integral close-combat claw of the Kataphron Destroyer and Breacher war-forms, current
+      Codex Adeptus Mechanicus background describing it crushing infantry and light structures alike
+      while its built-in arc discharge shorts out anything electronic it grips - combining raw
+      hydraulic force with the same anti-machine principle as the Mechanicus's smaller arc weapons.
+    design: >
+      Combines the Hydraulic Claw's mundane, no-divisor crushing design (a huge hydraulic ram, not a
+      disruption field, per that entry's own reasoning) with the Arc Maul's machine-disabling surge
+      effect at the top of the family's escalating HT-penalty scale (-6, matching the Heavy Arc
+      Rifle's own largest jolt), since a chassis this size carries a proportionally larger capacitor.
+      Checked by exact dice distribution at the Kataphron chassis's own ST of 20 (thr=2d, giving 8d
+      cr, avg 28): it crushes flak and unarmoured targets outright (100%) but, matching the Hydraulic
+      Claw's own reasoning, 0% of hits get through carapace (DR 45) or better with no armour divisor
+      applied - the claw's real threat to anything well-armoured or mechanical is the surge effect,
+      not its raw crushing force, keeping the Kataphron's actual anti-vehicle work with its ranged
+      weapons (the Heavy Grav-cannon and Eradication Ray in the ranged weapons file) rather than this
+      claw, exactly as current Codex background depicts a Kataphron's loadout. TL12 (a purpose-built
+      cybernetic war-form component, not general Skitarii issue) and LC0 (Kataphron husks are Cult
+      Mechanicus-restricted war material in their own right).

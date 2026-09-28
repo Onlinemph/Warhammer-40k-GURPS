@@ -1,0 +1,211 @@
+kind: template
+output: Adeptus Mechanicus/Templates/Magos.gct
+notes: >
+  A Magos: a senior Tech-Priest running a manufactorum wing, an Explorator
+  fleet vessel, or a specialist attachment to an Inquisitorial or Militarum
+  force, decades past an Enginseer's field-repair role and correspondingly
+  more heavily augmented, ranked, and educated. Point math: ST 10 (+0),
+  DX 12 (+40), IQ 15 (+100), HT 11 (+10) = 150, plus Will +2 (+10) = 160;
+  advantages +176; disadvantages -50; skills +119. Total 405 points,
+  comfortably inside framework.md's "Senior agents (350-600)" tier. An
+  Archmagos or Fabricator-General should raise Mechanicus Rank further and
+  add more augmetics/skills on top of this baseline rather than replace it.
+traits:
+  - name: ST
+    points: 0
+    tags: [Attribute]
+    lore: A Magos spends their career at a lectern and a cogitator bank, not on a firing range.
+    design: ST 10 (baseline), 10 pts/level (B15).
+  - name: DX
+    points: 40
+    tags: [Attribute]
+    lore: Enough manual precision for delicate augmetic and cogitator work.
+    design: DX 12 (+2), 20 pts/level (B15).
+  - name: IQ
+    points: 100
+    tags: [Attribute]
+    lore: A working Magos commands a formidable breadth of engineering, archival, and theological learning.
+    design: IQ 15 (+5), 20 pts/level (B15).
+  - name: HT
+    points: 10
+    tags: [Attribute]
+    lore: Augmetic life support compensates for a body that otherwise spends little time in the field.
+    design: HT 11 (+1), 10 pts/level (B14).
+  - name: Will
+    points: 10
+    tags: [Attribute]
+    lore: Decades of doctrinal certainty and command responsibility.
+    design: Will 17 (+2 above the IQ-derived default of 15), 5 pts/level (B16).
+  - name: Fit
+    points: 5
+    ref: B55
+    tags: [Advantage, Physical, Imperium]
+    lore: What field fitness remains after decades in a forge is maintained as much by augmetics as exercise.
+    design: Basic Set Fit (B55), 5 points.
+  - include: "mechanicus/traits/augmetics.yaml#Cranial Circuitry"
+  - include: "mechanicus/traits/augmetics.yaml#Cortex Implant, Logis Pattern"
+  - include: "mechanicus/traits/augmetics.yaml#Multi-lens Oculars, Magos Pattern"
+  - include: "mechanicus/traits/augmetics.yaml#Respirator Plugs (Filtration Lungs)"
+  - include: "mechanicus/traits/augmetics.yaml#Subdermal Armour Plating"
+    levels: 2
+  - include: "mechanicus/traits/augmetics.yaml#Servo-Arm"
+  - include: "mechanicus/traits/augmetics.yaml#Mechadendrite, Utility Pattern"
+  - include: "mechanicus/traits/augmetics.yaml#Noospheric Link"
+  - include: "mechanicus/traits/augmetics.yaml#Logis Cogitator"
+    levels: 2
+  - include: "mechanicus/traits/augmetics.yaml#Potentia Coil"
+    levels: 1
+  - include: "mechanicus/traits/augmetics.yaml#Mechanicus Rank"
+    levels: 5
+    lore: A Magos in good standing, several ranks above an Enginseer and below an Archmagos.
+  - include: "mechanicus/traits/augmetics.yaml#Disciplines of the Cult Mechanicus"
+  - include: "mechanicus/traits/augmetics.yaml#Duty (Adeptus Mechanicus)"
+  - include: "mechanicus/traits/augmetics.yaml#Distrust of Flesh"
+  - include: "mechanicus/traits/augmetics.yaml#Dependency (Maintenance Rites and Sacred Unguents)"
+  - include: "mechanicus/traits/augmetics.yaml#Social Stigma (Heavily Augmented)"
+  - include: "imperium/common/imperial-traits.yaml#Callous"
+    lore: >
+      Data and the Machine God's work outweigh any single life, including
+      (a Magos will tell you) their own — a working assumption behind a
+      great deal of what the Mechanicus does to and with its Servitors.
+  - name: Speaks of People the Way Others Speak of Components
+    points: -1
+    tags: [Quirk, Imperium]
+    design: Quirk (B9), roleplaying flag only.
+    lore: Decades of augmetic replacement and cogitator logic have a way of flattening a Magos' language.
+  - name: Never Without a Data-Slate or Servo-Skull in Attendance
+    points: -1
+    tags: [Quirk, Imperium]
+    design: Quirk (B9), roleplaying flag only.
+    lore: A Magos' authority is bound up in visible ritual and record-keeping.
+skills:
+  - name: Engineer
+    spec: Combat Engineering
+    diff: IQ/H
+    points: 8
+    tags: [Imperium, Adeptus Mechanicus]
+    lore: Field and forge-level repair, modification, and fabrication of matériel.
+    design: IQ+1 (16) for 8 points, Hard (B170).
+  - name: Engineer
+    spec: Powered Armor
+    diff: IQ/H
+    points: 8
+    tags: [Imperium, Adeptus Mechanicus]
+    lore: Power armour and exoskeleton maintenance and modification, at TL10-11.
+    design: IQ+1 (16) for 8 points, Hard.
+  - name: Engineer
+    spec: Starships
+    diff: IQ/H
+    points: 8
+    tags: [Imperium, Adeptus Mechanicus]
+    lore: Void-hull and drive-core engineering, a Magos' route to an Explorator or Navy attachment.
+    design: IQ+1 (16) for 8 points, Hard.
+  - name: Mechanic
+    spec: Ground Vehicles
+    diff: IQ/A
+    points: 8
+    tags: [Imperium, Adeptus Mechanicus]
+    lore: Routine vehicle upkeep, beneath a Magos' usual work but never fully delegated.
+    design: IQ+2 (17) for 8 points, Average.
+  - name: Electronics Repair
+    spec: Cogitators
+    diff: IQ/H
+    points: 8
+    tags: [Imperium, Adeptus Mechanicus]
+    lore: Cogitator-bank maintenance and repair.
+    design: IQ+1 (16) for 8 points, Hard.
+  - name: Electronics Operation
+    spec: Cogitators
+    diff: IQ/A
+    points: 4
+    tags: [Imperium, Adeptus Mechanicus]
+    lore: Day-to-day cogitator operation, distinct from the repair skill above.
+    design: IQ+1 (16) for 4 points, Average.
+  - name: Physician
+    diff: IQ/H
+    points: 8
+    tags: [Imperium]
+    lore: Biological (as opposed to augmetic) medicine, kept current for supervising augmentation surgery.
+    design: IQ+1 (16) for 8 points, Hard.
+  - name: Surgery
+    diff: IQ/VH
+    points: 8
+    tags: [Imperium]
+    lore: The surgical half of augmetic implantation.
+    design: IQ+0 (15) for 8 points, Very Hard.
+  - name: Theology
+    spec: Cult Mechanicus
+    diff: IQ/H
+    points: 12
+    tags: [Imperium, Adeptus Mechanicus]
+    lore: Deep command of Cult doctrine, expected of anyone senior enough to instruct novices; see Imperium/Skills/Imperial Skills.skl.
+    design: IQ+2 (17) for 12 points, Hard.
+  - name: Hidden Lore
+    spec: Archeotech
+    diff: IQ/A
+    points: 8
+    tags: [Imperium, Adeptus Mechanicus]
+    lore: STC and Dark Age relic cataloguing, a Magos' bread and butter; see Imperium/Skills/Imperial Skills.skl.
+    design: IQ+2 (17) for 8 points, Average.
+  - name: Hidden Lore
+    spec: Xenos
+    diff: IQ/A
+    points: 4
+    tags: [Imperium]
+    lore: Xenotech familiarity, useful and doctrinally suspect in equal measure; see Imperium/Skills/Imperial Skills.skl.
+    design: IQ+1 (16) for 4 points, Average.
+  - name: Research
+    diff: IQ/A
+    points: 4
+    tags: [Imperium]
+    lore: Archive work across Administratum and Mechanicus record-stacks.
+    design: IQ+1 (16) for 4 points, Average.
+  - name: Administration
+    diff: IQ/A
+    points: 4
+    tags: [Imperium]
+    lore: Running a manufactorum wing's staff, output quotas, and requisitions.
+    design: IQ+1 (16) for 4 points, Average.
+  - name: Chemistry
+    diff: IQ/H
+    points: 4
+    tags: [Imperium]
+    lore: Promethium refining, unguent synthesis, and the occasional forensic question.
+    design: IQ+0 (15) for 4 points, Hard.
+  - name: Physics
+    diff: IQ/H
+    points: 4
+    tags: [Imperium]
+    lore: Theoretical grounding for plasma, void shield, and reactor work.
+    design: IQ+0 (15) for 4 points, Hard.
+  - include: "mechanicus/skills/skills.yaml#Language"
+    spec: Binharic
+    points: 8
+    design: IQ+2 (17) for 8 points, Average — fluent, Magos-grade command of the cant.
+  - include: "mechanicus/skills/skills.yaml#Savoir-Faire"
+    spec: Adeptus Mechanicus
+    points: 2
+    design: IQ+1 (16) for 2 points, Easy.
+  - name: Leadership
+    diff: IQ/A
+    points: 4
+    tags: [Imperium]
+    lore: Commanding a manufactorum's Skitarii guard, servitors, and junior adepts.
+    design: IQ+1 (16) for 4 points, Average.
+  - include: "imperium/common/skills.yaml#Current Affairs"
+    spec: Imperium
+    points: 1
+    design: IQ+0 (15) for 1 point, Easy.
+  - name: Guns
+    spec: Pistol
+    diff: DX/E
+    points: 2
+    tags: [Imperium]
+    lore: A laspistol or a mechadendrite-mounted sidearm for self-defense.
+    design: DX+1 (13) for 2 points, Easy.
+  - name: Fast-Talk
+    diff: IQ/A
+    points: 2
+    tags: [Imperium]
+    lore: Talking down a rival Magos or a suspicious Administratum auditor.
+    design: IQ-1 (14) for 2 points, Average.

@@ -1,0 +1,379 @@
+kind: traits
+output: Adeptus Custodes/Traits/Custodes Physiology.adq
+items:
+  # ------------------------------------------------------------ physiology
+  # Unlike Astartes gene-seed, a Custodian is not built from a checklist of
+  # implanted organs shared by thousands of brothers; each is individually
+  # gene-wrought from infancy by the Emperor's own science, in numbers that
+  # have stayed in the low thousands for ten millennia. This file therefore
+  # models the result as a smaller set of broad, powerful traits rather than
+  # nineteen small organs, per framework.md's "Adeptus Custodes physiology"
+  # section: the point is not that Custodians lack the Astartes' fine detail,
+  # it's that the fiction never itemises their biology the way Codex Astartes
+  # background itemises gene-seed, so a component-by-component pastiche would
+  # invent detail no source supports.
+
+  - &custodian_attributes
+    name: Custodian Attribute Modifiers
+    points: 555
+    attributes: {st: 30, dx: 5, iq: 3, ht: 6, will: 3, hp: 10, basic_speed: 1.5, sm: 1}
+    tags: [Advantage, Physical, Imperium, Adeptus Custodes]
+    lore: >
+      A Custodian stands 2.5-3 m tall, built from infancy on hormonal and
+      surgical regimes far more individually tailored than a Chapter's
+      gene-seed batch process. Chris Wraight's Custodes novels (The
+      Emperor's Legion, Watchers of the Throne) and current Codex: Adeptus
+      Custodes background are consistent that a Custodian outclasses a
+      Space Marine the way a Space Marine outclasses an unaugmented human -
+      faster, stronger, more perceptive, and immeasurably more skilled from
+      centuries of training against the best the Imperium has ever fielded.
+    design: >
+      Framework targets: ST 40 (with the SM +1 cost break), DX 15, IQ 13,
+      HT 16, Will 16, HP ~50, Basic Speed well above an Astartes. Increased
+      Strength +30 (B14, 10/level, 300) for ST 40; per B18's Size and
+      Strength Table a creature whose SM matches its actual bulk gets a
+      cost break on ST, and SM +1 gives -10%, so 300 x 0.9 = 270. Increased
+      Dexterity +5 (B14, 20/level, 100) for DX 15 - sharper than an
+      Astartes' baseline DX 10 by exactly the gap the framework specifies.
+      Increased Intelligence +3 (B16, 20/level, 60) for IQ 13. Increased
+      Health +6 (B15, 10/level, 60) for HT 16, two points above the
+      Astartes HT 14. Increased Will +3 (B16, 5/level, 15) on top of IQ for
+      Will 16, matching the framework's explicit split between IQ 13 and
+      Will 16 - a Custodian's raw wit is merely excellent, but nothing
+      moves his resolve. Extra Hit Points +10 (B16, 2/level, 20) for HP
+      ~50 (40 base from ST, +10). Increased Basic Speed +1.50 (B17, 5
+      points per 0.25 level, 30) stacks with the formula-derived Basic
+      Speed of (15+16)/4 = 7.75 for a final 9.25 - well above an Astartes'
+      own formula-plus-bonus total of 7.00, matching "faster reflexes ...
+      Basic Speed well above an Astartes." SM +1 is the framework's own
+      figure for an unarmoured Custodian and carries no further point cost
+      beyond the ST break already taken above. 270+100+60+60+15+20+30 =
+      555 points.
+
+  - &custodian_fearlessness
+    name: Unfazeable
+    points: 15
+    ref: B99
+    tags: [Advantage, Mental, Imperium, Adeptus Custodes]
+    lore: >
+      A Custodian has stood in the Sanctum Imperialis for ten thousand
+      years, fought Horus's own Sons of Horus, boarded daemon-infested
+      hulks, and duelled things with no right to exist. Black Library and
+      Codex background never show a Custodian rattled, hesitant, or
+      surprised by anything short of the direct will of the Emperor.
+    design: >
+      Unfazeable (B99, 15 points): full immunity to Fear and to being
+      surprised, stronger than the Fearlessness the Astartes package uses,
+      matching the framework's flat "immune to fear" instruction rather
+      than a leveled resistance.
+
+  - &custodian_longevity
+    name: Unaging
+    points: 15
+    ref: B17
+    tags: [Advantage, Physical, Imperium, Adeptus Custodes]
+    lore: >
+      The Ten Thousand have served since before the Imperium existed;
+      named Custodians such as Valerian, Aleya, and the long-lived
+      characters of Wraight's novels are treated as ancient by any human
+      standard without any hint of physical decline. The exact biological
+      mechanism (whether it is a one-off transformation or an ongoing
+      process) is not detailed in the fiction consulted for this build.
+    design: >
+      Unaging (B17, 15 points): no HT penalties or death checks from old
+      age, matching "lives for millennia" without claiming a specific
+      immortality mechanism the sources don't describe.
+
+  - &custodian_combat_reflexes
+    name: Combat Reflexes
+    points: 15
+    ref: B43
+    tags: [Advantage, Mental, Imperium, Adeptus Custodes]
+    lore: >
+      Centuries of drilling against the finest opponents the Imperium can
+      offer (including each other) leave a Custodian essentially
+      unshakeable in combat, never fumbling a reaction to a sudden threat.
+    design: Combat Reflexes (B43, 15 points), as the Astartes package.
+
+  - &custodian_perception
+    name: Custodian Senses
+    per_level: 5
+    levels: 4
+    ref: B16
+    tags: [Advantage, Physical, Imperium, Adeptus Custodes]
+    lore: >
+      Codex background credits Custodians with reflexes and situational
+      awareness that let them track and parry attacks other elites simply
+      cannot perceive in time; this is modelled as raw Perception rather
+      than the itemised acute-sense organs the Astartes package uses, since
+      no source breaks a Custodian's senses down organ by organ.
+    design: >
+      Increased Perception +4 (B16, 5/level, 20 points): a broad
+      "notices everything" bonus, deliberately not split into Astartes-
+      style Acute Vision/Hearing/Smell packages since the fiction doesn't
+      describe Custodian senses that granularly.
+
+  - &custodian_healing
+    name: Custodian Regeneration
+    container: meta_trait
+    tags: [Advantage, Physical, Imperium, Adeptus Custodes]
+    children:
+      - name: Regeneration (Slow)
+        points: 10
+        ref: B80
+        notes: Recovers 1 HP per 12 hours even without rest or first aid.
+      - name: Very Rapid Healing
+        points: 15
+        ref: B80
+    lore: >
+      Custodians shrug off and recover from wounds that would permanently
+      cripple or kill an Astartes, a detail repeated across Wraight's
+      novels (Custodians returning to duty from injuries a Space Marine
+      would need months of Apothecarion care to survive). This project
+      reads that as healing markedly faster than the Astartes package's
+      Larraman's-Organ-based Rapid Healing, not as literal invulnerability.
+    design: >
+      Regeneration (Slow, B80, 10 points) for passive healing even without
+      rest, plus Very Rapid Healing (B80, 15 points, quadruple effective
+      HT for natural recovery) for a step above the Astartes' plain Rapid
+      Healing (double effective HT). 25 points total.
+
+  - &custodian_resilience
+    name: Custodian Constitution
+    container: meta_trait
+    tags: [Advantage, Physical, Imperium, Adeptus Custodes]
+    children:
+      - name: Resistant to Disease and Toxins
+        points: 30
+        ref: B81
+        notes: "Resistant (Very Common: Disease, Poison, Toxins, etc.), Immunity."
+      - name: High Pain Threshold
+        points: 10
+        ref: B59
+    lore: >
+      No single source itemises separate anti-toxin organs for Custodians
+      the way Codex Astartes background does for the Preomnor and Oolitic
+      Kidney; what the fiction consistently shows is a Custodian simply
+      shrugging off poisons, plagues, and pain that would down anyone else
+      outright.
+    design: >
+      Resistant (B81), Very Common: Metabolic Hazards (disease, poison,
+      toxins, radiation sickness and the like), Immunity tier - base 30, x1
+      for Immunity = 30 points, deliberately a single unified trait rather
+      than the Astartes package's several organ-specific ones (Preomnor
+      10 + Oolitic Kidney 15 + part of Melanchromic Organ 11 = 36 split
+      across three separate hazards): a Custodian's constitution doesn't
+      have gaps between what different organs happen to cover. High Pain
+      Threshold (B59, 10 points) as the Astartes package. 40 points total.
+
+  - name: Custodian Physiology
+    container: ancestry
+    tags: [Advantage, Physical, Imperium, Adeptus Custodes]
+    children:
+      - *custodian_attributes
+      - *custodian_fearlessness
+      - *custodian_longevity
+      - *custodian_combat_reflexes
+      - *custodian_perception
+      - *custodian_healing
+      - *custodian_resilience
+    lore: >
+      The Legio Custodes: the Emperor's personal bodyguard, each Custodian
+      individually created rather than mass-produced from a Chapter's
+      gene-seed, and never numbering more than a few thousand in ten
+      thousand years. Chris Wraight's Custodes novels and current Codex:
+      Adeptus Custodes background are the primary sources for this file;
+      Horus Heresy-era material (e.g. Master of Mankind) is used for the
+      Custodes' role and demeanour during the Great Crusade and Heresy,
+      not for anything this file treats as a hard number.
+    design: >
+      555 (Attribute Modifiers) + 15 (Unfazeable) + 15 (Unaging) + 15
+      (Combat Reflexes) + 20 (Custodian Senses) + 25 (Regeneration) + 40
+      (Constitution) = 685 points of physiology alone, before oath, rank,
+      or skills - see the Custodian Guardian and Shield-Captain templates.
+      This comfortably clears "outclasses a Space Marine (443 points of
+      physiology) the way a Space Marine outclasses a Guardsman" in raw
+      point terms as well as in the attribute targets themselves.
+
+  # ------------------------------------------------------------- oath
+  - name: Custodian Oath and Mindset
+    container: meta_trait
+    tags: [Imperium, Adeptus Custodes]
+    children:
+      - name: Duty (The Emperor and the Throneworld)
+        points: -15
+        ref: B133
+        notes: "Almost all the time, Extremely Hazardous."
+      - name: Sense of Duty (The Ten Thousand)
+        points: -5
+        ref: B153
+        notes: "Small group: fellow Custodians and the Throne they guard, not the wider Imperium."
+      - name: Code of Honor (Custodian's Creed)
+        points: -10
+        ref: B127
+        notes: >
+          Never leave a post while the Emperor lives; never speak falsely
+          to the Throne; accept correction from no authority outside the
+          Legio Custodes and the Emperor himself.
+      - name: Vow (Never Leave the Emperor's Side / Terra)
+        points: -10
+        ref: B161
+        disabled: true
+        notes: >
+          Major Vow. Disabled by default: this project follows current
+          Codex background and the Indomitus Crusade-era novels, where
+          Guilliman as Lord Commander formally released Custodians for
+          wider deployment after ten thousand years of confinement to
+          Terra. Enable this for a Custodian bound by the older, absolute
+          reading of the vow (pre-Indomitus, or a GM who wants the classic
+          "the Ten Thousand never leave Terra" status quo).
+      - name: Aloof
+        points: -1
+        tags: [Quirk]
+        notes: "Rarely engages with anyone outside the Legio Custodes as an equal, the Emperor excepted."
+    lore: >
+      Custodians are famously remote even from other Imperial elites -
+      Inquisitors, Chapter Masters and High Lords alike are received with
+      cool, absolute courtesy rather than camaraderie - and Wraight's
+      novels repeatedly frame this as focus rather than arrogance: nothing
+      matters to a Custodian except the duty in front of him. The historic
+      vow keeping the Legio on Terra is well documented in current Codex
+      background and its lifting during the Indomitus Crusade is likewise
+      current-edition canon, not a house rule.
+    design: >
+      Duty (-15) and Sense of Duty (-5) mirror the Astartes package's
+      structure but narrow the in-group to the Legio Custodes itself, per
+      the "aloof even from fellow elites" note. Code of Honor (-10) is
+      written from scratch rather than reusing Codex Astartes' text, since
+      a Custodian answers to no Chapter. The Vow is included but disabled
+      by default for the reason given above; enabling it is a straight
+      -10 swap, nothing else in this file needs to change. Aloof (-1
+      Quirk) is the cheapest possible flag for the "doesn't warm to
+      outsiders" personality note repeated across the fiction, kept small
+      because nothing in the sources supports a harsher social
+      disadvantage (Custodians aren't shown as cruel or friendless, just
+      focused). Net: -15-5-10-1 = -31 with the Vow disabled, -41 enabled.
+
+  - name: Rank (Legio Custodes)
+    per_level: 5
+    levels: 6
+    ref: B29
+    tags: [Advantage, Social, Imperium, Adeptus Custodes]
+    lore: >
+      Every Custodian outranks nearly the entire Imperial military and
+      ecclesiastical hierarchy by simple virtue of standing at the
+      Emperor's side; Codex background and Wraight's novels both show even
+      Inquisitors and Chapter Masters deferring to a Custodian's word on
+      matters of the Throneworld's security.
+    design: >
+      Rank (B29), 5 points/level, 6 levels = 30 points: double the
+      Battle-Brother template's Rank 3 (15 points), reflecting that even a
+      rank-and-file Custodian Guard carries more institutional weight than
+      a veteran Astartes sergeant.
+
+  - name: "Reputation (The Emperor's Companions)"
+    points: 10
+    ref: B27
+    tags: [Advantage, Social, Imperium, Adeptus Custodes]
+    reactions:
+      - situation: from anyone in the Imperium who recognizes Custodian gold, at any range they can be seen
+        amount: 3
+    lore: >
+      A Custodian's golden plate is recognized on sight across the
+      Imperium as the Emperor's own guard - awe, terror or reverent relief
+      depending on who's looking - a stronger and more universal version
+      of the reaction an Astartes' Chapter heraldry gets.
+    design: >
+      Reputation (B27), priced informally above the Battle-Brother
+      template's own Reputation (Angel of Death, 5 points for a +2
+      reaction) at 10 points for a +3 reaction recognized by essentially
+      everyone in the Imperium, not just soldiery - the same design
+      shortcut the Astartes file uses rather than a full frequency/scope
+      calculation, since GURPS Reputation pricing is explicitly meant to
+      be eyeballed against comparable published examples.
+
+  # ---------------------------------------------------------- pariah gene
+  # Sisters of Silence are unaugmented human Pariahs (framework.md); the
+  # Pariah Gene trait itself already lives in the psyker/warp file and is
+  # pulled in by reference here and by the Sister of Silence template,
+  # rather than copied, per data-format.md's include rule.
+  - include: "imperium/psykers/warp.yaml#Pariah Gene (Blank)"
+
+  - name: Vow of Silence (Oath of the Silent Sisterhood)
+    points: -10
+    ref: B161
+    tags: [Disadvantage, Mental, Imperium, Sisters of Silence]
+    notes: >
+      Major Vow: never speak aloud, under any circumstance. A Sister of
+      Silence can still make non-verbal sounds (a battle-cry grunt, a
+      warning shout with no words in it) and can write; she cannot use
+      spoken language, ever, by her own binding oath rather than physical
+      incapacity.
+    lore: >
+      The Sisters of Silence take a formal vow of silence on joining the
+      Sisterhood, communicating instead through their own battle-sign; the
+      practice is widely depicted (Codex: Adeptus Custodes background,
+      which covers the Sisters as the Custodes' sister order, and the
+      Horus Heresy-era novel The Master of Mankind, where Sisters of
+      Silence hunt and confront rogue psykers on Terra) without a single
+      canonical page citation this project can point to.
+    design: >
+      Modelled as a Vow (B161, Major, -10) rather than the involuntary
+      Cannot Speak (Mute) disadvantage (-25): a Sister of Silence can
+      physically speak and her pariah nature has nothing to do with her
+      vocal cords, she simply never does, by oath - "Mute by vow," per the
+      framework's own phrasing, is exactly what a self-imposed Vow models,
+      while the involuntary Basic Set Mute disadvantage would misrepresent
+      the cause. Major (not Minor or Great) because it affects nearly
+      every social and command interaction outside the Sisterhood's own
+      sign language, but doesn't prevent effective communication outright.
+
+  - name: Silent Sisterhood Battle-Sign
+    points: 4
+    tags: [Advantage, Mental, Imperium, Sisters of Silence]
+    ref: B24
+    notes: "Language (Silent Sisterhood Battle-Sign): Sign-only, Accented."
+    lore: >
+      The Sisters' own hand-and-body sign language, drilled into every
+      Sister as her primary means of tactical communication in place of
+      vox or speech; referenced throughout Custodes-adjacent background as
+      distinct from ordinary military hand signals.
+    design: >
+      Built as a Language (B23-24) using the sign-language variant of the
+      standard cost table rather than the spoken/written columns, at
+      Accented fluency (4 points): fluent enough for real tactical use
+      but, per the framework's citation-honesty rule, this project has no
+      source claiming Sisters are drilled to native perfect fluency versus
+      merely very good working fluency.
+
+  - name: Sense of Duty (The Silent Sisterhood)
+    points: -10
+    ref: B153
+    tags: [Disadvantage, Mental, Imperium, Sisters of Silence]
+    notes: "Large group: the Sisterhood as a whole, not just one Sister's own squad."
+    lore: >
+      Sisters of Silence operate as a tight, self-contained order bound to
+      each other and to their hunt for rogue psykers and daemonic
+      incursion; background consistently shows them protecting and
+      recovering their own before anything else.
+    design: Sense of Duty (B153), Large Group, -10 points, as the modifier table gives for an order-sized in-group.
+
+  - name: Intolerance (Psykers)
+    points: -2
+    ref: B140
+    tags: [Disadvantage, Mental, Imperium, Sisters of Silence]
+    notes: "Occasional scope: psykers are a small fraction of the Imperium's population."
+    reactions:
+      - situation: from psykers who sense the dislike
+        amount: -1
+    lore: >
+      A Sister of Silence's pariah nature makes her instinctively wary of,
+      and unwelcoming to, psykers - the profession the Sisterhood exists
+      to police - though background stops short of showing them cruel to
+      psykic Imperial citizens who pose no threat.
+    design: >
+      Intolerance (B140) at the "Occasional" scope modifier (-2 points):
+      psykers are rare in the general population even though a Sister
+      encounters them often professionally, and B140's scope size is about
+      real-world prevalence of the disliked group, not how often the
+      character's job brings her into contact with it.
