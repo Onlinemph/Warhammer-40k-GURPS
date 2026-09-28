@@ -1,0 +1,941 @@
+{
+	"version": 5,
+	"id": "B-IUUwtR-0P3cfOEr",
+	"notes": "A Warboss: the biggest, meanest, canniest Ork running a Waaagh. Point math: Ork Physiology 179 + Growth Lens: Warboss 277 + skills 100 = 556 points. Stats: ST 32, DX 12, IQ 10, HT 15, HP 40, Will 10, Per 10, SM +1 — framework.md's Warboss anchor line exactly. This lands at the low end of framework.md's Astartes tier (550-800): a solid, competent Warboss who genuinely out-muscles a Space Marine, built mostly from sheer physical scale, battlefield toughness and raw command presence (see Charisma and Wealth in the Growth Lens) rather than the breadth of skill and equipment a Chapter gives its Battle-Brothers. A legendary, named Warboss (a Ghazghkull Thraka-tier figure) should be built as a bespoke NPC well above this template, in framework.md's Heroes and Legends tier (1,000-3,000) — this is the \"typical, dangerous Warboss\" baseline, not the biggest name in the setting. Enable at most one Klan lens for flavor.\n",
+	"traits": [
+		{
+			"id": "TShA_BBFEc8BY3gBK",
+			"name": "Ork Physiology",
+			"local_notes": "Lore: An Ork Boy: the baseline greenskin warrior, grown fast, fed on violence, and built to get bigger and meaner the longer it survives. This trait is the shared baseline every growth lens (Nob, Warboss) and every Oddboy specialisation (Mek, Painboy, Weirdboy) builds on top of. Primary sources: Codex: Orks background across editions, Nate Crowley's Ghazghkull Thraka: Prophet of the Waaagh! and Mike Brooks' Brutal Kunnin', calibrated against Dark Heresy/Rogue Trader/Deathwatch/Only War Ork material for relative scale.\n\nDesign: 138 (Attribute Modifiers) + 10 (Thick Hide) + 10 (High Pain Threshold) + 6 (Hard to Kill 3) + 5 (Rapid Healing) + 5 (Injury Tolerance, No Brain) + 15 (Resistant to Disease and Toxins) + 0 (Fungal Physiology) - 10 (Bloodlust) - 10 (Impulsiveness) - 5 (Overconfidence) + 10 (Ork Kunnin' 1) + 5 (WAAAGH! Gestalt) = 179 points of physiology alone, before skills — see the Ork Boy template for a full character, and the growth lenses and Oddboy Talents below for Nobs, Warbosses, Meks, Painboyz and Weirdboyz built on top of it.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Orks"
+			],
+			"container_type": "ancestry",
+			"children": [
+				{
+					"id": "t_GJeJMUnRXYOTmHV",
+					"name": "Attribute Modifiers (Boy)",
+					"local_notes": "Design: Framework target: ST 22, DX 11, IQ 8, HT 13, HP 26, SM 0. Increased ST +12 (B14, 10/level, 120) for ST 22 — \"stooped but heavy; brawnier than a man\": Basic Lift 96 lb, well past an unaugmented human but nowhere near an Astartes' ST 30. Increased DX +1 (B15, 20/level, 20) for DX 11 — \"far clumsier than a Marine,\" barely above a Guardsman's own DX 12 despite the far greater ST. Decreased IQ -2 (B16, 20/level, -40) for IQ 8, the framework's own figure for \"not smart, but not helpless either\" — offset in play by Ork Kunnin' below rather than by raw IQ. Increased HT +3 (B15, 10/level, 30) for HT 13. Extra Hit Points +4 (B16, 2/level, 8) for HP 26 (22 base from ST, +4): an Ork soaks up more damage than its ST alone would suggest, matching how much punishment a Boy shrugs off in the fiction. 120+20-40 +30+8 = 138 points.",
+					"tags": [
+						"Physical"
+					],
+					"base_points": 138,
+					"features": [
+						{
+							"type": "attribute_bonus",
+							"attribute": "st",
+							"amount": 12
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "dx",
+							"amount": 1
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "iq",
+							"amount": -2
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "ht",
+							"amount": 3
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "hp",
+							"amount": 4
+						}
+					]
+				},
+				{
+					"id": "tCvdJdvEs6IRyxbJo",
+					"name": "Thick Hide",
+					"reference": "B46",
+					"local_notes": "DR 2, all locations. Stacks with worn armour.\n\nLore: An Ork's skin is thick, rubbery and mottled green, tough enough on its own to turn a knife-edge or a glancing shot that would open a human. Every depiction of an unarmoured Ork brawling — Codex background, Crowley's and Brooks' fiction alike — treats a bit of greenskin hide as meaningfully tougher than bare human flesh, well before any scrap armour goes on top of it.\n\nDesign: Damage Resistance 2 (B46, 5/level, all locations, 10 points): modest next to the Ossmodula's partial DR 3 or Custodes-tier toughness, but applies everywhere and is on top of whatever armour an Ork straps on.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Orks"
+					],
+					"base_points": 10,
+					"features": [
+						{
+							"type": "dr_bonus",
+							"locations": [
+								"all"
+							],
+							"amount": 2
+						}
+					]
+				},
+				{
+					"id": "tTh57ZR9LM0dVRa_T",
+					"name": "High Pain Threshold",
+					"reference": "B59",
+					"local_notes": "Lore: Orks shrug off wounds, keep fighting with an arm hanging by a tendon, and treat a lost eye as a minor inconvenience worth a good story later — a running joke across every Ork-focussed novel and a staple of Codex background (\"'e's still comin'!\").\n\nDesign: Basic Set High Pain Threshold (B59), 10 points, unmodified.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Orks"
+					],
+					"base_points": 10
+				},
+				{
+					"id": "t11ZNyjD9WJL83GgN",
+					"name": "Hard to Kill",
+					"reference": "B58",
+					"local_notes": "+3 to HT rolls made solely to avoid death.\n\nLore: An Ork that should be dead — gutshot, missing limbs, skull dented in — routinely keeps swinging until the fight is over, and often survives afterwards besides. Ghazghkull Thraka: Prophet of the Waaagh! plays this for both horror and comedy in the same scene more than once.\n\nDesign: Hard to Kill 3 (B58, 2/level, 6 points): +3 to death checks, below a Warboss's own extra levels below.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Orks"
+					],
+					"points_per_level": 2,
+					"can_level": true,
+					"levels": 3,
+					"base_points": 0
+				},
+				{
+					"id": "t3cbLdBnqiWro2u9P",
+					"name": "Rapid Healing",
+					"reference": "B79",
+					"local_notes": "Lore: Wounds that would fester or kill close over in days rather than weeks — part of the same fungal biology that lets a beaten Ork mob be back at strength within a season. Codex background is explicit that Ork tissue heals unnaturally fast; Black Library plays it as \"give it a week and 'e'll be grand.\"\n\nDesign: Basic Set Rapid Healing (B79, 5 points): doubles effective HT for natural recovery rolls.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Orks"
+					],
+					"base_points": 5
+				},
+				{
+					"id": "tmUxPGWpA2iihEH9_",
+					"name": "Injury Tolerance (No Brain)",
+					"reference": "B61",
+					"local_notes": "A hit to the skull or eye is resolved as a hit to the face instead; there is no separate brain to target for extra injury. House rule, not a further purchased trait: an Ork who loses a limb — or, per the fiction, even the head — to a crippling or removal wound is not necessarily dead from that alone. A Painboy (or any suitably brutal battlefield medic) who recovers the part and staples, bolts or wires it back on within a scene or two restores it to function once the patient heals, using Surgery per the framework's skill table. This is a GM-adjudicated narrative rule that Hard to Kill, Rapid Healing and this trait together make plausible, not a separate priced advantage.\n\nLore: Orks are famous for surviving injuries that would kill anything else outright, up to and including having a head sewn back on by a Doks after a losing argument — a beat repeated across Codex background, Brutal Kunnin' and countless tabletop-derived anecdotes (\"'e's had worse\"). Ork brain function is diffuse and fungal rather than centralised in the human sense, which is offered here as the setting explanation rather than a citable page reference.\n\nDesign: Injury Tolerance, No Brain (B61, 5 points): mechanically small on its own, but combined with Hard to Kill and Rapid Healing above it is what makes \"shrugs off a head wound\" true at the table instead of just in the fluff text.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Orks"
+					],
+					"base_points": 5
+				},
+				{
+					"id": "tjSqaN1F-K49t05cV",
+					"name": "Resistant to Disease and Toxins",
+					"reference": "B81",
+					"local_notes": "Resistant (Common: Disease and Toxins), Immunity.\n\nLore: An Ork can eat rotten meat, drink promethium-cut moonshine and wade through toxic industrial runoff without noticeable harm — Codex background treats Ork constitutions as effectively immune to the diseases and poisons that trouble other races, part of the same fungal-symbiote biology that lets a Squig be dinner, transport or weapon depending on how it's grown.\n\nDesign: Resistant (B81), Common: Disease and Toxins, Immunity tier — base 15, x1 for Immunity = 15 points, the same tier and math this project's Oolitic Kidney entry uses for a single unified hazard category, pitched below the Custodes' broader Very Common tier (30) since Orks are shown getting stinking drunk and mildly green-sick on purpose for fun, not as flatly unaffected as a Custodian.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Orks"
+					],
+					"base_points": 15
+				},
+				{
+					"id": "tvsssw3Oc3976xl36",
+					"name": "Fungal Physiology (Spore-Born)",
+					"local_notes": "Lore: Orks are not born but grown: an Ork reproduces by releasing spores that seed fresh fungal growth wherever conditions allow (a mechanism shared with Gretchin, Squigs and the rest of the Ork ecosystem), has no biological sex, and needs neither a mate nor, ordinarily, a trained physician who isn't another Ork with a saw and a good attitude. This is consistent, well-established Codex background and is played straight rather than for shock across Black Library's Ork fiction — an Ork simply is an ambulatory fungal colony shaped like a green thug.\n\nDesign: 0-point lore flag. Every mechanical payoff of this biology (thick hide, extreme pain tolerance, fast healing, survivability of wounds that would kill outright, immunity to disease and poison) is priced separately above; this entry exists purely to document why an Ork needs no gender, no mate, and no bedside manner from anyone.",
+					"tags": [
+						"Xenos",
+						"Orks"
+					],
+					"base_points": 0
+				},
+				{
+					"id": "tMxpXaF_sQAZxc1Zu",
+					"name": "Bloodlust",
+					"reference": "B125",
+					"local_notes": "Lore: Fighting is not a means to an end for an Ork, it is the point of being alive: Orks pick fights they don't need to, press an attack past the point of sense, and are consistently written (Ghazghkull Thraka above all) as unable to simply walk away from a fight worth having.\n\nDesign: Basic Set Bloodlust (B125), self-control 12, -10 points.",
+					"tags": [
+						"Disadvantage",
+						"Mental",
+						"Xenos",
+						"Orks"
+					],
+					"base_points": -10,
+					"cr": 12
+				},
+				{
+					"id": "tpDSz2LDW6pkZYTOm",
+					"name": "Impulsiveness",
+					"reference": "B143",
+					"local_notes": "Lore: Orks act first and, on a good day, think about it afterwards — a running theme in how Ork plans in the fiction go from \"good idea\" to \"already happening\" with nothing in between.\n\nDesign: Basic Set Impulsiveness (B143), self-control 12, -10 points.",
+					"tags": [
+						"Disadvantage",
+						"Mental",
+						"Xenos",
+						"Orks"
+					],
+					"base_points": -10,
+					"cr": 12
+				},
+				{
+					"id": "tvHiHk-8rFVzGDW3J",
+					"name": "Overconfidence",
+					"reference": "B94",
+					"local_notes": "Lore: An Ork mob genuinely believes it can win any fight it's in, right up until (and sometimes past) the point it's losing badly — a big part of why Ork strategy in the fiction is so often \"charge and find out.\"\n\nDesign: Basic Set Overconfidence (B94), self-control 12, -5 points.",
+					"tags": [
+						"Disadvantage",
+						"Mental",
+						"Xenos",
+						"Orks"
+					],
+					"base_points": -5,
+					"cr": 12
+				},
+				{
+					"id": "tEV1eB-vakc-HNtUS",
+					"name": "Ork Kunnin'",
+					"reference": "B89",
+					"local_notes": "This project's Talent (B89) for practical battlefield cunning: adds\nits level to Tactics, Traps, Camouflage and Observation, the same way\nthe Psyker Talent (Imperium/Traits/Psykers and the Warp.adq) adds to\nits own listed skills, per that file's house extension of Talent's\nnormal rules. An Ork Boy is not clever in the abstract (IQ 8 is IQ\n8), but a mob that has survived a hundred scraps has a bone-deep,\npractical instinct for where the enemy is weak, where the cover is,\nand when a trap will work — instinct this Talent represents directly\nrather than through raw IQ.\n\nLore: Ork tactics look like chaos from outside and are, by any human military-doctrine standard, chaos — and yet Ork mobs consistently find the gap in a defence, spring an ambush, or route around a strongpoint with an efficiency that surprises Imperial commanders who underestimate them. Codex background and both Crowley's and Brooks' novels play this as real, if inarticulate, battlefield cunning rather than dumb luck.\n\nDesign: Talent affecting four skills sits at the Medium Talent rate (B90, 10 points/level, 3-5 skill bracket), the same rate this project's Psyker Talent uses for the same reason. Base entry costs 0 points at level 0; every template above Gretchin buys at least level 1 (10 points, included in the Ork Physiology package below).",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Talent",
+						"Xenos",
+						"Orks"
+					],
+					"points_per_level": 10,
+					"can_level": true,
+					"levels": 1,
+					"base_points": 0
+				},
+				{
+					"id": "tRaQ1aGOwXyXrTJVB",
+					"name": "WAAAGH! Gestalt",
+					"local_notes": "Roughly ten or more fellow Orks fighting nearby, in earshot of the\nsame battle-roar, count as a WAAAGH! for this bonus. A Weirdboy\ncaught up in a WAAAGH! also treats his own Warp Empowerment as one\nlevel higher (cap +10) for the purpose of which known powers he may\nsafely cast, per the Weirdboy template's notes — this is the\nmechanical hook for \"Orks believe it, so it works, and it works\nbetter the more of them believe it together.\"\n\nLore: A lone Ork is dangerous; a mob of Orks worked up into a full WAAAGH! is a weaponised belief field — braver, louder, and (per Codex background's long-running joke about Ork technology) more likely to have its crude guns and rickety vehicles actually function, because enough Orks are collectively certain that they will. Weirdboyz in particular are consistently shown drawing directly on this collective psychic roar to power their biggest, most dangerous tricks; a Weirdboy isolated from a WAAAGH! is a much smaller threat.\n\nDesign: A narrow conditional Will/Fright Check bonus, eyeballed against Basic's Fearlessness (2/level flat, B55) but restricted to a specific, common-in-play situation rather than always on, so priced well below a flat level of Fearlessness at 5 points. The Weirdboy-specific Empowerment bump is documented, not separately priced, since it only changes which already-bought powers a Weirdboy may safely reach for.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Xenos",
+						"Orks"
+					],
+					"base_points": 5,
+					"features": [
+						{
+							"type": "conditional_modifier",
+							"situation": "to resist Fright Checks and Perils of the Warp, while fighting as part of a large mob of fellow Orks (a WAAAGH!)",
+							"amount": 2
+						}
+					]
+				}
+			]
+		},
+		{
+			"id": "TtyMfgW4qT8SiRD4t",
+			"name": "Growth Lens: Warboss",
+			"local_notes": "Lore: A Warboss is the biggest, meanest, canniest Ork in charge of a Waaagh — a Boy or Nob who kept fighting, kept winning, and kept growing until nothing short of a Space Marine or worse could reliably put him down. Ghazghkull Thraka: Prophet of the Waaagh! is the definitive Black Library portrait; current Codex: Orks background agrees a Warboss out-muscles a Space Marine on raw size and power alone.\n\nDesign: 178 (Attribute Modifiers) + 15 (Combat Reflexes) + 8 (Fearlessness 4) + 10 (Regeneration) + 6 (further Hard to Kill 3) + 15 (Reputation) + 15 (Charisma 3) + 10 (Basic Speed) + 20 (Wealth) = 277 points, added to the Ork Physiology package's 179 for 456 points of physiology and command presence before skills. See the Ork Warboss template, which lands the full character at the low end of framework.md's Astartes point tier (550-800) — appropriate for a solid, competent Warboss; a legendary name like Ghazghkull himself would run well past this, into the framework's Heroes and Legends tier, and should be built as a bespoke NPC on top of this template rather than read off it directly.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Orks"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "tyPdUJsSylVC9rjJa",
+					"name": "Attribute Modifiers (Warboss)",
+					"local_notes": "Design: Framework target over the Boy package: ST 32, DX 12, IQ 10, HT 15, HP 40, SM +1. Increased ST +10 (B14, 10/level, 100) for ST 32; per B18's Size and Strength Table a creature whose SM matches its actual bulk gets a cost break on ST, and SM +1 gives -10%, so 100 x 0.9 = 90 — the same discount this project's Custodian Attribute Modifiers takes for the same reason. Increased DX +1 (B15, 20/level, 20) for DX 12 — a Warboss hits harder and a little more precisely than a rank-and-file Boy, \"out-muscles a Space Marine\" more than out-fights one. Increased IQ +2 (B16, 20/level, 40) for IQ 10 — sharp enough to run a Waaagh's actual logistics of loot, grudges and turf, on top of Ork Kunnin's practical edge. Increased HT +2 (B15, 10/level, 20) for HT 15. Extra Hit Points +4 (B16, 2/level, 8) on top of the Boy package's own +4, for combined extra +8 over the new ST-32 base of 32, giving HP 40. SM +1 carries no cost beyond the ST discount already taken. 90+20+40+20+8 = 178 points.",
+					"tags": [
+						"Physical"
+					],
+					"base_points": 178,
+					"features": [
+						{
+							"type": "attribute_bonus",
+							"attribute": "st",
+							"amount": 10
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "dx",
+							"amount": 1
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "iq",
+							"amount": 2
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "ht",
+							"amount": 2
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "hp",
+							"amount": 4
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "sm",
+							"amount": 1
+						}
+					]
+				},
+				{
+					"id": "tdLToAa_zPue9esEk",
+					"name": "Combat Reflexes",
+					"reference": "B43",
+					"local_notes": "Lore: A Warboss has been in more fights than any ten Boyz put together and simply doesn't flinch.\n\nDesign: Basic Set Combat Reflexes (B43), 15 points, as the Astartes/Custodes packages.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Xenos",
+						"Orks"
+					],
+					"base_points": 15
+				},
+				{
+					"id": "tZtDwdjFvQCrEr8dW",
+					"name": "Fearlessness",
+					"reference": "B55",
+					"local_notes": "Lore: A Warboss is what other Orks are afraid of, not the other way around.\n\nDesign: Fearlessness 4 (B55, 2/level, 8 points), on top of WAAAGH! Gestalt's conditional bonus.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Xenos",
+						"Orks"
+					],
+					"points_per_level": 2,
+					"can_level": true,
+					"levels": 4,
+					"base_points": 0
+				},
+				{
+					"id": "tQ8FnurJQs6OXHX5k",
+					"name": "Regeneration (Slow)",
+					"reference": "B80",
+					"local_notes": "Recovers 1 HP per 12 hours even without rest or first aid, on top of Rapid Healing.\n\nLore: The oldest, biggest Warbosses just don't stop knitting back together, a step beyond even an ordinary Boy's already-fast healing.\n\nDesign: Regeneration (Slow) (B80, 10 points), stacking with the Boy package's Rapid Healing as a distinct passive-recovery benefit, per this project's Custodian Regeneration entry using the same two advantages together.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Orks"
+					],
+					"base_points": 10
+				},
+				{
+					"id": "tBh7P3iOt9MBRycOn",
+					"name": "Hard to Kill",
+					"reference": "B58",
+					"local_notes": "A further +3 to HT rolls to avoid death, stacking with the Boy package's Hard to Kill 3 for +6 total.\n\nLore: A Warboss dying on his feet is a running feature of Ork hero-tales, not an exception.\n\nDesign: A further Hard to Kill 3 (B58, 2/level, 6 points), stacking with the base package as GURPS allows multiple purchases of the same leveled advantage.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Orks"
+					],
+					"points_per_level": 2,
+					"can_level": true,
+					"levels": 3,
+					"base_points": 0
+				},
+				{
+					"id": "tI9_q0VQrty91dasc",
+					"name": "Reputation (The Biggest and Baddest)",
+					"reference": "B27",
+					"local_notes": "Lore: A Warboss's reputation travels ahead of him — other mobs fall in behind him without a fight, and Imperial commanders who've faced a named Warboss before know exactly how bad the day is about to get.\n\nDesign: Reputation (B27), priced in line with this project's other eyeballed Reputation entries (Custodes' Shield-Captain Reputation, 15 points for +4) rather than a full frequency/scope calculation, per Basic's own guidance that Reputation costs are meant to be judged against comparable published examples.",
+					"tags": [
+						"Advantage",
+						"Social",
+						"Xenos",
+						"Orks"
+					],
+					"base_points": 15,
+					"features": [
+						{
+							"type": "reaction_bonus",
+							"situation": "from other Orks who recognise a Warboss's markings and retinue, and Fright Check bonus/penalty context for enemies who know his name",
+							"amount": 4
+						}
+					]
+				},
+				{
+					"id": "tJQ6Inh5Y3lWzRJtf",
+					"name": "Charisma",
+					"reference": "B41",
+					"local_notes": "Lore: Ork society has no formal rank structure; a Warboss leads because every Ork in earshot wants to follow him, fears him, or both — Codex background is explicit that Warboss authority is pure force of personality (backed by a fist the size of a Rhino) rather than any chain of command.\n\nDesign: Charisma 3 (B41, 5/level, 15 points), used in place of a formal Rank trait since Ork command has no such structure.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Xenos",
+						"Orks"
+					],
+					"points_per_level": 5,
+					"can_level": true,
+					"levels": 3,
+					"base_points": 0
+				},
+				{
+					"id": "t07W9EJjWRAk9t41u",
+					"name": "Increased Basic Speed",
+					"local_notes": "Lore: A Warboss's reflexes stay sharp long after his mob-mates' have dulled from age or drink.\n\nDesign: Increased Basic Speed +0.50 (B17, 5 points per 0.25 level, 10 points).",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Orks"
+					],
+					"base_points": 10,
+					"features": [
+						{
+							"type": "attribute_bonus",
+							"attribute": "basic_speed",
+							"amount": 0.5
+						}
+					]
+				},
+				{
+					"id": "ttXAkW4MCRSJAKpgR",
+					"name": "Wealth (Loot Hoard)",
+					"reference": "B25",
+					"local_notes": "Wealthy.\n\nLore: A successful Warboss accumulates a genuinely enormous pile of loot over a career — teef, scavenged tech, trophies — the Ork measure of status and the fuel for the next Waaagh's gear.\n\nDesign: Basic Set Wealth (Wealthy) (B25), 20 points.",
+					"tags": [
+						"Advantage",
+						"Social",
+						"Xenos",
+						"Orks"
+					],
+					"base_points": 20
+				}
+			]
+		},
+		{
+			"id": "TB8Nnq4Ehh9C6RhF6",
+			"name": "Klan: Blood Axe",
+			"local_notes": "Lore: Blood Axes study and copy human (and other) military doctrine — formations, camouflage, combined arms — and are consequently distrusted by every other Klan as not being proper Orks at all.\n\nDesign: Net 0 points, per-Klan flavour lens, matching the Guardsman template's regimental-lens pattern.",
+			"tags": [
+				"Xenos",
+				"Orks"
+			],
+			"children": [
+				{
+					"id": "teiwBI3i9fce8NDzF",
+					"name": "Human Tactics",
+					"local_notes": "Lore: A Blood Axe has actually studied how humans fight, and borrows what works.\n\nDesign: Perk (B9), +1 to Tactics.",
+					"tags": [
+						"Perk",
+						"Xenos",
+						"Orks"
+					],
+					"base_points": 1,
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "Tactics"
+							},
+							"amount": 1
+						}
+					]
+				},
+				{
+					"id": "tgoESvQLstv1tMb6t",
+					"name": "Not a Proper Ork",
+					"local_notes": "Lore: Other Klans consider Blood Axes soft, sneaky, or worse — barely worth calling greenskins.\n\nDesign: Quirk (B9), roleplaying flag only.",
+					"tags": [
+						"Quirk",
+						"Xenos",
+						"Orks"
+					],
+					"base_points": -1
+				}
+			],
+			"disabled": true
+		},
+		{
+			"id": "TRNLsBXBlXVsmOD0s",
+			"name": "Klan: Snakebite",
+			"local_notes": "Lore: Snakebites are the most tribal, least tech-friendly Klan, riding Squiggoths and squigs into battle and distrusting a Mek's gadgets on principle.\n\nDesign: Net 0 points, per-Klan flavour lens.",
+			"tags": [
+				"Xenos",
+				"Orks"
+			],
+			"children": [
+				{
+					"id": "t-jGKnJXYe-Ng0_jk",
+					"name": "Squig-Rider",
+					"local_notes": "Lore: A Snakebite grows up on squig-back.\n\nDesign: Perk (B9), +1 to Riding (Squig).",
+					"tags": [
+						"Perk",
+						"Xenos",
+						"Orks"
+					],
+					"base_points": 1,
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "Riding"
+							},
+							"amount": 1,
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Squig"
+							}
+						}
+					]
+				},
+				{
+					"id": "tZPN_rZ-nKqVpXWC6",
+					"name": "Zoggin' Tech",
+					"local_notes": "Lore: A Snakebite trusts a good squig over a Mek's contraption every time.\n\nDesign: Quirk (B9), roleplaying flag only.",
+					"tags": [
+						"Quirk",
+						"Xenos",
+						"Orks"
+					],
+					"base_points": -1
+				}
+			],
+			"disabled": true
+		},
+		{
+			"id": "TY4zo-0aNPM50Cudf",
+			"name": "Klan: Evil Sunz",
+			"local_notes": "Lore: \"Red ones go fasta\": Evil Sunz paint everything red and build for speed, fielding the fastest bikes, buggies and trukks of any Klan.\n\nDesign: Net 0 points, per-Klan flavour lens.",
+			"tags": [
+				"Xenos",
+				"Orks"
+			],
+			"children": [
+				{
+					"id": "tzsV3lNQRFvgbOEzI",
+					"name": "Need for Speed",
+					"local_notes": "Lore: An Evil Sunz boy is happiest with an engine roaring under him.\n\nDesign: Perk (B9), +1 to Driving (Ork Vehicles).",
+					"tags": [
+						"Perk",
+						"Xenos",
+						"Orks"
+					],
+					"base_points": 1,
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "Driving"
+							},
+							"amount": 1,
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Ork Vehicles"
+							}
+						}
+					]
+				},
+				{
+					"id": "tVY9hgJmaX-UWoX9k",
+					"name": "Reckless",
+					"local_notes": "Lore: An Evil Sunz boy would rather crash going fast than arrive slow.\n\nDesign: Quirk (B9), roleplaying flag only.",
+					"tags": [
+						"Quirk",
+						"Xenos",
+						"Orks"
+					],
+					"base_points": -1
+				}
+			],
+			"disabled": true
+		},
+		{
+			"id": "Td9DxX_Unvc1cUMf4",
+			"name": "Klan: Deathskulls",
+			"local_notes": "Lore: Deathskulls are the Ork underworld's finest looters and the best Mekaniaks at making stolen tech work, on the principle that if you find it first, it's yours.\n\nDesign: Net 0 points, per-Klan flavour lens.",
+			"tags": [
+				"Xenos",
+				"Orks"
+			],
+			"children": [
+				{
+					"id": "tVpkoEOnzYn76lw-H",
+					"name": "Looter's Eye",
+					"local_notes": "Lore: A Deathskull can spot the one usable part in a scrapheap at a glance.\n\nDesign: Perk (B9), +1 to Scrounging.",
+					"tags": [
+						"Perk",
+						"Xenos",
+						"Orks"
+					],
+					"base_points": 1,
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "Scrounging"
+							},
+							"amount": 1
+						}
+					]
+				},
+				{
+					"id": "tuO1Wr9Ydg47BBTYf",
+					"name": "Finders Keepers",
+					"local_notes": "Lore: A Deathskull cannot walk past something shiny and unattended.\n\nDesign: Quirk (B9), roleplaying flag only.",
+					"tags": [
+						"Quirk",
+						"Xenos",
+						"Orks"
+					],
+					"base_points": -1
+				}
+			],
+			"disabled": true
+		},
+		{
+			"id": "TokKVP9HMy8Vn1oVv",
+			"name": "Klan: Goffs",
+			"local_notes": "Lore: Goffs are the biggest, toughest, most melee-obsessed Klan and, by their own account (and most others'), the best fighters of any Ork Klan — Ghazghkull Thraka himself is a Goff.\n\nDesign: Net 0 points, per-Klan flavour lens.",
+			"tags": [
+				"Xenos",
+				"Orks"
+			],
+			"children": [
+				{
+					"id": "t7y5b_fAuzrhnBLG6",
+					"name": "Goff Brawler",
+					"local_notes": "Lore: A Goff has been fighting hand-to-hand since before he could talk properly.\n\nDesign: Perk (B9), +1 to Brawling.",
+					"tags": [
+						"Perk",
+						"Xenos",
+						"Orks"
+					],
+					"base_points": 1,
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "Brawling"
+							},
+							"amount": 1
+						}
+					]
+				},
+				{
+					"id": "t3BFMLYK_h2RIKO2N",
+					"name": "Best Fighters, Everyone Knows It",
+					"local_notes": "Lore: A Goff will not let a claim of toughness from another Klan go unanswered.\n\nDesign: Quirk (B9), roleplaying flag only.",
+					"tags": [
+						"Quirk",
+						"Xenos",
+						"Orks"
+					],
+					"base_points": -1
+				}
+			],
+			"disabled": true
+		},
+		{
+			"id": "TEUdXWOQbp3Ccy-3C",
+			"name": "Klan: Bad Moons",
+			"local_notes": "Lore: Bad Moons are the richest Klan, trading in teef (Ork currency, quite literally teeth) for the best dakka and gear any Ork can buy — flashy, gold-painted, and widely resented for it.\n\nDesign: Net 0 points, per-Klan flavour lens.",
+			"tags": [
+				"Xenos",
+				"Orks"
+			],
+			"children": [
+				{
+					"id": "teTSbNXmyZylbWc-R",
+					"name": "Teef Trader",
+					"local_notes": "Lore: A Bad Moon knows the going rate for everything, in teef.\n\nDesign: Perk (B9), +1 to Merchant.",
+					"tags": [
+						"Perk",
+						"Xenos",
+						"Orks"
+					],
+					"base_points": 1,
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "Merchant"
+							},
+							"amount": 1
+						}
+					]
+				},
+				{
+					"id": "t_D5n-g7A_erKaZYf",
+					"name": "Ostentatious",
+					"local_notes": "Lore: A Bad Moon cannot resist showing off just how much richer he is than you.\n\nDesign: Quirk (B9), roleplaying flag only.",
+					"tags": [
+						"Quirk",
+						"Xenos",
+						"Orks"
+					],
+					"base_points": -1
+				}
+			],
+			"disabled": true
+		},
+		{
+			"id": "TD4Kg_-4qZY9B1Y85",
+			"name": "Klan: Freebooterz",
+			"local_notes": "Lore: Freebooterz are Ork pirates and void-raiders, more mercenary and more willing to deal (on their own terms) than any other Klan — the Orks other factions actually negotiate with, occasionally.\n\nDesign: Net 0 points, per-Klan flavour lens.",
+			"tags": [
+				"Xenos",
+				"Orks"
+			],
+			"children": [
+				{
+					"id": "tdNW1q7ixWvN3NxAT",
+					"name": "Void Raider",
+					"local_notes": "Lore: A Freebooter has spent as much time raiding from orbit as on the ground.\n\nDesign: Perk (B9), +1 to Piloting (Ork Spacecraft).",
+					"tags": [
+						"Perk",
+						"Xenos",
+						"Orks"
+					],
+					"base_points": 1,
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "Piloting"
+							},
+							"amount": 1,
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Ork Spacecraft"
+							}
+						}
+					]
+				},
+				{
+					"id": "tHtkItkaC46by5Uqa",
+					"name": "Mercenary Streak",
+					"local_notes": "Lore: A Freebooter always wants a bigger cut of the loot.\n\nDesign: Quirk (B9), roleplaying flag only.",
+					"tags": [
+						"Quirk",
+						"Xenos",
+						"Orks"
+					],
+					"base_points": -1
+				}
+			],
+			"disabled": true
+		}
+	],
+	"skills": [
+		{
+			"id": "s85xrZmFZTbmNe-Lr",
+			"name": "Two-Handed Axe/Mace",
+			"local_notes": "Lore: A Warboss's signature weapon — often a power klaw, built to the size only a Warboss can swing one-handed anyway.\n\nDesign: DX+6 (18) for 24 points, Average.",
+			"tags": [
+				"Xenos",
+				"Orks"
+			],
+			"specialization": "Power Klaw",
+			"difficulty": "dx/a",
+			"points": 24
+		},
+		{
+			"id": "sDHB18EnfHx5_oCmu",
+			"name": "Guns",
+			"local_notes": "Lore: Even a Warboss carries a shoota or bigger for when the klaw isn't enough reach.\n\nDesign: DX+4 (16) for 12 points, Easy.",
+			"tags": [
+				"Xenos",
+				"Orks"
+			],
+			"specialization": "Rifle",
+			"difficulty": "dx/e",
+			"points": 12
+		},
+		{
+			"id": "sm5N_44gDOf23Awew",
+			"name": "Brawling",
+			"local_notes": "Lore: Decades of winning every fight, armed or not.\n\nDesign: DX+2 (14) for 4 points, Easy.",
+			"tags": [
+				"Xenos",
+				"Orks"
+			],
+			"difficulty": "dx/e",
+			"points": 4
+		},
+		{
+			"id": "sCulOqu36_z_p39NO",
+			"name": "Wrestling",
+			"local_notes": "Lore: A Warboss grapples tanks and Ork rivals alike.\n\nDesign: DX+1 (13) for 4 points, Average.",
+			"tags": [
+				"Xenos",
+				"Orks"
+			],
+			"difficulty": "dx/a",
+			"points": 4
+		},
+		{
+			"id": "sPzzQivMOG5gNZhZF",
+			"name": "Axe/Mace",
+			"local_notes": "Lore: A backup blade for when the big weapon is lost or broken.\n\nDesign: DX+1 (13) for 4 points, Average.",
+			"tags": [
+				"Xenos",
+				"Orks"
+			],
+			"specialization": "Choppa",
+			"difficulty": "dx/a",
+			"points": 4
+		},
+		{
+			"id": "swuDjPiy9Luf2VVdW",
+			"name": "Leadership",
+			"local_notes": "Lore: Backed by Charisma, this is what actually holds a Waaagh together between fights.\n\nDesign: IQ+3 (13) for 12 points, Average.",
+			"tags": [
+				"Xenos",
+				"Orks"
+			],
+			"difficulty": "iq/a",
+			"points": 12
+		},
+		{
+			"id": "sOBkFL2SrI-RqzbdM",
+			"name": "Tactics",
+			"local_notes": "Lore: Enough grand-scale Ork Kunnin' to run a whole Waaagh's worth of mobs.\n\nDesign: IQ+1 (11) for 8 points, Hard.",
+			"tags": [
+				"Xenos",
+				"Orks"
+			],
+			"difficulty": "iq/h",
+			"points": 8
+		},
+		{
+			"id": "sBc7Bi50Y6Pdowdhe",
+			"name": "Intimidation",
+			"local_notes": "Lore: A Warboss's reputation and Charisma make this nearly automatic against anything but another Warboss.\n\nDesign: Will+3 (13) for 12 points, Average.",
+			"tags": [
+				"Xenos",
+				"Orks"
+			],
+			"difficulty": "will/a",
+			"points": 12
+		},
+		{
+			"id": "sSO_A3RTSxruWAoRj",
+			"name": "Survival",
+			"local_notes": "Lore: See the Ork Boy template.\n\nDesign: Per+1 (11) for 4 points, Average.",
+			"tags": [
+				"Xenos",
+				"Orks"
+			],
+			"specialization": "(Ork Worlds)",
+			"difficulty": "per/a",
+			"points": 4
+		},
+		{
+			"id": "sug_UZOsjIpvyLheK",
+			"name": "Carousing",
+			"local_notes": "Lore: A Warboss drinks and brawls harder than anyone under him, and has to.\n\nDesign: HT+1 (16) for 2 points, Easy.",
+			"tags": [
+				"Xenos",
+				"Orks"
+			],
+			"difficulty": "ht/e",
+			"points": 2
+		},
+		{
+			"id": "s7Hm9eLo10D1ps6kd",
+			"name": "Streetwise",
+			"local_notes": "Lore: Knows exactly how every Klan and mob under his banner really feels about him.\n\nDesign: IQ+1 (11) for 4 points, Average.",
+			"tags": [
+				"Xenos",
+				"Orks"
+			],
+			"difficulty": "iq/a",
+			"points": 4
+		},
+		{
+			"id": "sdhyKeeZ-0Uu839JL",
+			"name": "Fast-Talk",
+			"local_notes": "Lore: Talking a rival Warboss down, or into a worse fight than he realizes.\n\nDesign: IQ+0 (10) for 2 points, Average.",
+			"tags": [
+				"Xenos",
+				"Orks"
+			],
+			"difficulty": "iq/a",
+			"points": 2
+		},
+		{
+			"id": "sMG7gplVJbny3Pws0",
+			"name": "Armoury",
+			"local_notes": "Lore: A Warboss knows enough to tell his Meks what he wants built, even if he can't build it himself.\n\nDesign: IQ+0 (10) for 2 points, Average.",
+			"tags": [
+				"Xenos",
+				"Orks"
+			],
+			"specialization": "(Ork Tech)",
+			"difficulty": "iq/a",
+			"points": 2
+		},
+		{
+			"id": "s_mrxstu24J-ez0N1",
+			"name": "Riding",
+			"local_notes": "Lore: Many Warbosses ride a monstrous personal squig or beast into battle.\n\nDesign: DX+0 (12) for 2 points, Average.",
+			"tags": [
+				"Xenos",
+				"Orks"
+			],
+			"specialization": "(Squig)",
+			"difficulty": "dx/a",
+			"points": 2
+		},
+		{
+			"id": "sYVRuNDMywPN4QZAs",
+			"name": "Driving",
+			"local_notes": "Lore: Just as often, a Warboss rides at the head of his own battlewagon.\n\nDesign: DX+0 (12) for 2 points, Average.",
+			"tags": [
+				"Xenos",
+				"Orks"
+			],
+			"specialization": "(Wartrukk)",
+			"difficulty": "dx/a",
+			"points": 2
+		},
+		{
+			"id": "s87O5CP_2-h89fuQ9",
+			"name": "Gambling",
+			"local_notes": "Lore: Warbosses settle a surprising number of disputes over dice and cards, when not settling them with fists.\n\nDesign: IQ-1 (9) for 1 point, Average.",
+			"tags": [
+				"Xenos",
+				"Orks"
+			],
+			"difficulty": "iq/a",
+			"points": 1
+		},
+		{
+			"id": "snFEqv22_h2P8zOMf",
+			"name": "Games",
+			"local_notes": "Lore: Squig fights are a Waaagh's favorite downtime entertainment, and a Warboss always has money on his own squig.\n\nDesign: IQ+0 (10) for 1 point, Easy.",
+			"tags": [
+				"Xenos",
+				"Orks"
+			],
+			"specialization": "(Squig Fighting)",
+			"difficulty": "iq/e",
+			"points": 1
+		}
+	],
+	"equipment": []
+}

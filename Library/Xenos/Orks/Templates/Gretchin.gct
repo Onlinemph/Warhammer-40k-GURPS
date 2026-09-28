@@ -1,0 +1,246 @@
+{
+	"version": 5,
+	"id": "Bl0CPaytn3pYCx_Tg",
+	"notes": "A Gretchin (Grot): small, cowardly, expendable Ork underclass, usually found minding artillery, running errands, or being driven forward by a Runtherd. Point math: Gretchin Physiology -21 + skills 21 = 0 points. Stats: ST 8, DX 11, IQ 9, HT 10, HP 8, Will 9, Per 9, SM -1 — framework.md's Gretchin anchor line exactly. A 0-point total is honest for this template rather than forced upward to hit a tier: a Gretchin is explicitly written as weaker than an ordinary, untrained adult in every way that matters in a fight, and only survives in numbers, behind bigger Orks, or by running. This is intentionally the weakest template in the Ork line, at the bottom of framework.md's Ordinary Citizen tier (0-50), not a combatant to be taken individually seriously.\n",
+	"traits": [
+		{
+			"id": "TH2xmz8h2-g8AMMHw",
+			"name": "Gretchin Physiology",
+			"local_notes": "Lore: Gretchin (Grots): the small, cowardly, expendable underclass of Ork society — servants, artillery crew and Runtherd-driven cannon fodder who share the same fungal biology as Boyz without the size, toughness or nerve. Consistent across Codex background and Black Library's Ork fiction, where a Grot's main survival strategy is staying near a bigger, meaner Ork and knowing when to vanish.\n\nDesign: -20 (Attribute Modifiers) + 0 (Fungal Physiology) + 10 (Resistant, Minor) + 5 (Grot Sneakiness) - 10 (Cowardice) - 5 (Social Stigma) - 1 (Squeals and Bolts) = -21 points of physiology alone — a genuinely weak template before skills, matching Gretchin's place as the Imperium's most disposable enemy rather than a threat in its own right; see the Gretchin template for the full (still very modest) character.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Orks"
+			],
+			"container_type": "ancestry",
+			"children": [
+				{
+					"id": "thSFQMc-ErUALs-HR",
+					"name": "Attribute Modifiers (Gretchin)",
+					"local_notes": "Design: Framework target: ST 8, DX 11, IQ 9, HT 10, HP 8, SM -1. Decreased ST -2 (B14, 10/level, -20) for ST 8; base HP tracks ST, so HP 8 needs no separate purchase. Increased DX +1 (B15, 20/level, 20) for DX 11 — sneaky and quick-fingered despite the weak frame. Decreased IQ -1 (B16, 20/level, -20) for IQ 9, slightly sharper than a Boy. HT 10 is baseline, no purchase. SM -1 is the framework's own figure for a Gretchin's small stature; it carries no independent point cost here since no ST is being bought above baseline for it to discount. -20+20-20 = -20 points.",
+					"tags": [
+						"Physical"
+					],
+					"base_points": -20,
+					"features": [
+						{
+							"type": "attribute_bonus",
+							"attribute": "st",
+							"amount": -2
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "dx",
+							"amount": 1
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "iq",
+							"amount": -1
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "sm",
+							"amount": -1
+						}
+					]
+				},
+				{
+					"id": "tqUNBtxKouzuKFNXI",
+					"name": "Fungal Physiology (Spore-Born)",
+					"local_notes": "Lore: Orks are not born but grown: an Ork reproduces by releasing spores that seed fresh fungal growth wherever conditions allow (a mechanism shared with Gretchin, Squigs and the rest of the Ork ecosystem), has no biological sex, and needs neither a mate nor, ordinarily, a trained physician who isn't another Ork with a saw and a good attitude. This is consistent, well-established Codex background and is played straight rather than for shock across Black Library's Ork fiction — an Ork simply is an ambulatory fungal colony shaped like a green thug.\n\nDesign: 0-point lore flag. Every mechanical payoff of this biology (thick hide, extreme pain tolerance, fast healing, survivability of wounds that would kill outright, immunity to disease and poison) is priced separately above; this entry exists purely to document why an Ork needs no gender, no mate, and no bedside manner from anyone.",
+					"tags": [
+						"Xenos",
+						"Orks"
+					],
+					"base_points": 0
+				},
+				{
+					"id": "ts4FZ3hbmqCaOzKAh",
+					"name": "Resistant to Disease and Toxins (Minor)",
+					"reference": "B81",
+					"local_notes": "Resistant (Occasional: Disease and Toxins), Immunity.\n\nLore: Gretchin share the fungal-symbiote biology of full Orks, just a weaker dose of it — hardy compared to a human, sickly compared to a Boy.\n\nDesign: Resistant (B81), Occasional: Disease and Toxins, Immunity tier — base 10, x1 for Immunity = 10 points, the same tier and math this project's Preomnor entry uses, well below a Boy's Common-tier 15.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Orks"
+					],
+					"base_points": 10
+				},
+				{
+					"id": "tpRVfvJY09JybTA0o",
+					"name": "Grot Sneakiness",
+					"reference": "B89",
+					"local_notes": "Adds its level to Stealth and Filch.\n\nLore: What a Gretchin lacks in strength it makes up in a genuine talent for not being noticed — slipping through a mob's legs to loot a battlefield, or vanishing the instant a Nob starts looking for someone to hit.\n\nDesign: Talent affecting two skills sits at the Small Talent rate (B90, 5 points/level, 1-2 skill bracket). Level 1, 5 points.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Talent",
+						"Xenos",
+						"Orks"
+					],
+					"points_per_level": 5,
+					"can_level": true,
+					"levels": 1,
+					"base_points": 0
+				},
+				{
+					"id": "tov_RhXxaAiJ4tRZ8",
+					"name": "Cowardice",
+					"reference": "B129",
+					"local_notes": "Lore: Gretchin are expendable and know it; they fight only when a bigger Ork is watching and run the instant that stops being true. Universally played for both pathos and slapstick across Ork fiction and Codex background alike.\n\nDesign: Basic Set Cowardice (B129), self-control 12, -10 points.",
+					"tags": [
+						"Disadvantage",
+						"Mental",
+						"Xenos",
+						"Orks"
+					],
+					"base_points": -10,
+					"cr": 12
+				},
+				{
+					"id": "t5X8vOAPh21gqHWhX",
+					"name": "Social Stigma (Grot)",
+					"reference": "B155",
+					"local_notes": "Second-Class Citizen, within Ork society specifically.\n\nLore: Even by Ork standards a Gretchin is at the bottom of the pile — bossed, cuffed and worked by every Boy, Nob and Runtherd above it in the pecking order.\n\nDesign: Basic Set Social Stigma (Second-Class Citizen) (B155), -5 points, scoped to Ork society.",
+					"tags": [
+						"Disadvantage",
+						"Social",
+						"Xenos",
+						"Orks"
+					],
+					"base_points": -5
+				},
+				{
+					"id": "tCOOfzvSyLozlLOQS",
+					"name": "Squeals and Bolts",
+					"local_notes": "Roleplaying flag only.\n\nLore: A Gretchin's first instinct under real pressure is noise, then distance.\n\nDesign: Quirk (B9), roleplaying flag only.",
+					"tags": [
+						"Quirk",
+						"Xenos",
+						"Orks"
+					],
+					"base_points": -1
+				}
+			]
+		}
+	],
+	"skills": [
+		{
+			"id": "sWsH-H7-WsOIM0HQr",
+			"name": "Guns",
+			"local_notes": "Lore: A Grot's slugga (or a hand-me-down blasta) is usually the biggest thing it's trusted with.\n\nDesign: DX+2 (13) for 4 points, Easy.",
+			"tags": [
+				"Xenos",
+				"Orks"
+			],
+			"specialization": "Pistol",
+			"difficulty": "dx/e",
+			"points": 4
+		},
+		{
+			"id": "spVIcse6IOjzMxJI3",
+			"name": "Stealth",
+			"local_notes": "Lore: Staying small, quiet and unnoticed is a Gretchin's best survival tool.\n\nDesign: DX+1 (12) for 4 points, Average.",
+			"tags": [
+				"Xenos",
+				"Orks"
+			],
+			"difficulty": "dx/a",
+			"points": 4
+		},
+		{
+			"id": "s6QtdqAIAvKZMV8PZ",
+			"name": "Filch",
+			"local_notes": "Lore: A Grot survives partly by taking what bigger Orks won't miss.\n\nDesign: DX+0 (11) for 2 points, Average.",
+			"tags": [
+				"Xenos",
+				"Orks"
+			],
+			"difficulty": "dx/a",
+			"points": 2
+		},
+		{
+			"id": "s7-1s_38bOX5k1fjL",
+			"name": "Survival",
+			"local_notes": "Lore: Basic field survival, learned the hard way at the bottom of the pecking order.\n\nDesign: Per+0 (9) for 2 points, Average.",
+			"tags": [
+				"Xenos",
+				"Orks"
+			],
+			"specialization": "(Ork Worlds)",
+			"difficulty": "per/a",
+			"points": 2
+		},
+		{
+			"id": "sLXN_tUDoETbykTNn",
+			"name": "Scrounging",
+			"local_notes": "Lore: Finding something useful, or edible, in a battlefield's leftovers.\n\nDesign: Per+1 (10) for 2 points, Easy.",
+			"tags": [
+				"Xenos",
+				"Orks"
+			],
+			"difficulty": "per/e",
+			"points": 2
+		},
+		{
+			"id": "sLMDtfcr4SptSlCc4",
+			"name": "Fast-Talk",
+			"local_notes": "Lore: Talking a bigger Ork out of a beating, at least sometimes.\n\nDesign: IQ+0 (9) for 2 points, Average.",
+			"tags": [
+				"Xenos",
+				"Orks"
+			],
+			"difficulty": "iq/a",
+			"points": 2
+		},
+		{
+			"id": "s-jTQBThIEVrgNsN7",
+			"name": "Climbing",
+			"local_notes": "Lore: Small and light enough to get places bigger Orks can't.\n\nDesign: DX+0 (11) for 2 points, Average.",
+			"tags": [
+				"Xenos",
+				"Orks"
+			],
+			"difficulty": "dx/a",
+			"points": 2
+		},
+		{
+			"id": "sCvIuMN4Ss_-dydbJ",
+			"name": "Carousing",
+			"local_notes": "Lore: Grots drink and brawl in miniature the same way Boyz do in full.\n\nDesign: HT+0 (10) for 1 point, Easy.",
+			"tags": [
+				"Xenos",
+				"Orks"
+			],
+			"difficulty": "ht/e",
+			"points": 1
+		},
+		{
+			"id": "sjzea2cUllNREmnik",
+			"name": "Traps",
+			"local_notes": "Lore: Grots are commonly put to work rigging mines and booby traps other Orks can't be bothered with.\n\nDesign: IQ-1 (8) for 1 point, Average.",
+			"tags": [
+				"Xenos",
+				"Orks"
+			],
+			"difficulty": "iq/a",
+			"points": 1
+		},
+		{
+			"id": "sz5JErjS3ZjgMml7D",
+			"name": "Armoury",
+			"local_notes": "Lore: Basic maintenance on whatever gear it's handed, under a Mek's shouted instruction.\n\nDesign: IQ-1 (8) for 1 point, Average.",
+			"tags": [
+				"Xenos",
+				"Orks"
+			],
+			"specialization": "(Ork Tech)",
+			"difficulty": "iq/a",
+			"points": 1
+		}
+	],
+	"equipment": []
+}

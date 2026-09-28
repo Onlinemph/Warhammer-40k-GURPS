@@ -85,53 +85,71 @@ items:
   - name: Killsaw
     tl: 6
     lc: 0
-    cost: 3000
-    weight: 40
+    cost: 6000
+    weight: 42
     tags: [Melee Weapon, Xenos, Orks]
     weapons:
-      - usage: Swing, two-handed
-        damage: sw+5(3) cut
-        reach: 1
-        parry: "-2U"
-        st: 20
-        skill: Two-Handed Axe/Mace
+      - usage: Punch/cut
+        damage: thr+7d(10) cut
+        reach: C
+        parry: -2
+        st: 22
+        skill: Brawling
     notes: >-
-      A ring of powered chain-teeth, not a disruption field: unlike a power
-      klaw, the killsaw needs to be servo-assisted (mega armour, or an
-      unusually huge Ork) to swing at all, and the teeth can bind in a solid
-      hit exactly as an Imperium chainaxe's can (GM's discretion: a Ready
+      Cannot be used to Feint, as the Imperium Power Fist and Chainfist it's
+      built from. Like the power klaw, the ring of chain-teeth carries a
+      genuine (if crudely copied and worse-shielded) disruption field behind
+      its spinning edge - Ork background is explicit that a killsaw bites
+      through vehicle hulls and bulkheads the way a plain chain weapon
+      never could, and this project models that with the same Armor Divisor
+      every disruption-field weapon in this project shares, not with a
+      bigger mundane blade. The teeth can still bind in a very solid hit
+      exactly as an Imperium chainaxe's can (GM's discretion: a Ready
       maneuver to wrench it free).
     lore: >-
       A huge, motorised chain-blade mounted on a Meganob's arm alongside (or
       instead of) a power klaw, built for boarding actions and breaching
       where cutting through plate matters; Codex: Orks background places it
-      as the Ork parallel to the Imperium chainfist, minus any actual
-      disruption field - just bigger teeth and more raw torque than a
-      Boy-scale choppa could ever carry.
+      as the Ork parallel to the Imperium chainfist, and is explicit that it
+      genuinely cuts into tank hulls and bulkheads in the field - not merely
+      a bigger version of a Boy-scale choppa's chain-teeth.
     design: >-
-      Not a power-field weapon (the framework's power-field rule and its
-      Armor Divisor (10) apply only to disruption-field gear, and nothing in
-      Ork background credits a killsaw with a field) - instead it's built
-      the same way the Imperium Chainfist and Chainaxe are: a mundane
-      grinding-chain mechanism with its own Armor Divisor for the way the
-      teeth chew through plate rather than the field-based (10) a power klaw
-      gets. At the mega-armour-assisted strength a Meganob fights at
-      (effective ST around 30, sw approx. 5d+1), sw+5(3) cut averages
-      22.5 and, checked by exact dice distribution, penetrates flak (DR 30)
-      100% of the time and carapace (DR 70, eff. 23.3) 40.0% of the time -
-      a real infantry- and light-armour-shredder - but only 5.9% against
-      Sororitas power armour and 0.1% against Astartes plate, and
-      effectively 0% against any vehicle AV, confirming the killsaw is a
-      brutal melee weapon for chewing through bodies and light structure
-      rather than a genuine tank-opener - that job belongs to the Tankbusta
-      Bomb, not this weapon, matching how the fiction never actually shows a
-      killsaw cutting into a vehicle's hull the way a boarding chainfist
-      does to a bulkhead. Handling: 40 lb, heavier than the Imperium
-      Chainfist's 45 lb-adjacent weight class (comparable, reflecting a
-      similarly huge servo-driven cutting tool); min ST 20, reachable only
-      by a mega-armoured Meganob or an unusually huge Ork, per the notes.
-      Parry -2U (worse than the standard Axe/Mace -1U) for the sheer size
-      and clumsiness of a two-handed spinning chain blade this large.
+      REVISED (lore fix): the previous build treated the killsaw as a
+      mundane grinding-chain mechanism on the Imperium Chainaxe/Chainfist
+      model with its own Armor Divisor (3), which left it unable to hurt
+      power armour or a vehicle in any reliable way (0.1% vs Astartes plate,
+      effectively 0% vs every vehicle AV) - directly contradicted by Ork
+      background's own claim that a killsaw cuts through tank hulls and
+      bulkheads. Rebuilt instead exactly on the Imperium Power Fist/Chainfist
+      chassis the coordinator specified: thr+7d(10) cut, the Chainfist's own
+      formula (see data/imperium/weapons/melee.yaml), reasoned here as a
+      crude, worse-shielded disruption field a Mek has copied or looted
+      into the chain housing rather than a plain mechanical grind - "cruder"
+      is carried in cost, upkeep and the entry's own tone, not a weaker
+      divisor, exactly the same design choice this file already makes for
+      the Power Klaw relative to the Imperium Power Fist. Checked by exact
+      dice distribution at the mega-armour-assisted strength a Meganob
+      fights at (effective thrust around thr 3d+1, so thr+7d = 10d+1): avg
+      36, penetrating every personal armour on the table at or above 99.9%,
+      including a Terminator, and clearing AV10-12 essentially always,
+      AV13 94.2% of the time and even AV14 53.6% of the time - reaching (and,
+      at a Meganob's own greater bulk, slightly exceeding) the Astartes
+      Chainfist's own benchmark figures, exactly the "must reach
+      chainfist-level armour penetration" the coordinator asked for, and
+      finally matching the fiction's own claim that killsaws open up tank
+      hulls and bulkheads rather than merely chewing infantry. Handling:
+      weight up from 40 lb to 42 lb and cost up sharply (a genuine
+      field-bearing weapon, not a plain motorised blade, costs and weighs
+      accordingly, in line with the Power Klaw's own price jump over a
+      mundane chain weapon); reach C, parry -2 and the no-Feint note are
+      taken directly from the Imperium Power Fist/Chainfist, since a
+      fist-and-forearm-mounted spinning chain ring fights exactly like a
+      servo-driven punching weapon, not a swung two-handed blade - this also
+      corrects the skill to Brawling (unarmed-style, arm-mounted) in place
+      of the previous Two-Handed Axe/Mace, matching how the Imperium
+      Chainfist itself is built despite sharing a name with the swung
+      Chainaxe. Min ST 22, reachable by mega armour's own servo assistance
+      or an unusually huge Ork, per the notes.
 
   - name: Power Klaw
     tl: 7

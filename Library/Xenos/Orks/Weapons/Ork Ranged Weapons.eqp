@@ -1,0 +1,2368 @@
+{
+	"version": 5,
+	"rows": [
+		{
+			"id": "ebL_mNV-XH_qeEHYm",
+			"description": "Slugga",
+			"local_notes": "Lore: The slugga is the Ork sidearm: a stamped, riveted, big-bore auto-pistol every Boy carries alongside his choppa. Codex: Orks background and Deathwatch's Mark of the Xenos both describe it as crude but powerful - an oversized handgun firing a round more akin to a rifle cartridge than a pistol round - and it is a constant visual in Black Library Ork fiction (Nate Crowley's Ghazghkull Thraka: Prophet of the Waaagh! among others) as the \"boom\" half of \"choppa and shoota\" Ork close-combat doctrine.\n\nDesign: REVISED (lore fix): the framework's Ork anchor reads \"about 5d pi+,\" but at that dice count the slugga penetrated flak (DR 30) 0% of the time by exact dice distribution - flatly at odds with Ork dakka being able to chew through Guard lines at all, since even the sidearm should threaten flak-armoured infantry when Ork small arms are consistently described firing rounds far bigger than a human pistol's. Bumped two dice to 7d pi+ (avg 24.5) to actually earn \"big-bore\": exact dice distribution now penetrates flak 9.4% of the time (a real, if unreliable, threat rather than none at all) while still failing outright against carapace or better (0%), keeping the slugga clearly below the shoota in this file's own family and nowhere near a threat to real Imperial plate - a sidearm should hit meaningfully harder than \"no threat whatsoever,\" not compete with the family's own rifle. Handling re-derived for the bigger cartridge: weight up from 4 lb to 5 lb for the heavier case and stiffer frame; min ST 9 (raw formula sqrt(10x5)=7.1, bumped for a genuinely punishing pistol-frame round, the same logic the Imperium Bolt Pistol's ST bump uses) - still trivial for a Boy (ST 22) but a serious handful for an unaugmented human. Shots trimmed to 14(3) (a bigger cartridge means fewer rounds in the same drum) and Rcl bumped to 3 (up from 2) for the harder kick, both real handling consequences of the bigger round rather than cosmetic changes. Bulk -2 and Acc 1 are unchanged - the frame and sights aren't any different, only the ammunition. Malf 14 and the no-explosion house rule are unchanged from before.",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Orks"
+			],
+			"tech_level": "5",
+			"legality_class": "0",
+			"base_value": "70",
+			"base_weight": "5 lb",
+			"weapons": [
+				{
+					"id": "WlRcgrDIe6W92nJjK",
+					"sv": 1,
+					"damage": {
+						"type": "pi+",
+						"base": "7d"
+					},
+					"accuracy": "1",
+					"range": "90/220",
+					"rate_of_fire": "3",
+					"shots": "14(3)",
+					"bulk": "-2",
+					"recoil": "3",
+					"strength": "9",
+					"usage": "Standard",
+					"usage_notes": "Malf 14. Ork weapons never explode on the wielder's roll of 3; treat any Critical Failure as a jam instead (a Ready maneuver clears it).",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "es37N0-yfVLGYJCQ4",
+			"description": "Rokkit Pistol",
+			"local_notes": "Lore: A rarer, one-handed rokkit tube favoured by Kommando Nobz and Freebooter captains who want an anti-armour punch without giving up a choppa or power klaw in the other hand; smaller and shorter-ranged than the shoulder-fired rokkit launcha, and correspondingly less common in background art, but a recurring \"big pistol\" silhouette in Ork Kommando and Freebooter illustrations.\n\nDesign: Scaled down one size class from the rokkit launcha anchor (6dx4(3) cr ex) the same way this project scales a pistol from its parent rifle family elsewhere: two dice down, same mechanism and armour divisor, giving 4dx4(3) cr ex (avg 56). Exact dice distribution: penetrates carapace (DR 70, eff. 23.3) 99.6% of the time and Astartes power armour (DR 100, eff. 33.3) 94.6% - still a real Marine-killer at short range - but drops off hard against a Terminator (DR 200, eff. 66.7) to 23.9%, and against vehicles clears AV10/AV11 (66.4%) but fails AV12 upward (23.9%/0.4%/0%) - a real but weaker cousin of the full rokkit launcha, matching its rarer, smaller-warhead depiction. Handling: 10 lb loaded (a stubby tube and single warhead, no shoulder stock); min ST 12 (heavier than a slugga for the rocket motor and blast shield, light work for a Nob at ST 26); RoF 1 and Shots 1(6) - a single-shot tube that needs a fresh rocket socketed in by hand, slower even than the full launcha's reload since there's no shoulder brace to steady the reload. Bulk -4 (bulkier than any pistol, still one-handable) and Rcl 1 (the rocket motor, not the launch charge, does the accelerating). Acc 0, per the framework's Ork Acc bracket, worse even than the full launcha for the shorter sighting length. Malf 14, standard Ork gear.",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Orks"
+			],
+			"tech_level": "6",
+			"legality_class": "0",
+			"base_value": "500",
+			"base_weight": "10 lb",
+			"weapons": [
+				{
+					"id": "W7mulkhQ2octiWRcH",
+					"sv": 1,
+					"damage": {
+						"type": "cr ex",
+						"base": "4dx4",
+						"armor_divisor": 3
+					},
+					"accuracy": "0",
+					"range": "100/300",
+					"rate_of_fire": "1",
+					"shots": "1(6)",
+					"bulk": "-4",
+					"recoil": "1",
+					"strength": "12",
+					"usage": "Standard",
+					"usage_notes": "Malf 14.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "etYvBgFrlqmmhrBvr",
+			"description": "Shoota",
+			"local_notes": "Lore: The shoota is the Ork long arm: a heavy, crudely-stamped automatic weapon built to spray \"dakka\" rather than aim, consistently described across Codex: Orks and Deathwatch's Mark of the Xenos as more effective in volume than in precision, and a constant background weapon in every piece of Ork art and Black Library Ork fiction from the Waaagh!-era novels onward. Ork tech-lore holds that a shoota fires better the louder its owner shouts at it - a detail played for both humour and genuine menace in the fiction, since the effect (whatever its cause) is real in-universe.\n\nDesign: REVISED (lore fix): the framework's Ork anchor's own dice (\"about 7d pi+\") made the shoota ballistically identical to the Imperium autogun, penetrating flak (DR 30) only 9.4% of the time - flatly wrong for the weapon the fiction shows mowing down entire Guard lines under weight of fire. The anchor's own text calls shootas \"heavy slugs,\" and Ork background consistently describes shoota rounds as far bigger than a human rifle's, so the dice are corrected upward rather than treated as fixed: 9d pi+ (avg 31.5). Exact dice distribution now penetrates flak 57.6% of the time - genuinely dangerous to flak-armoured infantry, as \"dakka mows down Guard lines\" requires - while still failing outright against carapace or better (0%) and every vehicle AV on the table (checked AV10-14), so a shoota still cannot threaten real Imperial plate or armour, only unarmoured and flak-class targets, keeping the family's own internal escalation (shoota < kustom shoota/snazzgun < big shoota < deffgun) intact. Acc, RoF, Malf and the \"dakka not precision\" identity are all unchanged, per the coordinator's instruction - only the calibre moved. Handling re-derived for the bigger round: weight up from 16 lb to 20 lb for a genuinely heavier cartridge and reinforced receiver; min ST 16 (raw formula sqrt(10x20)=14.1, bumped for the harder-kicking action, the same recoil-handling logic used throughout this file) - a Boy (ST 22) still fires it without difficulty, an unaugmented human now struggles even more than before. Shots trimmed to 24(5) (fewer of the bigger cartridges fit the same drum) and Rcl bumped to 4 (up from 3, a genuinely heavier-calibre kick, matching the framework's own \"heavy bolter/heavy stubber 3-4\" bracket) - real consequences of the bigger round, not free changes. Bulk -5, RoF 10 and Acc 1 are unchanged: the weapon's size class and its \"dakka not precision\" identity haven't moved, only its stopping power. Malf 14 per the framework's explicit Ork-gear rule, unchanged.",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Orks"
+			],
+			"tech_level": "5",
+			"legality_class": "0",
+			"base_value": "220",
+			"base_weight": "20 lb",
+			"weapons": [
+				{
+					"id": "W1pj2R2k_NrjpFTXh",
+					"sv": 1,
+					"damage": {
+						"type": "pi+",
+						"base": "9d"
+					},
+					"accuracy": "1",
+					"range": "150/500",
+					"rate_of_fire": "10",
+					"shots": "24(5)",
+					"bulk": "-5",
+					"recoil": "4",
+					"strength": "16",
+					"usage": "Dakka (full auto)",
+					"usage_notes": "Malf 14. Ork critical failures jam (Ready to clear) rather than exploding; see Slugga.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "ezYTcqp8eoZ_y4UcM",
+			"description": "Kustom Shoota",
+			"local_notes": "Lore: A Mekboy-tuned shoota, its receiver welded over with extra plating, a bigger ammo hopper and (usually) at least one more barrel than it needs: Ork background material is consistent that a Mek's \"kustom\" work makes a weapon hit harder at the direct cost of reliability, since the Mek's improvements are guided by instinct and belief rather than any real engineering discipline.\n\nDesign: REVISED (lore fix): rebuilt one die over the now-corrected plain Shoota (9d pi+, see that entry) rather than the old, too-weak baseline, keeping the same relative \"Mek's overbuilt action hits a step harder\" relationship: 10d pi+ (avg 35). Exact dice distribution: 79.5% through flak (DR 30), a clear step up from the plain Shoota's own 57.6% and genuinely closing on \"beats flak easily,\" while still failing outright against carapace or better (0%) - a harder-hitting Shoota, not a different class of weapon, exactly as before. Handling re-derived for the bigger charge: weight up from 18 lb to 22 lb (extra plating and a bigger drum over the now-heavier plain Shoota's own 20 lb); min ST 17 (raw formula sqrt(10x22)=14.8, bumped to match the heavier housing and harder kick, the same margin over the plain Shoota's own ST 16 as before); Rcl bumped to 4, matching the plain Shoota's own correction. RoF stays at 12 (the reworked action cycling faster than stock) and Bulk stays at -5 - neither the mechanism nor the silhouette changed, only the calibre, per the coordinator's instruction to keep Acc, Malf and the \"dakka not precision\" identity intact. Shots trimmed to 24(5) to match the plain Shoota's own bigger-cartridge correction. Malf stays at 13, per the framework's explicit \"13 for kustom jobs\" rule, unchanged by the rescale.",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Orks"
+			],
+			"tech_level": "6",
+			"legality_class": "0",
+			"base_value": "400",
+			"base_weight": "22 lb",
+			"weapons": [
+				{
+					"id": "WtJF9eXuLDhHdE5UI",
+					"sv": 1,
+					"damage": {
+						"type": "pi+",
+						"base": "10d"
+					},
+					"accuracy": "1",
+					"range": "150/500",
+					"rate_of_fire": "12",
+					"shots": "24(5)",
+					"bulk": "-5",
+					"recoil": "4",
+					"strength": "17",
+					"usage": "Dakka (full auto)",
+					"usage_notes": "Malf 13 (kustom job; see design). Jams rather than explodes on a critical failure, as the Slugga.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "e52TKHSXVcRhVuilr",
+			"description": "Snazzgun",
+			"local_notes": "Lore: The snazzgun is the signature weapon of a Flash Git: a shoota rebuilt from looted, salvaged and traded-for parts of real quality by an Ork with more teef than sense, gaudily decorated and prized as much for status as for firepower. Codex: Orks background is explicit that Flash Gits' snazzguns are the best-made Ork small arms in general circulation, precisely because Flash Gits can afford to demand a Mek use good parts rather than whatever scrap is at hand.\n\nDesign: REVISED (lore fix): kept at the Kustom Shoota's now-corrected damage (10d pi+, avg 35, see that entry) rather than the old, too-weak baseline, since both still represent the same \"improved shoota\" tier - the difference this entry models is reliability and finish, not raw power. Exact dice distribution is identical to the Kustom Shoota (79.5% vs flak, 0% vs carapace or better). Handling re-derived for the bigger charge: weight up from 17 lb to 21 lb (lighter than the Kustom Shoota's 22 lb welded-on plating, since a snazzgun's quality comes from good components, not extra bulk); min ST 15 (raw formula sqrt(10x21)=14.5, essentially unmodified - a well-balanced weapon doesn't need the extra recoil-handling bump a cruder gun does, keeping it two points below the Kustom Shoota's ST 17); Rcl bumped to 4, matching the family-wide correction for the bigger round. Acc stays at 2 (the top of the framework's Ork bracket, for genuinely better sights than any other entry on this page), Bulk stays at -5, RoF stays at 10 and Malf stays at 15 - the coordinator's instruction was to keep Acc, Malf and the \"dakka not precision\" identity intact, and nothing about a snazzgun's actual craftsmanship changed, only its cartridge. Shots trimmed to 24(4), matching the family's bigger-cartridge correction while keeping the snazzgun's faster reload edge over the Kustom Shoota's 24(5).",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Orks"
+			],
+			"tech_level": "6",
+			"legality_class": "0",
+			"base_value": "1000",
+			"base_weight": "21 lb",
+			"weapons": [
+				{
+					"id": "WmFcB9EPKxVfW3FKf",
+					"sv": 1,
+					"damage": {
+						"type": "pi+",
+						"base": "10d"
+					},
+					"accuracy": "2",
+					"range": "180/550",
+					"rate_of_fire": "10",
+					"shots": "24(4)",
+					"bulk": "-5",
+					"recoil": "4",
+					"strength": "15",
+					"usage": "Dakka (full auto)",
+					"usage_notes": "Malf 15 (see design). Every snazzgun is individually built and often carries an idiosyncratic extra effect (a muzzle flare that briefly blinds, a second hidden barrel, a built-in gitfinda) left to the GM to add for a specific named weapon rather than statted generically here.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "e2eHKN9F0Qy0aQRLd",
+			"description": "Big Shoota",
+			"local_notes": "Lore: A heavy-stubber-class weapon carried two-handed by a big Ork rather than tripod-mounted by a human crew, common as a Nob's personal weapon, a trukk or battlewagon pintle gun, and standard wargear for the biggest Boyz in a mob. Codex: Orks background places it squarely in the heavy-stubber weight class, and it is a recurring silhouette on Ork vehicle art throughout the game's background material.\n\nDesign: REVISED (lore fix): the framework's own anchor text calls this a \"heavy stubber class and up\" weapon, but at the old anchor dice (\"about 9d pi+\") it penetrated flak (DR 30) only 57.6% of the time - a real threat, but well short of the \"and up\" and short of what a Boy mowing down a Guard firing line with a genuine heavy machine gun should manage against flak-class infantry, especially once the plain Shoota itself was corrected upward to that same 57.6% figure and a Big Shoota needs real daylight above its own little brother. Set to 13d pi+ (avg 45.5), the top of the coordinator's requested 12-13d range: exact dice distribution now clears flak 99.3% of the time - it \"beats flak easily,\" exactly as instructed - while still failing against carapace or better for all practical purposes (0.0006%, negligible - \"bounces off... mostly,\" per the instruction, read as \"essentially always\") and against every vehicle AV on the table (checked AV10-14, all 0%), so it still cannot hurt power armour or a vehicle, keeping the Imperium Heavy Stubber's own \"never once shown killing a tank\" reputation intact for the Ork equivalent. Handling re-derived for the much heavier round: weight up from 32 lb to 45 lb for a genuinely bigger receiver and ammunition (the \"heavy machine gun\" reading the coordinator asked for, not a slightly-bigger shoota); min ST bumped to 24, above a bare Boy's own 22 (raw formula sqrt(10x45)=21.2, bumped for the much harder recoil of a true heavy-calibre weapon) - any Boy can still heft it with real effort, but it now genuinely favours a big Boy or a Nob (ST 26), matching a heavier weapon class than before. Shots trimmed to 50(6) for the bigger cartridges in the same drum; Rcl bumped to 4 (up from 3) for the heavier kick, matching the framework's own \"heavy stubbers ... 3-4\" bracket at its top end. RoF 15, Bulk -7 and Acc 1 are all unchanged, per the coordinator's instruction to keep Acc and the \"dakka not precision\" identity intact - only the calibre and its handling consequences moved. Malf 14, standard Ork gear, unchanged.",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Orks"
+			],
+			"tech_level": "6",
+			"legality_class": "0",
+			"base_value": "800",
+			"base_weight": "45 lb",
+			"weapons": [
+				{
+					"id": "WR1Xp9ZkFdnj4cvjN",
+					"sv": 1,
+					"damage": {
+						"type": "pi+",
+						"base": "13d"
+					},
+					"accuracy": "1",
+					"range": "200/600",
+					"rate_of_fire": "15",
+					"shots": "50(6)",
+					"bulk": "-7",
+					"recoil": "4",
+					"strength": "24",
+					"usage": "Dakka (full auto)",
+					"usage_notes": "Malf 14. Jams rather than explodes on a critical failure, as the Slugga.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "ej14I_Iz6iIOpp4Zr",
+			"description": "Twin Big Shoota",
+			"local_notes": "Lore: Two big shootas bolted to a shared frame and fired together, most often seen as a Deff Dread or battlewagon weapon mount but occasionally wielded by an especially large Ork; Codex: Orks background treats twin-linking as the standard Ork answer to \"the first gun wasn't enough dakka.\"\n\nDesign: REVISED (lore fix): follows the Big Shoota's own corrected dice (13d pi+, see that entry) rather than the old, too-weak baseline, since a twin-link is still built as two of the same barrel, not a re-derivation. \"rof: 15x2\" continues to capture the doubled volume of fire per the standard GURPS convention for linked weapons (used identically for the Imperium Storm Bolter). Penetration odds per hit match the single Big Shoota exactly (99.3% vs flak, negligible vs carapace or better, 0% vs every vehicle AV). Handling re-derived from the heavier single gun: 85 lb, roughly double the single Big Shoota's new 45 lb for the shared mount and doubled ammunition feed; min ST bumped to 26 (above the single gun's own 24, matching the framework's Nob figure exactly - built for the very biggest Boyz and Nobz, or a vehicle mount) with Rcl matching the single gun's corrected 4. Shots set to 100(8) (not simply double the single gun's 50, since a shared twin feed is more cramped than two independent drums) with the same slower per-shot reload as before for the more awkward twin feed. Bulk -8, one step worse than the single gun's -7 for the doubled frame, is unchanged. Malf 14 as the single gun, unchanged; the note on rolling per barrel remains a GM option, not a mechanical requirement.",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Orks"
+			],
+			"tech_level": "6",
+			"legality_class": "0",
+			"base_value": "1500",
+			"base_weight": "85 lb",
+			"weapons": [
+				{
+					"id": "WTEzMRI-l9VC410c4",
+					"sv": 1,
+					"damage": {
+						"type": "pi+",
+						"base": "13d"
+					},
+					"accuracy": "1",
+					"range": "200/600",
+					"rate_of_fire": "15x2",
+					"shots": "100(8)",
+					"bulk": "-8",
+					"recoil": "4",
+					"strength": "26",
+					"usage": "Dakka (both barrels)",
+					"usage_notes": "Malf 14 per barrel (roll separately if a GM wants one barrel to jam and not the other). Jams rather than explodes on a critical failure, as the Slugga.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "e40y0iS0EBpzH_iF5",
+			"description": "Deffgun",
+			"local_notes": "Lore: A heavy support gun above the Big Shoota's weight class, mounted on Gunwagons, Deff Dreads and Big Meks' own heavy-support loadouts; background material (Codex: Orks, Forge World's Ork background) treats it as the Ork parallel to a human heavy machine gun proper - bigger, slower-cycling and harder-hitting than a shoota-family weapon, without crossing into rokkit or zzap-gun anti-armour territory.\n\nDesign: REVISED (lore fix): not covered by name in the framework's Ork anchor table, so it remains built one clear step above the Big Shoota on the same pi+ solid-slug family rather than copied from it, per the framework's \"each weapon's dice derived individually\" rule - but \"one step above\" now means one step above the Big Shoota's own corrected 13d pi+ (see that entry), not the old, too-weak 9d baseline. Set to 15d pi+ (avg 52.5): exact dice distribution clears flak (DR 30) 100% of the time and even opens a small, genuine crack in carapace (DR 70) at 0.3% of hits - still overwhelmingly an infantry-killer, but correctly sitting a clear notch above the Big Shoota's own negligible carapace chance, matching \"above the Big Shoota\" as instructed. Still 0% against every vehicle AV on the table (checked AV10-14), keeping it an infantry-killer rather than a vehicle-killer, the role Rokkits and the Zzap Gun fill instead - a genuine heavy machine gun, not a light autocannon. Handling re-derived for the heavier round: weight up from 55 lb to 75 lb for a genuinely bigger receiver and ammunition; the raw ST formula gives sqrt(10x75)=27.4, but the weapon is mounted on a pintle or Deff Dread arm in every depiction rather than carried loose, so it takes the M suffix, bumped to ST 22 (up from 20) to reflect the heavier mount and feed mechanism the mount itself now has to manage - the mount still bears the weight, not the gunner's back. RoF 10, below the Big Shoota's 15, is unchanged for the same heavier-calibre-but-slower-cycling reasoning as before. Shots trimmed to 60(8) for the bigger cartridges in the same belt/hopper. Bulk -8 unchanged; Rcl bumped to 4, matching the family-wide correction for the bigger round. Acc 1, unchanged Ork-gear figure, per the coordinator's instruction. Malf 14, standard Ork gear, unchanged.",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Orks"
+			],
+			"tech_level": "6",
+			"legality_class": "0",
+			"base_value": "2200",
+			"base_weight": "75 lb",
+			"weapons": [
+				{
+					"id": "WCu7p6Nxx1p1Q_kp4",
+					"sv": 1,
+					"damage": {
+						"type": "pi+",
+						"base": "15d"
+					},
+					"accuracy": "1",
+					"range": "250/800",
+					"rate_of_fire": "10",
+					"shots": "60(8)",
+					"bulk": "-8",
+					"recoil": "4",
+					"strength": "22M",
+					"usage": "Braced/mounted",
+					"usage_notes": "Malf 14. Jams rather than explodes on a critical failure, as the Slugga.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Gunner"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Machine Gun"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Gunner"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eRlivHuG8WK0G80cT",
+			"description": "Rokkit Launcha",
+			"local_notes": "Lore: The Ork anti-armour weapon of choice: a crude, shoulder-fired rocket tube that Codex: Orks and Deathwatch's Mark of the Xenos both describe as good enough to crack open light and medium Imperial armour despite (or because of) its total lack of finesse - fiction across the Ork range consistently shows rokkits cracking Chimeras, Sentinels and Rhinos while struggling against a main battle tank's frontal glacis.\n\nDesign: Matches the framework's Ork anchor exactly (\"Rokkit launcha | Anti-armour, about 6d×4(3) cr ex, Acc 0-1, Malf 14\"). Checked by exact dice distribution against the personal-armour and vehicle-AV tables: avg 84, penetrating every personal armour up to and including Astartes power armour (100%, 100%, 100%, 99.9%) and even a Terminator 85.5% of the time - a real Marine- and Terminator-killer in enough numbers, matching the fiction's Ork mobs grinding down Astartes squads by weight of rokkit fire. Against the vehicle table it clears AV10-11 (99.9%/98.0%) reliably, AV12 (85.5%) usually, but falls to 36.3% at AV13 and 2.0% at AV14 - reliably wrecks a Chimera, Rhino or Sentinel, sometimes cracks a Predator-weight hull, and rarely beats a Leman Russ or Land Raider outright, exactly the \"crack open light and medium armour\" reputation the lore consistently gives it. Handling: 20 lb loaded (tube plus one rocket), min ST 14 (raw formula sqrt(10x20)=14.1, unmodified - a Boy at ST 22 fires it one-handed in a pinch, as the art shows). RoF 1 and Shots 1(6): single-shot, hand- loaded between shots, slower than the Imperium Missile Launcher's 1(4) for the cruder loading mechanism. Bulk -7 and Rcl 1 (the rocket motor ignites clear of the tube, so felt recoil is light) match a shoulder- fired tube weapon. Acc 1, the top of the anchor's 0-1 bracket - Orks aim rokkits about as well as anything else they own. Malf 14, standard Ork gear.",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Orks"
+			],
+			"tech_level": "6",
+			"legality_class": "0",
+			"base_value": "900",
+			"base_weight": "20 lb",
+			"weapons": [
+				{
+					"id": "W5UeuFa8UVILnfpcN",
+					"sv": 1,
+					"damage": {
+						"type": "cr ex",
+						"base": "6dx4",
+						"armor_divisor": 3
+					},
+					"accuracy": "1",
+					"range": "150/450",
+					"rate_of_fire": "1",
+					"shots": "1(6)",
+					"bulk": "-7",
+					"recoil": "1",
+					"strength": "14",
+					"usage": "Standard",
+					"usage_notes": "Malf 14.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eHHRAHQZhFG0hQ4LK",
+			"description": "Kustom Mega-Slugga",
+			"local_notes": "Lore: A Meganob's sidearm: a slugga rebuilt to Meganob scale and Mekboy \"improvement,\" fired one-handed from inside a suit of mega armour alongside a power klaw. Background material treats it as simply a bigger, meaner slugga rather than a distinct weapon family, in keeping with how a Meganob's entire loadout is everything a Boy carries, scaled up and overbuilt.\n\nDesign: REVISED (lore fix): rebuilt to match the Kustom Shoota's own corrected damage tier (10d pi+, see that entry) rather than the old, too-weak baseline, since both represent the same \"kustom, one tier up\" class of Ork weapon regardless of pistol or rifle profile - the same relationship the Snazzgun already shares with the Kustom Shoota. Exact dice distribution matches the Kustom Shoota exactly (79.5% vs flak, 0% vs carapace or better), delivered as a pistol-profile weapon a Meganob can fire one-handed alongside a power klaw. Handling re-derived for the bigger charge: weight up from 14 lb to 16 lb, heavier than the plain Slugga's own corrected 5 lb for the Meganob- scale frame (the same weight jump the Astartes-pattern bolt pistol takes over the human one); min ST bumped to 19 (raw formula sqrt(10x16)=12.6, bumped for the punishing recoil of a genuinely big cartridge on a pistol frame, the same logic the Imperium Bolt Pistol's own ST bump and the plain Slugga's own correction both use) - well within a mega-armoured Meganob's servo-assisted strength, out of reach for a bare Boy. Shots trimmed to 10(4) for the bigger cartridge; Rcl bumped to 4, matching the family-wide correction for the heavier round. RoF 3 and Bulk -4 are unchanged pistol figures. Malf 13, the framework's kustom-job rating, unchanged.",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Orks"
+			],
+			"tech_level": "6",
+			"legality_class": "0",
+			"base_value": "650",
+			"base_weight": "16 lb",
+			"weapons": [
+				{
+					"id": "Wpq-7MYBC2b_lM0-K",
+					"sv": 1,
+					"damage": {
+						"type": "pi+",
+						"base": "10d"
+					},
+					"accuracy": "1",
+					"range": "100/300",
+					"rate_of_fire": "3",
+					"shots": "10(4)",
+					"bulk": "-4",
+					"recoil": "4",
+					"strength": "19",
+					"usage": "Standard",
+					"usage_notes": "Malf 13 (kustom job).",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eZP1HBOpPtZwEQsRd",
+			"description": "Kustom Mega-Blasta",
+			"local_notes": "Lore: The Big Mek's own signature weapon: a hand-built, unstable energy gun that Codex: Orks background repeatedly describes in the same breath as \"as likely to explode as to work,\" yet devastating when it doesn't. Widely depicted (Codex art, Black Library's Ghazghkull Thraka: Prophet of the Waaagh!) as a one-of-a-kind weapon specific to the Mek who built it, rather than a mass-produced pattern.\n\nDesign: No framework anchor covers this item by name, so it is built as an Ork answer to the Imperium's plasma family - the closest real-world analogue to \"unstable energy weapon that occasionally kills its own user\" this project already has a design pattern for (see the Plasma Gun's supercharged-mode Malf 14 rule) - but pushed further into Ork unreliability territory. Checked by exact dice distribution: 6dx4(2) burn ex averages 84 and penetrates Astartes power armour (DR 100, eff. 50) 98.0% of the time and even a Terminator (DR 200, eff. 100) 14.5% of the time, putting it in the same tier as the Imperium Plasma Gun against Astartes plate while falling well short of a lascannon against the heaviest armour on the table - a Big Mek's toy is a real Marine-killer, not a tank-killer. Against vehicles it clears AV10 (98.0%) and usually AV11 (72.1%) but fails AV12 upward. Handling: 30 lb, a genuinely heavy hand weapon reflecting a bulky, improvised containment vessel; min ST 22 (a Boy's own strength, per the framework's \"built for Ork hands\" rule, though in practice usually a Big Mek or a burly Boy carries it). RoF 1 and Shots 4(10): a slow, unstable capacitor that must fully recharge between shots and holds only a handful of charges before needing a lengthy re-arm. Bulk -6 and Rcl 2 fit a heavy two-handed energy weapon. Acc 1, the standard Ork figure - a Mek's genius goes into raw power, never sights. Malf 13 (kustom job) with the explicit misfire-injury note, since \"as likely to explode as to work\" is exactly the fiction's own description and deserves a real mechanical consequence, not just a jam.",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Orks"
+			],
+			"tech_level": "7",
+			"legality_class": "0",
+			"base_value": "4000",
+			"base_weight": "30 lb",
+			"weapons": [
+				{
+					"id": "WGVqz7FyKGqA_J164",
+					"sv": 1,
+					"damage": {
+						"type": "burn ex",
+						"base": "6dx4",
+						"armor_divisor": 2
+					},
+					"accuracy": "1",
+					"range": "100/300",
+					"rate_of_fire": "1",
+					"shots": "4(10)",
+					"bulk": "-6",
+					"recoil": "2",
+					"strength": "22",
+					"usage": "Standard",
+					"usage_notes": "Malf 13 (kustom job). On a malfunction the containment coil fails catastrophically: the wielder immediately takes 3d(5) burn ex, and the weapon is disabled until a Mek repairs it (Mechanic (Ork Tech) roll, GM's discretion on time and difficulty).",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "ec6ie_fHktHjXktuq",
+			"description": "Zzap Gun",
+			"local_notes": "Lore: A capacitor-and-lightning-rod contraption built by Meks who barely understand the archeotech-adjacent principles they're copying, the Zzap Gun charges up over a long, crackling moment before discharging a bolt Codex: Orks background credits with punching clean through tank armour and Terminator plate alike - when it doesn't simply detonate in the crew's faces first, a risk the same background treats as an accepted cost of owning one.\n\nDesign: No framework anchor covers this item by name, but the framework's Ork-tech table explicitly calls out the Zzap Gun as a worked example of \"Malf 12, huge damage.\" Built as the single hardest-hitting Ork energy weapon in this file: 6dx5(3) burn (avg 105, no \"ex\" - it is a single coherent bolt, not a bursting warhead) clears every personal armour on the table essentially always (100%/100%/100%/100%) and still beats a Terminator 96.4% of the time - a genuine Terminator-killer, as the anchor and lore both demand. Against vehicles it clears AV10-12 at or above 96% and remains a real threat even at AV13 (72.1%), only tailing off against AV14 (27.9%) - \"punches through tank armour,\" exactly as described, short of guaranteeing a Land Raider kill the way a lascannon does. Handling: 70 lb, a genuinely huge weapon built around a charge coil and accumulator rather than a compact reactor; the raw ST formula gives sqrt(10x70)=26.5, but every depiction shows it braced on a mount or a Big Mek's own reinforced frame, so it takes the M suffix at ST 20 the way the Imperium Lascannon does. RoF 1 and a slow Shots 3(15): the accumulator needs a genuinely long charge-up between shots, the longest reload in this file, matching its \"crackling for a long moment before it fires\" depiction. Bulk -8 and Rcl 1 (an energy discharge, no propellant kick) fit a heavy support weapon. Acc 0: no Ork ever built decent sights for this thing. Malf 12 is the framework's own explicit worked figure for this weapon, with a real misfire consequence (rather than a mere jam) reflecting \"as likely to kill the crew as the target,\" and the WAAAGH!-bonus note is written up exactly as the assignment specifies: optional GM colour, not a tracked mechanic.",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Orks"
+			],
+			"tech_level": "7",
+			"legality_class": "0",
+			"base_value": "6000",
+			"base_weight": "70 lb",
+			"weapons": [
+				{
+					"id": "WG1jnTOO7BA-CN29F",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "6dx5",
+						"armor_divisor": 3
+					},
+					"accuracy": "0",
+					"range": "150/450",
+					"rate_of_fire": "1",
+					"shots": "3(15)",
+					"bulk": "-8",
+					"recoil": "1",
+					"strength": "20M",
+					"usage": "Braced/mounted",
+					"usage_notes": "Malf 12, the worst reliability rating this project assigns to any weapon. On a malfunction, the accumulated charge discharges backward through the gubbinz: the gun is destroyed and every Ork within 2 yards (including the gunner) takes 3d(5) burn ex. Some Mekboyz claim a bigger Waaagh! nearby makes a Zzap Gun behave; a GM running a large Ork force in full cry may rule that Malf improves by 1 for every ten-plus Orks fighting within earshot, as pure battlefield colour rather than a tracked mechanic.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Gunner"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Beams"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Gunner"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eoEcN6VM2fGyBbpGR",
+			"description": "Burna",
+			"local_notes": "Lore: Originally a Mekboy's cutting and welding tool, the burna is pressed into service as a crude flamethrower by any Ork strong enough to carry one - background material (Codex: Orks) is explicit that its two uses are the same piece of kit, not two separate items, and Ork fiction shows Burna Boyz using the torch head to carve through both bulkheads and enemies interchangeably.\n\nDesign: The flame-jet mode reuses the Imperium Flamer's own damage and follow-up profile unchanged (3d burn / 1d burn ignoring DR - see the Imperium flame-weapon file), since nothing in Ork background suggests its raw output differs from a human-portable flamer's promethium jet, only its build quality and reliability. The cutting-torch mode is built as a short-range, DR-piercing melee tool rather than a weapon with an anchor: thr+1d(2) burn represents a focused cutting flame at point-blank range, armour divisor (2) for the way a torch head concentrates heat through a seam rather than across a broad hit, cannot parry since the wielder is holding a lit torch, not a blade. Handling: 15 lb loaded, a heavy hand tool with an integral fuel tank; min ST 12 for the ranged mode (a Boy manages it without difficulty). Range 4, shorter than the Imperium flamer's, for a smaller, cruder nozzle; Shots 1(4), one fuel charge per burst with a slow, jury-rigged reload. Bulk -5 fits a bulky two-part device. Malf 13, the kustom-job rating, since every burna is a Mek's individual, hand-modified tool rather than a mass-produced pattern.",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Orks"
+			],
+			"tech_level": "6",
+			"legality_class": "0",
+			"base_value": "400",
+			"base_weight": "15 lb",
+			"weapons": [
+				{
+					"id": "WBSH7KH4LfDsdnIO1",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "3d"
+					},
+					"range": "4",
+					"rate_of_fire": "1",
+					"shots": "1(4)",
+					"bulk": "-5",
+					"strength": "12",
+					"usage": "Flame jet (single burst)",
+					"usage_notes": "Malf 13 (kustom job). Cone attack out to the listed range; no Acc applies, per the Imperium flame-weapon rules this entry follows.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Liquid Projector"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Flamethrower"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Liquid Projector"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "WaI9G9nZos9Ur0fUO",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "1d"
+					},
+					"range": "4",
+					"rate_of_fire": "1",
+					"shots": "1(4)",
+					"bulk": "-5",
+					"strength": "12",
+					"usage": "Flame jet, follow-up (per turn if target catches fire)",
+					"usage_notes": "Ignores DR; see Flame Weapons (Imperium) for the ignition rule.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Liquid Projector"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Flamethrower"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Liquid Projector"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "wQZgGsGaa-M0ypRga",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"st": "thr",
+						"base": "1d",
+						"armor_divisor": 2
+					},
+					"reach": "C,1",
+					"parry": "No",
+					"strength": "12",
+					"usage": "Cutting torch (melee)",
+					"usage_notes": "A Mek's actual tool: burnas are built to cut plate and weld wreckage as much as to burn infantry, and Ork Boyz press them into melee use constantly. Cannot parry with the lit torch head.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Axe/Mace"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Flail"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Two-Handed Axe/Mace"
+							},
+							"modifier": -3
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "e1S1oNfSQf5oLs2QY",
+			"description": "Skorcha",
+			"local_notes": "Lore: A heavier, vehicle-scale burna carried by especially big Orks or mounted as a Battlewagon and Deff Dread weapon; Codex: Orks background places it a clear step above the hand-held burna in both reach and fuel capacity, used for clearing entrenched infantry ahead of an Ork advance rather than as a Mek's personal tool.\n\nDesign: One size class up from the Burna's flame-jet mode (no cutting-torch mode - this is a dedicated infantry-clearing weapon, not a Mek's multitool): 5d burn (avg 17.5) and a proportionally bigger follow-up (1d+1 vs. the Burna's 1d). Like every flame weapon in this project it has no armour divisor and is not checked against DR-heavy targets; its role is unarmoured and lightly-armoured infantry, matching the lore's \"clearing entrenched infantry\" framing. Handling: 35 lb, a genuinely heavy two-handed or mounted weapon with a much bigger fuel tank than the Burna's; min ST 18 (raw formula sqrt(10x35)=18.7, essentially unmodified) sits above a Boy's own 22... no, below it - comfortably within a Boy's strength and easy for a Nob. Range 7, longer than the Burna's 4 for a proper nozzle rather than a cutting-torch head. Shots 1(6), a bigger tank than the Burna's with a correspondingly slower refill. Bulk -6 fits its size. Malf 14, plain Ork-issue rather than a Mek's individual kustom job, since Skorchas are built to a more consistent (if still crude) pattern for squad-level issue.",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Orks"
+			],
+			"tech_level": "6",
+			"legality_class": "0",
+			"base_value": "1200",
+			"base_weight": "35 lb",
+			"weapons": [
+				{
+					"id": "WLW8fvJJrU3BKKgOk",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "5d"
+					},
+					"range": "7",
+					"rate_of_fire": "1",
+					"shots": "1(6)",
+					"bulk": "-6",
+					"strength": "18",
+					"usage": "Flame jet (single burst)",
+					"usage_notes": "Malf 14. Cone attack out to the listed range; no Acc applies.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Liquid Projector"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Flamethrower"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Liquid Projector"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "WiJ-5rw6tZmX0fMLo",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "1d+1"
+					},
+					"range": "7",
+					"rate_of_fire": "1",
+					"shots": "1(6)",
+					"bulk": "-6",
+					"strength": "18",
+					"usage": "Flame jet, follow-up (per turn if target catches fire)",
+					"usage_notes": "Ignores DR; see the Burna's follow-up note.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Liquid Projector"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Flamethrower"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Liquid Projector"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eJsA5A8YWniOtBvuR",
+			"description": "Grot Blasta",
+			"local_notes": "Lore: A cut-down, simplified slugga built to a Gretchin's much smaller hands and much smaller strength; Codex: Orks background and Ork army art consistently show armed Grots carrying an obviously scaled-down, even-more-slapdash version of Ork small arms rather than a full-sized weapon they couldn't hope to lift or aim.\n\nDesign: Not simply scaled down from the Slugga - even the corrected Slugga (7d pi+, see that entry) would make a Gretchin's own gun a real threat to flak, which contradicts every depiction of an armed Grot as expendable support fire rather than a combat threat in its own right. Built instead for a Gretchin's own frame (ST 8 per the framework's Ork table) from a genuinely smaller, lighter cartridge a Grot can actually cycle: 2d+1 pi (avg 8), dropping the pi+ wounding bonus the bigger Ork small arms all share. Exact dice distribution: 0% against flak (DR 30) or better - a real threat only to an unarmoured target, keeping the Grot Blasta the one deliberately weak entry in this file rather than a miniature Slugga, per the coordinator's explicit \"grot blasta a weak pistol\" instruction. Handling: 3 lb, a genuinely small pistol; min ST 5 (raw formula sqrt(10x3)=5.5, rounded down to sit within a Grot's own ST 8, since even a poorly-made pistol this light needs little strength) - a Grot fires it with no difficulty, though the same crude Ork engineering that makes every entry on this page unreliable still applies. RoF 3, Shots 10(4), Bulk -2 and Rcl 2 are all scaled-down pistol figures, unchanged. Acc 0, since even the shoota family's already-low sights are further degraded on a Grot-built copy. Malf 14, unchanged - Ork tech doesn't get more reliable just because a Grot is holding it.",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Orks"
+			],
+			"tech_level": "5",
+			"legality_class": "0",
+			"base_value": "25",
+			"base_weight": "3 lb",
+			"weapons": [
+				{
+					"id": "WiDEZqkyQr6uInuZF",
+					"sv": 1,
+					"damage": {
+						"type": "pi",
+						"base": "2d+1"
+					},
+					"accuracy": "0",
+					"range": "50/150",
+					"rate_of_fire": "3",
+					"shots": "10(4)",
+					"bulk": "-2",
+					"recoil": "2",
+					"strength": "5",
+					"usage": "Standard",
+					"usage_notes": "Malf 14.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eD2NdChjjknjsm-kk",
+			"description": "Kombi-Weapon, Shoota/Rokkit",
+			"local_notes": "Lore: An Ork answer to the Imperium's combi-weapons: a shoota with a single rokkit tube welded underneath or alongside the barrel, letting a Nob or Mek carry an anti-armour answer without giving up a rifle's worth of dakka; Ork army art and Codex background both show these improvised combination weapons as a recurring, if unofficial, field modification.\n\nDesign: REVISED (lore fix): the shoota barrel now follows the plain Shoota's own corrected profile (9d pi+, avg 31.5, see that entry - 57.6% vs flak, 0% vs carapace or better) rather than the old, too-weak 7d baseline, with a slightly reduced magazine (16 vs. the plain Shoota's 24) to make room for the rokkit tube's mounting hardware; the rokkit barrel reuses the Rokkit Launcha's damage line unchanged (6dx4(3) cr ex) for a single shot, since welding a second tube onto a shoota doesn't change the warhead inside it. Handling: both barrels share one stock, so both usage lines carry the same figures. 40 lb loaded, heavier than before for the plain Shoota's own corrected 20 lb housing plus the Rokkit Launcha's 20 lb tube, trimmed for a shared stock rather than two complete weapons; min ST 18 (above the plain Shoota's own corrected ST 16, for the added mass and unbalancing rocket tube, but well within a Boy's or Nob's strength); Rcl 4, matching the plain Shoota's own corrected figure. RoF is per-mechanism, not copy-pasted: the shoota barrel keeps RoF 10 (dakka), the rokkit barrel RoF 1 (a single warhead that must be hand-loaded). Bulk -6, one step worse than the plain Shoota's -5, for the awkward extra tube, unchanged. Malf 14 on both barrels, standard Ork gear - this is a field-welded combination, not a Mek's individually kustom job.",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Orks"
+			],
+			"tech_level": "6",
+			"legality_class": "0",
+			"base_value": "1200",
+			"base_weight": "40 lb",
+			"weapons": [
+				{
+					"id": "Wz3Wk51xtQxZjtHc3",
+					"sv": 1,
+					"damage": {
+						"type": "pi+",
+						"base": "9d"
+					},
+					"accuracy": "1",
+					"range": "150/500",
+					"rate_of_fire": "10",
+					"shots": "16(5)",
+					"bulk": "-6",
+					"recoil": "4",
+					"strength": "18",
+					"usage": "Shoota barrel",
+					"usage_notes": "Malf 14.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "WvgxzuztBrcpM4pc8",
+					"sv": 1,
+					"damage": {
+						"type": "cr ex",
+						"base": "6dx4",
+						"armor_divisor": 3
+					},
+					"accuracy": "1",
+					"range": "150/450",
+					"rate_of_fire": "1",
+					"shots": "1(8)",
+					"bulk": "-6",
+					"strength": "18",
+					"usage": "Rokkit barrel (single shot)",
+					"usage_notes": "Malf 14. One rocket before the auxiliary tube must be reloaded by hand.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eSdMN9ubhWBcIILlN",
+			"description": "Kombi-Weapon, Shoota/Burna",
+			"local_notes": "Lore: As the Shoota/Rokkit above, with a cut-down burna nozzle and fuel tank welded on in place of the rokkit tube, favoured where a mob expects entrenched infantry rather than armour; the same field-modification tradition Ork background attaches to every kombi pattern.\n\nDesign: REVISED (lore fix): shoota barrel now follows the plain Shoota's own corrected profile (9d pi+, see that entry), magazine trimmed to 16 as the Shoota/Rokkit above. Burna barrel reuses the standalone Burna's flame-jet damage unchanged (3d burn, with the same DR-ignoring 1d burn follow-up on an ignited target) for a single fuel charge - flame weapons were not part of the coordinator's rescale and are unaffected. Handling: 36 lb, lighter than the Shoota/Rokkit's 40 lb for a fuel tank instead of a heavier rocket tube, both up from before to reflect the plain Shoota's own corrected, heavier housing; min ST 18, Bulk -6 and Rcl 4 as the Shoota/Rokkit, since both kombi patterns share the same basic shoota-plus-auxiliary-tube construction and the same corrected shoota barrel. Malf is per-barrel: the shoota half stays at plain Ork-issue 14, while the burna half keeps the standalone Burna's kustom rating of 13, since the flame nozzle is still an individual Mek's hand-fitted work even when welded onto someone else's shoota.",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Orks"
+			],
+			"tech_level": "6",
+			"legality_class": "0",
+			"base_value": "800",
+			"base_weight": "36 lb",
+			"weapons": [
+				{
+					"id": "WHnlLk2oGYEit-JGx",
+					"sv": 1,
+					"damage": {
+						"type": "pi+",
+						"base": "9d"
+					},
+					"accuracy": "1",
+					"range": "150/500",
+					"rate_of_fire": "10",
+					"shots": "16(5)",
+					"bulk": "-6",
+					"recoil": "4",
+					"strength": "18",
+					"usage": "Shoota barrel",
+					"usage_notes": "Malf 14.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "WF3qVVvMRAH0vkR99",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "3d"
+					},
+					"range": "4",
+					"rate_of_fire": "1",
+					"shots": "1(4)",
+					"bulk": "-6",
+					"strength": "18",
+					"usage": "Burna barrel (single burst)",
+					"usage_notes": "Malf 13 (kustom job, as the standalone Burna). Cone attack; no Acc applies.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Liquid Projector"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Flamethrower"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Liquid Projector"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "ehviA_hxBfi43DtkX",
+			"description": "Stikkbomb (Frag)",
+			"local_notes": "Lore: The Ork hand grenade: a tin can packed with whatever explosive and scrap-metal shrapnel a Boy could get his hands on, thrown rather than launched, and depicted throughout Codex: Orks and Ork army background as a standard-issue Boy weapon alongside the choppa and slugga.\n\nDesign: Scaled from this project's own established \"standard hand grenade\" baseline (3d cr ex [3d], used as the reference point for the Imperium Missile Launcher's frag warhead) up by one die for a bigger, less carefully packed charge - crude Ork munitions favour more explosive filler over precision engineering - giving 4d cr ex [4d]. It carries no armour divisor and is not checked against the personal-armour or vehicle-AV tables, matching every other frag-grenade entry in this project: its job is infantry and light cover, not armour. Handling: thrown per Basic Set rules from the wielder's own ST and Throwing skill rather than a weapon profile of its own; 1 lb per bomb, a generic thrown-weapon weight. TL4 reflects that a fused explosive charge in a tin can needs no real industry behind it, matching the framework's \"primitive/feral worlds\" TL bracket even though it's built and carried by a spacefaring greenskin empire.",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Orks"
+			],
+			"tech_level": "4",
+			"legality_class": "0",
+			"base_value": "15",
+			"base_weight": "1 lb",
+			"weapons": [
+				{
+					"id": "WdalKqMY84DOHDHhX",
+					"sv": 1,
+					"damage": {
+						"type": "cr ex",
+						"base": "4d",
+						"fragmentation": "4d",
+						"fragmentation_type": "cut"
+					},
+					"accuracy": "0",
+					"range": "x1/x1.5 x ST",
+					"rate_of_fire": "1",
+					"shots": "1(3)",
+					"strength": "8",
+					"usage": "Thrown",
+					"usage_notes": "A crude pin-and-tin-can bomb; GM's discretion whether a natural 17 on the throw roll represents a genuinely early or dud fuse rather than simply a bad throw, in keeping with Ork gear's general unreliability, though this project does not assign it a formal Malf rating since it's a thrown weapon, not a mechanism that can jam.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Throwing"
+							}
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eqgKH8cq5RShecrEL",
+			"description": "Tankbusta Bomb",
+			"local_notes": "Lore: The signature weapon of Tankbusta mobs: a heavy, shaped-charge satchel bomb thrown or slapped directly onto a vehicle's hull, magnetic clamps and all; Codex: Orks background is explicit that Tankbustas exist specifically to close with and personally wreck Imperial armour this way when rokkits alone aren't enough.\n\nDesign: Built as a hand-thrown shaped charge between the Rokkit Launcha and the Imperium Krak Missile on the anti-armour scale, sharing the same armour divisor (3) as both: 6dx3(3) cr ex (avg 63). Checked by exact dice distribution against the vehicle table: clears AV10 (99.0%) and AV11 (85.5%) reliably, drops to 36.3% at AV12 and 1.0% at AV13, failing outright at AV14 - a real threat to Chimeras, Rhinos and Sentinels, an even bet against a Predator-weight hull, and no real threat to a Leman Russ or Land Raider without a whole mob's worth of charges, matching the fiction's Tankbusta mobs swarming a vehicle rather than relying on one bomb. Against personal armour it also clears Astartes power armour 99.0% of the time and a Terminator 36.3% of the time - a genuine Marine-killer at melee range, matching its \"get close and blow it up\" doctrine. Handling: thrown per Basic Set rules; 6 lb per bomb (heavier than a stikkbomb for the real shaped-charge liner and magnetic clamp); min ST 12 is the practical minimum to throw the extra weight effectively, per Basic Set thrown- weapon convention, though a Boy or Nob manages it easily. Shots 1(10): a single-use charge with the long fuse-and-clamp setup counted as the \"reload\" between uses in a squad's shared satchel.",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Orks"
+			],
+			"tech_level": "6",
+			"legality_class": "0",
+			"base_value": "120",
+			"base_weight": "6 lb",
+			"weapons": [
+				{
+					"id": "WHgCbnO_SLs3ot7wj",
+					"sv": 1,
+					"damage": {
+						"type": "cr ex",
+						"base": "6dx3",
+						"armor_divisor": 3
+					},
+					"accuracy": "0",
+					"range": "x1/x1.5 x ST",
+					"rate_of_fire": "1",
+					"shots": "1(10)",
+					"strength": "12",
+					"usage": "Thrown or planted",
+					"usage_notes": "Planting the bomb directly against a vehicle's hull (a Committed Attack against an adjacent or grappled target, GM's discretion) removes the throwing roll's range and Acc penalties entirely - Tankbustas favour sticking a bomb to the plate over lobbing it.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Throwing"
+							}
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eauFZX5uNpsycqFX3",
+			"description": "Shokk Attack Gun",
+			"local_notes": "Lore: Perhaps the strangest weapon in the Ork arsenal: a Mek jams a live Snotling into a chamber, opens a hole into (or through) the warp with a crude Waaagh!-powered field generator, and the Snotling is flung - still alive, and usually furious about it - directly into the enemy at the far end, materialising with enough violent, uncontrolled kinetic energy to flatten whatever it lands on or near. Codex: Orks background is explicit that the weapon is as dangerous to the Ork operating the readied hopper of Snotlings as to the enemy, since a snatched Snotling can just as easily reappear in the gun's own crew, or not reappear at all, or reappear as something other than a Snotling, and older Ork lore openly credits the whole process as barely-understood even by the Meks who build it.\n\nDesign: No framework anchor exists for this weapon and none of the framework's normal per-shot derivations (fixed Acc/RoF/Shots/Bulk figures feeding a clean to-hit-then-damage resolution) actually fit its own fiction, so this entry is built honestly as a deliberately weird weapon rather than forced into the standard mould: the \"damage\" line above is a working baseline for a Snotling's violent, uncontrolled materialisation (a solid, unarmoured-scale impact, no armour divisor - the Snotling itself does the hitting, not a penetrator) with a fragmentation-style spread bracket standing in for \"sometimes it lands short, or off to the side, or on top of something else nearby\" rather than a literal frag pattern. A GM is expected to actually run the following table on the attack roll rather than a plain hit/miss, per the fiction's own description of the gun as unpredictable in principle, not merely low-Acc in practice: on a normal hit, the Snotling appears on the target as the damage line states; on a miss, roll 1d - on 1-2 the Snotling materialises 1d yards short in a random direction and the attack still resolves against whatever (or whoever) is there instead; on 3-4 it fails to cross over at all (a wasted shot); on 5 it reappears somewhere near the gun itself instead (treat the gunner's own mob as the target); on 6 something other than the intended Snotling comes through - a chunk of terrain, a very surprised animal, or worse, at the GM's discretion, with no guaranteed damage at all. This is offered as one honest, playable version of \"warp-teleporting snotlings,\" not a claim to a single canonical mechanic; no source this project uses gives exact numbers for how the effect actually resolves, so none are invented here beyond what's needed to put the weapon on a table. Handling: 90 lb loaded (a heavy, backpack-and-hopper rig feeding live Snotlings into the chamber) with the M suffix and a raw sqrt(10x90)=30-adjacent ST 24, since it is always shown mounted on a dedicated frame or carried by an unusually large Ork rather than shouldered like a rifle. RoF 1 and Shots 1(10): one Snotling at a time, with a slow, awkward reload as the next one is wrestled into the chamber. Bulk -8 and Rcl 1 (there is no propellant charge, only the warp-field discharge) fit a heavy, backpack-scale weapon. Acc 0: by design, nobody aims a Shokk Attack Gun so much as points it and hopes. Malf 13 with its own misfire table rather than a plain malfunction result, since \"it works 'cos we fink it does\" is stretched to its breaking point by a weapon that is trying to open a hole in reality - a failure here should read as stranger and more dangerous than an ordinary jam, without this project inventing a full warp-rift subsystem the framework doesn't otherwise support.",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Orks"
+			],
+			"tech_level": "6^",
+			"legality_class": "0",
+			"base_value": "20000",
+			"base_weight": "90 lb",
+			"weapons": [
+				{
+					"id": "WeJxtBAozZYmZbZny",
+					"sv": 1,
+					"damage": {
+						"type": "cr",
+						"base": "6dx3",
+						"fragmentation": "4d",
+						"fragmentation_type": "cr"
+					},
+					"accuracy": "0",
+					"range": "200/600",
+					"rate_of_fire": "1",
+					"shots": "1(10)",
+					"bulk": "-8",
+					"recoil": "1",
+					"strength": "24M",
+					"usage": "Standard (see design)",
+					"usage_notes": "Not a normal ranged weapon: see design for the full randomiser rule. Malf 13, but a malfunction here does not merely jam the gun - roll on the misfire table below instead of a normal malfunction result.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Gunner"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Beams"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Gunner"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		}
+	]
+}
