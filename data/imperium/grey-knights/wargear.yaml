@@ -1,0 +1,601 @@
+kind: equipment
+output: Imperium/Grey Knights/Grey Knights Wargear.eqp
+items:
+
+  # ---------------------------------------------------------------- armour
+
+  - name: Aegis Power Armour
+    tl: "11^"
+    lc: 0
+    cost: 90000
+    weight: 150
+    tags: [Body Armor, Imperium, Adeptus Astartes, Grey Knights]
+    dr: {"torso,vitals,groin": 100, arm: 88, leg: 88, neck: 63, skull: 100, face: 75, eye: 40, hand: 63, foot: 75}
+    weak_points: 4
+    attributes: {lifting_st: 9, striking_st: 5}
+    conditional:
+      - situation: to resist Warp Sorcery-tagged Affliction, Mind Control, Mind Probe, and Fear effects, and to resist possession, directed at the wearer
+        amount: 3
+    notes: >-
+      Requires the black carapace interface, as Mark VII. The Aegis
+      conditional bonus stacks with the wearer's own Rites of Sanctity
+      (Imperium/Traits/Grey Knights.adq) and with a carried Psychic Hood or
+      Hexagrammic Ward Charm (Imperium/Gear/Psychic Gear.eqp).
+    lore: >-
+      Codex: Grey Knights and Ben Counter's novels describe Grey Knight
+      power armour as Mark VII-class plate every plate and seal of which is
+      inlaid with silver hexagrammic wards, anointed and re-sanctified by
+      the Chapter's own Interrogator-Chaplains, so that the armour itself
+      resists possession and daemonic influence rather than relying on the
+      wearer's own soul alone — a second line of defence on top of what a
+      Grey Knight's body already is (see Grey Knight Soul, Imperium/Traits/
+      Grey Knights.adq).
+    design: >-
+      Torso DR, weak_points, eye-lens DR, and servo-motor ST bonus are taken
+      unchanged from the Mark VII (Aquila Pattern) baseline (Imperium/
+      Armour/Imperial Armour.eqp): the anchor table lore is explicit that
+      Grey Knight plate is a warded Mark VII derivative, not a physically
+      thicker suit — the Chapter's edge against daemons is spiritual, not a
+      bigger DR number, so this entry deliberately does not invent a new
+      physical-DR anchor. What's added is the conditional_modifier feature
+      (same mechanic as the Psychic Hood item, Imperium/Gear/Psychic Gear.eqp):
+      a flat +3 to resist Warp Sorcery-tagged mental attacks and possession
+      directed at the wearer, one point higher than the Psychic Hood's +2
+      since this is inscribed across an entire suit of plate rather than a
+      single circlet. Cost is more than doubled over the Mark VII baseline
+      (40000) to reflect the labour of a full-suit sanctification rite (Ordo
+      Malleus- and Chapter-restricted, hence the LC0 and the superscience ^
+      TL tag alongside the standard TL11 power-armour bracket) rather than a
+      material or servo upgrade; weight, attribute bonuses and every other
+      figure are otherwise identical to Mark VII.
+
+  - name: Aegis Terminator Armour
+    tl: "11^"
+    lc: 0
+    cost: 170000
+    weight: 300
+    tags: [Body Armor, Imperium, Adeptus Astartes, Grey Knights]
+    dr: {"torso,vitals,groin": 200, arm: 175, leg: 175, neck: 138, skull: 200, face: 150, eye: 60, hand: 125, foot: 150}
+    weak_points: 3
+    attributes: {lifting_st: 20, striking_st: 10, sm: 1, basic_move: -1}
+    conditional:
+      - situation: to resist Warp Sorcery-tagged Affliction, Mind Control, Mind Probe, and Fear effects, and to resist possession, directed at the wearer
+        amount: 4
+    notes: >-
+      As Tactical Dreadnought Armour, Indomitus Pattern (effective SM +1,
+      -2 to fine DX work, unaided teleportation, black carapace required),
+      plus the Aegis warding below.
+    lore: >-
+      Grey Knight Terminators — the Chapter's most senior Brothers, often
+      called Grey Knight Paladins — fight daemons and other Terminator-
+      grade threats in Tactical Dreadnought Armour warded the same way the
+      Chapter's power armour is, per Codex: Grey Knights background; the
+      teleport-strike doctrine this plate enables is the Chapter's
+      signature way of bringing a kill-team directly into a daemon
+      incursion.
+    design: >-
+      Torso DR, limb/head DR, weak_points, SM, Basic Move penalty and
+      servo-motor ST bonus are taken unchanged from Tactical Dreadnought
+      Armour, Indomitus Pattern (Imperium/Armour/Imperial Armour.eqp), for
+      the same reason as the Aegis power armour above: the difference is
+      warding, not thicker plate. The conditional bonus is raised to +4
+      (one point above the power-armour version) since a full Terminator
+      shell carries proportionally more inscribed silver and ritual work
+      across its much larger surface. Cost is raised well above the plain
+      Indomitus baseline (120000) for the same full-suit sanctification
+      labour reasoning as the power armour, and it carries the same LC0/TL11^
+      tagging.
+
+  # ---------------------------------------------------------------- Nemesis weapons
+
+  - name: Nemesis Force Sword
+    tl: "10^"
+    lc: 0
+    cost: 22000
+    weight: 9
+    tags: [Melee Weapon, Imperium, Psyker, Grey Knights]
+    weapons:
+      - usage: Field off
+        damage: sw+1 cut
+        reach: "1"
+        parry: 0
+        st: 16
+        skill: Broadsword
+      - usage: Field on
+        damage: sw+3d+1(10) cut
+        reach: "1"
+        parry: 0
+        st: 16
+        skill: Broadsword
+      - usage: Force Strike (charged, vs. daemons)
+        damage: sw+3d+1 cut (ignores DR)
+        notes: >
+          As the Nemesis Force Halberd's Force Strike (Imperium/Gear/
+          Psychic Gear.eqp): no Perils of the Warp check against a daemon
+          or other Warp-touched target, field on; the ignores-DR component
+          only applies against such targets. Add +1d per level of Psyker
+          Talent (GCS can't scale this automatically; edit on the sheet).
+        reach: "1"
+        parry: 0
+        st: 16
+        skill: Broadsword
+    lore: >-
+      The standard one-handed Nemesis weapon pattern, carried where a Grey
+      Knight favours reach and a guard over the Nemesis Force Halberd's
+      two-handed heft; Ben Counter's Grey Knights novels show it as the
+      Chapter's most common sidearm-grade Nemesis weapon after the
+      halberd itself.
+    design: >-
+      Astartes Power Sword pattern (Imperium/Weapons/Melee Weapons.eqp):
+      field-off is the plain Astartes-scale broadsword baseline (sw+1
+      cut), field-on adds the shared power-field rule's +3d and Armor
+      Divisor (10) (framework.md), at the same weight (9 lb) and min ST
+      (16) as that entry, since a Nemesis blade's extra sanctification and
+      psychic attunement change what it can do to a daemon, not its
+      physical mass or handling. Exact dice distribution at full Astartes
+      ST 30 (sw 6d per B16, so field-on totals 9d+1(10) cut): penetrates
+      carapace (DR 70), Sororitas power armour (DR 85), and Astartes power
+      armour (DR 100) essentially always (100% by exact distribution) and
+      Terminator plate (DR 200, eff. DR 20) 99.1% of the time — matching
+      "the disruption field shears power armour whoever holds it" at the
+      high end of this project's power-weapon family. The Force Strike
+      line reuses the Nemesis Force Halberd's waived-Perils convention
+      (Imperium/Gear/Psychic Gear.eqp): every Nemesis weapon is
+      permanently attuned for anti-daemon work, so a Grey Knight needs no
+      check to use it against the enemy this weapon exists for. LC0 (Grey
+      Knights- and Ordo Malleus-restricted, per the framework's legality
+      table) and superscience TL10^ (warp-attuned, like every other force
+      weapon in Imperium/Gear/Psychic Gear.eqp), priced above the generic
+      Force Sword (8000, Imperium/Gear/Psychic Gear.eqp) for the Chapter's
+      own sanctification rites on top of the Astartes-scale housing.
+
+  - name: Nemesis Force Falchions
+    tl: "10^"
+    lc: 0
+    cost: 20000
+    weight: 5
+    tags: [Melee Weapon, Imperium, Psyker, Grey Knights]
+    weapons:
+      - usage: Field off, single falchion
+        damage: sw+0 cut
+        reach: "C,1"
+        parry: 0
+        st: 13
+        skill: Shortsword
+      - usage: Field on, single falchion
+        damage: sw+3d(10) cut
+        reach: "C,1"
+        parry: 0
+        st: 13
+        skill: Shortsword
+      - usage: Force Strike (charged, vs. daemons)
+        damage: sw+3d cut (ignores DR)
+        notes: >
+          As the Nemesis Force Sword's Force Strike; no Perils of the Warp
+          check vs. daemons, field on; +1d per level of Psyker Talent.
+        reach: "C,1"
+        parry: 0
+        st: 13
+        skill: Shortsword
+    notes: >-
+      Always carried and priced as a matched pair; a Grey Knight fighting
+      with one in each hand uses the standard Basic Set rules for two
+      weapons (B417, off-hand weapon training, extra attack at the usual
+      multiple-attack penalties) rather than any special rule of this
+      entry's own.
+    lore: >-
+      A shorter, lighter-bladed Nemesis pattern favoured by Grey Knights
+      who fight with a blade in each hand rather than a single sword or the
+      two-handed halberd — depicted in Codex: Grey Knights background and
+      Ben Counter's novels as a rarer, more aggressive close-combat
+      specialist's loadout than the standard Nemesis Force Sword.
+    design: >-
+      Scaled down one step from the Nemesis Force Sword's mundane baseline
+      the way the human Catachan Fang sits one step below a full sabre
+      (Imperium/Weapons/Melee Weapons.eqp): a shorter, single-edged blade
+      gives sw+0 cut rather than sw+1, at a lighter weight (5 lb per blade
+      vs. the Force Sword's 9) and lower min ST (13 vs. 16) for the smaller
+      grip and shorter lever arm, keeping Shortsword rather than
+      Broadsword as the family skill. The same power-field +3d/Armor
+      Divisor (10) addition applies per blade. At full Astartes ST 30 (sw
+      6d), field-on per falchion totals 9d(10) cut — one point under the
+      Force Sword's 9d+1(10) from the one lower mundane pip, penetrating
+      every one of the framework's personal-armour anchors at effectively
+      the same rate as the Force Sword above. Priced level with the Force
+      Sword (as a matched pair, not per blade) since a falchion set is no
+      less a piece of sanctified Nemesis wargear for being lighter; weight
+      given is per blade.
+
+  - name: Nemesis Daemon Hammer
+    tl: "11^"
+    lc: 0
+    cost: 24000
+    weight: 40
+    tags: [Melee Weapon, Imperium, Psyker, Grey Knights]
+    weapons:
+      - usage: Field off (as plain maul)
+        damage: sw+3 cr
+        reach: "1"
+        parry: "0U"
+        st: 21
+        skill: Two-Handed Axe/Mace
+      - usage: Field on, two-handed swing
+        damage: sw+6d(10) cr
+        reach: "1"
+        parry: "0U"
+        st: 21
+        skill: Two-Handed Axe/Mace
+      - usage: Force Strike (charged, vs. daemons)
+        damage: sw+6d cr (ignores DR)
+        notes: >
+          As the Nemesis Force Sword's Force Strike; no Perils of the Warp
+          check vs. daemons, field on; +1d per level of Psyker Talent. Any
+          hit that penetrates a target's DR also inflicts Knockback (B378)
+          using the raw crushing damage rolled, as the mundane Thunder
+          Hammer.
+        reach: "1"
+        parry: "0U"
+        st: 21
+        skill: Two-Handed Axe/Mace
+    lore: >-
+      The Grey Knights' own thunder hammer pattern, further sanctified and
+      permanently attuned against the warp; Codex: Grey Knights background
+      and Ben Counter's novels show it wielded by the Chapter's Terminator-
+      armoured Paladins against Greater Daemons and other Terminator-grade
+      threats where the Nemesis Force Halberd's finesse matters less than
+      raw, armour-caving force.
+    design: >-
+      Identical mundane baseline and power-field math to the Thunder
+      Hammer (Imperium/Weapons/Melee Weapons.eqp: field off sw+3 cr, field
+      on sw+6d(10) cr, the framework's own "thunder hammers +6d" figure)
+      at the same weight (40 lb) and min ST (21), since a Daemon Hammer is
+      mechanically the same massive capacitor-headed maul in Astartes
+      hands — what makes it a Nemesis weapon is the sanctification and
+      permanent anti-daemon attunement carried in the Force Strike line,
+      not a heavier head. At full Astartes ST 30 (sw 6d, field-on 12d(10)
+      cr) it penetrates every anchor in the framework's personal-armour
+      table (carapace, Sororitas, Astartes, and Terminator plate alike)
+      essentially 100% of the time by exact dice distribution — a
+      Terminator-killer even before the Force Strike line adds its
+      anti-daemon DR-ignoring component, matching the weapon's reputation
+      against the very worst things a Grey Knight fights. LC0 and
+      superscience TL11^ (an already-advanced Imperial power weapon made
+      warp-touched by its sanctification) mark it Chapter-restricted, one
+      tier above the mundane Thunder Hammer's plain TL11.
+
+  - name: Warding Stave
+    tl: "10^"
+    lc: 0
+    cost: 18000
+    weight: 9
+    tags: [Melee Weapon, Imperium, Psyker, Grey Knights]
+    weapons:
+      - usage: Field off, swing
+        damage: sw+2 cr
+        reach: "1,2"
+        parry: 0
+        st: 14
+        skill: Staff
+      - usage: Field off, thrust
+        damage: thr+2 cr
+        reach: "1,2"
+        parry: 0
+        st: 14
+        skill: Staff
+      - usage: Field on, swing
+        damage: sw+3d+2(10) cr
+        reach: "1,2"
+        parry: 0
+        st: 14
+        skill: Staff
+      - usage: Field on, thrust
+        damage: thr+3d+2(10) cr
+        reach: "1,2"
+        parry: 0
+        st: 14
+        skill: Staff
+      - usage: Force Strike (charged, vs. daemons)
+        damage: sw+3d+2 cr (ignores DR)
+        notes: >
+          As the Nemesis Force Sword's Force Strike; no Perils of the Warp
+          check vs. daemons, field on; +1d per level of Psyker Talent.
+        reach: "1,2"
+        parry: 0
+        st: 14
+        skill: Staff
+    conditional:
+      - situation: to resist Warp Sorcery-tagged Affliction, Mind Control, Mind Probe, and Fear effects, and to resist possession, directed at the bearer and any ally within the stave's reach
+        amount: 2
+    lore: >-
+      Some Grey Knights — particularly Brother-Chaplains and those who lead
+      a kill-team's wardings rather than its charge — carry a warding stave
+      instead of a sword or hammer: a badge of office and a focus for
+      Sanctic Daemonology's protective workings (see Sanctuary, Imperium/
+      Traits/Psykers and the Warp.adq) as much as a weapon, per Codex: Grey
+      Knights background and its Black Library depictions of the Chapter's
+      more ritual-focused Brothers.
+    design: >-
+      Built the same way the Nemesis Force Halberd scales up the generic
+      Force Axe (Imperium/Gear/Psychic Gear.eqp) to Astartes proportions:
+      here the generic Force Staff's mundane baseline (sw+1 cr/thr+1 cr,
+      field-on sw+3d(10) cr) is instead scaled to the Power Stave's heavier
+      profile (sw+2 cr/thr+2 cr, field-on sw+3d+2(10) cr, Imperium/Weapons/
+      Melee Weapons.eqp) and then given Astartes-scale weight and min ST (9
+      lb/ST 14, matching the Nemesis Force Halberd's two-handed-haft
+      figures) rather than the human Force Staff's 5 lb/ST 10, since this
+      is built for a Grey Knight's grip and strength like every other
+      Nemesis-family item on this page. At full Astartes ST 30 (sw 6d,
+      field-on swing totals 9d+2(10) cr) it penetrates every personal-armour
+      anchor in the framework essentially always, same order as the other
+      Nemesis melee weapons. The conditional bonus (+2, Area of reach
+      rather than self-only, reflecting a stave actively held out to ward a
+      companion rather than worn like the Aegis armour's inscriptions) uses
+      the same conditional_modifier mechanic as the Psychic Hood and Aegis
+      armour, one point below the Aegis power armour's self-only +3 since
+      it depends on being physically near the bearer rather than inscribed
+      across a whole suit. LC0/TL10^ as every Nemesis and force weapon in
+      this project.
+
+  # ---------------------------------------------------------------- ranged weapons
+
+  # Storm Bolter: unmodified Astartes wargear, not restated here. The Grey
+  # Knight Add-On template (Imperium/Templates/Grey Knight Add-On.gct)
+  # includes it directly from Imperium/Weapons/Bolt Weapons.eqp -- it is
+  # the Chapter's standard Terminator sidearm exactly as for any other
+  # Chapter's Terminators, and gains nothing Grey-Knight-specific unless
+  # loaded with the Psybolt Ammunition below.
+
+  - name: Psybolt Ammunition
+    tl: "10^"
+    lc: 0
+    cost: 900
+    weight: 3
+    tags: [Imperium, Adeptus Astartes, Grey Knights, Ammunition]
+    weapons:
+      - usage: Standard bolt (psybolt-loaded)
+        damage: 6dx2(3) pi++
+        acc: 4
+        range: 200/1000
+        rof: 3
+        shots: 24(3)
+        st: 19
+        bulk: -5
+        rcl: 3
+        skill: Guns (Rifle)
+      - usage: Follow-up (if bolt penetrates)
+        damage: 6d cr ex
+        acc: 4
+        range: 200/1000
+        rof: 3
+        shots: 24(3)
+        st: 19
+        bulk: -5
+        rcl: 3
+        skill: Guns (Rifle)
+    notes: >-
+      A full magazine load, statted as loaded into a Boltgun, Godwyn
+      Pattern or Storm Bolter (matching that weapon's own handling figures
+      above, RoF 3x2 and ST 20 for the twin-linked storm bolter); use this
+      weapon block in place of the host weapon's Standard bolt line while
+      loaded.
+    lore: >-
+      Grey Knights load their boltguns and storm bolters with rounds cast
+      from psychically-reactive, sanctified alloys and blessed over weeks
+      of ritual before a campaign, described in Codex: Grey Knights
+      background as hitting noticeably harder than a standard bolt round
+      against armoured foes and daemonic constructs alike, without
+      changing the weapon that fires them.
+    design: >-
+      Same dice and wounding modifier as the standard Godwyn-anchor bolt
+      (6dx2(2) pi++, Imperium/Weapons/Bolt Weapons.eqp) with the armour
+      divisor raised one step to (3), the same divisor-only change the
+      Kraken penetrator round already uses on the same page, representing
+      a denser sanctified penetrator core rather than a new cartridge.
+      Exact dice distribution against Astartes power armour (DR 100, eff.
+      DR 33.3): penetrates 85.5% of hits, up from the standard round's
+      14.5% — the "hits noticeably harder against armoured foes" the lore
+      describes — while carapace (DR 70, eff. 23.3) and Sororitas armour
+      (DR 85, eff. 28.3) both round to essentially 100%. Handling figures
+      are not restated as their own weapon: this is ammunition for an
+      existing gun, so weight and cost are for one spare magazine's worth,
+      priced above plain bolt rounds for the sanctification labour, and
+      TL is marked superscience (10^) like this project's other
+      warp-touched consumables despite riding in an ordinary TL10 weapon.
+
+  - name: Psycannon
+    tl: "10^"
+    lc: 0
+    cost: 26000
+    weight: 60
+    tags: [Missile Weapon, Imperium, Adeptus Astartes, Grey Knights]
+    weapons:
+      - usage: Standard bolt
+        damage: 6dx2(3) pi++
+        acc: 4
+        range: 250/1200
+        rof: 4
+        shots: 40(4)
+        st: 25
+        bulk: -7
+        rcl: 3
+        skill: Guns (Rifle)
+      - usage: Follow-up (if bolt penetrates)
+        damage: 6d cr ex
+        acc: 4
+        range: 250/1200
+        rof: 4
+        shots: 40(4)
+        st: 25
+        bulk: -7
+        rcl: 3
+        skill: Guns (Rifle)
+    notes: >-
+      Man-portable by a single Astartes (no tripod), or arm-mounted on
+      Terminator armour in place of a storm bolter.
+    lore: >-
+      The Grey Knights' signature heavy weapon: Codex: Grey Knights
+      background describes the psycannon as firing large-calibre
+      sanctified penetrator rounds built specifically to bring down
+      heavily armoured foes and tear through daemonic flesh that shrugs
+      off ordinary weapons, carried by Purgation squads and mounted on
+      Grey Knight Dreadknights and Terminators alike.
+    design: >-
+      Built as a dedicated anti-armour bolt weapon rather than copied from
+      the Heavy Bolter or Assault Cannon anchors: same .75-calibre bolt and
+      6d cr ex frag follow-up as the standard Godwyn round (Imperium/
+      Weapons/Bolt Weapons.eqp), but firing permanently Psybolt-grade
+      ammunition, so the armour divisor is (3) rather than the standard
+      bolter's (2) as standard issue, not an optional load — reflecting
+      "designed specifically to punch through heavily armoured foes." Exact
+      dice distribution: penetrates carapace (DR 70, eff. 23.3) 99.0% of
+      hits, Sororitas power armour (DR 85, eff. 28.3) 93.9%, and full
+      Astartes power armour (DR 100, eff. 33.3) 85.5% — reliably drops
+      power-armoured heretics and traitor Astartes alike, matching the
+      psycannon's reputation as the answer to targets a storm bolter can't
+      touch — while still essentially never beating Terminator plate (DR
+      200, eff. 66.7) at 0.1%. Checked against the vehicle AV table for
+      completeness though the psycannon is not an anti-tank weapon in the
+      fiction: AV10 (DR 100, eff. 33.3) 85.5%, AV11 (DR 150, eff. 50)
+      14.5%, AV12-14 (DR 200-350) 0.06% or less — an infantry- and
+      daemon-killer, not a tank-killer, the same role this project already
+      gives the Assault Cannon.
+      Handling: 60 lb loaded (heavier than the Storm Bolter's 40 lb for
+      the reinforced barrel and larger sanctified-round mechanism, lighter
+      than the tripod Heavy Bolter's 85 lb since it's meant to be carried
+      and fired by one Astartes). Min ST 25 (sqrt(10x60)~24.5): an Astartes
+      at ST 30 handles it two-handed without penalty, but it sits above
+      even Astartes ST x1.5 thresholds for one-handed use, matching every
+      depiction of the psycannon as a braced, two-handed weapon (or
+      forearm-mounted on Terminator plate) rather than a one-handed gun.
+      RoF 4 sits between the standard boltgun's semi/burst RoF 3 and the
+      Storm Bolter's twin-linked 3x2, reflecting a single heavier-cycling
+      barrel rather than paired guns. Bulk -7 and Rcl 3 mark a large,
+      two-handed support weapon in line with this project's other
+      Astartes heavy bolt weapons; Acc 4 and the 250/1200 range are a
+      modest step up from the standard boltgun's 200/1000 for the longer,
+      reinforced barrel.
+
+  - name: Psilencer
+    tl: "10^"
+    lc: 0
+    cost: 22000
+    weight: 45
+    tags: [Missile Weapon, Imperium, Adeptus Astartes, Grey Knights]
+    weapons:
+      - usage: Standard bolt (subsonic)
+        damage: 5dx2(2) pi+
+        acc: 3
+        range: 150/700
+        rof: 8
+        shots: 60(4)
+        st: 21
+        bulk: -6
+        rcl: 2
+        skill: Guns (Rifle)
+      - usage: Follow-up (if bolt penetrates)
+        damage: 2d cr ex
+        acc: 3
+        range: 150/700
+        rof: 8
+        shots: 60(4)
+        st: 21
+        bulk: -6
+        rcl: 2
+        skill: Guns (Rifle)
+    notes: Man-portable by a single Astartes; carried by Purgation and Interceptor squads for close-in suppression where a psycannon's report would betray a kill-team's position.
+    lore: >-
+      A quieter Grey Knight support weapon, per Codex: Grey Knights
+      background: a lighter, subsonic-round autoloader traded for near-
+      silence, used to suppress and cull lesser threats while a kill-team
+      moves in on a psychic phenomenon or daemon incursion without
+      announcing itself the way a psycannon or bolter volley would.
+    design: >-
+      Scaled down from the Psycannon the same way the Stalker Bolt Rifle
+      scales down from a standard boltgun (Imperium/Weapons/Bolt
+      Weapons.eqp): subsonic rounds keep a smaller pi+ wound multiplier
+      (5dx2 rather than 6dx2) and a reduced 2d cr ex follow-up (a subsonic
+      round carries less kinetic energy at impact to trigger a full-yield
+      detonation), but a much higher sustained RoF (8, a light autoloader
+      rather than the Psycannon's heavier single-barrel action) matching
+      its suppression role. Exact dice distribution: penetrates carapace
+      (DR 70, eff. 35) 50.0% of hits, Sororitas power armour (DR 85, eff.
+      42.5) 15.2%, Astartes power armour (DR 100, eff. 50) 1.6%, and
+      essentially never Terminator plate — a real but limited threat that
+      trades the Psycannon's armour-cracking punch for volume of fire and
+      a quiet report, exactly the "suppress rather than kill outright"
+      role Codex background gives it.
+      Handling: 45 lb loaded (lighter than the Psycannon's 60 lb for a
+      smaller-calibre mechanism and integral suppressor rather than a
+      full reinforced barrel). Min ST 21 (sqrt(10x45)~21.2). Bulk -6
+      (one step better than the Psycannon's -7 for the lighter housing)
+      and Rcl 2 (down from the Psycannon's 3, the subsonic load kicking
+      less). Acc 3 and a shorter 150/700 range reflect the suppressor's
+      shrouded sight line and the subsonic round's shorter effective
+      reach, and Shots 60(4) matches the higher sustained RoF with a
+      bigger magazine than the Psycannon's 40.
+
+  - name: Incinerator
+    tl: "10^"
+    lc: 0
+    cost: 4200
+    weight: 30
+    tags: [Missile Weapon, Imperium, Adeptus Astartes, Grey Knights]
+    weapons:
+      - usage: Cone attack (10 yards)
+        damage: 6d burn
+        range: 10
+        shots: 6(5)
+        st: 13
+        bulk: -6
+        skill: Liquid Projector (Flamethrower)
+        notes: >
+          No Acc bonus applies and no aiming roll is needed against a
+          target inside the cone (B412); promethium clings and burns
+          around cover, treat cover bonuses as halved (round down) rather
+          than ignored, as the Flamer family (Imperium/Weapons/Flame
+          Weapons.eqp).
+      - usage: Follow-up (per turn while ablaze)
+        damage: 1d+1 burn
+        range: 10
+        shots: 6(5)
+        st: 13
+        bulk: -6
+        skill: Liquid Projector (Flamethrower)
+        notes: >
+          As the Flamer family's burning follow-up: ignores DR, does not
+          apply against a hermetically sealed suit whose seal hasn't been
+          breached that scene. Against a daemon or other Warp-touched
+          creature with no armour to seal in the first place, both this
+          line and the cone attack above apply at full effect and a GM
+          should treat the promethium's sanctification as denying the
+          target any supernatural fire resistance or regeneration against
+          this damage specifically, per the lore note below.
+    lore: >-
+      Codex: Grey Knights background describes the incinerator as loaded
+      with promethium blessed and psychically charged during the same
+      rites that sanctify a Nemesis weapon, burning daemonic flesh in a way
+      an ordinary flamer's fire does not — countering the regenerative and
+      fire-resistant nature many daemons otherwise show in the fiction.
+    design: >-
+      Built one step up the Flame Weapons family from the Heavy Flamer
+      (Imperium/Weapons/Flame Weapons.eqp: 5d burn, 8-yard cone, ST 12) to
+      reflect the incinerator's larger fuel reservoir and longer reach in
+      Codex background: 6d burn, a 10-yard cone, ST 13, and a bigger 6-burst
+      tank. Raw cone damage still cannot scratch flak or carapace by exact
+      dice distribution at these anchors (matching every entry in the Flame
+      Weapons family after two rounds of the armour rescale, see that
+      file's own design notes) — the incinerator's real threat to armoured
+      targets, as with every flame weapon here, is the DR-ignoring burning
+      follow-up, not the initial cone hit. What's new for this entry is the
+      anti-daemon note on that follow-up: rather than invent a new damage
+      type, this project encodes "sanctified fire hurts daemons especially
+      badly" as a GM-adjudicated denial of supernatural fire immunity/
+      regeneration specifically against this weapon's follow-up, the same
+      notes-level treatment this project already gives Vengeance bolter
+      rounds against void shields (Imperium/Weapons/Bolt Weapons.eqp).
+      Handling: 30 lb loaded (between the Flamer's 14 lb and Heavy Flamer's
+      26 lb on the low end and the psycannon's 60 lb on the high end,
+      reflecting a genuinely heavier two-handed weapon than the standard
+      squad flamer but still man-portable without a mount); ST 13, one
+      point over the Heavy Flamer's 12 for the bigger tank; Bulk -6, one
+      step worse than the Heavy Flamer's -5, for the same reason.

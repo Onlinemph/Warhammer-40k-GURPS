@@ -495,7 +495,15 @@ def resolve_includes(items, ctx, depth=0):
                 _include_cache[src] = yaml.safe_load(src.read_text())
             doc = _include_cache[src]
             pool = doc.get("items") or (doc.get("traits", []) + doc.get("skills", []) + doc.get("equipment", []))
-            found = next((x for x in pool if x.get("name") == name), None)
+            pool = resolve_includes(pool, f"{ctx} -> {target}", depth + 1)  # chained includes
+            def find(items):
+                for x in items:
+                    if x.get("name") == name:
+                        return x
+                    hit = find(x.get("children") or [])
+                    if hit:
+                        return hit
+            found = find(pool)  # top-level first, then nested entries
             if found is None:
                 err(ctx, f"include target '{name}' not in {target}")
                 continue

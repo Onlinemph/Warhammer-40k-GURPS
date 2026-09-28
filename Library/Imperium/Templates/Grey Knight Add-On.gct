@@ -1,0 +1,1582 @@
+{
+	"version": 5,
+	"id": "BH9kX76ggHM6O2XaH",
+	"notes": "An add-on, not a full character: layer this over Imperium/Templates/ Astartes Battle-Brother.gct exactly as Imperium/Templates/Astartes Librarian Add-On.gct and Astartes Techmarine Add-On.gct do, in place of (not alongside) a Chapter Gene-Seed lens from Astartes Gene-Seed.adq -- the Grey Knights' own gene-seed provenance is unknown even within this project (see Imperium/Traits/Grey Knights.adq, \"Gene-Seed Provenance: Unknown\"), so this add-on stands in for a Chapter lens rather than stacking with one. It does not repeat the Battle-Brother's attributes, physiology, Chapter Rank, or Reputation -- only what every Grey Knight has beyond a Tactical Marine of an ordinary Chapter: an incorruptible, warded soul; the psychic gift and Sanctic Daemonology training that make the Chapter's daemon-hunting possible; the squad-wide Brotherhood bond; and the Chapter's own Duty and Secret.\nEvery Grey Knight is himself a trained psyker from his first patrol (see Grey Knight Psychic Gift, Imperium/Traits/Grey Knights.adq): this add-on buys Psyker (Talent) 4 and Warp Empowerment 3, landing a rank-and-file Brother at Beta grade (cap 50) on the warp.yaml Assignment table -- one step under the full Alpha grade this project's own Librarian Add-On buys, reflecting \"every brother is at least a strong psyker\" while leaving room for a named Grand Master or Brother-Captain to buy Psyker and Warp Empowerment higher as an individual advancement on top of this shared baseline, the same way a line Battle-Brother buys up Rank and Reputation. Sanctic Daemonology (Imperium/Traits/Psykers and the Warp.adq) is bought at Banishment 2 and Hammerhand 2 (modified cost 8 each, comfortably under the Beta-grade cap of 50) plus Sanctuary at its flat cost (13) -- a squad-ward power that needs Warp Empowerment 2 (cap 30) and so is within easy reach of this add-on's level 3 (cap 40), with real headroom left for a GM to push a known power to a higher level/more dice as the Warp Empowerment cap allows.\nPoint math for this add-on alone: 40 (Grey Knight Soul: 15 Incorruptible + 10 Rites of Sanctity + 15 Indomitable Will) + 98 (Grey Knight Psychic Gift: 10 Unusual Background + 40 Psyker 4 + 40 Warp Empowerment 3 + 8 Witch-sight) + 10 (Brotherhood) - 10 (Duty, Chamber Militant) - 10 (Secret, The Grey Knights) + 0 (Gene-Seed Provenance: Unknown) = 128 traits from Imperium/Traits/Grey Knights.adq, + 29 (Sanctic Daemonology: Banishment 2 = 8, Hammerhand 2 = 8, Sanctuary = 13) + 56 skills (Meditation 4, Hidden Lore the Warp 4, Hidden Lore Daemons 16, Polearm 8, Two-Handed Axe/Mace 8, Staff 4, Gunner Machine Gun 8, Liquid Projector Flamethrower 4) = 231 points as GCS computes it (flat-point modifiers included) on top of the Battle-Brother's own 791, for 1,022 total -- landing just above the Librarian Add-On's own combined total (~962), matching how Codex and Black Library background treat an ordinary Grey Knight Brother as costing about as much as another Chapter's Librarian, not merely as much as a Tactical Marine. The four squad-role lenses below (Purifier, Purgation, Interceptor, Paladin) are disabled by default, exactly as the Dark Angels' Inner Circle Secret (Astartes Gene-Seed.adq) is disabled by default: enable the one matching a specific Grey Knight's posting on the character sheet, not all four at once.\n",
+	"traits": [
+		{
+			"id": "TjSV4LQpkyuS7NoH-",
+			"name": "Grey Knight Soul",
+			"local_notes": "Lore: What Codex: Grey Knights and its Black Library tie-ins (Ben Counter's Grey Knights novels) treat as the Chapter's defining trait alongside its powers: a Grey Knight's soul is built, from recruitment onward, to be the hardest thing in the Imperium for the warp to touch.\n\nDesign: 15 (Incorruptible) + 10 (Rites of Sanctity) + 15 (Indomitable Will) = 40 points, layered on top of the standard Astartes Hypno-Indoctrination package (Astartes Gene-Seed.adq) which already buys ordinary Fearlessness and Duty/Code of Honor — this container is specifically the anti-warp half of Grey Knight conditioning, not a replacement for it.",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Physical",
+				"Imperium",
+				"Adeptus Astartes",
+				"Grey Knights"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "t3-v9VUdMLJ6YZNVS",
+					"name": "Incorruptible (Daemonic Possession Immunity)",
+					"reference": "B81",
+					"local_notes": "A daemon cannot seize a Grey Knight's body outright, however hard it tries.\n\nLore: Grey Knights are recruited, warded, and psycho-indoctrinated specifically so that their souls cannot be taken from the inside — Codex: Grey Knights background and Ben Counter's novels are consistent that possession of a Grey Knight, even a wounded or dying one, essentially never succeeds, in sharp contrast to how readily lesser psykers and even other Astartes can be ridden by a strong enough daemon.\n\nDesign: Resistant (B81), Common category (daemonic possession is exactly the hazard this Chapter exists to face down), taken as full Immunity rather than a resistance bonus: 15 x 1 = 15 points, per this project's own established convention for the Immunity tier of Resistant (see Oolitic Kidney, Astartes Gene-Seed.adq).",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Imperium",
+						"Grey Knights"
+					],
+					"modifiers": [
+						{
+							"id": "mFO76K-ULSH5JdjPT",
+							"name": "Common: Daemonic Possession",
+							"cost_adj": "15"
+						},
+						{
+							"id": "mC8c_iK3dHC4Sn2A_",
+							"name": "Immunity",
+							"cost_adj": "x1"
+						}
+					],
+					"base_points": 15
+				},
+				{
+					"id": "tbHTPzEKTXgbeigZZ",
+					"name": "Rites of Sanctity (Hexagrammic Wards)",
+					"reference": "B81",
+					"local_notes": "+3 to resist any Warp Sorcery-tagged Affliction, Mind Control, Mind Probe, Fear, or Terror effect directed at the bearer — stacks with the Psychic Hood and Hexagrammic Ward Charm items (Imperium/Gear/Psychic Gear.eqp) rather than duplicating them, since this is a ward worked into the flesh and armour itself, not a separate piece of kit.\n\nLore: Every Grey Knight's body is inscribed, branded and anointed with hexagrammic wards during his induction — the same symbols painted across a ship's hull or an Inquisitor's cell to ward off the warp — before a single implant is grafted; Codex background and Ben Counter's novels both describe this as woven into the Chapter's creation ritual, not applied after the fact like a charm.\n\nDesign: Resistant (B81) again, but as the weaker \"+3 to resist\" tier rather than Immunity, applied to the broader category of Warp Sorcery-tagged effects generally (not just possession, which the Incorruptible trait above already makes the Grey Knight outright immune to): Very Common base 30, x1/3 for the +3 bonus tier = 10 points.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Imperium",
+						"Grey Knights"
+					],
+					"modifiers": [
+						{
+							"id": "mrClPDKTynwW14QbN",
+							"name": "Very Common: Warp Sorcery-tagged effects directed at self",
+							"cost_adj": "30"
+						},
+						{
+							"id": "mpvy0EZN6SHYqNKil",
+							"name": "+3 to all rolls to resist",
+							"cost_adj": "x1/3"
+						}
+					],
+					"base_points": 10
+				},
+				{
+					"id": "tWc0wM5G1Hm-vv1jQ",
+					"name": "Indomitable Will",
+					"reference": "B60",
+					"local_notes": "Impossible to influence through ordinary words or actions; immune to Mind Control and Emotion Control, warp-touched or otherwise.\n\nLore: Beyond wardings against the warp specifically, a Grey Knight's will is drilled to a hardness the fiction treats as absolute — temptation, seduction, and coercion (daemonic or mundane) simply do not work on a Grey Knight the way they might on another Astartes, a theme Ben Counter's novels return to repeatedly whenever a Grey Knight is offered a bargain by something in the warp.\n\nDesign: Basic Set Indomitable (B60, flat 15): immune to Mind Control and Emotion Control from any source, not only Warp Sorcery-tagged ones, covering the \"cannot be turned\" half of the Chapter's incorruptibility that the possession- and ward-specific traits above don't reach.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Imperium",
+						"Grey Knights"
+					],
+					"base_points": 15
+				}
+			]
+		},
+		{
+			"id": "TbGE-Mp_63vx5zpSv",
+			"name": "Grey Knight Psychic Gift",
+			"local_notes": "Lore: Codex: Grey Knights and Ben Counter's novels are explicit that a Grey Knight is not a warrior with a psyker occasionally attached to his squad the way most Chapters use a Librarian: every Battle-Brother is himself a trained psyker, drawn only from aspirant stock that already tested psychically gifted, and fights that way from his first patrol. Individual Grey Knights are consistently written as comparable in raw psychic strength to another Chapter's Librarian, which this project's own Assignment-grade table (Imperium/Traits/Psykers and the Warp.adq) places at Beta-to-Alpha grade.\n\nDesign: Psyker (Talent) 4 and Warp Empowerment 3 land a rank-and-file Grey Knight at Beta grade (cap 50) on the warp.yaml Assignment table — one step under the Alpha grade this project gives a full Astartes Librarian (Talent 5 / Empowerment 3, Imperium/Templates/Astartes Librarian Add-On.gct), reflecting \"every brother is at least a strong psyker\" while leaving room for named Grey Knight heroes (Grand Masters, Brother-Captains) to buy up to Alpha or beyond as an individual advancement, exactly as a line Battle-Brother can buy up Rank and Reputation on top of the shared racial package. Unusual Background (10) and Witch-sight (8, 10 base x0.8 Warp Sorcery) are unchanged from warp.yaml. Total: 10 + 40 (Psyker 4: 0 base + 10x4) + 40 (Warp Empowerment 3: 10 base + 10x3) + 8 = 98 points. This trait does not include the Sanctic Daemonology powers themselves or the skills that use them (Meditation, Hidden Lore (the Warp)) — those belong to the full Grey Knight Add-On template (Imperium/Templates/Grey Knight Add-On.gct), since a squad's Sanctic training is a matter of what a brother has learned to do with this shared gift, not the gift itself.",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Psyker",
+				"Imperium",
+				"Adeptus Astartes",
+				"Grey Knights"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "tpn8qnR0SJqrL_P9y",
+					"name": "Unusual Background (Latent Psychic Potential)",
+					"local_notes": "Lore: Psychic ability is a random, rare mutation of the human genome that lets its bearer perceive and touch the immaterium (the warp). Sources disagree on exact frequency — Imperial administrative texts and Dark Heresy-line background both describe it as \"rare but not vanishingly so,\" on the order of a handful of latent potentials per hive-sized population, with usably strong psykers far rarer still. Treat any precise ratio as flavour, not census data.\n\nDesign: Required to take Psyker (Talent), Warp Empowerment, or any trait carrying the Warp Sorcery power modifier below. Basic Set B261 leaves Unusual Background costs to the GM; 10 points reflects that the ability itself is not learned but grants access to an entire framework of further abilities, roughly the going rate other published settings use for \"you may buy from this power list at all.\"",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Psyker",
+						"Imperium"
+					],
+					"base_points": 10
+				},
+				{
+					"id": "taF9knFkh9jZaL6Nf",
+					"name": "Psyker",
+					"reference": "TSOR5",
+					"local_notes": "This project's Sorcery Talent (Thaumatology: Sorcery, TSOR5) analogue:\napplies as Sorcery Talent applies to a sorcerer's skills in TSOR, just\nto a 40k-specific list — Psyniscience, Meditation, Hidden Lore (the\nWarp), and the Will roll to resist Perils of the Warp (see above) — a\nhouse extension of Talent's normal \"add to listed skills\" rule,\nprecedented by Magery's and Sorcery Talent's own habit of aiding\nrelated rolls beyond pure spellcasting. Reaction bonus: +1/level from\nother sanctioned psykers and the Astra Telepathica.\n\nPsyker (Talent) and Warp Empowerment are separate purchases on separate\naxes, exactly as Sorcery Talent and Sorcerous Empowerment are in TSOR:\nthis trait only sharpens related skills and Perils resistance, while\nWarp Empowerment (above) is what actually gates which powers a psyker\nmay know. A high-Talent, low-Empowerment psyker is a sharp, well-drilled\nmind who simply hasn't learned much yet; the reverse is a raw prodigy\nwho is clumsy with the skills around their gift.\n\nImperial Assignment scale (Adeptus Astra Telepathica / Black Ships),\nweakest to strongest, mapped to Talent level. See Warp Empowerment above\nfor the matching Empowerment level/point-cap column, which is the real\ngate on ability selection:\n  Iota    — Talent 0 (latent; register but rarely take Psyker traits at all)\n  Zeta    — Talent 1\n  Eta     — Talent 1\n  Theta   — Talent 2\n  Epsilon — Talent 2  (typical Wyrdvane conscript)\n  Delta   — Talent 3  (typical Sanctioned Primaris Psyker)\n  Gamma   — Talent 4\n  Beta    — Talent 4  (many Astropaths)\n  Alpha   — Talent 5  (Astartes Librarians, Black Ship candidates)\n  Alpha-Plus — Talent 6+ (beyond-play tier: Primarchs,\n    the most powerful Inquisitors, the worst Chaos sorcerers)\n\nLore: The Iota-to-Alpha-Plus assignment scale is drawn from the Adeptus Astra Telepathica's own grading of psychic potential as depicted across Dark Heresy-line material and repeated in Codex/Imperial Armour background; Black Library uses the same grades in passing (e.g. Eisenhorn-cycle and Ciaphas Cain references to Alpha-class talents). \"Alpha-Plus\" specifically denotes the rarest, most dangerous talents the Black Ships process.\n\nDesign: Talent affecting four things (three skills plus the Perils resistance roll) sits at Basic's \"Medium Talent\" rate of 10 points/level (B90, three-to-five-skill bracket) rather than 5 (one-two skills) or 15 (six-nine skills) — the same rate Sorcery Talent itself uses (TSOR5, 10/level). Capped at level 6 for player characters; higher grades are GM-reference only, per the framework's \"Beyond play\" tier.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Talent",
+						"Psyker",
+						"Imperium"
+					],
+					"points_per_level": 10,
+					"can_level": true,
+					"levels": 4,
+					"base_points": 0,
+					"max_levels": 6
+				},
+				{
+					"id": "tHu4oaCObig2nPvoP",
+					"name": "Warp Empowerment",
+					"reference": "TSOR4",
+					"local_notes": "A direct reskin of Sorcerous Empowerment (Thaumatology: Sorcery, TSOR4):\nthe psyker's raw, trained capacity to draw on and shape the warp, as\ndistinct from Psyker (Talent, TSOR5's Sorcery Talent analogue, below)\nwhich only sharpens related skills. Requires Unusual Background (Latent\nPsychic Potential). It is the prerequisite for every Warp Sorcery-tagged\nability in this file (see Witch-sight and each discipline below); the\nNavigator's Third Eye and the Pariah/Untouchable genes carry no Warp\nSorcery modifier and so need no Warp Empowerment.\n\nCap, cast per Thaumatology: Sorcery (TSOR): a psyker may only know a\npower whose full, modified point cost is no greater than the point cost\nof their own Warp Empowerment (10 + 10/level). A power bought at a\nhigher level (more dice, more range, etc.) costs proportionally more and\nmay outgrow a psyker's Empowerment even after they first learned it at a\ncheaper level — raising the level, and cost, of Warp Empowerment is how\na psyker \"grows into\" costlier or higher-level workings.\n\nImperial Assignment scale (Adeptus Astra Telepathica / Black Ships)\nmapped to Warp Empowerment level and the point cap that gives, worked\nout from this file's actual (Warp Sorcery -20% + Perils of the Warp)\nmodified costs:\n\n  Grade      | Empowerment level | Cap (10+10/lvl) | What the cap reaches\n  Iota       | 1                  | 20              | cheapest powers only: e.g. Smite (3), Endurance (2), Iron Arm (4), Fire Bolt (4), Assail (4), Mind Probe (14), Foresight (18) — register but rarely learn more than one or two\n  Zeta       | 1                  | 20              | as Iota; low Psyker Talent limits skill use, not what they can know\n  Eta        | 1                  | 20              | as Zeta\n  Theta      | 2                  | 30              | adds Molten Beam (9), Crush (11), Psychic Scream (12), Sanctuary (13), Null Zone (23), Terrify (28)\n  Epsilon    | 2                  | 30              | as Theta (typical Wyrdvane conscript)\n  Delta      | 3                  | 40              | adds Scrier's Gaze (35), Dominate (35), Gate of Infinity (40) — the full non-Great-Power roster (typical Sanctioned Primaris Psyker)\n  Gamma      | 3                  | 40              | as Delta, better skills from a higher Psyker Talent\n  Beta       | 4                  | 50              | full roster, with headroom to push a known leveled power to a higher level/more dice (many Astropaths)\n  Alpha      | 5                  | 60              | full roster, generous headroom for high-level workings (Astartes Librarians, Black Ship candidates)\n  Alpha-Plus | 7+ (GM only)       | 80+             | approaching Great Power territory; Vortex of Doom (280+ as usually bought) is still normally out of reach even here\n\nA character need not buy Warp Empowerment up to their grade's full\nceiling: templates in this project buy only the level their actually-\nknown powers need, and note the grade's theoretical ceiling separately.\n\nLore: The Iota-to-Alpha-Plus assignment scale is drawn from the Adeptus Astra Telepathica's own grading of psychic potential as depicted across Dark Heresy-line material and repeated in Codex/Imperial Armour background; Black Library uses the same grades in passing (e.g. Eisenhorn-cycle and Ciaphas Cain references to Alpha-class talents). \"Alpha-Plus\" specifically denotes the rarest, most dangerous talents the Black Ships process.\n\nDesign: Sorcerous Empowerment (TSOR4) costs 10 base + 10/level (level 1 = 20 points, each further level +10) in the GCS master Thaumatology data; reused verbatim here under a 40k-appropriate name, since the underlying mechanic — \"how much warp-power you can channel at all, gating which spells/powers you may know by their modified cost\" — is exactly what an Imperial Assignment grade represents. The level-to-grade mapping above is derived, not asserted: it walks every power in this file's actual modified cost (recomputed under the new Warp Sorcery -20% modifier, see below) and finds the cheapest Empowerment level whose cap clears it, so \"Iota can only cast minor powers\" and \"Alpha can cast the biggest non-Great-Power ability\" are literally true of the numbers, not just flavour text.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Talent",
+						"Psyker",
+						"Imperium"
+					],
+					"points_per_level": 10,
+					"can_level": true,
+					"levels": 3,
+					"base_points": 10
+				},
+				{
+					"id": "tN5__UGjr_N-yD2hW",
+					"name": "Witch-sight",
+					"local_notes": "Lore: The first, mildest sign of the gift: an unlearned, passive prickling sense of daemonic taint, psychic activity, and warp corruption — how unsanctioned psykers are so often found, and how veteran Inquisitors and Space Marines notice a place has gone wrong before anything visible happens. Widely depicted; no single canonical source, consistent across Black Library and Dark Heresy-line material alike.\n\nDesign: Built as Detect (Psychic Activity & Daemonic Taint), an uncommon but not vanishingly rare category, base 10 per Basic's Detect cost table (B47-48). No Perils of the Warp: it is involuntary background sense, not a deliberate act of channelling. Full modified cost: 10 x 0.8 = 8 points; needs only Warp Empowerment level 1 (cap 20) — even an Iota-grade latent can have it, matching how often unsanctioned psykers are found by exactly this unlearned sense.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Psyker",
+						"Imperium"
+					],
+					"modifiers": [
+						{
+							"id": "m9UqAKKwS4Dbd6n1o",
+							"name": "Warp Sorcery",
+							"cost_adj": "-20%"
+						}
+					],
+					"base_points": 10
+				}
+			]
+		},
+		{
+			"id": "tLBlrEehP0VNTMdhS",
+			"name": "Brotherhood",
+			"reference": "B70",
+			"local_notes": "Shares surface thoughts, intent, and warnings silently with every other linked Brother in the squad within Mindlink's normal range; Sanctic Daemonology's Sanctuary (Imperium/Traits/Psykers and the Warp.adq) rides on top of this same bond when a kill-team wards itself as one during a purge.\n\nLore: Codex: Grey Knights and its Black Library tie-ins describe Grey Knight kill-teams fighting with a coordination beyond ordinary squad drill — brothers who have trained and psychically bonded together for years moving and striking as if of one mind, a \"psychic gestalt\" the Chapter deliberately cultivates rather than the incidental telepathy of a gifted individual.\n\nDesign: Basic Set Mindlink (B70), Squad tier (2-9 people, the Basic Set modifier for a small linked group rather than a single named partner): base 0 points, +10 flat for the group-size modifier, per the GCS master Basic Set data. Not Warp Sorcery-tagged: it is a standing, always-on bond between initiated Brothers rather than a power any one of them channels and risks Perils casting, matching how the fiction never shows a Grey Knight's squad-sense failing a roll or backfiring the way an active power can.",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Imperium",
+				"Grey Knights"
+			],
+			"modifiers": [
+				{
+					"id": "mFgU8F2nktt2O9P5H",
+					"name": "Squad (2-9 Grey Knights)",
+					"reference": "B70",
+					"cost_adj": "10"
+				}
+			],
+			"base_points": 0
+		},
+		{
+			"id": "tsZeO-6CtiXMS8TOi",
+			"name": "Duty (Chamber Militant of the Ordo Malleus)",
+			"reference": "B133",
+			"local_notes": "Quite Often (9 or less), Hazardous. Stacks with, and is separate from, the standard Astartes Duty (Chapter and Imperium) in Astartes Gene-Seed.adq's Hypno-Indoctrination package.\n\nLore: Codex: Grey Knights background is explicit that the Chapter is the Ordo Malleus's own Chamber Militant: an Inquisitor of that Ordo can summon Grey Knight forces directly, overriding the Chapter's own chain of command for a given operation, in a way no other Chapter's Astartes are obligated to accept from an outside authority.\n\nDesign: A second, narrower Duty (B133) alongside the standard Astartes one: \"Quite Often\" rather than \"Almost All the Time\" (the Ordo Malleus doesn't direct every Grey Knight mission, only calls on it), still Hazardous, priced the same -10 this project already uses for the Sanctioned Psyker's Duty to the Astra Telepathica/Inquisition (Imperium/Traits/Psykers and the Warp.adq) for internal consistency between \"answers to an outside Inquisitorial authority\" disadvantages.",
+			"tags": [
+				"Disadvantage",
+				"Social",
+				"Imperium",
+				"Grey Knights"
+			],
+			"base_points": -10
+		},
+		{
+			"id": "tASpqG9IAYxgPomcR",
+			"name": "Secret (The Grey Knights)",
+			"reference": "B152",
+			"local_notes": "Almost no one outside the Inquisition and the Chapter itself knows the Grey Knights exist, and the Chapter works to keep it that way: survivors and witnesses of a Grey Knight action who are not already cleared for that knowledge are, per Codex and Black Library background, routinely mind-wiped of the encounter by the Chapter's own Interrogator-Chaplains or an attending Inquisitor afterward. In play this is the same Secret roll as any other (exposure risks censure, reassignment, or worse from the Ordo Malleus), and it doubles as the social cost the framework asks for: a Grey Knight cannot let an ordinary ally remember fighting beside him, so no Reputation, standing friendship, or reaction bonus with anyone outside the Chapter and its Inquisitorial handlers ever accumulates the way a line Chapter's Reputation (Angel of Death, Astartes Gene- Seed.adq via the Battle-Brother template) does — the same trait covers both the secrecy and its lonely price, rather than charging for them twice.\n\nLore: One of the most consistent beats across Codex: Grey Knights and Ben Counter's novels: almost every mortal who learns the Grey Knights exist and survives the encounter has their memory of it erased before they leave Titan or the operation's theatre, so that even the Imperium at large barely believes the Chapter is real.\n\nDesign: A single Secret (B152) covers both the institutional risk (exposure draws Ordo Malleus attention, at minimum, and at worst a body count) and the personal cost described in the notes above, at -10 — the same \"Serious\" tier this project already uses for the Dark Angels' Inner Circle Secret (Astartes Gene-Seed.adq) — rather than a second, separate disadvantage for the social isolation, since GURPS prices one Secret to cover everything that particular secret costs its keeper.",
+			"tags": [
+				"Disadvantage",
+				"Social",
+				"Imperium",
+				"Grey Knights"
+			],
+			"base_points": -10
+		},
+		{
+			"id": "tISugKypIqSkumwUE",
+			"name": "Gene-Seed Provenance: Unknown",
+			"local_notes": "0-point lore flag; no mechanical effect.\n\nLore: Unlike every other Chapter's gene-seed, whose founding Primarch and broad lineage is a matter of public Imperial record even where the exact quirks are secret, Codex: Grey Knights background is explicit that the Grey Knights' own gene-seed provenance is not stated — the Chapter's official founding legend credits Malcador the Sigillite and the Emperor's own will rather than a named Primarch, and no source this project treats as reliable confirms a specific genetic origin. Widely repeated fan and background speculation ties it to the Emperor directly; this project does not treat that as confirmed, only as the honest state of what is and isn't said on the page.\n\nDesign: 0-point flag, matching the pattern this project already uses for Chapter lenses with nothing mechanical to add (Ultramarines, White Scars in Astartes Gene-Seed.adq): the Grey Knights' physiology is built on the standard Astartes package like any other Chapter (imperium/astartes/gene-seed.yaml#Astartes); what's unusual is that this project can't honestly say where that gene-seed came from, and says so here rather than inventing an answer.",
+			"tags": [
+				"Imperium",
+				"Grey Knights",
+				"Chapter Variant"
+			],
+			"base_points": 0
+		},
+		{
+			"id": "TErLrx4v-36ZjKtqJ",
+			"name": "Sanctic Daemonology",
+			"local_notes": "Lore: Every Grey Knight Brother is trained in the Chapter's own Sanctic discipline from his earliest days in the Chapter's scholam, per Codex: Grey Knights and Ben Counter's Grey Knights novels; a squad that channels Hammerhand or Sanctuary together is drawing on the same Brotherhood bond that lets them fight as a psychic gestalt.",
+			"children": [
+				{
+					"id": "tOzg-Pcr1MMxwjXlg",
+					"name": "Banishment",
+					"local_notes": "Lore: A bolt of purifying anti-warp force that tears a daemon's physical anchor apart.\n\nDesign: Innate Attack (Impaling, 8/die, B61) restricted to warp-touched targets (Accessibility -10%, kept small since daemons are this unit's routine enemy, not a rare case) plus Warp Sorcery and the Severe Perils tier, net -50%. Full modified cost: 8 x 0.5 = 4 points/level; needs Warp Empowerment level 1 (cap 20).",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Psyker",
+						"Imperium",
+						"Grey Knights"
+					],
+					"modifiers": [
+						{
+							"id": "mjutaBG15d9-cSJRL",
+							"name": "Accessibility (only vs. Warp-touched/daemonic creatures)",
+							"cost_adj": "-10%"
+						},
+						{
+							"id": "mZcUqseYp-ZND_O0z",
+							"name": "Warp Sorcery",
+							"cost_adj": "-20%"
+						},
+						{
+							"id": "m_g9DQhGhzkZ8-xxL",
+							"name": "Perils of the Warp (Severe)",
+							"cost_adj": "-20%"
+						}
+					],
+					"points_per_level": 8,
+					"can_level": true,
+					"levels": 2
+				},
+				{
+					"id": "tSk0cHDK2wcddQeI9",
+					"name": "Hammerhand",
+					"local_notes": "Lore: Channels psychic force into a Grey Knight's blow, letting even blunt strikes crack a daemon's hide.\n\nDesign: Striking ST (5/level, B) with Warp Sorcery/Perils, net -30%. Full modified cost: 5 x 0.7 = ~4 points/level; needs Warp Empowerment level 1 (cap 20).",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Psyker",
+						"Imperium",
+						"Grey Knights"
+					],
+					"modifiers": [
+						{
+							"id": "mVfc5P52MgUmzmaPs",
+							"name": "Warp Sorcery",
+							"cost_adj": "-20%"
+						},
+						{
+							"id": "m183_4A70LXLUPE5k",
+							"name": "Perils of the Warp",
+							"cost_adj": "-10%"
+						}
+					],
+					"points_per_level": 5,
+					"can_level": true,
+					"levels": 2
+				},
+				{
+					"id": "tsF37aSwDHbBCongX",
+					"name": "Sanctuary",
+					"local_notes": "Lore: Wards a Grey Knight kill-team against fear, corruption, and possession during a purge.\n\nDesign: Affliction (10, delivering a +15-point protective advantage to willing allies rather than a disadvantage to a foe — Basic B35 allows either) with Area Effect (+50%), Warp Sorcery, and Severe Perils, net +25%. Full modified cost: 10 x 1.25 = ~13 points; needs Warp Empowerment level 2 (cap 30).",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Psyker",
+						"Imperium",
+						"Grey Knights"
+					],
+					"modifiers": [
+						{
+							"id": "m4CgDv8XeWaSLklSI",
+							"name": "Advantage Delivered (+2 vs. Fright Checks",
+							"cost_adj": "+15%"
+						},
+						{
+							"id": "mZu8vSZ2BOkCIlCyd",
+							"name": "Area Effect",
+							"cost_adj": "+50%"
+						},
+						{
+							"id": "mexXLs1NYTLeOoLFR",
+							"name": "Warp Sorcery",
+							"cost_adj": "-20%"
+						},
+						{
+							"id": "minAe8PE2x40AoGAZ",
+							"name": "Perils of the Warp (Severe)",
+							"cost_adj": "-20%"
+						}
+					],
+					"base_points": 10
+				}
+			]
+		},
+		{
+			"id": "Too5bn0IUHyEiW3zv",
+			"name": "Grey Knight Lens: Purifier",
+			"local_notes": "Disabled by default; enable only for a Grey Knight posted to a Purifier squad.\n\nLore: Purifiers are Grey Knights whose faith and hatred of the warp burn hottest, per Codex: Grey Knights background: a Purifier squad is entrusted with the harshest purges and can call on Cleansing Flame, a searing psychic fire that does nothing to a mortal but consumes daemonic matter outright.\n\nDesign: Built exactly like Sanctic Daemonology's own Banishment (Imperium/ Traits/Psykers and the Warp.adq): Innate Attack (Burning, 8/die, re-flavoured from Banishment's Impaling for a fire-themed purge power rather than a copy-pasted line) restricted to Warp-touched targets (-10%), Warp Sorcery (-20%) and Severe Perils (-20%), net -50%. Full modified cost: 8 x 0.5 = 4 points/level; the default 2 levels (8 points) needs only Warp Empowerment level 1 (cap 20), comfortably under this add-on's baseline level 3.",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Imperium",
+				"Grey Knights",
+				"Chapter Variant"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "teKDTxOupJRrG1Xr_",
+					"name": "Cleansing Flame",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Psyker",
+						"Imperium",
+						"Grey Knights"
+					],
+					"modifiers": [
+						{
+							"id": "mAaSC7rl142kn-8Os",
+							"name": "Accessibility (only vs. Warp-touched/daemonic creatures)",
+							"cost_adj": "-10%"
+						},
+						{
+							"id": "mqIrjlfaN5w7n7JgI",
+							"name": "Warp Sorcery",
+							"cost_adj": "-20%"
+						},
+						{
+							"id": "mxUOF9BVbQ941zMDr",
+							"name": "Perils of the Warp (Severe)",
+							"cost_adj": "-20%"
+						}
+					],
+					"points_per_level": 4,
+					"can_level": true,
+					"levels": 2
+				}
+			],
+			"disabled": true
+		},
+		{
+			"id": "t7_hJ8E05ee8J25X0",
+			"name": "Grey Knight Lens: Purgation",
+			"local_notes": "Disabled by default; enable only for a Grey Knight posted to a Purgation squad (heavy-weapon specialists: psycannon, psilencer, incinerator).\n\nLore: Purgation squads are the Grey Knights' heavy-weapon specialists, per Codex: Grey Knights background, drilled specifically on the Chapter's own psycannon, psilencer and incinerator patterns (see Imperium/Grey Knights/Grey Knights Wargear.eqp) rather than the standard Astartes armoury.\n\nDesign: A minor Talent (Basic B89-91, 5 points/level for the one-two-skill bracket) covering the two heavy-weapon skills a Purgation Brother actually uses; kept at level 1 (5 points) as a squad-training flag rather than a large investment, since the underlying Gunner and Guns skills are bought at whatever level a given character sheet needs separately.",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Imperium",
+				"Grey Knights",
+				"Chapter Variant"
+			],
+			"points_per_level": 5,
+			"can_level": true,
+			"levels": 1,
+			"base_points": 5,
+			"disabled": true,
+			"features": [
+				{
+					"type": "skill_bonus",
+					"selection_type": "skills_with_name",
+					"name": {
+						"compare": "is",
+						"qualifier": "Gunner"
+					},
+					"amount": 1,
+					"specialization": {
+						"compare": "is",
+						"qualifier": "Machine Gun"
+					}
+				},
+				{
+					"type": "skill_bonus",
+					"selection_type": "skills_with_name",
+					"name": {
+						"compare": "is",
+						"qualifier": "Guns"
+					},
+					"amount": 1,
+					"specialization": {
+						"compare": "is",
+						"qualifier": "Rifle"
+					}
+				}
+			]
+		},
+		{
+			"id": "tuzEtMfPy1CevZpYw",
+			"name": "Grey Knight Lens: Interceptor",
+			"local_notes": "Disabled by default; enable only for a Grey Knight posted to an Interceptor squad (teleport-strike deep insertion).\n\nLore: Interceptor squads are the Grey Knights' rapid-response arm, teleporting directly into a daemonic incursion's midst rather than advancing on foot, per Codex: Grey Knights background and Ben Counter's novels' recurring \"Grey Knights translate directly into the heart of the fighting\" beat.\n\nDesign: Rather than invent a new short-range teleport mechanic, this lens is built identically to Telekinesis's own Gate of Infinity (Imperium/Traits/Psykers and the Warp.adq: Basic's Warp advantage, B99, flat 100, with Preparation Required -20%, Warp Sorcery -20%, and Severe Perils -20%, net -60%) -- an Interceptor's teleport strike is mechanically the same instant-translocation power a Librarian's Gate of Infinity is, just trained into every Brother of this squad role rather than one specialist. Full modified cost: 100 x 0.4 = 40 points; it needs Warp Empowerment level 3 (cap 40) -- exactly this add-on's baseline level, so enabling this lens uses the full width of the psychic gift's cap with no headroom to spare, appropriate for a squad role built entirely around one demanding, high-risk power.",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Psyker",
+				"Imperium",
+				"Grey Knights",
+				"Chapter Variant"
+			],
+			"modifiers": [
+				{
+					"id": "mIEA5GDmWKCNcyFPu",
+					"name": "Preparation Required",
+					"cost_adj": "-20%"
+				},
+				{
+					"id": "mCuJ7fiCaRoxgaT9N",
+					"name": "Warp Sorcery",
+					"cost_adj": "-20%"
+				},
+				{
+					"id": "mFB-uwEi7i1k3sfcP",
+					"name": "Perils of the Warp (Severe)",
+					"cost_adj": "-20%"
+				}
+			],
+			"base_points": 100,
+			"disabled": true
+		},
+		{
+			"id": "TUVeIAerOmrTOkDb0",
+			"name": "Grey Knight Lens: Paladin",
+			"local_notes": "Disabled by default; enable only for a veteran Grey Knight elevated to the Paladin cadre (Terminator-armoured elite, see Aegis Terminator Armour, Imperium/Grey Knights/Grey Knights Wargear.eqp).\n\nLore: Paladins are the Grey Knights' most veteran Brothers, fighting permanently in Terminator plate against the worst things the Chapter faces; Codex: Grey Knights background treats elevation to the Paladin cadre as a mark of survival and trust on top of the standard Battle-Brother training every Grey Knight already has.\n\nDesign: One further level of Rank (B29, 5 points/level, matching the Battle-Brother template's own Rank 3 entry in Astartes Gene-Seed.adq's parent template) plus Extra Hit Points +2 (B16, 2/level) for the additional hardening veteran survival buys, 5 + 4 = 9 points -- a modest bump reflecting individual seniority on top of the shared Grey Knight package, not a second racial template.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Mental",
+				"Imperium",
+				"Grey Knights",
+				"Chapter Variant"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "tJSqQoNEHZO4p3pFD",
+					"name": "Rank 1 (Grey Knight Paladin)",
+					"reference": "B29",
+					"base_points": 5
+				},
+				{
+					"id": "tSiERwGuxkahIOkF_",
+					"name": "Extra Hit Points",
+					"reference": "B16",
+					"points_per_level": 2,
+					"can_level": true,
+					"levels": 1
+				}
+			],
+			"disabled": true
+		}
+	],
+	"skills": [
+		{
+			"id": "sbSP0mrq4g_dUN_TA",
+			"name": "Meditation",
+			"local_notes": "Lore: Every Grey Knight drills the same discipline the Astartes Librarian Add-On's own Meditation entry (Imperium/Templates/Astartes Librarian Add-On.gct) describes, to hold his gift steady in the presence of the warp's worst.\n\nDesign: Hard skill; points as the Librarian Add-On's own identical entry.",
+			"tags": [
+				"Imperium",
+				"Psyker",
+				"Grey Knights"
+			],
+			"difficulty": "iq/h",
+			"points": 4
+		},
+		{
+			"id": "sS9HqxB4d7R7XRQsy",
+			"name": "Hidden Lore",
+			"local_notes": "Lore: A Grey Knight's formal Sanctic training in the immaterium's nature, matching the Librarian Add-On's identical entry.\n\nDesign: Average skill; points as the Librarian Add-On's own identical entry.",
+			"tags": [
+				"Imperium",
+				"Psyker",
+				"Grey Knights"
+			],
+			"specialization": "the Warp",
+			"difficulty": "iq/a",
+			"points": 4
+		},
+		{
+			"id": "sbmIoW1sb9Iz6m4Wb",
+			"name": "Hidden Lore",
+			"local_notes": "Lore: The Grey Knights exist to hunt daemons, and Codex: Grey Knights background is explicit that the Chapter's knowledge of daemonic nature, names and weaknesses outstrips even the Inquisition's Ordo Malleus in places -- a Grey Knight's Hidden Lore (Daemons) is expected to be exceptional, not merely competent the way a line Battle-Brother's (Astartes Gene-Seed.adq's Battle-Brother template already has a lesser Hidden Lore, Xenos and Heresy, at 8 and 2 points respectively).\n\nDesign: 16 points on an IQ/Average skill is enough for roughly IQ+3 or better at a Grey Knight's typical IQ, a specialist's mastery rather than the field-competence level (8 points, roughly IQ+1) this project gives a line Battle-Brother's Hidden Lore specialisations.",
+			"tags": [
+				"Imperium",
+				"Psyker",
+				"Grey Knights"
+			],
+			"specialization": "Daemons",
+			"difficulty": "iq/a",
+			"points": 16
+		},
+		{
+			"id": "skc_gkE_0HFFLaD0D",
+			"name": "Polearm",
+			"local_notes": "Nemesis Force Halberd (Imperium/Gear/Psychic Gear.eqp).\n\nLore: The Nemesis Force Halberd is the Chapter's signature weapon, and most Grey Knights are trained to use one from their earliest live drills.\n\nDesign: Average skill, a trained specialist's level; the Battle-Brother base template has no Polearm skill of its own.",
+			"tags": [
+				"Imperium",
+				"Psyker",
+				"Grey Knights"
+			],
+			"difficulty": "dx/a",
+			"points": 8
+		},
+		{
+			"id": "sSrQQDUS7bc9g_Js8",
+			"name": "Two-Handed Axe/Mace",
+			"local_notes": "Nemesis Daemon Hammer (Imperium/Grey Knights/Grey Knights Wargear.eqp).\n\nLore: Carried by Grey Knights who favour crushing force over the halberd's reach, especially among Terminator-armoured Paladins.\n\nDesign: Average skill; the Battle-Brother base template's Axe/Mace entry (2 points, chainaxe familiarity) is a different, lighter weapon class.",
+			"tags": [
+				"Imperium",
+				"Psyker",
+				"Grey Knights"
+			],
+			"difficulty": "dx/a",
+			"points": 8
+		},
+		{
+			"id": "s58IdoXmx0_ZIJ-tU",
+			"name": "Staff",
+			"local_notes": "Warding Stave (Imperium/Grey Knights/Grey Knights Wargear.eqp).\n\nLore: Carried by Grey Knights who lead a kill-team's wardings, per Imperium/Grey Knights/Grey Knights Wargear.eqp's own entry.\n\nDesign: Average skill at familiarity level; not every Grey Knight carries a stave, so this is priced lightly compared with Polearm above.",
+			"tags": [
+				"Imperium",
+				"Psyker",
+				"Grey Knights"
+			],
+			"difficulty": "dx/a",
+			"points": 4
+		},
+		{
+			"id": "sQlSaArAnR4tYl6ss",
+			"name": "Gunner",
+			"local_notes": "Psycannon and Psilencer (Imperium/Grey Knights/Grey Knights Wargear.eqp), per the framework's \"braced/mounted heavies -> Gunner\" skill rule.\n\nDesign: Average skill; the Battle-Brother base template has Guns (Rifle/Pistol) but no Gunner skill, which the Chapter's own heavy weapons need.",
+			"tags": [
+				"Imperium",
+				"Adeptus Astartes",
+				"Grey Knights"
+			],
+			"specialization": "Machine Gun",
+			"difficulty": "dx/a",
+			"points": 8
+		},
+		{
+			"id": "stfm0buxMKgaJgg5a",
+			"name": "Liquid Projector",
+			"local_notes": "Incinerator (Imperium/Grey Knights/Grey Knights Wargear.eqp).\n\nDesign: Easy skill; the Battle-Brother base template has no flame-weapon skill of its own.",
+			"tags": [
+				"Imperium",
+				"Adeptus Astartes",
+				"Grey Knights"
+			],
+			"specialization": "Flamethrower",
+			"difficulty": "dx/e",
+			"points": 4
+		}
+	],
+	"equipment": [
+		{
+			"id": "eiqI9_XlDtRgsv3mI",
+			"description": "Aegis Power Armour",
+			"local_notes": "Weak Points 4: when a hit on this armour fails to penetrate, roll 3d; on 4 or less it found a gap and DR is halved against it.\n\nRequires the black carapace interface, as Mark VII. The Aegis conditional bonus stacks with the wearer's own Rites of Sanctity (Imperium/Traits/Grey Knights.adq) and with a carried Psychic Hood or Hexagrammic Ward Charm (Imperium/Gear/Psychic Gear.eqp).\n\nLore: Codex: Grey Knights and Ben Counter's novels describe Grey Knight power armour as Mark VII-class plate every plate and seal of which is inlaid with silver hexagrammic wards, anointed and re-sanctified by the Chapter's own Interrogator-Chaplains, so that the armour itself resists possession and daemonic influence rather than relying on the wearer's own soul alone — a second line of defence on top of what a Grey Knight's body already is (see Grey Knight Soul, Imperium/Traits/ Grey Knights.adq).\n\nDesign: Torso DR, weak_points, eye-lens DR, and servo-motor ST bonus are taken unchanged from the Mark VII (Aquila Pattern) baseline (Imperium/ Armour/Imperial Armour.eqp): the anchor table lore is explicit that Grey Knight plate is a warded Mark VII derivative, not a physically thicker suit — the Chapter's edge against daemons is spiritual, not a bigger DR number, so this entry deliberately does not invent a new physical-DR anchor. What's added is the conditional_modifier feature (same mechanic as the Psychic Hood item, Imperium/Gear/Psychic Gear.eqp): a flat +3 to resist Warp Sorcery-tagged mental attacks and possession directed at the wearer, one point higher than the Psychic Hood's +2 since this is inscribed across an entire suit of plate rather than a single circlet. Cost is more than doubled over the Mark VII baseline (40000) to reflect the labour of a full-suit sanctification rite (Ordo Malleus- and Chapter-restricted, hence the LC0 and the superscience ^ TL tag alongside the standard TL11 power-armour bracket) rather than a material or servo upgrade; weight, attribute bonuses and every other figure are otherwise identical to Mark VII.",
+			"tags": [
+				"Body Armor",
+				"Imperium",
+				"Adeptus Astartes",
+				"Grey Knights"
+			],
+			"tech_level": "11^",
+			"legality_class": "0",
+			"base_value": "90000",
+			"base_weight": "150 lb",
+			"features": [
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"torso",
+						"vitals",
+						"groin"
+					],
+					"amount": 100
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"arm"
+					],
+					"amount": 88
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"leg"
+					],
+					"amount": 88
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"neck"
+					],
+					"amount": 63
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"skull"
+					],
+					"amount": 100
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"face"
+					],
+					"amount": 75
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"eye"
+					],
+					"amount": 40
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"hand"
+					],
+					"amount": 63
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"foot"
+					],
+					"amount": 75
+				},
+				{
+					"type": "attribute_bonus",
+					"attribute": "lifting_st",
+					"amount": 9
+				},
+				{
+					"type": "attribute_bonus",
+					"attribute": "striking_st",
+					"amount": 5
+				},
+				{
+					"type": "conditional_modifier",
+					"situation": "to resist Warp Sorcery-tagged Affliction, Mind Control, Mind Probe, and Fear effects, and to resist possession, directed at the wearer",
+					"amount": 3
+				}
+			],
+			"quantity": 1,
+			"equipped": true
+		},
+		{
+			"id": "eTXtimppixxkB7IKu",
+			"description": "Nemesis Force Sword",
+			"local_notes": "Lore: The standard one-handed Nemesis weapon pattern, carried where a Grey Knight favours reach and a guard over the Nemesis Force Halberd's two-handed heft; Ben Counter's Grey Knights novels show it as the Chapter's most common sidearm-grade Nemesis weapon after the halberd itself.\n\nDesign: Astartes Power Sword pattern (Imperium/Weapons/Melee Weapons.eqp): field-off is the plain Astartes-scale broadsword baseline (sw+1 cut), field-on adds the shared power-field rule's +3d and Armor Divisor (10) (framework.md), at the same weight (9 lb) and min ST (16) as that entry, since a Nemesis blade's extra sanctification and psychic attunement change what it can do to a daemon, not its physical mass or handling. Exact dice distribution at full Astartes ST 30 (sw 6d per B16, so field-on totals 9d+1(10) cut): penetrates carapace (DR 70), Sororitas power armour (DR 85), and Astartes power armour (DR 100) essentially always (100% by exact distribution) and Terminator plate (DR 200, eff. DR 20) 99.1% of the time — matching \"the disruption field shears power armour whoever holds it\" at the high end of this project's power-weapon family. The Force Strike line reuses the Nemesis Force Halberd's waived-Perils convention (Imperium/Gear/Psychic Gear.eqp): every Nemesis weapon is permanently attuned for anti-daemon work, so a Grey Knight needs no check to use it against the enemy this weapon exists for. LC0 (Grey Knights- and Ordo Malleus-restricted, per the framework's legality table) and superscience TL10^ (warp-attuned, like every other force weapon in Imperium/Gear/Psychic Gear.eqp), priced above the generic Force Sword (8000, Imperium/Gear/Psychic Gear.eqp) for the Chapter's own sanctification rites on top of the Astartes-scale housing.",
+			"tags": [
+				"Melee Weapon",
+				"Imperium",
+				"Psyker",
+				"Grey Knights"
+			],
+			"tech_level": "10^",
+			"legality_class": "0",
+			"base_value": "22000",
+			"base_weight": "9 lb",
+			"weapons": [
+				{
+					"id": "w1_y8lhbEawCJVZQH",
+					"sv": 1,
+					"damage": {
+						"type": "cut",
+						"st": "sw",
+						"base": "1"
+					},
+					"reach": "1",
+					"parry": "0",
+					"strength": "16",
+					"usage": "Field off",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Broadsword"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Force Sword"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Rapier"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Saber"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Shortsword"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Two-Handed Sword"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "wWV1OnjNAbO6jSI5K",
+					"sv": 1,
+					"damage": {
+						"type": "cut",
+						"st": "sw",
+						"base": "3d+1",
+						"armor_divisor": 10
+					},
+					"reach": "1",
+					"parry": "0",
+					"strength": "16",
+					"usage": "Field on",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Broadsword"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Force Sword"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Rapier"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Saber"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Shortsword"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Two-Handed Sword"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "wd5V-ZdGKy0Am9Q1e",
+					"sv": 1,
+					"damage": {
+						"type": "cut (ignores DR)",
+						"st": "sw",
+						"base": "3d+1"
+					},
+					"reach": "1",
+					"parry": "0",
+					"strength": "16",
+					"usage": "Force Strike (charged, vs. daemons)",
+					"usage_notes": "As the Nemesis Force Halberd's Force Strike (Imperium/Gear/ Psychic Gear.eqp): no Perils of the Warp check against a daemon or other Warp-touched target, field on; the ignores-DR component only applies against such targets. Add +1d per level of Psyker Talent (GCS can't scale this automatically; edit on the sheet).\n",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Broadsword"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Force Sword"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Rapier"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Saber"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Shortsword"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Two-Handed Sword"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1,
+			"equipped": true
+		},
+		{
+			"id": "eCv6m9950FK2SyMpG",
+			"description": "Nemesis Force Halberd",
+			"local_notes": "Lore: The signature weapon of the Grey Knights: a psychically-attuned halberd that is, to a daemon, as lethal as a bolt round is to a man — Codex: Grey Knights and its Black Library tie-ins (Ben Counter's Grey Knights novels) are consistent on this. Nemesis weapons are built and sanctified specifically to hurt things from the warp.\n\nDesign: Same mundane baseline and rescaled power-field math (+3d, armour divisor (10)) as the Force Axe, reach 1-2 like other polearms, priced and LC0'd as unique Chapter-restricted wargear per the framework's LC table (Astartes/Inquisition-only warp-touched gear). Its Force Strike line waives the normal Perils check as a narrative nod to how routinely and safely Grey Knights use it against their signature enemy, unlike a general-purpose force weapon. Handling: Grey Knights are Astartes, so this halberd is built at Astartes scale rather than the human-scale weight/ST a previous pass gave it (8 lb/ST 12, indistinguishable from a human-carried polearm) - corrected to 14 lb and min ST 14, between the Astartes Chainsword (14 lb/ST 15) and Power Axe (13 lb/ST 18) in this project's melee.yaml, reflecting a two-handed haft weapon rather than a single-handed blade or axe-head. Parry corrected to -1U, the Basic Set convention for a polearm (Halberd-class weapons are unbalanced and slow to recover the same way axes and mauls are) - the previous flat parry 0 undersold how unwieldy a real halberd is on defense.",
+			"tags": [
+				"Melee Weapon",
+				"Imperium",
+				"Psyker",
+				"Grey Knights"
+			],
+			"tech_level": "10^",
+			"legality_class": "0",
+			"base_value": "20000",
+			"base_weight": "14 lb",
+			"weapons": [
+				{
+					"id": "whkNQuJ2CTHRJ28UL",
+					"sv": 1,
+					"damage": {
+						"type": "cut",
+						"st": "sw",
+						"base": "2"
+					},
+					"reach": "1,2",
+					"parry": "-1U",
+					"strength": "14",
+					"usage": "Field off",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Polearm"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Spear"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Staff"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Two-Handed Axe/Mace"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "wr_1QZjuQEcbdKJ8p",
+					"sv": 1,
+					"damage": {
+						"type": "cut",
+						"st": "sw",
+						"base": "3d+2",
+						"armor_divisor": 10
+					},
+					"reach": "1,2",
+					"parry": "-1U",
+					"strength": "14",
+					"usage": "Field on",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Polearm"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Spear"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Staff"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Two-Handed Axe/Mace"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "wQuPuDyq98Vb842P2",
+					"sv": 1,
+					"damage": {
+						"type": "cut (ignores DR)",
+						"st": "sw",
+						"base": "3d+2"
+					},
+					"reach": "1,2",
+					"parry": "-1U",
+					"strength": "14",
+					"usage": "Force Strike (charged, vs. daemons)",
+					"usage_notes": "Every Nemesis weapon is permanently attuned for anti-daemon work; Grey Knights need no Perils of the Warp check to use this line against a Warp-touched target, field on (their Sanctic training and armour wards absorb the backlash), though the GM may still call for one against anything else it is used on.\n",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Polearm"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Spear"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Staff"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Two-Handed Axe/Mace"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1,
+			"equipped": true
+		},
+		{
+			"id": "e9uGAp0Y1bXyc-BV6",
+			"description": "Storm Bolter",
+			"local_notes": "Unmodified Astartes storm bolter; gains nothing Grey-Knight-specific unless loaded with the Psybolt Ammunition below.\n\nLore: Twinned boltgun barrels sharing a single trigger and (usually) a large drum or box magazine, standard wargear for Terminator squads and a common pintle/hull weapon on Imperial vehicles; Codex and Horus Heresy background consistently shows it as simply \"two boltguns fired together,\" not a more powerful round.\n\nDesign: Same .75-calibre bolt and therefore the same damage line (6dx2(2) pi++ / 6d cr ex follow-up, identical to the standard Boltgun, Godwyn Pattern's penetration checks) as the Godwyn anchor; \"rof: 3x2\" captures the twin-linked barrels doubling the effective volume of fire per the standard GURPS convention for linked weapons. Handling: two full boltgun actions and a bigger drum magazine make this noticeably heavier than a single Godwyn-pattern gun - 40 lb loaded, roughly two barrels' worth of receiver sharing one stock and trigger group rather than twice the weight of one gun. Min ST 20 (√(10×40)≈20) sits a point above the single-barrel anchor, and the 60-round magazine matches the larger drums shown in art and background (Shots 60(3)). Bulk -6 (one step worse than a single boltgun's -5) and Rcl 4 (up from 3) reflect the twin barrels' combined mass and kick. Listed here for infantry (Terminator, ST 20) use with Guns (Rifle); a vehicle- or turret- mounted storm bolter should instead use Gunner (Machine Gun) per the framework's skill table, with no change to the damage line.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium",
+				"Adeptus Astartes"
+			],
+			"tech_level": "10",
+			"legality_class": "1",
+			"base_value": "1900",
+			"base_weight": "40 lb",
+			"weapons": [
+				{
+					"id": "WrqN98VrIUu1nZm3N",
+					"sv": 1,
+					"damage": {
+						"type": "pi++",
+						"base": "6dx2",
+						"armor_divisor": 2
+					},
+					"accuracy": "4",
+					"range": "200/1000",
+					"rate_of_fire": "3x2",
+					"shots": "60(3)",
+					"bulk": "-6",
+					"recoil": "4",
+					"strength": "20",
+					"usage": "Standard bolt",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "WMwG2ePwgh1Xj2MTu",
+					"sv": 1,
+					"damage": {
+						"type": "cr ex",
+						"base": "6d"
+					},
+					"accuracy": "4",
+					"range": "200/1000",
+					"rate_of_fire": "3x2",
+					"shots": "60(3)",
+					"bulk": "-6",
+					"recoil": "4",
+					"strength": "20",
+					"usage": "Follow-up (if bolt penetrates)",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1,
+			"equipped": true
+		},
+		{
+			"id": "e4V9y8TxBK3hTCAgl",
+			"description": "Psybolt Ammunition",
+			"local_notes": "A full magazine load, statted as loaded into a Boltgun, Godwyn Pattern or Storm Bolter (matching that weapon's own handling figures above, RoF 3x2 and ST 20 for the twin-linked storm bolter); use this weapon block in place of the host weapon's Standard bolt line while loaded.\n\nLore: Grey Knights load their boltguns and storm bolters with rounds cast from psychically-reactive, sanctified alloys and blessed over weeks of ritual before a campaign, described in Codex: Grey Knights background as hitting noticeably harder than a standard bolt round against armoured foes and daemonic constructs alike, without changing the weapon that fires them.\n\nDesign: Same dice and wounding modifier as the standard Godwyn-anchor bolt (6dx2(2) pi++, Imperium/Weapons/Bolt Weapons.eqp) with the armour divisor raised one step to (3), the same divisor-only change the Kraken penetrator round already uses on the same page, representing a denser sanctified penetrator core rather than a new cartridge. Exact dice distribution against Astartes power armour (DR 100, eff. DR 33.3): penetrates 85.5% of hits, up from the standard round's 14.5% — the \"hits noticeably harder against armoured foes\" the lore describes — while carapace (DR 70, eff. 23.3) and Sororitas armour (DR 85, eff. 28.3) both round to essentially 100%. Handling figures are not restated as their own weapon: this is ammunition for an existing gun, so weight and cost are for one spare magazine's worth, priced above plain bolt rounds for the sanctification labour, and TL is marked superscience (10^) like this project's other warp-touched consumables despite riding in an ordinary TL10 weapon.",
+			"tags": [
+				"Imperium",
+				"Adeptus Astartes",
+				"Grey Knights",
+				"Ammunition"
+			],
+			"tech_level": "10^",
+			"legality_class": "0",
+			"base_value": "900",
+			"base_weight": "3 lb",
+			"weapons": [
+				{
+					"id": "WWZEB7W5K5hGUa1gF",
+					"sv": 1,
+					"damage": {
+						"type": "pi++",
+						"base": "6dx2",
+						"armor_divisor": 3
+					},
+					"accuracy": "4",
+					"range": "200/1000",
+					"rate_of_fire": "3",
+					"shots": "24(3)",
+					"bulk": "-5",
+					"recoil": "3",
+					"strength": "19",
+					"usage": "Standard bolt (psybolt-loaded)",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "W-0-EeWJLA81eeQST",
+					"sv": 1,
+					"damage": {
+						"type": "cr ex",
+						"base": "6d"
+					},
+					"accuracy": "4",
+					"range": "200/1000",
+					"rate_of_fire": "3",
+					"shots": "24(3)",
+					"bulk": "-5",
+					"recoil": "3",
+					"strength": "19",
+					"usage": "Follow-up (if bolt penetrates)",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1,
+			"equipped": true
+		}
+	]
+}

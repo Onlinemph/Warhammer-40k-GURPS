@@ -1,0 +1,224 @@
+{
+	"version": 5,
+	"rows": [
+		{
+			"id": "TwxvqJZ0oEwFSxiQX",
+			"name": "Grey Knight Soul",
+			"local_notes": "Lore: What Codex: Grey Knights and its Black Library tie-ins (Ben Counter's Grey Knights novels) treat as the Chapter's defining trait alongside its powers: a Grey Knight's soul is built, from recruitment onward, to be the hardest thing in the Imperium for the warp to touch.\n\nDesign: 15 (Incorruptible) + 10 (Rites of Sanctity) + 15 (Indomitable Will) = 40 points, layered on top of the standard Astartes Hypno-Indoctrination package (Astartes Gene-Seed.adq) which already buys ordinary Fearlessness and Duty/Code of Honor — this container is specifically the anti-warp half of Grey Knight conditioning, not a replacement for it.",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Physical",
+				"Imperium",
+				"Adeptus Astartes",
+				"Grey Knights"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "t2G_urOeSzNKBc-nD",
+					"name": "Incorruptible (Daemonic Possession Immunity)",
+					"reference": "B81",
+					"local_notes": "A daemon cannot seize a Grey Knight's body outright, however hard it tries.\n\nLore: Grey Knights are recruited, warded, and psycho-indoctrinated specifically so that their souls cannot be taken from the inside — Codex: Grey Knights background and Ben Counter's novels are consistent that possession of a Grey Knight, even a wounded or dying one, essentially never succeeds, in sharp contrast to how readily lesser psykers and even other Astartes can be ridden by a strong enough daemon.\n\nDesign: Resistant (B81), Common category (daemonic possession is exactly the hazard this Chapter exists to face down), taken as full Immunity rather than a resistance bonus: 15 x 1 = 15 points, per this project's own established convention for the Immunity tier of Resistant (see Oolitic Kidney, Astartes Gene-Seed.adq).",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Imperium",
+						"Grey Knights"
+					],
+					"modifiers": [
+						{
+							"id": "mPVT7AGNqm1k3kYcj",
+							"name": "Common: Daemonic Possession",
+							"cost_adj": "15"
+						},
+						{
+							"id": "mWEZNR5XWCr64mb0S",
+							"name": "Immunity",
+							"cost_adj": "x1"
+						}
+					],
+					"base_points": 15
+				},
+				{
+					"id": "tG9uVnzbmE21OLeoI",
+					"name": "Rites of Sanctity (Hexagrammic Wards)",
+					"reference": "B81",
+					"local_notes": "+3 to resist any Warp Sorcery-tagged Affliction, Mind Control, Mind Probe, Fear, or Terror effect directed at the bearer — stacks with the Psychic Hood and Hexagrammic Ward Charm items (Imperium/Gear/Psychic Gear.eqp) rather than duplicating them, since this is a ward worked into the flesh and armour itself, not a separate piece of kit.\n\nLore: Every Grey Knight's body is inscribed, branded and anointed with hexagrammic wards during his induction — the same symbols painted across a ship's hull or an Inquisitor's cell to ward off the warp — before a single implant is grafted; Codex background and Ben Counter's novels both describe this as woven into the Chapter's creation ritual, not applied after the fact like a charm.\n\nDesign: Resistant (B81) again, but as the weaker \"+3 to resist\" tier rather than Immunity, applied to the broader category of Warp Sorcery-tagged effects generally (not just possession, which the Incorruptible trait above already makes the Grey Knight outright immune to): Very Common base 30, x1/3 for the +3 bonus tier = 10 points.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Imperium",
+						"Grey Knights"
+					],
+					"modifiers": [
+						{
+							"id": "mfMjK9nlbhIuwmZn-",
+							"name": "Very Common: Warp Sorcery-tagged effects directed at self",
+							"cost_adj": "30"
+						},
+						{
+							"id": "mvCDCM0QeamirgM1D",
+							"name": "+3 to all rolls to resist",
+							"cost_adj": "x1/3"
+						}
+					],
+					"base_points": 10
+				},
+				{
+					"id": "tcYFyr4WHN_24XuXJ",
+					"name": "Indomitable Will",
+					"reference": "B60",
+					"local_notes": "Impossible to influence through ordinary words or actions; immune to Mind Control and Emotion Control, warp-touched or otherwise.\n\nLore: Beyond wardings against the warp specifically, a Grey Knight's will is drilled to a hardness the fiction treats as absolute — temptation, seduction, and coercion (daemonic or mundane) simply do not work on a Grey Knight the way they might on another Astartes, a theme Ben Counter's novels return to repeatedly whenever a Grey Knight is offered a bargain by something in the warp.\n\nDesign: Basic Set Indomitable (B60, flat 15): immune to Mind Control and Emotion Control from any source, not only Warp Sorcery-tagged ones, covering the \"cannot be turned\" half of the Chapter's incorruptibility that the possession- and ward-specific traits above don't reach.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Imperium",
+						"Grey Knights"
+					],
+					"base_points": 15
+				}
+			]
+		},
+		{
+			"id": "Tk21AkruF3chYWU8V",
+			"name": "Grey Knight Psychic Gift",
+			"local_notes": "Lore: Codex: Grey Knights and Ben Counter's novels are explicit that a Grey Knight is not a warrior with a psyker occasionally attached to his squad the way most Chapters use a Librarian: every Battle-Brother is himself a trained psyker, drawn only from aspirant stock that already tested psychically gifted, and fights that way from his first patrol. Individual Grey Knights are consistently written as comparable in raw psychic strength to another Chapter's Librarian, which this project's own Assignment-grade table (Imperium/Traits/Psykers and the Warp.adq) places at Beta-to-Alpha grade.\n\nDesign: Psyker (Talent) 4 and Warp Empowerment 3 land a rank-and-file Grey Knight at Beta grade (cap 50) on the warp.yaml Assignment table — one step under the Alpha grade this project gives a full Astartes Librarian (Talent 5 / Empowerment 3, Imperium/Templates/Astartes Librarian Add-On.gct), reflecting \"every brother is at least a strong psyker\" while leaving room for named Grey Knight heroes (Grand Masters, Brother-Captains) to buy up to Alpha or beyond as an individual advancement, exactly as a line Battle-Brother can buy up Rank and Reputation on top of the shared racial package. Unusual Background (10) and Witch-sight (8, 10 base x0.8 Warp Sorcery) are unchanged from warp.yaml. Total: 10 + 40 (Psyker 4: 0 base + 10x4) + 40 (Warp Empowerment 3: 10 base + 10x3) + 8 = 98 points. This trait does not include the Sanctic Daemonology powers themselves or the skills that use them (Meditation, Hidden Lore (the Warp)) — those belong to the full Grey Knight Add-On template (Imperium/Templates/Grey Knight Add-On.gct), since a squad's Sanctic training is a matter of what a brother has learned to do with this shared gift, not the gift itself.",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Psyker",
+				"Imperium",
+				"Adeptus Astartes",
+				"Grey Knights"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "tzljULKvP4a-nx-RC",
+					"name": "Unusual Background (Latent Psychic Potential)",
+					"local_notes": "Lore: Psychic ability is a random, rare mutation of the human genome that lets its bearer perceive and touch the immaterium (the warp). Sources disagree on exact frequency — Imperial administrative texts and Dark Heresy-line background both describe it as \"rare but not vanishingly so,\" on the order of a handful of latent potentials per hive-sized population, with usably strong psykers far rarer still. Treat any precise ratio as flavour, not census data.\n\nDesign: Required to take Psyker (Talent), Warp Empowerment, or any trait carrying the Warp Sorcery power modifier below. Basic Set B261 leaves Unusual Background costs to the GM; 10 points reflects that the ability itself is not learned but grants access to an entire framework of further abilities, roughly the going rate other published settings use for \"you may buy from this power list at all.\"",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Psyker",
+						"Imperium"
+					],
+					"base_points": 10
+				},
+				{
+					"id": "t8m9PGDa40mBisRnc",
+					"name": "Psyker",
+					"reference": "TSOR5",
+					"local_notes": "This project's Sorcery Talent (Thaumatology: Sorcery, TSOR5) analogue:\napplies as Sorcery Talent applies to a sorcerer's skills in TSOR, just\nto a 40k-specific list — Psyniscience, Meditation, Hidden Lore (the\nWarp), and the Will roll to resist Perils of the Warp (see above) — a\nhouse extension of Talent's normal \"add to listed skills\" rule,\nprecedented by Magery's and Sorcery Talent's own habit of aiding\nrelated rolls beyond pure spellcasting. Reaction bonus: +1/level from\nother sanctioned psykers and the Astra Telepathica.\n\nPsyker (Talent) and Warp Empowerment are separate purchases on separate\naxes, exactly as Sorcery Talent and Sorcerous Empowerment are in TSOR:\nthis trait only sharpens related skills and Perils resistance, while\nWarp Empowerment (above) is what actually gates which powers a psyker\nmay know. A high-Talent, low-Empowerment psyker is a sharp, well-drilled\nmind who simply hasn't learned much yet; the reverse is a raw prodigy\nwho is clumsy with the skills around their gift.\n\nImperial Assignment scale (Adeptus Astra Telepathica / Black Ships),\nweakest to strongest, mapped to Talent level. See Warp Empowerment above\nfor the matching Empowerment level/point-cap column, which is the real\ngate on ability selection:\n  Iota    — Talent 0 (latent; register but rarely take Psyker traits at all)\n  Zeta    — Talent 1\n  Eta     — Talent 1\n  Theta   — Talent 2\n  Epsilon — Talent 2  (typical Wyrdvane conscript)\n  Delta   — Talent 3  (typical Sanctioned Primaris Psyker)\n  Gamma   — Talent 4\n  Beta    — Talent 4  (many Astropaths)\n  Alpha   — Talent 5  (Astartes Librarians, Black Ship candidates)\n  Alpha-Plus — Talent 6+ (beyond-play tier: Primarchs,\n    the most powerful Inquisitors, the worst Chaos sorcerers)\n\nLore: The Iota-to-Alpha-Plus assignment scale is drawn from the Adeptus Astra Telepathica's own grading of psychic potential as depicted across Dark Heresy-line material and repeated in Codex/Imperial Armour background; Black Library uses the same grades in passing (e.g. Eisenhorn-cycle and Ciaphas Cain references to Alpha-class talents). \"Alpha-Plus\" specifically denotes the rarest, most dangerous talents the Black Ships process.\n\nDesign: Talent affecting four things (three skills plus the Perils resistance roll) sits at Basic's \"Medium Talent\" rate of 10 points/level (B90, three-to-five-skill bracket) rather than 5 (one-two skills) or 15 (six-nine skills) — the same rate Sorcery Talent itself uses (TSOR5, 10/level). Capped at level 6 for player characters; higher grades are GM-reference only, per the framework's \"Beyond play\" tier.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Talent",
+						"Psyker",
+						"Imperium"
+					],
+					"points_per_level": 10,
+					"can_level": true,
+					"levels": 4,
+					"base_points": 0,
+					"max_levels": 6
+				},
+				{
+					"id": "tySg-FYDQbFonKDAw",
+					"name": "Warp Empowerment",
+					"reference": "TSOR4",
+					"local_notes": "A direct reskin of Sorcerous Empowerment (Thaumatology: Sorcery, TSOR4):\nthe psyker's raw, trained capacity to draw on and shape the warp, as\ndistinct from Psyker (Talent, TSOR5's Sorcery Talent analogue, below)\nwhich only sharpens related skills. Requires Unusual Background (Latent\nPsychic Potential). It is the prerequisite for every Warp Sorcery-tagged\nability in this file (see Witch-sight and each discipline below); the\nNavigator's Third Eye and the Pariah/Untouchable genes carry no Warp\nSorcery modifier and so need no Warp Empowerment.\n\nCap, cast per Thaumatology: Sorcery (TSOR): a psyker may only know a\npower whose full, modified point cost is no greater than the point cost\nof their own Warp Empowerment (10 + 10/level). A power bought at a\nhigher level (more dice, more range, etc.) costs proportionally more and\nmay outgrow a psyker's Empowerment even after they first learned it at a\ncheaper level — raising the level, and cost, of Warp Empowerment is how\na psyker \"grows into\" costlier or higher-level workings.\n\nImperial Assignment scale (Adeptus Astra Telepathica / Black Ships)\nmapped to Warp Empowerment level and the point cap that gives, worked\nout from this file's actual (Warp Sorcery -20% + Perils of the Warp)\nmodified costs:\n\n  Grade      | Empowerment level | Cap (10+10/lvl) | What the cap reaches\n  Iota       | 1                  | 20              | cheapest powers only: e.g. Smite (3), Endurance (2), Iron Arm (4), Fire Bolt (4), Assail (4), Mind Probe (14), Foresight (18) — register but rarely learn more than one or two\n  Zeta       | 1                  | 20              | as Iota; low Psyker Talent limits skill use, not what they can know\n  Eta        | 1                  | 20              | as Zeta\n  Theta      | 2                  | 30              | adds Molten Beam (9), Crush (11), Psychic Scream (12), Sanctuary (13), Null Zone (23), Terrify (28)\n  Epsilon    | 2                  | 30              | as Theta (typical Wyrdvane conscript)\n  Delta      | 3                  | 40              | adds Scrier's Gaze (35), Dominate (35), Gate of Infinity (40) — the full non-Great-Power roster (typical Sanctioned Primaris Psyker)\n  Gamma      | 3                  | 40              | as Delta, better skills from a higher Psyker Talent\n  Beta       | 4                  | 50              | full roster, with headroom to push a known leveled power to a higher level/more dice (many Astropaths)\n  Alpha      | 5                  | 60              | full roster, generous headroom for high-level workings (Astartes Librarians, Black Ship candidates)\n  Alpha-Plus | 7+ (GM only)       | 80+             | approaching Great Power territory; Vortex of Doom (280+ as usually bought) is still normally out of reach even here\n\nA character need not buy Warp Empowerment up to their grade's full\nceiling: templates in this project buy only the level their actually-\nknown powers need, and note the grade's theoretical ceiling separately.\n\nLore: The Iota-to-Alpha-Plus assignment scale is drawn from the Adeptus Astra Telepathica's own grading of psychic potential as depicted across Dark Heresy-line material and repeated in Codex/Imperial Armour background; Black Library uses the same grades in passing (e.g. Eisenhorn-cycle and Ciaphas Cain references to Alpha-class talents). \"Alpha-Plus\" specifically denotes the rarest, most dangerous talents the Black Ships process.\n\nDesign: Sorcerous Empowerment (TSOR4) costs 10 base + 10/level (level 1 = 20 points, each further level +10) in the GCS master Thaumatology data; reused verbatim here under a 40k-appropriate name, since the underlying mechanic — \"how much warp-power you can channel at all, gating which spells/powers you may know by their modified cost\" — is exactly what an Imperial Assignment grade represents. The level-to-grade mapping above is derived, not asserted: it walks every power in this file's actual modified cost (recomputed under the new Warp Sorcery -20% modifier, see below) and finds the cheapest Empowerment level whose cap clears it, so \"Iota can only cast minor powers\" and \"Alpha can cast the biggest non-Great-Power ability\" are literally true of the numbers, not just flavour text.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Talent",
+						"Psyker",
+						"Imperium"
+					],
+					"points_per_level": 10,
+					"can_level": true,
+					"levels": 3,
+					"base_points": 10
+				},
+				{
+					"id": "tHaLBPR6O20awfDUk",
+					"name": "Witch-sight",
+					"local_notes": "Lore: The first, mildest sign of the gift: an unlearned, passive prickling sense of daemonic taint, psychic activity, and warp corruption — how unsanctioned psykers are so often found, and how veteran Inquisitors and Space Marines notice a place has gone wrong before anything visible happens. Widely depicted; no single canonical source, consistent across Black Library and Dark Heresy-line material alike.\n\nDesign: Built as Detect (Psychic Activity & Daemonic Taint), an uncommon but not vanishingly rare category, base 10 per Basic's Detect cost table (B47-48). No Perils of the Warp: it is involuntary background sense, not a deliberate act of channelling. Full modified cost: 10 x 0.8 = 8 points; needs only Warp Empowerment level 1 (cap 20) — even an Iota-grade latent can have it, matching how often unsanctioned psykers are found by exactly this unlearned sense.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Psyker",
+						"Imperium"
+					],
+					"modifiers": [
+						{
+							"id": "mcN_DTa0GO0n5_Fmz",
+							"name": "Warp Sorcery",
+							"cost_adj": "-20%"
+						}
+					],
+					"base_points": 10
+				}
+			]
+		},
+		{
+			"id": "tsAmKCTFen4odPNUc",
+			"name": "Brotherhood",
+			"reference": "B70",
+			"local_notes": "Shares surface thoughts, intent, and warnings silently with every other linked Brother in the squad within Mindlink's normal range; Sanctic Daemonology's Sanctuary (Imperium/Traits/Psykers and the Warp.adq) rides on top of this same bond when a kill-team wards itself as one during a purge.\n\nLore: Codex: Grey Knights and its Black Library tie-ins describe Grey Knight kill-teams fighting with a coordination beyond ordinary squad drill — brothers who have trained and psychically bonded together for years moving and striking as if of one mind, a \"psychic gestalt\" the Chapter deliberately cultivates rather than the incidental telepathy of a gifted individual.\n\nDesign: Basic Set Mindlink (B70), Squad tier (2-9 people, the Basic Set modifier for a small linked group rather than a single named partner): base 0 points, +10 flat for the group-size modifier, per the GCS master Basic Set data. Not Warp Sorcery-tagged: it is a standing, always-on bond between initiated Brothers rather than a power any one of them channels and risks Perils casting, matching how the fiction never shows a Grey Knight's squad-sense failing a roll or backfiring the way an active power can.",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Imperium",
+				"Grey Knights"
+			],
+			"modifiers": [
+				{
+					"id": "mgubnxCpdxnRnXqRI",
+					"name": "Squad (2-9 Grey Knights)",
+					"reference": "B70",
+					"cost_adj": "10"
+				}
+			],
+			"base_points": 0
+		},
+		{
+			"id": "txofe-TsQ6c4evAXl",
+			"name": "Duty (Chamber Militant of the Ordo Malleus)",
+			"reference": "B133",
+			"local_notes": "Quite Often (9 or less), Hazardous. Stacks with, and is separate from, the standard Astartes Duty (Chapter and Imperium) in Astartes Gene-Seed.adq's Hypno-Indoctrination package.\n\nLore: Codex: Grey Knights background is explicit that the Chapter is the Ordo Malleus's own Chamber Militant: an Inquisitor of that Ordo can summon Grey Knight forces directly, overriding the Chapter's own chain of command for a given operation, in a way no other Chapter's Astartes are obligated to accept from an outside authority.\n\nDesign: A second, narrower Duty (B133) alongside the standard Astartes one: \"Quite Often\" rather than \"Almost All the Time\" (the Ordo Malleus doesn't direct every Grey Knight mission, only calls on it), still Hazardous, priced the same -10 this project already uses for the Sanctioned Psyker's Duty to the Astra Telepathica/Inquisition (Imperium/Traits/Psykers and the Warp.adq) for internal consistency between \"answers to an outside Inquisitorial authority\" disadvantages.",
+			"tags": [
+				"Disadvantage",
+				"Social",
+				"Imperium",
+				"Grey Knights"
+			],
+			"base_points": -10
+		},
+		{
+			"id": "tWqFNRWohqYK8K3TJ",
+			"name": "Secret (The Grey Knights)",
+			"reference": "B152",
+			"local_notes": "Almost no one outside the Inquisition and the Chapter itself knows the Grey Knights exist, and the Chapter works to keep it that way: survivors and witnesses of a Grey Knight action who are not already cleared for that knowledge are, per Codex and Black Library background, routinely mind-wiped of the encounter by the Chapter's own Interrogator-Chaplains or an attending Inquisitor afterward. In play this is the same Secret roll as any other (exposure risks censure, reassignment, or worse from the Ordo Malleus), and it doubles as the social cost the framework asks for: a Grey Knight cannot let an ordinary ally remember fighting beside him, so no Reputation, standing friendship, or reaction bonus with anyone outside the Chapter and its Inquisitorial handlers ever accumulates the way a line Chapter's Reputation (Angel of Death, Astartes Gene- Seed.adq via the Battle-Brother template) does — the same trait covers both the secrecy and its lonely price, rather than charging for them twice.\n\nLore: One of the most consistent beats across Codex: Grey Knights and Ben Counter's novels: almost every mortal who learns the Grey Knights exist and survives the encounter has their memory of it erased before they leave Titan or the operation's theatre, so that even the Imperium at large barely believes the Chapter is real.\n\nDesign: A single Secret (B152) covers both the institutional risk (exposure draws Ordo Malleus attention, at minimum, and at worst a body count) and the personal cost described in the notes above, at -10 — the same \"Serious\" tier this project already uses for the Dark Angels' Inner Circle Secret (Astartes Gene-Seed.adq) — rather than a second, separate disadvantage for the social isolation, since GURPS prices one Secret to cover everything that particular secret costs its keeper.",
+			"tags": [
+				"Disadvantage",
+				"Social",
+				"Imperium",
+				"Grey Knights"
+			],
+			"base_points": -10
+		},
+		{
+			"id": "ti-3AeNL-s5GZ3qif",
+			"name": "Gene-Seed Provenance: Unknown",
+			"local_notes": "0-point lore flag; no mechanical effect.\n\nLore: Unlike every other Chapter's gene-seed, whose founding Primarch and broad lineage is a matter of public Imperial record even where the exact quirks are secret, Codex: Grey Knights background is explicit that the Grey Knights' own gene-seed provenance is not stated — the Chapter's official founding legend credits Malcador the Sigillite and the Emperor's own will rather than a named Primarch, and no source this project treats as reliable confirms a specific genetic origin. Widely repeated fan and background speculation ties it to the Emperor directly; this project does not treat that as confirmed, only as the honest state of what is and isn't said on the page.\n\nDesign: 0-point flag, matching the pattern this project already uses for Chapter lenses with nothing mechanical to add (Ultramarines, White Scars in Astartes Gene-Seed.adq): the Grey Knights' physiology is built on the standard Astartes package like any other Chapter (imperium/astartes/gene-seed.yaml#Astartes); what's unusual is that this project can't honestly say where that gene-seed came from, and says so here rather than inventing an answer.",
+			"tags": [
+				"Imperium",
+				"Grey Knights",
+				"Chapter Variant"
+			],
+			"base_points": 0
+		}
+	]
+}

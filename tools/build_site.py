@@ -48,10 +48,21 @@ def trait_cost(t):
             return top + math.ceil(rest / 5)
         return sum(costs)
     base = t.get("base_points", 0) + t.get("points_per_level", 0) * t.get("levels", 0)
+    mult = 1.0
+    for m in t.get("modifiers", []):  # flat point and multiplier modifiers, as GCS applies them
+        if m.get("disabled"):
+            continue
+        c = str(m.get("cost_adj", "")).strip()
+        try:
+            if c.lower().startswith("x"):
+                mult *= eval(c[1:], {}, {}) if "/" in c else float(c[1:])
+            elif c and not c.endswith("%"):
+                base += float(c) * m.get("levels", 1)
+        except (ValueError, SyntaxError, ZeroDivisionError):
+            pass
     pct = mod_pct(t)
-    if base > 0:
-        return math.ceil(base * (1 + pct / 100) - 1e-9)
-    return math.floor(base * (1 + pct / 100) + 1e-9) if pct < 0 else base
+    v = base * (1 + pct / 100) * mult
+    return math.ceil(v - 1e-9) if v > 0 else math.floor(v + 1e-9)
 
 
 def skill_cost(s):
