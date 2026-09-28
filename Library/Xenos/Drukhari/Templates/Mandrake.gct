@@ -1,0 +1,635 @@
+{
+	"version": 5,
+	"id": "BZRFzNgebATADS_wE",
+	"notes": "A Mandrake: a shadow-killer of the dimension Aelindrach, half in this world, hired to strike from the dark. Point math (see Xenos/Drukhari/Traits/Drukhari Physiology.adq): Drukhari Physiology (145) + Keen Battle-Sense (5) + Mandrake Conditioning (85) + Mandrake Shadow Nature (55) + Unnatural Features (-5) + Callous (-5) + Sadism (-15) + Power from Pain Stages I and II (14) = 279 points of traits, plus skills (99 points) = 378 points. Stats: ST 11, DX 16, IQ 11, HT 11, HP 11, Will 12, Per 14, Speed 7.0, Move 10 (sprint x1.5), Dodge 12 (7 + 3 + Enhanced Dodge 1 + Combat Reflexes): exactly framework.md's Mandrake line. This is the framework's senior-agents tier (350-600) but falls under the 400-550 Mandrake target: the honest Basic Set price of the shadow traits (Shadow Form 30 after limitations, Chameleon 6, Silence 10, Night Vision 9) is modest, and I have not padded skills to close the gap. A GM who wants 400 can drop the Accessibility limitation on Shadow Form (+20) or add Stealth and blade skill.\n\nThe shadow-form trait is built from the Basic Set's Shadow Form (see the trait's own notes). No Mandrake weapon (glimmersteel blade, Baleblast) is a trait here: they are wargear. The blade is treated as a Shortsword; a GM who prefers Knife or Broadsword should swap it. Weapon skills follow the Drukhari armoury as framework.md's Skills table reads it: splinter weapons fire solid crystal shards, so they use Guns (Pistol/Rifle), the same choice the Aeldari Guardian makes for the shuriken catapult; blasters and dark lances are beam weapons (Beam Weapons); heavy splinter and disintegrator cannons are Gunner.",
+	"traits": [
+		{
+			"id": "T5Q5_tvmhC3uYL6g7",
+			"name": "Drukhari Physiology",
+			"local_notes": "Lore: The Drukhari are the Aeldari who never left: raiders and slavers of Commorragh, the Dark City hidden in the webway. Their bodies are the same fine-boned, fast, sharp-eyed Aeldari bodies the craftworlds field. What differs is the soul. With no spirit stone to shelter it, Slaanesh drains it continually, and they hold the hunger off by feeding on suffering. This trait is the baseline shared by every Drukhari template; the training, cult and coven lenses below layer on top of it, exactly as the Aeldari Physiology's Path and Aspect lenses do.\n\nDesign: Pulls in, by include, the shared Aeldari body: Attribute Modifiers (140), Enhanced Move (Ground) 1/2 (10), Acute Senses (8), Aeldari Grace (4) and Slender Frame (0), so a fix there updates the Drukhari on rebuild. Adds Soul Thirst (-26) and Unaging While Fed (+9). 140 + 10 + 8 + 4 + 0 - 26 + 9 = 145 points, landing ST 10, DX 14, IQ 12, HT 10, HP 10, Will 12, Per 12, Basic Speed 6.25, Move 9, the Kabalite Warrior's physical line before its own package (framework.md, Drukhari). Deliberately left out: Aeldari Psychic Sensitivity, Aeldari Psyker (Talent), Warp Empowerment, Spirit Stone and every Path lens (the Drukhari shun the warp and have no Paths), plus Emotional Intensity, Arrogance Towards Younger Races, Slaanesh's Hunger and Extended Lifespan, each of which Soul Thirst, the Drukhari mental traits below or Unaging While Fed replace. Emotional excess is a Drukhari trait too, but it shows up as the cruelty and vanity below, not as Path-restrained rapture.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Drukhari"
+			],
+			"container_type": "ancestry",
+			"children": [
+				{
+					"id": "t-m5uYZDDcT-8Ey6R",
+					"name": "Attribute Modifiers",
+					"local_notes": "Design: Framework target (Guardian anchor line, the ancestry baseline every other Aeldari template builds on): ST 10, DX 14, IQ 12, HT 10, HP 10. Increased DX +4 (B15, 20/level, 80) for DX 14 — \"faster and more precise than any baseline human,\" matching the anchor table's own figure without touching ST or HT, which stay human-baseline: Aeldari are quick and precise, not physically overwhelming. Increased IQ +2 (B16, 20/level, 40) for IQ 12 — a subtler, more perceptive mind than a human's on average, per Codex background's consistent \"the Aeldari are wiser and more perceptive than short-lived Humanity\" framing. Increased Basic Speed +0.25 (B17, 5 points per 0.25 level, 5) for reflexes a shade faster even than DX 14 alone implies — the same design choice this project's Astartes Attribute Modifiers makes for \"faster reflexes than baseline humans\" without inflating every DX skill. Basic Move +3 (B17, 5/level, 15) at the user's direction: the Aeldari are the fastest-moving people in the galaxy, and even a Guardian outpaces a human (Move 9). 80+40+5+15 = 140. Will and Per are left untouched here (both track IQ 12 with no separate bonus): the Guardian anchor's own Per 13 and Aspect Warrior's Will 13 come from Keen Battle-Sense and Aspect Training below, not from this universal package, because a Farseer's own anchor (Per 15 exactly equal to IQ 15) shows the extra Per point is a warrior's battlefield habit, not a species-wide trait — baking it in here would overshoot the Farseer line once her own IQ is bought up.",
+					"tags": [
+						"Physical"
+					],
+					"base_points": 140,
+					"features": [
+						{
+							"type": "attribute_bonus",
+							"attribute": "dx",
+							"amount": 4
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "iq",
+							"amount": 2
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "basic_speed",
+							"amount": 0.25
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "basic_move",
+							"amount": 3
+						}
+					]
+				},
+				{
+					"id": "t8RxFRJOum5W3kkQu",
+					"name": "Enhanced Move (Ground)",
+					"reference": "B52",
+					"local_notes": "Top sprinting speed x1.5. Combat Move unchanged.\n\nLore: Aeldari run with a lightness and speed no human can match; in the fiction they cross open ground before an enemy can bring guns to bear.\n\nDesign: Enhanced Move (Ground) 1/2 (B52, half level 10) at the user's direction, matching the Astartes half level.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Aeldari"
+					],
+					"points_per_level": 20,
+					"can_level": true,
+					"levels": 0.5
+				},
+				{
+					"id": "TBh3WxXTUlyqdtuSH",
+					"name": "Acute Senses",
+					"local_notes": "Lore: Aeldari sight and hearing are famously sharper than a human's — able to read the wind off a craftworld's wraithbone spires, or track a single voice through a warhost's roar. Consistently depicted across Codex background and the Path trilogy (a Ranger's eyesight in particular is played as near-supernatural).\n\nDesign: Acute Vision 2 (B35, 2/level, 4) plus Acute Hearing 2 (B35, 2/level, 4) = 8 points, the same math this project's Astartes Occulobe/Lyman's Ear entries use for the \"raw acuity\" half of their build, without the Protected Sense half (Aeldari have no fused eye/ear armour organ to shrug off flash and concussion the way an Astartes implant does).",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Aeldari"
+					],
+					"container_type": "meta_trait",
+					"children": [
+						{
+							"id": "tgkZ4eUd8owWi6t9G",
+							"name": "Acute Vision",
+							"reference": "B35",
+							"points_per_level": 2,
+							"can_level": true,
+							"levels": 2
+						},
+						{
+							"id": "tpOE6uKhnjQAzKvnF",
+							"name": "Acute Hearing",
+							"reference": "B35",
+							"points_per_level": 2,
+							"can_level": true,
+							"levels": 2
+						}
+					]
+				},
+				{
+					"id": "tOm66x-fWZ5sRhq1R",
+					"name": "Aeldari Grace",
+					"reference": "B21",
+					"local_notes": "Appearance (Attractive).\n\nLore: Aeldari are consistently described, in the fiction and in their own art, as slender, fine-boned and unnervingly graceful even to other Aeldari — a species that finds its own dying beauty worth mourning.\n\nDesign: Basic Set Appearance, Attractive tier (B21), 4 points.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Aeldari"
+					],
+					"base_points": 4
+				},
+				{
+					"id": "tyrVD1q8eVQ50kouB",
+					"name": "Slender Frame",
+					"local_notes": "Lore: An Aeldari body is light and fine-boned next to a human's, let alone an Ork's or an Astartes': speed and precision over mass. Codex background and the Path trilogy both play Aeldari as easy to underestimate physically and easy to actually hurt once a fight turns physical.\n\nDesign: 0-point lore flag: the mechanical consequence is what's absent, not present — this package buys no Extra Hit Points and no Damage Resistance the way the Astartes and Ork physiology files do, so Aeldari HP tracks bare ST with no bonus. This entry documents why, rather than pricing anything itself.",
+					"tags": [
+						"Xenos",
+						"Aeldari"
+					],
+					"base_points": 0
+				},
+				{
+					"id": "tfX87as-TkULWj56U",
+					"name": "Soul Thirst",
+					"reference": "B130",
+					"local_notes": "Dependency (Suffering of Others): Common, Weekly, with Aging. The Drukhari must take a dose about once a week: a session of torture, a raid's slaughter, a night in the arena, or a bloody fight they took part in all count. After a missed weekly dose the Drukhari loses 1 HP every six hours until they feed (B130), and each HP lost this way ages them 2 years (the Aging modifier). No spirit stone is worn and none would help: a Drukhari killed with no Haemonculus to call them back is food for Slaanesh.\n\nLore: Every Drukhari soul is being drained by Slaanesh, and they have no craftworld's Infinity Circuit and no spirit stone to catch it. They keep the dark god at bay by keeping their souls full of borrowed life: the pain and death of others. Nothing else in Commorragh's culture makes sense without this: the arenas, the slave raids, the torture-arts of the Haemonculi and the Kabals' constant reaving are all, at bottom, farming. Consistent, foundational background across every edition of Codex: Dark Eldar / Drukhari.\n\nDesign: Dependency (B130): the substance (suffering of others) is Common, base -10; a weekly dose is x2 = -20; the Aging modifier (+30%, 2 years per HP lost) makes -20 x 1.3 = -26 points. Built as base -20 with a +30% modifier so GCS computes -26. The B130 procedure applies unchanged (1 HP per six hours after a missed weekly dose); the coordinator's review of the Basic Set library supplied these figures.",
+					"tags": [
+						"Disadvantage",
+						"Physical",
+						"Xenos",
+						"Drukhari"
+					],
+					"modifiers": [
+						{
+							"id": "mFlfBlKYOjtfRBQd8",
+							"name": "Aging",
+							"reference": "B130",
+							"local_notes": "Each HP lost to the dependency ages the Drukhari 2 years.",
+							"cost_adj": "+30%"
+						}
+					],
+					"base_points": -20
+				},
+				{
+					"id": "tDqC5zSiuJQo4NSwo",
+					"name": "Unaging While Fed",
+					"reference": "B95",
+					"local_notes": "No aging rolls while fed. Replaces the Aeldari Extended Lifespan; a fed Drukhari has no natural end date at all.\n\nLore: Drukhari are as long-lived as any Aeldari, and the fed ones do not visibly age at all. The eldest Archons and Haemonculi are older than most craftworlds' oldest Exarchs, kept young by a steady diet of other people's agony. Starved Drukhari, by contrast, are described as withered and grey (Codex: Dark Eldar / Drukhari background).\n\nDesign: Unaging (B95, 15 points) with Accessibility (B110) -40%: it works only while the Soul Thirst dependency is met. 15 x 0.6 = 9 points. It stands in for the Aeldari Extended Lifespan (12 points) rather than adding to it.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Drukhari"
+					],
+					"modifiers": [
+						{
+							"id": "mOIbOiR4lTXWCRnKb",
+							"name": "Accessibility",
+							"reference": "B110",
+							"local_notes": "Works only while the Soul Thirst dependency is satisfied. Lapses after a month unfed (see Soul Thirst).",
+							"cost_adj": "-40%"
+						}
+					],
+					"base_points": 15
+				}
+			]
+		},
+		{
+			"id": "tpln3NfNFxJ5fBhng",
+			"name": "Keen Battle-Sense",
+			"local_notes": "Lore: A Guardian's militia drills, an Aspect Warrior's shrine training, and an Exarch's centuries in the same battle-role all sharpen the same thing: a heightened, ever-present awareness of the battlefield around them. A Farseer's gift runs a different direction entirely (inward and forward, not outward), which is why this is a warrior's-path trait, not part of the universal Aeldari package.\n\nDesign: Increased Perception +1 (B16, 5 points/level): the Guardian anchor's Per 13 over IQ 12, and the Aspect Warrior/Exarch anchors' matching one-point gap over their own IQ, all come from this single trait rather than a bonus baked into Attribute Modifiers, so it can be left out of the Farseer line (whose own anchor is Per == IQ exactly) without distorting that template's math.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Aeldari"
+			],
+			"base_points": 5,
+			"features": [
+				{
+					"type": "attribute_bonus",
+					"attribute": "per",
+					"amount": 1
+				}
+			]
+		},
+		{
+			"id": "TSib4zqs20Y5Co0ne",
+			"name": "Mandrake Conditioning",
+			"local_notes": "Lore: Mandrakes are creatures of the shadow-dimension Aelindrach, killers whose loyalty is bought and who are only half here: bodies of shade and bone. Codex: Drukhari's Mandrake background.\n\nDesign: 55 + 15 + 15 = 85 points, added to the baseline (150) for 235 points before shadow nature and skills.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Drukhari"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "tPqDn3m1vDSBVBtNj",
+					"name": "Attribute Modifiers (Mandrake)",
+					"local_notes": "Design: Framework target over the Drukhari Physiology + Keen Battle-Sense baseline: ST 11, DX 16, IQ 11, HT 11, Per 14, Will 12, Move 10. ST +1 (B14, 10); DX +2 (B15, 40); IQ -1 (B16, -20: the mind is a shadow's, sly and narrow); HT +1 (B15, 10); Will +1 (B16, 5; IQ 11 to Will 12); Per +2 (B16, 10, on top of Keen Battle-Sense's +1; IQ 11 to Per 14): 10 + 40 - 20 + 10 + 5 + 10 = 55 points.",
+					"tags": [
+						"Physical"
+					],
+					"base_points": 55,
+					"features": [
+						{
+							"type": "attribute_bonus",
+							"attribute": "st",
+							"amount": 1
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "dx",
+							"amount": 2
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "iq",
+							"amount": -1
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "ht",
+							"amount": 1
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "will",
+							"amount": 1
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "per",
+							"amount": 2
+						}
+					]
+				},
+				{
+					"id": "tXVQHG6velHCTj7IB",
+					"name": "Combat Reflexes",
+					"reference": "B43",
+					"local_notes": "Lore: A shadow-killer who is surprised is dead.\n\nDesign: Combat Reflexes (B43, 15 points).",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Xenos",
+						"Drukhari"
+					],
+					"base_points": 15
+				},
+				{
+					"id": "tgkYVMIn-1c-3zINt",
+					"name": "Enhanced Dodge",
+					"reference": "B51",
+					"local_notes": "Lore: A Mandrake fights half-sunk in the shadow.\n\nDesign: Enhanced Dodge 1 (B51, 15 points).",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Drukhari"
+					],
+					"points_per_level": 15,
+					"can_level": true,
+					"levels": 1
+				}
+			]
+		},
+		{
+			"id": "T-OocYyz5xTUQqKlZ",
+			"name": "Mandrake Shadow Nature",
+			"local_notes": "Lore: The Mandrake's nature is that of shadow: silent, hard to see, and able to melt into the dark and out of it. Codex: Drukhari's Mandrake background.\n\nDesign: 30 + 6 + 10 + 9 = 55 points.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Drukhari"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "tXEV_j19bPdeAHxyk",
+					"name": "Shadow Form (Half-Material)",
+					"reference": "B83",
+					"local_notes": "Uses the Basic Set advantage Shadow Form (B83), usable only in shadow and at a cost of 2 FP. A Mandrake can slip between shadows and strike from behind.\n\nLore: Mandrakes step out of Aelindrach's shadows to kill and return to them when done, a quality sometimes described as 'shadow-stepping'. Codex: Drukhari's Mandrake background; the mechanism is not fixed in lore.\n\nDesign: Shadow Form (B83, 50 points) with Accessibility -30% and Costs Fatigue 2 (-10%, B111): 50 x 0.6 = 30 points. Built this way rather than as Teleport because Shadow Form already models being a shadow, and I am not confident enough of Teleport's range table to price a 'shadow-step' honestly.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Drukhari"
+					],
+					"modifiers": [
+						{
+							"id": "m4XxjHhqI-WFbQuOA",
+							"name": "Accessibility",
+							"reference": "B110",
+							"local_notes": "Only in dim light, darkness or deep shadow.",
+							"cost_adj": "-30%"
+						},
+						{
+							"id": "mu9dzSzSIqh46mSVp",
+							"name": "Costs Fatigue",
+							"reference": "B111",
+							"local_notes": "2 FP to enter.",
+							"cost_adj": "-10%"
+						}
+					],
+					"base_points": 50
+				},
+				{
+					"id": "tfy4FMJq24SYjOZIC",
+					"name": "Chameleon",
+					"reference": "B47",
+					"local_notes": "+4 to Stealth against vision in shadow.\n\nLore: A Mandrake is very hard to see in the dark.\n\nDesign: Chameleon 2 (B47, 5/level, 10) with Accessibility -40%: 6 points.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Drukhari"
+					],
+					"modifiers": [
+						{
+							"id": "m1GCcWFskrvCgqgkP",
+							"name": "Accessibility",
+							"reference": "B110",
+							"local_notes": "Only in shadow or dim light.",
+							"cost_adj": "-40%"
+						}
+					],
+					"points_per_level": 5,
+					"can_level": true,
+					"levels": 2
+				},
+				{
+					"id": "teRaiB_25usf1bnyn",
+					"name": "Silence",
+					"reference": "B85",
+					"local_notes": "+4 to Stealth against hearing.\n\nLore: A Mandrake moves without sound.\n\nDesign: Silence 2 (B85, 5/level, 10 points).",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Drukhari"
+					],
+					"points_per_level": 5,
+					"can_level": true,
+					"levels": 2
+				},
+				{
+					"id": "tsH4GkDCs1vn-7NZu",
+					"name": "Night Vision",
+					"reference": "B71",
+					"local_notes": "Lore: A shadow-creature sees fine in the dark.\n\nDesign: Night Vision 9 (B71, 1/level, 9 points).",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Drukhari"
+					],
+					"points_per_level": 1,
+					"can_level": true,
+					"levels": 9
+				}
+			]
+		},
+		{
+			"id": "tUcTr5rCK8mUEqG9n",
+			"name": "Unnatural Features (Shadow-Touched)",
+			"reference": "B22",
+			"local_notes": "Skin absorbs light; edges blur. -1 reaction (Unnatural Features 1).\n\nLore: Mandrakes look like something cut out of the dark, which unnerves nearly everyone. Background.\n\nDesign: Unnatural Features 1 (B22, -5).",
+			"tags": [
+				"Disadvantage",
+				"Physical",
+				"Xenos",
+				"Drukhari"
+			],
+			"base_points": -5
+		},
+		{
+			"id": "tlRFCnFczijoDiUad",
+			"name": "Callous",
+			"reference": "B125",
+			"local_notes": "Indifferent to others' pain; -3 reaction when it shows.\n\nLore: Even a Drukhari who does not enjoy suffering treats it as currency. Background.\n\nDesign: Callous (B125, -5).",
+			"tags": [
+				"Disadvantage",
+				"Mental",
+				"Xenos",
+				"Drukhari"
+			],
+			"base_points": -5
+		},
+		{
+			"id": "tX8Uu8lRyPyUQTl-J",
+			"name": "Sadism",
+			"reference": "B152",
+			"local_notes": "Takes pleasure in others' suffering and seeks chances to inflict it; roll self-control when the chance arises.\n\nLore: Cruelty is Commorragh's native culture, not a deviance. Most Drukhari, and every Haemonculus, take an openly aesthetic interest in others' pain (Codex: Drukhari and background across editions). The self-control 12 default represents someone who can hold off when it would cost them, e.g. in front of a superior.\n\nDesign: Sadism (B152, -15) with self-control 12.",
+			"tags": [
+				"Disadvantage",
+				"Mental",
+				"Xenos",
+				"Drukhari"
+			],
+			"base_points": -15,
+			"cr": 12
+		},
+		{
+			"id": "tDnKfe4ZSqj6V918L",
+			"name": "Power from Pain (Stage I)",
+			"reference": "B59",
+			"local_notes": "High Pain Threshold, once feeding has begun. Stage I of three; each later stage needs the one before it. A stage lapses at the end of the scene.\n\nLore: Every Drukhari fights harder for the taste of blood. Codex background describes the Dark Eldar as growing bolder and stronger as the killing goes on, feeding on the pain they cause; the exact stages differ between Kabals, Wych Cults and Covens.\n\nDesign: High Pain Threshold (B59, 10 points) with Accessibility (B110) -30% for its trigger: 10 x 0.7 = 7 points. Deliberately no `attributes` feature: the bonus is conditional and must not raise the sheet's stats before the trigger.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Drukhari"
+			],
+			"modifiers": [
+				{
+					"id": "mj3YtlCXwaq5Qzook",
+					"name": "Accessibility",
+					"reference": "B110",
+					"local_notes": "Only after the Drukhari, or a comrade in the same unit, has drawn blood or caused real suffering in this scene.",
+					"cost_adj": "-30%"
+				}
+			],
+			"base_points": 10
+		},
+		{
+			"id": "Tbj-w7ot-2XOwjt5L",
+			"name": "Power from Pain (Stage II)",
+			"local_notes": "Stage II: melee and Fright Check bonuses (requires Stage I), lapses at the end of the scene.\n\nLore: By the time a fight has really turned, a Drukhari hits harder and cannot be frightened. Background: the Power from Pain rule in Codex: Drukhari (per unit, by kills scored).\n\nDesign: Melee and morale bonuses only; the real weight is small (5 + 2 = 7 points). Not `attributes`: the bonuses are conditional.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Drukhari"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "tOy1AXCrr6KsNZyWr",
+					"name": "Bloodied Strength",
+					"reference": "B88",
+					"local_notes": "Striking ST +2: melee damage as if ST 2 higher.\n\nLore: The Kabalite's cruelty in melee sharpens as the blood flows.\n\nDesign: Striking ST 2 (B88, 5/level, 10) with Accessibility -50% = 5 points.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Drukhari"
+					],
+					"modifiers": [
+						{
+							"id": "m-sSStQlxXD5hc_06",
+							"name": "Accessibility",
+							"reference": "B110",
+							"local_notes": "Only after Stage I plus at least one enemy dropped or seriously hurt in this scene by the Drukhari's unit.",
+							"cost_adj": "-50%"
+						}
+					],
+					"points_per_level": 5,
+					"can_level": true,
+					"levels": 2
+				},
+				{
+					"id": "tu6xBLLMUbrNKWbpQ",
+					"name": "Bloodied Nerve",
+					"reference": "B55",
+					"local_notes": "Fearlessness +2 to Fright Checks.\n\nLore: A feeding Drukhari does not flinch from the things that break other people.\n\nDesign: Fearlessness 2 (B55, 2/level, 4) with Accessibility -50% = 2 points.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Xenos",
+						"Drukhari"
+					],
+					"modifiers": [
+						{
+							"id": "m7x0QsIzuUvR2sWo_",
+							"name": "Accessibility",
+							"reference": "B110",
+							"local_notes": "Same trigger as Bloodied Strength.",
+							"cost_adj": "-50%"
+						}
+					],
+					"points_per_level": 2,
+					"can_level": true,
+					"levels": 2
+				}
+			]
+		}
+	],
+	"skills": [
+		{
+			"id": "s-fKKRkcHnTvXe6Hy",
+			"name": "Stealth",
+			"local_notes": "Lore: The Mandrake's trade: with Chameleon and Silence, a shadow that walks.\n\nDesign: DX+7 (23) for 28 points, Average.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "dx/a",
+			"points": 28
+		},
+		{
+			"id": "svPR68Kfez6RFifOq",
+			"name": "Shortsword",
+			"local_notes": "Lore: The glimmersteel blade: a short, quick killing blade.\n\nDesign: DX+6 (22) for 24 points, Average.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "dx/a",
+			"points": 24
+		},
+		{
+			"id": "skdGWvcAbY_omMgAZ",
+			"name": "Brawling",
+			"local_notes": "Lore: Close-in blows.\n\nDesign: DX+2 (18) for 4 points, Easy.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "dx/e",
+			"points": 4
+		},
+		{
+			"id": "s1iseK5UVN5EcjCZL",
+			"name": "Climbing",
+			"local_notes": "Lore: Wall-walking on ruins.\n\nDesign: DX+2 (18) for 8 points, Average.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "dx/a",
+			"points": 8
+		},
+		{
+			"id": "sdYWshfN6cWTSpkHo",
+			"name": "Acrobatics",
+			"local_notes": "Lore: Fluid movement.\n\nDesign: DX+2 (18) for 12 points, Hard.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "dx/h",
+			"points": 12
+		},
+		{
+			"id": "slQlt6SwhYyKcjZ5s",
+			"name": "Jumping",
+			"local_notes": "Lore: Springing from cover.\n\nDesign: DX+1 (17) for 2 points, Easy.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "dx/e",
+			"points": 2
+		},
+		{
+			"id": "sAXD7OybpmLbijhES",
+			"name": "Camouflage",
+			"local_notes": "Lore: Field-craft.\n\nDesign: IQ+2 (13) for 4 points, Easy.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "iq/e",
+			"points": 4
+		},
+		{
+			"id": "sGBvbbhhC1K4DmMkH",
+			"name": "Observation",
+			"local_notes": "Lore: A hunter's eye.\n\nDesign: Per+1 (15) for 4 points, Average.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "per/a",
+			"points": 4
+		},
+		{
+			"id": "sR01Y-DuQeQfPgbgP",
+			"name": "Shadowing",
+			"local_notes": "Lore: Following a target.\n\nDesign: IQ+1 (12) for 4 points, Average.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "iq/a",
+			"points": 4
+		},
+		{
+			"id": "sRtcGN3K4ClJkUxcu",
+			"name": "Intimidation",
+			"local_notes": "Lore: A Mandrake's appearance.\n\nDesign: Will+1 (13) for 4 points, Average.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "will/a",
+			"points": 4
+		},
+		{
+			"id": "sQRFVHJ6FMa9nKeV0",
+			"name": "Tactics",
+			"local_notes": "Lore: Strike planning.\n\nDesign: IQ-1 (10) for 2 points, Hard.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "iq/h",
+			"points": 2
+		},
+		{
+			"id": "sCTzImjEaPWXfrZYu",
+			"name": "Area Knowledge",
+			"local_notes": "Lore: The Dark City.\n\nDesign: IQ+1 (12) for 2 points, Easy.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"specialization": "(Commorragh)",
+			"difficulty": "iq/e",
+			"points": 2
+		},
+		{
+			"id": "s81SCnOujhQmKJxR6",
+			"name": "Hidden Lore",
+			"local_notes": "Lore: Every Drukhari knows what is coming for them.\n\nDesign: IQ-1 (10) for 1 point, Average.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"specialization": "(Slaanesh)",
+			"difficulty": "iq/a",
+			"points": 1
+		}
+	],
+	"equipment": []
+}

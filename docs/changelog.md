@@ -59,3 +59,9 @@ Anchor and rule changes to `framework.md`, with the reason for each.
 - **Genestealer DX** 16 → 17.
 - **Multi-laser and scatter laser** stay at 6d×2(2). The proposed 8d(2) would penetrate carapace about 5% of the time, no better than a lasgun, which contradicts their role as infantry shredders. The scatter laser's range rises to 900/2700 to match the multi-laser.
 - **Shuriken range anchor** now matches the entries: 60/300 (pistol 60/150, Avenger 80/400).
+
+## Drukhari
+
+- **New faction:** Drukhari traits (the shared Aeldari body; Soul Thirst as a real B130 Dependency, Common, Weekly, with Aging, −26; Unaging while fed; staged Power from Pain; Haemonculus regrowth as limited Extra Life; the six combat drugs). Nine templates: Kabalite Warrior 181, Wych 313, Scourge 282, Wrack 225, Mandrake 378, Incubus 413, Succubus 601, Haemonculus 601, Archon 604. No psykers.
+- **Wargear:** splinter weapons (4d(3) pi- with a 3d tox follow-up), blasters and dark lance on the bright-lance anchor, disintegrator, shredder, haywire blaster, hexrifle, liquifier, stinger; power-field and agoniser weapons; hyper-sharp (3) Wych and coven blades; Kabalite armour, Wychsuit, ghostplate, Incubus warsuit, a shadow field that does not recharge, clone field, combat-drug dispenser.
+- **Framework:** Drukhari anchors added. Mandrake target is 350–450 and Wrack about 225, after the honest builds came in there.

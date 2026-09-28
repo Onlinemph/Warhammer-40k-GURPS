@@ -1,0 +1,778 @@
+{
+	"version": 5,
+	"id": "B1Jmhq4beW4iRa9IT",
+	"notes": "An Archon: an ancient, paranoid, well-fed tyrant who rules a Kabal, armed with a blast pistol and a huskblade, protected by ghostplate and a shadow field. Point math (see Xenos/Drukhari/Traits/Drukhari Physiology.adq): Drukhari Physiology (145) + Archon's Mastery (230) + Archon's Estate (50) + Kabal Lens (-4) + Haemonculus Regrowth (15) + Power from Pain, all three stages (34) + Sadism (-15) + Callous (-5) + Megalomania (-10) + Paranoia (-10) + Overconfidence (-5) = 425 points of traits, plus skills (179 points) = 604 points. Stats: ST 12, DX 18, IQ 15, HT 12, HP 12, Will 17, Per 15, Speed 7.75, Move 10, Dodge 12 (7 + 3 + Enhanced Dodge 1 + Combat Reflexes): exactly framework.md's Archon line (no Keen Battle-Sense: Per equals IQ). This lands inside the 600-850 band of the framework for Haemonculus, Succubus and Archon (Astartes tier, 550-850).\n\nHaemonculus Regrowth is enabled: an Archon can afford it. Weapon skills follow the Drukhari armoury as framework.md's Skills table reads it: splinter weapons fire solid crystal shards, so they use Guns (Pistol/Rifle), the same choice the Aeldari Guardian makes for the shuriken catapult; blasters and dark lances are beam weapons (Beam Weapons); heavy splinter and disintegrator cannons are Gunner. The blast pistol is a beam weapon, Beam Weapons (Pistol); the huskblade is a power-field sword, Broadsword.",
+	"traits": [
+		{
+			"id": "Tl5-PdL7Ai2sf-9zO",
+			"name": "Drukhari Physiology",
+			"local_notes": "Lore: The Drukhari are the Aeldari who never left: raiders and slavers of Commorragh, the Dark City hidden in the webway. Their bodies are the same fine-boned, fast, sharp-eyed Aeldari bodies the craftworlds field. What differs is the soul. With no spirit stone to shelter it, Slaanesh drains it continually, and they hold the hunger off by feeding on suffering. This trait is the baseline shared by every Drukhari template; the training, cult and coven lenses below layer on top of it, exactly as the Aeldari Physiology's Path and Aspect lenses do.\n\nDesign: Pulls in, by include, the shared Aeldari body: Attribute Modifiers (140), Enhanced Move (Ground) 1/2 (10), Acute Senses (8), Aeldari Grace (4) and Slender Frame (0), so a fix there updates the Drukhari on rebuild. Adds Soul Thirst (-26) and Unaging While Fed (+9). 140 + 10 + 8 + 4 + 0 - 26 + 9 = 145 points, landing ST 10, DX 14, IQ 12, HT 10, HP 10, Will 12, Per 12, Basic Speed 6.25, Move 9, the Kabalite Warrior's physical line before its own package (framework.md, Drukhari). Deliberately left out: Aeldari Psychic Sensitivity, Aeldari Psyker (Talent), Warp Empowerment, Spirit Stone and every Path lens (the Drukhari shun the warp and have no Paths), plus Emotional Intensity, Arrogance Towards Younger Races, Slaanesh's Hunger and Extended Lifespan, each of which Soul Thirst, the Drukhari mental traits below or Unaging While Fed replace. Emotional excess is a Drukhari trait too, but it shows up as the cruelty and vanity below, not as Path-restrained rapture.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Drukhari"
+			],
+			"container_type": "ancestry",
+			"children": [
+				{
+					"id": "thjfBcBpi7HXHSpB0",
+					"name": "Attribute Modifiers",
+					"local_notes": "Design: Framework target (Guardian anchor line, the ancestry baseline every other Aeldari template builds on): ST 10, DX 14, IQ 12, HT 10, HP 10. Increased DX +4 (B15, 20/level, 80) for DX 14 — \"faster and more precise than any baseline human,\" matching the anchor table's own figure without touching ST or HT, which stay human-baseline: Aeldari are quick and precise, not physically overwhelming. Increased IQ +2 (B16, 20/level, 40) for IQ 12 — a subtler, more perceptive mind than a human's on average, per Codex background's consistent \"the Aeldari are wiser and more perceptive than short-lived Humanity\" framing. Increased Basic Speed +0.25 (B17, 5 points per 0.25 level, 5) for reflexes a shade faster even than DX 14 alone implies — the same design choice this project's Astartes Attribute Modifiers makes for \"faster reflexes than baseline humans\" without inflating every DX skill. Basic Move +3 (B17, 5/level, 15) at the user's direction: the Aeldari are the fastest-moving people in the galaxy, and even a Guardian outpaces a human (Move 9). 80+40+5+15 = 140. Will and Per are left untouched here (both track IQ 12 with no separate bonus): the Guardian anchor's own Per 13 and Aspect Warrior's Will 13 come from Keen Battle-Sense and Aspect Training below, not from this universal package, because a Farseer's own anchor (Per 15 exactly equal to IQ 15) shows the extra Per point is a warrior's battlefield habit, not a species-wide trait — baking it in here would overshoot the Farseer line once her own IQ is bought up.",
+					"tags": [
+						"Physical"
+					],
+					"base_points": 140,
+					"features": [
+						{
+							"type": "attribute_bonus",
+							"attribute": "dx",
+							"amount": 4
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "iq",
+							"amount": 2
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "basic_speed",
+							"amount": 0.25
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "basic_move",
+							"amount": 3
+						}
+					]
+				},
+				{
+					"id": "tcKUK9i5_zyP4JC-Q",
+					"name": "Enhanced Move (Ground)",
+					"reference": "B52",
+					"local_notes": "Top sprinting speed x1.5. Combat Move unchanged.\n\nLore: Aeldari run with a lightness and speed no human can match; in the fiction they cross open ground before an enemy can bring guns to bear.\n\nDesign: Enhanced Move (Ground) 1/2 (B52, half level 10) at the user's direction, matching the Astartes half level.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Aeldari"
+					],
+					"points_per_level": 20,
+					"can_level": true,
+					"levels": 0.5
+				},
+				{
+					"id": "TlFas6uIjurGI6z6m",
+					"name": "Acute Senses",
+					"local_notes": "Lore: Aeldari sight and hearing are famously sharper than a human's — able to read the wind off a craftworld's wraithbone spires, or track a single voice through a warhost's roar. Consistently depicted across Codex background and the Path trilogy (a Ranger's eyesight in particular is played as near-supernatural).\n\nDesign: Acute Vision 2 (B35, 2/level, 4) plus Acute Hearing 2 (B35, 2/level, 4) = 8 points, the same math this project's Astartes Occulobe/Lyman's Ear entries use for the \"raw acuity\" half of their build, without the Protected Sense half (Aeldari have no fused eye/ear armour organ to shrug off flash and concussion the way an Astartes implant does).",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Aeldari"
+					],
+					"container_type": "meta_trait",
+					"children": [
+						{
+							"id": "trX-0zQ1rWHbkjm-H",
+							"name": "Acute Vision",
+							"reference": "B35",
+							"points_per_level": 2,
+							"can_level": true,
+							"levels": 2
+						},
+						{
+							"id": "t8Ya5cS_Lv076STWq",
+							"name": "Acute Hearing",
+							"reference": "B35",
+							"points_per_level": 2,
+							"can_level": true,
+							"levels": 2
+						}
+					]
+				},
+				{
+					"id": "tfgdRy3xulic0Ynw5",
+					"name": "Aeldari Grace",
+					"reference": "B21",
+					"local_notes": "Appearance (Attractive).\n\nLore: Aeldari are consistently described, in the fiction and in their own art, as slender, fine-boned and unnervingly graceful even to other Aeldari — a species that finds its own dying beauty worth mourning.\n\nDesign: Basic Set Appearance, Attractive tier (B21), 4 points.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Aeldari"
+					],
+					"base_points": 4
+				},
+				{
+					"id": "tEHrgu-m9Pl2vD-H3",
+					"name": "Slender Frame",
+					"local_notes": "Lore: An Aeldari body is light and fine-boned next to a human's, let alone an Ork's or an Astartes': speed and precision over mass. Codex background and the Path trilogy both play Aeldari as easy to underestimate physically and easy to actually hurt once a fight turns physical.\n\nDesign: 0-point lore flag: the mechanical consequence is what's absent, not present — this package buys no Extra Hit Points and no Damage Resistance the way the Astartes and Ork physiology files do, so Aeldari HP tracks bare ST with no bonus. This entry documents why, rather than pricing anything itself.",
+					"tags": [
+						"Xenos",
+						"Aeldari"
+					],
+					"base_points": 0
+				},
+				{
+					"id": "tjiYkMrL0vRQn_Uw6",
+					"name": "Soul Thirst",
+					"reference": "B130",
+					"local_notes": "Dependency (Suffering of Others): Common, Weekly, with Aging. The Drukhari must take a dose about once a week: a session of torture, a raid's slaughter, a night in the arena, or a bloody fight they took part in all count. After a missed weekly dose the Drukhari loses 1 HP every six hours until they feed (B130), and each HP lost this way ages them 2 years (the Aging modifier). No spirit stone is worn and none would help: a Drukhari killed with no Haemonculus to call them back is food for Slaanesh.\n\nLore: Every Drukhari soul is being drained by Slaanesh, and they have no craftworld's Infinity Circuit and no spirit stone to catch it. They keep the dark god at bay by keeping their souls full of borrowed life: the pain and death of others. Nothing else in Commorragh's culture makes sense without this: the arenas, the slave raids, the torture-arts of the Haemonculi and the Kabals' constant reaving are all, at bottom, farming. Consistent, foundational background across every edition of Codex: Dark Eldar / Drukhari.\n\nDesign: Dependency (B130): the substance (suffering of others) is Common, base -10; a weekly dose is x2 = -20; the Aging modifier (+30%, 2 years per HP lost) makes -20 x 1.3 = -26 points. Built as base -20 with a +30% modifier so GCS computes -26. The B130 procedure applies unchanged (1 HP per six hours after a missed weekly dose); the coordinator's review of the Basic Set library supplied these figures.",
+					"tags": [
+						"Disadvantage",
+						"Physical",
+						"Xenos",
+						"Drukhari"
+					],
+					"modifiers": [
+						{
+							"id": "mwJ8fUJvHwfhpNDCU",
+							"name": "Aging",
+							"reference": "B130",
+							"local_notes": "Each HP lost to the dependency ages the Drukhari 2 years.",
+							"cost_adj": "+30%"
+						}
+					],
+					"base_points": -20
+				},
+				{
+					"id": "t8Lc6cV7DEVMJ8NGd",
+					"name": "Unaging While Fed",
+					"reference": "B95",
+					"local_notes": "No aging rolls while fed. Replaces the Aeldari Extended Lifespan; a fed Drukhari has no natural end date at all.\n\nLore: Drukhari are as long-lived as any Aeldari, and the fed ones do not visibly age at all. The eldest Archons and Haemonculi are older than most craftworlds' oldest Exarchs, kept young by a steady diet of other people's agony. Starved Drukhari, by contrast, are described as withered and grey (Codex: Dark Eldar / Drukhari background).\n\nDesign: Unaging (B95, 15 points) with Accessibility (B110) -40%: it works only while the Soul Thirst dependency is met. 15 x 0.6 = 9 points. It stands in for the Aeldari Extended Lifespan (12 points) rather than adding to it.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Drukhari"
+					],
+					"modifiers": [
+						{
+							"id": "mApTsImH3LH1q9n-5",
+							"name": "Accessibility",
+							"reference": "B110",
+							"local_notes": "Works only while the Soul Thirst dependency is satisfied. Lapses after a month unfed (see Soul Thirst).",
+							"cost_adj": "-40%"
+						}
+					],
+					"base_points": 15
+				}
+			]
+		},
+		{
+			"id": "TkfU9ijh8nROaM0da",
+			"name": "Archon's Mastery",
+			"local_notes": "Lore: The ancient, scheming, well-fed tyrants of the Kabals: warlords who rule a city-district of Commorragh and have been fending off rivals for centuries. Codex: Drukhari's Archon background.\n\nDesign: 190 + 15 + 15 + 10 = 230 points, added to the baseline (145) for 375 points before estate, regrowth, Power from Pain, mental traits and skills.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Drukhari"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "tHGRoPfbqpxrOt49u",
+					"name": "Attribute Modifiers (Archon)",
+					"local_notes": "Design: Framework target over the Drukhari Physiology baseline (no Keen Battle-Sense: an Archon's Per equals IQ): ST 12, DX 18, IQ 15, HT 12, Per 15, Will 17, Move 10. ST +2 (B14, 20), DX +4 (B15, 80), IQ +3 (B16, 60), HT +2 (B15, 20), Will +2 (B16, 10): 190 points.",
+					"tags": [
+						"Physical"
+					],
+					"base_points": 190,
+					"features": [
+						{
+							"type": "attribute_bonus",
+							"attribute": "st",
+							"amount": 2
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "dx",
+							"amount": 4
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "iq",
+							"amount": 3
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "ht",
+							"amount": 2
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "will",
+							"amount": 2
+						}
+					]
+				},
+				{
+					"id": "thZeF6xpJ9aAm3R0e",
+					"name": "Enhanced Dodge",
+					"reference": "B51",
+					"local_notes": "Lore: An Archon has survived centuries of assassinations; the ones who were slow are dead.\n\nDesign: Enhanced Dodge 1 (B51, 15 points).",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Drukhari"
+					],
+					"points_per_level": 15,
+					"can_level": true,
+					"levels": 1
+				},
+				{
+					"id": "tJ_I2JSofCSVVjNWy",
+					"name": "Combat Reflexes",
+					"reference": "B43",
+					"local_notes": "Lore: An Archon does not freeze in a coup.\n\nDesign: Combat Reflexes (B43, 15 points).",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Xenos",
+						"Drukhari"
+					],
+					"base_points": 15
+				},
+				{
+					"id": "tfbne4URPPKGGbYAb",
+					"name": "Charisma",
+					"reference": "B41",
+					"local_notes": "Lore: A Kabal follows its Archon out of fear, greed and the sense that the Archon will win.\n\nDesign: Charisma 2 (B41, 5/level, 10 points).",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Xenos",
+						"Drukhari"
+					],
+					"points_per_level": 5,
+					"can_level": true,
+					"levels": 2
+				}
+			]
+		},
+		{
+			"id": "TUjseZp41mnDz5pMr",
+			"name": "Archon's Estate",
+			"local_notes": "Lore: Money and rank in Commorragh: an Archon has more of both than nearly anyone. Background.\n\nDesign: 30 + 20 = 50 points.",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Xenos",
+				"Drukhari"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "t-2QCu73lvNrW1vQH",
+					"name": "Wealth (Very Wealthy)",
+					"reference": "B25",
+					"local_notes": "Lore: A Kabal's plunder flows to its Archon.\n\nDesign: Very Wealthy (B25, 30 points).",
+					"tags": [
+						"Advantage",
+						"Social",
+						"Xenos",
+						"Drukhari"
+					],
+					"base_points": 30
+				},
+				{
+					"id": "tFv-MvvmxLUNaTKM1",
+					"name": "Status 4",
+					"reference": "B28",
+					"local_notes": "Lore: An Archon sits above thousands of Kabalites and slaves and answers to few in Commorragh.\n\nDesign: Status 4 (B28, 5/level, 20 points).",
+					"tags": [
+						"Advantage",
+						"Social",
+						"Xenos",
+						"Drukhari"
+					],
+					"points_per_level": 5,
+					"can_level": true,
+					"levels": 4
+				}
+			]
+		},
+		{
+			"id": "TsOs0mpkm-n6iB2eq",
+			"name": "Kabal Lens",
+			"local_notes": "Lore: The Kabals are the Drukhari's warlord courts: an Archon at the top, Kabalites beneath in ranks, all loyalty conditional on results. Codex: Drukhari and Codex: Dark Eldar background.\n\nDesign: Net -4 points: a perk for drilled fire-discipline against the constant scheming that is the rest of a Kabal's culture. Used by Kabalite Warriors and Archons (enabled).",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"children": [
+				{
+					"id": "tnXbPXruD3W8R1iNm",
+					"name": "Raid Drill",
+					"reference": "B100",
+					"local_notes": "Lore: Splinter-rifle volley drill in the Kabal's own raid formations.\n\nDesign: Perk (B100), +1 to Guns (Rifle).",
+					"tags": [
+						"Perk",
+						"Xenos",
+						"Drukhari"
+					],
+					"base_points": 1,
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"amount": 1,
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						}
+					]
+				},
+				{
+					"id": "tjReKwPhN3XktxkzQ",
+					"name": "Kabal Politics",
+					"reference": "B153",
+					"local_notes": "Selfish as above (a lens-level reminder: the Kabal's loyalty is bought and rescinded).\n\nLore: A Kabalite climbs by advancing at others' expense.\n\nDesign: Selfish (B153, -5), self-control 12.",
+					"tags": [
+						"Disadvantage",
+						"Mental",
+						"Xenos",
+						"Drukhari"
+					],
+					"base_points": -5,
+					"cr": 12
+				}
+			]
+		},
+		{
+			"id": "t_fp3bJ-uRyR6jV9W",
+			"name": "Haemonculus Regrowth",
+			"reference": "B55",
+			"local_notes": "One Extra Life. On death, if a fragment reaches a Coven and the price is met, the character is regrown and returns, changed a little (GM's choice of small physical or mental side effect).\n\nLore: Haemonculi can regrow the dead from little more than a scrap, and the Covens sell that service to the powerful. Archons and their favoured servants are the ones who can afford the price, in coin, slaves or service. Codex: Drukhari background.\n\nDesign: Extra Life (B55, 25 points) with Accessibility (B110) -40% for the recovered-fragment and coven-fee requirements. 25 x 0.6 = 15 points. Reserved for Archons, favoured servants and Haemonculi; ordinary Kabalites and Wyches do not have it.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Drukhari"
+			],
+			"modifiers": [
+				{
+					"id": "m1QCGhocBGeRMLlHa",
+					"name": "Accessibility",
+					"reference": "B110",
+					"local_notes": "Needs a body fragment (at least the head or a torso) recovered to a Haemonculus and a Coven paid for the work; lasts one life.",
+					"cost_adj": "-40%"
+				}
+			],
+			"base_points": 25
+		},
+		{
+			"id": "Tul2h_JjWq0dH-2Vx",
+			"name": "Power from Pain",
+			"local_notes": "Lore: All three stages together: the full Power from Pain a Drukhari of rank earns in a long fight.\n\nDesign: 7 + 7 + 20 = 34 points. Lower-tier templates include the single stages above instead.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Drukhari"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "th5-Bq5s9mmqNLZxq",
+					"name": "Power from Pain (Stage I)",
+					"reference": "B59",
+					"local_notes": "High Pain Threshold, once feeding has begun. Stage I of three; each later stage needs the one before it. A stage lapses at the end of the scene.\n\nLore: Every Drukhari fights harder for the taste of blood. Codex background describes the Dark Eldar as growing bolder and stronger as the killing goes on, feeding on the pain they cause; the exact stages differ between Kabals, Wych Cults and Covens.\n\nDesign: High Pain Threshold (B59, 10 points) with Accessibility (B110) -30% for its trigger: 10 x 0.7 = 7 points. Deliberately no `attributes` feature: the bonus is conditional and must not raise the sheet's stats before the trigger.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Drukhari"
+					],
+					"modifiers": [
+						{
+							"id": "ml-WLCrxW1kBbSu-9",
+							"name": "Accessibility",
+							"reference": "B110",
+							"local_notes": "Only after the Drukhari, or a comrade in the same unit, has drawn blood or caused real suffering in this scene.",
+							"cost_adj": "-30%"
+						}
+					],
+					"base_points": 10
+				},
+				{
+					"id": "T9Ry0y8_cuddHnSfz",
+					"name": "Power from Pain (Stage II)",
+					"local_notes": "Stage II: melee and Fright Check bonuses (requires Stage I), lapses at the end of the scene.\n\nLore: By the time a fight has really turned, a Drukhari hits harder and cannot be frightened. Background: the Power from Pain rule in Codex: Drukhari (per unit, by kills scored).\n\nDesign: Melee and morale bonuses only; the real weight is small (5 + 2 = 7 points). Not `attributes`: the bonuses are conditional.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Drukhari"
+					],
+					"container_type": "meta_trait",
+					"children": [
+						{
+							"id": "tKgAJmUNm2txCxaT7",
+							"name": "Bloodied Strength",
+							"reference": "B88",
+							"local_notes": "Striking ST +2: melee damage as if ST 2 higher.\n\nLore: The Kabalite's cruelty in melee sharpens as the blood flows.\n\nDesign: Striking ST 2 (B88, 5/level, 10) with Accessibility -50% = 5 points.",
+							"tags": [
+								"Advantage",
+								"Physical",
+								"Xenos",
+								"Drukhari"
+							],
+							"modifiers": [
+								{
+									"id": "mzqNZXwo7tnEQ-oE6",
+									"name": "Accessibility",
+									"reference": "B110",
+									"local_notes": "Only after Stage I plus at least one enemy dropped or seriously hurt in this scene by the Drukhari's unit.",
+									"cost_adj": "-50%"
+								}
+							],
+							"points_per_level": 5,
+							"can_level": true,
+							"levels": 2
+						},
+						{
+							"id": "tsz1lYEtTHRmVQw1a",
+							"name": "Bloodied Nerve",
+							"reference": "B55",
+							"local_notes": "Fearlessness +2 to Fright Checks.\n\nLore: A feeding Drukhari does not flinch from the things that break other people.\n\nDesign: Fearlessness 2 (B55, 2/level, 4) with Accessibility -50% = 2 points.",
+							"tags": [
+								"Advantage",
+								"Mental",
+								"Xenos",
+								"Drukhari"
+							],
+							"modifiers": [
+								{
+									"id": "m03mCZuMX2RopIBkZ",
+									"name": "Accessibility",
+									"reference": "B110",
+									"local_notes": "Same trigger as Bloodied Strength.",
+									"cost_adj": "-50%"
+								}
+							],
+							"points_per_level": 2,
+							"can_level": true,
+							"levels": 2
+						}
+					]
+				},
+				{
+					"id": "tiIazfiZzBsBQz-1y",
+					"name": "Power from Pain (Stage III)",
+					"reference": "B80",
+					"local_notes": "Regeneration (Fast): 1 HP per minute (roughly 1 HP per 6 combat turns of 10 seconds when tracking turns).\n\nLore: The height of the feed: wounds close as fast as the killer can reopen new ones in other people. Codex: Drukhari's third stage is the strongest bonus a unit can earn.\n\nDesign: Regeneration, Fast tier (B80, 50 points, 1 HP per minute) with Accessibility -60%: 50 x 0.4 = 20 points. Kept at Fast rather than faster because the lore effect is 'hard to put down', not 'cannot be killed'.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Drukhari"
+					],
+					"modifiers": [
+						{
+							"id": "mbknI8BQju11jKjzQ",
+							"name": "Accessibility",
+							"reference": "B110",
+							"local_notes": "Only after Stages I and II and at least three enemies dropped or badly hurt in this scene by the Drukhari's unit.",
+							"cost_adj": "-60%"
+						}
+					],
+					"base_points": 50
+				}
+			]
+		},
+		{
+			"id": "twhLh7elWP_7O3mwk",
+			"name": "Sadism",
+			"reference": "B152",
+			"local_notes": "Takes pleasure in others' suffering and seeks chances to inflict it; roll self-control when the chance arises.\n\nLore: Cruelty is Commorragh's native culture, not a deviance. Most Drukhari, and every Haemonculus, take an openly aesthetic interest in others' pain (Codex: Drukhari and background across editions). The self-control 12 default represents someone who can hold off when it would cost them, e.g. in front of a superior.\n\nDesign: Sadism (B152, -15) with self-control 12.",
+			"tags": [
+				"Disadvantage",
+				"Mental",
+				"Xenos",
+				"Drukhari"
+			],
+			"base_points": -15,
+			"cr": 12
+		},
+		{
+			"id": "tmtpvNFkh0JmvtzT2",
+			"name": "Callous",
+			"reference": "B125",
+			"local_notes": "Indifferent to others' pain; -3 reaction when it shows.\n\nLore: Even a Drukhari who does not enjoy suffering treats it as currency. Background.\n\nDesign: Callous (B125, -5).",
+			"tags": [
+				"Disadvantage",
+				"Mental",
+				"Xenos",
+				"Drukhari"
+			],
+			"base_points": -5
+		},
+		{
+			"id": "tVW6LObN4W1RRrIup",
+			"name": "Megalomania",
+			"reference": "B144",
+			"local_notes": "Believes they are destined to rule, and plans and boasts accordingly; -5 to resist flattery about their greatness.\n\nLore: Every Archon is scheming at the top of a Kabal and every Kabal is one betrayal from the next Archon. Background across Codex editions.\n\nDesign: Megalomania (B144, -10).",
+			"tags": [
+				"Disadvantage",
+				"Mental",
+				"Xenos",
+				"Drukhari"
+			],
+			"base_points": -10
+		},
+		{
+			"id": "tlcs0N68iFrFYs9WP",
+			"name": "Paranoia",
+			"reference": "B148",
+			"local_notes": "Assumes hidden plots against them; trusts nobody, with reason.\n\nLore: In Commorragh most of the plots against an Archon are real. Paranoia is a survival skill here, not a delusion.\n\nDesign: Paranoia (B148, -10).",
+			"tags": [
+				"Disadvantage",
+				"Mental",
+				"Xenos",
+				"Drukhari"
+			],
+			"base_points": -10
+		},
+		{
+			"id": "t4v6kwMKgXKqg5Vda",
+			"name": "Overconfidence",
+			"reference": "B148",
+			"local_notes": "Overrates their own ability and underrates opposition; self-control roll to hold back from a risky show of strength.\n\nLore: Arena stars, aerial raiders and Kabal nobles all believe themselves the best in the room. Background.\n\nDesign: Overconfidence (B148, -5) with self-control 12.",
+			"tags": [
+				"Disadvantage",
+				"Mental",
+				"Xenos",
+				"Drukhari"
+			],
+			"base_points": -5,
+			"cr": 12
+		}
+	],
+	"skills": [
+		{
+			"id": "sHzdvUyJ7GJcou1pU",
+			"name": "Beam Weapons",
+			"local_notes": "Lore: The blast pistol: dark-lance tech in a hand weapon.\n\nDesign: DX+5 (23) for 16 points, Easy.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"specialization": "Pistol",
+			"difficulty": "dx/e",
+			"points": 16
+		},
+		{
+			"id": "sTyGKY3rqX3GubDFt",
+			"name": "Broadsword",
+			"local_notes": "Lore: The huskblade, a power-field sword.\n\nDesign: DX+6 (24) for 24 points, Average.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "dx/a",
+			"points": 24
+		},
+		{
+			"id": "sL0HXhjfk7XKDrDvN",
+			"name": "Guns",
+			"local_notes": "Lore: A splinter pistol backup.\n\nDesign: DX+2 (20) for 4 points, Easy.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"specialization": "Pistol",
+			"difficulty": "dx/e",
+			"points": 4
+		},
+		{
+			"id": "sf6-1jxwTTSRWuZjc",
+			"name": "Leadership",
+			"local_notes": "Lore: Commanding a Kabal.\n\nDesign: IQ+4 (19) for 16 points, Average.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "iq/a",
+			"points": 16
+		},
+		{
+			"id": "sR6-5ccQyOFD4peU6",
+			"name": "Tactics",
+			"local_notes": "Lore: Raids and sieges.\n\nDesign: IQ+3 (18) for 16 points, Hard.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "iq/h",
+			"points": 16
+		},
+		{
+			"id": "skmgU2n8_Xq1Vro-q",
+			"name": "Strategy",
+			"local_notes": "Lore: Kabal warfare.\n\nDesign: IQ+2 (17) for 12 points, Hard.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "iq/h",
+			"points": 12
+		},
+		{
+			"id": "s8UUe_LzncbZrHgsF",
+			"name": "Politics",
+			"local_notes": "Lore: Commorragh is a tangle of shifting loyalties.\n\nDesign: IQ+4 (19) for 16 points, Average.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "iq/a",
+			"points": 16
+		},
+		{
+			"id": "sCFFDH6yijytOHKcq",
+			"name": "Diplomacy",
+			"local_notes": "Lore: Deals between Kabals.\n\nDesign: IQ+1 (16) for 8 points, Hard.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "iq/h",
+			"points": 8
+		},
+		{
+			"id": "sm53rYm2NJPPRKYKQ",
+			"name": "Intimidation",
+			"local_notes": "Lore: A tyrant rules by fear.\n\nDesign: Will+4 (21) for 16 points, Average.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "will/a",
+			"points": 16
+		},
+		{
+			"id": "sPHcqI0lrVoocIPZz",
+			"name": "Interrogation",
+			"local_notes": "Lore: Extracting secrets from rivals.\n\nDesign: IQ+2 (17) for 8 points, Average.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "iq/a",
+			"points": 8
+		},
+		{
+			"id": "sP23OGFSTjosuEORM",
+			"name": "Savoir-Faire",
+			"local_notes": "Lore: Kabal court etiquette.\n\nDesign: IQ+2 (17) for 4 points, Easy.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"specialization": "(High Society)",
+			"difficulty": "iq/e",
+			"points": 4
+		},
+		{
+			"id": "sHUN2s8rCbOZ02e7G",
+			"name": "Detect Lies",
+			"local_notes": "Lore: In a court of traitors, an Archon reads everyone.\n\nDesign: Per+2 (17) for 12 points, Hard.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "per/h",
+			"points": 12
+		},
+		{
+			"id": "sNgMpZBZza8eQCg5W",
+			"name": "Body Language",
+			"local_notes": "Lore: Reading a rival before they move.\n\nDesign: Per+1 (16) for 4 points, Average.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "per/a",
+			"points": 4
+		},
+		{
+			"id": "s2XKPvrYX-Bmz9r8R",
+			"name": "Streetwise",
+			"local_notes": "Lore: Commorragh's underworld.\n\nDesign: IQ+1 (16) for 4 points, Average.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "iq/a",
+			"points": 4
+		},
+		{
+			"id": "s02L518vgd9mm-T8D",
+			"name": "Administration",
+			"local_notes": "Lore: Running a Kabal's slave trade and treasury.\n\nDesign: IQ+2 (17) for 8 points, Average.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "iq/a",
+			"points": 8
+		},
+		{
+			"id": "saSCHfn06jpSdb_Mx",
+			"name": "Area Knowledge",
+			"local_notes": "Lore: The Dark City's districts and Kabals.\n\nDesign: IQ+2 (17) for 4 points, Easy.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"specialization": "(Commorragh)",
+			"difficulty": "iq/e",
+			"points": 4
+		},
+		{
+			"id": "sg4nOoLBbW-6LqxUR",
+			"name": "Fast-Draw",
+			"local_notes": "Lore: A duelling draw.\n\nDesign: DX+0 (18) for 1 point, Easy.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"specialization": "Pistol",
+			"difficulty": "dx/e",
+			"points": 1
+		},
+		{
+			"id": "swHfKiCci_hrFSwZf",
+			"name": "Stealth",
+			"local_notes": "Lore: An Archon expects assassins and knows the tricks.\n\nDesign: DX+0 (18) for 2 points, Average.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "dx/a",
+			"points": 2
+		},
+		{
+			"id": "sphRv0UbLBSvwIMJk",
+			"name": "Hidden Lore",
+			"local_notes": "Lore: An Archon has lived long enough to know what waits for them.\n\nDesign: IQ+1 (16) for 4 points, Average.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"specialization": "(Slaanesh)",
+			"difficulty": "iq/a",
+			"points": 4
+		}
+	],
+	"equipment": []
+}

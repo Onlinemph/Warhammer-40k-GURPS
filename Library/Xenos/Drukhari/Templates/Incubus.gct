@@ -1,0 +1,603 @@
+{
+	"version": 5,
+	"id": "BOhEAO0RSBRqmzcez",
+	"notes": "An Incubus: a mercenary blade-cultist sworn to Arhra, fighting in a heavy warsuit with a two-handed klaive. Point math (see Xenos/Drukhari/Traits/Drukhari Physiology.adq): Drukhari Physiology (145) + Keen Battle-Sense (5) + Incubus Training (185) + Path of Arhra (-15) + Callous (-5) + Power from Pain Stages I and II (14) = 329 points of traits, plus skills (84 points) = 413 points. Stats: ST 12, DX 17, IQ 12, HT 12, HP 12, Will 14, Per 13, Speed 7.5, Move 10 (sprint x1.5), Dodge 11 (7 + 3 + Combat Reflexes): exactly framework.md's Incubus line. This lands inside the framework's Mandrake and Incubus band (400-550): the framework's senior-agents tier (350-600), a master duellist built on Trained By A Master, Weapon Master and Enhanced Parry rather than raw stats.\n\nSadism is deliberately left out: Incubi are ascetic and disciplined, not indulgent. The klaive is a power-field two-handed blade, Two-Handed Sword; the framework's Skills table treats power swords as swords. Weapon skills follow the Drukhari armoury as framework.md's Skills table reads it: splinter weapons fire solid crystal shards, so they use Guns (Pistol/Rifle), the same choice the Aeldari Guardian makes for the shuriken catapult; blasters and dark lances are beam weapons (Beam Weapons); heavy splinter and disintegrator cannons are Gunner.",
+	"traits": [
+		{
+			"id": "TIJ7eoJZECaROm9dt",
+			"name": "Drukhari Physiology",
+			"local_notes": "Lore: The Drukhari are the Aeldari who never left: raiders and slavers of Commorragh, the Dark City hidden in the webway. Their bodies are the same fine-boned, fast, sharp-eyed Aeldari bodies the craftworlds field. What differs is the soul. With no spirit stone to shelter it, Slaanesh drains it continually, and they hold the hunger off by feeding on suffering. This trait is the baseline shared by every Drukhari template; the training, cult and coven lenses below layer on top of it, exactly as the Aeldari Physiology's Path and Aspect lenses do.\n\nDesign: Pulls in, by include, the shared Aeldari body: Attribute Modifiers (140), Enhanced Move (Ground) 1/2 (10), Acute Senses (8), Aeldari Grace (4) and Slender Frame (0), so a fix there updates the Drukhari on rebuild. Adds Soul Thirst (-26) and Unaging While Fed (+9). 140 + 10 + 8 + 4 + 0 - 26 + 9 = 145 points, landing ST 10, DX 14, IQ 12, HT 10, HP 10, Will 12, Per 12, Basic Speed 6.25, Move 9, the Kabalite Warrior's physical line before its own package (framework.md, Drukhari). Deliberately left out: Aeldari Psychic Sensitivity, Aeldari Psyker (Talent), Warp Empowerment, Spirit Stone and every Path lens (the Drukhari shun the warp and have no Paths), plus Emotional Intensity, Arrogance Towards Younger Races, Slaanesh's Hunger and Extended Lifespan, each of which Soul Thirst, the Drukhari mental traits below or Unaging While Fed replace. Emotional excess is a Drukhari trait too, but it shows up as the cruelty and vanity below, not as Path-restrained rapture.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Drukhari"
+			],
+			"container_type": "ancestry",
+			"children": [
+				{
+					"id": "tEeboMu79kQwMdAye",
+					"name": "Attribute Modifiers",
+					"local_notes": "Design: Framework target (Guardian anchor line, the ancestry baseline every other Aeldari template builds on): ST 10, DX 14, IQ 12, HT 10, HP 10. Increased DX +4 (B15, 20/level, 80) for DX 14 — \"faster and more precise than any baseline human,\" matching the anchor table's own figure without touching ST or HT, which stay human-baseline: Aeldari are quick and precise, not physically overwhelming. Increased IQ +2 (B16, 20/level, 40) for IQ 12 — a subtler, more perceptive mind than a human's on average, per Codex background's consistent \"the Aeldari are wiser and more perceptive than short-lived Humanity\" framing. Increased Basic Speed +0.25 (B17, 5 points per 0.25 level, 5) for reflexes a shade faster even than DX 14 alone implies — the same design choice this project's Astartes Attribute Modifiers makes for \"faster reflexes than baseline humans\" without inflating every DX skill. Basic Move +3 (B17, 5/level, 15) at the user's direction: the Aeldari are the fastest-moving people in the galaxy, and even a Guardian outpaces a human (Move 9). 80+40+5+15 = 140. Will and Per are left untouched here (both track IQ 12 with no separate bonus): the Guardian anchor's own Per 13 and Aspect Warrior's Will 13 come from Keen Battle-Sense and Aspect Training below, not from this universal package, because a Farseer's own anchor (Per 15 exactly equal to IQ 15) shows the extra Per point is a warrior's battlefield habit, not a species-wide trait — baking it in here would overshoot the Farseer line once her own IQ is bought up.",
+					"tags": [
+						"Physical"
+					],
+					"base_points": 140,
+					"features": [
+						{
+							"type": "attribute_bonus",
+							"attribute": "dx",
+							"amount": 4
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "iq",
+							"amount": 2
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "basic_speed",
+							"amount": 0.25
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "basic_move",
+							"amount": 3
+						}
+					]
+				},
+				{
+					"id": "tPYjgEYb02y5_dj0V",
+					"name": "Enhanced Move (Ground)",
+					"reference": "B52",
+					"local_notes": "Top sprinting speed x1.5. Combat Move unchanged.\n\nLore: Aeldari run with a lightness and speed no human can match; in the fiction they cross open ground before an enemy can bring guns to bear.\n\nDesign: Enhanced Move (Ground) 1/2 (B52, half level 10) at the user's direction, matching the Astartes half level.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Aeldari"
+					],
+					"points_per_level": 20,
+					"can_level": true,
+					"levels": 0.5
+				},
+				{
+					"id": "T_oBHJC-r8zs1ZDDl",
+					"name": "Acute Senses",
+					"local_notes": "Lore: Aeldari sight and hearing are famously sharper than a human's — able to read the wind off a craftworld's wraithbone spires, or track a single voice through a warhost's roar. Consistently depicted across Codex background and the Path trilogy (a Ranger's eyesight in particular is played as near-supernatural).\n\nDesign: Acute Vision 2 (B35, 2/level, 4) plus Acute Hearing 2 (B35, 2/level, 4) = 8 points, the same math this project's Astartes Occulobe/Lyman's Ear entries use for the \"raw acuity\" half of their build, without the Protected Sense half (Aeldari have no fused eye/ear armour organ to shrug off flash and concussion the way an Astartes implant does).",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Aeldari"
+					],
+					"container_type": "meta_trait",
+					"children": [
+						{
+							"id": "tJqWuVlTkM9r7Vbas",
+							"name": "Acute Vision",
+							"reference": "B35",
+							"points_per_level": 2,
+							"can_level": true,
+							"levels": 2
+						},
+						{
+							"id": "t0SIJuw16v7Nsfa_w",
+							"name": "Acute Hearing",
+							"reference": "B35",
+							"points_per_level": 2,
+							"can_level": true,
+							"levels": 2
+						}
+					]
+				},
+				{
+					"id": "twr-TcJ3VPmwxqt1V",
+					"name": "Aeldari Grace",
+					"reference": "B21",
+					"local_notes": "Appearance (Attractive).\n\nLore: Aeldari are consistently described, in the fiction and in their own art, as slender, fine-boned and unnervingly graceful even to other Aeldari — a species that finds its own dying beauty worth mourning.\n\nDesign: Basic Set Appearance, Attractive tier (B21), 4 points.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Aeldari"
+					],
+					"base_points": 4
+				},
+				{
+					"id": "tLoI4yxfPHnv4oS_o",
+					"name": "Slender Frame",
+					"local_notes": "Lore: An Aeldari body is light and fine-boned next to a human's, let alone an Ork's or an Astartes': speed and precision over mass. Codex background and the Path trilogy both play Aeldari as easy to underestimate physically and easy to actually hurt once a fight turns physical.\n\nDesign: 0-point lore flag: the mechanical consequence is what's absent, not present — this package buys no Extra Hit Points and no Damage Resistance the way the Astartes and Ork physiology files do, so Aeldari HP tracks bare ST with no bonus. This entry documents why, rather than pricing anything itself.",
+					"tags": [
+						"Xenos",
+						"Aeldari"
+					],
+					"base_points": 0
+				},
+				{
+					"id": "tCjm2aBBQ7EKT0Bh2",
+					"name": "Soul Thirst",
+					"reference": "B130",
+					"local_notes": "Dependency (Suffering of Others): Common, Weekly, with Aging. The Drukhari must take a dose about once a week: a session of torture, a raid's slaughter, a night in the arena, or a bloody fight they took part in all count. After a missed weekly dose the Drukhari loses 1 HP every six hours until they feed (B130), and each HP lost this way ages them 2 years (the Aging modifier). No spirit stone is worn and none would help: a Drukhari killed with no Haemonculus to call them back is food for Slaanesh.\n\nLore: Every Drukhari soul is being drained by Slaanesh, and they have no craftworld's Infinity Circuit and no spirit stone to catch it. They keep the dark god at bay by keeping their souls full of borrowed life: the pain and death of others. Nothing else in Commorragh's culture makes sense without this: the arenas, the slave raids, the torture-arts of the Haemonculi and the Kabals' constant reaving are all, at bottom, farming. Consistent, foundational background across every edition of Codex: Dark Eldar / Drukhari.\n\nDesign: Dependency (B130): the substance (suffering of others) is Common, base -10; a weekly dose is x2 = -20; the Aging modifier (+30%, 2 years per HP lost) makes -20 x 1.3 = -26 points. Built as base -20 with a +30% modifier so GCS computes -26. The B130 procedure applies unchanged (1 HP per six hours after a missed weekly dose); the coordinator's review of the Basic Set library supplied these figures.",
+					"tags": [
+						"Disadvantage",
+						"Physical",
+						"Xenos",
+						"Drukhari"
+					],
+					"modifiers": [
+						{
+							"id": "mxGvoa-8_bQRxtQ_I",
+							"name": "Aging",
+							"reference": "B130",
+							"local_notes": "Each HP lost to the dependency ages the Drukhari 2 years.",
+							"cost_adj": "+30%"
+						}
+					],
+					"base_points": -20
+				},
+				{
+					"id": "txBhFwIOk3__C6Ffp",
+					"name": "Unaging While Fed",
+					"reference": "B95",
+					"local_notes": "No aging rolls while fed. Replaces the Aeldari Extended Lifespan; a fed Drukhari has no natural end date at all.\n\nLore: Drukhari are as long-lived as any Aeldari, and the fed ones do not visibly age at all. The eldest Archons and Haemonculi are older than most craftworlds' oldest Exarchs, kept young by a steady diet of other people's agony. Starved Drukhari, by contrast, are described as withered and grey (Codex: Dark Eldar / Drukhari background).\n\nDesign: Unaging (B95, 15 points) with Accessibility (B110) -40%: it works only while the Soul Thirst dependency is met. 15 x 0.6 = 9 points. It stands in for the Aeldari Extended Lifespan (12 points) rather than adding to it.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Drukhari"
+					],
+					"modifiers": [
+						{
+							"id": "mlOf7oElvg00DZNlw",
+							"name": "Accessibility",
+							"reference": "B110",
+							"local_notes": "Works only while the Soul Thirst dependency is satisfied. Lapses after a month unfed (see Soul Thirst).",
+							"cost_adj": "-40%"
+						}
+					],
+					"base_points": 15
+				}
+			]
+		},
+		{
+			"id": "tHXWIj7SFguCaBMKb",
+			"name": "Keen Battle-Sense",
+			"local_notes": "Lore: A Guardian's militia drills, an Aspect Warrior's shrine training, and an Exarch's centuries in the same battle-role all sharpen the same thing: a heightened, ever-present awareness of the battlefield around them. A Farseer's gift runs a different direction entirely (inward and forward, not outward), which is why this is a warrior's-path trait, not part of the universal Aeldari package.\n\nDesign: Increased Perception +1 (B16, 5 points/level): the Guardian anchor's Per 13 over IQ 12, and the Aspect Warrior/Exarch anchors' matching one-point gap over their own IQ, all come from this single trait rather than a bonus baked into Attribute Modifiers, so it can be left out of the Farseer line (whose own anchor is Per == IQ exactly) without distorting that template's math.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Aeldari"
+			],
+			"base_points": 5,
+			"features": [
+				{
+					"type": "attribute_bonus",
+					"attribute": "per",
+					"amount": 1
+				}
+			]
+		},
+		{
+			"id": "TKwsk1fbwuFc_r2Ya",
+			"name": "Incubus Training",
+			"local_notes": "Lore: Incubi are the Drukhari's elite blade-cultists, sworn to Arhra and available to the highest bidder, always armoured and always disciplined. Codex: Drukhari's Incubi background.\n\nDesign: 110 + 15 + 30 + 20 + 10 = 185 points, added to the baseline (150) for 335 points before lens, mental traits, Power from Pain and skills.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Drukhari"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "tMG-J2R-oZD6ANXBZ",
+					"name": "Attribute Modifiers (Incubus)",
+					"local_notes": "Design: Framework target over the Drukhari Physiology + Keen Battle-Sense baseline: ST 12, DX 17, IQ 12 (untouched), HT 12, Per 13, Will 14, Move 10. ST +2 (B14, 20), DX +3 (B15, 60), HT +2 (B15, 20), Will +2 (B16, 10): 110 points. Basic Move is unbought: Basic Speed 7.5 gives Basic Move 7 plus the Aeldari 3.",
+					"tags": [
+						"Physical"
+					],
+					"base_points": 110,
+					"features": [
+						{
+							"type": "attribute_bonus",
+							"attribute": "st",
+							"amount": 2
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "dx",
+							"amount": 3
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "ht",
+							"amount": 2
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "will",
+							"amount": 2
+						}
+					]
+				},
+				{
+					"id": "tQZzXrod433LwtRRk",
+					"name": "Combat Reflexes",
+					"reference": "B43",
+					"local_notes": "Lore: A cultist who has fought for decades does not freeze.\n\nDesign: Combat Reflexes (B43, 15 points).",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Xenos",
+						"Drukhari"
+					],
+					"base_points": 15
+				},
+				{
+					"id": "tpAtxzhsPrFGGZPBC",
+					"name": "Trained By A Master",
+					"reference": "B93",
+					"local_notes": "Lore: Incubi are taught in the Cult's own sanctums, master to disciple, for centuries.\n\nDesign: Trained By A Master (B93, 30 points).",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Xenos",
+						"Drukhari"
+					],
+					"base_points": 30
+				},
+				{
+					"id": "tndBgz7mDQZYQG3bI",
+					"name": "Weapon Master (Klaive)",
+					"reference": "B99",
+					"local_notes": "Lore: The klaive is the only weapon most Incubi will ever use.\n\nDesign: Weapon Master, one weapon (B99, 20 points).",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Drukhari"
+					],
+					"base_points": 20
+				},
+				{
+					"id": "t21LXxhAxYkkEfEac",
+					"name": "Enhanced Parry",
+					"reference": "B51",
+					"local_notes": "Lore: An Incubus can hold a line of blades on the klaive alone.\n\nDesign: Enhanced Parry 2, one weapon (B51, 5/level, 10 points).",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Drukhari"
+					],
+					"points_per_level": 5,
+					"can_level": true,
+					"levels": 2
+				}
+			]
+		},
+		{
+			"id": "THc7_B69Zua2CoqQv",
+			"name": "Path of Arhra",
+			"local_notes": "Lore: Incubi are a warrior-cult sworn to Arhra, a god of the Aeldari pantheon whose background is sparse and partly contradictory across editions. The lens records only what is consistent: an ascetic order, ritual discipline and a mercenary practice that never breaks the oath. Codex: Drukhari's Incubi background.\n\nDesign: Net -15 points (-15 - 5 + 1 + 4): the price of the Path is real; the discipline is what the money buys.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"children": [
+				{
+					"id": "tF5svXgBYiZzmTGUI",
+					"name": "Bound to Arhra",
+					"reference": "B136",
+					"local_notes": "Absolute devotion to the Cult of Arhra and its rites; refuses a contract that would defile them.\n\nLore: An Incubus's service is a religious calling first and a mercenary one second.\n\nDesign: Fanaticism (B136, -15) on the Cult of Arhra.",
+					"tags": [
+						"Disadvantage",
+						"Mental",
+						"Xenos",
+						"Drukhari"
+					],
+					"base_points": -15
+				},
+				{
+					"id": "tdocd9ktbHSJYEcVd",
+					"name": "Cult Oath",
+					"reference": "B127",
+					"local_notes": "Keeps a signed contract, honours an oath, will not strike a client.\n\nLore: A mercenary Incubus is expensive because he is reliable.\n\nDesign: Code of Honor (B127, -5): the oath a paying customer can rely on.",
+					"tags": [
+						"Disadvantage",
+						"Mental",
+						"Xenos",
+						"Drukhari"
+					],
+					"base_points": -5
+				},
+				{
+					"id": "tm6nid-Wb_OLJEtm5",
+					"name": "Blade-Discipline",
+					"reference": "B100",
+					"local_notes": "Lore: The Cult's drill, repeated on the klaive.\n\nDesign: Perk (B100), +1 to Two-Handed Sword.",
+					"tags": [
+						"Perk",
+						"Xenos",
+						"Drukhari"
+					],
+					"base_points": 1,
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "Two-Handed Sword"
+							},
+							"amount": 1
+						}
+					]
+				},
+				{
+					"id": "tdqTuugFDnEgj0nq9",
+					"name": "Ascetic Calm",
+					"reference": "B55",
+					"local_notes": "Lore: An Incubus's calm in the face of horror is part of the Cult's teaching.\n\nDesign: Fearlessness 2 (B55, 2/level, 4 points).",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Xenos",
+						"Drukhari"
+					],
+					"points_per_level": 2,
+					"can_level": true,
+					"levels": 2
+				}
+			]
+		},
+		{
+			"id": "tBmNuSETk6DrsZoym",
+			"name": "Callous",
+			"reference": "B125",
+			"local_notes": "Indifferent to others' pain; -3 reaction when it shows.\n\nLore: Even a Drukhari who does not enjoy suffering treats it as currency. Background.\n\nDesign: Callous (B125, -5).",
+			"tags": [
+				"Disadvantage",
+				"Mental",
+				"Xenos",
+				"Drukhari"
+			],
+			"base_points": -5
+		},
+		{
+			"id": "tdDccUevNXs0UclLe",
+			"name": "Power from Pain (Stage I)",
+			"reference": "B59",
+			"local_notes": "High Pain Threshold, once feeding has begun. Stage I of three; each later stage needs the one before it. A stage lapses at the end of the scene.\n\nLore: Every Drukhari fights harder for the taste of blood. Codex background describes the Dark Eldar as growing bolder and stronger as the killing goes on, feeding on the pain they cause; the exact stages differ between Kabals, Wych Cults and Covens.\n\nDesign: High Pain Threshold (B59, 10 points) with Accessibility (B110) -30% for its trigger: 10 x 0.7 = 7 points. Deliberately no `attributes` feature: the bonus is conditional and must not raise the sheet's stats before the trigger.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Drukhari"
+			],
+			"modifiers": [
+				{
+					"id": "myn3zTPXyzXwcQTeH",
+					"name": "Accessibility",
+					"reference": "B110",
+					"local_notes": "Only after the Drukhari, or a comrade in the same unit, has drawn blood or caused real suffering in this scene.",
+					"cost_adj": "-30%"
+				}
+			],
+			"base_points": 10
+		},
+		{
+			"id": "Tq48ifUr7boMgkaZG",
+			"name": "Power from Pain (Stage II)",
+			"local_notes": "Stage II: melee and Fright Check bonuses (requires Stage I), lapses at the end of the scene.\n\nLore: By the time a fight has really turned, a Drukhari hits harder and cannot be frightened. Background: the Power from Pain rule in Codex: Drukhari (per unit, by kills scored).\n\nDesign: Melee and morale bonuses only; the real weight is small (5 + 2 = 7 points). Not `attributes`: the bonuses are conditional.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Drukhari"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "t7ZiVJ07tJEs3WTzv",
+					"name": "Bloodied Strength",
+					"reference": "B88",
+					"local_notes": "Striking ST +2: melee damage as if ST 2 higher.\n\nLore: The Kabalite's cruelty in melee sharpens as the blood flows.\n\nDesign: Striking ST 2 (B88, 5/level, 10) with Accessibility -50% = 5 points.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Drukhari"
+					],
+					"modifiers": [
+						{
+							"id": "m6R9DHx4MkUvKqdXg",
+							"name": "Accessibility",
+							"reference": "B110",
+							"local_notes": "Only after Stage I plus at least one enemy dropped or seriously hurt in this scene by the Drukhari's unit.",
+							"cost_adj": "-50%"
+						}
+					],
+					"points_per_level": 5,
+					"can_level": true,
+					"levels": 2
+				},
+				{
+					"id": "t4DZ4D9-Rw_zyW9c8",
+					"name": "Bloodied Nerve",
+					"reference": "B55",
+					"local_notes": "Fearlessness +2 to Fright Checks.\n\nLore: A feeding Drukhari does not flinch from the things that break other people.\n\nDesign: Fearlessness 2 (B55, 2/level, 4) with Accessibility -50% = 2 points.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Xenos",
+						"Drukhari"
+					],
+					"modifiers": [
+						{
+							"id": "may81AIvky2Kqehjg",
+							"name": "Accessibility",
+							"reference": "B110",
+							"local_notes": "Same trigger as Bloodied Strength.",
+							"cost_adj": "-50%"
+						}
+					],
+					"points_per_level": 2,
+					"can_level": true,
+					"levels": 2
+				}
+			]
+		}
+	],
+	"skills": [
+		{
+			"id": "sFrwEqKNWNdG9cKWL",
+			"name": "Two-Handed Sword",
+			"local_notes": "Lore: The klaive, drilled for centuries: Trained By A Master and Weapon Master apply.\n\nDesign: DX+10 (27) for 40 points, Average.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "dx/a",
+			"points": 40
+		},
+		{
+			"id": "sHM8D_s6ihWKVz_KD",
+			"name": "Brawling",
+			"local_notes": "Lore: Close-in blows when the blade is engaged.\n\nDesign: DX+2 (19) for 4 points, Easy.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "dx/e",
+			"points": 4
+		},
+		{
+			"id": "siBxblG0gHiJ0KRe-",
+			"name": "Acrobatics",
+			"local_notes": "Lore: Precise, balanced footwork.\n\nDesign: DX+1 (18) for 8 points, Hard.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "dx/h",
+			"points": 8
+		},
+		{
+			"id": "suBoh1l4_NxXgnovA",
+			"name": "Stealth",
+			"local_notes": "Lore: Hired blades must sometimes come quietly.\n\nDesign: DX+0 (17) for 2 points, Average.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "dx/a",
+			"points": 2
+		},
+		{
+			"id": "sS5XzCVgpyCTh23sW",
+			"name": "Intimidation",
+			"local_notes": "Lore: The tormentor helm and reputation.\n\nDesign: Will+3 (17) for 12 points, Average.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "will/a",
+			"points": 12
+		},
+		{
+			"id": "sAtcY22yS6YpjYcnw",
+			"name": "Tactics",
+			"local_notes": "Lore: A mercenary's read of a fight.\n\nDesign: IQ+0 (12) for 4 points, Hard.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "iq/h",
+			"points": 4
+		},
+		{
+			"id": "sWaI-wVCu5a0PtCKC",
+			"name": "Meditation",
+			"local_notes": "Lore: The Cult's ascetic discipline.\n\nDesign: Will+0 (14) for 4 points, Hard.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "will/h",
+			"points": 4
+		},
+		{
+			"id": "sEuPrCNwYDsglnkcf",
+			"name": "Theology",
+			"local_notes": "Lore: The Cult's rites.\n\nDesign: IQ-1 (11) for 2 points, Hard.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"specialization": "(Cult of Arhra)",
+			"difficulty": "iq/h",
+			"points": 2
+		},
+		{
+			"id": "sWSesM-c-83jsnpXv",
+			"name": "Running",
+			"local_notes": "Lore: Fitness.\n\nDesign: HT+0 (12) for 2 points, Average.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "ht/a",
+			"points": 2
+		},
+		{
+			"id": "sTAOBVHXeXoX7fOZH",
+			"name": "Jumping",
+			"local_notes": "Lore: Battlefield mobility drill.\n\nDesign: DX+0 (17) for 1 point, Easy.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "dx/e",
+			"points": 1
+		},
+		{
+			"id": "sODpfn23qiMBRvOBC",
+			"name": "Climbing",
+			"local_notes": "Lore: Sanctuary and city work.\n\nDesign: DX+0 (17) for 2 points, Average.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "dx/a",
+			"points": 2
+		},
+		{
+			"id": "sDaNK-rkssYnAxyhC",
+			"name": "Area Knowledge",
+			"local_notes": "Lore: The Dark City's Kabals, the Incubi's clients.\n\nDesign: IQ+1 (13) for 2 points, Easy.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"specialization": "(Commorragh)",
+			"difficulty": "iq/e",
+			"points": 2
+		},
+		{
+			"id": "sJIO6TdII04ys54Xy",
+			"name": "Hidden Lore",
+			"local_notes": "Lore: Every Drukhari knows what is coming for them.\n\nDesign: IQ-1 (11) for 1 point, Average.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"specialization": "(Slaanesh)",
+			"difficulty": "iq/a",
+			"points": 1
+		}
+	],
+	"equipment": []
+}

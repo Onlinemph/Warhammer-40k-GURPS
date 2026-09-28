@@ -10,20 +10,22 @@ output: Xenos/Drukhari/Traits/Drukhari Physiology.adq
 # where noted. Where the lore is thin or contradictory (Arhra, Mandrake
 # mechanism, drug effects) the entry says so.
 items:
-- name: Soul Thirst
-  points: -15
+- &soul_thirst
+  name: Soul Thirst
+  points: -20
   tags: [Disadvantage, Physical, Xenos, Drukhari]
   ref: B130
+  modifiers:
+  - {name: Aging, cost: +30%, ref: B130, notes: Each HP lost to the dependency ages
+      the Drukhari 2 years.}
   notes: >-
-    Dependency on the suffering of others. The Drukhari must feed about once a week:
-    a session of torture, a raid's slaughter, a night in the arena, or a bloody
-    fight they took part in all count. Track it as a Dependency that comes due weekly.
-    On a missed feeding roll HT at the start of each following day; on a failure
-    lose 1 FP that cannot be regained until the Drukhari feeds (adapt the missed-dose
-    procedure at B130 to this weekly tempo). After a full month unfed, Unaging While
-    Fed lapses and normal aging rolls apply until the next feeding, but does not
-    undo any aging already suffered. No spirit stone is worn and none would help:
-    a Drukhari killed with no Haemonculus to call them back is food for Slaanesh.
+    Dependency (Suffering of Others): Common, Weekly, with Aging. The Drukhari must
+    take a dose about once a week: a session of torture, a raid's slaughter, a night
+    in the arena, or a bloody fight they took part in all count. After a missed
+    weekly dose the Drukhari loses 1 HP every six hours until they feed (B130),
+    and each HP lost this way ages them 2 years (the Aging modifier). No spirit
+    stone is worn and none would help: a Drukhari killed with no Haemonculus to
+    call them back is food for Slaanesh.
   lore: >-
     Every Drukhari soul is being drained by Slaanesh, and they have no craftworld's
     Infinity Circuit and no spirit stone to catch it. They keep the dark god at
@@ -33,14 +35,12 @@ items:
     are all, at bottom, farming. Consistent, foundational background across every
     edition of Codex: Dark Eldar / Drukhari.
   design: >-
-    Dependency (B130) with the substance being fresh suffering. B130 prices a Dependency
-    from how easy the substance is to find and how often it must be taken, and this
-    is neither rare (a raider always has slaves and enemies) nor daily (a week is
-    comfortable), while lack ages and weakens rather than killing outright. This
-    is a house judgement on that method, set at -15, the same price as the Aeldari
-    Slaanesh's Hunger it replaces; check it against the book's table if a GM wants
-    a stricter count. The aging rider is a house rule: the Basic Set's Dependency
-    has no aging clause, so the loss of Unaging While Fed carries it.
+    Dependency (B130): the substance (suffering of others) is Common, base -10;
+    a weekly dose is x2 = -20; the Aging modifier (+30%, 2 years per HP lost) makes
+    -20 x 1.3 = -26 points. Built as base -20 with a +30% modifier so GCS computes
+    -26. The B130 procedure applies unchanged (1 HP per six hours after a missed
+    weekly dose); the coordinator's review of the Basic Set library supplied these
+    figures.
 - name: Unaging While Fed
   points: 15
   tags: [Advantage, Physical, Xenos, Drukhari]
@@ -79,8 +79,8 @@ items:
   design: >-
     Pulls in, by include, the shared Aeldari body: Attribute Modifiers (140), Enhanced
     Move (Ground) 1/2 (10), Acute Senses (8), Aeldari Grace (4) and Slender Frame
-    (0), so a fix there updates the Drukhari on rebuild. Adds Soul Thirst (-15)
-    and Unaging While Fed (+9). 140 + 10 + 8 + 4 + 0 - 15 + 9 = 156 points, landing
+    (0), so a fix there updates the Drukhari on rebuild. Adds Soul Thirst (-26)
+    and Unaging While Fed (+9). 140 + 10 + 8 + 4 + 0 - 26 + 9 = 145 points, landing
     ST 10, DX 14, IQ 12, HT 10, HP 10, Will 12, Per 12, Basic Speed 6.25, Move 9,
     the Kabalite Warrior's physical line before its own package (framework.md, Drukhari).
     Deliberately left out: Aeldari Psychic Sensitivity, Aeldari Psyker (Talent),
@@ -96,39 +96,7 @@ items:
   - {include: xenos/aeldari/traits.yaml#Acute Senses}
   - {include: xenos/aeldari/traits.yaml#Aeldari Grace}
   - {include: xenos/aeldari/traits.yaml#Slender Frame}
-  - name: Soul Thirst
-    points: -15
-    tags: [Disadvantage, Physical, Xenos, Drukhari]
-    ref: B130
-    notes: >-
-      Dependency on the suffering of others. The Drukhari must feed about once a
-      week: a session of torture, a raid's slaughter, a night in the arena, or a
-      bloody fight they took part in all count. Track it as a Dependency that comes
-      due weekly. On a missed feeding roll HT at the start of each following day;
-      on a failure lose 1 FP that cannot be regained until the Drukhari feeds (adapt
-      the missed-dose procedure at B130 to this weekly tempo). After a full month
-      unfed, Unaging While Fed lapses and normal aging rolls apply until the next
-      feeding, but does not undo any aging already suffered. No spirit stone is
-      worn and none would help: a Drukhari killed with no Haemonculus to call them
-      back is food for Slaanesh.
-    lore: >-
-      Every Drukhari soul is being drained by Slaanesh, and they have no craftworld's
-      Infinity Circuit and no spirit stone to catch it. They keep the dark god at
-      bay by keeping their souls full of borrowed life: the pain and death of others.
-      Nothing else in Commorragh's culture makes sense without this: the arenas,
-      the slave raids, the torture-arts of the Haemonculi and the Kabals' constant
-      reaving are all, at bottom, farming. Consistent, foundational background across
-      every edition of Codex: Dark Eldar / Drukhari.
-    design: >-
-      Dependency (B130) with the substance being fresh suffering. B130 prices a
-      Dependency from how easy the substance is to find and how often it must be
-      taken, and this is neither rare (a raider always has slaves and enemies) nor
-      daily (a week is comfortable), while lack ages and weakens rather than killing
-      outright. This is a house judgement on that method, set at -15, the same price
-      as the Aeldari Slaanesh's Hunger it replaces; check it against the book's
-      table if a GM wants a stricter count. The aging rider is a house rule: the
-      Basic Set's Dependency has no aging clause, so the loss of Unaging While Fed
-      carries it.
+  - *soul_thirst
   - name: Unaging While Fed
     points: 15
     tags: [Advantage, Physical, Xenos, Drukhari]
@@ -383,13 +351,14 @@ items:
 - name: Megalomania
   points: -10
   tags: [Disadvantage, Mental, Xenos, Drukhari]
+  ref: B144
   notes: >-
     Believes they are destined to rule, and plans and boasts accordingly; -5 to
     resist flattery about their greatness.
   lore: >-
     Every Archon is scheming at the top of a Kabal and every Kabal is one betrayal
     from the next Archon. Background across Codex editions.
-  design: Megalomania, -10 points (ref left out).
+  design: Megalomania (B144, -10).
 - name: Paranoia
   points: -10
   tags: [Disadvantage, Mental, Xenos, Drukhari]
@@ -734,7 +703,7 @@ items:
     Drukhari's Wych Cult background.
   design: >-
     70 + 30 + 15 = 115 points, added to the Drukhari Physiology + Keen Battle-Sense
-    baseline (156 + 5 = 161) for 276 points before cult lens, mental traits and
+    baseline (145 + 5 = 150) for 265 points before cult lens, mental traits and
     skills.
   children:
   - name: Attribute Modifiers (Wych)
@@ -807,7 +776,7 @@ items:
     background.
   design: >-
     85 + 15 + 15 + 20 + 10 + 10 = 155 points, added to Wych Training (115) and the
-    baseline (161) for 431 points before lens, mental traits, Power from Pain and
+    baseline (150) for 420 points before lens, mental traits, Power from Pain and
     skills.
   children:
   - name: Attribute Modifiers (Succubus)
@@ -865,7 +834,7 @@ items:
     to the highest bidder, always armoured and always disciplined. Codex: Drukhari's
     Incubi background.
   design: >-
-    110 + 15 + 30 + 20 + 10 = 185 points, added to the baseline (161) for 346 points
+    110 + 15 + 30 + 20 + 10 = 185 points, added to the baseline (150) for 335 points
     before lens, mental traits, Power from Pain and skills.
   children:
   - name: Attribute Modifiers (Incubus)
@@ -954,7 +923,7 @@ items:
     of Commorragh and have been fending off rivals for centuries. Codex: Drukhari's
     Archon background.
   design: >-
-    190 + 15 + 15 + 10 = 230 points, added to the baseline (156) for 386 points
+    190 + 15 + 15 + 10 = 230 points, added to the baseline (145) for 375 points
     before estate, regrowth, Power from Pain, mental traits and skills.
   children:
   - name: Attribute Modifiers (Archon)
@@ -1021,8 +990,8 @@ items:
     bodies rebuilt over centuries into whatever shape their art demanded. Codex:
     Drukhari's Haemonculus background.
   design: >-
-    135 + 10 + 4 + 10 + 6 + 5 - 20 = 150 points, added to the baseline (156) for
-    306 points before regrowth, estate, mental traits and skills.
+    135 + 10 + 4 + 10 + 6 + 5 - 20 = 150 points, added to the baseline (145) for
+    295 points before regrowth, estate, mental traits and skills.
   children:
   - name: Attribute Modifiers (Haemonculus)
     points: 135
@@ -1138,7 +1107,7 @@ items:
     Wracks are the Covens' servants, taken and rebuilt for labour and torture: bulked
     out, dulled, and set to the Haemonculus's work. Codex: Drukhari's Wrack background.
   design: >-
-    4 + 10 + 9 + 6 + 6 - 12 = 23 points, added to the baseline (156) for 179 points
+    4 + 10 + 9 + 6 + 6 - 12 = 23 points, added to the baseline (145) for 168 points
     before mental traits, Power from Pain and skills.
   children:
   - name: Attribute Modifiers (Wrack)
@@ -1258,7 +1227,7 @@ items:
     is bought and who are only half here: bodies of shade and bone. Codex: Drukhari's
     Mandrake background.
   design: >-
-    55 + 15 + 15 = 85 points, added to the baseline (161) for 246 points before
+    55 + 15 + 15 = 85 points, added to the baseline (150) for 235 points before
     shadow nature and skills.
   children:
   - name: Attribute Modifiers (Mandrake)
@@ -1291,28 +1260,28 @@ items:
   lore: >-
     The Mandrake's nature is that of shadow: silent, hard to see, and able to melt
     into the dark and out of it. Codex: Drukhari's Mandrake background.
-  design: 60 + 6 + 10 + 9 = 85 points.
+  design: 30 + 6 + 10 + 9 = 55 points.
   children:
   - name: Shadow Form (Half-Material)
-    points: 100
+    points: 50
     tags: [Advantage, Physical, Xenos, Drukhari]
+    ref: B83
     modifiers:
     - {name: Accessibility, cost: -30%, ref: B110, notes: 'Only in dim light, darkness
         or deep shadow.'}
-    - {name: Costs Fatigue, cost: -10%, ref: B112, notes: 2 FP to enter.}
+    - {name: Costs Fatigue, cost: -10%, ref: B111, notes: 2 FP to enter.}
     notes: >-
-      Uses the Basic Set advantage Shadow Form (see the book for its exact rules;
-      page reference left out on purpose), usable only in shadow and at a cost of
-      2 FP. A Mandrake can slip between shadows and strike from behind.
+      Uses the Basic Set advantage Shadow Form (B83), usable only in shadow and
+      at a cost of 2 FP. A Mandrake can slip between shadows and strike from behind.
     lore: >-
       Mandrakes step out of Aelindrach's shadows to kill and return to them when
       done, a quality sometimes described as 'shadow-stepping'. Codex: Drukhari's
       Mandrake background; the mechanism is not fixed in lore.
     design: >-
-      Shadow Form (100 points) with Accessibility -30% and Costs Fatigue 2 (-10%):
-      100 x 0.6 = 60 points. Built this way rather than as Teleport because Shadow
-      Form already models being a shadow, and I am not confident enough of Teleport's
-      range table to price a 'shadow-step' honestly.
+      Shadow Form (B83, 50 points) with Accessibility -30% and Costs Fatigue 2 (-10%,
+      B111): 50 x 0.6 = 30 points. Built this way rather than as Teleport because
+      Shadow Form already models being a shadow, and I am not confident enough of
+      Teleport's range table to price a 'shadow-step' honestly.
   - name: Chameleon
     per_level: 5
     levels: 2

@@ -320,7 +320,7 @@ Society is three rival powers: the Kabals (Archons and their Kabalite Warriors),
 | Scourge | 11 | 15 | 12 | 11 | 11 | 14 | 12 | 9 (Air 20+) | Surgically grafted wings. |
 | Mandrake | 11 | 16 | 11 | 11 | 11 | 14 | 12 | 10 | Shadow-stepping killer, barely material. |
 
-Point targets: Kabalite Warrior about the Aeldari Guardian (180–220); Wych and Scourge 250–350; Wrack about 250; Mandrake and Incubus 400–550; Haemonculus, Succubus and Archon 600–850.
+Point targets: Kabalite Warrior about the Aeldari Guardian (180–220); Wych and Scourge 250–350; Wrack about 225; Mandrake 350–450 (the Basic Set prices shadow traits modestly); Incubus 400–550; Haemonculus, Succubus and Archon 600–850. Melee blades of Commorragh are hyper-sharp: mundane Drukhari blades carry (3), like shuriken, so a Wych threatens flak but not carapace.
 
 Drukhari traits: the shared Aeldari body (via include), **Soul Thirst** (disadvantage: Slaanesh drains the soul; without regularly causing suffering the Drukhari weakens and ages; Dependency on others' suffering, with aging on failure), Unaging while fed (a modifier tied to Soul Thirst), **Power from Pain** (grows stronger as the fight goes on: build as staged bonuses gained after the Drukhari or their unit has caused real suffering in the scene, e.g. High Pain Threshold first, then melee and Fright Check bonuses, then Regeneration; built honestly with Accessibility limitations), Sadism and Callous as common mental traits (varying by template), and **Haemonculus regrowth** (Extra Life, B55, limited: needs a body fragment recovered and a coven paid; Archons and favoured servants only). No spirit stones, no Psyker talent.
 

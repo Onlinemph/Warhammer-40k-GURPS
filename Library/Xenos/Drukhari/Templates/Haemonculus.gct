@@ -1,0 +1,765 @@
+{
+	"version": 5,
+	"id": "B6LyVOcHKQwqAq9ym",
+	"notes": "A Haemonculus: a flesh-sculptor of a Coven, an ancient torturer-surgeon who has rebuilt himself many times. Point math (see Xenos/Drukhari/Traits/Drukhari Physiology.adq): Drukhari Physiology (145) + Haemonculus's Self-Sculpted Body (150) + Haemonculus's Composure (15) + Haemonculus's Estate (30) + Haemonculus Regrowth (15) + Power from Pain, all three stages (34) + Sadism (-15) + Callous (-5) + Obsession (-10) = 359 points of traits, plus skills (242 points) = 601 points. Stats: ST 13, DX 13, IQ 16, HT 15, HP 18, Will 17, Per 14, Speed 7.25, Move 8, Dodge 10 (7 + 3): exactly framework.md's Haemonculus line. This lands at the bottom of the framework's 600-850 band for Haemonculus, Succubus and Archon (Astartes tier, 550-850): the skill points are what put it there, a millennium of practice in Surgery, Physiology and Poisons.\n\nA Haemonculus is slow and clumsy but nearly impossible to put down: HP 18 with High Pain Threshold, Hard to Kill 2, Injury Tolerance (No Vitals), DR 2 and Slow Regeneration, plus Extra Life. Weapon skills: the stinger pistol and hexrifle fire toxic darts or crystal (Guns), close work with the scissorhand is Knife-class. Weapon skills follow the Drukhari armoury as framework.md's Skills table reads it: splinter weapons fire solid crystal shards, so they use Guns (Pistol/Rifle), the same choice the Aeldari Guardian makes for the shuriken catapult; blasters and dark lances are beam weapons (Beam Weapons); heavy splinter and disintegrator cannons are Gunner.",
+	"traits": [
+		{
+			"id": "TKeMBoEJpeEbzlrD-",
+			"name": "Drukhari Physiology",
+			"local_notes": "Lore: The Drukhari are the Aeldari who never left: raiders and slavers of Commorragh, the Dark City hidden in the webway. Their bodies are the same fine-boned, fast, sharp-eyed Aeldari bodies the craftworlds field. What differs is the soul. With no spirit stone to shelter it, Slaanesh drains it continually, and they hold the hunger off by feeding on suffering. This trait is the baseline shared by every Drukhari template; the training, cult and coven lenses below layer on top of it, exactly as the Aeldari Physiology's Path and Aspect lenses do.\n\nDesign: Pulls in, by include, the shared Aeldari body: Attribute Modifiers (140), Enhanced Move (Ground) 1/2 (10), Acute Senses (8), Aeldari Grace (4) and Slender Frame (0), so a fix there updates the Drukhari on rebuild. Adds Soul Thirst (-26) and Unaging While Fed (+9). 140 + 10 + 8 + 4 + 0 - 26 + 9 = 145 points, landing ST 10, DX 14, IQ 12, HT 10, HP 10, Will 12, Per 12, Basic Speed 6.25, Move 9, the Kabalite Warrior's physical line before its own package (framework.md, Drukhari). Deliberately left out: Aeldari Psychic Sensitivity, Aeldari Psyker (Talent), Warp Empowerment, Spirit Stone and every Path lens (the Drukhari shun the warp and have no Paths), plus Emotional Intensity, Arrogance Towards Younger Races, Slaanesh's Hunger and Extended Lifespan, each of which Soul Thirst, the Drukhari mental traits below or Unaging While Fed replace. Emotional excess is a Drukhari trait too, but it shows up as the cruelty and vanity below, not as Path-restrained rapture.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Drukhari"
+			],
+			"container_type": "ancestry",
+			"children": [
+				{
+					"id": "tGW0juwAwq2PPm0Zr",
+					"name": "Attribute Modifiers",
+					"local_notes": "Design: Framework target (Guardian anchor line, the ancestry baseline every other Aeldari template builds on): ST 10, DX 14, IQ 12, HT 10, HP 10. Increased DX +4 (B15, 20/level, 80) for DX 14 — \"faster and more precise than any baseline human,\" matching the anchor table's own figure without touching ST or HT, which stay human-baseline: Aeldari are quick and precise, not physically overwhelming. Increased IQ +2 (B16, 20/level, 40) for IQ 12 — a subtler, more perceptive mind than a human's on average, per Codex background's consistent \"the Aeldari are wiser and more perceptive than short-lived Humanity\" framing. Increased Basic Speed +0.25 (B17, 5 points per 0.25 level, 5) for reflexes a shade faster even than DX 14 alone implies — the same design choice this project's Astartes Attribute Modifiers makes for \"faster reflexes than baseline humans\" without inflating every DX skill. Basic Move +3 (B17, 5/level, 15) at the user's direction: the Aeldari are the fastest-moving people in the galaxy, and even a Guardian outpaces a human (Move 9). 80+40+5+15 = 140. Will and Per are left untouched here (both track IQ 12 with no separate bonus): the Guardian anchor's own Per 13 and Aspect Warrior's Will 13 come from Keen Battle-Sense and Aspect Training below, not from this universal package, because a Farseer's own anchor (Per 15 exactly equal to IQ 15) shows the extra Per point is a warrior's battlefield habit, not a species-wide trait — baking it in here would overshoot the Farseer line once her own IQ is bought up.",
+					"tags": [
+						"Physical"
+					],
+					"base_points": 140,
+					"features": [
+						{
+							"type": "attribute_bonus",
+							"attribute": "dx",
+							"amount": 4
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "iq",
+							"amount": 2
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "basic_speed",
+							"amount": 0.25
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "basic_move",
+							"amount": 3
+						}
+					]
+				},
+				{
+					"id": "t67WNJt5iFd3uWuFV",
+					"name": "Enhanced Move (Ground)",
+					"reference": "B52",
+					"local_notes": "Top sprinting speed x1.5. Combat Move unchanged.\n\nLore: Aeldari run with a lightness and speed no human can match; in the fiction they cross open ground before an enemy can bring guns to bear.\n\nDesign: Enhanced Move (Ground) 1/2 (B52, half level 10) at the user's direction, matching the Astartes half level.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Aeldari"
+					],
+					"points_per_level": 20,
+					"can_level": true,
+					"levels": 0.5
+				},
+				{
+					"id": "TTLQOUfSOr8AIgQtl",
+					"name": "Acute Senses",
+					"local_notes": "Lore: Aeldari sight and hearing are famously sharper than a human's — able to read the wind off a craftworld's wraithbone spires, or track a single voice through a warhost's roar. Consistently depicted across Codex background and the Path trilogy (a Ranger's eyesight in particular is played as near-supernatural).\n\nDesign: Acute Vision 2 (B35, 2/level, 4) plus Acute Hearing 2 (B35, 2/level, 4) = 8 points, the same math this project's Astartes Occulobe/Lyman's Ear entries use for the \"raw acuity\" half of their build, without the Protected Sense half (Aeldari have no fused eye/ear armour organ to shrug off flash and concussion the way an Astartes implant does).",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Aeldari"
+					],
+					"container_type": "meta_trait",
+					"children": [
+						{
+							"id": "t9cepON9iJOmK9pDK",
+							"name": "Acute Vision",
+							"reference": "B35",
+							"points_per_level": 2,
+							"can_level": true,
+							"levels": 2
+						},
+						{
+							"id": "tlcj-hgxNO2Xk53No",
+							"name": "Acute Hearing",
+							"reference": "B35",
+							"points_per_level": 2,
+							"can_level": true,
+							"levels": 2
+						}
+					]
+				},
+				{
+					"id": "tJ58MSh9tTwZyhNgl",
+					"name": "Aeldari Grace",
+					"reference": "B21",
+					"local_notes": "Appearance (Attractive).\n\nLore: Aeldari are consistently described, in the fiction and in their own art, as slender, fine-boned and unnervingly graceful even to other Aeldari — a species that finds its own dying beauty worth mourning.\n\nDesign: Basic Set Appearance, Attractive tier (B21), 4 points.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Aeldari"
+					],
+					"base_points": 4
+				},
+				{
+					"id": "tJZ6WPmc46DUP5KFL",
+					"name": "Slender Frame",
+					"local_notes": "Lore: An Aeldari body is light and fine-boned next to a human's, let alone an Ork's or an Astartes': speed and precision over mass. Codex background and the Path trilogy both play Aeldari as easy to underestimate physically and easy to actually hurt once a fight turns physical.\n\nDesign: 0-point lore flag: the mechanical consequence is what's absent, not present — this package buys no Extra Hit Points and no Damage Resistance the way the Astartes and Ork physiology files do, so Aeldari HP tracks bare ST with no bonus. This entry documents why, rather than pricing anything itself.",
+					"tags": [
+						"Xenos",
+						"Aeldari"
+					],
+					"base_points": 0
+				},
+				{
+					"id": "tx2uR6m9bG8sbSrHB",
+					"name": "Soul Thirst",
+					"reference": "B130",
+					"local_notes": "Dependency (Suffering of Others): Common, Weekly, with Aging. The Drukhari must take a dose about once a week: a session of torture, a raid's slaughter, a night in the arena, or a bloody fight they took part in all count. After a missed weekly dose the Drukhari loses 1 HP every six hours until they feed (B130), and each HP lost this way ages them 2 years (the Aging modifier). No spirit stone is worn and none would help: a Drukhari killed with no Haemonculus to call them back is food for Slaanesh.\n\nLore: Every Drukhari soul is being drained by Slaanesh, and they have no craftworld's Infinity Circuit and no spirit stone to catch it. They keep the dark god at bay by keeping their souls full of borrowed life: the pain and death of others. Nothing else in Commorragh's culture makes sense without this: the arenas, the slave raids, the torture-arts of the Haemonculi and the Kabals' constant reaving are all, at bottom, farming. Consistent, foundational background across every edition of Codex: Dark Eldar / Drukhari.\n\nDesign: Dependency (B130): the substance (suffering of others) is Common, base -10; a weekly dose is x2 = -20; the Aging modifier (+30%, 2 years per HP lost) makes -20 x 1.3 = -26 points. Built as base -20 with a +30% modifier so GCS computes -26. The B130 procedure applies unchanged (1 HP per six hours after a missed weekly dose); the coordinator's review of the Basic Set library supplied these figures.",
+					"tags": [
+						"Disadvantage",
+						"Physical",
+						"Xenos",
+						"Drukhari"
+					],
+					"modifiers": [
+						{
+							"id": "m8JIUbRjp6kVwT_JH",
+							"name": "Aging",
+							"reference": "B130",
+							"local_notes": "Each HP lost to the dependency ages the Drukhari 2 years.",
+							"cost_adj": "+30%"
+						}
+					],
+					"base_points": -20
+				},
+				{
+					"id": "ti1Tpi0r064BCesFf",
+					"name": "Unaging While Fed",
+					"reference": "B95",
+					"local_notes": "No aging rolls while fed. Replaces the Aeldari Extended Lifespan; a fed Drukhari has no natural end date at all.\n\nLore: Drukhari are as long-lived as any Aeldari, and the fed ones do not visibly age at all. The eldest Archons and Haemonculi are older than most craftworlds' oldest Exarchs, kept young by a steady diet of other people's agony. Starved Drukhari, by contrast, are described as withered and grey (Codex: Dark Eldar / Drukhari background).\n\nDesign: Unaging (B95, 15 points) with Accessibility (B110) -40%: it works only while the Soul Thirst dependency is met. 15 x 0.6 = 9 points. It stands in for the Aeldari Extended Lifespan (12 points) rather than adding to it.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Drukhari"
+					],
+					"modifiers": [
+						{
+							"id": "mvN5TDIFTiEQR-zdJ",
+							"name": "Accessibility",
+							"reference": "B110",
+							"local_notes": "Works only while the Soul Thirst dependency is satisfied. Lapses after a month unfed (see Soul Thirst).",
+							"cost_adj": "-40%"
+						}
+					],
+					"base_points": 15
+				}
+			]
+		},
+		{
+			"id": "TB-BGoiMUbuAR8Z16",
+			"name": "Haemonculus's Self-Sculpted Body",
+			"local_notes": "Lore: Haemonculi are the flesh-sculptors of the Covens and their own first works: bodies rebuilt over centuries into whatever shape their art demanded. Codex: Drukhari's Haemonculus background.\n\nDesign: 135 + 10 + 4 + 10 + 6 + 5 - 20 = 150 points, added to the baseline (145) for 295 points before regrowth, estate, mental traits and skills.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Drukhari"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "tmo9etHGQSZlPT3Ps",
+					"name": "Attribute Modifiers (Haemonculus)",
+					"local_notes": "Design: Framework target over the Drukhari Physiology baseline: ST 13, DX 13, IQ 16, HT 15, HP 18, Per 14, Will 17, Move 8. ST +3 (B14, 30); DX -1 (B15, -20); IQ +4 (B16, 80); HT +5 (B15, 50); HP +5 (B16, 2/level, 10; 13 ST plus 5 = 18); Per -2 (B16, 5/level, -10; IQ 16 to Per 14: the Haemonculus is more focused on the inner than the outer world); Will +1 (B16, 5; IQ 16 to Will 17); Basic Move -2 (B17, -5/level, -10; Basic Speed 7.25 gives Basic Move 7, plus 3, minus 2 = 8; a ponderous, heavily-modified gait). 30 - 20 + 80 + 50 + 10 - 10 + 5 - 10 = 135 points.",
+					"tags": [
+						"Physical"
+					],
+					"base_points": 135,
+					"features": [
+						{
+							"type": "attribute_bonus",
+							"attribute": "st",
+							"amount": 3
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "dx",
+							"amount": -1
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "iq",
+							"amount": 4
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "ht",
+							"amount": 5
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "hp",
+							"amount": 5
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "per",
+							"amount": -2
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "will",
+							"amount": 1
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "basic_move",
+							"amount": -2
+						}
+					]
+				},
+				{
+					"id": "t6z2C0_ClQMJJ3NDk",
+					"name": "High Pain Threshold",
+					"reference": "B59",
+					"local_notes": "Lore: Haemonculi rebuild their own nervous systems; pain is a thing they choose to feel.\n\nDesign: High Pain Threshold (B59, 10 points).",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Drukhari"
+					],
+					"base_points": 10
+				},
+				{
+					"id": "t1ZKj1g0xaqLBYrDA",
+					"name": "Hard to Kill",
+					"reference": "B58",
+					"local_notes": "Lore: A Haemonculus's body is a work of redundancy: organs doubled, vessels rerouted.\n\nDesign: Hard to Kill 2 (B58, 2/level, 4 points).",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Drukhari"
+					],
+					"points_per_level": 2,
+					"can_level": true,
+					"levels": 2
+				},
+				{
+					"id": "td8NSZe-9KKvjE-XD",
+					"name": "Regeneration (Slow)",
+					"reference": "B80",
+					"local_notes": "Lore: Flesh sculpted for constant repair.\n\nDesign: Regeneration, Slow tier (B80, 10 points, 1 HP per 12 hours).",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Drukhari"
+					],
+					"base_points": 10
+				},
+				{
+					"id": "tkZhcCizGLwBJUpOA",
+					"name": "Tough Skin",
+					"reference": "B46",
+					"local_notes": "Lore: Grafted plates, layered scar tissue and toughened hide.\n\nDesign: Damage Resistance 2 (B46, 5/level, 10) with Tough Skin -40%: 6 points.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Drukhari"
+					],
+					"modifiers": [
+						{
+							"id": "mnGy9MjlBZR0GRboQ",
+							"name": "Tough Skin",
+							"reference": "B47",
+							"local_notes": "Skin toughened with grafts; injuries and blows that flay still cut.",
+							"cost_adj": "-40%"
+						}
+					],
+					"points_per_level": 5,
+					"can_level": true,
+					"levels": 2,
+					"features": [
+						{
+							"type": "dr_bonus",
+							"locations": [
+								"all"
+							],
+							"amount": 2
+						}
+					]
+				},
+				{
+					"id": "tXCReAwdm49ri4EiF",
+					"name": "Injury Tolerance (No Vitals)",
+					"reference": "B60",
+					"local_notes": "Lore: A Haemonculus's vital organs are moved, doubled or spread through the body.\n\nDesign: Injury Tolerance, No Vitals (B60, 5 points): vitals hits count as torso hits.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Drukhari"
+					],
+					"base_points": 5
+				},
+				{
+					"id": "tK2Tf9aRGeHLqfZNn",
+					"name": "Grotesque Body",
+					"reference": "B21",
+					"local_notes": "Replaces the Aeldari Grace's Attractive: net Hideous (-16).\n\nLore: Haemonculi sculpt themselves for aesthetic reasons that are theirs alone and rarely resemble a pleasant face.\n\nDesign: Appearance (B21) worse than Attractive: Hideous is -16, and the shared Aeldari Grace has already bought +4, so -20 brings the net Appearance to Hideous.",
+					"tags": [
+						"Disadvantage",
+						"Physical",
+						"Xenos",
+						"Drukhari"
+					],
+					"base_points": -20
+				}
+			]
+		},
+		{
+			"id": "TU-uee_UjPHfVzzMg",
+			"name": "Haemonculus's Composure",
+			"local_notes": "Lore: Fear and awe do not touch a Haemonculus.\n\nDesign: 15 points.",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Xenos",
+				"Drukhari"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "tCs3y9SlpnrpC0D7A",
+					"name": "Unfazeable",
+					"reference": "B95",
+					"local_notes": "Lore: A Haemonculus has seen every horror from the operating side.\n\nDesign: Unfazeable (B95, 15 points).",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Xenos",
+						"Drukhari"
+					],
+					"base_points": 15
+				}
+			]
+		},
+		{
+			"id": "TUA0hL2d_ThsQJm6a",
+			"name": "Haemonculus's Estate",
+			"local_notes": "Lore: A Haemonculus's coven pays them and answers to them. Background.\n\nDesign: 20 + 10 = 30 points.",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Xenos",
+				"Drukhari"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "tO-pe3QStj1EA7PTq",
+					"name": "Wealth (Wealthy)",
+					"reference": "B25",
+					"local_notes": "Lore: The Covens are the Drukhari's surgeons and are paid for it.\n\nDesign: Wealthy (B25, 20 points).",
+					"tags": [
+						"Advantage",
+						"Social",
+						"Xenos",
+						"Drukhari"
+					],
+					"base_points": 20
+				},
+				{
+					"id": "tQcNmmmGsqw0sF_0V",
+					"name": "Status 2",
+					"reference": "B28",
+					"local_notes": "Lore: A Haemonculus heads a Coven's rank.\n\nDesign: Status 2 (B28, 5/level, 10 points).",
+					"tags": [
+						"Advantage",
+						"Social",
+						"Xenos",
+						"Drukhari"
+					],
+					"points_per_level": 5,
+					"can_level": true,
+					"levels": 2
+				}
+			]
+		},
+		{
+			"id": "trynAg1MAlWNq5wIF",
+			"name": "Haemonculus Regrowth",
+			"reference": "B55",
+			"local_notes": "One Extra Life. On death, if a fragment reaches a Coven and the price is met, the character is regrown and returns, changed a little (GM's choice of small physical or mental side effect).\n\nLore: Haemonculi can regrow the dead from little more than a scrap, and the Covens sell that service to the powerful. Archons and their favoured servants are the ones who can afford the price, in coin, slaves or service. Codex: Drukhari background.\n\nDesign: Extra Life (B55, 25 points) with Accessibility (B110) -40% for the recovered-fragment and coven-fee requirements. 25 x 0.6 = 15 points. Reserved for Archons, favoured servants and Haemonculi; ordinary Kabalites and Wyches do not have it.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Drukhari"
+			],
+			"modifiers": [
+				{
+					"id": "m9YrT_QlkN-zDe1wb",
+					"name": "Accessibility",
+					"reference": "B110",
+					"local_notes": "Needs a body fragment (at least the head or a torso) recovered to a Haemonculus and a Coven paid for the work; lasts one life.",
+					"cost_adj": "-40%"
+				}
+			],
+			"base_points": 25
+		},
+		{
+			"id": "TliaSOLIBYfPDV4ME",
+			"name": "Power from Pain",
+			"local_notes": "Lore: All three stages together: the full Power from Pain a Drukhari of rank earns in a long fight.\n\nDesign: 7 + 7 + 20 = 34 points. Lower-tier templates include the single stages above instead.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Drukhari"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "tqqHnCH-WTMiQw_Dm",
+					"name": "Power from Pain (Stage I)",
+					"reference": "B59",
+					"local_notes": "High Pain Threshold, once feeding has begun. Stage I of three; each later stage needs the one before it. A stage lapses at the end of the scene.\n\nLore: Every Drukhari fights harder for the taste of blood. Codex background describes the Dark Eldar as growing bolder and stronger as the killing goes on, feeding on the pain they cause; the exact stages differ between Kabals, Wych Cults and Covens.\n\nDesign: High Pain Threshold (B59, 10 points) with Accessibility (B110) -30% for its trigger: 10 x 0.7 = 7 points. Deliberately no `attributes` feature: the bonus is conditional and must not raise the sheet's stats before the trigger.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Drukhari"
+					],
+					"modifiers": [
+						{
+							"id": "mBVE_7Jh3ZqaMc_fr",
+							"name": "Accessibility",
+							"reference": "B110",
+							"local_notes": "Only after the Drukhari, or a comrade in the same unit, has drawn blood or caused real suffering in this scene.",
+							"cost_adj": "-30%"
+						}
+					],
+					"base_points": 10
+				},
+				{
+					"id": "TycDZTZNDcArw90-j",
+					"name": "Power from Pain (Stage II)",
+					"local_notes": "Stage II: melee and Fright Check bonuses (requires Stage I), lapses at the end of the scene.\n\nLore: By the time a fight has really turned, a Drukhari hits harder and cannot be frightened. Background: the Power from Pain rule in Codex: Drukhari (per unit, by kills scored).\n\nDesign: Melee and morale bonuses only; the real weight is small (5 + 2 = 7 points). Not `attributes`: the bonuses are conditional.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Drukhari"
+					],
+					"container_type": "meta_trait",
+					"children": [
+						{
+							"id": "tlgNLKPzALD9kEOsw",
+							"name": "Bloodied Strength",
+							"reference": "B88",
+							"local_notes": "Striking ST +2: melee damage as if ST 2 higher.\n\nLore: The Kabalite's cruelty in melee sharpens as the blood flows.\n\nDesign: Striking ST 2 (B88, 5/level, 10) with Accessibility -50% = 5 points.",
+							"tags": [
+								"Advantage",
+								"Physical",
+								"Xenos",
+								"Drukhari"
+							],
+							"modifiers": [
+								{
+									"id": "mv8zTqDiOgRKlZgQk",
+									"name": "Accessibility",
+									"reference": "B110",
+									"local_notes": "Only after Stage I plus at least one enemy dropped or seriously hurt in this scene by the Drukhari's unit.",
+									"cost_adj": "-50%"
+								}
+							],
+							"points_per_level": 5,
+							"can_level": true,
+							"levels": 2
+						},
+						{
+							"id": "t5rpqWUD7mqR6yV52",
+							"name": "Bloodied Nerve",
+							"reference": "B55",
+							"local_notes": "Fearlessness +2 to Fright Checks.\n\nLore: A feeding Drukhari does not flinch from the things that break other people.\n\nDesign: Fearlessness 2 (B55, 2/level, 4) with Accessibility -50% = 2 points.",
+							"tags": [
+								"Advantage",
+								"Mental",
+								"Xenos",
+								"Drukhari"
+							],
+							"modifiers": [
+								{
+									"id": "mq0eTLWLIMdfCsLM4",
+									"name": "Accessibility",
+									"reference": "B110",
+									"local_notes": "Same trigger as Bloodied Strength.",
+									"cost_adj": "-50%"
+								}
+							],
+							"points_per_level": 2,
+							"can_level": true,
+							"levels": 2
+						}
+					]
+				},
+				{
+					"id": "tDH_POtd__V5We2Nc",
+					"name": "Power from Pain (Stage III)",
+					"reference": "B80",
+					"local_notes": "Regeneration (Fast): 1 HP per minute (roughly 1 HP per 6 combat turns of 10 seconds when tracking turns).\n\nLore: The height of the feed: wounds close as fast as the killer can reopen new ones in other people. Codex: Drukhari's third stage is the strongest bonus a unit can earn.\n\nDesign: Regeneration, Fast tier (B80, 50 points, 1 HP per minute) with Accessibility -60%: 50 x 0.4 = 20 points. Kept at Fast rather than faster because the lore effect is 'hard to put down', not 'cannot be killed'.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Drukhari"
+					],
+					"modifiers": [
+						{
+							"id": "m-XUnR7Jkw4-Sn5Ts",
+							"name": "Accessibility",
+							"reference": "B110",
+							"local_notes": "Only after Stages I and II and at least three enemies dropped or badly hurt in this scene by the Drukhari's unit.",
+							"cost_adj": "-60%"
+						}
+					],
+					"base_points": 50
+				}
+			]
+		},
+		{
+			"id": "tjd3gUas9n-63-6qV",
+			"name": "Sadism",
+			"reference": "B152",
+			"local_notes": "Takes pleasure in others' suffering and seeks chances to inflict it; roll self-control when the chance arises.\n\nLore: Cruelty is Commorragh's native culture, not a deviance. Most Drukhari, and every Haemonculus, take an openly aesthetic interest in others' pain (Codex: Drukhari and background across editions). The self-control 12 default represents someone who can hold off when it would cost them, e.g. in front of a superior.\n\nDesign: Sadism (B152, -15) with self-control 12.",
+			"tags": [
+				"Disadvantage",
+				"Mental",
+				"Xenos",
+				"Drukhari"
+			],
+			"base_points": -15,
+			"cr": 12
+		},
+		{
+			"id": "tLIi8_3zdCvpoepbg",
+			"name": "Callous",
+			"reference": "B125",
+			"local_notes": "Indifferent to others' pain; -3 reaction when it shows.\n\nLore: Even a Drukhari who does not enjoy suffering treats it as currency. Background.\n\nDesign: Callous (B125, -5).",
+			"tags": [
+				"Disadvantage",
+				"Mental",
+				"Xenos",
+				"Drukhari"
+			],
+			"base_points": -5
+		},
+		{
+			"id": "tDDt-I1v6sXuHw-PT",
+			"name": "Obsession (Perfect Agony)",
+			"reference": "B146",
+			"local_notes": "Consumed by a lifelong artistic project (a perfect pain, a perfect body); self-control roll to abandon a chance to advance it.\n\nLore: Every Haemonculus is driven by an aesthetic quest no one else understands. Background.\n\nDesign: Obsession (B146, -10) for a long-term goal.",
+			"tags": [
+				"Disadvantage",
+				"Mental",
+				"Xenos",
+				"Drukhari"
+			],
+			"base_points": -10,
+			"cr": 12
+		}
+	],
+	"skills": [
+		{
+			"id": "svS9Qm5xxbV-IQEEw",
+			"name": "Surgery",
+			"local_notes": "Lore: The Haemonculus's art: cutting, reshaping and rebuilding living bodies.\n\nDesign: IQ+10 (26) for 48 points, Very Hard.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "iq/vh",
+			"points": 48
+		},
+		{
+			"id": "sr7izs-mFn4n88ind",
+			"name": "Physiology",
+			"local_notes": "Lore: How every kind of flesh breaks and heals.\n\nDesign: IQ+9 (25) for 40 points, Hard.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"specialization": "(Xenos)",
+			"difficulty": "iq/h",
+			"points": 40
+		},
+		{
+			"id": "sqvLkZ149FV4y5xIb",
+			"name": "Poisons",
+			"local_notes": "Lore: The toxins on splinters and blades.\n\nDesign: IQ+9 (25) for 40 points, Hard.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "iq/h",
+			"points": 40
+		},
+		{
+			"id": "sCO1KGNyeU6OpZeRP",
+			"name": "Pharmacy",
+			"local_notes": "Lore: Combat drugs and painkillers.\n\nDesign: IQ+5 (21) for 24 points, Hard.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"specialization": "(Synthetic)",
+			"difficulty": "iq/h",
+			"points": 24
+		},
+		{
+			"id": "sRG-o4-mI3Fciymkb",
+			"name": "Diagnosis",
+			"local_notes": "Lore: Reading a patient's state at a glance.\n\nDesign: IQ+3 (19) for 16 points, Hard.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "iq/h",
+			"points": 16
+		},
+		{
+			"id": "sT2nLwwXMfQYInDdm",
+			"name": "Chemistry",
+			"local_notes": "Lore: Compound design.\n\nDesign: IQ+2 (18) for 12 points, Hard.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "iq/h",
+			"points": 12
+		},
+		{
+			"id": "sdNq5MrSlW2ZOpHs3",
+			"name": "Interrogation",
+			"local_notes": "Lore: The art of the question.\n\nDesign: IQ+4 (20) for 16 points, Average.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "iq/a",
+			"points": 16
+		},
+		{
+			"id": "s4VstF4E9w6YZq-TE",
+			"name": "Intimidation",
+			"local_notes": "Lore: Presence.\n\nDesign: Will+2 (19) for 8 points, Average.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "will/a",
+			"points": 8
+		},
+		{
+			"id": "sg6lwV_nONGFJEaAp",
+			"name": "Guns",
+			"local_notes": "Lore: Stinger pistol.\n\nDesign: DX+3 (16) for 8 points, Easy.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"specialization": "Pistol",
+			"difficulty": "dx/e",
+			"points": 8
+		},
+		{
+			"id": "sCsNpJ1VpMQlQ8MqQ",
+			"name": "Knife",
+			"local_notes": "Lore: Scissorhand and surgical blades.\n\nDesign: DX+4 (17) for 12 points, Easy.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "dx/e",
+			"points": 12
+		},
+		{
+			"id": "sUddAbZLfTHrw3k2W",
+			"name": "First Aid",
+			"local_notes": "Lore: Keeping a subject alive.\n\nDesign: IQ+1 (17) for 2 points, Easy.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "iq/e",
+			"points": 2
+		},
+		{
+			"id": "sON08S5v5vN2q0OXQ",
+			"name": "Hidden Lore",
+			"local_notes": "Lore: The Haemonculi study the thing that hunts them.\n\nDesign: IQ+1 (17) for 4 points, Average.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"specialization": "(Slaanesh)",
+			"difficulty": "iq/a",
+			"points": 4
+		},
+		{
+			"id": "spu7Ewe2yLZtBXKpx",
+			"name": "Area Knowledge",
+			"local_notes": "Lore: The Dark City's Covens.\n\nDesign: IQ+2 (18) for 4 points, Easy.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"specialization": "(Commorragh)",
+			"difficulty": "iq/e",
+			"points": 4
+		},
+		{
+			"id": "svHmvk3Z6ZrMQshgb",
+			"name": "Stealth",
+			"local_notes": "Lore: Even a torturer must sometimes come quietly.\n\nDesign: DX+0 (13) for 2 points, Average.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "dx/a",
+			"points": 2
+		},
+		{
+			"id": "sNqdwqj_xB86QKF1i",
+			"name": "Streetwise",
+			"local_notes": "Lore: The Dark City's markets in flesh.\n\nDesign: IQ+0 (16) for 2 points, Average.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "iq/a",
+			"points": 2
+		},
+		{
+			"id": "sHbc88Oc29iwAVd14",
+			"name": "Body Language",
+			"local_notes": "Lore: Reading a subject's pain.\n\nDesign: Per+1 (15) for 4 points, Average.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "per/a",
+			"points": 4
+		}
+	],
+	"equipment": []
+}

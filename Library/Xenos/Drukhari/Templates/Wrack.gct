@@ -1,0 +1,561 @@
+{
+	"version": 5,
+	"id": "BjYkEwmkyzyILJ-Pi",
+	"notes": "A Wrack: a coven servant, surgically bulked and dulled, serving a Haemonculus as torturer's assistant and bodyguard. Point math (see Xenos/Drukhari/Traits/Drukhari Physiology.adq): Drukhari Physiology (145) + Wrack Surgery (23) + Duty (Coven) (-10) + Sadism (-15) + Callous (-5) + Power from Pain Stages I and II (14) = 152 points of traits, plus skills (73 points) = 225 points. Stats: ST 14, DX 12, IQ 10, HT 14, HP 16, Will 11, Per 10, Speed 6.75, Move 8, Dodge 9 (6 + 3): exactly framework.md's Wrack line. This is the framework's elite-human tier (200-350), a little under its 'about 250' Wrack target: see the last paragraph.\n\nWeapon skills: scissorhand and hexrifle-type tools are Knife and Guns; the liquifier is Liquid Projector (Sprayer). Weapon skills follow the Drukhari armoury as framework.md's Skills table reads it: splinter weapons fire solid crystal shards, so they use Guns (Pistol/Rifle), the same choice the Aeldari Guardian makes for the shuriken catapult; blasters and dark lances are beam weapons (Beam Weapons); heavy splinter and disintegrator cannons are Gunner.\n\nWhy a little under 250: a Wrack is a rebuilt servant with IQ 10 and DX 12, and every point bought honestly (bulk, DR, Hard to Kill, High Pain Threshold, drilled skills) is already spent; the Grotesque Body and Duty (Coven) disadvantages, both lore-faithful, take about 22 points back. Drop Duty to reach about 235, or add a few skill points, if a GM wants exactly 250.",
+	"traits": [
+		{
+			"id": "TDHmqDjHHGo3po13d",
+			"name": "Drukhari Physiology",
+			"local_notes": "Lore: The Drukhari are the Aeldari who never left: raiders and slavers of Commorragh, the Dark City hidden in the webway. Their bodies are the same fine-boned, fast, sharp-eyed Aeldari bodies the craftworlds field. What differs is the soul. With no spirit stone to shelter it, Slaanesh drains it continually, and they hold the hunger off by feeding on suffering. This trait is the baseline shared by every Drukhari template; the training, cult and coven lenses below layer on top of it, exactly as the Aeldari Physiology's Path and Aspect lenses do.\n\nDesign: Pulls in, by include, the shared Aeldari body: Attribute Modifiers (140), Enhanced Move (Ground) 1/2 (10), Acute Senses (8), Aeldari Grace (4) and Slender Frame (0), so a fix there updates the Drukhari on rebuild. Adds Soul Thirst (-26) and Unaging While Fed (+9). 140 + 10 + 8 + 4 + 0 - 26 + 9 = 145 points, landing ST 10, DX 14, IQ 12, HT 10, HP 10, Will 12, Per 12, Basic Speed 6.25, Move 9, the Kabalite Warrior's physical line before its own package (framework.md, Drukhari). Deliberately left out: Aeldari Psychic Sensitivity, Aeldari Psyker (Talent), Warp Empowerment, Spirit Stone and every Path lens (the Drukhari shun the warp and have no Paths), plus Emotional Intensity, Arrogance Towards Younger Races, Slaanesh's Hunger and Extended Lifespan, each of which Soul Thirst, the Drukhari mental traits below or Unaging While Fed replace. Emotional excess is a Drukhari trait too, but it shows up as the cruelty and vanity below, not as Path-restrained rapture.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Drukhari"
+			],
+			"container_type": "ancestry",
+			"children": [
+				{
+					"id": "t-pzG7Yd9Dwy5pWdm",
+					"name": "Attribute Modifiers",
+					"local_notes": "Design: Framework target (Guardian anchor line, the ancestry baseline every other Aeldari template builds on): ST 10, DX 14, IQ 12, HT 10, HP 10. Increased DX +4 (B15, 20/level, 80) for DX 14 — \"faster and more precise than any baseline human,\" matching the anchor table's own figure without touching ST or HT, which stay human-baseline: Aeldari are quick and precise, not physically overwhelming. Increased IQ +2 (B16, 20/level, 40) for IQ 12 — a subtler, more perceptive mind than a human's on average, per Codex background's consistent \"the Aeldari are wiser and more perceptive than short-lived Humanity\" framing. Increased Basic Speed +0.25 (B17, 5 points per 0.25 level, 5) for reflexes a shade faster even than DX 14 alone implies — the same design choice this project's Astartes Attribute Modifiers makes for \"faster reflexes than baseline humans\" without inflating every DX skill. Basic Move +3 (B17, 5/level, 15) at the user's direction: the Aeldari are the fastest-moving people in the galaxy, and even a Guardian outpaces a human (Move 9). 80+40+5+15 = 140. Will and Per are left untouched here (both track IQ 12 with no separate bonus): the Guardian anchor's own Per 13 and Aspect Warrior's Will 13 come from Keen Battle-Sense and Aspect Training below, not from this universal package, because a Farseer's own anchor (Per 15 exactly equal to IQ 15) shows the extra Per point is a warrior's battlefield habit, not a species-wide trait — baking it in here would overshoot the Farseer line once her own IQ is bought up.",
+					"tags": [
+						"Physical"
+					],
+					"base_points": 140,
+					"features": [
+						{
+							"type": "attribute_bonus",
+							"attribute": "dx",
+							"amount": 4
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "iq",
+							"amount": 2
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "basic_speed",
+							"amount": 0.25
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "basic_move",
+							"amount": 3
+						}
+					]
+				},
+				{
+					"id": "twlkvdYRnbcuGDg-X",
+					"name": "Enhanced Move (Ground)",
+					"reference": "B52",
+					"local_notes": "Top sprinting speed x1.5. Combat Move unchanged.\n\nLore: Aeldari run with a lightness and speed no human can match; in the fiction they cross open ground before an enemy can bring guns to bear.\n\nDesign: Enhanced Move (Ground) 1/2 (B52, half level 10) at the user's direction, matching the Astartes half level.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Aeldari"
+					],
+					"points_per_level": 20,
+					"can_level": true,
+					"levels": 0.5
+				},
+				{
+					"id": "TccGT0MpYPwD8JFdY",
+					"name": "Acute Senses",
+					"local_notes": "Lore: Aeldari sight and hearing are famously sharper than a human's — able to read the wind off a craftworld's wraithbone spires, or track a single voice through a warhost's roar. Consistently depicted across Codex background and the Path trilogy (a Ranger's eyesight in particular is played as near-supernatural).\n\nDesign: Acute Vision 2 (B35, 2/level, 4) plus Acute Hearing 2 (B35, 2/level, 4) = 8 points, the same math this project's Astartes Occulobe/Lyman's Ear entries use for the \"raw acuity\" half of their build, without the Protected Sense half (Aeldari have no fused eye/ear armour organ to shrug off flash and concussion the way an Astartes implant does).",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Aeldari"
+					],
+					"container_type": "meta_trait",
+					"children": [
+						{
+							"id": "t0_36QIXOFtaAnA22",
+							"name": "Acute Vision",
+							"reference": "B35",
+							"points_per_level": 2,
+							"can_level": true,
+							"levels": 2
+						},
+						{
+							"id": "tdvJq-7QAGJLLAope",
+							"name": "Acute Hearing",
+							"reference": "B35",
+							"points_per_level": 2,
+							"can_level": true,
+							"levels": 2
+						}
+					]
+				},
+				{
+					"id": "tD_4T9wXHcBVcwsvG",
+					"name": "Aeldari Grace",
+					"reference": "B21",
+					"local_notes": "Appearance (Attractive).\n\nLore: Aeldari are consistently described, in the fiction and in their own art, as slender, fine-boned and unnervingly graceful even to other Aeldari — a species that finds its own dying beauty worth mourning.\n\nDesign: Basic Set Appearance, Attractive tier (B21), 4 points.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Aeldari"
+					],
+					"base_points": 4
+				},
+				{
+					"id": "tDbz2RRQa236LjCWK",
+					"name": "Slender Frame",
+					"local_notes": "Lore: An Aeldari body is light and fine-boned next to a human's, let alone an Ork's or an Astartes': speed and precision over mass. Codex background and the Path trilogy both play Aeldari as easy to underestimate physically and easy to actually hurt once a fight turns physical.\n\nDesign: 0-point lore flag: the mechanical consequence is what's absent, not present — this package buys no Extra Hit Points and no Damage Resistance the way the Astartes and Ork physiology files do, so Aeldari HP tracks bare ST with no bonus. This entry documents why, rather than pricing anything itself.",
+					"tags": [
+						"Xenos",
+						"Aeldari"
+					],
+					"base_points": 0
+				},
+				{
+					"id": "t0xpaNUMw3lOcTK_o",
+					"name": "Soul Thirst",
+					"reference": "B130",
+					"local_notes": "Dependency (Suffering of Others): Common, Weekly, with Aging. The Drukhari must take a dose about once a week: a session of torture, a raid's slaughter, a night in the arena, or a bloody fight they took part in all count. After a missed weekly dose the Drukhari loses 1 HP every six hours until they feed (B130), and each HP lost this way ages them 2 years (the Aging modifier). No spirit stone is worn and none would help: a Drukhari killed with no Haemonculus to call them back is food for Slaanesh.\n\nLore: Every Drukhari soul is being drained by Slaanesh, and they have no craftworld's Infinity Circuit and no spirit stone to catch it. They keep the dark god at bay by keeping their souls full of borrowed life: the pain and death of others. Nothing else in Commorragh's culture makes sense without this: the arenas, the slave raids, the torture-arts of the Haemonculi and the Kabals' constant reaving are all, at bottom, farming. Consistent, foundational background across every edition of Codex: Dark Eldar / Drukhari.\n\nDesign: Dependency (B130): the substance (suffering of others) is Common, base -10; a weekly dose is x2 = -20; the Aging modifier (+30%, 2 years per HP lost) makes -20 x 1.3 = -26 points. Built as base -20 with a +30% modifier so GCS computes -26. The B130 procedure applies unchanged (1 HP per six hours after a missed weekly dose); the coordinator's review of the Basic Set library supplied these figures.",
+					"tags": [
+						"Disadvantage",
+						"Physical",
+						"Xenos",
+						"Drukhari"
+					],
+					"modifiers": [
+						{
+							"id": "mWjNsKXn8ONsmIyPM",
+							"name": "Aging",
+							"reference": "B130",
+							"local_notes": "Each HP lost to the dependency ages the Drukhari 2 years.",
+							"cost_adj": "+30%"
+						}
+					],
+					"base_points": -20
+				},
+				{
+					"id": "tdlvv2ju1vNZVGHRh",
+					"name": "Unaging While Fed",
+					"reference": "B95",
+					"local_notes": "No aging rolls while fed. Replaces the Aeldari Extended Lifespan; a fed Drukhari has no natural end date at all.\n\nLore: Drukhari are as long-lived as any Aeldari, and the fed ones do not visibly age at all. The eldest Archons and Haemonculi are older than most craftworlds' oldest Exarchs, kept young by a steady diet of other people's agony. Starved Drukhari, by contrast, are described as withered and grey (Codex: Dark Eldar / Drukhari background).\n\nDesign: Unaging (B95, 15 points) with Accessibility (B110) -40%: it works only while the Soul Thirst dependency is met. 15 x 0.6 = 9 points. It stands in for the Aeldari Extended Lifespan (12 points) rather than adding to it.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Drukhari"
+					],
+					"modifiers": [
+						{
+							"id": "mDzJrtmOUBNbsKEnG",
+							"name": "Accessibility",
+							"reference": "B110",
+							"local_notes": "Works only while the Soul Thirst dependency is satisfied. Lapses after a month unfed (see Soul Thirst).",
+							"cost_adj": "-40%"
+						}
+					],
+					"base_points": 15
+				}
+			]
+		},
+		{
+			"id": "T-Yc-f1IIBrm_MOlt",
+			"name": "Wrack Surgery",
+			"local_notes": "Lore: Wracks are the Covens' servants, taken and rebuilt for labour and torture: bulked out, dulled, and set to the Haemonculus's work. Codex: Drukhari's Wrack background.\n\nDesign: 4 + 10 + 9 + 6 + 6 - 12 = 23 points, added to the baseline (145) for 168 points before mental traits, Power from Pain and skills.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Drukhari"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "tK42gihmpmeWOu-KS",
+					"name": "Attribute Modifiers (Wrack)",
+					"local_notes": "Design: Framework target over the Drukhari Physiology baseline: ST 14, DX 12, IQ 10, HT 14, HP 16, Per 10, Will 11, Move 8. ST +4 (B14, 40); DX -2 (B15, -40); IQ -2 (B16, -40); HT +4 (B15, 40); HP +2 (B16, 4; ST 14 plus 2 = 16); Will +1 (B16, 5; IQ 10 to Will 11); Basic Move -1 (B17, -5; Basic Speed 6.75 gives Basic Move 6 plus 3 minus 1 = 8). Per 10 tracks IQ 10 and no Keen Battle-Sense is bought. 40 - 40 - 40 + 40 + 4 + 5 - 5 = 4 points.",
+					"tags": [
+						"Physical"
+					],
+					"base_points": 4,
+					"features": [
+						{
+							"type": "attribute_bonus",
+							"attribute": "st",
+							"amount": 4
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "dx",
+							"amount": -2
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "iq",
+							"amount": -2
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "ht",
+							"amount": 4
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "hp",
+							"amount": 2
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "will",
+							"amount": 1
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "basic_move",
+							"amount": -1
+						}
+					]
+				},
+				{
+					"id": "tCgdCgZLcoSGtr_wz",
+					"name": "High Pain Threshold",
+					"reference": "B59",
+					"local_notes": "Lore: Deadened nerves: a Wrack's screams are the Haemonculus's, not his own.\n\nDesign: High Pain Threshold (B59, 10 points).",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Drukhari"
+					],
+					"base_points": 10
+				},
+				{
+					"id": "tNHFROQFmezcDWP2o",
+					"name": "Tough Skin",
+					"reference": "B46",
+					"local_notes": "Lore: Extra hide and grafted plates.\n\nDesign: Damage Resistance 3 (B46, 5/level, 15) with Tough Skin -40%: 9 points.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Drukhari"
+					],
+					"modifiers": [
+						{
+							"id": "mIH2OfQE_ny4_V6Xb",
+							"name": "Tough Skin",
+							"reference": "B47",
+							"local_notes": "Stitched, grafted and scarred hide.",
+							"cost_adj": "-40%"
+						}
+					],
+					"points_per_level": 5,
+					"can_level": true,
+					"levels": 3,
+					"features": [
+						{
+							"type": "dr_bonus",
+							"locations": [
+								"all"
+							],
+							"amount": 3
+						}
+					]
+				},
+				{
+					"id": "tFsJW5etReSkjDpJB",
+					"name": "Hard to Kill",
+					"reference": "B58",
+					"local_notes": "Lore: Duplicated organs and reinforced vessels keep a Wrack up long after he should be down.\n\nDesign: Hard to Kill 3 (B58, 2/level, 6 points).",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Drukhari"
+					],
+					"points_per_level": 2,
+					"can_level": true,
+					"levels": 3
+				},
+				{
+					"id": "tPSzAgb__jw2q6Irq",
+					"name": "Bulked Frame",
+					"reference": "B16",
+					"local_notes": "Lifting ST +2.\n\nLore: Wracks are hauled, bloated and rebuilt into load-bearing servants.\n\nDesign: Lifting ST 2 (B16, 3/level, 6 points).",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Drukhari"
+					],
+					"points_per_level": 3,
+					"can_level": true,
+					"levels": 2,
+					"features": [
+						{
+							"type": "attribute_bonus",
+							"attribute": "lifting_st",
+							"amount": 2
+						}
+					]
+				},
+				{
+					"id": "t7lsB9pq9Ng2wJk0E",
+					"name": "Grotesque Body (Wrack)",
+					"reference": "B21",
+					"local_notes": "Replaces the Aeldari Grace's Attractive: net Ugly (-8).\n\nLore: Wracks are stitched, flayed or otherwise visibly rebuilt, in a way their masters find pleasing.\n\nDesign: Ugly is -8 and the shared Aeldari Grace has already bought +4, so -12 brings the net Appearance to Ugly.",
+					"tags": [
+						"Disadvantage",
+						"Physical",
+						"Xenos",
+						"Drukhari"
+					],
+					"base_points": -12
+				}
+			]
+		},
+		{
+			"id": "toCBJF9hQ95t2H_Wp",
+			"name": "Duty (Coven)",
+			"reference": "B133",
+			"local_notes": "Bound to a Haemonculus's Coven: 12 or less on a frequency roll each session that the Coven requires service.\n\nLore: Wracks serve their Haemonculus because they cannot leave. Some were bought as slaves, some sold themselves in the hope of a better fate, and few are free to walk away. Background.\n\nDesign: Duty (B133) 12 or less, -10 points, not extremely hazardous.",
+			"tags": [
+				"Disadvantage",
+				"Mental",
+				"Xenos",
+				"Drukhari"
+			],
+			"base_points": -10
+		},
+		{
+			"id": "tTBXr46ZGQwes7nUG",
+			"name": "Sadism",
+			"reference": "B152",
+			"local_notes": "Takes pleasure in others' suffering and seeks chances to inflict it; roll self-control when the chance arises.\n\nLore: Cruelty is Commorragh's native culture, not a deviance. Most Drukhari, and every Haemonculus, take an openly aesthetic interest in others' pain (Codex: Drukhari and background across editions). The self-control 12 default represents someone who can hold off when it would cost them, e.g. in front of a superior.\n\nDesign: Sadism (B152, -15) with self-control 12.",
+			"tags": [
+				"Disadvantage",
+				"Mental",
+				"Xenos",
+				"Drukhari"
+			],
+			"base_points": -15,
+			"cr": 12
+		},
+		{
+			"id": "tuDbqlsAyPF5UTZgm",
+			"name": "Callous",
+			"reference": "B125",
+			"local_notes": "Indifferent to others' pain; -3 reaction when it shows.\n\nLore: Even a Drukhari who does not enjoy suffering treats it as currency. Background.\n\nDesign: Callous (B125, -5).",
+			"tags": [
+				"Disadvantage",
+				"Mental",
+				"Xenos",
+				"Drukhari"
+			],
+			"base_points": -5
+		},
+		{
+			"id": "tuJR-0I5T2i04dK1j",
+			"name": "Power from Pain (Stage I)",
+			"reference": "B59",
+			"local_notes": "High Pain Threshold, once feeding has begun. Stage I of three; each later stage needs the one before it. A stage lapses at the end of the scene.\n\nLore: Every Drukhari fights harder for the taste of blood. Codex background describes the Dark Eldar as growing bolder and stronger as the killing goes on, feeding on the pain they cause; the exact stages differ between Kabals, Wych Cults and Covens.\n\nDesign: High Pain Threshold (B59, 10 points) with Accessibility (B110) -30% for its trigger: 10 x 0.7 = 7 points. Deliberately no `attributes` feature: the bonus is conditional and must not raise the sheet's stats before the trigger.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Drukhari"
+			],
+			"modifiers": [
+				{
+					"id": "mPOO6CE3SoBy4GV1b",
+					"name": "Accessibility",
+					"reference": "B110",
+					"local_notes": "Only after the Drukhari, or a comrade in the same unit, has drawn blood or caused real suffering in this scene.",
+					"cost_adj": "-30%"
+				}
+			],
+			"base_points": 10
+		},
+		{
+			"id": "TAOHYq-JagmpM_CK4",
+			"name": "Power from Pain (Stage II)",
+			"local_notes": "Stage II: melee and Fright Check bonuses (requires Stage I), lapses at the end of the scene.\n\nLore: By the time a fight has really turned, a Drukhari hits harder and cannot be frightened. Background: the Power from Pain rule in Codex: Drukhari (per unit, by kills scored).\n\nDesign: Melee and morale bonuses only; the real weight is small (5 + 2 = 7 points). Not `attributes`: the bonuses are conditional.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Drukhari"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "tY8O5yODA9_rnPDgH",
+					"name": "Bloodied Strength",
+					"reference": "B88",
+					"local_notes": "Striking ST +2: melee damage as if ST 2 higher.\n\nLore: The Kabalite's cruelty in melee sharpens as the blood flows.\n\nDesign: Striking ST 2 (B88, 5/level, 10) with Accessibility -50% = 5 points.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Drukhari"
+					],
+					"modifiers": [
+						{
+							"id": "myf1REvG8SzKzkeQ3",
+							"name": "Accessibility",
+							"reference": "B110",
+							"local_notes": "Only after Stage I plus at least one enemy dropped or seriously hurt in this scene by the Drukhari's unit.",
+							"cost_adj": "-50%"
+						}
+					],
+					"points_per_level": 5,
+					"can_level": true,
+					"levels": 2
+				},
+				{
+					"id": "tgKvdb7JkKYd4YPWW",
+					"name": "Bloodied Nerve",
+					"reference": "B55",
+					"local_notes": "Fearlessness +2 to Fright Checks.\n\nLore: A feeding Drukhari does not flinch from the things that break other people.\n\nDesign: Fearlessness 2 (B55, 2/level, 4) with Accessibility -50% = 2 points.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Xenos",
+						"Drukhari"
+					],
+					"modifiers": [
+						{
+							"id": "mnqLrZPideMTMVQyh",
+							"name": "Accessibility",
+							"reference": "B110",
+							"local_notes": "Same trigger as Bloodied Strength.",
+							"cost_adj": "-50%"
+						}
+					],
+					"points_per_level": 2,
+					"can_level": true,
+					"levels": 2
+				}
+			]
+		}
+	],
+	"skills": [
+		{
+			"id": "skUp1zLMCv2YTqwIo",
+			"name": "Brawling",
+			"local_notes": "Lore: Bulked-up brawling and manhandling captives.\n\nDesign: DX+5 (17) for 16 points, Easy.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "dx/e",
+			"points": 16
+		},
+		{
+			"id": "siRhBJAm_0jQjLwy1",
+			"name": "Knife",
+			"local_notes": "Lore: Scissorhand and surgical blades.\n\nDesign: DX+3 (15) for 8 points, Easy.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "dx/e",
+			"points": 8
+		},
+		{
+			"id": "swEkcxJLnhrNgHYN1",
+			"name": "Guns",
+			"local_notes": "Lore: Stinger or splinter pistol.\n\nDesign: DX+4 (16) for 12 points, Easy.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"specialization": "Pistol",
+			"difficulty": "dx/e",
+			"points": 12
+		},
+		{
+			"id": "swPtsjCjfN7rLS-5K",
+			"name": "Liquid Projector",
+			"local_notes": "Lore: The liquifier gun.\n\nDesign: DX+3 (15) for 8 points, Easy.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"specialization": "Sprayer",
+			"difficulty": "dx/e",
+			"points": 8
+		},
+		{
+			"id": "sb70sn45ao5-1ir_b",
+			"name": "Surgery",
+			"local_notes": "Lore: A coven servant learns the work.\n\nDesign: IQ+0 (10) for 8 points, Very Hard.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "iq/vh",
+			"points": 8
+		},
+		{
+			"id": "sM33Df8tIfHr3wTKA",
+			"name": "First Aid",
+			"local_notes": "Lore: Keeping a subject alive.\n\nDesign: IQ+1 (11) for 2 points, Easy.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "iq/e",
+			"points": 2
+		},
+		{
+			"id": "sXHu7UdeYpbU8grWq",
+			"name": "Intimidation",
+			"local_notes": "Lore: A Wrack's bulk and menace.\n\nDesign: Will+2 (13) for 8 points, Average.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "will/a",
+			"points": 8
+		},
+		{
+			"id": "sBm2UOKavY2y1Rwoe",
+			"name": "Interrogation",
+			"local_notes": "Lore: The coven's questions.\n\nDesign: IQ+2 (12) for 8 points, Average.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"difficulty": "iq/a",
+			"points": 8
+		},
+		{
+			"id": "sNroapUHr7Rju2DyR",
+			"name": "Area Knowledge",
+			"local_notes": "Lore: The Dark City's coven-quarters.\n\nDesign: IQ+1 (11) for 2 points, Easy.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"specialization": "(Commorragh)",
+			"difficulty": "iq/e",
+			"points": 2
+		},
+		{
+			"id": "sYN3kSGSnwqn7qJ0C",
+			"name": "Hidden Lore",
+			"local_notes": "Lore: Every Drukhari knows what is coming for them.\n\nDesign: IQ-1 (9) for 1 point, Average.",
+			"tags": [
+				"Xenos",
+				"Drukhari"
+			],
+			"specialization": "(Slaanesh)",
+			"difficulty": "iq/a",
+			"points": 1
+		}
+	],
+	"equipment": []
+}

@@ -1,0 +1,2310 @@
+{
+	"version": 5,
+	"rows": [
+		{
+			"id": "e91AY25mSired-6rr",
+			"description": "Splinter Pistol",
+			"local_notes": "The shard is a small crystal sliver, so its wound multiplier is pi- (x1/2); the toxin follow-up is what kills. Line 2 is rolled only if line 1 penetrates DR (B414 follow-up rule).\n\nLore: The Kabalite sidearm: a slim crystal-shard projector loaded with a cartridge of toxin-tipped splinters. Codex: Drukhari background shows it carried by Kabalite Warriors, Sybarites and Wyches as the common Drukhari pistol; the pistol range is short and it trades reach for volume of poison rather than for punch.\n\nDesign: Scaled from the splinter rifle anchor (4d(3) pi-, 3d tox follow-up) by the framework's own pistol line, 3d(3) pi- + 2d tox, and not by shrinking the rifle: a smaller shard reservoir and shorter barrel put less velocity behind each sliver, and the cut in poison reflects a smaller dose per shard. Exact dice: 3d(3) averages 10.5 and penetrates flak (DR 30, effective 10) 50.0% of hits, carapace (DR 70, effective 23.3) 0.0% (1.7% counting the Weak Points chance), Astartes plate and Terminator plate 0.0%. A hit that gets through flak adds 2d tox (average 7) on top of about 1-3 injury from the shard: a wounded Guardsman-grade target drops in one or two hits. Handling: 2.5 lb loaded, so min ST 5 (sqrt(10x2.5)=5.0). RoF 3: a semi-automatic shard launcher fired as fast as the trigger allows (framework: 3 for semi-autos), a step under the rifle's 5. Shots 20(3): a small cartridge, quick to slap in. Acc 2 and Bulk -2 are ordinary pistol figures; Rcl 1 because a shard launcher has almost no kick. Range 50/200 keeps the rifle's 1:4 half/max shape at a third of the reach.",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Drukhari",
+				"Kabal"
+			],
+			"tech_level": "10^",
+			"legality_class": "0",
+			"base_value": "600",
+			"base_weight": "2.5 lb",
+			"weapons": [
+				{
+					"id": "WgTbPUUHWbPuo5PB4",
+					"sv": 1,
+					"damage": {
+						"type": "pi-",
+						"base": "3d",
+						"armor_divisor": 3
+					},
+					"accuracy": "2",
+					"range": "50/200",
+					"rate_of_fire": "3",
+					"shots": "20(3)",
+					"bulk": "-2",
+					"recoil": "1",
+					"strength": "5",
+					"usage": "Standard",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "W1zxFpL8l1UvEOuqH",
+					"sv": 1,
+					"damage": {
+						"type": "tox",
+						"base": "2d"
+					},
+					"accuracy": "2",
+					"range": "50/200",
+					"rate_of_fire": "3",
+					"shots": "20(3)",
+					"bulk": "-2",
+					"recoil": "1",
+					"strength": "5",
+					"usage": "Toxin follow-up (if shard penetrates)",
+					"usage_notes": "Delivered only when the shard gets through DR; the toxin goes straight to HP, so DR does not reduce it. Living targets only.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "egkoXTDB8SYN4TOq5",
+			"description": "Splinter Rifle",
+			"local_notes": "The shard is a small crystal sliver, so its wound multiplier is pi- (x1/2); the toxin follow-up is what kills. Line 2 is rolled only if line 1 penetrates DR (B414 follow-up rule).\n\nLore: The standard weapon of every Kabalite Warrior: a long, slender, faintly vicious rifle firing a stream of poison-coated crystal shards. Codex: Drukhari and older Codex: Dark Eldar background agree that its power lies in the toxin, which is why it is fielded in numbers against foes it could never hurt by kinetic force alone; the shards themselves are light and do little damage to armoured targets.\n\nDesign: This is the framework's fixed anchor: 4d(3) pi- with a 3d tox follow-up, RoF about 5, range about 150/600 (the framework's 'about' is kept: Acc, weight and handling are derived here). Exact dice: 4d(3) averages 14; it penetrates flak (effective 10) 84.1% of hits (86.7% with the Weak Points chance for flak WP 7), carapace (effective 23.3) 0.1% (3.6% with WP 5), Astartes plate (effective 33.3) 0.0% (0.4% with WP 4) and Terminator plate 0.0%: exactly 'stopped by carapace except on a Weak Point'. Against an unarmoured or flak-armoured man the shard's pi- injury is small but the 3d tox follow-up (average 10.5) is not: one penetrating hit averages about 12-17 injury, more than a Guardsman's 10 HP. A lasgun hit (7d(2) burn) is the comparison: the splinter rifle is a poorer weapon against armour and a better one against flesh. Handling: 6 lb loaded (a lasgun is 8 lb; this is a light, elegant Aeldari-style frame), min ST 8 (sqrt(60)=7.7). RoF 5 is the anchor. Acc 5 for a rifle-length barrel with a good sight radius; Bulk -5 for its length; Rcl 1 because the shard launcher barely kicks (framework: beams 1, pistols 2-3, rifles 2-3, so this is deliberately at the beam end). Shots 60(3): a shard cartridge, an honest design number since the sources give no capacity.",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Drukhari",
+				"Kabal"
+			],
+			"tech_level": "10^",
+			"legality_class": "0",
+			"base_value": "1200",
+			"base_weight": "6 lb",
+			"weapons": [
+				{
+					"id": "WZeSejq70SnYOWjwJ",
+					"sv": 1,
+					"damage": {
+						"type": "pi-",
+						"base": "4d",
+						"armor_divisor": 3
+					},
+					"accuracy": "5",
+					"range": "150/600",
+					"rate_of_fire": "5",
+					"shots": "60(3)",
+					"bulk": "-5",
+					"recoil": "1",
+					"strength": "8",
+					"usage": "Standard",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "WhjUccl6lLzr38EXk",
+					"sv": 1,
+					"damage": {
+						"type": "tox",
+						"base": "3d"
+					},
+					"accuracy": "5",
+					"range": "150/600",
+					"rate_of_fire": "5",
+					"shots": "60(3)",
+					"bulk": "-5",
+					"recoil": "1",
+					"strength": "8",
+					"usage": "Toxin follow-up (if shard penetrates)",
+					"usage_notes": "Delivered only when the shard gets through DR; the toxin goes straight to HP, so DR does not reduce it. Living targets only.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eFJ94r4zjWgh6vi9e",
+			"description": "Shardcarbine",
+			"local_notes": "The shard is a small crystal sliver, so its wound multiplier is pi- (x1/2); the toxin follow-up is what kills. Line 2 is rolled only if line 1 penetrates DR (B414 follow-up rule).\n\nLore: A short, fast-firing splinter weapon used by Kabalite Warriors, Sybarites and by winged Scourges who want a compact weapon in the air; Codex: Drukhari background describes the Scourge as carrying it, and it is the same weapon in the hands of either. It is a rapid-fire carbine version of the splinter rifle: shorter reach, greater volume.\n\nDesign: The framework anchor says 'rifle damage, higher RoF, shorter range', so the dice are unchanged from the splinter rifle (4d(3) pi- + 3d tox; every penetration figure there applies: 84.1% flak, 0.1% carapace, 0.0% Astartes) and the handling is re-derived. Range 75/300 is half the rifle's, the usual carbine trade. RoF 12 (up from 5, within the framework's 10-12 for automatic rifles) reflects a faster shard cycle. Weight 4.5 lb, min ST 7 (sqrt(45)=6.7). Acc 3 (framework: carbines 3-4) and Bulk -3 (carbines); Rcl 1 as for all splinter weapons. Shots 90(3): a larger cartridge to feed the higher rate (7 seconds of fire). The Scourge shardcarbine is not a separate weapon here: background gives it the same role and no distinct profile, so it uses this entry.",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Drukhari",
+				"Kabal"
+			],
+			"tech_level": "10^",
+			"legality_class": "0",
+			"base_value": "1400",
+			"base_weight": "4.5 lb",
+			"weapons": [
+				{
+					"id": "W6YkQqGrERDAgiyuq",
+					"sv": 1,
+					"damage": {
+						"type": "pi-",
+						"base": "4d",
+						"armor_divisor": 3
+					},
+					"accuracy": "3",
+					"range": "75/300",
+					"rate_of_fire": "12",
+					"shots": "90(3)",
+					"bulk": "-3",
+					"recoil": "1",
+					"strength": "7",
+					"usage": "Standard",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "W7gyYbXE1yguiPSew",
+					"sv": 1,
+					"damage": {
+						"type": "tox",
+						"base": "3d"
+					},
+					"accuracy": "3",
+					"range": "75/300",
+					"rate_of_fire": "12",
+					"shots": "90(3)",
+					"bulk": "-3",
+					"recoil": "1",
+					"strength": "7",
+					"usage": "Toxin follow-up (if shard penetrates)",
+					"usage_notes": "Delivered only when the shard gets through DR; the toxin goes straight to HP, so DR does not reduce it. Living targets only.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eCZyEH1nbHhYxZ1gt",
+			"description": "Splinter Cannon",
+			"local_notes": "The shard is a small crystal sliver, so its wound multiplier is pi- (x1/2); the toxin follow-up is what kills. Line 2 is rolled only if line 1 penetrates DR (B414 follow-up rule).\n\nLore: The Kabal's heavy support weapon, carried by Kabalite Trueborn and fitted to Raiders, Ravagers and other Kabal vehicles; a large-bore splinter launcher that sprays poisoned crystal at a rate a rifle cannot match (Codex: Drukhari and older Codex: Dark Eldar). It is more feared for its volume than for the strength of any single shard.\n\nDesign: The framework anchor is 5d(3) pi- + 3d tox with RoF 15+; RoF 16 is chosen (anchor 'RoF 15+'). Exact dice: 5d(3) averages 17.5, penetrating flak (effective 10) 96.8%, carapace (effective 23.3) 5.9% (10.0% with WP 5), Astartes plate 0.0% (1.1% with WP 4) and Terminator plate 0.0%: a real if unreliable carapace-breaker, still no threat to power armour. The 3d tox follow-up is the same as a rifle's, so a cannon burst is about the rate of fire, not a stronger poison. Handling: 22 lb loaded (a light-weight support weapon by human standards), so min ST sqrt(10x22)=14.8, 15, with a bipod (B): a Kabalite Warrior at ST 10 must brace it or fire at a penalty, as a Guardsman does with a heavy weapon. Acc 5 (a heavier, steadier barrel than a rifle's), Bulk -6 (support weapon), Rcl 2 (volume of shards rather than mass). Shots 200(5): a large feed drum. Range 175/700, a modest step up from the rifle's 150/600 for the longer barrel. Skill Guns (Light Machine Gun), as for the Aeldari shuriken cannon.",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Drukhari",
+				"Kabal"
+			],
+			"tech_level": "10^",
+			"legality_class": "0",
+			"base_value": "5000",
+			"base_weight": "22 lb",
+			"weapons": [
+				{
+					"id": "Wm3FOOutFWpiff6ND",
+					"sv": 1,
+					"damage": {
+						"type": "pi-",
+						"base": "5d",
+						"armor_divisor": 3
+					},
+					"accuracy": "5",
+					"range": "175/700",
+					"rate_of_fire": "16",
+					"shots": "200(5)",
+					"bulk": "-6",
+					"recoil": "2",
+					"strength": "15",
+					"usage": "Standard",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "WEIIpV2NeF7eANYue",
+					"sv": 1,
+					"damage": {
+						"type": "tox",
+						"base": "3d"
+					},
+					"accuracy": "5",
+					"range": "175/700",
+					"rate_of_fire": "16",
+					"shots": "200(5)",
+					"bulk": "-6",
+					"recoil": "2",
+					"strength": "15",
+					"usage": "Toxin follow-up (if shard penetrates)",
+					"usage_notes": "Delivered only when the shard gets through DR; the toxin goes straight to HP, so DR does not reduce it. Living targets only.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eljFoAyWkJhQbAJ6g",
+			"description": "Blast Pistol",
+			"local_notes": "Armour divisor (10): the beam drills a narrow hole through any armour to the same depth.\n\nLore: A hand-held dark-lance weapon carried by Archons, Sybarites and Hekatrixes who want a beam of anti-armour power at pistol reach (Codex: Drukhari background). It fires a narrow, focused burst and needs a moment to recover between shots; nothing in the sources gives it long range.\n\nDesign: Anchored by the framework: 6dx2(10) burn, short range, the hand-weapon step below the blaster's 6dx3 and the dark lance's 6dx4 (same focused-beam technology at 1/2, 3/4 and full 4x multiplier of a 6d core). Exact dice: 6dx2 averages 42; the divisor (10) makes effective DR 3 (flak), 7 (carapace), 10 (Astartes) and 19 (Terminator), so it penetrates flak, carapace and Astartes plate 100.0% of hits and Terminator plate 99.8%. This is the bright-lance logic at pistol scale: the divisor, not the dice, does the work, and the weapon is held back by short range (20/60) and a tiny charge rather than by damage. Vehicles: AV10 100%, AV12 99.5%, AV13 96.4%, AV14 79.4%. Handling: 3.5 lb loaded, min ST 6 (sqrt(35)=5.9). RoF 1 because the beam capacitor must recover between shots (framework: RoF 1 for anything that must recharge). Shots 3(4): a small charge cell, a shot fewer than the Aeldari fusion pistol's, since a dark-lance beam is a bigger draw per shot. Acc 2 (framework: pistols 1-3), Bulk -2, Rcl 1 (beam).",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Drukhari",
+				"Kabal"
+			],
+			"tech_level": "11^",
+			"legality_class": "0",
+			"base_value": "3500",
+			"base_weight": "3.5 lb",
+			"weapons": [
+				{
+					"id": "W0_d8dC6wjVLMvqpd",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "6dx2",
+						"armor_divisor": 10
+					},
+					"accuracy": "2",
+					"range": "20/60",
+					"rate_of_fire": "1",
+					"shots": "3(4)",
+					"bulk": "-2",
+					"recoil": "1",
+					"strength": "6",
+					"usage": "Standard",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "ewomwA-LIkpxwyLz5",
+			"description": "Blaster",
+			"local_notes": "Armour divisor (10).\n\nLore: A rifle-scale dark-lance weapon issued to Kabalite Trueborn and Sybarite squads when the Kabal expects armour: a short-range beam of anti-tank capability (Codex: Drukhari background). Its reach is short and its cells hold few shots.\n\nDesign: Framework anchor: 6dx3(10) burn, short range. It sits between the blast pistol (6dx2) and the dark lance (6dx4) at the same 6d core. Exact dice: average 63; effective DR under divisor (10) is 3, 7, 10 and 19 for flak, carapace, Astartes and Terminator armour, so it penetrates every one of them 100.0% of hits. Vehicles (DR 100/150/200/275/350): 100.0/100.0/100.0/99.8/99.0%. Handling: 8 lb loaded (a light two-handed rifle housing around a lance core), min ST 9 (sqrt(80)=8.9). RoF 1 (recharge). Shots 5(4): a modest cell, one more than the blast pistol. Range 40/120: twice the pistol's, a fraction of the dark lance's. Acc 3 (a short-barrelled beam rifle, framework: carbines 3-4, beams slightly better), Bulk -4, Rcl 1.",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Drukhari",
+				"Kabal"
+			],
+			"tech_level": "11^",
+			"legality_class": "0",
+			"base_value": "6000",
+			"base_weight": "8 lb",
+			"weapons": [
+				{
+					"id": "WnbvFgz2lST2ZVAr1",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "6dx3",
+						"armor_divisor": 10
+					},
+					"accuracy": "3",
+					"range": "40/120",
+					"rate_of_fire": "1",
+					"shots": "5(4)",
+					"bulk": "-4",
+					"recoil": "1",
+					"strength": "9",
+					"usage": "Standard",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "e1x0KnVuMhDYqBit2",
+			"description": "Dark Lance",
+			"local_notes": "Armour divisor (10). The B in Min ST means bipod-braced.\n\nLore: The Drukhari answer to the Aeldari bright lance: a heavy anti-armour weapon carried by Kabalite Trueborn and fitted to Raiders and Ravagers, and one of the most feared weapons in a Kabal's arsenal against vehicles and heavy infantry (Codex: Drukhari background). The Drukhari version is a darker, more brutal cousin of the craftworld weapon.\n\nDesign: The framework anchor: 'as the bright lance: 6dx4(10) burn'. The dice are kept exactly (6dx4(10), average 84) with the same argument as the bright lance: the focused beam penetrates all armour to the same depth, so effective DR never exceeds 35 and it penetrates flak, carapace, Astartes plate and Terminator plate 100.0% of hits, and vehicles AV10-14 at 100.0/100.0/100.0/100.0/99.9%. Handling is re-derived rather than copied: 26 lb loaded (the Aeldari bright lance is 28 lb; this is a rougher build), so min ST sqrt(260)=16.1, 16, with a bipod (16B), in line with the framework's shoulder-weapon rule; the Kabalite ST 10 fires it at a heavy penalty unless braced, so it is normally mounted or fired prone. Acc 8 (a vehicle-style optic on a shoulder weapon, less than the bright lance's 9 for the cruder sight), range 1000/3000 (slightly under the bright lance's 1200/3600), RoF 1 (recharge), Shots 4(6) (fewer than the bright lance's 6, a heavy draw per shot), Bulk -7, Rcl 1.",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Drukhari",
+				"Kabal"
+			],
+			"tech_level": "11^",
+			"legality_class": "0",
+			"base_value": "12000",
+			"base_weight": "26 lb",
+			"weapons": [
+				{
+					"id": "Wd8wvAZmmP235eghq",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "6dx4",
+						"armor_divisor": 10
+					},
+					"accuracy": "8",
+					"range": "1000/3000",
+					"rate_of_fire": "1",
+					"shots": "4(6)",
+					"bulk": "-7",
+					"recoil": "1",
+					"strength": "16B",
+					"usage": "Standard",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Gunner"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Beams"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Gunner"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "etxvV85UWO2GsD9gn",
+			"description": "Disintegrator Cannon",
+			"local_notes": "Does not overheat: no Malf on any roll. The 'ex' marks an explosive burn: a hit is a detonation, so damage is rolled as for explosions, not as a beam.\n\nLore: A heavy Drukhari energy weapon carried by Trueborn and fitted to Raiders, Ravagers and Razorwings: a rapid discharge of unstable energy that, in Codex: Drukhari background, is known for stripping armour and flesh alike. Unlike an Imperial plasma gun it does not overheat.\n\nDesign: The framework anchor is 'plasma class like the starcannon, no overheating'. It is the Aeldari starcannon's dice with one die removed: 5dx4(3) burn ex against the starcannon's 6dx4(3), because the sources put the Drukhari weapon a small step below the Aeldari one (background gives only the ordering, never a number, so the exact step is a design call). Exact dice: average 70; effective DR under divisor (3) is 10 (flak), 23.3 (carapace), 33.3 (Astartes) and 63.3 (Terminator): it penetrates flak and carapace 100.0%, Astartes plate 99.3% and Terminator plate 69.5% (more often than not, as a plasma weapon should). Vehicles AV10-14: 99.3/90.2/60.0/9.8/0.0%: it kills light and medium vehicles but not a Land Raider. RoF 4 (the starcannon is 3): with no vent cycle to wait on, the limit is the charge chamber's refresh. Weight 20 lb, min ST sqrt(200)=14.1, 14, with a bipod (14B). Acc 5, range 200/600, Shots 12(4), Bulk -6, Rcl 2 (a weighty discharge).",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Drukhari",
+				"Kabal"
+			],
+			"tech_level": "11^",
+			"legality_class": "0",
+			"base_value": "8000",
+			"base_weight": "20 lb",
+			"weapons": [
+				{
+					"id": "WoTBdE5e_Q4nVt4uw",
+					"sv": 1,
+					"damage": {
+						"type": "burn ex",
+						"base": "5dx4",
+						"armor_divisor": 3
+					},
+					"accuracy": "5",
+					"range": "200/600",
+					"rate_of_fire": "4",
+					"shots": "12(4)",
+					"bulk": "-6",
+					"recoil": "2",
+					"strength": "14B",
+					"usage": "Standard",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Gunner"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Beams"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Gunner"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eWL5GnkdXrw-lYc18",
+			"description": "Shredder",
+			"local_notes": "Shots are cartridges of net-charge. Targets may Dodge as usual: a successful Dodge avoids both the cut and the net. The net wraps on any hit, whether or not the cut penetrates DR.\n\nLore: A close-range Kabal weapon: a launcher that throws a spreading burst of monofilament wire that tangles and cuts (Codex: Drukhari background), carried by Kabalite Warriors and Trueborn to break up charges and pin targets for the poisoned weapons of the squad.\n\nDesign: The framework anchor is 'monofilament net: short-range area weapon that entangles and cuts (Binding plus cut damage)'. The cut uses the same dice and divisor as the splinter rifle (4d(3), monomolecular edge), rolled per target across a 6-yard cone as the Basic Set flamethrower cone rule does (B281): exact dice give flak (effective 10) 84.1%, carapace 0.1% (3.6% with WP), Astartes 0.0%. The entanglement is the weapon's real effect, and is modelled as Binding with ST 14, DR 3 rather than a further damage roll: a bound target cannot use its weapons or move until it breaks free, and each turn of struggling shreds it (1d(3) cut). Handling: 6 lb, min ST 8 (sqrt(60)=7.7); RoF 1 (a net-charge launcher, not automatic); Shots 4(4); Bulk -3. Acc and Rcl are omitted: a cone weapon has neither.",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Drukhari",
+				"Kabal"
+			],
+			"tech_level": "10^",
+			"legality_class": "0",
+			"base_value": "2500",
+			"base_weight": "6 lb",
+			"weapons": [
+				{
+					"id": "W3MhyzDG_Yx4_FkRa",
+					"sv": 1,
+					"damage": {
+						"type": "cut",
+						"base": "4d",
+						"armor_divisor": 3
+					},
+					"range": "6",
+					"rate_of_fire": "1",
+					"shots": "4(4)",
+					"bulk": "-3",
+					"strength": "8",
+					"usage": "Cone (6 yards)",
+					"usage_notes": "No Acc bonus applies and no aiming roll is needed against a target inside the cone; the skill roll is only to avoid intervening obstacles. Each target in the cone is rolled separately.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "W2aYaoJGEbbnMX601",
+					"sv": 1,
+					"damage": {
+						"type": "spec"
+					},
+					"range": "6",
+					"rate_of_fire": "1",
+					"shots": "4(4)",
+					"bulk": "-3",
+					"strength": "8",
+					"usage": "Entangle (any target hit and not dropped)",
+					"usage_notes": "The monofilament net wraps the victim: Binding (ST 14, DR 3). While bound, a struggling victim takes 1d(3) cut per turn from the wire, with no attack roll.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "e_UMGJAyaWs-nA_S1",
+			"description": "Haywire Blaster",
+			"local_notes": "Powered armour, cyborgs and vehicle machine-spirits are machines for these purposes (GM's call for sealed power armour: a wearer's servos and vox may fail rather than his body).\n\nLore: An electromagnetic pulse projector used by Drukhari raiders to take down vehicles and cybernetics, carried by Kabalite Trueborn and fitted to Raiders (Codex: Drukhari background). It leaves flesh almost unharmed and turns armour to scrap.\n\nDesign: The framework says 'anti-machine pulse: big damage to vehicles and electronics, near nothing to flesh'. Following the Adeptus Mechanicus arc weapons in this project (weak against flesh, strong against machines), it has two lines. Against flesh it is a nuisance: 1d burn, which penetrates nothing (flak effective DR 30, 0.0%). Against machines the 4dx3 (average 42) ignores DR because the pulse is delivered through a vehicle's plating into its systems, so armour thickness matters not at all; the HT-4 disable is the Arc Rifle's surge mechanic scaled to the weapon's larger discharge. It is not a hull-buster: 42 average against a vehicle's structural HP is meaningful, not decisive, and the weapon is really a systems-killer. Handling: 10 lb loaded, min ST 10 (sqrt(100)=10). RoF 1 (capacitor recharge). Acc 4, range 100/300 (lower than an ordinary rifle, a pulse projector), Shots 5(4), Bulk -5, Rcl 1.",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Drukhari",
+				"Kabal"
+			],
+			"tech_level": "10^",
+			"legality_class": "0",
+			"base_value": "4000",
+			"base_weight": "10 lb",
+			"weapons": [
+				{
+					"id": "WHYCYynjgNAsNhvjR",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "1d"
+					},
+					"accuracy": "4",
+					"range": "100/300",
+					"rate_of_fire": "1",
+					"shots": "5(4)",
+					"bulk": "-5",
+					"recoil": "1",
+					"strength": "10",
+					"usage": "Living targets",
+					"usage_notes": "Barely more than a shock to flesh.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "Wf6SAWl2SPIY9Wu-P",
+					"sv": 1,
+					"damage": {
+						"type": "burn (ignores DR)",
+						"base": "4dx3"
+					},
+					"accuracy": "4",
+					"range": "100/300",
+					"rate_of_fire": "1",
+					"shots": "5(4)",
+					"bulk": "-5",
+					"recoil": "1",
+					"strength": "10",
+					"usage": "Machines, vehicles and servitors",
+					"usage_notes": "Damage comes off structural HP, not DR: the pulse is fired through the armour into the wiring. In addition, machine targets roll HT-4: on a failure their active systems are disabled for 1d turns.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eCVWOj8e9_ci_Q0wZ",
+			"description": "Hexrifle",
+			"local_notes": "A sniper toxin weapon: aimed shots with the Accuracy bonus for Aim.\n\nLore: A long-barrelled sniper weapon used by poisoners and marksmen, firing a shard loaded with a toxin said to bring down anything from a man to a monster (Codex: Drukhari background). It does not kill by armour penetration but by poison. Background places it with the Kabals and Covens; I am not certain which arsenal lists it, so it carries both tags.\n\nDesign: The framework says 'sniper toxin that no armour stops once a shard lands'. That is modelled directly: line 2 is a 5d tox (average 17.5) follow-up that applies whenever the shot hits, with no DR check. This deliberately breaks the follow-up rule the splinter weapons use (only if the shard penetrates), because the hexrifle is the exception the sources describe. The shard itself is a needle (3d(3) pi-, the splinter pistol's dice: penetrates flak 50.0%, carapace 0.0%). 5d is chosen so that roughly two hits bring down a Space Marine (HP 34, average two hits 35) but one leaves him standing; against an unarmoured man (HP 10) one hit is enough. Handling: 7 lb (a long, slim rifle), min ST 8 (sqrt(70)=8.4). Acc 8 (framework: rifle 5, optics +1 to +3, +3 here). RoF 1 (bolt-action style aimed shot), Shots 10(3), range 250/1000 (well beyond the splinter rifle's 150/600). Bulk -6, Rcl 1.",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Drukhari",
+				"Kabal",
+				"Haemonculus Coven"
+			],
+			"tech_level": "10^",
+			"legality_class": "0",
+			"base_value": "9000",
+			"base_weight": "7 lb",
+			"weapons": [
+				{
+					"id": "WbsTiHKQAWWVNiAad",
+					"sv": 1,
+					"damage": {
+						"type": "pi-",
+						"base": "3d",
+						"armor_divisor": 3
+					},
+					"accuracy": "8",
+					"range": "250/1000",
+					"rate_of_fire": "1",
+					"shots": "10(3)",
+					"bulk": "-6",
+					"recoil": "1",
+					"strength": "8",
+					"usage": "Shard",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "WiYsMA3NIHiKzTkgz",
+					"sv": 1,
+					"damage": {
+						"type": "tox",
+						"base": "5d"
+					},
+					"accuracy": "8",
+					"range": "250/1000",
+					"rate_of_fire": "1",
+					"shots": "10(3)",
+					"bulk": "-6",
+					"recoil": "1",
+					"strength": "8",
+					"usage": "Toxin (on any hit; armour does not stop it)",
+					"usage_notes": "Rolled on any hit that is not dodged or parried, whether or not the shard penetrates DR: the shard shatters and its toxin finds seams and seals. Living targets only. Target's own toxin resistance (Injury Tolerance, Resistant to Poison, Astartes toxin organs) applies as the GM rules.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "ezOM56USsP1pSND-I",
+			"description": "Liquifier Gun",
+			"local_notes": "Corrosion (cor) wounds x1 as burn does. Sealed armour delays the follow-up; see that line.\n\nLore: A close-range weapon of the Haemonculus Coven that sprays a gel or liquid which dissolves the target's flesh (Codex: Drukhari background). Wracks carry it, and it is best at packing a squad into a corridor. Background gives no more than that.\n\nDesign: No framework number beyond 'close-range dissolving flamer'. Built from the flamer design: a 5-yard cone (B281), a hit-then-follow-up structure where the first roll is small and the real killing is the damage that keeps coming. The first hit is 3d cor (average 10.5, 0.0% against flak; it does not reach armour); the gel then dissolves, 2d cor per turn ignoring DR for 1d turns, which is what makes it feared. Where the Imperial flamer's follow-up does not affect sealed armour at all, the gel eats through seals, so sealed armour gets only a one-turn delay. Handling: 11 lb, min ST 10 (sqrt(110)=10.5); shots 6(4) is a small tank. RoF 1 and Bulk -4; Acc and Rcl are omitted for a cone weapon.",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Drukhari",
+				"Haemonculus Coven"
+			],
+			"tech_level": "10^",
+			"legality_class": "0",
+			"base_value": "3000",
+			"base_weight": "11 lb",
+			"weapons": [
+				{
+					"id": "WqiaQP8vN8xISG590",
+					"sv": 1,
+					"damage": {
+						"type": "cor",
+						"base": "3d"
+					},
+					"range": "5",
+					"rate_of_fire": "1",
+					"shots": "6(4)",
+					"bulk": "-4",
+					"strength": "10",
+					"usage": "Cone (5 yards)",
+					"usage_notes": "As the flamer: no Acc, no aiming roll inside the cone; each target rolled separately.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Liquid Projector"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Flamethrower"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Liquid Projector"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "W0cwNCJQxHaJSrhMP",
+					"sv": 1,
+					"damage": {
+						"type": "cor",
+						"base": "2d"
+					},
+					"range": "5",
+					"rate_of_fire": "1",
+					"shots": "6(4)",
+					"bulk": "-4",
+					"strength": "10",
+					"usage": "Follow-up (per turn while gel clings, 1d turns)",
+					"usage_notes": "Not stopped by DR. Ends when the target spends a turn wiping or washing the gel off, or when it has run for 1d turns. Fully sealed armour holds the gel off for one turn while it eats through the seals: the follow-up starts on the second turn.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Liquid Projector"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Flamethrower"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Liquid Projector"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "e9l3C1vgwPIV5iCr9",
+			"description": "Stinger Pistol",
+			"local_notes": "A quiet poisoner's weapon. Its dart does almost nothing to armour; it is for the unarmoured throat and the gap in a plate joint.\n\nLore: A small dart pistol firing toxic needles, in the sources a Drukhari poisoner's weapon: background mentions toxic dart weapons among the Drukhari, but I do not have a canonical listing or owner for this exact name, so this entry is built from the framework's 'toxic dart' description alone.\n\nDesign: The framework says only 'toxic dart'. 1d(3) pi- is deliberately negligible (0.0% against flak, 0.0% against carapace: penetrates nothing armoured) and the real weapon is the 3d tox follow-up (average 10.5), which requires the dart to penetrate: it is therefore an assassin's weapon aimed at unarmoured locations, the same 'follow-up carries the threat' principle as the Aeldari mandiblasters. Handling: 1.5 lb, min ST 4 (sqrt(15)=3.9). RoF 2 (a pneumatic dart gun with a slow cycling action, below a splinter pistol's 4). Acc 2, Shots 8(3), range 30/100, Bulk -1, Rcl 1.",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Drukhari",
+				"Kabal",
+				"Haemonculus Coven"
+			],
+			"tech_level": "10^",
+			"legality_class": "0",
+			"base_value": "800",
+			"base_weight": "1.5 lb",
+			"weapons": [
+				{
+					"id": "WI6jXlqXJMZ93HATb",
+					"sv": 1,
+					"damage": {
+						"type": "pi-",
+						"base": "1d",
+						"armor_divisor": 3
+					},
+					"accuracy": "2",
+					"range": "30/100",
+					"rate_of_fire": "2",
+					"shots": "8(3)",
+					"bulk": "-1",
+					"recoil": "1",
+					"strength": "4",
+					"usage": "Standard",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "WmoF9NuNwzWm1uH5z",
+					"sv": 1,
+					"damage": {
+						"type": "tox",
+						"base": "3d"
+					},
+					"accuracy": "2",
+					"range": "30/100",
+					"rate_of_fire": "2",
+					"shots": "8(3)",
+					"bulk": "-1",
+					"recoil": "1",
+					"strength": "4",
+					"usage": "Toxin follow-up (if dart penetrates)",
+					"usage_notes": "Only if the dart penetrates DR. Living targets only.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "enDYlWCRABxM1VXkX",
+			"description": "Plasma Grenade, Drukhari Pattern",
+			"local_notes": "Lore: A hand-thrown plasma charge carried by Wyches and Kabalite leaders to close with armoured targets (Codex: Drukhari background gives them to Wyches, and I am less sure of who else carries them).\n\nDesign: Half the plasma anchor's dice (3d) at the same x4 multiplier and (3) divisor, as every grenade in this project is built from its parent weapon: 3dx4(3) burn ex averages 42, effective DR under divisor (3) is 10, 23.3, 33.3 and 63.3. Exact dice: penetrates flak 100.0%, carapace 95.4%, Astartes plate 74.1% (74.5% with WP), Terminator plate 4.6%. Weight 1.2 lb and cost 900 are set a little under the Aeldari pattern (a Commorragh mass-produced charge). No Acc/RoF/ST/Bulk/Rcl figures apply to a hand-thrown weapon.",
+			"tags": [
+				"Missile Weapon",
+				"Xenos",
+				"Drukhari",
+				"Wych Cult"
+			],
+			"tech_level": "11^",
+			"legality_class": "0",
+			"base_value": "900",
+			"base_weight": "1.2 lb",
+			"weapons": [
+				{
+					"id": "WyfAnA9TJynWlAcby",
+					"sv": 1,
+					"damage": {
+						"type": "burn ex",
+						"base": "3dx4",
+						"armor_divisor": 3
+					},
+					"usage": "Thrown",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Throwing"
+							}
+						}
+					]
+				}
+			],
+			"quantity": 1
+		}
+	]
+}
