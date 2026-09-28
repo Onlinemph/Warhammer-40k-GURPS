@@ -29,3 +29,4 @@ Anchor and rule changes to `framework.md`, with the reason for each.
 - **Astartes and Custodes Basic Move +4; Custodes DX 20** (user direction). Marine Move 12, Custodian Move 14. Custodes package DX +9 (655 points), DX skills re-costed to hold levels. Sister of Silence gains Guns (Rifle/Pistol); her Psyniscience removed (a Pariah can't sense the warp).
 - **Enhanced Move (Ground)** (user direction: Marines and Custodes run very fast): Astartes 1/2 (sprint ×1.5, ~60 km/h), Custodes 1 (×2, ~90 km/h).
 - **Scouts get Enhanced Move (Ground) 1/2** (user direction), same as full Astartes.
+- **Orks: Thick Skull replaces Injury Tolerance (No Brain)** (user direction): DR 4 skull-only (6 points); headshots work normally once they penetrate.

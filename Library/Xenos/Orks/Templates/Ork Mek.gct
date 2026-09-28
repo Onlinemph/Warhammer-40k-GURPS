@@ -6,7 +6,7 @@
 		{
 			"id": "T96chKwg9VfMa22RP",
 			"name": "Ork Physiology",
-			"local_notes": "Lore: An Ork Boy: the baseline greenskin warrior, grown fast, fed on violence, and built to get bigger and meaner the longer it survives. This trait is the shared baseline every growth lens (Nob, Warboss) and every Oddboy specialisation (Mek, Painboy, Weirdboy) builds on top of. Primary sources: Codex: Orks background across editions, Nate Crowley's Ghazghkull Thraka: Prophet of the Waaagh! and Mike Brooks' Brutal Kunnin', calibrated against Dark Heresy/Rogue Trader/Deathwatch/Only War Ork material for relative scale.\n\nDesign: 138 (Attribute Modifiers) + 10 (Thick Hide) + 10 (High Pain Threshold) + 6 (Hard to Kill 3) + 5 (Rapid Healing) + 5 (Injury Tolerance, No Brain) + 15 (Resistant to Disease and Toxins) + 0 (Fungal Physiology) - 10 (Bloodlust) - 10 (Impulsiveness) - 5 (Overconfidence) + 10 (Ork Kunnin' 1) + 5 (WAAAGH! Gestalt) = 179 points of physiology alone, before skills — see the Ork Boy template for a full character, and the growth lenses and Oddboy Talents below for Nobs, Warbosses, Meks, Painboyz and Weirdboyz built on top of it.",
+			"local_notes": "Lore: An Ork Boy: the baseline greenskin warrior, grown fast, fed on violence, and built to get bigger and meaner the longer it survives. This trait is the shared baseline every growth lens (Nob, Warboss) and every Oddboy specialisation (Mek, Painboy, Weirdboy) builds on top of. Primary sources: Codex: Orks background across editions, Nate Crowley's Ghazghkull Thraka: Prophet of the Waaagh! and Mike Brooks' Brutal Kunnin', calibrated against Dark Heresy/Rogue Trader/Deathwatch/Only War Ork material for relative scale.\n\nDesign: 138 (Attribute Modifiers) + 10 (Thick Hide) + 10 (High Pain Threshold) + 6 (Hard to Kill 3) + 5 (Rapid Healing) + 6 (Thick Skull) + 15 (Resistant to Disease and Toxins) + 0 (Fungal Physiology) - 10 (Bloodlust) - 10 (Impulsiveness) - 5 (Overconfidence) + 10 (Ork Kunnin' 1) + 5 (WAAAGH! Gestalt) = 180 points of physiology alone, before skills — see the Ork Boy template for a full character, and the growth lenses and Oddboy Talents below for Nobs, Warbosses, Meks, Painboyz and Weirdboyz built on top of it.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -116,17 +116,34 @@
 					"base_points": 5
 				},
 				{
-					"id": "tRKsxyaIPYI2snNIQ",
-					"name": "Injury Tolerance (No Brain)",
-					"reference": "B61",
-					"local_notes": "A hit to the skull or eye is resolved as a hit to the face instead; there is no separate brain to target for extra injury. House rule, not a further purchased trait: an Ork who loses a limb — or, per the fiction, even the head — to a crippling or removal wound is not necessarily dead from that alone. A Painboy (or any suitably brutal battlefield medic) who recovers the part and staples, bolts or wires it back on within a scene or two restores it to function once the patient heals, using Surgery per the framework's skill table. This is a GM-adjudicated narrative rule that Hard to Kill, Rapid Healing and this trait together make plausible, not a separate priced advantage.\n\nLore: Orks are famous for surviving injuries that would kill anything else outright, up to and including having a head sewn back on by a Doks after a losing argument — a beat repeated across Codex background, Brutal Kunnin' and countless tabletop-derived anecdotes (\"'e's had worse\"). Ork brain function is diffuse and fungal rather than centralised in the human sense, which is offered here as the setting explanation rather than a citable page reference.\n\nDesign: Injury Tolerance, No Brain (B61, 5 points): mechanically small on its own, but combined with Hard to Kill and Rapid Healing above it is what makes \"shrugs off a head wound\" true at the table instead of just in the fluff text.",
+					"id": "teYkxYKxAf9qBhN07",
+					"name": "Thick Skull",
+					"reference": "B46",
+					"local_notes": "DR 4 on the skull only, on top of Thick Hide (skull DR 6 in total). Orks have brains and take normal extra injury from skull and eye hits once something gets through. House rule, not a priced trait: an Ork who loses a limb, or per the fiction even the head, to a crippling wound is not necessarily dead from that alone. A Painboy who recovers the part and staples or wires it back on within a scene or two restores it to function once the patient heals, using Surgery.\n\nLore: Ork skulls are notoriously thick, and Orks survive head wounds that would kill anything else, up to having a head sewn back on by a Dok (Codex background, Brutal Kunnin', and a long tradition of \"'e's had worse\" anecdotes). They do have brains: a bolt through the eye still kills an Ork.\n\nDesign: Damage Resistance 4 (B46, 5/level, 20) with Partial (skull only): the GCS Basic Set data prices Partial at -10% per -1 of the location's hit penalty, and the skull is -7, so -70%: 20 x 0.3 = 6 points. Replaced an earlier Injury Tolerance (No Brain), at the user's direction, because it made headshots meaningless against a species that does have a brain.",
 					"tags": [
 						"Advantage",
 						"Physical",
 						"Xenos",
 						"Orks"
 					],
-					"base_points": 5
+					"modifiers": [
+						{
+							"id": "mphiHOucJs0L4Bcqw",
+							"name": "Partial (Skull only)",
+							"reference": "B47",
+							"cost_adj": "-70%"
+						}
+					],
+					"base_points": 20,
+					"features": [
+						{
+							"type": "dr_bonus",
+							"locations": [
+								"skull"
+							],
+							"amount": 4
+						}
+					]
 				},
 				{
 					"id": "tOhrr4M8ndbQI_h2G",
