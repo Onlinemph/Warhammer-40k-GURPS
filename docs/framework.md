@@ -348,6 +348,60 @@ Drukhari traits: the shared Aeldari body (via include), **Soul Thirst** (disadva
 | Clone field | Illusory images: a Dodge bonus, not DR |
 | Combat drugs | Wych Cult dispensers: one drug per combat (Adrenalight, Grave Lotus, Hypex, Painbringer, Serpentin, Splintermind); each a modest, temporary boost to one attribute or skill set, with a Dependency |
 
+### T'au Empire
+
+The T'au are a young, fast-rising empire bound by the Greater Good (T'au'va) and ruled by the Ethereal caste. Society is split into castes bred for their roles: Fire (warriors), Earth (engineers), Air (pilots), Water (diplomats and bureaucrats) and Ethereal (rulers). Their war is a science, not a faith: long-range firepower, drones, battlesuits and markerlight-networked fire, with close combat avoided. Physically a T'au is about human-scale and no stronger than a human; castes differ (Earth stocky, Air tall and light-boned). They have almost no presence in the warp: no T'au psykers, and daemons and psychic powers find little purchase on them. Auxiliaries fight alongside them: the Kroot (carnivorous mercenaries who evolve by eating what they kill) and the Vespid (winged insectoids).
+
+| T'au | ST | DX | IQ | HT | HP | Per | Will | Move | Notes |
+|---|---|---|---|---|---|---|---|---|---|
+| Fire Warrior (Shas'la) | 10 | 12 | 11 | 11 | 10 | 11 | 11 | 5 | Better drilled than a Guardsman; poor in melee. |
+| Fire Warrior veteran (Shas'ui) | 11 | 13 | 11 | 12 | 11 | 12 | 12 | 6 | Team leader; often a battlesuit pilot. |
+| Pathfinder | 10 | 13 | 11 | 11 | 10 | 13 | 11 | 6 | Forward scout, markerlight specialist. |
+| Battlesuit pilot (Shas'vre) | 11 | 14 | 12 | 12 | 11 | 12 | 13 | 5 | Stat line is the pilot; the suit is equipment. |
+| Commander (Shas'o) | 11 | 15 | 14 | 12 | 11 | 14 | 15 | 6 | Veteran of decades; master of Kauyon and Mont'ka. |
+| Ethereal (Aun) | 9 | 11 | 13 | 10 | 9 | 12 | 17 | 5 | Absolute authority; T'au around them fight harder. |
+| Earth caste (Fio) | 11 | 11 | 13 | 12 | 11 | 12 | 11 | 5 | Stocky engineer. |
+| Water caste (Por) | 9 | 10 | 13 | 10 | 9 | 12 | 13 | 5 | Diplomat; tongue as weapon. |
+| Air caste (Kor) | 8 | 13 | 12 | 10 | 8 | 12 | 11 | 5 | Tall, hollow-boned, at home in zero-g, poor in high gravity. |
+| Kroot Carnivore | 12 | 13 | 9 | 11 | 12 | 13 | 10 | 8 | Lean predator, fine tracker and climber, beaked. |
+| Kroot Shaper | 13 | 13 | 11 | 12 | 13 | 13 | 12 | 8 | Kindred leader; decides what the kindred eats. |
+| Vespid Stingwing | 11 | 13 | 8 | 11 | 11 | 12 | 10 | 6 (Air 16+) | Winged insectoid, crystal-linked to neutron blasters. |
+
+Point targets (equipment excluded, so battlesuits don't count): castes other than Fire 80–180; Fire Warrior 120–160; Pathfinder 150–200; Shas'ui 180–240; battlesuit pilot 220–320; Ethereal 280–400; Commander 380–520; Kroot Carnivore 150–220; Kroot Shaper 250–350; Vespid 150–220.
+
+T'au traits: **Warp-Faint** (almost no warp presence: bonus to resist psychic powers and daemonic influence, and cannot be a psyker; build from Basic Set traits honestly), caste physiology as template lenses (Air caste: hollow bones and low-gravity adaptation; Earth caste: stocky and robust), **the Greater Good** (a Sense of Duty and Code of Honour to the T'au'va and the castes, not fanaticism in the Imperial sense), devotion to the Ethereals (T'au near an Ethereal fight harder and hold longer; the Ethereal's side of it is a Leadership/Charisma-style advantage, the Fire Warrior's a matching reaction), and poor close-combat training (Fire caste doctrine avoids it; a skill gap, not a disadvantage). Background gives the T'au shorter lives than humans; treat Short Lifespan as supported only if the drafter is confident, and say so. Kroot: beak (Sharp Teeth), Acute Smell/Taste, climbing and tracking talents, fast Move, and **genetic absorption** (Kroot evolve by eating the flesh of the strong: a kindred-level trait for flavour, not a per-meal stat change).
+
+T'au technology is TL11 science without the ^ superscience tag, except drone AI and grav systems where the Aeldari-style ^ fits better.
+
+| T'au gear | Anchor |
+|---|---|
+| Pulse rifle | Induction-launched plasma pulse: 6d×2(2) burn, no follow-up. Bolter-grade per shot (carapace 79%, Astartes 14%) and outranges it: about 1,000/3,000 yd. RoF about 3 |
+| Pulse carbine | Rifle damage, shorter range, higher RoF, underslung photon grenade launcher |
+| Pulse pistol | 5d×2(2) burn |
+| Burst cannon | Pulse-rifle damage at RoF 20+, suit- or drone-mounted |
+| Rail rifle | Hypervelocity solid slug: 6d×3(5) pi. Kills Astartes; threatens Terminators |
+| Heavy rail rifle (Broadside) | 8d×8(5) pi+, lascannon class |
+| Ion rifle | 6d×3(3) burn; overcharged 6d×2(3) burn ex with a malfunction risk to the firer |
+| Plasma rifle (T'au) | Plasma-gun anchor, lower RoF, no overheating |
+| Fusion blaster | Meltagun anchor |
+| Missile pod | 6d×3(3) cr ex, autocannon class |
+| Smart missile system | 5d×2(2) cr ex, self-guided: needs no line of sight to the target |
+| Seeker missile | Krak-missile anchor, fired by a markerlight lock |
+| T'au flamer | Imperial flamer parity |
+| Markerlight | Laser designator, no damage. A marked target gives networked T'au shooters +1 per mark (max +3) and removes cover penalties; seekers fire on a mark without line of sight |
+| Photon grenade | Blinding flash: affliction, no damage |
+| EMP grenade | Haywire-like, machines only |
+| Kroot rifle | T'au-made charged slug in a Kroot-built long gun: 7d(2) pi; blade-fitted stock for melee |
+| Neutron blaster (Vespid) | 5d×2(4) burn, short range |
+| Fire Warrior combat armour | Composite plates: DR 70 (carapace class), Weak Points 5, eye 20 |
+| Recon armour (Pathfinder) | Flexible, DR 36, Weak Points 5 |
+| XV25 Stealth battlesuit | DR 85, Weak Points 4, stealth field (a large visual-concealment bonus, not DR), jump jets |
+| XV8 Crisis battlesuit | DR 110, Weak Points 3, eye 45; about 2.5 m (SM +1); servo ST for the suit (child item per the GCS container rule); jet pack for short flight bursts; three hardpoints for weapon and support systems |
+| XV88 Broadside battlesuit | DR 170, Weak Points 3; heavy and slow, no jet pack |
+| Shield generator | Regenerating shield, iron-halo class (120 SP, 3 s, 20/s) |
+| Shield drone | Projects 80 SP onto its charge; the drone dies when the shield breaks through |
+| Drones | Gun, marker and shield drones: small flying AI units (build as templates, like the servitor) |
+
 ### Necrons
 
 Necrons are ancient minds transferred into bodies of living metal (necrodermis) during the biotransference, then left to sleep for sixty million years. Most rank-and-file Necrons lost their minds in the process; nobles kept their personalities. Their armour is their body: necrodermis is natural DR in the ancestry, not equipment. Anchors:
