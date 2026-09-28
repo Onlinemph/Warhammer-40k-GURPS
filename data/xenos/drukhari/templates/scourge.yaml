@@ -1,0 +1,120 @@
+kind: template
+output: Xenos/Drukhari/Templates/Scourge.gct
+notes: >-
+  A Scourge: a winged Drukhari raider who paid a Haemonculus for the wings and takes
+  to the air as a skirmisher. Point math (see Xenos/Drukhari/Traits/Drukhari Physiology.adq):
+  Drukhari Physiology (156) + Keen Battle-Sense (5) + Scourge Conditioning (45)
+  + Scourge Wings (40) + Callous (-5) + Selfish (-5) + Overconfidence (-5) + Power
+  from Pain Stage I (7) = TBD points of traits, plus skills (TBD points) = TBD points.
+  Stats: ST 11, DX 15, IQ 12, HT 11, HP 11, Will 12, Per 14, Speed 6.75, Move 9
+  on the ground, Air Move 18 (27 at top speed with Enhanced Move (Air) 1/2), Dodge
+  9 (6 + 3): matching framework.md's Scourge line (Air Move 20+ is satisfied by
+  the top speed, not the base Air Move). This lands inside the framework's Wych
+  and Scourge target of 250-350.
+
+
+  Weapon skills: splinter rifles, shardcarbines and haywire blasters (Guns, Rifle
+  and Beam Weapons for energy weapons like the dark lance). Weapon skills follow
+  the Drukhari armoury as framework.md's Skills table reads it: splinter weapons
+  fire solid crystal shards, so they use Guns (Pistol/Rifle), the same choice the
+  Aeldari Guardian makes for the shuriken catapult; blasters and dark lances are
+  beam weapons (Beam Weapons); heavy splinter and disintegrator cannons are Gunner.
+traits:
+- {include: xenos/drukhari/traits.yaml#Drukhari Physiology}
+- {include: xenos/aeldari/traits.yaml#Keen Battle-Sense}
+- {include: xenos/drukhari/traits.yaml#Scourge Conditioning}
+- {include: xenos/drukhari/traits.yaml#Scourge Wings}
+- {include: xenos/drukhari/traits.yaml#Callous}
+- {include: xenos/drukhari/traits.yaml#Selfish}
+- {include: xenos/drukhari/traits.yaml#Overconfidence}
+- {include: xenos/drukhari/traits.yaml#Power from Pain (Stage I)}
+skills:
+- name: Guns
+  spec: Rifle
+  diff: DX/E
+  points: 12
+  tags: [Xenos, Drukhari]
+  lore: Splinter rifle and shardcarbine.
+  design: DX+4 (19) for 12 points, Easy.
+- name: Flight
+  diff: DX/A
+  points: 16
+  tags: [Xenos, Drukhari]
+  lore: Aerial manoeuvre on grafted wings.
+  design: DX+4 (19) for 16 points, Average.
+- name: Beam Weapons
+  spec: Rifle
+  diff: DX/E
+  points: 4
+  tags: [Xenos, Drukhari]
+  lore: Dark lance and other energy weapons.
+  design: DX+2 (17) for 4 points, Easy.
+- name: Acrobatics
+  diff: DX/H
+  points: 4
+  tags: [Xenos, Drukhari]
+  lore: Aerial control and dodge.
+  design: DX+0 (15) for 4 points, Hard.
+- name: Stealth
+  diff: DX/A
+  points: 2
+  tags: [Xenos, Drukhari]
+  lore: Skirmish.
+  design: DX+0 (15) for 2 points, Average.
+- name: Tactics
+  diff: IQ/H
+  points: 2
+  tags: [Xenos, Drukhari]
+  lore: Aerial raid tactics.
+  design: IQ-1 (11) for 2 points, Hard.
+- name: Observation
+  diff: Per/A
+  points: 4
+  tags: [Xenos, Drukhari]
+  lore: A scout above a battlefield.
+  design: Per+1 (15) for 4 points, Average.
+- name: Knife
+  diff: DX/E
+  points: 2
+  tags: [Xenos, Drukhari]
+  lore: Close work.
+  design: DX+1 (16) for 2 points, Easy.
+- name: Intimidation
+  diff: Will/A
+  points: 2
+  tags: [Xenos, Drukhari]
+  lore: Wings are a menace.
+  design: Will+0 (12) for 2 points, Average.
+- name: Streetwise
+  diff: IQ/A
+  points: 2
+  tags: [Xenos, Drukhari]
+  lore: Commorragh.
+  design: IQ+0 (12) for 2 points, Average.
+- name: Area Knowledge
+  spec: (Commorragh)
+  diff: IQ/E
+  points: 2
+  tags: [Xenos, Drukhari]
+  lore: The Dark City.
+  design: IQ+1 (13) for 2 points, Easy.
+- name: First Aid
+  diff: IQ/E
+  points: 1
+  tags: [Xenos, Drukhari]
+  lore: Basic care.
+  design: IQ+0 (12) for 1 point, Easy.
+- name: Fast-Draw
+  spec: Ammo
+  diff: DX/E
+  points: 1
+  tags: [Xenos, Drukhari]
+  lore: Reload drill.
+  design: DX+0 (15) for 1 point, Easy.
+- name: Hidden Lore
+  spec: (Slaanesh)
+  diff: IQ/A
+  points: 1
+  tags: [Xenos, Drukhari]
+  lore: Every Drukhari knows what is coming for them.
+  design: IQ-1 (11) for 1 point, Average.

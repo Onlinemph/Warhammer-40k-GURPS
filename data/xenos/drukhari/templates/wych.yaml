@@ -1,0 +1,132 @@
+kind: template
+output: Xenos/Drukhari/Templates/Wych.gct
+notes: >-
+  A Wych: an arena gladiator of a Wych Cult, fighting in almost no armour on speed
+  and dodge, hyped on combat drugs and the crowd's noise. Point math (see Xenos/Drukhari/Traits/Drukhari
+  Physiology.adq): Drukhari Physiology (156) + Keen Battle-Sense (5) + Wych Training
+  (115) + Wych Cult Lens (2) + Sadism (-15) + Callous (-5) + Overconfidence (-5)
+  + Power from Pain Stages I and II (14) = TBD points of traits, plus skills (TBD
+  points) = TBD points. Stats: ST 11, DX 16, IQ 12, HT 11, HP 11, Will 12, Per 13,
+  Speed 7.0, Move 12 (sprint x1.5), Dodge 12 (7 + 3 + Enhanced Dodge 2): exactly
+  framework.md's Wych line. This lands inside the framework's Wych and Scourge target
+  of 250-350, comparable to an Aspect Warrior (295) and a little above, on the strength
+  of extra dodge and acrobatics.
+
+
+  The six Combat Drug traits are included disabled: one dose per combat, taken from
+  Xenos/Drukhari/Traits/Drukhari Physiology.adq; enable one for the fight. Weapon
+  skills follow the Drukhari armoury as framework.md's Skills table reads it: splinter
+  weapons fire solid crystal shards, so they use Guns (Pistol/Rifle), the same choice
+  the Aeldari Guardian makes for the shuriken catapult; blasters and dark lances
+  are beam weapons (Beam Weapons); heavy splinter and disintegrator cannons are
+  Gunner. Wych weapons are mundane blades made lethal by skill: hydra gauntlets
+  Brawling, razorflails Flail, the shardnet Net, the splinter pistol Guns (Pistol).
+  Impaler-type polearms, if used, need Spear or Polearm, not bought here.
+traits:
+- {include: xenos/drukhari/traits.yaml#Drukhari Physiology}
+- {include: xenos/aeldari/traits.yaml#Keen Battle-Sense}
+- {include: xenos/drukhari/traits.yaml#Wych Training}
+- {include: xenos/drukhari/traits.yaml#Wych Cult Lens}
+- {include: xenos/drukhari/traits.yaml#Sadism}
+- {include: xenos/drukhari/traits.yaml#Callous}
+- {include: xenos/drukhari/traits.yaml#Overconfidence}
+- {include: xenos/drukhari/traits.yaml#Power from Pain (Stage I)}
+- {include: xenos/drukhari/traits.yaml#Power from Pain (Stage II)}
+- {include: 'xenos/drukhari/traits.yaml#Combat Drug: Adrenalight', disabled: true}
+- {include: 'xenos/drukhari/traits.yaml#Combat Drug: Grave Lotus', disabled: true}
+- {include: 'xenos/drukhari/traits.yaml#Combat Drug: Hypex', disabled: true}
+- {include: 'xenos/drukhari/traits.yaml#Combat Drug: Painbringer', disabled: true}
+- {include: 'xenos/drukhari/traits.yaml#Combat Drug: Serpentin', disabled: true}
+- {include: 'xenos/drukhari/traits.yaml#Combat Drug: Splintermind', disabled: true}
+skills:
+- name: Brawling
+  diff: DX/E
+  points: 8
+  tags: [Xenos, Drukhari]
+  lore: >-
+    Hydra gauntlets and bare-handed fighting in the pit; the gauntlets add damage,
+    Brawling supplies the skill.
+  design: DX+3 (19) for 8 points, Easy.
+- name: Flail
+  diff: DX/H
+  points: 12
+  tags: [Xenos, Drukhari]
+  lore: >-
+    Razorflails, the classic Wych weapon: a mundane weapon made lethal by the wielder's
+    skill.
+  design: DX+2 (18) for 12 points, Hard.
+- name: Net
+  diff: DX/H
+  points: 4
+  tags: [Xenos, Drukhari]
+  lore: The shardnet, used to entangle before the kill.
+  design: DX+0 (16) for 4 points, Hard.
+- name: Acrobatics
+  diff: DX/H
+  points: 12
+  tags: [Xenos, Drukhari]
+  lore: 'The Wych''s real weapon: arena acrobatics and the Acrobatic Dodge.'
+  design: DX+2 (18) for 12 points, Hard.
+- name: Dancing
+  diff: DX/A
+  points: 4
+  tags: [Xenos, Drukhari]
+  lore: Every Wych is trained in the arena's performance-fighting.
+  design: DX+1 (17) for 4 points, Average.
+- name: Stealth
+  diff: DX/A
+  points: 2
+  tags: [Xenos, Drukhari]
+  lore: Approach to an ambush.
+  design: DX+0 (16) for 2 points, Average.
+- name: Performance
+  diff: IQ/A
+  points: 2
+  tags: [Xenos, Drukhari]
+  lore: The crowd expects a show.
+  design: IQ+0 (12) for 2 points, Average.
+- name: Intimidation
+  diff: Will/A
+  points: 2
+  tags: [Xenos, Drukhari]
+  lore: A Wych's arena reputation.
+  design: Will+0 (12) for 2 points, Average.
+- name: Jumping
+  diff: DX/E
+  points: 2
+  tags: [Xenos, Drukhari]
+  lore: Leaping over the fallen and onto the rails.
+  design: DX+1 (17) for 2 points, Easy.
+- name: Guns
+  spec: Pistol
+  diff: DX/E
+  points: 2
+  tags: [Xenos, Drukhari]
+  lore: Splinter pistol, carried in the arena's raiding parties.
+  design: DX+1 (17) for 2 points, Easy.
+- name: Climbing
+  diff: DX/A
+  points: 2
+  tags: [Xenos, Drukhari]
+  lore: Arena scaffolding and raid work.
+  design: DX+0 (16) for 2 points, Average.
+- name: Streetwise
+  diff: IQ/A
+  points: 2
+  tags: [Xenos, Drukhari]
+  lore: The cult's fans and rivals are in the streets.
+  design: IQ+0 (12) for 2 points, Average.
+- name: Area Knowledge
+  spec: (Commorragh)
+  diff: IQ/E
+  points: 2
+  tags: [Xenos, Drukhari]
+  lore: The Dark City's arenas.
+  design: IQ+1 (13) for 2 points, Easy.
+- name: Hidden Lore
+  spec: (Slaanesh)
+  diff: IQ/A
+  points: 1
+  tags: [Xenos, Drukhari]
+  lore: Every Drukhari knows what is coming for them.
+  design: IQ-1 (11) for 1 point, Average.

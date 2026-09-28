@@ -1,0 +1,92 @@
+kind: template
+output: Xenos/Drukhari/Templates/Wrack.gct
+notes: >-
+  A Wrack: a coven servant, surgically bulked and dulled, serving a Haemonculus
+  as torturer's assistant and bodyguard. Point math (see Xenos/Drukhari/Traits/Drukhari
+  Physiology.adq): Drukhari Physiology (156) + Wrack Surgery (23) + Duty (Coven)
+  (-10) + Sadism (-15) + Callous (-5) + Power from Pain Stages I and II (14) = TBD
+  points of traits, plus skills (TBD points) = TBD points. Stats: ST 14, DX 12,
+  IQ 10, HT 14, HP 16, Will 11, Per 10, Speed 6.75, Move 8, Dodge 9 (6 + 3): exactly
+  framework.md's Wrack line. This lands slightly short of the framework's 'about
+  250' Wrack target; see the last paragraph.
+
+
+  Weapon skills: scissorhand and hexrifle-type tools are Knife and Guns; the liquifier
+  is Liquid Projector (Sprayer). Weapon skills follow the Drukhari armoury as framework.md's
+  Skills table reads it: splinter weapons fire solid crystal shards, so they use
+  Guns (Pistol/Rifle), the same choice the Aeldari Guardian makes for the shuriken
+  catapult; blasters and dark lances are beam weapons (Beam Weapons); heavy splinter
+  and disintegrator cannons are Gunner.
+traits:
+- {include: xenos/drukhari/traits.yaml#Drukhari Physiology}
+- {include: xenos/drukhari/traits.yaml#Wrack Surgery}
+- {include: xenos/drukhari/traits.yaml#Duty (Coven)}
+- {include: xenos/drukhari/traits.yaml#Sadism}
+- {include: xenos/drukhari/traits.yaml#Callous}
+- {include: xenos/drukhari/traits.yaml#Power from Pain (Stage I)}
+- {include: xenos/drukhari/traits.yaml#Power from Pain (Stage II)}
+skills:
+- name: Brawling
+  diff: DX/E
+  points: 8
+  tags: [Xenos, Drukhari]
+  lore: Bulked-up brawling and manhandling captives.
+  design: DX+3 (15) for 8 points, Easy.
+- name: Knife
+  diff: DX/E
+  points: 4
+  tags: [Xenos, Drukhari]
+  lore: Scissorhand and surgical blades.
+  design: DX+2 (14) for 4 points, Easy.
+- name: Guns
+  spec: Pistol
+  diff: DX/E
+  points: 4
+  tags: [Xenos, Drukhari]
+  lore: Stinger or splinter pistol.
+  design: DX+2 (14) for 4 points, Easy.
+- name: Liquid Projector
+  spec: Sprayer
+  diff: DX/E
+  points: 4
+  tags: [Xenos, Drukhari]
+  lore: The liquifier gun.
+  design: DX+2 (14) for 4 points, Easy.
+- name: Surgery
+  diff: IQ/VH
+  points: 4
+  tags: [Xenos, Drukhari]
+  lore: A coven servant learns the work.
+  design: IQ-1 (9) for 4 points, Very Hard.
+- name: First Aid
+  diff: IQ/E
+  points: 2
+  tags: [Xenos, Drukhari]
+  lore: Keeping a subject alive.
+  design: IQ+1 (11) for 2 points, Easy.
+- name: Intimidation
+  diff: Will/A
+  points: 4
+  tags: [Xenos, Drukhari]
+  lore: A Wrack's bulk and menace.
+  design: Will+1 (12) for 4 points, Average.
+- name: Interrogation
+  diff: IQ/A
+  points: 4
+  tags: [Xenos, Drukhari]
+  lore: The coven's questions.
+  design: IQ+1 (11) for 4 points, Average.
+- name: Area Knowledge
+  spec: (Commorragh)
+  diff: IQ/E
+  points: 2
+  tags: [Xenos, Drukhari]
+  lore: The Dark City's coven-quarters.
+  design: IQ+1 (11) for 2 points, Easy.
+- name: Hidden Lore
+  spec: (Slaanesh)
+  diff: IQ/A
+  points: 1
+  tags: [Xenos, Drukhari]
+  lore: Every Drukhari knows what is coming for them.
+  design: IQ-1 (9) for 1 point, Average.

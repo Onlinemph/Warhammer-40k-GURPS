@@ -269,44 +269,49 @@ items:
   # ------------------------------------------------------------ Wych Cult arena weapons (no power fields)
 
   - name: "Wych Hydra Gauntlets (pair)"
-    tl: "10"
+    tl: "10^"
     lc: 0
-    cost: 1600
+    cost: 3000
     weight: 3
     tags: ["Melee Weapon", "Xenos", "Drukhari", "Wych Cult"]
     weapons:
       - usage: "Claw strike, each gauntlet"
-        damage: "thr+2 cut"
+        damage: "sw+2d(3) cut"
         reach: "C,1"
         parry: 0
         st: 8
         skill: "Brawling"
     notes: >-
       Worn as a pair: the Wych may attack with both in one turn (second attack at the usual off-hand
-      penalty unless she is Ambidextrous). Parry uses Brawling/2+3 as for any hand weapon.
+      penalty unless she is Ambidextrous). Parry uses Brawling/2+3 as for any hand weapon. Blades
+      are hyper-keen Commorraghan edges (armour divisor (3)), not a power field.
     lore: >-
       Clawed gauntlets worn by Hekatrixes and Wyches: a pair of hand-blades bonded to the forearm
       that let a Wych rake, slash and parry at close quarters with tremendous speed (Codex: Drukhari
-      background). The lethality lies in the fighter.
+      background). Wych weapons are consistently shown as monofilament-sharp rather than power-field
+      weapons; the tabletop gives them armour penetration but no field, and that is the reading used
+      here.
     design: >-
       No framework anchor beyond 'mundane weapons made lethal by the Wych's skill; no power fields'.
-      thr+2 cut is a hand-blade of the Basic Set claw or knife class (a sword-length hand claw would
-      give more): at a Wych's ST 11 (thr 1d-1) it does 1d+1, average 4.5, and penetrates flak,
-      carapace and Astartes plate 0.0% of the time, since a mundane blade does not beat DR 30. This
-      is deliberate: a Wych does not depend on penetrating armour but on hitting the unarmoured
-      locations (face, neck, limbs, groin) that her speed, called shots and multiple attacks per
-      turn reach, and her attack volume comes from her skill and traits, not from the gauntlet.
-      Handling: 3 lb the pair, min ST 8, reach C,1, parry 0, Brawling.
+      The edge is set by the same reasoning as the Aeldari shuriken (monomolecular edge, divisor
+      (3)) and the Imperial chainsword (sw+2d(2)): a hyper-sharp edge with no motor or field gets
+      the shuriken's (3) at the chainsword's two extra dice, sw+2d(3) cut. Exact dice at a Wych's ST
+      11 (sw 1d+1, so 3d+1(3), average 11.5): penetrates flak (effective 10) 62.5% of hits (68.5%
+      with the Weak Points chance), carapace (effective 23.3) 0.0% (2.3% with WP 5) and Astartes
+      plate 0.0% (0.1% with WP 4). Flak is therefore a coin-flip-plus for each blow, which with a
+      Wych's many attacks a turn is how she butchers Guardsmen, while carapace and power armour
+      still turn her aside except on gaps. Handling: 3 lb the pair, min ST 8, reach C,1, parry 0,
+      Brawling. TL 10 with the ^ mark for the Commorragh edge.
 
   - name: "Razorflails (pair)"
-    tl: "10"
+    tl: "10^"
     lc: 0
-    cost: 1500
+    cost: 2800
     weight: 5
     tags: ["Melee Weapon", "Xenos", "Drukhari", "Wych Cult"]
     weapons:
       - usage: "Swing, each flail"
-        damage: "sw+2 cut"
+        damage: "sw+2d(3) cut"
         reach: "1,2"
         parry: "0U"
         st: 9
@@ -318,24 +323,25 @@ items:
     lore: >-
       A pair of chain-flails studded with razor-edged blades, favoured by Wyches who fight at a
       range that makes a blade user's guard difficult (Codex: Drukhari background). The arena
-      fighters use them in a whirling, almost dancing style.
+      fighters use them in a whirling, almost dancing style; the edges are Commorragh-keen, not
+      power-field.
     design: >-
-      A mundane flail (sw+2 cr in the Basic Set) redone with razor blades as a cutting weapon: sw+2
-      cut, reach 1,2 and parry 0U, per the framework's 'flails 0U' note. At a Wych's ST 11 (sw 1d+1,
-      so 1d+3) it averages 6.5 and penetrates flak, carapace and Astartes plate 0.0%: a weapon for
-      unarmoured locations, like the hydra gauntlets. What it buys is reach and the ability to
-      bypass a parry (a flail's arc wraps around a blade). Handling: 2.5 lb each (5 lb the pair),
-      min ST 9, reach 1,2, parry 0U, Flail.
+      Same edge reasoning as the hydra gauntlets: a razor-bladed chain flail is a cutting weapon
+      with a monomolecular-class edge, sw+2d(3) cut, kept at reach 1,2 and parry 0U (framework:
+      flails 0U). Exact dice at a Wych's ST 11 (3d+1(3)): flak 62.5% (68.5% with Weak Points),
+      carapace 0.0% (2.3%), Astartes 0.0% (0.1%). What the flail adds over the gauntlets is reach
+      and the -4 to parry it. Handling: 2.5 lb each (5 lb the pair), min ST 9, reach 1,2, parry 0U,
+      Flail.
 
   - name: "Shardnet and Impaler"
-    tl: "10"
+    tl: "10^"
     lc: 0
-    cost: 1800
+    cost: 2200
     weight: 7
     tags: ["Melee Weapon", "Xenos", "Drukhari", "Wych Cult"]
     weapons:
       - usage: "Impaler, thrust"
-        damage: "thr+3 imp"
+        damage: "thr+2d(3) imp"
         reach: "1,2*"
         parry: 0
         st: 9
@@ -356,36 +362,38 @@ items:
           struggling the wire and crystals cut for 1d cut (no attack roll). Recovering a thrown net
           takes 1d turns and the Wych's next Ready. Cannot parry while it is thrown.
     notes: >-
-      The impaler is used one-handed while the net is held, or two-handed for the thr+3 line's usual
+      The impaler is used one-handed while the net is held, or two-handed for the thr line's usual
       reach. Roughly a gladiator's trident-and-net kit.
     lore: >-
       The arena kit of the Wych Cult's net-and-spear fighters: a crystal-studded net to bind an
       opponent and a barbed trident or spear to finish them (Codex: Drukhari background, Wych arena
-      weapons). It is more useful in the arena than the battlefield, but Wyches do use it.
+      weapons). The impaler's head is a Commorragh-keen point; the net is unchanged.
     design: >-
-      Two weapons in one item, both mundane per the framework. The impaler is a Basic Set
-      spear-class thrusting weapon: thr+3 imp, reach 1,2*, min ST 9 (a 4 lb pole arm); at a Wych's
-      ST 11 (thr 1d-1) it does 1d+2, average 5.5, and penetrates flak, carapace and Astartes plate
-      0.0% (an impaling wound is an unarmoured-location attack). The shardnet is thrown (range 3/6,
-      ST 8, 3 lb) and works as Binding rather than damage: the point of the net is to bring the
-      target down to a defenceless state for the impaler. Handling: 4 lb impaler + 3 lb net, min ST
-      9 and 8.
+      Two weapons in one item. The impaler is a spear-class thrusting weapon with the same
+      hyper-keen edge as the other Wych blades, thr+2d(3) imp (the shuriken's (3), two extra dice
+      over the thrust as for the flail and gauntlets), reach 1,2*, min ST 9. Exact dice at a Wych's
+      ST 11 (thr 1d-1, so 3d-1(3), average 9.5): flak 37.5% (46.7% with WP), carapace 0.0% (1.2%),
+      Astartes 0.0%. Thrusts are weaker than swings against armour because thr is lower than sw at
+      this ST, but the impaling wound multiplier makes each penetrating hit hurt. The shardnet is
+      unchanged: thrown (range 3/6, ST 8, 3 lb), Binding rather than damage, to bring the target
+      down to a defenceless state for the impaler. Handling: 4 lb impaler + 3 lb net, min ST 9 and
+      8.
 
   - name: "Wych Blade"
-    tl: "10"
+    tl: "10^"
     lc: 0
-    cost: 400
+    cost: 900
     weight: 1.5
     tags: ["Melee Weapon", "Xenos", "Drukhari", "Wych Cult"]
     weapons:
       - usage: "Swing"
-        damage: "sw cut"
+        damage: "sw+1d(3) cut"
         reach: "1"
         parry: 0
         st: 7
         skill: "Shortsword"
       - usage: "Thrust"
-        damage: "thr+1 imp"
+        damage: "thr+1d(3) imp"
         reach: "1"
         parry: 0
         st: 7
@@ -396,24 +404,27 @@ items:
     lore: >-
       The basic close-combat blade of the Wych Cults, carried by Wyches as a side-arm alongside more
       specialised weapons. The sources do not give it a distinct canonical profile; this entry is
-      built to give Wych characters an ordinary blade.
+      built to give Wych characters an ordinary Commorraghan blade.
     design: >-
-      A shortsword-class blade: sw cut / thr+1 imp per the Basic Set shortsword. At a Wych's ST 11
-      the swing is 1d+1 (average 4.5) and it penetrates armour 0.0% of the time; a knife-class blade
-      that gets its effect on unarmoured locations, as a mundane weapon should. Handling: 1.5 lb,
-      min ST 7, reach 1, parry 0, Shortsword.
+      A shortsword-class blade with the Commorragh hyper-keen edge: one die over the plain sword's
+      sw / thr+1 and the (3) divisor, sw+1d(3) cut and thr+1d(3) imp (a lighter blade than the
+      gauntlets and flails, so one die of edge rather than two). Exact dice at a Wych's ST 11: the
+      swing (2d+1(3), average 8) penetrates flak 16.7% (27.9% with WP), carapace 0.0% (0.4%),
+      Astartes 0.0%; the thrust (2d-1(3)) 2.8% flak (12.0% with WP). It cuts ordinary clothing and
+      light armour readily and only worries flak on a lucky roll. Handling: 1.5 lb, min ST 7, reach
+      1, parry 0, Shortsword.
 
   # ------------------------------------------------------------ Haemonculus tools
 
   - name: "Scissorhand"
-    tl: "10"
+    tl: "10^"
     lc: 0
-    cost: 2500
+    cost: 3500
     weight: 4
     tags: ["Melee Weapon", "Xenos", "Drukhari", "Haemonculus Coven"]
     weapons:
       - usage: "Swing"
-        damage: "sw+2 cut"
+        damage: "sw+1d(3) cut"
         reach: "1"
         parry: 0
         st: 11
@@ -425,18 +436,18 @@ items:
     lore: >-
       A giant pair of shears worn as a glove or bonded to the arm by Haemonculi and used as surgical
       and torture implements (Codex: Drukhari background gives a scissorhand as a Haemonculus's
-      melee weapon).
+      melee weapon). Its shear-edges are Commorragh-keen.
     design: >-
-      No framework anchor; built as a heavy, mundane cutting weapon of the Basic Set, sw+2 cut (a
-      bit above a broadsword for its shears action), no divisor, no field. At a Haemonculus's ST 13
-      (sw 2d-1, so 2d+1) it averages 8, and penetrates flak, carapace and Astartes plate 0.0% of the
-      time: a weapon for flesh, not armour, in keeping with a surgeon. Handling: 4 lb, min ST 11,
-      reach 1, parry 0.
+      No framework anchor; a mundane heavy cutting weapon with the hyper-keen edge used across the
+      Drukhari blades: sw+1d(3) cut, no field. Exact dice at a Haemonculus's ST 13 (sw 2d-1, so
+      3d-1(3), average 9.5): flak 37.5% (46.7% with WP 7), carapace 0.0% (1.2% with WP 5), Astartes
+      0.0%. A surgeon's tool that goes through a flak jacket about as often as not. Handling: 4 lb,
+      min ST 11, reach 1, parry 0.
 
   - name: "Flesh Gauntlet"
     tl: "10^"
     lc: 0
-    cost: 3000
+    cost: 3500
     weight: 5
     tags: ["Melee Weapon", "Xenos", "Drukhari", "Haemonculus Coven"]
     weapons:
@@ -446,27 +457,39 @@ items:
         parry: 0
         st: 10
         skill: "Brawling"
+      - usage: "Toxin follow-up (if the punch penetrates)"
+        damage: "2d tox"
+        reach: "C,1"
+        parry: 0
+        st: 10
+        skill: "Brawling"
+        notes: >-
+          Only if the crushing damage penetrates DR: the grafted spurs inject a coven toxin. Living
+          targets only.
     notes: >-
       Grown, not built: the gauntlet is fused into the wearer's arm by surgery. Removing or
-      replacing it takes a Haemonculus (Surgery roll).
+      replacing it takes a Haemonculus (Surgery roll). The crushing damage is mundane; the toxin is
+      the sting.
     lore: >-
       A brutish grafted gauntlet used by Haemonculi as a melee weapon (Codex: Drukhari background).
-      The sources say little about its exact working, so it is built as a heavy gauntlet with the
-      bulk to give the wearer a hard punch.
+      The sources say little about its exact working, so it is built as a heavy gauntlet with a
+      coven toxin follow-up, a design choice consistent with the Haemonculus's trade.
     design: >-
-      No framework anchor; a heavy fist-weapon of the Basic Set type. thr+3 cr at a Haemonculus's ST
-      13 (thr 1d) is 1d+3, average 6.5: no armour penetration at all (0.0% against flak). Handling:
-      5 lb, min ST 10, reach C,1, parry 0, Brawling.
+      No framework anchor; a heavy fist-weapon of the Basic Set type, kept mundane as the
+      coordinator asked: thr+3 cr at a Haemonculus's ST 13 (thr 1d, so 1d+3, average 6.5), no
+      divisor, so it penetrates flak 0.0% and the toxin never fires against armour; against bare
+      flesh it adds 2d tox (average 7). That makes it a weapon for unarmoured victims, the surgeon's
+      usual subjects. Handling: 5 lb, min ST 10, reach C,1, parry 0, Brawling.
 
   - name: "Electrocorrosive Whip"
     tl: "10^"
     lc: 0
-    cost: 2500
+    cost: 3000
     weight: 2
     tags: ["Melee Weapon", "Xenos", "Drukhari", "Haemonculus Coven"]
     weapons:
       - usage: "Lash"
-        damage: "sw cor"
+        damage: "sw(2) cor"
         reach: "1-3"
         parry: "No"
         st: 7
@@ -485,61 +508,63 @@ items:
       A Haemonculus's whip that both corrodes and shocks its victim (Codex: Drukhari background). A
       tool of the flesh-sculptor's torture chamber more than a battlefield arm.
     design: >-
-      Built as a mundane whip weapon with a follow-up, no field: lash sw cor (corrosion wounds x1)
-      plus a 2d burn discharge if the lash penetrates. At a Haemonculus's ST 13 (sw 2d-1) the lash
-      averages 6 and the discharge 7; against armour the lash never penetrates (0.0% flak), so it is
-      a weapon for exposed flesh. Handling: 2 lb, min ST 7, reach 1-3, parry 'No', Whip.
+      A mundane whip with a follow-up and no field: lash sw(2) cor (corrosion wounds x1, and the
+      acid coating gives it the (2) divisor) plus a 2d burn discharge if the lash penetrates. Exact
+      dice at a Haemonculus's ST 13 (sw 2d-1, average 6): flak 0.0% (4.5% with WP 7), carapace 0.0%,
+      Astartes 0.0%. A whip's low damage cannot make use of even a (2) edge against armour; it is a
+      weapon for exposed flesh. Handling: 2 lb, min ST 7, reach 1-3, parry 'No', Whip.
 
   # ------------------------------------------------------------ Mandrake and Scourge blades
 
   - name: "Glimmersteel Blade"
     tl: "10^"
     lc: 0
-    cost: 3000
+    cost: 3500
     weight: 2
     tags: ["Melee Weapon", "Xenos", "Drukhari", "Mandrake"]
     weapons:
       - usage: "Swing"
-        damage: "sw+1(2) cut"
+        damage: "sw+1d(3) cut"
         reach: "1"
         parry: 0
         st: 8
         skill: "Shortsword"
       - usage: "Thrust"
-        damage: "thr+1(2) imp"
+        damage: "thr+1d(3) imp"
         reach: "1"
         parry: 0
         st: 8
         skill: "Shortsword"
     notes: >-
-      Mundane: no power field and no follow-up; the (2) divisor is the keenness of the metal, not a
+      Mundane: no power field and no follow-up; the (3) divisor is the keenness of the metal, not a
       field.
     lore: >-
       The blade of the Mandrake, a shadow-steel weapon carried into fights from the darkness (Codex:
       Drukhari background gives Mandrakes a glimmersteel blade). Sources describe it as
       exceptionally keen; no detailed profile is given.
     design: >-
-      No framework anchor. Made from an exotic alloy that holds an edge unlike steel: a quality
-      shortsword with a light armour divisor (2), sw+1(2) cut and thr+1(2) imp. At a Mandrake's ST
-      11 (sw 1d+1, so 1d+2) it averages 5.5, and (effective DR 15 against flak) penetrates flak,
-      carapace and Astartes plate 0.0%: it rewards a Mandrake's stealth and positioning, not a
-      straight fight. Handling: 2 lb, min ST 8, reach 1, parry 0, Shortsword.
+      No framework anchor. An exotic alloy that holds a molecular-fine edge: the same sw+1d(3) cut
+      and thr+1d(3) imp as the Wych blade (the shuriken's (3), one die over a plain sword), but with
+      better min ST and cost for the alloy. Exact dice at a Mandrake's ST 11 (sw 1d+1): swing
+      2d+1(3) penetrates flak 16.7% (27.9% with WP), carapace 0.0% (0.4%), Astartes 0.0%; thrust
+      2d-1(3) flak 2.8% (12.0%). It rewards a Mandrake's stealth: an ambush strike on the unarmoured
+      throat, not a slugfest with plate. Handling: 2 lb, min ST 8, reach 1, parry 0, Shortsword.
 
   - name: "Venom Blade"
     tl: "10^"
     lc: 0
-    cost: 2500
+    cost: 3000
     weight: 3
     tags: ["Melee Weapon", "Xenos", "Drukhari", "Kabal"]
     weapons:
       - usage: "Swing"
-        damage: "sw+1 cut"
+        damage: "sw+1d(3) cut"
         reach: "1"
         parry: 0
         st: 9
         skill: "Broadsword"
       - usage: "Thrust"
-        damage: "thr+2 imp"
+        damage: "thr+1d(3) imp"
         reach: "1"
         parry: 0
         st: 9
@@ -561,8 +586,9 @@ items:
       certainty). The Drukhari's penchant for toxins makes it a natural companion to the splinter
       weapons.
     design: >-
-      Not a power weapon: a sword-class blade with a poison follow-up, the melee counterpart of the
-      splinter rifle's toxin. Swing sw+1 cut, thrust thr+2 imp, no divisor. At an Archon's ST 12 (sw
-      1d+2, so 1d+3) it averages 6.5 and never penetrates flak or better (0.0%); against an
-      unarmoured or lightly armoured target that it does penetrate, the 3d tox follow-up (average
-      10.5) is what kills. Handling: 3 lb, min ST 9, reach 1, parry 0, Broadsword.
+      Not a power weapon: a sword-class blade with the Commorragh hyper-keen edge and a poison
+      follow-up, the melee counterpart of the splinter rifle's toxin. Swing sw+1d(3) cut, thrust
+      thr+1d(3) imp. Exact dice at an Archon's ST 12 (sw 1d+2): swing 2d+2(3) penetrates flak 27.8%
+      (38.5% with WP 7), carapace 0.0% (0.8%), Astartes 0.0%; thrust 2d-1(3) flak 2.8% (12.0%). The
+      edge gets through flak on a good roll; when it does, the 3d tox follow-up (average 10.5) is
+      what kills. Handling: 3 lb, min ST 9, reach 1, parry 0, Broadsword.

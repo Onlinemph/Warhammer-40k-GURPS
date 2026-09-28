@@ -1,0 +1,112 @@
+kind: template
+output: Xenos/Drukhari/Templates/Incubus.gct
+notes: >-
+  An Incubus: a mercenary blade-cultist sworn to Arhra, fighting in a heavy warsuit
+  with a two-handed klaive. Point math (see Xenos/Drukhari/Traits/Drukhari Physiology.adq):
+  Drukhari Physiology (156) + Keen Battle-Sense (5) + Incubus Training (185) + Path
+  of Arhra (-15) + Callous (-5) + Power from Pain Stages I and II (14) = TBD points
+  of traits, plus skills (TBD points) = TBD points. Stats: ST 12, DX 17, IQ 12,
+  HT 12, HP 12, Will 14, Per 13, Speed 7.5, Move 10 (sprint x1.5), Dodge 11 (7 +
+  3 + Combat Reflexes): exactly framework.md's Incubus line. This lands inside the
+  framework's Mandrake and Incubus band (400-550): a master duellist built on Trained
+  By A Master, Weapon Master and Enhanced Parry rather than raw stats.
+
+
+  Sadism is deliberately left out: Incubi are ascetic and disciplined, not indulgent.
+  The klaive is a power-field two-handed blade, Two-Handed Sword; the framework's
+  Skills table treats power swords as swords. Weapon skills follow the Drukhari
+  armoury as framework.md's Skills table reads it: splinter weapons fire solid crystal
+  shards, so they use Guns (Pistol/Rifle), the same choice the Aeldari Guardian
+  makes for the shuriken catapult; blasters and dark lances are beam weapons (Beam
+  Weapons); heavy splinter and disintegrator cannons are Gunner.
+traits:
+- {include: xenos/drukhari/traits.yaml#Drukhari Physiology}
+- {include: xenos/aeldari/traits.yaml#Keen Battle-Sense}
+- {include: xenos/drukhari/traits.yaml#Incubus Training}
+- {include: xenos/drukhari/traits.yaml#Path of Arhra}
+- {include: xenos/drukhari/traits.yaml#Callous}
+- {include: xenos/drukhari/traits.yaml#Power from Pain (Stage I)}
+- {include: xenos/drukhari/traits.yaml#Power from Pain (Stage II)}
+skills:
+- name: Two-Handed Sword
+  diff: DX/A
+  points: 32
+  tags: [Xenos, Drukhari]
+  lore: >-
+    The klaive, drilled for centuries: Trained By A Master and Weapon Master apply.
+  design: DX+8 (25) for 32 points, Average.
+- name: Brawling
+  diff: DX/E
+  points: 4
+  tags: [Xenos, Drukhari]
+  lore: Close-in blows when the blade is engaged.
+  design: DX+2 (19) for 4 points, Easy.
+- name: Acrobatics
+  diff: DX/H
+  points: 4
+  tags: [Xenos, Drukhari]
+  lore: Precise, balanced footwork.
+  design: DX+0 (17) for 4 points, Hard.
+- name: Stealth
+  diff: DX/A
+  points: 2
+  tags: [Xenos, Drukhari]
+  lore: Hired blades must sometimes come quietly.
+  design: DX+0 (17) for 2 points, Average.
+- name: Intimidation
+  diff: Will/A
+  points: 8
+  tags: [Xenos, Drukhari]
+  lore: The tormentor helm and reputation.
+  design: Will+2 (16) for 8 points, Average.
+- name: Tactics
+  diff: IQ/H
+  points: 4
+  tags: [Xenos, Drukhari]
+  lore: A mercenary's read of a fight.
+  design: IQ+0 (12) for 4 points, Hard.
+- name: Meditation
+  diff: Will/H
+  points: 4
+  tags: [Xenos, Drukhari]
+  lore: The Cult's ascetic discipline.
+  design: Will+0 (14) for 4 points, Hard.
+- name: Theology
+  spec: (Cult of Arhra)
+  diff: IQ/H
+  points: 2
+  tags: [Xenos, Drukhari]
+  lore: The Cult's rites.
+  design: IQ-1 (11) for 2 points, Hard.
+- name: Running
+  diff: HT/A
+  points: 2
+  tags: [Xenos, Drukhari]
+  lore: Fitness.
+  design: HT+0 (12) for 2 points, Average.
+- name: Jumping
+  diff: DX/E
+  points: 1
+  tags: [Xenos, Drukhari]
+  lore: Battlefield mobility drill.
+  design: DX+0 (17) for 1 point, Easy.
+- name: Climbing
+  diff: DX/A
+  points: 2
+  tags: [Xenos, Drukhari]
+  lore: Sanctuary and city work.
+  design: DX+0 (17) for 2 points, Average.
+- name: Area Knowledge
+  spec: (Commorragh)
+  diff: IQ/E
+  points: 2
+  tags: [Xenos, Drukhari]
+  lore: The Dark City's Kabals, the Incubi's clients.
+  design: IQ+1 (13) for 2 points, Easy.
+- name: Hidden Lore
+  spec: (Slaanesh)
+  diff: IQ/A
+  points: 1
+  tags: [Xenos, Drukhari]
+  lore: Every Drukhari knows what is coming for them.
+  design: IQ-1 (11) for 1 point, Average.

@@ -1,0 +1,156 @@
+kind: template
+output: Xenos/Drukhari/Templates/Archon.gct
+notes: >-
+  An Archon: an ancient, paranoid, well-fed tyrant who rules a Kabal, armed with
+  a blast pistol and a huskblade, protected by ghostplate and a shadow field. Point
+  math (see Xenos/Drukhari/Traits/Drukhari Physiology.adq): Drukhari Physiology
+  (156) + Archon's Mastery (230) + Archon's Estate (50) + Kabal Lens (-4) + Haemonculus
+  Regrowth (15) + Power from Pain, all three stages (34) + Sadism (-15) + Callous
+  (-5) + Megalomania (-10) + Paranoia (-10) + Overconfidence (-5) = TBD points of
+  traits, plus skills (TBD points) = TBD points. Stats: ST 12, DX 18, IQ 15, HT
+  12, HP 12, Will 17, Per 15, Speed 7.75, Move 10, Dodge 14 (7 + 3 + Enhanced Dodge
+  1 + Combat Reflexes): exactly framework.md's Archon line (no Keen Battle-Sense:
+  Per equals IQ). This lands inside the 600-850 band of the framework for Haemonculus,
+  Succubus and Archon.
+
+
+  Haemonculus Regrowth is enabled: an Archon can afford it. Weapon skills follow
+  the Drukhari armoury as framework.md's Skills table reads it: splinter weapons
+  fire solid crystal shards, so they use Guns (Pistol/Rifle), the same choice the
+  Aeldari Guardian makes for the shuriken catapult; blasters and dark lances are
+  beam weapons (Beam Weapons); heavy splinter and disintegrator cannons are Gunner.
+  The blast pistol is a beam weapon, Beam Weapons (Pistol); the huskblade is a power-field
+  sword, Broadsword.
+traits:
+- {include: xenos/drukhari/traits.yaml#Drukhari Physiology}
+- {include: xenos/drukhari/traits.yaml#Archon's Mastery}
+- {include: xenos/drukhari/traits.yaml#Archon's Estate}
+- {include: xenos/drukhari/traits.yaml#Kabal Lens}
+- {include: xenos/drukhari/traits.yaml#Haemonculus Regrowth}
+- {include: xenos/drukhari/traits.yaml#Power from Pain}
+- {include: xenos/drukhari/traits.yaml#Sadism}
+- {include: xenos/drukhari/traits.yaml#Callous}
+- {include: xenos/drukhari/traits.yaml#Megalomania}
+- {include: xenos/drukhari/traits.yaml#Paranoia}
+- {include: xenos/drukhari/traits.yaml#Overconfidence}
+skills:
+- name: Beam Weapons
+  spec: Pistol
+  diff: DX/E
+  points: 12
+  tags: [Xenos, Drukhari]
+  lore: 'The blast pistol: dark-lance tech in a hand weapon.'
+  design: DX+4 (22) for 12 points, Easy.
+- name: Broadsword
+  diff: DX/A
+  points: 16
+  tags: [Xenos, Drukhari]
+  lore: The huskblade, a power-field sword.
+  design: DX+4 (22) for 16 points, Average.
+- name: Guns
+  spec: Pistol
+  diff: DX/E
+  points: 4
+  tags: [Xenos, Drukhari]
+  lore: A splinter pistol backup.
+  design: DX+2 (20) for 4 points, Easy.
+- name: Leadership
+  diff: IQ/A
+  points: 12
+  tags: [Xenos, Drukhari]
+  lore: Commanding a Kabal.
+  design: IQ+3 (18) for 12 points, Average.
+- name: Tactics
+  diff: IQ/H
+  points: 12
+  tags: [Xenos, Drukhari]
+  lore: Raids and sieges.
+  design: IQ+2 (17) for 12 points, Hard.
+- name: Strategy
+  diff: IQ/H
+  points: 8
+  tags: [Xenos, Drukhari]
+  lore: Kabal warfare.
+  design: IQ+1 (16) for 8 points, Hard.
+- name: Politics
+  diff: IQ/A
+  points: 12
+  tags: [Xenos, Drukhari]
+  lore: Commorragh is a tangle of shifting loyalties.
+  design: IQ+3 (18) for 12 points, Average.
+- name: Diplomacy
+  diff: IQ/H
+  points: 4
+  tags: [Xenos, Drukhari]
+  lore: Deals between Kabals.
+  design: IQ+0 (15) for 4 points, Hard.
+- name: Intimidation
+  diff: Will/A
+  points: 12
+  tags: [Xenos, Drukhari]
+  lore: A tyrant rules by fear.
+  design: Will+3 (20) for 12 points, Average.
+- name: Interrogation
+  diff: IQ/A
+  points: 4
+  tags: [Xenos, Drukhari]
+  lore: Extracting secrets from rivals.
+  design: IQ+1 (16) for 4 points, Average.
+- name: Savoir-Faire
+  spec: (High Society)
+  diff: IQ/E
+  points: 4
+  tags: [Xenos, Drukhari]
+  lore: Kabal court etiquette.
+  design: IQ+2 (17) for 4 points, Easy.
+- name: Detect Lies
+  diff: Per/H
+  points: 8
+  tags: [Xenos, Drukhari]
+  lore: In a court of traitors, an Archon reads everyone.
+  design: Per+1 (16) for 8 points, Hard.
+- name: Body Language
+  diff: Per/A
+  points: 4
+  tags: [Xenos, Drukhari]
+  lore: Reading a rival before they move.
+  design: Per+1 (16) for 4 points, Average.
+- name: Streetwise
+  diff: IQ/A
+  points: 4
+  tags: [Xenos, Drukhari]
+  lore: Commorragh's underworld.
+  design: IQ+1 (16) for 4 points, Average.
+- name: Administration
+  diff: IQ/A
+  points: 8
+  tags: [Xenos, Drukhari]
+  lore: Running a Kabal's slave trade and treasury.
+  design: IQ+2 (17) for 8 points, Average.
+- name: Area Knowledge
+  spec: (Commorragh)
+  diff: IQ/E
+  points: 4
+  tags: [Xenos, Drukhari]
+  lore: The Dark City's districts and Kabals.
+  design: IQ+2 (17) for 4 points, Easy.
+- name: Fast-Draw
+  spec: Pistol
+  diff: DX/E
+  points: 1
+  tags: [Xenos, Drukhari]
+  lore: A duelling draw.
+  design: DX+0 (18) for 1 point, Easy.
+- name: Stealth
+  diff: DX/A
+  points: 2
+  tags: [Xenos, Drukhari]
+  lore: An Archon expects assassins and knows the tricks.
+  design: DX+0 (18) for 2 points, Average.
+- name: Hidden Lore
+  spec: (Slaanesh)
+  diff: IQ/A
+  points: 4
+  tags: [Xenos, Drukhari]
+  lore: An Archon has lived long enough to know what waits for them.
+  design: IQ+1 (16) for 4 points, Average.

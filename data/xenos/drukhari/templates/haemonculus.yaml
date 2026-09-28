@@ -1,0 +1,135 @@
+kind: template
+output: Xenos/Drukhari/Templates/Haemonculus.gct
+notes: >-
+  A Haemonculus: a flesh-sculptor of a Coven, an ancient torturer-surgeon who has
+  rebuilt himself many times. Point math (see Xenos/Drukhari/Traits/Drukhari Physiology.adq):
+  Drukhari Physiology (156) + Haemonculus's Self-Sculpted Body (150) + Haemonculus's
+  Composure (15) + Haemonculus's Estate (30) + Haemonculus Regrowth (15) + Power
+  from Pain, all three stages (34) + Sadism (-15) + Callous (-5) + Obsession (-10)
+  = TBD points of traits, plus skills (TBD points) = TBD points. Stats: ST 13, DX
+  13, IQ 16, HT 15, HP 18, Will 17, Per 14, Speed 7.25, Move 8, Dodge 10 (7 + 3):
+  exactly framework.md's Haemonculus line. This lands in the framework's 600-850
+  band for Haemonculus, Succubus and Archon.
+
+
+  A Haemonculus is slow and clumsy but nearly impossible to put down: HP 18 with
+  High Pain Threshold, Hard to Kill 2, Injury Tolerance (No Vitals), DR 2 and Slow
+  Regeneration, plus Extra Life. Weapon skills: the stinger pistol and hexrifle
+  fire toxic darts or crystal (Guns), close work with the scissorhand is Knife-class.
+  Weapon skills follow the Drukhari armoury as framework.md's Skills table reads
+  it: splinter weapons fire solid crystal shards, so they use Guns (Pistol/Rifle),
+  the same choice the Aeldari Guardian makes for the shuriken catapult; blasters
+  and dark lances are beam weapons (Beam Weapons); heavy splinter and disintegrator
+  cannons are Gunner.
+traits:
+- {include: xenos/drukhari/traits.yaml#Drukhari Physiology}
+- {include: xenos/drukhari/traits.yaml#Haemonculus's Self-Sculpted Body}
+- {include: xenos/drukhari/traits.yaml#Haemonculus's Composure}
+- {include: xenos/drukhari/traits.yaml#Haemonculus's Estate}
+- {include: xenos/drukhari/traits.yaml#Haemonculus Regrowth}
+- {include: xenos/drukhari/traits.yaml#Power from Pain}
+- {include: xenos/drukhari/traits.yaml#Sadism}
+- {include: xenos/drukhari/traits.yaml#Callous}
+- {include: xenos/drukhari/traits.yaml#Obsession (Perfect Agony)}
+skills:
+- name: Surgery
+  diff: IQ/VH
+  points: 40
+  tags: [Xenos, Drukhari]
+  lore: 'The Haemonculus''s art: cutting, reshaping and rebuilding living bodies.'
+  design: IQ+8 (24) for 40 points, Very Hard.
+- name: Physiology
+  spec: (Xenos)
+  diff: IQ/H
+  points: 32
+  tags: [Xenos, Drukhari]
+  lore: How every kind of flesh breaks and heals.
+  design: IQ+7 (23) for 32 points, Hard.
+- name: Poisons
+  diff: IQ/H
+  points: 32
+  tags: [Xenos, Drukhari]
+  lore: The toxins on splinters and blades.
+  design: IQ+7 (23) for 32 points, Hard.
+- name: Pharmacy
+  spec: (Synthetic)
+  diff: IQ/H
+  points: 16
+  tags: [Xenos, Drukhari]
+  lore: Combat drugs and painkillers.
+  design: IQ+3 (19) for 16 points, Hard.
+- name: Diagnosis
+  diff: IQ/H
+  points: 12
+  tags: [Xenos, Drukhari]
+  lore: Reading a patient's state at a glance.
+  design: IQ+2 (18) for 12 points, Hard.
+- name: Chemistry
+  diff: IQ/H
+  points: 8
+  tags: [Xenos, Drukhari]
+  lore: Compound design.
+  design: IQ+1 (17) for 8 points, Hard.
+- name: Interrogation
+  diff: IQ/A
+  points: 12
+  tags: [Xenos, Drukhari]
+  lore: The art of the question.
+  design: IQ+3 (19) for 12 points, Average.
+- name: Intimidation
+  diff: Will/A
+  points: 8
+  tags: [Xenos, Drukhari]
+  lore: Presence.
+  design: Will+2 (19) for 8 points, Average.
+- name: Guns
+  spec: Pistol
+  diff: DX/E
+  points: 8
+  tags: [Xenos, Drukhari]
+  lore: Stinger pistol.
+  design: DX+3 (16) for 8 points, Easy.
+- name: Knife
+  diff: DX/E
+  points: 8
+  tags: [Xenos, Drukhari]
+  lore: Scissorhand and surgical blades.
+  design: DX+3 (16) for 8 points, Easy.
+- name: First Aid
+  diff: IQ/E
+  points: 2
+  tags: [Xenos, Drukhari]
+  lore: Keeping a subject alive.
+  design: IQ+1 (17) for 2 points, Easy.
+- name: Hidden Lore
+  spec: (Slaanesh)
+  diff: IQ/A
+  points: 4
+  tags: [Xenos, Drukhari]
+  lore: The Haemonculi study the thing that hunts them.
+  design: IQ+1 (17) for 4 points, Average.
+- name: Area Knowledge
+  spec: (Commorragh)
+  diff: IQ/E
+  points: 4
+  tags: [Xenos, Drukhari]
+  lore: The Dark City's Covens.
+  design: IQ+2 (18) for 4 points, Easy.
+- name: Stealth
+  diff: DX/A
+  points: 2
+  tags: [Xenos, Drukhari]
+  lore: Even a torturer must sometimes come quietly.
+  design: DX+0 (13) for 2 points, Average.
+- name: Streetwise
+  diff: IQ/A
+  points: 2
+  tags: [Xenos, Drukhari]
+  lore: The Dark City's markets in flesh.
+  design: IQ+0 (16) for 2 points, Average.
+- name: Body Language
+  diff: Per/A
+  points: 4
+  tags: [Xenos, Drukhari]
+  lore: Reading a subject's pain.
+  design: Per+1 (15) for 4 points, Average.

@@ -1,0 +1,142 @@
+kind: template
+output: Xenos/Drukhari/Templates/Kabalite Warrior.gct
+notes: >-
+  A Kabalite Warrior: the rank-and-file raider of a Kabal, armoured in light segmented
+  plate and armed with a splinter rifle, fast and precise like a Guardian but with
+  a cruel, shallow discipline. Point math (see Xenos/Drukhari/Traits/Drukhari Physiology.adq):
+  Drukhari Physiology (156) + Keen Battle-Sense (5) + Kabalite Conditioning (-5)
+  + Kabal Lens (-4) + Callous (-5) + Power from Pain Stage I (7) = TBD points of
+  traits, plus skills (TBD points) = TBD points. Stats: ST 10, DX 14, IQ 12, HT
+  10, HP 10, Will 11, Per 13, Speed 6.25, Move 9 (sprint x1.5 with Enhanced Move
+  1/2), Dodge 9: exactly framework.md's Kabalite Warrior line, the Guardian's physical
+  equal. This lands inside the framework's Drukhari target for a Kabalite Warrior
+  (about a Guardian, 180-220) and just above the trained-soldier tier, matching
+  the Aeldari Guardian's own 187.
+
+
+  Sadism is included but disabled: many Kabalites relish suffering, but for the
+  raider tier the framework's Guardian-equivalent budget allows only Callous; enable
+  Sadism to build a true cruel one, and drop 15 points of skills or accept the total
+  moving to about TBD. Kabalites carry no Extra Life (Haemonculus Regrowth is for
+  Archons and favoured servants) and no psychic talent (no Drukhari template has
+  one). Weapon skills follow the Drukhari armoury as framework.md's Skills table
+  reads it: splinter weapons fire solid crystal shards, so they use Guns (Pistol/Rifle),
+  the same choice the Aeldari Guardian makes for the shuriken catapult; blasters
+  and dark lances are beam weapons (Beam Weapons); heavy splinter and disintegrator
+  cannons are Gunner.
+traits:
+- {include: xenos/drukhari/traits.yaml#Drukhari Physiology}
+- {include: xenos/aeldari/traits.yaml#Keen Battle-Sense}
+- {include: xenos/drukhari/traits.yaml#Kabalite Conditioning}
+- {include: xenos/drukhari/traits.yaml#Kabal Lens}
+- {include: xenos/drukhari/traits.yaml#Callous}
+- {include: xenos/drukhari/traits.yaml#Sadism, disabled: true}
+- {include: xenos/drukhari/traits.yaml#Power from Pain (Stage I)}
+skills:
+- name: Guns
+  spec: Rifle
+  diff: DX/E
+  points: 8
+  tags: [Xenos, Drukhari]
+  lore: >-
+    The splinter rifle, the Kabalite's standard weapon: solid crystal shards, so
+    Guns rather than Beam Weapons (see notes).
+  design: DX+3 (17) for 8 points, Easy.
+- name: Guns
+  spec: Pistol
+  diff: DX/E
+  points: 2
+  tags: [Xenos, Drukhari]
+  lore: Splinter pistol as a sidearm.
+  design: DX+1 (15) for 2 points, Easy.
+- name: Knife
+  diff: DX/E
+  points: 2
+  tags: [Xenos, Drukhari]
+  lore: A Kabalite's knife for close work and finishing captives.
+  design: DX+1 (15) for 2 points, Easy.
+- name: Tactics
+  diff: IQ/H
+  points: 2
+  tags: [Xenos, Drukhari]
+  lore: 'Raid drill: how to shape a slave-raid''s approach.'
+  design: IQ-1 (11) for 2 points, Hard.
+- name: Stealth
+  diff: DX/A
+  points: 2
+  tags: [Xenos, Drukhari]
+  lore: Approach and ambush in the webway's gloom.
+  design: DX+0 (14) for 2 points, Average.
+- name: Intimidation
+  diff: Will/A
+  points: 2
+  tags: [Xenos, Drukhari]
+  lore: Terrorising captives is part of the job.
+  design: Will+0 (11) for 2 points, Average.
+- name: Streetwise
+  diff: IQ/A
+  points: 2
+  tags: [Xenos, Drukhari]
+  lore: Commorragh's underworld is a Kabalite's home.
+  design: IQ+0 (12) for 2 points, Average.
+- name: Area Knowledge
+  spec: (Commorragh)
+  diff: IQ/E
+  points: 2
+  tags: [Xenos, Drukhari]
+  lore: The Dark City's districts and Kabals.
+  design: IQ+1 (13) for 2 points, Easy.
+- name: Piloting
+  spec: (Contragravity)
+  diff: DX/A
+  points: 2
+  tags: [Xenos, Drukhari]
+  lore: >-
+    Raiders and Venoms are flown from the crew's own ranks; every Kabalite rides
+    one.
+  design: DX+0 (14) for 2 points, Average.
+- name: Observation
+  diff: Per/A
+  points: 2
+  tags: [Xenos, Drukhari]
+  lore: Spotting prey, and treachery.
+  design: Per+0 (13) for 2 points, Average.
+- name: Fast-Draw
+  spec: Ammo
+  diff: DX/E
+  points: 1
+  tags: [Xenos, Drukhari]
+  lore: Standard reload drill.
+  design: DX+0 (14) for 1 point, Easy.
+- name: First Aid
+  diff: IQ/E
+  points: 1
+  tags: [Xenos, Drukhari]
+  lore: Basic field medicine, mostly to keep a captive alive for later.
+  design: IQ+0 (12) for 1 point, Easy.
+- name: Climbing
+  diff: DX/A
+  points: 2
+  tags: [Xenos, Drukhari]
+  lore: Raiding parties climb into and through cities.
+  design: DX+0 (14) for 2 points, Average.
+- name: Hidden Lore
+  spec: (Slaanesh)
+  diff: IQ/A
+  points: 1
+  tags: [Xenos, Drukhari]
+  lore: Every Drukhari knows what is coming for them.
+  design: IQ-1 (11) for 1 point, Average.
+- name: Jumping
+  diff: DX/E
+  points: 1
+  tags: [Xenos, Drukhari]
+  lore: Battlefield mobility drill.
+  design: DX+0 (14) for 1 point, Easy.
+- name: Savoir-Faire
+  spec: (Kabal)
+  diff: IQ/E
+  points: 2
+  tags: [Xenos, Drukhari]
+  lore: Kabal rank, courtesy and knife-edge etiquette.
+  design: IQ+1 (13) for 2 points, Easy.
