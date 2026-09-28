@@ -119,6 +119,27 @@ Follow-up damage (B414): the follow-up applies only when the penetrator gets thr
 
 Anything in the same family scales from the nearest anchor (bolt pistol from boltgun, plasma pistol from plasma gun) and explains the step in `design`.
 
+### Weapon handling stats
+
+Damage anchors aren't enough on their own: Acc, RoF, Shots, ST, Bulk, Recoil and weight must each be derived for the specific weapon, never copied from a neighbour. Every weapon's `design` field says where each came from.
+
+**Weight** comes from the lore first (Black Library descriptions, FFG/C7 weights) and is the loaded weight in lb. Astartes-pattern weapons are built for ST 30 hands and are far heavier than human versions: an Astartes Godwyn boltgun is about 35–40 lb loaded (Deathwatch lists 18 kg), a human-scale boltgun roughly half that.
+
+**Minimum ST** follows GURPS practice for shoulder arms, about √(10 × loaded weight in lb), rounded, then adjusted for recoil and balance. That gives about ST 9 for an 8 lb rifle and about ST 19 for a 36 lb Astartes boltgun (a Guardsman can lift it but fires it at a heavy penalty; a Marine at ST 30 exceeds 1.5 × 19 and so can fire it one-handed, as the fiction shows). Use † for two-handed weapons, B for bipod-mounted and M for mounted, per the Basic Set.
+
+**RoF** reflects the actual mechanism:
+- 1: single-shot, bolt/lever/pump action, anything that must recharge, vent or cool between shots (plasma, melta, lascannon, long-las, missile and grenade launchers).
+- 3: semi-automatic weapons fired as fast as the trigger allows (most pistols, semi-auto rifles), per GURPS convention. Use only when the weapon really is semi-automatic.
+- Automatic weapons use their cyclic rate in GURPS terms: lasguns and autoguns on auto around 10–12; bolters fire slower, heavier rounds (boltgun 3 semi or burst, storm bolter 3×2 or 6, heavy bolter around 8); heavy stubbers and assault cannons high (15–20+); multi-lasers are rapid emitters (8–10).
+
+**Shots** come from the lore magazine or charge-pack capacity; (N) is reload time in seconds.
+
+**Bulk** comes from length and handiness: holdout pistols −1, pistols −2, carbines −3, rifles −4 to −5, heavy/support −6 to −8, Astartes-pattern weapons one step bulkier than human ones of the same type.
+
+**Recoil** comes from momentum: beams 1; pistols 2–3; rifles 2–3; bolters 3–4 (the rocket boosts after launch, but the initial charge still kicks); heavy stubbers and autocannon 3–4; anything braced or mounted uses the mounted value.
+
+**Acc**: pistols 1–3, carbines 3–4, rifles 4–5, sniper and scoped weapons +1 to +3 for the optic, beam weapons about +2 over a slug-thrower of the same size (no drop, no recoil).
+
 ### Vehicle armour
 
 Wargame armour values give only relative order. Map them to DR when a weapon needs to be checked against a vehicle:
@@ -156,6 +177,38 @@ Equipment is not included in these totals.
 ### Astartes physiology
 
 The nineteen gene-seed organs each become a trait (or several) inside an **Astartes** racial meta-trait, so a GM can remove or alter one for a Chapter's gene-seed (the Imperial Fists line lacks the Betcher's gland and Sus-an membrane; the Blood Angels carry the Red Thirst). Target physique: ~2.1–2.4 m unarmoured, heavily muscled, ST 30 (HP 34), HT 14+, faster reflexes than baseline humans, fused ribcage, no need to sleep for weeks. Stay at SM 0 unarmoured; a Terminator can be SM +1.
+
+### Adeptus Custodes physiology
+
+Each Custodian is individually gene-wrought from infancy, not built from gene-seed organs, and outclasses a Space Marine as far as a Marine outclasses a Guardsman. Targets: roughly 2.5–3 m tall, SM +1 unarmoured; ST 40 (with the SM +1 cost reduction), DX 15, IQ 13, HT 16, Will 16, HP about 50, Basic Speed well above an Astartes; needs almost no sleep or food; immune to fear; lives for millennia. A Custodian Guardian template lands around 1,200–1,600 points without gear.
+
+Custodes armour and arms:
+
+| Item | Anchor |
+|---|---|
+| Auramite power armour (Aquilon pattern) | Torso DR 150 |
+| Allarus Terminator armour | Torso DR 250 |
+| Custodes power weapons | Field-on = mundane baseline +4d, divisor (10): one step above Astartes power weapons, reflecting master-crafted Custodian arms |
+| Bolt casters on Custodes weapons (guardian spear, sentinel blade) | Boltgun anchor, 6d×2(2) pi++ with 6d cr ex follow-up |
+
+Sisters of Silence are unaugmented human Pariahs (see the Pariah Gene traits) in Vratine armour, which is carapace-class.
+
+### Adeptus Mechanicus
+
+Tech-Priests and Skitarii are humans rebuilt with augmetics. Model augmetics as traits (GURPS cybernetic advantages built from Basic Set abilities), one per implant, so a character sheet lists what has been replaced. Mechadendrites are Extra Arms with appropriate limitations; the Noosphere and binharic cant are Telecommunication and a Language; the Cult Mechanicus is Theology (Cult Mechanicus) plus faith disadvantages.
+
+Mechanicus weapons are older and stranger than Astra Militarum ones. Scale each from the nearest anchor and state the step:
+
+| Weapon | Anchor |
+|---|---|
+| Galvanic rifle | Between long-las and hellgun: 6d(2) pi+, long range, high Acc |
+| Radium carbine | Lasgun-class 5d(2) pi plus a radiation follow-up that ignores DR on unsealed targets |
+| Arc rifle / arc pistol | Weak against flesh, strong against machines: extra effect vs vehicles, cyborgs and powered armour systems (surge) |
+| Phosphor blaster | Burn damage that ignores concealment and marks the target |
+| Plasma caliver | Plasma gun anchor, higher RoF, same overheat risk |
+| Transuranic arquebus | Heavy sniper: beats Astartes armour (DR 100) reliably at long range |
+| Volkite weapons | Burn ex that chains to nearby targets on a kill; volkite blaster sits between heavy bolter and plasma |
+| Eradication ray | Melta-like, short range, disintegrating |
 
 ## Psykers and the warp
 
