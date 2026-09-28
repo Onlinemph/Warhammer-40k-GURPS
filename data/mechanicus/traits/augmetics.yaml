@@ -372,45 +372,148 @@ items:
       external resource only a fraction as often), different resource.
 
   # ---------------------------------------------------- Electro-Priest gear
+  # Electro-Priests are fanatical warrior-priests of the Motive Force who
+  # chose their transformation (Codex: Adeptus Mechanicus background) —
+  # not near-mindless temple slaves; that description belongs to Servitor
+  # Lobotomy (Neural Excision) above instead. Their defining trait is the
+  # Voltagheist Field below, a body-integrated version of this project's
+  # own regenerating-shield mechanic (framework.md, "Personal force
+  # fields"; Imperium/Armour/Force Fields.eqp for the equipment-side
+  # version the Rosarius etc. use). Corpuscarii and Fulgurite are the two
+  # weapon patterns built on top of that shared base.
   - &electoo_inductors
     name: Electoo Inductors
-    per_level: 3
-    levels: 2
-    tags: [Advantage, Physical, Imperium, Adeptus Mechanicus, Electro-Priest]
-    ref: B61
-    notes: >
-      Innate Attack (Burning, reflavored electrical), 1d/level, melee reach
-      C only.
+    points: 1
+    tags: [Advantage, Physical, Imperium, Adeptus Mechanicus, Electro-Priest, Perk]
     lore: >
       Circuit-tattoos inlaid with conductive metal, threaded through the
-      whole nervous system: the baseline weapon and mark of every
-      Electro-Priest, discharging a jolt through bare skin or a carried
-      conductor (an electro-flail, a pair of live wires).
+      whole nervous system of every Electro-Priest: the hardware base that
+      the Voltagheist Field, Electrostatic Gauntlets, and Electroleech
+      Staff are all built on top of.
     design: >
-      Innate Attack (Burning) (B61, 5 points/die) reflavored as an
-      electrical discharge, with the Melee Attack (Reach C, Cannot Parry)
-      limitation (B112, an estimated -40% per that limitation's standard
-      value): 5 x 0.6 = 3 points/die.
-  - &luminen_capacitor
-    name: Luminen Capacitor
-    per_level: 2
+      A 1-point Perk (B9) marking the tattoo hardware's presence, by the
+      same convention as Cranial Circuitry and the Mind Impulse Unit above
+      — the actual mechanical payoff lives on the traits built from it, not
+      here.
+  - &voltagheist_field
+    name: Voltagheist Field
+    container: meta_trait
+    tags: [Advantage, Physical, Imperium, Adeptus Mechanicus, Electro-Priest]
+    children:
+      - name: Field Shield Points
+        points: 25
+        notes: >
+          Shield 50 SP. Recharge: after 3 seconds without taking damage,
+          regains 10 SP per second. Blocks ranged and melee attacks,
+          including overflow from the priest's own Electrostatic
+          Gauntlets/Electroleech Staff. Track current SP with a GCS Uses
+          counter, exactly as the equipment-side fields in Imperium/
+          Armour/Force Fields.eqp do.
+      - name: Voltaic Insulation
+        points: 24
+        ref: B46
+        dr:
+          - locations: "all"
+            amount: 8
+            vs: burn
+        notes: DR 8, all locations, vs. burning (electrical) damage only.
+    lore: >
+      The crackling, visible aura of Motive Force every Electro-Priest
+      radiates: a permanent bio-electric field that shrugs off attacks
+      outright before the priest's own body-integrated insulation has to
+      deal with whatever gets through, and shields the priest from their
+      own discharges besides.
+    design: >
+      Built as a character trait using this project's own regenerating-
+      shield mechanic (framework.md, "Personal force fields"), sized "a
+      bit less than a Rosarius" per the Cult's lower-tier manufacture: 50
+      SP against the Rosarius' 60 (Imperium/Armour/Force Fields.eqp),
+      same 3-second recharge delay, at the Refractor Field's faster 10
+      SP/second regen (this is a body-integrated field maintained by a
+      living, actively-charging bio-battery, not a passive relic).
+      Basic Set has no advantage that directly prices a finite,
+      recharging damage pool — this mechanic is already a documented
+      project-wide departure from RAW (docs/changelog.md, "Personal
+      force fields are regenerating shields") — so this project prices
+      it as a trait at its own transparent, disclosed rate of 0.5
+      character points per Shield Point: 50 x 0.5 = 25. Voltaic
+      Insulation is ordinary Damage Resistance (B46, 5/level) at level 8
+      (40 points), restricted to burning/electrical damage only via the
+      `vs` mechanism (an estimated -40% limitation, by the same
+      "restrict a broad DR buy to a narrower case" logic this project
+      already uses for Partial DR elsewhere in this file): 40 x 0.6 = 24.
+      Container total 25 + 24 = 49 points. This directly answers "immunity
+      or strong resistance to electrical damage and their own discharges":
+      Voltaic Insulation cuts any electrical/burning hit that gets past
+      the Field's Shield Points by 8 before it touches HP, and the Field
+      itself absorbs their own overcharge backlash the same as an enemy's
+      attack.
+  - &electrostatic_gauntlets
+    name: Electrostatic Gauntlets, Corpuscarii Pattern
+    per_level: 8
+    levels: 3
+    tags: [Advantage, Physical, Imperium, Adeptus Mechanicus, Electro-Priest]
+    ref: B61
+    notes: >
+      Innate Attack (Burning, reflavored electrical), armor divisor (2),
+      ranged. At the default 3 levels: 3d(2) burn.
+    lore: >
+      Corpuscarii Electro-Priests wear gauntlets that focus their internal
+      charge into a thrown arc of lightning rather than a touch-range jolt
+      — a ranged weapon in its own right, not just a defensive field.
+    design: >
+      Innate Attack (Burning) (B61, 5 points/die) with Armor Divisor (2)
+      (B102, +50%, the same value used for the Lasgun anchor elsewhere in
+      this project): 5 x 1.5 = 7.5, rounded up to 8 points/die. At the
+      default 3 levels this is 3d(2) burn — mechanically identical to the
+      framework.md Laspistol anchor (3d(2) burn), which is exactly the
+      power tier a hand-focused arc of lightning should sit at. Damage
+      check against current armour anchors (flak 30, carapace 70,
+      Astartes 100): effective DR is halved by the (2) divisor, so 15
+      against flak, 35 against carapace, 50 against Astartes plate. 3d
+      averages 10.5 and maxes at 18, so it: kills or badly hurts an
+      unarmoured target in 1-2 hits (matching the Laspistol anchor's own
+      text exactly); penetrates flak (eff. DR 15) only on the two highest
+      rolls, 17-18 on 3d -- 4/216 = 1.9%; never penetrates carapace (eff.
+      DR 35, unreachable on 3d) or Astartes plate (eff. DR 50) at all.
+      This is deliberately a personnel-suppression weapon, not
+      anti-armour -- a Corpuscarii backs up a Skitarii firing line, it
+      doesn't spearhead an assault on one.
+  - &electroleech_staff
+    name: Electroleech Staff, Fulgurite Pattern
+    per_level: 13
     levels: 2
     tags: [Advantage, Physical, Imperium, Adeptus Mechanicus, Electro-Priest]
     ref: B61
     notes: >
-      Add-on to Electoo Inductors: extra Innate Attack dice, same type,
-      usable only after spending a Ready maneuver to charge.
+      Innate Attack (Fatigue), melee reach 1, Leech (the priest recovers
+      FP equal to the damage inflicted, up to their own maximum). At the
+      default 2 levels: 2d fatigue damage, ignoring DR entirely.
     lore: >
-      A reservoir capacitor bank layered on top of the base Electoo
-      Inductors, letting a Fulgurite Electro-Priest bank a much heavier
-      charge for one crippling discharge, at the cost of a moment spent
-      visibly building up a crackling static field first.
+      Fulgurite Electro-Priests carry a long voltaic stave that doesn't so
+      much burn a target as drain the electrochemical charge straight out
+      of their nervous system, feeding it back into the wielder — a stagger
+      and a jolt of stolen vitality in the same swing.
     design: >
-      Innate Attack (Burning) (B61, 5/die) with the same Melee Attack
-      (Reach C, Cannot Parry) limitation as Electoo Inductors (-40%,
-      B112) plus Preparation Required, roughly 1 turn (B114, an estimated
-      -20%): 5 x (1 - 0.40 - 0.20) = 5 x 0.4 = 2 points/die. Add its levels
-      to Electoo Inductors' only while the charge is held.
+      Innate Attack (Fatigue) (B61, 10 points/die; fatigue damage is
+      priced at double a normal physical Innate Attack precisely because
+      it bypasses DR outright, going straight to FP) with the Melee
+      Attack, Reach 1 limitation (B112, -25%, the exact value the Basic
+      Set data gives for a one-hex-reach melee-only restriction) and a
+      Leech enhancement (this project's own construction, since Basic Set
+      itself has no leech/drain-to-heal mechanic; costed at the same +50%
+      published for the equivalent enhancement in GURPS Powers, cited here
+      only for the percentage, not as a Basic Set source) that returns the
+      wielder's own FP equal to the damage inflicted: 10 x
+      (1 - 0.25 + 0.50) = 10 x 1.25 = 12.5, rounded up to 13 points/die.
+      At the default 2 levels (26 points), this drains 2d FP (ignoring DR,
+      so carapace or even Astartes plate is irrelevant to it) and restores
+      the same amount to the wielder's own FP pool -- a real threat to
+      anything that still has FP to lose, and no threat at all to a
+      construct or Injury Tolerance (Unliving) target with no FP to drain,
+      which is exactly the "drains energy" niche this pattern is known for
+      in the fiction rather than a flat damage upgrade over the
+      Corpuscarii pattern.
 
   # -------------------------------------------------------------- lobotomy
   - &servitor_lobotomy

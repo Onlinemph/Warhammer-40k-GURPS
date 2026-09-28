@@ -1,0 +1,391 @@
+kind: equipment
+output: Adeptus Mechanicus/Armour/Mechanicus Armour and Gear.eqp
+items:
+
+  # -------------------------------------------------------------- Skitarii/Sicarian armour
+
+  - name: Skitarii War-plate
+    tl: 11
+    lc: 1
+    cost: 2200
+    weight: 32
+    tags: [Body Armor, Imperium, Adeptus Mechanicus]
+    dr: {"torso,vitals,groin": 70, arm: 64, leg: 64, neck: 64, skull: 70, face: 42, eye: 36, hand: 36, foot: 42}
+    notes: >
+      Void-sealed; can be worn in vacuum or a toxic/irradiated atmosphere without a separate
+      rebreather, matching the environments Skitarii cohorts are routinely deployed into. Rigid
+      heavy armour DX/Stealth penalties apply.
+    lore: >
+      The moulded red plate worn by Skitarii Vanguard and Rangers, current Codex Adeptus Mechanicus
+      background places it firmly in the same rigid-plate tier as an Astra Militarum carapace suit
+      rather than anywhere near true power armour - Skitarii are tough, augmented humans in good
+      armour, not the post-human, power-armoured Astartes their tactics are sometimes compared to.
+    design: >
+      Torso DR set at the fixed Carapace anchor (framework.md, current value 70) per the
+      assignment's own instruction that Skitarii war-plate is carapace-class, not a distinct
+      Mechanicus armour tier. Non-torso DR matches the Imperium Carapace Armour, Tempestus
+      Pattern's own proportions exactly (arm/leg/neck 64, skull 70, face 42, eye 36, hand 36, foot
+      42) rather than the plainer Guard Pattern's, since Skitarii war-plate is depicted as sealed,
+      complete-coverage combat gear built for hazardous-environment operation - the same design
+      brief the Tempestus Pattern's own full coverage (versus the Guard Pattern's bare hands) was
+      built to answer - so this project reuses that reference point rather than re-deriving a third
+      set of non-torso ratios with no lore reason to differ. TL11 (advanced Imperial/rare
+      manufacture, matching plasma- and hellgun-tier Mechanicus production) and LC1 (Skitarii
+      combat-issue, restricted outside the Cult Mechanicus, per framework.md's legality table)
+      rather than the Guard's LC2 carapace bracket.
+
+  - name: Sicarian Infiltration Armour
+    tl: 11
+    lc: 0
+    cost: 4200
+    weight: 22
+    tags: [Body Armor, Imperium, Adeptus Mechanicus]
+    dr: {"torso,vitals,groin": 70, arm: 52, leg: 52, neck: 52, skull: 64, face: 36, eye: 28, hand: 0, foot: 36}
+    skill_bonuses: {Stealth: 2}
+    notes: >
+      Lighter and more flexible than standard war-plate; the reduced rigid-armour Stealth penalty
+      is already reflected in the Stealth bonus above rather than stacked on top of it. Rigid heavy
+      armour DX penalties still apply.
+    lore: >
+      Sicarian Infiltrators and Ruststalkers wear a lighter, close-fitting variant of Skitarii
+      war-plate built for infiltration, ambush and rapid close-quarters work rather than a Vanguard
+      or Ranger cohort's firing line, current Codex Adeptus Mechanicus background consistently
+      depicting Sicarian units as faster and quieter than line Skitarii at the cost of some raw
+      protection.
+    design: >
+      Kept at the same carapace-tier torso DR (70) as standard war-plate - the assignment's own
+      "carapace-class" instruction applies to all Skitarii-adjacent armour in this file, and nothing
+      in the lore suggests Sicarian units trade away their core plate's stopping power, only its
+      bulk and completeness - but non-torso DR is scaled back down to the plainer Guard Pattern's own
+      proportions (arm/leg/neck 52, skull 64, face 36, eye 28, hand 0, foot 36) and hands are left
+      bare, reflecting a stripped-down suit built for speed and manual dexterity in close combat
+      rather than full environmental sealing. The Stealth bonus (+2, matching the Imperium Mark X
+      Phobos Pattern's own reduced-bulk logic) is this project's chosen mechanical hook for "lighter
+      and quieter than standard war-plate," reused from that entry's own precedent rather than
+      invented fresh. Lower weight (22 lb vs. the War-plate's 32) follows directly from the reduced
+      coverage and lighter plate. LC0 rather than the War-plate's LC1: Sicarian-pattern kit is
+      chapter-restricted Cult Mechanicus material, per the Transonic Razor and Phosphor Serpenta's
+      own LC0 reasoning in the weapons files.
+
+  - name: Tech-Priest Robes, Armoured
+    tl: 11
+    lc: 1
+    cost: 2600
+    weight: 10
+    tags: [Body Armor, Imperium, Adeptus Mechanicus]
+    dr: {"torso,vitals,groin": 36, arm: 27, leg: 27, neck: 21, "skull,face,eye,hand,foot": 0}
+    notes: >
+      Flexible armour: treat blunt/crushing damage that fails to penetrate as normal per the
+      flexible-armour rule (blunt trauma still applies even when DR stops the attack). Worn under
+      or woven into a Tech-Priest's ceremonial red robes, with no visible plate.
+    lore: >
+      Senior Tech-Priests and Magi who do not wear full Skitarii war-plate are nonetheless rarely
+      unarmoured: current Codex Adeptus Mechanicus background and Black Library depictions of
+      Mechanicus characters (Belisarius Cawl among the more prominent) consistently show a fine
+      metal-weave or ceramite-thread lining worked into the ubiquitous red robes, concealed enough
+      that a stranger has no reason to suspect it.
+    design: >
+      Built as the Mechanicus's own version of the Imperium Mesh Armour rather than a re-derived
+      figure: torso DR taken directly from the fixed Mesh anchor (framework.md, current value 36,
+      flexible), the same anchor the Imperium file's own hive-noble and assassin mesh armour uses,
+      since a concealed metal-weave lining under robes is mechanically the same item as that entry
+      regardless of who wears it or what colour the outer garment is - per framework.md's own
+      instruction that the same underlying item gets the same numbers across factions. Non-torso DR
+      and coverage follow the Mesh Armour entry's own "a few below torso, nothing on hands/feet/head"
+      pattern exactly. TL11 and LC1 (Mechanicus-forged, not universally available) distinguish it
+      from the Imperium entry's TL10/LC2 civilian-and-agent bracket, reflecting that this specific
+      weave is a Cult Mechanicus product even though the underlying mesh technology is identical.
+
+  # -------------------------------------------------------------- Personal force fields
+
+  - name: Ionic Field, Skitarii Pattern
+    tl: 11
+    lc: 1
+    cost: 6000
+    weight: 3
+    uses: 30
+    tags: [Force Field, Energy Shield, Imperium, Adeptus Mechanicus]
+    notes: >-
+      Shield 30 SP. Recharge: after 2 seconds without taking damage, regains 10 SP per second.
+      Ranged attacks only, as the Imperium Refractor Field. Uses the regenerating-shield rules in
+      framework.md ("Personal force fields"); the GCS Uses counter tracks current Shield Points.
+    lore: >-
+      A rugged, field-forged energy screen issued to some Skitarii officers and Tech-Priest
+      combat-adepts, current Codex Adeptus Mechanicus background describing Mechanicus ionic shields
+      as a coarser, more mass-producible cousin of the Inquisition's refractor fields - dependable
+      and cheap to maintain by Mechanicus standards, but carrying less charge than a hand-fitted
+      Inquisitorial relic.
+    design: >-
+      Deliberately not identical to the Imperium Refractor Field: that entry is an Inquisition-grade
+      hand-fitted relic (40 SP), while this is described as coarser, mass-forge equipment, so its
+      pool is set below the Refractor Field's at 30 SP with the same fast 2-second/10-per-second
+      recharge (Mechanicus engineering favours reliability and quick recovery over raw capacity,
+      matching "dependable... but carrying less charge"). It eats a single lasgun hit (avg 24.5)
+      comfortably and is back to full a few seconds after the shooting stops, but a bolt (avg 42
+      plus its follow-up detonating on the field) breaks it outright, the same practical ceiling the
+      Refractor Field has against Astartes-tier weapons. Ranged-only, as the Refractor Field, for the
+      same fiction-matching reason (it scatters fast projectiles, not a blade or a punch). TL11/LC1:
+      Mechanicus-manufactured, restricted outside the Cult Mechanicus and its Skitarii per
+      framework.md's legality table, one tier below the Inquisition-issue Refractor Field's own LC1
+      (that entry sits at the edge of general Inquisitorial-agent issue; this one is Mechanicus
+      internal kit only, reflected in cost rather than LC since both already share LC1).
+
+  - name: Conversion Field, Ordo Reductor Pattern
+    tl: 12
+    lc: 0
+    cost: 28000
+    weight: 4
+    uses: 75
+    tags: [Force Field, Energy Shield, Imperium, Adeptus Mechanicus]
+    notes: >-
+      Shield 75 SP. Recharge: after 3 seconds without taking damage, regains 10 SP per second.
+      Blocks ranged and melee attacks. Flash: any single hit that removes 20+ SP converts into a
+      burst of light; everyone within 5 yards facing the wearer (not the wearer) rolls HT or is
+      blinded for 1d seconds, as the Imperium Conversion Field. Uses the regenerating-shield rules in
+      framework.md.
+    lore: >-
+      A rarer, Mechanicus-forged conversion field carried by senior magi of the Ordo Reductor and a
+      handful of other archeotech-obsessed Mechanicus factions, background material treating it as
+      functionally the same relic technology the Inquisition's own conversion fields use, adapted
+      and consecrated by Mechanicus ritual rather than independently reinvented.
+    design: >-
+      Set just below the Imperium Conversion Field's own 80 SP (75 SP here) rather than matching it
+      exactly: the two fields share the same underlying archeotech principle (hence the identical
+      recharge delay and rate, and the same Flash rule, copied unchanged from that entry rather than
+      re-derived), but this project treats a Mechanicus reproduction of a rediscovered STC-adjacent
+      device as very slightly less perfect than the specific hand-fitted relic the Inquisition
+      entry represents, the same small step already used between the Skitarii Ionic Field and the
+      Imperium Refractor Field above. Checked by exact dice distribution: it absorbs a bolt with room
+      to spare and stops a plasma bolt (6dx4(3) burn ex, avg 84) a little under half the time, just
+      under the Imperium Conversion Field's own figures at 80 SP, keeping it a genuine step below
+      that rarer Inquisitorial relic without being a toy. TL12 (archeotech-adjacent, matching the
+      Imperium Conversion Field's own TL) and LC0 (Ordo Reductor-restricted, one tier more closely
+      held than the general-issue Ionic Field).
+
+  # -------------------------------------------------------------- Sensory and communication gear
+
+  - name: Omnispex
+    tl: 11
+    lc: 1
+    cost: 1800
+    weight: 5
+    tags: [Gear, Imperium, Adeptus Mechanicus]
+    skill_bonuses: {Search: 4}
+    notes: >
+      A helm-mounted or handheld multi-spectrum sensor package reading motion, heat, atmosphere,
+      vox-traffic and machine-spirit telemetry simultaneously; the bonus above applies to actively
+      scanning an area or a target, not passive Perception.
+    lore: >
+      The omnispex is the Mechanicus's own answer to the Imperium's auspex, current Codex Adeptus
+      Mechanicus background depicting it as a genuinely more capable multi-spectrum instrument built
+      and maintained to Mechanicus ritual-precision standards rather than mass-produced Munitorum
+      kit, standard issue to Skitarii Marshals and Tech-Priest field officers coordinating a cohort.
+    design: >
+      Built directly on the Imperium Auspex's own design logic (a flat Search skill bonus per Basic
+      Set's "instruments help" convention, B345) rather than a new mechanic, one point higher (+4
+      vs. the Auspex's +3) to reflect its genuinely superior multi-spectrum sensor suite per the
+      lore's own "more capable" framing - the same small, reasoned step this project uses whenever
+      two items share a design but one is explicitly built to a higher standard (compare the Plasma
+      Caliver's higher RoF over the plain Plasma Gun). TL11 and LC1 (Mechanicus-grade instrument,
+      restricted per framework.md's advanced-Imperial bracket) sit one tier above the Auspex's
+      TL10/LC2, reflecting genuinely more advanced and more tightly controlled technology.
+
+  - name: Data-tether
+    tl: 11
+    lc: 2
+    cost: 250
+    weight: 0.5
+    tags: [Gear, Imperium, Adeptus Mechanicus]
+    notes: >
+      A short cable or short-range noospheric link plugged directly into a Tech-Priest's cranial
+      port, letting the wearer exchange binharic cant and machine-spirit telemetry with one other
+      linked device or Tech-Priest at touch range without speaking aloud. Requires the Noosphere
+      trait (a traits-file matter) to use meaningfully; an unaugmented human can still plug one in
+      but gets nothing out of it beyond a physical data cable's worth of bandwidth.
+    lore: >
+      The data-tether is the humblest piece of Mechanicus communication wargear: a short physical or
+      close-range noospheric link, current Codex Adeptus Mechanicus and Horus Heresy-era background
+      depicting Tech-Priests plugging into machine-spirits, servitors and each other constantly and
+      unremarkably, the digital equivalent of a whispered aside.
+    design: >
+      Deliberately not modelled as a bonus to any skill: its entire function is Noosphere-based
+      communication, which this project's traits files (per framework.md's Adeptus Mechanicus
+      section: "the Noosphere and binharic cant are Telecommunication and a Language") already
+      grant as a character trait - this equipment entry exists only to give that trait a physical,
+      priceable object to plug into, the same separation of concerns the Servo-arm entry in the
+      melee weapons file uses for its own tool-vs-weapon split. TL11/LC2: common enough Mechanicus
+      kit that it isn't tightly restricted, but still specialist equipment outside general Imperial
+      manufacture.
+
+  - name: Data-tether, Enhanced
+    tl: 11
+    lc: 2
+    cost: 900
+    weight: 1
+    tags: [Gear, Imperium, Adeptus Mechanicus]
+    notes: >
+      As the standard Data-tether, but extends the noospheric link to short range (tens of yards
+      rather than touch) and supports a small handful of simultaneous connections rather than one.
+    lore: >
+      Issued to Skitarii Alphas, Tech-Priest field officers and cohort command staff who need to
+      coordinate several linked minds and machine-spirits at once rather than a single one-to-one
+      data exchange, background material treating it as standard mid-tier command equipment within
+      a Mechanicus cohort's hierarchy.
+    design: >
+      A straightforward capability step up from the plain Data-tether (more simultaneous links,
+      genuine short range instead of touch) rather than a new mechanic, priced and weighted up
+      accordingly; it remains, as the base Data-tether does, a physical object supporting the
+      Noosphere trait rather than itself granting any skill bonus or communication capability - the
+      trait is what actually lets a wearer make use of the extra range and connections this hardware
+      provides. TL11/LC2 as the base tether.
+
+  - name: Data-tether, Broad Spectrum
+    tl: 12
+    lc: 1
+    cost: 3500
+    weight: 2
+    tags: [Gear, Imperium, Adeptus Mechanicus]
+    notes: >
+      As the Enhanced Data-tether, but extends the noospheric link to vox-caster range and can
+      relay across multiple hops through other broad-spectrum tethers or a cohort's command
+      Skitarii, functioning as a Mechanicus-internal communications backbone as well as a personal
+      link.
+    lore: >
+      A rarer, higher-output tether carried by Magi and Tacticae liaisons who must coordinate an
+      entire Mechanicus deployment's noospheric traffic - Kataphron husks, servitors, Skitarii
+      cohorts and allied Astra Militarum vox-nets alike - background depicting it as effectively a
+      portable node in the Mechanicus's wider data-network rather than a personal accessory.
+    design: >
+      The top of the data-tether family's escalating range/capacity progression (touch to short
+      range to vox-caster range with relay capability), priced and weighted for genuinely rarer,
+      more powerful hardware; TL bumped to 12 (archeotech-adjacent long-range noospheric relay
+      technology, per framework.md's TL table) and LC1 rather than the lower tethers' LC2, reflecting
+      that a device capable of tapping into the wider Mechanicus data-network is more tightly
+      controlled than a personal link. As with the rest of the family, it remains a physical support
+      object for the Noosphere trait rather than a skill-bonus item in its own right.
+
+  # -------------------------------------------------------------- Servo-skulls
+
+  - name: Servo-skull, Utility Pattern
+    tl: 11
+    lc: 2
+    cost: 1200
+    weight: 3
+    tags: [Gear, Imperium, Adeptus Mechanicus]
+    skill_bonuses: {Research: 2}
+    notes: >
+      A hovering augmented human skull fitted with grav-plates, a cogitator core and a small sensor
+      suite, used as a mobile assistant, light source, camera and record-keeper; the bonus above
+      applies to library, archive or field-research work the skull assists with, at the GM's
+      discretion for what "assisting" covers in a given scene.
+    lore: >
+      Servo-skulls are one of the Mechanicus's most visually iconic and widespread pieces of gear,
+      appearing throughout Imperial background and Black Library fiction from Inquisitorial retinues
+      to hive cathedral-libraries: the skull of a deceased and honoured Imperial citizen, reclaimed,
+      augmented and set to a menial task in perpetual, silent service.
+    design: >
+      Built as a flying utility drone rather than copied from any GURPS robot catalogue entry: its
+      mechanical contribution is modelled as a flat Research skill bonus (the same "instruments/
+      assistants help" convention the Auspex and Medi-kit entries already use) since its actual
+      combat or survival utility in most scenes is narrative (fetching, recording, illuminating,
+      relaying messages) rather than something a single stat line can capture, and this project
+      prefers an honest, modest bonus over inventing a full drone-companion subsystem this schema
+      has no clean hook for. TL11 (advanced but common Mechanicus-adjacent tech, seen across the
+      wider Imperium) and LC2 (available to Inquisitorial and other approved retinues, not
+      Mechanicus-exclusive, per its ubiquity in the fiction outside the Cult Mechanicus itself).
+
+  - name: Servo-skull, Medicae Pattern
+    tl: 11
+    lc: 2
+    cost: 1600
+    weight: 3
+    tags: [Gear, Imperium, Adeptus Mechanicus]
+    skill_bonuses: {"First Aid": 2, Diagnosis: 2}
+    notes: >
+      As the Utility Pattern servo-skull, but fitted with a compact autodoc suite (counter-septic
+      sprayers, sealant foam, a diagnostic augur) in place of general research tools; the bonuses
+      above apply to First Aid or Diagnosis rolls the skull assists with.
+    lore: >
+      A common sight trailing Mechanicus and Militarum medicae staff in background material and
+      Black Library fiction, hovering close to a wounded soldier or Tech-Priest to apply emergency
+      treatment or relay vital signs where a human medic's hands are full elsewhere on a battlefield.
+    design: >
+      Same design logic as the Utility Pattern (a flat skill bonus standing in for narrative
+      assistance) applied to medical rather than research skills, at a slightly higher cost for the
+      more specialised autodoc hardware; the two-skill bonus (First Aid and Diagnosis both) reflects
+      that battlefield medicine genuinely calls on both, unlike the single-skill Utility Pattern.
+      TL/LC as the Utility Pattern.
+
+  - name: Servo-skull, Combat Pattern
+    tl: 11
+    lc: 1
+    cost: 2200
+    weight: 4
+    tags: [Gear, Imperium, Adeptus Mechanicus]
+    skill_bonuses: {Observation: 2}
+    weapons:
+      - usage: Autonomous stubber sting
+        damage: 2d+2 pi
+        acc: 1
+        range: 80/180
+        rof: 3
+        shots: 12(20)
+        st: 3
+        bulk: -1
+        rcl: 2
+        skill: Guns (Pistol)
+        notes: >
+          Fired by the skull's own limited cogitator-driven targeting, not the owner's own skill:
+          use the skull's own effective skill of 10, or its owner's Guns (Pistol) skill at -4 if the
+          owner is actively directing it (the GM's call on which applies in a given scene), rather
+          than any character's full combat skill.
+    notes: >
+      Grants the Observation bonus above only while actively escorting or overwatching its owner in
+      a scene, representing its threat-scanning routines rather than passive background benefit.
+    lore: >
+      A rarer, weaponised servo-skull fielded by Inquisitorial retinues and some Mechanicus security
+      details, background depicting it as a hovering sentry and bodyguard drone armed with a small
+      stubber or laspistol mechanism, useful chiefly for covering an ally's back or discouraging a
+      lone assailant rather than as a serious combatant in its own right.
+    design: >
+      Adds a small autonomous weapon to the Utility Pattern's own chassis and skill-bonus logic,
+      deliberately kept weak (a light 2d+2 pi stub mechanism, the same round as the Imperium
+      Autopistol's standard ball ammunition, at ST 3 reflecting the tiny mounting a skull-sized drone
+      can actually carry) and fired at its own low effective skill or a heavy penalty when
+      remote-operated, since no depiction treats a combat servo-skull as more than a minor harassment
+      or bodyguard threat - its real value is the Observation bonus while it's on overwatch, not its
+      gun. TL11 and LC1 (a weaponised drone is more tightly controlled than the unarmed patterns)
+      reflect its status as genuine, if minor, wargear rather than a research or medical tool.
+
+  # -------------------------------------------------------------- Mechadendrite gear
+
+  - name: Mechadendrite Harness
+    tl: 11
+    lc: 1
+    cost: 1500
+    weight: 8
+    tags: [Gear, Imperium, Adeptus Mechanicus]
+    notes: >
+      The physical backpack/spinal mount, power feed and control interface that lets a Tech-Priest
+      carry and operate one or more mechadendrites; this entry is the mounting hardware only. The
+      mechadendrite limb itself (an Extra Arm with appropriate reach/DX limitations, per
+      framework.md's Adeptus Mechanicus section) is a trait defined in a traits file, not equipment,
+      and is not included here - this harness exists so that trait has a priced, weighted physical
+      object to attach to a character sheet's equipment list, the same separation of concerns the
+      Storm Shield's force-field component and the Mechadendrite, Combat Tip weapon fitting already
+      use elsewhere in this project.
+    lore: >
+      Every mechadendrite-bearing Tech-Priest is depicted with some form of visible mounting rig -
+      a spinal port, a backpack frame, an armoured harness - from which their extra limbs extend,
+      consistent across current Codex Adeptus Mechanicus artwork and Black Library depictions of
+      Tech-Priests from Enginseers to Archmagi.
+    design: >
+      Deliberately holds no trait-granting content of its own: per this project's data-format rules,
+      a mechadendrite's actual capability (reach, extra manipulation, a combat tip's weapon profile)
+      belongs either to the Extra Arms trait (built by the traits agent) or to a weapon-fitting
+      equipment entry like Mechadendrite, Combat Tip in the melee weapons file, never duplicated
+      here. This entry is priced and weighted as a substantial piece of worn hardware (a spinal
+      mount and power feed genuinely is bulky and expensive) precisely so that a character sheet
+      shows the physical cost of carrying mechadendrites even though their mechanical benefit is
+      recorded elsewhere. TL11 and LC1 (Mechanicus-forged bionic mounting hardware, restricted per
+      framework.md's advanced-Imperial/rare bracket).

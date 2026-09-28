@@ -1,53 +1,57 @@
 kind: template
 output: Adeptus Mechanicus/Templates/Electro-Priest.gct
 notes: >
-  An Electro-Priest: one of the Cult Mechanicus' lowest-caste devotees,
-  volunteers or the destitute remade as living batteries and melee/ranged
-  shock troops for temple guard duty and forge-world security. Baseline
-  below is the Corpuscarii pattern (a continuous, unpowered electrical
-  jolt); enable the disabled "Lens: Fulgurite Conversion" for the
-  heavier-hitting, charge-up pattern instead. Point math: ST 11 (+10),
-  DX 11 (+20), IQ 8 (-40), HT 11 (+10) = 0, plus Will +1 (+5) = 5;
-  advantages +27; disadvantages -35; skills +26. Total 23 points --
-  solidly inside framework.md's "Ordinary citizen (0-50)" tier, and by
-  design cheaper and more expendable even than a Skitarii Ranger: an
-  Electro-Priest is barely a person by the time the Cult is finished with
-  them. Weapons (electro-flail, voltaic staff) are equipment or use the
-  Electoo Inductors/Luminen Capacitor traits directly; nothing else is
-  covered here.
+  An Electro-Priest: a fanatical warrior-priest of the Motive Force who
+  chose this transformation to serve the Cult Mechanicus body and soul
+  (Codex: Adeptus Mechanicus background) -- devoted, doctrinally certain,
+  and dangerous in a fight, not the near-mindless temple slave a Servitor
+  is (Adeptus Mechanicus/Templates/Combat Servitor.gct is that template
+  instead). Baseline below is the Corpuscarii pattern (ranged electrostatic
+  gauntlets); enable the disabled "Lens: Fulgurite Conversion" for the
+  melee electroleech-staff pattern instead. Point math: ST 12 (+20), DX 11
+  (+20), IQ 10 (+0), HT 12 (+20) = 60, plus Will +2 (+10) = 70; advantages
+  +94 (Voltagheist Field 49 + Electrostatic Gauntlets, Corpuscarii Pattern
+  24 + Respirator Plugs 5 + Potentia Coil 2 + High Pain Threshold 10 +
+  Fearlessness x2 4); disadvantages -40; skills +36. Total 160 points,
+  inside framework.md's "Elite human (200-350)" tier's lower approach and
+  comfortably above "Trained soldier" -- a devoted zealot-warrior, tougher
+  and better-defended than a Guardsman but not as broadly trained as a
+  Battle Sister or Inquisitorial acolyte. The electro-flail/staff itself
+  (the physical weapon a Fulgurite carries) and any other equipment are not
+  covered here; the attack traits below are the augmetic/bio-electric
+  ability, not a separate weapon purchase.
 traits:
   - name: ST
-    points: 10
+    points: 20
     tags: [Attribute]
-    lore: Chosen for endurance under the augmentation process as much as for any prior fitness.
-    design: ST 11 (+1), 10 pts/level (B15).
+    lore: The augmentation process and the physical rigors of temple service both select for real strength.
+    design: ST 12 (+2), 10 pts/level (B15).
   - name: DX
     points: 20
     tags: [Attribute]
-    lore: Enough reflex to swing an electro-flail without electrocuting themselves.
+    lore: Enough reflex to fight in melee or land a gauntlet-arc on a moving target.
     design: DX 11 (+1), 20 pts/level (B15).
   - name: IQ
-    points: -40
+    points: 0
     tags: [Attribute]
     lore: >
-      Electro-Priests are recruited from the desperate and the destitute
-      and given minimal instruction beyond simple ritual and combat drill;
-      Black Library and codex background alike depict them as dim and
-      near-automatic compared to an ordained Tech-Priest or even a
-      Skitarii.
-    design: IQ 8 (-2), 20 pts/level (B15).
+      An Electro-Priest is a trained, willing initiate of the Cult, not a
+      lobotomized construct -- average intelligence, doctrinally narrow
+      rather than diminished.
+    design: IQ 10 (baseline), 20 pts/level (B15).
   - name: HT
+    points: 20
+    tags: [Attribute]
+    lore: The augmentation process and a body that runs a permanent bio-electric field both demand real endurance.
+    design: HT 12 (+2), 10 pts/level (B14).
+  - name: Will
     points: 10
     tags: [Attribute]
-    lore: The augmentation and the constant electrical load both select for raw endurance.
-    design: HT 11 (+1), 10 pts/level (B14).
-  - name: Will
-    points: 5
-    tags: [Attribute]
-    lore: What little independent thought remains is bent entirely toward doctrinal certainty.
-    design: Will 9 (+1 above the IQ-derived default of 8), 5 pts/level (B16).
+    lore: Doctrinal fanaticism translates into real, measurable force of will.
+    design: Will 12 (+2 above the IQ-derived default of 10), 5 pts/level (B16).
   - include: "mechanicus/traits/augmetics.yaml#Electoo Inductors"
-    levels: 2
+  - include: "mechanicus/traits/augmetics.yaml#Voltagheist Field"
+  - include: "mechanicus/traits/augmetics.yaml#Electrostatic Gauntlets, Corpuscarii Pattern"
   - include: "mechanicus/traits/augmetics.yaml#Respirator Plugs (Filtration Lungs)"
   - include: "mechanicus/traits/augmetics.yaml#Potentia Coil"
     levels: 1
@@ -55,23 +59,18 @@ traits:
     points: 10
     ref: B59
     tags: [Advantage, Physical, Imperium]
-    lore: Between the augmentation process and temple discipline, an Electro-Priest has learned to ignore pain that would stop most people cold.
+    lore: Between the augmentation process and temple discipline, an Electro-Priest has learned to fight through pain that would stop most people cold.
     design: Basic Set High Pain Threshold (B59), 10 points.
   - name: Fearlessness
     per_level: 2
     levels: 2
     ref: B55
     tags: [Advantage, Mental, Imperium]
-    lore: A mind narrowed this far by doctrine and augmentation has little room left for self-preservation.
+    lore: Doctrinal certainty and a body that shrugs off small-arms fire both feed a real disregard for danger.
     design: Basic Set Fearlessness (B55), 2/level, 2 levels bought.
   - include: "mechanicus/traits/augmetics.yaml#Fanaticism (The Omnissiah)"
   - include: "mechanicus/traits/augmetics.yaml#Disciplines of the Cult Mechanicus"
   - include: "mechanicus/traits/augmetics.yaml#Duty (Adeptus Mechanicus)"
-    points: -5
-    notes: >
-      Overridden to -5: most Electro-Priests serve out their whole
-      existence within a single temple-forge and are rarely deployed far
-      afield, unlike a field Enginseer or a Skitarii.
   - name: Odious Personal Habit (Visibly Crackles and Sparks)
     points: -5
     ref: B22
@@ -86,42 +85,53 @@ traits:
     disabled: true
     tags: [Imperium, Adeptus Mechanicus, Electro-Priest]
     lore: >
-      Fulgurite Electro-Priests trade the Corpuscarii's steady, unpowered
-      jolt for a much heavier discharge built up over a moment's visible,
-      crackling charge — a harder hit at the cost of a telegraphed wind-up.
+      Fulgurite Electro-Priests trade the Corpuscarii's ranged electrostatic
+      gauntlets for a melee electroleech staff that drains a target's own
+      vitality to fuel the wielder -- a different weapon pattern built on
+      the same Voltagheist Field and Cult conditioning, not a stronger
+      version of the same thing.
     design: >
-      Adds Luminen Capacitor (Adeptus Mechanicus/Traits/Augmetics and the
-      Cult Mechanicus.adq), 2 levels, +4 points on top of this template's
-      baseline 23 (27 points total) — not a net-zero flavor lens like the
-      regimental/Chapter lenses elsewhere in this project, since a
-      Fulgurite genuinely hits harder than a Corpuscarii for the points.
+      Disable Electrostatic Gauntlets, Corpuscarii Pattern (-24 points) and
+      enable this lens's Electroleech Staff, Fulgurite Pattern (+26 points)
+      instead: a net +2 points relative to the baseline template (162
+      total). Also move the 16 points this template spends on Innate
+      Attack (Beam) onto the Staff skill instead (see this template's
+      skill list), since the Fulgurite pattern's staff is a melee weapon
+      resolved with its own weapon skill, not the Innate Attack skill a
+      ranged gauntlet-bolt needs.
     children:
-      - include: "mechanicus/traits/augmetics.yaml#Luminen Capacitor"
-        levels: 2
+      - include: "mechanicus/traits/augmetics.yaml#Electroleech Staff, Fulgurite Pattern"
 skills:
-  - name: Flail
+  - name: Innate Attack
+    spec: Beam
     diff: DX/H
-    points: 12
+    points: 16
     tags: [Imperium, Adeptus Mechanicus, Electro-Priest]
-    lore: The electro-flail, an Electro-Priest's standard-issue weapon; per framework.md's weapon-skill table, flails use the Flail skill.
-    design: DX+2 (13) for 12 points, Hard (B170).
+    lore: >
+      The skill that resolves an Electrostatic Gauntlets shot (B61); a
+      Fulgurite build should move these points to Staff instead (see the
+      Fulgurite lens above).
+    design: DX+3 (14) for 16 points, Hard (B170).
   - name: Theology
     spec: Cult Mechanicus
     diff: IQ/H
-    points: 8
+    points: 12
     tags: [Imperium, Adeptus Mechanicus]
-    lore: Simple, deeply drilled doctrine rather than genuine theological understanding; see Imperium/Skills/Imperial Skills.skl.
-    design: IQ+1 (9) for 8 points, Hard.
+    lore: >
+      Deep, willingly-embraced doctrine of the Motive Force -- an
+      Electro-Priest's whole identity is built on this, unlike a Skitarii's
+      much lighter catechism; see Imperium/Skills/Imperial Skills.skl.
+    design: IQ+2 (12) for 12 points, Hard.
   - include: "mechanicus/skills/skills.yaml#Savoir-Faire"
     spec: Adeptus Mechanicus
     points: 1
-    design: IQ+0 (8) for 1 point, Easy.
+    design: IQ+0 (10) for 1 point, Easy.
   - name: Intimidation
     diff: Will/A
     points: 2
     tags: [Imperium]
-    lore: A crackling, sparking, blank-eyed zealot needs no words to be threatening.
-    design: Will+0 (9) for 2 points, Average.
+    lore: A crackling, sparking, doctrinally certain zealot needs no words to be threatening.
+    design: Will+0 (12) for 2 points, Average.
   - name: Brawling
     diff: DX/E
     points: 1
@@ -139,4 +149,23 @@ skills:
     points: 1
     tags: [Imperium]
     lore: Basic conditioning.
-    design: HT-1 (10) for 1 point, Average.
+    design: HT-1 (11) for 1 point, Average.
+  - name: Meditation
+    diff: IQ/H
+    points: 2
+    tags: [Imperium]
+    lore: The trance-discipline that keeps a permanently electrified body and an equally charged faith both under control.
+    design: IQ-1 (9) for 2 points, Hard.
+  - name: Staff
+    diff: DX/A
+    points: 0
+    tags: [Imperium, Adeptus Mechanicus, Electro-Priest]
+    lore: >
+      The electroleech staff's weapon skill, per framework.md's
+      weapon-skill table (Staff covers polearm-length two-handed staves).
+      Bought at 0 points in the Corpuscarii baseline; a Fulgurite build
+      moves the 16 points off Innate Attack (Beam) above onto this skill
+      instead (DX+3, 14, for 16 points, Average).
+    design: >
+      Listed here so a Fulgurite conversion has an obvious line to raise;
+      contributes 0 points to this template's baseline total.

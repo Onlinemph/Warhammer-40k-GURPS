@@ -202,8 +202,8 @@ Mechanicus weapons are older and stranger than Astra Militarum ones. Scale each 
 
 | Weapon | Anchor |
 |---|---|
-| Galvanic rifle | Between long-las and hellgun: 6d(2) pi+, long range, high Acc |
-| Radium carbine | Lasgun-class 5d(2) pi plus a radiation follow-up that ignores DR on unsealed targets |
+| Galvanic rifle | 8d(2) pi+: long-las dice with pi+ wounding, long range, high Acc |
+| Radium carbine | Lasgun-class 7d(2) pi plus a radiation follow-up that ignores DR on unsealed targets |
 | Arc rifle / arc pistol | Weak against flesh, strong against machines: extra effect vs vehicles, cyborgs and powered armour systems (surge) |
 | Phosphor blaster | Burn damage that ignores concealment and marks the target |
 | Plasma caliver | Plasma gun anchor, higher RoF, same overheat risk |

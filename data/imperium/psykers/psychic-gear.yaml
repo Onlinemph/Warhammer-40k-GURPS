@@ -27,7 +27,7 @@ items:
     tl: "10^"
     lc: 1
     cost: 8000
-    weight: 3
+    weight: 4
     tags: [Melee Weapon, Imperium, Psyker]
     weapons:
       - usage: Field off
@@ -79,32 +79,37 @@ items:
       per Psyker Talent level on top of the base 3d, GM's call above level 2)
       rather than as a fixed number, since the build tool's damage syntax
       cannot encode a variable.
+      Handling: weight corrected to 4 lb to match the Power Sword anchor
+      exactly (a previous 3 lb made it lighter than the mundane weapon it's
+      built from, an unintentional drift rather than a deliberate design
+      choice); min ST (10), parry (0, Broadsword - a guarded blade, not an
+      axe/mace weapon) and reach are unchanged.
 
   - name: Force Staff
     tl: "10^"
     lc: 1
     cost: 7000
-    weight: 4
+    weight: 5
     tags: [Melee Weapon, Imperium, Psyker]
     weapons:
       - usage: Field off
         damage: sw+1 cr
         reach: "1,2"
         parry: 0
-        st: 9
+        st: 10
         skill: Staff
       - usage: Field on
         damage: sw+3d(10) cr
         reach: "1,2"
         parry: 0
-        st: 9
+        st: 10
         skill: Staff
       - usage: Force Strike (charged, vs. Warp-touched)
         damage: sw+3d cr (ignores DR)
         notes: As Force Sword's Force Strike; +1d per level of Psyker Talent, requires field on and a Perils of the Warp check.
         reach: "1,2"
         parry: 0
-        st: 9
+        st: 10
         skill: Staff
     lore: >
       Many psykers prefer a staff to a blade: easier to carry openly as a
@@ -118,32 +123,38 @@ items:
       to a plain hardwood-and-metal quarterstaff (sw+1 cr) instead of an
       edged blade — a crushing rather than cutting power weapon, with the
       same charged Force Strike option and scaling note.
+      Handling: weight corrected to 5 lb and min ST to 10 to match the
+      Power Stave anchor exactly (a previous 4 lb/ST 9 quietly drifted
+      lighter than the mundane weapon it's built from). Staff keeps its
+      Basic Set parry 0 with no U, the same exception used for the mundane
+      Power Stave and Shock Staff elsewhere in this project - the skill's
+      own defensive bonus is what a quarterstaff trades raw damage for.
 
   - name: Force Axe
     tl: "10^"
     lc: 1
     cost: 8000
-    weight: 5
+    weight: 6
     tags: [Melee Weapon, Imperium, Psyker]
     weapons:
       - usage: Field off
         damage: sw+2 cut
         reach: "1"
-        parry: -1
-        st: 11
+        parry: "-1U"
+        st: 12
         skill: Axe/Mace
       - usage: Field on
         damage: sw+3d+2(10) cut
         reach: "1"
-        parry: -1
-        st: 11
+        parry: "-1U"
+        st: 12
         skill: Axe/Mace
       - usage: Force Strike (charged, vs. Warp-touched)
         damage: sw+3d+2 cut (ignores DR)
         notes: As Force Sword's Force Strike; +1d per level of Psyker Talent, requires field on and a Perils of the Warp check.
         reach: "1"
-        parry: -1
-        st: 11
+        parry: "-1U"
+        st: 12
         skill: Axe/Mace
     lore: >
       A heavier disruption weapon, favoured by psykers who fight as heavily
@@ -156,25 +167,32 @@ items:
       chainaxes from chainswords: heavier mundane baseline (sw+2 cut), the
       same rescaled +3d/armour divisor (10) power-field math ("+3d over the
       mundane weapon"), and a parry penalty for the unbalanced swing.
+      Handling: weight and min ST corrected to 6 lb/ST 12 to match the
+      mundane Power Axe anchor exactly (a previous 5 lb/ST 11 quietly
+      undershot the weapon it's built from). Parry corrected to -1U, the
+      Basic Set Axe/Mace figure this project applies consistently to every
+      one-handed axe (melee.yaml's Power Axe and Chainaxe both carry the
+      same correction) - the previous flat -1 omitted the "unready after
+      parrying" half of the penalty.
 
   - name: Nemesis Force Halberd
     tl: "10^"
     lc: 0
     cost: 20000
-    weight: 8
+    weight: 14
     tags: [Melee Weapon, Imperium, Psyker, Grey Knights]
     weapons:
       - usage: Field off
         damage: sw+2 cut
         reach: "1,2"
-        parry: 0
-        st: 12
+        parry: "-1U"
+        st: 14
         skill: Polearm
       - usage: Field on
         damage: sw+3d+2(10) cut
         reach: "1,2"
-        parry: 0
-        st: 12
+        parry: "-1U"
+        st: 14
         skill: Polearm
       - usage: Force Strike (charged, vs. daemons)
         damage: sw+3d+2 cut (ignores DR)
@@ -185,8 +203,8 @@ items:
           and armour wards absorb the backlash), though the GM may still
           call for one against anything else it is used on.
         reach: "1,2"
-        parry: 0
-        st: 12
+        parry: "-1U"
+        st: 14
         skill: Polearm
     lore: >
       The signature weapon of the Grey Knights: a psychically-attuned
@@ -202,6 +220,16 @@ items:
       line waives the normal Perils check as a narrative nod to how
       routinely and safely Grey Knights use it against their signature
       enemy, unlike a general-purpose force weapon.
+      Handling: Grey Knights are Astartes, so this halberd is built at
+      Astartes scale rather than the human-scale weight/ST a previous pass
+      gave it (8 lb/ST 12, indistinguishable from a human-carried polearm) -
+      corrected to 14 lb and min ST 14, between the Astartes Chainsword
+      (14 lb/ST 15) and Power Axe (13 lb/ST 18) in this project's melee.yaml,
+      reflecting a two-handed haft weapon rather than a single-handed blade
+      or axe-head. Parry corrected to -1U, the Basic Set convention for a
+      polearm (Halberd-class weapons are unbalanced and slow to recover the
+      same way axes and mauls are) - the previous flat parry 0 undersold
+      how unwieldy a real halberd is on defense.
 
   - name: Null Rod
     tl: "10^"
@@ -213,7 +241,7 @@ items:
       - usage: Swung
         damage: sw-1 cr
         reach: "1"
-        parry: 0
+        parry: "-1U"
         st: 9
         skill: Axe/Mace
     notes: >
@@ -236,6 +264,11 @@ items:
       threatens to unmake it. Its own melee stats are a plain, slightly
       underweight blunt weapon — it is carried as a ward and a badge of
       office, not a proper weapon, hence sw-1 rather than a full sw+0 mace.
+      Handling: parry corrected to -1U, the Axe/Mace-family convention this
+      project applies to every plain club/mace-class weapon (see the
+      Guardsman's Maul and Shock Maul in melee.yaml) - a rod has no guard
+      and is slow to recover after a swing, the same as any other blunt
+      weapon on this page. Weight (4 lb) and min ST (9) are unchanged.
 
   - name: Hexagrammic Ward Charm
     tl: "10^"
