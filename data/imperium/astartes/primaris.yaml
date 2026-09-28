@@ -1,0 +1,122 @@
+kind: template
+output: Imperium/Templates/Primaris Battle-Brother.gct
+notes: >-
+  A Primaris Marine of Cawl's design: the full Astartes gene-seed package plus the three Primaris-only
+  organs (Sinew Coils, Magnificat, Belisarian Furnace). Skill investment matches the Firstborn Battle-Brother
+  template rather than sitting below it -- Primaris training is compressed but thorough, and the strain's
+  own combat record backs treating a rank-and-file Primaris Battle-Brother as roughly on par with, not
+  junior to, a veteran of the old pattern. Equipment (Mk X bolt rifle, Mk X power armour) lives in the
+  armoury files, not here.
+traits:
+- include: "imperium/astartes/gene-seed.yaml#Astartes"
+- include: "imperium/astartes/gene-seed.yaml#Primaris Astartes"
+- name: Personal Advancement
+  points: 60
+  attributes:
+    dx: 1
+    iq: 1
+    ht: 1
+    will: 1
+    per: 1
+  tags:
+  - Physical
+  - Mental
+  lore: >-
+    Individual variation applies to Primaris Marines the same as Firstborn: the same augmentation regime,
+    run through Cawl's expanded gene-seed, still produces a range of outcomes rather than identical copies.
+  design: >-
+    DX+1 (20) + IQ+1 (20) + HT+1 (10) + Will+1 (5) + Per+1 (5) = 60, matching the Firstborn Battle-Brother's
+    Personal Advancement package.
+- name: Rank 2 (Battle-Brother, Primaris Strike Force)
+  points: 10
+  ref: B29
+  lore: >-
+    Standing within his squad and company, built up over a shorter career than a Firstborn veteran's but
+    still marking him as a proven, trusted Battle-Brother.
+  design: Rank (B29), 5 points/level, 2 levels = 10 points.
+skills:
+- name: Guns
+  spec: Rifle
+  diff: DX/E
+  points: 24
+  notes: Mk X pattern bolt rifle.
+- name: Guns
+  spec: Pistol
+  diff: DX/E
+  points: 8
+  notes: Bolt pistol.
+- name: Broadsword
+  diff: DX/A
+  points: 24
+  notes: Chainsword.
+- name: Brawling
+  diff: DX/E
+  points: 8
+- name: Knife
+  diff: DX/A
+  points: 4
+- name: Fast-Draw
+  spec: Ammo
+  diff: DX/E
+  points: 2
+- name: Throwing
+  diff: DX/A
+  points: 4
+  notes: Frag/krak grenades.
+- name: Free Fall
+  diff: DX/A
+  points: 4
+  notes: Drop-pod insertion.
+- name: Climbing
+  diff: DX/A
+  points: 4
+- name: Stealth
+  diff: DX/A
+  points: 8
+- name: Tactics
+  diff: IQ/H
+  points: 20
+- name: Soldier
+  diff: IQ/A
+  points: 12
+- name: Leadership
+  diff: IQ/A
+  points: 12
+- name: Theology
+  spec: Imperial Creed
+  diff: IQ/H
+  points: 16
+- name: Hidden Lore
+  spec: Xenos
+  diff: IQ/A
+  points: 6
+- name: Armoury
+  spec: Body Armor
+  diff: IQ/A
+  points: 4
+- name: Armoury
+  spec: Small Arms
+  diff: IQ/A
+  points: 4
+- name: First Aid
+  diff: IQ/E
+  points: 2
+- name: Camouflage
+  diff: IQ/E
+  points: 4
+- name: Intimidation
+  diff: Will/A
+  points: 8
+- name: Survival
+  spec: Any
+  diff: Per/A
+  points: 8
+- name: Observation
+  diff: Per/A
+  points: 12
+- name: Running
+  diff: HT/A
+  points: 4
+- name: Hiking
+  diff: HT/A
+  points: 4

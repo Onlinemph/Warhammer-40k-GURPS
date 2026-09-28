@@ -107,3 +107,16 @@ traits: [...]     # as in traits files
 skills: [...]     # as in skills files, with points set
 equipment: [...]
 ```
+
+## Reusing entries across files (`include`)
+
+Any list entry (trait, skill, equipment, or a container's child) can pull in an entry defined in another data file instead of copying it:
+
+```yaml
+traits:
+  - include: "imperium/astartes/gene-seed.yaml#Astartes"
+  - include: "imperium/astartes/gene-seed.yaml#Primaris Astartes"
+    disabled: true        # keys beside include override the included entry
+```
+
+The path is relative to `data/`; the part after `#` is the entry's `name`. Templates should always include racial packages and shared traits this way, so a fix to the source updates every template on rebuild.

@@ -441,15 +441,53 @@ def build_skill(item, path, trail):
     return out
 
 
+# ---------------------------------------------------------------------- includes
+
+_include_cache = {}
+
+
+def resolve_includes(items, ctx, depth=0):
+    """Replace {include: "dir/file.yaml#Entry Name"} with that entry from another data file.
+
+    Extra keys next to `include` override the included entry's top-level fields
+    (e.g. `disabled: true`, or a different `name`)."""
+    out = []
+    for it in items or []:
+        if isinstance(it, dict) and "include" in it:
+            if depth > 8:
+                err(ctx, "include nesting too deep")
+                continue
+            target, _, name = it["include"].partition("#")
+            src = DATA / target
+            if src not in _include_cache:
+                if not src.exists():
+                    err(ctx, f"include file not found: {target}")
+                    continue
+                _include_cache[src] = yaml.safe_load(src.read_text())
+            doc = _include_cache[src]
+            pool = doc.get("items") or (doc.get("traits", []) + doc.get("skills", []) + doc.get("equipment", []))
+            found = next((x for x in pool if x.get("name") == name), None)
+            if found is None:
+                err(ctx, f"include target '{name}' not in {target}")
+                continue
+            merged = {**found, **{k: v for k, v in it.items() if k != "include"}}
+            it = merged
+        if isinstance(it, dict) and it.get("children") is not None:
+            it = {**it, "children": resolve_includes(it["children"], ctx, depth + 1)}
+        out.append(it)
+    return out
+
+
 # --------------------------------------------------------------------- templates
 
 def build_template(doc, path):
     out = {"version": VERSION, "id": make_id("B", path)}
     if doc.get("notes"):
         out["notes"] = doc["notes"]
-    out["traits"] = [build_trait(t, path, ["traits"]) for t in doc.get("traits", [])]
-    out["skills"] = [build_skill(s, path, ["skills"]) for s in doc.get("skills", [])]
-    out["equipment"] = [build_equipment(e, path, ["equipment"]) for e in doc.get("equipment", [])]
+    out["traits"] = [build_trait(t, path, ["traits"]) for t in resolve_includes(doc.get("traits"), path)]
+    out["skills"] = [build_skill(s, path, ["skills"]) for s in resolve_includes(doc.get("skills"), path)]
+    out["equipment"] = [build_equipment(e, path, ["equipment"])
+                        for e in resolve_includes(doc.get("equipment"), path)]
     return out
 
 
@@ -471,7 +509,7 @@ def build_file(src):
         return output, build_template(doc, output)
     rows = doc.get("items", [])
     fn = {"equipment": build_equipment, "traits": build_trait, "skills": build_skill}[kind]
-    return output, {"version": VERSION, "rows": [fn(i, output, []) for i in rows]}
+    return output, {"version": VERSION, "rows": [fn(i, output, []) for i in resolve_includes(rows, output)]}
 
 
 def main():

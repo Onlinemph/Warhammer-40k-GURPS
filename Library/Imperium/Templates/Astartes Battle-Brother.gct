@@ -1,0 +1,774 @@
+{
+	"version": 5,
+	"id": "BBsHBwb7wrb_XNWrW",
+	"notes": "A Tactical Marine with some decades of service to his Chapter: fully implanted, trained, and combat-proven, but not yet a squad Sergeant or Chapter specialist. Point total (physiology + skills, no gear) sits comfortably inside the framework's 550-800 Astartes tier -- a veteran with more time in service, a command role, or a Chapter specialty (Apothecary, Techmarine, Chaplain, Librarian) should cost more on top of this. Equipment (bolter, power armour, chainsword) is defined in the armoury files, not here; add the relevant Chapter Gene-Seed lens from Astartes Gene-Seed.adq for a specific Chapter.",
+	"traits": [
+		{
+			"id": "TeEX9SM42SHmpUzvW",
+			"name": "Astartes",
+			"local_notes": "Lore: The Adeptus Astartes: a superhuman created by grafting nineteen engineered organs onto a chosen human recruit and finishing the process with years of training and psycho-indoctrination. This trait is the baseline shared by every Chapter's gene-seed; Chapter lenses below add or remove pieces where the fiction says a specific lineage differs.\n\nDesign: 167 (Attribute Modifiers) + 153 (nineteen organs: 4+14+1+1+5+6+10+1 +11+9+9+9+11+15+21+20+4+1+1) + 3 (Hypno-Indoctrination) = 323 points. This is the physiology alone, before any skills; see the Battle-Brother, Scout, and Primaris templates for full characters built on top of it.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Imperium",
+				"Adeptus Astartes"
+			],
+			"container_type": "ancestry",
+			"children": [
+				{
+					"id": "thZWsY9PW157ZNOYe",
+					"name": "Attribute Modifiers",
+					"local_notes": "Design: Increased ST +8 (B14, 10/level, 80) for ST 18 — also raises HP to 18 for free, since HP tracks ST unless bought separately. Increased HT +4 (B15, 10/level, 40) for HT 14. Increased Basic Speed +1.00 (B17, 5 points per 0.25, 20) for \"faster reflexes than baseline humans\" without inflating every DX-based skill the way a straight DX buy would. Increased Will +2 (B16, 5/level, 10) for the iron discipline the fiction shows even before the Hypno-Indoctrination package below. Extra Hit Points +4 (B16, 2/level, 8) for HP 22: Astartes survive wounds that would kill several men, beyond what ST alone gives. Extra Fatigue Points +3 (B16, 3/level, 9) for FP 17, matching fiction of Marines fighting for days without rest. 80+40+20+10+8+9 = 167. Height runs 2.1-2.4 m per the framework; SM stays 0 unarmoured.",
+					"tags": [
+						"Physical"
+					],
+					"base_points": 167,
+					"features": [
+						{
+							"type": "attribute_bonus",
+							"attribute": "st",
+							"amount": 8
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "ht",
+							"amount": 4
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "basic_speed",
+							"amount": 1
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "will",
+							"amount": 2
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "hp",
+							"amount": 4
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "fp",
+							"amount": 3
+						}
+					]
+				},
+				{
+					"id": "tvw3AYhmB_XhuGDe7",
+					"name": "Secondary Heart",
+					"reference": "B58",
+					"local_notes": "+2 to HT rolls made solely to avoid death (Hard to Kill 2).\n\nLore: A backup heart grown alongside the original, wired into the same circulatory system so the body keeps pumping blood even if the primary heart is destroyed or stops. Widely depicted in Black Library fiction as one reason Astartes shrug off wounds that would drop a normal man dead of shock or blood loss.\n\nDesign: Modelled as Hard to Kill 2 (B58): +2 to HT rolls to avoid death only, not a general toughness bonus, since the second heart is a redundancy against cardiac failure specifically. 2 x 2 = 4 points.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Imperium",
+						"Adeptus Astartes"
+					],
+					"base_points": 4
+				},
+				{
+					"id": "tQSL9DgM-XwzO740Q",
+					"name": "Ossmodula",
+					"reference": "B46",
+					"local_notes": "DR 3 on torso and vitals only (fused, armoured ribcage). Stacks with worn armour.\n\nLore: Triggers a second, controlled growth spurt: the skeleton is re-knitted around a denser mineral lattice, ribs fuse into an armoured cage, and the whole frame roughly doubles in mass over the following implantation. The fused ribcage is one of the most consistently described Astartes traits: a solid plate of bone over the chest that turns blades and slugs that would reach a normal man's heart.\n\nDesign: The ST/HT/HP payoff of the growth process is bought once in the Astartes Attribute Modifiers, not here. What the organ adds on its own is the fused ribcage: Damage Resistance 3 (B46, 5/level, 15) with the Partial (torso and vitals) limitation, -10%, = 13.5, rounded up to 14. An earlier draft priced this as a 1-point perk with no mechanical effect, which left the most-cited Astartes toughness feature out of play.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Imperium",
+						"Adeptus Astartes"
+					],
+					"base_points": 14,
+					"features": [
+						{
+							"type": "dr_bonus",
+							"locations": [
+								"torso",
+								"vitals"
+							],
+							"amount": 3
+						}
+					]
+				},
+				{
+					"id": "tAgeTvK9OQyXAMRIT",
+					"name": "Biscopea",
+					"local_notes": "Lore: Works alongside the Ossmodula to pack the newly-grown frame with dense, fast-twitch muscle, giving Astartes their characteristic bulk.\n\nDesign: Same reasoning as Ossmodula: the muscle mass is paid for once as part of the racial ST bonus, so this is a 1-point Perk marking the organ's presence rather than a second helping of ST.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Imperium",
+						"Adeptus Astartes",
+						"Perk"
+					],
+					"base_points": 1
+				},
+				{
+					"id": "t3l4bYQG2e7if1R7d",
+					"name": "Haemastamen",
+					"local_notes": "Lore: Regulates the chemistry of Astartes blood and produces the genetically-tagged compounds an Apothecary tests for to confirm a Marine's gene-seed lineage and general biochemical stability. Its output is also the substrate Larraman's Organ acts on.\n\nDesign: Pure physiology/plot-hook organ — no combat effect of its own. 1-point Perk (B21) so it stays a listed, removable trait.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Imperium",
+						"Adeptus Astartes",
+						"Perk"
+					],
+					"base_points": 1
+				},
+				{
+					"id": "tLR_sGrRPeNb6r5dk",
+					"name": "Larraman's Organ",
+					"reference": "B79",
+					"local_notes": "Wounds scab and scar over within seconds rather than minutes; treat as Rapid Healing for recovery rolls (B424), and the GM should waive ongoing blood-loss effects from an untreated wound after the first turn.\n\nLore: Floods the bloodstream with \"Larraman's cells\" that clot almost instantly on exposure to air, so an open wound scabs over in seconds. This is the single most commonly cited reason Astartes soldier on through injuries that would leave a Guardsman bleeding out; it is described across Black Library fiction from minor cuts up to serious battlefield trauma.\n\nDesign: Reflavoured Rapid Healing (B79, 5 points): the RAW effect (double effective HT for recovery rolls) undersells \"seals in seconds,\" so the design also folds in automatic stabilization against ongoing blood loss for the first turn after a wound, at no extra point cost — it's the same underlying \"clots fast\" phenomenon at two timescales.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Imperium",
+						"Adeptus Astartes"
+					],
+					"base_points": 5
+				},
+				{
+					"id": "tz8ORpygscIK2ExAf",
+					"name": "Catalepsean Node",
+					"reference": "B65",
+					"local_notes": "Lore: A brainstem structure that lets the two cerebral hemispheres rest in alternation, so an Astartes only needs a couple of hours of true sleep where a human needs eight, and can go without any for days at a stretch on campaign. Distinct from the Sus-an Membrane, which is a full metabolic shutdown rather than efficient rest.\n\nDesign: Less Sleep 3 (B65, 2 points/level): reduces sleep need from 8 hours to about 2. 3 x 2 = 6 points.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Imperium",
+						"Adeptus Astartes"
+					],
+					"base_points": 6
+				},
+				{
+					"id": "tkziRhfJRLkS8iiTk",
+					"name": "Preomnor",
+					"reference": "B81",
+					"local_notes": "Lore: A supplementary \"pre-stomach\" that chemically breaks down and neutralizes toxins and spoiled matter in food before it reaches the true stomach, letting Astartes eat things — rotten rations, raw feral-world game, toxic fungus — that would sicken or kill an unaugmented human.\n\nDesign: Resistant (B81), Occasional: Ingested Poison, Immunity — base 10, x1 for Immunity = 10 points. Deliberately narrower than Oolitic Kidney below: this organ only ever sees toxins that arrive through the gut.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Imperium",
+						"Adeptus Astartes"
+					],
+					"base_points": 10
+				},
+				{
+					"id": "tnCPX1z11eopXhSc-",
+					"name": "Omophagea",
+					"local_notes": "Lore: Lets an Astartes extract genetic and biochemical information by consuming a portion of a creature's flesh or blood, surfacing it as hazy instinctive knowledge — described in the fiction as ritual consumption of a slain xenos to \"know\" something of it, rather than a controllable database query.\n\nDesign: No reliable, repeatable mechanical payoff to hang a point cost on — the fiction treats it as evocative, not a reliable Analyze/Detect power. Kept as a 1-point Perk (B21); a GM can hand out a one-off Hidden Lore or skill bonus after an appropriate scene at their discretion, with no fixed rule for it here.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Imperium",
+						"Adeptus Astartes",
+						"Perk"
+					],
+					"base_points": 1
+				},
+				{
+					"id": "TENBF1cGHDqpTZT4V",
+					"name": "Multi-lung",
+					"local_notes": "Lore: A supplementary lung that scrubs smoke, gas, and thin or tainted atmospheres, and banks extra oxygen for holding the breath through vacuum exposure, drowning, or a gas attack.\n\nDesign: Filter Lungs (B55, 5 points) for the \"breathe filthy air safely\" half; Breath-Holding 3 (B41, 2/level, 6 points) for the \"hold it a long time\" half. Container sums to 11 points.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Imperium",
+						"Adeptus Astartes"
+					],
+					"container_type": "meta_trait",
+					"children": [
+						{
+							"id": "teKlgU1IpBDY3LwGF",
+							"name": "Filter Lungs",
+							"reference": "B55",
+							"base_points": 5
+						},
+						{
+							"id": "tHxA53mpqxOLcp7dU",
+							"name": "Breath-Holding",
+							"reference": "B41",
+							"points_per_level": 2,
+							"can_level": true,
+							"levels": 3
+						}
+					]
+				},
+				{
+					"id": "TPydeKACOP_oCtkyQ",
+					"name": "Occulobe",
+					"local_notes": "Lore: Rewires the optic nerve and visual cortex for much sharper acuity and low-light performance, and hardens the eye against flash and glare — Astartes are consistently shown spotting targets and reading terrain at ranges no unaugmented eye could manage, and shrugging off blinding light that would stagger a human.\n\nDesign: Acute Vision 2 (B35, 2/level, 4 points) for the raw acuity; Protected Sense (Vision) (B78, 5 points) so flash/glare can't blind the organ outright. 9 points total.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Imperium",
+						"Adeptus Astartes"
+					],
+					"container_type": "meta_trait",
+					"children": [
+						{
+							"id": "tf9ygLrk4yEEg8rrk",
+							"name": "Acute Vision",
+							"reference": "B35",
+							"points_per_level": 2,
+							"can_level": true,
+							"levels": 2
+						},
+						{
+							"id": "t7WFVj4jWqvXdA-90",
+							"name": "Protected Sense (Vision)",
+							"reference": "B78",
+							"base_points": 5
+						}
+					]
+				},
+				{
+					"id": "Tn2hMn_E7emHrusi3",
+					"name": "Lyman's Ear",
+					"local_notes": "Lore: Reinforces the inner ear against the constant concussion of bolter fire and explosions while sharpening hearing and balance, so an Astartes can still track sound and stay upright through the kind of noise that would deafen and disorient an unaugmented soldier.\n\nDesign: Acute Hearing 2 (B35, 2/level, 4 points) plus Protected Sense (Hearing) (B78, 5 points) against deafening/concussive noise. 9 points total.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Imperium",
+						"Adeptus Astartes"
+					],
+					"container_type": "meta_trait",
+					"children": [
+						{
+							"id": "tc7-ig2AMq3hs3SkL",
+							"name": "Acute Hearing",
+							"reference": "B35",
+							"points_per_level": 2,
+							"can_level": true,
+							"levels": 2
+						},
+						{
+							"id": "t5jnXICwzY3QrhIS_",
+							"name": "Protected Sense (Hearing)",
+							"reference": "B78",
+							"base_points": 5
+						}
+					]
+				},
+				{
+					"id": "t7p57hig8hJGRwjgB",
+					"name": "Sus-an Membrane",
+					"local_notes": "Lore: Lets an Astartes drop, on command, into a deep hibernation that slows metabolism to near nothing — used for long void crossings in a survival capsule, or to ride out wounds that would otherwise be fatal by shutting down everything but core function. Depicted as something that takes real time to enter and leave, not an instant reflex.\n\nDesign: Custom build shown for transparency rather than a straight RAW pull: Doesn't Eat or Drink (B50, 10) + Doesn't Breathe (B49, 20) = 30 points of effect, but only while deliberately entering the trance, which takes about a minute either way — an Accessibility-style limitation worth roughly -70% (comparable to \"Trance Only\" in scope and severity). 30 x 0.3 = 9 points.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Imperium",
+						"Adeptus Astartes"
+					],
+					"base_points": 9
+				},
+				{
+					"id": "tjZSvJ7cUxJgOw3nU",
+					"name": "Melanchromic Organ",
+					"reference": "B79",
+					"local_notes": "Radiation Tolerance (PF 5) plus a 1-point Perk for voluntary pigment control.\n\nLore: Controls skin pigmentation and shields the body against radiation and hard UV, letting Astartes operate on irradiated battlefields and hostile worlds. Its baseline output varies by Chapter gene-seed — most notably the Salamanders, whose Melanchromic Organ runs permanently at full output (see the Chapter lens below).\n\nDesign: Radiation Tolerance (B79), PF 5 (10 points) for the shielding effect, plus a 1-point Perk for voluntary control over pigmentation (camouflage/recognition flavor, no fixed numeric benefit). 11 points.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Imperium",
+						"Adeptus Astartes"
+					],
+					"base_points": 11
+				},
+				{
+					"id": "tW1SaxNfJeqotxV-O",
+					"name": "Oolitic Kidney",
+					"reference": "B81",
+					"local_notes": "Lore: A backup kidney that aggressively filters toxins circulating in the blood — venoms, industrial poisons, battlefield chemical agents — rather than the ones Preomnor already caught at the gut.\n\nDesign: Resistant (B81), Common: Poison, Immunity — base 15, x1 for Immunity = 15 points. Priced above Preomnor because it covers poison from any route of entry, not just food.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Imperium",
+						"Adeptus Astartes"
+					],
+					"base_points": 15
+				},
+				{
+					"id": "TOklbKw74KfFp1pJ_",
+					"name": "Neuroglottis",
+					"local_notes": "Lore: Pushes taste and smell to a level that lets an Astartes identify an individual, a poison, or a chemical trace by scent alone, and track a quarry across terrain a hound couldn't follow.\n\nDesign: Discriminatory Smell (B49, 15 points, identify/track individuals and substances by scent) plus Acute Taste & Smell 3 (B35, 2/level, 6 points) for raw sensitivity. 21 points total.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Imperium",
+						"Adeptus Astartes"
+					],
+					"container_type": "meta_trait",
+					"children": [
+						{
+							"id": "tMei0FSdcKSo9if3b",
+							"name": "Discriminatory Smell",
+							"reference": "B49",
+							"base_points": 15
+						},
+						{
+							"id": "tC7sPdIiApExeqWrI",
+							"name": "Acute Taste & Smell",
+							"reference": "B35",
+							"points_per_level": 2,
+							"can_level": true,
+							"levels": 3
+						}
+					]
+				},
+				{
+					"id": "ToSSXbNvpdgNz-GtC",
+					"name": "Mucranoid",
+					"local_notes": "Lore: Secretes a waxy, oily film that can be triggered to seal pores and orifices against vacuum, toxic atmosphere, and radiation, and that also insulates against extreme heat and cold.\n\nDesign: Sealed (B82, 15 points) covers vacuum/toxin/radiation sealing; Temperature Tolerance 5 (B93, 1/level, 5 points) covers the thermal insulation. 20 points total.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Imperium",
+						"Adeptus Astartes"
+					],
+					"container_type": "meta_trait",
+					"children": [
+						{
+							"id": "tY248WSSPzOQl-R98",
+							"name": "Sealed",
+							"reference": "B82",
+							"base_points": 15
+						},
+						{
+							"id": "tV9fX8MHEgFjyxDXF",
+							"name": "Temperature Tolerance",
+							"reference": "B93",
+							"points_per_level": 1,
+							"can_level": true,
+							"levels": 5
+						}
+					]
+				},
+				{
+					"id": "T1alLaABOkskZY6LD",
+					"name": "Betcher's Gland",
+					"local_notes": "Lore: Produces a corrosive, mildly toxic saliva. Fiction plays this as a minor, opportunistic weapon and a way to shrug off ingested poisons and diseased food in the mouth — not a primary attack for a Marine who has a bolter.\n\nDesign: Innate Attack (Corrosion) at a token 1d, melee reach C only (B61, roughly 3 points after the reach/range restriction) for the spit; 1-point Perk for the minor oral antitoxin effect (overlaps in concept with Preomnor, so kept nominal). 4 points total.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Imperium",
+						"Adeptus Astartes"
+					],
+					"container_type": "meta_trait",
+					"children": [
+						{
+							"id": "t6bgvYLRoxPNfhiIB",
+							"name": "Corrosive Spit",
+							"base_points": 3,
+							"weapons": [
+								{
+									"id": "weM0bA5Q7uQPYHufG",
+									"sv": 1,
+									"damage": {
+										"type": "cor",
+										"base": "1d"
+									},
+									"reach": "C",
+									"parry": "No",
+									"usage": "Spit",
+									"defaults": [
+										{
+											"type": "dx",
+											"modifier": 0
+										},
+										{
+											"type": "skill",
+											"name": {
+												"compare": "is",
+												"qualifier": "Brawling"
+											}
+										}
+									]
+								}
+							]
+						},
+						{
+							"id": "tD5aUpBS1rUqSamQy",
+							"name": "Oral Poison Filter",
+							"base_points": 1
+						}
+					]
+				},
+				{
+					"id": "t-0eU29yD7eg1o4J9",
+					"name": "Progenoid Glands",
+					"local_notes": "Lore: Two glands that mature over years into a bank of \"zygotes\" — genetic material an Apothecary harvests from the fallen to seed new recruits. Central to how a Chapter perpetuates and safeguards its gene-seed line, but they confer no combat benefit on the Marine who carries them; their value is entirely to the Chapter after death.\n\nDesign: 1-point Perk (B21): a narrative/plot-hook organ (its condition can matter for Apothecary rolls or a Chapter's gene-seed politics) with no combat mechanic of its own.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Imperium",
+						"Adeptus Astartes",
+						"Perk"
+					],
+					"base_points": 1
+				},
+				{
+					"id": "tulhUnxOBc-0g1f9d",
+					"name": "Black Carapace",
+					"local_notes": "Lore: A synthetic interface grafted under the skin across the torso and spine and wired into the nervous system, grown last, only after a Scout has proven himself and is elevated to full Battle-Brother. It lets a suit of power armour read a Marine's nervous impulses directly, so the armour moves as an extension of the body rather than a piloted shell.\n\nDesign: The mechanical payoff (full reflexes, no bulk/encumbrance penalty, no clumsy manual controls) is a property of Astartes power armour equipment and belongs on that equipment's entry, not duplicated here, since a Marine without a suit to plug into gets nothing from it in play. Kept as a 1-point Perk marking that the interface exists and is a hard prerequisite for wearing power armour as intended.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Imperium",
+						"Adeptus Astartes",
+						"Perk"
+					],
+					"base_points": 1
+				},
+				{
+					"id": "T6YOyhVKzES_05muJ",
+					"name": "Hypno-Indoctrination / Psycho-Conditioning",
+					"local_notes": "Lore: Years of hypnotherapy, drugs, and ritualized indoctrination laid over the biological changes, meant to produce a soldier who doesn't break under fire and who puts Chapter and Emperor before self. Consistently shown as psychological conditioning, not just training — Astartes keep fighting past the point a merely well-trained human would rout, and are bound by oaths to their Chapter that they do not question.\n\nDesign: Combat Reflexes (B43, 15) + Fearlessness 4 (B55, 2/level, 8) + High Pain Threshold (B59, 10) + Single-Minded (B85, 5) = 38 points of advantage, offset by Duty (B133, -15), Sense of Duty to the Chapter (B153, -10), and Code of Honor (B127, -10) = -35. Net +3 points. Intolerance is deliberately left out of the universal package — lore doesn't support a blanket xenophobia disadvantage across every Chapter; where a specific Chapter's fiction supports it, add it as part of that Chapter's lens instead.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Imperium",
+						"Adeptus Astartes"
+					],
+					"container_type": "meta_trait",
+					"children": [
+						{
+							"id": "tucXA0oULSVw67hl8",
+							"name": "Combat Reflexes",
+							"reference": "B43",
+							"base_points": 15
+						},
+						{
+							"id": "tTqpBhJt3FDs7nfHw",
+							"name": "Fearlessness",
+							"reference": "B55",
+							"points_per_level": 2,
+							"can_level": true,
+							"levels": 4
+						},
+						{
+							"id": "tkTeSRVLLf4x22wSd",
+							"name": "High Pain Threshold",
+							"reference": "B59",
+							"base_points": 10
+						},
+						{
+							"id": "tkaMnDUnZFuQSHobt",
+							"name": "Single-Minded",
+							"reference": "B85",
+							"local_notes": "Represents relentless mission focus drilled in from the day of recruitment.",
+							"base_points": 5
+						},
+						{
+							"id": "trT89tGJsZFowgyHh",
+							"name": "Duty (Chapter and Imperium)",
+							"reference": "B133",
+							"local_notes": "Almost all the time, Extremely Hazardous.",
+							"base_points": -15
+						},
+						{
+							"id": "tQtnkW7bmMhtyjsnd",
+							"name": "Sense of Duty (Battle-Brothers)",
+							"reference": "B153",
+							"local_notes": "Large group — the whole Chapter, not just one squad.",
+							"base_points": -10
+						},
+						{
+							"id": "tY_Ipu4kHWV-Dem_m",
+							"name": "Code of Honor (Codex Astartes)",
+							"reference": "B127",
+							"local_notes": "As Code of Honor (Soldier's): never abandon a Battle-Brother, never retreat without orders, uphold the Chapter's word.",
+							"base_points": -10
+						}
+					]
+				}
+			]
+		},
+		{
+			"id": "tdGSh458hPpzaHknz",
+			"name": "Personal Advancement",
+			"local_notes": "Lore: No two Battle-Brothers are physiologically identical even off the same gene-seed template, and what decades of live combat does to a body and mind that heal and learn far faster than baseline is depicted throughout Black Library fiction as making veterans noticeably sharper and tougher than newly-raised Battle-Brothers.\n\nDesign: DX+1 (20) + IQ+1 (20) + HT+1 (10) + Will+1 (5) + Per+1 (5) = 60 points of personal growth bought on top of the racial baseline.",
+			"tags": [
+				"Physical",
+				"Mental"
+			],
+			"base_points": 60,
+			"features": [
+				{
+					"type": "attribute_bonus",
+					"attribute": "dx",
+					"amount": 1
+				},
+				{
+					"type": "attribute_bonus",
+					"attribute": "iq",
+					"amount": 1
+				},
+				{
+					"type": "attribute_bonus",
+					"attribute": "ht",
+					"amount": 1
+				},
+				{
+					"type": "attribute_bonus",
+					"attribute": "will",
+					"amount": 1
+				},
+				{
+					"type": "attribute_bonus",
+					"attribute": "per",
+					"amount": 1
+				}
+			]
+		},
+		{
+			"id": "t4SqFvjZH4CmMMl-3",
+			"name": "Rank 3 (Battle-Brother, Veteran)",
+			"reference": "B29",
+			"local_notes": "Lore: Recognized standing within the squad and Chapter hierarchy built up over decades: enough seniority to be trusted with a fireteam or combat squad in his Sergeant's absence, short of holding a command role himself.\n\nDesign: Rank (B29), 5 points/level, 3 levels = 15 points.",
+			"base_points": 15
+		},
+		{
+			"id": "tzNrWmE4pCOxBIiQ1",
+			"name": "Reputation (Angel of Death)",
+			"reference": "B27",
+			"local_notes": "Lore: An Astartes in his Chapter's heraldry is instantly recognized by Imperial citizens and soldiery, who react with awe, hope, or fear -- a constant, near-universal reaction shown wherever Marines appear in the fiction.\n\nDesign: Small, reliably-recognized reaction bonus (+2), priced as a minor Reputation (B27): 5 points.",
+			"base_points": 5,
+			"features": [
+				{
+					"type": "reaction_bonus",
+					"situation": "from Imperial citizens and Guard who recognize the Chapter's colors",
+					"amount": 2
+				}
+			]
+		}
+	],
+	"skills": [
+		{
+			"id": "sGmF7jqiMPwyY_s12",
+			"name": "Guns",
+			"local_notes": "Bolter.",
+			"specialization": "Rifle",
+			"difficulty": "dx/e",
+			"points": 24
+		},
+		{
+			"id": "sJuhLOgsAWIBPhQwk",
+			"name": "Guns",
+			"local_notes": "Bolt pistol.",
+			"specialization": "Pistol",
+			"difficulty": "dx/e",
+			"points": 8
+		},
+		{
+			"id": "s6D7Wrq4xSe2mWvXa",
+			"name": "Broadsword",
+			"local_notes": "Chainsword.",
+			"difficulty": "dx/a",
+			"points": 24
+		},
+		{
+			"id": "si9MEfCmZ8wPQNS6d",
+			"name": "Brawling",
+			"difficulty": "dx/e",
+			"points": 8
+		},
+		{
+			"id": "swLhVMx8eIvkqKqSZ",
+			"name": "Wrestling",
+			"difficulty": "dx/a",
+			"points": 8
+		},
+		{
+			"id": "sufmch02-2npQ_vL0",
+			"name": "Knife",
+			"local_notes": "Combat knife.",
+			"difficulty": "dx/a",
+			"points": 2
+		},
+		{
+			"id": "s7wMAL-nu-X7Wjpey",
+			"name": "Axe/Mace",
+			"local_notes": "Chainaxe familiarity.",
+			"difficulty": "dx/a",
+			"points": 2
+		},
+		{
+			"id": "sBlXZ8rA98SjU22si",
+			"name": "Fast-Draw",
+			"specialization": "Ammo",
+			"difficulty": "dx/e",
+			"points": 2
+		},
+		{
+			"id": "srjjPD_-HNOvlgdYe",
+			"name": "Throwing",
+			"local_notes": "Frag/krak grenades.",
+			"difficulty": "dx/a",
+			"points": 2
+		},
+		{
+			"id": "sZjt3xl7zsyYAqqHc",
+			"name": "Free Fall",
+			"local_notes": "Drop-pod insertion.",
+			"difficulty": "dx/a",
+			"points": 4
+		},
+		{
+			"id": "sCUs7pIF7PbRvSJz6",
+			"name": "Climbing",
+			"difficulty": "dx/a",
+			"points": 2
+		},
+		{
+			"id": "ssMqE_he1gcAZLy3A",
+			"name": "Stealth",
+			"difficulty": "dx/a",
+			"points": 8
+		},
+		{
+			"id": "sBGEvnCo4x4yNexOm",
+			"name": "Tactics",
+			"difficulty": "iq/h",
+			"points": 24
+		},
+		{
+			"id": "s2-qyFpyiAtEzeoB-",
+			"name": "Strategy",
+			"difficulty": "iq/h",
+			"points": 8
+		},
+		{
+			"id": "sHNTVLGI8GH1BjLrh",
+			"name": "Soldier",
+			"difficulty": "iq/a",
+			"points": 12
+		},
+		{
+			"id": "sExdeCOwrN5BoRLel",
+			"name": "Leadership",
+			"local_notes": "Commanding a fireteam or combat squad.",
+			"difficulty": "iq/a",
+			"points": 12
+		},
+		{
+			"id": "slUIDqxPFnbXF5Ya-",
+			"name": "Theology",
+			"specialization": "Imperial Creed",
+			"difficulty": "iq/h",
+			"points": 20
+		},
+		{
+			"id": "sdFJ2-KdlWTtWHViE",
+			"name": "Hidden Lore",
+			"specialization": "Xenos",
+			"difficulty": "iq/a",
+			"points": 8
+		},
+		{
+			"id": "sj24eoQAsEfRuqzGI",
+			"name": "Hidden Lore",
+			"specialization": "Heresy",
+			"difficulty": "iq/a",
+			"points": 2
+		},
+		{
+			"id": "sj8hd5fVR3A1EzAu_",
+			"name": "Armoury",
+			"local_notes": "Field maintenance of power armour.",
+			"specialization": "Body Armor",
+			"difficulty": "iq/a",
+			"points": 2
+		},
+		{
+			"id": "szFTCbm2RyuanXZL3",
+			"name": "Armoury",
+			"local_notes": "Bolt weapons.",
+			"specialization": "Small Arms",
+			"difficulty": "iq/a",
+			"points": 2
+		},
+		{
+			"id": "sPgpol2ZSxOoAr4Ap",
+			"name": "Mechanic",
+			"specialization": "Bolt Weapons",
+			"difficulty": "iq/a",
+			"points": 2
+		},
+		{
+			"id": "sdT8Z5ZR70HCmtZdi",
+			"name": "First Aid",
+			"difficulty": "iq/e",
+			"points": 2
+		},
+		{
+			"id": "sfAZrtRNVHnGwsZo6",
+			"name": "Navigation",
+			"specialization": "Land",
+			"difficulty": "iq/a",
+			"points": 2
+		},
+		{
+			"id": "sNMwzehqZaTl5--Pn",
+			"name": "Gesture",
+			"local_notes": "Chapter battle-sign.",
+			"difficulty": "iq/e",
+			"points": 1
+		},
+		{
+			"id": "s6hU9sRodDZ-IlQBF",
+			"name": "Savoir-Faire",
+			"specialization": "Military",
+			"difficulty": "iq/e",
+			"points": 1
+		},
+		{
+			"id": "sy1f8Rcp_S57tjqoy",
+			"name": "Camouflage",
+			"difficulty": "iq/e",
+			"points": 2
+		},
+		{
+			"id": "sIJATzZLs_jRhfYVV",
+			"name": "Intimidation",
+			"difficulty": "will/a",
+			"points": 8
+		},
+		{
+			"id": "sVgA6tg0yGHMW6zG8",
+			"name": "Survival",
+			"specialization": "Any",
+			"difficulty": "per/a",
+			"points": 8
+		},
+		{
+			"id": "sD4EC5QR882ypzf2v",
+			"name": "Observation",
+			"difficulty": "per/a",
+			"points": 12
+		},
+		{
+			"id": "sTdqbMAqRYvBkgY91",
+			"name": "Tracking",
+			"difficulty": "per/a",
+			"points": 2
+		},
+		{
+			"id": "sxT-EE5Iq_dGxwtsC",
+			"name": "Running",
+			"difficulty": "ht/a",
+			"points": 2
+		},
+		{
+			"id": "sZ4x3oEExHKR26vL1",
+			"name": "Hiking",
+			"difficulty": "ht/a",
+			"points": 2
+		}
+	],
+	"equipment": []
+}

@@ -1,0 +1,97 @@
+kind: template
+output: Imperium/Templates/Astartes Scout.gct
+notes: >-
+  A neophyte in scout armour, still short of the final implantation and trials that make a full Battle-Brother:
+  built on Astartes Neophyte (Scout-Rank) rather than the full Astartes trait. That deliberately lands
+  this template in the 200-350 'Elite human' band rather than the 550-800 Astartes tier -- a Scout is
+  meant to read as a cut above a Guardsman or Stormtrooper, not yet a Space Marine. He lacks the Black
+  Carapace outright (see the Gene-Seed file for why that's the one implant this project treats as definitely
+  missing), and his attribute boost and conditioning are toned down to reflect a recruit who hasn't finished
+  growing into a Battle-Brother's frame or logged a veteran's years of drilling. Equipment (scout/sniper
+  rifle, camo cloak, combat blade) lives in the armoury files, not here.
+traits:
+- include: "imperium/astartes/gene-seed.yaml#Astartes Neophyte (Scout-Rank)"
+- name: Sniper's Eye
+  points: 5
+  ref: B51
+  notes: >-
+    A trained Acute Vision +1, kept separate from Occulobe's own bonus since this represents marksmanship
+    training rather than physiology.
+  lore: >-
+    Scouts serve as a Chapter's snipers and infiltrators long before they're trusted with a Tactical squad's
+    firepower, and that role is trained hard from day one.
+  design: >-
+    A small trained visual-acuity bonus (B35-style pricing) representing marksmanship training rather
+    than another organ. 5 points.
+skills:
+- name: Guns
+  spec: Rifle
+  diff: DX/E
+  points: 12
+  notes: Scout/sniper rifle.
+- name: Guns
+  spec: Pistol
+  diff: DX/E
+  points: 4
+  notes: Bolt pistol.
+- name: Broadsword
+  diff: DX/A
+  points: 8
+  notes: Combat knife-sized blades and chainswords.
+- name: Brawling
+  diff: DX/E
+  points: 4
+- name: Knife
+  diff: DX/A
+  points: 2
+- name: Throwing
+  diff: DX/A
+  points: 2
+  notes: Frag grenades.
+- name: Climbing
+  diff: DX/A
+  points: 4
+- name: Stealth
+  diff: DX/A
+  points: 12
+  notes: Scouts are the Chapter's infiltrators.
+- name: Camouflage
+  diff: IQ/E
+  points: 4
+- name: Survival
+  spec: Any
+  diff: Per/A
+  points: 4
+- name: Observation
+  diff: Per/A
+  points: 8
+- name: Tracking
+  diff: Per/A
+  points: 4
+- name: Soldier
+  diff: IQ/A
+  points: 2
+- name: Tactics
+  diff: IQ/H
+  points: 4
+- name: Theology
+  spec: Imperial Creed
+  diff: IQ/H
+  points: 4
+- name: Hidden Lore
+  spec: Xenos
+  diff: IQ/A
+  points: 1
+- name: First Aid
+  diff: IQ/E
+  points: 1
+- name: Navigation
+  spec: Land
+  diff: IQ/A
+  points: 2
+- name: Running
+  diff: HT/A
+  points: 2
+- name: Hiking
+  diff: HT/A
+  points: 2
