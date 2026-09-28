@@ -326,12 +326,19 @@ def template_entry(d, title):
 # --------------------------------------------------------------------- main
 
 def main():
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--exclude", action="append", default=[],
+                    help="Library/ subpath to leave out (e.g. unreviewed drafts); repeatable")
+    args = ap.parse_args()
     libs = []
     for p in sorted(LIB.rglob("*")):
         kind = KIND.get(p.suffix)
         if not kind:
             continue
         rel = p.relative_to(LIB)
+        if any(rel.as_posix().startswith(x.rstrip("/") + "/") for x in args.exclude):
+            continue
         d = json.loads(p.read_text())
         entry = {"id": rel.with_suffix("").as_posix().lower().replace(" ", "-").replace("/", "--"),
                  "title": p.stem, "section": "/".join(rel.parts[:-1]), "kind": kind, "path": rel.as_posix()}
