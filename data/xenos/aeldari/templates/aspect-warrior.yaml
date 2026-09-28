@@ -1,0 +1,123 @@
+kind: template
+output: Xenos/Aeldari/Templates/Aspect Warrior.gct
+notes: >
+  An Aspect Warrior: a Guardian who has walked into an Aspect Shrine and
+  given themselves over to one narrow art of war for years or decades,
+  matching a Space Marine's own precision on the strength of centuries of
+  focus rather than gene-engineering. Point math (see Xenos/Aeldari/Traits/
+  Aeldari Physiology.adq): Aeldari Physiology 122 + Keen Battle-Sense 5 +
+  Aspect Training 80 + skills 40 = 247 points. Stats: ST 11, DX 16, IQ 12,
+  HT 11, HP 11, Will 13, Per 13, Speed 6.75, Move 6, Dodge 12 (Enhanced
+  Dodge 1 included) — landing exactly on framework.md's Aspect Warrior
+  anchor line, matching DX 16 to a Battle-Brother's own DX 16 exactly as the
+  anchor table intends. This sits in the top half of framework.md's "Elite
+  human" tier (200-350) and the bottom of "Senior agents" (350-600): a
+  formidable specialist well above a Guardian, but still short of a full
+  Astartes package's own 550-800 total, which the framework reserves for
+  the Exarch a Warrior-Path veteran eventually becomes.
+
+  Enable exactly one Aspect lens below (from Xenos/Aeldari/Traits/Aeldari
+  Physiology.adq, all disabled by default) for the specific shrine this
+  character belongs to; they are small, low-point flavour packages layered
+  on top of this shared Aspect Warrior chassis, not full separate templates,
+  matching this project's Klan and regimental lens precedent. This template
+  also includes "Path of the Warrior", enabled, since every Aspect Warrior
+  is, by definition, walking it; disable it and enable a different Path
+  lens instead only for an unusual case (e.g. building a former Aspect
+  Warrior who has since moved on).
+traits:
+  - include: "xenos/aeldari/traits.yaml#Aeldari Physiology"
+  - include: "xenos/aeldari/traits.yaml#Keen Battle-Sense"
+  - include: "xenos/aeldari/traits.yaml#Aspect Training"
+  - include: "xenos/aeldari/traits.yaml#Path of the Warrior"
+  - include: "xenos/aeldari/traits.yaml#Aspect: Dire Avenger"
+    disabled: true
+  - include: "xenos/aeldari/traits.yaml#Aspect: Striking Scorpion"
+    disabled: true
+  - include: "xenos/aeldari/traits.yaml#Aspect: Howling Banshee"
+    disabled: true
+  - include: "xenos/aeldari/traits.yaml#Aspect: Fire Dragon"
+    disabled: true
+  - include: "xenos/aeldari/traits.yaml#Aspect: Dark Reaper"
+    disabled: true
+  - include: "xenos/aeldari/traits.yaml#Aspect: Swooping Hawk"
+    disabled: true
+  - include: "xenos/aeldari/traits.yaml#Aspect: Warp Spider"
+    disabled: true
+skills:
+  - name: Guns
+    spec: Rifle
+    diff: DX/E
+    points: 8
+    tags: [Xenos, Aeldari]
+    lore: The shrine's signature ranged weapon (shuriken catapult, fusion gun or reaper launcher, per the enabled Aspect lens), drilled for years.
+    design: DX+4 (20) for 8 points, Easy (B170).
+  - name: Broadsword
+    diff: DX/A
+    points: 8
+    tags: [Xenos, Aeldari]
+    lore: An Aspect's signature close-combat blade, whichever Aspect it is (a Scorpion's chainsword, a Banshee's power sword, a Dragon's fusion pistol backup notwithstanding).
+    design: DX+2 (18) for 8 points, Average (B208).
+  - name: Tactics
+    diff: IQ/H
+    points: 4
+    tags: [Xenos, Aeldari]
+    lore: Shrine-drilled small-unit tactics for this Aspect's specific role in a warhost.
+    design: IQ+0 (12) for 4 points, Hard.
+  - name: Stealth
+    diff: DX/A
+    points: 4
+    tags: [Xenos, Aeldari]
+    lore: Precise, controlled movement, whatever the Aspect's specific approach doctrine.
+    design: DX+1 (17) for 4 points, Average.
+  - name: Camouflage
+    diff: IQ/E
+    points: 1
+    tags: [Xenos, Aeldari]
+    lore: Basic field-craft, carried over from Guardian training.
+    design: IQ+0 (12) for 1 point, Easy.
+  - name: Jumping
+    diff: DX/E
+    points: 2
+    tags: [Xenos, Aeldari]
+    lore: Aggressive battlefield mobility, whatever the specific Aspect's own signature movement.
+    design: DX+1 (17) for 2 points, Easy.
+  - name: Acrobatics
+    diff: DX/H
+    points: 4
+    tags: [Xenos, Aeldari]
+    lore: The controlled, almost dancer's precision every Aspect Warrior fights with.
+    design: DX+0 (16) for 4 points, Hard.
+  - name: Fast-Draw
+    spec: Ammo
+    diff: DX/E
+    points: 1
+    tags: [Xenos, Aeldari]
+    lore: Standard reload drill, carried over from Guardian training.
+    design: DX+0 (16) for 1 point, Easy.
+  - name: Intimidation
+    diff: Will/A
+    points: 4
+    tags: [Xenos, Aeldari]
+    lore: A veteran Aspect Warrior's own presence, war mask and reputation do real work before a blade is drawn.
+    design: Will+1 (14) for 4 points, Average.
+  - name: First Aid
+    diff: IQ/E
+    points: 1
+    tags: [Xenos, Aeldari]
+    lore: Carried over from Guardian training.
+    design: IQ+0 (12) for 1 point, Easy.
+  - name: Hidden Lore
+    spec: (the Warp)
+    diff: IQ/A
+    points: 1
+    tags: [Xenos, Aeldari, Psyker]
+    lore: Carried over from Guardian training.
+    design: IQ-1 (11) for 1 point, Average.
+  - name: Survival
+    spec: (Craftworld/Webway)
+    diff: Per/A
+    points: 2
+    tags: [Xenos, Aeldari]
+    lore: Carried over from Guardian training.
+    design: Per+0 (13) for 2 points, Average.
