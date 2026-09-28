@@ -34,3 +34,4 @@ Anchor and rule changes to `framework.md`, with the reason for each.
 - **Necron anchors added** (natural necrodermis DR from Warrior 50 to Overlord 100; Reanimation Protocols; gauss flayer 6d(3) burn).
 - **Gauss divisor (3) → (4)**: the anchor's own description (strips flak and carapace) needed (4); at (3) a gauss flayer got through carapace only 28% of the time.
 - **Aeldari speed** (user direction): ancestry Basic Move +3 and Enhanced Move 1/2; Aspect Training a further Basic Move +2. Guardian Move 9, Aspect Warrior and Exarch Move 12.
+- **Tyranid anchors added** (bioforms from Termagant to Carnifex; chitin DR 25-150; weapon-symbiotes as traits; synapse and Shadow in the Warp; rending claws).
