@@ -1,7 +1,7 @@
 {
 	"version": 5,
 	"id": "BJmxoXDKj-dg-Z4xJ",
-	"notes": "Baseline Astra Militarum trooper: an unaugmented human, drilled and issued a lasgun, not a superhuman. Point math (see each entry's `design` field for the derivation): ST 11 (+10), DX 13 (+60), IQ 10 (+0), HT 12 (+20) = 90; advantages +20; disadvantages -47; skills +39. Total 102 points, the low end of framework.md's \"Trained soldier (100-175)\" tier — a rank-and-file conscript-veteran, not a sergeant or storm trooper. Raise DX/HT and buy more skill levels to build a veteran or NCO from this base; add Military Rank (Imperium/Traits/ Imperial Traits.adq) for an officer or sergeant. No psychic abilities here — a Guardsman almost never has them, and if a GM wants a battlefield psyker attached to a squad, add traits from the separate psyker power library, not this file. Enable exactly one regimental lens and, optionally, one world-of-origin lens (all disabled by default) to flavor a specific regiment/background; they are small, net-zero-point packages, not full racial templates, per framework.md's \"lore accuracy over mechanical weight\" for background flavor. Shared traits (Fanaticism, Duty, Intolerance, the origin lenses) are pulled in with `include` from Imperium/Traits/Imperial Traits.adq rather than copied, per docs/data-format.md's \"Reusing entries across files\".\n",
+	"notes": "Baseline Astra Militarum trooper: an unaugmented human, drilled and issued a lasgun, not a superhuman. Point math (see each entry's `design` field for the derivation): ST 11 (+10), DX 12 (+40), IQ 10 (+0), HT 12 (+20) = 70; advantages +20; disadvantages -47; skills +39. Total 82 points, just under framework.md's \"Trained soldier (100-175)\" tier after the user set Guardsman DX to 12 — a rank-and-file trooper, not a sergeant or storm trooper. Raise DX/HT and buy more skill levels to build a veteran or NCO from this base; add Military Rank (Imperium/Traits/ Imperial Traits.adq) for an officer or sergeant. No psychic abilities here — a Guardsman almost never has them, and if a GM wants a battlefield psyker attached to a squad, add traits from the separate psyker power library, not this file. Enable exactly one regimental lens and, optionally, one world-of-origin lens (all disabled by default) to flavor a specific regiment/background; they are small, net-zero-point packages, not full racial templates, per framework.md's \"lore accuracy over mechanical weight\" for background flavor. Shared traits (Fanaticism, Duty, Intolerance, the origin lenses) are pulled in with `include` from Imperium/Traits/Imperial Traits.adq rather than copied, per docs/data-format.md's \"Reusing entries across files\".\n",
 	"traits": [
 		{
 			"id": "tMmDXs33nXNjyHrQU",
@@ -22,16 +22,16 @@
 		{
 			"id": "tzgwfFFTqJ0ncXrcR",
 			"name": "DX",
-			"local_notes": "Lore: Basic training drills reflexes and weapon-handling hard; Imperial Guard doctrine (per Only War's calibration and countless Gaunt's Ghosts firefights) assumes competent, not exceptional, marksmanship from line infantry.\n\nDesign: DX 13 (+3 from baseline), 20 pts/level (B15).",
+			"local_notes": "Lore: Basic training drills reflexes and weapon-handling hard; Imperial Guard doctrine (per Only War's calibration and countless Gaunt's Ghosts firefights) assumes competent, not exceptional, marksmanship from line infantry.\n\nDesign: DX 12 (+2 from baseline, lowered from 13 at the user's direction), 20 pts/level (B15).",
 			"tags": [
 				"Attribute"
 			],
-			"base_points": 60,
+			"base_points": 40,
 			"features": [
 				{
 					"type": "attribute_bonus",
 					"attribute": "dx",
-					"amount": 3
+					"amount": 2
 				}
 			]
 		},
