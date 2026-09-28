@@ -108,12 +108,12 @@ items:
       symbiote's living ammunition rather than a magazine.
 
   - name: Spinefists
-    points: 31
+    points: 40
     ref: B61
     tags: [Advantage, Physical, Xenos, Tyranids]
     weapons:
       - usage: Standard
-        damage: 3d pi+
+        damage: 3d(2) pi+
         acc: 1
         range: 60/180
         rof: 6
@@ -132,15 +132,19 @@ items:
       shoot on the move. Codex: Tyranids background consistently frames
       Spinefists as a "spray and pray" weapon rather than a precision one.
     design: >-
-      Framework.md's own anchor: "Spinefists | 3d pi+ spines, RoF 6."
-      Innate Attack (Large Pierce) (B61, 6/die) at 3 dice = 18, with Rapid
-      Fire (B105, RoF 5-8 bracket, +70%): 18x1.7=30.6, rounded to 31.
-      Checked by exact dice distribution: 3d pi+ averages 10.5 and rounds
-      to 0% against flak (DR 30) or anything heavier on any single spine —
+      Framework.md's own anchor (updated after flak went to DR 30, for the
+      same reason as the Fleshborer above): "Spinefists | 3d(2) pi+
+      spines, RoF 6." Innate Attack (Large Pierce) (B61, 6/die) at 3 dice
+      = 18, with Armor Divisor (2) (B102, +50%) and Rapid Fire (B105, RoF
+      5-8 bracket, +70%): net +120%, 18x2.2=39.6, rounded to 40. Checked by
+      exact dice distribution: 3d(2) pi+ averages 10.5 and penetrates flak
+      (DR 30, eff. 15) 4.6% of the time per spine, and rounds to 0% against
+      carapace (DR 70) or anything heavier — still a weak single hit,
       exactly the "sprays a swarm of weak hits" role the anchor's own low
       dice count implies; the weapon's actual threat at the table comes
-      from RoF 6 giving several rolls to fish for an unarmoured hit or a
-      Weak Points chink, not from any one spine's own punch. Handling: Acc
+      from RoF 6 giving several rolls to fish for an unarmoured hit, a Weak
+      Points chink, or now an occasional flak penetration, not from any one
+      spine's own punch. Handling: Acc
       1 (a spray weapon, the lowest bracket this project uses, matching an
       Ork shoota's own crude accuracy for the same reason: volume over
       precision) and a short 60/180 range, both this project's own estimate
@@ -148,12 +152,12 @@ items:
       regrowth for the lighter, faster-cycling spine-glands.
 
   - name: Devourer
-    points: 70
+    points: 88
     ref: B61
     tags: [Advantage, Physical, Xenos, Tyranids]
     weapons:
       - usage: Standard
-        damage: 4d(2) pi++
+        damage: 5d(2) pi++
         acc: 3
         range: 150/450
         rof: 8
@@ -162,29 +166,32 @@ items:
         defaults: ["Innate Attack (Projectile)", "DX-4"]
         notes: >-
           ST-independent, fused to the arm. Shots regrow from the bearer's
-          brain-leech glands over the listed time.
+          boring-worm glands over the listed time.
     lore: >-
-      A heavier gun-arm that hurls squirming, brain-leech-like worms deep
-      into a wound at automatic-weapon speed, favoured by Tyranid Warriors
-      and Hive Tyrants who want sustained close-range firepower rather than
-      a single hard-hitting shot. Codex: Tyranids background places it a
+      A heavier gun-arm that hurls squirming, burrowing worms deep into a
+      wound at automatic-weapon speed, favoured by Tyranid Warriors and
+      Hive Tyrants who want sustained close-range firepower rather than a
+      single hard-hitting shot. Codex: Tyranids background places it a
       clear step above the Fleshborer/Spinefists family and roughly level
       with an Astra Militarum autogun in raw stopping power, made up for by
       its far higher rate of fire.
     design: >-
-      Framework.md's own anchor: "Devourer | Brain-leech worms: 4d(2)
-      pi++, RoF 8." Innate Attack (Huge Pierce) (B61, 8/die) at 4 dice = 32,
+      Framework.md's own anchor (updated after flak went to DR 30, for the
+      same reason as the Fleshborer above): "Devourer | Boring worms:
+      5d(2) pi++." Innate Attack (Huge Pierce) (B61, 8/die) at 5 dice = 40,
       with Armor Divisor (2) (B102, +50%) and Rapid Fire (B105, RoF 5-8
-      bracket, +70%): net +120%, 32x2.2=70.4, rounded to 70. Checked by
-      exact dice distribution: 4d(2) pi++ averages 14 and penetrates flak
-      (DR 30, eff. 15) 33.6% of the time and rounds to 0% against carapace
-      (DR 70, eff. 35) or heavier — a real but unspectacular threat to
-      lightly-armoured infantry per shot, exactly matching "roughly autogun-
-      class" (framework's own autogun anchor penetrates flak 9% per shot);
-      RoF 8 is what makes a Warrior's Devourer a genuine threat in practice.
-      Handling: Acc 3 and 150/450 range, this project's own rifle-class
-      estimate for a Warrior-scale gun-arm; Shots 12(20), a shorter,
-      20-second regrowth for the faster-cycling brood.
+      bracket, +70%): net +120%, 40x2.2=88. Checked by exact dice
+      distribution: 5d(2) pi++ averages 17.5 and penetrates flak (DR 30,
+      eff. 15) 69.5% of the time and rounds to 0% against carapace (DR 70,
+      eff. 35) or heavier — now a genuinely reliable threat to flak-armoured
+      infantry per shot, well past the old 4d(2) figure's 33.6% and past
+      even the framework's own autogun anchor (9% vs flak), matching a
+      "boring worms" weapon meant to chew through soft armour outright;
+      RoF 8 then stacks on top of that already-solid per-shot chance,
+      making a Warrior's Devourer a serious threat to anything short of
+      carapace. Handling: Acc 3 and 150/450 range, this project's own
+      rifle-class estimate for a Warrior-scale gun-arm; Shots 12(20), a
+      shorter, 20-second regrowth for the faster-cycling brood.
 
   - name: Deathspitter
     points: 180
