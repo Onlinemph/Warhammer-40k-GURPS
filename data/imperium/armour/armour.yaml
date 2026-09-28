@@ -8,7 +8,7 @@ items:
     cost: 200
     weight: 8
     tags: [Body Armor, Imperium, Astra Militarum]
-    dr: {"torso,vitals,groin": 12, "skull,face,eye,neck,arm,hand,leg,foot": 0}
+    dr: {"torso,vitals,groin": 18, "skull,face,eye,neck,arm,hand,leg,foot": 0}
     notes: Covers torso only. Worn over fatigues; does not interfere with Stealth the way rigid plate does.
     lore: >-
       The standard-issue ballistic vest of the Astra Militarum: overlapping plasteel or ceramic
@@ -16,34 +16,32 @@ items:
       (e.g. the Gaunt's Ghosts and Ciaphas Cain series) as adequate against shrapnel and stubber
       fire but routinely shrugged past by las-weapons at range and always by bolt weapons.
     design: >-
-      Torso DR set to the fixed Flak anchor (framework.md, Rescale: "Flak (vest/jacket) | 12"). No
-      coverage elsewhere: a vest by definition stops at the shoulders and waist. Cost and weight are
-      reasoned estimates (no anchor given) scaled below Mesh and well below Carapace.
-
+      Torso DR 18, the framework's flak anchor (raised from 12 at the user's direction to make
+      Guard armour tougher). A lasgun (7d(2), eff. DR 9) always penetrates; an autopistol (2d+2)
+      rarely does. No coverage elsewhere: a vest stops at the shoulders and waist. Cost and weight
+      are estimates scaled below mesh and well below carapace.
   - name: Flak Jacket
     tl: 10
     lc: 3
     cost: 250
     weight: 10
     tags: [Body Armor, Imperium, Astra Militarum]
-    dr: {"torso,vitals,groin": 12, arm: 9, "skull,face,eye,neck,hand,leg,foot": 0}
+    dr: {"torso,vitals,groin": 18, arm: 14, "skull,face,eye,neck,hand,leg,foot": 0}
     notes: Sleeved version of the flak vest; partial arm coverage from the short armoured sleeves.
     lore: >-
       A sleeved variant of the vest, common where regiments expect close-quarters or urban combat
       and want some forearm protection against shrapnel and blades. Seen in Imperial Guard art and
       background across multiple Codex Astra Militarum editions.
     design: >-
-      Torso DR unchanged from the Flak anchor (12). Arm coverage is new territory with no anchor, so
-      it is set a few points below torso (9), following framework.md's guidance that "limbs are
-      usually a few DR below torso."
-
+      Torso DR 18 (flak anchor). Arms 14, a few points below torso per the framework's limb
+      convention, keeping the 3:4 limb-to-torso ratio of the earlier build.
   - name: Flak Coat, Death Korps Pattern
     tl: 10
     lc: 3
     cost: 320
     weight: 15
     tags: [Body Armor, Imperium, Astra Militarum]
-    dr: {"torso,vitals,groin": 12, arm: 9, leg: 9, "skull,face,eye,neck,hand,foot": 0}
+    dr: {"torso,vitals,groin": 18, arm: 14, leg: 14, "skull,face,eye,neck,hand,foot": 0}
     notes: >-
       Ankle-length greatcoat with a quilted flak liner; often worn with a Death Korps gas-hood
       (see Respirator, Imperial Field Gear) rather than a separate helmet.
@@ -53,18 +51,15 @@ items:
       coat rather than a vest, reflecting the regiment's siege-warfare and toxic-battlefield
       doctrine.
     design: >-
-      Same torso DR as the Flak anchor (12); the coat's greater bulk buys leg coverage that the
-      vest and jacket lack, not extra torso DR (flak plate is flak plate regardless of cut). Leg
-      and arm DR set at the same "a few below torso" offset (9) as the Flak Jacket for consistency
-      across the family.
-
+      Torso DR 18 (flak anchor); the coat's extra length buys leg coverage, not thicker plate.
+      Arms and legs 14, matching the Flak Jacket.
   - name: Flak Armour, Full Suit (Cadian Pattern)
     tl: 10
     lc: 3
     cost: 420
     weight: 18
     tags: [Body Armor, Imperium, Astra Militarum]
-    dr: {"torso,vitals,groin": 12, arm: 9, leg: 9, "skull,face,eye,neck,hand,foot": 0}
+    dr: {"torso,vitals,groin": 18, arm: 14, leg: 14, "skull,face,eye,neck,hand,foot": 0}
     notes: >-
       Vest, pauldrons and leggings worn as a matched set; pairs with the Flak Helmet below for full
       coverage. The Cadian pattern (moulded breastplate over a grey bodyglove) is the Munitorum's
@@ -77,28 +72,24 @@ items:
       shirtless carapace-less troopers who often forgo the torso plate altogether for heat and
       mobility.
     design: >-
-      Identical DR profile to the Flak Jacket/Coat family: the anchor fixes torso at 12 regardless
-      of cut, so "full suit" buys completeness (a matched, better-fitted kit issued as one line
-      item) rather than a higher number. Regimental variation is a lore/flavour note, not a stat
-      change, per framework.md's instruction that tabletop/background colour orders things but
-      doesn't set absolute values.
-
+      Same profile as the Flak Coat: torso 18 (flak anchor), arms and legs 14. The full suit buys
+      a matched, fitted kit rather than a higher number; regimental variation is flavour, not
+      stats.
   - name: Flak Helmet, Cadian Pattern
     tl: 10
     lc: 3
     cost: 60
     weight: 3
     tags: [Body Armor, Imperium, Astra Militarum]
-    dr: {skull: 10, "face,eye,neck,torso,vitals,groin,arm,hand,leg,foot": 0}
+    dr: {skull: 15, "face,eye,neck,torso,vitals,groin,arm,hand,leg,foot": 0}
     notes: Open-faced; no eye or face protection. Some patterns (Mordian, Death Korps) add a neck flap worth a point or two of DR at the GM's discretion.
     lore: >-
       The classic Guard helmet: a domed plasteel/ceramite shell with a chinstrap and no visor,
       seen across nearly every piece of Astra Militarum art and background from the Uplifting
       Primer excerpts onward.
     design: >-
-      Skull DR taken directly from the anchor ("Flak helmet DR 10", framework.md). Open face is a
-      lore call (Guard helmets are consistently drawn without a visor) rather than a numeric
-      derivation.
+      Skull DR 15, the framework's flak helmet anchor. Open face is a lore call: Guard helmets are
+      consistently drawn without a visor.
 
   # ---------------------------------------------------------------- Mesh
   - name: Mesh Armour
@@ -107,7 +98,7 @@ items:
     cost: 1600
     weight: 6
     tags: [Body Armor, Imperium, Imperium]
-    dr: {"torso,vitals,groin": 15, arm: 12, leg: 12, neck: 9, "skull,face,eye,hand,foot": 0}
+    dr: {"torso,vitals,groin": 22, arm: 18, leg: 18, neck: 13, "skull,face,eye,hand,foot": 0}
     notes: >-
       Flexible armour: treat blunt/crushing damage that fails to penetrate as normal per the
       flexible-armour rule (blunt trauma still applies even when DR stops the attack).
@@ -117,11 +108,9 @@ items:
       across Dark Heresy/Rogue Trader-line background and hive-noble scenes in Black Library
       fiction (e.g. Ravenor, Eisenhorn) as concealable and comfortable but not rigid.
     design: >-
-      Torso DR taken directly from the anchor ("Mesh | 15, flexible", framework.md). Flexible
-      armour uses GURPS's standard flexible-armour interaction (Basic Set): it stops penetration
-      but not blunt trauma, called out explicitly in `notes` since GCS doesn't encode that rule
-      automatically. Limb/neck DR follow the "a few below torso" convention; hands, feet, and head
-      are uncovered because this is a bodysuit worn under clothes, not a suit of plate.
+      Torso DR 22, the framework's mesh anchor, flexible (GURPS flexible-armour rules: stops
+      penetration, not blunt trauma; see notes). Arms and legs 18, neck 13, keeping the earlier
+      limb ratios. Hands, feet and head uncovered: a bodysuit worn under clothes.
 
   # ---------------------------------------------------------------- Carapace
   - name: Carapace Armour, Guard Pattern
@@ -130,7 +119,7 @@ items:
     cost: 1800
     weight: 30
     tags: [Body Armor, Imperium, Astra Militarum]
-    dr: {"torso,vitals,groin": 45, arm: 34, leg: 34, neck: 34, skull: 41, face: 23, eye: 18, hand: 0, foot: 23}
+    dr: {"torso,vitals,groin": 60, arm: 45, leg: 45, neck: 45, skull: 55, face: 31, eye: 24, hand: 0, foot: 31}
     notes: Rigid plate over a padded underlayer; imposes the usual GURPS bulky-armour DX/Stealth penalties for rigid heavy armour.
     lore: >-
       Moulded plasteel plate issued to elite Guard formations (storm troopers historically, tank
@@ -138,19 +127,17 @@ items:
       Only War and Dark Heresy background consistently place carapace a clear step above flak and
       a clear step below power armour, which the anchor table encodes directly.
     design: >-
-      Torso DR taken from the fixed Carapace anchor (45, "stops stub rounds; stops most lasgun
-      hits; a hellgun or bolter goes through"). Head/neck/limb DR scaled down from that anchor
-      (×2.25 over the pre-Rescale figures) using the "few DR below torso" rule, with the helmet
-      close to torso (rigid full-coverage helms are typically as thick as the torso plate) and
-      hands left uncovered (gauntlets are a separate, optional piece not modelled here).
-
+      Torso DR 60, the framework's carapace anchor (raised from 45 at the user's direction). Exact
+      odds: lasgun 7d(2) penetrates 9%, hellgun 8d(3) 94%, human-scale bolter 90%. Arms, legs and
+      neck 45, skull 55, face and feet 31, eye 24, keeping the earlier location ratios; hands
+      uncovered (gauntlets are separate).
   - name: Carapace Armour, Tempestus Pattern
     tl: 10
     lc: 1
     cost: 2600
     weight: 32
     tags: [Body Armor, Imperium, Astra Militarum]
-    dr: {"torso,vitals,groin": 45, arm: 41, leg: 41, neck: 41, skull: 45, face: 27, eye: 23, hand: 23, foot: 27}
+    dr: {"torso,vitals,groin": 60, arm: 55, leg: 55, neck: 55, skull: 60, face: 36, eye: 31, hand: 31, foot: 36}
     notes: Void-sealed; can be worn in vacuum or toxic atmosphere for short periods without a separate rebreather. Rigid heavy armour DX/Stealth penalties apply.
     lore: >-
       The maroon-and-grey carapace of the Tempestus Scions (and their forerunners, Storm Troopers)
@@ -159,20 +146,17 @@ items:
       the hands, feet and joints that standard-issue kit leaves open, and rated for drop-pod and
       high-altitude insertion.
     design: >-
-      Torso DR held at the same fixed Carapace anchor (45) — the anchor is a category value, not a
-      unit-quality slider, so elite carapace doesn't simply get a bigger number. Instead its
-      advantage is modelled as more complete coverage: hands and feet are protected (unlike the
-      Guard pattern), and neck/limb DR sit closer to torso, representing tighter, better-forged
-      fit rather than thicker plate. All non-torso figures scale from the Guard pattern's own
-      Rescale-era values by the same ×2.25 the anchor itself moved by.
-
+      Torso DR 60 (carapace anchor). Elite carapace isn't a thicker category; its edge is
+      coverage: hands and feet protected, and limbs and neck (55) sit closer to torso than the
+      Guard pattern's, for tighter, better-forged fit. Skull 60, face and feet 36, eye and hands
+      31.
   - name: Carapace Armour, Arbites Pattern
     tl: 10
     lc: 2
     cost: 2400
     weight: 34
     tags: [Body Armor, Imperium, Adeptus Arbites]
-    dr: {"torso,vitals,groin": 45, arm: 36, leg: 36, neck: 41, skull: 45, face: 34, eye: 23, hand: 23, foot: 27}
+    dr: {"torso,vitals,groin": 60, arm: 48, leg: 48, neck: 55, skull: 60, face: 45, eye: 31, hand: 31, foot: 36}
     notes: >-
       Full-face armoured mask standard; the enclosed helm and shoulder guards read as unmistakably
       Arbites on sight, which the GM may use for Intimidation or Fast-Talk reaction penalties
@@ -184,11 +168,9 @@ items:
       the wearer. Depicted in Black Library's Arbites fiction (Warhammer Crime line, Fleshworks/
       Bloodlines) and Codex/Necromunda background.
     design: >-
-      Torso DR at the fixed Carapace anchor (45), matching every other carapace-tier suit. The
-      Arbites cut differs from the Guard pattern in the same way the Tempestus pattern does — full
-      head enclosure and hand/foot coverage — reflecting a design built for point-blank
-      hab-clearance work rather than trench warfare, per its background rather than any stat bump.
-      Non-torso figures scale ×2.25 from the pre-Rescale values, as with the other carapace suits.
+      Torso DR 60 (carapace anchor). Like the Tempestus pattern it adds full head enclosure and
+      hand/foot coverage for close-quarters hab clearance: limbs 48, neck 55, skull 60, face 45,
+      feet 36, eye and hands 31.
 
   # ---------------------------------------------------------------- Sororitas
   - name: Power Armour, Adepta Sororitas
@@ -546,7 +528,7 @@ items:
     cost: 8000
     weight: 40
     tags: [Body Armor, Imperium, Adeptus Astartes]
-    dr: {"torso,vitals,groin": 50, leg: 23, "skull,face,eye,neck,arm,hand,foot": 0}
+    dr: {"torso,vitals,groin": 67, leg: 31, "skull,face,eye,neck,arm,hand,foot": 0}
     notes: >-
       Unpowered partial plate: chestpiece, backplate and a groin/thigh guard worn over fatigues,
       with no helmet, gauntlets or servo-motors. Does not require the black carapace interface,
@@ -559,12 +541,10 @@ items:
       Library's Scout-focused fiction (the Raven Guard and Space Wolves Scout novels among others)
       and current Codex Space Marines background.
     design: >-
-      No power-armour anchor applies here since this is explicitly not full plate; torso DR scales
-      from Carapace (the anchor's 45, ×2.25 over the pre-Rescale figure) plus the same small
-      premium for Astartes-grade materials as before, at 50. Coverage is deliberately incomplete
-      (no head, arm, hand or foot protection, partial leg only) to reflect the "half-armoured,
-      half-fatigues" silhouette Scouts are consistently drawn with, and there is no servo-motor ST
-      bonus because the suit carries no powered assistance.
+      Not full plate, so no power-armour anchor applies. Torso DR 67: the carapace anchor (60)
+      plus the same small premium for Astartes-grade materials as before. Coverage is deliberately
+      partial (legs 31; no head, arm, hand or foot plate) for the half-armoured silhouette Scouts
+      are drawn with. No servo-motor ST bonus: the suit is unpowered.
 
   # ---------------------------------------------------------------- Tactical Dreadnought (Terminator) armour
   - name: Tactical Dreadnought Armour, Indomitus Pattern
