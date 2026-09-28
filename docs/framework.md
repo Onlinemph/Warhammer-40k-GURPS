@@ -288,7 +288,7 @@ Aeldari psychic powers use the same Sorcery model as Imperial psykers, but the A
 
 | Aeldari gear | Anchor |
 |---|---|
-| Shuriken catapult | Monomolecular discs: 5d(3) cut, RoF 10, short range (about 12/60 yd ½D/Max). Shreds flesh and flak; bites carapace sometimes; can't hurt power armour except on a Weak Point. |
+| Shuriken catapult | Monomolecular discs: 5d(3) cut, RoF 10, short range (60/300 yd ½D/Max, pistol 60/150, Avenger 80/400): well under a lasgun's reach, as in the lore, where shuriken weapons trade range for lethality. Shreds flesh and flak; bites carapace sometimes; can't hurt power armour except on a Weak Point. |
 | Avenger shuriken catapult | 5d(3) cut, longer range, higher RoF |
 | Shuriken cannon | 7d(3) cut, RoF 15 |
 | Lasblaster | 7d(2) burn, rapid |
