@@ -63,10 +63,10 @@ GURPS real-world baseline for scale: a modern soft vest with ceramic plate is ro
 | Armour | Torso DR | Notes |
 |---|---|---|
 | Unarmoured | 0 | |
-| Flak (vest/jacket) | 18 | Stops shrapnel and many pistol rounds. Lasgun and autogun hits get through; bolts always do. Flak helmet DR 15. |
-| Mesh | 22, flexible | Hive-noble and assassin wear. Flexible: blunt trauma applies. |
-| Carapace | 60 | Rigid plate. Stops stub rounds; stops about nine lasgun hits in ten; a hellgun or bolter goes through. |
-| Adepta Sororitas power armour | 70 | Lighter than Astartes plate. A bolter penetrates about four shots in five. |
+| Flak (vest/jacket) | 30 | User's figure. Stops shrapnel, pistol rounds and most solid slugs (autogun 9%). Lasgun hits get through (98%); bolts always do. Flak helmet DR 25. |
+| Mesh | 36, flexible | Hive-noble and assassin wear. Flexible: blunt trauma applies. |
+| Carapace | 70 | User's figure. Rigid plate, near-immune to las (lasgun 0.6%, long-las 6%); a hellgun (82%) or bolter (79%) goes through. |
+| Adepta Sororitas power armour | 85 | Raised with carapace so power armour stays above it; lighter than Astartes plate. A bolter penetrates 45%. |
 | Astartes power armour (Mk VII baseline) | 100 | Ignores las and stub fire. A bolter penetrates about one shot in seven. Limbs a little lower. Eye lenses DR 50. Marks vary ±10–15 around this. |
 | Mk X Gravis | 130 | Between power armour and Terminator plate. |
 | Tactical Dreadnought (Terminator) | 200 | Ignores bolters. Plasma, lascannon, power fist and thunder hammer still kill. |
@@ -98,10 +98,10 @@ Vehicle void shields will use the same rules at larger scale.
 | Weapon | Damage | What it has to do |
 |---|---|---|
 | Laspistol | 4d(2) burn | Kills an unarmoured man in 1–2 hits. |
-| Autogun | 7d pi | Lasgun parity against flesh: equally lethal in the fiction and Only War. Stopped by carapace. |
-| Lasgun | 7d(2) burn | User's figure. Always punches flak; penetrates carapace (eff. DR 30) about one hit in ten. Useless against power armour. |
+| Autogun | 7d pi | Equal to a lasgun against flesh; flak (DR 30) stops most slugs (9% get through), carapace all of them. |
+| Lasgun | 7d(2) burn | User's figure. Punches flak (98%); almost never carapace (0.6%). Useless against power armour. |
 | Long-las | 8d(2) burn | Sniper. |
-| Hellgun / hot-shot | 8d(3) burn | Built to beat carapace (eff. DR 20): 94%. |
+| Hellgun / hot-shot | 8d(3) burn | Built to beat carapace (eff. DR 23): 82%. |
 | Boltgun (Godwyn/standard) | 6d×2(2) pi++, follow-up 6d cr ex | Turns an unarmoured man to paste; always penetrates carapace. Against Astartes power armour (eff. DR 50) penetrates about one shot in seven (14%): a Marine takes several bolts to kill another Marine. |
 | Human-scale boltgun / bolt pistol | 6d×2(2) pi, follow-up 3d cr ex / 5d×2(2) pi, follow-up 2d cr ex | Sororitas, Inquisition and Commissar pattern: smaller bolts with a lighter mass-reactive charge (user direction). |
 | Heavy bolter | 7d×2(2) pi++, follow-up 8d cr ex | Chews light vehicles (AV10, eff. DR 50) about 40% of the time. |

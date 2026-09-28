@@ -22,3 +22,4 @@ Anchor and rule changes to `framework.md`, with the reason for each.
 - **Weapon handling rules added** (user feedback: RoF 3 and ST 11 had been copied across weapons without reason, and Astartes boltguns needed only ST 11). Framework now derives weight, min ST, RoF, Shots, Bulk, Recoil and Acc per weapon.
 - **Human-scale bolt weapons** use pi instead of pi++ and a smaller follow-up (boltgun 3d, pistol 2d cr ex) (user direction). Melee handling stats audited alongside ranged.
 - **Guard armour tougher and lasgun 7d(2)** (user direction): flak 12 → 18 (helmet 15), mesh 15 → 22, carapace 45 → 60; laspistol 4d(2), lasgun 7d(2), long-las 8d(2), hellgun 8d(3), autogun 7d pi. Lasgun vs carapace stays about 9%.
+- **Flak 30, carapace 70** (user direction; mesh 36, flak helmet 25, scout armour 77). **Sororitas power armour 70 → 85** so it stays above carapace. Lasgun vs carapace drops to 0.6%; flak now stops most autogun rounds (9% penetrate).
