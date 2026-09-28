@@ -1,0 +1,94 @@
+kind: template
+output: Xenos/Orks/Templates/Ork Nob.gct
+notes: >
+  A Nob: a Boy who kept fighting and kept growing, now the mob's natural
+  bodyguard or squad boss. Point math: Ork Physiology 179 + Growth Lens:
+  Nob 74 + skills 29 = 282 points. Stats: ST 26, DX 11, IQ 9, HT 14, HP 32,
+  Will 9, Per 9, SM 0 — framework.md's Nob anchor line exactly. Sits
+  toward the top of "Elite human" (200-350): tougher and a little sharper
+  than a Boy, still well short of a Warboss. Enable "Big Nob (SM +1)"
+  (inside the Growth Lens: Nob include below) for an especially large,
+  older Nob per framework.md's "(+1 for big ones)" note; enable at most
+  one Klan lens for flavor.
+traits:
+  - include: "xenos/orks/traits.yaml#Ork Physiology"
+  - include: "xenos/orks/traits.yaml#Growth Lens: Nob"
+  - include: "xenos/orks/traits.yaml#Klan: Blood Axe"
+    disabled: true
+  - include: "xenos/orks/traits.yaml#Klan: Snakebite"
+    disabled: true
+  - include: "xenos/orks/traits.yaml#Klan: Evil Sunz"
+    disabled: true
+  - include: "xenos/orks/traits.yaml#Klan: Deathskulls"
+    disabled: true
+  - include: "xenos/orks/traits.yaml#Klan: Goffs"
+    disabled: true
+  - include: "xenos/orks/traits.yaml#Klan: Bad Moons"
+    disabled: true
+  - include: "xenos/orks/traits.yaml#Klan: Freebooterz"
+    disabled: true
+skills:
+  - name: Axe/Mace
+    spec: Choppa
+    diff: DX/A
+    points: 4
+    tags: [Xenos, Orks]
+    lore: A Nob's choppa is bigger and better-kept than a common Boy's.
+    design: DX+1 (12) for 4 points, Average.
+  - name: Guns
+    spec: Rifle
+    diff: DX/E
+    points: 8
+    tags: [Xenos, Orks]
+    lore: A Nob has been shooting longer and better than the Boyz he bosses.
+    design: DX+3 (14) for 8 points, Easy.
+  - name: Brawling
+    diff: DX/E
+    points: 2
+    tags: [Xenos, Orks]
+    lore: A veteran brawler, even by Ork standards.
+    design: DX+1 (12) for 2 points, Easy.
+  - name: Leadership
+    diff: IQ/A
+    points: 4
+    tags: [Xenos, Orks]
+    lore: A Nob bosses the Boyz around a mob answers to, more by fist and reputation than by any formal rank.
+    design: IQ+1 (10) for 4 points, Average.
+  - name: Tactics
+    diff: IQ/H
+    points: 2
+    tags: [Xenos, Orks]
+    lore: Enough small-mob sense to know when to push and when to flank, sharpened further by Ork Kunnin'.
+    design: IQ-1 (8) for 2 points, Hard.
+  - name: Intimidation
+    diff: Will/A
+    points: 4
+    tags: [Xenos, Orks]
+    lore: A Nob keeps the Boyz in line the same way it keeps enemies flinching.
+    design: Will+1 (10) for 4 points, Average.
+  - name: Survival
+    spec: (Ork Worlds)
+    diff: Per/A
+    points: 2
+    tags: [Xenos, Orks]
+    lore: See the Ork Boy template.
+    design: Per+0 (9) for 2 points, Average.
+  - name: Carousing
+    diff: HT/E
+    points: 1
+    tags: [Xenos, Orks]
+    lore: See the Ork Boy template.
+    design: HT+0 (14) for 1 point, Easy.
+  - name: Armoury
+    spec: (Ork Tech)
+    diff: IQ/A
+    points: 1
+    tags: [Xenos, Orks]
+    lore: A Nob keeps its own gear in fighting shape between Mek visits.
+    design: IQ-1 (8) for 1 point, Average.
+  - name: Streetwise
+    diff: IQ/A
+    points: 1
+    tags: [Xenos, Orks]
+    lore: Knowing the mob's own pecking order, grudges and rackets.
+    design: IQ-1 (8) for 1 point, Average.

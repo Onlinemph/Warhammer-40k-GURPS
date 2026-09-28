@@ -1,0 +1,98 @@
+kind: template
+output: Xenos/Orks/Templates/Ork Weirdboy.gct
+notes: >
+  A Weirdboy: an Ork psyker, built on the same Thaumatology: Sorcery
+  chassis as every other psyker in this project (Imperium/Traits/Psykers
+  and the Warp.adq), reskinned Ork-flavour and gated by Warp Empowerment
+  exactly as an Astropath or Librarian is, just tuned for raw destructive
+  power over control. A Weirdboy near a WAAAGH! (framework.md's WAAAGH!
+  Gestalt trait, included as part of Ork Physiology below) treats his own
+  Warp Empowerment as one level higher for the purpose of which known
+  powers he may safely reach for — the mechanical reason Weirdboyz cut
+  loose with Da Jump and Fists of Gork mid-battle instead of only in
+  careful isolation, and why an isolated Weirdboy is far less dangerous
+  than one embedded in his mob.
+
+  Perils of the Warp is unchanged from the human-scale rules (Imperium/
+  Traits/Psykers and the Warp.adq): Catastrophic failure (fail the Will
+  roll by 10+, or roll an unmodified 18) is, for a Weirdboy specifically,
+  the setting's own trope of an exploding head — Codex background and
+  Black Library both play a Weirdboy's head literally detonating as a
+  routine occupational hazard, not a narrative rarity. Ork society's usual
+  answer is to keep a Painboy or Mek "attendant" nearby with tools (a
+  wrench, a shock-lash, sometimes a special hat) to relieve the pressure
+  before it gets that far — flavour for play, not a separate mechanic.
+
+  Point math: Ork Physiology 179 + psychic package 93 (10 Unusual
+  Background + 20 Psyker Talent 2 + 60 Warp Empowerment 5 + 8 Witch-sight
+  - 5 Social Stigma) + powers 92 modified (7 'Eadbanger x2 + 7 Fists of
+  Gork x2 + 18 Warpath + 60 Da Jump) + skills 11 = 375 points, inside
+  framework.md's Senior Agents / low Astartes-adjacent range — a rare,
+  powerful, and dangerous Ork specialist, matching how the fiction treats
+  a proper Weirdboy as a small strategic asset (or liability) in his own
+  right. Da Jump alone needs Warp Empowerment's full level-5 cap (60) with
+  no headroom to spare; a "young," less-developed Weirdboy who hasn't
+  grown into Da Jump yet should drop Warp Empowerment to level 2 (cap 30,
+  saving 30 points) and disable Da Jump until later.
+traits:
+  - include: "xenos/orks/traits.yaml#Ork Physiology"
+  - include: "imperium/psykers/warp.yaml#Unusual Background (Latent Psychic Potential)"
+  - include: "imperium/psykers/warp.yaml#Psyker"
+    levels: 2
+  - include: "imperium/psykers/warp.yaml#Warp Empowerment"
+    levels: 5
+  - include: "imperium/psykers/warp.yaml#Witch-sight"
+  - name: "Social Stigma (Dangerous 'Ead)"
+    points: -5
+    ref: B155
+    tags: [Disadvantage, Social, Xenos, Orks]
+    notes: Second-Class Citizen-equivalent, within Ork society specifically.
+    lore: >
+      Other Orks respect a Weirdboy's power and are visibly nervous around
+      it in the same breath — nobody wants to be standing too close when
+      the "funny feeling" starts, and a Weirdboy is watched, humoured, and
+      occasionally "helped" by a Painboy's tools rather than fully trusted.
+    design: >
+      Basic Set Social Stigma (Second-Class Citizen)-tier cost (B155), -5
+      points, reused here for the narrower "everyone's a little afraid of
+      you and it shows" social cost, distinct from the Imperium's own
+      Sanctioned Psyker Social Stigma since Ork society has no legal
+      apparatus to register or license a Weirdboy in the first place.
+  - include: "xenos/orks/traits.yaml#'Eadbanger"
+    levels: 2
+  - include: "xenos/orks/traits.yaml#Fists of Gork (an' Mork)"
+    levels: 2
+  - include: "xenos/orks/traits.yaml#Warpath"
+  - include: "xenos/orks/traits.yaml#Da Jump"
+skills:
+  - name: Hidden Lore
+    spec: (the WAAAGH!/the Warp)
+    diff: IQ/A
+    points: 2
+    tags: [Xenos, Orks, Psyker]
+    lore: A Weirdboy's own half-understood sense of what the WAAAGH! actually is and how it feeds him.
+    design: IQ+0 (8) for 2 points, Average.
+  - name: Psyniscience
+    diff: Per/H
+    points: 4
+    tags: [Xenos, Orks, Psyker]
+    lore: Sensing psychic activity, daemonic taint, and the ebb and flow of a WAAAGH!'s collective belief.
+    design: Per+0 (8) for 4 points, Hard.
+  - name: Meditation
+    diff: IQ/H
+    points: 2
+    tags: [Xenos, Orks, Psyker]
+    lore: The closest thing a Weirdboy has to control — mostly a matter of not thinking about it too hard.
+    design: IQ-1 (7) for 2 points, Hard.
+  - name: Brawling
+    diff: DX/E
+    points: 1
+    tags: [Xenos, Orks]
+    lore: See the Ork Boy template.
+    design: DX+0 (11) for 1 point, Easy.
+  - name: Intimidation
+    diff: Will/A
+    points: 2
+    tags: [Xenos, Orks]
+    lore: Even without using a power, a Weirdboy's reputation alone unsettles people.
+    design: Will+0 (8) for 2 points, Average.

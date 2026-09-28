@@ -1,0 +1,80 @@
+kind: template
+output: Xenos/Orks/Templates/Gretchin.gct
+notes: >
+  A Gretchin (Grot): small, cowardly, expendable Ork underclass, usually
+  found minding artillery, running errands, or being driven forward by a
+  Runtherd. Point math: Gretchin Physiology -21 + skills 21 = 0 points.
+  Stats: ST 8, DX 11, IQ 9, HT 10, HP 8, Will 9, Per 9, SM -1 —
+  framework.md's Gretchin anchor line exactly. A 0-point total is honest
+  for this template rather than forced upward to hit a tier: a Gretchin
+  is explicitly written as weaker than an ordinary, untrained adult in
+  every way that matters in a fight, and only survives in numbers, behind
+  bigger Orks, or by running. This is intentionally the weakest template
+  in the Ork line, at the bottom of framework.md's Ordinary Citizen tier
+  (0-50), not a combatant to be taken individually seriously.
+traits:
+  - include: "xenos/orks/traits.yaml#Gretchin Physiology"
+skills:
+  - name: Guns
+    spec: Pistol
+    diff: DX/E
+    points: 4
+    tags: [Xenos, Orks]
+    lore: A Grot's slugga (or a hand-me-down blasta) is usually the biggest thing it's trusted with.
+    design: DX+2 (13) for 4 points, Easy.
+  - name: Stealth
+    diff: DX/A
+    points: 4
+    tags: [Xenos, Orks]
+    lore: Staying small, quiet and unnoticed is a Gretchin's best survival tool.
+    design: DX+1 (12) for 4 points, Average.
+  - name: Filch
+    diff: DX/A
+    points: 2
+    tags: [Xenos, Orks]
+    lore: A Grot survives partly by taking what bigger Orks won't miss.
+    design: DX+0 (11) for 2 points, Average.
+  - name: Survival
+    spec: (Ork Worlds)
+    diff: Per/A
+    points: 2
+    tags: [Xenos, Orks]
+    lore: Basic field survival, learned the hard way at the bottom of the pecking order.
+    design: Per+0 (9) for 2 points, Average.
+  - name: Scrounging
+    diff: Per/E
+    points: 2
+    tags: [Xenos, Orks]
+    lore: Finding something useful, or edible, in a battlefield's leftovers.
+    design: Per+1 (10) for 2 points, Easy.
+  - name: Fast-Talk
+    diff: IQ/A
+    points: 2
+    tags: [Xenos, Orks]
+    lore: Talking a bigger Ork out of a beating, at least sometimes.
+    design: IQ+0 (9) for 2 points, Average.
+  - name: Climbing
+    diff: DX/A
+    points: 2
+    tags: [Xenos, Orks]
+    lore: Small and light enough to get places bigger Orks can't.
+    design: DX+0 (11) for 2 points, Average.
+  - name: Carousing
+    diff: HT/E
+    points: 1
+    tags: [Xenos, Orks]
+    lore: Grots drink and brawl in miniature the same way Boyz do in full.
+    design: HT+0 (10) for 1 point, Easy.
+  - name: Traps
+    diff: IQ/A
+    points: 1
+    tags: [Xenos, Orks]
+    lore: Grots are commonly put to work rigging mines and booby traps other Orks can't be bothered with.
+    design: IQ-1 (8) for 1 point, Average.
+  - name: Armoury
+    spec: (Ork Tech)
+    diff: IQ/A
+    points: 1
+    tags: [Xenos, Orks]
+    lore: Basic maintenance on whatever gear it's handed, under a Mek's shouted instruction.
+    design: IQ-1 (8) for 1 point, Average.

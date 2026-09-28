@@ -1,0 +1,53 @@
+kind: template
+output: Xenos/Orks/Templates/Ork Painboy.gct
+notes: >
+  A Painboy (Dok): the Ork battlefield medic, whose methods are brutal,
+  unhygienic by any human standard, and effective on Ork patients. Built
+  on the standard Boy chassis; a "Big Dok" would add the Growth Lens: Nob
+  the same way a Big Mek does. Point math: Ork Physiology 179 + Painboy's
+  Eye (level 2) 20 + skills 15 = 214 points, inside framework.md's Elite
+  human tier (200-350).
+traits:
+  - include: "xenos/orks/traits.yaml#Ork Physiology"
+  - include: "xenos/orks/traits.yaml#Painboy's Eye"
+    levels: 2
+skills:
+  - name: Surgery
+    spec: (Ork Methods)
+    diff: IQ/H
+    points: 4
+    tags: [Xenos, Orks]
+    lore: Bone saws, magnets, and total disregard for anaesthetic — and it works, on Orks.
+    design: IQ+0 (8) for 4 points, Hard; +2 more in practice from Painboy's Eye 2.
+  - name: Physician
+    spec: (Ork Methods)
+    diff: IQ/H
+    points: 4
+    tags: [Xenos, Orks]
+    lore: General Ork field medicine, mostly a matter of knowing how much abuse an Ork body can absorb.
+    design: IQ+0 (8) for 4 points, Hard; +2 more in practice from Painboy's Eye 2.
+  - name: Diagnosis
+    diff: IQ/H
+    points: 2
+    tags: [Xenos, Orks]
+    lore: Working out what's actually wrong with a patient before reaching for the saw — usually.
+    design: IQ-1 (7) for 2 points, Hard; +2 more in practice from Painboy's Eye 2.
+  - name: Pharmacy
+    spec: (Ork Brews)
+    diff: IQ/H
+    points: 2
+    tags: [Xenos, Orks]
+    lore: Mixing Ork "medicine," which is as likely to be a stimulant, a painkiller, or both at once, badly measured.
+    design: IQ-1 (7) for 2 points, Hard.
+  - name: Brawling
+    diff: DX/E
+    points: 1
+    tags: [Xenos, Orks]
+    lore: See the Ork Boy template.
+    design: DX+0 (11) for 1 point, Easy.
+  - name: Intimidation
+    diff: Will/A
+    points: 2
+    tags: [Xenos, Orks]
+    lore: Patients hold still for a Painboy at least partly out of fear.
+    design: Will+0 (8) for 2 points, Average.

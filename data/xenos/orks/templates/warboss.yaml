@@ -1,0 +1,145 @@
+kind: template
+output: Xenos/Orks/Templates/Ork Warboss.gct
+notes: >
+  A Warboss: the biggest, meanest, canniest Ork running a Waaagh. Point
+  math: Ork Physiology 179 + Growth Lens: Warboss 277 + skills 100 = 556
+  points. Stats: ST 32, DX 12, IQ 10, HT 15, HP 40, Will 10, Per 10, SM +1
+  — framework.md's Warboss anchor line exactly. This lands at the low end
+  of framework.md's Astartes tier (550-800): a solid, competent Warboss
+  who genuinely out-muscles a Space Marine, built mostly from sheer
+  physical scale, battlefield toughness and raw command presence (see
+  Charisma and Wealth in the Growth Lens) rather than the breadth of
+  skill and equipment a Chapter gives its Battle-Brothers. A legendary,
+  named Warboss (a Ghazghkull Thraka-tier figure) should be built as a
+  bespoke NPC well above this template, in framework.md's Heroes and
+  Legends tier (1,000-3,000) — this is the "typical, dangerous Warboss"
+  baseline, not the biggest name in the setting. Enable at most one Klan
+  lens for flavor.
+traits:
+  - include: "xenos/orks/traits.yaml#Ork Physiology"
+  - include: "xenos/orks/traits.yaml#Growth Lens: Warboss"
+  - include: "xenos/orks/traits.yaml#Klan: Blood Axe"
+    disabled: true
+  - include: "xenos/orks/traits.yaml#Klan: Snakebite"
+    disabled: true
+  - include: "xenos/orks/traits.yaml#Klan: Evil Sunz"
+    disabled: true
+  - include: "xenos/orks/traits.yaml#Klan: Deathskulls"
+    disabled: true
+  - include: "xenos/orks/traits.yaml#Klan: Goffs"
+    disabled: true
+  - include: "xenos/orks/traits.yaml#Klan: Bad Moons"
+    disabled: true
+  - include: "xenos/orks/traits.yaml#Klan: Freebooterz"
+    disabled: true
+skills:
+  - name: Two-Handed Axe/Mace
+    spec: Power Klaw
+    diff: DX/A
+    points: 24
+    tags: [Xenos, Orks]
+    lore: A Warboss's signature weapon — often a power klaw, built to the size only a Warboss can swing one-handed anyway.
+    design: DX+6 (18) for 24 points, Average.
+  - name: Guns
+    spec: Rifle
+    diff: DX/E
+    points: 12
+    tags: [Xenos, Orks]
+    lore: Even a Warboss carries a shoota or bigger for when the klaw isn't enough reach.
+    design: DX+4 (16) for 12 points, Easy.
+  - name: Brawling
+    diff: DX/E
+    points: 4
+    tags: [Xenos, Orks]
+    lore: Decades of winning every fight, armed or not.
+    design: DX+2 (14) for 4 points, Easy.
+  - name: Wrestling
+    diff: DX/A
+    points: 4
+    tags: [Xenos, Orks]
+    lore: A Warboss grapples tanks and Ork rivals alike.
+    design: DX+1 (13) for 4 points, Average.
+  - name: Axe/Mace
+    spec: Choppa
+    diff: DX/A
+    points: 4
+    tags: [Xenos, Orks]
+    lore: A backup blade for when the big weapon is lost or broken.
+    design: DX+1 (13) for 4 points, Average.
+  - name: Leadership
+    diff: IQ/A
+    points: 12
+    tags: [Xenos, Orks]
+    lore: Backed by Charisma, this is what actually holds a Waaagh together between fights.
+    design: IQ+3 (13) for 12 points, Average.
+  - name: Tactics
+    diff: IQ/H
+    points: 8
+    tags: [Xenos, Orks]
+    lore: Enough grand-scale Ork Kunnin' to run a whole Waaagh's worth of mobs.
+    design: IQ+1 (11) for 8 points, Hard.
+  - name: Intimidation
+    diff: Will/A
+    points: 12
+    tags: [Xenos, Orks]
+    lore: A Warboss's reputation and Charisma make this nearly automatic against anything but another Warboss.
+    design: Will+3 (13) for 12 points, Average.
+  - name: Survival
+    spec: (Ork Worlds)
+    diff: Per/A
+    points: 4
+    tags: [Xenos, Orks]
+    lore: See the Ork Boy template.
+    design: Per+1 (11) for 4 points, Average.
+  - name: Carousing
+    diff: HT/E
+    points: 2
+    tags: [Xenos, Orks]
+    lore: A Warboss drinks and brawls harder than anyone under him, and has to.
+    design: HT+1 (16) for 2 points, Easy.
+  - name: Streetwise
+    diff: IQ/A
+    points: 4
+    tags: [Xenos, Orks]
+    lore: Knows exactly how every Klan and mob under his banner really feels about him.
+    design: IQ+1 (11) for 4 points, Average.
+  - name: Fast-Talk
+    diff: IQ/A
+    points: 2
+    tags: [Xenos, Orks]
+    lore: Talking a rival Warboss down, or into a worse fight than he realizes.
+    design: IQ+0 (10) for 2 points, Average.
+  - name: Armoury
+    spec: (Ork Tech)
+    diff: IQ/A
+    points: 2
+    tags: [Xenos, Orks]
+    lore: A Warboss knows enough to tell his Meks what he wants built, even if he can't build it himself.
+    design: IQ+0 (10) for 2 points, Average.
+  - name: Riding
+    spec: (Squig)
+    diff: DX/A
+    points: 2
+    tags: [Xenos, Orks]
+    lore: Many Warbosses ride a monstrous personal squig or beast into battle.
+    design: DX+0 (12) for 2 points, Average.
+  - name: Driving
+    spec: (Wartrukk)
+    diff: DX/A
+    points: 2
+    tags: [Xenos, Orks]
+    lore: Just as often, a Warboss rides at the head of his own battlewagon.
+    design: DX+0 (12) for 2 points, Average.
+  - name: Gambling
+    diff: IQ/A
+    points: 1
+    tags: [Xenos, Orks]
+    lore: Warbosses settle a surprising number of disputes over dice and cards, when not settling them with fists.
+    design: IQ-1 (9) for 1 point, Average.
+  - name: Games
+    spec: (Squig Fighting)
+    diff: IQ/E
+    points: 1
+    tags: [Xenos, Orks]
+    lore: Squig fights are a Waaagh's favorite downtime entertainment, and a Warboss always has money on his own squig.
+    design: IQ+0 (10) for 1 point, Easy.

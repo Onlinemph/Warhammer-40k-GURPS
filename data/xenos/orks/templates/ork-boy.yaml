@@ -1,0 +1,94 @@
+kind: template
+output: Xenos/Orks/Templates/Ork Boy.gct
+notes: >
+  Baseline Ork infantry: the rank-and-file greenskin, a match for two or
+  three Guardsmen in a straight fight and utterly indifferent to the odds.
+  Point math (see Xenos/Orks/Traits/Ork Physiology.adq for the full
+  derivation of every trait below): Ork Physiology 179 + skills 17 = 196
+  points. Stats: ST 22, DX 11, IQ 8, HT 13, HP 26, Will 8, Per 8, SM 0 —
+  landing exactly on framework.md's Boy anchor line. This sits well above
+  framework.md's "Trained soldier" tier (100-175) and into "Elite human"
+  territory (200-350) almost entirely on the strength of raw ST and HP:
+  the framework's own Ork anchor table asks for a body that outclasses a
+  trained human soldier before a single skill point is spent, so the
+  point total reflects that rather than any special training or
+  intellect — this is a crude, low-IQ brawler who happens to be built
+  like a small tank, not a disciplined veteran. Enable at most one Klan
+  lens (from Xenos/Orks/Traits/Ork Physiology.adq, all disabled by
+  default) for clan flavor; they are net-zero-point packages, not full
+  sub-templates, per this project's Guardsman regimental-lens precedent.
+traits:
+  - include: "xenos/orks/traits.yaml#Ork Physiology"
+  - include: "xenos/orks/traits.yaml#Klan: Blood Axe"
+    disabled: true
+  - include: "xenos/orks/traits.yaml#Klan: Snakebite"
+    disabled: true
+  - include: "xenos/orks/traits.yaml#Klan: Evil Sunz"
+    disabled: true
+  - include: "xenos/orks/traits.yaml#Klan: Deathskulls"
+    disabled: true
+  - include: "xenos/orks/traits.yaml#Klan: Goffs"
+    disabled: true
+  - include: "xenos/orks/traits.yaml#Klan: Bad Moons"
+    disabled: true
+  - include: "xenos/orks/traits.yaml#Klan: Freebooterz"
+    disabled: true
+skills:
+  - name: Axe/Mace
+    spec: Choppa
+    diff: DX/A
+    points: 2
+    tags: [Xenos, Orks]
+    lore: The choppa is the Ork's universal melee sidearm, crude and always to hand.
+    design: DX+0 (11) for 2 points, Average (B208).
+  - name: Guns
+    spec: Rifle
+    diff: DX/E
+    points: 4
+    tags: [Xenos, Orks]
+    lore: Framework's weapon-skill table: shootas are heavy autogun-pattern weapons, so they use Guns (Rifle) like their Imperial counterparts.
+    design: DX+2 (13) for 4 points, Easy (B170).
+  - name: Guns
+    spec: Pistol
+    diff: DX/E
+    points: 1
+    tags: [Xenos, Orks]
+    lore: The slugga is a Boy's backup or off-hand piece, paired with a choppa.
+    design: DX+0 (11) for 1 point, Easy.
+  - name: Brawling
+    diff: DX/E
+    points: 1
+    tags: [Xenos, Orks]
+    lore: When the choppa breaks or the fight gets close enough, an Ork just uses its fists, head and teeth.
+    design: DX+0 (11) for 1 point, Easy.
+  - name: Intimidation
+    diff: Will/A
+    points: 4
+    tags: [Xenos, Orks]
+    lore: A Boy's size and temper do most of the work; the skill just channels it.
+    design: Will+1 (9) for 4 points, Average. GURPS Intimidation (B202) lets ST substitute for Will on the roll itself, which matters far more for an Ork than the raw skill level does.
+  - name: Survival
+    spec: (Ork Worlds)
+    diff: Per/A
+    points: 2
+    tags: [Xenos, Orks]
+    lore: Rough field survival, picked up living on the move with a Waaagh.
+    design: Per+0 (8) for 2 points, Average.
+  - name: Carousing
+    diff: HT/E
+    points: 1
+    tags: [Xenos, Orks]
+    lore: Orks drink, brawl and sing between fights as enthusiastically as they fight.
+    design: HT+0 (13) for 1 point, Easy.
+  - name: Climbing
+    diff: DX/A
+    points: 1
+    tags: [Xenos, Orks]
+    lore: Scrambling over wreckage and trenches is routine.
+    design: DX-1 (10) for 1 point, Average.
+  - name: Jumping
+    diff: DX/E
+    points: 1
+    tags: [Xenos, Orks]
+    lore: Basic battlefield mobility.
+    design: DX+0 (11) for 1 point, Easy.
