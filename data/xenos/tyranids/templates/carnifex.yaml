@@ -2,7 +2,8 @@ kind: template
 output: Xenos/Tyranids/Templates/Carnifex.gct
 notes: >
   NPC creature stat block, not a player-facing race. Point math: Tyranid
-  Biology 15 + Body Lens: Carnifex 1180 + skills 8 = 1203 points. Stats:
+  Biology 15 + Body Lens: Carnifex 1180 + Monstrous Crushing Claws 79 +
+  Venom Cannon 225 + skills 8 = 1507 points. Stats:
   SM +2, ST 60, DX 10, IQ 4, HT 16, HP 70, Will 4, Per 4, natural chitin
   torso DR 150 (Weak Points 3, eye DR 75), Regeneration (Fast), Shadow
   in the Warp (8 yards) — framework.md's Carnifex anchor line exactly.
@@ -13,20 +14,15 @@ notes: >
   soak up and deal out damage nothing else on the battlefield can match.
   The point total is for GM reference only, not party balance.
 
-  Weapon-symbiotes: carries Monstrous Crushing Claws (framework.md's own
-  anchor: thr+6d(5) cr) and a Venom Cannon (6d×3(3) cr ex) — a classic
-  Carnifex loadout of one melee and one heavy ranged symbiote. These are
-  being built as natural-attack traits named "Monstrous Crushing Claws"
-  and "Venom Cannon" in data/xenos/tyranids/bio-weapons.yaml by another
-  pass on this project; that file did not exist yet when this template
-  was written, so the weapons are not `include`d here. Once it exists,
-  add:
-    - include: "xenos/tyranids/bio-weapons.yaml#Monstrous Crushing Claws"
-    - include: "xenos/tyranids/bio-weapons.yaml#Venom Cannon"
-  to the traits list below.
+  Weapon-symbiotes: carries Monstrous Crushing Claws and a Venom
+  Cannon — a classic Carnifex loadout of one melee and one heavy ranged
+  symbiote, both built as natural-attack traits in
+  data/xenos/tyranids/bio-weapons.yaml.
 traits:
   - include: "xenos/tyranids/traits.yaml#Tyranid Biology"
   - include: "xenos/tyranids/traits.yaml#Body Lens: Carnifex"
+  - include: "xenos/tyranids/bio-weapons.yaml#Monstrous Crushing Claws"
+  - include: "xenos/tyranids/bio-weapons.yaml#Venom Cannon"
 skills:
   - name: Brawling
     diff: DX/E

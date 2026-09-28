@@ -1,0 +1,270 @@
+{
+	"version": 5,
+	"id": "BK4fiyK6zThrwhzSk",
+	"notes": "NPC creature stat block, not a player-facing race — a Termagant is disposable swarm biomass, not an individual worth building as a PC. Point math: Tyranid Biology 15 + Body Lens: Termagant 25 + Fleshborer 54 + skills 6 = 100 points. Stats: SM -1, ST 9, DX 11, IQ 4, HT 11, HP 9, Will 4, Per 4, natural chitin torso DR 25 (Weak Points 7, eye DR 12) — framework.md's Termagant anchor line exactly. This lands at the bottom of framework.md's Trained Soldier tier (100-175), most of it spent on its fleshborer symbiote rather than the animal underneath: a cheap, mass-produced gun-beast that is only dangerous in numbers and only disciplined while a synapse creature holds its leash. The point total is for GM reference (how much a Termagant \"costs\" relative to other bioforms), never a measure of individual threat or party balance.\nWeapon-symbiote: carries a Fleshborer, built as a natural-attack trait in data/xenos/tyranids/bio-weapons.yaml.\n",
+	"traits": [
+		{
+			"id": "TYQB32op6-HFBISjW",
+			"name": "Tyranid Biology",
+			"local_notes": "Lore: The Tyranid Biology shared by every bioform in a Hive Fleet: bound to the Hive Mind from the moment it is grown, disciplined and fearless only so long as a synapse creature's link holds, mute and without individual culture, and adapted to digest or shrug off almost anything a target world can throw at it. This is the baseline every body-type lens below (Termagant through Carnifex) builds on top of; the lens supplies the bioform's own attributes, chitin DR, and any special biology (leaping legs, rending claws, psychic organs, wings) that role calls for.\n\nDesign: 5 (Hive Mind Link) - 10 (Synapse Dependence) + 5 (Synapse Discipline) - 15 (Cannot Speak) + 0 (No Independent Society) + 30 (Adapted Biology) = 15 points of shared physiology before attributes, chitin DR, special biology, or skills. See each template for a full stat block built on top of this plus a body- type lens.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Mental",
+				"Xenos",
+				"Tyranids"
+			],
+			"container_type": "ancestry",
+			"children": [
+				{
+					"id": "tjfv5S_JSaHjQPsxJ",
+					"name": "Hive Mind Link",
+					"reference": "B70",
+					"local_notes": "A permanent, involuntary telepathic link to the Hive Mind: the organism receives strategic direction, feels the Hive Mind's intent when synapse creatures are near, and cannot meaningfully act against it (see Synapse Dependence and Synapse Discipline below for what that link actually does turn to turn). It carries none of the individual privacy or two-way nuance Mindlink usually implies between two people.\n\nLore: Every Tyranid bioform, however small, is grown already wired into the Hive Mind's collective will — Codex background across editions is explicit that a lone Tyranid organism has essentially no independent will to speak of, and Black Library's Hive Fleet material consistently frames the swarm as a single directed organism wearing a billion bodies rather than a species of individuals.\n\nDesign: Basic Set Mindlink (B70): the published cost table prices the advantage by how many separate people share the link (5 points for a single person, rising with group size). The Hive Mind functions mechanically as one linked entity, not as a separate link to every other Tyranid organism in the swarm, so this project takes the \"single person\" tier (5 points) rather than trying to price a link to billions of individual minds — the same kind of reasoned reinterpretation of a Basic Set category this project's other xenos files use rather than inventing a new, uncosted tier.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Xenos",
+						"Tyranids"
+					],
+					"modifiers": [
+						{
+							"id": "mLjZiIKrG_OgHxhR9",
+							"name": "Single person (the Hive Mind, treated as one linked entity)",
+							"reference": "B70",
+							"cost_adj": "5"
+						}
+					]
+				},
+				{
+					"id": "tIiUBY45FbKSLpd_q",
+					"name": "Synapse Dependence (Instinctive Behaviour)",
+					"reference": "B124",
+					"local_notes": "Default state: outside synapse range (see Synapse Discipline below), a Tyranid organism reverts to pure instinct. It cannot follow a complex order, hold a defensive position under real pressure, or resist an overwhelming urge to feed on the nearest kill or flee an unwinnable fight — GM's call, biased toward whichever instinct the immediate situation makes obvious (feeding on a fresh kill; fleeing when reduced below 1/3 HP with nowhere to push forward; otherwise holding station near its Hive Fleet's last clear directive). This is fully suppressed while the organism is within the range of a Synapse Creature (see that trait, below) — see Synapse Discipline for what replaces it there.\n\nLore: Codex background is explicit that most Tyranid bioforms have no independent tactical judgement at all: cut off from a synapse creature, a swarm degenerates within moments into a feeding frenzy or a panicked rout, exactly the behaviour Imperial commanders are taught to exploit by killing synapse creatures first. Deathwatch RPG's Mark of the Xenos Tyranid material calibrates this as the single most reliable tactic against a swarm.\n\nDesign: Basic Set Bestial (B124, -10 points): \"you are driven by animal instinct rather than reason,\" applied here as the organism's default, un-linked state rather than an always-on trait, per the Accessibility-style reading this project's own conditional traits (Ork WAAAGH! Gestalt, Necron Slave Mentality) already use for \"the disadvantage's effects only apply in this specific, common-in- play circumstance.\" No further limitation percentage is taken since being outside synapse range is the swarm's normal condition, not a rare edge case — Synapse Discipline below is priced separately as the (comparatively rare, situational) benefit that suppresses it.",
+					"tags": [
+						"Disadvantage",
+						"Mental",
+						"Xenos",
+						"Tyranids"
+					],
+					"base_points": -10
+				},
+				{
+					"id": "tuD6_-ZoVSfsxEeAh",
+					"name": "Synapse Discipline",
+					"local_notes": "While linked, Synapse Dependence's instinctive-behaviour effects are fully suppressed: the organism fights with total discipline, no fear, and follows the Hive Mind's tactical intent through the nearest synapse creature exactly as ordered. The moment the link breaks (the synapse creature dies, moves out of range, or is itself cut off from a larger synapse creature further up the chain), Synapse Dependence resumes immediately.\n\nLore: A swarm fighting under a synapse creature's watch is unrecognisable from the same swarm cut loose — utterly fearless, perfectly coordinated, and willing to press an attack to the last organism. This is the other half of the same well-documented Codex mechanic that makes synapse creatures the Imperium's priority targets.\n\nDesign: A narrow conditional Will/Fright Check bonus, built the same way this project's Ork WAAAGH! Gestalt prices an equivalent situational bonus (5 points) rather than a flat, always-on Fearlessness — here the \"always on\" case is Synapse Dependence's disadvantage instead, and this trait is the paired benefit that replaces it under a synapse creature's link.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Xenos",
+						"Tyranids"
+					],
+					"base_points": 5,
+					"features": [
+						{
+							"type": "conditional_modifier",
+							"situation": "to Will rolls and Fright Checks, and to resist Bestial's effects, while within the range of a Synapse Creature's link (see that trait)",
+							"amount": 4
+						}
+					]
+				},
+				{
+					"id": "tH0D7lL7D3LpRFg8H",
+					"name": "Cannot Speak",
+					"reference": "B125",
+					"local_notes": "A Tyranid organism has no language, no vocal apparatus built for speech, and nothing resembling individual society to speak with — it communicates, if at all, through the Hive Mind Link above, not through sound.\n\nLore: Tyranids are never shown speaking, negotiating, or maintaining any culture separable from the Hive Mind's single collective will — universal, unremarked-on Codex background and consistent across every piece of Tyranid-focussed Black Library fiction.\n\nDesign: Basic Set Cannot Speak (B125), -15 points, unmodified.",
+					"tags": [
+						"Disadvantage",
+						"Physical",
+						"Xenos",
+						"Tyranids"
+					],
+					"base_points": -15
+				},
+				{
+					"id": "tt9sKS_k5PDuZBR81",
+					"name": "No Independent Society (Hive Fleet Biology)",
+					"local_notes": "0-point lore flag, the same convention this project's Ork Fungal Physiology and Necron Machine-Body entries use: a Tyranid organism has no name, no kin, no culture, and no concept of self outside the Hive Fleet that grew it — grown to purpose in a bio-ship's gestation pools and disassembled for raw biomass on death, not born, raised, or mourned. Every mechanical payoff of this (no language, no independent will outside synapse range, no fear or pain worth the name) is priced separately above and in each body-type lens; this entry exists purely to document why a Tyranid needs no name, no family, and no biography.\n\nLore: Codex background across editions treats every Tyranid bioform as disposable biomass the Hive Fleet will reclaim and regrow into something else entirely, and Black Library's Hive Fleet material never shows a Tyranid organism with anything resembling individual identity — only the Hive Mind's single, continuous intent wearing whichever body a given battle calls for.\n\nDesign: 0 points, documentation only; see notes for why this needs no separate purchase.",
+					"tags": [
+						"Xenos",
+						"Tyranids"
+					],
+					"base_points": 0
+				},
+				{
+					"id": "tnVRqhCS57I4zoEsN",
+					"name": "Adapted Biology (Resistant to Disease and Toxins)",
+					"reference": "B81",
+					"local_notes": "Resistant (Very Common: Disease, Toxins, Alien Biochemistry), Immunity.\n\nLore: A Tyranid organism can be grown to digest, and fight through, almost any biosphere or biochemical hazard a target world can offer — part of the same adaptive, purpose-grown biology that lets the Hive Fleet consume entire ecosystems. Consistent Codex background across editions; Deathwatch's Mark of the Xenos material treats Tyranid immunity to conventional toxins and pathogens as a given for any Imperial biologist studying a captured specimen.\n\nDesign: Resistant (Very Common), Immunity tier (B81): base value 30 for the broadest tabled hazard category, x1 for full Immunity = 30 points, the same tier and math this project's Custodes and Necron \"Resistant to Metabolic Hazards\" entries use for an adapted body that shrugs off disease, poison, and radiation alike.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Tyranids"
+					],
+					"modifiers": [
+						{
+							"id": "mK1p9R4PN4uLrKwgV",
+							"name": "Very Common: Disease, Toxins, Alien Atmospheres and Biochemistries",
+							"reference": "B81",
+							"cost_adj": "30"
+						},
+						{
+							"id": "mLPyrSd1Ml9zJ3BKv",
+							"name": "Immunity",
+							"reference": "B81",
+							"cost_adj": "x1"
+						}
+					]
+				}
+			]
+		},
+		{
+			"id": "TnnBxqxRlY4XjX0J1",
+			"name": "Body Lens: Termagant",
+			"local_notes": "Lore: The Termagant: the Hive Fleet's basic gun-beast, grown cheaply and in huge numbers to advance in a firing line ahead of, or alongside, heavier bioforms. Consistent across Codex background and Black Library's Hive Fleet fiction as the swarm's most disposable ranged infantry.\n\nDesign: -100 (Attribute Modifiers) + 125 (Chitin DR 25, 5/level) = 25 points, added to Tyranid Biology's 15 for 40 points of physiology alone before skills and its weapon-symbiote. See the Termagant template. NPC creature stat block only, not a player-facing race; the point total below is for GM reference, not party balance.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Tyranids"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "tahYOyuurtY04yrH8",
+					"name": "Attribute Modifiers (Termagant)",
+					"local_notes": "Design: Framework target: SM -1, ST 9, DX 11, IQ 4, HT 11, HP 9. Decreased ST -1 (B14, 10/level, -10) for ST 9. Increased DX +1 (B15, 20/level, 20) for DX 11 -- a gun-beast bred for a steady aim despite its small frame. Decreased IQ -6 (B16, 20/level, -120) for IQ 4, barely above pure animal cunning, matching a creature with essentially no independent judgement outside the Hive Mind Link. Increased HT +1 (B15, 10/level, 10) for HT 11. Base HP from ST 9 is already 9, the framework target, so no separate Extra Hit Points purchase. SM -1 carries no independent point cost, per this project's Ork Gretchin precedent (no ST premium is applied for a negative Size Modifier). -10+20-120+10 = -100.",
+					"tags": [
+						"Physical"
+					],
+					"base_points": -100,
+					"features": [
+						{
+							"type": "attribute_bonus",
+							"attribute": "sm",
+							"amount": -1
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "st",
+							"amount": -1
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "dx",
+							"amount": 1
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "iq",
+							"amount": -6
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "ht",
+							"amount": 1
+						}
+					]
+				},
+				{
+					"id": "t16p3OS4iQW7xx7zp",
+					"name": "Chitin (Termagant)",
+					"reference": "B46",
+					"local_notes": "DR 25, all locations. Weak Points 7 (thin, gappy plates on a swarm-scale gun-beast, per framework.md's own \"flak-tier\" Weak Points figure for the loosest armour in this project): on a hit that fails to penetrate, roll 3d; 7 or less halves DR (13, rounded down) against that hit. Eye clusters run at DR 12 (roughly half the body DR) rather than 25.\n\nLore: A Tyranid's exoskeleton is grown, not worn: dense bio-ceramic chitin fused directly to the flesh beneath it, thickest on the largest bioforms and thin enough on a Termagant to be more like a swarm-trooper's flak jacket than real armour plate. Universal across Codex background and every piece of Black Library Tyranid fiction.\n\nDesign: Damage Resistance (B46, 5/level, all locations): natural DR bought directly on the body, per framework.md's explicit instruction that chitin is a character trait, not equipment. Each body-type lens overrides `levels`/`dr` to its own figure from framework.md's Tyranid anchor table; see that lens's own copy of this trait for its point cost.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Tyranids"
+					],
+					"points_per_level": 5,
+					"can_level": true,
+					"levels": 25,
+					"features": [
+						{
+							"type": "dr_bonus",
+							"locations": [
+								"all"
+							],
+							"amount": 25
+						}
+					]
+				}
+			]
+		},
+		{
+			"id": "tsI_kLTQWKIdFAqQ9",
+			"name": "Fleshborer",
+			"reference": "B61",
+			"local_notes": "Lore: The most common weapon in the swarm: a fused, fleshy launcher that fires a swarm of ravenous, flesh-eating beetles at the target, where they burrow in and devour tissue from the inside. Codex: Tyranids background across editions treats the Fleshborer as the baseline Termagant/Hormagaunt-carried gun, present in overwhelming numbers rather than individually deadly — what makes a gaunt brood dangerous is weight of fire, not any one shot's punch.\n\nDesign: Framework.md's own anchor (updated after flak went to DR 30, replacing an earlier 6d pi+ that left a Termagant brood unable to hurt a flak-armoured Guardsman at all — 0.99% per hit): \"Fleshborer | Fires burrowing beetles: 6d(2) pi+.\" Innate Attack (Large Pierce) (B61, 6/die) at 6 dice = 36, with Armor Divisor (2) (B102, +50%): 36x1.5=54. Checked by exact dice distribution: 6d(2) pi+ averages 21 and penetrates flak (DR 30, eff. 15) 90.4% of the time, and rounds to 0% against carapace (DR 70, eff. 35) or anything heavier — now a real threat to flak, per the anchor's own \"kills unarmoured men, struggles against carapace\" wording, while carapace (and everything above it) remains untouched, exactly the gap the divisor correction exists to fix. Handling: Acc 2 (an organic launcher with no sights, between an Ork shoota's crude 1-2 and a proper Imperial rifle's 4-5, since a Tyranid's own instinct aims better than a Boy's guesswork even without optics) and range 80/240 (the anchor's own \"short range,\" read as roughly submachine-gun reach) are this project's own estimate, since no anchor gives exact figures; Shots 6(60), a one-minute brood-regrowth, reflects the symbiote's living ammunition rather than a magazine.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Tyranids"
+			],
+			"base_points": 54,
+			"weapons": [
+				{
+					"id": "WXpZYdl-5nE-yTcYI",
+					"sv": 1,
+					"damage": {
+						"type": "pi+",
+						"base": "6d",
+						"armor_divisor": 2
+					},
+					"accuracy": "2",
+					"range": "80/240",
+					"rate_of_fire": "1",
+					"shots": "6(60)",
+					"usage": "Standard",
+					"usage_notes": "ST-independent: grown fused to the bearer's arm, not carried, so any Termagant or Hormagaunt fires it at full effect regardless of its own ST. Shots regrow: the beetle brood living in the weapon's bio-mass regenerates over the listed time rather than being reloaded; a Fleshborer that has just emptied its brood is out of the fight for about a minute, not permanently disarmed.",
+					"defaults": [
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Innate Attack"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Projectile"
+							}
+						},
+						{
+							"type": "dx",
+							"modifier": -4
+						}
+					]
+				}
+			]
+		}
+	],
+	"skills": [
+		{
+			"id": "s0TOnlWnXEVvgQAYZ",
+			"name": "Innate Attack",
+			"local_notes": "Lore: A Termagant's fleshborer beetles are loosed with a simple, drilled reflex rather than any real marksmanship — the gun-beast points and the Hive Mind's instinct does the rest.\n\nDesign: Innate Attack (Projectile) (DX/E, B269) at DX+2 (13) for 4 points, the skill that governs any Innate Attack-built natural weapon's to-hit roll, matching the fleshborer's own build once bio-weapons.yaml defines it.",
+			"tags": [
+				"Xenos",
+				"Tyranids"
+			],
+			"specialization": "Projectile",
+			"difficulty": "dx/e",
+			"points": 4
+		},
+		{
+			"id": "sCjb1UQ9PMrrkBnz1",
+			"name": "Brawling",
+			"local_notes": "Lore: A Termagant falls back on tooth and claw only when its fleshborer is spent or the fight closes past ranged distance.\n\nDesign: DX+1 (12) for 2 points, Easy.",
+			"tags": [
+				"Xenos",
+				"Tyranids"
+			],
+			"difficulty": "dx/e",
+			"points": 2
+		}
+	],
+	"equipment": []
+}

@@ -2,7 +2,8 @@ kind: template
 output: Xenos/Tyranids/Templates/Lictor.gct
 notes: >
   NPC creature stat block, not a player-facing race. Point math: Tyranid
-  Biology 15 + Body Lens: Lictor 547 + skills 10 = 572 points. Stats: SM
+  Biology 15 + Body Lens: Lictor 547 + Flesh Hooks 11 + Lash Whip 47 +
+  Rending Claws 38 + skills 12 = 670 points. Stats: SM
   +1, ST 22, DX 15, IQ 8, HT 13, HP 26, Will 8, Per 8, natural chitin
   torso DR 60 (Weak Points 5, eye DR 30), Chameleonic Hide (-4/-2 to
   others' Vision rolls), Pheromone Trail, Shadow in the Warp (8 yards) —
@@ -15,19 +16,14 @@ notes: >
 
   Weapon-symbiotes: carries Flesh Hooks (a ranged grapple/snare) and a
   Lash Whip (a disabling reach weapon), per framework.md's own symbiote
-  list, plus Rending Claws (sw+2d(3) cut, rending) for its actual kill.
-  These are being built as natural-attack traits named "Flesh Hooks,"
-  "Lash Whip" and "Rending Claws" in
-  data/xenos/tyranids/bio-weapons.yaml by another pass on this project;
-  that file did not exist yet when this template was written, so the
-  weapons are not `include`d here. Once it exists, add:
-    - include: "xenos/tyranids/bio-weapons.yaml#Flesh Hooks"
-    - include: "xenos/tyranids/bio-weapons.yaml#Lash Whip"
-    - include: "xenos/tyranids/bio-weapons.yaml#Rending Claws"
-  to the traits list below.
+  list, plus Rending Claws for its actual kill — all built as
+  natural-attack traits in data/xenos/tyranids/bio-weapons.yaml.
 traits:
   - include: "xenos/tyranids/traits.yaml#Tyranid Biology"
   - include: "xenos/tyranids/traits.yaml#Body Lens: Lictor"
+  - include: "xenos/tyranids/bio-weapons.yaml#Flesh Hooks"
+  - include: "xenos/tyranids/bio-weapons.yaml#Lash Whip"
+  - include: "xenos/tyranids/bio-weapons.yaml#Rending Claws"
 skills:
   - name: Brawling
     diff: DX/E

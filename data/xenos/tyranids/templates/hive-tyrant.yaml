@@ -4,8 +4,9 @@ notes: >
   NPC creature stat block, not a player-facing race. Point math: Tyranid
   Biology 15 + Body Lens: Hive Tyrant 1155 (Wings disabled by default;
   +30 if a winged variant is enabled) + Unusual Background 10 + Warp
-  Empowerment 2 (20) + Psyker (Talent) 3 (30) + The Horror (28) +
-  Dominion 1 (18) + skills 10 = 1286 points. Stats: SM +2, ST 45, DX 13,
+  Empowerment 2 (30) + Psyker (Talent) 3 (30) + The Horror (28) +
+  Dominion 1 (18) + Monstrous Scything Talons 62 + Venom Cannon 225 +
+  skills 10 = 1583 points. Stats: SM +2, ST 45, DX 13,
   IQ 12, HT 16, HP 60, Will 12 (+3 from Psyker Talent's Perils bonus, see
   that trait's notes), Per 12, natural chitin torso DR 120 (Weak Points
   4, eye DR 60), Regeneration (Regular), Synapse Creature (32 yards),
@@ -16,17 +17,10 @@ notes: >
   campaign-level victory. The point total is for GM reference only, not
   party balance.
 
-  Weapon-symbiotes: carries Monstrous Scything Talons (framework.md's
-  own anchor: sw+4d(3) cut) and a Venom Cannon (6d×3(3) cr ex) — a
-  classic Hive Tyrant loadout of one melee and one heavy ranged
-  symbiote. These are being built as natural-attack traits named
-  "Monstrous Scything Talons" and "Venom Cannon" in
-  data/xenos/tyranids/bio-weapons.yaml by another pass on this project;
-  that file did not exist yet when this template was written, so the
-  weapons are not `include`d here. Once it exists, add:
-    - include: "xenos/tyranids/bio-weapons.yaml#Monstrous Scything Talons"
-    - include: "xenos/tyranids/bio-weapons.yaml#Venom Cannon"
-  to the traits list below.
+  Weapon-symbiotes: carries Monstrous Scything Talons and a Venom
+  Cannon — a classic Hive Tyrant loadout of one melee and one heavy
+  ranged symbiote, both built as natural-attack traits in
+  data/xenos/tyranids/bio-weapons.yaml.
 traits:
   - include: "xenos/tyranids/traits.yaml#Tyranid Biology"
   - include: "xenos/tyranids/traits.yaml#Body Lens: Hive Tyrant"
@@ -38,6 +32,8 @@ traits:
   - include: "xenos/tyranids/psychic.yaml#The Horror"
   - include: "xenos/tyranids/psychic.yaml#Dominion"
     levels: 1
+  - include: "xenos/tyranids/bio-weapons.yaml#Monstrous Scything Talons"
+  - include: "xenos/tyranids/bio-weapons.yaml#Venom Cannon"
 skills:
   - name: Brawling
     diff: DX/E

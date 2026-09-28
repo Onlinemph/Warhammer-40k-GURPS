@@ -1,0 +1,1907 @@
+{
+	"version": 5,
+	"rows": [
+		{
+			"id": "tJbifH6yvh__GAIrc",
+			"name": "Hive Mind Link",
+			"reference": "B70",
+			"local_notes": "A permanent, involuntary telepathic link to the Hive Mind: the organism receives strategic direction, feels the Hive Mind's intent when synapse creatures are near, and cannot meaningfully act against it (see Synapse Dependence and Synapse Discipline below for what that link actually does turn to turn). It carries none of the individual privacy or two-way nuance Mindlink usually implies between two people.\n\nLore: Every Tyranid bioform, however small, is grown already wired into the Hive Mind's collective will — Codex background across editions is explicit that a lone Tyranid organism has essentially no independent will to speak of, and Black Library's Hive Fleet material consistently frames the swarm as a single directed organism wearing a billion bodies rather than a species of individuals.\n\nDesign: Basic Set Mindlink (B70): the published cost table prices the advantage by how many separate people share the link (5 points for a single person, rising with group size). The Hive Mind functions mechanically as one linked entity, not as a separate link to every other Tyranid organism in the swarm, so this project takes the \"single person\" tier (5 points) rather than trying to price a link to billions of individual minds — the same kind of reasoned reinterpretation of a Basic Set category this project's other xenos files use rather than inventing a new, uncosted tier.",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Xenos",
+				"Tyranids"
+			],
+			"modifiers": [
+				{
+					"id": "m6kNs5OfxdB-D9t4-",
+					"name": "Single person (the Hive Mind, treated as one linked entity)",
+					"reference": "B70",
+					"cost_adj": "5"
+				}
+			]
+		},
+		{
+			"id": "tkv4kRHuy_QopHv2m",
+			"name": "Synapse Dependence (Instinctive Behaviour)",
+			"reference": "B124",
+			"local_notes": "Default state: outside synapse range (see Synapse Discipline below), a Tyranid organism reverts to pure instinct. It cannot follow a complex order, hold a defensive position under real pressure, or resist an overwhelming urge to feed on the nearest kill or flee an unwinnable fight — GM's call, biased toward whichever instinct the immediate situation makes obvious (feeding on a fresh kill; fleeing when reduced below 1/3 HP with nowhere to push forward; otherwise holding station near its Hive Fleet's last clear directive). This is fully suppressed while the organism is within the range of a Synapse Creature (see that trait, below) — see Synapse Discipline for what replaces it there.\n\nLore: Codex background is explicit that most Tyranid bioforms have no independent tactical judgement at all: cut off from a synapse creature, a swarm degenerates within moments into a feeding frenzy or a panicked rout, exactly the behaviour Imperial commanders are taught to exploit by killing synapse creatures first. Deathwatch RPG's Mark of the Xenos Tyranid material calibrates this as the single most reliable tactic against a swarm.\n\nDesign: Basic Set Bestial (B124, -10 points): \"you are driven by animal instinct rather than reason,\" applied here as the organism's default, un-linked state rather than an always-on trait, per the Accessibility-style reading this project's own conditional traits (Ork WAAAGH! Gestalt, Necron Slave Mentality) already use for \"the disadvantage's effects only apply in this specific, common-in- play circumstance.\" No further limitation percentage is taken since being outside synapse range is the swarm's normal condition, not a rare edge case — Synapse Discipline below is priced separately as the (comparatively rare, situational) benefit that suppresses it.",
+			"tags": [
+				"Disadvantage",
+				"Mental",
+				"Xenos",
+				"Tyranids"
+			],
+			"base_points": -10
+		},
+		{
+			"id": "thY2-lPXdC7uR_9kY",
+			"name": "Synapse Discipline",
+			"local_notes": "While linked, Synapse Dependence's instinctive-behaviour effects are fully suppressed: the organism fights with total discipline, no fear, and follows the Hive Mind's tactical intent through the nearest synapse creature exactly as ordered. The moment the link breaks (the synapse creature dies, moves out of range, or is itself cut off from a larger synapse creature further up the chain), Synapse Dependence resumes immediately.\n\nLore: A swarm fighting under a synapse creature's watch is unrecognisable from the same swarm cut loose — utterly fearless, perfectly coordinated, and willing to press an attack to the last organism. This is the other half of the same well-documented Codex mechanic that makes synapse creatures the Imperium's priority targets.\n\nDesign: A narrow conditional Will/Fright Check bonus, built the same way this project's Ork WAAAGH! Gestalt prices an equivalent situational bonus (5 points) rather than a flat, always-on Fearlessness — here the \"always on\" case is Synapse Dependence's disadvantage instead, and this trait is the paired benefit that replaces it under a synapse creature's link.",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Xenos",
+				"Tyranids"
+			],
+			"base_points": 5,
+			"features": [
+				{
+					"type": "conditional_modifier",
+					"situation": "to Will rolls and Fright Checks, and to resist Bestial's effects, while within the range of a Synapse Creature's link (see that trait)",
+					"amount": 4
+				}
+			]
+		},
+		{
+			"id": "tUy93VoUD08-_2rYI",
+			"name": "Cannot Speak",
+			"reference": "B125",
+			"local_notes": "A Tyranid organism has no language, no vocal apparatus built for speech, and nothing resembling individual society to speak with — it communicates, if at all, through the Hive Mind Link above, not through sound.\n\nLore: Tyranids are never shown speaking, negotiating, or maintaining any culture separable from the Hive Mind's single collective will — universal, unremarked-on Codex background and consistent across every piece of Tyranid-focussed Black Library fiction.\n\nDesign: Basic Set Cannot Speak (B125), -15 points, unmodified.",
+			"tags": [
+				"Disadvantage",
+				"Physical",
+				"Xenos",
+				"Tyranids"
+			],
+			"base_points": -15
+		},
+		{
+			"id": "t2M0m7a-xZXq5AHyh",
+			"name": "No Independent Society (Hive Fleet Biology)",
+			"local_notes": "0-point lore flag, the same convention this project's Ork Fungal Physiology and Necron Machine-Body entries use: a Tyranid organism has no name, no kin, no culture, and no concept of self outside the Hive Fleet that grew it — grown to purpose in a bio-ship's gestation pools and disassembled for raw biomass on death, not born, raised, or mourned. Every mechanical payoff of this (no language, no independent will outside synapse range, no fear or pain worth the name) is priced separately above and in each body-type lens; this entry exists purely to document why a Tyranid needs no name, no family, and no biography.\n\nLore: Codex background across editions treats every Tyranid bioform as disposable biomass the Hive Fleet will reclaim and regrow into something else entirely, and Black Library's Hive Fleet material never shows a Tyranid organism with anything resembling individual identity — only the Hive Mind's single, continuous intent wearing whichever body a given battle calls for.\n\nDesign: 0 points, documentation only; see notes for why this needs no separate purchase.",
+			"tags": [
+				"Xenos",
+				"Tyranids"
+			],
+			"base_points": 0
+		},
+		{
+			"id": "tSUxFgCW8ysrLaQVK",
+			"name": "Adapted Biology (Resistant to Disease and Toxins)",
+			"reference": "B81",
+			"local_notes": "Resistant (Very Common: Disease, Toxins, Alien Biochemistry), Immunity.\n\nLore: A Tyranid organism can be grown to digest, and fight through, almost any biosphere or biochemical hazard a target world can offer — part of the same adaptive, purpose-grown biology that lets the Hive Fleet consume entire ecosystems. Consistent Codex background across editions; Deathwatch's Mark of the Xenos material treats Tyranid immunity to conventional toxins and pathogens as a given for any Imperial biologist studying a captured specimen.\n\nDesign: Resistant (Very Common), Immunity tier (B81): base value 30 for the broadest tabled hazard category, x1 for full Immunity = 30 points, the same tier and math this project's Custodes and Necron \"Resistant to Metabolic Hazards\" entries use for an adapted body that shrugs off disease, poison, and radiation alike.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Tyranids"
+			],
+			"modifiers": [
+				{
+					"id": "mYu7Und-A1R1XGEw5",
+					"name": "Very Common: Disease, Toxins, Alien Atmospheres and Biochemistries",
+					"reference": "B81",
+					"cost_adj": "30"
+				},
+				{
+					"id": "mpXBO7UIMjNkVszeb",
+					"name": "Immunity",
+					"reference": "B81",
+					"cost_adj": "x1"
+				}
+			]
+		},
+		{
+			"id": "T4ENi4NA8aJfx_gpJ",
+			"name": "Tyranid Biology",
+			"local_notes": "Lore: The Tyranid Biology shared by every bioform in a Hive Fleet: bound to the Hive Mind from the moment it is grown, disciplined and fearless only so long as a synapse creature's link holds, mute and without individual culture, and adapted to digest or shrug off almost anything a target world can throw at it. This is the baseline every body-type lens below (Termagant through Carnifex) builds on top of; the lens supplies the bioform's own attributes, chitin DR, and any special biology (leaping legs, rending claws, psychic organs, wings) that role calls for.\n\nDesign: 5 (Hive Mind Link) - 10 (Synapse Dependence) + 5 (Synapse Discipline) - 15 (Cannot Speak) + 0 (No Independent Society) + 30 (Adapted Biology) = 15 points of shared physiology before attributes, chitin DR, special biology, or skills. See each template for a full stat block built on top of this plus a body- type lens.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Mental",
+				"Xenos",
+				"Tyranids"
+			],
+			"container_type": "ancestry",
+			"children": [
+				{
+					"id": "t0J8IsfPpTZUswq5z",
+					"name": "Hive Mind Link",
+					"reference": "B70",
+					"local_notes": "A permanent, involuntary telepathic link to the Hive Mind: the organism receives strategic direction, feels the Hive Mind's intent when synapse creatures are near, and cannot meaningfully act against it (see Synapse Dependence and Synapse Discipline below for what that link actually does turn to turn). It carries none of the individual privacy or two-way nuance Mindlink usually implies between two people.\n\nLore: Every Tyranid bioform, however small, is grown already wired into the Hive Mind's collective will — Codex background across editions is explicit that a lone Tyranid organism has essentially no independent will to speak of, and Black Library's Hive Fleet material consistently frames the swarm as a single directed organism wearing a billion bodies rather than a species of individuals.\n\nDesign: Basic Set Mindlink (B70): the published cost table prices the advantage by how many separate people share the link (5 points for a single person, rising with group size). The Hive Mind functions mechanically as one linked entity, not as a separate link to every other Tyranid organism in the swarm, so this project takes the \"single person\" tier (5 points) rather than trying to price a link to billions of individual minds — the same kind of reasoned reinterpretation of a Basic Set category this project's other xenos files use rather than inventing a new, uncosted tier.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Xenos",
+						"Tyranids"
+					],
+					"modifiers": [
+						{
+							"id": "mOTT4NiWD3lfsfTvi",
+							"name": "Single person (the Hive Mind, treated as one linked entity)",
+							"reference": "B70",
+							"cost_adj": "5"
+						}
+					]
+				},
+				{
+					"id": "tRB7TIOSlZbphlM2r",
+					"name": "Synapse Dependence (Instinctive Behaviour)",
+					"reference": "B124",
+					"local_notes": "Default state: outside synapse range (see Synapse Discipline below), a Tyranid organism reverts to pure instinct. It cannot follow a complex order, hold a defensive position under real pressure, or resist an overwhelming urge to feed on the nearest kill or flee an unwinnable fight — GM's call, biased toward whichever instinct the immediate situation makes obvious (feeding on a fresh kill; fleeing when reduced below 1/3 HP with nowhere to push forward; otherwise holding station near its Hive Fleet's last clear directive). This is fully suppressed while the organism is within the range of a Synapse Creature (see that trait, below) — see Synapse Discipline for what replaces it there.\n\nLore: Codex background is explicit that most Tyranid bioforms have no independent tactical judgement at all: cut off from a synapse creature, a swarm degenerates within moments into a feeding frenzy or a panicked rout, exactly the behaviour Imperial commanders are taught to exploit by killing synapse creatures first. Deathwatch RPG's Mark of the Xenos Tyranid material calibrates this as the single most reliable tactic against a swarm.\n\nDesign: Basic Set Bestial (B124, -10 points): \"you are driven by animal instinct rather than reason,\" applied here as the organism's default, un-linked state rather than an always-on trait, per the Accessibility-style reading this project's own conditional traits (Ork WAAAGH! Gestalt, Necron Slave Mentality) already use for \"the disadvantage's effects only apply in this specific, common-in- play circumstance.\" No further limitation percentage is taken since being outside synapse range is the swarm's normal condition, not a rare edge case — Synapse Discipline below is priced separately as the (comparatively rare, situational) benefit that suppresses it.",
+					"tags": [
+						"Disadvantage",
+						"Mental",
+						"Xenos",
+						"Tyranids"
+					],
+					"base_points": -10
+				},
+				{
+					"id": "tPYgvTTpkKQOkKJXn",
+					"name": "Synapse Discipline",
+					"local_notes": "While linked, Synapse Dependence's instinctive-behaviour effects are fully suppressed: the organism fights with total discipline, no fear, and follows the Hive Mind's tactical intent through the nearest synapse creature exactly as ordered. The moment the link breaks (the synapse creature dies, moves out of range, or is itself cut off from a larger synapse creature further up the chain), Synapse Dependence resumes immediately.\n\nLore: A swarm fighting under a synapse creature's watch is unrecognisable from the same swarm cut loose — utterly fearless, perfectly coordinated, and willing to press an attack to the last organism. This is the other half of the same well-documented Codex mechanic that makes synapse creatures the Imperium's priority targets.\n\nDesign: A narrow conditional Will/Fright Check bonus, built the same way this project's Ork WAAAGH! Gestalt prices an equivalent situational bonus (5 points) rather than a flat, always-on Fearlessness — here the \"always on\" case is Synapse Dependence's disadvantage instead, and this trait is the paired benefit that replaces it under a synapse creature's link.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Xenos",
+						"Tyranids"
+					],
+					"base_points": 5,
+					"features": [
+						{
+							"type": "conditional_modifier",
+							"situation": "to Will rolls and Fright Checks, and to resist Bestial's effects, while within the range of a Synapse Creature's link (see that trait)",
+							"amount": 4
+						}
+					]
+				},
+				{
+					"id": "t76HTUCzE9HthUQZ6",
+					"name": "Cannot Speak",
+					"reference": "B125",
+					"local_notes": "A Tyranid organism has no language, no vocal apparatus built for speech, and nothing resembling individual society to speak with — it communicates, if at all, through the Hive Mind Link above, not through sound.\n\nLore: Tyranids are never shown speaking, negotiating, or maintaining any culture separable from the Hive Mind's single collective will — universal, unremarked-on Codex background and consistent across every piece of Tyranid-focussed Black Library fiction.\n\nDesign: Basic Set Cannot Speak (B125), -15 points, unmodified.",
+					"tags": [
+						"Disadvantage",
+						"Physical",
+						"Xenos",
+						"Tyranids"
+					],
+					"base_points": -15
+				},
+				{
+					"id": "tQfWqMdeld5SkxcNB",
+					"name": "No Independent Society (Hive Fleet Biology)",
+					"local_notes": "0-point lore flag, the same convention this project's Ork Fungal Physiology and Necron Machine-Body entries use: a Tyranid organism has no name, no kin, no culture, and no concept of self outside the Hive Fleet that grew it — grown to purpose in a bio-ship's gestation pools and disassembled for raw biomass on death, not born, raised, or mourned. Every mechanical payoff of this (no language, no independent will outside synapse range, no fear or pain worth the name) is priced separately above and in each body-type lens; this entry exists purely to document why a Tyranid needs no name, no family, and no biography.\n\nLore: Codex background across editions treats every Tyranid bioform as disposable biomass the Hive Fleet will reclaim and regrow into something else entirely, and Black Library's Hive Fleet material never shows a Tyranid organism with anything resembling individual identity — only the Hive Mind's single, continuous intent wearing whichever body a given battle calls for.\n\nDesign: 0 points, documentation only; see notes for why this needs no separate purchase.",
+					"tags": [
+						"Xenos",
+						"Tyranids"
+					],
+					"base_points": 0
+				},
+				{
+					"id": "tVKCjnRBDYV1i0SJF",
+					"name": "Adapted Biology (Resistant to Disease and Toxins)",
+					"reference": "B81",
+					"local_notes": "Resistant (Very Common: Disease, Toxins, Alien Biochemistry), Immunity.\n\nLore: A Tyranid organism can be grown to digest, and fight through, almost any biosphere or biochemical hazard a target world can offer — part of the same adaptive, purpose-grown biology that lets the Hive Fleet consume entire ecosystems. Consistent Codex background across editions; Deathwatch's Mark of the Xenos material treats Tyranid immunity to conventional toxins and pathogens as a given for any Imperial biologist studying a captured specimen.\n\nDesign: Resistant (Very Common), Immunity tier (B81): base value 30 for the broadest tabled hazard category, x1 for full Immunity = 30 points, the same tier and math this project's Custodes and Necron \"Resistant to Metabolic Hazards\" entries use for an adapted body that shrugs off disease, poison, and radiation alike.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Tyranids"
+					],
+					"modifiers": [
+						{
+							"id": "m5gV5XPHWf8Hs6mfQ",
+							"name": "Very Common: Disease, Toxins, Alien Atmospheres and Biochemistries",
+							"reference": "B81",
+							"cost_adj": "30"
+						},
+						{
+							"id": "m3l3KUyiQESP8PrmZ",
+							"name": "Immunity",
+							"reference": "B81",
+							"cost_adj": "x1"
+						}
+					]
+				}
+			]
+		},
+		{
+			"id": "tJokNBwFo6Sb6Tgw7",
+			"name": "Chitin",
+			"reference": "B46",
+			"local_notes": "Placeholder entry at level 0. Every body-type lens below includes this trait with `levels` and `dr` overridden to its own anchor figure from framework.md's Tyranid table, and documents that lens's Weak Points rating and eye DR in its own copy of these notes: Tyranid chitin plating is organic and grows in overlapping but imperfect segments, with joints, sensory pits and eye clusters as the natural gaps a Weak Points roll represents.\n\nLore: A Tyranid's exoskeleton is grown, not worn: dense bio-ceramic chitin fused directly to the flesh beneath it, thickest on the largest bioforms and thin enough on a Termagant to be more like a swarm-trooper's flak jacket than real armour plate. Universal across Codex background and every piece of Black Library Tyranid fiction.\n\nDesign: Damage Resistance (B46, 5/level, all locations): natural DR bought directly on the body, per framework.md's explicit instruction that chitin is a character trait, not equipment. Each body-type lens overrides `levels`/`dr` to its own figure from framework.md's Tyranid anchor table; see that lens's own copy of this trait for its point cost.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Tyranids"
+			],
+			"points_per_level": 5,
+			"can_level": true,
+			"levels": 0
+		},
+		{
+			"id": "ti44H11zSPIDyopO-",
+			"name": "Synapse Creature (Warrior)",
+			"reference": "B35",
+			"local_notes": "Every friendly Tyranid organism within 16 yards automatically gains Synapse Discipline's benefit and has Synapse Dependence suppressed, for as long as this creature is alive, conscious, and itself linked (directly or through a closer synapse creature) to the Hive Mind. A Tyranid Warrior's own Synapse Dependence is never active while it is drawing on the wider Hive Mind this way.\n\nLore: Tyranid Warriors are the swarm's front-line officers precisely because they project this field: Codex background across editions names Warriors, alongside larger synapse-capable bioforms, as the link that keeps a local swarm fighting with purpose instead of degenerating into a feeding frenzy the instant a fight turns bad.\n\nDesign: Affliction (B35) base 10; Advantage Delivered (a 5-point granted advantage, valued at +5% per this project's own Advantage/ Disadvantage Delivered convention); Area Effect at the 16-yard tier (+200%, B102); Always On (-40%, B113, it cannot be switched off); Emanation (-20%, B111, proximity only, no attack roll). Net: +5+200-40-20 = +145%. 10 x 2.45 = 24.5, rounded up to 25 points.",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Xenos",
+				"Tyranids"
+			],
+			"modifiers": [
+				{
+					"id": "mvzUf7OdPaXaMWUhI",
+					"name": "Advantage Delivered (grants Synapse Discipline, 5 pts)",
+					"cost_adj": "5%"
+				},
+				{
+					"id": "mvVk1iBUYMNS_hG4r",
+					"name": "Area Effect, 16 yards",
+					"cost_adj": "+200%"
+				},
+				{
+					"id": "mOFg-yDp2mdsLsfQe",
+					"name": "Always On",
+					"cost_adj": "-40%"
+				},
+				{
+					"id": "mms4xYxsfT9zelToB",
+					"name": "Emanation",
+					"cost_adj": "-20%"
+				}
+			],
+			"base_points": 10
+		},
+		{
+			"id": "tcVvJkt1BivHdAPBC",
+			"name": "Synapse Creature (Zoanthrope)",
+			"reference": "B35",
+			"local_notes": "As the Tyranid Warrior's Synapse Creature trait, above: every friendly Tyranid organism within 16 yards gains Synapse Discipline and has Synapse Dependence suppressed while this Zoanthrope is alive, conscious, and linked to the Hive Mind.\n\nLore: Zoanthropes double as both psychic artillery and a mobile synapse node, a combination Codex background calls out explicitly as part of why they are escorted rather than left to operate alone.\n\nDesign: Identical build and math to the Tyranid Warrior's Synapse Creature trait, above (10 base, net +145%, 25 points) — a Zoanthrope's field is no wider than a Warrior's despite the psychic amplification that discipline goes into Shadow in the Warp instead.",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Xenos",
+				"Tyranids"
+			],
+			"modifiers": [
+				{
+					"id": "mdSnPxpYQCDCs2roo",
+					"name": "Advantage Delivered (grants Synapse Discipline, 5 pts)",
+					"cost_adj": "5%"
+				},
+				{
+					"id": "mc1epmBSGmroh--9T",
+					"name": "Area Effect, 16 yards",
+					"cost_adj": "+200%"
+				},
+				{
+					"id": "mP-WlMplkRarmLBDP",
+					"name": "Always On",
+					"cost_adj": "-40%"
+				},
+				{
+					"id": "mIgIvaOFAQfy4RYIl",
+					"name": "Emanation",
+					"cost_adj": "-20%"
+				}
+			],
+			"base_points": 10
+		},
+		{
+			"id": "tpc9woebcD1lpT69t",
+			"name": "Synapse Creature (Hive Tyrant)",
+			"reference": "B35",
+			"local_notes": "As the Tyranid Warrior's Synapse Creature trait, but out to 32 yards: every friendly Tyranid organism in range gains Synapse Discipline and has Synapse Dependence suppressed while this Hive Tyrant is alive, conscious, and linked to the Hive Mind.\n\nLore: A Hive Tyrant is the Hive Mind's on-the-ground synapse lord: Codex background across editions gives it by far the largest synapse range of any single bioform, able to hold an entire local swarm together where a lone Warrior only holds a squad.\n\nDesign: Affliction (B35) base 10; Advantage Delivered (+5%); Area Effect at the 32-yard tier (+250%, B102); Always On (-40%); Emanation (-20%). Net: +5+250-40-20 = +195%. 10 x 2.95 = 29.5, rounded up to 30 points.",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Xenos",
+				"Tyranids"
+			],
+			"modifiers": [
+				{
+					"id": "muY_gh2mBQMtSI1DZ",
+					"name": "Advantage Delivered (grants Synapse Discipline, 5 pts)",
+					"cost_adj": "5%"
+				},
+				{
+					"id": "mg9rwy36k2hYT5ctP",
+					"name": "Area Effect, 32 yards",
+					"cost_adj": "+250%"
+				},
+				{
+					"id": "mA0StpQuTWLikpbJN",
+					"name": "Always On",
+					"cost_adj": "-40%"
+				},
+				{
+					"id": "m0z1wluWtuptb-C9L",
+					"name": "Emanation",
+					"cost_adj": "-20%"
+				}
+			],
+			"base_points": 10
+		},
+		{
+			"id": "ta1DXRfjhVTYzRQ76",
+			"name": "Shadow in the Warp (Ravener)",
+			"reference": "B35",
+			"local_notes": "Any psyker (or other warp-sensitive mind) within 8 yards suffers -3 to Psyniscience, Warp Sorcery-tagged skill rolls, and the Will roll to resist Perils of the Warp, and must make an immediate Fright Check the first time they come within range of this creature. Non-psychic minds are unaffected.\n\nLore: The Hive Mind's raw psychic mass smothers the immaterium around any Tyranid bioform large enough to carry a fraction of it — Codex background describes Imperial and Aeldari psykers alike going deaf, blind, or outright panicking the moment a large Tyranid force (never just the smallest gaunts) comes close enough to sense. Deathwatch's Mark of the Xenos material treats Shadow in the Warp as a standing hazard for any Librarian escorting a kill-team against Tyranids.\n\nDesign: Affliction (B35) base 10; Disadvantage Delivered (a compound -30 point disadvantage — the skill/Empowerment penalty plus the forced Fright Check — valued per this project's own eyeballed Disadvantage Delivered convention, +30%); Area Effect at the 8-yard tier (+150%, B102); Always On (-40%); Emanation (-20%); Accessibility, limited to warp-sensitive targets only (-20%, the same kind of narrowing this project's Grey Knights Banishment entry uses for a daemon-only target restriction). Net: +30+150-40-20-20 = +100%. 10 x 2.0 = 20 points. Included on Raveners and other bioforms framework.md calls out as \"larger bioforms,\" never on the small swarm forms.",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Xenos",
+				"Tyranids"
+			],
+			"modifiers": [
+				{
+					"id": "m-mV0hV84MwirmJoc",
+					"name": "Disadvantage Delivered (Warp-Deafened: -3 to psychic skill and Warp Empowerment-related rolls, plus an immediate Fright Check on first exposure, -30 pts)",
+					"cost_adj": "30%"
+				},
+				{
+					"id": "m1lFp5rTU0nRKNypf",
+					"name": "Area Effect, 8 yards",
+					"cost_adj": "+150%"
+				},
+				{
+					"id": "mC_UuBOqA8KbKktQO",
+					"name": "Always On",
+					"cost_adj": "-40%"
+				},
+				{
+					"id": "mqCYb6gQQTa1LEkTC",
+					"name": "Emanation",
+					"cost_adj": "-20%"
+				},
+				{
+					"id": "m1oGHCsrdJzcY053M",
+					"name": "Accessibility (only affects psykers and other warp-sensitive minds)",
+					"cost_adj": "-20%"
+				}
+			],
+			"base_points": 10
+		},
+		{
+			"id": "tS2tBgpB88ccvr1_-",
+			"name": "Shadow in the Warp (Lictor)",
+			"reference": "B35",
+			"local_notes": "As the Ravener's Shadow in the Warp trait, above: 8-yard radius, -3 to psychic rolls, forced Fright Check on first exposure.\n\nLore: A Lictor is large enough to carry the same psychic weight as any other mid-tier bioform, on top of everything else that makes it a nightmare to hunt.\n\nDesign: Identical build and math to the Ravener's Shadow in the Warp trait, above (20 points).",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Xenos",
+				"Tyranids"
+			],
+			"modifiers": [
+				{
+					"id": "m3RgI0uEFcPgAdnf4",
+					"name": "Disadvantage Delivered (Warp-Deafened: -3 to psychic skill and Warp Empowerment-related rolls, plus an immediate Fright Check on first exposure, -30 pts)",
+					"cost_adj": "30%"
+				},
+				{
+					"id": "mp-ETtO40sXRxWXuB",
+					"name": "Area Effect, 8 yards",
+					"cost_adj": "+150%"
+				},
+				{
+					"id": "mLGb4jD45d_MhkbGx",
+					"name": "Always On",
+					"cost_adj": "-40%"
+				},
+				{
+					"id": "myf6EbFkLplTf7DVC",
+					"name": "Emanation",
+					"cost_adj": "-20%"
+				},
+				{
+					"id": "mn-WUuoj2upx2sLmJ",
+					"name": "Accessibility (only affects psykers and other warp-sensitive minds)",
+					"cost_adj": "-20%"
+				}
+			],
+			"base_points": 10
+		},
+		{
+			"id": "tzS0k_tpmUmcibknj",
+			"name": "Shadow in the Warp (Carnifex)",
+			"reference": "B35",
+			"local_notes": "As the Ravener's Shadow in the Warp trait, above: 8-yard radius, -3 to psychic rolls, forced Fright Check on first exposure.\n\nLore: A Carnifex is more brute muscle than psychic mass, so its field sits at the same modest radius as a Ravener's or Lictor's rather than a synapse creature's own wider reach.\n\nDesign: Identical build and math to the Ravener's Shadow in the Warp trait, above (20 points).",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Xenos",
+				"Tyranids"
+			],
+			"modifiers": [
+				{
+					"id": "mvWti9pKKksqp0DDx",
+					"name": "Disadvantage Delivered (Warp-Deafened: -3 to psychic skill and Warp Empowerment-related rolls, plus an immediate Fright Check on first exposure, -30 pts)",
+					"cost_adj": "30%"
+				},
+				{
+					"id": "mp5slwgZmXrOe49nq",
+					"name": "Area Effect, 8 yards",
+					"cost_adj": "+150%"
+				},
+				{
+					"id": "mk82dNhxcU6_e0LUM",
+					"name": "Always On",
+					"cost_adj": "-40%"
+				},
+				{
+					"id": "mLV0tdtaRdbLa_2-E",
+					"name": "Emanation",
+					"cost_adj": "-20%"
+				},
+				{
+					"id": "m0FFDelmrJdMLFBKK",
+					"name": "Accessibility (only affects psykers and other warp-sensitive minds)",
+					"cost_adj": "-20%"
+				}
+			],
+			"base_points": 10
+		},
+		{
+			"id": "thT2HE1akdbg1jPs6",
+			"name": "Shadow in the Warp (Tyranid Warrior)",
+			"reference": "B35",
+			"local_notes": "Any psyker within 16 yards suffers -3 to Psyniscience, Warp Sorcery-tagged skill rolls, and the Will roll to resist Perils of the Warp, and must make an immediate Fright Check the first time they come within range.\n\nLore: A Warrior's synapse role means it carries a heavier share of the Hive Mind's psychic mass than a lesser predator bioform, widening its Shadow in the Warp to match its synapse range.\n\nDesign: Affliction (B35) base 10; Disadvantage Delivered (+30%); Area Effect at the 16-yard tier (+200%, B102); Always On (-40%); Emanation (-20%); Accessibility (-20%). Net: +30+200-40-20-20 = +150%. 10 x 2.5 = 25 points.",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Xenos",
+				"Tyranids"
+			],
+			"modifiers": [
+				{
+					"id": "m78mfJIgXQUkBBw9w",
+					"name": "Disadvantage Delivered (Warp-Deafened: -3 to psychic skill and Warp Empowerment-related rolls, plus an immediate Fright Check on first exposure, -30 pts)",
+					"cost_adj": "30%"
+				},
+				{
+					"id": "mAvbkCWUEOvy6aY0R",
+					"name": "Area Effect, 16 yards",
+					"cost_adj": "+200%"
+				},
+				{
+					"id": "ma-1E_MjzTHnzfXg7",
+					"name": "Always On",
+					"cost_adj": "-40%"
+				},
+				{
+					"id": "mjgKHSYIwrwxFt-sV",
+					"name": "Emanation",
+					"cost_adj": "-20%"
+				},
+				{
+					"id": "mf4_fI627umcyUja3",
+					"name": "Accessibility (only affects psykers and other warp-sensitive minds)",
+					"cost_adj": "-20%"
+				}
+			],
+			"base_points": 10
+		},
+		{
+			"id": "tfUVjW4CztAKS9Yjk",
+			"name": "Shadow in the Warp (Zoanthrope)",
+			"reference": "B35",
+			"local_notes": "As the Tyranid Warrior's Shadow in the Warp trait, above: 16-yard radius, -3 to psychic rolls, forced Fright Check on first exposure.\n\nLore: A Zoanthrope is a dedicated psychic amplifier for the Hive Mind, carrying as heavy a share of its psychic mass as a Warrior despite its small, frail body.\n\nDesign: Identical build and math to the Tyranid Warrior's Shadow in the Warp trait, above (25 points).",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Xenos",
+				"Tyranids"
+			],
+			"modifiers": [
+				{
+					"id": "mFyvIA9tlVfu-VcUt",
+					"name": "Disadvantage Delivered (Warp-Deafened: -3 to psychic skill and Warp Empowerment-related rolls, plus an immediate Fright Check on first exposure, -30 pts)",
+					"cost_adj": "30%"
+				},
+				{
+					"id": "miZJcCmxNy9nkf2qy",
+					"name": "Area Effect, 16 yards",
+					"cost_adj": "+200%"
+				},
+				{
+					"id": "myT346qUV8-Ap_QRZ",
+					"name": "Always On",
+					"cost_adj": "-40%"
+				},
+				{
+					"id": "m4Z6v6PeFhLB7Of7K",
+					"name": "Emanation",
+					"cost_adj": "-20%"
+				},
+				{
+					"id": "mZ1FWmt8_R3jTZSLf",
+					"name": "Accessibility (only affects psykers and other warp-sensitive minds)",
+					"cost_adj": "-20%"
+				}
+			],
+			"base_points": 10
+		},
+		{
+			"id": "tXPeZiVPiyXkzosUH",
+			"name": "Shadow in the Warp (Hive Tyrant)",
+			"reference": "B35",
+			"local_notes": "Any psyker within 32 yards suffers -3 to Psyniscience, Warp Sorcery-tagged skill rolls, and the Will roll to resist Perils of the Warp, and must make an immediate Fright Check the first time they come within range.\n\nLore: A Hive Tyrant carries the largest single share of the Hive Mind's psychic mass of any bioform on the ground, matching its synapse range with the widest Shadow in the Warp in this file.\n\nDesign: Affliction (B35) base 10; Disadvantage Delivered (+30%); Area Effect at the 32-yard tier (+250%, B102); Always On (-40%); Emanation (-20%); Accessibility (-20%). Net: +30+250-40-20-20 = +200%. 10 x 3.0 = 30 points.",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Xenos",
+				"Tyranids"
+			],
+			"modifiers": [
+				{
+					"id": "mwnfOGRyjqfMvTHHu",
+					"name": "Disadvantage Delivered (Warp-Deafened: -3 to psychic skill and Warp Empowerment-related rolls, plus an immediate Fright Check on first exposure, -30 pts)",
+					"cost_adj": "30%"
+				},
+				{
+					"id": "mysekHLWJtpX6TYdm",
+					"name": "Area Effect, 32 yards",
+					"cost_adj": "+250%"
+				},
+				{
+					"id": "m7170DvsCk1wju1JF",
+					"name": "Always On",
+					"cost_adj": "-40%"
+				},
+				{
+					"id": "mymmcK9E0QIerIU7L",
+					"name": "Emanation",
+					"cost_adj": "-20%"
+				},
+				{
+					"id": "mqinriZ_0nJuZjUWA",
+					"name": "Accessibility (only affects psykers and other warp-sensitive minds)",
+					"cost_adj": "-20%"
+				}
+			],
+			"base_points": 10
+		},
+		{
+			"id": "tofGwmjWw09Z_dSFT",
+			"name": "Leaping Musculature",
+			"reference": "B89",
+			"local_notes": "Doubles jumping distance (Basic's Super Jump rule, B89/P79): a Hormagaunt can clear a full-grown man in a standing jump and closes the last few yards to a target in a single leaping bound rather than a run.\n\nLore: Hormagaunts are built specifically to close distance faster than almost anything else in the swarm, covering ground in long, bounding leaps rather than a flat sprint — a consistent visual in Codex background and Black Library's Hive Fleet material alike.\n\nDesign: Basic Set Super Jump (B89/P79, 10 points/level), level 1, 10 points.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Tyranids"
+			],
+			"points_per_level": 10,
+			"can_level": true,
+			"levels": 1
+		},
+		{
+			"id": "tZKEn9--D-NQOq5v6",
+			"name": "Genestealer Speed",
+			"local_notes": "Enhanced Move (Ground) 1: doubles ground Move over what Basic Speed alone would give.\n\nLore: A Genestealer is consistently described and depicted as faster than almost anything it hunts — closing on a target from cover in a fraction of a second, per Codex background's \"fastest killer in the swarm\" framing and every Black Library depiction of a Genestealer infiltration going wrong for its prey.\n\nDesign: Basic Set Enhanced Move (Ground) 1 (B52, 20 points), the same trait and rate this project's Astartes, Custodes and Aeldari files use for their own speed anchors, at a full level rather than the half-level those files use — a Genestealer outruns even a Space Marine on foot.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Tyranids"
+			],
+			"base_points": 20
+		},
+		{
+			"id": "tyKxR2NwfvJSADYmw",
+			"name": "Infravision",
+			"reference": "B60",
+			"local_notes": "Sees body heat; ignores darkness and most concealment based on visible light alone.\n\nLore: Genestealers hunt as often in ductwork, hab-block crawlspaces and unlit holds as in daylight, and Codex background is explicit that darkness is no protection from one.\n\nDesign: Basic Set Infravision (B60/P87, 10 points), unmodified.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Tyranids"
+			],
+			"base_points": 10
+		},
+		{
+			"id": "tpMplJvLr6PFKzwgd",
+			"name": "Extra Attack (Second Claw)",
+			"reference": "B53",
+			"local_notes": "One extra Attack maneuver per turn, using its own rending claws (see the Rending Claws weapon-symbiote for the actual attack line).\n\nLore: A Genestealer's four clawed limbs strike in a blur that has no real human equivalent — every Codex-era description and the classic \"it's already inside the room\" Black Library beat treats a Genestealer as attacking far more than once per second of combat.\n\nDesign: Basic Set Extra Attack (B53/P49, 25 points/level), level 1, 25 points.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Tyranids"
+			],
+			"points_per_level": 25,
+			"can_level": true,
+			"levels": 1
+		},
+		{
+			"id": "tezIdI5c1nQbxOwPp",
+			"name": "Tunnelling",
+			"local_notes": "Through loose earth, sand, or similar soft ground only (never solid rock or a hardened floor), the Ravener may move at its full Basic Move underground, submerging and re-surfacing as a single Move action; it may not attack while submerged. The moment it erupts from the ground it is treated as attacking from ambush for that turn's initial attack.\n\nLore: Raveners burrow beneath the battlefield and erupt without warning beneath their target, the signature ambush Codex background gives the bioform and a recurring beat in Black Library's Hive Fleet material and Deathwatch's own Mark of the Xenos description of the species.\n\nDesign: Built from Basic Set Enhanced Move (Ground) (B52, 20 points/level, the same base rate this file's Genestealer Speed and this project's Astartes/Custodes/Aeldari files all use) with an Accessibility limitation restricting the whole trait to a new, narrow movement mode (through soft earth only, never on open ground or hard rock, -40%, an eyeballed percentage in line with this project's own Accessibility convention): 20 x 0.6 = 12 points. This grants the underground Move itself rather than doubling an existing one, a reasoned adaptation of the same mechanic rather than a renamed catalogue trait, per framework.md's \"built, not borrowed\" rule.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Tyranids"
+			],
+			"base_points": 12
+		},
+		{
+			"id": "tQ1uSq0pz7JdTHs7K",
+			"name": "Chameleonic Hide",
+			"reference": "B41",
+			"local_notes": "-4 to others' Vision rolls to spot the Lictor while it is motionless, or -2 while moving (per Basic's Chameleon rule, B41); does not work against Infravision, scent-based tracking, or other non-visual detection.\n\nLore: A Lictor's hide shifts colour and texture to match its surroundings well enough to stand motionless in plain sight and go unnoticed until it strikes — the bioform's whole reason for existing in Codex background, and the source of its reputation as the swarm's perfect assassin in Black Library's Hive Fleet fiction.\n\nDesign: Basic Set Chameleon (B41/P43, 5 points/level), level 4, 20 points.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Tyranids"
+			],
+			"points_per_level": 5,
+			"can_level": true,
+			"levels": 4
+		},
+		{
+			"id": "t-q_oOw79L8hLXVXr",
+			"name": "Pheromone Trail",
+			"local_notes": "Automatically marks the Lictor's path and kill sites with a chemical trail other Tyranid organisms can follow without a roll, for as long as roughly a day; the GM may use this to have the nearest swarm elements arrive at a Lictor's last known location once its scouting or killing is done.\n\nLore: Lictors scout ahead of a landing and leave a chemical trail for the rest of the Hive Fleet to follow to a viable kill zone — standard Codex background on the bioform's actual battlefield purpose (infiltration and target-marking, not sustained combat).\n\nDesign: Perk (B21, 1 point): a narrow, always-on tracking convenience for other Tyranids rather than a combat effect, priced the same way this project's other Perk-tier flavour traits (Necron's \"Beneath a Daemon's Notice,\" this file's own Klan-style flags) are.",
+			"tags": [
+				"Perk",
+				"Xenos",
+				"Tyranids"
+			],
+			"base_points": 1
+		},
+		{
+			"id": "tyiVDFWvqZdKquDyL",
+			"name": "Regeneration (Adapted Biomass)",
+			"reference": "B80",
+			"local_notes": "Regeneration (Regular): recovers 1 HP per hour even without rest or first aid.\n\nLore: Larger Tyranid bioforms visibly close wounds and regrow damaged tissue over the course of a battle, part of the same adaptive biology that lets the Hive Fleet field bioforms built to take punishment no unaugmented creature could survive. Codex background across editions gives this trait explicitly to Tyranid monstrous creatures.\n\nDesign: Basic Set Regeneration (Regular) (B80, 25 points).",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Tyranids"
+			],
+			"base_points": 25
+		},
+		{
+			"id": "tKA_GOrM66BTlmHcc",
+			"name": "Regeneration (Adapted Biomass, Fast)",
+			"reference": "B80",
+			"local_notes": "Regeneration (Fast): recovers 1 HP per minute even without rest or first aid.\n\nLore: A Carnifex is built to absorb an amount of damage that would kill any other bioform several times over and keep coming, closing wounds visibly fast enough to matter mid-fight — Codex background's consistent framing of the Carnifex as the swarm's most durable single-target answer to armour.\n\nDesign: Basic Set Regeneration (Fast) (B80, 50 points), one tier above the Hive Tyrant's Regular rate, matching the Carnifex's specific reputation for shrugging off damage that would down a Hive Tyrant.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Tyranids"
+			],
+			"base_points": 50
+		},
+		{
+			"id": "t3OUKKHUj7GENLnYr",
+			"name": "Warp Field (Bio-Psychic Ward)",
+			"local_notes": "A regenerating psychic buffer, built on the same Shield Points mechanic framework.md's \"Personal force fields\" section uses for worn refractor fields and the like, scaled down for a Zoanthrope's own biology: SP 30, 2-second delay, recharges 10 SP/second once undamaged for that long, covers all locations. Damage comes off this pool first (armour divisors do not apply to SP); once it is exhausted, excess damage carries on to the Zoanthrope's chitin at the attack's full armour divisor, and the field needs a full 4 seconds undamaged before it starts recharging from empty. Track current SP with a Uses counter, as for worn fields.\n\nLore: A Zoanthrope generates a visible, crackling field of raw psychic force around its frail body — its only real protection beyond its own thin chitin, and Codex background's explanation for why a Zoanthrope can survive fire that would kill it outright without one.\n\nDesign: This project has no published point-cost formula for a shield's SP pool (framework.md tracks worn fields as equipment with a Uses counter, not as a priced character trait); a Zoanthrope's field is part of its body rather than worn gear, so it needs an honest point price here. Eyeballed at half of Damage Resistance's own rate (B46, 5 points per point of permanent DR) for a pool that absorbs the same amount of damage but is temporary and must recharge, i.e. 0.5 points per SP: 30 SP x 0.5 = 15 points. This is a reasoned extrapolation from Basic Set principles, not a catalogue trait renamed, and a future framework update that adds a formal shield- point pricing formula should supersede it.",
+			"tags": [
+				"Advantage",
+				"Xenos",
+				"Tyranids"
+			],
+			"base_points": 15
+		},
+		{
+			"id": "tUNMDsXFB0G8xKGgk",
+			"name": "Wings (Flight)",
+			"reference": "B56",
+			"local_notes": "Disabled by default; enable for a winged Hive Tyrant variant. Air Move equals twice Basic Speed (dropping fractions), per Basic's Flight rule; Winged flight cannot hover and is grounded by high winds or a damaged wing, same as any other winged flier.\n\nLore: Some Hive Tyrants are grown with a huge, membranous wing pair for genuine flight rather than the leaping glides other large bioforms manage — a well-known wargear/bioform option across Codex editions and a striking image in Black Library's Hive Fleet material whenever a Winged Hive Tyrant appears.\n\nDesign: Basic Set Flight (B56, 40 points) with the Winged limitation (-25%, B56, cannot hover, grounded by bad weather or wing damage): 40 x 0.75 = 30 points.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Tyranids"
+			],
+			"modifiers": [
+				{
+					"id": "miX7BfPrpS9rRhPBn",
+					"name": "Winged",
+					"reference": "B56",
+					"cost_adj": "-25%"
+				}
+			],
+			"base_points": 40,
+			"disabled": true
+		},
+		{
+			"id": "TWu_fWbHNjDgI9A7R",
+			"name": "Body Lens: Termagant",
+			"local_notes": "Lore: The Termagant: the Hive Fleet's basic gun-beast, grown cheaply and in huge numbers to advance in a firing line ahead of, or alongside, heavier bioforms. Consistent across Codex background and Black Library's Hive Fleet fiction as the swarm's most disposable ranged infantry.\n\nDesign: -100 (Attribute Modifiers) + 125 (Chitin DR 25, 5/level) = 25 points, added to Tyranid Biology's 15 for 40 points of physiology alone before skills and its weapon-symbiote. See the Termagant template. NPC creature stat block only, not a player-facing race; the point total below is for GM reference, not party balance.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Tyranids"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "t44PYGG0-xeeQlixe",
+					"name": "Attribute Modifiers (Termagant)",
+					"local_notes": "Design: Framework target: SM -1, ST 9, DX 11, IQ 4, HT 11, HP 9. Decreased ST -1 (B14, 10/level, -10) for ST 9. Increased DX +1 (B15, 20/level, 20) for DX 11 -- a gun-beast bred for a steady aim despite its small frame. Decreased IQ -6 (B16, 20/level, -120) for IQ 4, barely above pure animal cunning, matching a creature with essentially no independent judgement outside the Hive Mind Link. Increased HT +1 (B15, 10/level, 10) for HT 11. Base HP from ST 9 is already 9, the framework target, so no separate Extra Hit Points purchase. SM -1 carries no independent point cost, per this project's Ork Gretchin precedent (no ST premium is applied for a negative Size Modifier). -10+20-120+10 = -100.",
+					"tags": [
+						"Physical"
+					],
+					"base_points": -100,
+					"features": [
+						{
+							"type": "attribute_bonus",
+							"attribute": "sm",
+							"amount": -1
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "st",
+							"amount": -1
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "dx",
+							"amount": 1
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "iq",
+							"amount": -6
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "ht",
+							"amount": 1
+						}
+					]
+				},
+				{
+					"id": "tWMU_UJPksR_Apujc",
+					"name": "Chitin (Termagant)",
+					"reference": "B46",
+					"local_notes": "DR 25, all locations. Weak Points 7 (thin, gappy plates on a swarm-scale gun-beast, per framework.md's own \"flak-tier\" Weak Points figure for the loosest armour in this project): on a hit that fails to penetrate, roll 3d; 7 or less halves DR (13, rounded down) against that hit. Eye clusters run at DR 12 (roughly half the body DR) rather than 25.\n\nLore: A Tyranid's exoskeleton is grown, not worn: dense bio-ceramic chitin fused directly to the flesh beneath it, thickest on the largest bioforms and thin enough on a Termagant to be more like a swarm-trooper's flak jacket than real armour plate. Universal across Codex background and every piece of Black Library Tyranid fiction.\n\nDesign: Damage Resistance (B46, 5/level, all locations): natural DR bought directly on the body, per framework.md's explicit instruction that chitin is a character trait, not equipment. Each body-type lens overrides `levels`/`dr` to its own figure from framework.md's Tyranid anchor table; see that lens's own copy of this trait for its point cost.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Tyranids"
+					],
+					"points_per_level": 5,
+					"can_level": true,
+					"levels": 25,
+					"features": [
+						{
+							"type": "dr_bonus",
+							"locations": [
+								"all"
+							],
+							"amount": 25
+						}
+					]
+				}
+			]
+		},
+		{
+			"id": "TwgAkJviNqvEaM12s",
+			"name": "Body Lens: Hormagaunt",
+			"local_notes": "Lore: The Hormagaunt: a close-combat swarm killer bred for speed over firepower, closing on its target in long bounding leaps rather than a flat sprint before its scything talons go to work. Codex background across editions and Black Library's Hive Fleet fiction both treat Hormagaunts as the swarm's fastest melee threat at this tier.\n\nDesign: -50 (Attribute Modifiers) + 125 (Chitin DR 25) + 10 (Leaping Musculature) = 85 points, added to Tyranid Biology's 15 for 100 points of physiology alone before skills and its weapon-symbiote. See the Hormagaunt template. NPC creature stat block only.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Tyranids"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "tY6LXTx6VgasyMPQz",
+					"name": "Attribute Modifiers (Hormagaunt)",
+					"local_notes": "Design: Framework target: SM -1, ST 10, DX 13, IQ 4, HT 11, HP 10. ST 10 is human baseline (0 points). Increased DX +3 (B15, 20/level, 60) for DX 13 -- a bounding, close-combat killer well past a Termagant's steadier aim. Decreased IQ -6 (-120) for IQ 4, as debased as a Termagant's. Increased HT +1 (10) for HT 11. Base HP from ST 10 is already 10, the framework target, so no separate Extra Hit Points purchase. SM -1 carries no independent cost, as the Termagant lens above. 60-120+10 = -50.",
+					"tags": [
+						"Physical"
+					],
+					"base_points": -50,
+					"features": [
+						{
+							"type": "attribute_bonus",
+							"attribute": "sm",
+							"amount": -1
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "dx",
+							"amount": 3
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "iq",
+							"amount": -6
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "ht",
+							"amount": 1
+						}
+					]
+				},
+				{
+					"id": "tmTNuhwyrs5uRVBPV",
+					"name": "Chitin (Hormagaunt)",
+					"reference": "B46",
+					"local_notes": "DR 25, all locations. Weak Points 7 (as thin and gappy as a Termagant's plating, per framework.md's flak-tier figure): on a hit that fails to penetrate, roll 3d; 7 or less halves DR (13, rounded down). Eye clusters run at DR 12 rather than 25.\n\nLore: A Tyranid's exoskeleton is grown, not worn: dense bio-ceramic chitin fused directly to the flesh beneath it, thickest on the largest bioforms and thin enough on a Termagant to be more like a swarm-trooper's flak jacket than real armour plate. Universal across Codex background and every piece of Black Library Tyranid fiction.\n\nDesign: Damage Resistance (B46, 5/level, all locations): natural DR bought directly on the body, per framework.md's explicit instruction that chitin is a character trait, not equipment. Each body-type lens overrides `levels`/`dr` to its own figure from framework.md's Tyranid anchor table; see that lens's own copy of this trait for its point cost.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Tyranids"
+					],
+					"points_per_level": 5,
+					"can_level": true,
+					"levels": 25,
+					"features": [
+						{
+							"type": "dr_bonus",
+							"locations": [
+								"all"
+							],
+							"amount": 25
+						}
+					]
+				},
+				{
+					"id": "tf3Qi3HRxJuH7razp",
+					"name": "Leaping Musculature",
+					"reference": "B89",
+					"local_notes": "Doubles jumping distance (Basic's Super Jump rule, B89/P79): a Hormagaunt can clear a full-grown man in a standing jump and closes the last few yards to a target in a single leaping bound rather than a run.\n\nLore: Hormagaunts are built specifically to close distance faster than almost anything else in the swarm, covering ground in long, bounding leaps rather than a flat sprint — a consistent visual in Codex background and Black Library's Hive Fleet material alike.\n\nDesign: Basic Set Super Jump (B89/P79, 10 points/level), level 1, 10 points.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Tyranids"
+					],
+					"points_per_level": 10,
+					"can_level": true,
+					"levels": 1
+				}
+			]
+		},
+		{
+			"id": "Td15AbbMSEXPDWg8B",
+			"name": "Body Lens: Genestealer",
+			"local_notes": "Lore: The Genestealer: the fastest, most dangerous close-quarters killer the swarm fields at this tier, and the origin point of a broodline infestation that can subvert a whole world before the main Hive Fleet arrives. Consistent Codex background across editions and a recurring Black Library horror-fiction staple (an infiltrating Genestealer moving faster than anyone in the room can react).\n\nDesign: 154 (Attribute Modifiers) + 250 (Chitin DR 50) + 20 (Genestealer Speed) + 10 (Infravision) + 25 (Extra Attack) = 459 points, added to Tyranid Biology's 15 for 474 points of physiology alone before skills and its weapon-symbiote. See the Genestealer template. NPC creature stat block only; a Genestealer's broodline-infestation role is a GM plot hook, not a point-costed trait.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Tyranids"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "tTFICpwt3t5Ju5jsV",
+					"name": "Attribute Modifiers (Genestealer)",
+					"local_notes": "Design: Framework target: SM 0, ST 18, DX 16, IQ 6, HT 13, HP 20. Increased ST +8 (B14, 10/level, 80) for ST 18. Increased DX +6 (B15, 20/level, 120) for DX 16 -- matching an Astartes Battle- Brother's own precision, the fiction's \"fastest killer in the swarm\" made literal. Decreased IQ -4 (B16, 20/level, -80) for IQ 6 -- animal-cunning-plus, enough for a genuinely dangerous infiltration predator without any real reasoning. Increased HT +3 (B15, 10/level, 30) for HT 13. Extra Hit Points +2 (B16, 2/level, 4) on top of the ST-18 base of 18, for HP 20. 80+120-80+30+4 = 154.",
+					"tags": [
+						"Physical"
+					],
+					"base_points": 154,
+					"features": [
+						{
+							"type": "attribute_bonus",
+							"attribute": "st",
+							"amount": 8
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "dx",
+							"amount": 6
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "iq",
+							"amount": -4
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "ht",
+							"amount": 3
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "hp",
+							"amount": 2
+						}
+					]
+				},
+				{
+					"id": "tO_vtw4PN8yP9xHNh",
+					"name": "Chitin (Genestealer)",
+					"reference": "B46",
+					"local_notes": "DR 50, all locations. Weak Points 5 (tighter, more developed plating than a swarm gaunt's, on a par with Guard-pattern carapace, per framework.md's own figure for that tier): on a hit that fails to penetrate, roll 3d; 5 or less halves DR (25). Eye clusters run at DR 25 rather than 50.\n\nLore: A Tyranid's exoskeleton is grown, not worn: dense bio-ceramic chitin fused directly to the flesh beneath it, thickest on the largest bioforms and thin enough on a Termagant to be more like a swarm-trooper's flak jacket than real armour plate. Universal across Codex background and every piece of Black Library Tyranid fiction.\n\nDesign: Damage Resistance (B46, 5/level, all locations): natural DR bought directly on the body, per framework.md's explicit instruction that chitin is a character trait, not equipment. Each body-type lens overrides `levels`/`dr` to its own figure from framework.md's Tyranid anchor table; see that lens's own copy of this trait for its point cost.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Tyranids"
+					],
+					"points_per_level": 5,
+					"can_level": true,
+					"levels": 50,
+					"features": [
+						{
+							"type": "dr_bonus",
+							"locations": [
+								"all"
+							],
+							"amount": 50
+						}
+					]
+				},
+				{
+					"id": "tHNvdcIh-ZFJL0mQJ",
+					"name": "Genestealer Speed",
+					"local_notes": "Enhanced Move (Ground) 1: doubles ground Move over what Basic Speed alone would give.\n\nLore: A Genestealer is consistently described and depicted as faster than almost anything it hunts — closing on a target from cover in a fraction of a second, per Codex background's \"fastest killer in the swarm\" framing and every Black Library depiction of a Genestealer infiltration going wrong for its prey.\n\nDesign: Basic Set Enhanced Move (Ground) 1 (B52, 20 points), the same trait and rate this project's Astartes, Custodes and Aeldari files use for their own speed anchors, at a full level rather than the half-level those files use — a Genestealer outruns even a Space Marine on foot.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Tyranids"
+					],
+					"base_points": 20
+				},
+				{
+					"id": "tznytQ8s5VcMvkSw0",
+					"name": "Infravision",
+					"reference": "B60",
+					"local_notes": "Sees body heat; ignores darkness and most concealment based on visible light alone.\n\nLore: Genestealers hunt as often in ductwork, hab-block crawlspaces and unlit holds as in daylight, and Codex background is explicit that darkness is no protection from one.\n\nDesign: Basic Set Infravision (B60/P87, 10 points), unmodified.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Tyranids"
+					],
+					"base_points": 10
+				},
+				{
+					"id": "tVCOFGOYD5tzILX6G",
+					"name": "Extra Attack (Second Claw)",
+					"reference": "B53",
+					"local_notes": "One extra Attack maneuver per turn, using its own rending claws (see the Rending Claws weapon-symbiote for the actual attack line).\n\nLore: A Genestealer's four clawed limbs strike in a blur that has no real human equivalent — every Codex-era description and the classic \"it's already inside the room\" Black Library beat treats a Genestealer as attacking far more than once per second of combat.\n\nDesign: Basic Set Extra Attack (B53/P49, 25 points/level), level 1, 25 points.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Tyranids"
+					],
+					"points_per_level": 25,
+					"can_level": true,
+					"levels": 1
+				}
+			]
+		},
+		{
+			"id": "TMRK2SY18mSkWMviA",
+			"name": "Body Lens: Ravener",
+			"local_notes": "Lore: The Ravener: a serpentine burrowing predator that erupts from beneath a defensive line rather than crossing open ground to reach it. Codex background across editions is explicit that this ambush capability, not raw combat stats, is the Ravener's whole purpose.\n\nDesign: 136 (Attribute Modifiers) + 300 (Chitin DR 60) + 12 (Tunnelling) + 20 (Shadow in the Warp) = 468 points, added to Tyranid Biology's 15 for 483 points of physiology alone before skills and its weapon- symbiote. See the Ravener template. NPC creature stat block only.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Tyranids"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "t2QuYQMLNAK0yn3HV",
+					"name": "Attribute Modifiers (Ravener)",
+					"local_notes": "Design: Framework target: SM +1, ST 22, DX 14, IQ 5, HT 14, HP 26. Increased ST +12 (B14, 10/level, 120) for ST 22, with the SM +1 cost break (-10% per B18's Size and Strength Table for a creature whose bulk matches its size, the same discount this project's Ork Warboss and Custodes Attribute Modifiers entries take): 120 x 0.9 = 108. Increased DX +4 (B15, 20/level, 80) for DX 14 -- a serpentine burrowing predator, quick despite its bulk. Decreased IQ -5 (B16, 20/level, -100) for IQ 5, barely above a Termagant's. Increased HT +4 (B15, 10/level, 40) for HT 14. Extra Hit Points +4 (B16, 2/level, 8) on top of the ST-22 base of 22, for HP 26. 108+80-100+40+8 = 136.",
+					"tags": [
+						"Physical"
+					],
+					"base_points": 136,
+					"features": [
+						{
+							"type": "attribute_bonus",
+							"attribute": "sm",
+							"amount": 1
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "st",
+							"amount": 12
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "dx",
+							"amount": 4
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "iq",
+							"amount": -5
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "ht",
+							"amount": 4
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "hp",
+							"amount": 4
+						}
+					]
+				},
+				{
+					"id": "teBNB16kXWKYuiegM",
+					"name": "Chitin (Ravener)",
+					"reference": "B46",
+					"local_notes": "DR 60, all locations. Weak Points 5 (as a Genestealer's, matching framework.md's own figure for this tier): on a hit that fails to penetrate, roll 3d; 5 or less halves DR (30). Eye clusters run at DR 30 rather than 60.\n\nLore: A Tyranid's exoskeleton is grown, not worn: dense bio-ceramic chitin fused directly to the flesh beneath it, thickest on the largest bioforms and thin enough on a Termagant to be more like a swarm-trooper's flak jacket than real armour plate. Universal across Codex background and every piece of Black Library Tyranid fiction.\n\nDesign: Damage Resistance (B46, 5/level, all locations): natural DR bought directly on the body, per framework.md's explicit instruction that chitin is a character trait, not equipment. Each body-type lens overrides `levels`/`dr` to its own figure from framework.md's Tyranid anchor table; see that lens's own copy of this trait for its point cost.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Tyranids"
+					],
+					"points_per_level": 5,
+					"can_level": true,
+					"levels": 60,
+					"features": [
+						{
+							"type": "dr_bonus",
+							"locations": [
+								"all"
+							],
+							"amount": 60
+						}
+					]
+				},
+				{
+					"id": "tIFYjf1vxfUs3mBcS",
+					"name": "Tunnelling",
+					"local_notes": "Through loose earth, sand, or similar soft ground only (never solid rock or a hardened floor), the Ravener may move at its full Basic Move underground, submerging and re-surfacing as a single Move action; it may not attack while submerged. The moment it erupts from the ground it is treated as attacking from ambush for that turn's initial attack.\n\nLore: Raveners burrow beneath the battlefield and erupt without warning beneath their target, the signature ambush Codex background gives the bioform and a recurring beat in Black Library's Hive Fleet material and Deathwatch's own Mark of the Xenos description of the species.\n\nDesign: Built from Basic Set Enhanced Move (Ground) (B52, 20 points/level, the same base rate this file's Genestealer Speed and this project's Astartes/Custodes/Aeldari files all use) with an Accessibility limitation restricting the whole trait to a new, narrow movement mode (through soft earth only, never on open ground or hard rock, -40%, an eyeballed percentage in line with this project's own Accessibility convention): 20 x 0.6 = 12 points. This grants the underground Move itself rather than doubling an existing one, a reasoned adaptation of the same mechanic rather than a renamed catalogue trait, per framework.md's \"built, not borrowed\" rule.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Tyranids"
+					],
+					"base_points": 12
+				},
+				{
+					"id": "tS4CiAGeG14krm2iu",
+					"name": "Shadow in the Warp (Ravener)",
+					"reference": "B35",
+					"local_notes": "Any psyker (or other warp-sensitive mind) within 8 yards suffers -3 to Psyniscience, Warp Sorcery-tagged skill rolls, and the Will roll to resist Perils of the Warp, and must make an immediate Fright Check the first time they come within range of this creature. Non-psychic minds are unaffected.\n\nLore: The Hive Mind's raw psychic mass smothers the immaterium around any Tyranid bioform large enough to carry a fraction of it — Codex background describes Imperial and Aeldari psykers alike going deaf, blind, or outright panicking the moment a large Tyranid force (never just the smallest gaunts) comes close enough to sense. Deathwatch's Mark of the Xenos material treats Shadow in the Warp as a standing hazard for any Librarian escorting a kill-team against Tyranids.\n\nDesign: Affliction (B35) base 10; Disadvantage Delivered (a compound -30 point disadvantage — the skill/Empowerment penalty plus the forced Fright Check — valued per this project's own eyeballed Disadvantage Delivered convention, +30%); Area Effect at the 8-yard tier (+150%, B102); Always On (-40%); Emanation (-20%); Accessibility, limited to warp-sensitive targets only (-20%, the same kind of narrowing this project's Grey Knights Banishment entry uses for a daemon-only target restriction). Net: +30+150-40-20-20 = +100%. 10 x 2.0 = 20 points. Included on Raveners and other bioforms framework.md calls out as \"larger bioforms,\" never on the small swarm forms.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Xenos",
+						"Tyranids"
+					],
+					"modifiers": [
+						{
+							"id": "mhBSHpdGiws8lSfPZ",
+							"name": "Disadvantage Delivered (Warp-Deafened: -3 to psychic skill and Warp Empowerment-related rolls, plus an immediate Fright Check on first exposure, -30 pts)",
+							"cost_adj": "30%"
+						},
+						{
+							"id": "mwrS0ytF64UGfuiU0",
+							"name": "Area Effect, 8 yards",
+							"cost_adj": "+150%"
+						},
+						{
+							"id": "mYs3moxJoR2_VjxMm",
+							"name": "Always On",
+							"cost_adj": "-40%"
+						},
+						{
+							"id": "myMtVEE3EvnHYILpO",
+							"name": "Emanation",
+							"cost_adj": "-20%"
+						},
+						{
+							"id": "mn_-XJgESR3SSzh9c",
+							"name": "Accessibility (only affects psykers and other warp-sensitive minds)",
+							"cost_adj": "-20%"
+						}
+					],
+					"base_points": 10
+				}
+			]
+		},
+		{
+			"id": "TOF_2fLUflLqAnubZ",
+			"name": "Body Lens: Tyranid Warrior",
+			"local_notes": "Lore: The Tyranid Warrior: the officer caste of the swarm, big and canny enough to hold real tactical initiative and to project the Hive Mind's discipline to the lesser bioforms nearby. Consistent Codex background across editions and Black Library's Hive Fleet fiction (chiefly the Deathwatch novels' portrayal of Warriors as the dangerous, thinking edge of an otherwise mindless tide).\n\nDesign: 198 (Attribute Modifiers) + 300 (Chitin DR 60) + 25 (Synapse Creature) + 25 (Shadow in the Warp) = 548 points, added to Tyranid Biology's 15 for 563 points of physiology alone before skills and its weapon-symbiotes -- deep in framework.md's Astartes point tier (550-800), matching a Warrior's role as the swarm's single most dangerous common bioform. See the Tyranid Warrior template. NPC creature stat block only; do not read this total as a measure of individual threat the way a similarly-costed human character would be -- a lone Warrior separated from its swarm and any synapse backup is a smaller problem than the number suggests.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Tyranids"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "tRRn1bhmX0ABMzsJN",
+					"name": "Attribute Modifiers (Tyranid Warrior)",
+					"local_notes": "Design: Framework target: SM +1, ST 24, DX 13, IQ 8, HT 14, HP 30. Increased ST +14 (B14, 10/level, 140) for ST 24, with the SM +1 discount: 140 x 0.9 = 126. Increased DX +3 (B15, 20/level, 60) for DX 13. Decreased IQ -2 (B16, 20/level, -40) for IQ 8 -- a genuine officer of the swarm, sharp enough for real tactical judgement without approaching a human genius. Increased HT +4 (40) for HT 14. Extra Hit Points +6 (B16, 2/level, 12) on top of the ST-24 base of 24, for HP 30. 126+60-40+40+12 = 198.",
+					"tags": [
+						"Physical"
+					],
+					"base_points": 198,
+					"features": [
+						{
+							"type": "attribute_bonus",
+							"attribute": "sm",
+							"amount": 1
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "st",
+							"amount": 14
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "dx",
+							"amount": 3
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "iq",
+							"amount": -2
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "ht",
+							"amount": 4
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "hp",
+							"amount": 6
+						}
+					]
+				},
+				{
+					"id": "tOvhYCLBnPTNXpudI",
+					"name": "Chitin (Tyranid Warrior)",
+					"reference": "B46",
+					"local_notes": "DR 60, all locations. Weak Points 5 (as a Ravener's, matching framework.md's own figure for this tier): on a hit that fails to penetrate, roll 3d; 5 or less halves DR (30). Eye clusters run at DR 30 rather than 60.\n\nLore: A Tyranid's exoskeleton is grown, not worn: dense bio-ceramic chitin fused directly to the flesh beneath it, thickest on the largest bioforms and thin enough on a Termagant to be more like a swarm-trooper's flak jacket than real armour plate. Universal across Codex background and every piece of Black Library Tyranid fiction.\n\nDesign: Damage Resistance (B46, 5/level, all locations): natural DR bought directly on the body, per framework.md's explicit instruction that chitin is a character trait, not equipment. Each body-type lens overrides `levels`/`dr` to its own figure from framework.md's Tyranid anchor table; see that lens's own copy of this trait for its point cost.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Tyranids"
+					],
+					"points_per_level": 5,
+					"can_level": true,
+					"levels": 60,
+					"features": [
+						{
+							"type": "dr_bonus",
+							"locations": [
+								"all"
+							],
+							"amount": 60
+						}
+					]
+				},
+				{
+					"id": "t0ZCAudsr6kOSX1-M",
+					"name": "Synapse Creature (Warrior)",
+					"reference": "B35",
+					"local_notes": "Every friendly Tyranid organism within 16 yards automatically gains Synapse Discipline's benefit and has Synapse Dependence suppressed, for as long as this creature is alive, conscious, and itself linked (directly or through a closer synapse creature) to the Hive Mind. A Tyranid Warrior's own Synapse Dependence is never active while it is drawing on the wider Hive Mind this way.\n\nLore: Tyranid Warriors are the swarm's front-line officers precisely because they project this field: Codex background across editions names Warriors, alongside larger synapse-capable bioforms, as the link that keeps a local swarm fighting with purpose instead of degenerating into a feeding frenzy the instant a fight turns bad.\n\nDesign: Affliction (B35) base 10; Advantage Delivered (a 5-point granted advantage, valued at +5% per this project's own Advantage/ Disadvantage Delivered convention); Area Effect at the 16-yard tier (+200%, B102); Always On (-40%, B113, it cannot be switched off); Emanation (-20%, B111, proximity only, no attack roll). Net: +5+200-40-20 = +145%. 10 x 2.45 = 24.5, rounded up to 25 points.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Xenos",
+						"Tyranids"
+					],
+					"modifiers": [
+						{
+							"id": "meHVFoueNuPbzWsRu",
+							"name": "Advantage Delivered (grants Synapse Discipline, 5 pts)",
+							"cost_adj": "5%"
+						},
+						{
+							"id": "mExV3pzFJ7WCEv1V0",
+							"name": "Area Effect, 16 yards",
+							"cost_adj": "+200%"
+						},
+						{
+							"id": "moMxCtheXmRNmX6uo",
+							"name": "Always On",
+							"cost_adj": "-40%"
+						},
+						{
+							"id": "mjYb6MDnOEZOaYoLa",
+							"name": "Emanation",
+							"cost_adj": "-20%"
+						}
+					],
+					"base_points": 10
+				},
+				{
+					"id": "tGdBZPjmn34nPhZvG",
+					"name": "Shadow in the Warp (Tyranid Warrior)",
+					"reference": "B35",
+					"local_notes": "Any psyker within 16 yards suffers -3 to Psyniscience, Warp Sorcery-tagged skill rolls, and the Will roll to resist Perils of the Warp, and must make an immediate Fright Check the first time they come within range.\n\nLore: A Warrior's synapse role means it carries a heavier share of the Hive Mind's psychic mass than a lesser predator bioform, widening its Shadow in the Warp to match its synapse range.\n\nDesign: Affliction (B35) base 10; Disadvantage Delivered (+30%); Area Effect at the 16-yard tier (+200%, B102); Always On (-40%); Emanation (-20%); Accessibility (-20%). Net: +30+200-40-20-20 = +150%. 10 x 2.5 = 25 points.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Xenos",
+						"Tyranids"
+					],
+					"modifiers": [
+						{
+							"id": "mbeH40W3OTnImfvCo",
+							"name": "Disadvantage Delivered (Warp-Deafened: -3 to psychic skill and Warp Empowerment-related rolls, plus an immediate Fright Check on first exposure, -30 pts)",
+							"cost_adj": "30%"
+						},
+						{
+							"id": "mshLGYq4SSygNtOtE",
+							"name": "Area Effect, 16 yards",
+							"cost_adj": "+200%"
+						},
+						{
+							"id": "mWBzHQHB9dvU8zACi",
+							"name": "Always On",
+							"cost_adj": "-40%"
+						},
+						{
+							"id": "mC7bqv1RWTpdPOkR6",
+							"name": "Emanation",
+							"cost_adj": "-20%"
+						},
+						{
+							"id": "mItguhPS7HddWPHqY",
+							"name": "Accessibility (only affects psykers and other warp-sensitive minds)",
+							"cost_adj": "-20%"
+						}
+					],
+					"base_points": 10
+				}
+			]
+		},
+		{
+			"id": "T1ypFqhNYXMynWfXx",
+			"name": "Body Lens: Lictor",
+			"local_notes": "Lore: The Lictor: a solitary, chameleonic stalker sent ahead of a landing to scout, terrorise, and mark a kill zone for the swarm that follows -- consistent Codex background across editions, and the basis for the classic \"something was watching, then it wasn't\" Black Library beat.\n\nDesign: 206 (Attribute Modifiers) + 300 (Chitin DR 60) + 20 (Chameleonic Hide) + 1 (Pheromone Trail) + 20 (Shadow in the Warp) = 547 points, added to Tyranid Biology's 15 for 562 points of physiology alone before skills and its weapon-symbiotes, on a par with the Tyranid Warrior lens. See the Lictor template. NPC creature stat block only.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Tyranids"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "tM0zDXBdPupqc821P",
+					"name": "Attribute Modifiers (Lictor)",
+					"local_notes": "Design: Framework target: SM +1, ST 22, DX 15, IQ 8, HT 13, HP 26. Increased ST +12 (120) with the SM +1 discount: 120 x 0.9 = 108. Increased DX +5 (B15, 20/level, 100) for DX 15 -- a stalking ambush predator with the swarm's best reflexes outside a Genestealer's. Decreased IQ -2 (-40) for IQ 8, sharp enough for patient, solo infiltration work rather than raw instinct. Increased HT +3 (30) for HT 13. Extra Hit Points +4 (8) on top of the ST-22 base of 22, for HP 26. 108+100-40+30+8 = 206.",
+					"tags": [
+						"Physical"
+					],
+					"base_points": 206,
+					"features": [
+						{
+							"type": "attribute_bonus",
+							"attribute": "sm",
+							"amount": 1
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "st",
+							"amount": 12
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "dx",
+							"amount": 5
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "iq",
+							"amount": -2
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "ht",
+							"amount": 3
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "hp",
+							"amount": 4
+						}
+					]
+				},
+				{
+					"id": "tmPTKhh_1wuqwoJsc",
+					"name": "Chitin (Lictor)",
+					"reference": "B46",
+					"local_notes": "DR 60, all locations. Weak Points 5 (as a Ravener's or Warrior's, matching framework.md's own figure for this tier): on a hit that fails to penetrate, roll 3d; 5 or less halves DR (30). Eye clusters run at DR 30 rather than 60.\n\nLore: A Tyranid's exoskeleton is grown, not worn: dense bio-ceramic chitin fused directly to the flesh beneath it, thickest on the largest bioforms and thin enough on a Termagant to be more like a swarm-trooper's flak jacket than real armour plate. Universal across Codex background and every piece of Black Library Tyranid fiction.\n\nDesign: Damage Resistance (B46, 5/level, all locations): natural DR bought directly on the body, per framework.md's explicit instruction that chitin is a character trait, not equipment. Each body-type lens overrides `levels`/`dr` to its own figure from framework.md's Tyranid anchor table; see that lens's own copy of this trait for its point cost.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Tyranids"
+					],
+					"points_per_level": 5,
+					"can_level": true,
+					"levels": 60,
+					"features": [
+						{
+							"type": "dr_bonus",
+							"locations": [
+								"all"
+							],
+							"amount": 60
+						}
+					]
+				},
+				{
+					"id": "td_jrt4yLzrzLyszE",
+					"name": "Chameleonic Hide",
+					"reference": "B41",
+					"local_notes": "-4 to others' Vision rolls to spot the Lictor while it is motionless, or -2 while moving (per Basic's Chameleon rule, B41); does not work against Infravision, scent-based tracking, or other non-visual detection.\n\nLore: A Lictor's hide shifts colour and texture to match its surroundings well enough to stand motionless in plain sight and go unnoticed until it strikes — the bioform's whole reason for existing in Codex background, and the source of its reputation as the swarm's perfect assassin in Black Library's Hive Fleet fiction.\n\nDesign: Basic Set Chameleon (B41/P43, 5 points/level), level 4, 20 points.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Tyranids"
+					],
+					"points_per_level": 5,
+					"can_level": true,
+					"levels": 4
+				},
+				{
+					"id": "tRYxsJ15iOpZipsiT",
+					"name": "Pheromone Trail",
+					"local_notes": "Automatically marks the Lictor's path and kill sites with a chemical trail other Tyranid organisms can follow without a roll, for as long as roughly a day; the GM may use this to have the nearest swarm elements arrive at a Lictor's last known location once its scouting or killing is done.\n\nLore: Lictors scout ahead of a landing and leave a chemical trail for the rest of the Hive Fleet to follow to a viable kill zone — standard Codex background on the bioform's actual battlefield purpose (infiltration and target-marking, not sustained combat).\n\nDesign: Perk (B21, 1 point): a narrow, always-on tracking convenience for other Tyranids rather than a combat effect, priced the same way this project's other Perk-tier flavour traits (Necron's \"Beneath a Daemon's Notice,\" this file's own Klan-style flags) are.",
+					"tags": [
+						"Perk",
+						"Xenos",
+						"Tyranids"
+					],
+					"base_points": 1
+				},
+				{
+					"id": "twF40Gjxct2mmeW5r",
+					"name": "Shadow in the Warp (Lictor)",
+					"reference": "B35",
+					"local_notes": "As the Ravener's Shadow in the Warp trait, above: 8-yard radius, -3 to psychic rolls, forced Fright Check on first exposure.\n\nLore: A Lictor is large enough to carry the same psychic weight as any other mid-tier bioform, on top of everything else that makes it a nightmare to hunt.\n\nDesign: Identical build and math to the Ravener's Shadow in the Warp trait, above (20 points).",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Xenos",
+						"Tyranids"
+					],
+					"modifiers": [
+						{
+							"id": "mzNIUayrIdxP2GW1S",
+							"name": "Disadvantage Delivered (Warp-Deafened: -3 to psychic skill and Warp Empowerment-related rolls, plus an immediate Fright Check on first exposure, -30 pts)",
+							"cost_adj": "30%"
+						},
+						{
+							"id": "mRBqZeSYsJsqduAuS",
+							"name": "Area Effect, 8 yards",
+							"cost_adj": "+150%"
+						},
+						{
+							"id": "m-IB1gzF8PyuWqqFJ",
+							"name": "Always On",
+							"cost_adj": "-40%"
+						},
+						{
+							"id": "mnBNT-OaY2dSbH4at",
+							"name": "Emanation",
+							"cost_adj": "-20%"
+						},
+						{
+							"id": "moqHc6ZhEpTPaS6lS",
+							"name": "Accessibility (only affects psykers and other warp-sensitive minds)",
+							"cost_adj": "-20%"
+						}
+					],
+					"base_points": 10
+				}
+			]
+		},
+		{
+			"id": "TPk0QyjwriT5Bu7lj",
+			"name": "Body Lens: Zoanthrope",
+			"local_notes": "Lore: The Zoanthrope: a dedicated psychic amplifier for the Hive Mind, floating on its own telekinetic field and doubling as a synapse node -- consistent Codex background across editions, and Black Library's few Zoanthrope-focussed scenes always frame it as artillery to be escorted, not a front-line fighter.\n\nDesign: 24 (Attribute Modifiers) + 200 (Chitin DR 40) + 15 (Warp Field) + 25 (Synapse Creature) + 25 (Shadow in the Warp) = 289 points, added to Tyranid Biology's 15 for 304 points of physiology alone before skills and Warp Blast (data/xenos/tyranids/psychic.yaml). See the Zoanthrope template. NPC creature stat block only.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Tyranids"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "tjOK4Hw3LAZ2NCOsD",
+					"name": "Attribute Modifiers (Zoanthrope)",
+					"local_notes": "Design: Framework target: SM +1, ST 8, DX 10, IQ 10, HT 12, HP 20. Decreased ST -2 (B14, 10/level, -20) for ST 8 -- a floating, near-vestigial body; no SM discount is taken on a decrease, per this project's own Termagant/Hormagaunt precedent. DX 10 is human baseline (0 points). IQ 10 is human baseline (0 points) -- smart enough to channel real psychic power but no genius. Increased HT +2 (B15, 10/level, 20) for HT 12. Extra Hit Points +12 (B16, 2/level, 24) on top of the ST-8 base of 8, for HP 20 -- a huge Extra HP purchase reflecting a body that is nearly all brain and psychic organ, propped up by bulk rather than muscle. -20+20+24 = 24.",
+					"tags": [
+						"Physical"
+					],
+					"base_points": 24,
+					"features": [
+						{
+							"type": "attribute_bonus",
+							"attribute": "sm",
+							"amount": 1
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "st",
+							"amount": -2
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "ht",
+							"amount": 2
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "hp",
+							"amount": 12
+						}
+					]
+				},
+				{
+					"id": "tfL6gE48F10saHceS",
+					"name": "Chitin (Zoanthrope)",
+					"reference": "B46",
+					"local_notes": "DR 40, all locations. Weak Points 6 (a soft, floating body with only partial plating, gappier than a ground-fighting bioform of similar DR): on a hit that fails to penetrate, roll 3d; 6 or less halves DR (20). Eye clusters run at DR 20 rather than 40. See the Warp Field trait, below, for the psychic shield that sits in front of this DR.\n\nLore: A Tyranid's exoskeleton is grown, not worn: dense bio-ceramic chitin fused directly to the flesh beneath it, thickest on the largest bioforms and thin enough on a Termagant to be more like a swarm-trooper's flak jacket than real armour plate. Universal across Codex background and every piece of Black Library Tyranid fiction.\n\nDesign: Damage Resistance (B46, 5/level, all locations): natural DR bought directly on the body, per framework.md's explicit instruction that chitin is a character trait, not equipment. Each body-type lens overrides `levels`/`dr` to its own figure from framework.md's Tyranid anchor table; see that lens's own copy of this trait for its point cost.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Tyranids"
+					],
+					"points_per_level": 5,
+					"can_level": true,
+					"levels": 40,
+					"features": [
+						{
+							"type": "dr_bonus",
+							"locations": [
+								"all"
+							],
+							"amount": 40
+						}
+					]
+				},
+				{
+					"id": "tuhVSYGUjjh4_zXBQ",
+					"name": "Warp Field (Bio-Psychic Ward)",
+					"local_notes": "A regenerating psychic buffer, built on the same Shield Points mechanic framework.md's \"Personal force fields\" section uses for worn refractor fields and the like, scaled down for a Zoanthrope's own biology: SP 30, 2-second delay, recharges 10 SP/second once undamaged for that long, covers all locations. Damage comes off this pool first (armour divisors do not apply to SP); once it is exhausted, excess damage carries on to the Zoanthrope's chitin at the attack's full armour divisor, and the field needs a full 4 seconds undamaged before it starts recharging from empty. Track current SP with a Uses counter, as for worn fields.\n\nLore: A Zoanthrope generates a visible, crackling field of raw psychic force around its frail body — its only real protection beyond its own thin chitin, and Codex background's explanation for why a Zoanthrope can survive fire that would kill it outright without one.\n\nDesign: This project has no published point-cost formula for a shield's SP pool (framework.md tracks worn fields as equipment with a Uses counter, not as a priced character trait); a Zoanthrope's field is part of its body rather than worn gear, so it needs an honest point price here. Eyeballed at half of Damage Resistance's own rate (B46, 5 points per point of permanent DR) for a pool that absorbs the same amount of damage but is temporary and must recharge, i.e. 0.5 points per SP: 30 SP x 0.5 = 15 points. This is a reasoned extrapolation from Basic Set principles, not a catalogue trait renamed, and a future framework update that adds a formal shield- point pricing formula should supersede it.",
+					"tags": [
+						"Advantage",
+						"Xenos",
+						"Tyranids"
+					],
+					"base_points": 15
+				},
+				{
+					"id": "tjpMwAiJ2CfOHjH1L",
+					"name": "Synapse Creature (Zoanthrope)",
+					"reference": "B35",
+					"local_notes": "As the Tyranid Warrior's Synapse Creature trait, above: every friendly Tyranid organism within 16 yards gains Synapse Discipline and has Synapse Dependence suppressed while this Zoanthrope is alive, conscious, and linked to the Hive Mind.\n\nLore: Zoanthropes double as both psychic artillery and a mobile synapse node, a combination Codex background calls out explicitly as part of why they are escorted rather than left to operate alone.\n\nDesign: Identical build and math to the Tyranid Warrior's Synapse Creature trait, above (10 base, net +145%, 25 points) — a Zoanthrope's field is no wider than a Warrior's despite the psychic amplification that discipline goes into Shadow in the Warp instead.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Xenos",
+						"Tyranids"
+					],
+					"modifiers": [
+						{
+							"id": "mivk6YnzczjA4f4Vv",
+							"name": "Advantage Delivered (grants Synapse Discipline, 5 pts)",
+							"cost_adj": "5%"
+						},
+						{
+							"id": "mb4iTlJ9yVSntLHXj",
+							"name": "Area Effect, 16 yards",
+							"cost_adj": "+200%"
+						},
+						{
+							"id": "mcjLtragEH8Yf7W1D",
+							"name": "Always On",
+							"cost_adj": "-40%"
+						},
+						{
+							"id": "mfL3QNYFsKaemlYs-",
+							"name": "Emanation",
+							"cost_adj": "-20%"
+						}
+					],
+					"base_points": 10
+				},
+				{
+					"id": "t03D2JBF_l73a-e-S",
+					"name": "Shadow in the Warp (Zoanthrope)",
+					"reference": "B35",
+					"local_notes": "As the Tyranid Warrior's Shadow in the Warp trait, above: 16-yard radius, -3 to psychic rolls, forced Fright Check on first exposure.\n\nLore: A Zoanthrope is a dedicated psychic amplifier for the Hive Mind, carrying as heavy a share of its psychic mass as a Warrior despite its small, frail body.\n\nDesign: Identical build and math to the Tyranid Warrior's Shadow in the Warp trait, above (25 points).",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Xenos",
+						"Tyranids"
+					],
+					"modifiers": [
+						{
+							"id": "mvmxP66rAGu1LJcLO",
+							"name": "Disadvantage Delivered (Warp-Deafened: -3 to psychic skill and Warp Empowerment-related rolls, plus an immediate Fright Check on first exposure, -30 pts)",
+							"cost_adj": "30%"
+						},
+						{
+							"id": "mAbhhKJxsu5-XIret",
+							"name": "Area Effect, 16 yards",
+							"cost_adj": "+200%"
+						},
+						{
+							"id": "mht2N_rbFq9do-Sa7",
+							"name": "Always On",
+							"cost_adj": "-40%"
+						},
+						{
+							"id": "mq-MQLgpC6Er7o2aC",
+							"name": "Emanation",
+							"cost_adj": "-20%"
+						},
+						{
+							"id": "mQIITqVKV4yCkObIf",
+							"name": "Accessibility (only affects psykers and other warp-sensitive minds)",
+							"cost_adj": "-20%"
+						}
+					],
+					"base_points": 10
+				}
+			]
+		},
+		{
+			"id": "TLEbl7Ul11OOqSYyZ",
+			"name": "Body Lens: Hive Tyrant",
+			"local_notes": "Lore: The Hive Tyrant: the Hive Mind's synapse lord and its own psyker, the biggest single command bioform normally seen on the ground and the anchor of a swarm's local tactical will. Consistent Codex background across editions; Black Library's Hive Fleet fiction routinely treats a confirmed Hive Tyrant kill as a campaign-level victory.\n\nDesign: 470 (Attribute Modifiers) + 600 (Chitin DR 120) + 25 (Regeneration) + 30 (Synapse Creature) + 30 (Shadow in the Warp) = 1155 points (Wings disabled by default, +30 more if enabled), added to Tyranid Biology's 15 for 1170 points of physiology alone before skills, psychic powers (data/xenos/tyranids/psychic.yaml) and weapon- symbiotes -- squarely in framework.md's Heroes and Legends tier (1,000-3,000), appropriate for the swarm's synapse lord. See the Hive Tyrant template. NPC creature stat block only; this total is for GM reference, not party balance.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Tyranids"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "ts_9RhEHmqX1sX1v5",
+					"name": "Attribute Modifiers (Hive Tyrant)",
+					"local_notes": "Design: Framework target: SM +2, ST 45, DX 13, IQ 12, HT 16, HP 60. Increased ST +35 (B14, 10/level, 350) for ST 45, with the SM +2 discount (-10% per point of positive SM, per B18, the same rate this project's Ork Warboss and Custodes entries use, here two steps): 350 x 0.8 = 280. Increased DX +3 (60) for DX 13. Increased IQ +2 (B16, 20/level, 40) for IQ 12 -- a genuine synapse lord and psyker, sharper than any lesser bioform. Increased HT +6 (B15, 10/level, 60) for HT 16. Extra Hit Points +15 (B16, 2/level, 30) on top of the ST-45 base of 45, for HP 60. 280+60+40+60+30 = 470.",
+					"tags": [
+						"Physical"
+					],
+					"base_points": 470,
+					"features": [
+						{
+							"type": "attribute_bonus",
+							"attribute": "sm",
+							"amount": 2
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "st",
+							"amount": 35
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "dx",
+							"amount": 3
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "iq",
+							"amount": 2
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "ht",
+							"amount": 6
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "hp",
+							"amount": 15
+						}
+					]
+				},
+				{
+					"id": "tWT0XOoespqg15lkt",
+					"name": "Chitin (Hive Tyrant)",
+					"reference": "B46",
+					"local_notes": "DR 120, all locations -- the anchor's own top figure short of a Carnifex's. Weak Points 4 (a synapse lord's plating is thicker and better-grown than a rank-and-file predator's): on a hit that fails to penetrate, roll 3d; 4 or less halves DR (60). Eye clusters run at DR 60 rather than 120.\n\nLore: A Tyranid's exoskeleton is grown, not worn: dense bio-ceramic chitin fused directly to the flesh beneath it, thickest on the largest bioforms and thin enough on a Termagant to be more like a swarm-trooper's flak jacket than real armour plate. Universal across Codex background and every piece of Black Library Tyranid fiction.\n\nDesign: Damage Resistance (B46, 5/level, all locations): natural DR bought directly on the body, per framework.md's explicit instruction that chitin is a character trait, not equipment. Each body-type lens overrides `levels`/`dr` to its own figure from framework.md's Tyranid anchor table; see that lens's own copy of this trait for its point cost.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Tyranids"
+					],
+					"points_per_level": 5,
+					"can_level": true,
+					"levels": 120,
+					"features": [
+						{
+							"type": "dr_bonus",
+							"locations": [
+								"all"
+							],
+							"amount": 120
+						}
+					]
+				},
+				{
+					"id": "t3jwGWiTBTOPgIhvD",
+					"name": "Regeneration (Adapted Biomass)",
+					"reference": "B80",
+					"local_notes": "Regeneration (Regular): recovers 1 HP per hour even without rest or first aid.\n\nLore: Larger Tyranid bioforms visibly close wounds and regrow damaged tissue over the course of a battle, part of the same adaptive biology that lets the Hive Fleet field bioforms built to take punishment no unaugmented creature could survive. Codex background across editions gives this trait explicitly to Tyranid monstrous creatures.\n\nDesign: Basic Set Regeneration (Regular) (B80, 25 points).",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Tyranids"
+					],
+					"base_points": 25
+				},
+				{
+					"id": "t6ZgEZGm1E3GiNded",
+					"name": "Wings (Flight)",
+					"reference": "B56",
+					"local_notes": "Disabled by default; enable for a winged Hive Tyrant variant. Air Move equals twice Basic Speed (dropping fractions), per Basic's Flight rule; Winged flight cannot hover and is grounded by high winds or a damaged wing, same as any other winged flier.\n\nLore: Some Hive Tyrants are grown with a huge, membranous wing pair for genuine flight rather than the leaping glides other large bioforms manage — a well-known wargear/bioform option across Codex editions and a striking image in Black Library's Hive Fleet material whenever a Winged Hive Tyrant appears.\n\nDesign: Basic Set Flight (B56, 40 points) with the Winged limitation (-25%, B56, cannot hover, grounded by bad weather or wing damage): 40 x 0.75 = 30 points.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Tyranids"
+					],
+					"modifiers": [
+						{
+							"id": "mIVWqlu7QK-48Vvk_",
+							"name": "Winged",
+							"reference": "B56",
+							"cost_adj": "-25%"
+						}
+					],
+					"base_points": 40,
+					"disabled": true
+				},
+				{
+					"id": "tyUxtZR6F8viX4lNN",
+					"name": "Synapse Creature (Hive Tyrant)",
+					"reference": "B35",
+					"local_notes": "As the Tyranid Warrior's Synapse Creature trait, but out to 32 yards: every friendly Tyranid organism in range gains Synapse Discipline and has Synapse Dependence suppressed while this Hive Tyrant is alive, conscious, and linked to the Hive Mind.\n\nLore: A Hive Tyrant is the Hive Mind's on-the-ground synapse lord: Codex background across editions gives it by far the largest synapse range of any single bioform, able to hold an entire local swarm together where a lone Warrior only holds a squad.\n\nDesign: Affliction (B35) base 10; Advantage Delivered (+5%); Area Effect at the 32-yard tier (+250%, B102); Always On (-40%); Emanation (-20%). Net: +5+250-40-20 = +195%. 10 x 2.95 = 29.5, rounded up to 30 points.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Xenos",
+						"Tyranids"
+					],
+					"modifiers": [
+						{
+							"id": "mfQ_x1BF3MjfCooxP",
+							"name": "Advantage Delivered (grants Synapse Discipline, 5 pts)",
+							"cost_adj": "5%"
+						},
+						{
+							"id": "mvvzX5WB_kXqOisWs",
+							"name": "Area Effect, 32 yards",
+							"cost_adj": "+250%"
+						},
+						{
+							"id": "mNND1aJcT6GKxhRZB",
+							"name": "Always On",
+							"cost_adj": "-40%"
+						},
+						{
+							"id": "mVKT-ed0-C5JLbwc5",
+							"name": "Emanation",
+							"cost_adj": "-20%"
+						}
+					],
+					"base_points": 10
+				},
+				{
+					"id": "tswaACFL7KvHKAa0H",
+					"name": "Shadow in the Warp (Hive Tyrant)",
+					"reference": "B35",
+					"local_notes": "Any psyker within 32 yards suffers -3 to Psyniscience, Warp Sorcery-tagged skill rolls, and the Will roll to resist Perils of the Warp, and must make an immediate Fright Check the first time they come within range.\n\nLore: A Hive Tyrant carries the largest single share of the Hive Mind's psychic mass of any bioform on the ground, matching its synapse range with the widest Shadow in the Warp in this file.\n\nDesign: Affliction (B35) base 10; Disadvantage Delivered (+30%); Area Effect at the 32-yard tier (+250%, B102); Always On (-40%); Emanation (-20%); Accessibility (-20%). Net: +30+250-40-20-20 = +200%. 10 x 3.0 = 30 points.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Xenos",
+						"Tyranids"
+					],
+					"modifiers": [
+						{
+							"id": "m1kVpIrXo4ijF2HiK",
+							"name": "Disadvantage Delivered (Warp-Deafened: -3 to psychic skill and Warp Empowerment-related rolls, plus an immediate Fright Check on first exposure, -30 pts)",
+							"cost_adj": "30%"
+						},
+						{
+							"id": "mtNNAsQTKVrvsjXZg",
+							"name": "Area Effect, 32 yards",
+							"cost_adj": "+250%"
+						},
+						{
+							"id": "myiSNdj75AXKU5jjz",
+							"name": "Always On",
+							"cost_adj": "-40%"
+						},
+						{
+							"id": "mIr77PTSx-Pr8Nr8-",
+							"name": "Emanation",
+							"cost_adj": "-20%"
+						},
+						{
+							"id": "mkSfDUjdfWDvGB9kL",
+							"name": "Accessibility (only affects psykers and other warp-sensitive minds)",
+							"cost_adj": "-20%"
+						}
+					],
+					"base_points": 10
+				}
+			]
+		},
+		{
+			"id": "Tiir8F939ijoMA5vj",
+			"name": "Body Lens: Carnifex",
+			"local_notes": "Lore: The Carnifex: a living battering ram grown purely to soak up and deal out damage that would kill anything else outright, deployed wherever the swarm needs a hole punched through armour, fortification or a defensive line. Consistent Codex background across editions and Black Library's Hive Fleet fiction alike.\n\nDesign: 360 (Attribute Modifiers) + 750 (Chitin DR 150) + 50 (Regeneration, Fast) + 20 (Shadow in the Warp) = 1180 points, added to Tyranid Biology's 15 for 1195 points of physiology alone before skills and weapon-symbiotes -- squarely in framework.md's Heroes and Legends tier (1,000-3,000), matching a Hive Tyrant's own physiology cost almost exactly despite the very different build (raw ST and DR instead of IQ, synapse range and wings). See the Carnifex template. NPC creature stat block only; this total is for GM reference, not party balance.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Tyranids"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "tK88yosW9Bqt8-kpg",
+					"name": "Attribute Modifiers (Carnifex)",
+					"local_notes": "Design: Framework target: SM +2, ST 60, DX 10, IQ 4, HT 16, HP 70. Increased ST +50 (B14, 10/level, 500) for ST 60, with the SM +2 discount: 500 x 0.8 = 400. DX 10 is human baseline (0 points) -- a Carnifex is not precise, it is simply unstoppable. Decreased IQ -6 (B16, 20/level, -120) for IQ 4, as debased as a Termagant's -- pure directed muscle. Increased HT +6 (60) for HT 16. Extra Hit Points +10 (B16, 2/level, 20) on top of the ST-60 base of 60, for HP 70. 400-120+60+20 = 360.",
+					"tags": [
+						"Physical"
+					],
+					"base_points": 360,
+					"features": [
+						{
+							"type": "attribute_bonus",
+							"attribute": "sm",
+							"amount": 2
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "st",
+							"amount": 50
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "iq",
+							"amount": -6
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "ht",
+							"amount": 6
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "hp",
+							"amount": 10
+						}
+					]
+				},
+				{
+					"id": "t_AODgFRVhzGtstX0",
+					"name": "Chitin (Carnifex)",
+					"reference": "B46",
+					"local_notes": "DR 150, all locations -- the anchor's own top figure. Weak Points 3 (the thickest, least gappy chitin any Tyranid grows, on a par with Terminator plate): on a hit that fails to penetrate, roll 3d; 3 or less halves DR (75). Eye clusters run at DR 75 rather than 150.\n\nLore: A Tyranid's exoskeleton is grown, not worn: dense bio-ceramic chitin fused directly to the flesh beneath it, thickest on the largest bioforms and thin enough on a Termagant to be more like a swarm-trooper's flak jacket than real armour plate. Universal across Codex background and every piece of Black Library Tyranid fiction.\n\nDesign: Damage Resistance (B46, 5/level, all locations): natural DR bought directly on the body, per framework.md's explicit instruction that chitin is a character trait, not equipment. Each body-type lens overrides `levels`/`dr` to its own figure from framework.md's Tyranid anchor table; see that lens's own copy of this trait for its point cost.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Tyranids"
+					],
+					"points_per_level": 5,
+					"can_level": true,
+					"levels": 150,
+					"features": [
+						{
+							"type": "dr_bonus",
+							"locations": [
+								"all"
+							],
+							"amount": 150
+						}
+					]
+				},
+				{
+					"id": "t0gYndUryMTstvzib",
+					"name": "Regeneration (Adapted Biomass, Fast)",
+					"reference": "B80",
+					"local_notes": "Regeneration (Fast): recovers 1 HP per minute even without rest or first aid.\n\nLore: A Carnifex is built to absorb an amount of damage that would kill any other bioform several times over and keep coming, closing wounds visibly fast enough to matter mid-fight — Codex background's consistent framing of the Carnifex as the swarm's most durable single-target answer to armour.\n\nDesign: Basic Set Regeneration (Fast) (B80, 50 points), one tier above the Hive Tyrant's Regular rate, matching the Carnifex's specific reputation for shrugging off damage that would down a Hive Tyrant.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Tyranids"
+					],
+					"base_points": 50
+				},
+				{
+					"id": "tPlf9XqXQGb2cLpuB",
+					"name": "Shadow in the Warp (Carnifex)",
+					"reference": "B35",
+					"local_notes": "As the Ravener's Shadow in the Warp trait, above: 8-yard radius, -3 to psychic rolls, forced Fright Check on first exposure.\n\nLore: A Carnifex is more brute muscle than psychic mass, so its field sits at the same modest radius as a Ravener's or Lictor's rather than a synapse creature's own wider reach.\n\nDesign: Identical build and math to the Ravener's Shadow in the Warp trait, above (20 points).",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Xenos",
+						"Tyranids"
+					],
+					"modifiers": [
+						{
+							"id": "m9aFDatcZMCXHk1Rz",
+							"name": "Disadvantage Delivered (Warp-Deafened: -3 to psychic skill and Warp Empowerment-related rolls, plus an immediate Fright Check on first exposure, -30 pts)",
+							"cost_adj": "30%"
+						},
+						{
+							"id": "m6AgGHt29UiMd_F_S",
+							"name": "Area Effect, 8 yards",
+							"cost_adj": "+150%"
+						},
+						{
+							"id": "mRayP_vH-Cvk8wn8j",
+							"name": "Always On",
+							"cost_adj": "-40%"
+						},
+						{
+							"id": "mTdH1FiQw-zY0Cvh3",
+							"name": "Emanation",
+							"cost_adj": "-20%"
+						},
+						{
+							"id": "mcpw1hC2dNjVMKjwi",
+							"name": "Accessibility (only affects psykers and other warp-sensitive minds)",
+							"cost_adj": "-20%"
+						}
+					],
+					"base_points": 10
+				}
+			]
+		}
+	]
+}

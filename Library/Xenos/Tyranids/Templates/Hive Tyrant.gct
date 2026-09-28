@@ -1,0 +1,548 @@
+{
+	"version": 5,
+	"id": "BfF1iEhmaitWbMjBN",
+	"notes": "NPC creature stat block, not a player-facing race. Point math: Tyranid Biology 15 + Body Lens: Hive Tyrant 1155 (Wings disabled by default; +30 if a winged variant is enabled) + Unusual Background 10 + Warp Empowerment 2 (30) + Psyker (Talent) 3 (30) + The Horror (28) + Dominion 1 (18) + Monstrous Scything Talons 62 + Venom Cannon 225 + skills 10 = 1583 points. Stats: SM +2, ST 45, DX 13, IQ 12, HT 16, HP 60, Will 12 (+3 from Psyker Talent's Perils bonus, see that trait's notes), Per 12, natural chitin torso DR 120 (Weak Points 4, eye DR 60), Regeneration (Regular), Synapse Creature (32 yards), Shadow in the Warp (32 yards) — framework.md's Hive Tyrant anchor line exactly. This lands squarely in framework.md's Heroes and Legends tier (1,000-3,000): the swarm's synapse lord and its own psyker, matching Codex background's treatment of a confirmed Hive Tyrant kill as a campaign-level victory. The point total is for GM reference only, not party balance.\nWeapon-symbiotes: carries Monstrous Scything Talons and a Venom Cannon — a classic Hive Tyrant loadout of one melee and one heavy ranged symbiote, both built as natural-attack traits in data/xenos/tyranids/bio-weapons.yaml.\n",
+	"traits": [
+		{
+			"id": "TP849dfcd5majQKH8",
+			"name": "Tyranid Biology",
+			"local_notes": "Lore: The Tyranid Biology shared by every bioform in a Hive Fleet: bound to the Hive Mind from the moment it is grown, disciplined and fearless only so long as a synapse creature's link holds, mute and without individual culture, and adapted to digest or shrug off almost anything a target world can throw at it. This is the baseline every body-type lens below (Termagant through Carnifex) builds on top of; the lens supplies the bioform's own attributes, chitin DR, and any special biology (leaping legs, rending claws, psychic organs, wings) that role calls for.\n\nDesign: 5 (Hive Mind Link) - 10 (Synapse Dependence) + 5 (Synapse Discipline) - 15 (Cannot Speak) + 0 (No Independent Society) + 30 (Adapted Biology) = 15 points of shared physiology before attributes, chitin DR, special biology, or skills. See each template for a full stat block built on top of this plus a body- type lens.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Mental",
+				"Xenos",
+				"Tyranids"
+			],
+			"container_type": "ancestry",
+			"children": [
+				{
+					"id": "tXGkYBdmxw9UtJZlo",
+					"name": "Hive Mind Link",
+					"reference": "B70",
+					"local_notes": "A permanent, involuntary telepathic link to the Hive Mind: the organism receives strategic direction, feels the Hive Mind's intent when synapse creatures are near, and cannot meaningfully act against it (see Synapse Dependence and Synapse Discipline below for what that link actually does turn to turn). It carries none of the individual privacy or two-way nuance Mindlink usually implies between two people.\n\nLore: Every Tyranid bioform, however small, is grown already wired into the Hive Mind's collective will — Codex background across editions is explicit that a lone Tyranid organism has essentially no independent will to speak of, and Black Library's Hive Fleet material consistently frames the swarm as a single directed organism wearing a billion bodies rather than a species of individuals.\n\nDesign: Basic Set Mindlink (B70): the published cost table prices the advantage by how many separate people share the link (5 points for a single person, rising with group size). The Hive Mind functions mechanically as one linked entity, not as a separate link to every other Tyranid organism in the swarm, so this project takes the \"single person\" tier (5 points) rather than trying to price a link to billions of individual minds — the same kind of reasoned reinterpretation of a Basic Set category this project's other xenos files use rather than inventing a new, uncosted tier.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Xenos",
+						"Tyranids"
+					],
+					"modifiers": [
+						{
+							"id": "mHz89y5an1Olk6MhC",
+							"name": "Single person (the Hive Mind, treated as one linked entity)",
+							"reference": "B70",
+							"cost_adj": "5"
+						}
+					]
+				},
+				{
+					"id": "tGZh2Mmf8vtuZdhKn",
+					"name": "Synapse Dependence (Instinctive Behaviour)",
+					"reference": "B124",
+					"local_notes": "Default state: outside synapse range (see Synapse Discipline below), a Tyranid organism reverts to pure instinct. It cannot follow a complex order, hold a defensive position under real pressure, or resist an overwhelming urge to feed on the nearest kill or flee an unwinnable fight — GM's call, biased toward whichever instinct the immediate situation makes obvious (feeding on a fresh kill; fleeing when reduced below 1/3 HP with nowhere to push forward; otherwise holding station near its Hive Fleet's last clear directive). This is fully suppressed while the organism is within the range of a Synapse Creature (see that trait, below) — see Synapse Discipline for what replaces it there.\n\nLore: Codex background is explicit that most Tyranid bioforms have no independent tactical judgement at all: cut off from a synapse creature, a swarm degenerates within moments into a feeding frenzy or a panicked rout, exactly the behaviour Imperial commanders are taught to exploit by killing synapse creatures first. Deathwatch RPG's Mark of the Xenos Tyranid material calibrates this as the single most reliable tactic against a swarm.\n\nDesign: Basic Set Bestial (B124, -10 points): \"you are driven by animal instinct rather than reason,\" applied here as the organism's default, un-linked state rather than an always-on trait, per the Accessibility-style reading this project's own conditional traits (Ork WAAAGH! Gestalt, Necron Slave Mentality) already use for \"the disadvantage's effects only apply in this specific, common-in- play circumstance.\" No further limitation percentage is taken since being outside synapse range is the swarm's normal condition, not a rare edge case — Synapse Discipline below is priced separately as the (comparatively rare, situational) benefit that suppresses it.",
+					"tags": [
+						"Disadvantage",
+						"Mental",
+						"Xenos",
+						"Tyranids"
+					],
+					"base_points": -10
+				},
+				{
+					"id": "txEYq_lmShdoiBOGY",
+					"name": "Synapse Discipline",
+					"local_notes": "While linked, Synapse Dependence's instinctive-behaviour effects are fully suppressed: the organism fights with total discipline, no fear, and follows the Hive Mind's tactical intent through the nearest synapse creature exactly as ordered. The moment the link breaks (the synapse creature dies, moves out of range, or is itself cut off from a larger synapse creature further up the chain), Synapse Dependence resumes immediately.\n\nLore: A swarm fighting under a synapse creature's watch is unrecognisable from the same swarm cut loose — utterly fearless, perfectly coordinated, and willing to press an attack to the last organism. This is the other half of the same well-documented Codex mechanic that makes synapse creatures the Imperium's priority targets.\n\nDesign: A narrow conditional Will/Fright Check bonus, built the same way this project's Ork WAAAGH! Gestalt prices an equivalent situational bonus (5 points) rather than a flat, always-on Fearlessness — here the \"always on\" case is Synapse Dependence's disadvantage instead, and this trait is the paired benefit that replaces it under a synapse creature's link.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Xenos",
+						"Tyranids"
+					],
+					"base_points": 5,
+					"features": [
+						{
+							"type": "conditional_modifier",
+							"situation": "to Will rolls and Fright Checks, and to resist Bestial's effects, while within the range of a Synapse Creature's link (see that trait)",
+							"amount": 4
+						}
+					]
+				},
+				{
+					"id": "tF7w-8XdedFTZDijm",
+					"name": "Cannot Speak",
+					"reference": "B125",
+					"local_notes": "A Tyranid organism has no language, no vocal apparatus built for speech, and nothing resembling individual society to speak with — it communicates, if at all, through the Hive Mind Link above, not through sound.\n\nLore: Tyranids are never shown speaking, negotiating, or maintaining any culture separable from the Hive Mind's single collective will — universal, unremarked-on Codex background and consistent across every piece of Tyranid-focussed Black Library fiction.\n\nDesign: Basic Set Cannot Speak (B125), -15 points, unmodified.",
+					"tags": [
+						"Disadvantage",
+						"Physical",
+						"Xenos",
+						"Tyranids"
+					],
+					"base_points": -15
+				},
+				{
+					"id": "tHQWJc0op2icxydY9",
+					"name": "No Independent Society (Hive Fleet Biology)",
+					"local_notes": "0-point lore flag, the same convention this project's Ork Fungal Physiology and Necron Machine-Body entries use: a Tyranid organism has no name, no kin, no culture, and no concept of self outside the Hive Fleet that grew it — grown to purpose in a bio-ship's gestation pools and disassembled for raw biomass on death, not born, raised, or mourned. Every mechanical payoff of this (no language, no independent will outside synapse range, no fear or pain worth the name) is priced separately above and in each body-type lens; this entry exists purely to document why a Tyranid needs no name, no family, and no biography.\n\nLore: Codex background across editions treats every Tyranid bioform as disposable biomass the Hive Fleet will reclaim and regrow into something else entirely, and Black Library's Hive Fleet material never shows a Tyranid organism with anything resembling individual identity — only the Hive Mind's single, continuous intent wearing whichever body a given battle calls for.\n\nDesign: 0 points, documentation only; see notes for why this needs no separate purchase.",
+					"tags": [
+						"Xenos",
+						"Tyranids"
+					],
+					"base_points": 0
+				},
+				{
+					"id": "tfCDLf4ehWxqWqS-7",
+					"name": "Adapted Biology (Resistant to Disease and Toxins)",
+					"reference": "B81",
+					"local_notes": "Resistant (Very Common: Disease, Toxins, Alien Biochemistry), Immunity.\n\nLore: A Tyranid organism can be grown to digest, and fight through, almost any biosphere or biochemical hazard a target world can offer — part of the same adaptive, purpose-grown biology that lets the Hive Fleet consume entire ecosystems. Consistent Codex background across editions; Deathwatch's Mark of the Xenos material treats Tyranid immunity to conventional toxins and pathogens as a given for any Imperial biologist studying a captured specimen.\n\nDesign: Resistant (Very Common), Immunity tier (B81): base value 30 for the broadest tabled hazard category, x1 for full Immunity = 30 points, the same tier and math this project's Custodes and Necron \"Resistant to Metabolic Hazards\" entries use for an adapted body that shrugs off disease, poison, and radiation alike.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Tyranids"
+					],
+					"modifiers": [
+						{
+							"id": "m8rVtb3BffP62ZVVO",
+							"name": "Very Common: Disease, Toxins, Alien Atmospheres and Biochemistries",
+							"reference": "B81",
+							"cost_adj": "30"
+						},
+						{
+							"id": "mSPdQS2cDCWzv23ye",
+							"name": "Immunity",
+							"reference": "B81",
+							"cost_adj": "x1"
+						}
+					]
+				}
+			]
+		},
+		{
+			"id": "TTOlMUdC4XKJP5VRw",
+			"name": "Body Lens: Hive Tyrant",
+			"local_notes": "Lore: The Hive Tyrant: the Hive Mind's synapse lord and its own psyker, the biggest single command bioform normally seen on the ground and the anchor of a swarm's local tactical will. Consistent Codex background across editions; Black Library's Hive Fleet fiction routinely treats a confirmed Hive Tyrant kill as a campaign-level victory.\n\nDesign: 470 (Attribute Modifiers) + 600 (Chitin DR 120) + 25 (Regeneration) + 30 (Synapse Creature) + 30 (Shadow in the Warp) = 1155 points (Wings disabled by default, +30 more if enabled), added to Tyranid Biology's 15 for 1170 points of physiology alone before skills, psychic powers (data/xenos/tyranids/psychic.yaml) and weapon- symbiotes -- squarely in framework.md's Heroes and Legends tier (1,000-3,000), appropriate for the swarm's synapse lord. See the Hive Tyrant template. NPC creature stat block only; this total is for GM reference, not party balance.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Tyranids"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "tpq0M_kxYIZWYPgub",
+					"name": "Attribute Modifiers (Hive Tyrant)",
+					"local_notes": "Design: Framework target: SM +2, ST 45, DX 13, IQ 12, HT 16, HP 60. Increased ST +35 (B14, 10/level, 350) for ST 45, with the SM +2 discount (-10% per point of positive SM, per B18, the same rate this project's Ork Warboss and Custodes entries use, here two steps): 350 x 0.8 = 280. Increased DX +3 (60) for DX 13. Increased IQ +2 (B16, 20/level, 40) for IQ 12 -- a genuine synapse lord and psyker, sharper than any lesser bioform. Increased HT +6 (B15, 10/level, 60) for HT 16. Extra Hit Points +15 (B16, 2/level, 30) on top of the ST-45 base of 45, for HP 60. 280+60+40+60+30 = 470.",
+					"tags": [
+						"Physical"
+					],
+					"base_points": 470,
+					"features": [
+						{
+							"type": "attribute_bonus",
+							"attribute": "sm",
+							"amount": 2
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "st",
+							"amount": 35
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "dx",
+							"amount": 3
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "iq",
+							"amount": 2
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "ht",
+							"amount": 6
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "hp",
+							"amount": 15
+						}
+					]
+				},
+				{
+					"id": "tcJhT13aVGWsLZjjc",
+					"name": "Chitin (Hive Tyrant)",
+					"reference": "B46",
+					"local_notes": "DR 120, all locations -- the anchor's own top figure short of a Carnifex's. Weak Points 4 (a synapse lord's plating is thicker and better-grown than a rank-and-file predator's): on a hit that fails to penetrate, roll 3d; 4 or less halves DR (60). Eye clusters run at DR 60 rather than 120.\n\nLore: A Tyranid's exoskeleton is grown, not worn: dense bio-ceramic chitin fused directly to the flesh beneath it, thickest on the largest bioforms and thin enough on a Termagant to be more like a swarm-trooper's flak jacket than real armour plate. Universal across Codex background and every piece of Black Library Tyranid fiction.\n\nDesign: Damage Resistance (B46, 5/level, all locations): natural DR bought directly on the body, per framework.md's explicit instruction that chitin is a character trait, not equipment. Each body-type lens overrides `levels`/`dr` to its own figure from framework.md's Tyranid anchor table; see that lens's own copy of this trait for its point cost.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Tyranids"
+					],
+					"points_per_level": 5,
+					"can_level": true,
+					"levels": 120,
+					"features": [
+						{
+							"type": "dr_bonus",
+							"locations": [
+								"all"
+							],
+							"amount": 120
+						}
+					]
+				},
+				{
+					"id": "tvN67UdVPZMt0TISs",
+					"name": "Regeneration (Adapted Biomass)",
+					"reference": "B80",
+					"local_notes": "Regeneration (Regular): recovers 1 HP per hour even without rest or first aid.\n\nLore: Larger Tyranid bioforms visibly close wounds and regrow damaged tissue over the course of a battle, part of the same adaptive biology that lets the Hive Fleet field bioforms built to take punishment no unaugmented creature could survive. Codex background across editions gives this trait explicitly to Tyranid monstrous creatures.\n\nDesign: Basic Set Regeneration (Regular) (B80, 25 points).",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Tyranids"
+					],
+					"base_points": 25
+				},
+				{
+					"id": "tqJWesBXEbJYgrJ3p",
+					"name": "Wings (Flight)",
+					"reference": "B56",
+					"local_notes": "Disabled by default; enable for a winged Hive Tyrant variant. Air Move equals twice Basic Speed (dropping fractions), per Basic's Flight rule; Winged flight cannot hover and is grounded by high winds or a damaged wing, same as any other winged flier.\n\nLore: Some Hive Tyrants are grown with a huge, membranous wing pair for genuine flight rather than the leaping glides other large bioforms manage — a well-known wargear/bioform option across Codex editions and a striking image in Black Library's Hive Fleet material whenever a Winged Hive Tyrant appears.\n\nDesign: Basic Set Flight (B56, 40 points) with the Winged limitation (-25%, B56, cannot hover, grounded by bad weather or wing damage): 40 x 0.75 = 30 points.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Tyranids"
+					],
+					"modifiers": [
+						{
+							"id": "m7_0xv0R13WOQ_QmB",
+							"name": "Winged",
+							"reference": "B56",
+							"cost_adj": "-25%"
+						}
+					],
+					"base_points": 40,
+					"disabled": true
+				},
+				{
+					"id": "tKiPpjJ5-EwzHw7A-",
+					"name": "Synapse Creature (Hive Tyrant)",
+					"reference": "B35",
+					"local_notes": "As the Tyranid Warrior's Synapse Creature trait, but out to 32 yards: every friendly Tyranid organism in range gains Synapse Discipline and has Synapse Dependence suppressed while this Hive Tyrant is alive, conscious, and linked to the Hive Mind.\n\nLore: A Hive Tyrant is the Hive Mind's on-the-ground synapse lord: Codex background across editions gives it by far the largest synapse range of any single bioform, able to hold an entire local swarm together where a lone Warrior only holds a squad.\n\nDesign: Affliction (B35) base 10; Advantage Delivered (+5%); Area Effect at the 32-yard tier (+250%, B102); Always On (-40%); Emanation (-20%). Net: +5+250-40-20 = +195%. 10 x 2.95 = 29.5, rounded up to 30 points.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Xenos",
+						"Tyranids"
+					],
+					"modifiers": [
+						{
+							"id": "m2MC8WfiNEk6LiONZ",
+							"name": "Advantage Delivered (grants Synapse Discipline, 5 pts)",
+							"cost_adj": "5%"
+						},
+						{
+							"id": "mgcu1R9nyGsUq7-jg",
+							"name": "Area Effect, 32 yards",
+							"cost_adj": "+250%"
+						},
+						{
+							"id": "mpyRZwMsgjcnixglX",
+							"name": "Always On",
+							"cost_adj": "-40%"
+						},
+						{
+							"id": "mOtUG7N9LItsiqBNf",
+							"name": "Emanation",
+							"cost_adj": "-20%"
+						}
+					],
+					"base_points": 10
+				},
+				{
+					"id": "tcNOsgABAVkNg2oS5",
+					"name": "Shadow in the Warp (Hive Tyrant)",
+					"reference": "B35",
+					"local_notes": "Any psyker within 32 yards suffers -3 to Psyniscience, Warp Sorcery-tagged skill rolls, and the Will roll to resist Perils of the Warp, and must make an immediate Fright Check the first time they come within range.\n\nLore: A Hive Tyrant carries the largest single share of the Hive Mind's psychic mass of any bioform on the ground, matching its synapse range with the widest Shadow in the Warp in this file.\n\nDesign: Affliction (B35) base 10; Disadvantage Delivered (+30%); Area Effect at the 32-yard tier (+250%, B102); Always On (-40%); Emanation (-20%); Accessibility (-20%). Net: +30+250-40-20-20 = +200%. 10 x 3.0 = 30 points.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Xenos",
+						"Tyranids"
+					],
+					"modifiers": [
+						{
+							"id": "mW0sQYPLDljPdSA1p",
+							"name": "Disadvantage Delivered (Warp-Deafened: -3 to psychic skill and Warp Empowerment-related rolls, plus an immediate Fright Check on first exposure, -30 pts)",
+							"cost_adj": "30%"
+						},
+						{
+							"id": "mZxO4YcBaOn1-axEq",
+							"name": "Area Effect, 32 yards",
+							"cost_adj": "+250%"
+						},
+						{
+							"id": "mUR1vGbVwEakmxm-5",
+							"name": "Always On",
+							"cost_adj": "-40%"
+						},
+						{
+							"id": "mj4kvZN9UfRD-uQld",
+							"name": "Emanation",
+							"cost_adj": "-20%"
+						},
+						{
+							"id": "mSBTf_2bl4X-wPblk",
+							"name": "Accessibility (only affects psykers and other warp-sensitive minds)",
+							"cost_adj": "-20%"
+						}
+					],
+					"base_points": 10
+				}
+			]
+		},
+		{
+			"id": "ttQnie7gEzTweYtxy",
+			"name": "Unusual Background (Latent Psychic Potential)",
+			"local_notes": "Lore: Psychic ability is a random, rare mutation of the human genome that lets its bearer perceive and touch the immaterium (the warp). Sources disagree on exact frequency — Imperial administrative texts and Dark Heresy-line background both describe it as \"rare but not vanishingly so,\" on the order of a handful of latent potentials per hive-sized population, with usably strong psykers far rarer still. Treat any precise ratio as flavour, not census data.\n\nDesign: Required to take Psyker (Talent), Warp Empowerment, or any trait carrying the Warp Sorcery power modifier below. Basic Set B261 leaves Unusual Background costs to the GM; 10 points reflects that the ability itself is not learned but grants access to an entire framework of further abilities, roughly the going rate other published settings use for \"you may buy from this power list at all.\"",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Psyker",
+				"Imperium"
+			],
+			"base_points": 10
+		},
+		{
+			"id": "tRnIv9tedlD5-TaGf",
+			"name": "Warp Empowerment",
+			"reference": "TSOR4",
+			"local_notes": "A direct reskin of Sorcerous Empowerment (Thaumatology: Sorcery, TSOR4):\nthe psyker's raw, trained capacity to draw on and shape the warp, as\ndistinct from Psyker (Talent, TSOR5's Sorcery Talent analogue, below)\nwhich only sharpens related skills. Requires Unusual Background (Latent\nPsychic Potential). It is the prerequisite for every Warp Sorcery-tagged\nability in this file (see Witch-sight and each discipline below); the\nNavigator's Third Eye and the Pariah/Untouchable genes carry no Warp\nSorcery modifier and so need no Warp Empowerment.\n\nCap, cast per Thaumatology: Sorcery (TSOR): a psyker may only know a\npower whose full, modified point cost is no greater than the point cost\nof their own Warp Empowerment (10 + 10/level). A power bought at a\nhigher level (more dice, more range, etc.) costs proportionally more and\nmay outgrow a psyker's Empowerment even after they first learned it at a\ncheaper level — raising the level, and cost, of Warp Empowerment is how\na psyker \"grows into\" costlier or higher-level workings.\n\nImperial Assignment scale (Adeptus Astra Telepathica / Black Ships)\nmapped to Warp Empowerment level and the point cap that gives, worked\nout from this file's actual (Warp Sorcery -20% + Perils of the Warp)\nmodified costs:\n\n  Grade      | Empowerment level | Cap (10+10/lvl) | What the cap reaches\n  Iota       | 1                  | 20              | cheapest powers only: e.g. Smite (3), Endurance (2), Iron Arm (4), Fire Bolt (4), Assail (4), Mind Probe (14), Foresight (18) — register but rarely learn more than one or two\n  Zeta       | 1                  | 20              | as Iota; low Psyker Talent limits skill use, not what they can know\n  Eta        | 1                  | 20              | as Zeta\n  Theta      | 2                  | 30              | adds Molten Beam (9), Crush (11), Psychic Scream (12), Sanctuary (13), Null Zone (23), Terrify (28)\n  Epsilon    | 2                  | 30              | as Theta (typical Wyrdvane conscript)\n  Delta      | 3                  | 40              | adds Scrier's Gaze (35), Dominate (35), Gate of Infinity (40) — the full non-Great-Power roster (typical Sanctioned Primaris Psyker)\n  Gamma      | 3                  | 40              | as Delta, better skills from a higher Psyker Talent\n  Beta       | 4                  | 50              | full roster, with headroom to push a known leveled power to a higher level/more dice (many Astropaths)\n  Alpha      | 5                  | 60              | full roster, generous headroom for high-level workings (Astartes Librarians, Black Ship candidates)\n  Alpha-Plus | 7+ (GM only)       | 80+             | approaching Great Power territory; Vortex of Doom (280+ as usually bought) is still normally out of reach even here\n\nA character need not buy Warp Empowerment up to their grade's full\nceiling: templates in this project buy only the level their actually-\nknown powers need, and note the grade's theoretical ceiling separately.\n\nLore: The Iota-to-Alpha-Plus assignment scale is drawn from the Adeptus Astra Telepathica's own grading of psychic potential as depicted across Dark Heresy-line material and repeated in Codex/Imperial Armour background; Black Library uses the same grades in passing (e.g. Eisenhorn-cycle and Ciaphas Cain references to Alpha-class talents). \"Alpha-Plus\" specifically denotes the rarest, most dangerous talents the Black Ships process.\n\nDesign: Sorcerous Empowerment (TSOR4) costs 10 base + 10/level (level 1 = 20 points, each further level +10) in the GCS master Thaumatology data; reused verbatim here under a 40k-appropriate name, since the underlying mechanic — \"how much warp-power you can channel at all, gating which spells/powers you may know by their modified cost\" — is exactly what an Imperial Assignment grade represents. The level-to-grade mapping above is derived, not asserted: it walks every power in this file's actual modified cost (recomputed under the new Warp Sorcery -20% modifier, see below) and finds the cheapest Empowerment level whose cap clears it, so \"Iota can only cast minor powers\" and \"Alpha can cast the biggest non-Great-Power ability\" are literally true of the numbers, not just flavour text.",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Talent",
+				"Psyker",
+				"Imperium"
+			],
+			"points_per_level": 10,
+			"can_level": true,
+			"levels": 2,
+			"base_points": 10
+		},
+		{
+			"id": "t_HpFOj4cNSSf3k0X",
+			"name": "Psyker",
+			"reference": "TSOR5",
+			"local_notes": "This project's Sorcery Talent (Thaumatology: Sorcery, TSOR5) analogue:\napplies as Sorcery Talent applies to a sorcerer's skills in TSOR, just\nto a 40k-specific list — Psyniscience, Meditation, Hidden Lore (the\nWarp), and the Will roll to resist Perils of the Warp (see above) — a\nhouse extension of Talent's normal \"add to listed skills\" rule,\nprecedented by Magery's and Sorcery Talent's own habit of aiding\nrelated rolls beyond pure spellcasting. Reaction bonus: +1/level from\nother sanctioned psykers and the Astra Telepathica.\n\nPsyker (Talent) and Warp Empowerment are separate purchases on separate\naxes, exactly as Sorcery Talent and Sorcerous Empowerment are in TSOR:\nthis trait only sharpens related skills and Perils resistance, while\nWarp Empowerment (above) is what actually gates which powers a psyker\nmay know. A high-Talent, low-Empowerment psyker is a sharp, well-drilled\nmind who simply hasn't learned much yet; the reverse is a raw prodigy\nwho is clumsy with the skills around their gift.\n\nImperial Assignment scale (Adeptus Astra Telepathica / Black Ships),\nweakest to strongest, mapped to Talent level. See Warp Empowerment above\nfor the matching Empowerment level/point-cap column, which is the real\ngate on ability selection:\n  Iota    — Talent 0 (latent; register but rarely take Psyker traits at all)\n  Zeta    — Talent 1\n  Eta     — Talent 1\n  Theta   — Talent 2\n  Epsilon — Talent 2  (typical Wyrdvane conscript)\n  Delta   — Talent 3  (typical Sanctioned Primaris Psyker)\n  Gamma   — Talent 4\n  Beta    — Talent 4  (many Astropaths)\n  Alpha   — Talent 5  (Astartes Librarians, Black Ship candidates)\n  Alpha-Plus — Talent 6+ (beyond-play tier: Primarchs,\n    the most powerful Inquisitors, the worst Chaos sorcerers)\n\nLore: The Iota-to-Alpha-Plus assignment scale is drawn from the Adeptus Astra Telepathica's own grading of psychic potential as depicted across Dark Heresy-line material and repeated in Codex/Imperial Armour background; Black Library uses the same grades in passing (e.g. Eisenhorn-cycle and Ciaphas Cain references to Alpha-class talents). \"Alpha-Plus\" specifically denotes the rarest, most dangerous talents the Black Ships process.\n\nDesign: Talent affecting four things (three skills plus the Perils resistance roll) sits at Basic's \"Medium Talent\" rate of 10 points/level (B90, three-to-five-skill bracket) rather than 5 (one-two skills) or 15 (six-nine skills) — the same rate Sorcery Talent itself uses (TSOR5, 10/level). Capped at level 6 for player characters; higher grades are GM-reference only, per the framework's \"Beyond play\" tier.",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Talent",
+				"Psyker",
+				"Imperium"
+			],
+			"points_per_level": 10,
+			"can_level": true,
+			"levels": 3,
+			"base_points": 0,
+			"max_levels": 6
+		},
+		{
+			"id": "t5Xebo2Rcbkvo5ckQ",
+			"name": "The Horror",
+			"local_notes": "Lore: A wave of pure, alien wrongness projected directly into a target's mind, distinct from Shadow in the Warp's constant background hum — a focused psychic terror-strike the Hive Mind can direct at a single dangerous enemy (an officer, a Librarian) rather than merely radiating outward. Consistent with Codex background's framing of the Hive Mind as capable of directed as well as ambient psychic effects.\n\nDesign: Terror, Basic's core advantage (flat 30 + 10/level for extra range, B), with Warp Sorcery/Perils, net -30%, identical build to this project's own Telepathy: Terrify entry. Full modified cost: (30+10) x 0.7 = 28 points at its default first extra-range level; needs Warp Empowerment level 2 (cap 30).",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Xenos",
+				"Tyranids"
+			],
+			"modifiers": [
+				{
+					"id": "mYYy9nRy8Vc0nTA6u",
+					"name": "Warp Sorcery",
+					"cost_adj": "-20%"
+				},
+				{
+					"id": "m8C1nPbkdmicMWRPO",
+					"name": "Perils of the Warp",
+					"cost_adj": "-10%"
+				}
+			],
+			"points_per_level": 10,
+			"can_level": true,
+			"levels": 1,
+			"base_points": 30
+		},
+		{
+			"id": "t8jsodJX994d1Zh5-",
+			"name": "Dominion",
+			"local_notes": "Lore: A Hive Tyrant's own signature working: it reaches into a target with the same crushing psychic weight it uses to hold its own swarm together, stripping away whatever protects them and leaving them more vulnerable to everything that follows — Codex background names this kind of debuff among a synapse lord's psychic gifts, and this project's own reasoned scaling of it onto the Hive Mind's known telepathic dominance theme, on the model of this project's Librarius: Null Zone (the closest published analogue for \"strip an enemy's defences from a distance\").\n\nDesign: Affliction (10/level) delivering a Vulnerability-style disadvantage valued at roughly -20 points (+20%, matching this project's own Null Zone valuation), Malediction (+100%, B36), Warp Sorcery and the Severe Perils tier (a Hive Tyrant-scale psychic push, matching Null Zone's own Severe tier), net +80%. Full modified cost: 10 x 1.8 = 18 points/level; needs Warp Empowerment level 2 (cap 30).",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Xenos",
+				"Tyranids"
+			],
+			"modifiers": [
+				{
+					"id": "mJsZg5Uo5YkCPZLv1",
+					"name": "Disadvantage Delivered (Vulnerability x1.5, -20 pts)",
+					"cost_adj": "20%"
+				},
+				{
+					"id": "mLc2q53m474-F8-kL",
+					"name": "Malediction 1",
+					"cost_adj": "+100%"
+				},
+				{
+					"id": "mWyhlzeFx8JAburBg",
+					"name": "Warp Sorcery",
+					"cost_adj": "-20%"
+				},
+				{
+					"id": "mLhO7NuznTiWF6SPx",
+					"name": "Perils of the Warp (Severe)",
+					"cost_adj": "-20%"
+				}
+			],
+			"points_per_level": 10,
+			"can_level": true,
+			"levels": 1
+		},
+		{
+			"id": "t9ZnGqIOcO2TO70ku",
+			"name": "Monstrous Scything Talons",
+			"reference": "B271",
+			"local_notes": "Lore: Scything talons grown to Carnifex or Hive Tyrant scale: blades the size of a man, capable of shearing clean through a light vehicle's hull as easily as a Marine's plate. Codex: Tyranids background treats monstrous scything talons as one of the Carnifex's signature close-combat options, a genuine threat to armour that would shrug off a Warrior's own scything talons entirely.\n\nDesign: Framework.md's own anchor: \"Monstrous scything talons | sw+4d(3) cut.\" Built at a Carnifex's own ST 60 (sw 13d+2): Cutting Striker (B271, 7 points) with Armor Divisor (3) (+100%) = 14 for the sw+0(3) baseline; the anchor's own +4d is bought as Innate Attack (Cut) (B61, 7/die) at 4 dice = 28, with Armor Divisor (3) (+100%) and Melee Attack, Reach C (-30%): net +70%, 28x1.7=47.6, rounded to 48. Total 14+48=62. Checked by exact dice distribution at ST 60 (sw+4d(3) = 17d+2(3)): averages 61.5 and clears every personal-armour DR up to and including Astartes plate at 100%, dropping to 24.0% against a Terminator (DR 200, eff. 66.7) — a decisive Marine-killer and a real, if not certain, Terminator-killer. Against vehicles: AV10 100%, AV11 94.1%, AV12 24.0%, AV13-14 0% — shears through light vehicles and struggles against a main battle tank's own frontal armour, exactly the \"would shrug off a Warrior's own talons entirely\" step up the anchor implies.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Tyranids"
+			],
+			"base_points": 62,
+			"weapons": [
+				{
+					"id": "wgmwJHbS0c_6UL0az",
+					"sv": 1,
+					"damage": {
+						"type": "cut",
+						"st": "sw",
+						"base": "4d",
+						"armor_divisor": 3
+					},
+					"reach": "1,2",
+					"parry": "0",
+					"usage": "Standard",
+					"usage_notes": "Written for a Carnifex-scale bearer (ST 60, sw 13d+2, giving a total of 17d+2(3) cut); rebuild the +4d Innate Attack component for any other bearer's own ST (e.g. a Hive Tyrant, ST 45) per this file's header note.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": 0
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Brawling"
+							}
+						}
+					]
+				}
+			]
+		},
+		{
+			"id": "t5pNyAiRUecSI-e0h",
+			"name": "Venom Cannon",
+			"reference": "B61",
+			"local_notes": "Lore: A heavy bio-cannon that hurls a dense, explosive mass of caustic bile at a single target hard enough to crack light armour outright — the swarm's first real answer to armoured infantry and light vehicles, most often seen mounted on Tyranid Warriors and Carnifexes. Codex: Tyranids background across editions and Deathwatch RPG material both describe it as capable of blowing an unarmoured target apart and staggering even power-armoured targets with a solid hit.\n\nDesign: Framework.md's own anchor: \"Venom cannon | 6d×3(3) cr ex.\" Innate Attack (Crush) (B61, 5/die) at an effective 18 dice (6 base x3 multiplier) = 90, with Explosion (B102, +50%, for the \"ex\" bursting bile) and Armor Divisor (3) (B102, +100%): net +150%, 90x2.5=225. Checked by exact dice distribution: 6dx3(3) averages 63 and penetrates flak (DR 30, eff. 10) 100%, carapace (DR 70, eff. 23.3) 100%, Sororitas plate (DR 85, eff. 28.3) 99.8%, Astartes plate (DR 100, eff. 33.3) 99.0%, and Terminator plate (DR 200, eff. 66.7) 36.3% — genuinely \"cracks armour,\" including a real chance against Terminator-grade plate. Against vehicles: AV10 99.0%, AV11 85.5%, AV12 36.3%, AV13 0.99%, AV14 0% — a real light-vehicle killer, no threat at all to a main battle tank, exactly the light-anti-armour niche the anchor implies without inflating it into a lascannon. Handling: Acc 4 and 200/600 range, this project's own heavy-symbiote estimate; Shots 4(60), a one-minute regrowth for the biggest single discharge in the venom-gland family.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Tyranids"
+			],
+			"base_points": 225,
+			"weapons": [
+				{
+					"id": "WFbjUMprX_mrGBNh0",
+					"sv": 1,
+					"damage": {
+						"type": "cr ex",
+						"base": "6dx3",
+						"armor_divisor": 3
+					},
+					"accuracy": "4",
+					"range": "200/600",
+					"rate_of_fire": "1",
+					"shots": "4(60)",
+					"usage": "Standard",
+					"usage_notes": "ST-independent, grown as a torso- or arm-mounted organ (Tyranid Warrior/Carnifex-scale bioforms only). Shots regrow over the listed time as the bearer's bile-gland refills.",
+					"defaults": [
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Innate Attack"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Projectile"
+							}
+						},
+						{
+							"type": "dx",
+							"modifier": -4
+						}
+					]
+				}
+			]
+		}
+	],
+	"skills": [
+		{
+			"id": "sgN7xXNtaKCwz1-LS",
+			"name": "Brawling",
+			"local_notes": "Lore: A Hive Tyrant's monstrous scything talons can gut a tank crew or a Terminator with equal ease.\n\nDesign: DX+1 (14) for 2 points, Easy.",
+			"tags": [
+				"Xenos",
+				"Tyranids"
+			],
+			"difficulty": "dx/e",
+			"points": 2
+		},
+		{
+			"id": "s6x9vxa8Ef8RfuBqs",
+			"name": "Innate Attack",
+			"local_notes": "Lore: A Hive Tyrant's venom cannon is fired with a synapse lord's own tactical precision, not a lesser bioform's blind reflex.\n\nDesign: Innate Attack (Projectile) (DX/E, B269) at DX+2 (15) for 4 points, Easy.",
+			"tags": [
+				"Xenos",
+				"Tyranids"
+			],
+			"specialization": "Projectile",
+			"difficulty": "dx/e",
+			"points": 4
+		},
+		{
+			"id": "sHEddHjQDUeCmM1hR",
+			"name": "Tactics",
+			"local_notes": "Lore: A Hive Tyrant commands the local swarm's actual strategy, not merely its discipline.\n\nDesign: IQ (12) for 4 points, Hard.",
+			"tags": [
+				"Xenos",
+				"Tyranids"
+			],
+			"difficulty": "iq/h",
+			"points": 4
+		}
+	],
+	"equipment": []
+}

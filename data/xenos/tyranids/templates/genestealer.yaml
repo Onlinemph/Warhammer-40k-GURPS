@@ -2,7 +2,8 @@ kind: template
 output: Xenos/Tyranids/Templates/Genestealer.gct
 notes: >
   NPC creature stat block, not a player-facing race. Point math: Tyranid
-  Biology 15 + Body Lens: Genestealer 459 + skills 8 = 482 points. Stats:
+  Biology 15 + Body Lens: Genestealer 459 + Rending Claws 38 + skills
+  12 = 524 points. Stats:
   SM 0, ST 18, DX 16, IQ 6, HT 13, HP 20, Will 6, Per 6, natural chitin
   torso DR 50 (Weak Points 5, eye DR 25), Enhanced Move (Ground) 1,
   Infravision, Extra Attack (second claw) — framework.md's Genestealer
@@ -13,19 +14,13 @@ notes: >
   total is for GM reference only; a Genestealer's broodline-infestation
   hook is a GM plot tool, not a purchased trait.
 
-  Weapon-symbiote: carries Rending Claws (framework.md's own anchor:
-  sw+2d(3) cut; rending — a hit that succeeds by 5+ or is a critical
-  uses armour divisor (10) instead). This is being built as a
-  natural-attack trait named "Rending Claws" in
-  data/xenos/tyranids/bio-weapons.yaml by another pass on this project;
-  that file did not exist yet when this template was written, so the
-  weapon is not `include`d here. Once it exists, add:
-    - include: "xenos/tyranids/bio-weapons.yaml#Rending Claws"
-  to the traits list below (the Extra Attack trait above lets a
-  Genestealer make two such attacks per turn).
+  Weapon-symbiote: carries Rending Claws, built as a natural-attack
+  trait in data/xenos/tyranids/bio-weapons.yaml (the Extra Attack trait
+  above lets a Genestealer make two such attacks per turn).
 traits:
   - include: "xenos/tyranids/traits.yaml#Tyranid Biology"
   - include: "xenos/tyranids/traits.yaml#Body Lens: Genestealer"
+  - include: "xenos/tyranids/bio-weapons.yaml#Rending Claws"
 skills:
   - name: Brawling
     diff: DX/E
