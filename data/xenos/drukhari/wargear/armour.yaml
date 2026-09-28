@@ -1,0 +1,289 @@
+kind: equipment
+output: Xenos/Drukhari/Armour/Drukhari Armour and Gear.eqp
+items:
+
+  # ------------------------------------------------------------ Body armour
+
+  - name: "Kabalite Armour"
+    tl: "10^"
+    lc: 0
+    cost: 900
+    weight: 9
+    tags: ["Body Armor", "Xenos", "Drukhari", "Kabal"]
+    dr: {"torso,vitals,groin": 36, "arm,leg": 29, "skull,face,neck": 30, eye: 20, "hand,foot": 18}
+    weak_points: 5
+    notes: >-
+      Flexible armour (B47): plates riding on a flexible weave, so blunt-trauma rules apply as for
+      Guardian mesh: a hit that fails to penetrate still delivers (damage/10, rounded down, minimum
+      1) crushing injury.
+    lore: >-
+      The light segmented plate of the Kabalite Warrior and most Kabal raiders: overlapping barbed
+      plates over a body glove, giving good protection at very low weight and leaving the wearer
+      free to move and dodge (Codex: Drukhari background). It is much more visible and aggressive
+      than Aeldari mesh but works on the same principle.
+    design: >-
+      The framework anchor is 'light segmented plate: DR 36, Weak Points 5 (as Guardian mesh)', so
+      torso DR 36 and WP 5 are held exactly, the same mechanical protection as the Aeldari mesh
+      anchor (both are mesh-class protection regardless of who built it). Exact dice: a lasgun hit
+      (7d(2) burn) penetrates the torso 90.6% of the time, a shuriken catapult hit (5d(3) cut)
+      90.2%, a splinter rifle hit 66.4%, an autogun round (7d pi) only 0.3%, a boltgun 99.8%. Limbs
+      at 29 (lasgun 98.8%, autogun 13.7%), eye lens at 20 as for carapace visors, helmet and neck 30
+      (as mesh). Hands and feet are small plates at 18 (the Aeldari mesh leaves them unarmoured), an
+      honest reflection of the raider's gauntlets and boots. It is heavier than the Aeldari mesh (9
+      lb against 6 lb) because it carries plates, not just fibre. An eye hit from a splinter rifle
+      penetrates the lens 98.8% of the time, and counts as a brain hit for piercing damage (B399).
+
+  - name: "Wychsuit"
+    tl: "10"
+    lc: 0
+    cost: 300
+    weight: 2
+    tags: ["Body Armor", "Xenos", "Drukhari", "Wych Cult"]
+    dr: {"torso,vitals,groin": 12, "arm,leg": 0, "skull,face,neck": 0, eye: 0, "hand,foot": 0}
+    weak_points: 7
+    notes: >-
+      Flexible armour (B47). Covers only the torso and groin; the arms, legs, head and hands are
+      unarmoured. No DX or Stealth penalty. The Wych's protection is her Dodge and Acrobatics, not
+      the suit.
+    lore: >-
+      The minimal skintight garb of the Wych Cults: a body suit of thin hide or cloth with a few
+      plates at the vitals, worn because a Wych relies on speed and avoidance rather than on armour
+      (Codex: Drukhari background). It leaves her free to leap, spin and twist through a fight.
+    design: >-
+      The framework anchor is 'almost no armour: DR 12, flexible', held exactly on the torso, vitals
+      and groin, with everything else left at 0 for freedom of movement. Weak Points 7, the flak
+      rating, since a thin suit has a lot of gaps. Exact dice: DR 12 stops nothing that matters: an
+      autogun round (7d pi) penetrates 99.7%, a splinter rifle hit 99.9%, and a lasgun hit 100.0%;
+      it stops mostly a light blade or a bare-handed blow. Against any real weapon a Wych survives
+      by not being hit. Handling: 2 lb, no ST requirement, no coverage beyond the torso.
+
+  - name: "Ghostplate Armour"
+    tl: "11^"
+    lc: 0
+    cost: 15000
+    weight: 8
+    uses: 20
+    tags: ["Body Armor", "Xenos", "Drukhari", "Kabal", "Force Field", "Energy Shield"]
+    dr: {"torso,vitals,groin": 60, "arm,leg": 53, "skull,face,neck": 50, eye: 22, "hand,foot": 30}
+    weak_points: 5
+    notes: >-
+      Flexible armour (B47). Weak personal field, per the framework's Personal force fields rules:
+      20 SP, recharge after 3 seconds without damage at 5 SP/second, covers all attacks. Field
+      knocked to 0 needs double the delay (6 seconds) before recharging. Track current SP with the
+      Uses counter (max 20). Overflow damage passes to the plate with the attack's full armour
+      divisor.
+    lore: >-
+      The armour of Archons and Kabalite Trueborn: lighter than the Kabalite's plate for the
+      protection it gives, and fitted with a weak personal field that dissipates part of an attack's
+      force (Codex: Drukhari background). It is what a Kabal lord who does not trust his warriors
+      wears.
+    design: >-
+      The framework anchor is 'DR 60, very light, with a weak field': torso DR 60 (between Kabalite
+      plate 36 and Aspect armour 70), limbs 53, helmet 50, eye lens 22 (scaled to the DR as Aspect
+      plate's 25 at DR 70), hands and feet 30. The field is built on the Personal force fields
+      chassis at a fraction of the refractor field's 40 SP: 20 SP, delay 3 seconds, recharge 5
+      SP/second, covering all attacks. That is deliberately weak: a single lasgun hit (average 24.5)
+      collapses it. Exact dice: torso DR 60 stops a lasgun hit 90.6% of the time, a shuriken hit
+      77.9%, a splinter rifle hit 97.3%, and a boltgun 9.6% (90.4% penetrate); limbs at 53 are
+      noticeably weaker (lasgun 33.2%, bolter 96.4%). Weak Points 5 as for Kabalite plate: a
+      segmented suit with more seams than Aspect plate (4). Handling: 8 lb, no ST requirement.
+
+  - name: "Incubus Warsuit"
+    tl: "10^"
+    lc: 0
+    cost: 12000
+    weight: 32
+    tags: ["Body Armor", "Xenos", "Drukhari", "Incubi"]
+    dr: {"torso,vitals,groin": 85, "arm,leg": 78, "skull,face,neck": 70, eye: 30, "hand,foot": 42}
+    weak_points: 4
+    notes: >-
+      Rigid heavy plate: no blunt-trauma rule. Weak Points 4. Full-body coverage.
+    lore: >-
+      The heavy plate of the Incubi: a full suit of thick, ornate armour, much heavier than a
+      Kabalite's and the mark of an elite warrior-cult that expects to fight at the front (Codex:
+      Drukhari background). It is worn with a full helm.
+    design: >-
+      The framework anchor is 'DR 85, Weak Points 4 (as Exarch armour)', so torso 85 and WP 4 are
+      held exactly and the coverage follows the Exarch profile: limbs 78, helmet and neck 70, eye
+      lens 30, hands and feet 42. Unlike the Exarch suit it is rigid, so the flexible rule is
+      dropped and it weighs 32 lb (an Exarch's 16 lb is a fused wraithbone suit; an Incubus wears
+      plated ceramic and steel). Exact dice: it stops a lasgun hit 100.0% and a shuriken catapult
+      hit 99.9% and a splinter rifle hit 100.0% of the time; a boltgun round penetrates the torso
+      45.4% and a limb 63.7% of the time (framework: the same as Sororitas plate at 85). Eye lens 30
+      is at Sororitas parity.
+
+  # ------------------------------------------------------------ Fields
+
+  - name: "Shadow Field"
+    tl: "12^"
+    lc: 0
+    cost: 30000
+    weight: 2
+    uses: 200
+    tags: ["Xenos", "Drukhari", "Kabal", "Force Field", "Energy Shield"]
+    notes: >-
+      Regenerating-shield chassis with no regeneration: 200 SP, covers all attacks, does NOT
+      recharge during the fight. Damage from an attack the field covers comes off SP first; if an
+      attack does more damage than the SP remaining, the field drops to 0 and the excess passes to
+      worn armour with the attack's full armour divisor. Once at 0 SP the field is gone for the rest
+      of the fight. Between fights it is restored (an hour of attendants' work, GM's call). Track
+      current SP with the Uses counter (max 200).
+    lore: >-
+      An Archon's personal defence: a large shadow-shield that wraps the wearer in darkness and
+      turns aside almost anything, but once broken it does not return in the same fight (Codex:
+      Drukhari background gives it as one-use protection).
+    design: >-
+      The framework says 'a large shield that does not recharge; when breached it is gone for the
+      fight'. Pool 200 SP, larger than the iron halo's 120 and the storm shield's 160, because it
+      never recovers: over a whole fight an iron halo (120 SP at 20 SP/second) absorbs far more
+      damage, but the Archon's shield takes the first blow. Exact figures: a boltgun hit is 42
+      average plus a 6d cr ex follow-up of 21 that also comes off SP (framework), so about 3 bolts
+      (63 each) break it; a lasgun hit averages 24.5, so 8 hits; a dark lance hit averages 84, so
+      2-3. Handling: 2 lb, no ST requirement.
+
+  - name: "Clone Field"
+    tl: "11^"
+    lc: 0
+    cost: 15000
+    weight: 1.5
+    attributes: {dodge: 2}
+    tags: ["Xenos", "Drukhari"]
+    notes: >-
+      +2 Dodge, applies only against attacks the wearer can see coming (it scatters a visible image,
+      not the wearer's actual position) and not against area or cone effects. Does not stack with a
+      holo-suit or with shield Defense Bonus. Gives no DR.
+    lore: >-
+      A personal field that projects false images of the wearer around him, making it hard to tell
+      which is real, worn by Archons and other Drukhari leaders (Codex: Drukhari background gives it
+      as a defensive item). The sources do not say more; this entry follows the framework.
+    design: >-
+      The framework says 'illusory images: a Dodge bonus, not DR'. Modelled as a flat +2 Dodge
+      (attribute bonus), one below the Aeldari holo-suit's +3, since a clone field is a defensive
+      add-on to real armour rather than the whole basis of the wearer's defence. The visibility and
+      area limitations keep it from being a free upgrade. Handling: 1.5 lb, no ST requirement, no
+      DR.
+
+  # ------------------------------------------------------------ Drugs and souls
+
+  - name: "Combat Drug Dispenser"
+    tl: "10^"
+    lc: 0
+    cost: 3000
+    weight: 1
+    tags: ["Xenos", "Drukhari", "Wych Cult"]
+    children:
+      - name: "Vial: Adrenalight"
+        tl: "10^"
+        lc: 0
+        cost: 150
+        weight: 0.1
+        uses: 1
+        tags: ["Xenos", "Drukhari", "Wych Cult"]
+        notes: >-
+          One dose. Its effect is the trait "Combat Drug: Adrenalight" (defined in the Drukhari
+          traits library), which lasts for one combat and carries its own Dependency.
+        design: >-
+          A single sealed dose, priced as a consumable.
+      - name: "Vial: Grave Lotus"
+        tl: "10^"
+        lc: 0
+        cost: 150
+        weight: 0.1
+        uses: 1
+        tags: ["Xenos", "Drukhari", "Wych Cult"]
+        notes: >-
+          One dose. Its effect is the trait "Combat Drug: Grave Lotus" (defined in the Drukhari
+          traits library), which lasts for one combat and carries its own Dependency.
+        design: >-
+          A single sealed dose, priced as a consumable.
+      - name: "Vial: Hypex"
+        tl: "10^"
+        lc: 0
+        cost: 150
+        weight: 0.1
+        uses: 1
+        tags: ["Xenos", "Drukhari", "Wych Cult"]
+        notes: >-
+          One dose. Its effect is the trait "Combat Drug: Hypex" (defined in the Drukhari traits
+          library), which lasts for one combat and carries its own Dependency.
+        design: >-
+          A single sealed dose, priced as a consumable.
+      - name: "Vial: Painbringer"
+        tl: "10^"
+        lc: 0
+        cost: 150
+        weight: 0.1
+        uses: 1
+        tags: ["Xenos", "Drukhari", "Wych Cult"]
+        notes: >-
+          One dose. Its effect is the trait "Combat Drug: Painbringer" (defined in the Drukhari
+          traits library), which lasts for one combat and carries its own Dependency.
+        design: >-
+          A single sealed dose, priced as a consumable.
+      - name: "Vial: Serpentin"
+        tl: "10^"
+        lc: 0
+        cost: 150
+        weight: 0.1
+        uses: 1
+        tags: ["Xenos", "Drukhari", "Wych Cult"]
+        notes: >-
+          One dose. Its effect is the trait "Combat Drug: Serpentin" (defined in the Drukhari traits
+          library), which lasts for one combat and carries its own Dependency.
+        design: >-
+          A single sealed dose, priced as a consumable.
+      - name: "Vial: Splintermind"
+        tl: "10^"
+        lc: 0
+        cost: 150
+        weight: 0.1
+        uses: 1
+        tags: ["Xenos", "Drukhari", "Wych Cult"]
+        notes: >-
+          One dose. Its effect is the trait "Combat Drug: Splintermind" (defined in the Drukhari
+          traits library), which lasts for one combat and carries its own Dependency.
+        design: >-
+          A single sealed dose, priced as a consumable.
+    notes: >-
+      Worn on the arm or harness; injects the chosen drug as a free action at the start of a fight.
+      Only one drug per combat: the dispenser does not open a second vial in the same fight. The
+      drugs are the traits Combat Drug: Adrenalight, Combat Drug: Grave Lotus, Combat Drug: Hypex,
+      Combat Drug: Painbringer, Combat Drug: Serpentin and Combat Drug: Splintermind. Their effects
+      are defined there; this item only holds and delivers them. Each has its own Dependency (see
+      the traits), which is what makes regular use a hazard.
+    lore: >-
+      A device of the Wych Cults that delivers combat drugs by a needle into the arm, giving the
+      Wych a burst of speed, strength or resistance for the length of a fight (Codex: Drukhari
+      background names the six drugs Adrenalight, Grave Lotus, Hypex, Painbringer, Serpentin and
+      Splintermind). The drugs are habit-forming and are the mark of Wych Cult discipline.
+    design: >-
+      The framework says: 'Wych Cult dispensers: one drug per combat; each a modest, temporary boost
+      to one attribute or skill set, with a Dependency'. The dispenser is a container (GCS sums the
+      children's weight and cost) holding the six vials as separate 1-use children, so the sheet
+      shows which have been used. The rules of each drug live in the traits, not here, so a trait
+      edit updates all users. Weight 1 lb, cost 3000 for the dispenser and 150 per vial (about 3900
+      for a full set).
+
+  - name: "Soul-Trap"
+    tl: "12^"
+    lc: 0
+    cost: 20000
+    weight: 1
+    tags: ["Xenos", "Drukhari", "Kabal"]
+    notes: >-
+      Worn on the harness. The wearer treats each killing within 10 yards of him (by his own hand or
+      a squad-mate's) as a feeding for Soul Thirst purposes, at the GM's discretion, and the death
+      also counts toward advancing Power from Pain in the scene. No effect on the wearer's combat
+      rolls.
+    lore: >-
+      A Drukhari device for capturing and holding the soul-essence of the slain so it can be
+      consumed later and the wearer's own soul kept from Slaanesh a little longer (background
+      generally; I recall the name from Drukhari wargear lists but hold the exact mechanism and who
+      carries it with low confidence, so the rules here are a design choice rather than a quotation
+      of any rule).
+    design: >-
+      The framework's Drukhari overview gives no soul-trap anchor and the sources are thin, so it is
+      written as rules text for the GM to apply rather than a combat statistic, in the way the
+      Aeldari spirit stone is. It ties directly to the Drukhari traits: it feeds Soul Thirst and
+      Power from Pain (the disadvantage and the staged bonus defined in the traits library). Cost
+      20000 makes it a rare relic. Handling: 1 lb, no ST requirement, no DR.

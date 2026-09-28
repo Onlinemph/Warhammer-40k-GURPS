@@ -1,0 +1,1350 @@
+kind: traits
+output: Xenos/Drukhari/Traits/Drukhari Physiology.adq
+# Drukhari (Dark Eldar) racial traits. Calibrated to framework.md's "Xenos >
+# Drukhari" anchor table and point targets. The shared Aeldari body comes by
+# include from xenos/aeldari/traits.yaml (Attribute Modifiers, Enhanced Move,
+# Acute Senses, Aeldari Grace, Slender Frame) so a fix there updates every
+# Drukhari on rebuild; the psychic chassis (Psyker talent, Warp Empowerment,
+# spirit stones, Paths) is deliberately NOT pulled in. Sources: Codex: Dark
+# Eldar and Codex: Drukhari background across editions; Black Library only
+# where noted. Where the lore is thin or contradictory (Arhra, Mandrake
+# mechanism, drug effects) the entry says so.
+items:
+- name: Soul Thirst
+  points: -15
+  tags: [Disadvantage, Physical, Xenos, Drukhari]
+  ref: B130
+  notes: >-
+    Dependency on the suffering of others. The Drukhari must feed about once a week:
+    a session of torture, a raid's slaughter, a night in the arena, or a bloody
+    fight they took part in all count. Track it as a Dependency that comes due weekly.
+    On a missed feeding roll HT at the start of each following day; on a failure
+    lose 1 FP that cannot be regained until the Drukhari feeds (adapt the missed-dose
+    procedure at B130 to this weekly tempo). After a full month unfed, Unaging While
+    Fed lapses and normal aging rolls apply until the next feeding, but does not
+    undo any aging already suffered. No spirit stone is worn and none would help:
+    a Drukhari killed with no Haemonculus to call them back is food for Slaanesh.
+  lore: >-
+    Every Drukhari soul is being drained by Slaanesh, and they have no craftworld's
+    Infinity Circuit and no spirit stone to catch it. They keep the dark god at
+    bay by keeping their souls full of borrowed life: the pain and death of others.
+    Nothing else in Commorragh's culture makes sense without this: the arenas, the
+    slave raids, the torture-arts of the Haemonculi and the Kabals' constant reaving
+    are all, at bottom, farming. Consistent, foundational background across every
+    edition of Codex: Dark Eldar / Drukhari.
+  design: >-
+    Dependency (B130) with the substance being fresh suffering. B130 prices a Dependency
+    from how easy the substance is to find and how often it must be taken, and this
+    is neither rare (a raider always has slaves and enemies) nor daily (a week is
+    comfortable), while lack ages and weakens rather than killing outright. This
+    is a house judgement on that method, set at -15, the same price as the Aeldari
+    Slaanesh's Hunger it replaces; check it against the book's table if a GM wants
+    a stricter count. The aging rider is a house rule: the Basic Set's Dependency
+    has no aging clause, so the loss of Unaging While Fed carries it.
+- name: Unaging While Fed
+  points: 15
+  tags: [Advantage, Physical, Xenos, Drukhari]
+  ref: B95
+  modifiers:
+  - name: Accessibility
+    cost: -40%
+    ref: B110
+    notes: >-
+      Works only while the Soul Thirst dependency is satisfied. Lapses after a month
+      unfed (see Soul Thirst).
+  notes: >-
+    No aging rolls while fed. Replaces the Aeldari Extended Lifespan; a fed Drukhari
+    has no natural end date at all.
+  lore: >-
+    Drukhari are as long-lived as any Aeldari, and the fed ones do not visibly age
+    at all. The eldest Archons and Haemonculi are older than most craftworlds' oldest
+    Exarchs, kept young by a steady diet of other people's agony. Starved Drukhari,
+    by contrast, are described as withered and grey (Codex: Dark Eldar / Drukhari
+    background).
+  design: >-
+    Unaging (B95, 15 points) with Accessibility (B110) -40%: it works only while
+    the Soul Thirst dependency is met. 15 x 0.6 = 9 points. It stands in for the
+    Aeldari Extended Lifespan (12 points) rather than adding to it.
+- name: Drukhari Physiology
+  container: ancestry
+  tags: [Advantage, Physical, Xenos, Drukhari]
+  lore: >-
+    The Drukhari are the Aeldari who never left: raiders and slavers of Commorragh,
+    the Dark City hidden in the webway. Their bodies are the same fine-boned, fast,
+    sharp-eyed Aeldari bodies the craftworlds field. What differs is the soul. With
+    no spirit stone to shelter it, Slaanesh drains it continually, and they hold
+    the hunger off by feeding on suffering. This trait is the baseline shared by
+    every Drukhari template; the training, cult and coven lenses below layer on
+    top of it, exactly as the Aeldari Physiology's Path and Aspect lenses do.
+  design: >-
+    Pulls in, by include, the shared Aeldari body: Attribute Modifiers (140), Enhanced
+    Move (Ground) 1/2 (10), Acute Senses (8), Aeldari Grace (4) and Slender Frame
+    (0), so a fix there updates the Drukhari on rebuild. Adds Soul Thirst (-15)
+    and Unaging While Fed (+9). 140 + 10 + 8 + 4 + 0 - 15 + 9 = 156 points, landing
+    ST 10, DX 14, IQ 12, HT 10, HP 10, Will 12, Per 12, Basic Speed 6.25, Move 9,
+    the Kabalite Warrior's physical line before its own package (framework.md, Drukhari).
+    Deliberately left out: Aeldari Psychic Sensitivity, Aeldari Psyker (Talent),
+    Warp Empowerment, Spirit Stone and every Path lens (the Drukhari shun the warp
+    and have no Paths), plus Emotional Intensity, Arrogance Towards Younger Races,
+    Slaanesh's Hunger and Extended Lifespan, each of which Soul Thirst, the Drukhari
+    mental traits below or Unaging While Fed replace. Emotional excess is a Drukhari
+    trait too, but it shows up as the cruelty and vanity below, not as Path-restrained
+    rapture.
+  children:
+  - {include: xenos/aeldari/traits.yaml#Attribute Modifiers}
+  - {include: xenos/aeldari/traits.yaml#Enhanced Move (Ground)}
+  - {include: xenos/aeldari/traits.yaml#Acute Senses}
+  - {include: xenos/aeldari/traits.yaml#Aeldari Grace}
+  - {include: xenos/aeldari/traits.yaml#Slender Frame}
+  - name: Soul Thirst
+    points: -15
+    tags: [Disadvantage, Physical, Xenos, Drukhari]
+    ref: B130
+    notes: >-
+      Dependency on the suffering of others. The Drukhari must feed about once a
+      week: a session of torture, a raid's slaughter, a night in the arena, or a
+      bloody fight they took part in all count. Track it as a Dependency that comes
+      due weekly. On a missed feeding roll HT at the start of each following day;
+      on a failure lose 1 FP that cannot be regained until the Drukhari feeds (adapt
+      the missed-dose procedure at B130 to this weekly tempo). After a full month
+      unfed, Unaging While Fed lapses and normal aging rolls apply until the next
+      feeding, but does not undo any aging already suffered. No spirit stone is
+      worn and none would help: a Drukhari killed with no Haemonculus to call them
+      back is food for Slaanesh.
+    lore: >-
+      Every Drukhari soul is being drained by Slaanesh, and they have no craftworld's
+      Infinity Circuit and no spirit stone to catch it. They keep the dark god at
+      bay by keeping their souls full of borrowed life: the pain and death of others.
+      Nothing else in Commorragh's culture makes sense without this: the arenas,
+      the slave raids, the torture-arts of the Haemonculi and the Kabals' constant
+      reaving are all, at bottom, farming. Consistent, foundational background across
+      every edition of Codex: Dark Eldar / Drukhari.
+    design: >-
+      Dependency (B130) with the substance being fresh suffering. B130 prices a
+      Dependency from how easy the substance is to find and how often it must be
+      taken, and this is neither rare (a raider always has slaves and enemies) nor
+      daily (a week is comfortable), while lack ages and weakens rather than killing
+      outright. This is a house judgement on that method, set at -15, the same price
+      as the Aeldari Slaanesh's Hunger it replaces; check it against the book's
+      table if a GM wants a stricter count. The aging rider is a house rule: the
+      Basic Set's Dependency has no aging clause, so the loss of Unaging While Fed
+      carries it.
+  - name: Unaging While Fed
+    points: 15
+    tags: [Advantage, Physical, Xenos, Drukhari]
+    ref: B95
+    modifiers:
+    - name: Accessibility
+      cost: -40%
+      ref: B110
+      notes: >-
+        Works only while the Soul Thirst dependency is satisfied. Lapses after a
+        month unfed (see Soul Thirst).
+    notes: >-
+      No aging rolls while fed. Replaces the Aeldari Extended Lifespan; a fed Drukhari
+      has no natural end date at all.
+    lore: >-
+      Drukhari are as long-lived as any Aeldari, and the fed ones do not visibly
+      age at all. The eldest Archons and Haemonculi are older than most craftworlds'
+      oldest Exarchs, kept young by a steady diet of other people's agony. Starved
+      Drukhari, by contrast, are described as withered and grey (Codex: Dark Eldar
+      / Drukhari background).
+    design: >-
+      Unaging (B95, 15 points) with Accessibility (B110) -40%: it works only while
+      the Soul Thirst dependency is met. 15 x 0.6 = 9 points. It stands in for the
+      Aeldari Extended Lifespan (12 points) rather than adding to it.
+- name: Power from Pain (Stage I)
+  points: 10
+  tags: [Advantage, Physical, Xenos, Drukhari]
+  ref: B59
+  modifiers:
+  - name: Accessibility
+    cost: -30%
+    ref: B110
+    notes: >-
+      Only after the Drukhari, or a comrade in the same unit, has drawn blood or
+      caused real suffering in this scene.
+  notes: >-
+    High Pain Threshold, once feeding has begun. Stage I of three; each later stage
+    needs the one before it. A stage lapses at the end of the scene.
+  lore: >-
+    Every Drukhari fights harder for the taste of blood. Codex background describes
+    the Dark Eldar as growing bolder and stronger as the killing goes on, feeding
+    on the pain they cause; the exact stages differ between Kabals, Wych Cults and
+    Covens.
+  design: >-
+    High Pain Threshold (B59, 10 points) with Accessibility (B110) -30% for its
+    trigger: 10 x 0.7 = 7 points. Deliberately no `attributes` feature: the bonus
+    is conditional and must not raise the sheet's stats before the trigger.
+- name: Power from Pain (Stage II)
+  container: meta_trait
+  tags: [Advantage, Physical, Xenos, Drukhari]
+  notes: >-
+    Stage II: melee and Fright Check bonuses (requires Stage I), lapses at the end
+    of the scene.
+  lore: >-
+    By the time a fight has really turned, a Drukhari hits harder and cannot be
+    frightened. Background: the Power from Pain rule in Codex: Drukhari (per unit,
+    by kills scored).
+  design: >-
+    Melee and morale bonuses only; the real weight is small (5 + 2 = 7 points).
+    Not `attributes`: the bonuses are conditional.
+  children:
+  - name: Bloodied Strength
+    per_level: 5
+    levels: 2
+    tags: [Advantage, Physical, Xenos, Drukhari]
+    ref: B88
+    modifiers:
+    - name: Accessibility
+      cost: -50%
+      ref: B110
+      notes: >-
+        Only after Stage I plus at least one enemy dropped or seriously hurt in
+        this scene by the Drukhari's unit.
+    notes: 'Striking ST +2: melee damage as if ST 2 higher.'
+    lore: The Kabalite's cruelty in melee sharpens as the blood flows.
+    design: Striking ST 2 (B88, 5/level, 10) with Accessibility -50% = 5 points.
+  - name: Bloodied Nerve
+    per_level: 2
+    levels: 2
+    tags: [Advantage, Mental, Xenos, Drukhari]
+    ref: B55
+    modifiers:
+    - {name: Accessibility, cost: -50%, ref: B110, notes: Same trigger as Bloodied
+        Strength.}
+    notes: Fearlessness +2 to Fright Checks.
+    lore: >-
+      A feeding Drukhari does not flinch from the things that break other people.
+    design: Fearlessness 2 (B55, 2/level, 4) with Accessibility -50% = 2 points.
+- name: Power from Pain (Stage III)
+  points: 50
+  tags: [Advantage, Physical, Xenos, Drukhari]
+  ref: B80
+  modifiers:
+  - name: Accessibility
+    cost: -60%
+    ref: B110
+    notes: >-
+      Only after Stages I and II and at least three enemies dropped or badly hurt
+      in this scene by the Drukhari's unit.
+  notes: >-
+    Regeneration (Fast): 1 HP per minute (roughly 1 HP per 6 combat turns of 10
+    seconds when tracking turns).
+  lore: >-
+    The height of the feed: wounds close as fast as the killer can reopen new ones
+    in other people. Codex: Drukhari's third stage is the strongest bonus a unit
+    can earn.
+  design: >-
+    Regeneration, Fast tier (B80, 50 points, 1 HP per minute) with Accessibility
+    -60%: 50 x 0.4 = 20 points. Kept at Fast rather than faster because the lore
+    effect is 'hard to put down', not 'cannot be killed'.
+- name: Power from Pain
+  container: meta_trait
+  tags: [Advantage, Physical, Xenos, Drukhari]
+  lore: >-
+    All three stages together: the full Power from Pain a Drukhari of rank earns
+    in a long fight.
+  design: >-
+    7 + 7 + 20 = 34 points. Lower-tier templates include the single stages above
+    instead.
+  children:
+  - name: Power from Pain (Stage I)
+    points: 10
+    tags: [Advantage, Physical, Xenos, Drukhari]
+    ref: B59
+    modifiers:
+    - name: Accessibility
+      cost: -30%
+      ref: B110
+      notes: >-
+        Only after the Drukhari, or a comrade in the same unit, has drawn blood
+        or caused real suffering in this scene.
+    notes: >-
+      High Pain Threshold, once feeding has begun. Stage I of three; each later
+      stage needs the one before it. A stage lapses at the end of the scene.
+    lore: >-
+      Every Drukhari fights harder for the taste of blood. Codex background describes
+      the Dark Eldar as growing bolder and stronger as the killing goes on, feeding
+      on the pain they cause; the exact stages differ between Kabals, Wych Cults
+      and Covens.
+    design: >-
+      High Pain Threshold (B59, 10 points) with Accessibility (B110) -30% for its
+      trigger: 10 x 0.7 = 7 points. Deliberately no `attributes` feature: the bonus
+      is conditional and must not raise the sheet's stats before the trigger.
+  - name: Power from Pain (Stage II)
+    container: meta_trait
+    tags: [Advantage, Physical, Xenos, Drukhari]
+    notes: >-
+      Stage II: melee and Fright Check bonuses (requires Stage I), lapses at the
+      end of the scene.
+    lore: >-
+      By the time a fight has really turned, a Drukhari hits harder and cannot be
+      frightened. Background: the Power from Pain rule in Codex: Drukhari (per unit,
+      by kills scored).
+    design: >-
+      Melee and morale bonuses only; the real weight is small (5 + 2 = 7 points).
+      Not `attributes`: the bonuses are conditional.
+    children:
+    - name: Bloodied Strength
+      per_level: 5
+      levels: 2
+      tags: [Advantage, Physical, Xenos, Drukhari]
+      ref: B88
+      modifiers:
+      - name: Accessibility
+        cost: -50%
+        ref: B110
+        notes: >-
+          Only after Stage I plus at least one enemy dropped or seriously hurt in
+          this scene by the Drukhari's unit.
+      notes: 'Striking ST +2: melee damage as if ST 2 higher.'
+      lore: The Kabalite's cruelty in melee sharpens as the blood flows.
+      design: Striking ST 2 (B88, 5/level, 10) with Accessibility -50% = 5 points.
+    - name: Bloodied Nerve
+      per_level: 2
+      levels: 2
+      tags: [Advantage, Mental, Xenos, Drukhari]
+      ref: B55
+      modifiers:
+      - {name: Accessibility, cost: -50%, ref: B110, notes: Same trigger as Bloodied
+          Strength.}
+      notes: Fearlessness +2 to Fright Checks.
+      lore: >-
+        A feeding Drukhari does not flinch from the things that break other people.
+      design: Fearlessness 2 (B55, 2/level, 4) with Accessibility -50% = 2 points.
+  - name: Power from Pain (Stage III)
+    points: 50
+    tags: [Advantage, Physical, Xenos, Drukhari]
+    ref: B80
+    modifiers:
+    - name: Accessibility
+      cost: -60%
+      ref: B110
+      notes: >-
+        Only after Stages I and II and at least three enemies dropped or badly hurt
+        in this scene by the Drukhari's unit.
+    notes: >-
+      Regeneration (Fast): 1 HP per minute (roughly 1 HP per 6 combat turns of 10
+      seconds when tracking turns).
+    lore: >-
+      The height of the feed: wounds close as fast as the killer can reopen new
+      ones in other people. Codex: Drukhari's third stage is the strongest bonus
+      a unit can earn.
+    design: >-
+      Regeneration, Fast tier (B80, 50 points, 1 HP per minute) with Accessibility
+      -60%: 50 x 0.4 = 20 points. Kept at Fast rather than faster because the lore
+      effect is 'hard to put down', not 'cannot be killed'.
+- name: Haemonculus Regrowth
+  points: 25
+  tags: [Advantage, Physical, Xenos, Drukhari]
+  ref: B55
+  modifiers:
+  - name: Accessibility
+    cost: -40%
+    ref: B110
+    notes: >-
+      Needs a body fragment (at least the head or a torso) recovered to a Haemonculus
+      and a Coven paid for the work; lasts one life.
+  notes: >-
+    One Extra Life. On death, if a fragment reaches a Coven and the price is met,
+    the character is regrown and returns, changed a little (GM's choice of small
+    physical or mental side effect).
+  lore: >-
+    Haemonculi can regrow the dead from little more than a scrap, and the Covens
+    sell that service to the powerful. Archons and their favoured servants are the
+    ones who can afford the price, in coin, slaves or service. Codex: Drukhari background.
+  design: >-
+    Extra Life (B55, 25 points) with Accessibility (B110) -40% for the recovered-fragment
+    and coven-fee requirements. 25 x 0.6 = 15 points. Reserved for Archons, favoured
+    servants and Haemonculi; ordinary Kabalites and Wyches do not have it.
+- name: Sadism
+  points: -15
+  cr: 12
+  tags: [Disadvantage, Mental, Xenos, Drukhari]
+  ref: B152
+  notes: >-
+    Takes pleasure in others' suffering and seeks chances to inflict it; roll self-control
+    when the chance arises.
+  lore: >-
+    Cruelty is Commorragh's native culture, not a deviance. Most Drukhari, and every
+    Haemonculus, take an openly aesthetic interest in others' pain (Codex: Drukhari
+    and background across editions). The self-control 12 default represents someone
+    who can hold off when it would cost them, e.g. in front of a superior.
+  design: Sadism (B152, -15) with self-control 12.
+- name: Callous
+  points: -5
+  tags: [Disadvantage, Mental, Xenos, Drukhari]
+  ref: B125
+  notes: Indifferent to others' pain; -3 reaction when it shows.
+  lore: >-
+    Even a Drukhari who does not enjoy suffering treats it as currency. Background.
+  design: Callous (B125, -5).
+- name: Megalomania
+  points: -10
+  tags: [Disadvantage, Mental, Xenos, Drukhari]
+  notes: >-
+    Believes they are destined to rule, and plans and boasts accordingly; -5 to
+    resist flattery about their greatness.
+  lore: >-
+    Every Archon is scheming at the top of a Kabal and every Kabal is one betrayal
+    from the next Archon. Background across Codex editions.
+  design: Megalomania, -10 points (ref left out).
+- name: Paranoia
+  points: -10
+  tags: [Disadvantage, Mental, Xenos, Drukhari]
+  ref: B148
+  notes: Assumes hidden plots against them; trusts nobody, with reason.
+  lore: >-
+    In Commorragh most of the plots against an Archon are real. Paranoia is a survival
+    skill here, not a delusion.
+  design: Paranoia (B148, -10).
+- name: Overconfidence
+  points: -5
+  cr: 12
+  tags: [Disadvantage, Mental, Xenos, Drukhari]
+  ref: B148
+  notes: >-
+    Overrates their own ability and underrates opposition; self-control roll to
+    hold back from a risky show of strength.
+  lore: >-
+    Arena stars, aerial raiders and Kabal nobles all believe themselves the best
+    in the room. Background.
+  design: Overconfidence (B148, -5) with self-control 12.
+- name: Selfish
+  points: -5
+  cr: 12
+  tags: [Disadvantage, Mental, Xenos, Drukhari]
+  ref: B153
+  notes: >-
+    Puts own gain over the group's; self-control roll to share loot or hold a post.
+  lore: A Kabalite's loyalty is to their own advancement first. Background.
+  design: Selfish (B153, -5) with self-control 12.
+- name: Duty (Coven)
+  points: -10
+  tags: [Disadvantage, Mental, Xenos, Drukhari]
+  ref: B133
+  notes: >-
+    Bound to a Haemonculus's Coven: 12 or less on a frequency roll each session
+    that the Coven requires service.
+  lore: >-
+    Wracks serve their Haemonculus because they cannot leave. Some were bought as
+    slaves, some sold themselves in the hope of a better fate, and few are free
+    to walk away. Background.
+  design: Duty (B133) 12 or less, -10 points, not extremely hazardous.
+- name: 'Combat Drug: Adrenalight'
+  container: meta_trait
+  tags: [Advantage, Physical, Xenos, Drukhari]
+  notes: >-
+    One dose per combat. Enable the trait for the fight; lasts the whole fight (about
+    ten minutes at most). Roll HT after the fight ends; on a failure lose 1 FP and
+    take -1 on all rolls for an hour (the comedown).
+  lore: >-
+    Adrenalight is the Wych Cults' basic fighting stimulant: it makes a warrior
+    faster, lets her strike more often, and is favoured for its low risk. Background:
+    Codex: Drukhari's Wych Cult combat drugs list; the tabletop effect is one extra
+    attack, translated here as more speed.
+  design: >-
+    Modest boost, no more than Aspect Training's own speed edge. Net cost 7 - 5
+    = 2 points when enabled.
+  children:
+  - name: Adrenalight Surge
+    points: 10
+    tags: [Advantage, Physical, Xenos, Drukhari]
+    attributes: {basic_speed: 0.5}
+    modifiers:
+    - {name: Accessibility, cost: -30%, ref: B110, notes: 'One dose per combat;
+        effect lasts the fight, then the comedown. '}
+    notes: Basic Speed +0.5.
+    lore: >-
+      A stimulant that speeds reactions and pushes the body to strike more often.
+    design: >-
+      Increased Basic Speed +0.5 (B17, 10 points) with the one-dose Accessibility
+      -30%: 7 points.
+  - name: Dependency (Adrenalight)
+    points: -5
+    tags: [Disadvantage, Physical, Xenos, Drukhari]
+    ref: B130
+    notes: >-
+      Roll HT after the fight ends; on a failure lose 1 FP and take -1 on all rolls
+      for an hour (the comedown).
+    lore: >-
+      Combat drugs are habit-forming; regular users need a dose or suffer the comedown.
+    design: >-
+      Dependency (B130), a Common substance in Commorragh, milder than Soul Thirst,
+      priced at -5 as a judgement on B130's method.
+- name: 'Combat Drug: Grave Lotus'
+  container: meta_trait
+  tags: [Advantage, Physical, Xenos, Drukhari]
+  notes: >-
+    One dose per combat. Enable the trait for the fight; lasts the whole fight (about
+    ten minutes at most). Roll HT after the fight ends; on a failure lose 1 FP and
+    take -1 on all rolls for an hour (the comedown).
+  lore: >-
+    Grave Lotus is the Wych's blade-fighting drug: it slows the world so that a
+    strike is seen coming. Background: Codex: Drukhari's Wych Cult combat drug list;
+    tabletop effect is +1 Weapon Skill.
+  design: Hits skill, not damage. Net 6 - 5 = 1 point when enabled.
+  children:
+  - name: Lotus Focus
+    points: 20
+    tags: [Advantage, Physical, Xenos, Drukhari]
+    attributes: {dx: 1}
+    modifiers:
+    - {name: Accessibility, cost: -30%, ref: B110, notes: 'One dose per combat;
+        effect lasts the fight, then the comedown. '}
+    - {name: Accessibility, cost: -40%, ref: B110, notes: Applies only to melee
+        attack and parry rolls.}
+    notes: DX +1, melee attacks and parries only.
+    lore: >-
+      A concentrate that heightens perception and reflexes, sharpening a Wych's
+      blows and parries.
+    design: >-
+      Increased DX +1 (B15, 20 points) with Accessibility -30% (one dose) and -40%
+      (melee attack and parry rolls only): 20 x 0.3 = 6 points.
+  - name: Dependency (Grave Lotus)
+    points: -5
+    tags: [Disadvantage, Physical, Xenos, Drukhari]
+    ref: B130
+    notes: >-
+      Roll HT after the fight ends; on a failure lose 1 FP and take -1 on all rolls
+      for an hour (the comedown).
+    lore: >-
+      Combat drugs are habit-forming; regular users need a dose or suffer the comedown.
+    design: >-
+      Dependency (B130), a Common substance in Commorragh, milder than Soul Thirst,
+      priced at -5 as a judgement on B130's method.
+- name: 'Combat Drug: Hypex'
+  container: meta_trait
+  tags: [Advantage, Physical, Xenos, Drukhari]
+  notes: >-
+    One dose per combat. Enable the trait for the fight; lasts the whole fight (about
+    ten minutes at most). Roll HT after the fight ends; on a failure lose 1 FP and
+    take -1 on all rolls for an hour (the comedown).
+  lore: >-
+    Hypex is the drug of the charging Wych: raw speed for crossing a killing field.
+    Background: Codex: Drukhari's Wych Cult drug list.
+  design: Modest; +2 Move on a base of 10-12. Net 7 - 5 = 2 points when enabled.
+  children:
+  - name: Hypex Sprint
+    points: 10
+    tags: [Advantage, Physical, Xenos, Drukhari]
+    attributes: {basic_move: 2}
+    modifiers:
+    - {name: Accessibility, cost: -30%, ref: B110, notes: 'One dose per combat;
+        effect lasts the fight, then the comedown. '}
+    notes: Basic Move +2.
+    lore: A fast-acting stimulant that floods the legs with speed.
+    design: >-
+      Increased Basic Move +2 (B17, 5 points/level, 10) with the one-dose Accessibility:
+      7 points.
+  - name: Dependency (Hypex)
+    points: -5
+    tags: [Disadvantage, Physical, Xenos, Drukhari]
+    ref: B130
+    notes: >-
+      Roll HT after the fight ends; on a failure lose 1 FP and take -1 on all rolls
+      for an hour (the comedown).
+    lore: >-
+      Combat drugs are habit-forming; regular users need a dose or suffer the comedown.
+    design: >-
+      Dependency (B130), a Common substance in Commorragh, milder than Soul Thirst,
+      priced at -5 as a judgement on B130's method.
+- name: 'Combat Drug: Painbringer'
+  container: meta_trait
+  tags: [Advantage, Physical, Xenos, Drukhari]
+  notes: >-
+    One dose per combat. Enable the trait for the fight; lasts the whole fight (about
+    ten minutes at most). Roll HT after the fight ends; on a failure lose 1 FP and
+    take -1 on all rolls for an hour (the comedown). The wounds it ignored still
+    count: track HP as normal.
+  lore: >-
+    Painbringer numbs the nerves so that a fighter can ignore what would send her
+    down. Background: Codex: Drukhari's Wych Cult drug list; tabletop effect is
+    Feel No Pain.
+  design: >-
+    Overlaps with Power from Pain Stage I on purpose (the drug is the Wych's way
+    of getting it earlier). Net 7 - 5 = 2 points when enabled.
+  children:
+  - name: Painbringer Numbness
+    points: 10
+    tags: [Advantage, Physical, Xenos, Drukhari]
+    ref: B59
+    modifiers:
+    - name: Accessibility
+      cost: -30%
+      ref: B110
+      notes: >-
+        One dose per combat; effect lasts the fight, then the comedown. Does not
+        stack with Power from Pain Stage I's High Pain Threshold.
+    notes: High Pain Threshold. Does not stack with Power from Pain (Stage I).
+    lore: >-
+      A nerve-deadening drug: the Wych feels nothing until the fight is done and
+      the damage arrives all at once.
+    design: >-
+      High Pain Threshold (B59, 10 points) with the one-dose Accessibility: 7 points.
+  - name: Dependency (Painbringer)
+    points: -5
+    tags: [Disadvantage, Physical, Xenos, Drukhari]
+    ref: B130
+    notes: >-
+      Roll HT after the fight ends; on a failure lose 1 FP and take -1 on all rolls
+      for an hour (the comedown). The wounds it ignored still count: track HP as
+      normal.
+    lore: >-
+      Combat drugs are habit-forming; regular users need a dose or suffer the comedown.
+    design: >-
+      Dependency (B130), a Common substance in Commorragh, milder than Soul Thirst,
+      priced at -5 as a judgement on B130's method.
+- name: 'Combat Drug: Serpentin'
+  container: meta_trait
+  tags: [Advantage, Physical, Xenos, Drukhari]
+  notes: >-
+    One dose per combat. Enable the trait for the fight; lasts the whole fight (about
+    ten minutes at most). Roll HT after the fight ends; on a failure lose 1 FP and
+    take -1 on all rolls for an hour (the comedown).
+  lore: >-
+    Serpentin is the drug that adds force to the arm, favoured by the Wych Cults'
+    bruisers. Background: Codex: Drukhari's Wych Cult drug list; tabletop effect
+    is +1 Strength.
+  design: Damage, not accuracy. Net 7 - 5 = 2 points when enabled.
+  children:
+  - name: Serpentin Strength
+    per_level: 5
+    levels: 2
+    tags: [Advantage, Physical, Xenos, Drukhari]
+    ref: B88
+    modifiers:
+    - {name: Accessibility, cost: -30%, ref: B110, notes: 'One dose per combat;
+        effect lasts the fight, then the comedown. '}
+    notes: 'Striking ST +2: melee damage as if ST 2 higher.'
+    lore: A muscle-stimulant that adds force to every blow.
+    design: >-
+      Striking ST 2 (B88, 5/level, 10 points) with the one-dose Accessibility: 7
+      points.
+  - name: Dependency (Serpentin)
+    points: -5
+    tags: [Disadvantage, Physical, Xenos, Drukhari]
+    ref: B130
+    notes: >-
+      Roll HT after the fight ends; on a failure lose 1 FP and take -1 on all rolls
+      for an hour (the comedown).
+    lore: >-
+      Combat drugs are habit-forming; regular users need a dose or suffer the comedown.
+    design: >-
+      Dependency (B130), a Common substance in Commorragh, milder than Soul Thirst,
+      priced at -5 as a judgement on B130's method.
+- name: 'Combat Drug: Splintermind'
+  container: meta_trait
+  tags: [Advantage, Physical, Xenos, Drukhari]
+  notes: >-
+    One dose per combat. Enable the trait for the fight; lasts the whole fight (about
+    ten minutes at most). Roll HT after the fight ends; on a failure lose 1 FP and
+    take -1 on all rolls for an hour (the comedown).
+  lore: >-
+    Splintermind is the mental drug of the six: a hard, focused calm. Background:
+    Codex: Drukhari's Wych Cult drug list. Its exact effect varies by edition, so
+    this is the project's choice, not a fixed lore fact.
+  design: Will only; no bonus to skills. Net 7 - 5 = 2 points when enabled.
+  children:
+  - name: Splintermind Clarity
+    per_level: 5
+    levels: 2
+    tags: [Advantage, Mental, Xenos, Drukhari]
+    attributes: {will: 2}
+    modifiers:
+    - {name: Accessibility, cost: -30%, ref: B110, notes: 'One dose per combat;
+        effect lasts the fight, then the comedown. '}
+    notes: Will +2, including Fright Checks and resisting pain and fatigue.
+    lore: >-
+      A drug that hardens the mind and gives it an odd, cold focus, so that a warrior
+      can keep fighting through what would break them.
+    design: >-
+      Increased Will +2 (B16, 5/level, 10 points) with the one-dose Accessibility:
+      7 points.
+  - name: Dependency (Splintermind)
+    points: -5
+    tags: [Disadvantage, Physical, Xenos, Drukhari]
+    ref: B130
+    notes: >-
+      Roll HT after the fight ends; on a failure lose 1 FP and take -1 on all rolls
+      for an hour (the comedown).
+    lore: >-
+      Combat drugs are habit-forming; regular users need a dose or suffer the comedown.
+    design: >-
+      Dependency (B130), a Common substance in Commorragh, milder than Soul Thirst,
+      priced at -5 as a judgement on B130's method.
+- name: Kabalite Conditioning
+  container: meta_trait
+  tags: [Advantage, Physical, Xenos, Drukhari]
+  lore: >-
+    The rank-and-file Kabalite is a raider, not a militiaman: as fast and precise
+    as any Guardian but with a lower threshold for fear, kept in line by a mix of
+    loot, terror and the Archon's favour. Codex: Drukhari background.
+  design: >-
+    Net -5 points. A Kabalite's edge over a Guardian is the raid's training, not
+    the body.
+  children:
+  - name: Attribute Modifiers (Kabalite)
+    points: -5
+    tags: [Physical]
+    attributes: {will: -1}
+    design: >-
+      Framework target over the Drukhari Physiology + Keen Battle-Sense baseline:
+      ST 10, DX 14, IQ 12, HT 10, Per 13 (delivered by Keen Battle-Sense), Will
+      11. Lowered Will -1 (B16, -5/level, -5): a rank-and-file raider's nerve is
+      thinner than an Aeldari Guardian's, cowed by the Kabal's own cruelty rather
+      than steeled by a Path. Nothing else is bought.
+- name: Kabal Lens
+  container: group
+  tags: [Xenos, Drukhari]
+  lore: >-
+    The Kabals are the Drukhari's warlord courts: an Archon at the top, Kabalites
+    beneath in ranks, all loyalty conditional on results. Codex: Drukhari and Codex:
+    Dark Eldar background.
+  design: >-
+    Net -4 points: a perk for drilled fire-discipline against the constant scheming
+    that is the rest of a Kabal's culture. Used by Kabalite Warriors and Archons
+    (enabled).
+  children:
+  - name: Raid Drill
+    points: 1
+    tags: [Perk, Xenos, Drukhari]
+    ref: B100
+    skill_bonuses: {Guns (Rifle): 1}
+    lore: Splinter-rifle volley drill in the Kabal's own raid formations.
+    design: Perk (B100), +1 to Guns (Rifle).
+  - name: Kabal Politics
+    points: -5
+    cr: 12
+    tags: [Disadvantage, Mental, Xenos, Drukhari]
+    ref: B153
+    notes: >-
+      Selfish as above (a lens-level reminder: the Kabal's loyalty is bought and
+      rescinded).
+    lore: A Kabalite climbs by advancing at others' expense.
+    design: Selfish (B153, -5), self-control 12.
+- name: Wych Training
+  container: meta_trait
+  tags: [Advantage, Physical, Xenos, Drukhari]
+  lore: >-
+    What the Wych Cults' arena training does to a Kabalite-grade body: years of
+    mock-battles on razor-strewn floors and blood-sport fights on death-trap arenas,
+    turning a raider into a fighting dancer whose skill is dodge, not armour. Codex:
+    Drukhari's Wych Cult background.
+  design: >-
+    70 + 30 + 15 = 115 points, added to the Drukhari Physiology + Keen Battle-Sense
+    baseline (156 + 5 = 161) for 276 points before cult lens, mental traits and
+    skills.
+  children:
+  - name: Attribute Modifiers (Wych)
+    points: 70
+    tags: [Physical]
+    attributes: {st: 1, dx: 2, ht: 1, basic_move: 2}
+    design: >-
+      Framework target over the Drukhari Physiology + Keen Battle-Sense baseline:
+      ST 11, DX 16, IQ 12, HT 11, Per 13, Will 12 (both untouched), Move 12. ST
+      +1 (B14, 10) for arena-honed muscle; DX +2 (B15, 20/level, 40) to DX 16, matching
+      an Aspect Warrior's; HT +1 (B15, 10); Basic Move +2 (B17, 5/level, 10) so
+      a Wych (Move 12) crosses the arena as fast as an Aspect Warrior. 10 + 40 +
+      10 + 10 = 70 points.
+  - name: Enhanced Dodge
+    per_level: 15
+    levels: 2
+    tags: [Advantage, Physical, Xenos, Drukhari]
+    ref: B51
+    lore: >-
+      A Wych fights in almost no armour, so evasion is her defence: framework.md
+      calls her 'drug-fuelled acrobat; dodge is her armour'. Two levels rather than
+      the Aspect Warrior's one because that is all she has.
+    design: >-
+      Enhanced Dodge 2 (B51, 15/level, 30 points): Dodge 12 at Basic Speed 7.0 (7
+      + 3 + 2).
+  - name: Perfect Balance
+    points: 15
+    tags: [Advantage, Physical, Xenos, Drukhari]
+    ref: B74
+    lore: >-
+      Arena acrobats fight on ropes, spinning blades and moving platforms; the balance
+      is the profession.
+    design: >-
+      Perfect Balance (B74, 15 points): +6 to Acrobatics rolls to avoid falling
+      and to balance, per the book (no extra bonus to an Acrobatic Dodge).
+- name: Wych Cult Lens
+  container: group
+  tags: [Xenos, Drukhari]
+  lore: >-
+    Wych Cults are Commorragh's gladiatorial societies: each arena fight is both
+    sport and sacrifice, fed by drugs and worshipped by the crowd. Codex: Drukhari
+    and Codex: Dark Eldar background. The cult's combat drugs are the six separate
+    Combat Drug traits, disabled by default on each cult template.
+  design: >-
+    Net +2 points: two perks for what the arena gives every Wych, on top of the
+    Wych Training package.
+  children:
+  - name: Arena Poise
+    points: 1
+    tags: [Perk, Xenos, Drukhari]
+    ref: B100
+    skill_bonuses: {Acrobatics: 1}
+    lore: An arena fighter's flourish is part of the fight.
+    design: Perk (B100), +1 to Acrobatics.
+  - name: Crowd's Favourite
+    points: 1
+    tags: [Perk, Xenos, Drukhari]
+    ref: B100
+    skill_bonuses: {Performance: 1}
+    lore: >-
+      A Wych is an entertainer first; the crowd's roar is its own reward and its
+      own tax.
+    design: Perk (B100), +1 to Performance.
+- name: Succubus's Mastery
+  container: meta_trait
+  tags: [Advantage, Physical, Xenos, Drukhari]
+  lore: >-
+    The champion of the arena: a Wych who has won more fights than any other and
+    is prepared to die keeping the title. Codex: Drukhari's Succubus and Wych Cult
+    background.
+  design: >-
+    85 + 15 + 15 + 20 + 10 + 10 = 155 points, added to Wych Training (115) and the
+    baseline (161) for 431 points before lens, mental traits, Power from Pain and
+    skills.
+  children:
+  - name: Attribute Modifiers (Succubus)
+    points: 85
+    tags: [Physical]
+    attributes: {st: 1, dx: 2, iq: 1, ht: 1, will: 1}
+    design: >-
+      Framework target over the Wych + Keen Battle-Sense baseline: ST 12, DX 18,
+      IQ 13, HT 12, Per 14 (IQ 13 plus Keen Battle-Sense), Will 14 (IQ 13 plus 1),
+      Move 12. ST +1 (B14, 10), DX +2 (B15, 40) to DX 18, IQ +1 (B16, 20), HT +1
+      (B15, 10), Will +1 (B16, 5): 85 points.
+  - name: Enhanced Dodge
+    per_level: 15
+    levels: 1
+    tags: [Advantage, Physical, Xenos, Drukhari]
+    ref: B51
+    lore: An arena queen out-dodges her own Wyches.
+    design: >-
+      A further Enhanced Dodge 1 (B51, 15 points), stacking with Wych Training's
+      two for Enhanced Dodge 3.
+  - name: Combat Reflexes
+    points: 15
+    tags: [Advantage, Mental, Xenos, Drukhari]
+    ref: B43
+    lore: Years in the arena leave no room for surprise.
+    design: Combat Reflexes (B43, 15 points).
+  - name: Weapon Master (Arena Weapon)
+    points: 20
+    tags: [Advantage, Physical, Xenos, Drukhari]
+    ref: B99
+    lore: >-
+      A Succubus's signature weapon (agoniser, razorflails, hydra gauntlets or shardnet)
+      is the one she has refought a thousand times.
+    design: Weapon Master, one weapon (B99, 20 points).
+  - name: Enhanced Parry
+    per_level: 5
+    levels: 2
+    tags: [Advantage, Physical, Xenos, Drukhari]
+    ref: B51
+    lore: A Wych rarely parries but a Succubus can.
+    design: Enhanced Parry 2, one weapon (B51, 5/level, 10 points).
+  - name: Charisma
+    per_level: 5
+    levels: 2
+    tags: [Advantage, Mental, Xenos, Drukhari]
+    ref: B41
+    lore: >-
+      A Succubus commands a Wych Cult by being the one every Wych wants to become.
+    design: Charisma 2 (B41, 5/level, 10 points).
+- name: Incubus Training
+  container: meta_trait
+  tags: [Advantage, Physical, Xenos, Drukhari]
+  lore: >-
+    Incubi are the Drukhari's elite blade-cultists, sworn to Arhra and available
+    to the highest bidder, always armoured and always disciplined. Codex: Drukhari's
+    Incubi background.
+  design: >-
+    110 + 15 + 30 + 20 + 10 = 185 points, added to the baseline (161) for 346 points
+    before lens, mental traits, Power from Pain and skills.
+  children:
+  - name: Attribute Modifiers (Incubus)
+    points: 110
+    tags: [Physical]
+    attributes: {st: 2, dx: 3, ht: 2, will: 2}
+    design: >-
+      Framework target over the Drukhari Physiology + Keen Battle-Sense baseline:
+      ST 12, DX 17, IQ 12 (untouched), HT 12, Per 13, Will 14, Move 10. ST +2 (B14,
+      20), DX +3 (B15, 60), HT +2 (B15, 20), Will +2 (B16, 10): 110 points. Basic
+      Move is unbought: Basic Speed 7.5 gives Basic Move 7 plus the Aeldari 3.
+  - name: Combat Reflexes
+    points: 15
+    tags: [Advantage, Mental, Xenos, Drukhari]
+    ref: B43
+    lore: A cultist who has fought for decades does not freeze.
+    design: Combat Reflexes (B43, 15 points).
+  - name: Trained By A Master
+    points: 30
+    tags: [Advantage, Mental, Xenos, Drukhari]
+    ref: B93
+    lore: >-
+      Incubi are taught in the Cult's own sanctums, master to disciple, for centuries.
+    design: Trained By A Master (B93, 30 points).
+  - name: Weapon Master (Klaive)
+    points: 20
+    tags: [Advantage, Physical, Xenos, Drukhari]
+    ref: B99
+    lore: The klaive is the only weapon most Incubi will ever use.
+    design: Weapon Master, one weapon (B99, 20 points).
+  - name: Enhanced Parry
+    per_level: 5
+    levels: 2
+    tags: [Advantage, Physical, Xenos, Drukhari]
+    ref: B51
+    lore: An Incubus can hold a line of blades on the klaive alone.
+    design: Enhanced Parry 2, one weapon (B51, 5/level, 10 points).
+- name: Path of Arhra
+  container: group
+  tags: [Xenos, Drukhari]
+  lore: >-
+    Incubi are a warrior-cult sworn to Arhra, a god of the Aeldari pantheon whose
+    background is sparse and partly contradictory across editions. The lens records
+    only what is consistent: an ascetic order, ritual discipline and a mercenary
+    practice that never breaks the oath. Codex: Drukhari's Incubi background.
+  design: >-
+    Net -15 points (-15 - 5 + 1 + 4): the price of the Path is real; the discipline
+    is what the money buys.
+  children:
+  - name: Bound to Arhra
+    points: -15
+    tags: [Disadvantage, Mental, Xenos, Drukhari]
+    ref: B136
+    notes: >-
+      Absolute devotion to the Cult of Arhra and its rites; refuses a contract that
+      would defile them.
+    lore: >-
+      An Incubus's service is a religious calling first and a mercenary one second.
+    design: Fanaticism (B136, -15) on the Cult of Arhra.
+  - name: Cult Oath
+    points: -5
+    tags: [Disadvantage, Mental, Xenos, Drukhari]
+    ref: B127
+    notes: Keeps a signed contract, honours an oath, will not strike a client.
+    lore: A mercenary Incubus is expensive because he is reliable.
+    design: 'Code of Honor (B127, -5): the oath a paying customer can rely on.'
+  - name: Blade-Discipline
+    points: 1
+    tags: [Perk, Xenos, Drukhari]
+    ref: B100
+    skill_bonuses: {Two-Handed Sword: 1}
+    lore: The Cult's drill, repeated on the klaive.
+    design: Perk (B100), +1 to Two-Handed Sword.
+  - name: Ascetic Calm
+    per_level: 2
+    levels: 2
+    tags: [Advantage, Mental, Xenos, Drukhari]
+    ref: B55
+    lore: An Incubus's calm in the face of horror is part of the Cult's teaching.
+    design: Fearlessness 2 (B55, 2/level, 4 points).
+- name: Archon's Mastery
+  container: meta_trait
+  tags: [Advantage, Physical, Xenos, Drukhari]
+  lore: >-
+    The ancient, scheming, well-fed tyrants of the Kabals: warlords who rule a city-district
+    of Commorragh and have been fending off rivals for centuries. Codex: Drukhari's
+    Archon background.
+  design: >-
+    190 + 15 + 15 + 10 = 230 points, added to the baseline (156) for 386 points
+    before estate, regrowth, Power from Pain, mental traits and skills.
+  children:
+  - name: Attribute Modifiers (Archon)
+    points: 190
+    tags: [Physical]
+    attributes: {st: 2, dx: 4, iq: 3, ht: 2, will: 2}
+    design: >-
+      Framework target over the Drukhari Physiology baseline (no Keen Battle-Sense:
+      an Archon's Per equals IQ): ST 12, DX 18, IQ 15, HT 12, Per 15, Will 17, Move
+      10. ST +2 (B14, 20), DX +4 (B15, 80), IQ +3 (B16, 60), HT +2 (B15, 20), Will
+      +2 (B16, 10): 190 points.
+  - name: Enhanced Dodge
+    per_level: 15
+    levels: 1
+    tags: [Advantage, Physical, Xenos, Drukhari]
+    ref: B51
+    lore: >-
+      An Archon has survived centuries of assassinations; the ones who were slow
+      are dead.
+    design: Enhanced Dodge 1 (B51, 15 points).
+  - name: Combat Reflexes
+    points: 15
+    tags: [Advantage, Mental, Xenos, Drukhari]
+    ref: B43
+    lore: An Archon does not freeze in a coup.
+    design: Combat Reflexes (B43, 15 points).
+  - name: Charisma
+    per_level: 5
+    levels: 2
+    tags: [Advantage, Mental, Xenos, Drukhari]
+    ref: B41
+    lore: >-
+      A Kabal follows its Archon out of fear, greed and the sense that the Archon
+      will win.
+    design: Charisma 2 (B41, 5/level, 10 points).
+- name: Archon's Estate
+  container: meta_trait
+  tags: [Advantage, Mental, Xenos, Drukhari]
+  lore: >-
+    Money and rank in Commorragh: an Archon has more of both than nearly anyone.
+    Background.
+  design: 30 + 20 = 50 points.
+  children:
+  - name: Wealth (Very Wealthy)
+    points: 30
+    tags: [Advantage, Social, Xenos, Drukhari]
+    ref: B25
+    lore: A Kabal's plunder flows to its Archon.
+    design: Very Wealthy (B25, 30 points).
+  - name: Status 4
+    per_level: 5
+    levels: 4
+    tags: [Advantage, Social, Xenos, Drukhari]
+    ref: B28
+    lore: >-
+      An Archon sits above thousands of Kabalites and slaves and answers to few
+      in Commorragh.
+    design: Status 4 (B28, 5/level, 20 points).
+- name: Haemonculus's Self-Sculpted Body
+  container: meta_trait
+  tags: [Advantage, Physical, Xenos, Drukhari]
+  lore: >-
+    Haemonculi are the flesh-sculptors of the Covens and their own first works:
+    bodies rebuilt over centuries into whatever shape their art demanded. Codex:
+    Drukhari's Haemonculus background.
+  design: >-
+    135 + 10 + 4 + 10 + 6 + 5 - 20 = 150 points, added to the baseline (156) for
+    306 points before regrowth, estate, mental traits and skills.
+  children:
+  - name: Attribute Modifiers (Haemonculus)
+    points: 135
+    tags: [Physical]
+    attributes: {st: 3, dx: -1, iq: 4, ht: 5, hp: 5, per: -2, will: 1, basic_move: -2}
+    design: >-
+      Framework target over the Drukhari Physiology baseline: ST 13, DX 13, IQ 16,
+      HT 15, HP 18, Per 14, Will 17, Move 8. ST +3 (B14, 30); DX -1 (B15, -20);
+      IQ +4 (B16, 80); HT +5 (B15, 50); HP +5 (B16, 2/level, 10; 13 ST plus 5 =
+      18); Per -2 (B16, 5/level, -10; IQ 16 to Per 14: the Haemonculus is more focused
+      on the inner than the outer world); Will +1 (B16, 5; IQ 16 to Will 17); Basic
+      Move -2 (B17, -5/level, -10; Basic Speed 7.25 gives Basic Move 7, plus 3,
+      minus 2 = 8; a ponderous, heavily-modified gait). 30 - 20 + 80 + 50 + 10 -
+      10 + 5 - 10 = 135 points.
+  - name: High Pain Threshold
+    points: 10
+    tags: [Advantage, Physical, Xenos, Drukhari]
+    ref: B59
+    lore: >-
+      Haemonculi rebuild their own nervous systems; pain is a thing they choose
+      to feel.
+    design: High Pain Threshold (B59, 10 points).
+  - name: Hard to Kill
+    per_level: 2
+    levels: 2
+    tags: [Advantage, Physical, Xenos, Drukhari]
+    ref: B58
+    lore: >-
+      A Haemonculus's body is a work of redundancy: organs doubled, vessels rerouted.
+    design: Hard to Kill 2 (B58, 2/level, 4 points).
+  - name: Regeneration (Slow)
+    points: 10
+    tags: [Advantage, Physical, Xenos, Drukhari]
+    ref: B80
+    lore: Flesh sculpted for constant repair.
+    design: Regeneration, Slow tier (B80, 10 points, 1 HP per 12 hours).
+  - name: Tough Skin
+    per_level: 5
+    levels: 2
+    tags: [Advantage, Physical, Xenos, Drukhari]
+    ref: B46
+    dr: {all: 2}
+    modifiers:
+    - {name: Tough Skin, cost: -40%, ref: B47, notes: Skin toughened with grafts;
+        injuries and blows that flay still cut.}
+    lore: Grafted plates, layered scar tissue and toughened hide.
+    design: 'Damage Resistance 2 (B46, 5/level, 10) with Tough Skin -40%: 6 points.'
+  - name: Injury Tolerance (No Vitals)
+    points: 5
+    tags: [Advantage, Physical, Xenos, Drukhari]
+    ref: B60
+    lore: >-
+      A Haemonculus's vital organs are moved, doubled or spread through the body.
+    design: >-
+      Injury Tolerance, No Vitals (B60, 5 points): vitals hits count as torso hits.
+  - name: Grotesque Body
+    points: -20
+    tags: [Disadvantage, Physical, Xenos, Drukhari]
+    ref: B21
+    notes: 'Replaces the Aeldari Grace''s Attractive: net Hideous (-16).'
+    lore: >-
+      Haemonculi sculpt themselves for aesthetic reasons that are theirs alone and
+      rarely resemble a pleasant face.
+    design: >-
+      Appearance (B21) worse than Attractive: Hideous is -16, and the shared Aeldari
+      Grace has already bought +4, so -20 brings the net Appearance to Hideous.
+- name: Haemonculus's Composure
+  container: meta_trait
+  tags: [Advantage, Mental, Xenos, Drukhari]
+  lore: Fear and awe do not touch a Haemonculus.
+  design: 15 points.
+  children:
+  - name: Unfazeable
+    points: 15
+    tags: [Advantage, Mental, Xenos, Drukhari]
+    ref: B95
+    lore: A Haemonculus has seen every horror from the operating side.
+    design: Unfazeable (B95, 15 points).
+- name: Haemonculus's Estate
+  container: meta_trait
+  tags: [Advantage, Mental, Xenos, Drukhari]
+  lore: A Haemonculus's coven pays them and answers to them. Background.
+  design: 20 + 10 = 30 points.
+  children:
+  - name: Wealth (Wealthy)
+    points: 20
+    tags: [Advantage, Social, Xenos, Drukhari]
+    ref: B25
+    lore: The Covens are the Drukhari's surgeons and are paid for it.
+    design: Wealthy (B25, 20 points).
+  - name: Status 2
+    per_level: 5
+    levels: 2
+    tags: [Advantage, Social, Xenos, Drukhari]
+    ref: B28
+    lore: A Haemonculus heads a Coven's rank.
+    design: Status 2 (B28, 5/level, 10 points).
+- name: Obsession (Perfect Agony)
+  points: -10
+  cr: 12
+  tags: [Disadvantage, Mental, Xenos, Drukhari]
+  ref: B146
+  notes: >-
+    Consumed by a lifelong artistic project (a perfect pain, a perfect body); self-control
+    roll to abandon a chance to advance it.
+  lore: >-
+    Every Haemonculus is driven by an aesthetic quest no one else understands. Background.
+  design: Obsession (B146, -10) for a long-term goal.
+- name: Wrack Surgery
+  container: meta_trait
+  tags: [Advantage, Physical, Xenos, Drukhari]
+  lore: >-
+    Wracks are the Covens' servants, taken and rebuilt for labour and torture: bulked
+    out, dulled, and set to the Haemonculus's work. Codex: Drukhari's Wrack background.
+  design: >-
+    4 + 10 + 9 + 6 + 6 - 12 = 23 points, added to the baseline (156) for 179 points
+    before mental traits, Power from Pain and skills.
+  children:
+  - name: Attribute Modifiers (Wrack)
+    points: 4
+    tags: [Physical]
+    attributes: {st: 4, dx: -2, iq: -2, ht: 4, hp: 2, will: 1, basic_move: -1}
+    design: >-
+      Framework target over the Drukhari Physiology baseline: ST 14, DX 12, IQ 10,
+      HT 14, HP 16, Per 10, Will 11, Move 8. ST +4 (B14, 40); DX -2 (B15, -40);
+      IQ -2 (B16, -40); HT +4 (B15, 40); HP +2 (B16, 4; ST 14 plus 2 = 16); Will
+      +1 (B16, 5; IQ 10 to Will 11); Basic Move -1 (B17, -5; Basic Speed 6.75 gives
+      Basic Move 6 plus 3 minus 1 = 8). Per 10 tracks IQ 10 and no Keen Battle-Sense
+      is bought. 40 - 40 - 40 + 40 + 4 + 5 - 5 = 4 points.
+  - name: High Pain Threshold
+    points: 10
+    tags: [Advantage, Physical, Xenos, Drukhari]
+    ref: B59
+    lore: 'Deadened nerves: a Wrack''s screams are the Haemonculus''s, not his own.'
+    design: High Pain Threshold (B59, 10 points).
+  - name: Tough Skin
+    per_level: 5
+    levels: 3
+    tags: [Advantage, Physical, Xenos, Drukhari]
+    ref: B46
+    dr: {all: 3}
+    modifiers:
+    - {name: Tough Skin, cost: -40%, ref: B47, notes: 'Stitched, grafted and scarred
+        hide.'}
+    lore: Extra hide and grafted plates.
+    design: 'Damage Resistance 3 (B46, 5/level, 15) with Tough Skin -40%: 9 points.'
+  - name: Hard to Kill
+    per_level: 2
+    levels: 3
+    tags: [Advantage, Physical, Xenos, Drukhari]
+    ref: B58
+    lore: >-
+      Duplicated organs and reinforced vessels keep a Wrack up long after he should
+      be down.
+    design: Hard to Kill 3 (B58, 2/level, 6 points).
+  - name: Bulked Frame
+    per_level: 3
+    levels: 2
+    tags: [Advantage, Physical, Xenos, Drukhari]
+    ref: B16
+    attributes: {lifting_st: 2}
+    notes: Lifting ST +2.
+    lore: Wracks are hauled, bloated and rebuilt into load-bearing servants.
+    design: Lifting ST 2 (B16, 3/level, 6 points).
+  - name: Grotesque Body (Wrack)
+    points: -12
+    tags: [Disadvantage, Physical, Xenos, Drukhari]
+    ref: B21
+    notes: 'Replaces the Aeldari Grace''s Attractive: net Ugly (-8).'
+    lore: >-
+      Wracks are stitched, flayed or otherwise visibly rebuilt, in a way their masters
+      find pleasing.
+    design: >-
+      Ugly is -8 and the shared Aeldari Grace has already bought +4, so -12 brings
+      the net Appearance to Ugly.
+- name: Scourge Conditioning
+  container: meta_trait
+  tags: [Advantage, Physical, Xenos, Drukhari]
+  lore: >-
+    Scourges are ordinary Drukhari raiders who were rebuilt with the wings they
+    paid for and trained for the aerial role. Background.
+  design: 45 points.
+  children:
+  - name: Attribute Modifiers (Scourge)
+    points: 45
+    tags: [Physical]
+    attributes: {st: 1, dx: 1, ht: 1, per: 1}
+    design: >-
+      Framework target over the Drukhari Physiology + Keen Battle-Sense baseline:
+      ST 11, DX 15, IQ 12, HT 11, Per 14, Will 12, Move 9. ST +1 (B14, 10), DX +1
+      (B15, 20), HT +1 (B15, 10), Per +1 (B16, 5, on top of Keen Battle-Sense's
+      +1): 45 points.
+- name: Scourge Wings
+  container: meta_trait
+  tags: [Advantage, Physical, Xenos, Drukhari]
+  lore: >-
+    Grafted wings that let a Drukhari raider take to the air. Codex: Drukhari's
+    Scourge background.
+  design: 30 + 10 = 40 points.
+  children:
+  - name: Flight (Winged)
+    points: 40
+    tags: [Advantage, Physical, Xenos, Drukhari]
+    ref: B56
+    modifiers:
+    - name: Winged
+      cost: -25%
+      ref: B56
+      notes: >-
+        Needs room to spread the wings; a Scourge cannot fly cramped, and a hit
+        to a wing can ground them.
+    notes: Air Move 2 x Basic Move (18 at Move 9).
+    lore: >-
+      Scourges pay a Haemonculus to graft on wings and take to the air as raiders
+      and scouts. Codex: Drukhari's Scourge background; the wings' surgical origin
+      is background across editions.
+    design: 'Flight (B56, 40 points) with Winged -25%: 40 x 0.75 = 30 points.'
+  - name: Enhanced Move (Air)
+    per_level: 20
+    levels: 0.5
+    tags: [Advantage, Physical, Xenos, Drukhari]
+    ref: B52
+    notes: Top sprinting speed x1.5 in flight.
+    lore: Scourges dive on their targets faster than a Guardian can run.
+    design: >-
+      Enhanced Move (Air) 1/2 (B52, 20/level, 10 points): Air Move 18 with x1.5
+      top speed, 27, well past the framework's 'Air 20+'.
+- name: Mandrake Conditioning
+  container: meta_trait
+  tags: [Advantage, Physical, Xenos, Drukhari]
+  lore: >-
+    Mandrakes are creatures of the shadow-dimension Aelindrach, killers whose loyalty
+    is bought and who are only half here: bodies of shade and bone. Codex: Drukhari's
+    Mandrake background.
+  design: >-
+    55 + 15 + 15 = 85 points, added to the baseline (161) for 246 points before
+    shadow nature and skills.
+  children:
+  - name: Attribute Modifiers (Mandrake)
+    points: 55
+    tags: [Physical]
+    attributes: {st: 1, dx: 2, iq: -1, ht: 1, will: 1, per: 2}
+    design: >-
+      Framework target over the Drukhari Physiology + Keen Battle-Sense baseline:
+      ST 11, DX 16, IQ 11, HT 11, Per 14, Will 12, Move 10. ST +1 (B14, 10); DX
+      +2 (B15, 40); IQ -1 (B16, -20: the mind is a shadow's, sly and narrow); HT
+      +1 (B15, 10); Will +1 (B16, 5; IQ 11 to Will 12); Per +2 (B16, 10, on top
+      of Keen Battle-Sense's +1; IQ 11 to Per 14): 10 + 40 - 20 + 10 + 5 + 10 =
+      55 points.
+  - name: Combat Reflexes
+    points: 15
+    tags: [Advantage, Mental, Xenos, Drukhari]
+    ref: B43
+    lore: A shadow-killer who is surprised is dead.
+    design: Combat Reflexes (B43, 15 points).
+  - name: Enhanced Dodge
+    per_level: 15
+    levels: 1
+    tags: [Advantage, Physical, Xenos, Drukhari]
+    ref: B51
+    lore: A Mandrake fights half-sunk in the shadow.
+    design: Enhanced Dodge 1 (B51, 15 points).
+- name: Mandrake Shadow Nature
+  container: meta_trait
+  tags: [Advantage, Physical, Xenos, Drukhari]
+  lore: >-
+    The Mandrake's nature is that of shadow: silent, hard to see, and able to melt
+    into the dark and out of it. Codex: Drukhari's Mandrake background.
+  design: 60 + 6 + 10 + 9 = 85 points.
+  children:
+  - name: Shadow Form (Half-Material)
+    points: 100
+    tags: [Advantage, Physical, Xenos, Drukhari]
+    modifiers:
+    - {name: Accessibility, cost: -30%, ref: B110, notes: 'Only in dim light, darkness
+        or deep shadow.'}
+    - {name: Costs Fatigue, cost: -10%, ref: B112, notes: 2 FP to enter.}
+    notes: >-
+      Uses the Basic Set advantage Shadow Form (see the book for its exact rules;
+      page reference left out on purpose), usable only in shadow and at a cost of
+      2 FP. A Mandrake can slip between shadows and strike from behind.
+    lore: >-
+      Mandrakes step out of Aelindrach's shadows to kill and return to them when
+      done, a quality sometimes described as 'shadow-stepping'. Codex: Drukhari's
+      Mandrake background; the mechanism is not fixed in lore.
+    design: >-
+      Shadow Form (100 points) with Accessibility -30% and Costs Fatigue 2 (-10%):
+      100 x 0.6 = 60 points. Built this way rather than as Teleport because Shadow
+      Form already models being a shadow, and I am not confident enough of Teleport's
+      range table to price a 'shadow-step' honestly.
+  - name: Chameleon
+    per_level: 5
+    levels: 2
+    tags: [Advantage, Physical, Xenos, Drukhari]
+    ref: B47
+    modifiers:
+    - {name: Accessibility, cost: -40%, ref: B110, notes: Only in shadow or dim
+        light.}
+    notes: +4 to Stealth against vision in shadow.
+    lore: A Mandrake is very hard to see in the dark.
+    design: 'Chameleon 2 (B47, 5/level, 10) with Accessibility -40%: 6 points.'
+  - name: Silence
+    per_level: 5
+    levels: 2
+    tags: [Advantage, Physical, Xenos, Drukhari]
+    ref: B85
+    notes: +4 to Stealth against hearing.
+    lore: A Mandrake moves without sound.
+    design: Silence 2 (B85, 5/level, 10 points).
+  - name: Night Vision
+    per_level: 1
+    levels: 9
+    tags: [Advantage, Physical, Xenos, Drukhari]
+    ref: B71
+    lore: A shadow-creature sees fine in the dark.
+    design: Night Vision 9 (B71, 1/level, 9 points).
+- name: Unnatural Features (Shadow-Touched)
+  points: -5
+  tags: [Disadvantage, Physical, Xenos, Drukhari]
+  ref: B22
+  notes: Skin absorbs light; edges blur. -1 reaction (Unnatural Features 1).
+  lore: >-
+    Mandrakes look like something cut out of the dark, which unnerves nearly everyone.
+    Background.
+  design: Unnatural Features 1 (B22, -5).

@@ -1,0 +1,568 @@
+kind: equipment
+output: Xenos/Drukhari/Weapons/Drukhari Melee Weapons.eqp
+items:
+
+  # ------------------------------------------------------------ Power-field weapons
+
+  - name: "Power Sword, Drukhari Pattern"
+    tl: "11^"
+    lc: 0
+    cost: 5000
+    weight: 3.5
+    tags: ["Melee Weapon", "Xenos", "Drukhari", "Kabal", "Wych Cult"]
+    weapons:
+      - usage: "Field on"
+        damage: "sw+3d+1(10) cut"
+        reach: "1"
+        parry: 0
+        st: 10
+        skill: "Broadsword"
+      - usage: "Field off"
+        damage: "sw+1 cut"
+        reach: "1"
+        parry: 0
+        st: 10
+        skill: "Broadsword"
+    notes: >-
+      Field-on line carries armour divisor (10), per the framework's power-field rule.
+    lore: >-
+      The disruption-field blade of the Drukhari elite: Archons, Succubi and Sybarites carry power
+      swords as symbols of rank as much as weapons (Codex: Drukhari background). It is the same
+      weapon in principle as an Imperial or Aeldari power sword, built with the barbed, cruel
+      styling of Commorragh.
+    design: >-
+      Built on the power-field rule exactly: mundane blade sw+1 cut (field off), field on adds +3d
+      and armour divisor (10), sw+3d+1(10) cut, the same as every other power sword in the project
+      since the disruption field does not care who forged the blade. Exact dice at an Archon's ST 12
+      (sw 1d+2, so 4d+3 with the field on): penetrates flak 100.0%, carapace 99.9%, Astartes plate
+      (effective 10) 97.3% and Terminator plate (effective 19) 23.9% (24.3% with the WP chance). At
+      a Kabalite's ST 10 (sw 1d, so 4d+1) the figures are 100.0/98.8/90.3/9.7%: a Kabalite officer
+      can still cut down a Marine, but not a Terminator. Handling: 3.5 lb, a little heavier than the
+      Aeldari pattern's 3 lb for its barbed, more elaborate guard, min ST 10 (the Aeldari weapon is
+      ST 9), reach 1, parry 0, Broadsword.
+
+  - name: "Huskblade"
+    tl: "11^"
+    lc: 0
+    cost: 16000
+    weight: 4
+    tags: ["Melee Weapon", "Xenos", "Drukhari", "Kabal"]
+    weapons:
+      - usage: "Field on"
+        damage: "sw+3d+2(10) cut"
+        reach: "1"
+        parry: 0
+        st: 10
+        skill: "Broadsword"
+      - usage: "Field off"
+        damage: "sw+2 cut"
+        reach: "1"
+        parry: 0
+        st: 10
+        skill: "Broadsword"
+      - usage: "Desiccation follow-up (if blade penetrates)"
+        damage: "2d tox"
+        reach: "1"
+        parry: 0
+        st: 10
+        skill: "Broadsword"
+        notes: >-
+          Only when the field is on and the blade penetrates DR. Living targets only: undead,
+          Necrons and machines are unaffected. The wounded body dries and shrivels: the target's
+          flesh is drained, not poisoned in the usual sense (toxin resistance may not help, GM's
+          call).
+    notes: >-
+      Field-on line carries armour divisor (10). The follow-up line is used only with the field on
+      (the drain is carried by the disruption field).
+    lore: >-
+      A power sword particular to Archons that, in Codex: Drukhari background, drains the vitality
+      of what it wounds, leaving a dried husk. It is a personal weapon of the Kabal's greatest lords
+      and is not carried by their warriors.
+    design: >-
+      Built on the power-field rule (framework: 'power-field rule plus a follow-up'): mundane sw+2
+      cut, field on adds +3d (sw+3d+2(10) cut), one point over the standard Drukhari power sword to
+      reflect a master-crafted lord's weapon, plus a 2d tox follow-up (average 7) if the blade
+      penetrates, representing the desiccating drain. Exact dice at an Archon's ST 12 (4d+4 field
+      on): flak 100.0%, carapace 100.0%, Astartes plate 98.8%, Terminator plate 33.6% (33.9% with WP
+      3). The follow-up is small in Space Marine terms (HP 34) but ends most human-scale targets.
+      Handling: 4 lb, min ST 10, reach 1, parry 0, Broadsword.
+
+  - name: "Incubus Klaive"
+    tl: "11^"
+    lc: 0
+    cost: 9000
+    weight: 6.5
+    tags: ["Melee Weapon", "Xenos", "Drukhari", "Incubi"]
+    weapons:
+      - usage: "Field on, two-handed"
+        damage: "sw+3d+3(10) cut"
+        reach: "1,2"
+        parry: 0
+        st: "11†"
+        skill: "Two-Handed Sword"
+      - usage: "Field off, two-handed"
+        damage: "sw+3 cut"
+        reach: "1,2"
+        parry: 0
+        st: "11†"
+        skill: "Two-Handed Sword"
+    notes: >-
+      Field-on line carries armour divisor (10). Two-handed only.
+    lore: >-
+      The Incubus's two-handed power blade: a long, heavy, elegantly barbed weapon, wielded with
+      terrifying skill by the mercenary swordsmen of Arhra (Codex: Drukhari background). It is the
+      tool of the master duellist and is used one-handed by no Incubus.
+    design: >-
+      Power-field rule again: the mundane baseline for a two-handed sword-length blade is sw+3 cut
+      (a greatsword), and the field adds +3d and (10): sw+3d+3(10) cut. Exact dice at an Incubus's
+      ST 12 (sw 1d+2, so 4d+5): flak 100.0%, carapace 100.0%, Astartes plate 99.6%, Terminator plate
+      44.4% (44.6% with WP 3). It is the best power-field weapon in Drukhari hands at range 1-2, and
+      the best of the two Incubus patterns against a Terminator; the Incubi are the Drukhari's
+      answer to heavy armour in melee. Handling: 6.5 lb, min ST 11 two-handed, reach 1,2, parry 0,
+      Two-Handed Sword.
+
+  - name: "Incubus Demiklaives (pair)"
+    tl: "11^"
+    lc: 0
+    cost: 12000
+    weight: 6
+    tags: ["Melee Weapon", "Xenos", "Drukhari", "Incubi"]
+    weapons:
+      - usage: "Field on, each blade"
+        damage: "sw+3d+1(10) cut"
+        reach: "1"
+        parry: 0
+        st: 10
+        skill: "Shortsword"
+      - usage: "Field off, each blade"
+        damage: "sw+1 cut"
+        reach: "1"
+        parry: 0
+        st: 10
+        skill: "Shortsword"
+    notes: >-
+      Field-on line carries armour divisor (10). Sold and weighed as a pair; each blade is a
+      one-handed weapon. Fighting with both blades gives two attacks a turn, the second at the usual
+      off-hand penalty unless the wielder is Ambidextrous; each blade parries separately.
+    lore: >-
+      A pair of shorter one-handed power blades carried by Incubi who fight with two weapons rather
+      than one (Codex: Drukhari background). The paired blades give up reach and raw power for
+      speed, in line with the Incubi's role as elite duellists.
+    design: >-
+      Each blade uses the standard Drukhari power-field line, sw+3d+1(10) cut (field off sw+1), at 3
+      lb apiece. Exact dice at ST 12: 4d+3(10), so flak 100.0%, carapace 99.9%, Astartes plate
+      97.3%, Terminator plate 23.9% per blade: half the klaive's 44.4% on the toughest armour, the
+      price for two blades and two attacks. Handling: 3 lb each (6 lb the pair), min ST 10 each,
+      reach 1, parry 0, Shortsword.
+
+  # ------------------------------------------------------------ Agonisers
+
+  - name: "Agoniser (Whip)"
+    tl: "11^"
+    lc: 0
+    cost: 10000
+    weight: 2.5
+    tags: ["Melee Weapon", "Xenos", "Drukhari", "Wych Cult", "Haemonculus Coven"]
+    weapons:
+      - usage: "Field on"
+        damage: "sw+1d-1(10) cut"
+        reach: "1-3"
+        parry: "No"
+        st: 8
+        skill: "Whip"
+        defaults: ["DX-5", "Flail-3"]
+      - usage: "Field off"
+        damage: "sw-2 cut"
+        reach: "1-3"
+        parry: "No"
+        st: 8
+        skill: "Whip"
+        defaults: ["DX-5", "Flail-3"]
+      - usage: "Agony follow-up (if the lash penetrates)"
+        damage: "spec"
+        reach: "1-3"
+        parry: "No"
+        st: 8
+        skill: "Whip"
+        notes: >-
+          Agony follow-up: if the field-on strike penetrates DR, roll HT-3 or suffer Severe Pain (-4
+          to all IQ- and DX-based rolls, B428) for a number of minutes equal to the margin of
+          failure; a critical failure also stuns the victim. High Pain Threshold gives +3 to the
+          roll (GM's call for other pain resistance). No effect on machines or on anything that does
+          not feel pain.
+        defaults: ["DX-5", "Flail-3"]
+    notes: >-
+      Field-on line carries armour divisor (10). Agony follow-up: if the field-on strike penetrates
+      DR, roll HT-3 or suffer Severe Pain (-4 to all IQ- and DX-based rolls, B428) for a number of
+      minutes equal to the margin of failure; a critical failure also stuns the victim. High Pain
+      Threshold gives +3 to the roll (GM's call for other pain resistance). No effect on machines or
+      on anything that does not feel pain.
+    lore: >-
+      The signature torture-weapon of the Wych Cults (Succubi and Hekatrixes) and a common
+      Haemonculus tool: a whip or lash whose field is tuned to overload the pain nerves rather than
+      cut the flesh, so that the victim suffers agony out of proportion to the wound (Codex:
+      Drukhari background). It is at least as much an instrument of torture as of war.
+    design: >-
+      The framework's anchor: 'neural-whip or blade: a field weapon (10) plus a pain affliction;
+      agony rather than cutting power'. The field is on the power-field rule (armour divisor (10),
+      field-off mundane baseline) but the damage is deliberately low: sw+1d-1 field on (2d at a
+      Wych's ST 11), well under the +3d power weapons, since the field is tuned to pain rather than
+      to shearing (a mundane whip is sw-2 cut). The (10) divisor is what lets the pain reach the
+      victim through armour, and the pain, not the wound, is the weapon. Exact dice: at a Succubus's
+      ST 12 (sw 1d+2, so 2d+1 field on) it penetrates flak 97.2%, carapace 58.3%, Astartes plate
+      16.7% (18.0% with WP 4) and never Terminator plate; at a Wych's ST 11 (2d) 91.7/41.7/8.3%. It
+      is not a Marine-killer and not meant to be; a Marine's High Pain Threshold gives +3 against
+      the affliction anyway. Affliction rules follow the project's other pain-based items:
+      penetration gates the follow-up, and the HT roll resists it. Handling: 2.5 lb (a slim handle
+      with the field generator), min ST 8, reach 1-3, parry 'No' (a whip cannot parry), Whip skill
+      (defaults DX-5, Flail-3).
+
+  - name: "Agoniser (Blade)"
+    tl: "11^"
+    lc: 0
+    cost: 11000
+    weight: 3
+    tags: ["Melee Weapon", "Xenos", "Drukhari", "Wych Cult", "Haemonculus Coven", "Kabal"]
+    weapons:
+      - usage: "Field on"
+        damage: "sw+1d+1(10) cut"
+        reach: "1"
+        parry: 0
+        st: 8
+        skill: "Shortsword"
+      - usage: "Field off"
+        damage: "sw+1 cut"
+        reach: "1"
+        parry: 0
+        st: 8
+        skill: "Shortsword"
+      - usage: "Agony follow-up (if the blade penetrates)"
+        damage: "spec"
+        reach: "1"
+        parry: 0
+        st: 8
+        skill: "Shortsword"
+        notes: >-
+          Agony follow-up: if the field-on strike penetrates DR, roll HT-3 or suffer Severe Pain (-4
+          to all IQ- and DX-based rolls, B428) for a number of minutes equal to the margin of
+          failure; a critical failure also stuns the victim. High Pain Threshold gives +3 to the
+          roll (GM's call for other pain resistance). No effect on machines or on anything that does
+          not feel pain.
+    notes: >-
+      Field-on line carries armour divisor (10). Agony follow-up: if the field-on strike penetrates
+      DR, roll HT-3 or suffer Severe Pain (-4 to all IQ- and DX-based rolls, B428) for a number of
+      minutes equal to the margin of failure; a critical failure also stuns the victim. High Pain
+      Threshold gives +3 to the roll (GM's call for other pain resistance). No effect on machines or
+      on anything that does not feel pain.
+    lore: >-
+      The bladed form of the agoniser, favoured by Archons and by Succubi who want a duelling
+      weapon: a short blade whose field, as with the whip, overloads the nerves rather than shears
+      the flesh (Codex: Drukhari background).
+    design: >-
+      Same principle as the whip: a field weapon (10) whose real weapon is the pain affliction. A
+      blade can carry a little more damage than a whip: sw+1d+1(10) cut (2d+3 at a Succubus's ST
+      12), still 2d under the power sword's +3d. Exact dice at ST 12: flak 100.0%, carapace 83.3%,
+      Astartes plate 41.7% (42.7% with WP 4), Terminator plate 0.0% (0.3% with WP 3): a duellist's
+      weapon that reaches through carapace far more reliably than a whip but is no threat to
+      Terminators. Handling: 3 lb, min ST 8, reach 1, parry 0, Shortsword.
+
+  # ------------------------------------------------------------ Wych Cult arena weapons (no power fields)
+
+  - name: "Wych Hydra Gauntlets (pair)"
+    tl: "10"
+    lc: 0
+    cost: 1600
+    weight: 3
+    tags: ["Melee Weapon", "Xenos", "Drukhari", "Wych Cult"]
+    weapons:
+      - usage: "Claw strike, each gauntlet"
+        damage: "thr+2 cut"
+        reach: "C,1"
+        parry: 0
+        st: 8
+        skill: "Brawling"
+    notes: >-
+      Worn as a pair: the Wych may attack with both in one turn (second attack at the usual off-hand
+      penalty unless she is Ambidextrous). Parry uses Brawling/2+3 as for any hand weapon.
+    lore: >-
+      Clawed gauntlets worn by Hekatrixes and Wyches: a pair of hand-blades bonded to the forearm
+      that let a Wych rake, slash and parry at close quarters with tremendous speed (Codex: Drukhari
+      background). The lethality lies in the fighter.
+    design: >-
+      No framework anchor beyond 'mundane weapons made lethal by the Wych's skill; no power fields'.
+      thr+2 cut is a hand-blade of the Basic Set claw or knife class (a sword-length hand claw would
+      give more): at a Wych's ST 11 (thr 1d-1) it does 1d+1, average 4.5, and penetrates flak,
+      carapace and Astartes plate 0.0% of the time, since a mundane blade does not beat DR 30. This
+      is deliberate: a Wych does not depend on penetrating armour but on hitting the unarmoured
+      locations (face, neck, limbs, groin) that her speed, called shots and multiple attacks per
+      turn reach, and her attack volume comes from her skill and traits, not from the gauntlet.
+      Handling: 3 lb the pair, min ST 8, reach C,1, parry 0, Brawling.
+
+  - name: "Razorflails (pair)"
+    tl: "10"
+    lc: 0
+    cost: 1500
+    weight: 5
+    tags: ["Melee Weapon", "Xenos", "Drukhari", "Wych Cult"]
+    weapons:
+      - usage: "Swing, each flail"
+        damage: "sw+2 cut"
+        reach: "1,2"
+        parry: "0U"
+        st: 9
+        skill: "Flail"
+    notes: >-
+      Ordinary flail rules apply: the U in 0U means the flail is unbalanced (it cannot parry after
+      it has attacked that turn), and a defender's parry against a flail is at -4. Carried as a
+      pair.
+    lore: >-
+      A pair of chain-flails studded with razor-edged blades, favoured by Wyches who fight at a
+      range that makes a blade user's guard difficult (Codex: Drukhari background). The arena
+      fighters use them in a whirling, almost dancing style.
+    design: >-
+      A mundane flail (sw+2 cr in the Basic Set) redone with razor blades as a cutting weapon: sw+2
+      cut, reach 1,2 and parry 0U, per the framework's 'flails 0U' note. At a Wych's ST 11 (sw 1d+1,
+      so 1d+3) it averages 6.5 and penetrates flak, carapace and Astartes plate 0.0%: a weapon for
+      unarmoured locations, like the hydra gauntlets. What it buys is reach and the ability to
+      bypass a parry (a flail's arc wraps around a blade). Handling: 2.5 lb each (5 lb the pair),
+      min ST 9, reach 1,2, parry 0U, Flail.
+
+  - name: "Shardnet and Impaler"
+    tl: "10"
+    lc: 0
+    cost: 1800
+    weight: 7
+    tags: ["Melee Weapon", "Xenos", "Drukhari", "Wych Cult"]
+    weapons:
+      - usage: "Impaler, thrust"
+        damage: "thr+3 imp"
+        reach: "1,2*"
+        parry: 0
+        st: 9
+        skill: "Spear"
+        defaults: ["DX-5", "Polearm-4", "Staff-2"]
+      - usage: "Shardnet, thrown"
+        damage: "spec"
+        acc: 0
+        range: "3/6"
+        rof: 1
+        shots: "1(T)"
+        st: 8
+        bulk: -3
+        skill: "Net"
+        defaults: ["DX-6"]
+        notes: >-
+          A hit entangles the target: Binding (advantage, ST 12, DR 2). While bound, each turn spent
+          struggling the wire and crystals cut for 1d cut (no attack roll). Recovering a thrown net
+          takes 1d turns and the Wych's next Ready. Cannot parry while it is thrown.
+    notes: >-
+      The impaler is used one-handed while the net is held, or two-handed for the thr+3 line's usual
+      reach. Roughly a gladiator's trident-and-net kit.
+    lore: >-
+      The arena kit of the Wych Cult's net-and-spear fighters: a crystal-studded net to bind an
+      opponent and a barbed trident or spear to finish them (Codex: Drukhari background, Wych arena
+      weapons). It is more useful in the arena than the battlefield, but Wyches do use it.
+    design: >-
+      Two weapons in one item, both mundane per the framework. The impaler is a Basic Set
+      spear-class thrusting weapon: thr+3 imp, reach 1,2*, min ST 9 (a 4 lb pole arm); at a Wych's
+      ST 11 (thr 1d-1) it does 1d+2, average 5.5, and penetrates flak, carapace and Astartes plate
+      0.0% (an impaling wound is an unarmoured-location attack). The shardnet is thrown (range 3/6,
+      ST 8, 3 lb) and works as Binding rather than damage: the point of the net is to bring the
+      target down to a defenceless state for the impaler. Handling: 4 lb impaler + 3 lb net, min ST
+      9 and 8.
+
+  - name: "Wych Blade"
+    tl: "10"
+    lc: 0
+    cost: 400
+    weight: 1.5
+    tags: ["Melee Weapon", "Xenos", "Drukhari", "Wych Cult"]
+    weapons:
+      - usage: "Swing"
+        damage: "sw cut"
+        reach: "1"
+        parry: 0
+        st: 7
+        skill: "Shortsword"
+      - usage: "Thrust"
+        damage: "thr+1 imp"
+        reach: "1"
+        parry: 0
+        st: 7
+        skill: "Shortsword"
+    notes: >-
+      Also stands for the shorter Wych knife: use the same profile at reach C,1 if the GM wants a
+      concealed dagger.
+    lore: >-
+      The basic close-combat blade of the Wych Cults, carried by Wyches as a side-arm alongside more
+      specialised weapons. The sources do not give it a distinct canonical profile; this entry is
+      built to give Wych characters an ordinary blade.
+    design: >-
+      A shortsword-class blade: sw cut / thr+1 imp per the Basic Set shortsword. At a Wych's ST 11
+      the swing is 1d+1 (average 4.5) and it penetrates armour 0.0% of the time; a knife-class blade
+      that gets its effect on unarmoured locations, as a mundane weapon should. Handling: 1.5 lb,
+      min ST 7, reach 1, parry 0, Shortsword.
+
+  # ------------------------------------------------------------ Haemonculus tools
+
+  - name: "Scissorhand"
+    tl: "10"
+    lc: 0
+    cost: 2500
+    weight: 4
+    tags: ["Melee Weapon", "Xenos", "Drukhari", "Haemonculus Coven"]
+    weapons:
+      - usage: "Swing"
+        damage: "sw+2 cut"
+        reach: "1"
+        parry: 0
+        st: 11
+        skill: "Broadsword"
+        defaults: ["DX-5", "Shortsword-2", "Knife-3"]
+    notes: >-
+      Two blades pivoting on a joint like shears. A Haemonculus with a scissorhand on each arm may
+      attack with both, the second at the usual off-hand penalty unless Ambidextrous.
+    lore: >-
+      A giant pair of shears worn as a glove or bonded to the arm by Haemonculi and used as surgical
+      and torture implements (Codex: Drukhari background gives a scissorhand as a Haemonculus's
+      melee weapon).
+    design: >-
+      No framework anchor; built as a heavy, mundane cutting weapon of the Basic Set, sw+2 cut (a
+      bit above a broadsword for its shears action), no divisor, no field. At a Haemonculus's ST 13
+      (sw 2d-1, so 2d+1) it averages 8, and penetrates flak, carapace and Astartes plate 0.0% of the
+      time: a weapon for flesh, not armour, in keeping with a surgeon. Handling: 4 lb, min ST 11,
+      reach 1, parry 0.
+
+  - name: "Flesh Gauntlet"
+    tl: "10^"
+    lc: 0
+    cost: 3000
+    weight: 5
+    tags: ["Melee Weapon", "Xenos", "Drukhari", "Haemonculus Coven"]
+    weapons:
+      - usage: "Punch"
+        damage: "thr+3 cr"
+        reach: "C,1"
+        parry: 0
+        st: 10
+        skill: "Brawling"
+    notes: >-
+      Grown, not built: the gauntlet is fused into the wearer's arm by surgery. Removing or
+      replacing it takes a Haemonculus (Surgery roll).
+    lore: >-
+      A brutish grafted gauntlet used by Haemonculi as a melee weapon (Codex: Drukhari background).
+      The sources say little about its exact working, so it is built as a heavy gauntlet with the
+      bulk to give the wearer a hard punch.
+    design: >-
+      No framework anchor; a heavy fist-weapon of the Basic Set type. thr+3 cr at a Haemonculus's ST
+      13 (thr 1d) is 1d+3, average 6.5: no armour penetration at all (0.0% against flak). Handling:
+      5 lb, min ST 10, reach C,1, parry 0, Brawling.
+
+  - name: "Electrocorrosive Whip"
+    tl: "10^"
+    lc: 0
+    cost: 2500
+    weight: 2
+    tags: ["Melee Weapon", "Xenos", "Drukhari", "Haemonculus Coven"]
+    weapons:
+      - usage: "Lash"
+        damage: "sw cor"
+        reach: "1-3"
+        parry: "No"
+        st: 7
+        skill: "Whip"
+        defaults: ["DX-5", "Flail-3"]
+      - usage: "Discharge follow-up (if lash penetrates)"
+        damage: "2d burn"
+        reach: "1-3"
+        parry: "No"
+        st: 7
+        skill: "Whip"
+        defaults: ["DX-5", "Flail-3"]
+    notes: >-
+      A whip that is also a wire of corrosive acid and electric charge. Does not parry.
+    lore: >-
+      A Haemonculus's whip that both corrodes and shocks its victim (Codex: Drukhari background). A
+      tool of the flesh-sculptor's torture chamber more than a battlefield arm.
+    design: >-
+      Built as a mundane whip weapon with a follow-up, no field: lash sw cor (corrosion wounds x1)
+      plus a 2d burn discharge if the lash penetrates. At a Haemonculus's ST 13 (sw 2d-1) the lash
+      averages 6 and the discharge 7; against armour the lash never penetrates (0.0% flak), so it is
+      a weapon for exposed flesh. Handling: 2 lb, min ST 7, reach 1-3, parry 'No', Whip.
+
+  # ------------------------------------------------------------ Mandrake and Scourge blades
+
+  - name: "Glimmersteel Blade"
+    tl: "10^"
+    lc: 0
+    cost: 3000
+    weight: 2
+    tags: ["Melee Weapon", "Xenos", "Drukhari", "Mandrake"]
+    weapons:
+      - usage: "Swing"
+        damage: "sw+1(2) cut"
+        reach: "1"
+        parry: 0
+        st: 8
+        skill: "Shortsword"
+      - usage: "Thrust"
+        damage: "thr+1(2) imp"
+        reach: "1"
+        parry: 0
+        st: 8
+        skill: "Shortsword"
+    notes: >-
+      Mundane: no power field and no follow-up; the (2) divisor is the keenness of the metal, not a
+      field.
+    lore: >-
+      The blade of the Mandrake, a shadow-steel weapon carried into fights from the darkness (Codex:
+      Drukhari background gives Mandrakes a glimmersteel blade). Sources describe it as
+      exceptionally keen; no detailed profile is given.
+    design: >-
+      No framework anchor. Made from an exotic alloy that holds an edge unlike steel: a quality
+      shortsword with a light armour divisor (2), sw+1(2) cut and thr+1(2) imp. At a Mandrake's ST
+      11 (sw 1d+1, so 1d+2) it averages 5.5, and (effective DR 15 against flak) penetrates flak,
+      carapace and Astartes plate 0.0%: it rewards a Mandrake's stealth and positioning, not a
+      straight fight. Handling: 2 lb, min ST 8, reach 1, parry 0, Shortsword.
+
+  - name: "Venom Blade"
+    tl: "10^"
+    lc: 0
+    cost: 2500
+    weight: 3
+    tags: ["Melee Weapon", "Xenos", "Drukhari", "Kabal"]
+    weapons:
+      - usage: "Swing"
+        damage: "sw+1 cut"
+        reach: "1"
+        parry: 0
+        st: 9
+        skill: "Broadsword"
+      - usage: "Thrust"
+        damage: "thr+2 imp"
+        reach: "1"
+        parry: 0
+        st: 9
+        skill: "Broadsword"
+      - usage: "Toxin follow-up (if blade penetrates)"
+        damage: "3d tox"
+        reach: "1"
+        parry: 0
+        st: 9
+        skill: "Broadsword"
+        notes: >-
+          Only if the blade penetrates DR. Living targets only. The poison reservoir holds 6 doses;
+          refill takes a turn and an Armoury (Poisons) or similar roll.
+    notes: >-
+      Mundane blade with a hollow edge fed from a poison reservoir.
+    lore: >-
+      A poisoned blade carried by Archons and by some Kabal elites such as the winged Scourges as a
+      close-range weapon (Codex: Drukhari background; the pairing with Scourges I hold with less
+      certainty). The Drukhari's penchant for toxins makes it a natural companion to the splinter
+      weapons.
+    design: >-
+      Not a power weapon: a sword-class blade with a poison follow-up, the melee counterpart of the
+      splinter rifle's toxin. Swing sw+1 cut, thrust thr+2 imp, no divisor. At an Archon's ST 12 (sw
+      1d+2, so 1d+3) it averages 6.5 and never penetrates flak or better (0.0%); against an
+      unarmoured or lightly armoured target that it does penetrate, the 3d tox follow-up (average
+      10.5) is what kills. Handling: 3 lb, min ST 9, reach 1, parry 0, Broadsword.
