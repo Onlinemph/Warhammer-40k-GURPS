@@ -1,0 +1,239 @@
+kind: template
+output: Imperium/Templates/Adepta Sororitas Battle Sister.gct
+notes: >
+  A Sister of Battle of the Adepta Sororitas: an unaugmented but
+  rigorously trained and utterly devout human warrior-nun, wearing power
+  armour but carrying none of the Astartes' gene-seed enhancements. Point
+  math: ST 12 (+20), DX 13 (+60), IQ 11 (+20), HT 12 (+20) = 120, plus
+  Will +1 (+5) = 125; advantages +42; disadvantages -62; skills +95.
+  Total 200 points, the low end of framework.md's "Elite human (200-350)"
+  tier. No psychic abilities here: Sororitas Faith is explicitly not
+  psychic power in Black Library fiction and this template does not
+  touch the separate psyker power library. Add Military/Religious Rank
+  levels for a Sister Superior or Canoness built from this base.
+traits:
+  - name: ST
+    points: 20
+    tags: [Attribute]
+    lore: Sororitas training is physically demanding, producing soldiers a step above an ordinary Guardsman.
+    design: ST 12 (+2), 10 pts/level (B15).
+  - name: DX
+    points: 60
+    tags: [Attribute]
+    lore: Extensive combat drill from a young age in the Order's schola.
+    design: DX 13 (+3), 20 pts/level (B15).
+  - name: IQ
+    points: 20
+    tags: [Attribute]
+    lore: Sororitas education is thorough but doctrinally narrow compared to, say, an Inquisitorial acolyte's.
+    design: IQ 11 (+1), 20 pts/level (B15).
+  - name: HT
+    points: 20
+    tags: [Attribute]
+    lore: Conditioned for endurance in power armour and prolonged campaigns.
+    design: HT 12 (+2), 10 pts/level (B14).
+  - name: Will
+    points: 5
+    tags: [Attribute]
+    lore: Faith translates mechanically into exceptional force of will as much as raw intellect.
+    design: Will 12 (+1 above the IQ-derived default of 11), 5 pts/level (B16).
+  - name: Combat Reflexes
+    points: 15
+    ref: B43
+    tags: [Advantage, Mental, Imperium]
+    lore: Drilled reactions under fire.
+    design: Basic Set Combat Reflexes (B43), 15 points.
+  - name: High Pain Threshold
+    points: 10
+    ref: B59
+    tags: [Advantage, Physical, Imperium]
+    lore: Sororitas are consistently written as fighting on through wounds that would stop lesser soldiers.
+    design: Basic Set High Pain Threshold (B59), 10 points.
+  - name: Act of Faith
+    points: 12
+    tags: [Advantage, Imperium, Adepta Sororitas]
+    lore: See Imperium/Traits/Imperial Traits.adq for sourcing and design rationale.
+    design: 2 levels of the homebrew Act of Faith advantage (6 pts/level), 12 points.
+  - name: Religious Rank
+    points: 5
+    ref: B29
+    tags: [Advantage, Social, Imperium, Ecclesiarchy]
+    lore: A Sister of Battle holds rank within her Order's hierarchy from the day she takes vows.
+    design: Basic Set Rank (B29), 1 level, 5 points.
+  - name: Fanaticism (The God-Emperor)
+    points: -15
+    ref: B136
+    tags: [Disadvantage, Mental, Imperium]
+    lore: >
+      Sororitas devotion is, if anything, the most absolute in the
+      Imperium — the Orders are the Ecclesiarchy's own military arm and
+      recruit specifically for unshakeable faith.
+    design: Basic Set Fanaticism (B136), -15.
+  - name: Duty (Ecclesiarchy)
+    points: -10
+    ref: B133
+    tags: [Disadvantage, Social, Imperium, Ecclesiarchy]
+    lore: See Imperium/Traits/Imperial Traits.adq for sourcing.
+    design: Basic Set Duty (B133), frequent but not universally lethal-on-every-posting, -10.
+  - name: Vow (Chastity and Poverty)
+    points: -10
+    ref: B160
+    tags: [Disadvantage, Mental, Imperium]
+    lore: >
+      Adepta Sororitas Orders are explicitly convents as much as regiments;
+      Sisters take vows on joining, consistently depicted across Black
+      Library's Sisters of Battle fiction.
+    design: Basic Set Vow (B160/B162's table), a moderate lifestyle-restricting vow, -10.
+  - name: Intolerance (Xenos)
+    points: -10
+    ref: B140
+    tags: [Disadvantage, Mental, Imperium]
+    lore: See Imperium/Traits/Imperial Traits.adq for sourcing.
+    design: Basic Set Intolerance (B140), broad-category, -10.
+  - name: Intolerance (Mutants)
+    points: -10
+    ref: B140
+    tags: [Disadvantage, Mental, Imperium]
+    lore: See Imperium/Traits/Imperial Traits.adq for sourcing.
+    design: Basic Set Intolerance (B140), broad-category, -10.
+  - name: Intolerance (Heretics and Psykers)
+    points: -10
+    ref: B140
+    tags: [Disadvantage, Mental, Imperium]
+    lore: >
+      Sororitas doctrine is openly hostile to unsanctioned psychic power as
+      well as heresy — the Orders reject psychic gifts as a temptation to
+      corruption, per their consistent portrayal in Black Library fiction.
+    design: Basic Set Intolerance (B140), a combined broad category, -10.
+  - name: Marked by the Order's Habit
+    points: -1
+    tags: [Quirk, Imperium]
+    design: Quirk (B9), roleplaying flag only.
+    lore: A Sororitas is recognisable on sight by her Order's habit and iconography, wherever she goes.
+  - name: Never Backs Down From a Fight Against the Unclean
+    points: -1
+    tags: [Quirk, Imperium]
+    design: Quirk (B9), roleplaying flag only.
+    lore: Retreat from daemons, xenos or heretics is not a Sororitas instinct.
+skills:
+  - name: Guns
+    spec: Rifle
+    diff: DX/E
+    points: 16
+    tags: [Imperium, Adepta Sororitas]
+    lore: The bolter is the Order Militant's standard weapon, per framework.md's weapon-skill table.
+    design: DX+5 (18) for 16 points, Easy (B170).
+  - name: Broadsword
+    diff: DX/A
+    points: 12
+    tags: [Imperium, Adepta Sororitas]
+    lore: Many Sisters carry a power sword or combat blade for close-quarters work.
+    design: DX+3 (16) for 12 points, Average.
+  - name: Theology
+    spec: Imperial Creed
+    diff: IQ/H
+    points: 12
+    tags: [Imperium, Adepta Sororitas]
+    lore: A Sister of Battle is a warrior-cleric first; deep command of the Creed is expected, not optional.
+    design: IQ+2 (13) for 12 points, Hard.
+  - name: Savoir-Faire
+    spec: Ecclesiarchy
+    diff: IQ/E
+    points: 1
+    tags: [Imperium, Ecclesiarchy]
+    lore: Order and Ecclesiarchy protocol; see Imperium/Skills/Imperial Skills.skl.
+    design: IQ+0 (11) for 1 point, Easy.
+  - name: Intimidation
+    diff: Will/A
+    points: 8
+    tags: [Imperium]
+    lore: A visor-faced, bolter-carrying Sister of Battle in power armour is a genuinely frightening sight.
+    design: Will+2 (14) for 8 points, Average.
+  - name: Leadership
+    diff: IQ/A
+    points: 8
+    tags: [Imperium]
+    lore: Squad-level command within a Sororitas Battle Sister Squad.
+    design: IQ+2 (13) for 8 points, Average.
+  - name: Soldier
+    diff: IQ/A
+    points: 8
+    tags: [Imperium]
+    lore: General military competence.
+    design: IQ+2 (13) for 8 points, Average.
+  - name: Tactics
+    diff: IQ/H
+    points: 8
+    tags: [Imperium]
+    lore: Squad and detachment tactics.
+    design: IQ+1 (12) for 8 points, Hard.
+  - name: Interrogation
+    diff: IQ/A
+    points: 4
+    tags: [Imperium]
+    lore: Sororitas field units frequently secure and question suspected heretics and cultists directly.
+    design: IQ+1 (12) for 4 points, Average.
+  - name: First Aid
+    diff: IQ/E
+    points: 2
+    tags: [Imperium]
+    lore: Combat first aid.
+    design: IQ+1 (12) for 2 points, Easy.
+  - name: Hidden Lore
+    spec: Daemons
+    diff: IQ/A
+    points: 4
+    tags: [Imperium]
+    lore: See Imperium/Skills/Imperial Skills.skl; Sororitas doctrine takes daemonic threats extremely seriously.
+    design: IQ+1 (12) for 4 points, Average.
+  - name: Hidden Lore
+    spec: Heresy
+    diff: IQ/A
+    points: 4
+    tags: [Imperium]
+    lore: See Imperium/Skills/Imperial Skills.skl.
+    design: IQ+1 (12) for 4 points, Average.
+  - name: Stealth
+    diff: DX/A
+    points: 2
+    tags: [Imperium]
+    lore: Basic fieldcraft, secondary to a Sororitas' preference for direct confrontation.
+    design: DX+0 (13) for 2 points, Average.
+  - name: Climbing
+    diff: DX/A
+    points: 1
+    tags: [Imperium]
+    lore: Assault and boarding-action fitness.
+    design: DX-1 (12) for 1 point, Average.
+  - name: Jumping
+    diff: DX/E
+    points: 1
+    tags: [Imperium]
+    lore: Obstacle and assault fitness.
+    design: DX+0 (13) for 1 point, Easy.
+  - name: Running
+    diff: HT/A
+    points: 1
+    tags: [Imperium]
+    lore: Conditioning for prolonged combat in heavy armour.
+    design: HT-1 (11) for 1 point, Average.
+  - name: Area Knowledge
+    spec: (home Convent / Order's chapter house)
+    diff: IQ/E
+    points: 1
+    tags: [Imperium]
+    lore: Knowledge of the character's home Convent or Order chapter house.
+    design: IQ+0 (11) for 1 point, Easy.
+  - name: Current Affairs
+    spec: Imperium
+    diff: IQ/E
+    points: 1
+    tags: [Imperium]
+    lore: Awareness of Imperium-wide news relevant to the Order's missions.
+    design: IQ+0 (11) for 1 point, Easy.
+  - name: Brawling
+    diff: DX/E
+    points: 1
+    tags: [Imperium]
+    lore: Unarmed and gauntlet fighting.
+    design: DX+0 (13) for 1 point, Easy.

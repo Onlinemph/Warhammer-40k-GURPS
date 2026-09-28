@@ -1,0 +1,845 @@
+kind: traits
+output: Imperium/Traits/Psykers and the Warp.adq
+items:
+  # --------------------------------------------------------------- foundation
+
+  - name: Unusual Background (Latent Psychic Potential)
+    points: 10
+    tags: [Advantage, Mental, Psyker, Imperium]
+    lore: >
+      Psychic ability is a random, rare mutation of the human genome that lets its
+      bearer perceive and touch the immaterium (the warp). Sources disagree on exact
+      frequency — Imperial administrative texts and Dark Heresy-line background both
+      describe it as "rare but not vanishingly so," on the order of a handful of
+      latent potentials per hive-sized population, with usably strong psykers far
+      rarer still. Treat any precise ratio as flavour, not census data.
+    design: >
+      Required to take Psyker (Talent) or any trait carrying the Warp power
+      modifier below. Basic Set B261 leaves Unusual Background costs to the GM;
+      10 points reflects that the ability itself is not learned but grants access
+      to an entire framework of further abilities, roughly the going rate other
+      published settings use for "you may buy from this power list at all."
+
+  - name: Warp (Power Modifier)
+    points: 0
+    tags: [Reference, Psyker, Imperium]
+    notes: >
+      Not purchased on its own. Apply "Warp, -15%" as a modifier to every advantage
+      built as a psychic ability in this file (Innate Attack, Affliction, Mind
+      Control, Mind Probe, Mind Reading, Telekinesis-based traits, Terror, etc.).
+      It does not apply to the Blank/Pariah gene or the Navigator's third eye,
+      which are inborn mutations, not channelled acts.
+    lore: >
+      Every psychic act in the fiction shares three traits: it can be shut down by
+      a null field (Culexus Assassins, Officio Assassinorum "blanks," null rods,
+      hexagrammic wards, a ship's Geller field extending into a room), it can be
+      sensed by other warp-touched minds (daemons home in on strong psykers;
+      astropaths and Inquisitors can feel a working; the Black Ships find latent
+      talents this way), and using it always risks the warp answering back (see
+      Perils of the Warp, below). Black Library depictions (Eisenhorn, Ravenor,
+      Ahriman, the Horus Heresy Librarius material) and Dark Heresy/Rogue
+      Trader's psychic-power rules agree on all three points.
+    design: >
+      Built as two stacked limitations on a single -15% power modifier, shown
+      separately for clarity:
+      (1) Nullified, -10% — the power fails outright in a null field/near a
+      blank, comparable in weight to Basic's own Mana Sensitive limitation
+      (-10%, B112) for a power that simply stops working under specific,
+      uncommon but real battlefield conditions.
+      (2) Detectable, -5% — other warp-sensitive beings (psykers, daemons, the
+      Astronomican-attuned) can sense the use, roughly the mirror of Basic's No
+      Signature enhancement (+20%, B111) which buys detectability away entirely;
+      here only a narrow audience can detect it, so removing that audience's
+      free ability to sense you is worth a smaller -5%.
+      Net: -15%, applied identically to every Warp-tagged ability so their
+      relative costs stay comparable.
+
+  - name: Perils of the Warp (Limitation)
+    points: 0
+    tags: [Reference, Psyker, Imperium]
+    notes: |
+      Not purchased on its own. Apply "Perils of the Warp, -10%" (or the Severe
+      variant, -20%, for rituals, Great Powers, and interstellar workings called
+      out below) to every Warp-tagged advantage.
+
+      Whenever a character uses an ability carrying this limitation, roll vs
+      Will (modified by any Pushing, see below, and by GM-set warp conditions:
+      -1 to -5 near a Chaos icon, inside a warp storm, on a ship whose Geller
+      field is failing, etc.). Success: the power works with no ill effect.
+      Failure, consult the margin:
+        - Failed by 1-2 (Minor Perils): lose 1 FP; migraine or nosebleed; -1 to
+          the next IQ-based roll this scene.
+        - Failed by 3-5 (Moderate Perils): 1d damage, ignores DR (warp-shock);
+          the power still fizzles; anyone adjacent makes a Fright Check.
+        - Failed by 6-9 (Major Perils): 2d damage, ignores DR; the psyker is
+          stunned (roll vs HT each turn to recover); a minor manifestation
+          appears nearby (cold spot, whispering, flickering shadow) and
+          witnesses roll Fright Check at -2.
+        - Failed by 10+, or an unmodified 18: Catastrophic. A warp rift may
+          open, or a daemon attempts possession: Quick Contest of Will against
+          the daemon (GM sets 12-16 for a minor one) or the psyker is possessed,
+          killed, or reduced to a Chaos Spawn, GM's call. The triggering power
+          still goes off, at full or worse effect, entirely out of its user's
+          control.
+
+      Pushing: before rolling, a psyker may declare up to 3 pushes. Each push
+      grants +1 to the ability's effective level (an extra die, +1 to an
+      Affliction, one more yard of Move, etc., GM's call for the specific power)
+      but applies a cumulative -2 to this Perils roll. Pushing represents
+      drawing more of the warp than the caster's mind and body can safely carry.
+    lore: >
+      Calibrated against Dark Heresy's Psychic Phenomena/Perils of the Warp
+      tables, the best worked example of "using your gift can doom you," and
+      against countless Black Library scenes of psykers burning out, exploding,
+      or being possessed the instant they overreach (Ahriman's own Rubric;
+      Quixos in Eisenhorn; any Chaos-touched sorcerer's Perils rolls in the
+      Black Library Horus Heresy Librarius stories).
+    design: >
+      Standard, -10%: comparable in total weight to Basic's Costs Fatigue
+      (-5%, B112, a guaranteed minor cost) stacked with a low-frequency chance
+      of a serious complication similar in spirit to Unreliable (-5% to -10%,
+      B113) — bundled here as one flat roll-and-consult-a-table limitation
+      instead of tracked as separate costs, since the system assumes a single
+      check per activation rather than a metered resource.
+      Severe, -20%: used on rituals, Great Powers, and interstellar workings
+      (Gate of Infinity, Astrotelepathy, Vortex of Doom, Sanctic Daemonology's
+      Banishment and Sanctuary, Librarius's Null Zone) where any serious
+      failure can open a rift regardless of scale — double the standard
+      weight, echoing how Basic's Always On climbs from -10% to -40% (B113)
+      as an effect becomes harder to control.
+
+  - name: Psyker
+    points: 0
+    per_level: 10
+    levels: 1
+    max_levels: 6
+    tags: [Advantage, Mental, Talent, Psyker, Imperium]
+    ref: B89
+    notes: |
+      Applies to: Meditation, Hidden Lore (the Warp), and the Will roll to
+      resist Perils of the Warp (see above) — a house extension of Talent's
+      normal "add to listed skills" rule, precedented by Magery's own habit of
+      aiding related rolls beyond pure spellcasting. Reaction bonus: +1/level
+      from other sanctioned psykers and the Astra Telepathica.
+
+      Imperial Assignment scale (Adeptus Astra Telepathica / Black Ships),
+      weakest to strongest, mapped to Talent level and the practical ceiling on
+      any single ability's level/dice bought with it:
+        Iota    — Talent 0 (latent; register but rarely take Psyker traits at all)
+        Zeta    — Talent 1, ability cap ~2
+        Eta     — Talent 1, ability cap ~2
+        Theta   — Talent 2, ability cap ~3
+        Epsilon — Talent 2, ability cap ~4  (typical Wyrdvane conscript)
+        Delta   — Talent 3, ability cap ~5  (typical Sanctioned Primaris Psyker)
+        Gamma   — Talent 4, ability cap ~6
+        Beta    — Talent 4, ability cap ~7  (many Astropaths)
+        Alpha   — Talent 5, ability cap ~8  (Astartes Librarians, Black Ship candidates)
+        Alpha-Plus — Talent 6+, ability cap 9+ (beyond-play tier: Primarchs,
+          the most powerful Inquisitors, the worst Chaos sorcerers)
+    lore: >
+      The Iota-to-Alpha-Plus assignment scale is drawn from the Adeptus Astra
+      Telepathica's own grading of psychic potential as depicted across Dark
+      Heresy-line material and repeated in Codex/Imperial Armour background;
+      Black Library uses the same grades in passing (e.g. Eisenhorn-cycle and
+      Ciaphas Cain references to Alpha-class talents). "Alpha-Plus" specifically
+      denotes the rarest, most dangerous talents the Black Ships process.
+    design: >
+      Talent affecting three things (two skills plus the Perils resistance
+      roll) sits at Basic's "Medium Talent" rate of 10 points/level (B90,
+      three-to-five-skill bracket) rather than 5 (one-two skills) or 15
+      (six-nine skills). Capped at level 6 for player characters; higher grades
+      are GM-reference only, per the framework's "Beyond play" tier.
+
+  - name: Witch-sight
+    points: 10
+    tags: [Advantage, Mental, Psyker, Imperium]
+    modifiers:
+      - "Warp, -15%"
+    lore: >
+      The first, mildest sign of the gift: an unlearned, passive prickling
+      sense of daemonic taint, psychic activity, and warp corruption — how
+      unsanctioned psykers are so often found, and how veteran Inquisitors and
+      Space Marines notice a place has gone wrong before anything visible
+      happens. Widely depicted; no single canonical source, consistent across
+      Black Library and Dark Heresy-line material alike.
+    design: >
+      Built as Detect (Psychic Activity & Daemonic Taint), an uncommon but not
+      vanishingly rare category, base 10 per Basic's Detect cost table (B47-48).
+      No Perils of the Warp: it is involuntary background sense, not a
+      deliberate act of channelling.
+
+  # ------------------------------------------------------- legal status & fate
+
+  - name: Unsanctioned Psyker
+    container: meta_trait
+    tags: [Disadvantage, Mental, Social, Psyker, Imperium]
+    lore: >
+      Discovery of an unregistered psyker is, at best, summary transport to a
+      Black Ship and Soul-binding or the Scholastia Psykana; at worst, on-the-
+      spot execution by any Adepta Sororitas, Inquisitor, or panicking mob with
+      a lasgun. This is one of the most consistent beats in Black Library's
+      Imperium (Eisenhorn's witch-hunts; the fate of countless minor characters
+      across the Gaunt's Ghosts and Ciaphas Cain series) and Dark Heresy's
+      default assumption for any PC psyker who hasn't been Sanctioned.
+    design: >
+      A single Secret (Basic B94-95) covers it: discovery is not rare (any
+      strong emotional moment or unlucky witness can trigger it) and its
+      consequences are severe and often fatal, so it sits at -20 points,
+      toward the harsh end of Secret's usual range.
+    children:
+      - name: Secret (Unsanctioned Psyker)
+        points: -20
+        tags: [Disadvantage, Social, Psyker, Imperium]
+        ref: B94
+        notes: Exposure means the Black Ships, summary execution, or worse.
+        lore: See parent trait.
+        design: See parent trait.
+
+  - name: Sanctioned Psyker
+    container: meta_trait
+    tags: [Disadvantage, Mental, Social, Psyker, Imperium]
+    lore: >
+      A Sanctioned psyker has passed through the Scholastia Psykana or an
+      equivalent rite, is legally registered, and typically serves the Astra
+      Militarum, an Inquisitor, or their Chapter's Librarius. They are watched,
+      bound by oath and duty, and — even legally protected — are still called
+      "witch" behind their back by the citizens they defend. Consistent across
+      Dark Heresy/Only War's Sanctioned-psyker rules and Black Library's
+      depiction of Primaris Psykers and Astartes Librarians alike.
+    design: >
+      Duty to the Astra Telepathica/Inquisition (Basic B133 Duty table,
+      hazardous, 12 or less) at -10, plus a mild, legally-protected Social
+      Stigma ("sanctioned witch," -5, lighter than Basic's Minority Group
+      tier because the law is nominally on their side). Net -15.
+    children:
+      - name: Duty (Astra Telepathica/Inquisition, 12 or less)
+        points: -10
+        tags: [Disadvantage, Social, Psyker, Imperium]
+        lore: See parent trait.
+        design: See parent trait.
+      - name: Social Stigma (Sanctioned Psyker)
+        points: -5
+        tags: [Disadvantage, Social, Psyker, Imperium]
+        lore: See parent trait.
+        design: See parent trait.
+
+  - name: Soulbinding (Astropathic Choir)
+    container: meta_trait
+    tags: [Disadvantage, Physical, Mental, Psyker, Imperium]
+    lore: >
+      To become an Astropath, a Sanctioned psyker undergoes the soul-binding
+      ritual: their eyes are burned out and their mind is bound, in a small
+      part, to the Emperor's own psychic light on the Astronomican, so that
+      their thoughts can be found and carried across interstellar distances.
+      They are permanently blind and permanently, irrevocably in the Emperor's
+      and the Imperium's service from that day on. This is standard background
+      across Dark Heresy/Rogue Trader's Astropath material and referenced
+      throughout Black Library whenever an Astropathic Choir appears (e.g. the
+      Horus Heresy's Astropaths aboard Legion flagships).
+    design: >
+      Blindness (Basic B140, -50) is the dominant cost; it is not mitigated
+      mechanically here (their remaining "sight" is represented by Witch-sight
+      and their Telepathy powers, not a vision substitute). Mindlink to the
+      Astronomican/the Emperor's light (Basic Mindlink, a specific "person," 5
+      points) is a genuine benefit — it is how they are found and relayed
+      across the void. Sense of Duty to the Imperium of Man (a very-large-group
+      Sense of Duty, -10, Basic's tier below "entire race") completes the
+      package. Net -55.
+    children:
+      - name: Blindness
+        points: -50
+        ref: B140
+        tags: [Disadvantage, Physical, Psyker, Imperium]
+        lore: See parent trait.
+        design: See parent trait.
+      - name: Mindlink (the Astronomican)
+        points: 5
+        tags: [Advantage, Mental, Psyker, Imperium]
+        lore: See parent trait.
+        design: See parent trait.
+      - name: Sense of Duty (Imperium of Man)
+        points: -10
+        tags: [Disadvantage, Social, Psyker, Imperium]
+        lore: See parent trait.
+        design: See parent trait.
+
+  # ---------------------------------------------------------- blanks & pariahs
+
+  - name: Pariah Gene (Blank)
+    container: meta_trait
+    tags: [Advantage, Disadvantage, Mental, Psyker, Imperium]
+    lore: >
+      A blank is born, not made: a rare genetic absence that leaves a
+      person's soul all but invisible in the warp, and makes the warp itself
+      recoil from them. Psykers, daemons, and even animals find blanks
+      instinctively unsettling to be near — a "hole" where a presence should
+      be. Depicted consistently across Black Library (the Culexus Temple's
+      "Untouchables," Cain-series and Eisenhorn-cycle blanks) and Dark
+      Heresy/Only War's Untouchable career.
+    design: >
+      Deliberately carries no Warp or Perils of the Warp modifier: a Pariah's
+      field is the *absence* of the warp, not a channelled act, so none of
+      the framework's activation risk applies. See each child trait for its
+      own derivation. Net for the package: +12 (Null Aura) +10 (Immunity)
+      -3 (Unnerving Void) -10 (Social Stigma) = +9.
+    children:
+      - name: Null Aura
+        points: 10
+        tags: [Advantage, Mental, Psyker, Imperium]
+        modifiers:
+          - {name: Disadvantage Delivered (Warp-Choked, -30 pts), cost: "+30%",
+             notes: "Any Warp-tagged ability used in the area must be rolled again as if failed; already-running continuous Warp effects go inert while inside it."}
+          - "Area Effect, 2 yards, +50%"
+          - "Always On, -40%"
+          - "Emanation, -20%"
+        lore: >
+          The blank's presence itself smothers nearby psychic workings — the
+          basis for why the Inquisition uses blanks to hunt witches and why
+          daemons fear and hate them.
+        design: >
+          Built on Affliction (Basic B35): base 10, the delivered "Warp-
+          Choked" disadvantage is valued at -30 points for the enhancement
+          math (+30%), stacked with Area Effect (+50%, B102, 2-yard radius),
+          Always On (-40%, B113, it can't be switched off or aimed), and
+          Emanation (-20%, B111, no ranged attack roll, just proximity).
+      - name: Immunity to Warp-Based Effects
+        points: 10
+        tags: [Advantage, Mental, Psyker, Imperium]
+        lore: Warp-based Affliction, Mind Control, Mind Probe, and Fear simply do not work on a Pariah.
+        design: >
+          Resistant, Immunity tier (Basic B80: base rarity value x5). Warp-
+          based attacks are treated as an "occasional" specific hazard (base
+          2) for a Pariah, since it is their entire defining trait, giving
+          2 x 5 = 10.
+      - name: Unnatural Features (Unnerving Void)
+        per_level: -1
+        levels: 3
+        tags: [Disadvantage, Social, Psyker, Imperium]
+        lore: People and animals find a Pariah's presence quietly, deeply wrong.
+        design: Basic's Unnatural Features (per-level reaction penalty), 3 levels of -1 each.
+      - name: Social Stigma (Feared Blank)
+        points: -10
+        tags: [Disadvantage, Social, Psyker, Imperium]
+        lore: Feared and, in many sectors, watched or conscripted by the Inquisition and the Officio Assassinorum.
+        design: Basic's Social Stigma (Minority Group), -10 (B155).
+
+  - name: Pariah Gene (Untouchable)
+    container: meta_trait
+    tags: [Advantage, Disadvantage, Mental, Psyker, Imperium]
+    lore: >
+      An Untouchable is a blank whose gene runs stronger still — the raw
+      material from which the Officio Assassinorum's Culexus Temple recruits.
+      Their null field is wider, their touch is actively harmful to warp-
+      spawned things, and ordinary people find them nearly impossible to be
+      near for long. This trait models the degree only, not a full Culexus
+      Assassin (animus speculum, etc. belong to that unit's own writeup).
+    design: >
+      Same components as Pariah Gene, scaled up: wider Null Aura, a new
+      Soul-Static Discharge that actively harms warp-touched creatures in
+      contact, deeper social cost. Net: +22 (Null Aura) +5 (Soul-Static
+      Discharge) +10 (Immunity) -5 (Unnerving Void) -15 (Social Stigma) = +17.
+    children:
+      - name: Null Aura (Wide)
+        points: 10
+        tags: [Advantage, Mental, Psyker, Imperium]
+        modifiers:
+          - {name: Disadvantage Delivered (Warp-Choked, -30 pts), cost: "+30%"}
+          - "Area Effect, 8 yards, +150%"
+          - "Always On, -40%"
+          - "Emanation, -20%"
+        lore: See Pariah Gene's Null Aura; the field simply reaches further.
+        design: As Pariah Gene's Null Aura, but Area Effect scaled to the 8-yard tier (+150%, B102) instead of 2 yards.
+      - name: Soul-Static Discharge
+        per_level: 4
+        levels: 1
+        tags: [Advantage, Mental, Psyker, Imperium]
+        modifiers:
+          - "Aura, +80%"
+          - "Always On, -40%"
+          - {name: Accessibility (only vs. Warp-touched/daemonic creatures), cost: "-20%"}
+        lore: Warp-spawned creatures — daemons, Chaos Spawn, warp-touched beasts — burn where an Untouchable's field touches them.
+        design: Innate Attack (Toxic, 4/die, B61) with Aura (+80%, B111, automatic contact damage), Always On (-40%), and Accessibility limiting it to warp-touched targets only (-20%).
+      - name: Immunity to Warp-Based Effects
+        points: 10
+        tags: [Advantage, Mental, Psyker, Imperium]
+        lore: As Pariah Gene.
+        design: As Pariah Gene's Immunity to Warp-Based Effects.
+      - name: Unnatural Features (Unnerving Void, Deep)
+        per_level: -1
+        levels: 5
+        tags: [Disadvantage, Social, Psyker, Imperium]
+        lore: Few can stand to be near an Untouchable for long.
+        design: As Pariah Gene, at 5 levels instead of 3.
+      - name: Social Stigma (Monster)
+        points: -15
+        tags: [Disadvantage, Social, Psyker, Imperium]
+        lore: Treated by most Imperial citizens as barely human — when not simply recruited and vanished by the Officio Assassinorum.
+        design: Basic's Social Stigma (Monster), -15 (B155).
+
+  # ------------------------------------------------------------- navigator gene
+
+  - name: Navigator's Third Eye
+    container: meta_trait
+    tags: [Advantage, Disadvantage, Mental, Psyker, Imperium, Navis Nobilite]
+    lore: >
+      House Navigators carry a third eye, fused shut beneath the brow, that
+      perceives the Astronomican's light and the safe currents of the warp
+      well enough to steer a ship through it — and that kills or maddens
+      anyone it meets uncovered. Navigators keep the eye bound at all times
+      except when navigating from a shielded bridge. The clearest published
+      detail on this comes from the Rogue Trader corebook's Navigator
+      background rather than Black Library, which mostly gestures at the
+      Navis Nobilite and the "third eye" in passing (e.g. Horus Heresy-era
+      references); treat the RPG-tier material as the calibration source here
+      per the framework's source-priority rule.
+      Over centuries of psychic strain, aged Navigators are widely depicted as
+      growing increasingly strange or deformed (a GM-invoked cosmetic/social
+      disadvantage for very old Navigators — e.g. escalating Unnatural
+      Features — rather than a fixed cost baked into this trait).
+    design: >
+      Deliberately carries no Warp or Perils of the Warp modifier: the third
+      eye is an always-on inherited mutation, not a deliberately channelled
+      act — though a GM is free to call for a one-off Perils-style check
+      during an extreme event like flying blind through a warp storm. Net for
+      the package: 12 (Warp Sight) + 6 (Lethal Gaze) = 18.
+    children:
+      - name: Warp Sight
+        points: 5
+        tags: [Advantage, Mental, Psyker, Imperium, Navis Nobilite]
+        skill_bonuses: {"Navigation (Warp)": 4}
+        modifiers:
+          - "Precise, +100%"
+          - "Increased Range x100, +60%"
+          - {name: Accessibility (only while the third eye is uncovered), cost: "-10%"}
+        lore: >
+          What lets a Navigator see the Astronomican's beacon and the warp's
+          safer currents across a voyage, letting a ship cross the immaterium
+          without being lost or devoured.
+        design: >
+          Detect (Basic B47-48), base 5 for an uncommon, specific thing;
+          Precise doubles that (expressed here as +100%, equivalent to Basic's
+          x2 multiplier); Increased Range at the highest tabled step (+60%,
+          the "100x" tier) reflects effectively unlimited range while the
+          eye is open in transit; Accessibility (-10%) reflects that it only
+          works, and is only tolerable, while uncovered.
+      - name: Lethal Gaze
+        points: 10
+        tags: [Disadvantage, Advantage, Mental, Psyker, Imperium, Navis Nobilite]
+        modifiers:
+          - {name: Disadvantage Delivered (Mind-Sundering, -50 pts), cost: "+50%",
+             notes: "An unshielded mortal who meets the open eye is killed, driven mad, or worse, GM's call; only other Navigators and comparably warp-touched beings routinely survive it."}
+          - {name: Sense-Based (Vision), cost: "-20%"}
+          - "Uncontrollable, -30%"
+          - {name: Accessibility (only when the third eye is uncovered), cost: "-10%"}
+        lore: >
+          This is why the eye stays bound: anyone who meets it directly, with
+          no warding, risks death or madness. It is a narrative hazard for the
+          people around a Navigator far more than a usable weapon for the
+          player.
+        design: >
+          Affliction (Basic B35), base 10, delivering a -50 point
+          "Mind-Sundering" disadvantage (+50%); Sense-Based (Vision) (-20%,
+          B112, only affects those who can see the eye); Uncontrollable
+          (-30%, B113, the Navigator cannot pick and choose who is struck);
+          Accessibility limiting it to moments the eye is uncovered (-10%).
+
+  # ------------------------------------------------------------- disciplines
+
+  - name: Biomancy
+    container: group
+    tags: [Advantage, Mental, Psyker, Imperium]
+    lore: >
+      The discipline of the flesh: hardening it, mending it, driving it
+      faster than it should go, or unmaking an enemy's body from the inside.
+      Calibrated against Dark Heresy's Biomancy power list (Smite, Iron Arm,
+      Warp Speed, Haemorrhage all appear there under close-to-these names)
+      and Black Library depictions of Biomancer-Librarians and Chaos
+      "physicians."
+    design: Talent-linked group; see each child for build math. All children take Warp (-15%) and Perils of the Warp (-10%) unless noted.
+    children:
+      - name: Smite
+        per_level: 4
+        levels: 1
+        tags: [Advantage, Mental, Psyker, Imperium]
+        modifiers: ["Warp, -15%", "Perils of the Warp, -10%"]
+        lore: A short-ranged bolt of biomantic force that ruptures vessels and boils blood.
+        design: Innate Attack (Toxic, 4/die, B61) with the standard Warp/Perils pair, net -25%.
+      - name: Endurance
+        per_level: 3
+        levels: 1
+        tags: [Advantage, Mental, Psyker, Imperium]
+        modifiers: ["Warp, -15%", "Perils of the Warp, -10%"]
+        lore: Wards off fatigue and pain in battle by forcing the body past its limits.
+        design: Extra Fatigue Points (3/level, B ~power-ups table) with Warp/Perils.
+      - name: Warp Speed
+        per_level: 5
+        levels: 1
+        tags: [Advantage, Physical, Psyker, Imperium]
+        modifiers: ["Warp, -15%", "Perils of the Warp, -10%"]
+        lore: Quickens the caster's own nervous system and reflexes to a blur.
+        design: >
+          Increased Basic Speed (5 points per +0.25, B) with Warp/Perils; the
+          resulting Dodge increase comes free from Basic's normal Speed-to-
+          Dodge derivation, no separate purchase needed.
+      - name: Iron Arm
+        per_level: 5
+        levels: 1
+        tags: [Advantage, Physical, Psyker, Imperium]
+        modifiers: ["Warp, -15%", "Perils of the Warp, -10%"]
+        lore: Hardens flesh and bone into something closer to ceramite for a few seconds.
+        design: Damage Resistance (5/level, B) with Warp/Perils.
+      - name: Haemorrhage
+        per_level: 10
+        levels: 1
+        tags: [Advantage, Mental, Psyker, Imperium]
+        modifiers:
+          - {name: Disadvantage Delivered (Bleeding/Nauseated, -20 pts), cost: "+20%"}
+          - "Malediction 1, +100%"
+          - "Warp, -15%"
+          - "Perils of the Warp, -10%"
+        lore: Ruptures blood vessels inside a target from a distance, with no visible attack to dodge.
+        design: >
+          Affliction (10/level, B35) delivering a -20 point bleeding/nauseated
+          disadvantage (+20%), Malediction (+100%, B36, resisted by HT
+          instead of dodged), plus Warp/Perils.
+
+  - name: Divination
+    container: group
+    tags: [Advantage, Mental, Psyker, Imperium]
+    lore: >
+      Sight beyond the present moment: warnings, glimpses of the future,
+      remote viewing, and turning fortune against an enemy. Calibrated
+      against Dark Heresy's Divination list (Foreboding, Machinate, Fate's
+      Hand, Scrier's Gaze all map closely) and Black Library's recurring
+      "the Emperor's seers dream of what is to come" beats.
+    design: Talent-linked group; see each child.
+    children:
+      - name: Foresight
+        points: 25
+        tags: [Advantage, Mental, Psyker, Imperium]
+        modifiers: ["Warp, -15%", "Perils of the Warp, -10%"]
+        lore: A flash of true precognition — a moment's warning of what is about to happen.
+        design: Precognition, Basic's core advantage, flat 25, with Warp/Perils.
+      - name: Forewarning
+        points: 15
+        tags: [Advantage, Mental, Psyker, Imperium]
+        modifiers: ["Warp, -15%", "Perils of the Warp, -10%"]
+        lore: An unbidden sense that danger is close, before it strikes.
+        design: Danger Sense, Basic's core advantage, flat 15, with Warp/Perils.
+      - name: Misfortune
+        per_level: 10
+        levels: 1
+        tags: [Advantage, Mental, Psyker, Imperium]
+        modifiers:
+          - {name: Disadvantage Delivered (Unluckiness, -10 pts), cost: "+10%"}
+          - "Malediction 1, +100%"
+          - "Warp, -15%"
+          - "Perils of the Warp, -10%"
+        lore: Turns an enemy's own luck against them — the misfire, the missed step, the wrong turn.
+        design: Affliction (10/level) delivering Unluckiness (-10 points, +10%, matching Basic's own Unluckiness cost), Malediction (+100%), Warp/Perils.
+      - name: Scrier's Gaze
+        points: 50
+        tags: [Advantage, Mental, Psyker, Imperium]
+        modifiers: ["Warp, -15%", "Perils of the Warp, -10%"]
+        lore: Projects the caster's sight to a distant or hidden place.
+        design: Clairsentience, Basic's core advantage, flat 50, with Warp/Perils.
+
+  - name: Pyromancy
+    container: group
+    tags: [Advantage, Mental, Psyker, Imperium]
+    lore: >
+      Fire called from nothing, or matter itself set alight and melted.
+      Calibrated against Dark Heresy's Pyromancy list (Fire Bolt, Fire Storm,
+      Molten Beam all appear near-verbatim) and the recurring Black Library
+      image of a pyromancer's target simply combusting.
+    design: Talent-linked group; see each child.
+    children:
+      - name: Fire Bolt
+        per_level: 5
+        levels: 1
+        tags: [Advantage, Mental, Psyker, Imperium]
+        modifiers: ["Warp, -15%", "Perils of the Warp, -10%"]
+        lore: A thrown bolt of raw fire, the pyromancer's most basic attack.
+        design: Innate Attack (Burning, 5/die, B61) with Warp/Perils.
+      - name: Inferno/Molten Beam
+        container: alternative_abilities
+        tags: [Advantage, Mental, Psyker, Imperium]
+        lore: >
+          Two faces of the same power over fire and molten matter: a bursting
+          fireball for a crowd, or a focused, armour-melting beam for a
+          single hard target. A pyromancer trains both together and switches
+          between them freely, never both at once.
+        design: >
+          Built as GCS's alternative_abilities container: full price for the
+          costlier child (Molten Beam) plus a fifth the cost of the cheaper
+          one (Inferno), per Basic's Alternate Abilities rule.
+        children:
+          - name: Inferno
+            per_level: 5
+            levels: 1
+            tags: [Advantage, Mental, Psyker, Imperium]
+            modifiers: ["Explosion, +50%", "Warp, -15%", "Perils of the Warp, -10%"]
+            lore: A bursting fireball that engulfs a small area.
+            design: Innate Attack (Burning, 5/die) with Explosion (+50%, B106, 2-yard burst) plus Warp/Perils.
+          - name: Molten Beam
+            per_level: 5
+            levels: 1
+            tags: [Advantage, Mental, Psyker, Imperium]
+            modifiers: ["Armor Divisor (3), +100%", "Warp, -15%", "Perils of the Warp, -10%"]
+            lore: A focused beam of molten matter that burns straight through armour.
+            design: Innate Attack (Burning, 5/die) with Armor Divisor (3) (+100%, B103) plus Warp/Perils.
+      - name: Flame Breath
+        per_level: 5
+        levels: 1
+        tags: [Advantage, Mental, Psyker, Imperium]
+        modifiers: ["Cone, +50%", "Warp, -15%", "Perils of the Warp, -10%"]
+        lore: A gout of fire breathed out in a cone in front of the caster.
+        design: Innate Attack (Burning, 5/die) with Cone (+50%, B103) plus Warp/Perils.
+
+  - name: Telekinesis
+    container: group
+    tags: [Advantage, Mental, Psyker, Imperium]
+    lore: >
+      Force of will made physical: hurled objects, barriers of solid air,
+      crushing grips, and — at its rarest and most dangerous — stepping
+      instantly from one place to another. Calibrated against Dark Heresy's
+      Telekinesis list (Assail, Kinetic Barrier/Shield, Crush, Warp
+      Conduit/Gate of Infinity all map closely).
+    design: Talent-linked group; see each child.
+    children:
+      - name: Assail
+        per_level: 5
+        levels: 1
+        tags: [Advantage, Mental, Psyker, Imperium]
+        modifiers: ["Warp, -15%", "Perils of the Warp, -10%"]
+        lore: Hurls the nearest loose object, or the target themselves, with bruising force.
+        design: Innate Attack (Crushing, 5/die, B61) with Warp/Perils.
+      - name: Force Dome/Kinetic Shield
+        container: alternative_abilities
+        tags: [Advantage, Mental, Psyker, Imperium]
+        lore: >
+          The same telekinetic barrier, bought as one power: held tight around
+          the caster alone, or opened out to cover the whole squad.
+        design: Alternative_abilities container; full price for the costlier Force Dome plus a fifth of Kinetic Shield.
+        children:
+          - name: Kinetic Shield
+            per_level: 5
+            levels: 1
+            tags: [Advantage, Mental, Psyker, Imperium]
+            modifiers: ["Warp, -15%", "Perils of the Warp, -10%"]
+            lore: A tight telekinetic skin around the caster alone.
+            design: Damage Resistance (5/level, B), self only, with Warp/Perils.
+          - name: Force Dome
+            per_level: 5
+            levels: 1
+            tags: [Advantage, Mental, Psyker, Imperium]
+            modifiers: ["Area Effect, +50%", "Warp, -15%", "Perils of the Warp, -10%"]
+            lore: A dome of solid force wide enough to cover the caster's whole fireteam.
+            design: Damage Resistance (5/level) with Area Effect (+50%, B102, 2-yard radius) plus Warp/Perils.
+      - name: Crush
+        per_level: 5
+        levels: 1
+        tags: [Advantage, Mental, Psyker, Imperium]
+        modifiers: ["Malediction 1, +100%", "Armor Divisor (2), +50%", "Warp, -15%", "Perils of the Warp, -10%"]
+        lore: An invisible telekinetic grip that closes on a target's throat or chest, ignoring armour and impossible to dodge.
+        design: Innate Attack (Crushing, 5/die) with Malediction (+100%, B36) and Armor Divisor (2) (+50%, B103), plus Warp/Perils.
+      - name: Gate of Infinity
+        points: 100
+        tags: [Advantage, Mental, Psyker, Imperium]
+        modifiers: ["Preparation Required, -20%", "Warp, -15%", "Perils of the Warp (Severe), -20%"]
+        lore: >
+          Tears a hole between two points in real space and steps through —
+          the rarest and most feared telekinetic feat, since a botched Gate
+          can open into the warp itself instead.
+        design: >
+          Built on Basic's own Warp advantage (B99, instant travel to any
+          place you have seen/visualized, flat 100), with Preparation
+          Required (-20%, B113, a few seconds' concentration) and the Severe
+          Perils tier, reflecting the setting's specific fear of a failed
+          Gate opening into the immaterium.
+
+  - name: Telepathy
+    container: group
+    tags: [Advantage, Mental, Psyker, Imperium]
+    lore: >
+      Reading, sending, and overwhelming minds. Calibrated against Dark
+      Heresy's Telepathy list (Mind Probe, Dominate, Psychic Scream, Terrify,
+      Invisibility-adjacent Mental Interrogation) and the astropathic relay
+      seen throughout Black Library whenever a ship needs to send word home.
+    design: Talent-linked group; see each child.
+    children:
+      - name: Mind Probe/Dominate
+        container: alternative_abilities
+        tags: [Advantage, Mental, Psyker, Imperium]
+        lore: >
+          The same intrusion into another mind, bought at two intensities: a
+          forced reading of buried memory, or outright control of the body.
+        design: Alternative_abilities container; full price for the costlier Dominate plus a fifth of Mind Probe.
+        children:
+          - name: Mind Probe
+            points: 20
+            tags: [Advantage, Mental, Psyker, Imperium]
+            modifiers: ["Warp, -15%", "Perils of the Warp, -10%"]
+            lore: Tears buried memories and secrets from an unwilling subject.
+            design: Mind Probe, Basic's core advantage, flat 20, with Warp/Perils.
+          - name: Dominate
+            points: 50
+            tags: [Advantage, Mental, Psyker, Imperium]
+            modifiers: ["Warp, -15%", "Perils of the Warp, -10%"]
+            lore: Seizes outright control of a target's body and actions.
+            design: Mind Control, Basic's core advantage, flat 50, with Warp/Perils.
+      - name: Psychic Scream
+        per_level: 10
+        levels: 1
+        tags: [Advantage, Mental, Psyker, Imperium]
+        modifiers: ["Area Effect, +50%", "Warp, -15%", "Perils of the Warp, -10%"]
+        lore: A silent, mind-shattering shout that stuns everyone nearby.
+        design: Affliction (10/level, delivering the default Stun effect) with Area Effect (+50%) plus Warp/Perils.
+      - name: Terrify
+        points: 30
+        per_level: 10
+        levels: 1
+        tags: [Advantage, Mental, Psyker, Imperium]
+        modifiers: ["Warp, -15%", "Perils of the Warp, -10%"]
+        lore: Projects raw, focused fear straight into a target's mind.
+        design: Terror, Basic's core advantage (flat 30 + 10/level for extra range), with Warp/Perils.
+      - name: Mental Interrogation
+        points: 30
+        tags: [Advantage, Mental, Psyker, Imperium]
+        modifiers: ["Warp, -15%", "Perils of the Warp, -10%"]
+        lore: Reads surface thoughts, willing or not — an Inquisitorial interrogator's favourite tool.
+        design: Mind Reading, Basic's core advantage, flat 30, with Warp/Perils.
+      - name: Astrotelepathy
+        points: 20
+        tags: [Advantage, Mental, Psyker, Imperium]
+        modifiers: ["Increased Range x100, +60%", "Preparation Required, -20%", "Warp, -15%", "Perils of the Warp (Severe), -20%"]
+        lore: >
+          The astropath's signature act: sending and receiving thought across
+          interstellar distances, relayed choir to choir and, ultimately,
+          through the Astronomican itself. Astropaths who fail badly during a
+          transmission are a recurring Black Library beat (burned out,
+          driven mad, or lost with the ship's Geller field).
+        design: >
+          Base 20 points for a mental send-and-receive package is this
+          project's own baseline (Basic's exact per-range-step Telecommunication
+          costs are not confidently recalled, so this figure is fixed for
+          internal consistency rather than cited to a page); Increased Range
+          at the highest tabled step (+60%) for interstellar reach,
+          Preparation Required (-20%, a ritual trance), and the Severe Perils
+          tier for the real danger of transmitting through the warp.
+
+  - name: Sanctic Daemonology
+    container: group
+    tags: [Advantage, Mental, Psyker, Imperium, Adeptus Astartes, Grey Knights]
+    lore: >
+      The Grey Knights' own discipline: powers built and sanctified
+      specifically to fight the warp's own creatures, drawn from Codex: Grey
+      Knights background and its Black Library tie-ins (Ben Counter's Grey
+      Knights novels).
+    design: Talent-linked group, Grey Knights only; see each child.
+    children:
+      - name: Banishment
+        per_level: 8
+        levels: 1
+        tags: [Advantage, Mental, Psyker, Imperium, Grey Knights]
+        modifiers:
+          - {name: Accessibility (only vs. Warp-touched/daemonic creatures), cost: "-10%"}
+          - "Warp, -15%"
+          - "Perils of the Warp (Severe), -20%"
+        lore: A bolt of purifying anti-warp force that tears a daemon's physical anchor apart.
+        design: >
+          Innate Attack (Impaling, 8/die, B61) restricted to warp-touched
+          targets (Accessibility -10%, kept small since daemons are this
+          unit's routine enemy, not a rare case) plus Warp and the Severe
+          Perils tier.
+      - name: Hammerhand
+        per_level: 5
+        levels: 1
+        tags: [Advantage, Physical, Psyker, Imperium, Grey Knights]
+        modifiers: ["Warp, -15%", "Perils of the Warp, -10%"]
+        lore: Channels psychic force into a Grey Knight's blow, letting even blunt strikes crack a daemon's hide.
+        design: Striking ST (5/level, B) with Warp/Perils.
+      - name: Sanctuary
+        points: 10
+        tags: [Advantage, Mental, Psyker, Imperium, Grey Knights]
+        modifiers:
+          - {name: Advantage Delivered (+2 vs. Fright Checks, possession, and Warp-based Affliction, 15 pts), cost: "+15%"}
+          - "Area Effect, +50%"
+          - "Warp, -15%"
+          - "Perils of the Warp (Severe), -20%"
+        lore: Wards a Grey Knight kill-team against fear, corruption, and possession during a purge.
+        design: >
+          Affliction (10, delivering a +15-point protective advantage to
+          willing allies rather than a disadvantage to a foe — Basic B35
+          allows either) with Area Effect (+50%), Warp, and Severe Perils.
+
+  - name: Librarius
+    container: group
+    tags: [Advantage, Mental, Psyker, Imperium, Adeptus Astartes]
+    lore: >
+      The general Chapter Librarius discipline used across most non-Grey-
+      Knights Space Marine chapters, drawn from Codex: Space Marines
+      background and its recurring Black Library depictions of Librarians in
+      the Horus Heresy and modern-day novels alike.
+    design: Talent-linked group; see each child.
+    children:
+      - name: Null Zone
+        per_level: 10
+        levels: 1
+        tags: [Advantage, Mental, Psyker, Imperium]
+        modifiers:
+          - {name: Disadvantage Delivered (Vulnerability, approx. x1.5 to all attacks, -20 pts), cost: "+20%"}
+          - "Malediction 1, +100%"
+          - "Area Effect, +50%"
+          - "Warp, -15%"
+          - "Perils of the Warp (Severe), -20%"
+        lore: Strips the warp's protection from everything nearby — invulnerable saves falter, toughened hides thin.
+        design: >
+          Affliction (10/level) delivering a Vulnerability-style disadvantage
+          valued (by this project, not a cited RAW table entry) at roughly
+          -20 points, +100% Malediction, +50% Area Effect, then Warp and
+          Severe Perils — the setting's single most dangerous debuff, priced
+          to match.
+      - name: Might of Heroes
+        container: group
+        tags: [Advantage, Mental, Psyker, Imperium]
+        lore: A Librarian's traditional pre-charge blessing, filling a squad with unnatural strength and courage.
+        design: Grouped Basic advantages, each carrying Area Effect (squad-wide) plus Warp/Perils; GCS sums the children.
+        children:
+          - name: Heroic Feats of Strength
+            points: 10
+            tags: [Advantage, Physical, Psyker, Imperium]
+            modifiers: ["Area Effect, +50%", "Warp, -15%", "Perils of the Warp, -10%"]
+            lore: See parent trait.
+            design: Basic's Heroic Feats of Strength (flat 10) with Area Effect plus Warp/Perils.
+          - name: Fearlessness
+            per_level: 2
+            levels: 2
+            tags: [Advantage, Mental, Psyker, Imperium]
+            modifiers: ["Area Effect, +50%", "Warp, -15%", "Perils of the Warp, -10%"]
+            lore: See parent trait.
+            design: Basic's Fearlessness (2/level) with Area Effect plus Warp/Perils.
+      - name: Vortex of Doom
+        per_level: 5
+        levels: 20
+        max_levels: 30
+        tags: [Advantage, Mental, Psyker, Imperium, Great Power]
+        modifiers:
+          - "Explosion, +200%"
+          - "Armor Divisor (2), +50%"
+          - "Preparation Required, -30%"
+          - "Warp, -15%"
+          - "Perils of the Warp (Severe), -20%"
+        lore: >
+          A Great Power: a tearing vortex of raw warp-force that can gut a
+          building or a company of tanks, at genuine risk to everything and
+          everyone nearby, caster included. GM-reference only, in the same
+          "Beyond play" bracket the framework reserves for Primarchs and
+          Greater Daemons — not meant for ordinary play.
+        design: >
+          Innate Attack (Crushing, 5/die), 20d starting suggestion, with
+          Explosion at the 16-yard tier (+200%, B106), Armor Divisor (2)
+          (+50%), Preparation Required (-30%, a full turn's channelling),
+          Warp, and Severe Perils. At 20 levels this alone totals in the
+          hundreds of points, deliberately priced in the framework's
+          "Beyond play" tier rather than toward ordinary Librarian play.

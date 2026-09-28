@@ -1,0 +1,218 @@
+kind: template
+output: Imperium/Templates/Commissar.gct
+notes: >
+  A veteran Commissar of the Officio Prefectus: political officer,
+  battlefield disciplinarian, and (per Ciaphas Cain's narration of his own
+  reputation, which he insists is undeserved) supposed to lead from the
+  front and be the last man standing. Point math: ST 11 (+10), DX 12
+  (+40), IQ 12 (+40), HT 12 (+20) = 110, plus Will +2 (+10) = 120;
+  advantages +55; disadvantages -52; skills +78. Total 201 points, the
+  low end of framework.md's "Elite human (200-350)" tier — a senior,
+  experienced Commissar with a long record runs noticeably higher via
+  more Rank and skill points. No psychic abilities here.
+traits:
+  - name: ST
+    points: 10
+    tags: [Attribute]
+    lore: A Commissar is expected to be physically capable, not exceptional.
+    design: ST 11 (+1), 10 pts/level (B15).
+  - name: DX
+    points: 40
+    tags: [Attribute]
+    lore: Trained to a good military standard with both bolt pistol and blade.
+    design: DX 12 (+2), 20 pts/level (B15).
+  - name: IQ
+    points: 40
+    tags: [Attribute]
+    lore: Commissars are Schola Progenium or equivalent-trained political officers, not mere disciplinarians.
+    design: IQ 12 (+2), 20 pts/level (B15).
+  - name: HT
+    points: 20
+    tags: [Attribute]
+    lore: A Commissar who leads from the front needs the endurance to survive it.
+    design: HT 12 (+2), 10 pts/level (B14).
+  - name: Will
+    points: 10
+    tags: [Attribute]
+    lore: >
+      A Commissar's job is to be the one person on the line who does not
+      break — Ciaphas Cain repeatedly notes that whatever else is true of
+      him, his nerve under fire is genuine.
+    design: Will 14 (+2 above IQ-derived default of 12), 5 pts/level (B16).
+  - name: Unfazeable
+    points: 15
+    ref: B95
+    tags: [Advantage, Mental, Imperium]
+    lore: Little left to shock a Commissar who has already ordered executions and watched daemons take a trench line.
+    design: Basic Set Unfazeable (B95), 15 points.
+  - name: Combat Reflexes
+    points: 15
+    ref: B43
+    tags: [Advantage, Mental, Imperium]
+    lore: A Commissar cannot afford to freeze; the regiment is watching.
+    design: Basic Set Combat Reflexes (B43), 15 points.
+  - name: Legal Enforcement Powers (Commissariat)
+    points: 15
+    ref: B65
+    tags: [Advantage, Social, Imperium, Astra Militarum]
+    lore: See Imperium/Traits/Imperial Traits.adq for sourcing.
+    design: Basic Set Legal Enforcement Powers (B65), 3 levels, 15 points.
+  - name: Military Rank
+    points: 10
+    ref: B29
+    tags: [Advantage, Social, Imperium, Astra Militarum]
+    lore: Commissars hold an officer-equivalent rank within the Officio Prefectus chain, separate from the regiment's own command structure.
+    design: Basic Set Rank (B29), 2 levels, 10 points.
+  - name: Fanaticism (The God-Emperor)
+    points: -15
+    ref: B136
+    tags: [Disadvantage, Mental, Imperium]
+    lore: A Commissar's authority rests entirely on this belief being genuine, not performed.
+    design: Basic Set Fanaticism (B136), -15.
+  - name: Duty (Astra Militarum)
+    points: -15
+    ref: B133
+    tags: [Disadvantage, Social, Imperium, Astra Militarum]
+    lore: Commissars are themselves Munitorum-bound, answerable to the Officio Prefectus for their conduct.
+    design: Basic Set Duty (B133), almost-always, hazardous, involuntary, -15.
+  - name: Intolerance (Heretics)
+    points: -5
+    ref: B140
+    tags: [Disadvantage, Mental, Imperium]
+    lore: The Commissariat exists specifically to root out heresy, cowardice and defeatism in the ranks.
+    design: Basic Set Intolerance (B140), narrow-category, -5.
+  - name: Intolerance (Xenos)
+    points: -10
+    ref: B140
+    tags: [Disadvantage, Mental, Imperium]
+    lore: See Imperium/Traits/Imperial Traits.adq for sourcing.
+    design: Basic Set Intolerance (B140), broad-category, -10.
+  - name: Callous
+    points: -5
+    ref: B125
+    tags: [Disadvantage, Mental, Imperium]
+    lore: >
+      The Commissariat's reputation (which Ciaphas Cain's novels explicitly
+      play against, making him an exception) is one of willingness to
+      execute one's own troops without much hesitation.
+    design: Basic Set Callous (B125), -5.
+  - name: Feared, Not Loved
+    points: -1
+    tags: [Quirk, Imperium]
+    design: Quirk (B9), roleplaying flag only.
+    lore: Troopers obey a Commissar; they rarely relax around one.
+  - name: Immaculate Uniform
+    points: -1
+    tags: [Quirk, Imperium]
+    design: Quirk (B9), roleplaying flag only.
+    lore: Commissarial dress is a deliberate, unmissable symbol of authority and is maintained accordingly, mud and blood permitting.
+skills:
+  - name: Guns
+    spec: Pistol
+    diff: DX/E
+    points: 12
+    tags: [Imperium, Astra Militarum]
+    lore: The bolt pistol is the Commissariat's signature sidearm.
+    design: DX+4 (16) for 12 points, Easy (B170).
+  - name: Broadsword
+    diff: DX/A
+    points: 12
+    tags: [Imperium, Astra Militarum]
+    lore: A Commissar's chainsword or power sword, per framework.md's weapon-skill table.
+    design: DX+3 (15) for 12 points, Average.
+  - name: Leadership
+    diff: IQ/A
+    points: 8
+    tags: [Imperium]
+    lore: Rallying broken troops is a Commissar's central battlefield function.
+    design: IQ+2 (14) for 8 points, Average.
+  - name: Intimidation
+    diff: Will/A
+    points: 8
+    tags: [Imperium]
+    lore: A Commissar's authority is enforced as much by presence and reputation as by the bolt pistol itself.
+    design: Will+2 (16) for 8 points, Average.
+  - name: Tactics
+    diff: IQ/H
+    points: 8
+    tags: [Imperium]
+    lore: Enough grasp of tactics to judge an officer's competence, not merely follow orders.
+    design: IQ+1 (13) for 8 points, Hard.
+  - name: Strategy
+    diff: IQ/H
+    points: 4
+    tags: [Imperium]
+    lore: Broader campaign awareness expected of an officer who reports on a regiment's conduct.
+    design: IQ+0 (12) for 4 points, Hard.
+  - name: Public Speaking
+    diff: IQ/A
+    points: 4
+    tags: [Imperium]
+    lore: Addressing a regiment before battle, or reading a sentence of execution, are both public performances.
+    design: IQ+1 (13) for 4 points, Average.
+  - name: Law
+    spec: Imperial
+    diff: IQ/H
+    points: 4
+    tags: [Imperium]
+    lore: A Commissar's summary judgments still draw on the Lex Imperialis' framework, however abbreviated the process.
+    design: IQ+0 (12) for 4 points, Hard.
+  - name: Savoir-Faire
+    spec: Military
+    diff: IQ/E
+    points: 1
+    tags: [Imperium]
+    lore: Officer-level military etiquette.
+    design: IQ+0 (12) for 1 point, Easy.
+  - name: Soldier
+    diff: IQ/A
+    points: 4
+    tags: [Imperium]
+    lore: General military competence.
+    design: IQ+1 (13) for 4 points, Average.
+  - name: Interrogation
+    diff: IQ/A
+    points: 4
+    tags: [Imperium]
+    lore: Rooting out defeatism and cowardice often starts with questioning.
+    design: IQ+1 (13) for 4 points, Average.
+  - name: First Aid
+    diff: IQ/E
+    points: 1
+    tags: [Imperium]
+    lore: Basic combat first aid.
+    design: IQ+0 (12) for 1 point, Easy.
+  - name: Area Knowledge
+    spec: (current front / regiment's theatre)
+    diff: IQ/E
+    points: 1
+    tags: [Imperium]
+    lore: Knowledge of the current campaign's area of operations.
+    design: IQ+0 (12) for 1 point, Easy.
+  - name: Current Affairs
+    spec: Imperium
+    diff: IQ/E
+    points: 1
+    tags: [Imperium]
+    lore: Awareness of Imperium-wide news, expected of an Officio Prefectus officer.
+    design: IQ+0 (12) for 1 point, Easy.
+  - name: Heraldry
+    spec: Regimental
+    diff: IQ/A
+    points: 2
+    tags: [Imperium, Astra Militarum]
+    lore: A Commissar is typically attached to a regiment not their own and must learn its customs quickly.
+    design: IQ+0 (12) for 2 points, Average.
+  - name: Theology
+    spec: Imperial Creed
+    diff: IQ/H
+    points: 2
+    tags: [Imperium]
+    lore: A working command of the Imperial Creed, since a Commissar is also a lay authority on Imperial orthodoxy in the field.
+    design: IQ-1 (11) for 2 points, Hard.
+  - name: Brawling
+    diff: DX/E
+    points: 2
+    tags: [Imperium]
+    lore: Close-quarters fighting.
+    design: DX+1 (13) for 2 points, Easy.

@@ -1,0 +1,218 @@
+kind: template
+output: Imperium/Templates/Inquisitorial Acolyte.gct
+notes: >
+  A rank-and-file agent of an Inquisitor's retinue: ex-Guardsman,
+  ex-Arbitrator, scholar, rogue trader scion, or reformed criminal —
+  Inquisitorial acolytes are drawn from anywhere the Inquisition finds a
+  useful skill set, per Eisenhorn's and Ravenor's ensemble casts. This is
+  a generalist investigator/field-agent baseline; individual acolytes
+  should reskin the skill list toward their actual background. Point
+  math: ST 10 (+0), DX 12 (+40), IQ 13 (+60), HT 11 (+10) = 110;
+  advantages +20; disadvantages -32; skills +100. Total 198 points, the
+  low end of framework.md's "Elite human (200-350)" tier. No psychic
+  abilities here — an acolyte with a sanctioned psyker gift should add
+  traits from the separate psyker power library on top of this base.
+traits:
+  - name: ST
+    points: 0
+    tags: [Attribute]
+    lore: Acolytes are chosen for skills and usefulness, not physical extremes.
+    design: ST 10 (baseline), 10 pts/level (B15).
+  - name: DX
+    points: 40
+    tags: [Attribute]
+    lore: Competent but not elite combatants — most acolytes' real value is investigative, not martial.
+    design: DX 12 (+2), 20 pts/level (B15).
+  - name: IQ
+    points: 60
+    tags: [Attribute]
+    lore: >
+      The Inquisition recruits for intelligence and initiative above all;
+      Eisenhorn's and Ravenor's retinues are consistently written as sharp,
+      resourceful people.
+    design: IQ 13 (+3), 20 pts/level (B15).
+  - name: HT
+    points: 10
+    tags: [Attribute]
+    lore: Fieldwork for the Inquisition is hard on the body, if less uniformly brutal than front-line Guard service.
+    design: HT 11 (+1), 10 pts/level (B14).
+  - name: Fit
+    points: 5
+    ref: B55
+    tags: [Advantage, Physical, Imperium]
+    lore: Kept in reasonable shape by an active, dangerous job.
+    design: Basic Set Fit (B55), 5 points.
+  - name: Combat Reflexes
+    points: 15
+    ref: B43
+    tags: [Advantage, Mental, Imperium]
+    lore: An acolyte who freezes under fire does not remain an acolyte for long.
+    design: Basic Set Combat Reflexes (B43), 15 points.
+  - name: Duty (Inquisition)
+    points: -15
+    ref: B133
+    tags: [Disadvantage, Social, Imperium, Inquisition]
+    lore: See Imperium/Traits/Imperial Traits.adq for sourcing.
+    design: Basic Set Duty (B133), hazardous and frequent, -15.
+  - name: Intolerance (Heretics)
+    points: -5
+    ref: B140
+    tags: [Disadvantage, Mental, Imperium]
+    lore: An acolyte's entire job is hunting heresy; most come to share their Inquisitor's zeal for it.
+    design: Basic Set Intolerance (B140), narrow-category, -5.
+  - name: Secret (Works for the Inquisition)
+    points: -10
+    ref: B152
+    tags: [Disadvantage, Social, Imperium, Inquisition]
+    lore: >
+      Inquisitorial agents routinely operate under cover identities; being
+      identified as Inquisition staff can get an acolyte killed by exactly
+      the people they are investigating, or by a hostile Imperial official
+      who resents being investigated at all.
+    design: Basic Set Secret (B152), moderate exposure risk, -10.
+  - name: Nobody Trusts an Inquisitor's Agent
+    points: -1
+    tags: [Quirk, Imperium]
+    design: Quirk (B9), roleplaying flag only.
+    lore: Even loyal Imperial citizens tend to clam up around anyone connected to the Inquisition.
+  - name: Suspicious of Everyone, Eventually
+    points: -1
+    tags: [Quirk, Imperium]
+    design: Quirk (B9), roleplaying flag only.
+    lore: The job trains acolytes out of taking anyone at face value for long.
+skills:
+  - name: Guns
+    spec: Pistol
+    diff: DX/E
+    points: 12
+    tags: [Imperium, Inquisition]
+    lore: A concealable sidearm (autopistol, laspistol, or stub revolver) is standard acolyte kit.
+    design: DX+4 (16) for 12 points, Easy (B170).
+  - name: Stealth
+    diff: DX/A
+    points: 12
+    tags: [Imperium]
+    lore: Investigative fieldwork depends on not being noticed until the acolyte chooses to be.
+    design: DX+3 (15) for 12 points, Average.
+  - name: Streetwise
+    diff: IQ/A
+    points: 12
+    tags: [Imperium]
+    lore: Working informant networks and the underworld is core acolyte tradecraft.
+    design: IQ+3 (16) for 12 points, Average.
+  - name: Fast-Talk
+    diff: IQ/A
+    points: 8
+    tags: [Imperium]
+    lore: Talking past a checkpoint or out of trouble.
+    design: IQ+2 (15) for 8 points, Average.
+  - name: Interrogation
+    diff: IQ/A
+    points: 8
+    tags: [Imperium]
+    lore: Extracting information from suspects and witnesses.
+    design: IQ+2 (15) for 8 points, Average.
+  - name: Research
+    diff: IQ/A
+    points: 8
+    tags: [Imperium]
+    lore: Chasing a lead through Administratum archives or a Mechanicus data-vault.
+    design: IQ+2 (15) for 8 points, Average.
+  - name: Hidden Lore
+    spec: Heresy
+    diff: IQ/A
+    points: 8
+    tags: [Imperium]
+    lore: See Imperium/Skills/Imperial Skills.skl; recognising cult activity is core acolyte work.
+    design: IQ+2 (15) for 8 points, Average.
+  - name: Hidden Lore
+    spec: Xenos
+    diff: IQ/A
+    points: 2
+    tags: [Imperium]
+    lore: See Imperium/Skills/Imperial Skills.skl.
+    design: IQ+0 (13) for 2 points, Average.
+  - name: Hidden Lore
+    spec: Daemons
+    diff: IQ/A
+    points: 2
+    tags: [Imperium]
+    lore: See Imperium/Skills/Imperial Skills.skl.
+    design: IQ+0 (13) for 2 points, Average.
+  - name: Law
+    spec: Imperial
+    diff: IQ/H
+    points: 4
+    tags: [Imperium]
+    lore: Enough grasp of the Lex Imperialis to know which laws a suspect has actually broken.
+    design: IQ+0 (13) for 4 points, Hard.
+  - name: Cryptography
+    spec: Inquisitorial Ciphers
+    diff: IQ/H
+    points: 4
+    tags: [Imperium, Inquisition]
+    lore: See Imperium/Skills/Imperial Skills.skl.
+    design: IQ+0 (13) for 4 points, Hard.
+  - name: Disguise
+    diff: IQ/A
+    points: 4
+    tags: [Imperium]
+    lore: Undercover identities are standard acolyte tradecraft.
+    design: IQ+1 (14) for 4 points, Average.
+  - name: Shadowing
+    diff: IQ/A
+    points: 2
+    tags: [Imperium]
+    lore: Following a suspect without being made.
+    design: IQ+0 (13) for 2 points, Average.
+  - name: Intimidation
+    diff: Will/A
+    points: 4
+    tags: [Imperium]
+    lore: An Inquisitor's agent invoking that authority is often intimidation enough.
+    design: Will+1 (14) for 4 points, Average.
+  - name: First Aid
+    diff: IQ/E
+    points: 1
+    tags: [Imperium]
+    lore: Basic field first aid.
+    design: IQ+0 (13) for 1 point, Easy.
+  - name: Area Knowledge
+    spec: (current assignment)
+    diff: IQ/E
+    points: 1
+    tags: [Imperium]
+    lore: Knowledge of wherever the acolyte's current investigation is based.
+    design: IQ+0 (13) for 1 point, Easy.
+  - name: Current Affairs
+    spec: Imperium
+    diff: IQ/E
+    points: 1
+    tags: [Imperium]
+    lore: Basic awareness of Imperium-wide news.
+    design: IQ+0 (13) for 1 point, Easy.
+  - name: Savoir-Faire
+    spec: High Society
+    diff: IQ/E
+    points: 1
+    tags: [Imperium]
+    lore: Some investigations require moving convincingly through noble circles.
+    design: IQ+0 (13) for 1 point, Easy.
+  - name: Brawling
+    diff: DX/E
+    points: 1
+    tags: [Imperium]
+    lore: Unarmed fighting for when things get close and ugly.
+    design: DX+0 (12) for 1 point, Easy.
+  - name: Forgery
+    diff: IQ/H
+    points: 1
+    tags: [Imperium]
+    lore: Faking papers, requisition chits, and identity documents.
+    design: IQ-2 (11) for 1 point, Hard.
+  - name: Acting
+    diff: IQ/A
+    points: 4
+    tags: [Imperium]
+    lore: Maintaining a cover identity under pressure.
+    design: IQ+1 (14) for 4 points, Average.
