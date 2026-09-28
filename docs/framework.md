@@ -86,6 +86,8 @@ Limbs are usually a few DR below torso. Specify every location explicitly.
 | Chainsword | sw+1d cut | Tears flesh, skids off power armour. |
 | Power sword | sw+1d+1(10) cut | The disruption field shears ceramite whoever holds it. |
 
+**Power-field rule.** Every disruption-field weapon (power sword, axe, maul, lance, fist, chainfist, thunder hammer, lightning claw) has armour divisor (10) with the field on, and a second weapon line for field-off at the mundane baseline. Bladed/mace power weapons add +1d over the mundane weapon; thunder hammers +2d; power fists thr+4d.
+
 Follow-up damage (B414): the follow-up applies only when the penetrator gets through DR. In GCS, add the follow-up as a second weapon line with usage like "Follow-up (if bolt penetrates)".
 
 Anything in the same family scales from the nearest anchor (bolt pistol from boltgun, plasma pistol from plasma gun) and explains the step in `design`.
