@@ -50,3 +50,12 @@ Anchor and rule changes to `framework.md`, with the reason for each.
 - **Tyranids:** Hormagaunt talons 5d(2). Zoanthrope Warp Blast 6d(5) at Empowerment 6. Warp Field 60 SP. Monstrous scything talons restated at 13d(3). Ravener tunnelling uses real Tunneling (Move 7). Synapse Discipline is Fearlessness 5 + HPT. The Carnifex loses Shadow in the Warp and the Lictor its lash whip. Added a Warrior variant with bonesword and lash whip.
 - **Site:** Dodge now includes Enhanced Dodge.
 - **Held for user decision:** Ork, Necron and Tyranid Move; multi-laser and scatter laser damage (6d×2(2) vs about 8d(2)); shuriken range (framework 12/60 vs entries 60/300); Exarch powers and extra Aeldari templates; Ghazghkull; Genestealer DX.
+
+## Speed pass and held decisions (user approved)
+
+- **Ork Move:** Boyz and Nobz 9, Warboss 11, Gretchin 7. Mega Armour is −3 Move while worn (about 6).
+- **Necron Move:** Flayed Ones 8, Skorpekhs 9. The rest keep the slow advance (6–7).
+- **Tyranid Move:** Genestealer 14 + Enhanced Move 1, Hormagaunt 12 + Enhanced Move ½, Ravener 12 (Tunnel Move stays 7), Lictor 11, Hive Tyrant 10, Warrior and Carnifex 9, Termagant 7. The Zoanthrope is unchanged at 5.
+- **Genestealer DX** 16 → 17.
+- **Multi-laser and scatter laser** stay at 6d×2(2). The proposed 8d(2) would penetrate carapace about 5% of the time, no better than a lasgun, which contradicts their role as infantry shredders. The scatter laser's range rises to 900/2700 to match the multi-laser.
+- **Shuriken range anchor** now matches the entries: 60/300 (pistol 60/150, Avenger 80/400).

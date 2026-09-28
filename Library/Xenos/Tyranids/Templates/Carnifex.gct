@@ -1,7 +1,7 @@
 {
 	"version": 5,
 	"id": "BnM9DFV639MvCf-aY",
-	"notes": "NPC creature stat block, not a player-facing race. Point math: Tyranid Biology 20 + Body Lens: Carnifex 1160 + Monstrous Crushing Claws 79 + Venom Cannon 225 + skills 8 = 1492 points. Stats: SM +2, ST 60, DX 10, IQ 4, HT 16, HP 70, Will 4, Per 4, natural chitin torso DR 150 (Weak Points 3, eye DR 75), Regeneration (Fast) — framework.md's Carnifex anchor line exactly. It carries no Shadow in the Warp or synapse role: it is a mindless siege beast. This lands squarely in framework.md's Heroes and Legends tier (1,000-3,000), matching a Hive Tyrant's own physiology cost almost exactly despite the very different build (raw ST and DR rather than IQ, synapse range and psychic power): a living battering ram bred to soak up and deal out damage nothing else on the battlefield can match. The point total is for GM reference only, not party balance.\nWeapon-symbiotes: carries Monstrous Crushing Claws and a Venom Cannon — a classic Carnifex loadout of one melee and one heavy ranged symbiote, both built as natural-attack traits in data/xenos/tyranids/bio-weapons.yaml.\n",
+	"notes": "NPC creature stat block, not a player-facing race. Point math: Tyranid Biology 20 + Body Lens: Carnifex 1175 + Monstrous Crushing Claws 79 + Venom Cannon 225 + skills 8 = 1507 points. Stats: SM +2, ST 60, DX 10, IQ 4, HT 16, HP 70, Will 4, Per 4, Basic Move 9, natural chitin torso DR 150 (Weak Points 3, eye DR 75), Regeneration (Fast) — framework.md's Carnifex anchor line exactly. It carries no Shadow in the Warp or synapse role: it is a mindless siege beast. This lands squarely in framework.md's Heroes and Legends tier (1,000-3,000), matching a Hive Tyrant's own physiology cost almost exactly despite the very different build (raw ST and DR rather than IQ, synapse range and psychic power): a living battering ram bred to soak up and deal out damage nothing else on the battlefield can match. The point total is for GM reference only, not party balance.\nWeapon-symbiotes: carries Monstrous Crushing Claws and a Venom Cannon — a classic Carnifex loadout of one melee and one heavy ranged symbiote, both built as natural-attack traits in data/xenos/tyranids/bio-weapons.yaml.\n",
 	"traits": [
 		{
 			"id": "T5TrwWBZtR_s8FChp",
@@ -123,7 +123,7 @@
 		{
 			"id": "T9QwnvZEeGrZmHf8N",
 			"name": "Body Lens: Carnifex",
-			"local_notes": "Lore: The Carnifex: a living battering ram grown purely to soak up and deal out damage that would kill anything else outright, deployed wherever the swarm needs a hole punched through armour, fortification or a defensive line. Consistent Codex background across editions and Black Library's Hive Fleet fiction alike.\n\nDesign: 360 (Attribute Modifiers) + 750 (Chitin DR 150) + 50 (Regeneration, Fast) = 1160 points, added to Tyranid Biology's 20 for 1180 points of physiology alone before skills and weapon-symbiotes -- squarely in framework.md's Heroes and Legends tier (1,000-3,000), matching a Hive Tyrant's own physiology cost almost exactly despite the very different build (raw ST and DR instead of IQ, synapse range and wings). See the Carnifex template. NPC creature stat block only; this total is for GM reference, not party balance.",
+			"local_notes": "Lore: The Carnifex: a living battering ram grown purely to soak up and deal out damage that would kill anything else outright, deployed wherever the swarm needs a hole punched through armour, fortification or a defensive line. Consistent Codex background across editions and Black Library's Hive Fleet fiction alike.\n\nDesign: 375 (Attribute Modifiers) + 750 (Chitin DR 150) + 50 (Regeneration, Fast) = 1175 points, added to Tyranid Biology's 20 for 1195 points of physiology alone before skills and weapon-symbiotes -- squarely in framework.md's Heroes and Legends tier (1,000-3,000), matching a Hive Tyrant's own physiology cost almost exactly despite the very different build (raw ST and DR instead of IQ, synapse range and wings). See the Carnifex template. NPC creature stat block only; this total is for GM reference, not party balance.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -135,11 +135,11 @@
 				{
 					"id": "t2zqvS8siLrzJ4cWD",
 					"name": "Attribute Modifiers (Carnifex)",
-					"local_notes": "Design: Framework target: SM +2, ST 60, DX 10, IQ 4, HT 16, HP 70. Increased ST +50 (B14, 10/level, 500) for ST 60, with the SM +2 discount: 500 x 0.8 = 400. DX 10 is human baseline (0 points) -- a Carnifex is not precise, it is simply unstoppable. Decreased IQ -6 (B16, 20/level, -120) for IQ 4, as debased as a Termagant's -- pure directed muscle. Increased HT +6 (60) for HT 16. Extra Hit Points +10 (B16, 2/level, 20) on top of the ST-60 base of 60, for HP 70. 400-120+60+20 = 360.",
+					"local_notes": "Design: Framework target: SM +2, ST 60, DX 10, IQ 4, HT 16, HP 70. Increased ST +50 (B14, 10/level, 500) for ST 60, with the SM +2 discount: 500 x 0.8 = 400. DX 10 is human baseline (0 points) -- a Carnifex is not precise, it is simply unstoppable. Decreased IQ -6 (B16, 20/level, -120) for IQ 4, as debased as a Termagant's -- pure directed muscle. Increased HT +6 (60) for HT 16. Extra Hit Points +10 (B16, 2/level, 20) on top of the ST-60 base of 60, for HP 70. Increased Basic Move +3 (B17, 5/level, 15): Basic Speed 6.5 gives Move 6, so +3 lands Basic Move at 9. 400-120+60+20+15 = 375.",
 					"tags": [
 						"Physical"
 					],
-					"base_points": 360,
+					"base_points": 375,
 					"features": [
 						{
 							"type": "attribute_bonus",
@@ -165,6 +165,11 @@
 							"type": "attribute_bonus",
 							"attribute": "hp",
 							"amount": 10
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "basic_move",
+							"amount": 3
 						}
 					]
 				},

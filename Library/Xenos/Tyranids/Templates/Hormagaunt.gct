@@ -1,7 +1,7 @@
 {
 	"version": 5,
 	"id": "BvkuEX6vpQaVvCRoG",
-	"notes": "NPC creature stat block, not a player-facing race. Point math: Tyranid Biology 20 + Body Lens: Hormagaunt 85 + Scything Talons (Hormagaunt) 45 + skills 4 = 154 points. Stats: SM -1, ST 10, DX 13, IQ 4, HT 11, HP 10, Will 4, Per 4, natural chitin torso DR 25 (Weak Points 7, eye DR 12), Super Jump 1 (leaping musculature) — framework.md's Hormagaunt anchor line exactly. This lands in the middle of framework.md's Trained Soldier tier (100-175): a genuinely fast, dangerous close-combat swarm killer, but still disposable biomass rather than an individual threat outside a swarm. The point total is for GM reference only.\nWeapon-symbiote: carries Scything Talons (Hormagaunt), 5d(2) cut at its ST 10 (the ST-24 anchor version would give only 3d(2) and could not hurt flak), built as a natural-attack trait in data/xenos/tyranids/bio-weapons.yaml.\n",
+	"notes": "NPC creature stat block, not a player-facing race. Point math: Tyranid Biology 20 + Body Lens: Hormagaunt 125 + Scything Talons (Hormagaunt) 45 + skills 4 = 194 points. Stats: SM -1, ST 10, DX 13, IQ 4, HT 11, HP 10, Will 4, Per 4, natural chitin torso DR 25 (Weak Points 7, eye DR 12), Basic Move 12 (Basic Speed 6.0) with Enhanced Move (Ground) 1/2, Super Jump 1 (leaping musculature) — framework.md's Hormagaunt anchor line exactly. This lands in the middle of framework.md's Trained Soldier tier (100-175): a genuinely fast, dangerous close-combat swarm killer, but still disposable biomass rather than an individual threat outside a swarm. The point total is for GM reference only.\nWeapon-symbiote: carries Scything Talons (Hormagaunt), 5d(2) cut at its ST 10 (the ST-24 anchor version would give only 3d(2) and could not hurt flak), built as a natural-attack trait in data/xenos/tyranids/bio-weapons.yaml.\n",
 	"traits": [
 		{
 			"id": "TDC2AU70ysgAE2WL7",
@@ -123,7 +123,7 @@
 		{
 			"id": "TzpM4G03Mz1oCUJae",
 			"name": "Body Lens: Hormagaunt",
-			"local_notes": "Lore: The Hormagaunt: a close-combat swarm killer bred for speed over firepower, closing on its target in long bounding leaps rather than a flat sprint before its scything talons go to work. Codex background across editions and Black Library's Hive Fleet fiction both treat Hormagaunts as the swarm's fastest melee threat at this tier.\n\nDesign: -50 (Attribute Modifiers) + 125 (Chitin DR 25) + 10 (Leaping Musculature) = 85 points, added to Tyranid Biology's 20 for 105 points of physiology alone before skills and its weapon-symbiote. See the Hormagaunt template. NPC creature stat block only.",
+			"local_notes": "Lore: The Hormagaunt: a close-combat swarm killer bred for speed over firepower, closing on its target in long bounding leaps rather than a flat sprint before its scything talons go to work. Codex background across editions and Black Library's Hive Fleet fiction both treat Hormagaunts as the swarm's fastest melee threat at this tier.\n\nDesign: -20 (Attribute Modifiers) + 125 (Chitin DR 25) + 10 (Leaping Musculature) + 10 (Enhanced Move 1/2) = 125 points, added to Tyranid Biology's 20 for 145 points of physiology alone before skills and its weapon-symbiote. See the Hormagaunt template. NPC creature stat block only.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -135,11 +135,11 @@
 				{
 					"id": "tcQVx41GImpvGy4ET",
 					"name": "Attribute Modifiers (Hormagaunt)",
-					"local_notes": "Design: Framework target: SM -1, ST 10, DX 13, IQ 4, HT 11, HP 10. ST 10 is human baseline (0 points). Increased DX +3 (B15, 20/level, 60) for DX 13 -- a bounding, close-combat killer well past a Termagant's steadier aim. Decreased IQ -6 (-120) for IQ 4, as debased as a Termagant's. Increased HT +1 (10) for HT 11. Base HP from ST 10 is already 10, the framework target, so no separate Extra Hit Points purchase. SM -1 carries no independent cost, as the Termagant lens above. 60-120+10 = -50.",
+					"local_notes": "Design: Framework target: SM -1, ST 10, DX 13, IQ 4, HT 11, HP 10. ST 10 is human baseline (0 points). Increased DX +3 (B15, 20/level, 60) for DX 13 -- a bounding, close-combat killer well past a Termagant's steadier aim. Decreased IQ -6 (-120) for IQ 4, as debased as a Termagant's. Increased HT +1 (10) for HT 11. Base HP from ST 10 is already 10, the framework target, so no separate Extra Hit Points purchase. SM -1 carries no independent cost, as the Termagant lens above. Increased Basic Move +6 (B17, 5/level, 30): Basic Speed 6.0 gives Move 6, so +6 makes Basic Move 12, the swarm's fastest sprinter short of a Genestealer (see also Enhanced Move 1/2 below). 60-120+10+30 = -20.",
 					"tags": [
 						"Physical"
 					],
-					"base_points": -50,
+					"base_points": -20,
 					"features": [
 						{
 							"type": "attribute_bonus",
@@ -160,6 +160,11 @@
 							"type": "attribute_bonus",
 							"attribute": "ht",
 							"amount": 1
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "basic_move",
+							"amount": 6
 						}
 					]
 				},
@@ -201,6 +206,21 @@
 					"points_per_level": 10,
 					"can_level": true,
 					"levels": 1
+				},
+				{
+					"id": "twXm-oUhDmOBZw_d7",
+					"name": "Enhanced Move (Ground)",
+					"reference": "B52",
+					"local_notes": "Enhanced Move (Ground) 1/2: top sprinting speed x1.5. Combat Move unchanged.\n\nLore: Hormagaunts are bred to cover ground faster than almost anything else in the swarm, a flat-out bounding charge that reaches the line before defenders can reposition -- Codex background's consistent framing of the bioform.\n\nDesign: Basic Set Enhanced Move (Ground) 1/2 (B52, half level 10 points), the same half level this project's Astartes and Aeldari files use. With Basic Move 12 (bought in the Attribute Modifiers) a Hormagaunt sprints at Move 18, matching a Space Marine's top speed.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Tyranids"
+					],
+					"points_per_level": 20,
+					"can_level": true,
+					"levels": 0.5
 				}
 			]
 		},

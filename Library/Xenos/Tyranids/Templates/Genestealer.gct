@@ -1,7 +1,7 @@
 {
 	"version": 5,
 	"id": "BoMXY1dnvni8g8Je0",
-	"notes": "NPC creature stat block, not a player-facing race. Point math: Tyranid Biology 20 + Body Lens: Genestealer 459 + Rending Claws 38 + skills 12 = 529 points. Stats: SM 0, ST 18, DX 16, IQ 6, HT 13, HP 20, Will 6, Per 6, natural chitin torso DR 50 (Weak Points 5, eye DR 25), Enhanced Move (Ground) 1, Infravision, Extra Attack (second claw) — framework.md's Genestealer anchor line exactly. This sits in framework.md's Senior Agents tier (350-600): the fastest and most dangerous single killer the swarm fields below a Warrior, though still without any independent tactical will outside a broodline's own infiltration plans. The point total is for GM reference only; a Genestealer's broodline-infestation hook is a GM plot tool, not a purchased trait.\nWeapon-symbiote: carries Rending Claws, built as a natural-attack trait in data/xenos/tyranids/bio-weapons.yaml (the Extra Attack trait above lets a Genestealer make two such attacks per turn).\n",
+	"notes": "NPC creature stat block, not a player-facing race. Point math: Tyranid Biology 20 + Body Lens: Genestealer 514 + Rending Claws 38 + skills 12 = 584 points. Stats: SM 0, ST 18, DX 17, IQ 6, HT 13, HP 20, Will 6, Per 6, natural chitin torso DR 50 (Weak Points 5, eye DR 25), Basic Move 14 (Basic Speed 7.5) with Enhanced Move (Ground) 1, Infravision, Extra Attack (second claw) — framework.md's Genestealer anchor line, with DX raised to 17 and Basic Move bought up to 14 so it outruns even a Space Marine (Move 12, Enhanced Move 1/2). This sits in framework.md's Senior Agents tier (350-600): the fastest and most dangerous single killer the swarm fields below a Warrior, though still without any independent tactical will outside a broodline's own infiltration plans. The point total is for GM reference only; a Genestealer's broodline-infestation hook is a GM plot tool, not a purchased trait.\nWeapon-symbiote: carries Rending Claws, built as a natural-attack trait in data/xenos/tyranids/bio-weapons.yaml (the Extra Attack trait above lets a Genestealer make two such attacks per turn).\n",
 	"traits": [
 		{
 			"id": "T1PQ-A01meI4z4R5Q",
@@ -123,7 +123,7 @@
 		{
 			"id": "TSGW7bi6im8cTmRYJ",
 			"name": "Body Lens: Genestealer",
-			"local_notes": "Lore: The Genestealer: the fastest, most dangerous close-quarters killer the swarm fields at this tier, and the origin point of a broodline infestation that can subvert a whole world before the main Hive Fleet arrives. Consistent Codex background across editions and a recurring Black Library horror-fiction staple (an infiltrating Genestealer moving faster than anyone in the room can react).\n\nDesign: 154 (Attribute Modifiers) + 250 (Chitin DR 50) + 20 (Genestealer Speed) + 10 (Infravision) + 25 (Extra Attack) = 459 points, added to Tyranid Biology's 20 for 479 points of physiology alone before skills and its weapon-symbiote. See the Genestealer template. NPC creature stat block only; a Genestealer's broodline-infestation role is a GM plot hook, not a point-costed trait.",
+			"local_notes": "Lore: The Genestealer: the fastest, most dangerous close-quarters killer the swarm fields at this tier, and the origin point of a broodline infestation that can subvert a whole world before the main Hive Fleet arrives. Consistent Codex background across editions and a recurring Black Library horror-fiction staple (an infiltrating Genestealer moving faster than anyone in the room can react).\n\nDesign: 209 (Attribute Modifiers) + 250 (Chitin DR 50) + 20 (Enhanced Move 1) + 10 (Infravision) + 25 (Extra Attack) = 514 points, added to Tyranid Biology's 20 for 534 points of physiology alone before skills and its weapon-symbiote. See the Genestealer template. NPC creature stat block only; a Genestealer's broodline-infestation role is a GM plot hook, not a point-costed trait.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -135,11 +135,11 @@
 				{
 					"id": "tYXgBI_ft3I5syP3_",
 					"name": "Attribute Modifiers (Genestealer)",
-					"local_notes": "Design: Framework target: SM 0, ST 18, DX 16, IQ 6, HT 13, HP 20. Increased ST +8 (B14, 10/level, 80) for ST 18. Increased DX +6 (B15, 20/level, 120) for DX 16 -- matching an Astartes Battle- Brother's own precision, the fiction's \"fastest killer in the swarm\" made literal. Decreased IQ -4 (B16, 20/level, -80) for IQ 6 -- animal-cunning-plus, enough for a genuinely dangerous infiltration predator without any real reasoning. Increased HT +3 (B15, 10/level, 30) for HT 13. Extra Hit Points +2 (B16, 2/level, 4) on top of the ST-18 base of 18, for HP 20. 80+120-80+30+4 = 154.",
+					"local_notes": "Design: Framework target: SM 0, ST 18, DX 17, IQ 6, HT 13, HP 20. Increased ST +8 (B14, 10/level, 80) for ST 18. Increased DX +7 (B15, 20/level, 140) for DX 17 -- past an Astartes Battle- Brother's own precision, the fiction's \"fastest killer in the swarm\" made literal. Decreased IQ -4 (B16, 20/level, -80) for IQ 6 -- animal-cunning-plus, enough for a genuinely dangerous infiltration predator without any real reasoning. Increased HT +3 (B15, 10/level, 30) for HT 13. Extra Hit Points +2 (B16, 2/level, 4) on top of the ST-18 base of 18, for HP 20. Increased Basic Move +7 (B17, 5/level, 35): Basic Speed is (17+13)/4 = 7.5, Move 7, so +7 lands Basic Move at exactly 14. 80+140-80+30+4+35 = 209.",
 					"tags": [
 						"Physical"
 					],
-					"base_points": 154,
+					"base_points": 209,
 					"features": [
 						{
 							"type": "attribute_bonus",
@@ -149,7 +149,7 @@
 						{
 							"type": "attribute_bonus",
 							"attribute": "dx",
-							"amount": 6
+							"amount": 7
 						},
 						{
 							"type": "attribute_bonus",
@@ -165,6 +165,11 @@
 							"type": "attribute_bonus",
 							"attribute": "hp",
 							"amount": 2
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "basic_move",
+							"amount": 7
 						}
 					]
 				},
@@ -193,16 +198,19 @@
 					]
 				},
 				{
-					"id": "tWL-8j7NsjTdU1l-7",
-					"name": "Genestealer Speed",
-					"local_notes": "Enhanced Move (Ground) 1: doubles ground Move over what Basic Speed alone would give.\n\nLore: A Genestealer is consistently described and depicted as faster than almost anything it hunts — closing on a target from cover in a fraction of a second, per Codex background's \"fastest killer in the swarm\" framing and every Black Library depiction of a Genestealer infiltration going wrong for its prey.\n\nDesign: Basic Set Enhanced Move (Ground) 1 (B52, 20 points), the same trait and rate this project's Astartes, Custodes and Aeldari files use for their own speed anchors, at a full level rather than the half-level those files use — a Genestealer outruns even a Space Marine on foot.",
+					"id": "tfwOE5Cl_Utku_TlM",
+					"name": "Enhanced Move (Ground)",
+					"reference": "B52",
+					"local_notes": "Enhanced Move (Ground) 1: doubles ground Move for sprinting (Move 14 becomes 28). Combat Move unchanged.\n\nLore: A Genestealer is consistently described and depicted as faster than almost anything it hunts — closing on a target from cover in a fraction of a second, per Codex background's \"fastest killer in the swarm\" framing and every Black Library depiction of a Genestealer infiltration going wrong for its prey.\n\nDesign: Basic Set Enhanced Move (Ground) 1 (B52, 20 points), the same trait and rate this project's Astartes, Custodes and Aeldari files use for their own speed anchors, at a full level rather than the half-level those files use. Together with Basic Move 14 (bought in the Attribute Modifiers) a Genestealer walks at Move 14 and sprints at Move 28; a Space Marine has Move 12 with Enhanced Move 1/2 and sprints at 18, so a Genestealer outruns even a Space Marine on foot, in both Basic Move and top speed.",
 					"tags": [
 						"Advantage",
 						"Physical",
 						"Xenos",
 						"Tyranids"
 					],
-					"base_points": 20
+					"points_per_level": 20,
+					"can_level": true,
+					"levels": 1
 				},
 				{
 					"id": "tXYdUi-PVsjPue6WY",
@@ -307,7 +315,7 @@
 		{
 			"id": "sXGOdldAKlGo7idpu",
 			"name": "Brawling",
-			"local_notes": "Lore: A Genestealer's four clawed limbs strike faster and more precisely than almost anything else the swarm fields.\n\nDesign: DX+3 (19) for 8 points, Easy — matching the rending claws' own natural-weapon attack roll, used for both of its Extra Attack strikes.",
+			"local_notes": "Lore: A Genestealer's four clawed limbs strike faster and more precisely than almost anything else the swarm fields.\n\nDesign: DX+3 (20) for 8 points, Easy — matching the rending claws' own natural-weapon attack roll, used for both of its Extra Attack strikes.",
 			"tags": [
 				"Xenos",
 				"Tyranids"
@@ -318,7 +326,7 @@
 		{
 			"id": "stdLst9y4OdnPe96g",
 			"name": "Stealth",
-			"local_notes": "Lore: A Genestealer infiltrates ahead of the Hive Fleet's main force, moving through ducts, crawlspaces and shadow without being seen until it is already in the room.\n\nDesign: DX+1 (17) for 4 points, Average.",
+			"local_notes": "Lore: A Genestealer infiltrates ahead of the Hive Fleet's main force, moving through ducts, crawlspaces and shadow without being seen until it is already in the room.\n\nDesign: DX+1 (18) for 4 points, Average.",
 			"tags": [
 				"Xenos",
 				"Tyranids"

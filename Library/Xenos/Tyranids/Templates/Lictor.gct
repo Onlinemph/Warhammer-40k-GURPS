@@ -1,7 +1,7 @@
 {
 	"version": 5,
 	"id": "Bzsl-h5nDGyAkxL3K",
-	"notes": "NPC creature stat block, not a player-facing race. Point math: Tyranid Biology 20 + Body Lens: Lictor 547 + Flesh Hooks 11 + Rending Claws 38 + skills 12 = 628 points. Stats: SM +1, ST 22, DX 15, IQ 8, HT 13, HP 26, Will 8, Per 8, natural chitin torso DR 60 (Weak Points 5, eye DR 30), Chameleonic Hide (-4/-2 to others' Vision rolls), Pheromone Trail, Shadow in the Warp (8 yards) — framework.md's Lictor anchor line exactly. This lands on a par with the Tyranid Warrior template, deep in framework.md's Astartes point tier (550-800): a solitary ambush predator built to scout, terrorise and mark a kill zone rather than to hold a line. The point total is for GM reference only; do not read it as a measure of how a lone Lictor performs in a stand-up fight, which is never its role in the fiction.\nWeapon-symbiotes: carries Flesh Hooks (a ranged grapple/snare) plus Rending Claws for its actual kill, both built as natural-attack traits in data/xenos/tyranids/bio-weapons.yaml. The Lash Whip (a Bonesword companion carried by Warriors) was removed from the Lictor; the Codex gives Lictors flesh hooks, grasping talons and rending claws. There is no Grasping Talons entry yet.\n",
+	"notes": "NPC creature stat block, not a player-facing race. Point math: Tyranid Biology 20 + Body Lens: Lictor 567 + Flesh Hooks 11 + Rending Claws 38 + skills 12 = 648 points. Stats: SM +1, ST 22, DX 15, IQ 8, HT 13, HP 26, Will 8, Per 8, natural chitin torso DR 60 (Weak Points 5, eye DR 30), Basic Move 11, Chameleonic Hide (-4/-2 to others' Vision rolls), Pheromone Trail, Shadow in the Warp (8 yards) — framework.md's Lictor anchor line exactly. This lands on a par with the Tyranid Warrior template, deep in framework.md's Astartes point tier (550-800): a solitary ambush predator built to scout, terrorise and mark a kill zone rather than to hold a line. The point total is for GM reference only; do not read it as a measure of how a lone Lictor performs in a stand-up fight, which is never its role in the fiction.\nWeapon-symbiotes: carries Flesh Hooks (a ranged grapple/snare) plus Rending Claws for its actual kill, both built as natural-attack traits in data/xenos/tyranids/bio-weapons.yaml. The Lash Whip (a Bonesword companion carried by Warriors) was removed from the Lictor; the Codex gives Lictors flesh hooks, grasping talons and rending claws. There is no Grasping Talons entry yet.\n",
 	"traits": [
 		{
 			"id": "TamW7k7hQJE7T5Dsy",
@@ -123,7 +123,7 @@
 		{
 			"id": "TaQgnWzvB4Sj64Jud",
 			"name": "Body Lens: Lictor",
-			"local_notes": "Lore: The Lictor: a solitary, chameleonic stalker sent ahead of a landing to scout, terrorise, and mark a kill zone for the swarm that follows -- consistent Codex background across editions, and the basis for the classic \"something was watching, then it wasn't\" Black Library beat.\n\nDesign: 206 (Attribute Modifiers) + 300 (Chitin DR 60) + 20 (Chameleonic Hide) + 1 (Pheromone Trail) + 20 (Shadow in the Warp) = 547 points, added to Tyranid Biology's 20 for 567 points of physiology alone before skills and its weapon-symbiotes, on a par with the Tyranid Warrior lens. See the Lictor template. NPC creature stat block only.",
+			"local_notes": "Lore: The Lictor: a solitary, chameleonic stalker sent ahead of a landing to scout, terrorise, and mark a kill zone for the swarm that follows -- consistent Codex background across editions, and the basis for the classic \"something was watching, then it wasn't\" Black Library beat.\n\nDesign: 226 (Attribute Modifiers) + 300 (Chitin DR 60) + 20 (Chameleonic Hide) + 1 (Pheromone Trail) + 20 (Shadow in the Warp) = 567 points, added to Tyranid Biology's 20 for 587 points of physiology alone before skills and its weapon-symbiotes, on a par with the Tyranid Warrior lens. See the Lictor template. NPC creature stat block only.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -135,11 +135,11 @@
 				{
 					"id": "t4mQdDQFhCj_FIQ0z",
 					"name": "Attribute Modifiers (Lictor)",
-					"local_notes": "Design: Framework target: SM +1, ST 22, DX 15, IQ 8, HT 13, HP 26. Increased ST +12 (120) with the SM +1 discount: 120 x 0.9 = 108. Increased DX +5 (B15, 20/level, 100) for DX 15 -- a stalking ambush predator with the swarm's best reflexes outside a Genestealer's. Decreased IQ -2 (-40) for IQ 8, sharp enough for patient, solo infiltration work rather than raw instinct. Increased HT +3 (30) for HT 13. Extra Hit Points +4 (8) on top of the ST-22 base of 22, for HP 26. 108+100-40+30+8 = 206.",
+					"local_notes": "Design: Framework target: SM +1, ST 22, DX 15, IQ 8, HT 13, HP 26. Increased ST +12 (120) with the SM +1 discount: 120 x 0.9 = 108. Increased DX +5 (B15, 20/level, 100) for DX 15 -- a stalking ambush predator with the swarm's best reflexes outside a Genestealer's. Decreased IQ -2 (-40) for IQ 8, sharp enough for patient, solo infiltration work rather than raw instinct. Increased HT +3 (30) for HT 13. Extra Hit Points +4 (8) on top of the ST-22 base of 22, for HP 26. Increased Basic Move +4 (B17, 5/level, 20): Basic Speed 7.0 gives Move 7, so +4 lands Basic Move at 11. 108+100-40+30+8+20 = 226.",
 					"tags": [
 						"Physical"
 					],
-					"base_points": 206,
+					"base_points": 226,
 					"features": [
 						{
 							"type": "attribute_bonus",
@@ -169,6 +169,11 @@
 						{
 							"type": "attribute_bonus",
 							"attribute": "hp",
+							"amount": 4
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "basic_move",
 							"amount": 4
 						}
 					]

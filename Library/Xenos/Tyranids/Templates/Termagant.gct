@@ -1,7 +1,7 @@
 {
 	"version": 5,
 	"id": "BK4fiyK6zThrwhzSk",
-	"notes": "NPC creature stat block, not a player-facing race — a Termagant is disposable swarm biomass, not an individual worth building as a PC. Point math: Tyranid Biology 20 + Body Lens: Termagant 25 + Fleshborer 54 + skills 6 = 105 points. Stats: SM -1, ST 9, DX 11, IQ 4, HT 11, HP 9, Will 4, Per 4, natural chitin torso DR 25 (Weak Points 7, eye DR 12) — framework.md's Termagant anchor line exactly. This lands at the bottom of framework.md's Trained Soldier tier (100-175), most of it spent on its fleshborer symbiote rather than the animal underneath: a cheap, mass-produced gun-beast that is only dangerous in numbers and only disciplined while a synapse creature holds its leash. The point total is for GM reference (how much a Termagant \"costs\" relative to other bioforms), never a measure of individual threat or party balance.\nWeapon-symbiote: carries a Fleshborer, built as a natural-attack trait in data/xenos/tyranids/bio-weapons.yaml.\n",
+	"notes": "NPC creature stat block, not a player-facing race — a Termagant is disposable swarm biomass, not an individual worth building as a PC. Point math: Tyranid Biology 20 + Body Lens: Termagant 35 + Fleshborer 54 + skills 6 = 115 points. Stats: SM -1, ST 9, DX 11, IQ 4, HT 11, HP 9, Will 4, Per 4, natural chitin torso DR 25 (Weak Points 7, eye DR 12), Basic Move 7 — framework.md's Termagant anchor line exactly. This lands at the bottom of framework.md's Trained Soldier tier (100-175), most of it spent on its fleshborer symbiote rather than the animal underneath: a cheap, mass-produced gun-beast that is only dangerous in numbers and only disciplined while a synapse creature holds its leash. The point total is for GM reference (how much a Termagant \"costs\" relative to other bioforms), never a measure of individual threat or party balance.\nWeapon-symbiote: carries a Fleshborer, built as a natural-attack trait in data/xenos/tyranids/bio-weapons.yaml.\n",
 	"traits": [
 		{
 			"id": "TYQB32op6-HFBISjW",
@@ -123,7 +123,7 @@
 		{
 			"id": "TnnBxqxRlY4XjX0J1",
 			"name": "Body Lens: Termagant",
-			"local_notes": "Lore: The Termagant: the Hive Fleet's basic gun-beast, grown cheaply and in huge numbers to advance in a firing line ahead of, or alongside, heavier bioforms. Consistent across Codex background and Black Library's Hive Fleet fiction as the swarm's most disposable ranged infantry.\n\nDesign: -100 (Attribute Modifiers) + 125 (Chitin DR 25, 5/level) = 25 points, added to Tyranid Biology's 20 for 45 points of physiology alone before skills and its weapon-symbiote. See the Termagant template. NPC creature stat block only, not a player-facing race; the point total below is for GM reference, not party balance.",
+			"local_notes": "Lore: The Termagant: the Hive Fleet's basic gun-beast, grown cheaply and in huge numbers to advance in a firing line ahead of, or alongside, heavier bioforms. Consistent across Codex background and Black Library's Hive Fleet fiction as the swarm's most disposable ranged infantry.\n\nDesign: -90 (Attribute Modifiers) + 125 (Chitin DR 25, 5/level) = 35 points, added to Tyranid Biology's 20 for 55 points of physiology alone before skills and its weapon-symbiote. See the Termagant template. NPC creature stat block only, not a player-facing race; the point total below is for GM reference, not party balance.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -135,11 +135,11 @@
 				{
 					"id": "tahYOyuurtY04yrH8",
 					"name": "Attribute Modifiers (Termagant)",
-					"local_notes": "Design: Framework target: SM -1, ST 9, DX 11, IQ 4, HT 11, HP 9. Decreased ST -1 (B14, 10/level, -10) for ST 9. Increased DX +1 (B15, 20/level, 20) for DX 11 -- a gun-beast bred for a steady aim despite its small frame. Decreased IQ -6 (B16, 20/level, -120) for IQ 4, barely above pure animal cunning, matching a creature with essentially no independent judgement outside the Hive Mind Link. Increased HT +1 (B15, 10/level, 10) for HT 11. Base HP from ST 9 is already 9, the framework target, so no separate Extra Hit Points purchase. SM -1 carries no independent point cost, per this project's Ork Gretchin precedent (no ST premium is applied for a negative Size Modifier). -10+20-120+10 = -100.",
+					"local_notes": "Design: Framework target: SM -1, ST 9, DX 11, IQ 4, HT 11, HP 9. Decreased ST -1 (B14, 10/level, -10) for ST 9. Increased DX +1 (B15, 20/level, 20) for DX 11 -- a gun-beast bred for a steady aim despite its small frame. Decreased IQ -6 (B16, 20/level, -120) for IQ 4, barely above pure animal cunning, matching a creature with essentially no independent judgement outside the Hive Mind Link. Increased HT +1 (B15, 10/level, 10) for HT 11. Base HP from ST 9 is already 9, the framework target, so no separate Extra Hit Points purchase. SM -1 carries no independent point cost, per this project's Ork Gretchin precedent (no ST premium is applied for a negative Size Modifier). Increased Basic Move +2 (B17, 5/level, 10): Basic Speed 5.5 gives Move 5, so +2 lands the swarm's skirmishing gun-beast at Move 7, a brisk trot that keeps a firing line advancing. -10+20-120+10+10 = -90.",
 					"tags": [
 						"Physical"
 					],
-					"base_points": -100,
+					"base_points": -90,
 					"features": [
 						{
 							"type": "attribute_bonus",
@@ -165,6 +165,11 @@
 							"type": "attribute_bonus",
 							"attribute": "ht",
 							"amount": 1
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "basic_move",
+							"amount": 2
 						}
 					]
 				},

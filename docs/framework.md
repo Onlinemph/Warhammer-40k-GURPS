@@ -343,7 +343,7 @@ The Tyranids are a galaxy-devouring swarm of bio-engineered organisms directed b
 |---|---|---|---|---|---|---|---|---|
 | Termagant | −1 | 9 | 11 | 4 | 11 | 9 | 25 | Gun-beast; swarm |
 | Hormagaunt | −1 | 10 | 13 | 4 | 11 | 10 | 25 | Leaping killer; swarm |
-| Genestealer | 0 | 18 | 16 | 6 | 13 | 20 | 50 | Fastest killer in the swarm; rending claws |
+| Genestealer | 0 | 18 | 17 | 6 | 13 | 20 | 50 | Fastest killer in the swarm; rending claws |
 | Ravener | +1 | 22 | 14 | 5 | 14 | 26 | 60 | Burrower |
 | Tyranid Warrior | +1 | 24 | 13 | 8 | 14 | 30 | 60 | Synapse creature, officer of the swarm |
 | Lictor | +1 | 22 | 15 | 8 | 13 | 26 | 60 | Chameleonic stalker |

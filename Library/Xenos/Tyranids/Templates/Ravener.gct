@@ -1,7 +1,7 @@
 {
 	"version": 5,
 	"id": "BE_i24vUxDbmrrdL6",
-	"notes": "NPC creature stat block, not a player-facing race. Point math: Tyranid Biology 20 + Body Lens: Ravener 495 + Scything Talons 28 + skills 8 = 551 points. Stats: SM +1, ST 22, DX 14, IQ 5, HT 14, HP 26, Will 5, Per 5, natural chitin torso DR 60 (Weak Points 5, eye DR 30), Tunnelling, Shadow in the Warp (8 yards) — framework.md's Ravener anchor line exactly. This sits at the top of framework.md's Senior Agents tier (350-600): a burrowing ambush predator whose whole value is erupting where it is least expected, not standing toe-to-toe once found. The point total is for GM reference only.\nWeapon-symbiote: carries Scything Talons, the classic Ravener close-combat loadout, built as a natural-attack trait in data/xenos/tyranids/bio-weapons.yaml.\n",
+	"notes": "NPC creature stat block, not a player-facing race. Point math: Tyranid Biology 20 + Body Lens: Ravener 520 + Scything Talons 28 + skills 8 = 576 points. Stats: SM +1, ST 22, DX 14, IQ 5, HT 14, HP 26, Will 5, Per 5, natural chitin torso DR 60 (Weak Points 5, eye DR 30), Basic Move 12 (Tunnel Move 7, a separate figure), Tunnelling, Shadow in the Warp (8 yards) — framework.md's Ravener anchor line exactly. This sits at the top of framework.md's Senior Agents tier (350-600): a burrowing ambush predator whose whole value is erupting where it is least expected, not standing toe-to-toe once found. The point total is for GM reference only.\nWeapon-symbiote: carries Scything Talons, the classic Ravener close-combat loadout, built as a natural-attack trait in data/xenos/tyranids/bio-weapons.yaml.\n",
 	"traits": [
 		{
 			"id": "TsJ0WwfHeibZPH1Zb",
@@ -123,7 +123,7 @@
 		{
 			"id": "TjFIVyDCig3IL7ECc",
 			"name": "Body Lens: Ravener",
-			"local_notes": "Lore: The Ravener: a serpentine burrowing predator that erupts from beneath a defensive line rather than crossing open ground to reach it. Codex background across editions is explicit that this ambush capability, not raw combat stats, is the Ravener's whole purpose.\n\nDesign: 136 (Attribute Modifiers) + 300 (Chitin DR 60) + 39 (Tunnelling) + 20 (Shadow in the Warp) = 495 points, added to Tyranid Biology's 20 for 515 points of physiology alone before skills and its weapon- symbiote. See the Ravener template. NPC creature stat block only.",
+			"local_notes": "Lore: The Ravener: a serpentine burrowing predator that erupts from beneath a defensive line rather than crossing open ground to reach it. Codex background across editions is explicit that this ambush capability, not raw combat stats, is the Ravener's whole purpose.\n\nDesign: 161 (Attribute Modifiers) + 300 (Chitin DR 60) + 39 (Tunnelling) + 20 (Shadow in the Warp) = 520 points, added to Tyranid Biology's 20 for 540 points of physiology alone before skills and its weapon- symbiote. See the Ravener template. NPC creature stat block only.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -135,11 +135,11 @@
 				{
 					"id": "tPRhdles4xGdIYZPF",
 					"name": "Attribute Modifiers (Ravener)",
-					"local_notes": "Design: Framework target: SM +1, ST 22, DX 14, IQ 5, HT 14, HP 26. Increased ST +12 (B14, 10/level, 120) for ST 22, with the SM +1 cost break (-10% per B18's Size and Strength Table for a creature whose bulk matches its size, the same discount this project's Ork Warboss and Custodes Attribute Modifiers entries take): 120 x 0.9 = 108. Increased DX +4 (B15, 20/level, 80) for DX 14 -- a serpentine burrowing predator, quick despite its bulk. Decreased IQ -5 (B16, 20/level, -100) for IQ 5, barely above a Termagant's. Increased HT +4 (B15, 10/level, 40) for HT 14. Extra Hit Points +4 (B16, 2/level, 8) on top of the ST-22 base of 22, for HP 26. 108+80-100+40+8 = 136.",
+					"local_notes": "Design: Framework target: SM +1, ST 22, DX 14, IQ 5, HT 14, HP 26. Increased ST +12 (B14, 10/level, 120) for ST 22, with the SM +1 cost break (-10% per B18's Size and Strength Table for a creature whose bulk matches its size, the same discount this project's Ork Warboss and Custodes Attribute Modifiers entries take): 120 x 0.9 = 108. Increased DX +4 (B15, 20/level, 80) for DX 14 -- a serpentine burrowing predator, quick despite its bulk. Decreased IQ -5 (B16, 20/level, -100) for IQ 5, barely above a Termagant's. Increased HT +4 (B15, 10/level, 40) for HT 14. Extra Hit Points +4 (B16, 2/level, 8) on top of the ST-22 base of 22, for HP 26. Increased Basic Move +5 (B17, 5/level, 25): Basic Speed 7.0 gives Move 7, so +5 lands Basic Move at 12. 108+80-100+40+8+25 = 161.",
 					"tags": [
 						"Physical"
 					],
-					"base_points": 136,
+					"base_points": 161,
 					"features": [
 						{
 							"type": "attribute_bonus",
@@ -170,6 +170,11 @@
 							"type": "attribute_bonus",
 							"attribute": "hp",
 							"amount": 4
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "basic_move",
+							"amount": 5
 						}
 					]
 				},
@@ -201,7 +206,7 @@
 					"id": "tHbIuw6twshZeXI-r",
 					"name": "Tunnelling",
 					"reference": "B94",
-					"local_notes": "Tunnel Move 7 (the Ravener's current Basic Move) through loose earth, sand, or similar soft ground only (never solid rock or a hardened floor), submerging and re-surfacing as a single Move action; it may not attack while submerged. The moment it erupts from the ground it is treated as attacking from ambush for that turn's initial attack.\n\nLore: Raveners burrow beneath the battlefield and erupt without warning beneath their target, the signature ambush Codex background gives the bioform and a recurring beat in Black Library's Hive Fleet material and Deathwatch's own Mark of the Xenos description of the species.\n\nDesign: Basic Set Tunneling (B94, 30 base + 5/level of Tunnel Move) at Tunnel Move 7 = 65, with an Accessibility limitation restricting it to soft earth only (-40%, an eyeballed percentage in line with this project's own Accessibility convention): 65 x 0.6 = 39 points. This replaces an earlier Enhanced Move build (12 points), which doubled an existing Move rather than granting a burrowing mode at all. If the Ravener's Basic Move is later changed, set the Tunnel Move level to match.",
+					"local_notes": "Tunnel Move 7 through loose earth, sand, or similar soft ground only (never solid rock or a hardened floor), submerging and re-surfacing as a single Move action; it may not attack while submerged. The moment it erupts from the ground it is treated as attacking from ambush for that turn's initial attack.\n\nLore: Raveners burrow beneath the battlefield and erupt without warning beneath their target, the signature ambush Codex background gives the bioform and a recurring beat in Black Library's Hive Fleet material and Deathwatch's own Mark of the Xenos description of the species.\n\nDesign: Basic Set Tunneling (B94, 30 base + 5/level of Tunnel Move) at Tunnel Move 7 = 65, with an Accessibility limitation restricting it to soft earth only (-40%, an eyeballed percentage in line with this project's own Accessibility convention): 65 x 0.6 = 39 points. This replaces an earlier Enhanced Move build (12 points), which doubled an existing Move rather than granting a burrowing mode at all. Tunnel Move is a separate figure from Basic Move (12 for a Ravener): it is set to 7 as a design choice, burrowing through soil being slower than running, and does not track Basic Move.",
 					"tags": [
 						"Advantage",
 						"Physical",
