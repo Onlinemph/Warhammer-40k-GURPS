@@ -36,3 +36,9 @@ Anchor and rule changes to `framework.md`, with the reason for each.
 - **Aeldari speed** (user direction): ancestry Basic Move +3 and Enhanced Move 1/2; Aspect Training a further Basic Move +2. Guardian Move 9, Aspect Warrior and Exarch Move 12.
 - **Tyranid anchors added** (bioforms from Termagant to Carnifex; chitin DR 25-150; weapon-symbiotes as traits; synapse and Shadow in the Warp; rending claws).
 - **Termagant symbiotes raised for flak 30**: fleshborer 6d(2) pi+, devourer 5d(2) pi++, spinefists 3d(2) pi+ (burrowing beetles and worms); at the original anchors Termagants could barely hurt flak-armoured Guardsmen.
+
+## Lore audit
+
+- **Full lore audit** of every faction by eight reviewers (about 270 findings). Fixes applied per area; the builder now rejects double-charged leveled traits and power-field lines without an armour divisor.
+- **Ork gun anchors** updated to the values rescaled for flak 30 (slugga 7d, shoota 9d, big shoota 13d pi+); Malf ladder 15/14/13/12 written down.
+- **Astartes point band** widened to 550–850 after the user's ST/DX/Move increases put a Battle-Brother at about 820.

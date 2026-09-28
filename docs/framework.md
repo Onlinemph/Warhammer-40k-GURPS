@@ -186,7 +186,7 @@ Attributes 10, HP 10. Imperial citizens are human; abhumans (Ogryn, Ratling, Squ
 | Trained soldier | 100–175 | Guardsman, PDF trooper, Arbitrator |
 | Elite human | 200–350 | Stormtrooper, veteran Commissar, Battle Sister, Inquisitorial acolyte |
 | Senior agents | 350–600 | Field Inquisitor, veteran Interrogator, Canoness, Lord Commissar |
-| Astartes | 550–800 | Battle-Brother, veteran, Primaris adds more |
+| Astartes | 550–850 | Battle-Brother, veteran, Primaris adds more |
 | Heroes and legends | 1,000–3,000 | Chapter Master, Custodian, Living Saint, Lord Inquisitor |
 | Beyond play | 5,000+ | Primarchs, Greater Daemons, C'tan shards. Built for GM reference only. |
 
@@ -243,13 +243,13 @@ Orks are fungal-based greenskins who grow bigger, stronger and tougher the longe
 
 Ork physiology traits: very high pain tolerance, Hard to Kill, fast healing and survivability of wounds that kill other species (heads sewn back on by Painboyz), love of violence (Bloodlust, Impulsiveness), growth with age as template lenses. Orks reproduce by spores, have no fear to speak of, and the Weirdboy's psychic power is fed by nearby Orks' WAAAGH! energy.
 
-**Ork tech.** Mekboyz build by instinct (a genetic Talent for Engineer/Mechanic/Armoury). Ork weapons are crude and unreliable: Malf 14 for most, 15 at best, and low Acc (shootas Acc 1–2). They compensate with big calibres and high RoF (dakka). Ork armour is thick scrap plate with many gaps: high Weak Points ratings (7–8).
+**Ork tech.** Mekboyz build by instinct (a genetic Talent for Engineer/Mechanic/Armoury). Ork weapons are crude and unreliable: Malf 14 for most, 15 at best, 13 for kustom jobs, 12 for the zzap gun, and low Acc (shootas Acc 1–2). They compensate with big calibres and high RoF (dakka). Ork armour is thick scrap plate with many gaps: high Weak Points ratings (7–8).
 
 | Ork gear | Anchor |
 |---|---|
-| Slugga | Big-bore pistol, about 5d pi+, Acc 1 |
-| Shoota | Heavy slugs, about 7d pi+, RoF 10, Acc 1–2, Malf 14 |
-| Big shoota | Heavy stubber class and up, about 9d pi+, RoF 15+ |
+| Slugga | Big-bore pistol, 7d pi+, Acc 1 |
+| Shoota | Heavy slugs, 9d pi+, RoF 10, Acc 1–2, Malf 14 (gets through flak about 58%) |
+| Big shoota | Heavy machine gun, 13d pi+, RoF 15+ |
 | Rokkit launcha | Anti-armour, about 6d×4(3) cr ex, Acc 0–1, Malf 14 |
 | Choppa | Crude cleaver, sw+3 cut, parry −1U |
 | Power klaw | Power-field weapon: thr+8d(10) cr, like a power fist but cruder |
