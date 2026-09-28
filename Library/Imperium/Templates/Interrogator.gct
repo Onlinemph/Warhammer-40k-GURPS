@@ -1,7 +1,7 @@
 {
 	"version": 5,
 	"id": "Bj_AB-HIS-lvqYVQS",
-	"notes": "An Interrogator: an Inquisitor's chosen second, one step from being invested with a rosette of their own — Eisenhorn's and Ravenor's own Interrogators (before their eventual promotions) are the model. Built as a more capable, more independent Inquisitorial Acolyte (Imperium/ Templates/Inquisitorial Acolyte.gct) rather than a separate archetype. Point math: ST 10 (+0), DX 13 (+60), IQ 14 (+80), HT 11 (+10) = 150, plus Will +1 (+5) = 155; advantages +30; disadvantages -37; skills +178. Total 326 points, near the top of framework.md's \"Elite human (200-350)\" tier — appropriate for someone who is, functionally, nearly an Inquisitor already. No psychic abilities here; add from the separate psyker power library if the Interrogator is also a sanctioned psyker.\n",
+	"notes": "An Interrogator: an Inquisitor's chosen second, one step from being invested with a rosette of their own — Eisenhorn's and Ravenor's own Interrogators (before their eventual promotions) are the model. Built as a more capable, more independent Inquisitorial Acolyte (Imperium/ Templates/Inquisitorial Acolyte.gct) rather than a separate archetype. Point math: ST 10 (+0), DX 13 (+60), IQ 14 (+80), HT 11 (+10) = 150, plus Will +1 (+5) = 155; advantages +30 plus Inquisitorial Rank 3 (+30) and Status 2 (+10); disadvantages -37; skills +178. Total 366 points, in framework.md's \"Senior agents\" tier: functionally nearly an Inquisitor already. No psychic abilities here; add from the separate psyker power library if the Interrogator is also a sanctioned psyker.\n",
 	"traits": [
 		{
 			"id": "tHVwYj-T2UJhueGZT",
@@ -97,6 +97,43 @@
 				"Inquisition"
 			],
 			"base_points": -15
+		},
+		{
+			"id": "tOItcXVaNHiYDW2OF",
+			"name": "Inquisitorial Rank",
+			"reference": "B29",
+			"local_notes": "Levels: 1 Acolyte in formal service, 3 Interrogator, 6 Inquisitor, 7 senior/renowned Inquisitor, 8 Lord Inquisitor, 9 Grand Master of an Ordo or Inquisitorial Representative to the High Lords.\n\nLore: The Inquisition answers to no Imperial body but itself. A single Inquisitor can requisition Guard regiments and Navy vessels, declare Exterminatus, and relieve a governor, as shown repeatedly in the Eisenhorn and Ravenor novels and codex background. In practice that authority is limited by what the Inquisitor can enforce and by rival Inquisitors.\n\nDesign: Basic Set Rank (B29), 5/level, with a custom +100% enhancement because the Rank reaches across every Imperial institution instead of one. Inquisitor at level 6: 30 x 2 = 60 points. Kept separate from Status per GURPS convention: Rank is authority within (here, over) organisations; Status is social standing.",
+			"tags": [
+				"Advantage",
+				"Social",
+				"Imperium",
+				"Inquisition"
+			],
+			"modifiers": [
+				{
+					"id": "msB7GDfQZotis_4yn",
+					"name": "Overrides all Imperial hierarchies",
+					"local_notes": "Every Imperial organisation (Astra Militarum, Administratum, Ecclesiarchy, Navy, planetary governments) treats this as a Rank higher than any of its own at the same or lower level. The Adeptus Astartes and Mechanicus are sovereign allies rather than subordinates: they are not bound by it, but in practice rarely defy it openly.\n",
+					"cost_adj": "+100%"
+				}
+			],
+			"points_per_level": 5,
+			"can_level": true,
+			"levels": 3,
+			"max_levels": 9
+		},
+		{
+			"id": "tOfZSaXHMR0gJcLDd",
+			"name": "Status (Interrogator)",
+			"reference": "B28",
+			"local_notes": "Lore: Nobles and planetary rulers defer to an Inquisitor who reveals themselves; most Imperial citizens will never meet anyone higher. Many Inquisitors hide their Status behind a cover identity until it is needed.\n\nDesign: Basic Set Status (B28) level 2 (10 points), borrowed from their Inquisitor master.",
+			"tags": [
+				"Advantage",
+				"Social",
+				"Imperium",
+				"Inquisition"
+			],
+			"base_points": 10
 		},
 		{
 			"id": "tyGA-CTvqDtQL4_YU",

@@ -4,9 +4,10 @@
 		{
 			"id": "eXKDQsaQnsaBRFfHT",
 			"description": "Refractor Field",
-			"local_notes": "Worn as a small emitter on a belt, collar or ring; the shimmer is faint but visible up close (-2 to Holdout while active). Stacks with worn armour's own DR. Provides no protection against blunt/crushing or edged/impaling attacks, only against energy-type (burning) damage, since it works by scattering and diffusing incoming energy rather than physically stopping mass.\n\nLore: The refractor field is the personal deflector shield most commonly associated with Inquisitors, Rogue Traders and other senior Imperial agents in Black Library fiction (the Eisenhorn and Ravenor novels, among others) and Dark Heresy/Rogue Trader-line background: a shimmering energy field that scatters and diffuses incoming fire, notably better against sustained or lower-powered energy attacks than against a single massive blow.\n\nDesign: No fixed DR anchor exists for force fields, so this is built from first principles using GURPS's own force-field logic (a DR bonus layered on top of worn armour) rather than an Ultra-Tech catalogue entry. The DR is restricted to `vs: burn` specifically to encode the lore's \"diffuses energy\" framing — a refractor field does nothing against a blade or a fist — and set well below the Carapace anchor (20) since fiction consistently shows refractor fields as a useful edge, not a suit of armour in their own right.",
+			"local_notes": "Shield 20 SP. Recharge: after 2 seconds without taking damage, regains 5 SP per second. Ranged attacks only: melee blows and thrown objects pass through at walking speed. A faint shimmer surrounds the wearer while active (-1 to Holdout, Stealth in darkness -1).\n\nLore: The personal field most associated with Inquisitors, Rogue Traders and senior Imperial agents in Black Library fiction (Eisenhorn and Ravenor among others) and the Dark Heresy and Rogue Trader lines: a shimmering field that scatters incoming fire. Shown as good against a stream of small-arms fire and poor against one heavy hit.\n\nDesign: Small pool, fastest recharge of the Imperial fields, which reproduces the lore: it eats a lasgun hit (avg 14) and is back to full two or three seconds after the shooting pauses, but a single plasma bolt (avg 42) goes straight through. Ranged-only follows the fiction of fields that stop fast projectiles but not slow objects.",
 			"tags": [
 				"Force Field",
+				"Energy Shield",
 				"Imperium",
 				"Inquisition"
 			],
@@ -14,48 +15,17 @@
 			"legality_class": "1",
 			"base_value": "8000",
 			"base_weight": "2 lb",
-			"features": [
-				{
-					"type": "dr_bonus",
-					"locations": [
-						"all"
-					],
-					"amount": 6,
-					"specialization": "burn"
-				}
-			],
-			"quantity": 1
-		},
-		{
-			"id": "eHkkScx8S5hdnk6zC",
-			"description": "Conversion Field",
-			"local_notes": "Unlike the refractor field, this works against any attack type, not just energy weapons: it converts the kinetic or thermal energy of a blow that fails to penetrate into a blinding flash of light around the wearer (treat anyone within a few yards with line of sight as making an immediate Vision-based check to avoid being dazzled, GM's discretion). It does not distinguish \"big\" hits from \"small\" ones the way its lore reputation for stopping bolter rounds and chainblades alike suggests — model that reputation as the flat DR below, which is already high enough to usually stop small-arms and blades outright; only weapons that punch through DR 12 (heavy weapons, power weapons' armour divisor, etc.) get past it.\n\nLore: Conversion fields are the signature protection of high-ranking Inquisitors and Rogue Traders in Black Library fiction (Eisenhorn/Ravenor again, and Rogue Trader-line background material) — famously able to turn aside a chainsword blow or point-blank pistol shot in a flash of light, at the cost of being rare, expensive archeotech-adjacent relics rather than standard Imperial manufacture.\n\nDesign: Built independently from GURPS's DR-plus-special-effect toolkit rather than any catalogue item: a flat, type-independent DR (no `vs` restriction, unlike the refractor field) reflects \"converts any incoming energy,\" set noticeably higher than the refractor field's 6 to reflect its superior reputation in the fiction, while remaining below the Sororitas power armour anchor (32) so it reads as a strong personal ward rather than a substitute for a suit of plate. The blinding-flash effect is flavour text for the GM to adjudicate rather than a GCS-native mechanic.",
-			"tags": [
-				"Force Field",
-				"Imperium",
-				"Inquisition"
-			],
-			"tech_level": "12",
-			"legality_class": "1",
-			"base_value": "25000",
-			"base_weight": "3 lb",
-			"features": [
-				{
-					"type": "dr_bonus",
-					"locations": [
-						"all"
-					],
-					"amount": 12
-				}
-			],
+			"uses": 20,
+			"max_uses": 20,
 			"quantity": 1
 		},
 		{
 			"id": "eCtxYN74qNBPPLwzu",
 			"description": "Rosarius",
-			"local_notes": "A holy icon (usually a stylised aquila or Ecclesiarchy seal) worn openly around the neck; the field is a lesser, mass-produced descendant of the conversion field principle.\n\nLore: The rosarius is standard-issue protection for Ministorum priests, confessors and other Ecclesiarchy clergy who serve on active warzones without a Battle Sister's power armour, depicted across Adepta Sororitas and Ecclesiarchy background and Black Library fiction (the Sisters of Battle and Warhammer Crime lines feature priest characters wearing them) as humbler but functionally similar to a conversion field.\n\nDesign: Same conversion-field mechanic (flat, type-independent DR) as the Conversion Field entry above, but at a lower value (8) and lower cost/rarity, reflecting the rosarius's status as a mass-produced, lesser version of the same underlying principle rather than a one-of-a-kind Inquisitorial relic.",
+			"local_notes": "Shield 30 SP. Recharge: after 3 seconds without taking damage, regains 5 SP per second. Blocks ranged and melee attacks. Worn as an amulet; the field is invisible until struck.\n\nLore: Protection for Ministorum priests, Confessors and Canonesses who fight without full Sororitas plate. Ecclesiarchy background presents it as a blessed relic as much as a device: the faithful credit the Emperor's favour when it holds.\n\nDesign: Two lasgun hits or one bolter round (avg 21) are absorbed; plasma or heavier weapons break through. Ranked below the conversion field and iron halo, matching its role as the field for mortal clergy rather than Astartes officers.",
 			"tags": [
 				"Force Field",
+				"Energy Shield",
 				"Imperium",
 				"Ecclesiarchy"
 			],
@@ -63,47 +33,53 @@
 			"legality_class": "2",
 			"base_value": "6000",
 			"base_weight": "1 lb",
-			"features": [
-				{
-					"type": "dr_bonus",
-					"locations": [
-						"all"
-					],
-					"amount": 8
-				}
+			"uses": 30,
+			"max_uses": 30,
+			"quantity": 1
+		},
+		{
+			"id": "eHkkScx8S5hdnk6zC",
+			"description": "Conversion Field",
+			"local_notes": "Shield 40 SP. Recharge: after 3 seconds without taking damage, regains 5 SP per second. Blocks ranged and melee attacks. Flash: any single hit that removes 10+ SP converts into a burst of light; everyone within 5 yards facing the wearer (not the wearer) rolls HT or is blinded for 1d seconds. Photo-visors and auto-senses negate the flash.\n\nLore: Signature protection of high-ranking Inquisitors and Rogue Traders in Black Library fiction: it turns a chainsword stroke or a point-blank shot into a blinding flare. A rare relic rather than standard Imperial manufacture.\n\nDesign: Absorbs a plasma bolt (avg 42) about half the time, a bolter round easily, and stops nearly any hand weapon wielded by an unaugmented human. The flash is its defining lore trait and makes heavy hits on the wearer dangerous to bystanders.",
+			"tags": [
+				"Force Field",
+				"Energy Shield",
+				"Imperium",
+				"Inquisition"
 			],
+			"tech_level": "12",
+			"legality_class": "1",
+			"base_value": "25000",
+			"base_weight": "3 lb",
+			"uses": 40,
+			"max_uses": 40,
 			"quantity": 1
 		},
 		{
 			"id": "eJUTEW1irNlvgX2qX",
 			"description": "Iron Halo",
-			"local_notes": "Worn as a halo-shaped emitter, traditionally mounted at the collar or above the helm of a Chaplain or senior officer; stacks with the wearer's power armour DR.\n\nLore: The iron halo is a relic conversion field reserved for Space Marine Chaplains, Chapter Masters and other senior officers, per Codex Space Marines background and Black Library fiction — visually iconic (the mounted halo) and mechanically framed the same way as an Inquisitor's conversion field, just built for and issued to the Adeptus Astartes.\n\nDesign: Same flat-DR conversion-field mechanic as the Conversion Field and Rosarius entries, scaled between the two: better than a common rosarius, short of a bespoke Inquisitorial relic, reflecting the iron halo's status as a valued but still Chapter-manufactured piece of wargear rather than a unique archeotech find.",
+			"local_notes": "Shield 60 SP. Recharge: after 3 seconds without taking damage, regains 10 SP per second. Blocks ranged and melee attacks. Mounted on the backpack of Astartes power armour; needs the armour's power supply.\n\nLore: A relic field worn by Chaplains, Captains and Chapter Masters, per Codex: Space Marines background and Black Library fiction. An honour as well as protection: a Marine is granted one, not issued it.\n\nDesign: Holds against a plasma bolt and most power-weapon blows (a power fist averages ~20) and recovers quickly, so an Astartes hero can walk through small-arms fire in the fiction. A lascannon (avg 112) still breaks it and continues into the armour.",
 			"tags": [
 				"Force Field",
+				"Energy Shield",
 				"Imperium",
 				"Adeptus Astartes"
 			],
 			"tech_level": "12",
-			"legality_class": "1",
+			"legality_class": "0",
 			"base_value": "20000",
 			"base_weight": "2 lb",
-			"features": [
-				{
-					"type": "dr_bonus",
-					"locations": [
-						"all"
-					],
-					"amount": 16
-				}
-			],
+			"uses": 60,
+			"max_uses": 60,
 			"quantity": 1
 		},
 		{
 			"id": "eyjya3iMPBKNN45je",
 			"description": "Storm Shield (Field Component)",
-			"local_notes": "This entry covers only the shield's integrated dispersion field, layered on top of the shield's own physical block/parry value and the wearer's armour DR; the shield as a melee item (block bonus, weight as carried equipment) belongs with this project's weapons/shields material, not here.\n\nLore: Terminator and Astartes storm shields are depicted (Codex Space Marines background, Black Library Terminator-focused fiction) as combining a solid physical shield with a kinetic dispersion field able to shrug off blows — including, famously, occasional lascannon or plasma hits — that would kill an Astartes outright without it.\n\nDesign: Modelled the same way as the other conversion-family fields in this file: a flat, type- independent DR bonus, pitched below the standalone Conversion Field (12) since in the fiction the storm shield's toughness comes as much from the physical shield underneath as from its field, and this entry is explicitly only the field component.",
+			"local_notes": "Shield 80 SP. Recharge: after 2 seconds without taking damage, regains 10 SP per second. Covers only attacks from the front and the shield-arm side (the arcs a shield covers); attacks from behind or the off side bypass it. The physical shield's Defense Bonus and melee stats are on the Storm Shield entry in Melee Weapons.\n\nLore: Astartes and Terminator storm shields pair a solid shield with a kinetic dispersion field, shown in Codex: Space Marines background and Black Library fiction shrugging off blows that would kill a Marine, including the occasional lascannon or plasma hit.\n\nDesign: Largest pool of any personal field, limited to its arc. Plasma (avg 42) is stopped outright; a lascannon (8dx4, avg 112) is stopped only when it rolls 80 or less (8d of 20 or less, about 5% of shots), matching \"occasionally\" in the fiction.",
 			"tags": [
 				"Force Field",
+				"Energy Shield",
 				"Imperium",
 				"Adeptus Astartes"
 			],
@@ -111,21 +87,14 @@
 			"legality_class": "0",
 			"base_value": "15000",
 			"base_weight": "4 lb",
-			"features": [
-				{
-					"type": "dr_bonus",
-					"locations": [
-						"all"
-					],
-					"amount": 10
-				}
-			],
+			"uses": 80,
+			"max_uses": 80,
 			"quantity": 1
 		},
 		{
 			"id": "eUSWyZtxjHHQ3GXF5",
 			"description": "Displacer Field",
-			"local_notes": "Provides no passive DR. Instead: when the wearer would take damage that penetrates their worn armour, the GM may rule that the field instead teleports them 2d yards in a random direction (as the Teleport advantage, B90), taking no damage from that attack — treat this as usable a limited number of times before the field needs to recharge (recommended: once per few seconds of combat, i.e. about once per turn at most), and note the risk of teleporting into solid matter, off a ledge, or into a worse position is a real one the GM should apply per the Teleport rules.\n\nLore: Displacer fields are archeotech/xenos-derived teleportation wards, most associated in the fiction with Aeldari (Eldar) Farseers and Autarchs, but occasionally captured, reverse- engineered, or gifted relics carried by high-ranking Inquisitors or Rogue Traders in Black Library fiction and Rogue Trader-line background — rather than blocking a killing blow, the wearer simply isn't where the blow lands anymore.\n\nDesign: Deliberately not modelled as DR at all, since the lore mechanic is avoidance rather than resistance: this uses GURPS's existing Teleport advantage (B90) as its design basis rather than any force-field or armour catalogue entry, triggered defensively instead of at will. Marked as TL12^-equivalent xenotech in spirit (warp-adjacent teleportation, per framework.md's \"Warp-dependent\" category) even though it's issued as an Imperial-held relic rather than built by the Imperium; cost and LC reflect extreme rarity and the Inquisition's wariness of xenotech in mortal hands.",
+			"local_notes": "Not a shield: it has no Shield Points. When the wearer would take damage that penetrates their worn armour, the GM may rule that the field instead teleports them 2d yards in a random direction (as the Teleport advantage, B90), taking no damage from that attack — treat this as usable a limited number of times before the field needs to recharge (recommended: once per few seconds of combat, i.e. about once per turn at most), and note the risk of teleporting into solid matter, off a ledge, or into a worse position is a real one the GM should apply per the Teleport rules.\n\nLore: Displacer fields are archeotech/xenos-derived teleportation wards, most associated in the fiction with Aeldari (Eldar) Farseers and Autarchs, but occasionally captured, reverse- engineered, or gifted relics carried by high-ranking Inquisitors or Rogue Traders in Black Library fiction and Rogue Trader-line background — rather than blocking a killing blow, the wearer simply isn't where the blow lands anymore.\n\nDesign: Deliberately not modelled as DR at all, since the lore mechanic is avoidance rather than resistance: this uses GURPS's existing Teleport advantage (B90) as its design basis rather than any force-field or armour catalogue entry, triggered defensively instead of at will. Marked as TL12^-equivalent xenotech in spirit (warp-adjacent teleportation, per framework.md's \"Warp-dependent\" category) even though it's issued as an Imperial-held relic rather than built by the Imperium; cost and LC reflect extreme rarity and the Inquisition's wariness of xenotech in mortal hands.",
 			"tags": [
 				"Force Field",
 				"Imperium",
@@ -135,15 +104,6 @@
 			"legality_class": "1",
 			"base_value": "35000",
 			"base_weight": "3 lb",
-			"features": [
-				{
-					"type": "dr_bonus",
-					"locations": [
-						"all"
-					],
-					"amount": 0
-				}
-			],
 			"quantity": 1
 		}
 	]

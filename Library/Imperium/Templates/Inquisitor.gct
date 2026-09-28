@@ -1,7 +1,7 @@
 {
 	"version": 5,
 	"id": "BX9dfyvPvEZHBgAUB",
-	"notes": "A working field Inquisitor — Eisenhorn or Ravenor in their prime, not a centuries-old Lord Inquisitor running whole sub-sectors (that belongs in framework.md's \"Heroes and legends\" tier, well above this template). Point math: ST 11 (+10), DX 14 (+80), IQ 15 (+100), HT 12 (+20) = 210, plus Will +2 (+10) = 220; advantages +40; disadvantages -37; skills +251. Total 474 points. Framework.md's tier table has a gap between \"Elite human (200-350)\" and \"Heroes and legends (1,000-3,000)\" with nothing named in between; a veteran field Inquisitor genuinely belongs in that gap — clearly beyond an elite specialist, well short of a living legend — so this template deliberately sits there rather than being forced into either tier. Flagged in this project's report as a possible anchor gap worth a deliberate decision (see framework.md, \"Changing an anchor\") if more Inquisition-tier templates are built.\nPuritan vs. Radical: this template is written Puritan-neutral. A strict Puritan build should add Intolerance (Xenos) (-10, Imperium/ Traits/Imperial Traits.adq) and lean on the Ordo Hereticus/Malleus lenses; a Radical build (xenotech users, daemonhosts, etc.) should drop or reinterpret Intolerance (Heretics) and is otherwise unrestricted by this template — Radicalism is a stance on methods and sanctioned lore, not a separate stat block, per how Eisenhorn's own arc treats it.\nNo psychic abilities here; many Inquisitors are sanctioned psykers, but that is a separate purchase from the psyker power library, not part of this baseline.\nEnable at most one Ordo lens (all disabled by default); an Inquisitor belongs to exactly one Ordo. They are small flavor packages, not full specialisations — a real Ordo Malleus Inquisitor's daemon-hunting expertise should mostly show up as bought-up Hidden Lore (Daemons) and Hidden Lore (The Warp) levels, not a lens.\n",
+	"notes": "A working field Inquisitor — Eisenhorn or Ravenor in their prime, not a centuries-old Lord Inquisitor running whole sub-sectors (that belongs in framework.md's \"Heroes and legends\" tier, well above this template). Point math: ST 11 (+10), DX 14 (+80), IQ 15 (+100), HT 12 (+20) = 210, plus Will +2 (+10) = 220; advantages +40 plus Inquisitorial Rank 6 (+60) and Status 5 (+25); disadvantages -37; skills +251. Total 559 points, top of framework.md's \"Senior agents\" tier. Authority comes from three traits together: the Rosette (Legal Enforcement Powers: arrest, search, execute), Inquisitorial Rank (overrides every Imperial hierarchy) and Status (social standing).\nPuritan vs. Radical: this template is written Puritan-neutral. A strict Puritan build should add Intolerance (Xenos) (-10, Imperium/ Traits/Imperial Traits.adq) and lean on the Ordo Hereticus/Malleus lenses; a Radical build (xenotech users, daemonhosts, etc.) should drop or reinterpret Intolerance (Heretics) and is otherwise unrestricted by this template — Radicalism is a stance on methods and sanctioned lore, not a separate stat block, per how Eisenhorn's own arc treats it.\nNo psychic abilities here; many Inquisitors are sanctioned psykers, but that is a separate purchase from the psyker power library, not part of this baseline.\nEnable at most one Ordo lens (all disabled by default); an Inquisitor belongs to exactly one Ordo. They are small flavor packages, not full specialisations — a real Ordo Malleus Inquisitor's daemon-hunting expertise should mostly show up as bought-up Hidden Lore (Daemons) and Hidden Lore (The Warp) levels, not a lens.\n",
 	"traits": [
 		{
 			"id": "tPpi9FJrFAwD7P08t",
@@ -76,7 +76,7 @@
 			"id": "tYsNbKKyXs6xq4Y6R",
 			"name": "Legal Enforcement Powers (Inquisitorial Rosette)",
 			"reference": "B65",
-			"local_notes": "Lore: \"I have the authority of the Emperor Himself\" — an Inquisitor can commandeer Imperial Guard regiments, override a planetary governor's orders, or execute an Astartes Chapter Master's aide without trial, per repeated scenes across Eisenhorn, Ravenor, and countless codex vignettes.\n\nDesign: Basic Set Legal Enforcement Powers (B65) at its maximum, 4 levels (20 points): the trait's own ceiling. Note the honest mismatch — fiction gives an Inquisitor authority well beyond what 20 points of LEP models (they can, in principle, override anyone up to and including a Space Marine Chapter). That narrative scope isn't something a point-bought trait should try to fully price; GMs run it as near-absolute in-fiction authority backed by this trait for the mechanical bits (arrest, search, requisition) and by roleplaying otherwise, exactly as Dark Heresy handles it with a non-numeric \"Inquisitorial authority\" rule instead of a stat.",
+			"local_notes": "Lore: \"I have the authority of the Emperor Himself\" — an Inquisitor can commandeer Imperial Guard regiments, override a planetary governor's orders, or execute an Astartes Chapter Master's aide without trial, per repeated scenes across Eisenhorn, Ravenor, and countless codex vignettes.\n\nDesign: Basic Set Legal Enforcement Powers (B65) at its maximum, 4 levels (20 points): the right to arrest, search, requisition and execute. LEP covers what an Inquisitor may do to people; their authority over other Imperial institutions (commandeering a regiment, overruling a governor) is Inquisitorial Rank, and their standing in Imperial society is Status. Take all three.",
 			"tags": [
 				"Advantage",
 				"Social",
@@ -86,6 +86,43 @@
 			"points_per_level": 5,
 			"can_level": true,
 			"levels": 4
+		},
+		{
+			"id": "trGkM6641Zn66hkEO",
+			"name": "Inquisitorial Rank",
+			"reference": "B29",
+			"local_notes": "Levels: 1 Acolyte in formal service, 3 Interrogator, 6 Inquisitor, 7 senior/renowned Inquisitor, 8 Lord Inquisitor, 9 Grand Master of an Ordo or Inquisitorial Representative to the High Lords.\n\nLore: The Inquisition answers to no Imperial body but itself. A single Inquisitor can requisition Guard regiments and Navy vessels, declare Exterminatus, and relieve a governor, as shown repeatedly in the Eisenhorn and Ravenor novels and codex background. In practice that authority is limited by what the Inquisitor can enforce and by rival Inquisitors.\n\nDesign: Basic Set Rank (B29), 5/level, with a custom +100% enhancement because the Rank reaches across every Imperial institution instead of one. Inquisitor at level 6: 30 x 2 = 60 points. Kept separate from Status per GURPS convention: Rank is authority within (here, over) organisations; Status is social standing.",
+			"tags": [
+				"Advantage",
+				"Social",
+				"Imperium",
+				"Inquisition"
+			],
+			"modifiers": [
+				{
+					"id": "mYp7sIPFK2529TgNJ",
+					"name": "Overrides all Imperial hierarchies",
+					"local_notes": "Every Imperial organisation (Astra Militarum, Administratum, Ecclesiarchy, Navy, planetary governments) treats this as a Rank higher than any of its own at the same or lower level. The Adeptus Astartes and Mechanicus are sovereign allies rather than subordinates: they are not bound by it, but in practice rarely defy it openly.\n",
+					"cost_adj": "+100%"
+				}
+			],
+			"points_per_level": 5,
+			"can_level": true,
+			"levels": 6,
+			"max_levels": 9
+		},
+		{
+			"id": "tHrHWMEoOFAk4_jpm",
+			"name": "Status (Inquisitor)",
+			"reference": "B28",
+			"local_notes": "Lore: Nobles and planetary rulers defer to an Inquisitor who reveals themselves; most Imperial citizens will never meet anyone higher. Many Inquisitors hide their Status behind a cover identity until it is needed.\n\nDesign: Basic Set Status (B28) level 5 (25 points): just below a planetary governor (Status 6) socially, while Inquisitorial Rank lets them overrule one. Interrogators typically have Status 2-3.",
+			"tags": [
+				"Advantage",
+				"Social",
+				"Imperium",
+				"Inquisition"
+			],
+			"base_points": 25
 		},
 		{
 			"id": "tCLK5yO804HUNHBMV",

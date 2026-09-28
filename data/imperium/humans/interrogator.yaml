@@ -7,10 +7,10 @@ notes: >
   as a more capable, more independent Inquisitorial Acolyte (Imperium/
   Templates/Inquisitorial Acolyte.gct) rather than a separate archetype.
   Point math: ST 10 (+0), DX 13 (+60), IQ 14 (+80), HT 11 (+10) = 150,
-  plus Will +1 (+5) = 155; advantages +30; disadvantages -37; skills
-  +178. Total 326 points, near the top of framework.md's "Elite human
-  (200-350)" tier — appropriate for someone who is, functionally, nearly
-  an Inquisitor already. No psychic abilities here; add from the separate
+  plus Will +1 (+5) = 155; advantages +30 plus Inquisitorial Rank 3
+  (+30) and Status 2 (+10); disadvantages -37; skills +178. Total 366
+  points, in framework.md's "Senior agents" tier: functionally nearly an
+  Inquisitor already. No psychic abilities here; add from the separate
   psyker power library if the Interrogator is also a sanctioned psyker.
 traits:
   - name: ST
@@ -61,6 +61,12 @@ traits:
       name, though not to act wholly independently of them.
     design: Basic Set Legal Enforcement Powers (B65), 2 levels, 10 points — below the Inquisitorial Rosette's 4-level maximum (Imperium/Traits/Imperial Traits.adq).
   - include: "imperium/common/imperial-traits.yaml#Duty (Inquisition)"
+  - include: "imperium/common/imperial-traits.yaml#Inquisitorial Rank"
+    levels: 3
+  - include: "imperium/common/imperial-traits.yaml#Status (Inquisitor)"
+    name: Status (Interrogator)
+    points: 10
+    design: Basic Set Status (B28) level 2 (10 points), borrowed from their Inquisitor master.
   - include: "imperium/common/imperial-traits.yaml#Intolerance (Heretics)"
     lore: Years of hunting heresy sharpen this into something close to reflex.
   - include: "imperium/common/imperial-traits.yaml#Secret (Works for the Inquisition)"

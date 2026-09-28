@@ -70,6 +70,26 @@ These numbers are fixed. Everything else is placed relative to them.
 
 Limbs are usually a few DR below torso. Specify every location explicitly.
 
+### Personal force fields (regenerating shields)
+
+Refractor fields, conversion fields, rosarii, iron halos and storm shields work as regenerating shields, not DR:
+
+- **Shield Points (SP).** Each field has a pool. Damage from an attack the field covers comes off SP first. Armour divisors don't apply to SP; they describe getting through matter.
+- **Overflow.** If an attack does more damage than the SP left, the field drops to 0 and the excess carries on to worn armour with the attack's full armour divisor. A bolt stopped by the field detonates on it: its follow-up damage also comes off SP.
+- **Recharge.** After a set delay (2–3 seconds) in which the field takes no damage, it regains SP each second until full. Any damage resets the delay.
+- **Collapse.** A field knocked to 0 SP needs double its normal delay before it starts recharging.
+- Track current SP with the item's Uses counter in GCS.
+
+| Field | SP | Delay | Recharge/s | Covers |
+|---|---|---|---|---|
+| Refractor field | 20 | 2 s | 5 | Ranged only |
+| Rosarius | 30 | 3 s | 5 | All |
+| Conversion field | 40 | 3 s | 5 | All; flash on big hits |
+| Iron halo | 60 | 3 s | 10 | All |
+| Storm shield | 80 | 2 s | 10 | Front and shield side |
+
+Vehicle void shields will use the same rules at larger scale.
+
 ### Weapon anchors
 
 | Weapon | Damage | What it has to do |
@@ -120,7 +140,7 @@ Attributes 10, HP 10. Imperial citizens are human; abhumans (Ogryn, Ratling, Squ
 | Ordinary citizen | 0–50 | Hive worker, scribe |
 | Trained soldier | 100–175 | Guardsman, PDF trooper, Arbitrator |
 | Elite human | 200–350 | Stormtrooper, veteran Commissar, Battle Sister, Inquisitorial acolyte |
-| Senior agents | 350–550 | Field Inquisitor, veteran Interrogator, Canoness, Lord Commissar |
+| Senior agents | 350–600 | Field Inquisitor, veteran Interrogator, Canoness, Lord Commissar |
 | Astartes | 550–800 | Battle-Brother, veteran, Primaris adds more |
 | Heroes and legends | 1,000–3,000 | Chapter Master, Custodian, Living Saint, Lord Inquisitor |
 | Beyond play | 5,000+ | Primarchs, Greater Daemons, C'tan shards. Built for GM reference only. |

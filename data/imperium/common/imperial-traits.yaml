@@ -171,15 +171,57 @@ items:
       countless codex vignettes.
     design: >
       Basic Set Legal Enforcement Powers (B65) at its maximum, 4 levels
-      (20 points): the trait's own ceiling. Note the honest mismatch —
-      fiction gives an Inquisitor authority well beyond what 20 points of
-      LEP models (they can, in principle, override anyone up to and
-      including a Space Marine Chapter). That narrative scope isn't
-      something a point-bought trait should try to fully price; GMs run it
-      as near-absolute in-fiction authority backed by this trait for the
-      mechanical bits (arrest, search, requisition) and by roleplaying
-      otherwise, exactly as Dark Heresy handles it with a non-numeric
-      "Inquisitorial authority" rule instead of a stat.
+      (20 points): the right to arrest, search, requisition and execute.
+      LEP covers what an Inquisitor may do to people; their authority over
+      other Imperial institutions (commandeering a regiment, overruling a
+      governor) is Inquisitorial Rank, and their standing in Imperial
+      society is Status. Take all three.
+  - name: Inquisitorial Rank
+    per_level: 5
+    levels: 6
+    max_levels: 9
+    tags: [Advantage, Social, Imperium, Inquisition]
+    ref: B29
+    modifiers:
+      - name: Overrides all Imperial hierarchies
+        cost: "+100%"
+        notes: >
+          Every Imperial organisation (Astra Militarum, Administratum,
+          Ecclesiarchy, Navy, planetary governments) treats this as a Rank
+          higher than any of its own at the same or lower level. The
+          Adeptus Astartes and Mechanicus are sovereign allies rather than
+          subordinates: they are not bound by it, but in practice rarely
+          defy it openly.
+    notes: >
+      Levels: 1 Acolyte in formal service, 3 Interrogator, 6 Inquisitor,
+      7 senior/renowned Inquisitor, 8 Lord Inquisitor, 9 Grand Master of an
+      Ordo or Inquisitorial Representative to the High Lords.
+    lore: >
+      The Inquisition answers to no Imperial body but itself. A single
+      Inquisitor can requisition Guard regiments and Navy vessels, declare
+      Exterminatus, and relieve a governor, as shown repeatedly in the
+      Eisenhorn and Ravenor novels and codex background. In practice that
+      authority is limited by what the Inquisitor can enforce and by rival
+      Inquisitors.
+    design: >
+      Basic Set Rank (B29), 5/level, with a custom +100% enhancement
+      because the Rank reaches across every Imperial institution instead of
+      one. Inquisitor at level 6: 30 x 2 = 60 points. Kept separate from
+      Status per GURPS convention: Rank is authority within (here, over)
+      organisations; Status is social standing.
+  - name: Status (Inquisitor)
+    points: 25
+    tags: [Advantage, Social, Imperium, Inquisition]
+    ref: B28
+    lore: >
+      Nobles and planetary rulers defer to an Inquisitor who reveals
+      themselves; most Imperial citizens will never meet anyone higher.
+      Many Inquisitors hide their Status behind a cover identity until it
+      is needed.
+    design: >
+      Basic Set Status (B28) level 5 (25 points): just below a planetary
+      governor (Status 6) socially, while Inquisitorial Rank lets them
+      overrule one. Interrogators typically have Status 2-3.
   - name: Secret (Works for the Inquisition)
     points: -10
     ref: B152

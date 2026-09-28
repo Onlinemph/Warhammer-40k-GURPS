@@ -11,3 +11,5 @@ Anchor and rule changes to `framework.md`, with the reason for each.
 - **"Senior agents" point tier (350–550)** for field Inquisitors and equivalents.
 - **Astartes physiology:** Ossmodula grants DR 3 torso/vitals (fused ribcage); racial attribute block adds HP +4, FP +3. Package 293 → 323 points.
 - **Force weapons use Broadsword/Staff/Axe skills**, not Force Sword (the GURPS beam-blade skill). Force strike adds +1d per level of Psyker Talent.
+- **Personal force fields are regenerating shields** (user direction: Halo-style shields). Shield Points absorb damage before armour and recharge after a short delay; replaces the earlier flat-DR fields.
+- **Inquisitorial authority** is modelled as Legal Enforcement Powers + Inquisitorial Rank (overrides all Imperial hierarchies, +100%) + Status (user decision). Inquisitor 474 → 559, Interrogator 326 → 366; senior-agents tier widened to 350–600.
