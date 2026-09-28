@@ -250,18 +250,20 @@ items:
     tags: [Melee Weapon, Imperium, Astra Militarum]
     weapons:
       - usage: Swing
-        damage: sw+1d cut
+        damage: sw+2d(2) cut
         reach: 1
         parry: 0
         st: 10
         skill: Broadsword
     notes: >
-      The motor and chain-teeth tear rather than cleanly cut; the framework
-      anchor notes it "skids off power armour" - against DR 32+ targets, a
-      GM may rule the chain simply fails to bite rather than dealing a
-      grazing wound, at the table's discretion. A jammed or fouled chain
-      (tangled cloth, bone, or a lucky parry) may stall the motor until
-      cleared with a Ready maneuver.
+      The motor and chain-teeth tear rather than cleanly cut, hence the
+      Armor Divisor (2) rather than a clean-edged blade's no-divisor cut;
+      the framework anchor notes it "skids off power armour" - against
+      DR 70+ targets it essentially never penetrates, at the table's
+      discretion the GM may rule the chain simply fails to bite rather than
+      dealing a grazing wound. A jammed or fouled chain (tangled cloth,
+      bone, or a lucky parry) may stall the motor until cleared with a
+      Ready maneuver.
     lore: >
       The archetypal Imperial melee weapon: sergeants, veterans and
       officers across the Astra Militarum, plus most Chaos and Imperial
@@ -269,13 +271,20 @@ items:
       shown butchering unarmoured infantry but failing to trouble power
       armour, matching the framework anchor's own description.
     design: >
-      Fixed anchor: sw+1d cut, reach 1, parry 0, min ST 10. This is a
-      human-scale one-handed weapon, so weight (6 lb, heavier than a plain
-      sword for the motor housing and chain loop) and min ST 10 (higher
-      than a mundane broadsword's ST 9-10 band, again for the added mass)
-      are the only free parameters; damage and defenses come straight from
-      the anchor. TL10 and LC2 per the framework's own worked example
-      ("Standard Imperial manufacture: TL10 ... chainsword").
+      Fixed anchor (Rescale): sw+2d(2) cut, reach 1, parry 0, min ST 10.
+      The Rescale raised the chainsword from a flat sw+1d cut with no
+      divisor to sw+2d(2): against carapace (DR 45) a Guardsman-strength
+      swing (roughly 3d+1 total) essentially never gets through (eff. DR 22
+      well above the average roll), matching "bites carapace" only in an
+      Astartes' hands, while it still guts an unarmoured man or a flak
+      vest (DR 12, eff. 6) on nearly every hit and skids off power armour
+      (eff. DR 50+) outright - exactly the framework's "tears flesh and
+      flak; bites carapace; skids off power armour." Weight (6 lb, heavier
+      than a plain sword for the motor housing and chain loop) and min ST
+      10 (higher than a mundane broadsword's ST 9-10 band, again for the
+      added mass) are the only free parameters. TL10 and LC2 per the
+      framework's own worked example ("Standard Imperial manufacture:
+      TL10 ... chainsword").
 
   - name: Chainsword, Astartes Pattern
     tl: 10
@@ -285,7 +294,7 @@ items:
     tags: [Melee Weapon, Imperium, Adeptus Astartes]
     weapons:
       - usage: Swing
-        damage: sw+1d cut
+        damage: sw+2d(2) cut
         reach: 1
         parry: 0
         st: 15
@@ -298,18 +307,23 @@ items:
       more common than) power swords, which are reserved for veterans and
       officers.
     design: >
-      The sw+1d cut formula is unchanged from the human-scale anchor - GCS
-      resolves "sw" from the wielder's own ST, so an Astartes swinging this
-      weapon already rolls more dice than a human swinging the human-scale
-      version without changing the weapon's damage line. What must change,
-      per the framework's instruction that human- and Astartes-scale
-      versions need different min ST and weight, is the housing itself:
-      heavier chain loop and motor (14 lb vs. 6 lb) and a min ST (15) far
-      above what an unaugmented human can bring to bear one-handed, so a
-      human could not wield this pattern even though the damage formula
-      looks identical on paper. LC1 (Astartes-issue), not LC0, since the
-      framework's LC1 bracket explicitly covers Astartes-carried
-      war-gear one tier below power-armour-integrated items.
+      The sw+2d(2) cut formula is unchanged from the human-scale anchor -
+      GCS resolves "sw" from the wielder's own ST, so an Astartes swinging
+      this weapon already rolls more dice than a human swinging the
+      human-scale version (a Marine's sw is 5d vs. a Guardsman's 3d+1,
+      before the +2d chain bonus) without changing the weapon's damage
+      line. This is exactly why an Astartes chainsword bites carapace
+      (DR 45) roughly one swing in ten while a Guardsman's essentially
+      never does, and still skids off power armour either way. What must
+      change, per the framework's instruction that human- and Astartes-
+      scale versions need different min ST and weight, is the housing
+      itself: heavier chain loop and motor (14 lb vs. 6 lb) and a min ST
+      (15) far above what an unaugmented human can bring to bear
+      one-handed, so a human could not wield this pattern even though the
+      damage formula looks identical on paper. LC1 (Astartes-issue), not
+      LC0, since the framework's LC1 bracket explicitly covers
+      Astartes-carried war-gear one tier below power-armour-integrated
+      items.
 
   - name: Chainaxe
     tl: 10
@@ -319,7 +333,7 @@ items:
     tags: [Melee Weapon, Imperium, Adeptus Astartes]
     weapons:
       - usage: Swing
-        damage: sw+1d+2 cut
+        damage: sw+2d+2(2) cut
         reach: 1
         parry: -1
         st: 13
@@ -336,12 +350,17 @@ items:
       one-handed axe over a one-handed sword of the same era: a single
       heavy, chain-driven axe-head carries more mass into the swing than a
       chainsword's full-length blade, for +2 damage over the chainsword's
-      sw+1d, and axes are traditionally worse for defense, hence parry -1
-      instead of 0. Min ST 13 sits above the human chainsword's ST 10 and
-      below the Astartes chainsword's ST 15, reflecting that it is normally
-      an Astartes weapon but (per its fiction) occasionally wielded
-      one-handed by an unusually strong or augmented human at a stiff
-      strength penalty.
+      sw+2d, keeping the same Armor Divisor (2) since it's the same
+      grinding chain-teeth mechanic; axes are traditionally worse for
+      defense, hence parry -1 instead of 0. At Astartes ST an axe swing
+      (5d+2(2)) bites carapace (DR 45) noticeably harder than a plain
+      chainsword (about 1 hit in 5 vs. 1 in 10) but still skids off power
+      armour, matching its "hits harder but handles clumsier" reputation.
+      Min ST 13 sits above the human chainsword's ST 10 and below the
+      Astartes chainsword's ST 15, reflecting that it is normally an
+      Astartes weapon but (per its fiction) occasionally wielded one-handed
+      by an unusually strong or augmented human at a stiff strength
+      penalty.
 
   - name: Eviscerator
     tl: 10
@@ -351,7 +370,7 @@ items:
     tags: [Melee Weapon, Imperium, Adepta Sororitas]
     weapons:
       - usage: Swing, two-handed
-        damage: sw+2d cut
+        damage: sw+3d(2) cut
         reach: "1,2"
         parry: -1
         st: 13
@@ -372,12 +391,16 @@ items:
       One further step up the chain-weapon family from the chainaxe: a
       two-handed weapon gets Basic Set's two-handed bonus over a
       one-handed weapon of the same family (roughly +1 die over the
-      one-handed chainaxe's sw+1d+2, rounded to a clean sw+2d cut), with
-      reach extended to 1,2 and parry penalised further (-1) for its bulk.
-      Min ST 13 is kept in the human range rather than pushed to Astartes
-      levels, per its lore as human (if enhanced-by-faith) Sororitas
-      wargear, not Astartes equipment - hence the notes on using it below
-      min ST rather than simply barring human use outright.
+      one-handed chainaxe's sw+2d+2, rounded to a clean sw+3d cut), keeping
+      the shared chain-family Armor Divisor (2), with reach extended to 1,2
+      and parry penalised further (-1) for its bulk. At a Sororitas-typical
+      ST this still only scratches carapace occasionally and does nothing
+      to power armour - fitting its role as an anti-personnel penance
+      weapon, not an anti-Astartes one. Min ST 13 is kept in the human
+      range rather than pushed to Astartes levels, per its lore as human
+      (if enhanced-by-faith) Sororitas wargear, not Astartes equipment -
+      hence the notes on using it below min ST rather than simply barring
+      human use outright.
 
   - name: Chainfist
     tl: 11
@@ -387,7 +410,7 @@ items:
     tags: [Melee Weapon, Imperium, Adeptus Astartes]
     weapons:
       - usage: Punch
-        damage: thr+3d(10) cut
+        damage: thr+7d(10) cut
         reach: C
         parry: "-2"
         st: 17
@@ -414,11 +437,15 @@ items:
       not a multiplier on the wielder's own thrust - see that entry's design
       note for why), with the same (10) disruption-field divisor every Imperial
       power weapon shares (framework.md, power-field rule), and the
-      die count is one step down (+3d vs. the power fist's +4d) because
+      die count is one step down (+7d vs. the power fist's +8d) because
       chain teeth trade some raw hitting power for penetration and add
-      their own moving parts' weight and drag. TL11 (advanced Imperial/rare,
-      shares the power-field-adjacent servo technology) and LC1 (Astartes
-      power-weapon-tier legality per the framework).
+      their own moving parts' weight and drag. At Astartes ST (thr+7d
+      averaging around 30) it still penetrates Terminator plate (eff. DR 20)
+      the large majority of the time, keeping it a credible boarding/
+      breaching weapon even though it hits slightly softer than a plain
+      power fist. TL11 (advanced Imperial/rare, shares the power-field-
+      adjacent servo technology) and LC1 (Astartes power-weapon-tier
+      legality per the framework).
 
   # --------------------------------------------------------- Shock/electro
 
@@ -448,9 +475,14 @@ items:
       electrical-stun effect layered on top as a secondary rules note
       (HT-3 or stunned) rather than a new damage type, since GURPS models
       "shocked and dazed but not much hurt" through the Stun rule, not
-      through raw damage. TL10 for the power cell and stun generator; LC2
-      (enforcer/Arbites-issue, not general military) per the framework's
-      "military-issue heavy weapons, carapace, hellguns" LC2 bracket.
+      through raw damage. Rescale note: this weapon's raw damage is left
+      unchanged, since it was never anchored to any armour DR figure - it's
+      plain ST-scaled club damage, and its entire purpose (subduing a
+      target, not penetrating armour) is carried by the Stun rule rather
+      than by beating DR, so the armour-anchor rescale doesn't touch it.
+      TL10 for the power cell and stun generator; LC2 (enforcer/Arbites-
+      issue, not general military) per the framework's "military-issue
+      heavy weapons, carapace, hellguns" LC2 bracket.
 
   - name: Electro-flail
     tl: 10
@@ -478,7 +510,10 @@ items:
       cannot parry, more damage than a rigid weapon of similar weight for
       the whipping strike) applied one step above the shock maul (sw+2 cr
       vs. sw+1 cr) since a multi-headed flail carries more striking mass,
-      plus the same HT-3 stun note. TL/LC match the shock maul's bracket.
+      plus the same HT-3 stun note. As with the shock maul, raw damage is
+      unaffected by the armour-DR rescale: this is a subdual weapon whose
+      job is done by the Stun rule, not by beating DR. TL/LC match the
+      shock maul's bracket.
 
   - name: Shock Staff
     tl: 10
@@ -511,8 +546,11 @@ items:
       A quarterstaff profile (sw+1 cr/thr+1 cr, reach 1,2) carrying the
       same electro-stun note as the shock maul and electro-flail rather
       than a new mechanic; the two-handed reach trades the flail's extra
-      damage for the Staff skill's superior defensive profile. TL/LC match
-      the rest of the shock-weapon family.
+      damage for the Staff skill's superior defensive profile. Raw damage
+      is left unchanged by the Rescale for the same reason as the rest of
+      the shock-weapon family (it's a mundane, Stun-rule weapon, not one
+      derived from any armour DR anchor). TL/LC match the rest of the
+      shock-weapon family.
 
   - name: Power Maul, Arbites Pattern
     tl: 11
@@ -529,7 +567,7 @@ items:
         skill: Axe/Mace
         notes: A hit that does any HP of damage forces the target to roll HT-3 or be stunned (B420), as the shock maul.
       - usage: Lethal setting (field on)
-        damage: sw+1d+2(10) cr
+        damage: sw+3d+2(10) cr
         reach: 1
         parry: 0
         st: 10
@@ -546,11 +584,12 @@ items:
     design: >
       Suppression setting is the same maul-plus-stun-note logic as the
       shock maul family above, one step heavier (sw+2 cr) for the denser
-      Arbites-issue head. Lethal setting applies this file's general power-
-      field rule (see Power Sword below): the field adds +1d damage and
-      Armor Divisor (10) to the weapon's base blow, so sw+2 cr (field off)
-      becomes sw+1d+2(10) cr (field on) - the same +1d/(10) step used to
-      build every other field-on/field-off pair in this file, keeping the
+      Arbites-issue head; its damage is unaffected by the Rescale for the
+      same reason as the mundane shock weapons. Lethal setting applies this
+      file's general power-field rule (framework.md: field-on = mundane
+      baseline +3d, Armor Divisor (10)): sw+2 cr (field off) becomes
+      sw+3d+2(10) cr (field on) - the same +3d/(10) step used to build
+      every other field-on/field-off pair in this file, keeping the
       Arbites maul consistent with the Chapter- and Sororitas-issue power
       weapons below it despite its different institutional owner.
 
@@ -564,7 +603,7 @@ items:
     tags: [Melee Weapon, Imperium, Astra Militarum, Adeptus Astartes]
     weapons:
       - usage: Field on
-        damage: sw+1d+1(10) cut
+        damage: sw+3d+1(10) cut
         reach: 1
         parry: 0
         st: 10
@@ -586,19 +625,33 @@ items:
       even power armour where a plain sword or chainsword would just
       bounce or skid, matching the framework anchor's own description.
     design: >
-      Fixed anchor: sw+1d+1(10) cut, reach 1, parry 0, min ST 10. This
-      entry also establishes the general "power field" rule every other
-      powered edged/blunt weapon in this file is built from: comparing the
-      anchor to a plain one-handed sword's Basic Set baseline (sw+1 cut for
-      a broadsword-class blade) shows the field itself contributes exactly
-      +1d damage and Armor Divisor (10) over the same weapon with the field
-      off - the "field off" line above is that same sw+1 cut baseline. This
-      is why the field-off usage is included explicitly: the framework says
-      power field on/off must be modelled as separate weapon lines, and
-      this file applies the same +1d/(10) delta to every other "power"
-      weapon below, scaled from each weapon's own mundane baseline rather
-      than re-deriving the anchor each time. TL11 and LC1 per the
-      framework's "Advanced Imperial/rare" and "power weapons" brackets.
+      Fixed anchor (Rescale): sw+3d+1(10) cut, reach 1, parry 0, min ST 10.
+      This entry also establishes the general "power field" rule every
+      other powered edged/blunt weapon in this file is built from
+      (framework.md, power-field rule): comparing the anchor to a plain
+      one-handed sword's Basic Set baseline (sw+1 cut for a broadsword-
+      class blade) shows the field itself contributes exactly +3d damage
+      and Armor Divisor (10) over the same weapon with the field off - the
+      "field off" line above is that same sw+1 cut baseline, unchanged by
+      the Rescale (a plain sword's mundane edge doesn't care what DR
+      anchors moved). This is why the field-off usage is included
+      explicitly: the framework says power field on/off must be modelled
+      as separate weapon lines, and this file applies the same +3d/(10)
+      delta to every bladed/mace power weapon below (thunder hammers get
+      +6d and power fists thr+8d instead, per the framework's own
+      breakdown), scaled from each weapon's own mundane baseline rather
+      than re-deriving the anchor each time. Checked against the new
+      armour anchors: a Guardsman-strength blow (sw=1d+1, so field-on
+      totals 4d+1) penetrates carapace (DR 45, eff. 4) essentially always,
+      Astartes power armour (DR 100, eff. 10) about 90% of the time, and
+      Terminator plate (DR 200, eff. 20) about 5% of the time; an
+      Astartes-strength blow (sw=3d, field-on 6d) penetrates Astartes
+      power armour better than 99% of the time and Terminator plate more
+      than half the time. This matches the framework's "the disruption
+      field shears power armour whoever holds it" - even a human's power
+      sword reliably beats another human's power armour. TL11 and LC1 per
+      the framework's "Advanced Imperial/rare" and "power weapons"
+      brackets.
 
   - name: Power Axe
     tl: 11
@@ -608,7 +661,7 @@ items:
     tags: [Melee Weapon, Imperium, Astra Militarum, Adeptus Astartes]
     weapons:
       - usage: Field on
-        damage: sw+1d+2(10) cut
+        damage: sw+3d+2(10) cut
         reach: 1
         parry: -1
         st: 12
@@ -626,7 +679,7 @@ items:
       recurring wargear for Astartes veterans and Guard officers with a
       taste for a bigger blade.
     design: >
-      Applies the power-field rule established under Power Sword (+1d
+      Applies the power-field rule established under Power Sword (+3d
       damage, Armor Divisor (10), field on vs. off) to a plain axe's Basic
       Set baseline (sw+2 cut, parry -1, per the same broadsword-vs-axe
       relationship used for the mundane weapons above) rather than to the
@@ -641,7 +694,7 @@ items:
     tags: [Melee Weapon, Imperium, Astra Militarum, Adeptus Astartes, Adepta Sororitas]
     weapons:
       - usage: Field on
-        damage: sw+1d+2(10) cr
+        damage: sw+3d+2(10) cr
         reach: 1
         parry: 0
         st: 11
@@ -659,9 +712,10 @@ items:
       crushing force; background material treats it as functionally
       equivalent to a power sword or axe, just blunt rather than edged.
     design: >
-      Same power-field rule as Power Sword and Power Axe, applied to a
-      plain mace's Basic Set baseline (sw+2 cr); the field still applies
-      Armor Divisor (10) and damage type stays crushing rather than
+      Same power-field rule as Power Sword and Power Axe (+3d, field on
+      vs. off), applied to a plain mace's Basic Set baseline (sw+2 cr); the
+      field still applies Armor Divisor (10) and damage type stays crushing
+      rather than
       switching to cut, since the field disrupts and shears at the point of
       impact regardless of whether the striking surface is an edge or a
       flat head - the wound is still blunt trauma amplified by the field,
@@ -676,13 +730,13 @@ items:
     tags: [Melee Weapon, Imperium, Astra Militarum]
     weapons:
       - usage: Field on, mounted charge
-        damage: thr+1d+3(10) imp
+        damage: thr+3d+3(10) imp
         reach: "1,2*,3*"
         parry: -1
         st: 11
         skill: Spear
       - usage: Field on, braced (dismounted)
-        damage: thr+1d+2(10) imp
+        damage: thr+3d+2(10) imp
         reach: "1,2"
         parry: -1
         st: 11
@@ -705,9 +759,9 @@ items:
     design: >
       Baseline mundane lance follows Basic Set cavalry lance logic
       (thr+3 imp mounted at a charge, extra reach only while mounted and
-      moving); the power-field rule adds its usual +1d and Armor Divisor
-      (10) on top. The braced (dismounted) line drops one die of charge
-      momentum but keeps the field's own bonus, since the field itself
+      moving); the power-field rule adds its usual +3d and Armor Divisor
+      (10) on top. The braced (dismounted) line drops one point of charge
+      momentum but keeps the field's own +3d bonus, since the field itself
       doesn't care whether the wielder is moving.
 
   - name: Power Stave
@@ -718,13 +772,13 @@ items:
     tags: [Melee Weapon, Imperium, Astra Militarum]
     weapons:
       - usage: Field on, swing
-        damage: sw+1d+2(10) cr
+        damage: sw+3d+2(10) cr
         reach: "1,2"
         parry: 0
         st: 10
         skill: Staff
       - usage: Field on, thrust
-        damage: thr+1d+2(10) cr
+        damage: thr+3d+2(10) cr
         reach: "1,2"
         parry: 0
         st: 10
@@ -745,9 +799,9 @@ items:
       enforcers who want a power weapon's bite with a quarterstaff's reach
       and two-handed control rather than a one-handed blade.
     design: >
-      Same power-field rule as Power Maul, applied to a two-handed
-      quarterstaff's Basic Set baseline (sw+2 cr/thr+2 cr, reach 1,2)
-      instead of a one-handed mace. Explicitly not the same item as a
+      Same power-field rule as Power Maul (+3d, field on vs. off), applied
+      to a two-handed quarterstaff's Basic Set baseline (sw+2 cr/thr+2 cr,
+      reach 1,2) instead of a one-handed mace. Explicitly not the same item as a
       force stave (a Warp-powered weapon keyed to a psyker's own ability,
       per framework.md's psychic-power rules) - that variant belongs to the
       psyker-equipment file, not here.
@@ -760,7 +814,7 @@ items:
     tags: [Melee Weapon, Imperium, Adeptus Astartes]
     weapons:
       - usage: Punch
-        damage: thr+4d(10) cr
+        damage: thr+8d(10) cr
         reach: C
         parry: "-2"
         st: 15
@@ -777,27 +831,28 @@ items:
       reinforced gauntlet with an internal power field and myo-fibre
       actuators, consistently shown punching clean through Astartes power
       armour, vehicle hulls and monstrous xenos alike - the framework's
-      Tactical Dreadnought (DR80) armour table entry explicitly lists the
+      Tactical Dreadnought (DR 200) armour table entry explicitly lists the
       power fist as one of the few things that still kills a Terminator.
     design: >
-      No framework anchor exists for the power fist directly, so it is
-      built from first principles rather than borrowed from a catalogue
-      "power glove": because the internal actuators (not the wielder's own
-      swing) generate most of the force, its bonus is a large flat die
-      addition to the wielder's own thrust (thr+4d) rather than a
-      multiplier on that thrust (a "thr x3"-style multiplier was
-      considered and rejected, since it would make the weapon nearly
-      unusable in a human's hands and absurdly swingy in an Astartes',
-      whereas a flat die bonus keeps it dangerous regardless of wielder and
-      matches the fiction that the fist itself, not the arm behind it, is
-      doing the killing). Armor Divisor (10) is the shared disruption-field
-      divisor (framework.md, power-field rule). At Astartes ST 20, thr+4d
-      (6d-1, avg ~20) against Terminator DR 80/10 = 8 penetrates by ~12 on
-      average, matching "power fist ... still kills" against
-      Tactical Dreadnought armour. Reach C, parry -2 and the no-Feint/
-      no-called-shot notes encode the framework's "power fist ... unwieldy
-      (hard to parry, slow)" instruction without needing a bespoke game
-      mechanic beyond existing GURPS defense penalties.
+      Fixed anchor (Rescale, framework.md): thr+8d(10) cr. It is built from
+      first principles rather than borrowed from a catalogue "power glove":
+      because the internal actuators (not the wielder's own swing) generate
+      most of the force, its bonus is a large flat die addition to the
+      wielder's own thrust (thr+8d) rather than a multiplier on that thrust
+      (a "thr x3"-style multiplier was considered and rejected, since it
+      would make the weapon nearly unusable in a human's hands and
+      absurdly swingy in an Astartes', whereas a flat die bonus keeps it
+      dangerous regardless of wielder and matches the fiction that the fist
+      itself, not the arm behind it, is doing the killing). Armor Divisor
+      (10) is the shared disruption-field divisor (framework.md,
+      power-field rule). At Astartes ST 18, thr+8d (thr 1d+2, so 9d+2,
+      avg ~33.5) against Terminator plate (DR 200, eff. DR 20) penetrates
+      about 99.5% of the time and against Astartes power armour (DR 100,
+      eff. 10) essentially always, matching "power fist ... kills
+      Terminators in Astartes hands" cleanly. Reach C, parry -2 and the
+      no-Feint/no-called-shot notes encode the framework's "power fist ...
+      unwieldy (hard to parry, slow)" instruction without needing a bespoke
+      game mechanic beyond existing GURPS defense penalties.
 
   - name: Relic Blade
     tl: 11
@@ -807,7 +862,7 @@ items:
     tags: [Melee Weapon, Imperium, Adeptus Astartes]
     weapons:
       - usage: Field on
-        damage: sw+1d+3(10) cut
+        damage: sw+3d+3(10) cut
         reach: "1,2"
         parry: 0
         st: 16
@@ -829,12 +884,17 @@ items:
       "hero weapon" across Black Library Space Marine fiction (e.g. named
       blades carried by Chapter Masters and First Company veterans).
     design: >
-      Applies the power-field rule to a two-handed greatsword's Basic Set
-      baseline (sw+3 cut) rather than the one-handed broadsword baseline
-      used for the standard power sword, reflecting a longer, heavier
-      blade; min ST 16 keeps it a firmly Astartes-only weapon (a human
-      could not meet the strength requirement even one-handed), matching
-      the fiction that ordinary humans do not wield relic blades.
+      Applies the power-field rule (+3d, field on vs. off) to a two-handed
+      greatsword's Basic Set baseline (sw+3 cut) rather than the one-handed
+      broadsword baseline used for the standard power sword, reflecting a
+      longer, heavier blade; min ST 16 keeps it a firmly Astartes-only
+      weapon (a human could not meet the strength requirement even
+      one-handed), matching the fiction that ordinary humans do not wield
+      relic blades. At Astartes ST (sw=3d, field-on 6d+3, avg ~24) it
+      penetrates Astartes power armour (DR 100, eff. 10) essentially always
+      and Terminator plate (DR 200, eff. 20) about 4 times in 5, a step
+      above the standard power sword's own Astartes-hands figures,
+      fitting its "hero weapon" status.
 
   - name: Thunder Hammer
     tl: 11
@@ -844,7 +904,7 @@ items:
     tags: [Melee Weapon, Imperium, Adeptus Astartes]
     weapons:
       - usage: Field on, two-handed swing
-        damage: sw+2d+3(10) cr
+        damage: sw+6d(10) cr
         reach: 1
         parry: -1
         st: 15
@@ -868,16 +928,19 @@ items:
       opponents flying rather than cutting them, distinct in style from
       the disruption-field swords and axes above.
     design: >
-      Built as a two-handed great maul's Basic Set baseline (sw+3 cr) plus
-      a power-field bonus, but the bonus is scaled up (+2d instead of the
-      standard +1d used for the sword/axe/maul family) since a thunder
-      hammer's coil is built into a much larger head than a sword's blade,
-      with the shared (10) disruption-field divisor (framework.md). An earlier
-      draft used (3) on the theory that a hammer beats armour by concussion,
-      but that left a Marine's average blow (~22) unable to clear Terminator
-      DR 80/3, contradicting the hammer's role as the Terminator-killer.
-      At (10) it penetrates by ~14 on average and adds knockback. The knockback note
-      captures the anchor-adjacent "thunder hammer" lore detail (send
+      Fixed anchor (Rescale, framework.md): sw+6d(10) cr. A two-handed
+      great maul's Basic Set baseline is sw+3 cr (unchanged, field off);
+      the field's bonus is scaled up well past the standard +3d used for
+      the sword/axe/maul family (framework.md: "thunder hammers +6d")
+      since a thunder hammer's coil is built into a much larger head than a
+      sword's blade, with the shared (10) disruption-field divisor. An
+      earlier draft used (3) on the theory that a hammer beats armour by
+      concussion, but that left a Marine's average blow unable to clear
+      Terminator armour, contradicting the hammer's role as the
+      Terminator-killer. At Astartes ST 18 (sw=3d, so 9d, avg ~31.5)
+      against the Rescale's Terminator anchor (DR 200, eff. 20/10) it
+      penetrates about 98-99% of the time and adds knockback. The knockback
+      note captures the anchor-adjacent "thunder hammer" lore detail (send
       Marines and even light vehicles flying) using the existing Basic Set
       B378 knockback rule rather than a new mechanic, per this project's
       preference for built, not borrowed, but standard-rules design.
@@ -890,7 +953,7 @@ items:
     tags: [Melee Weapon, Imperium, Adeptus Astartes]
     weapons:
       - usage: Field on
-        damage: sw+1d-2(10) cut
+        damage: sw+3d-2(10) cut
         reach: C,1
         parry: -1
         st: 9

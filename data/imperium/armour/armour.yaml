@@ -8,7 +8,7 @@ items:
     cost: 200
     weight: 8
     tags: [Body Armor, Imperium, Astra Militarum]
-    dr: {"torso,vitals,groin": 8, "skull,face,eye,neck,arm,hand,leg,foot": 0}
+    dr: {"torso,vitals,groin": 12, "skull,face,eye,neck,arm,hand,leg,foot": 0}
     notes: Covers torso only. Worn over fatigues; does not interfere with Stealth the way rigid plate does.
     lore: >-
       The standard-issue ballistic vest of the Astra Militarum: overlapping plasteel or ceramic
@@ -16,8 +16,8 @@ items:
       (e.g. the Gaunt's Ghosts and Ciaphas Cain series) as adequate against shrapnel and stubber
       fire but routinely shrugged past by las-weapons at range and always by bolt weapons.
     design: >-
-      Torso DR set to the fixed Flak anchor (framework.md: "Flak (vest/jacket) | 8"). No coverage
-      elsewhere: a vest by definition stops at the shoulders and waist. Cost and weight are
+      Torso DR set to the fixed Flak anchor (framework.md, Rescale: "Flak (vest/jacket) | 12"). No
+      coverage elsewhere: a vest by definition stops at the shoulders and waist. Cost and weight are
       reasoned estimates (no anchor given) scaled below Mesh and well below Carapace.
 
   - name: Flak Jacket
@@ -26,16 +26,16 @@ items:
     cost: 250
     weight: 10
     tags: [Body Armor, Imperium, Astra Militarum]
-    dr: {"torso,vitals,groin": 8, arm: 6, "skull,face,eye,neck,hand,leg,foot": 0}
+    dr: {"torso,vitals,groin": 12, arm: 9, "skull,face,eye,neck,hand,leg,foot": 0}
     notes: Sleeved version of the flak vest; partial arm coverage from the short armoured sleeves.
     lore: >-
       A sleeved variant of the vest, common where regiments expect close-quarters or urban combat
       and want some forearm protection against shrapnel and blades. Seen in Imperial Guard art and
       background across multiple Codex Astra Militarum editions.
     design: >-
-      Torso DR unchanged from the Flak anchor (8). Arm coverage is new territory with no anchor, so
-      it is set two below torso, following framework.md's guidance that "limbs are usually a few DR
-      below torso."
+      Torso DR unchanged from the Flak anchor (12). Arm coverage is new territory with no anchor, so
+      it is set a few points below torso (9), following framework.md's guidance that "limbs are
+      usually a few DR below torso."
 
   - name: Flak Coat, Death Korps Pattern
     tl: 10
@@ -43,7 +43,7 @@ items:
     cost: 320
     weight: 15
     tags: [Body Armor, Imperium, Astra Militarum]
-    dr: {"torso,vitals,groin": 8, arm: 6, leg: 6, "skull,face,eye,neck,hand,foot": 0}
+    dr: {"torso,vitals,groin": 12, arm: 9, leg: 9, "skull,face,eye,neck,hand,foot": 0}
     notes: >-
       Ankle-length greatcoat with a quilted flak liner; often worn with a Death Korps gas-hood
       (see Respirator, Imperial Field Gear) rather than a separate helmet.
@@ -53,9 +53,9 @@ items:
       coat rather than a vest, reflecting the regiment's siege-warfare and toxic-battlefield
       doctrine.
     design: >-
-      Same torso DR as the Flak anchor (8); the coat's greater bulk buys leg coverage that the
+      Same torso DR as the Flak anchor (12); the coat's greater bulk buys leg coverage that the
       vest and jacket lack, not extra torso DR (flak plate is flak plate regardless of cut). Leg
-      and arm DR set at the same "a few below torso" offset as the Flak Jacket for consistency
+      and arm DR set at the same "a few below torso" offset (9) as the Flak Jacket for consistency
       across the family.
 
   - name: Flak Armour, Full Suit (Cadian Pattern)
@@ -64,7 +64,7 @@ items:
     cost: 420
     weight: 18
     tags: [Body Armor, Imperium, Astra Militarum]
-    dr: {"torso,vitals,groin": 8, arm: 6, leg: 6, "skull,face,eye,neck,hand,foot": 0}
+    dr: {"torso,vitals,groin": 12, arm: 9, leg: 9, "skull,face,eye,neck,hand,foot": 0}
     notes: >-
       Vest, pauldrons and leggings worn as a matched set; pairs with the Flak Helmet below for full
       coverage. The Cadian pattern (moulded breastplate over a grey bodyglove) is the Munitorum's
@@ -77,7 +77,7 @@ items:
       shirtless carapace-less troopers who often forgo the torso plate altogether for heat and
       mobility.
     design: >-
-      Identical DR profile to the Flak Jacket/Coat family: the anchor fixes torso at 8 regardless
+      Identical DR profile to the Flak Jacket/Coat family: the anchor fixes torso at 12 regardless
       of cut, so "full suit" buys completeness (a matched, better-fitted kit issued as one line
       item) rather than a higher number. Regimental variation is a lore/flavour note, not a stat
       change, per framework.md's instruction that tabletop/background colour orders things but
@@ -89,14 +89,14 @@ items:
     cost: 60
     weight: 3
     tags: [Body Armor, Imperium, Astra Militarum]
-    dr: {skull: 6, "face,eye,neck,torso,vitals,groin,arm,hand,leg,foot": 0}
+    dr: {skull: 10, "face,eye,neck,torso,vitals,groin,arm,hand,leg,foot": 0}
     notes: Open-faced; no eye or face protection. Some patterns (Mordian, Death Korps) add a neck flap worth a point or two of DR at the GM's discretion.
     lore: >-
       The classic Guard helmet: a domed plasteel/ceramite shell with a chinstrap and no visor,
       seen across nearly every piece of Astra Militarum art and background from the Uplifting
       Primer excerpts onward.
     design: >-
-      Skull DR taken directly from the anchor ("Flak helmet DR 6", framework.md). Open face is a
+      Skull DR taken directly from the anchor ("Flak helmet DR 10", framework.md). Open face is a
       lore call (Guard helmets are consistently drawn without a visor) rather than a numeric
       derivation.
 
@@ -107,7 +107,7 @@ items:
     cost: 1600
     weight: 6
     tags: [Body Armor, Imperium, Imperium]
-    dr: {"torso,vitals,groin": 10, arm: 8, leg: 8, neck: 6, "skull,face,eye,hand,foot": 0}
+    dr: {"torso,vitals,groin": 15, arm: 12, leg: 12, neck: 9, "skull,face,eye,hand,foot": 0}
     notes: >-
       Flexible armour: treat blunt/crushing damage that fails to penetrate as normal per the
       flexible-armour rule (blunt trauma still applies even when DR stops the attack).
@@ -117,7 +117,7 @@ items:
       across Dark Heresy/Rogue Trader-line background and hive-noble scenes in Black Library
       fiction (e.g. Ravenor, Eisenhorn) as concealable and comfortable but not rigid.
     design: >-
-      Torso DR taken directly from the anchor ("Mesh | 10, flexible", framework.md). Flexible
+      Torso DR taken directly from the anchor ("Mesh | 15, flexible", framework.md). Flexible
       armour uses GURPS's standard flexible-armour interaction (Basic Set): it stops penetration
       but not blunt trauma, called out explicitly in `notes` since GCS doesn't encode that rule
       automatically. Limb/neck DR follow the "a few below torso" convention; hands, feet, and head
@@ -130,7 +130,7 @@ items:
     cost: 1800
     weight: 30
     tags: [Body Armor, Imperium, Astra Militarum]
-    dr: {"torso,vitals,groin": 20, arm: 15, leg: 15, neck: 15, skull: 18, face: 10, eye: 8, hand: 0, foot: 10}
+    dr: {"torso,vitals,groin": 45, arm: 34, leg: 34, neck: 34, skull: 41, face: 23, eye: 18, hand: 0, foot: 23}
     notes: Rigid plate over a padded underlayer; imposes the usual GURPS bulky-armour DX/Stealth penalties for rigid heavy armour.
     lore: >-
       Moulded plasteel plate issued to elite Guard formations (storm troopers historically, tank
@@ -138,11 +138,11 @@ items:
       Only War and Dark Heresy background consistently place carapace a clear step above flak and
       a clear step below power armour, which the anchor table encodes directly.
     design: >-
-      Torso DR taken from the fixed Carapace anchor (20, "usually stops a lasgun; a bolter or
-      hot-shot las goes through"). Head/neck/limb DR scaled down from that anchor using the
-      "few DR below torso" rule, with the helmet close to torso (rigid full-coverage helms are
-      typically as thick as the torso plate) and hands left uncovered (gauntlets are a separate,
-      optional piece not modelled here).
+      Torso DR taken from the fixed Carapace anchor (45, "stops stub rounds; stops most lasgun
+      hits; a hellgun or bolter goes through"). Head/neck/limb DR scaled down from that anchor
+      (×2.25 over the pre-Rescale figures) using the "few DR below torso" rule, with the helmet
+      close to torso (rigid full-coverage helms are typically as thick as the torso plate) and
+      hands left uncovered (gauntlets are a separate, optional piece not modelled here).
 
   - name: Carapace Armour, Tempestus Pattern
     tl: 10
@@ -150,7 +150,7 @@ items:
     cost: 2600
     weight: 32
     tags: [Body Armor, Imperium, Astra Militarum]
-    dr: {"torso,vitals,groin": 20, arm: 18, leg: 18, neck: 18, skull: 20, face: 12, eye: 10, hand: 10, foot: 12}
+    dr: {"torso,vitals,groin": 45, arm: 41, leg: 41, neck: 41, skull: 45, face: 27, eye: 23, hand: 23, foot: 27}
     notes: Void-sealed; can be worn in vacuum or toxic atmosphere for short periods without a separate rebreather. Rigid heavy armour DX/Stealth penalties apply.
     lore: >-
       The maroon-and-grey carapace of the Tempestus Scions (and their forerunners, Storm Troopers)
@@ -159,11 +159,12 @@ items:
       the hands, feet and joints that standard-issue kit leaves open, and rated for drop-pod and
       high-altitude insertion.
     design: >-
-      Torso DR held at the same fixed Carapace anchor (20) — the anchor is a category value, not a
+      Torso DR held at the same fixed Carapace anchor (45) — the anchor is a category value, not a
       unit-quality slider, so elite carapace doesn't simply get a bigger number. Instead its
       advantage is modelled as more complete coverage: hands and feet are protected (unlike the
       Guard pattern), and neck/limb DR sit closer to torso, representing tighter, better-forged
-      fit rather than thicker plate.
+      fit rather than thicker plate. All non-torso figures scale from the Guard pattern's own
+      Rescale-era values by the same ×2.25 the anchor itself moved by.
 
   - name: Carapace Armour, Arbites Pattern
     tl: 10
@@ -171,7 +172,7 @@ items:
     cost: 2400
     weight: 34
     tags: [Body Armor, Imperium, Adeptus Arbites]
-    dr: {"torso,vitals,groin": 20, arm: 16, leg: 16, neck: 18, skull: 20, face: 15, eye: 10, hand: 10, foot: 12}
+    dr: {"torso,vitals,groin": 45, arm: 36, leg: 36, neck: 41, skull: 45, face: 34, eye: 23, hand: 23, foot: 27}
     notes: >-
       Full-face armoured mask standard; the enclosed helm and shoulder guards read as unmistakably
       Arbites on sight, which the GM may use for Intimidation or Fast-Talk reaction penalties
@@ -183,10 +184,11 @@ items:
       the wearer. Depicted in Black Library's Arbites fiction (Warhammer Crime line, Fleshworks/
       Bloodlines) and Codex/Necromunda background.
     design: >-
-      Torso DR at the fixed Carapace anchor (20), matching every other carapace-tier suit. The
+      Torso DR at the fixed Carapace anchor (45), matching every other carapace-tier suit. The
       Arbites cut differs from the Guard pattern in the same way the Tempestus pattern does — full
       head enclosure and hand/foot coverage — reflecting a design built for point-blank
       hab-clearance work rather than trench warfare, per its background rather than any stat bump.
+      Non-torso figures scale ×2.25 from the pre-Rescale values, as with the other carapace suits.
 
   # ---------------------------------------------------------------- Sororitas
   - name: Power Armour, Adepta Sororitas
@@ -195,7 +197,7 @@ items:
     cost: 30000
     weight: 40
     tags: [Body Armor, Imperium, Adepta Sororitas]
-    dr: {"torso,vitals,groin": 32, arm: 24, leg: 24, neck: 26, skull: 30, face: 20, eye: 16, hand: 14, foot: 16}
+    dr: {"torso,vitals,groin": 70, arm: 53, leg: 53, neck: 57, skull: 66, face: 44, eye: 35, hand: 31, foot: 35}
     notes: >-
       Built and rigged for an unaugmented human body: no black carapace or other neural interface
       is required, and a Sister of Battle suffers none of the fit/control penalties a
@@ -208,12 +210,12 @@ items:
       because it's engineered from the outset for a baseline (if exceptionally devout and
       disciplined) human body rather than a post-human one.
     design: >-
-      Torso DR taken directly from the fixed anchor ("Adepta Sororitas power armour | 32,
-      Lighter than Astartes plate", framework.md). Limb/head DR scaled down using the same
-      proportional offsets used for Astartes plate below, so the two families read as the same
-      design philosophy at different scale. Weight and cost are reasoned: roughly a quarter of an
-      Astartes suit's weight, reflecting "lighter" in the anchor note, at a fraction of the price
-      since it needs no genetic modification of its wearer.
+      Torso DR taken directly from the fixed anchor ("Adepta Sororitas power armour | 70,
+      Lighter than Astartes plate", framework.md). Limb/head DR scaled proportionally
+      (×2.1875 over the pre-Rescale figures) using the same offsets used for Astartes plate below,
+      so the two families read as the same design philosophy at different scale. Weight and cost
+      are reasoned: roughly a quarter of an Astartes suit's weight, reflecting "lighter" in the
+      anchor note, at a fraction of the price since it needs no genetic modification of its wearer.
     children:
       - name: Auto-senses Suite (Sororitas Pattern)
         weight: 3
@@ -255,7 +257,7 @@ items:
     cost: 40000
     weight: 140
     tags: [Body Armor, Imperium, Adeptus Astartes]
-    dr: {"torso,vitals,groin": 38, arm: 33, leg: 33, neck: 23, skull: 38, face: 28, eye: 20, hand: 23, foot: 28}
+    dr: {"torso,vitals,groin": 95, arm: 83, leg: 83, neck: 58, skull: 95, face: 70, eye: 50, hand: 58, foot: 70}
     attributes: {lifting_st: 8, striking_st: 4}
     notes: >-
       Requires the black carapace interface to move and fight at full efficiency (see design
@@ -267,13 +269,14 @@ items:
       novel series) depicts it as solid but unremarkable — the workhorse suit of the early
       Crusade, superseded once heavier and then more mobile patterns entered production.
     design: >-
-      Torso DR set five below the Mark VII baseline anchor (40), reflecting the framework's "Marks
-      vary +/-5 around this" instruction and Mark II's status as an early, unrefined pattern
-      relative to the post-Heresy standard. Eye lenses held at the fixed 20 regardless of mark
-      (anchor note: "Eye lenses DR 20") since the lens component is depicted as broadly similar
-      technology reused across generations. Limb/head DR use the same proportional offsets as
-      every other Mark in this file for internal consistency. Servo ST bonus set at a moderate
-      level typical of the mid-Crusade suits.
+      Torso DR set 5 below the Mark VII baseline anchor (100), reflecting the framework's "Marks
+      vary ±10–15 around this" instruction and Mark II's status as an early, unrefined pattern
+      relative to the post-Heresy standard (this is the pre-Rescale -2-from-baseline figure scaled
+      by the anchor's own ×2.5 move, landing near the low end of the new spread). Eye lenses held
+      at the fixed 50 regardless of mark (anchor note: "Eye lenses DR 50") since the lens component
+      is depicted as broadly similar technology reused across generations. Limb/head DR use the
+      same proportional offsets as every other Mark in this file for internal consistency. Servo ST
+      bonus set at a moderate level typical of the mid-Crusade suits.
 
   - name: Power Armour, Mark III (Iron Armour)
     tl: 11
@@ -281,7 +284,7 @@ items:
     cost: 45000
     weight: 160
     tags: [Body Armor, Imperium, Adeptus Astartes]
-    dr: {"torso,vitals,groin": 45, arm: 40, leg: 40, neck: 30, skull: 45, face: 35, eye: 20, hand: 30, foot: 35}
+    dr: {"torso,vitals,groin": 113, arm: 100, leg: 100, neck: 75, skull: 113, face: 88, eye: 50, hand: 75, foot: 88}
     attributes: {lifting_st: 9, striking_st: 5}
     notes: >-
       Heaviest of the Heresy-era patterns; the design prioritises frontal protection over mobility
@@ -293,9 +296,10 @@ items:
       breaching actions — thick chest and shoulder plate at the cost of speed, issued for grinding,
       attritional fighting rather than manoeuvre warfare.
     design: >-
-      Torso DR set five above the Mark VII baseline (45), the top of the framework's "+/-5"
-      spread, reflecting Mark III's reputation as the single heaviest mainline pattern. Eye lenses
-      fixed at 20 per the shared-component reasoning used across all marks. The extra bulk is also
+      Torso DR set 13 above the Mark VII baseline (100), near the top of the framework's "±10–15"
+      spread, reflecting Mark III's reputation as the single heaviest mainline pattern (the
+      pre-Rescale +5-from-baseline figure scaled by the anchor's own ×2.5 move). Eye lenses fixed
+      at 50 per the shared-component reasoning used across all marks. The extra bulk is also
       flagged qualitatively in `notes` as a mobility cost, since the DR anchor spread has no
       separate mechanism for encoding "heavier but slower" beyond the number itself.
 
@@ -305,7 +309,7 @@ items:
     cost: 38000
     weight: 135
     tags: [Body Armor, Imperium, Adeptus Astartes]
-    dr: {"torso,vitals,groin": 38, arm: 33, leg: 33, neck: 23, skull: 38, face: 28, eye: 20, hand: 23, foot: 28}
+    dr: {"torso,vitals,groin": 95, arm: 83, leg: 83, neck: 58, skull: 95, face: 70, eye: 50, hand: 58, foot: 70}
     attributes: {lifting_st: 8, striking_st: 4}
     notes: >-
       Interlocking plate sections reduce the usual bulky-armour penalty by 1 relative to other
@@ -317,10 +321,10 @@ items:
       freely — the pattern most associated with the war's mid-to-late battles in Black Library's
       Horus Heresy series.
     design: >-
-      Torso DR returned to the same -5-from-baseline value as Mark II (38): the fiction frames
+      Torso DR returned to the same -5-from-baseline value as Mark II (95): the fiction frames
       Mark IV as a mobility improvement over Mark III, not a protection one, so the DR number does
       not move from the "lighter" end of the spread — the improvement is represented instead as a
-      reduced bulk penalty called out in `notes`. Eye lenses fixed at 20 as with every other mark.
+      reduced bulk penalty called out in `notes`. Eye lenses fixed at 50 as with every other mark.
 
   - name: Power Armour, Mark V (Heresy Pattern)
     tl: 11
@@ -328,7 +332,7 @@ items:
     cost: 37000
     weight: 133
     tags: [Body Armor, Imperium, Adeptus Astartes]
-    dr: {"torso,vitals,groin": 37, arm: 32, leg: 32, neck: 22, skull: 37, face: 27, eye: 20, hand: 22, foot: 27}
+    dr: {"torso,vitals,groin": 93, arm: 80, leg: 80, neck: 55, skull: 93, face: 68, eye: 50, hand: 55, foot: 68}
     attributes: {lifting_st: 7, striking_st: 4}
     notes: >-
       A hybrid/composite suit: individual pieces may visibly mismatch (Mark II vambraces on a
@@ -340,10 +344,10 @@ items:
       combined with whatever a forge or salvage crew had on hand. Horus Heresy-era Black Library
       fiction repeatedly shows Astartes wearing visibly patchwork plate by this stage of the war.
     design: >-
-      Torso DR set just below the general -5-from-baseline cluster (37) to reflect inconsistent
-      manufacture and scavenged parts — the framework's Mark spread is +/-5, and a composite suit
+      Torso DR set just below the general -5-from-baseline cluster (93) to reflect inconsistent
+      manufacture and scavenged parts — the framework's Mark spread is ±10–15, and a composite suit
       built from mismatched salvage is reasoned to sit at the lower edge of that range rather than
-      the middle. Eye lenses fixed at 20 as with every mark.
+      the middle. Eye lenses fixed at 50 as with every mark.
 
   - name: Power Armour, Mark VI (Corvus Pattern)
     tl: 11
@@ -351,7 +355,7 @@ items:
     cost: 36000
     weight: 125
     tags: [Body Armor, Imperium, Adeptus Astartes]
-    dr: {"torso,vitals,groin": 35, arm: 30, leg: 30, neck: 20, skull: 35, face: 25, eye: 20, hand: 20, foot: 25}
+    dr: {"torso,vitals,groin": 88, arm: 75, leg: 75, neck: 50, skull: 88, face: 63, eye: 50, hand: 50, foot: 63}
     attributes: {lifting_st: 7, striking_st: 3}
     notes: Reduced bulk penalty (as Mark IV) reflecting the pattern's emphasis on speed. Requires the black carapace interface.
     lore: >-
@@ -360,9 +364,9 @@ items:
       predecessors, developed by the Raven Guard's Corvus Corax and adopted widely for its
       mobility, at a real cost in raw protection compared to heavier Heresy-era plate.
     design: >-
-      Torso DR set at the bottom of the framework's +/-5 spread (35), the lightest of the
+      Torso DR set at the bottom of the framework's ±10–15 spread (88, -12), the lightest of the
       Heresy-era marks modelled here, directly reflecting the "lighter" framing consistently
-      attached to this pattern in the lore. Eye lenses fixed at 20 as with every mark; the
+      attached to this pattern in the lore. Eye lenses fixed at 50 as with every mark; the
       reduced-bulk note mirrors Mark IV's for the same reason (both patterns are explicitly about
       trading plate for speed).
 
@@ -372,7 +376,7 @@ items:
     cost: 40000
     weight: 150
     tags: [Body Armor, Imperium, Adeptus Astartes]
-    dr: {"torso,vitals,groin": 40, arm: 35, leg: 35, neck: 25, skull: 40, face: 30, eye: 20, hand: 25, foot: 30}
+    dr: {"torso,vitals,groin": 100, arm: 88, leg: 88, neck: 63, skull: 100, face: 75, eye: 50, hand: 63, foot: 75}
     attributes: {lifting_st: 9, striking_st: 5}
     notes: >-
       This is the framework's baseline pattern; treat its numbers as the reference point every
@@ -390,9 +394,9 @@ items:
       41st-millennium Black Library novels, the most commonly depicted Astartes plate to this day.
     design: >-
       Torso DR and eye-lens DR are both taken directly from the fixed anchor ("Astartes power
-      armour (Mk VII baseline) | 40 ... Eye lenses DR 20", framework.md); every other Mark in this
+      armour (Mk VII baseline) | 100 ... Eye lenses DR 50", framework.md); every other Mark in this
       file is derived relative to this entry. Limb/head DR use the standard proportional offsets
-      (roughly torso minus 5 for arms/legs, minus 10 for hands/feet/face, minus 15 for neck)
+      (roughly torso minus 12 for arms/legs, minus 25 for hands/feet/face, minus 37 for neck)
       applied consistently across the whole Astartes power-armour family. Servo ST bonus is the
       reference value the other marks scale from.
     children:
@@ -447,7 +451,7 @@ items:
     cost: 42000
     weight: 155
     tags: [Body Armor, Imperium, Adeptus Astartes]
-    dr: {"torso,vitals,groin": 42, arm: 37, leg: 37, neck: 37, skull: 42, face: 32, eye: 20, hand: 27, foot: 32}
+    dr: {"torso,vitals,groin": 105, arm: 93, leg: 93, neck: 93, skull: 105, face: 80, eye: 50, hand: 68, foot: 80}
     attributes: {lifting_st: 9, striking_st: 5}
     notes: >-
       The reinforced collar gives this pattern far better neck coverage than other Marks (see DR
@@ -458,10 +462,11 @@ items:
       operations; current Codex Space Marines background places it as a slightly later, incremental
       pattern rather than a wholesale redesign.
     design: >-
-      Torso DR set two above the Mark VII baseline (42), within the framework's +/-5 spread. The
+      Torso DR set 5 above the Mark VII baseline (105), within the framework's ±10–15 spread. The
       pattern's signature feature — its reinforced collar — is modelled as a large jump in neck DR
-      specifically (37, versus 25 on Mark VII) rather than a torso change, since that's exactly
-      where the lore says the improvement lives. Eye lenses fixed at 20 as with every mark.
+      specifically (93, matching the arm DR rather than the usual lower neck figure, versus 63 on
+      Mark VII) rather than a torso change, since that's exactly where the lore says the
+      improvement lives. Eye lenses fixed at 50 as with every mark.
 
   - name: Power Armour, Mark X (Tacticus Pattern)
     tl: 11
@@ -469,7 +474,7 @@ items:
     cost: 50000
     weight: 150
     tags: [Body Armor, Imperium, Adeptus Astartes]
-    dr: {"torso,vitals,groin": 43, arm: 38, leg: 38, neck: 28, skull: 43, face: 33, eye: 20, hand: 28, foot: 33}
+    dr: {"torso,vitals,groin": 108, arm: 95, leg: 95, neck: 70, skull: 108, face: 83, eye: 50, hand: 70, foot: 83}
     attributes: {lifting_st: 10, striking_st: 5}
     notes: Requires the black carapace interface; Primaris Space Marines receive an enhanced black carapace as part of their creation, per current background, but the interface requirement and its penalties for an unaugmented wearer are unchanged.
     lore: >-
@@ -478,9 +483,9 @@ items:
       Library novels: a modern synthesis of earlier design principles built for a taller, more
       heavily muscled Primaris physiology.
     design: >-
-      Torso DR set three above the Mark VII baseline (43), reflecting current background's framing
+      Torso DR set 8 above the Mark VII baseline (108), reflecting current background's framing
       of Tacticus plate as an incremental, modern refinement rather than a radical departure —
-      still within the framework's +/-5 spread. Slightly higher servo ST than Mark VII reflects the
+      still within the framework's ±10–15 spread. Slightly higher servo ST than Mark VII reflects the
       larger Primaris frame the suit is built around, though this project keeps Primaris ST as a
       trait-file matter, not an armour one; the bonus here is the suit's own contribution only.
 
@@ -490,7 +495,7 @@ items:
     cost: 48000
     weight: 110
     tags: [Body Armor, Imperium, Adeptus Astartes]
-    dr: {"torso,vitals,groin": 35, arm: 28, leg: 28, neck: 20, skull: 35, face: 25, eye: 18, hand: 18, foot: 24}
+    dr: {"torso,vitals,groin": 88, arm: 70, leg: 70, neck: 50, skull: 88, face: 63, eye: 45, hand: 45, foot: 60}
     attributes: {lifting_st: 6, striking_st: 3}
     skill_bonuses: {Stealth: 2}
     notes: Requires the black carapace interface. Lighter and quieter than baseline Tacticus plate; the reduced bulk lessens (but does not remove) the usual rigid heavy armour Stealth penalty, represented as the Stealth bonus above.
@@ -499,13 +504,13 @@ items:
       Space Marines background describes it as deliberately stripped down for stealth insertion and
       reconnaissance, sacrificing plate thickness for silence, sensor equipment and low signature.
     design: >-
-      Torso DR set at the bottom of the framework's spread (35), matching Mark VI's lightweight
+      Torso DR set at the bottom of the framework's spread (88), matching Mark VI's lightweight
       reasoning for the same trade-off (speed and stealth over raw protection). Eye-lens DR is
-      nudged slightly below the shared 20 (to 18) since the pattern's sensor visor is optimised for
-      passive detection rather than ballistic resistance, a deliberate, called-out departure from
-      the "same component reused" assumption used elsewhere, justified by Phobos gear's explicit
-      stealth-first design brief. The Stealth skill bonus has no anchor and is a reasoned estimate
-      for "lighter and quieter than the baseline suit."
+      nudged slightly below the shared 50 (to 45, the same 90% ratio used pre-Rescale) since the
+      pattern's sensor visor is optimised for passive detection rather than ballistic resistance, a
+      deliberate, called-out departure from the "same component reused" assumption used elsewhere,
+      justified by Phobos gear's explicit stealth-first design brief. The Stealth skill bonus has
+      no anchor and is a reasoned estimate for "lighter and quieter than the baseline suit."
 
   - name: Power Armour, Mark X (Gravis Pattern)
     tl: 11
@@ -513,7 +518,7 @@ items:
     cost: 58000
     weight: 220
     tags: [Body Armor, Imperium, Adeptus Astartes]
-    dr: {"torso,vitals,groin": 55, arm: 48, leg: 48, neck: 40, skull: 55, face: 45, eye: 25, hand: 35, foot: 42}
+    dr: {"torso,vitals,groin": 130, arm: 113, leg: 113, neck: 95, skull: 130, face: 106, eye: 59, hand: 83, foot: 99}
     attributes: {lifting_st: 14, striking_st: 8, sm: 0, basic_move: -1}
     notes: >-
       Heavier and slower than standard plate; the wearer suffers an extra -1 Basic Move from bulk
@@ -525,12 +530,15 @@ items:
       thicker than any other power-armour pattern short of Terminator plate, explicitly a step
       between standard power armour and Tactical Dreadnought armour.
     design: >-
-      Torso DR deliberately breaks the +/-5 spread that governs every other power-armour Mark in
-      this file, because the lore explicitly places Gravis between the Mark VII baseline (40) and
-      the Tactical Dreadnought anchor (80): 55 sits roughly a third of the way up that gap,
-      reflecting "heavier than standard plate, well short of Terminator plate." Servo ST bonus is
-      raised well above every other power-armour Mark for the same reason, and a small Basic Move
-      penalty is added since the suit trades mobility for that extra plate.
+      Torso DR is its own fixed anchor (130, framework.md: "Between power armour and Terminator
+      plate"), deliberately breaking the ±10–15 spread that governs every other power-armour Mark
+      in this file, because the lore explicitly places Gravis between the Mark VII baseline (100)
+      and the Tactical Dreadnought anchor (200): 130 sits roughly a third of the way up that gap,
+      reflecting "heavier than standard plate, well short of Terminator plate." Limb/head DR scale
+      ×2.3636 from the pre-Rescale figures (130/55, the anchor's own move), landing eye-lens DR (59)
+      sensibly between the Mark VII (50) and Terminator (75) values. Servo ST bonus is raised well
+      above every other power-armour Mark for the same reason, and a small Basic Move penalty is
+      added since the suit trades mobility for that extra plate.
 
   - name: Scout Armour
     tl: 10
@@ -538,7 +546,7 @@ items:
     cost: 8000
     weight: 40
     tags: [Body Armor, Imperium, Adeptus Astartes]
-    dr: {"torso,vitals,groin": 22, leg: 10, "skull,face,eye,neck,arm,hand,foot": 0}
+    dr: {"torso,vitals,groin": 50, leg: 23, "skull,face,eye,neck,arm,hand,foot": 0}
     notes: >-
       Unpowered partial plate: chestpiece, backplate and a groin/thigh guard worn over fatigues,
       with no helmet, gauntlets or servo-motors. Does not require the black carapace interface,
@@ -551,12 +559,12 @@ items:
       Library's Scout-focused fiction (the Raven Guard and Space Wolves Scout novels among others)
       and current Codex Space Marines background.
     design: >-
-      No power-armour anchor applies here since this is explicitly not full plate; torso DR is
-      reasoned as roughly Carapace-tier (the anchor's 20) plus a small premium for Astartes-grade
-      materials, at 22. Coverage is deliberately incomplete (no head, arm, hand or foot protection,
-      partial leg only) to reflect the "half-armoured, half-fatigues" silhouette Scouts are
-      consistently drawn with, and there is no servo-motor ST bonus because the suit carries no
-      powered assistance.
+      No power-armour anchor applies here since this is explicitly not full plate; torso DR scales
+      from Carapace (the anchor's 45, ×2.25 over the pre-Rescale figure) plus the same small
+      premium for Astartes-grade materials as before, at 50. Coverage is deliberately incomplete
+      (no head, arm, hand or foot protection, partial leg only) to reflect the "half-armoured,
+      half-fatigues" silhouette Scouts are consistently drawn with, and there is no servo-motor ST
+      bonus because the suit carries no powered assistance.
 
   # ---------------------------------------------------------------- Tactical Dreadnought (Terminator) armour
   - name: Tactical Dreadnought Armour, Indomitus Pattern
@@ -565,7 +573,7 @@ items:
     cost: 120000
     weight: 300
     tags: [Body Armor, Imperium, Adeptus Astartes]
-    dr: {"torso,vitals,groin": 80, arm: 70, leg: 70, neck: 55, skull: 80, face: 60, eye: 30, hand: 50, foot: 60}
+    dr: {"torso,vitals,groin": 200, arm: 175, leg: 175, neck: 138, skull: 200, face: 150, eye: 75, hand: 125, foot: 150}
     attributes: {lifting_st: 20, striking_st: 10, sm: 1, basic_move: -1}
     notes: >-
       Effective SM +1 while worn (bigger target, but also greater reach and a larger surface for
@@ -581,10 +589,11 @@ items:
       Library depictions describe it as effectively a one-Astartes tank: it shrugs off small-arms
       and bolter fire and is brought down only by heavy weapons, power fists, or comparable threats.
     design: >-
-      Torso DR taken directly from the fixed anchor ("Tactical Dreadnought (Terminator) | 80,
+      Torso DR taken directly from the fixed anchor ("Tactical Dreadnought (Terminator) | 200,
       Ignores bolters. Plasma, lascannon, power fist and thunder hammer still kill.",
       framework.md). Limb/head DR use the same proportional offsets as the rest of the Astartes
-      power-armour family, scaled up from this heavier base. SM +1 is taken directly from
+      power-armour family (×2.5 over the pre-Rescale figures, matching the anchor's own move),
+      scaled up from this heavier base. SM +1 is taken directly from
       framework.md's "a Terminator can be SM +1" note; the Basic Move penalty and extra DX note
       represent the suit's bulk in mechanical terms the anchor doesn't itself specify.
     children:
@@ -633,7 +642,7 @@ items:
     cost: 130000
     weight: 340
     tags: [Body Armor, Imperium, Adeptus Astartes]
-    dr: {"torso,vitals,groin": 88, arm: 75, leg: 75, neck: 60, skull: 88, face: 65, eye: 30, hand: 55, foot: 65}
+    dr: {"torso,vitals,groin": 220, arm: 188, leg: 188, neck: 151, skull: 220, face: 163, eye: 75, hand: 138, foot: 163}
     attributes: {lifting_st: 22, striking_st: 11, sm: 1, basic_move: -2}
     notes: >-
       Effective SM +1 while worn, as Indomitus pattern, but heavier still: an extra -1 Basic Move
@@ -645,9 +654,12 @@ items:
       World's Horus Heresy background and Black Library's Horus Heresy series, where Cataphractii-
       armoured Terminators are repeatedly described as nigh-unstoppable but ponderous.
     design: >-
-      Torso DR set above the Tactical Dreadnought anchor (88 vs. the anchor's 80), justified by the
-      lore's explicit framing of Cataphractii as heavier than modern Terminator plate — the anchor
-      value is treated as the Indomitus/modern baseline, with this older pattern scaled up the same
-      way individual power-armour Marks are scaled around the Mark VII baseline. An extra point of
-      Basic Move penalty (net -2) represents the pattern's greater ponderousness relative to
-      Indomitus plate.
+      Torso DR set above the Tactical Dreadnought anchor (220 vs. the anchor's 200, a 10% premium
+      carried over from the pre-Rescale ratio of 88/80), justified by the lore's explicit framing of
+      Cataphractii as heavier than modern Terminator plate — the anchor value is treated as the
+      Indomitus/modern baseline, with this older pattern scaled up the same way individual
+      power-armour Marks are scaled around the Mark VII baseline. Limb/head DR carry over the same
+      per-location premium the pre-Rescale suit held over Indomitus (roughly 7–10%), except the eye
+      lens, held equal to Indomitus (75) under the same shared-component assumption used across the
+      whole Astartes power-armour family. An extra point of Basic Move penalty (net -2) represents
+      the pattern's greater ponderousness relative to Indomitus plate.
