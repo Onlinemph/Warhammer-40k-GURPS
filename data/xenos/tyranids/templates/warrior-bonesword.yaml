@@ -1,0 +1,45 @@
+kind: template
+output: Xenos/Tyranids/Templates/Tyranid Warrior (Bonesword and Lash Whip).gct
+notes: >
+  NPC creature stat block, not a player-facing race. Variant of the
+  Tyranid Warrior with the Bonesword and Lash Whip in place of Scything
+  Talons: the Codex pairing for a Warrior that fights armoured troops. Point
+  math: Tyranid Biology 20 + Body Lens: Tyranid Warrior 548 + Devourer 88 +
+  Bonesword 78 + Lash Whip 47 + skills 10 = 791 points. Stats as the
+  standard Tyranid Warrior: SM +1, ST 24, DX 13, IQ 8, HT 14, HP 30, Will
+  8, Per 8, natural chitin torso DR 60 (Weak Points 5, eye DR 30), Synapse
+  Creature (16 yards), Shadow in the Warp (16 yards). The Bonesword's
+  sw+3d(10) clears every personal armour up to Astartes plate 100% of the
+  time and a Terminator about 91%, which the plain Warrior's Scything
+  Talons (6d+2(2)) cannot do. This sits at the top of framework.md's
+  Astartes point tier (550-800). The point total is for GM reference only.
+
+  Weapon-symbiotes: carries a Devourer (ranged), a Bonesword (melee) and a
+  Lash Whip (the entangling companion that pins a target for the blade), all
+  built as natural-attack traits in data/xenos/tyranids/bio-weapons.yaml.
+traits:
+  - include: "xenos/tyranids/traits.yaml#Tyranid Biology"
+  - include: "xenos/tyranids/traits.yaml#Body Lens: Tyranid Warrior"
+  - include: "xenos/tyranids/bio-weapons.yaml#Devourer"
+  - include: "xenos/tyranids/bio-weapons.yaml#Bonesword"
+  - include: "xenos/tyranids/bio-weapons.yaml#Lash Whip"
+skills:
+  - name: Innate Attack
+    spec: Projectile
+    diff: DX/E
+    points: 4
+    tags: [Xenos, Tyranids]
+    lore: A Warrior's Devourer is aimed with real, drilled tactical intent rather than a gaunt's blind reflex.
+    design: Innate Attack (Projectile) (DX/E, B201) at DX+2 (15) for 4 points, Easy.
+  - name: Brawling
+    diff: DX/E
+    points: 2
+    tags: [Xenos, Tyranids]
+    lore: A Warrior lashes a target still and cuts it down with the bonesword the instant a fight closes to melee range.
+    design: DX+1 (14) for 2 points, Easy.
+  - name: Tactics
+    diff: IQ/H
+    points: 4
+    tags: [Xenos, Tyranids]
+    lore: A Warrior is the swarm's officer caste, canny enough to direct lesser bioforms rather than merely link them to the Hive Mind's discipline.
+    design: IQ (8) for 4 points, Hard.
