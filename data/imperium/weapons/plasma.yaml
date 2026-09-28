@@ -6,16 +6,16 @@ items:
     tl: 11
     lc: 1
     cost: 2200
-    weight: 5
+    weight: 6
     tags: [Missile Weapon, Imperium, Adeptus Astartes, Inquisition]
     weapons:
       - usage: Standard
         damage: 4dx4(3) burn ex
         acc: 2
         range: 100/300
-        rof: 3
+        rof: 1
         shots: 6(20)
-        st: 10†
+        st: 9†
         bulk: -2
         rcl: 2
         skill: Beam Weapons (Pistol)
@@ -23,9 +23,9 @@ items:
         damage: 4dx5(3) burn ex
         acc: 2
         range: 100/300
-        rof: 3
+        rof: 1
         shots: 6(20)
-        st: 10†
+        st: 9†
         bulk: -2
         rcl: 2
         skill: Beam Weapons (Pistol)
@@ -46,6 +46,16 @@ items:
       Terminator (DR 200, effective DR 66) 24% of the time; supercharged raises Terminator
       penetration to 99%. A pistol-class charge clears flak and carapace with no meaningful chance
       of failure either way.
+      Handling: 6 lb loaded for the containment coil, capacitor and cooling fins a plasma weapon
+      needs even at pistol scale - heavier than a bolt pistol's mechanically simpler cartridge
+      action. Min ST 9† (√(10×6)≈7.7, bumped for the bulky coil housing and the two-handed brace
+      most depictions show even for a "pistol") is below the plasma gun's ST 12, reflecting the
+      smaller charge; the † still lets it be fired two-handed at the listed ST. RoF 1, not the
+      generic "3" every pistol on this page used to share: a plasma weapon must let its containment
+      field cycle and vent excess heat between shots (framework.md's plasma-weapons rule), so even
+      a pistol-format coil cannot be fired semi-automatically like a solid-slug or las sidearm.
+      Shots 6(20): a small charge cell good for six shots before a slow 20-second swap, in line
+      with the plasma gun's own scaled-down cell. Bulk -2 and Rcl 2 are ordinary pistol figures.
 
   - name: Plasma Gun
     tl: 11
@@ -58,7 +68,7 @@ items:
         damage: 6dx4(3) burn ex
         acc: 3
         range: 150/450
-        rof: 3
+        rof: 1
         shots: 8(20)
         st: 12
         bulk: -4
@@ -68,7 +78,7 @@ items:
         damage: 6dx5(3) burn ex
         acc: 3
         range: 150/450
-        rof: 3
+        rof: 1
         shots: 8(20)
         st: 12
         bulk: -4
@@ -96,6 +106,18 @@ items:
       vehicles) at the cost of a real chance of the coil failing and burning the firer, matching the
       fiction's running theme of plasma weapons being feared by their own side almost as much as by
       the enemy.
+      Handling: 14 lb loaded, per Only War/Rogue Trader's consistent depiction of a plasma gun as
+      noticeably heavier than a lasgun for its coil, coolant jacket and capacitor bank. Min ST 12
+      (√(10×14)≈11.8, matching the framework's own worked figure for a weapon this weight almost
+      exactly) needs both hands and real upper-body strength to control, well above a lasgun's ST 9
+      despite similar bulk, reflecting the reinforced housing a live plasma reaction demands. RoF 1
+      is the framework's explicit rule for plasma weapons - the coil has to recharge and vent heat
+      between shots, so it cannot fire faster no matter how fast the trigger is pulled; the old
+      "RoF 3" this and every other plasma weapon shared was a straight copy-paste that ignored the
+      weapon's actual mechanism. Shots 8(20): an 8-shot cell (Only War-style capacity) and a slow
+      20-second reload for a reservoir that has to be handled carefully. Bulk -4 and Rcl 2 (low, per
+      framework.md's "beams: 1" figure nudged up slightly for the coil's own kick) are ordinary
+      rifle-class figures.
 
   - name: Plasma Cannon
     tl: 11
@@ -110,7 +132,7 @@ items:
         range: 250/750
         rof: 1
         shots: 5(20)
-        st: 15
+        st: 15M
         bulk: -7
         rcl: 3
         skill: Gunner (Beams)
@@ -120,7 +142,7 @@ items:
         range: 250/750
         rof: 1
         shots: 5(20)
-        st: 15
+        st: 15M
         bulk: -7
         rcl: 3
         skill: Gunner (Beams)
@@ -138,10 +160,16 @@ items:
       standard progression used for the bolt and melta families in this project. Checked against
       the vehicle table: standard mode averages 112 and, even against AV12 (DR 200, effective DR
       66), penetrates 99% of hits, comfortably beating the light and medium vehicles the fiction
-      shows it killing. Low RoF 1 and ST 15 (tripod or a very strong user) capture the "slow-firing
-      but devastating" character the fiction gives it; Malf 15 rather than 14 for the
-      standard/overcharge pair reflects a crew-served weapon's better cooling and shielding, at
-      correspondingly higher stakes for the crew when it does fail.
+      shows it killing.
+      Handling: 45 lb loaded puts it well beyond man-portable weight, and it is marked ST 15M
+      (mounted): the tripod or pintle bears the bulk of that weight, so the ST figure covers
+      recoil and aim rather than the raw √(10×45)≈21 a shoulder-fired weapon this heavy would need
+      - comparable to the similarly mounted Multi-laser (45 lb, ST 9M) elsewhere in this project,
+      pitched a few points higher for the plasma reactor's own recoil kick. RoF 1 (unchanged from
+      every other plasma weapon here - the reactor's cycle time, not the mount, is the limiting
+      factor) and Malf 15 rather than the man-portable weapons' 14 reflect a crew-served weapon's
+      better cooling and shielding, at correspondingly higher stakes for the crew when it does
+      fail. Bulk -7 and Rcl 3 mark a genuine support weapon.
 
   - name: Plasma Incinerator, Primaris Pattern
     tl: 11
@@ -154,7 +182,7 @@ items:
         damage: 6d+1x4(3) burn ex
         acc: 4
         range: 200/600
-        rof: 3
+        rof: 1
         shots: 10(20)
         st: 11
         bulk: -4
@@ -164,7 +192,7 @@ items:
         damage: 6d+1x5(3) burn ex
         acc: 4
         range: 200/600
-        rof: 3
+        rof: 1
         shots: 10(20)
         st: 11
         bulk: -4
@@ -180,11 +208,18 @@ items:
       rather than a fundamentally different weapon.
     design: >
       One pip over the plasma gun anchor (6d+1x4(3) vs 6dx4(3), supercharged 6d+1x5(3)) for the
-      "improved" cartridge, on a lighter, easier-handling ST 11 frame with better range (200/600)
-      for the improved optics. Against a Terminator (DR 200, effective DR 66) the extra pip nudges
+      "improved" cartridge, on a lighter, easier-handling frame with better range (200/600) for
+      the improved optics. Against a Terminator (DR 200, effective DR 66) the extra pip nudges
       standard-mode penetration from the plasma gun's 86% to 90%; the higher Malf 15 on its
       supercharged mode reflects the claimed better containment without pretending overheating risk
       is eliminated.
+      Handling: 13 lb loaded, slightly under the legacy plasma gun's 14 lb for Codex's "improved
+      containment design" claim; min ST 11 (√(10×13)≈11.4) follows accordingly - an easier-handling
+      frame than the plasma gun's ST 12, matching an Astartes-issue weapon that a strong human could
+      still shoulder at a penalty. RoF 1, same as every plasma weapon in this file (the containment
+      coil still has to cycle and vent, improved design or not). Shots 10(20): a slightly bigger
+      cell than the plasma gun's 8, per the "improved" reactor Codex text describes. Bulk -4 and
+      Rcl 2 match the plasma gun's figures.
 
   - name: Heavy Plasma Incinerator, Primaris Pattern
     tl: 11
@@ -197,9 +232,9 @@ items:
         damage: 8dx4(3) burn ex
         acc: 4
         range: 250/700
-        rof: 3
+        rof: 1
         shots: 8(20)
-        st: 13
+        st: 14
         bulk: -5
         rcl: 2
         skill: Beam Weapons (Rifle)
@@ -207,9 +242,9 @@ items:
         damage: 8dx5(3) burn ex
         acc: 4
         range: 250/700
-        rof: 3
+        rof: 1
         shots: 8(20)
-        st: 13
+        st: 14
         bulk: -5
         rcl: 2
         skill: Beam Weapons (Rifle)
@@ -223,6 +258,14 @@ items:
       weapon itself is lighter.
     design: >
       Matches the Plasma Cannon's damage (8dx4(3)/8dx5(3)) since both fire a cannon-class charge,
-      but keeps RoF 3 rather than the cannon's RoF 1 and drops the tripod requirement, reflecting
-      that this is a man-portable weapon for a superhuman user rather than a crew-served support
-      gun; ST 13 is set below the Plasma Cannon's ST 15 for the same reason.
+      but drops the tripod requirement entirely, reflecting that this is a man-portable weapon for
+      a superhuman user rather than a crew-served support gun.
+      Handling: 20 lb loaded - much lighter than the tripod-mounted Plasma Cannon's 45 lb, since
+      this is a shoulder-fired weapon meant to be carried and fired by a single Astartes rather
+      than braced on a mount. Min ST 14 (√(10×20)≈14.1) is set below the Plasma Cannon's mounted
+      figure but well above the standard Plasma Incinerator's ST 11, reflecting real handling
+      difficulty for anyone but an Astartes - a human could not reasonably shoulder it at all. RoF
+      1 (unchanged, per the family-wide plasma rule); the cell (8 shots) and Malf 15 both sit
+      between the standard Incinerator and the Plasma Cannon, matching a weapon built as a scaled-
+      down cannon rather than a scaled-up rifle. Bulk -5 and Rcl 2 reflect its real size without a
+      mount to steady it.
