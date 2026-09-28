@@ -103,6 +103,7 @@ Vehicle void shields will use the same rules at larger scale.
 | Long-las | 6d(2) burn | Sniper. |
 | Hellgun / hot-shot | 6d(3) burn | Built to beat carapace (eff. DR 15). |
 | Boltgun (Godwyn/standard) | 6d×2(2) pi++, follow-up 6d cr ex | Turns an unarmoured man to paste; always penetrates carapace. Against Astartes power armour (eff. DR 50) penetrates about one shot in seven (14%): a Marine takes several bolts to kill another Marine. |
+| Human-scale boltgun / bolt pistol | 6d×2(2) pi, follow-up 3d cr ex / 5d×2(2) pi, follow-up 2d cr ex | Sororitas, Inquisition and Commissar pattern: smaller bolts with a lighter mass-reactive charge (user direction). |
 | Heavy bolter | 7d×2(2) pi++, follow-up 8d cr ex | Chews light vehicles (AV10, eff. DR 50) about 40% of the time. |
 | Plasma gun | 6d×4(3) burn ex | Kills Marines through power armour (eff. DR 33); penetrates Terminators (eff. DR 67) more often than not. Overheat risk. |
 | Meltagun | 8d×6(10) burn to ½D; beyond ½D 4d×6(3) | Kills AV14 (eff. DR 35) at short range; past ½D still wrecks AV12 (76%), almost never beats AV14 (5%). |
