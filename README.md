@@ -25,3 +25,7 @@ Each entry carries its lore sources and the derivation of its numbers in the GCS
 Built in waves. Wave 1 is the core Imperium: Astra Militarum, Adeptus Astartes, Adepta Sororitas, the Inquisition, psykers, and their wargear.
 
 Warhammer 40,000 is © Games Workshop. GURPS is © Steve Jackson Games. This is an unofficial fan project; it reproduces no rules text from either.
+
+## Browsing without GCS
+
+`python3 tools/build_site.py` turns `Library/` into a single searchable page at `site/index.html` (stat blocks, point totals, lore and design notes). Open it in any browser.

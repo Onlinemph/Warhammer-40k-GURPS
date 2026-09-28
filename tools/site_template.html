@@ -1,0 +1,290 @@
+<title>40K GURPS Codex</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#e9e8e3; --panel:#f5f4f0; --ink:#1c1a21; --muted:#5f5b66; --line:#cfccc4;
+  --accent:#8e1b1b; --accent-soft:#8e1b1b14; --brass:#8a6a22; --brass-soft:#8a6a2218;
+  --row:#efeee9; --chip:#e0ded7; --neg:#6b3fa0;
+  --display:"Cinzel",Georgia,"Times New Roman",serif;
+  --body:"Alegreya Sans","Segoe UI",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#141318; --panel:#1c1b21; --ink:#e7e2d7; --muted:#a39daa; --line:#34313b;
+  --accent:#e0574b; --accent-soft:#e0574b1c; --brass:#d1ad5d; --brass-soft:#d1ad5d1c;
+  --row:#211f26; --chip:#2b2931; --neg:#b692e6; color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#141318; --panel:#1c1b21; --ink:#e7e2d7; --muted:#a39daa; --line:#34313b;
+  --accent:#e0574b; --accent-soft:#e0574b1c; --brass:#d1ad5d; --brass-soft:#d1ad5d1c;
+  --row:#211f26; --chip:#2b2931; --neg:#b692e6; color-scheme:dark;}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font:16px/1.5 var(--body);margin:0}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+.app{display:grid;grid-template-columns:290px minmax(0,1fr);height:100%}
+aside{background:var(--panel);border-right:1px solid var(--line);overflow-y:auto;padding:20px 16px 40px}
+.brand{font-family:var(--display);font-weight:700;letter-spacing:.06em;font-size:1.15rem;line-height:1.2;margin:0 0 2px}
+.brand small{display:block;font-family:var(--body);font-weight:400;letter-spacing:0;font-size:.82rem;color:var(--muted);margin-top:4px}
+.search{width:100%;margin:16px 0 8px;padding:9px 11px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font:inherit}
+.stats{font-size:.8rem;color:var(--muted);margin-bottom:14px;font-variant-numeric:tabular-nums}
+nav h3{font-family:var(--display);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--brass);margin:18px 0 6px;font-weight:700}
+nav button{display:flex;justify-content:space-between;gap:8px;width:100%;text-align:left;background:none;border:0;color:var(--ink);font:inherit;font-size:.95rem;padding:5px 8px;border-radius:5px;cursor:pointer}
+nav button:hover{background:var(--row)}
+nav button[aria-current="true"]{background:var(--accent-soft);color:var(--accent);font-weight:500}
+nav button span{white-space:nowrap;color:var(--muted);font-family:var(--mono);font-size:.75rem;padding-top:3px}
+main{overflow-y:auto;padding-block:28px 80px;padding-inline:clamp(16px,4vw,48px)}
+.libhead{max-width:1100px;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:22px}
+.eyebrow{font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(1.6rem,3vw,2.3rem);letter-spacing:.03em;margin:4px 0 0;text-wrap:balance;line-height:1.15}
+.libhead p{margin:6px 0 0;color:var(--muted);font-size:.9rem}
+.libhead code{font-family:var(--mono);font-size:.8rem}
+.entries{display:grid;gap:18px;max-width:1100px}
+.entry{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:16px 18px}
+.entry.child{background:none;border:0;border-left:2px solid var(--line);border-radius:0;padding:4px 0 4px 14px;margin-top:12px}
+.ehead{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px}
+.ename{font-weight:700;font-size:1.12rem;margin:0}
+.child .ename{font-size:1rem}
+.pts{margin-left:auto;font-family:var(--mono);font-weight:600;color:var(--brass);font-size:.95rem;white-space:nowrap}
+.pts.neg{color:var(--neg)}
+.meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.chip{font-family:var(--mono);font-size:.74rem;background:var(--chip);padding:1px 7px;border-radius:3px;white-space:nowrap}
+.chip.tag{font-family:var(--body);font-size:.76rem;background:none;border:1px solid var(--line)}
+.chip.off{background:var(--accent-soft);color:var(--accent)}
+.notes{margin:10px 0 0;white-space:pre-line;max-width:75ch}
+.tablewrap{overflow-x:auto;margin-top:12px}
+table{border-collapse:collapse;font-size:.88rem;width:100%}
+th{font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:left;font-weight:500;padding:4px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:5px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+td.n{font-family:var(--mono);font-size:.82rem;font-variant-numeric:tabular-nums;white-space:nowrap}
+td.dmg{font-family:var(--mono);font-size:.84rem;font-weight:600;color:var(--accent);white-space:nowrap}
+tr.wnote td{border-bottom:1px solid var(--line);color:var(--muted);font-size:.82rem;padding-top:0}
+tr.hasnote td{border-bottom:0}
+.dr{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:10px;font-size:.9rem}
+.dr b{font-family:var(--mono);color:var(--accent);font-weight:600;margin-right:4px}
+.feat{margin-top:8px;font-size:.9rem;color:var(--muted)}
+.mods{margin:10px 0 0;padding:0;list-style:none;font-size:.88rem}
+.mods li{padding:2px 0}
+.mods .c{font-family:var(--mono);font-size:.8rem;color:var(--brass);margin-left:6px}
+.mods .mn{color:var(--muted)}
+details.more{margin-top:10px;border-top:1px dashed var(--line);padding-top:6px}
+details.more summary{cursor:pointer;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);list-style:none;display:inline-block}
+details.more summary::-webkit-details-marker{display:none}
+details.more summary::before{content:"+ ";font-family:var(--mono)}
+details.more[open] summary::before{content:"− "}
+.more h4{font-family:var(--display);font-size:.8rem;letter-spacing:.1em;margin:10px 0 2px;color:var(--brass)}
+.more p{margin:0;white-space:pre-line;max-width:75ch;font-size:.93rem}
+.tsum{display:flex;flex-wrap:wrap;gap:10px 28px;margin:4px 0 20px;max-width:1100px}
+.tsum div{font-size:.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.tsum b{display:block;font-family:var(--mono);font-size:1.6rem;color:var(--ink);letter-spacing:0;text-transform:none}
+.tnotes{max-width:75ch;white-space:pre-line;margin:0 0 22px}
+h2{font-family:var(--display);font-size:1.05rem;letter-spacing:.08em;margin:28px 0 10px;max-width:1100px;border-bottom:1px solid var(--line);padding-bottom:4px}
+.tree{max-width:1100px;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:6px 0}
+.tree details>summary,.tree .leaf{display:flex;gap:10px;align-items:baseline;padding:5px 14px;cursor:pointer;list-style:none}
+.tree .leaf{cursor:default}
+.tree summary::-webkit-details-marker{display:none}
+.tree details>summary::before{content:"▸";color:var(--muted);font-size:.8rem;width:10px}
+.tree details[open]>summary::before{content:"▾"}
+.tree .leaf::before{content:"";width:10px}
+.tree .kids{padding-left:18px;border-left:1px solid var(--line);margin-left:19px}
+.tree .tn{flex:1}
+.tree .tn small{color:var(--muted);margin-left:6px}
+.tree .tp{font-family:var(--mono);font-size:.85rem;color:var(--brass);font-variant-numeric:tabular-nums}
+.tree .tp.neg{color:var(--neg)}
+.tree .off{opacity:.55}
+.tree .detail{padding:0 14px 8px 34px;font-size:.88rem;color:var(--muted)}
+.tree .detail .notes{margin-top:0}
+.empty{color:var(--muted);font-style:italic}
+.hit{background:var(--brass-soft);border-radius:2px}
+.menubtn{display:none}
+@media (max-width:760px){
+  .app{grid-template-columns:1fr;grid-template-rows:auto 1fr}
+  aside{border-right:0;border-bottom:1px solid var(--line);padding:14px 16px;max-height:none;overflow:visible}
+  aside nav{display:none}
+  aside.open nav{display:block}
+  .menubtn{display:inline-block;margin-top:4px;background:none;border:1px solid var(--line);color:var(--ink);font:inherit;font-size:.85rem;padding:5px 10px;border-radius:5px;cursor:pointer}
+  .search{margin-top:10px}
+  main{padding-block:20px 60px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="app">
+  <aside id="side">
+    <p class="brand">40K GURPS Codex<small>Warhammer 40,000 for GURPS 4e</small></p>
+    <input id="q" class="search" type="search" placeholder="Search names, tags, lore…" aria-label="Search the codex">
+    <div class="stats" id="stats"></div>
+    <button class="menubtn" id="menubtn" aria-expanded="false">Libraries</button>
+    <nav id="nav"></nav>
+  </aside>
+  <main id="main"></main>
+</div>
+
+<script>
+const DATA = /*__DATA__*/null;
+const LIBS = DATA.libraries;
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const KINDNAME = {equipment:"Equipment", traits:"Traits", skills:"Skills", template:"Template"};
+let current = null;
+
+function fmtPts(p){ const n = Number(p)||0; return `<span class="pts${n<0?" neg":""}">[${n}]</span>`; }
+function money(v){ if(v==null||v==="") return ""; const n=Number(v); return isNaN(n)?v:"$"+n.toLocaleString("en-US"); }
+
+function drBlock(feat){
+  if(!feat) return "";
+  let h = "";
+  for(const row of feat.dr||[]){
+    h += `<div class="dr">${row.vs?`<span class="chip">vs ${esc(row.vs)}</span>`:""}` +
+      row.groups.map(g=>`<span><b>DR ${g.dr}</b>${esc(g.locs.join(", "))}</span>`).join("") + `</div>`;
+  }
+  if(feat.other && feat.other.length) h += `<div class="feat">${feat.other.map(esc).join(" · ")}</div>`;
+  return h;
+}
+
+function weaponTables(ws){
+  if(!ws || !ws.length) return "";
+  const ranged = ws.filter(w=>!w.melee), melee = ws.filter(w=>w.melee);
+  let h = "";
+  const row = (w, cols) => {
+    const note = w.notes ? `<tr class="wnote"><td colspan="${cols.length+3}">${esc(w.notes)}</td></tr>` : "";
+    return `<tr${w.notes?' class="hasnote"':""}><td>${esc(w.usage)}</td><td class="dmg">${esc(w.damage)}</td>` +
+      cols.map(c=>`<td class="n">${esc(w[c]??"")}</td>`).join("") + `<td>${esc(w.skill)}</td></tr>` + note;
+  };
+  if(ranged.length){
+    const cols=["accuracy","range","rate_of_fire","shots","strength","bulk","recoil"];
+    h += `<div class="tablewrap"><table><thead><tr><th>Mode</th><th>Damage</th><th>Acc</th><th>Range</th><th>RoF</th><th>Shots</th><th>ST</th><th>Bulk</th><th>Rcl</th><th>Skill</th></tr></thead><tbody>` +
+      ranged.map(w=>row(w,cols)).join("") + `</tbody></table></div>`;
+  }
+  if(melee.length){
+    const cols=["reach","parry","strength"];
+    h += `<div class="tablewrap"><table><thead><tr><th>Mode</th><th>Damage</th><th>Reach</th><th>Parry</th><th>ST</th><th>Skill</th></tr></thead><tbody>` +
+      melee.map(w=>row(w,cols)).join("") + `</tbody></table></div>`;
+  }
+  return h;
+}
+
+function mods(ms){
+  if(!ms || !ms.length) return "";
+  return `<ul class="mods">${ms.map(m=>`<li>${esc(m.name)}<span class="c">${esc(m.cost)}</span>${m.notes?` <span class="mn">— ${esc(m.notes)}</span>`:""}</li>`).join("")}</ul>`;
+}
+
+function more(e){
+  if(!e.lore && !e.design) return "";
+  return `<details class="more"><summary>Lore &amp; design</summary>` +
+    (e.lore?`<h4>Lore</h4><p>${esc(e.lore)}</p>`:"") + (e.design?`<h4>Design</h4><p>${esc(e.design)}</p>`:"") + `</details>`;
+}
+
+function tagChips(tags){ return (tags||[]).map(t=>`<span class="chip tag">${esc(t)}</span>`).join(""); }
+
+function eqCard(e, child){
+  const chips = [e.tl?`TL${e.tl}`:"", e.lc!=null&&e.lc!==undefined?`LC${e.lc}`:"", money(e.cost), e.weight||"",
+    e.qty>1?`×${e.qty}`:"", e.uses!=null?`${e.uses} SP / uses`:"", e.ref||""].filter(Boolean);
+  return `<article class="entry${child?" child":""}"><div class="ehead"><h3 class="ename">${esc(e.name)}</h3></div>
+    <div class="meta">${chips.map(c=>`<span class="chip">${esc(c)}</span>`).join("")}${child?"":tagChips(e.tags)}</div>
+    ${e.notes?`<p class="notes">${esc(e.notes)}</p>`:""}
+    ${weaponTables(e.weapons)}${drBlock(e.feat)}${mods(e.mods)}${more(e)}
+    ${(e.children||[]).map(c=>eqCard(c,true)).join("")}</article>`;
+}
+
+function traitCard(t, child){
+  const chips = [t.levels!=null?`Level ${t.levels}`:"", t.cr?`CR ${t.cr}`:"", t.container&&t.container!=="group"?t.container.replace("_"," "):"", t.ref||""].filter(Boolean);
+  return `<article class="entry${child?" child":""}"><div class="ehead"><h3 class="ename">${esc(t.name)}</h3>${fmtPts(t.points)}</div>
+    <div class="meta">${t.disabled?`<span class="chip off">optional · off by default</span>`:""}${chips.map(c=>`<span class="chip">${esc(c)}</span>`).join("")}${child?"":tagChips(t.tags)}</div>
+    ${t.notes?`<p class="notes">${esc(t.notes)}</p>`:""}
+    ${mods(t.mods)}${weaponTables(t.weapons)}${drBlock(t.feat)}${more(t)}
+    ${(t.children||[]).map(c=>traitCard(c,true)).join("")}</article>`;
+}
+
+function skillCard(s){
+  if(s.children) return `<article class="entry"><div class="ehead"><h3 class="ename">${esc(s.name)}</h3></div>${s.children.map(skillCard).join("")}</article>`;
+  const chips=[s.diff, s.tl?`TL${s.tl}`:"", s.ref||""].filter(Boolean);
+  return `<article class="entry"><div class="ehead"><h3 class="ename">${esc(s.name)}</h3></div>
+    <div class="meta">${chips.map(c=>`<span class="chip">${esc(c)}</span>`).join("")}${tagChips(s.tags)}</div>
+    ${s.defaults&&s.defaults.length?`<div class="feat">Defaults: ${esc(s.defaults.join(", "))}</div>`:`<div class="feat">No default</div>`}
+    ${s.notes?`<p class="notes">${esc(s.notes)}</p>`:""}${drBlock(s.feat)}${more(s)}</article>`;
+}
+
+function treeNode(t){
+  const pts = `<span class="tp${t.points<0?" neg":""}">${t.points}</span>`;
+  const label = `<span class="tn">${esc(t.name)}${t.levels!=null?`<small>level ${t.levels}</small>`:""}${t.disabled?"<small>optional, off</small>":""}</span>${pts}`;
+  const detail = (t.notes||t.mods||(t.feat&&(t.feat.dr.length||t.feat.other.length))||t.lore||t.design)
+    ? `<div class="detail">${t.notes?`<p class="notes">${esc(t.notes)}</p>`:""}${mods(t.mods)}${drBlock(t.feat)}${more(t)}</div>` : "";
+  if(t.children){
+    return `<details class="${t.disabled?"off":""}"><summary>${label}</summary>${detail}<div class="kids">${t.children.map(treeNode).join("")}</div></details>`;
+  }
+  return detail
+    ? `<details class="${t.disabled?"off":""}"><summary>${label}</summary>${detail}</details>`
+    : `<div class="leaf${t.disabled?" off":""}">${label}</div>`;
+}
+
+function templateView(t){
+  const sk = t.skills.flatMap(s=>s.children?s.children:[s]);
+  return `<div class="tsum"><div>Total<b>${t.points}</b></div><div>Traits<b>${t.traitPoints}</b></div><div>Skills<b>${t.skillPoints}</b></div></div>
+    ${t.notes?`<p class="tnotes">${esc(t.notes)}</p>`:""}
+    <h2>Traits</h2><div class="tree">${t.traits.map(treeNode).join("")}</div>
+    ${sk.length?`<h2>Skills</h2><div class="tablewrap" style="max-width:1100px"><table><thead><tr><th>Skill</th><th>Difficulty</th><th>Points</th></tr></thead><tbody>${
+      sk.map(s=>`<tr><td>${esc(s.name)}</td><td class="n">${esc(s.diff||"")}</td><td class="n">${s.points}</td></tr>`).join("")}</tbody></table></div>`:""}
+    ${t.equipment.length?`<h2>Equipment</h2><div class="entries">${t.equipment.map(e=>eqCard(e)).join("")}</div>`:""}`;
+}
+
+function card(lib, e){ return lib.kind==="equipment"?eqCard(e):lib.kind==="traits"?traitCard(e):skillCard(e); }
+
+function showLib(id){
+  const lib = LIBS.find(l=>l.id===id) || LIBS[0];
+  current = lib.id;
+  document.querySelectorAll("nav button").forEach(b=>b.setAttribute("aria-current", b.dataset.id===lib.id));
+  const head = `<header class="libhead"><div class="eyebrow">${esc(lib.section.replace(/\//g," › "))} · ${KINDNAME[lib.kind]}</div>
+    <h1>${esc(lib.title)}</h1><p>${lib.kind==="template"?"Character template":`${lib.count} entries`} · GCS file <code>Library/${esc(lib.path)}</code></p></header>`;
+  const body = lib.kind==="template" ? templateView(lib.template) : `<div class="entries">${lib.items.map(e=>card(lib,e)).join("")}</div>`;
+  $("#main").innerHTML = head + body;
+  $("#main").scrollTop = 0;
+  try{ history.replaceState(null,"","#"+lib.id); }catch(_){}
+  $("#side").classList.remove("open"); $("#menubtn").setAttribute("aria-expanded","false");
+}
+
+function flat(e){ return [e, ...(e.children||[]).flatMap(flat)]; }
+function text(e){ return [e.name,(e.tags||[]).join(" "),e.notes,e.lore].join(" ").toLowerCase(); }
+
+function search(q){
+  q = q.trim().toLowerCase();
+  if(!q){ showLib(current); return; }
+  const terms = q.split(/\s+/);
+  let out = "", total = 0;
+  for(const lib of LIBS){
+    const pool = lib.kind==="template" ? [{...lib.template, tags:[]}] : lib.items;
+    const hits = pool.filter(e=>{ const t = flat(e).map(text).join(" ") + " " + lib.title.toLowerCase(); return terms.every(x=>t.includes(x)); });
+    if(!hits.length) continue;
+    total += hits.length;
+    out += `<h2>${esc(lib.title)} <button class="chip tag" style="cursor:pointer;font:inherit;font-size:.72rem" data-open="${lib.id}">open library</button></h2>`;
+    out += lib.kind==="template"
+      ? `<div class="entries"><article class="entry"><div class="ehead"><h3 class="ename">${esc(lib.title)}</h3>${fmtPts(lib.template.points)}</div><p class="notes">${esc((lib.template.notes||"").slice(0,300))}…</p></article></div>`
+      : `<div class="entries">${hits.slice(0,40).map(e=>card(lib,e)).join("")}</div>`;
+  }
+  $("#main").innerHTML = `<header class="libhead"><div class="eyebrow">Search</div><h1>“${esc(q)}”</h1><p>${total} matching entr${total===1?"y":"ies"}</p></header>` + (out || `<p class="empty">Nothing matches. Try a weapon, trait or faction name.</p>`);
+  document.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>{ $("#q").value=""; showLib(b.dataset.open); });
+}
+
+function buildNav(){
+  const groups = {};
+  for(const l of LIBS) (groups[l.section] ||= []).push(l);
+  $("#nav").innerHTML = Object.entries(groups).map(([sec,ls]) =>
+    `<h3>${esc(sec.split("/").slice(-1)[0] || sec)}<span style="color:var(--muted);letter-spacing:.06em"> · ${esc(sec.split("/")[0])}</span></h3>` +
+    ls.map(l=>`<button data-id="${l.id}">${esc(l.title)}<span>${l.kind==="template"?fmtPtsPlain(l.template.points):l.count}</span></button>`).join("")).join("");
+  document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{ $("#q").value=""; showLib(b.dataset.id); });
+  const entries = LIBS.reduce((n,l)=>n+(l.kind==="template"?0:l.count),0);
+  const tmpl = LIBS.filter(l=>l.kind==="template").length;
+  $("#stats").textContent = `${LIBS.length} libraries · ${entries} entries · ${tmpl} templates`;
+}
+function fmtPtsPlain(p){ return p+" pts"; }
+
+buildNav();
+let tmr; $("#q").addEventListener("input", e=>{ clearTimeout(tmr); tmr=setTimeout(()=>search(e.target.value),150); });
+$("#menubtn").onclick = ()=>{ const s=$("#side"); s.classList.toggle("open"); $("#menubtn").setAttribute("aria-expanded", s.classList.contains("open")); };
+window.addEventListener("hashchange", ()=>{ const h=location.hash.slice(1); if(h && h!==current && LIBS.some(l=>l.id===h)) showLib(h); });
+const start = (location.hash||"").slice(1);
+showLib(LIBS.some(l=>l.id===start) ? start : (LIBS.find(l=>l.id.includes("las-weapons"))||LIBS[0]).id);
+</script>
