@@ -1,0 +1,135 @@
+kind: equipment
+output: Imperium/Weapons/Melta Weapons.eqp
+items:
+
+  - name: Inferno Pistol
+    tl: 11
+    lc: 1
+    cost: 2600
+    weight: 6
+    tags: [Missile Weapon, Imperium, Adeptus Astartes, Inquisition]
+    weapons:
+      - usage: Short range (up to ½D)
+        damage: 6dx3(10) burn
+        acc: 1
+        range: 5/25
+        rof: 1
+        shots: 3(5)
+        st: 9
+        bulk: -2
+        rcl: 1
+        skill: Beam Weapons (Pistol)
+      - usage: Beyond ½D
+        damage: 3d burn
+        acc: 1
+        range: 5/25
+        rof: 1
+        shots: 3(5)
+        st: 9
+        bulk: -2
+        rcl: 1
+        skill: Beam Weapons (Pistol)
+        notes: >
+          Past its ½D range the flash-fusion charge has lost cohesion into an ordinary superheated
+          gas cloud: no armour divisor or multiplier applies.
+    lore: >
+      A pistol-format melta weapon carried by Astartes command squads, Inquisitors and Tempestus
+      officers wanting a point-blank answer to armour without a full meltagun's bulk; background
+      consistently frames it as devastating at arm's length and near-useless at any real distance.
+    design: >
+      Scaled down two dice from the meltagun anchor (8dx3(10) burn) to 6dx3(10) burn for a pistol-
+      sized fuel cell, on a very short 5/25 range band matching the anchor's "vehicle-killer at
+      short range, much less beyond" description. See the Meltagun entry for the armour check; a
+      pistol still comfortably beats carapace and power armour at point-blank range even though it
+      falls short of a full meltagun against the heaviest vehicle armour.
+
+  - name: Meltagun
+    tl: 11
+    lc: 1
+    cost: 4200
+    weight: 17
+    tags: [Missile Weapon, Imperium, Astra Militarum, Adeptus Astartes]
+    weapons:
+      - usage: Short range (up to ½D)
+        damage: 8dx3(10) burn
+        acc: 2
+        range: 10/50
+        rof: 1
+        shots: 4(5)
+        st: 10
+        bulk: -4
+        rcl: 1
+        skill: Beam Weapons (Rifle)
+      - usage: Beyond ½D
+        damage: 4d burn
+        acc: 2
+        range: 10/50
+        rof: 1
+        shots: 4(5)
+        st: 10
+        bulk: -4
+        rcl: 1
+        skill: Beam Weapons (Rifle)
+        notes: >
+          Past its ½D range the flash-fusion charge has lost cohesion into an ordinary superheated
+          gas cloud: no armour divisor or multiplier applies, and it deals only its base dice.
+    lore: >
+      The Imperium's dedicated close-range anti-armour infantry weapon, flash-vaporising the
+      target's outer surface with a superheated fusion reaction; fiction across every era treats
+      it as able to gut a tank at point-blank range and as nearly worthless at any distance, in
+      sharp contrast to a lascannon's much longer reach.
+    design: >
+      This is the project's fixed melta anchor: 8dx3(10) burn at ½D, "much less beyond." Checked
+      against the vehicle armour table: AV14 (DR 250, a Leman Russ or Land Raider's front) has
+      effective DR 25 against the (10) armour divisor; 8dx3 averages 84, more than three times the
+      effective DR, so it easily beats even the heaviest armour in the framework's table at ½D
+      range, as the assignment requires. The sharp drop-off is modelled as a second weapon line
+      rather than a formula: beyond ½D the round keeps only its base dice (4d burn), with neither
+      the x3 multiplier nor the (10) armour divisor, representing the fusion reaction losing
+      coherence in open air before it reaches the target. This is a deliberate departure from
+      default GURPS range rules (which do not normally reduce damage with range) rather than an
+      anchor conflict; it exists because the framework explicitly calls for "much less beyond," and
+      a flat halving of the anchor's own huge multiplier would still be an anti-tank weapon at any
+      range, which the fiction does not support. ST 10 and a very short 10/50 range band (versus a
+      boltgun's 200/1000) capture the weapon's role as a close-assault specialist, not a rifle.
+
+  - name: Multi-Melta
+    tl: 11
+    lc: 1
+    cost: 8000
+    weight: 55
+    tags: [Missile Weapon, Imperium, Astra Militarum, Adeptus Astartes]
+    weapons:
+      - usage: Short range (up to ½D)
+        damage: 10dx3(10) burn
+        acc: 3
+        range: 15/75
+        rof: 1
+        shots: 6(5)
+        st: 13
+        bulk: -6
+        rcl: 1
+        skill: Gunner (Beams)
+      - usage: Beyond ½D
+        damage: 5d burn
+        acc: 3
+        range: 15/75
+        rof: 1
+        shots: 6(5)
+        st: 13
+        bulk: -6
+        rcl: 1
+        skill: Gunner (Beams)
+        notes: >
+          Past its ½D range the fusion charge loses cohesion; no armour divisor or multiplier
+          applies.
+    lore: >
+      A tripod- or vehicle-mounted heavy melta weapon fielded by heavy weapon teams and as a common
+      tank sponson/hull weapon; background treats it exactly as a bigger meltagun, killing the
+      heaviest vehicles at short range and rapidly losing effect beyond it.
+    design: >
+      Two dice over the meltagun anchor (10d vs 8d), matching this project's standard heavy-weapon
+      progression, on a slightly longer 15/75 range band appropriate to a crew-served weapon with a
+      bigger reactor. ST 13 and Gunner (Beams) reflect a support weapon needing a mount or a very
+      strong user rather than a shoulder-fired arm; the same short-range/beyond-½D split as the
+      meltagun models the identical sharp fall-off.

@@ -1,0 +1,218 @@
+kind: equipment
+output: Imperium/Weapons/Plasma Weapons.eqp
+items:
+
+  - name: Plasma Pistol
+    tl: 11
+    lc: 1
+    cost: 2200
+    weight: 5
+    tags: [Missile Weapon, Imperium, Adeptus Astartes, Inquisition]
+    weapons:
+      - usage: Standard
+        damage: 4dx2(3) burn ex
+        acc: 2
+        range: 100/300
+        rof: 3
+        shots: 6(20)
+        st: 10†
+        bulk: -2
+        rcl: 2
+        skill: Beam Weapons (Pistol)
+      - usage: Supercharged
+        damage: 4dx3(3) burn ex
+        acc: 2
+        range: 100/300
+        rof: 3
+        shots: 6(20)
+        st: 10†
+        bulk: -2
+        rcl: 2
+        skill: Beam Weapons (Pistol)
+        notes: >
+          Malf 14. On a malfunction the containment coil fails: the firer immediately takes 2d(5)
+          burn ex and the weapon is disabled until a Tech-Priest or Armoury roll repairs it.
+    lore: >
+      Widely carried by Inquisitors, veteran officers and Astartes as a compact answer to armour a
+      bolt pistol cannot beat; Black Library and Codex background repeatedly show plasma pistols
+      overheating and injuring or killing careless users, a trait long associated with older,
+      unstable patterns especially.
+    design: >
+      Scaled down two dice from the plasma gun anchor (6dx2(3) burn ex) to 4dx2(3) burn ex for the
+      standard, safe firing mode; the ×3 supercharged mode trades a Malf 14 risk for another 50% of
+      damage, following the same standard/overcharge relationship used across this file. See the
+      Plasma Gun entry for the full penetration check against armour; a pistol-class charge still
+      clears flak and carapace comfortably and can trouble carapace-plus targets when supercharged.
+
+  - name: Plasma Gun
+    tl: 11
+    lc: 1
+    cost: 3200
+    weight: 14
+    tags: [Missile Weapon, Imperium, Astra Militarum, Adeptus Astartes]
+    weapons:
+      - usage: Standard
+        damage: 6dx2(3) burn ex
+        acc: 3
+        range: 150/450
+        rof: 3
+        shots: 8(20)
+        st: 12
+        bulk: -4
+        rcl: 2
+        skill: Beam Weapons (Rifle)
+      - usage: Supercharged
+        damage: 6dx3(3) burn ex
+        acc: 3
+        range: 150/450
+        rof: 3
+        shots: 8(20)
+        st: 12
+        bulk: -4
+        rcl: 2
+        skill: Beam Weapons (Rifle)
+        notes: >
+          Malf 14. On a malfunction the containment coil fails: the firer immediately takes 2d(5)
+          burn ex and the weapon is disabled until a Tech-Priest or Armoury roll repairs it.
+    lore: >
+      The plasma gun is the Guard's and the Astartes' standard answer to power armour and light
+      vehicles alike; fiction from Gaunt's Ghosts to Space Marine Battles depicts it killing
+      power-armoured targets outright while carrying a real chance of cooking its own wielder,
+      especially on older, less stable patterns - the origin of the tabletop and RPG "gets hot"/
+      overheat mechanic this entry represents mechanically as Malf 14 on the supercharged line.
+    design: >
+      This is the project's fixed plasma anchor: 6dx2(3) burn ex, treated as the weapon's safe
+      standard mode (no Malf risk) since it is already stated in the framework to kill Marines
+      through power armour without needing to invoke overheating. Check: Astartes power armour is
+      torso DR 40; armour divisor (3) drops effective DR to about 13.3, and 6dx2 averages 42, so it
+      penetrates and kills reliably, as required. Against a Terminator's DR 80 (effective DR ~26.7)
+      the average of 42 still gets through, matching the framework's explicit statement that plasma
+      still kills Terminators. The supercharged mode (6dx3(3), Malf 14) exists for harder targets
+      (light vehicles, multiple Terminators) at the cost of a real chance of the coil failing and
+      burning the firer, matching the fiction's running theme of plasma weapons being feared by
+      their own side almost as much as by the enemy.
+
+  - name: Plasma Cannon
+    tl: 11
+    lc: 1
+    cost: 6500
+    weight: 45
+    tags: [Missile Weapon, Imperium, Astra Militarum, Adeptus Astartes]
+    weapons:
+      - usage: Standard
+        damage: 8dx2(3) burn ex
+        acc: 4
+        range: 250/750
+        rof: 1
+        shots: 5(20)
+        st: 15
+        bulk: -7
+        rcl: 3
+        skill: Gunner (Beams)
+      - usage: Supercharged
+        damage: 8dx3(3) burn ex
+        acc: 4
+        range: 250/750
+        rof: 1
+        shots: 5(20)
+        st: 15
+        bulk: -7
+        rcl: 3
+        skill: Gunner (Beams)
+        notes: >
+          Malf 15. Heavier cooling and shielding on a support weapon make the coil somewhat more
+          forgiving than a man-portable plasma weapon's, but a failure is correspondingly larger:
+          the crew take 3d(5) burn ex and the weapon is disabled until repaired.
+    lore: >
+      A tripod- or vehicle-mounted heavy weapon fielded by Astra Militarum heavy weapon teams and
+      Devastator squads, background consistently treats it as a slow-firing but devastating answer
+      to Astartes-scale infantry and light vehicles at range, at the price of a low rate of fire
+      while the reactor cycles.
+    design: >
+      Two dice over the plasma gun anchor (8d vs 6d), matching the standard progression used for
+      the bolt and melta families in this project. Low RoF 1 and ST 15 (tripod or a very strong
+      user) capture the "slow-firing but devastating" character the fiction gives it; Malf 15
+      rather than 14 for the standard/overcharge pair reflects a crew-served weapon's better
+      cooling and shielding, at correspondingly higher stakes for the crew when it does fail.
+
+  - name: Plasma Incinerator, Primaris Pattern
+    tl: 11
+    lc: 1
+    cost: 3400
+    weight: 13
+    tags: [Missile Weapon, Imperium, Adeptus Astartes]
+    weapons:
+      - usage: Standard
+        damage: 6d+1x2(3) burn ex
+        acc: 4
+        range: 200/600
+        rof: 3
+        shots: 10(20)
+        st: 11
+        bulk: -4
+        rcl: 2
+        skill: Beam Weapons (Rifle)
+      - usage: Supercharged
+        damage: 6d+1x3(3) burn ex
+        acc: 4
+        range: 200/600
+        rof: 3
+        shots: 10(20)
+        st: 11
+        bulk: -4
+        rcl: 2
+        skill: Beam Weapons (Rifle)
+        notes: >
+          Malf 15. Codex background credits Primaris-pattern containment coils with being safer
+          than legacy plasma weapons; on a malfunction the firer takes 2d(5) burn ex and the weapon
+          is disabled until repaired.
+    lore: >
+      Standard-issue Primaris plasma weapon (Hellblaster squads and others), Codex background
+      describes it as an improved, more reliable containment design over the legacy plasma gun
+      rather than a fundamentally different weapon.
+    design: >
+      One pip over the plasma gun anchor (6d+1 vs 6d) for the "improved" cartridge, on a lighter,
+      easier-handling ST 11 frame with better range (200/600) for the improved optics; the higher
+      Malf 15 on its supercharged mode reflects the claimed better containment without pretending
+      overheating risk is eliminated.
+
+  - name: Heavy Plasma Incinerator, Primaris Pattern
+    tl: 11
+    lc: 1
+    cost: 4200
+    weight: 20
+    tags: [Missile Weapon, Imperium, Adeptus Astartes]
+    weapons:
+      - usage: Standard
+        damage: 8dx2(3) burn ex
+        acc: 4
+        range: 250/700
+        rof: 3
+        shots: 8(20)
+        st: 13
+        bulk: -5
+        rcl: 2
+        skill: Beam Weapons (Rifle)
+      - usage: Supercharged
+        damage: 8dx3(3) burn ex
+        acc: 4
+        range: 250/700
+        rof: 3
+        shots: 8(20)
+        st: 13
+        bulk: -5
+        rcl: 2
+        skill: Beam Weapons (Rifle)
+        notes: >
+          Malf 15. On a malfunction the firer takes 3d(5) burn ex and the weapon is disabled until
+          repaired.
+    lore: >
+      The two-handed, un-mounted heavy weapon carried by Primaris Hellblaster squads' heavy-weapon
+      troopers, background treats it as a genuine step up in output over the standard plasma
+      incinerator, manageable only because of a Primaris Marine's greater strength, not because the
+      weapon itself is lighter.
+    design: >
+      Matches the Plasma Cannon's damage (8dx2(3)/8dx3(3)) since both fire a cannon-class charge,
+      but keeps RoF 3 rather than the cannon's RoF 1 and drops the tripod requirement, reflecting
+      that this is a man-portable weapon for a superhuman user rather than a crew-served support
+      gun; ST 13 is set below the Plasma Cannon's ST 15 for the same reason.

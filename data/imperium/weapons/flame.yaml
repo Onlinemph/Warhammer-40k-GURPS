@@ -1,0 +1,156 @@
+kind: equipment
+output: Imperium/Weapons/Flame Weapons.eqp
+items:
+
+  - name: Hand Flamer
+    tl: 8
+    lc: 2
+    cost: 350
+    weight: 5
+    tags: [Missile Weapon, Imperium, Adepta Sororitas, Inquisition]
+    weapons:
+      - usage: Cone attack (3 yards)
+        damage: 2d burn
+        range: 3
+        shots: 3(5)
+        st: 8
+        bulk: -2
+        skill: Liquid Projector (Flamethrower)
+        notes: >
+          No Acc bonus applies and no aiming roll is needed against a target inside the cone
+          (B412): the skill roll is only to avoid intervening obstacles and to keep the cone off
+          friendly targets. Promethium clings to whatever it touches and burns around the edges of
+          hard cover rather than needing a clear line of fire the way a bullet does; treat cover
+          bonuses as halved (round down) against a flame cone, not ignored outright.
+      - usage: Follow-up (per turn while ablaze)
+        damage: 1d-1 burn
+        range: 3
+        shots: 3(5)
+        st: 8
+        bulk: -2
+        skill: Liquid Projector (Flamethrower)
+        notes: >
+          A target who fails an HT roll on being hit catches fire and takes this every turn until
+          extinguished (see B433's fire rules); this damage is not stopped by DR, since it is the
+          promethium burning on and around the target rather than a fresh attack.
+    lore: >
+      A compact, one-handed flame weapon carried by Adepta Sororitas Seraphim and Inquisitorial
+      agents for close-quarters purging; background stresses its short reach compared with a full
+      flamer, traded for one-handed use alongside a second weapon or wargear item.
+    design: >
+      Built bottom-up rather than from an anchor, since the framework's weapon table has none for
+      flame weapons: base damage and cone length scale down from the standard Flamer entry below in
+      the same rough proportion the bolt and plasma families use for their pistol-scale members (2d
+      burn and a 3-yard cone versus the Flamer's 3d and 5 yards). The clinging, DR-ignoring
+      follow-up and the cover-bypassing behaviour are the two lore properties the assignment calls
+      out for the whole flame family; both are given the same treatment as the Flamer entry so they
+      read identically across every weapon in this file.
+
+  - name: Flamer
+    tl: 8
+    lc: 2
+    cost: 550
+    weight: 14
+    tags: [Missile Weapon, Imperium, Astra Militarum, Adeptus Astartes]
+    weapons:
+      - usage: Cone attack (5 yards)
+        damage: 3d burn
+        range: 5
+        shots: 4(5)
+        st: 9
+        bulk: -3
+        skill: Liquid Projector (Flamethrower)
+        notes: >
+          No Acc bonus applies and no aiming roll is needed against a target inside the cone
+          (B412): the skill roll is only to avoid intervening obstacles and to keep the cone off
+          friendly targets. Promethium clings and burns around the edges of hard cover rather than
+          needing a clear line of fire; treat cover bonuses as halved (round down) against a flame
+          cone, not ignored outright.
+      - usage: Follow-up (per turn while ablaze)
+        damage: 1d burn
+        range: 5
+        shots: 4(5)
+        st: 9
+        bulk: -3
+        skill: Liquid Projector (Flamethrower)
+        notes: >
+          A target who fails an HT roll on being hit catches fire and takes this every turn until
+          extinguished (see B433's fire rules); this damage is not stopped by DR.
+    lore: >
+      Standard Astra Militarum and Astartes squad flame weapon, used throughout the fiction to
+      clear trenches, bunkers, hab-blocks and tunnel networks of infantry, xenos broods and
+      heretics where a bolter or lasgun would need a clean line of sight to every target; universally
+      shown as short-ranged but able to reach around corners and into cover that stops bullets.
+    design: >
+      No anchor exists for flame weapons in the framework, so this entry is built from GURPS's own
+      area/cone attack design language (B412) rather than from a catalogue item: an "always hits
+      inside the cone, no Acc" ranged attack with a burning-target follow-up per the Fire rules
+      (B433). Base damage (3d burn) and cone length (5 yards) are set to comfortably kill an
+      unarmoured man and threaten (but not reliably beat) flak DR 8 on the initial hit, with the
+      real killing power coming from repeated, DR-ignoring burning damage once a target catches
+      fire - matching the fiction's emphasis on flame weapons as area-denial and anti-infantry tools
+      rather than armour-piercing ones. TL is set at 8, well below the TL10 the framework gives
+      most standard Imperial small arms, because a pressurised-fuel-and-igniter weapon is genuinely
+      simple compared with a lasgun or bolter; LC2 (rather than the low LC4 real stub-tech gets)
+      reflects that the Imperium restricts flame weapons for what they do and who is trusted to
+      carry them, not for how sophisticated they are - a deliberate case where TL and LC diverge
+      that departs from the framework's usual TL-implies-LC pattern, worth flagging as a judgment
+      call rather than a strict anchor.
+
+  - name: Heavy Flamer
+    tl: 8
+    lc: 2
+    cost: 900
+    weight: 26
+    tags: [Missile Weapon, Imperium, Astra Militarum, Adeptus Astartes]
+    weapons:
+      - usage: Cone attack (8 yards)
+        damage: 4d burn
+        range: 8
+        shots: 6(5)
+        st: 12
+        bulk: -5
+        skill: Liquid Projector (Flamethrower)
+        notes: >
+          No Acc bonus applies and no aiming roll is needed against a target inside the cone
+          (B412): the skill roll is only to avoid intervening obstacles and to keep the cone off
+          friendly targets. Promethium clings and burns around the edges of hard cover; treat cover
+          bonuses as halved (round down) against a flame cone, not ignored outright.
+      - usage: Follow-up (per turn while ablaze)
+        damage: 1d+1 burn
+        range: 8
+        shots: 6(5)
+        st: 12
+        bulk: -5
+        skill: Liquid Projector (Flamethrower)
+        notes: >
+          A target who fails an HT roll on being hit catches fire and takes this every turn until
+          extinguished (see B433's fire rules); this damage is not stopped by DR.
+    lore: >
+      A heavier, hotter-burning flame weapon mounted on vehicles or carried by Astartes Devastator/
+      Aggressor-adjacent squads and Inquisitorial storm troopers; background treats it as a bunker-
+      and horde-clearing weapon with a longer, wider cone and a bigger promethium reservoir than a
+      standard flamer.
+    design: >
+      One die over the standard Flamer, with a longer 8-yard cone and a bigger fuel tank (6 bursts
+      vs 4), on a much higher ST 12 reflecting a genuinely heavy weapon usually carried by an
+      Astartes or mounted on a vehicle sponson. The DR-ignoring burning follow-up is scaled the
+      same amount as the base damage, keeping the same design relationship used for the Hand
+      Flamer and Flamer above.
+
+  - name: Promethium Fuel Canister
+    tl: 8
+    lc: 2
+    cost: 40
+    weight: 6
+    tags: [Imperium, Astra Militarum, Adeptus Astartes]
+    lore: >
+      The sealed, pressurised fuel reservoir every flame weapon in this file draws from; background
+      material treats spare canisters as standard squad-level resupply, carried by an ammo-bearer or
+      strapped to the weapon itself, and as a minor hazard in their own right if struck by enemy fire.
+    design: >
+      A plain reload item rather than a weapon: swapping one in restores a flame weapon's shots to
+      its listed maximum (the number after the slash in each weapon's shots field above). No
+      separate stat block is needed since the fuel itself has no damage value; a GM wanting a
+      "canister explodes if shot" hazard can rule it detonates for the carrying weapon's own cone
+      damage.

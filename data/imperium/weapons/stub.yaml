@@ -1,0 +1,410 @@
+kind: equipment
+output: Imperium/Weapons/Solid Projectile Weapons.eqp
+items:
+  - name: Autopistol
+    tl: 7
+    lc: 4
+    cost: 80
+    weight: 2
+    tags: [Missile Weapon, Imperium]
+    weapons:
+      - usage: Standard (ball)
+        damage: 2d pi-
+        acc: 2
+        range: 80/180
+        rof: 3
+        shots: 16+1(3)
+        st: 7
+        bulk: -2
+        rcl: 2
+        skill: Guns (Pistol)
+      - usage: Manstopper rounds
+        damage: 2d+1(0.5) pi+
+        acc: 2
+        range: 80/180
+        rof: 3
+        shots: 16+1(3)
+        st: 7
+        bulk: -2
+        rcl: 2
+        skill: Guns (Pistol)
+        notes: >-
+          Soft-nosed rounds that flatten on impact for a bigger wound
+          channel but poor penetration.
+    lore: >-
+      A cheap, mass-produced sidearm found across a billion hive worlds:
+      gang muscle, PDF conscripts and Guard officers who don't rate a
+      laspistol all carry one. Consistently portrayed in Guard and Arbites
+      fiction as the low-status "poor man's laspistol."
+    design: >-
+      No framework anchor covers stub weapons, so this is built from
+      scratch as a real-world-style light service pistol at TL7 (per
+      framework.md's stub-tech tier), not lifted from any catalogue. 2d
+      pi- averages 7, halved by the pi- wounding modifier to ~3.5 — a real
+      but unimpressive threat to an unarmoured target, matching the
+      autopistol's reputation as a backup weapon rather than a main-line
+      arm. The Manstopper usage swaps to pi+ (bigger wound multiplier) with
+      an armour divisor of (0.5), the standard GURPS way to model an
+      expanding round: more damage to flesh, worse against any DR.
+
+  - name: Autogun
+    tl: 7
+    lc: 3
+    cost: 150
+    weight: 8
+    tags: [Missile Weapon, Imperium, Astra Militarum]
+    weapons:
+      - usage: Standard ball
+        damage: 2d+2 pi
+        acc: 4
+        range: 150/500
+        rof: 10
+        shots: 30(3)
+        st: 8
+        bulk: -4
+        rcl: 2
+        skill: Guns (Rifle)
+      - usage: Dum-Dum rounds
+        damage: 3d(0.5) pi+
+        acc: 4
+        range: 150/500
+        rof: 10
+        shots: 30(3)
+        st: 8
+        bulk: -4
+        rcl: 2
+        skill: Guns (Rifle)
+        notes: >-
+          Expanding rounds: bigger wound channel against flesh, much worse
+          against armour.
+    lore: >-
+      The standard-issue solid-slug battle rifle of regiments and militias
+      that lack a lasgun allocation — a recoil-operated intermediate-calibre
+      rifle that recurs across Astra Militarum background material as the
+      "poor cousin" of the lasgun, more common on low-priority garrison and
+      PDF postings.
+    design: >-
+      No fixed anchor exists for the autogun, but framework.md's armour
+      table gives an indirect one: flak (DR 8) is stated to stop "shrapnel
+      and stub rounds." 2d+2 pi averages 9 — just enough to punch a single
+      point through DR 8 on an average hit, i.e. functionally stopped for
+      most purposes while still a solid 9-point wound against an unarmoured
+      target. That's a deliberate calibration to the flak anchor, not a
+      coincidence. RoF 10/shots 30(3) follow ordinary selective-fire rifle
+      conventions (used only as a design reference, per framework.md's
+      rule against renaming catalogue items — no stat block here is copied
+      from an existing book). The Dum-Dum usage applies the same
+      expanding-round logic as the autopistol's Manstopper round.
+
+  - name: Stub Revolver
+    tl: 7
+    lc: 4
+    cost: 140
+    weight: 2.5
+    tags: [Missile Weapon, Imperium]
+    weapons:
+      - usage: Standard
+        damage: 2d+1 pi
+        acc: 2
+        range: 100/250
+        rof: 1
+        shots: 6(3)
+        st: 7
+        bulk: -2
+        rcl: 1
+        skill: Guns (Pistol)
+    lore: >-
+      A well-made, reliable break-top or swing-cylinder handgun favoured by
+      Inquisitorial acolytes, enforcers and anyone who prizes reliability
+      over firepower or rate of fire; FFG-line background (used here only
+      for relative calibration, per framework.md's source order) singles
+      the stub revolver out as the higher-quality, slower-firing counterpart
+      to the stub automatic.
+    design: >-
+      Single-action cycling caps RoF at 1 — there's no autofire mechanism.
+      Full pi wounding (rather than the autopistol's pi-) and a higher base
+      die (2d+1) reflect a larger-calibre, better-machined round fired from
+      a tighter, hand-fitted barrel; low Rcl (1) follows from GURPS
+      convention for a heavier, well-balanced revolver.
+
+  - name: Stub Automatic
+    tl: 7
+    lc: 4
+    cost: 90
+    weight: 2
+    tags: [Missile Weapon, Imperium]
+    weapons:
+      - usage: Standard (ball)
+        damage: 2d pi-
+        acc: 2
+        range: 80/180
+        rof: 3
+        shots: 10+1(3)
+        st: 7
+        bulk: -2
+        rcl: 2
+        skill: Guns (Pistol)
+    lore: >-
+      The cheaper, select-fire cousin of the autopistol and stub revolver,
+      common as a backup piece among gangers, cultists and low-tier militia;
+      distinguished in FFG-line background primarily by cost and magazine
+      capacity rather than raw power.
+    design: >-
+      Same round as the autopistol's standard ball ammunition (2d pi-),
+      since both fire generic mass-produced pistol-calibre cartridges — the
+      difference is a smaller magazine (10+1 vs. 16+1) and cheaper
+      construction, reflected here in cost and weight rather than a
+      duplicate damage figure, since GCS has no separate build-quality stat.
+
+  - name: Heavy Stubber
+    tl: 7
+    lc: 2
+    cost: 900
+    weight: 40
+    tags: [Missile Weapon, Imperium, Astra Militarum]
+    weapons:
+      - usage: Standard
+        damage: 5d+1 pi+
+        acc: 4
+        range: 500/2000
+        rof: 10
+        shots: 250(20)
+        st: 12B
+        bulk: -6
+        rcl: 3
+        skill: Gunner (Machine Gun)
+    lore: >-
+      The Imperium's standard heavy machine gun: a deliberately archaic
+      solid-slug design valued precisely because a forge world with almost
+      no infrastructure can still manufacture it. A mainstay on Chimera
+      pintles, Sentinel weapon mounts and heavy-weapon squads across Guard
+      background art and fiction, and never once shown killing a tank.
+    design: >-
+      Scaled up from the autogun's pi rating to a true heavy-calibre
+      weapon (pi+, the GURPS x1.5 wounding multiplier), reasoned from a
+      real-world heavy support-gun analogue rather than any catalogue entry.
+      Deliberately pitched below the heavy bolter anchor (8d(2) pi+, which
+      "chews light vehicles"): 5d+1 pi+ averages ~19 with no armour
+      divisor, nowhere near AV10's DR 50. That failure is intentional — the
+      fiction never shows a heavy stubber meaningfully hurting a vehicle,
+      only infantry, and this stat block reproduces that gap explicitly.
+      Mounted per framework.md's braced/mounted-heavies rule, hence Gunner
+      (Machine Gun) rather than Guns.
+
+  - name: Combat Shotgun
+    tl: 7
+    lc: 2
+    cost: 350
+    weight: 9
+    tags: [Missile Weapon, Imperium, Adeptus Arbites]
+    weapons:
+      - usage: Buckshot
+        damage: 3d+2 pi+
+        acc: 2
+        range: 20/70
+        rof: 3
+        shots: 8(3)
+        st: 9
+        bulk: -4
+        rcl: 1
+        skill: Guns (Shotgun)
+      - usage: Slug
+        damage: 5d pi+
+        acc: 3
+        range: 150/500
+        rof: 3
+        shots: 8(3)
+        st: 9
+        bulk: -4
+        rcl: 2
+        skill: Guns (Shotgun)
+      - usage: Executioner shell
+        damage: 4d(2) pi+
+        acc: 2
+        range: 20/70
+        rof: 3
+        shots: 8(3)
+        st: 9
+        bulk: -4
+        rcl: 1
+        skill: Guns (Shotgun)
+        notes: >-
+          Rare flechette/APDS-style shell, usually restricted to Inquisition
+          or Arbites armouries.
+    lore: >-
+      A full-auto-capable military scattergun issued to void-ship boarding
+      parties, PDF close-quarters units and Adeptus Arbites riot squads.
+      "Executioner" shells are referenced in FFG-line background (relative
+      calibration only, per framework.md) as a specialist close-range,
+      armour-beating round issued to elite units rather than line troops.
+    design: >-
+      Buckshot and slug follow the usual GURPS shotgun split — short-ranged
+      and hard-hitting versus long-ranged and precise — but are given single
+      flat damage figures rather than the Basic Set's full range-banded
+      pellet-spread rules, a deliberate simplification noted here for
+      transparency. The Executioner shell keeps the buckshot's short range
+      but adds an armour divisor of (2), modelling a penetrator flechette
+      payload that trades general usefulness for beating armour at point-
+      blank range.
+
+  - name: Pump Shotgun
+    tl: 7
+    lc: 4
+    cost: 150
+    weight: 7
+    tags: [Missile Weapon, Imperium]
+    weapons:
+      - usage: Buckshot
+        damage: 3d pi+
+        acc: 2
+        range: 15/60
+        rof: 1
+        shots: 5+1(3)
+        st: 9
+        bulk: -4
+        rcl: 1
+        skill: Guns (Shotgun)
+      - usage: Slug
+        damage: 4d+2 pi+
+        acc: 3
+        range: 120/400
+        rof: 1
+        shots: 5+1(3)
+        st: 9
+        bulk: -4
+        rcl: 2
+        skill: Guns (Shotgun)
+    lore: >-
+      A civilian and militia pump-action scattergun common on agri and
+      feral worlds and among hive gangers — a step down from the military
+      combat shotgun, and the more commonly depicted shotgun among
+      non-military characters in Imperial fiction.
+    design: >-
+      Same buckshot/slug split as the Combat Shotgun, toned down roughly
+      half a die and locked to RoF 1 (manual pump cycling, no autofire) to
+      reflect civilian manufacture rather than a military select-fire
+      action.
+
+  - name: Hunting Rifle
+    tl: 7
+    lc: 4
+    cost: 300
+    weight: 9
+    tags: [Missile Weapon, Imperium]
+    weapons:
+      - usage: Standard
+        damage: 6d pi
+        acc: 7
+        range: 600/2000
+        rof: 1
+        shots: 5(3)
+        st: 10
+        bulk: -6
+        rcl: 2
+        skill: Guns (Rifle)
+    lore: >-
+      A bolt-action precision rifle common on agri, feral and frontier
+      worlds, pressed into service as a stopgap sniper weapon by Guard
+      marksmen and PDF units where a long-las isn't issued.
+    design: >-
+      Modelled as a realistic TL7 bolt-action big-game rifle (a real-world
+      analogue, not a renamed catalogue item): a large single round for
+      maximum penetration, RoF 1 for manual bolt cycling between shots.
+      Kept below the long-las (5d burn, no armour help at all against
+      carapace or better) in practical terms — full pi wounding and no
+      armour divisor mean it's comparably lethal to an unarmoured target
+      but does nothing against carapace-or-better armour, in contrast to
+      the long-las which at least keeps pace with a standard lasgun there.
+
+  - name: Autopistol Magazine, Standard Ball (spare, x3)
+    tl: 7
+    lc: 4
+    cost: 8
+    weight: 1
+    tags: [Imperium]
+    lore: >-
+      Spare magazines for an autopistol or stub automatic, sold and issued
+      in bundles.
+    design: >-
+      Pure ammunition item; matches the "16+1(3)" and "10+1(3)" shot lines
+      on the Autopistol and Stub Automatic above.
+
+  - name: Manstopper Rounds, box of 20
+    tl: 7
+    lc: 3
+    cost: 25
+    weight: 1
+    tags: [Imperium]
+    lore: >-
+      Boxed soft-point ammunition for autopistols; restricted above plain
+      ball ammunition since it's a purpose-made anti-personnel round rather
+      than general-issue stock.
+    design: >-
+      Pure ammunition item backing the Autopistol's "Manstopper rounds"
+      usage line.
+
+  - name: Autogun Magazine, Standard Ball (spare, x2)
+    tl: 7
+    lc: 3
+    cost: 12
+    weight: 2
+    tags: [Imperium, Astra Militarum]
+    lore: >-
+      Standard-issue spare magazines for the autogun, carried by the case
+      on any world where lasguns and their charge packs aren't the standard
+      allocation.
+    design: >-
+      Pure ammunition item; matches the Autogun's "30(3)" shot line.
+
+  - name: Dum-Dum Rounds, box of 20
+    tl: 7
+    lc: 2
+    cost: 35
+    weight: 2
+    tags: [Imperium]
+    lore: >-
+      Illegal-in-many-jurisdictions expanding ammunition for the autogun,
+      more restricted than standard ball rounds precisely because of the
+      wound it leaves.
+    design: >-
+      Pure ammunition item backing the Autogun's "Dum-Dum rounds" usage
+      line.
+
+  - name: Heavy Stubber Ammo Belt, 250 rounds
+    tl: 7
+    lc: 2
+    cost: 60
+    weight: 14
+    tags: [Imperium, Astra Militarum]
+    lore: >-
+      A standard belt of heavy-calibre ammunition for the heavy stubber,
+      typically carried in a drum or box feed by the weapon's second crewer.
+    design: >-
+      Pure ammunition item; matches the Heavy Stubber's "250(20)" shot line.
+
+  - name: Shotgun Shells, box of 20 (buckshot/slug)
+    tl: 7
+    lc: 3
+    cost: 15
+    weight: 3
+    tags: [Imperium]
+    lore: >-
+      A mixed box of standard shotgun shells, issued or bought for either
+      the combat shotgun or pump shotgun.
+    design: >-
+      Pure ammunition item backing the Buckshot and Slug usage lines on
+      both shotguns above.
+
+  - name: Executioner Shells, box of 10
+    tl: 7
+    lc: 2
+    cost: 80
+    weight: 2
+    tags: [Imperium, Adeptus Arbites]
+    lore: >-
+      Restricted flechette shells for the combat shotgun, typically drawn
+      only from Arbites or Inquisitorial armouries rather than general
+      Munitorum stock.
+    design: >-
+      Pure ammunition item backing the Combat Shotgun's "Executioner shell"
+      usage line.
