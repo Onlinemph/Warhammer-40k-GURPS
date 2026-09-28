@@ -1,0 +1,92 @@
+kind: template
+output: Adeptus Mechanicus/Templates/Combat Servitor.gct
+notes: >
+  An NPC template, not a player-character build: a Combat Servitor, a
+  lobotomized criminal or debtor grafted with a mounted weapon and heavy
+  augmetic reinforcement, fielded as expendable, utterly obedient
+  battlefield muscle by the Cult Mechanicus and any Militarum force it
+  attaches to. Point math: ST 14 (+40), DX 9 (-20), IQ 6 (-80), HT 12
+  (+20) = -40 (Will and Per both default to IQ 6 at no extra cost);
+  advantages +74; disadvantages -110; skills +9. Total -67 points. A
+  negative total is expected and correct for this kind of construct-NPC
+  stat block (the same way some GURPS bestiary write-ups price a creature
+  built almost entirely out of disadvantages below zero): a Servitor isn't
+  a character anyone plays, it's a thing the Mechanicus builds, and the
+  disadvantages of having had most of a person surgically removed
+  genuinely outweigh what's left. GMs should treat the listed HP/ST/etc.
+  as the real numbers to fight and should not expect a player to "buy" this
+  template. The mounted weapon itself (heavy bolter, flamer, etc.) is
+  equipment, not covered here.
+traits:
+  - name: ST
+    points: 40
+    tags: [Attribute]
+    lore: Menial and combat Servitor stock is chosen or reinforced for raw strength; augmetic replacement adds more on top.
+    design: ST 14 (+4), 10 pts/level (B15).
+  - name: DX
+    points: -20
+    tags: [Attribute]
+    lore: What's left of fine motor control after the excision is well below the human average; a Servitor moves like the machine it now mostly is.
+    design: DX 9 (-1), 20 pts/level (B15).
+  - name: IQ
+    points: -80
+    tags: [Attribute]
+    lore: >
+      Enough intelligence remains to follow simple binharic command-cant
+      and standing orders; nothing more. Will and Perception both default
+      to this IQ (6) rather than being bought up, since nothing about a
+      Servitor calls for either to be higher.
+    design: IQ 6 (-4), 20 pts/level (B15).
+  - name: HT
+    points: 20
+    tags: [Attribute]
+    lore: Surgical and augmetic reinforcement produce real physical endurance, whatever else was removed.
+    design: HT 12 (+2), 10 pts/level (B14).
+  - include: "mechanicus/traits/augmetics.yaml#Mechadendrite, Ballistic Pattern"
+    lore: The mounted heavy weapon (a heavy bolter, flamer, or similar) that defines a Combat Servitor's battlefield role.
+  - include: "mechanicus/traits/augmetics.yaml#Augmetic Arm, Combat Pattern"
+    lore: The Servitor's other arm, reinforced for melee and heavy lifting when the mounted weapon isn't the answer.
+  - include: "mechanicus/traits/augmetics.yaml#Subdermal Armour Plating"
+    levels: 2
+  - include: "mechanicus/traits/augmetics.yaml#Respirator Plugs (Filtration Lungs)"
+  - name: High Pain Threshold
+    points: 10
+    ref: B59
+    tags: [Advantage, Physical, Imperium]
+    lore: What remains of a Servitor's nervous system has been surgically and chemically dulled well past the point of registering ordinary pain.
+    design: Basic Set High Pain Threshold (B59), 10 points.
+  - name: Injury Tolerance (No Blood)
+    points: 5
+    ref: B61
+    tags: [Advantage, Physical, Imperium]
+    lore: Heavy circulatory augmentation and replacement organs leave a Servitor largely unaffected by the bleeding-out effects that would drop an ordinary wounded human.
+    design: Basic Set Injury Tolerance (No Blood) (B61), 5 points.
+  - include: "mechanicus/traits/augmetics.yaml#Servitor Lobotomy (Neural Excision)"
+  - include: "mechanicus/traits/augmetics.yaml#Duty (Adeptus Mechanicus)"
+    points: -15
+    notes: >
+      Overridden to -15: a Combat Servitor's entire existence is service,
+      with none of an ordained adept's remaining autonomy to soften it.
+  - name: Social Stigma (Valuable Property)
+    points: -10
+    ref: B156
+    tags: [Disadvantage, Social, Imperium]
+    lore: >
+      A Servitor is Mechanicus property in exactly the legal sense the
+      words imply: requisitioned, inventoried, and disposed of at need,
+      with no standing to be treated otherwise anywhere in the Imperium.
+    design: Basic Set Social Stigma (Valuable Property) (B156), -10.
+skills:
+  - name: Gunner
+    spec: Machine Gun
+    diff: DX/A
+    points: 8
+    tags: [Imperium, Adeptus Mechanicus]
+    lore: The single combat routine most Combat Servitors are conditioned to execute, over and over, without variation.
+    design: DX+2 (11) for 8 points, Average (B170).
+  - name: Brawling
+    diff: DX/E
+    points: 1
+    tags: [Imperium]
+    lore: A fallback routine for when the mounted weapon runs dry.
+    design: DX+0 (9) for 1 point, Easy.
