@@ -55,9 +55,9 @@ items:
     tags: [Missile Weapon, Imperium, Astra Militarum]
     weapons:
       - usage: Standard ball
-        damage: 2d+2 pi
+        damage: 4d+1 pi
         acc: 4
-        range: 150/500
+        range: 500/2000
         rof: 10
         shots: 30(3)
         st: 8
@@ -65,9 +65,9 @@ items:
         rcl: 2
         skill: Guns (Rifle)
       - usage: Dum-Dum rounds
-        damage: 3d(0.5) pi+
+        damage: 4d+1(0.5) pi+
         acc: 4
-        range: 150/500
+        range: 500/2000
         rof: 10
         shots: 30(3)
         st: 8
@@ -84,17 +84,15 @@ items:
       "poor cousin" of the lasgun, more common on low-priority garrison and
       PDF postings.
     design: >-
-      No fixed anchor exists for the autogun, but framework.md's armour
-      table gives an indirect one: flak (DR 8) is stated to stop "shrapnel
-      and stub rounds." 2d+2 pi averages 9 — just enough to punch a single
-      point through DR 8 on an average hit, i.e. functionally stopped for
-      most purposes while still a solid 9-point wound against an unarmoured
-      target. That's a deliberate calibration to the flak anchor, not a
-      coincidence. RoF 10/shots 30(3) follow ordinary selective-fire rifle
-      conventions (used only as a design reference, per framework.md's
-      rule against renaming catalogue items — no stat block here is copied
-      from an existing book). The Dum-Dum usage applies the same
-      expanding-round logic as the autopistol's Manstopper round.
+      Calibrated to lasgun parity rather than to flak. In the fiction autoguns
+      kill as readily as lasguns, and Only War gives both the same damage
+      (1d10+3), so the autogun sits at 4d+1 pi against the lasgun's 4d burn:
+      avg 15, getting ~7 through flak (DR 8) and rarely beating carapace (DR 20),
+      the same outcomes as the lasgun. An earlier draft used 2d+2 pi to make
+      flak "stop stub rounds"; that framework wording was about pistol calibres
+      and has been corrected. Range 500/2000 fits an intermediate-calibre rifle.
+      RoF 10, 30(3) follow selective-fire rifle conventions. The Dum-Dum usage
+      applies the same expanding-round logic as the autopistol's Manstopper.
 
   - name: Stub Revolver
     tl: 7

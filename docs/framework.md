@@ -61,7 +61,7 @@ These numbers are fixed. Everything else is placed relative to them.
 | Armour | Torso DR | Notes |
 |---|---|---|
 | Unarmoured | 0 | |
-| Flak (vest/jacket) | 8 | Stops shrapnel and stub rounds. Las and bolts get through. Flak helmet DR 6. |
+| Flak (vest/jacket) | 8 | Stops shrapnel and pistol-calibre stub rounds. Lasgun and autogun hits usually get through; bolts always do. Flak helmet DR 6. |
 | Mesh | 10, flexible | Hive-noble and assassin wear. Flexible: blunt trauma applies. |
 | Carapace | 20 | Rigid plate. Usually stops a lasgun; a bolter or hot-shot las goes through. |
 | Adepta Sororitas power armour | 32 | Lighter than Astartes plate. |
@@ -75,6 +75,7 @@ Limbs are usually a few DR below torso. Specify every location explicitly.
 | Weapon | Damage | What it has to do |
 |---|---|---|
 | Laspistol | 3d burn | Kills an unarmoured man in 1–2 hits. |
+| Autogun | 4d+1 pi | Lasgun parity: the two are equally lethal in fiction and Only War. |
 | Lasgun | 4d burn | Punches flak; rarely penetrates carapace (4d max 24 vs DR 20). |
 | Long-las | 5d burn | Sniper. |
 | Hellgun / hot-shot | 5d(2) burn | Built to beat carapace. |

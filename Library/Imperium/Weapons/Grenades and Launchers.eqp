@@ -1,0 +1,612 @@
+{
+	"version": 5,
+	"rows": [
+		{
+			"id": "ewHVmXbmr8GN43NIj",
+			"description": "Frag Grenade",
+			"local_notes": "Lore: The standard fragmentation grenade of the Departmento Munitorum, a fist-sized charge issued to virtually every Guardsman; a background constant across Black Library Guard fiction from Gaunt's Ghosts to the Ciaphas Cain novels.\n\nDesign: No framework.md anchor covers grenades, so this is built independently using GURPS's own explosive-damage convention — a concussion \"cr ex\" figure plus a bracketed fragmentation die, exactly the pattern data-format.md's own schema example uses. Concussion is set to a modest 3d cr ex (enough to injure at the centre, nowhere near a demolition charge) with a 6d cut fragmentation cloud as the real threat to exposed infantry within a few yards, matching how frag grenades are consistently shown as lethal to troops in the open but useless against armour or fortifications.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium",
+				"Astra Militarum"
+			],
+			"tech_level": "8",
+			"legality_class": "2",
+			"base_value": "20",
+			"base_weight": "1 lb",
+			"weapons": [
+				{
+					"id": "WWR_FxjOQl1NiBlcB",
+					"sv": 1,
+					"damage": {
+						"type": "cr ex",
+						"base": "3d",
+						"fragmentation": "6d",
+						"fragmentation_type": "cut"
+					},
+					"usage": "Thrown",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Throwing"
+							}
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eEGPd6DfrgIA6xDzN",
+			"description": "Krak Grenade",
+			"local_notes": "Lore: The Imperium's standard anti-armour and anti-fortification grenade, issued alongside frag grenades to Guard and Astartes forces alike; codex and Black Library background repeatedly show it wrecking light vehicles and bunker firing points, and occasionally cracking heavier targets at real cost and risk.\n\nDesign: Modelled as a hand-thrown shaped charge using the same \"cr ex plus armour divisor\" logic GURPS uses for anti-tank warheads, scaled down from the meltagun anchor (8dx3(10) burn): same x3 dice multiplier convention, but a much smaller armour divisor of (2) instead of (10), since a grenade-sized shaped charge is far less focused and powerful than a dedicated melta weapon's thermal lance. Required vehicle-armour check (framework.md's AV-to-DR table): average roll is 6dx3 = 63. Against AV10 (DR 50, halved to 25 by the divisor): 63-25 = 38 points through — comfortably \"cracks\" light vehicle armour, as required. Against AV11 (DR 80, halved to 40): 23 points through — still hurts a Rhino. Against AV12 (DR 120, halved to 60): only 3 points through — a glancing effect on a Chimera's front. Against AV13-14 (DR 180+, halved to 90+): the halved DR exceeds the grenade's damage outright, so a krak grenade cannot crack a Leman Russ or Land Raider's frontal armour. This matches the lore's use of krak grenades as light-vehicle and infantry-support ordnance rather than a dedicated tank-killer — that job belongs to the meltagun and melta bomb.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium",
+				"Astra Militarum"
+			],
+			"tech_level": "8",
+			"legality_class": "2",
+			"base_value": "60",
+			"base_weight": "1.5 lb",
+			"weapons": [
+				{
+					"id": "WhHpNRRx41eSmllVY",
+					"sv": 1,
+					"damage": {
+						"type": "cr ex",
+						"base": "6dx3",
+						"armor_divisor": 2
+					},
+					"usage": "Thrown, shaped charge",
+					"usage_notes": "Contact-fused shaped charge with a very small blast radius (roughly 1 yard) — built for a single hard target, not an area effect.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Throwing"
+							}
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "e8kIcbTj8cSMlP-1z",
+			"description": "Melta Bomb",
+			"local_notes": "Lore: A hefty demolition charge with an integral melta-coil detonator, carried by sappers and Techmarines to crack void-hull bulkheads, bunkers and vehicle hulls when a meltagun isn't available or isn't enough; Black Library fiction shows melta bombs destroying Land Raiders and fortifications when a Space Marine or Guard sapper can get one physically onto the target.\n\nDesign: Uses the same superheated thermal-lance principle as the meltagun anchor (8dx3(10) burn) and keeps its armour divisor of (10) unchanged — it's the same fuel-air/thermic mechanism, just a bigger charge. The larger die count (6dx5, average 105) is justified by a satchel-sized charge carrying far more fuel mass than a handheld weapon's cell can. Sanity check against the toughest anchor: Land Raider frontal armour (AV14, DR 250) is reduced to an effective DR 25 by the divisor, so an average charge still deals roughly 80 points of burn damage through — enough to explain the fiction's \"well-placed melta bomb cracks even the heaviest armour,\" and consistent with it being a dedicated, single-use, last-resort tank-killer rather than a weapon anyone carries casually (LC1, high cost).",
+			"tags": [
+				"Missile Weapon",
+				"Imperium",
+				"Astra Militarum"
+			],
+			"tech_level": "11",
+			"legality_class": "1",
+			"base_value": "250",
+			"base_weight": "6 lb",
+			"weapons": [
+				{
+					"id": "W75fn78DfyOe5xd2k",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "6dx5",
+						"armor_divisor": 10
+					},
+					"usage": "Placed charge (contact, timed or remote-detonated)",
+					"usage_notes": "Hand-placed against a hull, hatch or wall; not thrown and not usable at range. Arming and placing it well enough to guarantee the shot is a demolitions task, not a weapon skill.",
+					"defaults": [
+						{
+							"type": "iq",
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eIIiAsU8jyxh5N_gZ",
+			"description": "Photon Flash Grenade",
+			"local_notes": "Lore: A dazzling photonic flash grenade used by the Guard and the Adeptus Arbites for room-clearing and riot control; consistently shown as a non-lethal, temporary-blindness tool rather than a casualty-producing weapon.\n\nDesign: Modelled as a GURPS Affliction-style blinding attack (per Basic Set's flash-grenade conventions) using a flat HT roll rather than a damage roll, since a photon flash grenade's entire purpose is sensory disruption rather than physical injury. No dedicated GCS damage type exists for this, so \"spec\" (special) is used and the actual mechanic is spelled out in the notes field, which is read at the table.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium",
+				"Astra Militarum"
+			],
+			"tech_level": "8",
+			"legality_class": "3",
+			"base_value": "25",
+			"base_weight": "1 lb",
+			"weapons": [
+				{
+					"id": "W8AM7tmp9IugrhLPk",
+					"sv": 1,
+					"damage": {
+						"type": "spec"
+					},
+					"usage": "Flash",
+					"usage_notes": "Everyone within 5 yards facing the grenade when it goes off must roll vs. HT-6 or be blinded for 1d minutes; anyone looking away or wearing eye protection is unaffected. Deals no HP damage.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Throwing"
+							}
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "ess8bQp2O98izzBCT",
+			"description": "Blind Grenade",
+			"local_notes": "Lore: Several RPG-line sourcebooks use \"blind grenade\" and \"photon flash grenade\" almost interchangeably; honestly, no single source draws a hard line between them. This entry treats the blind grenade as the cruder, more common cousin of the Guard's issued photon flash grenade — a chemical flash-charge rather than a calibrated photonic burst, and correspondingly cheaper and more widely available.\n\nDesign: Same Affliction-style blinding effect as the Photon Flash Grenade, but a shallower HT-4 roll to be blinded, reflecting the cruder, less reliable dazzle mechanism implied by its lower cost and wider availability (LC3 vs. the photon flash's more standardised issue).",
+			"tags": [
+				"Missile Weapon",
+				"Imperium"
+			],
+			"tech_level": "7",
+			"legality_class": "3",
+			"base_value": "18",
+			"base_weight": "1 lb",
+			"weapons": [
+				{
+					"id": "WxdhfS-AYAqAtFq1K",
+					"sv": 1,
+					"damage": {
+						"type": "spec"
+					},
+					"usage": "Flash",
+					"usage_notes": "Everyone within 5 yards facing the grenade when it goes off must roll vs. HT-4 or be blinded for 1d minutes; anyone looking away or wearing eye protection is unaffected. Deals no HP damage.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Throwing"
+							}
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "e-bCBKlDsy4MwI6tA",
+			"description": "Smoke Grenade",
+			"local_notes": "Fills a roughly 5-yard-radius area with heavy smoke starting the turn after it lands, blocking normal vision through the cloud (treat as Dark, B358) for several minutes depending on wind; auspex and thermal sights may partially see through it at the GM's discretion.\n\nLore: The standard obscurant grenade issued to virtually every Imperial infantry force for cover during an advance or a withdrawal — one of the least remarkable and most universally carried pieces of Guard wargear.\n\nDesign: No attack roll applies, so there's no `weapons` entry; the area effect is written directly into the rules-text `notes` field using GURPS's existing smoke/vision rules (B358) rather than inventing a new mechanic for it.",
+			"tags": [
+				"Imperium",
+				"Astra Militarum"
+			],
+			"tech_level": "7",
+			"legality_class": "4",
+			"base_value": "15",
+			"base_weight": "1 lb",
+			"quantity": 1
+		},
+		{
+			"id": "ehX1P97WQPspDtpY1",
+			"description": "Stun Grenade",
+			"local_notes": "Lore: A non-lethal concussive grenade used by the Adeptus Arbites, ship security details and Inquisitorial forces for taking suspects alive rather than killing them.\n\nDesign: Deliberately weak on raw damage (1d cr, rarely more than a bruise) because its purpose is the HT roll it forces, not the blast itself — the same additional-effect logic GURPS flashbangs use. The small crushing damage represents the physical concussion of the charge.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium",
+				"Adeptus Arbites"
+			],
+			"tech_level": "8",
+			"legality_class": "3",
+			"base_value": "30",
+			"base_weight": "1 lb",
+			"weapons": [
+				{
+					"id": "Wi1iD86lkAQzbOXP-",
+					"sv": 1,
+					"damage": {
+						"type": "cr",
+						"base": "1d"
+					},
+					"usage": "Concussion",
+					"usage_notes": "Everyone within 3 yards who fails a HT-4 roll is stunned (B420) and deafened for 1d rounds, in addition to the blast damage.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Throwing"
+							}
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eOcvBZwcsZ9d3EELb",
+			"description": "Plasma Grenade",
+			"local_notes": "Lore: A rare, expensive superheated-plasma grenade, more commonly referenced in Horus Heresy-era and elite Inquisitorial/Deathwatch matériel than standard Guard issue; included here as the thrown cousin of the plasma gun, honestly noted as an uncommon item rather than standard-issue wargear.\n\nDesign: Scaled down from the plasma gun anchor (6dx2(3) burn ex) by one die-step, following the same family-scaling convention used elsewhere (laspistol from lasgun, hellpistol from hellgun): a hand-thrown plasma charge has an even smaller containment cell than a plasma pistol's. The armour divisor (3) is kept identical to the plasma gun, since it's the same superheated-plasma penetration principle. The canonical containment-failure/overheat hazard of plasma technology is noted as flavour rather than modelled numerically, matching how the plasma gun anchor itself just references \"Malfunction\" without a schema field for it.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium"
+			],
+			"tech_level": "11",
+			"legality_class": "1",
+			"base_value": "500",
+			"base_weight": "2 lb",
+			"weapons": [
+				{
+					"id": "WkbPRXKX1Vv8DVzBK",
+					"sv": 1,
+					"damage": {
+						"type": "burn ex",
+						"base": "3dx2",
+						"armor_divisor": 3
+					},
+					"usage": "Thrown",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Throwing"
+							}
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eRVmQ_ZSO--Oed4zS",
+			"description": "Haywire Grenade",
+			"local_notes": "Lore: An anti-vehicle, anti-servitor EMP charge used by Guard tank-hunter teams and Inquisitorial forces against constructs and unshielded machine-spirits; background material notes it as effective but unpredictable against lightly shielded war machines, and useless against anything that isn't substantially mechanical.\n\nDesign: Deals no HP damage at all — modelled purely as a systems-disable effect (the \"spec\" damage type plus rules text) rather than a damage roll, matching how GURPS treats EMP-style weapons as a disruption effect rather than a wounding one.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium"
+			],
+			"tech_level": "8",
+			"legality_class": "2",
+			"base_value": "150",
+			"base_weight": "1.5 lb",
+			"weapons": [
+				{
+					"id": "Wq_aHGZSLnTRogyFF",
+					"sv": 1,
+					"damage": {
+						"type": "spec"
+					},
+					"usage": "EMP burst",
+					"usage_notes": "No effect on living flesh. Vehicles, robots and servitors within 2 yards have all active systems (weapons, engines, augur/vox) disabled for 2d turns unless the GM rules the target is shielded; against a Machine Spirit-bound war engine (Dreadnoughts, Sentinels and the like), treat this as an unusually harsh HT roll instead of an automatic effect.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Throwing"
+							}
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eO34j8A2iKkdmo5eI",
+			"description": "Grenade Launcher",
+			"local_notes": "Lore: A break-action or revolver-cylinder launcher used by Guard grenadiers and heavy-weapon teams to put frag or krak payloads well past throwing range; a mainstay support weapon across Astra Militarum background art and fiction.\n\nDesign: The damage lines are identical to the hand-thrown Frag and Krak Grenade entries above — same warhead, delivered by a launcher tube instead of an arm, which is the standard GURPS approach (B412: a launched grenade uses the grenade's own damage, not a new figure). Acc/range/RoF/shots are new here, since a thrown weapon doesn't carry those stats, and are built as a simple single-shot break-action or revolver launcher: modest accuracy, a much longer practical reach than a throwing arm, and slow reloading between shots.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium",
+				"Astra Militarum"
+			],
+			"tech_level": "8",
+			"legality_class": "2",
+			"base_value": "700",
+			"base_weight": "6 lb",
+			"weapons": [
+				{
+					"id": "WCsqYwumt0QNF0MlF",
+					"sv": 1,
+					"damage": {
+						"type": "cr ex",
+						"base": "3d",
+						"fragmentation": "6d",
+						"fragmentation_type": "cut"
+					},
+					"accuracy": "3",
+					"range": "170/650",
+					"rate_of_fire": "1",
+					"shots": "6(3)",
+					"bulk": "-4",
+					"recoil": "1",
+					"strength": "9",
+					"usage": "Frag round",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "WonaMJPqPlmvEOv4J",
+					"sv": 1,
+					"damage": {
+						"type": "cr ex",
+						"base": "6dx3",
+						"armor_divisor": 2
+					},
+					"accuracy": "3",
+					"range": "170/650",
+					"rate_of_fire": "1",
+					"shots": "6(3)",
+					"bulk": "-4",
+					"recoil": "1",
+					"strength": "9",
+					"usage": "Krak round",
+					"usage_notes": "Same shaped-charge warhead as the hand-thrown Krak Grenade; see that entry's design notes for how it performs against vehicle armour.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eTgR-8_7IBHR4kTGM",
+			"description": "Frag Grenades, Launcher Rounds (box of 6)",
+			"local_notes": "Lore: Boxed frag rounds packaged for the grenade launcher rather than for hand-throwing.\n\nDesign: Pure ammunition item backing the Grenade Launcher's \"Frag round\" usage line.",
+			"tags": [
+				"Imperium",
+				"Astra Militarum"
+			],
+			"tech_level": "8",
+			"legality_class": "2",
+			"base_value": "90",
+			"base_weight": "6 lb",
+			"quantity": 1
+		},
+		{
+			"id": "elDQNQ7bugCrVVN9H",
+			"description": "Krak Grenades, Launcher Rounds (box of 6)",
+			"local_notes": "Lore: Boxed krak rounds packaged for the grenade launcher rather than for hand-throwing.\n\nDesign: Pure ammunition item backing the Grenade Launcher's \"Krak round\" usage line.",
+			"tags": [
+				"Imperium",
+				"Astra Militarum"
+			],
+			"tech_level": "8",
+			"legality_class": "2",
+			"base_value": "300",
+			"base_weight": "9 lb",
+			"quantity": 1
+		}
+	]
+}
