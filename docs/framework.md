@@ -381,7 +381,7 @@ T'au technology is TL11 science without the ^ superscience tag, except drone AI 
 | Burst cannon | Pulse-rifle damage at RoF 20+, suit- or drone-mounted |
 | Rail rifle | Hypervelocity solid slug: 6d×3(5) pi. Kills Astartes; threatens Terminators |
 | Heavy rail rifle (Broadside) | 8d×8(5) pi+, lascannon class |
-| Ion rifle | 6d×3(3) burn; overcharged 6d×2(3) burn ex with a malfunction risk to the firer |
+| Ion rifle | 6d×3(3) burn; overcharged 6d×4(3) burn ex (three charges, RoF 1) with a malfunction risk to the firer |
 | Plasma rifle (T'au) | Plasma-gun anchor, lower RoF, no overheating |
 | Fusion blaster | Meltagun anchor |
 | Missile pod | 6d×3(3) cr ex, autocannon class |

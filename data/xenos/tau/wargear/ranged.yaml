@@ -1,0 +1,945 @@
+kind: equipment
+output: Xenos/Tau/Weapons/T'au Ranged Weapons.eqp
+items:
+
+  # ------------------------------------------------------------ Pulse weapons (Fire Warriors)
+
+  - name: "Pulse Pistol"
+    tl: 11
+    lc: 0
+    cost: 1200
+    weight: 3.5
+    tags: ["Missile Weapon", "Xenos", "T'au", "Fire Caste"]
+    weapons:
+      - usage: "Standard"
+        damage: "5dx2(2) burn"
+        acc: 3
+        range: "300/900"
+        rof: 3
+        shots: "16(3)"
+        st: 6
+        bulk: -2
+        rcl: 1
+        skill: "Beam Weapons (Pistol)"
+    notes: >-
+      Induction-launched plasma pulse: no propellant, no follow-up. An energy pack, not a magazine;
+      a pack is one Ready maneuver to change.
+    lore: >-
+      The Fire Caste sidearm: Codex: T'au Empire background shows pulse pistols as a Shas'ui and
+      officer sidearm, a short-barrelled version of the pulse rifle's induction launcher. Sources
+      give no weights or capacities, so those are design numbers below.
+    design: >-
+      Anchor (framework): 5dx2(2) burn, one die under the pulse rifle. Exact dice: average 35.0;
+      penetrates flak 99.7%, carapace 50.0% (52.3% with WP 5), Astartes 1.6% (3.3% with WP 4),
+      Terminator plate 0.0%, Tartaros (190) 0.0%. So a pulse pistol goes through flak essentially
+      always and gets through carapace about one hit in two, the same figures as an Astartes-grade
+      bolt pistol's 5dx2(2) dice, and almost never hurts Astartes plate. Handling: 3.5 lb loaded (a
+      laspistol is 2.5 lb, bolt pistol 5 lb; the induction coil and pack make it a little heavy),
+      Min ST 6 (sqrt(35)=5.9). RoF 3: a semi-automatic pulse cycle fired as fast as the trigger
+      allows (framework: 3 for semi-autos). Acc 3 (pistols 1-3, plus beam bonus) and Bulk -2 as a
+      full-size pistol; Rcl 1 because an induction launcher throws plasma with almost no kick
+      (framework: beams 1). Range 300/900: the 0.3 ratio of laspistol to lasgun (120/400) applied to
+      the pulse rifle's 1000/3000. Shots 16(3): design number.
+
+  - name: "Pulse Carbine"
+    tl: 11
+    lc: 0
+    cost: 2400
+    weight: 8
+    tags: ["Missile Weapon", "Xenos", "T'au", "Fire Caste", "Pathfinder"]
+    weapons:
+      - usage: "Standard"
+        damage: "6dx2(2) burn"
+        acc: 5
+        range: "600/1800"
+        rof: 6
+        shots: "40(3)"
+        st: 9
+        bulk: -3
+        rcl: 1
+        skill: "Beam Weapons (Rifle)"
+      - usage: "Photon grenade launcher (underslung)"
+        damage: "spec"
+        acc: 3
+        range: "120/400"
+        rof: 1
+        shots: "3(3)"
+        st: 9
+        bulk: -3
+        skill: "Guns (Grenade Launcher)"
+        notes: >-
+          Fires the photon grenade (see Photon Grenade): each target within 5 yards of the burst
+          facing it rolls HT-6 or is blinded for 1d minutes. No HP damage. Launched grenades use the
+          launcher's own Acc and range, not the carbine's.
+    notes: >-
+      Rifle damage, shorter range, faster cycle. The launcher line is a separate weapon on the same
+      frame: it shares no ammunition with the pulse carbine and needs its own Ready maneuver to
+      reload. Weight includes the launcher.
+    lore: >-
+      Codex: T'au Empire background places pulse carbines with Pathfinders and with Fire Warrior
+      teams that need a shorter, handier weapon, and gives the Pathfinder version an underslung
+      photon grenade launcher; sources do not fix weights or ranges.
+    design: >-
+      Framework anchor: 'rifle damage, shorter range, higher RoF, underslung photon grenade
+      launcher'. The dice are the pulse rifle's, 6dx2(2), so every penetration figure there applies:
+      average 42.0; flak 100.0%, carapace 79.4% (80.4% with WP 5), Astartes 14.5% (16.0% with WP 4),
+      Terminator plate 0.0% (0.1% with WP 3), Tartaros (190) 0.0%. Handling re-derived for a
+      carbine: 6.5 lb body plus a 1.5 lb launcher = 8 lb, Min ST 9 (sqrt(80)=8.9). Range 600/1800,
+      60% of the rifle's (the usual carbine trade). RoF 6: a faster automatic pulse cycle, above the
+      rifle's 3 and under the 10-12 of automatic las-class rifles, because each pulse still needs
+      its coil charged. Acc 5 (carbine 3-4 plus beam bonus, two under the rifle), Bulk -3 (carbine),
+      Rcl 1 (induction, no kick). Shots 40(3). Launcher: Acc 3, range 120/400 and 3 grenades, scaled
+      from the Imperial grenade launcher's 170/650 and 6 rounds (a compact underslung tube has a
+      shorter reach and smaller feed); skill Guns (Grenade Launcher).
+
+  - name: "Pulse Rifle"
+    tl: 11
+    lc: 0
+    cost: 2000
+    weight: 9
+    tags: ["Missile Weapon", "Xenos", "T'au", "Fire Caste"]
+    weapons:
+      - usage: "Standard"
+        damage: "6dx2(2) burn"
+        acc: 7
+        range: "1000/3000"
+        rof: 3
+        shots: "40(3)"
+        st: 9
+        bulk: -5
+        rcl: 1
+        skill: "Beam Weapons (Rifle)"
+    notes: >-
+      Induction-launched plasma pulse; no follow-up. Energy pack, not a magazine.
+    lore: >-
+      The standard weapon of the Fire Warrior, the T'au answer to the lasgun and the bolter: Codex:
+      T'au Empire background and the whole Fire Caste's depiction agree that it favours range and
+      accuracy over volume, and that T'au armies fight at distances where Imperial and Ork riflemen
+      cannot reply. It is not a recoil weapon: pulses are accelerated along an induction rail.
+    design: >-
+      This is the framework's fixed anchor: 6dx2(2) burn, bolter-grade per shot, RoF about 3, range
+      about 1000/3000. Exact dice: average 42.0; penetrates flak 100.0%, carapace 79.4% (80.4% with
+      WP 5), Astartes 14.5% (16.0% with WP 4), Terminator plate 0.0% (0.1% with WP 3), Tartaros
+      (190) 0.0%. That reproduces the anchor's numbers exactly (carapace 79%, Astartes 14%): a Fire
+      Warrior's rifle hurts a Marine about as often as a Marine's bolter hurts another Marine, and
+      vehicles AV10 14.5%, AV11 and above 0.0%. A hit that gets through Astartes plate averages only
+      5 points of penetrating burn, so it takes a squad's volley to kill a Marine. Handling: 9 lb
+      loaded (a lasgun is 8 lb; the induction rail and coil make it a long, slim, slightly heavier
+      weapon), Min ST 9 (sqrt(90)=9.5). RoF 3 (anchor; semi-automatic pulses). Acc 7: a lasgun's 6
+      (rifle 4 plus beam 2) plus one for the integrated sights the longer reach needs. Bulk -5 (long
+      rifle), Rcl 1 (induction). Range 1000/3000 (anchor, 2.5x the lasgun's 400/1200). Shots 40(3):
+      design number, sources give no capacity.
+
+  - name: "Pulse Blaster"
+    tl: 11
+    lc: 0
+    cost: 3200
+    weight: 12
+    tags: ["Missile Weapon", "Xenos", "T'au", "Fire Caste", "Breacher"]
+    weapons:
+      - usage: "Close range (out to 10 yards)"
+        damage: "6d+2x2(2) burn"
+        acc: 3
+        range: "10"
+        rof: 2
+        shots: "20(3)"
+        st: 11
+        bulk: -4
+        rcl: 2
+        skill: "Beam Weapons (Rifle)"
+      - usage: "Medium range (11 to 30 yards)"
+        damage: "5dx2(2) burn"
+        acc: 3
+        range: "30"
+        rof: 2
+        shots: "20(3)"
+        st: 11
+        bulk: -4
+        rcl: 2
+        skill: "Beam Weapons (Rifle)"
+      - usage: "Long range (31 to 90 yards)"
+        damage: "4dx2(2) burn"
+        acc: 3
+        range: "90"
+        rof: 2
+        shots: "20(3)"
+        st: 11
+        bulk: -4
+        rcl: 2
+        skill: "Beam Weapons (Rifle)"
+    notes: >-
+      One weapon, three range settings: the firer picks the line by target distance (the coil is
+      tuned for the band; no maneuver to change). The range figure is the maximum of that setting,
+      and the pulse fades beyond it. Beyond 90 yards use a pulse rifle.
+    lore: >-
+      The Breacher Team's weapon: Codex: T'au Empire background has Breachers, a Fire Warrior
+      specialisation for urban fighting, boarding and clearing bunkers, armed with pulse blasters
+      that hit hard at close range and fall off quickly with distance. I hold the three-range-band
+      idea from the Codex but not its numbers, so the dice below are derived from the pulse rifle
+      anchor.
+    design: >-
+      No anchor, so scaled from the pulse rifle's 6dx2(2). Close: 6d+2x2(2), average 46.0, four
+      dice-points above the rifle; penetrates flak 100.0%, carapace 90.4% (90.8% with WP 5),
+      Astartes 27.9% (29.3% with WP 4), Terminator plate 0.0% (0.1% with WP 3), Tartaros (190) 0.0%.
+      Medium 5dx2(2), average 35.0 (the pistol's dice): flak 99.7%, carapace 50.0% (52.3% with WP
+      5), Astartes 1.6% (3.3% with WP 4), Terminator plate 0.0%, Tartaros (190) 0.0%. Long 4dx2(2),
+      average 28.0: flak 97.3% (97.7% with WP 7), carapace 15.9% (19.5% with WP 5), Astartes 0.0%
+      (1.2% with WP 4), Terminator plate 0.0%, Tartaros (190) 0.0%. So at contact it is a real
+      threat to carapace and gives a Marine 28% trouble per shot (a bolter's 14.5%, a heavy bolter's
+      41%), but past 30 yards it is a poor weapon: the pulse disperses. Handling: 12 lb loaded (the
+      pulse rifle's coil packed into a short, thick body with a bigger pack), Min ST 11
+      (sqrt(120)=11); a Fire Warrior at ST 10 fires it at -1. RoF 2: slower than the rifle because
+      the higher current takes the coil longer to recover. Acc 3 (a short weapon, no long sight
+      radius), Bulk -4, Rcl 2 (a hard-hitting pulse). Shots 20(3).
+
+  - name: "Burst Cannon"
+    tl: 11
+    lc: 0
+    cost: 7000
+    weight: 45
+    tags: ["Missile Weapon", "Xenos", "T'au", "Battlesuit"]
+    weapons:
+      - usage: "Standard, mounted"
+        damage: "6dx2(2) burn"
+        acc: 5
+        range: "600/1800"
+        rof: 20
+        shots: "200(5)"
+        st: "21M"
+        bulk: -6
+        rcl: 1
+        skill: "Gunner (Beams)"
+    notes: >-
+      Hardpoint weapon: a battlesuit uses the suit's strength, not the pilot's. Minimum ST is
+      checked against the pilot's ST plus the suit's Lifting ST bonus (Crisis 11+18=29, Stealth
+      11+10=21, Broadside 11+26=37), so the M in Min ST is met by the suit's servos and the weapon
+      cannot be fired by an unaided T'au. Also fitted to drones and vehicles; the drone-mounted
+      pattern is a template matter.
+    lore: >-
+      A rapid-firing pulse weapon: Codex: T'au Empire background lists the burst cannon as a
+      standard weapon of Crisis and Stealth battlesuits and of gun drones and vehicles, the T'au
+      answer to a heavy stubber or assault cannon, with the same plasma pulses as a pulse rifle.
+    design: >-
+      Anchor (framework): pulse-rifle damage at RoF 20+, suit- or drone-mounted. So 6dx2(2) burn
+      exactly: average 42.0; penetrates flak 100.0%, carapace 79.4% (80.4% with WP 5), Astartes
+      14.5% (16.0% with WP 4), Terminator plate 0.0% (0.1% with WP 3), Tartaros (190) 0.0%. At RoF
+      20 that is a hail of pulses: expect about 3 hits through Astartes plate per full burst that
+      hits at all, and flak and carapace are stripped quickly, but each individual hit is still only
+      bolter-grade. Handling: 45 lb loaded, Min ST sqrt(450)=21, M (mounted). RoF 20 (anchor 20+).
+      Acc 5 (mounted, with the suit's targeting; a pulse rifle's 7 less the weight of a long burst).
+      Range 600/1800, the carbine's, shorter than the rifle. Bulk -6 (support weapon), Rcl 1
+      (induction; nothing to kick against). Shots 200(5): a design number, fed from the suit's power
+      core.
+
+  # ------------------------------------------------------------ Rail and ion weapons
+
+  - name: "Rail Rifle"
+    tl: 11
+    lc: 0
+    cost: 4500
+    weight: 10
+    tags: ["Missile Weapon", "Xenos", "T'au", "Fire Caste", "Pathfinder"]
+    weapons:
+      - usage: "Standard"
+        damage: "6dx3(5) pi"
+        acc: 9
+        range: "1500/4500"
+        rof: 1
+        shots: "8(3)"
+        st: 10
+        bulk: -6
+        rcl: 2
+        skill: "Guns (Rifle)"
+    notes: >-
+      Hypervelocity solid slug fired by magnetic acceleration. Aimed shots gain the Accuracy bonus
+      for Aim as usual.
+    lore: >-
+      A long-range sniper weapon: Codex: T'au Empire background gives rail rifles to Pathfinder
+      teams, hurling a dense slug so fast that armour is little obstacle. It is the one T'au
+      infantry weapon built to kill heavy targets rather than screens of infantry.
+    design: >-
+      Anchor (framework): 6dx3(5) pi. Exact dice: average 63.0; penetrates flak 100.0%, carapace
+      100.0%, Astartes 100.0%, Terminator plate 96.4%, Tartaros (190) 98.0%. Against vehicles: AV10
+      100.0%, AV11 99.5%, AV12 96.4%, AV13 72.1%, AV14 27.9%. That matches 'kills Astartes,
+      threatens Terminators': it goes through Astartes plate every time, and a Terminator (effective
+      DR 40) about 96% of the time. 'Threatens' is the honest reading of the damage type: it is pi
+      (x1), not pi+ or pi++, so a hit that clears Terminator plate averages 24 points of injury
+      against HP 34, about two hits to kill one, and about 43 against a Marine in Mk VII plate. It
+      also wrecks AV10-11 (about 100% and 99.5%) but is a poor tank-killer against AV13-14 (72% and
+      28%). Handling: 10 lb loaded (a long rail and its capacitor; a Pathfinder must not be
+      penalised), Min ST 10 (sqrt(100)=10). RoF 1 (the accelerator must recharge between shots;
+      framework). Acc 9: rifle 4, sniper optic +3, beam-like flat trajectory +2. Range 1500/4500,
+      half as far again as a pulse rifle. Bulk -6, Rcl 2 (a hard-launched slug, but with no
+      propellant blast). Shots 8(3).
+
+  - name: "Heavy Rail Rifle"
+    tl: 11
+    lc: 0
+    cost: 22000
+    weight: 90
+    tags: ["Missile Weapon", "Xenos", "T'au", "Battlesuit", "Broadside"]
+    weapons:
+      - usage: "Standard, mounted"
+        damage: "8dx8(5) pi+"
+        acc: 15
+        range: "2000/6000"
+        rof: 1
+        shots: "6(6)"
+        st: "30M"
+        bulk: -9
+        rcl: 2
+        skill: "Gunner (Cannon)"
+    notes: >-
+      Hardpoint weapon: a battlesuit uses the suit's strength, not the pilot's. Minimum ST is
+      checked against the pilot's ST plus the suit's Lifting ST bonus (Crisis 11+18=29, Stealth
+      11+10=21, Broadside 11+26=37), so the M in Min ST is met by the suit's servos and the weapon
+      cannot be fired by an unaided T'au.
+    lore: >-
+      The Broadside battlesuit's main gun: Codex: T'au Empire background describes the heavy rail
+      rifle as a long-range anti-tank weapon in the lascannon's role, and one of the most powerful
+      weapons a T'au infantry unit fields; it fires the same kind of hypervelocity slug as the rail
+      rifle, only heavier.
+    design: >-
+      Anchor (framework): 8dx8(5) pi+, lascannon class. Exact dice: average 224.0; penetrates flak,
+      carapace, Astartes and Terminator plate 100.0% of hits, and vehicles AV10 100.0%, AV11 100.0%,
+      AV12 100.0%, AV13 100.0%, AV14 100.0%, exactly the lascannon's figures (AV14 has effective DR
+      70, and only a roll of eight 1s fails to clear it). The pi+ (x1.5) wound makes a penetrating
+      hit more lethal to infantry than a lascannon's burn (x1). Handling: 90 lb (a lascannon is 80
+      lb; a longer rail and heavier capacitors), Min ST sqrt(900)=30, M (mounted): a Broadside's 37
+      (11+26) meets it. RoF 1 (recharge). Acc 15: the lascannon's 14, plus one for the suit's optics
+      and range gate. Range 2000/6000, a step over the lascannon's 1500/4500 (the framework's
+      'outranges' for T'au fire). Bulk -9, Rcl 2. Shots 6(6): a Broadside's slug magazine, design
+      number.
+
+  - name: "Ion Rifle"
+    tl: 11
+    lc: 0
+    cost: 6500
+    weight: 16
+    tags: ["Missile Weapon", "Xenos", "T'au", "Fire Caste", "Pathfinder"]
+    weapons:
+      - usage: "Standard"
+        damage: "6dx3(3) burn"
+        acc: 6
+        range: "600/1800"
+        rof: 2
+        shots: "10(4)"
+        st: 13
+        bulk: -6
+        rcl: 1
+        skill: "Beam Weapons (Rifle)"
+      - usage: "Overcharged (area burst)"
+        damage: "6dx4(3) burn ex"
+        acc: 6
+        range: "600/1800"
+        rof: 1
+        shots: "10(4)"
+        st: 13
+        bulk: -6
+        rcl: 1
+        skill: "Beam Weapons (Rifle)"
+        notes: >-
+          Explosion damage, rolled for the target hit and every target within a few yards as B414
+          explosions. Malfunction: an attack roll of 15 or more (or any critical failure) overloads
+          the accelerator: the firer takes 3d burn (torso, DR applies, no armour divisor) and the
+          rifle is out of action until repaired (Armoury). The standard line has no malfunction. An
+          overcharged shot uses three charges.
+    notes: >-
+      Ion accelerator: a beam of energetic charged particles. The overcharge line dumps the whole capacitor at once:
+      a harder, explosive shot at the cost of three charges and a risk to the firer.
+    lore: >-
+      A heavy T'au infantry energy weapon: T'au background lists the ion rifle as an infantry
+      support weapon (I am not sure which units carry it in the current Codex); the ability to
+      overcharge it, at some risk to the firer, is the part I am sure of. Weights and capacities are
+      design numbers.
+    design: >-
+      Anchors (framework): 6dx3(3) burn; overcharged 6dx4(3) burn ex with a malfunction risk to the
+      firer. Standard: average 63.0; penetrates flak 100.0%, carapace 100.0%, Astartes 99.0%,
+      Terminator plate 36.3% (36.6% with WP 3), Tartaros (190) 45.4%; vehicles AV10 99.0%, AV11
+      85.5%, AV12 36.3%, AV13 1.0%, AV14 0.0%. Overcharged 6dx4(3) burn ex: average 84; Astartes 99.9%, Terminator
+      plate 85.5%, Tartaros (190) 90.4%; vehicles AV12 85.5%, AV13 54.6%, AV14 14.5%. In the lore
+      overcharging makes the shot stronger, not weaker, so the anchor is one multiplier up from the
+      standard line and pays for it with three charges, RoF 1 and the malfunction risk (anchor
+      revised at review; the first draft's 6dx2 made overcharging pointless). The standard shot is a plasma-gun-class hit at a rifle's rate (36% to clear Terminator
+      plate, 99% vs Marines). Handling: 16 lb loaded (an accelerator, a heavy coil and a larger
+      pack), Min ST 13 (sqrt(160)=12.6). RoF 2 (a two-stage capacitor allows a pair of shots per
+      turn, but still needs to recover: not the 3 of a semi-automatic); the overcharged line is RoF
+      1. Acc 6 (rifle 4 + beam 2). Range 600/1800 (heavier, shorter than a pulse rifle). Bulk -6,
+      Rcl 1 (beam). Shots 10(4). The Malf figure (15+) is a design number.
+
+  - name: "Cyclic Ion Blaster"
+    tl: 11
+    lc: 0
+    cost: 9000
+    weight: 42
+    tags: ["Missile Weapon", "Xenos", "T'au", "Battlesuit", "Crisis"]
+    weapons:
+      - usage: "Standard, mounted"
+        damage: "5dx3(3) burn"
+        acc: 5
+        range: "500/1500"
+        rof: 4
+        shots: "30(5)"
+        st: "21M"
+        bulk: -6
+        rcl: 2
+        skill: "Gunner (Beams)"
+      - usage: "Overcharged, mounted (area burst)"
+        damage: "5dx4(3) burn ex"
+        acc: 5
+        range: "500/1500"
+        rof: 2
+        shots: "30(5)"
+        st: "21M"
+        bulk: -6
+        rcl: 2
+        skill: "Gunner (Beams)"
+        notes: >-
+          As the ion rifle's overcharge: explosion damage, and an attack roll of 15 or more (or any
+          critical failure) overloads the weapon: the pilot takes 3d burn (the suit's DR applies)
+          and the blaster is out of action until repaired. An overcharged shot uses three charges.
+    notes: >-
+      Hardpoint weapon: a battlesuit uses the suit's strength, not the pilot's. Minimum ST is
+      checked against the pilot's ST plus the suit's Lifting ST bonus (Crisis 11+18=29, Stealth
+      11+10=21, Broadside 11+26=37), so the M in Min ST is met by the suit's servos and the weapon
+      cannot be fired by an unaided T'au.
+    lore: >-
+      A rapid-firing ion weapon of Crisis battlesuits and Commanders: Codex: T'au Empire background
+      shows the cyclic ion blaster as a prized elite-killing option, the ion rifle's technology on a
+      rapid-fire mount, with the same overcharge risk. Numbers here are derived, not quoted.
+    design: >-
+      No framework number, so the ion rifle's anchor is stepped down one die for the faster cycle:
+      5dx3(3) burn, average 52.5; penetrates flak 100.0%, carapace 99.7%, Astartes 94.1% (94.2% with
+      WP 4), Terminator plate 9.8% (10.2% with WP 3), Tartaros (190) 15.2%; vehicles AV10 94.1%,
+      AV11 60.0%, AV12 9.8%, AV13 0.0%, AV14 0.0%. Overcharged 5dx4(3) burn ex, average 70; Astartes
+      99.3%, Terminator plate 60.0%, Tartaros (190) 69.5%; AV12 60.0%, AV13 22.1%, AV14 1.6%: one
+      multiplier up from the standard line, as the ion rifle's overcharge. At RoF 4 that is about four hits that clear Marine
+      plate each turn, each one leaving about 21 points of penetrating damage: a Marine dies in two
+      to three hits, a Terminator (10% per hit) rarely. Handling: 42 lb loaded, Min ST
+      sqrt(420)=20.5, 21M. RoF 4 (a rapid capacitor bank, well under the burst cannon's 20 because
+      each shot is an ion bolt of ion-rifle grade); overcharged 2. Acc 5, Bulk -6, Rcl 2 (bursts of
+      heavy bolts). Range 500/1500, the ion rifle's shorter reach. Shots 30(5). Malf 15+ as the ion
+      rifle.
+
+  # ------------------------------------------------------------ Plasma, fusion and missiles
+
+  - name: "Plasma Rifle, T'au Pattern"
+    tl: 11
+    lc: 0
+    cost: 8000
+    weight: 30
+    tags: ["Missile Weapon", "Xenos", "T'au", "Battlesuit", "Crisis"]
+    weapons:
+      - usage: "Standard, mounted"
+        damage: "6dx4(3) burn ex"
+        acc: 4
+        range: "250/750"
+        rof: 1
+        shots: "6(6)"
+        st: "17M"
+        bulk: -5
+        rcl: 2
+        skill: "Gunner (Beams)"
+    notes: >-
+      Hardpoint weapon: a battlesuit uses the suit's strength, not the pilot's. Minimum ST is
+      checked against the pilot's ST plus the suit's Lifting ST bonus (Crisis 11+18=29, Stealth
+      11+10=21, Broadside 11+26=37), so the M in Min ST is met by the suit's servos and the weapon
+      cannot be fired by an unaided T'au. Does not overheat: no Malf on any roll. The ex marks an
+      explosive burn: a hit detonates, so damage is rolled as for explosions.
+    lore: >-
+      A hardpoint plasma weapon of Crisis battlesuits and Commanders: Codex: T'au Empire background
+      places the plasma rifle among the heavy options for elite battlesuit pilots. That it is the
+      T'au counterpart of the Imperial plasma gun, but stable enough not to overheat, is the
+      framework's reading.
+    design: >-
+      Anchor (framework): plasma-gun anchor 6dx4(3) burn ex, lower RoF, no overheating. Exact dice:
+      average 84.0; penetrates flak 100.0%, carapace 100.0%, Astartes 99.9%, Terminator plate 85.5%
+      (85.6% with WP 3), Tartaros (190) 90.4%; vehicles AV10 99.9%, AV11 98.0%, AV12 85.5%, AV13
+      36.3%, AV14 2.0%. Kills Marines through their plate (99.9%) and Terminators in most hits
+      (85.5%), and cracks AV10-12 (99.9%/98.0%/85.5%). Handling: 30 lb loaded (a plasma gun is 14
+      lb; a suit-mounted one carries a bigger chamber and its own cooling and does not vent), Min ST
+      sqrt(300)=17.3, 17M. RoF 1: the Imperial anchor is already RoF 1, so 'lower' is honoured by a
+      longer recharge, Shots 6(6) against the Imperial 8(20), not by a fractional RoF (flagged). Acc
+      4 (a mounted plasma gun with the suit's targeting: the Imperial gun's 3 plus 1). Range
+      250/750, the Imperial 150/450 stretched by the T'au's longer-ranged fire control. Bulk -5, Rcl
+      2 (as the plasma gun).
+
+  - name: "Fusion Blaster"
+    tl: 11
+    lc: 0
+    cost: 9000
+    weight: 22
+    tags: ["Missile Weapon", "Xenos", "T'au", "Battlesuit", "Crisis"]
+    weapons:
+      - usage: "Short range (up to 10 yards)"
+        damage: "8dx6(10) burn"
+        acc: 3
+        range: "10/50"
+        rof: 1
+        shots: "4(5)"
+        st: "15M"
+        bulk: -4
+        rcl: 1
+        skill: "Gunner (Beams)"
+      - usage: "Beyond 10 yards"
+        damage: "4dx6(3) burn"
+        acc: 3
+        range: "10/50"
+        rof: 1
+        shots: "4(5)"
+        st: "15M"
+        bulk: -4
+        rcl: 1
+        skill: "Gunner (Beams)"
+    notes: >-
+      Hardpoint weapon: a battlesuit uses the suit's strength, not the pilot's. Minimum ST is
+      checked against the pilot's ST plus the suit's Lifting ST bonus (Crisis 11+18=29, Stealth
+      11+10=21, Broadside 11+26=37), so the M in Min ST is met by the suit's servos and the weapon
+      cannot be fired by an unaided T'au. Beyond the first range bracket the burn diffuses and loses
+      its armour divisor, as for any meltagun-class weapon.
+    lore: >-
+      The T'au anti-armour close-range weapon: Codex: T'au Empire background places fusion blasters
+      on Crisis, Stealth and Commander battlesuits and gives them a short-range melta role. It is
+      the weapon T'au commanders use to kill tanks and heavy elite infantry that their long-range
+      guns cannot stop.
+    design: >-
+      Anchor (framework): meltagun. Exact dice: short range 8dx6(10), average 168.0, penetrates
+      flak, carapace, Astartes plate and Terminator plate 100.0% of hits, and every vehicle AV10-14
+      100.0% (AV10 100.0%, AV11 100.0%, AV12 100.0%, AV13 100.0%, AV14 100.0%); beyond short range
+      4dx6(3), average 84.0, flak 100.0%, carapace 100.0%, Astartes 99.6%, Terminator plate 76.1%
+      (76.2% with WP 3), Tartaros (190) 84.1%; vehicles AV10 99.6%, AV11 94.6%, AV12 76.1%, AV13
+      33.6%, AV14 5.4%. So 'kills AV14 at short range' and 'wrecks AV12 (76%) but almost never AV14
+      (5%)' hold exactly. Handling: 22 lb loaded (a meltagun is 17 lb; a suit weapon carries a
+      bigger cell), Min ST sqrt(220)=14.8, 15M. RoF 1, Shots 4(5) (as the meltagun: a T'au fusion
+      cell of the same class). Acc 3: the meltagun's 2, plus 1 for the suit's targeting. Range 10/50
+      as the meltagun (the framework treats the two as the same class); Bulk -4, Rcl 1.
+
+  - name: "Missile Pod"
+    tl: 11
+    lc: 0
+    cost: 6000
+    weight: 46
+    tags: ["Missile Weapon", "Xenos", "T'au", "Battlesuit", "Crisis"]
+    weapons:
+      - usage: "Standard, mounted"
+        damage: "6dx3(3) cr ex"
+        acc: 6
+        range: "1000/3000"
+        rof: 3
+        shots: "12(6)"
+        st: "21M"
+        bulk: -6
+        rcl: 2
+        skill: "Gunner (Rockets)"
+    notes: >-
+      Hardpoint weapon: a battlesuit uses the suit's strength, not the pilot's. Minimum ST is
+      checked against the pilot's ST plus the suit's Lifting ST bonus (Crisis 11+18=29, Stealth
+      11+10=21, Broadside 11+26=37), so the M in Min ST is met by the suit's servos and the weapon
+      cannot be fired by an unaided T'au. Unguided: the pod's small rockets do not need a
+      markerlight and gain no bonus from one beyond the ordinary networked attack bonus.
+    lore: >-
+      A pod of small rockets in a rapid-firing pod: Codex: T'au Empire background lists the missile
+      pod as an anti-infantry and light-armour option on Crisis suits, and as the sort of weapon one
+      Broadside or Crisis carries in quantity.
+    design: >-
+      Anchor (framework): 6dx3(3) cr ex, autocannon class. Exact dice: average 63.0; penetrates flak
+      100.0%, carapace 100.0%, Astartes 99.0%, Terminator plate 36.3% (36.6% with WP 3), Tartaros
+      (190) 45.4%; vehicles AV10 99.0%, AV11 85.5%, AV12 36.3%, AV13 1.0%, AV14 0.0%, the Imperial
+      autocannon's figures exactly (AV10 99%, AV11 85%, AV12 36%, AV13 1%). It kills flak and
+      carapace, kills a Marine 99% of the time, and cracks a Terminator 36%. Handling: 46 lb loaded
+      (a pod of rockets and their feed; an autocannon is 85 lb with its tripod), Min ST
+      sqrt(460)=21.4, 21M. RoF 3 (a rocket every third of a second; a pod, not a gun). Acc 6, a
+      mounted rocket pod with the suit's guidance; range 1000/3000, the autocannon's. Shots 12(6), a
+      pod's worth. Bulk -6, Rcl 2 (rocket launch, but the propellant is in the rocket).
+
+  - name: "Smart Missile System"
+    tl: 11
+    lc: 0
+    cost: 9500
+    weight: 50
+    tags: ["Missile Weapon", "Xenos", "T'au", "Battlesuit", "Broadside"]
+    weapons:
+      - usage: "Standard, self-guided"
+        damage: "5dx2(2) cr ex"
+        acc: 6
+        range: "1000/3000"
+        rof: 4
+        shots: "20(10)"
+        st: "22M"
+        bulk: -7
+        rcl: 2
+        skill: "Gunner (Rockets)"
+        notes: >-
+          The missiles seek a target that any networked T'au can see (a markerlight mark, a drone,
+          an ally's sights): the firer needs no line of sight, ignores cover and concealment
+          penalties, and rolls at -2 if the target is sensed only by the network. A target that has
+          left the network's sight cannot be fired at.
+    notes: >-
+      Hardpoint weapon: a battlesuit uses the suit's strength, not the pilot's. Minimum ST is
+      checked against the pilot's ST plus the suit's Lifting ST bonus (Crisis 11+18=29, Stealth
+      11+10=21, Broadside 11+26=37), so the M in Min ST is met by the suit's servos and the weapon
+      cannot be fired by an unaided T'au.
+    lore: >-
+      A mass of small self-guided missiles: Codex: T'au Empire background describes smart missile
+      systems on Broadside battlesuits and on vehicles as an anti-infantry weapon that can strike
+      targets the firer cannot see, using T'au network data; the missiles are guided by sensors on
+      each rocket.
+    design: >-
+      Anchor (framework): 5dx2(2) cr ex, self-guided, no line of sight. Exact dice: average 35.0;
+      penetrates flak 99.7%, carapace 50.0% (52.3% with WP 5), Astartes 1.6% (3.3% with WP 4),
+      Terminator plate 0.0%, Tartaros (190) 0.0%; vehicles AV10 1.6%, AV11 0.0%, AV12 0.0%, AV13
+      0.0%, AV14 0.0%. So it is anti-infantry: about half of hits go through carapace and almost all
+      through flak, and nothing gets through Astartes plate except on a Weak Point (3.3%). The
+      guidance rule (no line of sight, cover ignored, -2 if only network-sensed) is a design
+      mechanic to express 'needs no line of sight' at the table. Handling: 50 lb loaded, Min ST
+      sqrt(500)=22.4, 22M. RoF 4 (a salvo of four small missiles). Acc 6 (guided, but small
+      seekers), range 1000/3000. Shots 20(10) (the magazine on the Broadside's back). Bulk -7, Rcl
+      2.
+
+  - name: "Seeker Missile"
+    tl: 11
+    lc: 0
+    cost: 1800
+    weight: 22
+    tags: ["Missile Weapon", "Xenos", "T'au", "Battlesuit", "Broadside"]
+    weapons:
+      - usage: "Markerlight-guided"
+        damage: "6dx6(3) cr ex"
+        acc: 8
+        range: "1500/4500"
+        rof: 1
+        shots: "1(10)"
+        st: "15M"
+        bulk: -6
+        rcl: 1
+        skill: "Gunner (Rockets)"
+        notes: >-
+          Fire only at a target with at least one markerlight mark: no line of sight is needed,
+          cover and concealment penalties do not apply. Without a mark the missile has no guidance
+          and cannot be aimed. Each missile is one shot.
+    notes: >-
+      Hardpoint weapon: a battlesuit uses the suit's strength, not the pilot's. Minimum ST is
+      checked against the pilot's ST plus the suit's Lifting ST bonus (Crisis 11+18=29, Stealth
+      11+10=21, Broadside 11+26=37), so the M in Min ST is met by the suit's servos and the weapon
+      cannot be fired by an unaided T'au. One item is one missile; the launch rail is part of the
+      battlesuit hardpoint or vehicle.
+    lore: >-
+      A one-shot guided anti-armour missile: Codex: T'au Empire background places seeker missiles on
+      Broadside battlesuits and on vehicles (Skyray, Hammerhead), fired at targets marked by a
+      Pathfinder's markerlight.
+    design: >-
+      Anchor (framework): krak-missile anchor 6dx6(3) cr ex, fired by a markerlight lock. Exact
+      dice: average 126.0; penetrates flak 100.0%, carapace 100.0%, Astartes 100.0%, Terminator
+      plate 99.0%, Tartaros (190) 99.5%; vehicles AV10 100.0%, AV11 99.9%, AV12 99.0%, AV13 90.4%,
+      AV14 63.7%, the krak missile's figures exactly (AV12 99%, AV13 90%, AV14 64%: reliable vs
+      AV12-13, two in three vs AV14). Handling: a whole missile plus its launch rail fitting weighs
+      22 lb (a krak missile is 10 lb), Min ST sqrt(220)=14.8, 15M. RoF 1, Shots 1(10) (a reload of a
+      fresh missile by a crew). Acc 8: the missile flies the laser, so the roll is for a clean
+      launch rather than aim. Range 1500/4500: a rocket's reach, better than the launcher's 100/1800
+      because of the seeker. Bulk -6, Rcl 1.
+
+  # ------------------------------------------------------------ Flame, frag and designators
+
+  - name: "Flamer, T'au Pattern"
+    tl: 11
+    lc: 0
+    cost: 700
+    weight: 12
+    tags: ["Missile Weapon", "Xenos", "T'au", "Battlesuit", "Crisis"]
+    weapons:
+      - usage: "Cone attack (5 yards)"
+        damage: "4d burn"
+        range: 5
+        shots: "4(5)"
+        st: "11M"
+        bulk: -3
+        skill: "Liquid Projector (Flamethrower)"
+        notes: >-
+          No Acc bonus applies and no aiming roll is needed against a target inside the cone (B281):
+          the skill roll is only to avoid intervening obstacles and keep the cone off friendly
+          targets. Cover bonuses are halved (round down) against the cone, not ignored.
+      - usage: "Follow-up (per turn while ablaze)"
+        damage: "1d burn"
+        range: 5
+        shots: "4(5)"
+        st: "11M"
+        bulk: -3
+        skill: "Liquid Projector (Flamethrower)"
+        notes: >-
+          A target who fails an HT roll on being hit catches fire and takes this every turn until
+          extinguished (B433); DR does not reduce it. It does not apply at all against a
+          hermetically sealed suit whose seal has not been breached: T'au battlesuits and Astartes
+          power armour are sealed (GM's call).
+    notes: >-
+      Hardpoint weapon: a battlesuit uses the suit's strength, not the pilot's. Minimum ST is
+      checked against the pilot's ST plus the suit's Lifting ST bonus (Crisis 11+18=29, Stealth
+      11+10=21, Broadside 11+26=37), so the M in Min ST is met by the suit's servos and the weapon
+      cannot be fired by an unaided T'au. A cone attack needs no Acc or Rcl.
+    lore: >-
+      A pressurised fire weapon: Codex: T'au Empire background lists the flamer as a Crisis
+      battlesuit option for clearing trenches, buildings and dense cover where their long-range fire
+      is blocked. The sources give no more than that it produces a jet of burning fuel; a small,
+      compact unit.
+    design: >-
+      Anchor (framework): Imperial flamer parity. Same 4d burn, 5-yard cone and 1d burn follow-up as
+      the Imperial Flamer, so the same odds apply: 4d burn (average 14) goes through nothing
+      armoured (0.0% vs flak; 5.4% with the Weak Points chance) and is an unarmoured-target killer;
+      the burning follow-up is the real threat and ignores DR. The sealed-armour exemption is
+      carried over from the Imperial entry. Handling: 12 lb loaded (the Imperial flamer is 14 lb; a
+      smaller tank), Min ST sqrt(120)=11, 11M, derived from weight and suit-mounted (the Imperial
+      flamer's lower ST 9 for 14 lb is not copied). Shots 4(5) as the Imperial flamer. Bulk -3. TL
+      11 (T'au tech): a small integrated unit, so I have not dropped it to the simple TL of the
+      Imperial tank-and-igniter.
+
+  - name: "Airbursting Fragmentation Projector"
+    tl: 11
+    lc: 0
+    cost: 5000
+    weight: 24
+    tags: ["Missile Weapon", "Xenos", "T'au", "Battlesuit", "Crisis"]
+    weapons:
+      - usage: "Airburst, mounted"
+        damage: "4d cr ex [7d cut]"
+        acc: 4
+        range: "250/900"
+        rof: 3
+        shots: "9(5)"
+        st: "16M"
+        bulk: -5
+        rcl: 2
+        skill: "Gunner (Cannon)"
+        notes: >-
+          Each burst detonates over the target: hard cover between the firer and the target does not
+          stop the fragments unless the target also has overhead cover (a roof, a heavy canopy).
+          Otherwise fragments are as B414, with no armour divisor.
+    notes: >-
+      Hardpoint weapon: a battlesuit uses the suit's strength, not the pilot's. Minimum ST is
+      checked against the pilot's ST plus the suit's Lifting ST bonus (Crisis 11+18=29, Stealth
+      11+10=21, Broadside 11+26=37), so the M in Min ST is met by the suit's servos and the weapon
+      cannot be fired by an unaided T'au. The frag cloud is rolled as fragmentation (B414): the
+      bracketed dice are the cut damage; the 4d cr ex is the blast.
+    lore: >-
+      An anti-infantry launcher: Codex: T'au Empire background lists the airbursting fragmentation
+      projector as a Crisis battlesuit weapon that shoots shells fused to burst above hidden
+      infantry, the T'au answer to entrenched troops.
+    design: >-
+      No framework number beyond the frag anchors: Imperial frag grenade 3d cr ex [6d cut] and
+      missile launcher frag 6d cr ex [9d cut]. It sits between them: a cluster of small charges, 4d
+      cr ex [7d cut], with no armour divisor. Exact dice for the fragments: 7d cut (average 24.5)
+      penetrates flak 9.4% (23.7% with WP 7), carapace 0.0%, Astartes plate 0.0%; it is a weapon
+      against the unarmoured and the lightly armoured, not against armour, exactly like the Imperial
+      frag. The airburst rule is the only thing that distinguishes it. Handling: 24 lb loaded, Min
+      ST sqrt(240)=15.5, 16M. RoF 3, Shots 9(5), Acc 4 (fused shells with a fire-control range
+      gate), range 250/900 (a grenade launcher's 170/650, stretched), Bulk -5, Rcl 2 (a shell
+      launcher). Skill Gunner (Cannon): a suit-mounted shell projector, not a hand-held grenade
+      launcher.
+
+  - name: "Markerlight"
+    tl: 11
+    lc: 0
+    cost: 6000
+    weight: 4.5
+    tags: ["Missile Weapon", "Xenos", "T'au", "Fire Caste", "Pathfinder"]
+    weapons:
+      - usage: "Designate"
+        damage: "spec"
+        acc: 9
+        range: "1500/4500"
+        rof: 1
+        shots: "60(3)"
+        st: 7
+        bulk: -4
+        rcl: 1
+        skill: "Beam Weapons (Rifle)"
+        notes: >-
+          Does no damage. A hit places one mark on the target. Marks last until the end of the
+          marker's next turn, and a target may carry up to three. While a target is marked, every
+          networked T'au (troops, drones and battlesuits sharing a data link; network range is the
+          GM's call, roughly line of sight to the marker's transmissions) who attacks it gains +1
+          per mark (maximum +3) to hit and ignores cover and concealment penalties, and a seeker
+          missile may be fired at it with no line of sight. The target may see the dot: a marked
+          target that notices has -1 to any Stealth roll to hide again.
+    notes: >-
+      A designator, not a weapon. Uses no ammunition apart from a small pack.
+    lore: >-
+      The Pathfinder's tool and the basis of T'au fire coordination: Codex: T'au Empire background
+      gives markerlights to Pathfinders, some Fire Warrior teams, drones and battlesuit systems, and
+      treats the mark as what turns their long-range weapons into a networked killing zone; seekers
+      are fired at marked targets.
+    design: >-
+      Anchor (framework): laser designator, no damage. A marked target gives networked T'au shooters
+      +1 per mark (max +3) and removes cover penalties; seekers fire on a mark without line of
+      sight. There is no damage line: the 'spec' damage is a zero-damage designate line, with all
+      rules in the notes. The mark's duration (until the marker's next turn) and the -1 to hide are
+      design choices; the framework fixes only the +1 per mark, the cap of +3, the removal of cover
+      penalties and seeker use. Handling: 4.5 lb (a designator with its pack), Min ST 7
+      (sqrt(45)=6.7). RoF 1 (each mark is one aimed hit). Acc 9: a laser designator's flat
+      trajectory (beam +2), rifle 4 and a designator optic +3. Range 1500/4500. Bulk -4, Rcl 1 (none
+      really: beam).
+
+  # ------------------------------------------------------------ Grenades
+
+  - name: "Photon Grenade"
+    tl: 11
+    lc: 0
+    cost: 60
+    weight: 0.8
+    tags: ["Missile Weapon", "Xenos", "T'au", "Fire Caste", "Pathfinder"]
+    weapons:
+      - usage: "Flash"
+        damage: "spec"
+        skill: "Throwing"
+        notes: >-
+          Everyone within 5 yards facing the grenade when it goes off must roll HT-6 or be blinded
+          for 1d minutes; anyone looking away or wearing eye protection is unaffected. No HP damage.
+          The same charge is fired from a pulse carbine's underslung launcher.
+    notes: >-
+      A flash charge. It can be thrown, or launched from the pulse carbine's grenade launcher.
+    lore: >-
+      A blinding-flash grenade: Codex: T'au Empire background lists photon grenades among the
+      wargear of Pathfinders and Fire Warriors, used to blind and stall an enemy at close quarters
+      so the T'au can fall back and shoot; consistent with a people who avoid melee.
+    design: >-
+      Anchor (framework): blinding flash, affliction, no damage. Built at parity with the Imperial
+      Photon Flash Grenade, an Affliction-style blinding flash resolved on an HT roll rather than
+      damage: the same 5-yard radius, HT-6, 1d minutes. The T'au version differs in TL (11) and cost
+      only. 'spec' is the schema's no-damage marker, with the effect in notes.
+
+  - name: "EMP Grenade"
+    tl: 11
+    lc: 0
+    cost: 250
+    weight: 1.2
+    tags: ["Missile Weapon", "Xenos", "T'au", "Fire Caste"]
+    weapons:
+      - usage: "EMP burst"
+        damage: "spec"
+        skill: "Throwing"
+        notes: >-
+          No effect on living flesh. Vehicles, robots, drones and servitors within 2 yards have all
+          active systems (weapons, engines, vox) disabled for 2d turns unless the GM rules the
+          target shielded; against a war engine, an unusually harsh HT roll instead.
+    notes: >-
+      Machines only.
+    lore: >-
+      An anti-vehicle electromagnetic-pulse charge: Codex: T'au Empire background lists EMP grenades
+      among Fire Caste anti-vehicle wargear. Which units carry them I hold with low confidence; the
+      weapon's function (a disabling pulse against machines, nothing to flesh) is clear.
+    design: >-
+      Anchor (framework): haywire-like, machines only. Built at parity with the Imperial Haywire
+      Grenade (no HP damage, a 2-yard systems disable of 2d turns), with T'au TL 11 and cost 250. It
+      is never a damage roll: a machine's armour is irrelevant. Vehicles that are sealed or shielded
+      are the GM's call, as for the Imperial grenade.
+
+  # ------------------------------------------------------------ Kroot and Vespid
+
+  - name: "Kroot Rifle"
+    tl: 11
+    lc: 0
+    cost: 800
+    weight: 10
+    tags: ["Missile Weapon", "Melee Weapon", "Xenos", "T'au", "Kroot"]
+    weapons:
+      - usage: "Standard"
+        damage: "7d(2) pi"
+        acc: 5
+        range: "500/1500"
+        rof: 3
+        shots: "20(3)"
+        st: 10
+        bulk: -5
+        rcl: 2
+        skill: "Guns (Rifle)"
+      - usage: "Blade stock (rifle reversed, two-handed)"
+        damage: "sw+1 cut"
+        st: 10
+        reach: "1"
+        parry: "0"
+        skill: "Staff"
+        notes: >-
+          A blade fitted to the stock of the rifle. A Kroot at ST 12 swings 1d+3 cut with it. No
+          Parry bonus.
+    notes: >-
+      Charged-slug rifle built by the Kroot around T'au induction coils.
+    lore: >-
+      The Kroot Carnivore's weapon: Codex: T'au Empire background describes Kroot rifles as
+      slug-throwing long guns built by the Kroot to their own tastes, with T'au tech at the core,
+      and fitted with a blade at the stock for the melee the Kroot like. Kroot fight more willingly
+      in melee than the T'au, which is why the blade is there.
+    design: >-
+      Anchor (framework): T'au-made charged slug in a Kroot-built long gun, 7d(2) pi; blade-fitted
+      stock. Exact dice: average 24.5; penetrates flak 97.8% (98.1% with WP 7), carapace 0.6% (4.9%
+      with WP 5), Astartes 0.0% (0.8% with WP 4), Terminator plate 0.0%, Tartaros (190) 0.0%;
+      vehicles: nothing. That is a lasgun's punch (7d(2) burn: flak 98%, carapace 0.6%) in a slug,
+      so a Kroot squad is as good as a Guard squad against flak and is stopped by carapace except on
+      a Weak Point. Handling: 10 lb loaded, Min ST 10 (sqrt(100)=10; a Kroot has ST 12). RoF 3:
+      semi-automatic. Acc 5, range 500/1500 (a lasgun's 400/1200, longer for a rail-accelerated
+      slug), Bulk -5, Rcl 2 (a slug). Shots 20(3). Blade line: sw+1 cut at reach 1: a rifle butt
+      with a blade, using Staff (a long haft), no parry bonus.
+
+  - name: "Kroot Gun"
+    tl: 11
+    lc: 0
+    cost: 2400
+    weight: 28
+    tags: ["Missile Weapon", "Xenos", "T'au", "Kroot"]
+    weapons:
+      - usage: "Braced"
+        damage: "9d(2) pi+"
+        acc: 6
+        range: "800/2400"
+        rof: 2
+        shots: "10(4)"
+        st: "17B"
+        bulk: -7
+        rcl: 3
+        skill: "Guns (Rifle)"
+    notes: >-
+      A heavy Kroot slug gun. B: bipod-braced; a Krootox can carry and steady it.
+    lore: >-
+      A heavier, larger-bore weapon of the Kroot: background places the Kroot gun with the Krootox
+      riders, the big beasts the Kroot breed as living gun platforms. I am reasonably, not
+      perfectly, sure of the carrier; sources give no numbers.
+    design: >-
+      No framework anchor beyond 'Kroot rifle'. Built as the rifle's bigger sibling: two more dice
+      and a larger slug, 9d(2) pi+ (x1.5). Exact dice: average 31.5; penetrates flak 100.0%,
+      carapace 22.0% (25.6% with WP 5), Astartes 0.0% (1.6% with WP 4), Terminator plate 0.0%,
+      Tartaros (190) 0.0%. It goes through flak always and carapace about one hit in four, but not
+      Astartes plate except a Weak Point. Handling: 28 lb loaded, Min ST sqrt(280)=16.7, 17B: a
+      Kroot at ST 12 must brace it, or fire from a Krootox. RoF 2 (a heavy slug, semi-automatic but
+      slow). Acc 6, range 800/2400, Bulk -7, Rcl 3, Shots 10(4). Design numbers throughout.
+
+  - name: "Neutron Blaster"
+    tl: 11
+    lc: 0
+    cost: 3500
+    weight: 6
+    tags: ["Missile Weapon", "Xenos", "T'au", "Vespid"]
+    weapons:
+      - usage: "Standard"
+        damage: "5dx2(4) burn"
+        acc: 3
+        range: "100/300"
+        rof: 2
+        shots: "12(4)"
+        st: 8
+        bulk: -4
+        rcl: 1
+        skill: "Beam Weapons (Rifle)"
+    notes: >-
+      Crystal-linked to a Vespid's own crystal: it cannot be fired by a non-Vespid without a crystal
+      link (GM's call; a T'au at -4).
+    lore: >-
+      The Vespid Stingwing's weapon: Vespid background gives the winged Vespid a short-range neutron
+      blaster linked to a crystal each carries; the crystal-link is the part I recall with
+      confidence, and the rest is design.
+    design: >-
+      Anchor (framework): 5dx2(4) burn, short range. Exact dice: average 35.0; penetrates flak
+      100.0%, carapace 99.3%, Astartes 90.2% (90.4% with WP 4), Terminator plate 1.6% (2.0% with WP
+      3), Tartaros (190) 5.9%; vehicles AV10 90.2%, AV11 40.0%, AV12 1.6%, AV13 0.0%, AV14 0.0%. The
+      (4) divisor gives it one of the best T'au infantry hit rates against Marine plate (90%, behind
+      only the ion weapons), but the damage is low: a hit through Astartes plate averages 11 points
+      of injury, so a Marine takes three or four hits to drop. Handling: 6 lb, Min ST 8
+      (sqrt(60)=7.7). RoF 2 (a Vespid's short burst), Acc 3, range 100/300 (anchor: short range),
+      Bulk -4, Rcl 1, Shots 12(4).
+
