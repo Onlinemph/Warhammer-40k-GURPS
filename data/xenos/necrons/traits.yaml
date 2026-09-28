@@ -685,6 +685,37 @@ items:
       single target, and nothing resembling a social self beyond that.
     design: 5 (Single-Minded) - 10 (No Sense of Humor) = -5 points.
 
+  - name: "Deathmark Phase-Shift"
+    container: meta_trait
+    tags: [Advantage, Physical, Xenos, Necrons]
+    children:
+      - name: "Ethereal Interception"
+        per_level: 15
+        levels: 1
+        ref: B51
+        tags: [Advantage, Physical, Xenos, Necrons]
+        modifiers:
+          - {name: "Limited (ranged attacks only)", cost: "-20%"}
+        notes: "+1 to Dodge against ranged attacks: the Deathmark phases partly out of reality as a shot arrives."
+        lore: >
+          Deathmarks are described in the Codex as partially phased out of
+          reality between shots, which is why fire aimed at them seems to
+          pass through the moment before it lands.
+        design: "Enhanced Dodge (B51, 15/level) level 1, Limited to ranged attacks (-20%): 15 x 0.8 = 12 points."
+      - name: "Phase-In Ambush"
+        points: 6
+        tags: [Advantage, Physical, Xenos, Necrons]
+        notes: "Once per scene, while out of sight of every enemy, the Deathmark may appear at any spot within 20 yards that it could see if it were standing there. It cannot move through solid barriers, and acts normally next turn."
+        lore: >
+          Deathmarks are described arriving from the ambush position of a
+          dimensional pocket or phase-shift and opening fire with no
+          warning, rather than marching to a firing position.
+        design: "House price of 6 points, since the Basic Set library has no teleportation trait; one use per scene, out of sight only."
+    lore: >
+      A Deathmark hunts from phase: partly out of step with reality, it
+      arrives unseen and turns a shot aside as it lands.
+    design: 12 (Ethereal Interception) + 6 (Phase-In Ambush) = 18 points.
+
   - name: "Mind: Lychguard Honour"
     container: meta_trait
     tags: [Disadvantage, Mental, Xenos, Necrons]
@@ -925,10 +956,12 @@ items:
     children:
       - name: "Channelled Discharge"
         per_level: 5
-        levels: 4
+        levels: 6
         ref: B61
         tags: [Advantage, Xenos, Necrons]
-        notes: "Bare-handed emergency discharge; a Plasmancer normally releases this through a staff or rod (built separately as equipment), not empty-handed."
+        modifiers:
+          - {name: "Armor Divisor (3)", cost: "+100%", ref: B102}
+        notes: "6d(3) burn: an emergency discharge straight from the hands, matching the staff-of-light tier. A Plasmancer normally releases this through a staff or rod (built separately as equipment) rather than empty-handed."
         lore: >
           Plasmancers store and release raw particle/plasma energy through
           their staves, and can (if disarmed) still discharge a
@@ -936,12 +969,15 @@ items:
         design: >
           Innate Attack (Burning) (B61, 5 points/die), the same anchor
           this project's 'Eadbanger and Betcher's Gland entries use. Level
-          4, 20 points.
+          6 (30 points) with Armor Divisor (3) (B102, +100%): 30 x 2 = 60
+          points. Raised from 4d with no divisor, which left a Plasmancer
+          weaker than an ordinary Warrior's gauss flayer; 6d(3) matches the
+          Staff of Light's own ranged tier.
     lore: >
       Plasmancers are Necron energy-weapons specialists, channelling the
       same particle science behind gauss weaponry into more focused,
       more destructive bursts.
-    design: 20 points (Channelled Discharge, level 4) at default level.
+    design: 60 points (Channelled Discharge, level 6 with Armor Divisor (3)) at default level.
 
   - name: "Cryptek Discipline: Psychomancy"
     container: group

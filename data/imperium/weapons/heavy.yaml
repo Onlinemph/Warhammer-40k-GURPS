@@ -14,19 +14,20 @@ items:
         range: 1500/4500
         rof: 1
         shots: 5(5)
-        st: 12M
+        st: 14M
         bulk: -8
         rcl: 1
         skill: Gunner (Beams)
     notes: >
-      Needs a tripod or vehicle pit mount (ST 12M): an unmounted human cannot
+      Needs a tripod or vehicle pit mount (ST 14M): an unmounted human cannot
       brace it, though Astartes ST lets a Space Marine fire it standing
-      (treat as braced at ST 12 rather than mounted, GM's call). Draws from
+      (treat as braced at ST 14 rather than mounted, GM's call). The 80 lb
+      is the weapon alone; the tripod (Heavy Weapon Tripod, 20 lb) is extra. Draws from
       a dedicated power cell (see Lascannon Power Cell); swapping cells
       takes the 5-turn reload noted in shots.
     lore: >
       The definitive Imperial anti-tank weapon: Guard heavy weapons squads,
-      Space Marine Devastators and Predator/Rhino/Razorback sponsons and
+      Space Marine Devastators and Predator/Razorback/Land Raider sponsons and
       turrets all mount it, and Black Library fiction (Gaunt's Ghosts,
       Horus Heresy novels) consistently has a well-placed lascannon shot
       cripple or kill a battle tank, and treats it as one of the few
@@ -35,19 +36,20 @@ items:
       Damage is the fixed anchor from framework.md: 8dx8(5) burn ("kills
       tanks and Terminators"). Checked against the vehicle AV table with the
       exact dice distribution: average 224 burn through an armor divisor of
-      5 gives an effective DR of 20 (AV10) to 70 (AV14). Even a worst-case
-      minimum roll (8 dice all at 1, x8 = 64) clears every effective DR on
-      the table, so the lascannon always beats AV10 through AV14 (DR
-      100-350) with the anchor's divisor doing almost all the work; against
+      5 gives an effective DR of 20 (AV10) to 70 (AV14). Even the minimum
+      roll (8 dice all at 1, x8 = 64) clears every effective DR on the table
+      except AV14's 70, which it misses only when all eight dice show 1 (1 in
+      1.7 million), so the lascannon beats AV10 through AV14 (DR 100-350)
+      essentially every time with the anchor's divisor doing almost all the work; against
       a Terminator (DR 200, effective DR 40) or Astartes power armor (DR
-      100, effective DR 20) it is likewise a guaranteed penetration, matching
+      100, effective DR 20) it is a guaranteed penetration (minimum roll 64), matching
       "kills tanks and Terminators" without exception. Acc, range, RoF, shots, Bulk and
       Rcl are not anchored by framework.md, so they're built from first
       principles: RoF 1 and Rcl 1 because a beam weapon has no recoil and
       the capacitor cycle time is the limiting factor; Acc 14 and a long
       1500/4500 range because the weapon's entire battlefield role is
       precision fire on distant armor, which demands better optics than a
-      lasgun (Acc 10); Bulk -8 and ST 12M because the weapon and its
+      lasgun (Acc 6); Bulk -8 and ST 14M (sqrt(10x80)=28, mostly carried by the mount) because the weapon and its
       cooling housing are backpack-sized and unwieldy without a brace.
       Cost and LC follow "military-issue heavy weapons" (LC2) and are
       priced well above a lasgun to reflect scarcity of the long-barrel
@@ -69,7 +71,7 @@ items:
     cost: 300
     weight: 20
     tags: [Imperium, Astra Militarum, Gear]
-    notes: Required to fire a mounted-only (M) heavy weapon without an Astartes-grade ST score. Setup/breakdown takes about a minute (Fast-Draw or GM discretion can shorten this).
+    notes: Required to fire a mounted-only (M) heavy weapon without an Astartes-grade ST score. Setup/breakdown takes about a minute (Fast-Draw or GM discretion can shorten this). Weapons whose entry says the weight already includes the mount (Autocannon, Multi-laser) do not need a second tripod; the Lascannon, Plasma Cannon and Multi-Melta weights exclude it.
     lore: Guard heavy weapons squads are built around a two- or three-man team - gunner, loader, and often an ammo carrier - who move the tripod between firing positions, a staple of Astra Militarum fiction from Gaunt's Ghosts onward.
     design: Not anchored; a generic piece of gear so lascannon, multi-laser, autocannon and mortar entries can all reference the same mount rather than each inventing one. Cost and weight are a plausible generic tripod, not derived from any weapon-specific figure.
 
@@ -78,7 +80,7 @@ items:
     lc: 2
     cost: 8000
     weight: 45
-    tags: [Missile Weapon, Imperium, Astra Militarum]
+    tags: [Missile Weapon, Imperium, Astra Militarum, Adeptus Astartes]
     weapons:
       - usage: Braced/mounted
         damage: 6dx2(2) burn
@@ -90,8 +92,8 @@ items:
         bulk: -6
         rcl: 1
         skill: Gunner (Beams)
-    notes: More commonly seen as a Sentinel or Rhino turret weapon than carried into the field; this is the static defensive-emplacement or bunker version issued to line regiments guarding a position.
-    lore: Multi-lasers are the standard secondary and light-vehicle turret weapon across the Astra Militarum (Sentinels, Chimeras, Rhinos); fiction and background consistently treat them as good infantry-shredders that struggle to hurt anything with real armour plate.
+    notes: More commonly seen as a Sentinel, Chimera or Land Speeder weapon than carried into the field; this is the static defensive-emplacement or bunker version issued to line regiments guarding a position. The 45 lb includes its tripod.
+    lore: Multi-lasers are the standard secondary and light-vehicle turret weapon across the Astra Militarum (Sentinels, Chimeras; Astartes Land Speeders carry it too); fiction and background consistently treat them as good infantry-shredders that struggle to hurt anything with real armour plate.
     design: >
       No framework anchor covers the multi-laser. It is several linked
       lasgun-grade emitters cycling far faster and harder than any infantry
@@ -101,12 +103,9 @@ items:
       eff. 35) 79%; Sororitas plate (DR 85, eff. 42.5) 45%; Astartes power
       armour (DR 100, eff. 50) 14%, same as a bolter; AV10 (DR 100) 14%, so
       it can threaten a Chimera's flank with luck but no tank.
-      Handling: RoF corrected to 9 per framework.md's explicit "multi-lasers
-      are rapid emitters (8-10)" rule - the previous RoF 3 copied the
-      bolter's semi/burst rate onto a weapon the framework itself singles
-      out as a fast-cycling linked-emitter array, understating exactly the
-      "several linked lasgun-grade emitters cycling far faster... than any
-      infantry weapon" description in this entry's own design note. Acc,
+      Handling: RoF 9 follows framework.md's "multi-lasers
+      are rapid emitters (8-10)" rule, matching the "several linked lasgun-grade
+      emitters cycling far faster... than any infantry weapon" description above. Acc,
       range and Bulk sit between the lasgun and lascannon; ST 9M (mounted)
       is unchanged, the tripod bearing the 45 lb weight.
 
@@ -115,7 +114,7 @@ items:
     lc: 2
     cost: 6000
     weight: 85
-    tags: [Missile Weapon, Imperium, Astra Militarum]
+    tags: [Missile Weapon, Imperium, Astra Militarum, Adeptus Astartes]
     weapons:
       - usage: Braced/mounted
         damage: 6dx3(3) pi++
@@ -151,10 +150,10 @@ items:
       effectively 0% - it does not beat a Leman Russ or Land Raider's
       armour, matching every source that has autocannon fire shrug off a
       main battle tank's frontal plate.
-      Handling: RoF corrected to 5 - a real chain-driven or revolver-cannon
+      Handling: RoF 5 - a real chain-driven or revolver-cannon
       autoloader cycles noticeably faster than a bolter's semi/burst RoF 3,
       but this project keeps it well under the true chain-gun rate of the
-      Assault Cannon (RoF 10) and the rapid-emitter Multi-laser (RoF 9), so
+      Assault Cannon (RoF 20) and the rapid-emitter Multi-laser (RoF 9), so
       the autocannon reads as a burst-fire cannon rather than a
       spray-weapon, matching its lore role of putting a few large,
       accurate rounds into a specific target rather than hosing an area.
@@ -175,10 +174,10 @@ items:
     lc: 2
     cost: 5000
     weight: 22
-    tags: [Missile Weapon, Imperium, Astra Militarum]
+    tags: [Missile Weapon, Imperium, Astra Militarum, Adeptus Astartes]
     weapons:
       - usage: Frag missile
-        damage: 6d cr ex [6d]
+        damage: 6d cr ex [9d cut]
         acc: 10
         range: 100/1800
         rof: 1
@@ -188,7 +187,7 @@ items:
         rcl: 1
         skill: Gunner (Rockets)
       - usage: Krak missile
-        damage: 6dx6(3) cr
+        damage: 6dx6(3) cr ex
         acc: 10
         range: 100/1800
         rof: 1
@@ -198,7 +197,7 @@ items:
         rcl: 1
         skill: Gunner (Rockets)
       - usage: Flakk missile (vs. aircraft, proximity-fused)
-        damage: 5d cr ex [5d]
+        damage: 5d cr ex [8d cut]
         acc: 10
         range: 100/1800
         rof: 1
@@ -227,14 +226,14 @@ items:
       glacis is a real but not certain kill, which is why the fiction has
       missile teams engage such targets in numbers rather than solo. Frag:
       scaled from the B414 fragmentation rules as a "big frag grenade" per
-      the framework's own description - roughly double the blast and
-      fragmentation dice of a standard hand grenade (3d[3d]) to reflect a
-      much larger warhead, giving 6d cr ex [6d]; it has no armor divisor
+      the framework's own description - double the concussion dice and
+      1.5x the fragmentation dice of a standard hand grenade (3d cr ex
+      [6d cut]) to reflect a much larger warhead, giving 6d cr ex [9d cut]; it has no armor divisor
       and is not intended to threaten anything on the vehicle AV table,
-      only infantry and light cover, so it is not rescaled alongside Krak.
+      only infantry and light cover.
       Flakk: the frag warhead's dice with a proximity fuze instead of
-      impact/frag optimisation, at one die less since more of the casing
-      goes into the fuze and less into the frag liner; it is not rated
+      impact/frag optimisation, at one die less on each figure (5d cr ex [8d cut]) since more
+      of the casing goes into the fuze and less into the frag liner; it is not rated
       against ground DR at all. Acc/range/RoF/Bulk are shared across
       usages since they describe the launcher, not the warhead, and are
       built as a shoulder-fired tube (lower ST and Bulk penalty than the
@@ -271,7 +270,7 @@ items:
     lore: A rarer load issued when air cover is expected, first widely catalogued in later Guard background material.
     design: Ammunition line for the flakk usage above; damage and derivation are given there.
 
-  - name: Assault Cannon (Soulreaper Pattern)
+  - name: Assault Cannon
     tl: 10
     lc: 1
     cost: 20000
@@ -282,7 +281,7 @@ items:
         damage: 5dx2(2) pi+
         acc: 5
         range: 500/1500
-        rof: 10
+        rof: 20
         shots: 200(20)
         st: 15
         bulk: -6
@@ -290,8 +289,9 @@ items:
         skill: Gunner (Machine Gun)
     notes: Arm- or hip-socket mounted on Terminator armour, or carried and fired one-handed by an Astartes on a stabilising harness; ST 15 assumes Astartes-grade strength rather than a tripod.
     lore: >
-      Devastator squads and Terminators use the multi-barrelled assault
-      cannon (also fielded by Chaos as the Soulreaper cannon) as a
+      Terminators, Dreadnoughts and vehicle sponsons (Predators, Land
+      Raiders) use the multi-barrelled assault cannon (the Chaos Soulreaper
+      cannon is the same design) as a
       close-to-mid-range storm of solid shot for shredding infantry,
       light vehicles and swarms; it is fired solid rounds rather than
       bolts, which is why it sits outside the bolt-weapon family, and
@@ -305,11 +305,11 @@ items:
       no explosive follow-up and a lower pi+ wound multiplier (dense solid
       shot, not a mass-reactive bolt), so it drops the follow-up term and
       scales the base damage down two dice (5d instead of 7d) in exchange
-      for a much higher RoF (10 vs. the heavy bolter's typical
-      squad-support RoF), matching its fluff role as a horde-clearing hail
+      for a much higher RoF (20 vs. the heavy bolter's 8; framework.md puts assault
+      cannons at 15-20+), matching its fluff role as a horde-clearing hail
       of fire rather than a hard-hitting single line of shots. Checked
       with the exact dice distribution (5dx2(2) pi+, avg 35) against the
-      vehicle AV table: even at RoF 10, no single round reliably clears
+      vehicle AV table: even at RoF 20, no single round reliably clears
       AV10's effective DR 50 (only 1.6% per shot), so it cannot reliably
       beat any vehicle on the table - consistent with Astartes fiction,
       where the assault cannon is a horde/infantry weapon and its wielder
@@ -336,7 +336,7 @@ items:
     tags: [Missile Weapon, Imperium, Astra Militarum]
     weapons:
       - usage: Indirect fire, HE bomb
-        damage: 6dx2 cr ex [6d]
+        damage: 6dx2 cr ex [12d cut]
         acc: 3
         range: 100/3600
         rof: 1
@@ -344,8 +344,8 @@ items:
         st: 8
         bulk: -6
         rcl: 1
-        skill: Artillery (Mortar)
-    notes: Baseplate, bipod and tube break down for a three-man crew to carry; minimum range reflects the bomb's arming distance, not a targeting limit. Uses the indirect-fire rules under Artillery, not a direct line of sight.
+        skill: Artillery (Cannon)
+    notes: Baseplate, bipod and tube break down for a three-man crew to carry; minimum range about 20 yd (the bomb's arming distance, not a targeting limit). Uses the indirect-fire rules under Artillery, not a direct line of sight.
     lore: >
       The mortar is the Guard's simplest and most ubiquitous indirect-fire
       support weapon, issued down to platoon level in Guard fiction for
@@ -358,10 +358,12 @@ items:
       lasguns, stubbers or rockets, which is exactly why every regiment
       from a hive world to a feral-world levy can field one. Damage is
       built the same way as the missile launcher's frag warhead (B414
-      fragmentation, "big frag grenade" scaling) but roughly doubled again,
+      fragmentation, "big frag grenade" scaling) with the fragmentation
+      doubled again over a hand grenade's 6d (12d cut, against the missile's 9d),
       since a mortar bomb is not weight-constrained by a rocket motor and
       can devote more of its mass to filler and casing, giving 6dx2 cr ex
-      [6d]. It carries no armor divisor and is not intended to be checked
+      [12d cut]. Basic Set Artillery specialties have no Mortar entry, so it uses
+      Artillery (Cannon). It carries no armor divisor and is not intended to be checked
       against the vehicle AV table at all - its role in the fiction is
       area denial and infantry suppression, not armour-killing, so unlike
       the autocannon, krak missile or lascannon above it has no reliably/

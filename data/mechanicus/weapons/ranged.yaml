@@ -143,7 +143,7 @@ items:
         acc: 7
         range: 400/1200
         rof: 1
-        shots: 24(3)
+        shots: 10(3)
         st: 9
         bulk: -5
         rcl: 1
@@ -173,7 +173,7 @@ items:
       hypersonic velocity, placing it squarely in framework.md's "must recharge between shots"
       RoF-1 bracket alongside plasma and melta weapons, not the lasgun's near-instant lasing cycle -
       this is also what lets it be a genuine long-range precision weapon rather than a
-      spray-and-pray carbine. Shots 24(3): a moderate magazine of pre-shaped darts. Bulk -5, at the
+      spray-and-pray carbine. Shots 10(3): a short magazine of pre-shaped darts, sized like a bolt-action rifle's since every shot waits on the capacitor (a 24-round magazine would only suit a semi-automatic weapon). Bulk -5, at the
       heavier end of the rifle bracket, for its long barrel and accelerator housing. Rcl 1: a
       magnetically-launched dart carries no propellant charge, so felt recoil is only the dart's
       own momentum, lighter than any chemical or las weapon in this file. Acc 7, well above a plain
@@ -342,9 +342,11 @@ items:
         rcl: 1
         skill: Beam Weapons (Pistol)
         notes: >
-          Phosphor fire clings and glows white-hot on whatever it touches: treat cover bonuses
-          against it as halved (round down), as the flame-weapon family's cover-bypassing rule in
-          the Imperium files, and any target hit is luminously marked - it cannot benefit from
+          Phosphor fire clings and glows white-hot on whatever it touches: it ignores concealment
+          entirely (camouflage, smoke, foliage, darkness and similar sight penalties do not apply
+          to the attack roll), per framework.md's "ignores concealment"; hard cover still works, but
+          treat its bonuses against it as halved (round down), as the flame-weapon family's rule in
+          the Imperium files. Any target hit is luminously marked - it cannot benefit from
           Stealth, camouflage, or being in shadow or smoke for the rest of the encounter (the glow
           only fades with a wash-down or a fresh coat of cammo paint).
     lore: >
@@ -430,11 +432,12 @@ items:
         skill: Beam Weapons (Pistol)
         notes: As the Phosphor Blast Pistol's cover-bypass and marking note above.
     lore: >
-      A twin-emitter phosphor sidearm issued to Sicarian Ruststalkers alongside their transonic
-      blades, background depicting the "serpenta" pattern generally as a paired, elite-issue
+      A twin-emitter phosphor sidearm, as best this project can tell (moderate confidence, tabletop
+      Codex level) issued to Skitarii officers and Alphas rather than to Sicarian melee patterns,
+      background depicting the "serpenta" pattern generally as a paired, elite-issue
       variant one step above a standard sidearm and one step below a full rifle - here, a weapon
-      built to keep a Ruststalker's hands free for its bladework while still able to mark and burn
-      a target at closer range than a phosphor blaster.
+      built as a sidearm that can still mark and burn a target at closer range than a phosphor
+      blaster.
     design: >
       Sits deliberately between the Phosphor Blast Pistol and Phosphor Blaster rather than
       matching either exactly, per its "elite sidearm, not quite a rifle" place in the family: 6d(2)
@@ -447,9 +450,8 @@ items:
       Blaster's full-auto 10. Handling stats: weight 4 lb for a twin-barrelled handgun unit; min ST
       sqrt(10x4)=6.3, rounded to 6. Shots 16(3): a shared cell feeding both emitters. Bulk -3 (bulkier
       than a single pistol for the paired housing) and Rcl 1 (beam weapon). Acc 4: between the blast
-      pistol's 3 and the blaster's 6. LC0 rather than LC1: Sicarian-pattern gear is Cult Mechanicus
-      chapter-restricted kit in its own right, one step more closely held than standard Skitarii
-      cohort issue.
+      pistol's 3 and the blaster's 6. LC1 like the Phosphor Blaster and Phosphor Blast Pistol: it is officer-grade Skitarii issue,
+      no more closely held than the rest of the phosphor family.
 
   # -------------------------------------------------------------- Plasma caliver
 
@@ -529,7 +531,8 @@ items:
         rcl: 3
         skill: Guns (Rifle)
     lore: >
-      The heavy sniper rifle of the Sicarian Ruststalkers and dedicated Skitarii marksmen, firing
+      The heavy sniper rifle of Skitarii Rangers and dedicated marksmen (not a Ruststalker weapon,
+      who are melee specialists), firing
       a dense transuranic-metal penetrator round; current Codex Adeptus Mechanicus background
       singles it out as one of the few infantry-scale weapons that can put down an Astartes or
       crack open a light vehicle's armour at genuine long range, distinct from the galvanic rifle's
@@ -754,8 +757,9 @@ items:
           fusion-beam physics (framework.md: "melta-like, short range, disintegrating"), just scaled
           to a Kataphron Destroyer's integral reactor arm rather than a shoulder-fired weapon.
     lore: >
-      The heavy, arm-integrated disintegration weapon of the Kataphron Destroyer, current Codex
-      Adeptus Mechanicus background describing it as capable of reducing infantry and light
+      A heavy disintegration weapon fitted as an arm-integrated or mounted heavy weapon on Mechanicus
+      war-forms (a Tech-Priest Dominus carries a version; this project uses the Kataphron Destroyer
+      as its reference chassis, at moderate confidence), current Codex Adeptus Mechanicus background describing it as capable of reducing infantry and light
       vehicles alike to ash at close range - the Mechanicus's answer to the meltagun, built into a
       cybernetic war-form rather than carried.
     design: >
@@ -799,8 +803,8 @@ items:
         rcl: 1
         skill: Gunner (Beams)
     lore: >
-      A lighter, tripod-portable disintegration weapon fielded by Mechanicus heavy-support details
-      where a full Kataphron isn't available: background describes it as trading the eradication
+      A lighter disintegration weapon of the kind mounted on Dunecrawler-class war engines (this project
+      also allows a tripod-portable version for heavy-support details; moderate confidence): background describes it as trading the eradication
       ray's point-blank, melta-like violence for a longer-ranged, continuously-sustained
       disintegration beam.
     design: >
@@ -1074,16 +1078,16 @@ items:
         rcl: 1
         skill: Gunner (Beams)
         notes: >
-          A graviton weapon crushes rather than burns or pierces: it deals crushing damage as shown,
-          with no separate bonus against heavier armour beyond the armour divisor already applied -
-          this project does not add a bespoke "extra effect vs. high DR" sub-mechanic on top of the
-          existing divisor/DR system per its own design principles, so the anchor's anti-armour
-          reputation is carried entirely by the (4) divisor and high raw damage below.
+          A graviton weapon crushes rather than burns or pierces, and its force scales with the
+          mass it grips: against a living target wearing armour with torso DR 70 or more (carapace
+          and heavier; not vehicles), the armour divisor is (5) instead of (4). Against anything
+          lighter, or a vehicle, use the listed (4).
     lore: >
-      The main weapon of the Sydonian Dragoon and Ironstrider Ballistarius walker chassis, current
-      Codex Adeptus Mechanicus background describing a torsion cannon as warping local gravity into
+      A heavy graviton weapon that this project takes, at moderate confidence and from tabletop-level
+      Codex material, to be the Kataphron Breacher's main weapon (a walker mounting is a GM
+      extension, not a sourced one), current Codex Adeptus Mechanicus background describing a torsion cannon as warping local gravity into
       a crushing, armour-buckling pulse rather than firing a conventional bolt or beam - consistently
-      shown wrecking light and medium vehicles and infantry alike from a fast-moving walker platform.
+      shown wrecking light and medium vehicles and infantry alike from a heavy war-form platform.
     design: >
       No framework.md anchor names graviton weapons directly, so this is built from the project's
       existing anti-armour design language (a high-damage, divisor-boosted crushing attack, the same
@@ -1123,10 +1127,10 @@ items:
         bulk: -8
         rcl: 1
         skill: Gunner (Beams)
-        notes: As the Torsion Cannon's note on how graviton crushing damage is modelled.
+        notes: As the Torsion Cannon's note: divisor (5) against a living target in torso DR 70+ armour.
     lore: >
       The Kataphron Destroyer's own graviton weapon, background material distinguishing it from the
-      Ironstrider/Dragoon's torsion cannon as a shorter-ranged, closer-support pattern built into a
+      Kataphron Breacher's torsion cannon as a shorter-ranged, closer-support pattern built into a
       slower, more heavily armoured war-form rather than a fast walker's main gun.
     design: >
       One die down from the Torsion Cannon (5dx4(4) cr vs. 6dx4(4) cr), reflecting a smaller

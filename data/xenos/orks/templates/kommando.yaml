@@ -6,45 +6,10 @@ notes: >
   Boy chassis with a stealth/sabotage skill package instead of a Boy's
   straightforward brawl-and-shoot kit. Point math: Ork Physiology 179 +
   skills 28 = 207 points, inside framework.md's Elite human tier
-  (200-350). Enable the Stormboy lens below (disabled by default) to build
-  a Stormboy instead: a Kommando-adjacent specialist who straps a crude
-  rokkit pack on and jumps into the fight from above, at the cost of
-  occasionally not landing where, or how, intended.
+  (200-350). The Stormboy rokkit-pack lens lives on the Ork Boy template,
+  since Stormboyz are fast young Boyz, not Kommando derivatives.
 traits:
   - include: "xenos/orks/traits.yaml#Ork Physiology"
-  - name: "Lens: Stormboy Rokkit Pack"
-    container: group
-    disabled: true
-    tags: [Xenos, Orks]
-    lore: >
-      Stormboyz strap a crude, Mek-built rokkit pack to their backs and
-      launch themselves at the enemy from height — a spectacular, popular
-      and genuinely dangerous way to get into a fight fast, since the packs
-      are exactly as reliable as the rest of Ork technology.
-    design: Net 7 points; disabled by default so the base Kommando template stays a pure ground specialist.
-    children:
-      - name: Super Jump
-        points: 0
-        per_level: 10
-        levels: 1
-        ref: B99
-        tags: [Advantage, Physical, Xenos, Orks]
-        modifiers:
-          - {name: "Accessibility, only while wearing a working rokkit pack", cost: "-20%"}
-        notes: Vertical leap distance per B99, used here for a rokkit-boosted jump into or across a fight rather than a natural ability.
-        lore: A single good burst from a rokkit pack throws a Stormboy well over the heads of the enemy line.
-        design: "Super Jump 1 (B99, 10/level) with Accessibility (only while the pack works, -20%). Full modified cost: 10 x 0.8 = 8 points."
-      - name: Rokkit Malfunctions
-        points: -1
-        tags: [Quirk, Xenos, Orks]
-        notes: Roleplaying/GM-hazard flag only.
-        lore: >
-          Rokkit packs are built by the same Meks and to the same standards
-          as every other piece of Ork tech, which is to say: they work, up
-          until the moment they spectacularly don't. Codex background and
-          Black Library both play a botched Stormboy landing for comedy
-          about as often as they play the charge itself for menace.
-        design: "Quirk (B9): a GM is free to call for an occasional bad landing on unlucky rolls, at no further point cost."
 skills:
   - name: Guns
     spec: Rifle

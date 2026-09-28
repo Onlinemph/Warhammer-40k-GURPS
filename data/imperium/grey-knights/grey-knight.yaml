@@ -18,18 +18,18 @@ notes: >
   Every Grey Knight is himself a trained psyker from his first patrol (see
   Grey Knight Psychic Gift, Imperium/Traits/Grey Knights.adq): this add-on
   buys Psyker (Talent) 4 and Warp Empowerment 3, landing a rank-and-file
-  Brother at Beta grade (cap 50) on the warp.yaml Assignment table -- one
-  step under the full Alpha grade this project's own Librarian Add-On
+  Brother at a Gamma-equivalent grade (Talent 4 / Empowerment 3, cap 40) on
+  the warp.yaml Assignment table -- one step under the full Alpha grade this project's own Librarian Add-On
   buys, reflecting "every brother is at least a strong psyker" while
   leaving room for a named Grand Master or Brother-Captain to buy Psyker
   and Warp Empowerment higher as an individual advancement on top of this
   shared baseline, the same way a line Battle-Brother buys up Rank and
   Reputation. Sanctic Daemonology (Imperium/Traits/Psykers and the
-  Warp.adq) is bought at Banishment 2 and Hammerhand 2 (modified cost 8
-  each, comfortably under the Beta-grade cap of 50) plus Sanctuary at its
-  flat cost (13) -- a squad-ward power that needs Warp Empowerment 2 (cap
-  30) and so is within easy reach of this add-on's level 3 (cap 40), with
-  real headroom left for a GM to push a known power to a higher
+  Warp.adq) is bought at Banishment 2 (modified cost 8) and Hammerhand 2
+  (modified cost 7), both well under this add-on's cap of 40, plus
+  Sanctuary at its flat cost (13) -- a squad-ward power that needs only
+  Warp Empowerment 1 (cap 20) and so is within easy reach of this add-on's
+  level 3 (cap 40), with real headroom left for a GM to push a known power to a higher
   level/more dice as the Warp Empowerment cap allows.
 
   Point math for this add-on alone: 40 (Grey Knight Soul: 15 Incorruptible
@@ -37,13 +37,13 @@ notes: >
   Gift: 10 Unusual Background + 40 Psyker 4 + 40 Warp Empowerment 3 + 8
   Witch-sight) + 10 (Brotherhood) - 10 (Duty, Chamber Militant) - 10
   (Secret, The Grey Knights) + 0 (Gene-Seed Provenance: Unknown) = 128
-  traits from Imperium/Traits/Grey Knights.adq, + 29 (Sanctic Daemonology:
-  Banishment 2 = 8, Hammerhand 2 = 8, Sanctuary = 13) + 56 skills (Meditation
+  traits from Imperium/Traits/Grey Knights.adq, + 28 (Sanctic Daemonology:
+  Banishment 2 = 8, Hammerhand 2 = 7, Sanctuary = 13) + 56 skills (Meditation
   4, Hidden Lore the Warp 4, Hidden Lore Daemons 16, Polearm 8, Two-Handed
   Axe/Mace 8, Staff 4, Gunner Machine Gun 8, Liquid Projector Flamethrower
-  4) = 231 points as GCS computes it (flat-point modifiers included) on top
-  of the Battle-Brother's own 791, for 1,022 total --
-  landing just above the Librarian Add-On's own combined total (~962),
+  4) = 212 points (128 + 28 + 56) on top of the Battle-Brother's own 821,
+  for 1,033 total --
+  landing at about the Librarian Add-On's own combined total (~1,032),
   matching how Codex and Black Library background treat an ordinary Grey
   Knight Brother as costing about as much as another Chapter's Librarian,
   not merely as much as a Tactical Marine. The four squad-role lenses below
@@ -79,7 +79,7 @@ traits:
     tags: [Advantage, Mental, Imperium, Grey Knights, Chapter Variant]
     children:
       - name: Cleansing Flame
-        per_level: 4
+        per_level: 5
         levels: 2
         tags: [Advantage, Mental, Psyker, Imperium, Grey Knights]
         modifiers:
@@ -94,17 +94,15 @@ traits:
       a searing psychic fire that does nothing to a mortal but consumes
       daemonic matter outright.
     design: >
-      Built exactly like Sanctic Daemonology's own Banishment (Imperium/
-      Traits/Psykers and the Warp.adq): Innate Attack (Burning, 8/die,
-      re-flavoured from Banishment's Impaling for a fire-themed purge
-      power rather than a copy-pasted line) restricted to Warp-touched
-      targets (-10%), Warp Sorcery (-20%) and Severe Perils (-20%), net
-      -50%. Full modified cost: 8 x 0.5 = 4 points/level; the default 2
-      levels (8 points) needs only Warp Empowerment level 1 (cap 20),
-      comfortably under this add-on's baseline level 3.
+      Built like Sanctic Daemonology's own Banishment (Imperium/Traits/
+      Psykers and the Warp.adq), but as fire: Innate Attack (Burning,
+      5/die, B61) restricted to Warp-touched targets (-10%), Warp Sorcery
+      (-20%) and Severe Perils (-20%), net -50%. Full modified cost:
+      5 x 0.5 = 2.5 points/level; the default 2 levels cost 5 points and
+      need only Warp Empowerment level 1 (cap 20), comfortably under this
+      add-on's baseline level 3.
 
   - name: "Grey Knight Lens: Purgation"
-    points: 5
     per_level: 5
     levels: 1
     disabled: true
@@ -177,13 +175,13 @@ traits:
     design: >
       One further level of Rank (B29, 5 points/level, matching the
       Battle-Brother template's own Rank 3 entry in Astartes Gene-Seed.adq's
-      parent template) plus Extra Hit Points +2 (B16, 2/level) for the
-      additional hardening veteran survival buys, 5 + 4 = 9 points -- a
+      parent template) plus Extra Hit Points +1 (B16, 2/level) for the
+      additional hardening veteran survival buys, 5 + 2 = 7 points -- a
       modest bump reflecting individual seniority on top of the shared
       Grey Knight package, not a second racial template.
 skills:
   - name: Meditation
-    diff: IQ/H
+    diff: Will/H
     points: 4
     tags: [Imperium, Psyker, Grey Knights]
     lore: >
@@ -191,7 +189,7 @@ skills:
       Add-On's own Meditation entry (Imperium/Templates/Astartes Librarian
       Add-On.gct) describes, to hold his gift steady in the presence of
       the warp's worst.
-    design: Hard skill; points as the Librarian Add-On's own identical entry.
+    design: Meditation is Will/Hard (B207); points as the Librarian Add-On's own identical entry.
   - name: Hidden Lore
     spec: the Warp
     diff: IQ/A

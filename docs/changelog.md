@@ -42,3 +42,4 @@ Anchor and rule changes to `framework.md`, with the reason for each.
 - **Full lore audit** of every faction by eight reviewers (about 270 findings). Fixes applied per area; the builder now rejects double-charged leveled traits and power-field lines without an armour divisor.
 - **Ork gun anchors** updated to the values rescaled for flak 30 (slugga 7d, shoota 9d, big shoota 13d pi+); Malf ladder 15/14/13/12 written down.
 - **Astartes point band** widened to 550–850 after the user's ST/DX/Move increases put a Battle-Brother at about 820.
+- **Meltagun beyond ½D** is 4d×6(3) (was 4d×3(5) before the rescale). **Krak missile** is `cr ex` like the krak grenade (GURPS shaped charges are explosive).

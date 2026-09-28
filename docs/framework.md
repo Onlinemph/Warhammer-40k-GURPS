@@ -125,7 +125,7 @@ Vehicle void shields will use the same rules at larger scale.
 | Plasma gun | 6d×4(3) burn ex | Kills Marines through power armour (eff. DR 33); penetrates Terminators (eff. DR 67) more often than not. Overheat risk. |
 | Meltagun | 8d×6(10) burn to ½D; beyond ½D 4d×6(3) | Kills AV14 (eff. DR 35) at short range; past ½D still wrecks AV12 (76%), almost never beats AV14 (5%). |
 | Lascannon | 8d×8(5) burn | Kills tanks (AV14 eff. DR 70) and Terminators. |
-| Krak missile | 6d×6(3) cr | Reliable vs AV12–13 (90%); about two in three vs AV14. |
+| Krak missile | 6d×6(3) cr ex (shaped charge) | Reliable vs AV12–13 (90%); about two in three vs AV14. |
 | Chainsword | sw+2d(2) cut | Tears flesh and flak; bites carapace; skids off power armour. |
 | Power sword | sw+3d+1(10) cut | The disruption field shears power armour whoever holds it. |
 | Power fist | thr+8d(10) cr | Kills Terminators in Astartes hands. |

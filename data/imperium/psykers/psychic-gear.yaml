@@ -37,13 +37,13 @@ items:
         st: 10
         skill: Broadsword
       - usage: Field on
-        damage: sw+3d(10) cut
+        damage: sw+3d+1(10) cut
         reach: "1"
         parry: 0
         st: 10
         skill: Broadsword
       - usage: Force Strike (charged, vs. Warp-touched)
-        damage: sw+3d cut (ignores DR)
+        damage: sw+3d+1 cut (ignores DR)
         notes: >
           Add +1d per level of Psyker Talent to this line (GCS can't scale
           it automatically; edit the damage on the sheet). Usable only by a
@@ -58,32 +58,73 @@ items:
         parry: 0
         st: 10
         skill: Broadsword
+    notes: Human-scale pattern, for Inquisitors and other unaugmented psykers. Astartes Librarians use the Astartes pattern below.
     lore: >
       A disruption-field blade further warded and psychically attuned so a
       trained mind can channel force directly through it — standard wargear
-      for Inquisitors, Sisters of the Ordo Hereticus with psychic gifts, and
-      any Astartes Librarian who favours a blade over a staff. Depicted
-      throughout Black Library (Eisenhorn's own force sword; Grey Knights'
-      force weapons) and Dark Heresy/Rogue Trader's force-weapon rules.
+      for Inquisitors and for Sisters of the Ordo Hereticus with psychic
+      gifts. Depicted throughout Black Library (Eisenhorn's own force
+      sword; Grey Knights' force weapons) and Dark Heresy/Rogue Trader's
+      force-weapon rules.
     design: >
-      Built directly on the framework's rescaled power-field rule: field off
-      is the mundane fine blade (sw+1 cut), field on adds +3d and armour
-      divisor (10) per the updated rule ("Bladed/mace power weapons add +3d
-      over the mundane weapon"), landing exactly on the rescaled power sword
-      anchor (sw+3d(10) cut) — a force sword is mechanically a power sword
-      that a trained mind can also channel psychic force through. The Force
-      Strike line shows that channelling: same dice as field-on minus the
-      armour divisor, but its ignores-DR component only applies against
-      Warp-touched targets, so it never trivialises ordinary armour. Its
-      damage scales narratively with the wielder's Psyker Talent level (+1d
-      per Psyker Talent level on top of the base 3d, GM's call above level 2)
+      Built directly on the framework's power-field rule: field off is the
+      mundane fine blade (sw+1 cut), field on adds +3d and armour divisor
+      (10) ("Bladed/mace power weapons add +3d over the mundane weapon"),
+      landing exactly on the Power Sword anchor (sw+3d+1(10) cut) — a force
+      sword is mechanically a power sword that a trained mind can also
+      channel psychic force through. The Force Strike line shows that
+      channelling: same dice as field-on minus the armour divisor, but its
+      ignores-DR component only applies against Warp-touched targets, so it
+      never trivialises ordinary armour. Its damage scales with the
+      wielder's Psyker Talent level (+1d per level on top of the base 3d)
       rather than as a fixed number, since the build tool's damage syntax
       cannot encode a variable.
-      Handling: weight corrected to 4 lb to match the Power Sword anchor
-      exactly (a previous 3 lb made it lighter than the mundane weapon it's
-      built from, an unintentional drift rather than a deliberate design
-      choice); min ST (10), parry (0, Broadsword - a guarded blade, not an
-      axe/mace weapon) and reach are unchanged.
+      Handling: 4 lb, min ST 10 and parry 0 match the human Power Sword
+      anchor exactly (Broadsword, a guarded blade rather than an axe/mace
+      weapon).
+
+  - name: Force Sword, Astartes Pattern
+    tl: "10^"
+    lc: 1
+    cost: 8500
+    weight: 9
+    tags: [Melee Weapon, Imperium, Psyker, Adeptus Astartes]
+    weapons:
+      - usage: Field off
+        damage: sw+1 cut
+        reach: "1"
+        parry: 0
+        st: 16
+        skill: Broadsword
+      - usage: Field on
+        damage: sw+3d+1(10) cut
+        reach: "1"
+        parry: 0
+        st: 16
+        skill: Broadsword
+      - usage: Force Strike (charged, vs. Warp-touched)
+        damage: sw+3d+1 cut (ignores DR)
+        notes: As the human-scale Force Sword's Force Strike; +1d per level of Psyker Talent, requires field on and a Perils of the Warp check.
+        reach: "1"
+        parry: 0
+        st: 16
+        skill: Broadsword
+    lore: >
+      The blade of the Astartes Librarian: a Chapter-armoury power sword
+      built to a Marine's grip and reach, with the psychic warding and focus
+      crystals of a force weapon. Librarians of most Chapters favour a
+      sword or staff, in Codex Space Marines background and Black Library
+      Space Marine fiction.
+    design: >
+      The human Force Sword's damage formula unchanged (sw+3d+1(10) field
+      on, sw+1 field off), for the same reason the Astartes Power Sword is:
+      "sw" resolves from the wielder's own ST, so a Marine (ST 30, sw 5d+2)
+      rolls far more dice than a human without the weapon's line changing.
+      Field-on is 8d+3(10), average 31, which penetrates Astartes plate
+      always and Terminator plate (eff. DR 20) 98.6% of the time.
+      Handling: the same heavier housing as the Astartes Power Sword: 9 lb
+      and min ST 16, out of an unaugmented human's reach. Parry 0 (Broadsword).
+      Cost $500 above the human pattern, as the Astartes Power Sword is above the human one.
 
   - name: Force Staff
     tl: "10^"
@@ -92,25 +133,45 @@ items:
     weight: 5
     tags: [Melee Weapon, Imperium, Psyker]
     weapons:
-      - usage: Field off
-        damage: sw+1 cr
+      - usage: Field off, swing
+        damage: sw+2 cr
         reach: "1,2"
         parry: 0
         st: 10
         skill: Staff
-      - usage: Field on
-        damage: sw+3d(10) cr
+      - usage: Field off, thrust
+        damage: thr+2 cr
         reach: "1,2"
         parry: 0
         st: 10
         skill: Staff
-      - usage: Force Strike (charged, vs. Warp-touched)
-        damage: sw+3d cr (ignores DR)
+      - usage: Field on, swing
+        damage: sw+3d+2(10) cr
+        reach: "1,2"
+        parry: 0
+        st: 10
+        skill: Staff
+      - usage: Field on, thrust
+        damage: thr+3d+2(10) cr
+        reach: "1,2"
+        parry: 0
+        st: 10
+        skill: Staff
+      - usage: Force Strike, swing (charged, vs. Warp-touched)
+        damage: sw+3d+2 cr (ignores DR)
         notes: As Force Sword's Force Strike; +1d per level of Psyker Talent, requires field on and a Perils of the Warp check.
         reach: "1,2"
         parry: 0
         st: 10
         skill: Staff
+      - usage: Force Strike, thrust (charged, vs. Warp-touched)
+        damage: thr+3d+2 cr (ignores DR)
+        notes: As the swing Force Strike above.
+        reach: "1,2"
+        parry: 0
+        st: 10
+        skill: Staff
+    notes: Human-scale pattern, for Inquisitors and Astra Telepathica psykers; see the Astartes pattern below.
     lore: >
       Many psykers prefer a staff to a blade: easier to carry openly as a
       badge of office, and a familiar focus for channelling telekinetic and
@@ -118,17 +179,76 @@ items:
       options and depicted for Inquisitorial and Adeptus Astra Telepathica
       psykers throughout Black Library.
     design: >
-      Same rescaled power-field math as the Force Sword (field on adds +3d
-      and armour divisor (10) over the field-off mundane baseline), applied
-      to a plain hardwood-and-metal quarterstaff (sw+1 cr) instead of an
-      edged blade — a crushing rather than cutting power weapon, with the
-      same charged Force Strike option and scaling note.
-      Handling: weight corrected to 5 lb and min ST to 10 to match the
-      Power Stave anchor exactly (a previous 4 lb/ST 9 quietly drifted
-      lighter than the mundane weapon it's built from). Staff keeps its
-      Basic Set parry 0 with no U, the same exception used for the mundane
-      Power Stave and Shock Staff elsewhere in this project - the skill's
-      own defensive bonus is what a quarterstaff trades raw damage for.
+      The mundane Power Stave's exact profile (melee.yaml): field off is a
+      hardwood-and-metal quarterstaff (sw+2 cr / thr+2 cr), field on adds
+      +3d and armour divisor (10) per the power-field rule, giving
+      sw+3d+2(10) cr and thr+3d+2(10) cr, with the same charged Force
+      Strike option and scaling note as the Force Sword.
+      Handling: 5 lb and min ST 10 match the Power Stave. Staff keeps its
+      parry 0 with no U, the same convention as the Power Stave and Shock
+      Staff in melee.yaml; the skill's own defensive bonus is what a
+      quarterstaff trades raw damage for.
+
+  - name: Force Staff, Astartes Pattern
+    tl: "10^"
+    lc: 1
+    cost: 7500
+    weight: 9
+    tags: [Melee Weapon, Imperium, Psyker, Adeptus Astartes]
+    weapons:
+      - usage: Field off, swing
+        damage: sw+2 cr
+        reach: "1,2"
+        parry: 0
+        st: 14
+        skill: Staff
+      - usage: Field off, thrust
+        damage: thr+2 cr
+        reach: "1,2"
+        parry: 0
+        st: 14
+        skill: Staff
+      - usage: Field on, swing
+        damage: sw+3d+2(10) cr
+        reach: "1,2"
+        parry: 0
+        st: 14
+        skill: Staff
+      - usage: Field on, thrust
+        damage: thr+3d+2(10) cr
+        reach: "1,2"
+        parry: 0
+        st: 14
+        skill: Staff
+      - usage: Force Strike, swing (charged, vs. Warp-touched)
+        damage: sw+3d+2 cr (ignores DR)
+        notes: As the human-scale Force Staff's Force Strike; +1d per level of Psyker Talent, requires field on and a Perils of the Warp check.
+        reach: "1,2"
+        parry: 0
+        st: 14
+        skill: Staff
+      - usage: Force Strike, thrust (charged, vs. Warp-touched)
+        damage: thr+3d+2 cr (ignores DR)
+        notes: As the swing Force Strike above.
+        reach: "1,2"
+        parry: 0
+        st: 14
+        skill: Staff
+    lore: >
+      The Librarian's staff of office: a tall, gauntlet-sized psychic focus
+      shown in Codex Space Marines background and Black Library Space
+      Marine fiction in the hands of Librarians and Epistolaries, doubling
+      as a power weapon.
+    design: >
+      The human Force Staff's formulas unchanged (sw+3d+2(10) cr and
+      thr+3d+2(10) cr): a Marine's own ST 30 (sw 5d+2, thr 3d) supplies the
+      extra dice, so the swing is 8d+4(10), average 32, and the thrust
+      6d+2(10), average 23. Swing penetrates Terminator plate (eff. DR 20)
+      99.3% of the time.
+      Handling: heavier housing at Astartes scale, 9 lb and min ST 14, a
+      two-handed reach weapon lighter than the Astartes Nemesis Force
+      Halberd (14 lb, ST 14) and the Astartes power axe (13 lb, ST 18) because a
+      staff is a psychic focus first. Staff parry 0 with no U as the human pattern.
 
   - name: Force Axe
     tl: "10^"
@@ -156,24 +276,57 @@ items:
         parry: "-1U"
         st: 12
         skill: Axe/Mace
+    notes: Human-scale pattern; see the Astartes pattern below.
     lore: >
       A heavier disruption weapon, favoured by psykers who fight as heavily
-      as they cast — seen among Black Templars chaplaincy-adjacent
-      Librarians and some Ordo Malleus interrogators in Black Library
+      as they cast — some Ordo Malleus interrogators in Black Library
       material, and offered as a standard force-weapon option in Dark
       Heresy/Rogue Trader.
     design: >
       Scaled up from the Force Sword the same way the framework scales
       chainaxes from chainswords: heavier mundane baseline (sw+2 cut), the
-      same rescaled +3d/armour divisor (10) power-field math ("+3d over the
-      mundane weapon"), and a parry penalty for the unbalanced swing.
-      Handling: weight and min ST corrected to 6 lb/ST 12 to match the
-      mundane Power Axe anchor exactly (a previous 5 lb/ST 11 quietly
-      undershot the weapon it's built from). Parry corrected to -1U, the
-      Basic Set Axe/Mace figure this project applies consistently to every
-      one-handed axe (melee.yaml's Power Axe and Chainaxe both carry the
-      same correction) - the previous flat -1 omitted the "unready after
-      parrying" half of the penalty.
+      same power-field math (+3d over the mundane weapon, armour divisor
+      (10)), and a parry penalty for the unbalanced swing.
+      Handling: 6 lb and min ST 12 match the human Power Axe. Parry -1U, the
+      Basic Set Axe/Mace figure applied to every one-handed axe in this
+      project (Power Axe and Chainaxe carry the same).
+
+  - name: Force Axe, Astartes Pattern
+    tl: "10^"
+    lc: 1
+    cost: 8500
+    weight: 13
+    tags: [Melee Weapon, Imperium, Psyker, Adeptus Astartes]
+    weapons:
+      - usage: Field off
+        damage: sw+2 cut
+        reach: "1"
+        parry: "-1U"
+        st: 18
+        skill: Axe/Mace
+      - usage: Field on
+        damage: sw+3d+2(10) cut
+        reach: "1"
+        parry: "-1U"
+        st: 18
+        skill: Axe/Mace
+      - usage: Force Strike (charged, vs. Warp-touched)
+        damage: sw+3d+2 cut (ignores DR)
+        notes: As Force Sword's Force Strike; +1d per level of Psyker Talent, requires field on and a Perils of the Warp check.
+        reach: "1"
+        parry: "-1U"
+        st: 18
+        skill: Axe/Mace
+    lore: >
+      A Chapter-armoury force axe for Librarians of Chapters that favour
+      axes, and Space Wolves Rune Priests, whose Chapter carries force
+      axes as a signature psyker weapon in Codex background.
+    design: >
+      The human Force Axe's formulas unchanged (sw+3d+2(10) cut); a Marine's
+      ST 30 makes it 8d+4(10), average 32, penetrating Terminator plate
+      (eff. DR 20) 99.3% of the time.
+      Handling: 13 lb and min ST 18, the same Astartes housing as the
+      Astartes Power Axe. Parry -1U as the human Force Axe.
 
   - name: Nemesis Force Halberd
     tl: "10^"
@@ -213,23 +366,20 @@ items:
       Knights novels) are consistent on this. Nemesis weapons are built and
       sanctified specifically to hurt things from the warp.
     design: >
-      Same mundane baseline and rescaled power-field math (+3d, armour
+      Same mundane baseline and power-field math (+3d, armour
       divisor (10)) as the Force Axe, reach 1-2 like other polearms, priced
       and LC0'd as unique Chapter-restricted wargear per the framework's LC
       table (Astartes/Inquisition-only warp-touched gear). Its Force Strike
       line waives the normal Perils check as a narrative nod to how
       routinely and safely Grey Knights use it against their signature
       enemy, unlike a general-purpose force weapon.
-      Handling: Grey Knights are Astartes, so this halberd is built at
-      Astartes scale rather than the human-scale weight/ST a previous pass
-      gave it (8 lb/ST 12, indistinguishable from a human-carried polearm) -
-      corrected to 14 lb and min ST 14, between the Astartes Chainsword
-      (14 lb/ST 15) and Power Axe (13 lb/ST 18) in this project's melee.yaml,
-      reflecting a two-handed haft weapon rather than a single-handed blade
-      or axe-head. Parry corrected to -1U, the Basic Set convention for a
-      polearm (Halberd-class weapons are unbalanced and slow to recover the
-      same way axes and mauls are) - the previous flat parry 0 undersold
-      how unwieldy a real halberd is on defense.
+      Handling: Grey Knights are Astartes, so the halberd is built at
+      Astartes scale: 14 lb and min ST 14, level with the Astartes
+      Chainsword (14 lb/ST 15) and close to the Power Axe (13 lb/ST 18) in
+      melee.yaml, reflecting a two-handed haft weapon rather than a
+      single-handed blade or axe-head. Parry -1U, the Basic Set convention
+      for a polearm: halberd-class weapons are unbalanced and slow to
+      recover, as axes and mauls are.
 
   - name: Null Rod
     tl: "10^"
@@ -264,11 +414,11 @@ items:
       threatens to unmake it. Its own melee stats are a plain, slightly
       underweight blunt weapon — it is carried as a ward and a badge of
       office, not a proper weapon, hence sw-1 rather than a full sw+0 mace.
-      Handling: parry corrected to -1U, the Axe/Mace-family convention this
-      project applies to every plain club/mace-class weapon (see the
-      Guardsman's Maul and Shock Maul in melee.yaml) - a rod has no guard
-      and is slow to recover after a swing, the same as any other blunt
-      weapon on this page. Weight (4 lb) and min ST (9) are unchanged.
+      Handling: parry -1U, the Axe/Mace-family convention this project
+      applies to every plain club/mace-class weapon (see the Guardsman's
+      Maul and Shock Maul in melee.yaml): a rod has no guard and is slow to
+      recover after a swing, as any other blunt weapon. Weight 4 lb and
+      min ST 9.
 
   - name: Hexagrammic Ward Charm
     tl: "10^"
@@ -299,7 +449,7 @@ items:
     tags: [Imperium, Psyker]
     notes: >
       A worn ocular rig that lets a non-psyker see psychic residue and
-      warp-taint the naked eye cannot: roll vs Optics/Electronics Operation
+      warp-taint the naked eye cannot: roll vs Electronics Operation (Sensors)
       or a relevant Hidden Lore specialisation to spot a hidden psyker,
       daemon, or recently-used Warp Sorcery-tagged ability's afterglow within 20
       yards. Functions as a wearable, skill-based substitute for the Witch-

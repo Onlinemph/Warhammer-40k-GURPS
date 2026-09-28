@@ -23,8 +23,8 @@ items:
     lore: >
       An Ork's skin is thick, rubbery and mottled green, tough enough on its
       own to turn a knife-edge or a glancing shot that would open a human.
-      Every depiction of an unarmoured Ork brawling — Codex background,
-      Crowley's and Brooks' fiction alike — treats a bit of greenskin hide
+      Every depiction of an unarmoured Ork brawling, in Codex background
+      and Ork fiction alike, treats a bit of greenskin hide
       as meaningfully tougher than bare human flesh, well before any scrap
       armour goes on top of it.
     design: >
@@ -92,7 +92,7 @@ items:
     lore: >
       Ork skulls are notoriously thick, and Orks survive head wounds that
       would kill anything else, up to having a head sewn back on by a Dok
-      (Codex background, Brutal Kunnin', and a long tradition of "'e's had
+      (Codex background and a long tradition of "'e's had
       worse" anecdotes). They do have brains: a bolt through the eye still
       kills an Ork.
     design: >
@@ -163,25 +163,25 @@ items:
     name: Impulsiveness
     points: -10
     cr: 12
-    ref: B143
+    ref: B139
     tags: [Disadvantage, Mental, Xenos, Orks]
     lore: >
       Orks act first and, on a good day, think about it afterwards — a
       running theme in how Ork plans in the fiction go from "good idea" to
       "already happening" with nothing in between.
-    design: Basic Set Impulsiveness (B143), self-control 12, -10 points.
+    design: Basic Set Impulsiveness (B139), self-control 12, -10 points.
 
   - &overconfidence
     name: Overconfidence
     points: -5
     cr: 12
-    ref: B94
+    ref: B148
     tags: [Disadvantage, Mental, Xenos, Orks]
     lore: >
       An Ork mob genuinely believes it can win any fight it's in, right up
       until (and sometimes past) the point it's losing badly — a big part
       of why Ork strategy in the fiction is so often "charge and find out."
-    design: Basic Set Overconfidence (B94), self-control 12, -5 points.
+    design: Basic Set Overconfidence (B148), self-control 12, -5 points.
 
   - &ork_kunnin
     name: "Ork Kunnin'"
@@ -205,8 +205,7 @@ items:
       military-doctrine standard, chaos — and yet Ork mobs consistently
       find the gap in a defence, spring an ambush, or route around a
       strongpoint with an efficiency that surprises Imperial commanders who
-      underestimate them. Codex background and both Crowley's and Brooks'
-      novels play this as real, if inarticulate, battlefield cunning rather
+      underestimate them. Codex background and Ork fiction play this as real, if inarticulate, battlefield cunning rather
       than dumb luck.
     design: >
       Talent affecting four skills sits at the Medium Talent rate (B90,
@@ -224,12 +223,19 @@ items:
         amount: 2
     notes: |
       Roughly ten or more fellow Orks fighting nearby, in earshot of the
-      same battle-roar, count as a WAAAGH! for this bonus. A Weirdboy
-      caught up in a WAAAGH! also treats his own Warp Empowerment as one
-      level higher (cap +10) for the purpose of which known powers he may
-      safely cast, per the Weirdboy template's notes — this is the
-      mechanical hook for "Orks believe it, so it works, and it works
-      better the more of them believe it together."
+      same battle-roar, count as a WAAAGH!. While inside one:
+      - Fright Checks and Perils of the Warp rolls get +2 (the conditional
+        bonus above).
+      - Ork-built weapons and vehicles the character carries or crews have
+        their Malf number raised by 1 (fewer jams; e.g. Malf 14 becomes 15,
+        the Zzap Gun's 12 becomes 13). A lone Ork, or one with fewer than
+        ten fellows in earshot, gets no bonus. This is the mechanical hook
+        for "Orks believe it, so it works, and it works better the more of
+        them believe it together."
+      - A Weirdboy treats his own Warp Empowerment as one level higher (cap
+        +10) for the purpose of which known powers he may safely cast.
+        The Weirdboy template buys Empowerment 4 (cap 50), so Da Jump (60)
+        is castable only inside a WAAAGH!.
     lore: >
       A lone Ork is dangerous; a mob of Orks worked up into a full WAAAGH!
       is a weaponised belief field — braver, louder, and (per Codex
@@ -240,12 +246,14 @@ items:
       psychic roar to power their biggest, most dangerous tricks; a Weirdboy
       isolated from a WAAAGH! is a much smaller threat.
     design: >
-      A narrow conditional Will/Fright Check bonus, eyeballed against
-      Basic's Fearlessness (2/level flat, B55) but restricted to a specific,
-      common-in-play situation rather than always on, so priced well below
-      a flat level of Fearlessness at 5 points. The Weirdboy-specific
-      Empowerment bump is documented, not separately priced, since it only
-      changes which already-bought powers a Weirdboy may safely reach for.
+      A conditional Fright Check/Perils bonus eyeballed against Basic's
+      Fearlessness (2 points per level, so a flat +2 is 4 points, B55),
+      restricted to a common-in-play situation (a mob of ten or more), which
+      alone would price at about 2-3 points. The 5 points also buy two
+      mechanical riders that are the point of the trait: an Ork-tech Malf +1
+      inside a WAAAGH!, and the Weirdboy's Empowerment +1. The Empowerment
+      rider is not separately priced beyond that since it only changes which
+      already-bought powers a Weirdboy may safely reach for.
 
   # ------------------------------------------------------------ Boyz & Gretchin
   - name: Ork Physiology
@@ -283,6 +291,19 @@ items:
       - *overconfidence
       - *ork_kunnin
       - *waaagh_gestalt
+      - name: Fearlessness
+        points: 0
+        per_level: 2
+        levels: 3
+        ref: B55
+        tags: [Advantage, Mental, Xenos, Orks]
+        lore: >
+          An Ork has no fear to speak of: a lone Boy walks at a line of
+          Marines because it looks like a good fight. It is the Gretchin who
+          run. Below the Warboss's own extra levels, but enough that a Boy
+          with Will 8 no longer fails a Fright Check as readily as a
+          Guardsman.
+        design: Fearlessness 3 (B55, 2/level, 6 points), a flat +3 to Fright Checks and Will rolls to resist fear and intimidation, on top of WAAAGH! Gestalt's conditional bonus.
     lore: >
       An Ork Boy: the baseline greenskin warrior, grown fast, fed on
       violence, and built to get bigger and meaner the longer it survives.
@@ -297,8 +318,8 @@ items:
       Threshold) + 6 (Hard to Kill 3) + 5 (Rapid Healing) + 6 (Thick
       Skull) + 15 (Resistant to Disease and Toxins) + 0
       (Fungal Physiology) - 10 (Bloodlust) - 10 (Impulsiveness) - 5
-      (Overconfidence) + 10 (Ork Kunnin' 1) + 5 (WAAAGH! Gestalt) = 180
-      points of physiology alone, before skills — see the Ork Boy template
+      (Overconfidence) + 10 (Ork Kunnin' 1) + 5 (WAAAGH! Gestalt) + 6
+      (Fearlessness 3) = 186 points of physiology alone, before skills — see the Ork Boy template
       for a full character, and the growth lenses and Oddboy Talents below
       for Nobs, Warbosses, Meks, Painboyz and Weirdboyz built on top of it.
 
@@ -435,7 +456,7 @@ items:
       meaner, and canny enough to have picked up real tactical sense the
       hard way.
     design: >
-      74 points, added to the Ork Physiology package's 179 for 253 points
+      74 points, added to the Ork Physiology package's 186 for 260 points
       of physiology before skills. See the Ork Nob template.
 
   - name: "Growth Lens: Warboss"
@@ -443,16 +464,19 @@ items:
     tags: [Advantage, Physical, Xenos, Orks]
     children:
       - name: Attribute Modifiers (Warboss)
-        points: 178
+        points: 166
         attributes: {st: 10, dx: 1, iq: 2, ht: 2, hp: 4, sm: 1}
         tags: [Physical]
         design: >
           Framework target over the Boy package: ST 32, DX 12, IQ 10, HT
           15, HP 40, SM +1. Increased ST +10 (B14, 10/level, 100) for ST
           32; per B18's Size and Strength Table a creature whose SM matches
-          its actual bulk gets a cost break on ST, and SM +1 gives -10%, so
-          100 x 0.9 = 90 — the same discount this project's Custodian
-          Attribute Modifiers takes for the same reason. Increased DX +1
+          its actual bulk gets a cost break on ST, and SM +1 gives -10% on
+          every level of ST bought, including the Boy package's +12: the
+          Warboss's whole +22 costs 220 x 0.9 = 198, of which the Boy
+          package already charged 120, so this lens adds 78 — the same
+          discount this project's Custodian Attribute Modifiers takes for the
+          same reason. Increased DX +1
           (B15, 20/level, 20) for DX 12 — a Warboss hits harder and a
           little more precisely than a rank-and-file Boy, "out-muscles a
           Space Marine" more than out-fights one. Increased IQ +2 (B16,
@@ -462,7 +486,7 @@ items:
           Extra Hit Points +4 (B16, 2/level, 8) on top of the Boy package's
           own +4, for combined extra +8 over the new ST-32 base of 32,
           giving HP 40. SM +1 carries no cost beyond the ST discount
-          already taken. 90+20+40+20+8 = 178 points.
+          already taken. 78+20+40+20+8 = 166 points.
       - name: Combat Reflexes
         points: 15
         ref: B43
@@ -476,7 +500,7 @@ items:
         ref: B55
         tags: [Advantage, Mental, Xenos, Orks]
         lore: A Warboss is what other Orks are afraid of, not the other way around.
-        design: Fearlessness 4 (B55, 2/level, 8 points), on top of WAAAGH! Gestalt's conditional bonus.
+        design: Fearlessness 4 (B55, 2/level, 8 points), on top of the Boy package's Fearlessness 3 (7 levels in all) and WAAAGH! Gestalt's conditional bonus.
       - name: Regeneration (Slow)
         points: 10
         ref: B80
@@ -498,7 +522,7 @@ items:
         design: A further Hard to Kill 3 (B58, 2/level, 6 points), stacking with the base package as GURPS allows multiple purchases of the same leveled advantage.
       - name: "Reputation (The Biggest and Baddest)"
         points: 15
-        ref: B27
+        ref: B26
         tags: [Advantage, Social, Xenos, Orks]
         reactions:
           - situation: from other Orks who recognise a Warboss's markings and retinue, and Fright Check bonus/penalty context for enemies who know his name
@@ -509,7 +533,7 @@ items:
           a named Warboss before know exactly how bad the day is about to
           get.
         design: >
-          Reputation (B27), priced in line with this project's other
+          Reputation (B26), priced in line with this project's other
           eyeballed Reputation entries (Custodes' Shield-Captain
           Reputation, 15 points for +4) rather than a full frequency/scope
           calculation, per Basic's own guidance that Reputation costs are
@@ -551,13 +575,13 @@ items:
       Black Library portrait; current Codex: Orks background agrees a
       Warboss out-muscles a Space Marine on raw size and power alone.
     design: >
-      178 (Attribute Modifiers) + 15 (Combat Reflexes) + 8 (Fearlessness 4)
+      166 (Attribute Modifiers) + 15 (Combat Reflexes) + 8 (Fearlessness 4)
       + 10 (Regeneration) + 6 (further Hard to Kill 3) + 15 (Reputation) +
-      15 (Charisma 3) + 10 (Basic Speed) + 20 (Wealth) = 277 points, added
-      to the Ork Physiology package's 179 for 456 points of physiology and
+      15 (Charisma 3) + 10 (Basic Speed) + 20 (Wealth) = 265 points, added
+      to the Ork Physiology package's 186 for 451 points of physiology and
       command presence before skills. See the Ork Warboss template, which
-      lands the full character at the low end of framework.md's Astartes
-      point tier (550-800) — appropriate for a solid, competent Warboss;
+      lands the full character just under the low end of framework.md's
+      Astartes point tier (550-800) — appropriate for a solid, competent Warboss;
       a legendary name like Ghazghkull himself would run well past this,
       into the framework's Heroes and Legends tier, and should be built as
       a bespoke NPC on top of this template rather than read off it
@@ -586,8 +610,8 @@ items:
       superweapon. Codex background is explicit that Mek genius is
       instinctive rather than learned, and that Ork technology partly works
       because the whole Waaagh collectively believes it will (see WAAAGH!
-      Gestalt); Brutal Kunnin' features Meks prominently as this exact kind
-      of dangerous, half-mad genius.
+      Gestalt); Ork fiction features Meks prominently as this exact kind of
+      dangerous, half-mad genius (no single canonical figure).
     design: >
       Talent affecting four skills, Medium Talent rate (B90, 10
       points/level), matching Ork Kunnin's own math for the same
@@ -702,7 +726,7 @@ items:
     modifiers:
       - "Area Effect, +50%"
       - "Preparation Required, -20%"
-      - "Uncontrollable, -30%"
+      - {name: "Uncontrollable (Destructive)", cost: "-30%", ref: B116}
       - "Warp Sorcery, -20%"
       - "Perils of the Warp (Severe), -20%"
     tags: [Advantage, Mental, Xenos, Orks]
@@ -712,24 +736,66 @@ items:
       else on the battlefield an instant later — sometimes exactly where
       intended, sometimes scattered, occasionally (per the fiction's
       favourite running joke about Da Jump) several yards in the air.
-      Nate Crowley's Ghazghkull Thraka: Prophet of the Waaagh! uses Da Jump
-      for both a genuine tactical surprise and outright slapstick in the
-      same book.
+      Weirdboyz and Da Jump-style warp effects recur in Ork fiction, played
+      both as genuine tactical surprise and as slapstick; there is no single
+      canonical mechanic.
     design: >
       Built on Basic's own Warp advantage (B99, instant travel to any
       place you have seen/visualised, flat 100), matching this project's
       Gate of Infinity build, with Area Effect (+50%, B102, brings the
       whole mob) added on top, Preparation Required (-20%, a moment's
-      howling concentration), Uncontrollable (-30%, B113, a Weirdboy can't
-      always land the mob exactly where he meant to — the game's own
-      "scatter" mechanic, modelled honestly rather than smoothed over),
+      howling concentration), Uncontrollable (Destructive, -30%, B116; the -10% Harmless version does
+      not fit, since a mis-aimed mob is a real hazard: a Weirdboy can't
+      always land the mob exactly where he meant to, the "scatter" of the
+      tabletop, modelled honestly rather than smoothed over),
       Warp Sorcery (-20%) and the Severe Perils tier (-20%, a botched Jump
       is exactly the kind of interstellar-workings-adjacent disaster that
       tier exists for). Net: +50-20-30-20-20 = -40%. Full modified cost:
       100 x 0.6 = 60 points — needing Warp Empowerment level 5 (cap 60),
-      right at the cap with no headroom, marking Da Jump as the single
-      hardest power for an ordinary Weirdboy to reach, exactly matching its
-      status in the fiction as the biggest trick in a Weirdboy's book.
+      one more than a lone Weirdboy's Empowerment 4 (cap 50) reaches, so Da Jump
+      is castable only inside a WAAAGH!, where WAAAGH! Gestalt raises his
+      Empowerment to 5 (cap 60): the biggest trick in a Weirdboy's book needs
+      the mob behind him.
+
+  # ---------------------------------------------------- Stormboy lens (a Boy)
+  - name: "Lens: Stormboy Rokkit Pack"
+    container: group
+    disabled: true
+    tags: [Xenos, Orks]
+    lore: >
+      Stormboyz are young, fast, fanatical Boyz who strap a crude, Mek-built
+      rokkit pack to their backs and launch themselves at the enemy in short
+      bounding flights: a spectacular, popular and genuinely dangerous way to
+      get into a fight fast, since the packs are exactly as reliable as the
+      rest of Ork technology. They are ordinary Boyz with a pack, not Kommando
+      derivatives, so the lens belongs on the Boy template.
+    design: >
+      Net 17 points (18 for the pack, -1 quirk); disabled by default so the
+      base Boy stays a pure ground trooper. Enable it on a Boy (or any Ork
+      template) to build a Stormboy.
+    children:
+      - name: Rokkit Pack (Short-Burst Flight)
+        points: 40
+        ref: B56
+        tags: [Advantage, Physical, Xenos, Orks]
+        modifiers:
+          - {name: "Cannot Hover", cost: "-15%", ref: B56}
+          - {name: "Limited Use, 3-4 bursts per pack", cost: "-20%", ref: B112}
+          - {name: "Accessibility, only while wearing a working rokkit pack", cost: "-20%", ref: B110}
+        notes: "Flight (B56) for a short bounding flight: Air Move is twice Basic Move, for a few short bursts before the pack is spent, and the wearer cannot hover. A pack that malfunctions (Malf 14, 15 within a WAAAGH!) is spent at once and the landing is the GM's to complicate."
+        lore: A single good burst from a rokkit pack throws a Stormboy well over the heads of the enemy line and down into it.
+        design: "Flight (B56, 40 points) with Cannot Hover (-15%, B56), Limited Use 3-4 uses (-20%, B112) and Accessibility, working pack only (-20%, B110). Net -55%, 40 x 0.45 = 18 points. Replaces an earlier Super Jump 1, which only doubled a leap and did not model a jump pack."
+      - name: Rokkit Malfunctions
+        points: -1
+        tags: [Quirk, Xenos, Orks]
+        notes: Roleplaying/GM-hazard flag only.
+        lore: >
+          Rokkit packs are built by the same Meks and to the same standards
+          as every other piece of Ork tech, which is to say: they work, up
+          until the moment they spectacularly don't. A botched Stormboy
+          landing is played for comedy about as often as the charge itself is
+          played for menace.
+        design: "Quirk (B9): a GM is free to call for an occasional bad landing on unlucky rolls, at no further point cost."
 
   # ---------------------------------------------------- klan lenses (flavour)
   - name: "Klan: Blood Axe"
@@ -748,11 +814,22 @@ items:
         design: Perk (B9), +1 to Tactics.
         lore: A Blood Axe has actually studied how humans fight, and borrows what works.
         skill_bonuses: {Tactics: 1}
+      - name: Hides in Plain Sight
+        points: 1
+        tags: [Perk, Xenos, Orks]
+        design: Perk (B9), +1 to Camouflage.
+        lore: Blood Axes copy human camouflage patterns and fieldcraft.
+        skill_bonuses: {Camouflage: 1}
       - name: "Not a Proper Ork"
         points: -1
         tags: [Quirk, Xenos, Orks]
         design: Quirk (B9), roleplaying flag only.
         lore: Other Klans consider Blood Axes soft, sneaky, or worse — barely worth calling greenskins.
+      - name: Prefers Uniforms
+        points: -1
+        tags: [Quirk, Xenos, Orks]
+        design: Quirk (B9), roleplaying flag only.
+        lore: A Blood Axe likes his kit matched and his mob in formation, which other Orks find deeply suspicious.
 
   - name: "Klan: Snakebite"
     container: group
@@ -770,11 +847,22 @@ items:
         design: Perk (B9), +1 to Riding (Squig).
         lore: A Snakebite grows up on squig-back.
         skill_bonuses: {"Riding (Squig)": 1}
+      - name: Boar-Rider
+        points: 1
+        tags: [Perk, Xenos, Orks]
+        design: Perk (B9), +1 to Riding (Boar); Snakebites are as famous for boarboy cavalry as for squigs.
+        lore: A Snakebite rides a warboar as naturally as he walks.
+        skill_bonuses: {"Riding (Boar)": 1}
       - name: "Zoggin' Tech"
         points: -1
         tags: [Quirk, Xenos, Orks]
         design: Quirk (B9), roleplaying flag only.
         lore: A Snakebite trusts a good squig over a Mek's contraption every time.
+      - name: Superstitious
+        points: -1
+        tags: [Quirk, Xenos, Orks]
+        design: Quirk (B9), roleplaying flag only.
+        lore: Snakebites hold to old tribal taboos and lucky charms far more than other Klans.
 
   - name: "Klan: Evil Sunz"
     container: group
@@ -791,11 +879,22 @@ items:
         design: Perk (B9), +1 to Driving (Ork Vehicles).
         lore: An Evil Sunz boy is happiest with an engine roaring under him.
         skill_bonuses: {"Driving (Ork Vehicles)": 1}
+      - name: Speed Freak
+        points: 1
+        tags: [Perk, Xenos, Orks]
+        design: Perk (B9), +1 to Piloting (Ork Aircraft); Evil Sunz build and fly the fastest kites too.
+        lore: An Evil Sunz boy handles fast machines of any kind by instinct.
+        skill_bonuses: {"Piloting (Ork Aircraft)": 1}
       - name: Reckless
         points: -1
         tags: [Quirk, Xenos, Orks]
         design: Quirk (B9), roleplaying flag only.
         lore: An Evil Sunz boy would rather crash going fast than arrive slow.
+      - name: Red Ones Go Fasta
+        points: -1
+        tags: [Quirk, Xenos, Orks]
+        design: Quirk (B9), roleplaying flag only.
+        lore: An Evil Sunz boy paints everything red and swears it makes it faster.
 
   - name: "Klan: Deathskulls"
     container: group
@@ -835,11 +934,22 @@ items:
         design: Perk (B9), +1 to Brawling.
         lore: A Goff has been fighting hand-to-hand since before he could talk properly.
         skill_bonuses: {Brawling: 1}
+      - name: Loud and Menacing
+        points: 1
+        tags: [Perk, Xenos, Orks]
+        design: Perk (B9), +1 to Intimidation.
+        lore: Goffs are the biggest, loudest and most feared boyz in any mob.
+        skill_bonuses: {Intimidation: 1}
       - name: "Best Fighters, Everyone Knows It"
         points: -1
         tags: [Quirk, Xenos, Orks]
         design: Quirk (B9), roleplaying flag only.
         lore: A Goff will not let a claim of toughness from another Klan go unanswered.
+      - name: Black Armour Snob
+        points: -1
+        tags: [Quirk, Xenos, Orks]
+        design: Quirk (B9), roleplaying flag only.
+        lore: Goffs favour black armour and checks, and sneer at gaudy or colourful Klans.
 
   - name: "Klan: Bad Moons"
     container: group
@@ -857,21 +967,33 @@ items:
         design: Perk (B9), +1 to Merchant.
         lore: A Bad Moon knows the going rate for everything, in teef.
         skill_bonuses: {Merchant: 1}
+      - name: Teef-Rich
+        points: 1
+        tags: [Perk, Xenos, Orks]
+        design: Perk (B9), a modest extra stake of teef at the start of play (GM's discretion, about one wealth step for kit purposes, not a Wealth level).
+        lore: A Bad Moon always has a little more teef, and a little better kit, than any Klan-mate his size.
       - name: Ostentatious
         points: -1
         tags: [Quirk, Xenos, Orks]
         design: Quirk (B9), roleplaying flag only.
         lore: A Bad Moon cannot resist showing off just how much richer he is than you.
+      - name: Gold-Plated Everything
+        points: -1
+        tags: [Quirk, Xenos, Orks]
+        design: Quirk (B9), roleplaying flag only.
+        lore: A Bad Moon cannot leave a weapon or helmet un-gilded.
 
-  - name: "Klan: Freebooterz"
+  - name: "Culture: Freebooterz"
     container: group
     disabled: true
     tags: [Xenos, Orks]
     lore: >
       Freebooterz are Ork pirates and void-raiders, more mercenary and more
-      willing to deal (on their own terms) than any other Klan — the
-      Orks other factions actually negotiate with, occasionally.
-    design: Net 0 points, per-Klan flavour lens.
+      willing to deal (on their own terms) than any Klan — the Orks other
+      factions actually negotiate with, occasionally. They are a way of
+      life rather than a Klan: Freebooterz come from every Klan, so this
+      lens is a culture that can be combined with one Klan lens.
+    design: Net 0 points, culture flavour lens (not a Klan), combinable with a Klan lens.
     children:
       - name: Void Raider
         points: 1

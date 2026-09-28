@@ -1,21 +1,23 @@
 kind: equipment
 output: Imperium/Gear/Imperial Field Gear.eqp
 items:
-  - name: Rebreather
+  - name: Filter Mask
     tl: 8
     lc: 3
     cost: 60
     weight: 1
     tags: [Gear, Imperium, Astra Militarum]
-    notes: A light filter mask covering nose and mouth; grants a bonus to HT rolls to resist inhaled toxins, smoke and dust, but is not a full atmospheric seal.
+    notes: A light filter mask covering nose and mouth; grants +2 to HT rolls to resist inhaled toxins, smoke and dust, but is not a full atmospheric seal and supplies no oxygen.
     lore: >-
       Basic breathing protection issued wherever the Munitorum expects toxic atmospheres, ash
       storms or gas warfare short of a full hazmat environment — seen throughout Astra Militarum
       background art and Black Library fiction set on hive or forge worlds.
     design: >-
-      No armour/damage anchor applies; built as a simple GURPS filter mask (a HT-roll bonus vs.
-      inhaled hazards) at a TL appropriate to "stub tech"-era mass production, since a rebreather is
+      No armour/damage anchor applies; built as a simple GURPS filter mask (+2 to HT rolls vs.
+      inhaled hazards) at a TL appropriate to "stub tech"-era mass production, since a filter mask is
       mechanically simple and produced across the Imperium regardless of a world's exact tech base.
+      Named a filter mask rather than a rebreather because it has no oxygen supply: GURPS
+      rebreathers are closed-circuit oxygen devices, and the Respirator below is the sealed set.
 
   - name: Respirator
     tl: 10
@@ -33,7 +35,7 @@ items:
       Library fiction as standard kit for regiments that expect chemical, biological or simply
       toxic battlefield conditions as a matter of course.
     design: >-
-      Sits a clear step above the Rebreather: full immunity rather than a resistance bonus, priced
+      Sits a clear step above the Filter Mask: full immunity rather than a resistance bonus, priced
       and weighted higher to reflect the canister filtration system, at the same "standard Imperial
       manufacture" TL as flak and carapace per framework.md's TL table.
 
@@ -46,16 +48,16 @@ items:
     notes: >-
       Low-light image intensification, worn as a visor/goggle unit or, in the surgically-fitted
       "photo-contacts" variant, as lenses with no external bulk (same effect, -1 Holdout only for
-      the visor version, none for contacts). Treat as granting Night Vision for game purposes while
+      the visor version, none for contacts). Grants Night Vision 5 (no penalty for darkness up to -5) while
       worn/active; does not help in absolute darkness.
     lore: >-
       Photo-visors (and their subtler photo-contact lens equivalent) are common-issue night-fighting
       gear across Astra Militarum and Inquisitorial-agent background, letting the wearer fight
       effectively in low light without a powered searchlight giving away their position.
     design: >-
-      No anchor; modelled narratively as the GURPS Night Vision effect (Basic Set) for the GM to
-      apply, since equipment-level features in this schema don't have a direct "grant an
-      advantage" hook. Priced as inexpensive, widely issued optics rather than a rare relic.
+      No anchor; modelled as GURPS Night Vision 5 (Basic Set), a level between cheap goggles and
+      the best military optics, noted in the rules text because equipment in this schema has no
+      "grant an advantage" hook. Priced as inexpensive, widely issued optics rather than a rare relic.
 
   - name: Magnoculars
     tl: 10
@@ -78,7 +80,7 @@ items:
     cost: 900
     weight: 4
     tags: [Gear, Imperium, Astra Militarum]
-    skill_bonuses: {Search: 3}
+    skill_bonuses: {"Electronics Operation (Sensors)": 3}
     notes: Handheld multi-sensor unit reading motion, heat, atmosphere and (on some patterns) psychic disturbance; the bonus above applies specifically to actively scanning an area, not passive Perception.
     lore: >-
       The auspex is the Imperium's ubiquitous field scanner, seen in nearly every piece of
@@ -86,8 +88,9 @@ items:
       tool for detecting hidden enemies, structural hazards, or (in Inquisitorial hands) warp
       taint.
     design: >-
-      No damage/armour anchor applies; modelled as a flat Search skill bonus (Basic Set's
-      "instruments help" convention) rather than lifted from any Ultra-Tech scanner entry, priced
+      No damage/armour anchor applies; modelled as a flat +3 to Electronics Operation (Sensors),
+      the skill scanner use falls under (Search is a Per/vision skill and would not model it), following Basic Set's
+      "instruments help" convention rather than lifted from any Ultra-Tech scanner entry, priced
       as valuable, restricted military-grade kit (LC2) consistent with its usefulness and relative
       scarcity outside the Guard and Inquisition.
 
@@ -97,7 +100,7 @@ items:
     cost: 400
     weight: 12
     tags: [Gear, Imperium, Astra Militarum]
-    notes: Backpack-mounted long-range radio, typically crewed by a dedicated vox-operator; range measured in miles rather than the short range of a micro-bead.
+    notes: Backpack-mounted long-range radio, typically crewed by a dedicated vox-operator; range about 5 miles over open ground (micro-bead about 1 mile).
     lore: >-
       The vox-caster is the standard heavy communications set of Astra Militarum platoons and
       companies, a recurring detail in Guard-focused Black Library fiction (a vox-operator is a
@@ -112,7 +115,7 @@ items:
     cost: 80
     weight: 0.25
     tags: [Gear, Imperium, Astra Militarum]
-    notes: Short-range personal earpiece/throat-mic comm unit for squad-level chatter; does not reach vox-caster range.
+    notes: Short-range personal earpiece/throat-mic comm unit for squad-level chatter; range about 1 mile over open ground, a fifth of a vox-caster's.
     lore: >-
       The micro-bead is standard personal-issue comms for individual Guardsmen and many other
       Imperial servants, referenced constantly in Black Library fiction as the earpiece through
@@ -128,7 +131,7 @@ items:
     cost: 350
     weight: 2
     tags: [Gear, Imperium, Astra Militarum]
-    notes: Combined thermal/motion overlay goggles, worn under a gas-hood visor; grants the same narrative Night Vision benefit as a photo-visor, plus motion-detection against concealed or camouflaged targets at the GM's discretion.
+    notes: Combined thermal/motion overlay goggles, worn under a gas-hood visor; grants Night Vision 5 as a photo-visor, plus motion-detection against concealed or camouflaged targets at the GM's discretion.
     lore: >-
       Preysense goggles are a signature piece of Death Korps of Krieg kit in Forge World's Imperial
       Armour background, combining thermal imaging with motion sensing to let Krieg troopers fight
@@ -159,22 +162,45 @@ items:
     cost: 45000
     weight: 60
     tags: [Gear, Imperium, Adeptus Astartes]
-    notes: >-
-      Rocket-propelled flight/leap pack used for short powered jumps and controlled descents in
-      combat (the tabletop "Assault"/deep-strike leap); treat mechanically as a short-burst Flight
-      capability the GM adjudicates per scene rather than sustained flight, with a real risk of
-      burn damage to anyone caught in the exhaust wash on landing. Sized and rigged for the
-      Astartes frame and its power-armour interface; an unaugmented human cannot use one safely.
-    lore: >-
+    notes: >
+      Rocket-propelled hop pack: Flight for short powered jumps, not sustained flight. Air Move 15,
+      6 seconds of thrust per fuel load (each turn of thrust uses 1 second), and it cannot hover:
+      the wearer climbs on burn turns and must be descending or landing when the fuel is gone.
+      A burning jump can carry a wearer about 60 yards up and 100 yards across. Refuel takes
+      about 10 minutes and a Ready maneuver to prime. Anyone within 2 yards of a landing takes
+      1d burn from the exhaust wash. Sized and rigged for the Astartes frame and its power-armour
+      interface: the 60 lb frame and thrust are more than an unaugmented human can control in
+      Astartes plate (the Sororitas version below is the human-scaled pack).
+    lore: >
       Jump packs equip Assault Marines and Vanguard veterans across Codex Space Marines background
       and Black Library fiction, covering the ground between a standard Astartes's leap and true
       flight in short, thunderous bursts, at the cost of a very conspicuous, fuel-limited profile.
-    design: >-
-      No damage/armour anchor applies; the jump pack is deliberately left as a narrative/maneuver
-      capability (short powered leaps, GM-adjudicated) rather than an automated GCS Flight bonus,
-      since GURPS models tactical jump-pack flight as a maneuver, not a passive trait, and this
-      schema has no clean equipment-level hook for that. Weight and cost scaled to sit well above
-      mundane Guard equipment, in line with other Astartes-exclusive wargear in this file.
+    design: >
+      Built as a limited Flight capability in the style of the Ultra-Tech jet pack (Air Move on
+      burn turns, no hover, short fuel) with numbers set here: Air Move 15 (30 yards over two
+      turns) and 6 seconds of fuel give the 60-yard, 100-yard hops the fiction shows, without
+      making Assault Marines into flyers. Schema note: equipment has no Flight hook, so the
+      capability sits in the rules text. Weight and cost scaled to sit well above mundane Guard
+      equipment, in line with other Astartes-exclusive wargear in this file.
+
+  - name: Jump Pack (Sororitas Seraphim)
+    tl: 11
+    lc: 1
+    cost: 18000
+    weight: 30
+    tags: [Gear, Imperium, Adepta Sororitas]
+    notes: >
+      As the Astartes jump pack but sized for an unaugmented human in Sororitas plate: Air Move 10,
+      4 seconds of thrust per fuel load, no hover, about 35 yards up and 50 yards across. Exhaust
+      wash as the Astartes pack (1d burn within 2 yards of a landing). Refuel about 10 minutes.
+    lore: >
+      Seraphim squads fly with jump packs and are drawn as the Sisters' fast, hard-hitting assault
+      troops in Codex Adepta Sororitas background. They are unaugmented humans, so their packs
+      are lighter and weaker than the Astartes pattern.
+    design: >
+      The Astartes jump pack scaled down to a human frame: half the weight, two thirds of the
+      Air Move and fuel, priced at 40% of the Astartes pack because it is smaller but also an
+      issue item of a large organisation. LC1 rather than LC0, matching Sororitas power weapons.
 
   - name: Grav-chute
     tl: 10
@@ -211,8 +237,8 @@ items:
   - name: Guardsman's Kit
     tl: 10
     lc: 4
-    cost: 60
-    weight: 20
+    cost: 0
+    weight: 0
     tags: [Gear, Imperium, Astra Militarum]
     notes: The standard web-gear/pack loadout carried by an Astra Militarum trooper on campaign.
     lore: >-
@@ -220,7 +246,7 @@ items:
       Library fiction (the Gaunt's Ghosts and Ciaphas Cain series in particular) and Astra
       Militarum background: unglamorous, faith-adjacent, and built around long marches and worse
       rations.
-    design: A container grouping the small items below into one carried loadout, rather than tracking each separately; total weight/cost is the sum of the parts.
+    design: A container grouping the small items below into one carried loadout, rather than tracking each separately. GCS adds a container's children to its own weight and cost, so the container itself is 0 lb and $0 and the total is the sum of the parts (22.5 lb, $90).
     children:
       - name: Uplifting Primer
         weight: 1
@@ -252,12 +278,7 @@ items:
         notes: Collapsible mess tin, utensils and a water canteen.
         lore: Standard Guard kit, occasionally a plot detail when water runs short.
         design: Flavour item; no mechanical effect.
-      - name: Entrenching Tool
-        weight: 2.5
-        cost: 10
-        notes: Folding spade for digging in; usable in a pinch as an improvised weapon (treat as a small axe/shovel, sw-1 cut or thr cr).
-        lore: A staple of trench-warfare-flavoured Guard depictions.
-        design: Standard GURPS entrenching tool (Basic Set); the improvised-weapon note is a reasoned estimate, not a formal weapon anchor.
+      - include: "imperium/weapons/melee.yaml#Entrenching Tool, Folding"
       - name: Aquila Icon
         weight: 0.25
         cost: 5
@@ -270,7 +291,7 @@ items:
     lc: 4
     cost: 40
     weight: 0.25
-    tags: [Gear, Imperium, Imperium]
+    tags: [Gear, Imperium]
     notes: A rugged wrist or pocket chronometer.
     lore: Unremarkable but near-universal personal timekeeping across the Imperium, mentioned in passing across Black Library fiction rather than dwelt on.
     design: No anchor; a plain GURPS wristwatch (Basic Set) equivalent, at a low TL since timekeeping is mechanically trivial regardless of setting.
@@ -280,27 +301,27 @@ items:
     lc: 4
     cost: 25
     weight: 1
-    tags: [Gear, Imperium, Imperium]
+    tags: [Gear, Imperium]
     notes: Handheld or hung electric light; the glow-globe is a softer, room-lighting sphere, the stablight a focused beam torch.
     lore: Standard Imperial lighting, mentioned throughout Black Library fiction wherever characters move through unlit corridors, hab-blocks or underhive tunnels.
     design: No anchor; a plain GURPS flashlight/lantern (Basic Set) under Imperial naming, at a low TL since it's mechanically simple household/field tech.
 
   - name: Cameleoline Cloak
-    tl: 8
+    tl: 10
     lc: 2
     cost: 600
     weight: 3
     tags: [Gear, Imperium, Astra Militarum]
-    skill_bonuses: {Stealth: 2, Camouflage: 3}
-    notes: A light-bending, pattern-disrupting cloak fabric; the bonuses above apply while the cloak is worn and the wearer is stationary or moving slowly enough to keep it effective (GM's call on faster movement).
+    skill_bonuses: {Stealth: 3}
+    notes: A light-bending, pattern-disrupting cloak fabric; the +3 to Stealth above applies while the cloak is worn and the wearer is stationary or moving slowly enough to keep it effective (GM's call on faster movement).
     lore: >-
       Cameleoline cloaks are the signature camouflage gear of Imperial snipers and scout troops
       (Catachan and Tanith patterns both appear in Black Library fiction, most notably the Tanith
       First-and-Only's scouts in the Gaunt's Ghosts series) — a fabric that bends light and breaks
       up a wearer's outline rather than simple colour-matched cloth.
     design: >-
-      No anchor; modelled as flat Stealth/Camouflage skill bonuses (a common GURPS convention for
-      camouflage gear in Basic Set/Ultra-Tech-style items, applied here as an independently-reasoned
-      value rather than copied from a specific catalogue entry) with no DR, since the cloak's whole
+      No anchor; modelled as a flat +3 to Stealth (the Camouflage skill is for making camouflage,
+      not for benefiting from it), an independently-reasoned value rather than one copied from a
+      catalogue entry, with no DR and TL 10 to match the Imperium's standard manufacture, since the cloak's whole
       function is concealment rather than protection. Restricted to LC2 to reflect its status as
       specialist rather than universal-issue kit.
