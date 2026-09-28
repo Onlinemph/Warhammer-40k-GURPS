@@ -133,27 +133,29 @@ items:
       design as "M-Galaxy pattern"; this entry treats the two names as the
       same underlying weapon rather than asserting they're formally distinct.
     design: >-
-      Damage is the fixed lasgun anchor, raised to 7d(2) burn in the armour
-      rescale (flak 12→18, carapace 45→60). Range/RoF/shots are not
-      anchored and are built to match the lasgun's lore signature: a 60-shot
-      accumulator that recharges off almost any power source, and a fire
-      selector giving single, burst and full-auto settings (abstracted here
-      as RoF 10 for full-auto; treat single fire as RoF 1 at the GM's
-      discretion). Required lasgun-vs-armour check (framework.md, exact dice
-      distribution): 7d(2) averages 24.5 and penetrates flak (DR 18,
-      effective 9) on 100% of hits, matching "punches flak"; against
-      carapace (DR 60, effective 30) it penetrates 9.4% of hits,
-      matching "penetrates carapace about one hit in ten"; against Astartes
-      power armour (DR 100, effective 50, unchanged by this rescale) it
-      penetrates 0% of hits, matching "useless against power armour." The
-      Hot-shot pack usage reuses the hellgun anchor (8d(3) burn) exactly,
-      since a hot-shot pack is explicitly the same overcharge trick as a
-      hellgun's power cell, just dropped into an ordinary lasgun for one
-      shot. The Overcharge usage is a milder, non-hellgun field expedient
-      stepped up from the lasgun anchor: +1 die (8d burn, average 28), no
-      armour divisor, limited shots — it still clears flak (97.6% of hits)
-      and mesh (87.0%) but fails against carapace (0% of hits), because the
-      whole point of the divisor is what an overcharge pack doesn't add.
+      Damage is the fixed lasgun anchor, raised to 7d(2) burn across two
+      rounds of the armour rescale (flak 12→18→30, carapace 45→60→70).
+      Range/RoF/shots are not anchored and are built to match the lasgun's
+      lore signature: a 60-shot accumulator that recharges off almost any
+      power source, and a fire selector giving single, burst and full-auto
+      settings (abstracted here as RoF 10 for full-auto; treat single fire
+      as RoF 1 at the GM's discretion). Required lasgun-vs-armour check
+      (framework.md, exact dice distribution): 7d(2) averages 24.5 and
+      penetrates flak (DR 30, effective 15) on 97.8% of hits, matching
+      "punches flak"; against carapace (DR 70, effective 35) it penetrates
+      0.6% of hits, matching "penetrates carapace about one hit in ten" only
+      loosely now that carapace has been raised twice - the user's own
+      figure, kept as given. Against Astartes power armour (DR 100,
+      effective 50, unchanged by both rescales) it penetrates 0% of hits,
+      matching "useless against power armour." The Hot-shot pack usage
+      reuses the hellgun anchor (8d(3) burn) exactly, since a hot-shot pack
+      is explicitly the same overcharge trick as a hellgun's power cell,
+      just dropped into an ordinary lasgun for one shot. The Overcharge
+      usage is a milder, non-hellgun field expedient stepped up from the
+      lasgun anchor: +1 die (8d burn, average 28), no armour divisor,
+      limited shots — it still clears flak (30.5% of hits) but fails
+      against mesh (3.9%) and carapace (0% of hits), because the whole
+      point of the divisor is what an overcharge pack doesn't add.
       Handling: min ST corrected to 9 for all three usages (standard,
       hot-shot pack, overcharge shot - it's the same physical rifle, so
       they share one ST figure), matching framework.md's own worked example
@@ -374,12 +376,12 @@ items:
       Damage is the fixed long-las anchor (8d(2) burn), one die over the
       standard lasgun — an extra focusing chamber concentrates more energy
       per shot at the cost of rate of fire, and keeps the same (2) divisor
-      family-wide. Average roll 28 makes flak (DR 18) meaningless (100% of
-      hits penetrate) and gets through carapace (DR 60, effective 30) on
-      30.5% of hits, comfortably better than the lasgun's 9.4% and matching
-      the long-las's role as the harder-hitting sniper pattern; it still
-      fails outright against Astartes power armour (0% of hits, eff. DR 50
-      unchanged by this rescale). RoF drops
+      family-wide. Average roll 28 makes flak (DR 30) nearly a non-issue
+      (99.6% of hits penetrate) and gets through carapace (DR 70, effective
+      35) on 6.1% of hits, comfortably better than the lasgun's 0.6% and
+      matching the long-las's role as the harder-hitting sniper pattern; it
+      still fails outright against Astartes power armour (0% of hits, eff.
+      DR 50 unchanged by both armour rescales). RoF drops
       to 1 (no autofire mechanism survives the rebuild) and the custom cell
       holds fewer shots than a stock lasgun. Acc rises to 9 for the integral
       scope, and Bulk worsens to -6 for the longer, heavier weapon, following
@@ -416,9 +418,9 @@ items:
       laspistol steps down one die from the lasgun: -1d, armour divisor
       unchanged. The (3) divisor is what lets it beat carapace at all —
       that's the entire point of the hot-shot family, so it carries over
-      unmodified. Average roll 24.5 against carapace (DR 60, effective 20)
-      penetrates 80.8% of hits: a real threat, if less reliable than the
-      full-size hellgun's 93.9%. Shot count is lower than an ordinary
+      unmodified. Average roll 24.5 against carapace (DR 70, effective 23.3)
+      penetrates 58.6% of hits: a real threat, if less reliable than the
+      full-size hellgun's 82.1%. Shot count is lower than an ordinary
       laspistol's because a hot-shot cell packs more energy per shot into
       the same volume, so it burns out faster.
       Handling: min ST 6 (√(10×3)≈5.5, rounded up for the reinforced
@@ -450,16 +452,17 @@ items:
       can't; its role as the carapace-killer of Imperial small arms is
       consistent background across Scion-focused fiction and codex material.
     design: >-
-      Damage is the fixed hellgun anchor, raised to 8d(3) burn in the armour
-      rescale. Sanity check against the framework's stated purpose, computed
-      by exact dice distribution: average roll 28, armour divisor 3 cuts
-      carapace's DR 60 to an effective 20, so 8d(3) penetrates carapace on
-      93.9% of hits — it reliably beats carapace, confirming "built to beat
-      carapace" with no adjustment needed. Against Sororitas power armour
-      (DR 70, effective 23.3) it still gets through 82.1% of the time;
-      against Astartes power armour (DR 100, effective 33.3, unchanged by
-      this rescale) that drops to 13.0%, matching hellgun's place below the
-      boltgun as an infantry-scale weapon. Shot count (40) is lower than a
+      Damage is the fixed hellgun anchor, raised to 8d(3) burn across two
+      rounds of the armour rescale. Sanity check against the framework's
+      stated purpose, computed by exact dice distribution: average roll 28,
+      armour divisor 3 cuts carapace's DR 70 to an effective 23.3, so 8d(3)
+      penetrates carapace on 82.1% of hits — it reliably beats carapace,
+      confirming "built to beat carapace" with no adjustment needed. Against
+      Sororitas power armour (DR 85, effective 28.3) it still gets through
+      46.0% of the time; against Astartes power armour (DR 100, effective
+      33.3, unchanged by both rescales) that drops to 13.0%, matching
+      hellgun's place below the boltgun as an infantry-scale weapon. Shot
+      count (40) is lower than a
       standard lasgun's 60 to reflect the hungrier, hotter cell.
       Handling: min ST corrected to 9 (√(10×9)≈9.5, rounded down), matching
       the framework formula for a 9 lb rifle - a point above a standard

@@ -1,0 +1,99 @@
+kind: template
+output: Imperium/Templates/Astartes Techmarine Add-On.gct
+notes: >
+  An add-on, not a full character: layer this over Imperium/Templates/
+  Astartes Battle-Brother.gct (plus a Chapter Gene-Seed lens) to build a
+  Techmarine, exactly as Imperium/Templates/Astartes Librarian Add-On.gct
+  builds a Librarian. It does not repeat the Battle-Brother's attributes,
+  physiology, Chapter Rank, or Reputation -- only what a Techmarine has
+  beyond a Tactical Marine: a full second apprenticeship on Mars (or a
+  Chapter's own equivalent forge) inducted into the Cult Mechanicus, plus
+  the servo-harness every Techmarine is known for. Augmetics and Mechanicus
+  faith traits are pulled in with `include` from Adeptus Mechanicus/Traits/
+  Augmetics and the Cult Mechanicus.adq rather than copied.
+
+  Point math for this add-on alone: traits 1 (Cranial Circuitry) + 7
+  (Cortex Implant) + 8 (Noospheric Link) + 50 (Servo-Arm) + 1 (Mind Impulse
+  Unit) + 9 (Mechadendrite, Utility Pattern) + 10 (Mechanicus Rank 2) - 10
+  (Disciplines of the Cult Mechanicus) - 10 (Duty, Adeptus Mechanicus) = 66,
+  plus skills 8 (Engineer, Combat Engineering) + 8 (Engineer, Powered
+  Armor) + 4 (Theology, Cult Mechanicus) + 4 (Language, Binharic) + 4
+  (Hidden Lore, Archeotech) + 1 (Savoir-Faire, Adeptus Mechanicus) = 29.
+  95 points on top of the Battle-Brother's own 751, landing at roughly 846
+  -- past the Astartes tier's normal 550-800 ceiling and into framework.md's
+  "Heroes and legends" band, matching how the Librarian add-on (bringing a
+  Battle-Brother to ~962) already treats a Chapter specialist as costing
+  more than a line Marine. The servo-harness itself (the physical mount the
+  Servo-Arm and Mechadendrite are built into) and any Techmarine-pattern
+  weapon (servo-harness-mounted flamer, plasma cutter, etc.) are equipment,
+  not covered here.
+traits:
+  - include: "mechanicus/traits/augmetics.yaml#Cranial Circuitry"
+  - include: "mechanicus/traits/augmetics.yaml#Cortex Implant, Logis Pattern"
+  - include: "mechanicus/traits/augmetics.yaml#Noospheric Link"
+  - include: "mechanicus/traits/augmetics.yaml#Servo-Arm"
+    lore: >
+      Mounted on the servo-harness every Techmarine carries into battle
+      alongside their bolter and chainsword.
+  - include: "mechanicus/traits/augmetics.yaml#Mind Impulse Unit"
+    lore: >
+      The same interface hardware a Dreadnought pilot or Titan princeps
+      uses, fitted so a Techmarine can drive a servo-harness or (rarely) an
+      interred war machine as an extension of their own reflexes.
+  - include: "mechanicus/traits/augmetics.yaml#Mechadendrite, Utility Pattern"
+    lore: A second harness limb for fine repair work alongside the heavier Servo-Arm.
+  - include: "mechanicus/traits/augmetics.yaml#Mechanicus Rank"
+    levels: 2
+    lore: >
+      A Techmarine is ordained into the Cult Mechanicus at roughly an
+      Enginseer's standing, separate from and in addition to whatever
+      Chapter rank they also hold.
+  - include: "mechanicus/traits/augmetics.yaml#Disciplines of the Cult Mechanicus"
+  - include: "mechanicus/traits/augmetics.yaml#Duty (Adeptus Mechanicus)"
+    lore: >
+      A second, genuinely distinct Duty from the Battle-Brother base
+      template's Duty (Chapter and Imperium): a Techmarine answers to Mars
+      as well as to their Chapter, and Black Library background (the
+      Ultramarines' and Iron Hands' Techmarine characters especially) plays
+      the two loyalties as capable of real tension.
+skills:
+  - name: Engineer
+    spec: Combat Engineering
+    diff: IQ/H
+    points: 8
+    tags: [Imperium, Adeptus Mechanicus]
+    lore: Field repair and modification of vehicles and heavy weapons under fire.
+    design: >
+      Hard skill; points left generic since this add-on does not know the
+      base template's final IQ, exactly as Imperium/Templates/Astartes
+      Librarian Add-On.gct leaves Meditation and Hidden Lore (the Warp)
+      generic for the same reason.
+  - name: Engineer
+    spec: Powered Armor
+    diff: IQ/H
+    points: 8
+    tags: [Imperium, Adeptus Mechanicus]
+    lore: Astartes power armour maintenance and battlefield repair -- a Chapter's Techmarines are who keep the rest of the company's plate running.
+    design: Hard skill; points as above.
+  - name: Theology
+    spec: Cult Mechanicus
+    diff: IQ/H
+    points: 4
+    tags: [Imperium, Adeptus Mechanicus]
+    lore: A Mars apprenticeship's doctrinal instruction; see Imperium/Skills/Imperial Skills.skl.
+    design: Hard skill; points as above.
+  - include: "mechanicus/skills/skills.yaml#Language"
+    spec: Binharic
+    points: 4
+    design: Average skill; points as above.
+  - name: Hidden Lore
+    spec: Archeotech
+    diff: IQ/A
+    points: 4
+    tags: [Imperium, Adeptus Mechanicus]
+    lore: STC and relic recognition from the Mars apprenticeship; see Imperium/Skills/Imperial Skills.skl.
+    design: Average skill; points as above.
+  - include: "mechanicus/skills/skills.yaml#Savoir-Faire"
+    spec: Adeptus Mechanicus
+    points: 1
+    design: Easy skill; points as above.
