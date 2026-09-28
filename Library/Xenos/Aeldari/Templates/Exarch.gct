@@ -1,0 +1,1019 @@
+{
+	"version": 5,
+	"id": "B1gy41KJ-47CK7wpI",
+	"notes": "An Exarch: an Aspect Warrior lost to the Path of the Warrior entirely, leading their shrine's warriors from inside ancient, spirit-linked Exarch armour that has passed from Exarch to Exarch for millennia. Point math (see Xenos/Aeldari/Traits/Aeldari Physiology.adq): Aeldari Physiology + Keen Battle-Sense + Aspect Training + Exarch's Mastery (traits, 371 points) + skills (179 points) = 550 points. Stats: ST 12, DX 18, IQ 13, HT 12, HP 12, Will 15, Per 14, Speed 7.75, Move 7, Dodge 11 (Enhanced Dodge 2 included) — landing exactly on framework.md's Exarch anchor line, DX 18 above even a Battle-Brother's own DX 16, matching Codex background's treatment of a proper Exarch as a genuinely unmatched duelist. This lands right at the floor of framework.md's Astartes tier (550-800): a master specialist built almost entirely from centuries of total focus on one weapon-art (Trained By A Master, Weapon Master, Enhanced Parry, and a very high signature-weapon skill level below) rather than an Astartes' raw ST and HP, matching how the fiction treats an Exarch as lethal through precision, not bulk.\nEnable exactly one Aspect lens (from Xenos/Aeldari/Traits/Aeldari Physiology.adq, disabled by default; the same seven as the Aspect Warrior template) for the specific shrine this Exarch leads — the Trained By A Master, Weapon Master and signature-weapon skill points below assume whichever weapon that Aspect's shrine centres on (shuriken catapult, chainsword, power sword, fusion gun, reaper launcher, or equivalent).\n",
+	"traits": [
+		{
+			"id": "TfvkH6tLDcOLT9bzV",
+			"name": "Aeldari Physiology",
+			"local_notes": "Lore: The Aeldari: an ancient, dying, near-immortal species, slender and swift, all born with a latent thread into the warp and all hunted, in the end, by the god their own species' fall gave birth to. This trait is the baseline shared by every Craftworld Aeldari; Path lenses and Aspect lenses below layer specialization on top of it, exactly as the Astartes gene-seed file's Chapter lenses and the Ork Physiology file's Klan lenses do for their own species.\n\nDesign: 125 (Attribute Modifiers) + 8 (Acute Senses) + 4 (Aeldari Grace) + 0 (Slender Frame) + 4 (Extended Lifespan) + 10 (Psychic Sensitivity) + 1 (Spirit Stone) - 10 (Emotional Intensity) - 5 (Arrogance) - 15 (Slaanesh's Hunger) = 122 points of physiology alone, before Path, Aspect, or skills — landing ST 10, DX 14, IQ 12, HT 10, HP 10, Will 12, Per 12 (Per 13 once Keen Battle-Sense is added by a warrior-path template). See the Guardian template for the first full character built on this package.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Aeldari"
+			],
+			"container_type": "ancestry",
+			"children": [
+				{
+					"id": "tBP39MYCY4V9G6L_G",
+					"name": "Attribute Modifiers",
+					"local_notes": "Design: Framework target (Guardian anchor line, the ancestry baseline every other Aeldari template builds on): ST 10, DX 14, IQ 12, HT 10, HP 10. Increased DX +4 (B15, 20/level, 80) for DX 14 — \"faster and more precise than any baseline human,\" matching the anchor table's own figure without touching ST or HT, which stay human-baseline: Aeldari are quick and precise, not physically overwhelming. Increased IQ +2 (B16, 20/level, 40) for IQ 12 — a subtler, more perceptive mind than a human's on average, per Codex background's consistent \"the Aeldari are wiser and more perceptive than short-lived Humanity\" framing. Increased Basic Speed +0.25 (B17, 5 points per 0.25 level, 5) for reflexes a shade faster even than DX 14 alone implies — the same design choice this project's Astartes Attribute Modifiers makes for \"faster reflexes than baseline humans\" without inflating every DX skill. 80+40+5 = 125. Will and Per are left untouched here (both track IQ 12 with no separate bonus): the Guardian anchor's own Per 13 and Aspect Warrior's Will 13 come from Keen Battle-Sense and Aspect Training below, not from this universal package, because a Farseer's own anchor (Per 15 exactly equal to IQ 15) shows the extra Per point is a warrior's battlefield habit, not a species-wide trait — baking it in here would overshoot the Farseer line once her own IQ is bought up.",
+					"tags": [
+						"Physical"
+					],
+					"base_points": 125,
+					"features": [
+						{
+							"type": "attribute_bonus",
+							"attribute": "dx",
+							"amount": 4
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "iq",
+							"amount": 2
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "basic_speed",
+							"amount": 0.25
+						}
+					]
+				},
+				{
+					"id": "TqK37BgAhJpCGCmuN",
+					"name": "Acute Senses",
+					"local_notes": "Lore: Aeldari sight and hearing are famously sharper than a human's — able to read the wind off a craftworld's wraithbone spires, or track a single voice through a warhost's roar. Consistently depicted across Codex background and the Path trilogy (a Ranger's eyesight in particular is played as near-supernatural).\n\nDesign: Acute Vision 2 (B35, 2/level, 4) plus Acute Hearing 2 (B35, 2/level, 4) = 8 points, the same math this project's Astartes Occulobe/Lyman's Ear entries use for the \"raw acuity\" half of their build, without the Protected Sense half (Aeldari have no fused eye/ear armour organ to shrug off flash and concussion the way an Astartes implant does).",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Aeldari"
+					],
+					"container_type": "meta_trait",
+					"children": [
+						{
+							"id": "t7LmVUeeLD0HxZGHD",
+							"name": "Acute Vision",
+							"reference": "B35",
+							"points_per_level": 2,
+							"can_level": true,
+							"levels": 2
+						},
+						{
+							"id": "tzSwInVnqT8n3FMvS",
+							"name": "Acute Hearing",
+							"reference": "B35",
+							"points_per_level": 2,
+							"can_level": true,
+							"levels": 2
+						}
+					]
+				},
+				{
+					"id": "ttXF-gDTh-nSvZ9E-",
+					"name": "Aeldari Grace",
+					"reference": "B21",
+					"local_notes": "Appearance (Attractive).\n\nLore: Aeldari are consistently described, in the fiction and in their own art, as slender, fine-boned and unnervingly graceful even to other Aeldari — a species that finds its own dying beauty worth mourning.\n\nDesign: Basic Set Appearance, Attractive tier (B21), 4 points.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Aeldari"
+					],
+					"base_points": 4
+				},
+				{
+					"id": "tkHBJ3sSPRInHJtVO",
+					"name": "Slender Frame",
+					"local_notes": "Lore: An Aeldari body is light and fine-boned next to a human's, let alone an Ork's or an Astartes': speed and precision over mass. Codex background and the Path trilogy both play Aeldari as easy to underestimate physically and easy to actually hurt once a fight turns physical.\n\nDesign: 0-point lore flag: the mechanical consequence is what's absent, not present — this package buys no Extra Hit Points and no Damage Resistance the way the Astartes and Ork physiology files do, so Aeldari HP tracks bare ST with no bonus. This entry documents why, rather than pricing anything itself.",
+					"tags": [
+						"Xenos",
+						"Aeldari"
+					],
+					"base_points": 0
+				},
+				{
+					"id": "tD4y-jNPWrAjNtPgS",
+					"name": "Extended Lifespan",
+					"reference": "B17",
+					"local_notes": "x100 natural lifespan (roughly 8,000 years before natural death).\n\nLore: Aeldari live for millennia baseline, and the oldest craftworld seers and named heroes (Eldrad Ulthran chief among them) are shown outlasting even that by a wide margin — treated here as an exceptional, GM-adjudicated extension on top of this baseline rather than a fixed higher purchase every Aeldari makes.\n\nDesign: Basic Set Extended Lifespan 2 (B17, 2/level, x100 natural lifespan), 4 points.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Aeldari"
+					],
+					"points_per_level": 2,
+					"can_level": true,
+					"levels": 2,
+					"base_points": 4
+				},
+				{
+					"id": "t3v_Fw1EgjKg-xZD1",
+					"name": "Aeldari Psychic Sensitivity",
+					"local_notes": "Lore: Every Aeldari is born with a latent thread into the warp — a legacy of Isha and Cegorach's blessing, or of the psychic shock of the Fall, depending which telling you credit — where among humans the gift is a vanishingly rare mutation. Most Aeldari never develop it past a constant, low background hum of unease near the warp; Warlocks and Farseers are the ones who walk toward it instead of away.\n\nDesign: This project's Aeldari analogue of Imperium/Psykers and the Warp.adq's Unusual Background (Latent Psychic Potential): identical cost (10 points, B261) and identical function (it is the prerequisite for Aeldari Psyker (Talent), Aeldari Warp Empowerment, and every Warp Sorcery-tagged Rune below), but built as its own entry rather than reused verbatim because the Imperium entry's own lore text is explicitly a rare human mutation — false for a species where the gift is universal and latent. Bought once as part of the Aeldari Physiology package below, unlike the Imperium version, which is an optional purchase most humans never make.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Xenos",
+						"Aeldari",
+						"Psyker"
+					],
+					"base_points": 10
+				},
+				{
+					"id": "to5Yomo1KAEtfO1bV",
+					"name": "Spirit Stone",
+					"local_notes": "Worn on the breast from childhood. At its bearer's death, an attending psyker (a Warlock, Farseer, or another spirit-stone-bearer) must draw the escaping soul into the stone within moments, or it is lost to Slaanesh (see Slaanesh's Hunger, below) — a rite, not an automatic save, and one that can fail on a battlefield in chaos or far from help.\n\nLore: Every Craftworld Aeldari wears a spirit stone: a small, wraithbone- cored gem that anchors the soul against the warp and, at death, can catch it before Slaanesh does — from which it may later be interred in a craftworld's Infinity Circuit to live on, disembodied, among its ancestors. Consistent, foundational Aeldari background across every edition of Codex: Craftworlds and the Path trilogy.\n\nDesign: A 1-point Perk (B21): the stone's real narrative weight — catching a soul at death — is a rite the GM adjudicates in the moment (see Slaanesh's Hunger below for exactly what it's warding against), not a combat-turn mechanic worth a bigger purchase. The one live-play effect it's worth pricing is a small, steadying +1 to the wearer's own Will roll against Perils of the Warp (Aeldari Runes) — the stone's ward dampens backlash the same way it will one day catch the soul itself.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Xenos",
+						"Aeldari",
+						"Psyker",
+						"Perk"
+					],
+					"base_points": 1,
+					"features": [
+						{
+							"type": "conditional_modifier",
+							"situation": "on the Will roll to resist Perils of the Warp",
+							"amount": 1
+						}
+					]
+				},
+				{
+					"id": "t1IqFeF6RkAUCicug",
+					"name": "Emotional Intensity",
+					"local_notes": "As Bad Temper (B125), but the triggering emotion can be grief, joy, desire or artistic rapture as easily as anger — whatever the moment's strongest feeling is, not anger specifically. On a failed self-control roll the Aeldari acts on the emotion, not on reason, for the rest of the scene.\n\nLore: Aeldari feel everything more sharply than a human does — joy, grief, desire, fury — and the fiction is explicit that this, not any weakness of will, is why the Path exists at all: without the discipline of devoting centuries to one narrow art at a time, an Aeldari mind burns out or turns inward on itself. Path of the Warrior and Path of the Seer both open on exactly this problem.\n\nDesign: Built as Bad Temper (B125, self-control 12, -10 points) with a broadened trigger, the same \"as Bloodlust, but...\" reflavoring this project's Chapter Gene-Seed: Blood Angels entry uses for Red Thirst: same cost and self-control math, different triggering emotion.",
+					"tags": [
+						"Disadvantage",
+						"Mental",
+						"Xenos",
+						"Aeldari"
+					],
+					"base_points": -10,
+					"cr": 12
+				},
+				{
+					"id": "tR9SQJMtTS5TaPLuS",
+					"name": "Arrogance Towards Younger Races",
+					"reference": "B22",
+					"local_notes": "Odious Personal Habit: casual condescension toward humans, Orks, and other 'younger' races.\n\nLore: An Aeldari watching over the ruins of a civilization older than humanity's entire recorded history struggles not to be condescending about it — Codex background and the Path trilogy alike play this as a near-universal Aeldari failing, not a villain trait: even sympathetic Aeldari protagonists talk down to \"mon-keigh\" without quite noticing they're doing it.\n\nDesign: Odious Personal Habit (B22), minor tier, -5 points: a real social cost (reaction penalties from anyone who notices) but not the deliberate cruelty a full Intolerance or Bully disadvantage would represent.",
+					"tags": [
+						"Disadvantage",
+						"Mental",
+						"Xenos",
+						"Aeldari"
+					],
+					"base_points": -5
+				},
+				{
+					"id": "t2pWideWzcHnndzkA",
+					"name": "Slaanesh's Hunger",
+					"reference": "B160",
+					"local_notes": "As Weirdness Magnet, but the \"weirdness\" is specifically Chaos and warp phenomena drawn to an Aeldari soul's exceptional flavour: Chaos cultists, daemons (Slaaneshi ones above all), and warp-touched omens/hauntings single an Aeldari out over other bystanders, at the GM's discretion, roughly as often as Weirdness Magnet's own frequency guidance suggests.\nThis is also the mechanical flag for the larger, unpriced stake behind it: an Aeldari who dies with no spirit stone drawing their soul clear (see Spirit Stone, above) is devoured by Slaanesh, GM's call on the exact fate — endless torment, absorption into the Dark Prince's being, or worse. Like this project's Black Rage and Wulfen Curse entries, this fate is a narrative endpoint the GM adjudicates when it's dramatically earned, not a disadvantage bought and rolled against at chargen. A functioning Spirit Stone worn at time of death, and recovered promptly, avoids it outright.\n\nLore: Slaanesh, the youngest Chaos god, was born screaming from the psychic shockwave of the Aeldari's own Fall, and has hungered for Aeldari souls above all others' ever since — this is one of the single most consistent, foundational beats of Aeldari background across every edition of Codex: Craftworlds and Codex: Drukhari, and the entire reason spirit stones and the Infinity Circuit exist.\n\nDesign: Weirdness Magnet (B160, -15 points) reused for its \"supernatural trouble finds you more often\" mechanic, standing in for the fact that an Aeldari's soul draws Chaos's attention the way a bright light draws moths. The GM-adjudicated death fate it flags is deliberately not separately priced, per the framework's own guidance to build this honestly rather than as a combat-relevant stat; the Spirit Stone above is what actually buys it off.",
+					"tags": [
+						"Disadvantage",
+						"Mental",
+						"Xenos",
+						"Aeldari"
+					],
+					"base_points": -15
+				}
+			]
+		},
+		{
+			"id": "t2qXCg0NARvtkLIwA",
+			"name": "Keen Battle-Sense",
+			"local_notes": "Lore: A Guardian's militia drills, an Aspect Warrior's shrine training, and an Exarch's centuries in the same battle-role all sharpen the same thing: a heightened, ever-present awareness of the battlefield around them. A Farseer's gift runs a different direction entirely (inward and forward, not outward), which is why this is a warrior's-path trait, not part of the universal Aeldari package.\n\nDesign: Increased Perception +1 (B16, 5 points/level): the Guardian anchor's Per 13 over IQ 12, and the Aspect Warrior/Exarch anchors' matching one-point gap over their own IQ, all come from this single trait rather than a bonus baked into Attribute Modifiers, so it can be left out of the Farseer line (whose own anchor is Per == IQ exactly) without distorting that template's math.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Aeldari"
+			],
+			"base_points": 5,
+			"features": [
+				{
+					"type": "attribute_bonus",
+					"attribute": "per",
+					"amount": 1
+				}
+			]
+		},
+		{
+			"id": "TCODQaMqDKFHaSNGi",
+			"name": "Aspect Training",
+			"local_notes": "Lore: What a Shrine actually does to a Guardian who commits to the Path of the Warrior: years, sometimes decades, of drilling one narrow art of war until body and reflex both match its demands — matching framework.md's own note that this is exactly what closes the gap to a Space Marine's DX.\n\nDesign: 65 (Attribute Modifiers) + 15 (Enhanced Dodge 1) = 80 points, added to the Aeldari Physiology + Keen Battle-Sense baseline (122 + 5 = 127) for 207 points of physiology before skills. See the Aspect Warrior template for the full character, and Exarch's Mastery below for the further step up to Exarch.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Aeldari"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "td2UiScablckl5f9v",
+					"name": "Attribute Modifiers (Aspect Training)",
+					"local_notes": "Design: Framework target over the Aeldari Physiology + Keen Battle-Sense baseline: ST 11, DX 16, IQ 12 (unchanged), HT 11, Will 13, Per 13 (unchanged, already delivered by Keen Battle-Sense at this IQ). Increased ST +1 (B14, 10/level, 10) for ST 11 — enough muscle to wear Aspect armour and carry a fusion gun or exarch blade, nowhere near an Astartes' bulk. Increased DX +2 (B15, 20/level, 40) for DX 16, matching the anchor table's own note that this is exactly where centuries on one Path bring an Aspect Warrior's precision level with a Space Marine's own DX. Increased HT +1 (B15, 10/level, 10) for HT 11. Increased Will +1 (B16, 5/level, 5) for Will 13, the discipline of the shrine holding Emotional Intensity firmly in check. 10+40+10+5 = 65 points.",
+					"tags": [
+						"Physical"
+					],
+					"base_points": 65,
+					"features": [
+						{
+							"type": "attribute_bonus",
+							"attribute": "st",
+							"amount": 1
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "dx",
+							"amount": 2
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "ht",
+							"amount": 1
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "will",
+							"amount": 1
+						}
+					]
+				},
+				{
+					"id": "tTFR2UOroRv3ctuXh",
+					"name": "Enhanced Dodge",
+					"reference": "B52",
+					"local_notes": "Lore: Framework.md calls this out by name: superior Aeldari reflexes translate into an Enhanced Dodge for Aspect Warriors specifically, on top of Guardian-tier speed — a Dire Avenger or Howling Banshee weaving through incoming fire in a way no unaugmented human, Guardsman or Guardian, quite manages.\n\nDesign: Enhanced Dodge 1 (B52, 15 points/level).",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Aeldari"
+					],
+					"points_per_level": 15,
+					"can_level": true,
+					"levels": 1
+				}
+			]
+		},
+		{
+			"id": "TobqvZeI1blDcTgYb",
+			"name": "Exarch's Mastery",
+			"local_notes": "Lore: What it costs, and what it grants, to be lost to the Path of the Warrior entirely: an Exarch, wearing the shrine's own war-mask and ancient armour, leading their Aspect's Aspect Warriors in battle after battle across centuries, with no path back to an ordinary life.\n\nDesign: 85 (Attribute Modifiers) + 15 (further Enhanced Dodge) + 15 (Combat Reflexes) + 30 (Trained By A Master) + 20 (Weapon Master) + 10 (Enhanced Parry 2) - 15 (Lost to the Path) = 160 points, added to the Aspect Warrior package's 207 for 367 points of physiology and mastery before skills. See the Exarch template.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Aeldari"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "tJXoDOJXFlCuVOIWl",
+					"name": "Attribute Modifiers (Exarch)",
+					"local_notes": "Design: Framework target over the Aspect Warrior + Keen Battle-Sense baseline: ST 12, DX 18, IQ 13, HT 12, Per 14 (free: IQ 13 + Keen Battle-Sense's existing +1), Will 15. Increased ST +1 (B14, 10/level, 10) for ST 12. Increased DX +2 (B15, 20/level, 40) for DX 18 — the anchor table's own figure for the single deadliest duelist tier this project has built. Increased IQ +1 (B16, 20/level, 20) for IQ 13: centuries of total focus sharpen more than reflexes. Increased HT +1 (B15, 10/level, 10) for HT 12. Increased Will +1 (B16, 5/level, 5) on top of Aspect Training's own +1, for Will 15 — an Exarch's Fanaticism-grade devotion (see Lost to the Path) needs the Will to match. 10+40+20+10+5 = 85 points.",
+					"tags": [
+						"Physical"
+					],
+					"base_points": 85,
+					"features": [
+						{
+							"type": "attribute_bonus",
+							"attribute": "st",
+							"amount": 1
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "dx",
+							"amount": 2
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "iq",
+							"amount": 1
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "ht",
+							"amount": 1
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "will",
+							"amount": 1
+						}
+					]
+				},
+				{
+					"id": "t-tnmnO6XoBSJqVlT",
+					"name": "Enhanced Dodge",
+					"reference": "B52",
+					"local_notes": "Lore: A further step up from an ordinary Aspect Warrior's already-formidable evasion, after centuries of nothing else.\n\nDesign: A further Enhanced Dodge 1 (B52, 15 points), stacking with Aspect Training's own level for Enhanced Dodge 2 total.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Aeldari"
+					],
+					"points_per_level": 15,
+					"can_level": true,
+					"levels": 1
+				},
+				{
+					"id": "tQpbPrAUBSwi4n4m9",
+					"name": "Combat Reflexes",
+					"reference": "B43",
+					"local_notes": "Lore: An Exarch has refought the same battle-role for centuries and simply does not freeze.\n\nDesign: Basic Set Combat Reflexes (B43), 15 points, the same trait this project's Astartes and Ork Warboss packages use for veteran-tier battlefield composure.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Xenos",
+						"Aeldari"
+					],
+					"base_points": 15
+				},
+				{
+					"id": "teYzuPF6EevVcSP0I",
+					"name": "Trained By A Master",
+					"reference": "B90",
+					"local_notes": "Lore: An Exarch's chosen weapon-form (the shrine's own signature blade, fusion gun, or reaper launcher) is drilled to a level no ordinary Aspect Warrior reaches, matching the fiction's treatment of an Exarch as an unmatched duelist within their Aspect's own art.\n\nDesign: Basic Set Trained By A Master (B90), 30 points, one weapon-art.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Xenos",
+						"Aeldari"
+					],
+					"base_points": 30
+				},
+				{
+					"id": "trtS5GyeZ2xkClL_f",
+					"name": "Weapon Master (Aspect Weapon)",
+					"reference": "B99",
+					"local_notes": "Lore: See Trained By A Master, above; the two together are how GURPS models a genuine master duelist.\n\nDesign: Basic Set Weapon Master, one weapon (B99), 20 points.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Aeldari"
+					],
+					"base_points": 20
+				},
+				{
+					"id": "tdTCz7MMkB5AQrnik",
+					"name": "Enhanced Parry",
+					"reference": "B52",
+					"local_notes": "Lore: Centuries of the same duel, refought against every kind of foe, until the block is reflexive.\n\nDesign: Enhanced Parry 2, one weapon (B52, 5/level, 10 points).",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Aeldari"
+					],
+					"points_per_level": 5,
+					"can_level": true,
+					"levels": 2
+				},
+				{
+					"id": "twq3txcHTzryYtbP0",
+					"name": "Lost to the Path (Warrior)",
+					"reference": "B151",
+					"local_notes": "As Fanaticism (single-minded devotion to the Path itself, here the Path of the Warrior): an Exarch cannot set the mantle down and walk away as an ordinary Aspect Warrior does when their years in the shrine end. See the top-level \"Lost to the Path\" entry above for the full design note; duplicated here as its own child so this container's point total is self-contained.\n\nLore: See the top-level \"Lost to the Path\" entry above.\n\nDesign: Fanaticism (B151, -15 points), redirected onto the Path itself; see the top-level entry above.",
+					"tags": [
+						"Disadvantage",
+						"Mental",
+						"Xenos",
+						"Aeldari"
+					],
+					"base_points": -15
+				}
+			]
+		},
+		{
+			"id": "T_fVswK6ShWHUFBRF",
+			"name": "Aspect: Dire Avenger",
+			"local_notes": "Lore: The most numerous Aspect and every shrine-world's backbone: disciplined shuriken-catapult skirmishers who hold a line and cover a retreat as readily as they lead an assault.\n\nDesign: Net 3 points, per-Aspect flavour lens, matching the Ork Klan lens pattern.",
+			"tags": [
+				"Xenos",
+				"Aeldari"
+			],
+			"children": [
+				{
+					"id": "t6B0vFwTuREi9g_BZ",
+					"name": "Shrine Discipline",
+					"local_notes": "Lore: Endless drilled volley-fire discipline.\n\nDesign: Perk (B9), +1 to Guns (Rifle) (shuriken catapult).",
+					"tags": [
+						"Perk",
+						"Xenos",
+						"Aeldari"
+					],
+					"base_points": 1,
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"amount": 1,
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						}
+					]
+				},
+				{
+					"id": "twG9FYL5GrkMdcna_",
+					"name": "Unbroken Line",
+					"reference": "B55",
+					"local_notes": "Lore: A Dire Avenger holds the line other Aspects break through from.\n\nDesign: Fearlessness 1 (B55, 2/level, 2 points).",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Xenos",
+						"Aeldari"
+					],
+					"points_per_level": 2,
+					"can_level": true,
+					"levels": 1,
+					"base_points": 2
+				}
+			],
+			"disabled": true
+		},
+		{
+			"id": "TefdrSUL9c7Gjh3Qy",
+			"name": "Aspect: Striking Scorpion",
+			"local_notes": "Lore: Ambush and infiltration specialists who wait, motionless, in cover for an enemy column to pass before rising, silent, to butcher it from behind.\n\nDesign: Net 4 points, per-Aspect flavour lens.",
+			"tags": [
+				"Xenos",
+				"Aeldari"
+			],
+			"children": [
+				{
+					"id": "t44pb-d6EgVeS6pXx",
+					"name": "Ambush Predator",
+					"local_notes": "Lore: A lifetime's discipline of not being seen until it's too late.\n\nDesign: Perk (B9), +1 to Stealth.",
+					"tags": [
+						"Perk",
+						"Xenos",
+						"Aeldari"
+					],
+					"base_points": 1,
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "Stealth"
+							},
+							"amount": 1
+						}
+					]
+				},
+				{
+					"id": "tG2l-nugYh45tphwG",
+					"name": "Mandiblasters",
+					"local_notes": "Lore: A last, close-in bite from a helmet fitted with venomous, mechanical mandibles, used when the blade already has the kill in hand.\n\nDesign: Innate Attack (Toxic, token 1d, melee reach C only, B61), the same reduced-reach math this project's Betcher's Gland Corrosive Spit entry uses, for the helmet-mounted neurotoxin mandiblasters every Striking Scorpion wears as a guaranteed backup bite.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Aeldari"
+					],
+					"base_points": 3,
+					"weapons": [
+						{
+							"id": "w3rrE6g4h3ly_j-Xk",
+							"sv": 1,
+							"damage": {
+								"type": "tox",
+								"base": "1d"
+							},
+							"reach": "C",
+							"parry": "No",
+							"usage": "Mandiblasters",
+							"defaults": [
+								{
+									"type": "dx",
+									"modifier": 0
+								},
+								{
+									"type": "skill",
+									"name": {
+										"compare": "is",
+										"qualifier": "Brawling"
+									}
+								}
+							]
+						}
+					]
+				}
+			],
+			"disabled": true
+		},
+		{
+			"id": "TN5rFmuBNAJZHpSud",
+			"name": "Aspect: Howling Banshee",
+			"local_notes": "Lore: The fastest Aspect: duelists whose war masks howl a shriek that unsteadies an enemy line half a heartbeat before the blades arrive.\n\nDesign: Net 6 points, per-Aspect flavour lens.",
+			"tags": [
+				"Xenos",
+				"Aeldari"
+			],
+			"children": [
+				{
+					"id": "tt65jnVi4jtQ7A7EV",
+					"name": "Banshee Mask",
+					"local_notes": "Lore: The mask's shriek unsteadies a line before the charge lands.\n\nDesign: Perk (B9), +1 to Intimidation.",
+					"tags": [
+						"Perk",
+						"Xenos",
+						"Aeldari"
+					],
+					"base_points": 1,
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "Intimidation"
+							},
+							"amount": 1
+						}
+					]
+				},
+				{
+					"id": "tREgUnMJpNNduzeOf",
+					"name": "Quicksilver Charge",
+					"local_notes": "Lore: Howling Banshees are, consistently, the fastest Aspect on a charge.\n\nDesign: Increased Basic Speed +0.25 (B17, 5 points/0.25 level).",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Aeldari"
+					],
+					"base_points": 5,
+					"features": [
+						{
+							"type": "attribute_bonus",
+							"attribute": "basic_speed",
+							"amount": 0.25
+						}
+					]
+				}
+			],
+			"disabled": true
+		},
+		{
+			"id": "T2e2xh56XWOYq59GO",
+			"name": "Aspect: Fire Dragon",
+			"local_notes": "Lore: Close-assault tank hunters who close to point-blank range with a fusion gun and burn through anything short of a Titan.\n\nDesign: Net 3 points, per-Aspect flavour lens.",
+			"tags": [
+				"Xenos",
+				"Aeldari"
+			],
+			"children": [
+				{
+					"id": "tAmgsxIWC30NYbBAE",
+					"name": "Tank Hunter's Eye",
+					"local_notes": "Lore: An instinct for the exact range and angle a fusion gun needs.\n\nDesign: Perk (B9), +1 to Beam Weapons (Rifle) (fusion gun, per the framework's las/plasma/melta weapon-skill table).",
+					"tags": [
+						"Perk",
+						"Xenos",
+						"Aeldari"
+					],
+					"base_points": 1,
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"amount": 1,
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						}
+					]
+				},
+				{
+					"id": "tVcR-HzMVX1Jl63kk",
+					"name": "Suicide Run",
+					"reference": "B55",
+					"local_notes": "Lore: Closing to melta range against a tank or a Wraithlord takes real, drilled nerve.\n\nDesign: Fearlessness 1 (B55, 2/level, 2 points).",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Xenos",
+						"Aeldari"
+					],
+					"points_per_level": 2,
+					"can_level": true,
+					"levels": 1,
+					"base_points": 2
+				}
+			],
+			"disabled": true
+		},
+		{
+			"id": "TKRF9VcU9UgUyi-t1",
+			"name": "Aspect: Dark Reaper",
+			"local_notes": "Lore: Slow, deliberate heavy-weapons specialists who trade an Aspect's usual speed for the range and firepower of the reaper launcher.\n\nDesign: Net 1 point, per-Aspect flavour lens.",
+			"tags": [
+				"Xenos",
+				"Aeldari"
+			],
+			"children": [
+				{
+					"id": "tMkb6uR4HI6z6zPU5",
+					"name": "Patient Killer",
+					"local_notes": "Lore: Death dealt at range, without haste, and without missing.\n\nDesign: Perk (B9), +1 to Gunner (Cannon) (reaper launcher, per the framework's braced/mounted heavy weapon-skill table).",
+					"tags": [
+						"Perk",
+						"Xenos",
+						"Aeldari"
+					],
+					"base_points": 1,
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "Gunner"
+							},
+							"amount": 1,
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Cannon"
+							}
+						}
+					]
+				}
+			],
+			"disabled": true
+		},
+		{
+			"id": "TAaFmGCpOIh2bzDfR",
+			"name": "Aspect: Swooping Hawk",
+			"local_notes": "Lore: Jump-pack skirmishers who drop grenade packs from above before landing to finish the fight, or simply vanishing again.\n\nDesign: Net 2 points, per-Aspect flavour lens.",
+			"tags": [
+				"Xenos",
+				"Aeldari"
+			],
+			"children": [
+				{
+					"id": "tr843VkEK4rZ-9F4C",
+					"name": "Sky-Hunter's Grace",
+					"local_notes": "Lore: Landing a jump-pack drop under fire, again and again, without breaking an ankle.\n\nDesign: Perk (B9), +1 to Jumping.",
+					"tags": [
+						"Perk",
+						"Xenos",
+						"Aeldari"
+					],
+					"base_points": 1,
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "Jumping"
+							},
+							"amount": 1
+						}
+					]
+				},
+				{
+					"id": "tFND1rhA2Qo-ZVyRT",
+					"name": "Aerial Poise",
+					"local_notes": "Lore: Fighting from an unstable landing, the instant the boots touch down.\n\nDesign: Perk (B9), +1 to Acrobatics.",
+					"tags": [
+						"Perk",
+						"Xenos",
+						"Aeldari"
+					],
+					"base_points": 1,
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "Acrobatics"
+							},
+							"amount": 1
+						}
+					]
+				}
+			],
+			"disabled": true
+		},
+		{
+			"id": "TC0ltQ6AZxbKmeI1B",
+			"name": "Aspect: Warp Spider",
+			"local_notes": "Lore: The strangest Aspect: warriors whose jump generators tear a short hole in real space rather than merely leap it, blinking in and out of a firefight where no jump pack could follow.\n\nDesign: Net 1 point, per-Aspect flavour lens.",
+			"tags": [
+				"Xenos",
+				"Aeldari"
+			],
+			"children": [
+				{
+					"id": "tK15rZPHGtJNnxnya",
+					"name": "Displacement Sense",
+					"local_notes": "Lore: A Warp Spider who has jumped a hundred times develops a real, trained instinct for exactly when and where to trigger the next one — the difference between landing behind an enemy line and landing inside a wall.\n\nDesign: Perk (B9), +1 to Piloting (Jump Generator). The jump generator's own short-range teleport effect is a wargear property (a warp- technology item, not a psychic power the wearer casts) and belongs on that item's own future equipment entry, per the same equipment-vs-physiology split this project's Black Carapace entry draws; this lens covers only the wearer's own trained reflex for timing and steering a jump.",
+					"tags": [
+						"Perk",
+						"Xenos",
+						"Aeldari"
+					],
+					"base_points": 1,
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "Piloting"
+							},
+							"amount": 1,
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Jump Generator"
+							}
+						}
+					]
+				}
+			],
+			"disabled": true
+		}
+	],
+	"skills": [
+		{
+			"id": "s-v7womlBBLkDL4_E",
+			"name": "Broadsword",
+			"local_notes": "Lore: An Exarch's signature blade (an Exarch's power weapon, or a Striking Scorpion's chainsword-claw, or equivalent), the single most-drilled skill of an entire centuries-long life, further sharpened by Trained By A Master and Weapon Master above.\n\nDesign: DX+7 (25) for 32 points, Average (B208); Trained By A Master lets this default from other combat skills at only -1, and Weapon Master doubles this skill's effective damage bonus rather than adding to the roll.",
+			"tags": [
+				"Xenos",
+				"Aeldari"
+			],
+			"difficulty": "dx/a",
+			"points": 32
+		},
+		{
+			"id": "s5qOUQ6zY5GVIC2C3",
+			"name": "Guns",
+			"local_notes": "Lore: The shrine's ranged weapon, kept sharp even for an Exarch whose true mastery is the blade.\n\nDesign: DX+6 (24) for 12 points, Easy (B170).",
+			"tags": [
+				"Xenos",
+				"Aeldari"
+			],
+			"specialization": "Rifle",
+			"difficulty": "dx/e",
+			"points": 12
+		},
+		{
+			"id": "sH1-FfOMI1-h4vK8N",
+			"name": "Tactics",
+			"local_notes": "Lore: Leading a shrine's Aspect Warriors through battle after battle across centuries.\n\nDesign: IQ+2 (15) for 16 points, Hard.",
+			"tags": [
+				"Xenos",
+				"Aeldari"
+			],
+			"difficulty": "iq/h",
+			"points": 16
+		},
+		{
+			"id": "s34_Urn2FC2LHQORE",
+			"name": "Leadership",
+			"local_notes": "Lore: An Exarch commands absolute, unquestioned authority within their own shrine's warriors.\n\nDesign: IQ+4 (17) for 16 points, Average.",
+			"tags": [
+				"Xenos",
+				"Aeldari"
+			],
+			"difficulty": "iq/a",
+			"points": 16
+		},
+		{
+			"id": "sDe4jtll-NNWVc-_i",
+			"name": "Intimidation",
+			"local_notes": "Lore: A war mask, ancient armour and a reputation centuries in the making.\n\nDesign: Will+2 (17) for 12 points, Average.",
+			"tags": [
+				"Xenos",
+				"Aeldari"
+			],
+			"difficulty": "will/a",
+			"points": 12
+		},
+		{
+			"id": "suscEErsYrAKxdDIc",
+			"name": "Stealth",
+			"local_notes": "Lore: Precision under total control, whatever the specific Aspect's own approach doctrine.\n\nDesign: DX+2 (20) for 8 points, Average.",
+			"tags": [
+				"Xenos",
+				"Aeldari"
+			],
+			"difficulty": "dx/a",
+			"points": 8
+		},
+		{
+			"id": "sbiqRuXfWuSkYKjr1",
+			"name": "Acrobatics",
+			"local_notes": "Lore: Movement as controlled and exact as the killing blow itself.\n\nDesign: DX+1 (19) for 8 points, Hard.",
+			"tags": [
+				"Xenos",
+				"Aeldari"
+			],
+			"difficulty": "dx/h",
+			"points": 8
+		},
+		{
+			"id": "sBTfWLLoyrK7NMXOF",
+			"name": "Jumping",
+			"local_notes": "Lore: Carried over and sharpened from Aspect Warrior training.\n\nDesign: DX+3 (21) for 4 points, Easy.",
+			"tags": [
+				"Xenos",
+				"Aeldari"
+			],
+			"difficulty": "dx/e",
+			"points": 4
+		},
+		{
+			"id": "sDwbGdpyDhWkLARwx",
+			"name": "Fast-Draw",
+			"local_notes": "Lore: Carried over from Aspect Warrior training.\n\nDesign: DX+0 (18) for 1 point, Easy.",
+			"tags": [
+				"Xenos",
+				"Aeldari"
+			],
+			"specialization": "Ammo",
+			"difficulty": "dx/e",
+			"points": 1
+		},
+		{
+			"id": "siissXv5PQhJFmeba",
+			"name": "Hidden Lore",
+			"local_notes": "Lore: An Exarch's own long acquaintance with their shrine's ancient, spirit-linked war-mask.\n\nDesign: IQ+0 (13) for 2 points, Average.",
+			"tags": [
+				"Xenos",
+				"Aeldari",
+				"Psyker"
+			],
+			"specialization": "(the Warp)",
+			"difficulty": "iq/a",
+			"points": 2
+		},
+		{
+			"id": "sRVYSBtT4K6YaDVoF",
+			"name": "History",
+			"local_notes": "Lore: Millennia of the shrine's own accumulated lore and every prior Exarch's deeds, carried forward.\n\nDesign: IQ+0 (13) for 4 points, Hard.",
+			"tags": [
+				"Xenos",
+				"Aeldari"
+			],
+			"specialization": "(the Aspect's Shrine)",
+			"difficulty": "iq/h",
+			"points": 4
+		},
+		{
+			"id": "s0T0fYyG9JeQbQUvG",
+			"name": "Survival",
+			"local_notes": "Lore: Carried over from Aspect Warrior training.\n\nDesign: Per+0 (14) for 2 points, Average.",
+			"tags": [
+				"Xenos",
+				"Aeldari"
+			],
+			"specialization": "(Craftworld/Webway)",
+			"difficulty": "per/a",
+			"points": 2
+		},
+		{
+			"id": "suaJPuVJ7R2lcMlzO",
+			"name": "First Aid",
+			"local_notes": "Lore: Carried over from Aspect Warrior training.\n\nDesign: IQ+2 (15) for 2 points, Easy.",
+			"tags": [
+				"Xenos",
+				"Aeldari"
+			],
+			"difficulty": "iq/e",
+			"points": 2
+		},
+		{
+			"id": "snHWUhI_hBpJS6uX2",
+			"name": "Body Language",
+			"local_notes": "Lore: Reading an opponent's coming move a heartbeat before they make it.\n\nDesign: Per+1 (15) for 8 points, Average.",
+			"tags": [
+				"Xenos",
+				"Aeldari"
+			],
+			"difficulty": "per/a",
+			"points": 8
+		},
+		{
+			"id": "s9k4GuqRAIXAUl7UL",
+			"name": "Judo",
+			"local_notes": "Lore: When the blade is lost or the fight closes past its reach, an Exarch is still the deadliest thing in the room.\n\nDesign: DX+1 (19) for 8 points, Hard.",
+			"tags": [
+				"Xenos",
+				"Aeldari"
+			],
+			"difficulty": "dx/h",
+			"points": 8
+		},
+		{
+			"id": "sqUKQK9ddYuT6CEL9",
+			"name": "Fast-Talk",
+			"local_notes": "Lore: An Exarch negotiates between shrines and warhosts as readily as they command their own.\n\nDesign: IQ+2 (15) for 8 points, Average.",
+			"tags": [
+				"Xenos",
+				"Aeldari"
+			],
+			"difficulty": "iq/a",
+			"points": 8
+		},
+		{
+			"id": "sE1TvktIBuHK6jem2",
+			"name": "Strategy",
+			"local_notes": "Lore: A senior Exarch is trusted with a warhost's own battle plan, not only their shrine's part of it.\n\nDesign: IQ+1 (14) for 12 points, Hard.",
+			"tags": [
+				"Xenos",
+				"Aeldari"
+			],
+			"specialization": "(Land)",
+			"difficulty": "iq/h",
+			"points": 12
+		},
+		{
+			"id": "siAH_Bw5pZ9OLQiVV",
+			"name": "Meditation",
+			"local_notes": "Lore: Even a Warrior-Path Exarch keeps the discipline that holds Emotional Intensity in check across centuries.\n\nDesign: IQ+1 (14) for 8 points, Hard.",
+			"tags": [
+				"Xenos",
+				"Aeldari"
+			],
+			"difficulty": "iq/h",
+			"points": 8
+		},
+		{
+			"id": "szyDCtng6pUOSODw2",
+			"name": "Armoury",
+			"local_notes": "Lore: An Exarch is entrusted with the maintenance rites for their shrine's ancient, spirit-linked wargear.\n\nDesign: IQ+0 (13) for 4 points, Average.",
+			"tags": [
+				"Xenos",
+				"Aeldari"
+			],
+			"specialization": "(Aspect Wargear)",
+			"difficulty": "iq/a",
+			"points": 4
+		},
+		{
+			"id": "stTQDuIl-4SPEtrQv",
+			"name": "Climbing",
+			"local_notes": "Lore: Carried over and sharpened from Aspect Warrior training.\n\nDesign: DX+1 (19) for 4 points, Average.",
+			"tags": [
+				"Xenos",
+				"Aeldari"
+			],
+			"difficulty": "dx/a",
+			"points": 4
+		},
+		{
+			"id": "sgIAewrzOpnYyS8y6",
+			"name": "Connoisseur",
+			"local_notes": "Lore: An Exarch's long familiarity with the finest wargear their shrine has produced across the centuries.\n\nDesign: IQ+1 (14) for 4 points, Average.",
+			"tags": [
+				"Xenos",
+				"Aeldari"
+			],
+			"specialization": "(Aeldari Wargear)",
+			"difficulty": "iq/a",
+			"points": 4
+		},
+		{
+			"id": "sNnsGAQ9JneMfQYv5",
+			"name": "Streetwise",
+			"local_notes": "Lore: An Exarch dealing with a warhost's less formal politics between battles.\n\nDesign: IQ+0 (13) for 4 points, Average.",
+			"tags": [
+				"Xenos",
+				"Aeldari"
+			],
+			"difficulty": "iq/a",
+			"points": 4
+		}
+	],
+	"equipment": []
+}

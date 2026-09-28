@@ -1,0 +1,465 @@
+{
+	"version": 5,
+	"id": "B7Vs0DLa3IsMIuqwz",
+	"notes": "An Aeldari Ranger: a Guardian who has left their craftworld's shielded webway entirely to walk the Path of the Outcast, surviving alone or in small bands across the wider galaxy as a scout, long-rifle sniper and sometime guide for craftworld expeditions that need someone who actually knows the ground. Gav Thorpe's Path of the Outcast is this project's primary source. Point math (see Xenos/Aeldari/Traits/Aeldari Physiology.adq): Aeldari Physiology + Path of the Outcast (traits, 123 points) + skills (84 points) = 207 points. Stats: ST 10, DX 14, IQ 12, HT 10, HP 10, Will 12, Per 12, Speed 6.25, Move 6, Dodge 9 — the bare Guardian-line anchor with no Keen Battle-Sense (a Ranger's instincts are honed by isolation and field survival, not shrine or militia drill, so Per stays at the Aeldari Physiology baseline of IQ-equal rather than the warrior-track +1). This sits in framework.md's \"Elite human\" tier (200-350) at its low end: tougher and far better trained than a Guardian in the specific skills of surviving alone, but without an Aspect Shrine's DX-raising training behind it — matching how the fiction treats Rangers as dangerous specialists rather than battlefield powerhouses.\n",
+	"traits": [
+		{
+			"id": "TlerZA_SJYX1F9g-o",
+			"name": "Aeldari Physiology",
+			"local_notes": "Lore: The Aeldari: an ancient, dying, near-immortal species, slender and swift, all born with a latent thread into the warp and all hunted, in the end, by the god their own species' fall gave birth to. This trait is the baseline shared by every Craftworld Aeldari; Path lenses and Aspect lenses below layer specialization on top of it, exactly as the Astartes gene-seed file's Chapter lenses and the Ork Physiology file's Klan lenses do for their own species.\n\nDesign: 125 (Attribute Modifiers) + 8 (Acute Senses) + 4 (Aeldari Grace) + 0 (Slender Frame) + 4 (Extended Lifespan) + 10 (Psychic Sensitivity) + 1 (Spirit Stone) - 10 (Emotional Intensity) - 5 (Arrogance) - 15 (Slaanesh's Hunger) = 122 points of physiology alone, before Path, Aspect, or skills — landing ST 10, DX 14, IQ 12, HT 10, HP 10, Will 12, Per 12 (Per 13 once Keen Battle-Sense is added by a warrior-path template). See the Guardian template for the first full character built on this package.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Xenos",
+				"Aeldari"
+			],
+			"container_type": "ancestry",
+			"children": [
+				{
+					"id": "tIUs86K9xBHOcLbrp",
+					"name": "Attribute Modifiers",
+					"local_notes": "Design: Framework target (Guardian anchor line, the ancestry baseline every other Aeldari template builds on): ST 10, DX 14, IQ 12, HT 10, HP 10. Increased DX +4 (B15, 20/level, 80) for DX 14 — \"faster and more precise than any baseline human,\" matching the anchor table's own figure without touching ST or HT, which stay human-baseline: Aeldari are quick and precise, not physically overwhelming. Increased IQ +2 (B16, 20/level, 40) for IQ 12 — a subtler, more perceptive mind than a human's on average, per Codex background's consistent \"the Aeldari are wiser and more perceptive than short-lived Humanity\" framing. Increased Basic Speed +0.25 (B17, 5 points per 0.25 level, 5) for reflexes a shade faster even than DX 14 alone implies — the same design choice this project's Astartes Attribute Modifiers makes for \"faster reflexes than baseline humans\" without inflating every DX skill. 80+40+5 = 125. Will and Per are left untouched here (both track IQ 12 with no separate bonus): the Guardian anchor's own Per 13 and Aspect Warrior's Will 13 come from Keen Battle-Sense and Aspect Training below, not from this universal package, because a Farseer's own anchor (Per 15 exactly equal to IQ 15) shows the extra Per point is a warrior's battlefield habit, not a species-wide trait — baking it in here would overshoot the Farseer line once her own IQ is bought up.",
+					"tags": [
+						"Physical"
+					],
+					"base_points": 125,
+					"features": [
+						{
+							"type": "attribute_bonus",
+							"attribute": "dx",
+							"amount": 4
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "iq",
+							"amount": 2
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "basic_speed",
+							"amount": 0.25
+						}
+					]
+				},
+				{
+					"id": "TAxWPavTWPLA2JQd6",
+					"name": "Acute Senses",
+					"local_notes": "Lore: Aeldari sight and hearing are famously sharper than a human's — able to read the wind off a craftworld's wraithbone spires, or track a single voice through a warhost's roar. Consistently depicted across Codex background and the Path trilogy (a Ranger's eyesight in particular is played as near-supernatural).\n\nDesign: Acute Vision 2 (B35, 2/level, 4) plus Acute Hearing 2 (B35, 2/level, 4) = 8 points, the same math this project's Astartes Occulobe/Lyman's Ear entries use for the \"raw acuity\" half of their build, without the Protected Sense half (Aeldari have no fused eye/ear armour organ to shrug off flash and concussion the way an Astartes implant does).",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Aeldari"
+					],
+					"container_type": "meta_trait",
+					"children": [
+						{
+							"id": "tc_tHV-bTpYTIdH2v",
+							"name": "Acute Vision",
+							"reference": "B35",
+							"points_per_level": 2,
+							"can_level": true,
+							"levels": 2
+						},
+						{
+							"id": "tdPdBoGetqslmB2xa",
+							"name": "Acute Hearing",
+							"reference": "B35",
+							"points_per_level": 2,
+							"can_level": true,
+							"levels": 2
+						}
+					]
+				},
+				{
+					"id": "tzaed_nrtC_hEctV7",
+					"name": "Aeldari Grace",
+					"reference": "B21",
+					"local_notes": "Appearance (Attractive).\n\nLore: Aeldari are consistently described, in the fiction and in their own art, as slender, fine-boned and unnervingly graceful even to other Aeldari — a species that finds its own dying beauty worth mourning.\n\nDesign: Basic Set Appearance, Attractive tier (B21), 4 points.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Aeldari"
+					],
+					"base_points": 4
+				},
+				{
+					"id": "tHgBY2MyWfm63lIDO",
+					"name": "Slender Frame",
+					"local_notes": "Lore: An Aeldari body is light and fine-boned next to a human's, let alone an Ork's or an Astartes': speed and precision over mass. Codex background and the Path trilogy both play Aeldari as easy to underestimate physically and easy to actually hurt once a fight turns physical.\n\nDesign: 0-point lore flag: the mechanical consequence is what's absent, not present — this package buys no Extra Hit Points and no Damage Resistance the way the Astartes and Ork physiology files do, so Aeldari HP tracks bare ST with no bonus. This entry documents why, rather than pricing anything itself.",
+					"tags": [
+						"Xenos",
+						"Aeldari"
+					],
+					"base_points": 0
+				},
+				{
+					"id": "tMesKuFAmml9tETWO",
+					"name": "Extended Lifespan",
+					"reference": "B17",
+					"local_notes": "x100 natural lifespan (roughly 8,000 years before natural death).\n\nLore: Aeldari live for millennia baseline, and the oldest craftworld seers and named heroes (Eldrad Ulthran chief among them) are shown outlasting even that by a wide margin — treated here as an exceptional, GM-adjudicated extension on top of this baseline rather than a fixed higher purchase every Aeldari makes.\n\nDesign: Basic Set Extended Lifespan 2 (B17, 2/level, x100 natural lifespan), 4 points.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Aeldari"
+					],
+					"points_per_level": 2,
+					"can_level": true,
+					"levels": 2,
+					"base_points": 4
+				},
+				{
+					"id": "tk9CQKd1UDQAeZNGp",
+					"name": "Aeldari Psychic Sensitivity",
+					"local_notes": "Lore: Every Aeldari is born with a latent thread into the warp — a legacy of Isha and Cegorach's blessing, or of the psychic shock of the Fall, depending which telling you credit — where among humans the gift is a vanishingly rare mutation. Most Aeldari never develop it past a constant, low background hum of unease near the warp; Warlocks and Farseers are the ones who walk toward it instead of away.\n\nDesign: This project's Aeldari analogue of Imperium/Psykers and the Warp.adq's Unusual Background (Latent Psychic Potential): identical cost (10 points, B261) and identical function (it is the prerequisite for Aeldari Psyker (Talent), Aeldari Warp Empowerment, and every Warp Sorcery-tagged Rune below), but built as its own entry rather than reused verbatim because the Imperium entry's own lore text is explicitly a rare human mutation — false for a species where the gift is universal and latent. Bought once as part of the Aeldari Physiology package below, unlike the Imperium version, which is an optional purchase most humans never make.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Xenos",
+						"Aeldari",
+						"Psyker"
+					],
+					"base_points": 10
+				},
+				{
+					"id": "t1RONGEiN5E6GGzv6",
+					"name": "Spirit Stone",
+					"local_notes": "Worn on the breast from childhood. At its bearer's death, an attending psyker (a Warlock, Farseer, or another spirit-stone-bearer) must draw the escaping soul into the stone within moments, or it is lost to Slaanesh (see Slaanesh's Hunger, below) — a rite, not an automatic save, and one that can fail on a battlefield in chaos or far from help.\n\nLore: Every Craftworld Aeldari wears a spirit stone: a small, wraithbone- cored gem that anchors the soul against the warp and, at death, can catch it before Slaanesh does — from which it may later be interred in a craftworld's Infinity Circuit to live on, disembodied, among its ancestors. Consistent, foundational Aeldari background across every edition of Codex: Craftworlds and the Path trilogy.\n\nDesign: A 1-point Perk (B21): the stone's real narrative weight — catching a soul at death — is a rite the GM adjudicates in the moment (see Slaanesh's Hunger below for exactly what it's warding against), not a combat-turn mechanic worth a bigger purchase. The one live-play effect it's worth pricing is a small, steadying +1 to the wearer's own Will roll against Perils of the Warp (Aeldari Runes) — the stone's ward dampens backlash the same way it will one day catch the soul itself.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Xenos",
+						"Aeldari",
+						"Psyker",
+						"Perk"
+					],
+					"base_points": 1,
+					"features": [
+						{
+							"type": "conditional_modifier",
+							"situation": "on the Will roll to resist Perils of the Warp",
+							"amount": 1
+						}
+					]
+				},
+				{
+					"id": "tYkKEkq0g1bkvwYSF",
+					"name": "Emotional Intensity",
+					"local_notes": "As Bad Temper (B125), but the triggering emotion can be grief, joy, desire or artistic rapture as easily as anger — whatever the moment's strongest feeling is, not anger specifically. On a failed self-control roll the Aeldari acts on the emotion, not on reason, for the rest of the scene.\n\nLore: Aeldari feel everything more sharply than a human does — joy, grief, desire, fury — and the fiction is explicit that this, not any weakness of will, is why the Path exists at all: without the discipline of devoting centuries to one narrow art at a time, an Aeldari mind burns out or turns inward on itself. Path of the Warrior and Path of the Seer both open on exactly this problem.\n\nDesign: Built as Bad Temper (B125, self-control 12, -10 points) with a broadened trigger, the same \"as Bloodlust, but...\" reflavoring this project's Chapter Gene-Seed: Blood Angels entry uses for Red Thirst: same cost and self-control math, different triggering emotion.",
+					"tags": [
+						"Disadvantage",
+						"Mental",
+						"Xenos",
+						"Aeldari"
+					],
+					"base_points": -10,
+					"cr": 12
+				},
+				{
+					"id": "tykVseRH5x60Xm6fM",
+					"name": "Arrogance Towards Younger Races",
+					"reference": "B22",
+					"local_notes": "Odious Personal Habit: casual condescension toward humans, Orks, and other 'younger' races.\n\nLore: An Aeldari watching over the ruins of a civilization older than humanity's entire recorded history struggles not to be condescending about it — Codex background and the Path trilogy alike play this as a near-universal Aeldari failing, not a villain trait: even sympathetic Aeldari protagonists talk down to \"mon-keigh\" without quite noticing they're doing it.\n\nDesign: Odious Personal Habit (B22), minor tier, -5 points: a real social cost (reaction penalties from anyone who notices) but not the deliberate cruelty a full Intolerance or Bully disadvantage would represent.",
+					"tags": [
+						"Disadvantage",
+						"Mental",
+						"Xenos",
+						"Aeldari"
+					],
+					"base_points": -5
+				},
+				{
+					"id": "tPUZrrlE9SRRwgFuf",
+					"name": "Slaanesh's Hunger",
+					"reference": "B160",
+					"local_notes": "As Weirdness Magnet, but the \"weirdness\" is specifically Chaos and warp phenomena drawn to an Aeldari soul's exceptional flavour: Chaos cultists, daemons (Slaaneshi ones above all), and warp-touched omens/hauntings single an Aeldari out over other bystanders, at the GM's discretion, roughly as often as Weirdness Magnet's own frequency guidance suggests.\nThis is also the mechanical flag for the larger, unpriced stake behind it: an Aeldari who dies with no spirit stone drawing their soul clear (see Spirit Stone, above) is devoured by Slaanesh, GM's call on the exact fate — endless torment, absorption into the Dark Prince's being, or worse. Like this project's Black Rage and Wulfen Curse entries, this fate is a narrative endpoint the GM adjudicates when it's dramatically earned, not a disadvantage bought and rolled against at chargen. A functioning Spirit Stone worn at time of death, and recovered promptly, avoids it outright.\n\nLore: Slaanesh, the youngest Chaos god, was born screaming from the psychic shockwave of the Aeldari's own Fall, and has hungered for Aeldari souls above all others' ever since — this is one of the single most consistent, foundational beats of Aeldari background across every edition of Codex: Craftworlds and Codex: Drukhari, and the entire reason spirit stones and the Infinity Circuit exist.\n\nDesign: Weirdness Magnet (B160, -15 points) reused for its \"supernatural trouble finds you more often\" mechanic, standing in for the fact that an Aeldari's soul draws Chaos's attention the way a bright light draws moths. The GM-adjudicated death fate it flags is deliberately not separately priced, per the framework's own guidance to build this honestly rather than as a combat-relevant stat; the Spirit Stone above is what actually buys it off.",
+					"tags": [
+						"Disadvantage",
+						"Mental",
+						"Xenos",
+						"Aeldari"
+					],
+					"base_points": -15
+				}
+			]
+		},
+		{
+			"id": "T7CNm1MdltrbjTpme",
+			"name": "Path of the Outcast",
+			"local_notes": "Lore: The path outside the Path: those who leave their craftworld's shielded webway entirely, for a season or for the rest of their life, and walk the wider galaxy as Rangers, Corsairs, or simple wanderers — trading a Craftworld's protection and society for a freedom most Aeldari find unsettling to watch. Gav Thorpe's Path of the Outcast is this project's primary source for the mechanic.\n\nDesign: Net -3 points (1+1-5), the one Path lens with an honest net cost: it trades a real social safety net for real independence, unlike the other three Paths' pure flavour-lens neutrality.",
+			"tags": [
+				"Xenos",
+				"Aeldari"
+			],
+			"children": [
+				{
+					"id": "tIf4LlgYBoWvKN_tG",
+					"name": "Wanderer's Eye",
+					"local_notes": "Lore: Time spent living outside a craftworld's shielded webway sharpens practical survival sense fast.\n\nDesign: Perk (B9), +1 to Survival.",
+					"tags": [
+						"Perk",
+						"Xenos",
+						"Aeldari"
+					],
+					"base_points": 1,
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "Survival"
+							},
+							"amount": 1
+						}
+					]
+				},
+				{
+					"id": "t-TvX5cEi48JLsrCJ",
+					"name": "Unblooded Silence",
+					"local_notes": "Lore: A Ranger or Corsair's continued survival depends on not being seen first.\n\nDesign: Perk (B9), +1 to Stealth.",
+					"tags": [
+						"Perk",
+						"Xenos",
+						"Aeldari"
+					],
+					"base_points": 1,
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "Stealth"
+							},
+							"amount": 1
+						}
+					]
+				},
+				{
+					"id": "t0W_cdtKOPE3VpWwm",
+					"name": "Social Stigma (Outcast)",
+					"reference": "B155",
+					"local_notes": "Lore: Craftworld Aeldari who never left the webway regard those who did — Rangers and Corsairs both — with a mix of pity and suspicion: an Outcast has stepped outside the Path structure that keeps Emotional Intensity in check, and it shows.\n\nDesign: Basic Set Social Stigma tier (B155), -5 points, scoped to Craftworld society.",
+					"tags": [
+						"Disadvantage",
+						"Social",
+						"Xenos",
+						"Aeldari"
+					],
+					"base_points": -5
+				}
+			]
+		}
+	],
+	"skills": [
+		{
+			"id": "sGlfYNdGn6Rn5Lu0f",
+			"name": "Guns",
+			"local_notes": "Lore: A Ranger's long rifle is a longer-ranged, more accurate cousin of the Guardian shuriken catapult, per framework.md's long-las-equivalent scaling logic.\n\nDesign: DX+4 (18) for 8 points, Easy (B170).",
+			"tags": [
+				"Xenos",
+				"Aeldari"
+			],
+			"specialization": "Rifle",
+			"difficulty": "dx/e",
+			"points": 8
+		},
+		{
+			"id": "s_X_JdkAHB5R0j2MI",
+			"name": "Stealth",
+			"local_notes": "Lore: A Ranger's continued survival depends on never being found first.\n\nDesign: DX+2 (16) for 8 points, Average.",
+			"tags": [
+				"Xenos",
+				"Aeldari"
+			],
+			"difficulty": "dx/a",
+			"points": 8
+		},
+		{
+			"id": "sNiy0UA3SC5zqG7as",
+			"name": "Camouflage",
+			"local_notes": "Lore: Real, hard-earned field-craft rather than the basic version drilled into every Guardian.\n\nDesign: IQ+2 (14) for 4 points, Easy.",
+			"tags": [
+				"Xenos",
+				"Aeldari"
+			],
+			"difficulty": "iq/e",
+			"points": 4
+		},
+		{
+			"id": "s9jAVeOAibdhqIPFt",
+			"name": "Survival",
+			"local_notes": "Lore: A Ranger's defining skill: living for months or years at a stretch, alone, on worlds no craftworld ever mapped.\n\nDesign: Per+2 (14) for 8 points, Average.",
+			"tags": [
+				"Xenos",
+				"Aeldari"
+			],
+			"specialization": "(any)",
+			"difficulty": "per/a",
+			"points": 8
+		},
+		{
+			"id": "sY9bvNo5VxS3nUsfw",
+			"name": "Tracking",
+			"local_notes": "Lore: Following what a quarry left behind, whether the quarry is prey, an enemy patrol, or another expedition's trail.\n\nDesign: Per+2 (14) for 8 points, Average.",
+			"tags": [
+				"Xenos",
+				"Aeldari"
+			],
+			"difficulty": "per/a",
+			"points": 8
+		},
+		{
+			"id": "sWldyDwCS1cIsPhrq",
+			"name": "Navigation",
+			"local_notes": "Lore: Finding the way across unfamiliar ground with no craftworld infrastructure to rely on.\n\nDesign: IQ+1 (13) for 4 points, Average.",
+			"tags": [
+				"Xenos",
+				"Aeldari"
+			],
+			"specialization": "(Land)",
+			"difficulty": "iq/a",
+			"points": 4
+		},
+		{
+			"id": "sEpf7iWs67HCvGznQ",
+			"name": "Scrounging",
+			"local_notes": "Lore: Living off whatever a hostile world actually offers, not what a quartermaster issues.\n\nDesign: Per+1 (13) for 2 points, Easy.",
+			"tags": [
+				"Xenos",
+				"Aeldari"
+			],
+			"difficulty": "per/e",
+			"points": 2
+		},
+		{
+			"id": "sx9gTt1fJ0QmtkMUh",
+			"name": "Broadsword",
+			"local_notes": "Lore: A Ranger's sidearm blade, for when stealth and range both fail.\n\nDesign: DX+0 (14) for 4 points, Average.",
+			"tags": [
+				"Xenos",
+				"Aeldari"
+			],
+			"difficulty": "dx/a",
+			"points": 4
+		},
+		{
+			"id": "soepkMyyRvOics_Oq",
+			"name": "First Aid",
+			"local_notes": "Lore: Field medicine with no craftworld healer to call on.\n\nDesign: IQ+1 (13) for 2 points, Easy.",
+			"tags": [
+				"Xenos",
+				"Aeldari"
+			],
+			"difficulty": "iq/e",
+			"points": 2
+		},
+		{
+			"id": "su6yf16_psdYKb7Fp",
+			"name": "Climbing",
+			"local_notes": "Lore: Whatever terrain a hostile world offers, a Ranger crosses it.\n\nDesign: DX+0 (14) for 4 points, Average.",
+			"tags": [
+				"Xenos",
+				"Aeldari"
+			],
+			"difficulty": "dx/a",
+			"points": 4
+		},
+		{
+			"id": "sU1VzooT54rtmsMay",
+			"name": "Fast-Draw",
+			"local_notes": "Lore: Standard reload drill, carried over from Guardian training.\n\nDesign: DX+0 (14) for 1 point, Easy.",
+			"tags": [
+				"Xenos",
+				"Aeldari"
+			],
+			"specialization": "Ammo",
+			"difficulty": "dx/e",
+			"points": 1
+		},
+		{
+			"id": "sp3yoc9qLyEK1MU6k",
+			"name": "Hidden Lore",
+			"local_notes": "Lore: Carried over from Guardian training.\n\nDesign: IQ-1 (11) for 1 point, Average.",
+			"tags": [
+				"Xenos",
+				"Aeldari",
+				"Psyker"
+			],
+			"specialization": "(the Warp)",
+			"difficulty": "iq/a",
+			"points": 1
+		},
+		{
+			"id": "sngvG2JTF1pab-oke",
+			"name": "Fast-Talk",
+			"local_notes": "Lore: Talking a wary local, human or otherwise, into helping rather than hindering.\n\nDesign: IQ+0 (12) for 4 points, Average.",
+			"tags": [
+				"Xenos",
+				"Aeldari"
+			],
+			"difficulty": "iq/a",
+			"points": 4
+		},
+		{
+			"id": "sCnW7idtQP2rLCshI",
+			"name": "Observation",
+			"local_notes": "Lore: Sighting trouble, or a target, before anyone else on the field does.\n\nDesign: Per+2 (14) for 8 points, Average.",
+			"tags": [
+				"Xenos",
+				"Aeldari"
+			],
+			"difficulty": "per/a",
+			"points": 8
+		},
+		{
+			"id": "sJzyGX0ZnbT5Vca-m",
+			"name": "Jumping",
+			"local_notes": "Lore: Basic battlefield mobility.\n\nDesign: DX+0 (14) for 1 point, Easy.",
+			"tags": [
+				"Xenos",
+				"Aeldari"
+			],
+			"difficulty": "dx/e",
+			"points": 1
+		},
+		{
+			"id": "srvA2IxmBqtNkAn1m",
+			"name": "Traps",
+			"local_notes": "Lore: Rangers seed the ground they defend, or move through, with unpleasant surprises.\n\nDesign: IQ+1 (13) for 4 points, Average.",
+			"tags": [
+				"Xenos",
+				"Aeldari"
+			],
+			"difficulty": "iq/a",
+			"points": 4
+		},
+		{
+			"id": "s10Pka4nysW7gicWm",
+			"name": "Diplomacy",
+			"local_notes": "Lore: Rangers are often a craftworld's only real point of contact with the wider galaxy's other powers.\n\nDesign: IQ+0 (12) for 8 points, Hard.",
+			"tags": [
+				"Xenos",
+				"Aeldari"
+			],
+			"difficulty": "iq/h",
+			"points": 8
+		},
+		{
+			"id": "sgXq166f76GuKR2_E",
+			"name": "Piloting",
+			"local_notes": "Lore: Many Rangers travel between worlds aboard small Corsair vessels or personal skiffs rather than a craftworld's own fleet.\n\nDesign: DX+1 (15) for 5 points, Average.",
+			"tags": [
+				"Xenos",
+				"Aeldari"
+			],
+			"specialization": "(Aeldari Skiff/Corsair Vessel)",
+			"difficulty": "dx/a",
+			"points": 5
+		}
+	],
+	"equipment": []
+}
