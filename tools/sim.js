@@ -327,6 +327,7 @@ const SIM = (() => {
   // ------------------------------------------------------------------ battle
   function runBattle(unitSpecs, opt = {}) {
     const distance = opt.distance ?? 100, maxTurns = opt.maxTurns ?? 60, morale = opt.morale !== false;
+    const frac = opt.health === "fractional", boxes = opt.boxes || 5;
     const log = opt.log ? [] : null;
     const L = s => { if (log && log.length < 4000) log.push(s); };
     const units = unitSpecs.map(s => { const u = buildUnit(s.spec, s.side); u.pos = s.side === 0 ? 0 : distance; return u; });
@@ -336,7 +337,8 @@ const SIM = (() => {
       for (let i = 0; i < u.count; i++) {
         const m = { u, id: `${u.name} #${i + 1}`, hp: u.HP, state: "ok", shock: 0, stunned: false, aimed: false,
           ammo: u.ranged ? u.ranged.shots.mag : 0, reload: 0, sp: u.shield ? u.shield.sp : 0, spHit: -99, spCollapsed: false,
-          parries: 0, attacked: false, deathChecks: 0, reanim: 0, dmgDealt: 0, kills: 0 };
+          parries: 0, attacked: false, deathChecks: 0, reanim: 0, dmgDealt: 0, kills: 0,
+          wounds: {}, pain: 0, painSev: 0, halfMove: false, halfDodge: false, gawd: 0, armsLost: 0, crippled: {} };
         u.models.push(m); models.push(m);
       }
     });
@@ -346,8 +348,85 @@ const SIM = (() => {
     const dist = (a, b) => Math.abs(a.pos - b.pos);
     const enemiesOf = u => units.filter(v => v.side !== u.side && unitActive(v));
 
-    function injure(att, t, inj, loc) {
+    // skill penalty from shock (standard), or the larger of shock and pain plus wound effects (fractional)
+    const skillPen = m => frac ? Math.max(m.shock, m.pain) + m.gawd + (m.armsLost ? 4 : 0) : Math.min(4, m.shock);
+    const dodgeOf = t => frac && t.halfDodge ? Math.floor(t.u.dodge / 2) : t.u.dodge;
+    const unitMove = u => frac ? Math.max(1, Math.min(...u.models.filter(active).map(m => m.halfMove ? Math.floor(u.move / 2) : u.move))) : u.move;
+
+    // ---- Revised Fractional Health (the user's house rule; after panoptesv.com's wound rules).
+    // No HP pool: each hit is a wound whose severity is its injury as a fraction of HP.
+    const SEVN = ["", "Scratch", "Minor", "Moderate", "Major", "Critical", "Massive", "Gawdawful", "Destruction"];
+    function severity(inj, HP) {
+      const r = inj / HP;
+      return r < 1 / 16 ? 0 : r < 1 / 8 ? 1 : r < 1 / 4 ? 2 : r < 1 / 2 ? 3 : r < 1 ? 4 : r < 2 ? 5 : r < 4 ? 6 : r < 8 ? 7 : 8;
+    }
+    function incapacitate(t, why) { if (t.state === "ok") { t.state = "out"; L(`  ${t.id} ${why}`); } }
+    function fracInjure(att, t, inj, loc, type) {
+      att.dmgDealt += inj;
+      const f = t.u.flags, HT = t.u.HT;
+      const numb = f.unliving || f.homogenous || f.diffuse;      // never shock, impairment or stun
+      let sev = severity(inj, t.u.HP);
+      if (f.diffuse && sev > 2) sev = 2;
+      if (!sev) { L(`  ${inj} injury is too slight to count`); return; }
+      const limb = ["arm", "hand", "leg", "foot"].includes(loc);
+      const key = limb ? loc + (R() < 0.5 ? "L" : "R") : loc;
+      const W = t.wounds[key] ||= Array(9).fill(0);
+      const prevBad = W[4] + W[5];
+      // Assumption (the rules are silent): each location has five boxes per severity, as on the
+      // Fractional Health 40k sheet; a wound that finds its row full counts one level higher.
+      if (!(type === "cr" && sev <= 2)) { while (sev < 8 && W[sev] >= boxes) sev++; W[sev]++; }
+      L(`  ${SEVN[sev]} wound to ${loc} (${inj} injury vs HP ${t.u.HP})`);
+      if (sev === 8) { kill(att, t, "destroyed"); return; }
+      const head = loc === "skull" || loc === "eye" || loc === "face", brain = loc === "skull" || loc === "eye";
+      if (!numb && !f.hpt) t.shock = Math.max(t.shock, sev);
+      // stunning; failure by 5+ knocks the target out (for a Minor wound, only on a head hit)
+      if (!numb && sev >= 2) {
+        const mod = head ? [0, 0, -1, -2, -5, -6, -7, -8][sev] : [0, 0, 0, -1, -2, -3, -4, -5][sev];
+        const r = check(HT + mod);
+        if (!r.ok) {
+          if (r.margin <= -5 && (sev >= 3 || head)) { incapacitate(t, "is knocked unconscious"); return; }
+          t.stunned = true; L(`  ${t.id} is stunned`);
+        }
+      }
+      if ((head || loc === "neck") && sev >= 6) { kill(att, t, "killed outright"); return; }
+      if (brain && sev === 5 && !check(HT - 3 + (f.htk || 0)).ok) { kill(att, t, "dies of a brain wound"); return; }
+      if (loc === "neck" && sev === 5 && !check(HT - 3).ok) { incapacitate(t, "goes down, paralysed or bleeding out"); return; }
+      if (sev === 6 && !check(HT - 3).ok) { incapacitate(t, "breaks and is incapacitated"); return; }
+      if (sev === 7) {
+        if (!check(HT - 5).ok) { incapacitate(t, "breaks and is incapacitated"); return; }
+        t.halfMove = t.halfDodge = true; t.gawd++;
+      }
+      // Progressive Limb Trauma
+      if (limb && (sev === 4 || sev === 5)) {
+        const was = t.crippled[key];
+        const ok = sev === 4 ? check(HT - 2 - 2 * prevBad).ok : check(HT - 5 - 3 * prevBad - (was ? 3 : 0)).ok;
+        if (!ok || sev === 5) {
+          if (!was) {
+            t.crippled[key] = true;
+            if (loc === "leg" || loc === "foot") t.halfMove = t.halfDodge = true;
+            else if (++t.armsLost >= 2) { incapacitate(t, "has lost the use of both arms"); return; }
+          }
+          L(`  ${loc} ${!ok && sev === 5 ? "dismembered" : "crippled"}`);
+        }
+      }
+      // Impairment: pain unless adrenaline carries them through
+      if (!numb && sev >= 3 && (sev > t.painSev || sev >= 5)) {
+        t.painSev = Math.max(t.painSev, sev);
+        const r = check(HT + [0, 0, 0, 0, -1, -2, -3, -4][sev] + (f.hpt ? 2 : 0));
+        if (!r.ok) {
+          if (sev === 7 || r.margin <= -5) { incapacitate(t, "collapses in agony"); return; }
+          let pain = [0, 0, 0, 2, 4, 6, 6][sev];
+          if (f.hpt) pain = Math.floor(pain / 2);
+          t.pain = Math.max(t.pain, pain);
+          if (sev >= 4) t.halfMove = t.halfDodge = true;
+          L(`  ${t.id} is in pain (-${t.pain})`);
+        }
+      }
+    }
+
+    function injure(att, t, inj, loc, type) {
       if (inj <= 0) return;
+      if (frac) return fracInjure(att, t, inj, loc, type);
       const HP = t.u.HP, before = t.hp;
       t.hp -= inj;
       att.dmgDealt += inj;
@@ -400,8 +479,9 @@ const SIM = (() => {
       // Injury Tolerance (Damage Reduction), Powers p. 53: injury divided by the divisor
       const red = flags.dmgRed > 1 ? flags.dmgRed : 1;
       if (red > 1 && inj > 0) inj = Math.max(1, Math.floor(inj / red));
-      if (loc === "arm" || loc === "leg") inj = Math.min(inj, Math.floor(t.u.HP / 2) + 1);
-      if (loc === "hand" || loc === "foot") inj = Math.min(inj, Math.floor(t.u.HP / 3) + 1);
+      // standard limb caps (B420); Fractional Health handles limbs with Progressive Limb Trauma instead
+      if (!frac && (loc === "arm" || loc === "leg")) inj = Math.min(inj, Math.floor(t.u.HP / 2) + 1);
+      if (!frac && (loc === "hand" || loc === "foot")) inj = Math.min(inj, Math.floor(t.u.HP / 3) + 1);
       let finj = 0;
       if (w.follow && fraw > 0) {
         const ft = w.follow.type;
@@ -411,19 +491,19 @@ const SIM = (() => {
           if (red > 1 && finj > 0) finj = Math.max(1, Math.floor(finj / red));
         }
       }
-      L(`  ${raw} dmg to ${loc} (DR ${armDR + natDR}${div !== 1 ? "/" + (div === Infinity ? "∞" : div) : ""}): ${inj} injury${finj ? ` + ${finj} follow-up` : ""}; ${t.id} at ${t.hp - inj - finj}/${t.u.HP} HP`);
-      injure(att, t, inj + finj, loc);
+      L(`  ${raw} dmg to ${loc} (DR ${armDR + natDR}${div !== 1 ? "/" + (div === Infinity ? "∞" : div) : ""}): ${inj} injury${finj ? ` + ${finj} follow-up` : ""}${frac ? "" : `; ${t.id} at ${t.hp - inj - finj}/${t.u.HP} HP`}`);
+      injure(att, t, inj + finj, loc, dmg.type);
       return inj + finj;
     }
 
     function bestDefence(t) {
-      let d = t.u.dodge + 3 - (t.stunned ? 4 : 0);
+      let d = dodgeOf(t) + 3 - (t.stunned ? 4 : 0);
       if (t.u.parry != null && !(t.u.melee.unbalanced && t.attacked)) d = Math.max(d, t.u.parry + 1 - 4 * t.parries - (t.stunned ? 4 : 0));
       return d;
     }
     function defend(t, melee, da = 0) {
       if (t.state !== "ok") return false;
-      let dodge = t.u.dodge + (melee ? 3 : 0) - (t.stunned ? 4 : 0) - da;
+      let dodge = dodgeOf(t) + (melee ? 3 : 0) - (t.stunned ? 4 : 0) - da;
       let best = dodge, how = "dodge";
       if (melee && t.u.parry != null && !(t.u.melee.unbalanced && t.attacked)) {
         const p = t.u.parry + 1 - 4 * t.parries - (t.stunned ? 4 : 0) - da;
@@ -456,7 +536,7 @@ const SIM = (() => {
       if (pointBlank) {
         const shots = Math.min(w.rof, m.ammo, 3);
         m.ammo -= shots; m.attacked = true; m.aimed = false;
-        const lvl = w.level + Math.min(0, w.bulk) + rapidBonus(shots) - Math.min(4, m.shock);
+        const lvl = w.level + Math.min(0, w.bulk) + rapidBonus(shots) - skillPen(m);
         const r = check(lvl);
         if (!r.ok) { L(`${m.id} fires point-blank at ${target.id} (skill ${lvl}): misses`); return; }
         let hits = Math.min(shots, 1 + Math.floor(Math.max(0, r.margin) / w.rcl));
@@ -482,7 +562,7 @@ const SIM = (() => {
       while (targets.length < parts) targets.push(pool.splice(Math.floor(R() * pool.length), 1)[0]);
       targets.forEach((t, i) => {
         const shots = Math.floor(total / parts) + (i < total % parts ? 1 : 0);
-        let lvl = w.level + rangePenalty(d) + rapidBonus(shots) + t.u.sm - Math.min(4, m.shock) + acc;
+        let lvl = w.level + rangePenalty(d) + rapidBonus(shots) + t.u.sm - skillPen(m) + acc;
         if (moved) lvl += Math.min(-2, w.bulk);
         const r = check(lvl);
         if (!r.ok) { L(`${m.id} fires ${shots} at ${t.id} (${d} yd, skill ${lvl}): misses`); return; }
@@ -500,7 +580,7 @@ const SIM = (() => {
     function meleeAttack(m, target, charged) {
       const w = m.u.melee, n = 1 + (m.u.flags.extraAttack || 0);
       for (let i = 0; i < n && target.state === "ok"; i++) {
-        let lvl = w.level - Math.min(4, m.shock) - (charged ? 4 : 0);
+        let lvl = w.level - skillPen(m) - (charged ? 4 : 0);
         if (charged) lvl = Math.min(lvl, 9);
         // Deceptive Attack (B369): -2 skill per -1 to the defence, at the level that
         // gives the best chance to land a blow against this defender's best defence
@@ -547,7 +627,7 @@ const SIM = (() => {
         const d = dist(u, near);
         if (d <= 1 || u.stance === "shoot") continue;
         if (u.stance === "advance" && u.ranged && u.melee && u.melee.name === "Punch" && d <= u.ranged.range.half) continue;
-        const step = Math.min(u.move, d - 1);
+        const step = Math.min(unitMove(u), d - 1);
         u.pos += (near.pos > u.pos ? 1 : -1) * step;
         if (dist(u, near) <= 1) { u.pos = near.pos; if (u.stance === "charge") charged.add(u); }
         moved.add(u);
@@ -559,7 +639,7 @@ const SIM = (() => {
         if (m.state !== "ok") continue;
         if (!sideActive(0) || !sideActive(1)) break;
         if (m.u.routed) continue;
-        if (m.hp <= 0) {
+        if (!frac && m.hp <= 0) {
           const k = Math.floor(-m.hp / m.u.HP);
           if (!check(m.u.HT - k).ok) { m.state = "out"; L(`${m.id} collapses unconscious`); continue; }
         }
@@ -594,7 +674,7 @@ const SIM = (() => {
       for (const m of models) {
         if (m.state !== "down") continue;
         const r = check(m.u.HT);
-        if (r.ok) { m.state = "ok"; m.hp = Math.max(1, Math.floor(m.u.HP / 2)); m.stunned = false; L(`${m.id} reanimates`); }
+        if (r.ok) { m.state = "ok"; m.hp = Math.max(1, Math.floor(m.u.HP / 2)); m.stunned = false; m.wounds = {}; m.pain = 0; m.painSev = 0; m.halfMove = m.halfDodge = false; m.gawd = 0; m.armsLost = 0; m.crippled = {}; L(`${m.id} reanimates`); }
         else if (r.fumble || --m.reanim <= 0) { m.state = "phased"; L(`${m.id} phases out`); }
       }
       // morale
@@ -758,6 +838,8 @@ if (typeof document !== "undefined") (() => {
         <label>Runs <input type="number" min="1" max="2000" value="${S.runs}" data-g="runs"></label>
         <label>Turn limit <input type="number" min="5" max="600" value="${S.maxTurns}" data-g="maxTurns"> s</label>
         <label><input type="checkbox" data-g="morale"${S.morale ? " checked" : ""}> Morale checks</label>
+        <label>Wounds <select data-h aria-label="Wound rules"><option value="standard"${S.health !== "fractional" ? " selected" : ""}>Standard GURPS HP</option><option value="fractional"${S.health === "fractional" ? " selected" : ""}>Revised Fractional Health</option></select></label>
+        ${S.health === "fractional" ? `<label>Wounds per level before the next one steps up <input type="number" min="1" max="9" value="${S.boxes || 5}" data-g="boxes"></label>` : ""}
         <button class="run" id="simrun">Run simulation</button>
       </div>
       <div class="sgrid">${side(0)}${side(1)}</div>
@@ -765,7 +847,7 @@ if (typeof document !== "undefined") (() => {
       <details class="more"><summary>How the simulator works</summary><p>${esc(HOW)}</p></details>`;
     wire();
   }
-  const HOW = `Each second every model acts in Basic Speed order. Shooters aim once at each new target (+Acc), then fire every turn with range penalties (B550), the rapid-fire bonus and Recoil for extra hits, spreading automatic bursts across two or three models (B373); targets Dodge, and every point of margin dodges one more round. Units set to advance move and fire (−2 or Bulk, no Acc); units set to charge run in and strike, with Move and Attack penalties on the turn they arrive. In close combat a model with a gun fires it point-blank (Bulk as a penalty) when that does more harm than its melee weapon. In melee, defenders use the better of Dodge (+3 retreat) and Parry (+1 retreat, −4 per extra parry), and skilled attackers make Deceptive Attacks. Hits land on a random location (B552), with 1 in 6 face hits striking an eye lens. Regenerating shields soak damage first; armour divisors, Weak Points, wounding multipliers, Injury Tolerance (including Damage Reduction), limb caps, battlesuit structure HP and follow-up damage all apply. Shock, knockdown, stun, the HT rolls to stay conscious and to survive at −1×HP and below, Hard to Kill and Necron Reanimation Protocols are modelled. With morale on, a unit checks Will (+Fearlessness) when it falls to half and to a quarter strength, and breaks on a failure; Unfazeable units, machines with Slave Mentality and Necrons never break, and Tyranids are assumed to be within synapse range (Fearlessness 5). Not modelled: cover and terrain, explosion splash and fragmentation, crippled-limb effects, psychic powers, vehicles and drones' support roles.`;
+  const HOW = `Each second every model acts in Basic Speed order. Shooters aim once at each new target (+Acc), then fire every turn with range penalties (B550), the rapid-fire bonus and Recoil for extra hits, spreading automatic bursts across two or three models (B373); targets Dodge, and every point of margin dodges one more round. Units set to advance move and fire (−2 or Bulk, no Acc); units set to charge run in and strike, with Move and Attack penalties on the turn they arrive. In close combat a model with a gun fires it point-blank (Bulk as a penalty) when that does more harm than its melee weapon. In melee, defenders use the better of Dodge (+3 retreat) and Parry (+1 retreat, −4 per extra parry), and skilled attackers make Deceptive Attacks. Hits land on a random location (B552), with 1 in 6 face hits striking an eye lens. Regenerating shields soak damage first; armour divisors, Weak Points, wounding multipliers, Injury Tolerance (including Damage Reduction), limb caps, battlesuit structure HP and follow-up damage all apply. Shock, knockdown, stun, the HT rolls to stay conscious and to survive at −1×HP and below, Hard to Kill and Necron Reanimation Protocols are modelled. With morale on, a unit checks Will (+Fearlessness) when it falls to half and to a quarter strength, and breaks on a failure; Unfazeable units, machines with Slave Mentality and Necrons never break, and Tyranids are assumed to be within synapse range (Fearlessness 5). With Revised Fractional Health selected there is no HP pool: each hit is a Scratch to Gawdawful wound by its injury as a fraction of HP, with that level's shock, stun and knockout roll, brain, neck and "break" checks, Progressive Limb Trauma and impairment (pain, or Agony that takes the model out). The rules don't say how repeated wounds combine, so the simulator assumes the five boxes per level on the Fractional Health 40k sheet: a wound that finds its row full on that location counts one level higher. The number of boxes is a setting (1 means a second wound at a level counts one level higher). Not modelled: cover and terrain, explosion splash and fragmentation, crippled-limb effects, psychic powers, vehicles and drones' support roles.`;
 
   function results(r) {
     const pct = x => (100 * x / r.runs).toFixed(0) + "%";
@@ -784,6 +866,7 @@ if (typeof document !== "undefined") (() => {
     main.querySelectorAll("[data-g]").forEach(el => el.onchange = () => {
       S[el.dataset.g] = el.type === "checkbox" ? el.checked : Math.max(1, Number(el.value) || 1); save();
     });
+    const hs = main.querySelector("[data-h]"); hs.onchange = () => { S.health = hs.value; save(); render(); };
     main.querySelectorAll("[data-add]").forEach(el => el.onchange = () => {
       if (!el.value) return; S.sides[+el.dataset.add].push(newUnit(el.value, 5)); save(); render();
     });
@@ -814,7 +897,7 @@ if (typeof document !== "undefined") (() => {
       if (!S.sides[0].length || !S.sides[1].length) { $("#simout").innerHTML = `<p class="empty">Add at least one unit to each side.</p>`; return; }
       $("#simout").innerHTML = `<p class="empty">Fighting ${S.runs} battles…</p>`;
       setTimeout(() => {
-        try { last = SIM.monteCarlo(specs, { runs: S.runs, distance: S.distance, maxTurns: S.maxTurns, morale: S.morale }); $("#simout").innerHTML = results(last); }
+        try { last = SIM.monteCarlo(specs, { runs: S.runs, distance: S.distance, maxTurns: S.maxTurns, morale: S.morale, health: S.health, boxes: S.boxes || 5 }); $("#simout").innerHTML = results(last); }
         catch (e) { $("#simout").innerHTML = `<p class="empty">Could not run: ${esc(e.message)}</p>`; }
       }, 20);
     };
