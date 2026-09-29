@@ -15,6 +15,7 @@ ROOT = Path(__file__).resolve().parent.parent
 LIB = ROOT / "Library"
 OUT = ROOT / "site" / "index.html"
 TEMPLATE = ROOT / "tools" / "site_template.html"
+SIM = ROOT / "tools" / "sim.js"
 
 KIND = {".eqp": "equipment", ".adq": "traits", ".skl": "skills", ".gct": "template"}
 
@@ -126,7 +127,8 @@ def weapon(w):
     defs = w.get("defaults", [])
     skill = next((fmt_default(d) for d in defs if d["type"] == "skill" and not d.get("modifier")), None)
     out = {"melee": melee, "usage": w.get("usage", ""), "damage": fmt_damage(w.get("damage", {})),
-           "skill": skill or (fmt_default(defs[0]) if defs else ""), "notes": w.get("usage_notes", "")}
+           "skill": skill or (fmt_default(defs[0]) if defs else ""), "notes": w.get("usage_notes", ""),
+           "defaults": [fmt_default(d) for d in defs]}
     keys = ("reach", "parry", "block", "strength") if melee else \
         ("accuracy", "range", "rate_of_fire", "shots", "strength", "bulk", "recoil")
     for k in keys:
@@ -262,14 +264,56 @@ def skill_level(pts, diff):
     return rel
 
 
+def combat_flags(t, flags):
+    """Traits the combat simulator (tools/sim.js) needs, read from active trait names."""
+    n = t.get("name", "")
+    lv = t.get("levels") or 1
+    if t.get("children") is not None:
+        return
+    low = n.lower()
+    if n.startswith("High Pain Threshold"):
+        flags["hpt"] = 1
+    elif n.startswith("Combat Reflexes"):
+        flags["cr"] = 1
+    elif n.startswith("Hard to Kill"):
+        flags["htk"] = flags.get("htk", 0) + lv
+    elif n.startswith("Enhanced Parry"):
+        flags["enhParry"] = flags.get("enhParry", 0) + lv
+    elif n.startswith("Enhanced Block"):
+        flags["enhBlock"] = flags.get("enhBlock", 0) + lv
+    elif n.startswith("Extra Attack"):
+        flags["extraAttack"] = flags.get("extraAttack", 0) + lv
+    elif n.startswith("Fearlessness"):
+        flags["fearless"] = flags.get("fearless", 0) + lv
+    elif n.startswith("Unfazeable"):
+        flags["unfazeable"] = 1
+    elif n.startswith("Weapon Master") or n.startswith("Trained By A Master"):
+        flags["master"] = 1
+    elif n.startswith("Injury Tolerance"):
+        for k in ("unliving", "homogenous", "diffuse", "no brain", "no vitals"):
+            if k in low:
+                flags[k.replace(" ", "")] = 1
+    elif n.startswith("Reanimation"):
+        flags["reanimation"] = 1
+    elif "slave mentality" in low or "machine mind" in low:
+        flags["noMorale"] = 1
+    if ("metabolic hazards" in low or "toxins" in low or "poison" in low) and (
+            n.startswith("Immunity") or n.startswith("Resistant")):
+        immune = n.startswith("Immunity") or any(m.get("name", "").startswith("Immunity") and not m.get("disabled")
+                                                  for m in t.get("modifiers", []))
+        flags["poison"] = "immune" if immune else "resist"
+
+
 def character_stats(d):
     bonus = {}
     dr = {}
     names = set()
     skill_bonus = {}
     enh_dodge = 0
+    flags = {}
     for t in active_traits(d.get("traits", [])):
         names.add(t.get("name", "").split(" (")[0])
+        combat_flags(t, flags)
         if t.get("name") == "Enhanced Dodge":
             enh_dodge += t.get("levels", 1)
         mods_on = [m for m in t.get("modifiers", []) if not m.get("disabled")]
@@ -312,7 +356,7 @@ def character_stats(d):
     return {"st": st, "dx": dx, "iq": iq, "ht": ht, "hp": hp, "will": will, "per": per, "fp": fp,
             "speed": round(speed, 2), "move": move, "dodge": dodge, "sm": b("sm"),
             "bl": round(lift_st * lift_st / 5), "thr": thr, "sw": sw,
-            "dr": dr, "skills": skills, "bonus": bonus}
+            "dr": dr, "skills": skills, "bonus": bonus, "flags": flags}
 
 
 def template_entry(d, title):
@@ -353,8 +397,14 @@ def main():
             entry["items"] = [fn(r) for r in d["rows"]]
             entry["count"] = len(entry["items"])
         libs.append(entry)
-    data = json.dumps({"libraries": libs}, ensure_ascii=False, separators=(",", ":"))
+    loadouts = {}
+    lp = ROOT / "data" / "sim" / "loadouts.yaml"
+    if lp.exists():
+        import yaml
+        loadouts = yaml.safe_load(lp.read_text()) or {}
+    data = json.dumps({"libraries": libs, "loadouts": loadouts}, ensure_ascii=False, separators=(",", ":"))
     html = TEMPLATE.read_text().replace("/*__DATA__*/null", data.replace("</", "<\\/"))
+    html = html.replace("/*__SIM__*/", SIM.read_text())
     OUT.parent.mkdir(exist_ok=True)
     OUT.write_text(html)
     print(f"{OUT.relative_to(ROOT)}: {len(libs)} libraries, {len(html) // 1024} KB")

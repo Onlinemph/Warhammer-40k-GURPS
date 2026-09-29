@@ -1,3 +1,4 @@
+<meta charset="utf-8">
 <title>40K GURPS Codex</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -116,6 +117,32 @@ h2{font-family:var(--display);font-size:1.05rem;letter-spacing:.08em;margin:28px
   .search{margin-top:10px}
   main{padding-block:20px 60px}
 }
+.spresets{display:flex;flex-wrap:wrap;gap:6px;max-width:1100px;margin:0 0 14px}
+.spresets button{cursor:pointer;font:inherit;font-size:.8rem;color:var(--ink)}
+.sset{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center;max-width:1100px;margin:0 0 18px;font-size:.92rem}
+.sset input[type=number]{width:5.5em}
+input[type=number],.sunit select,.addu{font:inherit;font-size:.88rem;padding:4px 6px;border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--ink);max-width:100%}
+.run{font:inherit;font-weight:700;background:var(--accent);color:#fff;border:0;border-radius:5px;padding:8px 16px;cursor:pointer}
+.sgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;max-width:1100px}
+.sside h2{margin-top:0}
+.sunit{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:10px 12px;margin-bottom:10px}
+.shead{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.shead input{width:4.2em}.shead b{flex:1;min-width:8em}
+.x{background:none;border:0;color:var(--muted);font-size:1.3rem;line-height:1;cursor:pointer;padding:0 4px}
+.prof{display:flex;flex-wrap:wrap;gap:2px 14px;font-size:.84rem;margin-top:6px;font-family:var(--mono)}
+.prof b{font-family:var(--body);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-right:5px}
+.prof.err{color:var(--accent)}
+.lo summary{cursor:pointer;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:8px}
+.lgrid{display:grid;gap:6px;margin-top:6px;font-size:.85rem}
+.lgrid label{display:grid;gap:2px}.lgrid select{width:100%}
+.lgrid .sh{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.lgrid .sh input[type=number]{width:4.5em}
+.lonote{font-size:.82rem;color:var(--muted);margin:6px 0 0}
+.addu{width:100%}
+.sbar{display:flex;height:12px;border-radius:3px;overflow:hidden;max-width:1100px;margin:-8px 0 18px;background:var(--chip)}
+.sbar .a{background:var(--accent)}.sbar .d{background:var(--line)}.sbar .b{background:var(--brass)}
+.slog{font-family:var(--mono);font-size:.78rem;white-space:pre-wrap;max-height:480px;overflow:auto;background:var(--panel);border:1px solid var(--line);padding:10px;border-radius:4px}
+.navtool{font-weight:700}
+@media (max-width:760px){.sgrid{grid-template-columns:1fr}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 
@@ -276,6 +303,9 @@ function templateView(t){
 function card(lib, e){ return lib.kind==="equipment"?eqCard(e):lib.kind==="traits"?traitCard(e):skillCard(e); }
 
 function showLib(id){
+  if(id==="sim"){ current="sim"; document.querySelectorAll("nav button").forEach(b=>b.setAttribute("aria-current", b.dataset.id==="sim"));
+    window.simView(); $("#main").scrollTop=0; try{ history.replaceState(null,"","#sim"); }catch(_){}
+    $("#side").classList.remove("open"); $("#menubtn").setAttribute("aria-expanded","false"); return; }
   const lib = LIBS.find(l=>l.id===id) || LIBS[0];
   current = lib.id;
   document.querySelectorAll("nav button").forEach(b=>b.setAttribute("aria-current", b.dataset.id===lib.id));
@@ -313,7 +343,7 @@ function search(q){
 function buildNav(){
   const groups = {};
   for(const l of LIBS) (groups[l.section] ||= []).push(l);
-  $("#nav").innerHTML = Object.entries(groups).map(([sec,ls]) =>
+  $("#nav").innerHTML = `<h3>Tools</h3><button data-id="sim" class="navtool">Combat Simulator<span>new</span></button>` + Object.entries(groups).map(([sec,ls]) =>
     `<h3>${esc(sec.split("/").slice(-1)[0] || sec)}<span style="color:var(--muted);letter-spacing:.06em"> · ${esc(sec.split("/")[0])}</span></h3>` +
     ls.map(l=>`<button data-id="${l.id}">${esc(l.title)}<span>${l.kind==="template"?fmtPtsPlain(l.template.points):l.count}</span></button>`).join("")).join("");
   document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{ $("#q").value=""; showLib(b.dataset.id); });
@@ -323,10 +353,12 @@ function buildNav(){
 }
 function fmtPtsPlain(p){ return p+" pts"; }
 
+/*__SIM__*/
+
 buildNav();
 let tmr; $("#q").addEventListener("input", e=>{ clearTimeout(tmr); tmr=setTimeout(()=>search(e.target.value),150); });
 $("#menubtn").onclick = ()=>{ const s=$("#side"); s.classList.toggle("open"); $("#menubtn").setAttribute("aria-expanded", s.classList.contains("open")); };
-window.addEventListener("hashchange", ()=>{ const h=location.hash.slice(1); if(h && h!==current && LIBS.some(l=>l.id===h)) showLib(h); });
+window.addEventListener("hashchange", ()=>{ const h=location.hash.slice(1); if(h && h!==current && (h==="sim"||LIBS.some(l=>l.id===h))) showLib(h); });
 const start = (location.hash||"").slice(1);
-showLib(LIBS.some(l=>l.id===start) ? start : (LIBS.find(l=>l.id.includes("las-weapons"))||LIBS[0]).id);
+showLib(start==="sim"||LIBS.some(l=>l.id===start) ? start : (LIBS.find(l=>l.id.includes("las-weapons"))||LIBS[0]).id);
 </script>

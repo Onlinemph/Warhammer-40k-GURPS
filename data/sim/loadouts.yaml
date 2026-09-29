@@ -1,0 +1,467 @@
+# Default battle loadouts for the combat simulator (one entry per character template; Add-Ons skipped).
+# Keys are the Library/**/*.gct file stems. Item / trait names and modes resolve against data/**.
+
+# ------------------------------------------------------------------ Imperium
+Astra Militarum Guardsman:
+  armour: ["Flak Armour, Full Suit (Cadian Pattern)", "Flak Helmet, Cadian Pattern"]
+  ranged: {item: "Lasgun, Kantrael Pattern", mode: "Standard"}
+  melee: {item: "Bayonet, Lug-Mounted", mode: "Fixed to lasgun"}
+  stance: shoot
+  note: "Cadian-style line trooper: flak suit and helmet, Kantrael lasgun with bayonet fixed."
+Militarum Tempestus Scion:
+  armour: ["Carapace Armour, Tempestus Pattern"]
+  ranged: {item: "Hellgun", mode: "Standard"}
+  melee: {item: "Combat Knife, Munitorum Pattern", mode: "Thrust"}
+  stance: advance
+  note: "Tempestus carapace, hot-shot lasgun (hellgun), combat knife; hellpistol sidearm not modelled."
+Commissar:
+  armour: ["Flak Jacket"]
+  ranged: {item: "Bolt Pistol, Godwyn-De'az Pattern", mode: "Standard bolt"}
+  melee: {item: "Chainsword", mode: "Swing"}
+  stance: advance
+  note: "Codex commissar kit: bolt pistol and chainsword (a Commissar's Sabre is the alternative); flak jacket stands in for the greatcoat."
+Adepta Sororitas Battle Sister:
+  armour: ["Power Armour, Adepta Sororitas"]
+  ranged: {item: "Boltgun, Sororitas/Human Pattern", mode: "Standard bolt"}
+  melee: {item: "Combat Knife, Munitorum Pattern", mode: "Thrust"}
+  stance: advance
+  note: "Sororitas power armour and boltgun; knife as sidearm melee (no standard Battle Sister blade)."
+Inquisitor:
+  armour: ["Mesh Armour"]
+  ranged: {item: "Bolt Pistol, Godwyn-De'az Pattern", mode: "Standard bolt"}
+  melee: {item: "Power Sword", mode: "Field on"}
+  shield: {item: "Rosarius", sp: 60, delay: 3, recharge: 10, ranged_only: false}
+  stance: advance
+  note: "Concealable mesh armour, bolt pistol, power sword and a Rosarius (Eisenhorn-style Inquisitor)."
+Inquisitorial Acolyte:
+  armour: ["Flak Jacket"]
+  ranged: {item: "Autopistol", mode: "Standard (ball)"}
+  melee: {item: "Combat Knife, Munitorum Pattern", mode: "Thrust"}
+  stance: advance
+  note: "Generic acolyte: flak jacket, autopistol, knife (acolytes have no fixed kit)."
+Interrogator:
+  armour: ["Mesh Armour"]
+  ranged: {item: "Bolt Pistol, Godwyn-De'az Pattern", mode: "Standard bolt"}
+  melee: {item: "Chainsword", mode: "Swing"}
+  stance: advance
+  note: "Inquisitorial agent kit: mesh armour, bolt pistol, chainsword; no fixed standard loadout."
+Astartes Battle-Brother:
+  armour: ["Power Armour, Mark VII (Aquila Pattern)"]
+  ranged: {item: "Boltgun, Godwyn Pattern", mode: "Standard bolt"}
+  melee: {item: "Chainsword, Astartes Pattern", mode: "Swing"}
+  stance: advance
+  note: "Tactical Marine: Mk VII Aquila plate, boltgun, chainsword (per template notes)."
+Primaris Battle-Brother:
+  armour: ["Power Armour, Mark X (Tacticus Pattern)"]
+  ranged: {item: "Bolt Rifle, Primaris Pattern", mode: "Standard bolt"}
+  melee: {item: "Combat Knife, Astartes Pattern", mode: "Thrust"}
+  stance: advance
+  note: "Intercessor: Mk X Tacticus, bolt rifle, combat knife."
+Astartes Scout:
+  armour: ["Scout Armour"]
+  ranged: {item: "Boltgun, Godwyn Pattern", mode: "Standard bolt"}
+  melee: {item: "Combat Knife, Astartes Pattern", mode: "Thrust"}
+  stance: shoot
+  note: "Scout armour, boltgun, combat knife."
+Astropath:
+  armour: []
+  stance: shoot
+  note: "Unarmed and unarmoured non-combatant; no standard weapon exists in the data, so it punches."
+Navigator:
+  armour: []
+  ranged: {item: "Laspistol, Common Pattern", mode: "Standard"}
+  stance: shoot
+  note: "Noble-house sidearm only; no fixed codex kit, laspistol chosen."
+Sanctioned Psyker:
+  armour: ["Flak Jacket"]
+  ranged: {item: "Laspistol, Common Pattern", mode: "Standard"}
+  melee: {item: "Force Staff", mode: "Field on, swing"}
+  stance: advance
+  note: "Primaris Psyker per template: force staff (its template equipment), flak jacket, laspistol sidearm."
+
+# ------------------------------------------------------------------ Custodes
+Custodian Guardian:
+  armour: ["Auramite Power Armour (Aquilon Pattern)"]
+  ranged: {item: "Guardian Spear", mode: "Bolt caster"}
+  melee: {item: "Guardian Spear", mode: "Spearhead, field on"}
+  stance: advance
+  note: "Guardian spear and Auramite armour (per template notes); the spear is both melee and bolt caster."
+Shield-Captain:
+  armour: ["Auramite Power Armour (Aquilon Pattern)"]
+  ranged: {item: "Guardian Spear", mode: "Bolt caster"}
+  melee: {item: "Guardian Spear", mode: "Spearhead, field on"}
+  stance: advance
+  note: "Template notes: guardian spear or castellan axe with Auramite or Allarus plate; chose spear and Auramite."
+Sister of Silence:
+  armour: ["Vratine Armour"]
+  melee: {item: "Executioner Greatblade", mode: "Field on"}
+  stance: charge
+  note: "Vigilator-style kit per template notes (executioner greatblade, Vratine armour); no ranged weapon carried."
+
+# ------------------------------------------------------------------ Mechanicus
+Skitarii Ranger:
+  armour: ["Skitarii War-plate"]
+  ranged: {item: "Galvanic Rifle", mode: "Standard"}
+  stance: shoot
+  note: "Galvanic rifle and war-plate; no standard melee weapon."
+Skitarii Vanguard:
+  armour: ["Skitarii War-plate"]
+  ranged: {item: "Radium Carbine", mode: "Standard"}
+  stance: shoot
+  note: "Radium carbine and war-plate; no standard melee weapon."
+Sicarian Ruststalker:
+  armour: ["Sicarian Infiltration Armour"]
+  melee: {item: "Transonic Razor", mode: "Field on"}
+  stance: charge
+  note: "Ruststalker: transonic razor (chordclaw off-hand not modelled) in infiltration armour."
+Tech-Priest Enginseer:
+  armour: ["Tech-Priest Robes, Armoured"]
+  ranged: {item: "Laspistol, Common Pattern", mode: "Standard"}
+  melee: {item: "Omnissian Axe", mode: "Field on"}
+  stance: advance
+  note: "Enginseer: Omnissian axe and laspistol (servo-arm not modelled)."
+Magos:
+  armour: ["Tech-Priest Robes, Armoured"]
+  ranged: {item: "Phosphor Blast Pistol", mode: "Standard"}
+  melee: {item: "Omnissian Staff", mode: "Field on, swing"}
+  shield: {item: "Conversion Field, Ordo Reductor Pattern", sp: 75, delay: 3, recharge: 10, ranged_only: false}
+  stance: advance
+  note: "Magos: Omnissian staff, phosphor blast pistol, conversion field; choice is illustrative (no single standard kit)."
+Electro-Priest:
+  armour: ["Tech-Priest Robes, Armoured"]
+  melee: {item: "Electro-flail", mode: "Swing"}
+  stance: charge
+  note: "Fulgurite with electro-flail; the template's bio-electric attack traits are not weapon lines."
+Combat Servitor:
+  armour: []
+  ranged: {item: "Heavy Bolter", mode: "Standard bolt"}
+  stance: shoot
+  note: "Servitor's mounted heavy bolter (ST 14 meets the 14B requirement); flamer and other mounts are alternatives."
+
+# ------------------------------------------------------------------ Aeldari
+Aeldari Guardian:
+  armour: ["Guardian Mesh Armour"]
+  ranged: {item: "Shuriken Catapult", mode: "Standard"}
+  stance: shoot
+  note: "Mesh armour and shuriken catapult (per template notes)."
+Aeldari Ranger:
+  armour: ["Guardian Mesh Armour"]
+  ranged: {item: "Long Rifle, Ranger Pattern", mode: "Standard"}
+  stance: shoot
+  note: "Long rifle with mesh armour; cloak and stealth gear ignored."
+Aspect Warrior:
+  armour: ["Aspect Armour", "Banshee War-Mask"]
+  ranged: {item: "Shuriken Pistol", mode: "Standard"}
+  melee: {item: "Power Sword, Aeldari Pattern", mode: "Field on"}
+  stance: charge
+  note: "Aspect lenses are optional; chose Howling Banshee (power sword, shuriken pistol, war-mask)."
+Exarch:
+  armour: ["Exarch Armour", "Banshee War-Mask"]
+  ranged: {item: "Shuriken Pistol", mode: "Standard"}
+  melee: {item: "Executioner", mode: "Field on, two-handed"}
+  stance: charge
+  note: "Aspect lenses are optional; chose Howling Banshee Exarch with the executioner."
+Autarch:
+  armour: ["Aspect Armour"]
+  ranged: {item: "Fusion Pistol", mode: "Short range (up to ½D)"}
+  melee: {item: "Power Sword, Aeldari Pattern", mode: "Field on"}
+  stance: advance
+  note: "Warhost commander: fusion pistol and power sword in aspect armour; illustrative pick."
+Warlock:
+  armour: ["Rune Armour"]
+  ranged: {item: "Shuriken Pistol", mode: "Standard"}
+  melee: {item: "Witchblade", mode: "Field on"}
+  shield: {item: "Rune Armour", sp: 60, delay: 3, recharge: 10, ranged_only: false}
+  stance: advance
+  note: "Witchblade and shuriken pistol; rune armour ward is 60 SP at Warp Empowerment 2 (template level)."
+Farseer:
+  armour: ["Rune Armour"]
+  ranged: {item: "Shuriken Pistol", mode: "Standard"}
+  melee: {item: "Witchblade", mode: "Field on"}
+  shield: {item: "Rune Armour", sp: 120, delay: 3, recharge: 10, ranged_only: false}
+  stance: advance
+  note: "Witchblade, shuriken pistol; rune ward scaled to Warp Empowerment 5 (60 base + 20 per level above 2)."
+
+# ------------------------------------------------------------------ Drukhari
+Kabalite Warrior:
+  armour: ["Kabalite Armour"]
+  ranged: {item: "Splinter Rifle", mode: "Standard"}
+  stance: shoot
+  note: "Splinter rifle and Kabalite plate (per template notes); no standard melee weapon."
+Wych:
+  armour: ["Wychsuit"]
+  ranged: {item: "Splinter Pistol", mode: "Standard"}
+  melee: {item: "Wych Hydra Gauntlets (pair)", mode: "Claw strike, each gauntlet"}
+  stance: charge
+  note: "Arena fighter: hydra gauntlets and splinter pistol in a wychsuit."
+Succubus:
+  armour: ["Wychsuit"]
+  ranged: {item: "Splinter Pistol", mode: "Standard"}
+  melee: {item: "Agoniser (Whip)", mode: "Field on"}
+  stance: charge
+  note: "Agoniser (per template notes) with splinter pistol in a wychsuit."
+Incubus:
+  armour: ["Incubus Warsuit"]
+  melee: {item: "Incubus Klaive", mode: "Field on, two-handed"}
+  stance: charge
+  note: "Klaive in a warsuit; no ranged weapon."
+Archon:
+  armour: ["Ghostplate Armour"]
+  ranged: {item: "Blast Pistol", mode: "Standard"}
+  melee: {item: "Huskblade", mode: "Field on"}
+  shield: {item: "Shadow Field", sp: 200, delay: 0, recharge: 0, ranged_only: false}
+  stance: advance
+  note: "Per template notes: blast pistol, huskblade, ghostplate and a one-shot shadow field."
+Haemonculus:
+  armour: []
+  ranged: {item: "Stinger Pistol", mode: "Standard"}
+  melee: {item: "Scissorhand", mode: "Swing"}
+  stance: advance
+  note: "Stinger pistol and scissorhand, no armour; other coven tools are alternatives."
+Wrack:
+  armour: []
+  ranged: {item: "Stinger Pistol", mode: "Standard"}
+  melee: {item: "Flesh Gauntlet", mode: "Punch"}
+  stance: charge
+  note: "Coven servant: stinger pistol, flesh gauntlet, no armour; illustrative (no fixed kit)."
+Mandrake:
+  armour: []
+  melee: {item: "Glimmersteel Blade", mode: "Swing"}
+  stance: charge
+  note: "Glimmersteel blade only; the Baleblast is a power, not a weapon line."
+Scourge:
+  armour: ["Kabalite Armour"]
+  ranged: {item: "Shardcarbine", mode: "Standard"}
+  stance: shoot
+  note: "Shardcarbine; heavy-weapon Scourges (dark lance, haywire) are alternatives; flight ignored."
+
+# ------------------------------------------------------------------ Necrons
+Necron Warrior:
+  armour: []
+  ranged: {item: "Gauss Flayer", mode: "Standard"}
+  stance: shoot
+  note: "Gauss flayer; necrodermis DR comes from traits."
+Necron Immortal:
+  armour: []
+  ranged: {item: "Gauss Blaster", mode: "Standard"}
+  stance: shoot
+  note: "Gauss blaster (tesla carbine is the alternative)."
+Deathmark:
+  armour: []
+  ranged: {item: "Synaptic Disintegrator", mode: "Standard"}
+  stance: shoot
+  note: "Synaptic disintegrator."
+Lychguard:
+  armour: []
+  melee: {item: "Hyperphase Sword", mode: "Swing (field on)"}
+  shield: {item: "Dispersion Shield Field", sp: 150, delay: 2, recharge: 20, ranged_only: false}
+  stance: charge
+  note: "Sword-and-dispersion-shield variant (warscythe is the alternative); field covers front only in the rules."
+Necron Overlord:
+  armour: []
+  melee: {item: "Warscythe", mode: "Swing, two-handed (field on)"}
+  shield: {item: "Phase Shifter", sp: 200, delay: 3, recharge: 20, ranged_only: false}
+  stance: charge
+  note: "Warscythe and phase shifter; illustrative (Overlords vary widely). Phase-through-overflow rule ignored."
+Cryptek:
+  armour: []
+  ranged: {item: "Staff of Light", mode: "Ranged bolt"}
+  melee: {item: "Staff of Light", mode: "Melee, power-field strike (field on)"}
+  stance: advance
+  note: "Staff of light (bolt and melee)."
+Flayed One:
+  armour: []
+  melee: {item: "Flayed One Claws", mode: "Claw strike"}
+  stance: charge
+  note: "Flayer claws only."
+Skorpekh Destroyer:
+  armour: []
+  melee: {item: "Hyperphase Reap-blade", mode: "Swing, two-handed (field on)"}
+  stance: charge
+  note: "Hyperphase reap-blade (the template has no dedicated threshers item)."
+
+# ------------------------------------------------------------------ Orks
+Ork Boy:
+  armour: []
+  ranged: {item: "Slugga", mode: "Standard"}
+  melee: {item: "Choppa", mode: "Swing"}
+  stance: charge
+  note: "Slugga and choppa; shoota is the alternative."
+Ork Nob:
+  armour: ["'Eavy Armour"]
+  ranged: {item: "Shoota", mode: "Dakka (full auto)"}
+  melee: {item: "Choppa", mode: "Swing"}
+  stance: advance
+  note: "Nob with shoota and choppa in 'eavy armour."
+Ork Kommando:
+  armour: []
+  ranged: {item: "Slugga", mode: "Standard"}
+  melee: {item: "Choppa", mode: "Swing"}
+  stance: charge
+  note: "Slugga and choppa; unarmoured infiltrator."
+Gretchin:
+  armour: []
+  ranged: {item: "Grot Blasta", mode: "Standard"}
+  stance: shoot
+  note: "Grot blasta."
+Ork Mek:
+  armour: ["Ork Scrap Flak"]
+  ranged: {item: "Kustom Mega-Slugga", mode: "Standard"}
+  melee: {item: "Mek's Kustom Tools", mode: "Swing (wrench/hammer)"}
+  stance: advance
+  note: "Mek's kustom mega-slugga and tools; illustrative."
+Ork Big Mek:
+  armour: ["Ork Scrap Flak"]
+  ranged: {item: "Kustom Mega-Blasta", mode: "Standard"}
+  melee: {item: "Mek's Kustom Tools", mode: "Swing (wrench/hammer)"}
+  shield: {item: "Kustom Force Field", sp: 250, delay: 4, recharge: 15, ranged_only: false}
+  stance: advance
+  note: "Kustom mega-blasta and Kustom Force Field (mob-scale bubble, treated as personal; 1-in-6 fail ignored)."
+Ork Painboy:
+  armour: ["Ork Scrap Flak"]
+  ranged: {item: "Slugga", mode: "Standard"}
+  melee: {item: "'Urty Syringe", mode: "Thrust (injection)"}
+  stance: charge
+  note: "'Urty syringe and slugga; illustrative."
+Ork Warboss:
+  armour: ["'Eavy Armour"]
+  ranged: {item: "Kustom Shoota", mode: "Dakka (full auto)"}
+  melee: {item: "Power Klaw", mode: "Punch/crush"}
+  stance: charge
+  note: "Power klaw and kustom shoota in 'eavy armour."
+Ork Weirdboy:
+  armour: []
+  melee: {item: "Weirdboy Staff", mode: "Swing"}
+  stance: charge
+  note: "Warpstaff only; psychic powers ignored."
+Ork Meganob:
+  armour: ["Mega Armour"]
+  ranged: {item: "Kombi-Weapon, Shoota/Rokkit", mode: "Shoota barrel"}
+  melee: {item: "Power Klaw", mode: "Punch/crush"}
+  stance: charge
+  note: "Mega armour, power klaw and kombi-weapon (template says armour and klaw)."
+
+# ------------------------------------------------------------------ T'au
+Fire Warrior (Shas'la):
+  armour: ["Fire Warrior Combat Armour"]
+  ranged: {item: "Pulse Rifle", mode: "Standard"}
+  stance: shoot
+  note: "Pulse rifle and combat armour (per template notes); no standard melee weapon."
+Fire Warrior Veteran (Shas'ui):
+  armour: ["Fire Warrior Combat Armour"]
+  ranged: {item: "Pulse Rifle", mode: "Standard"}
+  stance: shoot
+  note: "Same as a Shas'la (per template notes); drones not modelled."
+Pathfinder:
+  armour: ["Recon Armour, Pathfinder Pattern"]
+  ranged: {item: "Pulse Carbine", mode: "Standard"}
+  stance: shoot
+  note: "Pulse carbine and recon armour; markerlight does no damage."
+Battlesuit Pilot (Shas'vre):
+  armour: ["XV8 Crisis Battlesuit"]
+  ranged: {item: "Burst Cannon", mode: "Standard, mounted"}
+  stance: shoot
+  note: "XV8 Crisis suit with burst cannon (other hardpoints not modelled)."
+Commander (Shas'o):
+  armour: ["XV8 Crisis Battlesuit"]
+  ranged: {item: "Plasma Rifle, T'au Pattern", mode: "Standard, mounted"}
+  shield: {item: "Shield Generator", sp: 120, delay: 3, recharge: 20, ranged_only: false}
+  stance: advance
+  note: "XV8 Crisis suit, plasma rifle and shield generator."
+Air Caste Pilot (Kor):
+  armour: []
+  ranged: {item: "Pulse Pistol", mode: "Standard"}
+  stance: shoot
+  note: "Sidearm only."
+Earth Caste Engineer (Fio):
+  armour: []
+  ranged: {item: "Pulse Pistol", mode: "Standard"}
+  stance: shoot
+  note: "Sidearm at DX only (per template notes)."
+Water Caste Envoy (Por):
+  armour: []
+  ranged: {item: "Pulse Pistol", mode: "Standard"}
+  stance: shoot
+  note: "Diplomat with a token sidearm."
+Ethereal (Aun):
+  armour: []
+  melee: {item: "Ethereal Honour Blade", mode: "Swing, two-handed"}
+  stance: charge
+  note: "Honour blade only; rarely armed, not a fighter."
+Gun Drone:
+  armour: []
+  ranged: {item: "Pulse Carbine", mode: "Standard"}
+  stance: shoot
+  note: "One pulse carbine of the twin mount; chassis DR from traits."
+Kroot Carnivore:
+  armour: ["Kroot Hide and Scavenged Plate"]
+  ranged: {item: "Kroot Rifle", mode: "Standard"}
+  melee: {item: "Kroot Rifle", mode: "Blade stock (rifle reversed, two-handed)"}
+  stance: advance
+  note: "Kroot rifle with blade stock (per template notes)."
+Kroot Shaper:
+  armour: ["Kroot Hide and Scavenged Plate"]
+  ranged: {item: "Kroot Rifle", mode: "Standard"}
+  melee: {item: "Kroot Rifle", mode: "Blade stock (rifle reversed, two-handed)"}
+  stance: advance
+  note: "Armed like a Carnivore (per template notes)."
+Vespid Stingwing:
+  armour: []
+  ranged: {item: "Neutron Blaster", mode: "Standard"}
+  stance: shoot
+  note: "Neutron blaster; natural armour is not in the data."
+
+# ------------------------------------------------------------------ Tyranids
+Termagant:
+  armour: []
+  ranged: {trait: "Fleshborer", mode: "Standard"}
+  stance: shoot
+  note: "Fleshborer symbiote."
+Hormagaunt:
+  armour: []
+  melee: {trait: "Scything Talons (Hormagaunt)", mode: "Standard"}
+  stance: charge
+  note: "Scything talons."
+Genestealer:
+  armour: []
+  melee: {trait: "Rending Claws", mode: "Standard"}
+  stance: charge
+  note: "Rending claws; the rending-hit line is a rider on the standard line."
+Lictor:
+  armour: []
+  melee: {trait: "Rending Claws", mode: "Standard"}
+  stance: charge
+  note: "Rending claws; flesh hooks are a snare, not modelled."
+Ravener:
+  armour: []
+  melee: {trait: "Scything Talons", mode: "Standard"}
+  stance: charge
+  note: "Scything talons."
+Tyranid Warrior:
+  armour: []
+  ranged: {trait: "Devourer", mode: "Standard"}
+  melee: {trait: "Scything Talons", mode: "Standard"}
+  stance: advance
+  note: "Devourer and scything talons."
+Tyranid Warrior (Bonesword and Lash Whip):
+  armour: []
+  ranged: {trait: "Devourer", mode: "Standard"}
+  melee: {trait: "Bonesword", mode: "Standard"}
+  stance: advance
+  note: "Devourer and bonesword; lash whip entangle not modelled."
+Carnifex:
+  armour: []
+  ranged: {trait: "Venom Cannon", mode: "Standard"}
+  melee: {trait: "Monstrous Crushing Claws", mode: "Standard"}
+  stance: advance
+  note: "Venom cannon and monstrous crushing claws."
+Hive Tyrant:
+  armour: []
+  ranged: {trait: "Venom Cannon", mode: "Standard"}
+  melee: {trait: "Monstrous Scything Talons", mode: "Standard"}
+  stance: advance
+  note: "Venom cannon and monstrous scything talons."
+Zoanthrope:
+  armour: []
+  stance: shoot
+  note: "No weapon line exists; fights only with the Warp Blast power (ignored by the sim), so it punches."

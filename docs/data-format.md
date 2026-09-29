@@ -130,3 +130,19 @@ The path is relative to `data/`; the part after `#` is the entry's `name`. Templ
 
 - A leveled trait whose `points` equals `per_level × levels`. `points` is the base cost added on top of the levels, so this charges twice. If a real base cost happens to equal one level (e.g. Warp Empowerment, 10 + 10/level), mark the entry `base_cost_intended: true`.
 - A weapon line whose usage says "field on" or "power-field" but whose damage has no armour divisor.
+
+## Simulator loadouts (`data/sim/loadouts.yaml`)
+
+The combat simulator on the site (`tools/sim.js`) gives each template a default battle loadout. Keys are template titles exactly as the `.gct` file stems; add-ons are skipped.
+
+```yaml
+Astra Militarum Guardsman:
+  armour: ["Flak Full Suit (Cadian Pattern)", "Flak Helmet"]   # equipment names; a suit container counts as one
+  ranged: {item: "Lasgun, Kantrael Pattern", mode: "Standard"} # mode = the weapon line's usage
+  melee: {item: "Bayonet, Lug-Mounted", mode: "Fixed to lasgun"}   # or {trait: "Rending Claws"} for natural weapons
+  shield: {item: "Refractor Field", sp: 40, delay: 2, recharge: 10, ranged_only: true}   # recharge 0 = one-shot
+  stance: shoot    # shoot | advance | charge
+  note: One line on what this kit is and any choice made.
+```
+
+The simulator reads DR, Weak Points, servo ST and Basic Move changes from the armour items, and follow-up damage from the weapon line after the chosen one. `node tools/sim_test.js` runs a few reference fights against the built site.

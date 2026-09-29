@@ -72,3 +72,8 @@ Anchor and rule changes to `framework.md`, with the reason for each.
 - **Wargear:** pulse weapons (6d×2(2) burn, 1,000/3,000 yd), rail rifles, ion weapons, T'au plasma and fusion, missile pods, smart and seeker missiles, markerlight, Kroot rifle and gun, neutron blaster; Fire Warrior and recon armour; XV25, XV8 and XV88 battlesuits as containers with servo ST on a child; shield generator; support systems.
 - **Anchor fix:** ion overcharge is 6d×4(3) burn ex, stronger than the standard shot (the first anchor had it weaker). Shas'vre Move 6 (follows from DX 14, HT 12).
 - **Skill difficulties** checked against the Basic Set library across every file: Knife and Gunner are Easy, Physics is Very Hard, Flight is HT/A. Points kept; levels adjusted. Navigation (Warp) stays Hard as a deliberate house choice.
+
+## Combat simulator
+
+- **New tool:** a Combat Simulator page on the site. Build two sides from any templates, adjust loadouts, and run hundreds of second-by-second GURPS fights (ranged and melee, Dodge and Parry, Deceptive Attack, hit locations and eye lenses, armour divisors, Weak Points, shields, wounding and Injury Tolerance, follow-ups, shock, stun, consciousness and death checks, Reanimation Protocols, morale). Default loadouts for all 80 templates are in `data/sim/loadouts.yaml`.
+- **Site data:** weapon lines now carry their full default list, and template stats carry combat flags (High Pain Threshold, Hard to Kill, Combat Reflexes, Extra Attack, Injury Tolerance, poison resistance, Reanimation).
