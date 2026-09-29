@@ -1,7 +1,7 @@
 {
 	"version": 5,
 	"id": "BE_i24vUxDbmrrdL6",
-	"notes": "NPC creature stat block, not a player-facing race. Point math: Tyranid Biology 20 + Body Lens: Ravener 520 + Scything Talons 28 + skills 8 = 576 points. Stats: SM +1, ST 22, DX 14, IQ 5, HT 14, HP 26, Will 5, Per 5, natural chitin torso DR 60 (Weak Points 5, eye DR 30), Basic Move 12 (Tunnel Move 7, a separate figure), Tunnelling, Shadow in the Warp (8 yards) — framework.md's Ravener anchor line exactly. This sits at the top of framework.md's Senior Agents tier (350-600): a burrowing ambush predator whose whole value is erupting where it is least expected, not standing toe-to-toe once found. The point total is for GM reference only.\nWeapon-symbiote: carries Scything Talons, the classic Ravener close-combat loadout, built as a natural-attack trait in data/xenos/tyranids/bio-weapons.yaml.\n",
+	"notes": "NPC creature stat block, not a player-facing race. Point math: Tyranid Biology 20 + Body Lens: Ravener 570 (incl. Injury Tolerance 2) + Scything Talons 28 + skills 8 = 626 points. Stats: SM +1, ST 22, DX 14, IQ 5, HT 14, HP 26, Will 5, Per 5, natural chitin torso DR 60 (Weak Points 5, eye DR 30), Basic Move 12 (Tunnel Move 7, a separate figure), Tunnelling, Shadow in the Warp (8 yards) — framework.md's Ravener anchor line exactly. This sits just above framework.md's Senior Agents tier (350-600), in the Astartes tier's (550-850) lower end: a burrowing ambush predator whose whole value is erupting where it is least expected, not standing toe-to-toe once found. The point total is for GM reference only.\nWeapon-symbiote: carries Scything Talons, the classic Ravener close-combat loadout, built as a natural-attack trait in data/xenos/tyranids/bio-weapons.yaml.\n",
 	"traits": [
 		{
 			"id": "TsJ0WwfHeibZPH1Zb",
@@ -123,7 +123,7 @@
 		{
 			"id": "TjFIVyDCig3IL7ECc",
 			"name": "Body Lens: Ravener",
-			"local_notes": "Lore: The Ravener: a serpentine burrowing predator that erupts from beneath a defensive line rather than crossing open ground to reach it. Codex background across editions is explicit that this ambush capability, not raw combat stats, is the Ravener's whole purpose.\n\nDesign: 161 (Attribute Modifiers) + 300 (Chitin DR 60) + 39 (Tunnelling) + 20 (Shadow in the Warp) = 520 points, added to Tyranid Biology's 20 for 540 points of physiology alone before skills and its weapon- symbiote. See the Ravener template. NPC creature stat block only.",
+			"local_notes": "Lore: The Ravener: a serpentine burrowing predator that erupts from beneath a defensive line rather than crossing open ground to reach it. Codex background across editions is explicit that this ambush capability, not raw combat stats, is the Ravener's whole purpose.\n\nDesign: 161 (Attribute Modifiers) + 300 (Chitin DR 60) + 39 (Tunnelling) + 20 (Shadow in the Warp) + 50 (Injury Tolerance 2) = 570 points, added to Tyranid Biology's 20 for 590 points of physiology alone before skills and its weapon- symbiote. See the Ravener template. NPC creature stat block only.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -264,6 +264,22 @@
 						}
 					],
 					"base_points": 10
+				},
+				{
+					"id": "t2huQQxnfsefAAhIt",
+					"name": "Injury Tolerance (Damage Reduction)",
+					"reference": "P53",
+					"local_notes": "Divisor 2 (level = divisor): after DR and wounding multipliers, all injury is divided by 2 (round down, minimum 1 if anything penetrated).\n\nLore: The Ravener's segmented, muscled body keeps moving through damage. Large synapse-beasts and monsters shrug off wounds that would fell smaller creatures.\n\nDesign: Injury Tolerance (Damage Reduction) (GURPS Powers p. 53, 25 points per level, level = divisor): divisor 2 = 50 points. Gives the Ravener the bulk-and-redundant-organs toughness the lore describes on top of its chitin DR and extra HP.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Tyranids"
+					],
+					"points_per_level": 25,
+					"can_level": true,
+					"levels": 2,
+					"base_points": 0
 				}
 			]
 		},

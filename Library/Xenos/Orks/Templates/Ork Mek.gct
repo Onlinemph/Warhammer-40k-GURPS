@@ -1,12 +1,12 @@
 {
 	"version": 5,
 	"id": "BAPDcNW8kUHSiuHEN",
-	"notes": "A Mek: the Ork instinctive engineer, keeping shootas firing, trukks running and the occasional walker lurching forward on belief and scrap alone. Built on the standard Boy chassis, not a growth lens — most Meks are ordinary-sized Orks whose gift is in the hands and head, not the muscle; a GM building a \"Big Mek\" should add the Growth Lens: Nob from Xenos/Orks/Traits/Ork Physiology.adq on top of this template. Point math: Ork Physiology 201 + Mek Instinct (level 2) 20 + skills 16 = 237 points, comfortably inside framework.md's Elite human tier (200-350) — a genuine specialist, not just a Boy with a wrench.\n",
+	"notes": "A Mek: the Ork instinctive engineer, keeping shootas firing, trukks running and the occasional walker lurching forward on belief and scrap alone. Built on the standard Boy chassis, not a growth lens — most Meks are ordinary-sized Orks whose gift is in the hands and head, not the muscle; a GM building a \"Big Mek\" should add the Growth Lens: Nob from Xenos/Orks/Traits/Ork Physiology.adq on top of this template. Point math: Ork Physiology 251 + Mek Instinct (level 2) 20 + skills 16 = 287 points, comfortably inside framework.md's Elite human tier (200-350) — a genuine specialist, not just a Boy with a wrench.\n",
 	"traits": [
 		{
 			"id": "T96chKwg9VfMa22RP",
 			"name": "Ork Physiology",
-			"local_notes": "Lore: An Ork Boy: the baseline greenskin warrior, grown fast, fed on violence, and built to get bigger and meaner the longer it survives. This trait is the shared baseline every growth lens (Nob, Warboss) and every Oddboy specialisation (Mek, Painboy, Weirdboy) builds on top of. Primary sources: Codex: Orks background across editions, Nate Crowley's Ghazghkull Thraka: Prophet of the Waaagh! and Mike Brooks' Brutal Kunnin', calibrated against Dark Heresy/Rogue Trader/Deathwatch/Only War Ork material for relative scale.\n\nDesign: 138 (Attribute Modifiers) + 15 (Basic Move +3) + 10 (Thick Hide) + 10 (High Pain Threshold) + 6 (Hard to Kill 3) + 5 (Rapid Healing) + 6 (Thick Skull) + 15 (Resistant to Disease and Toxins) + 0 (Fungal Physiology) - 10 (Bloodlust) - 10 (Impulsiveness) - 5 (Overconfidence) + 10 (Ork Kunnin' 1) + 5 (WAAAGH! Gestalt) + 6 (Fearlessness 3) = 201 points of physiology alone, before skills — see the Ork Boy template for a full character, and the growth lenses and Oddboy Talents below for Nobs, Warbosses, Meks, Painboyz and Weirdboyz built on top of it.",
+			"local_notes": "Lore: An Ork Boy: the baseline greenskin warrior, grown fast, fed on violence, and built to get bigger and meaner the longer it survives. This trait is the shared baseline every growth lens (Nob, Warboss) and every Oddboy specialisation (Mek, Painboy, Weirdboy) builds on top of. Primary sources: Codex: Orks background across editions, Nate Crowley's Ghazghkull Thraka: Prophet of the Waaagh! and Mike Brooks' Brutal Kunnin', calibrated against Dark Heresy/Rogue Trader/Deathwatch/Only War Ork material for relative scale.\n\nDesign: 138 (Attribute Modifiers) + 15 (Basic Move +3) + 10 (Thick Hide) + 10 (High Pain Threshold) + 6 (Hard to Kill 3) + 5 (Rapid Healing) + 6 (Thick Skull) + 15 (Resistant to Disease and Toxins) + 0 (Fungal Physiology) - 10 (Bloodlust) - 10 (Impulsiveness) - 5 (Overconfidence) + 10 (Ork Kunnin' 1) + 5 (WAAAGH! Gestalt) + 6 (Fearlessness 3) + 50 (Injury Tolerance (Damage Reduction), divisor 2) = 251 points of physiology alone, before skills — see the Ork Boy template for a full character, and the growth lenses and Oddboy Talents below for Nobs, Warbosses, Meks, Painboyz and Weirdboyz built on top of it.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -176,6 +176,22 @@
 						"Orks"
 					],
 					"base_points": 15
+				},
+				{
+					"id": "tCaH-N9CYwTTwFCga",
+					"name": "Injury Tolerance (Damage Reduction)",
+					"reference": "P53",
+					"local_notes": "Divisor 2 (level = divisor): after DR and wounding multipliers, all injury is divided by 2 (round down, minimum 1 if anything penetrated). The Nob and Warboss growth lenses raise the divisor through \"Injury Tolerance (Damage Reduction) upgrade\" levels; add the upgrade levels to this trait's 2 for the total divisor.\n\nLore: Orks survive and fight on through wounds that would kill a man: Codex: Orks background is full of Boyz who keep charging with holes in them, and the fungal-hardy greenskin body simply does not register damage the way a human one does. A big Ork is tougher still (see the growth lenses).\n\nDesign: Injury Tolerance (Damage Reduction) (GURPS Powers p. 53, 25 points per level, level = divisor): divisor 2 = 50 points. Bought as levels rather than a flat cost so the growth lenses can raise the divisor one step at a time. It is what keeps a Boy standing after two lasgun hits and makes bolt-pistol rounds a real but not instantly fatal threat, on top of Thick Hide's DR and the extra HP.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Orks"
+					],
+					"points_per_level": 25,
+					"can_level": true,
+					"levels": 2,
+					"base_points": 0
 				},
 				{
 					"id": "tCuak4ei28PLJw_rW",

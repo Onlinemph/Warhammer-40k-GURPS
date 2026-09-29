@@ -1,7 +1,7 @@
 {
 	"version": 5,
 	"id": "BfF1iEhmaitWbMjBN",
-	"notes": "NPC creature stat block, not a player-facing race. Point math: Tyranid Biology 20 + Body Lens: Hive Tyrant 1170 (Wings disabled by default; +30 if a winged variant is enabled) + Unusual Background 10 + Warp Empowerment 2 (30) + Psyker (Talent) 3 (30) + The Horror (28) + Dominion 1 (18) + Monstrous Scything Talons 62 + Venom Cannon 225 + skills 10 = 1603 points. Stats: SM +2, ST 45, DX 13, IQ 12, HT 16, HP 60, Basic Move 10, Will 12 (+3 from Psyker Talent's Perils bonus, see that trait's notes), Per 12, natural chitin torso DR 120 (Weak Points 4, eye DR 60), Regeneration (Regular), Synapse Creature (32 yards), Shadow in the Warp (32 yards) — framework.md's Hive Tyrant anchor line exactly. This lands squarely in framework.md's Heroes and Legends tier (1,000-3,000): the swarm's synapse lord and its own psyker, matching Codex background's treatment of a confirmed Hive Tyrant kill as a campaign-level victory. The point total is for GM reference only, not party balance.\nWeapon-symbiotes: carries Monstrous Scything Talons and a Venom Cannon — a classic Hive Tyrant loadout of one melee and one heavy ranged symbiote, both built as natural-attack traits in data/xenos/tyranids/bio-weapons.yaml.\n",
+	"notes": "NPC creature stat block, not a player-facing race. Point math: Tyranid Biology 20 + Body Lens: Hive Tyrant 1245 (incl. Injury Tolerance 3; Wings disabled by default; +30 if a winged variant is enabled) + Unusual Background 10 + Warp Empowerment 2 (30) + Psyker (Talent) 3 (30) + The Horror (28) + Dominion 1 (18) + Monstrous Scything Talons 62 + Venom Cannon 225 + skills 10 = 1678 points. Stats: SM +2, ST 45, DX 13, IQ 12, HT 16, HP 60, Basic Move 10, Will 12 (+3 from Psyker Talent's Perils bonus, see that trait's notes), Per 12, natural chitin torso DR 120 (Weak Points 4, eye DR 60), Regeneration (Regular), Synapse Creature (32 yards), Shadow in the Warp (32 yards) — framework.md's Hive Tyrant anchor line exactly. This lands squarely in framework.md's Heroes and Legends tier (1,000-3,000): the swarm's synapse lord and its own psyker, matching Codex background's treatment of a confirmed Hive Tyrant kill as a campaign-level victory. The point total is for GM reference only, not party balance.\nWeapon-symbiotes: carries Monstrous Scything Talons and a Venom Cannon — a classic Hive Tyrant loadout of one melee and one heavy ranged symbiote, both built as natural-attack traits in data/xenos/tyranids/bio-weapons.yaml.\n",
 	"traits": [
 		{
 			"id": "TP849dfcd5majQKH8",
@@ -123,7 +123,7 @@
 		{
 			"id": "TTOlMUdC4XKJP5VRw",
 			"name": "Body Lens: Hive Tyrant",
-			"local_notes": "Lore: The Hive Tyrant: the Hive Mind's synapse lord and its own psyker, the biggest single command bioform normally seen on the ground and the anchor of a swarm's local tactical will. Consistent Codex background across editions; Black Library's Hive Fleet fiction routinely treats a confirmed Hive Tyrant kill as a campaign-level victory.\n\nDesign: 485 (Attribute Modifiers) + 600 (Chitin DR 120) + 25 (Regeneration) + 30 (Synapse Creature) + 30 (Shadow in the Warp) = 1170 points (Wings disabled by default, +30 more if enabled), added to Tyranid Biology's 20 for 1190 points of physiology alone before skills, psychic powers (data/xenos/tyranids/psychic.yaml) and weapon- symbiotes -- squarely in framework.md's Heroes and Legends tier (1,000-3,000), appropriate for the swarm's synapse lord. See the Hive Tyrant template. NPC creature stat block only; this total is for GM reference, not party balance.",
+			"local_notes": "Lore: The Hive Tyrant: the Hive Mind's synapse lord and its own psyker, the biggest single command bioform normally seen on the ground and the anchor of a swarm's local tactical will. Consistent Codex background across editions; Black Library's Hive Fleet fiction routinely treats a confirmed Hive Tyrant kill as a campaign-level victory.\n\nDesign: 485 (Attribute Modifiers) + 600 (Chitin DR 120) + 25 (Regeneration) + 30 (Synapse Creature) + 30 (Shadow in the Warp) + 75 (Injury Tolerance 3) = 1245 points (Wings disabled by default, +30 more if enabled), added to Tyranid Biology's 20 for 1265 points of physiology alone before skills, psychic powers (data/xenos/tyranids/psychic.yaml) and weapon- symbiotes -- squarely in framework.md's Heroes and Legends tier (1,000-3,000), appropriate for the swarm's synapse lord. See the Hive Tyrant template. NPC creature stat block only; this total is for GM reference, not party balance.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -311,6 +311,22 @@
 						}
 					],
 					"base_points": 10
+				},
+				{
+					"id": "tKjhbMKwoaShTXucy",
+					"name": "Injury Tolerance (Damage Reduction)",
+					"reference": "P53",
+					"local_notes": "Divisor 3 (level = divisor): after DR and wounding multipliers, all injury is divided by 3 (round down, minimum 1 if anything penetrated).\n\nLore: A Hive Tyrant's vast bulk and redundant organs make a killing wound very hard to land. Large synapse-beasts and monsters shrug off wounds that would fell smaller creatures.\n\nDesign: Injury Tolerance (Damage Reduction) (GURPS Powers p. 53, 25 points per level, level = divisor): divisor 3 = 75 points. Gives the Hive Tyrant the bulk-and-redundant-organs toughness the lore describes on top of its chitin DR and extra HP.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Tyranids"
+					],
+					"points_per_level": 25,
+					"can_level": true,
+					"levels": 3,
+					"base_points": 0
 				}
 			]
 		},

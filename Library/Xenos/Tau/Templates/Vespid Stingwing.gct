@@ -1,12 +1,12 @@
 {
 	"version": 5,
 	"id": "B1zyPkR_otof0E90J",
-	"notes": "A Vespid Stingwing: a winged insectoid mercenary who strafes and skirmishes for the T'au with a neutron blaster, under its Strain Leader. Point math (see Xenos/Tau/Traits/T'au Traits.adq): Vespid Physiology (110) + Vespid Strain (-5) = 105 points of traits, plus skills (54 points) = 159 points. Stats: ST 11, DX 13, IQ 8, HT 11, HP 11, Will 10, Per 12, Speed 6.0, Move 6, Dodge 9. Tier: trained soldier (100-175).\n\nThe neutron blaster is a Beam Weapons (Rifle) skill. Vespid natural armour is deliberately left out (no confident source); see the Vespid Physiology trait. Flight is bought at HT/A (B195), rated at HT 11.",
+	"notes": "A Vespid Stingwing: a winged insectoid mercenary who strafes and skirmishes for the T'au with a neutron blaster, under its Strain Leader. Point math (see Xenos/Tau/Traits/T'au Traits.adq): Vespid Physiology (235, including Chitin 125) + Vespid Strain (-5) = 230 points of traits, plus skills (54 points) = 284 points. Stats: ST 11, DX 13, IQ 8, HT 11, HP 11, Will 10, Per 12, Speed 6.0, Move 6, Dodge 9. Tier: elite human (200-350).\n\nThe neutron blaster is a Beam Weapons (Rifle) skill. Vespid natural armour is Chitin (DR 25, Weak Points 7, eye DR 12), see the Vespid Physiology trait. Flight is bought at HT/A (B195), rated at HT 11.",
 	"traits": [
 		{
 			"id": "TOXI-BitGjiVRVVQU",
 			"name": "Vespid Physiology",
-			"local_notes": "Lore: The Vespid are winged, insectoid mercenaries from a distant world whom the T'au hire for their flight and firepower. They are led by Strain Leaders, and their Stingwings fire neutron blasters powered by crystals from their homeworld, reportedly hard for others to use. Codex: T'au Empire background, Vespid Stingwings.\n\nDesign: Attribute Modifiers (Vespid) 70 + Flight (Winged) 30 + Enhanced Move (Air) 1/2 10 = 110 points, framework.md's Vespid Stingwing line before training. Not priced, for lack of lore confidence: chitin armour (a Vespid may well have natural DR; Damage Resistance is 5/level and adding a guess would push the template past its 150-220 target), compound-eye vision (Peripheral Vision), and language limits. The crystal link to the neutron blaster is equipment, not a trait.",
+			"local_notes": "Lore: The Vespid are winged, insectoid mercenaries from a distant world whom the T'au hire for their flight and firepower. They are led by Strain Leaders, and their Stingwings fire neutron blasters powered by crystals from their homeworld, reportedly hard for others to use. Codex: T'au Empire background, Vespid Stingwings.\n\nDesign: Attribute Modifiers (Vespid) 70 + Flight (Winged) 30 + Enhanced Move (Air) 1/2 10 + Chitin (Vespid) 125 = 235 points, framework.md's Vespid Stingwing line before training. Chitin is DR 25 (a hard insectoid exoskeleton, modelled on the Tyranid Termagant's light chitin; the exact lore figure is thin, so it is set at the flak-and-a-bit end rather than carapace class); it was added after combat testing showed a Stingwing with no natural armour at all. Not priced, for lack of lore confidence: compound-eye vision (Peripheral Vision) and language limits. The crystal link to the neutron blaster is equipment, not a trait.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -98,6 +98,31 @@
 					"points_per_level": 20,
 					"can_level": true,
 					"levels": 0.5
+				},
+				{
+					"id": "t9n5sMY-B7S2bfD19",
+					"name": "Chitin (Vespid)",
+					"reference": "B46",
+					"local_notes": "DR 25, all locations. Weak Points 7 (thin, gappy plates and wing joints): on a hit that fails to penetrate, roll 3d; 7 or less halves DR (13, rounded down) against that hit. Compound eyes run at DR 12 (roughly half the body DR) rather than 25.\n\nLore: Vespid bodies are covered in a hard chitinous shell, which is why the T'au use them as skirmishers in the open. Codex: T'au Empire background describes them as insectoid; the exact toughness is not stated, so this is a modest figure.\n\nDesign: Damage Resistance (B46, 5/level, all locations), 25 levels = 125 points, at the same DR and Weak Points as this project's Tyranid Termagant chitin (a light exoskeleton, framework.md's flak-tier Weak Points 7).",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"T'au",
+						"Vespid"
+					],
+					"points_per_level": 5,
+					"can_level": true,
+					"levels": 25,
+					"features": [
+						{
+							"type": "dr_bonus",
+							"locations": [
+								"all"
+							],
+							"amount": 25
+						}
+					]
 				}
 			]
 		},

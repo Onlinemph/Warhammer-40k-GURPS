@@ -724,10 +724,12 @@ items:
     others to use. Codex: T'au Empire background, Vespid Stingwings.
   design: >-
     Attribute Modifiers (Vespid) 70 + Flight (Winged) 30 + Enhanced Move (Air) 1/2 10
-    = 110 points, framework.md's Vespid Stingwing line before training. Not priced, for
-    lack of lore confidence: chitin armour (a Vespid may well have natural DR; Damage
-    Resistance is 5/level and adding a guess would push the template past its 150-220
-    target), compound-eye vision (Peripheral Vision), and language limits. The crystal
+    + Chitin (Vespid) 125 = 235 points, framework.md's Vespid Stingwing line before
+    training. Chitin is DR 25 (a hard insectoid exoskeleton, modelled on the Tyranid
+    Termagant's light chitin; the exact lore figure is thin, so it is set at the
+    flak-and-a-bit end rather than carapace class); it was added after combat testing
+    showed a Stingwing with no natural armour at all. Not priced, for lack of lore
+    confidence: compound-eye vision (Peripheral Vision) and language limits. The crystal
     link to the neutron blaster is equipment, not a trait.
   children:
   - name: Attribute Modifiers (Vespid)
@@ -759,6 +761,24 @@ items:
     design: >-
       Enhanced Move (Air) 1/2 (B52, 20/level = 10 points). Air Move 12, top speed 18,
       meeting framework.md's 'Air 16+'.
+  - name: Chitin (Vespid)
+    per_level: 5
+    levels: 25
+    ref: B46
+    dr: {all: 25}
+    tags: [Advantage, Physical, Xenos, T'au, Vespid]
+    notes: >-
+      DR 25, all locations. Weak Points 7 (thin, gappy plates and wing joints): on a hit
+      that fails to penetrate, roll 3d; 7 or less halves DR (13, rounded down) against
+      that hit. Compound eyes run at DR 12 (roughly half the body DR) rather than 25.
+    lore: >-
+      Vespid bodies are covered in a hard chitinous shell, which is why the T'au use them
+      as skirmishers in the open. Codex: T'au Empire background describes them as
+      insectoid; the exact toughness is not stated, so this is a modest figure.
+    design: >-
+      Damage Resistance (B46, 5/level, all locations), 25 levels = 125 points, at the same
+      DR and Weak Points as this project's Tyranid Termagant chitin (a light exoskeleton,
+      framework.md's flak-tier Weak Points 7).
 - name: Vespid Strain
   container: meta_trait
   tags: [Disadvantage, Mental, Xenos, T'au, Vespid]

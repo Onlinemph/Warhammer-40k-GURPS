@@ -199,7 +199,7 @@
 		{
 			"id": "Tr0Ob9YKUWTctmlNl",
 			"name": "Ork Physiology",
-			"local_notes": "Lore: An Ork Boy: the baseline greenskin warrior, grown fast, fed on violence, and built to get bigger and meaner the longer it survives. This trait is the shared baseline every growth lens (Nob, Warboss) and every Oddboy specialisation (Mek, Painboy, Weirdboy) builds on top of. Primary sources: Codex: Orks background across editions, Nate Crowley's Ghazghkull Thraka: Prophet of the Waaagh! and Mike Brooks' Brutal Kunnin', calibrated against Dark Heresy/Rogue Trader/Deathwatch/Only War Ork material for relative scale.\n\nDesign: 138 (Attribute Modifiers) + 15 (Basic Move +3) + 10 (Thick Hide) + 10 (High Pain Threshold) + 6 (Hard to Kill 3) + 5 (Rapid Healing) + 6 (Thick Skull) + 15 (Resistant to Disease and Toxins) + 0 (Fungal Physiology) - 10 (Bloodlust) - 10 (Impulsiveness) - 5 (Overconfidence) + 10 (Ork Kunnin' 1) + 5 (WAAAGH! Gestalt) + 6 (Fearlessness 3) = 201 points of physiology alone, before skills — see the Ork Boy template for a full character, and the growth lenses and Oddboy Talents below for Nobs, Warbosses, Meks, Painboyz and Weirdboyz built on top of it.",
+			"local_notes": "Lore: An Ork Boy: the baseline greenskin warrior, grown fast, fed on violence, and built to get bigger and meaner the longer it survives. This trait is the shared baseline every growth lens (Nob, Warboss) and every Oddboy specialisation (Mek, Painboy, Weirdboy) builds on top of. Primary sources: Codex: Orks background across editions, Nate Crowley's Ghazghkull Thraka: Prophet of the Waaagh! and Mike Brooks' Brutal Kunnin', calibrated against Dark Heresy/Rogue Trader/Deathwatch/Only War Ork material for relative scale.\n\nDesign: 138 (Attribute Modifiers) + 15 (Basic Move +3) + 10 (Thick Hide) + 10 (High Pain Threshold) + 6 (Hard to Kill 3) + 5 (Rapid Healing) + 6 (Thick Skull) + 15 (Resistant to Disease and Toxins) + 0 (Fungal Physiology) - 10 (Bloodlust) - 10 (Impulsiveness) - 5 (Overconfidence) + 10 (Ork Kunnin' 1) + 5 (WAAAGH! Gestalt) + 6 (Fearlessness 3) + 50 (Injury Tolerance (Damage Reduction), divisor 2) = 251 points of physiology alone, before skills — see the Ork Boy template for a full character, and the growth lenses and Oddboy Talents below for Nobs, Warbosses, Meks, Painboyz and Weirdboyz built on top of it.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -369,6 +369,22 @@
 						"Orks"
 					],
 					"base_points": 15
+				},
+				{
+					"id": "trpQKIyM9rLuExB56",
+					"name": "Injury Tolerance (Damage Reduction)",
+					"reference": "P53",
+					"local_notes": "Divisor 2 (level = divisor): after DR and wounding multipliers, all injury is divided by 2 (round down, minimum 1 if anything penetrated). The Nob and Warboss growth lenses raise the divisor through \"Injury Tolerance (Damage Reduction) upgrade\" levels; add the upgrade levels to this trait's 2 for the total divisor.\n\nLore: Orks survive and fight on through wounds that would kill a man: Codex: Orks background is full of Boyz who keep charging with holes in them, and the fungal-hardy greenskin body simply does not register damage the way a human one does. A big Ork is tougher still (see the growth lenses).\n\nDesign: Injury Tolerance (Damage Reduction) (GURPS Powers p. 53, 25 points per level, level = divisor): divisor 2 = 50 points. Bought as levels rather than a flat cost so the growth lenses can raise the divisor one step at a time. It is what keeps a Boy standing after two lasgun hits and makes bolt-pistol rounds a real but not instantly fatal threat, on top of Thick Hide's DR and the extra HP.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Orks"
+					],
+					"points_per_level": 25,
+					"can_level": true,
+					"levels": 2,
+					"base_points": 0
 				},
 				{
 					"id": "tuHkuHVp4MDIyCbVs",
@@ -621,7 +637,7 @@
 		{
 			"id": "TNp68a0lxabWgIwQg",
 			"name": "Growth Lens: Nob",
-			"local_notes": "Lore: A Nob (short for \"Nobz,\" itself short for \"Nobber\") is a Boy who has survived enough fights, and eaten enough of the mob's best food, to keep growing well past where most Boyz stop. Nobs are the Ork mob's natural toughs, bodyguards and squad bosses — bigger, tougher and meaner, and canny enough to have picked up real tactical sense the hard way.\n\nDesign: 74 points, added to the Ork Physiology package's 201 for 275 points of physiology before skills. See the Ork Nob template.",
+			"local_notes": "Lore: A Nob (short for \"Nobz,\" itself short for \"Nobber\") is a Boy who has survived enough fights, and eaten enough of the mob's best food, to keep growing well past where most Boyz stop. Nobs are the Ork mob's natural toughs, bodyguards and squad bosses — bigger, tougher and meaner, and canny enough to have picked up real tactical sense the hard way.\n\nDesign: 74 (Attribute Modifiers) + 25 (Injury Tolerance upgrade, divisor 3 total) = 99 points, added to the Ork Physiology package's 251 for 350 points of physiology before skills. See the Ork Nob template.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -678,13 +694,29 @@
 							"amount": 1
 						}
 					]
+				},
+				{
+					"id": "twrD__Ls3MFWi7BQi",
+					"name": "Injury Tolerance (Damage Reduction) upgrade",
+					"reference": "P53",
+					"local_notes": "Raises the divisor of the Ork Physiology package's Injury Tolerance (Damage Reduction) by one (divisor 2 becomes 3): total divisor 3. The simulator sums the levels of the base trait and this upgrade.\n\nLore: A Nob is a bigger, older Ork, and the extra bulk soaks up wounds that would drop a Boy: he shrugs off hits that would fell a smaller Ork (Codex: Orks background).\n\nDesign: Injury Tolerance (Damage Reduction) (GURPS Powers p. 53, 25 points per level, level = divisor): 1 further level, 25 points.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Orks"
+					],
+					"points_per_level": 25,
+					"can_level": true,
+					"levels": 1,
+					"base_points": 0
 				}
 			]
 		},
 		{
 			"id": "TBQmUbdls2HWdNGud",
 			"name": "Growth Lens: Warboss",
-			"local_notes": "Lore: A Warboss is the biggest, meanest, canniest Ork in charge of a Waaagh — a Boy or Nob who kept fighting, kept winning, and kept growing until nothing short of a Space Marine or worse could reliably put him down. Ghazghkull Thraka: Prophet of the Waaagh! is the definitive Black Library portrait; current Codex: Orks background agrees a Warboss out-muscles a Space Marine on raw size and power alone.\n\nDesign: 166 (Attribute Modifiers) + 15 (Combat Reflexes) + 8 (Fearlessness 4) + 10 (Regeneration) + 6 (further Hard to Kill 3) + 15 (Reputation) + 15 (Charisma 3) + 10 (Basic Speed) + 5 (Basic Move +1) + 20 (Wealth) = 270 points, added to the Ork Physiology package's 201 for 471 points of physiology and command presence before skills. See the Ork Warboss template, which lands the full character just under the low end of framework.md's Astartes point tier (550-800) — appropriate for a solid, competent Warboss; a legendary name like Ghazghkull himself would run well past this, into the framework's Heroes and Legends tier, and should be built as a bespoke NPC on top of this template rather than read off it directly.",
+			"local_notes": "Lore: A Warboss is the biggest, meanest, canniest Ork in charge of a Waaagh — a Boy or Nob who kept fighting, kept winning, and kept growing until nothing short of a Space Marine or worse could reliably put him down. Ghazghkull Thraka: Prophet of the Waaagh! is the definitive Black Library portrait; current Codex: Orks background agrees a Warboss out-muscles a Space Marine on raw size and power alone.\n\nDesign: 166 (Attribute Modifiers) + 15 (Combat Reflexes) + 8 (Fearlessness 4) + 10 (Regeneration) + 6 (further Hard to Kill 3) + 15 (Reputation) + 15 (Charisma 3) + 10 (Basic Speed) + 5 (Basic Move +1) + 20 (Wealth) + 50 (Injury Tolerance upgrade 2, divisor 4 total; the Warboss lens replaces the Nob lens, so it carries both steps) = 320 points, added to the Ork Physiology package's 251 for 571 points of physiology and command presence before skills. See the Ork Warboss template, which lands the full character just under the low end of framework.md's Astartes point tier (550-800) — appropriate for a solid, competent Warboss; a legendary name like Ghazghkull himself would run well past this, into the framework's Heroes and Legends tier, and should be built as a bespoke NPC on top of this template rather than read off it directly.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -733,6 +765,22 @@
 							"amount": 1
 						}
 					]
+				},
+				{
+					"id": "twd0rdnCmOp91z2J8",
+					"name": "Injury Tolerance (Damage Reduction) upgrade",
+					"reference": "P53",
+					"local_notes": "Raises the divisor of the Ork Physiology package's Injury Tolerance (Damage Reduction) by two (this lens replaces the Nob lens rather than stacking on it, so it carries both steps: divisor 2 becomes 4): total divisor 4. The simulator sums the levels of the base trait and this upgrade.\n\nLore: A Warboss is tougher than any Nob; wounds that would fell a smaller Ork barely slow the biggest of the breed (Codex: Orks background).\n\nDesign: Injury Tolerance (Damage Reduction) (GURPS Powers p. 53, 25 points per level, level = divisor): 2 further levels, 50 points.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Orks"
+					],
+					"points_per_level": 25,
+					"can_level": true,
+					"levels": 2,
+					"base_points": 0
 				},
 				{
 					"id": "tAwh0eaKXCPVpEjgu",

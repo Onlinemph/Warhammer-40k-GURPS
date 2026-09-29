@@ -250,7 +250,7 @@ Orks are fungal-based greenskins who grow bigger, stronger and tougher the longe
 | Nob | 26 | 11 | 9 | 14 | 32 | 0 (+1 for big ones) | A Boy who survived long enough to grow. |
 | Warboss | 32 | 12 | 10 | 15 | 40 | +1 | Out-muscles a Space Marine; sheer bulk. |
 
-Ork physiology traits: very high pain tolerance, Hard to Kill, fast healing and survivability of wounds that kill other species (heads sewn back on by Painboyz), love of violence (Bloodlust, Impulsiveness), growth with age as template lenses. Orks reproduce by spores, have no fear to speak of, and the Weirdboy's psychic power is fed by nearby Orks' WAAAGH! energy.
+Ork physiology traits: very high pain tolerance, Hard to Kill, fast healing and survivability of wounds that kill other species (heads sewn back on by Painboyz), **Injury Tolerance (Damage Reduction)** (GURPS Powers p. 53, 25 points per level, level = divisor: injury after DR and wounding multipliers is divided by it; Boy ÷2, Nob ÷3, Warboss ÷4, Gretchin none, with the Nob and Warboss lenses adding upgrade levels), love of violence (Bloodlust, Impulsiveness), growth with age as template lenses. Orks reproduce by spores, have no fear to speak of, and the Weirdboy's psychic power is fed by nearby Orks' WAAAGH! energy.
 
 **Ork tech.** Mekboyz build by instinct (a genetic Talent for Engineer/Mechanic/Armoury). Ork weapons are crude and unreliable: Malf 14 for most, 15 at best, 13 for kustom jobs, 12 for the zzap gun, and low Acc (shootas Acc 1–2). They compensate with big calibres and high RoF (dakka). Ork armour is thick scrap plate with many gaps: high Weak Points ratings (7–8).
 
@@ -367,7 +367,7 @@ The T'au are a young, fast-rising empire bound by the Greater Good (T'au'va) and
 | Kroot Shaper | 13 | 13 | 11 | 12 | 13 | 13 | 12 | 8 | Kindred leader; decides what the kindred eats. |
 | Vespid Stingwing | 11 | 13 | 8 | 11 | 11 | 12 | 10 | 6 (Air 16+) | Winged insectoid, crystal-linked to neutron blasters. |
 
-Point targets (equipment excluded, so battlesuits don't count): castes other than Fire 80–180; Fire Warrior 120–160; Pathfinder 150–200; Shas'ui 180–240; battlesuit pilot 220–320; Ethereal 280–400; Commander 380–520; Kroot Carnivore 150–220; Kroot Shaper 250–350; Vespid 150–220.
+Point targets (equipment excluded, so battlesuits don't count): castes other than Fire 80–180; Fire Warrior 120–160; Pathfinder 150–200; Shas'ui 180–240; battlesuit pilot 220–320; Ethereal 280–400; Commander 380–520; Kroot Carnivore 150–220; Kroot Shaper 250–350; Vespid 250–320 (includes chitin DR 25).
 
 T'au traits: **Warp-Faint** (almost no warp presence: bonus to resist psychic powers and daemonic influence, and cannot be a psyker; build from Basic Set traits honestly), caste physiology as template lenses (Air caste: hollow bones and low-gravity adaptation; Earth caste: stocky and robust), **the Greater Good** (a Sense of Duty and Code of Honour to the T'au'va and the castes, not fanaticism in the Imperial sense), devotion to the Ethereals (T'au near an Ethereal fight harder and hold longer; the Ethereal's side of it is a Leadership/Charisma-style advantage, the Fire Warrior's a matching reaction), and poor close-combat training (Fire caste doctrine avoids it; a skill gap, not a disadvantage). Background gives the T'au shorter lives than humans; treat Short Lifespan as supported only if the drafter is confident, and say so. Kroot: beak (Sharp Teeth), Acute Smell/Taste, climbing and tracking talents, fast Move, and **genetic absorption** (Kroot evolve by eating the flesh of the strong: a kindred-level trait for flavour, not a per-meal stat change).
 
@@ -396,7 +396,7 @@ T'au technology is TL11 science without the ^ superscience tag, except drone AI 
 | Fire Warrior combat armour | Composite plates: DR 70 (carapace class), Weak Points 5, eye 20 |
 | Recon armour (Pathfinder) | Flexible, DR 36, Weak Points 5 |
 | XV25 Stealth battlesuit | DR 85, Weak Points 4, stealth field (a large visual-concealment bonus, not DR), jump jets |
-| XV8 Crisis battlesuit | DR 110, Weak Points 3, eye 45; about 2.5 m (SM +1); servo ST for the suit (child item per the GCS container rule); jet pack for short flight bursts; three hardpoints for weapon and support systems |
+| XV8 Crisis battlesuit | DR 110, Weak Points 3, eye 45; about 2.5 m (SM +1); servo ST for the suit (child item per the GCS container rule); suit HP +30 for the wearer while worn (XV25 +10, XV88 +40); jet pack for short flight bursts; three hardpoints for weapon and support systems |
 | XV88 Broadside battlesuit | DR 170, Weak Points 3; heavy and slow, no jet pack |
 | Shield generator | Regenerating shield, iron-halo class (120 SP, 3 s, 20/s) |
 | Shield drone | Projects 80 SP onto its charge; the drone dies when the shield breaks through |
@@ -451,7 +451,7 @@ The Tyranids are a galaxy-devouring swarm of bio-engineered organisms directed b
 | Hive Tyrant | +2 | 45 | 13 | 12 | 16 | 60 | 120 | Synapse lord, psyker |
 | Carnifex | +2 | 60 | 10 | 4 | 16 | 70 | 150 | Living battering ram |
 
-Tyranid traits: Hive Mind link and **synapse** (within range of a synapse creature, Tyranids fight with total discipline and no fear; outside it they revert to instinct: feeding or fleeing, a disadvantage built honestly), **Shadow in the Warp** (the Hive Mind's presence smothers nearby psykers: a penalty to psychic power and a Fright Check risk, built as an aura; carried by synapse creatures (Warrior, Zoanthrope, Hive Tyrant) and, as a house choice, the Ravener and Lictor, but not the Carnifex), no fear or pain within synapse, immunity to disease and toxins, adapted biology (regeneration on larger forms), no language or society. Tyranid psychic powers use the Sorcery model with the Hive Mind as the source; they suffer Perils like other psykers but with Hive Mind flavour.
+Tyranid traits: Hive Mind link and **synapse** (within range of a synapse creature, Tyranids fight with total discipline and no fear; outside it they revert to instinct: feeding or fleeing, a disadvantage built honestly), **Shadow in the Warp** (the Hive Mind's presence smothers nearby psykers: a penalty to psychic power and a Fright Check risk, built as an aura; carried by synapse creatures (Warrior, Zoanthrope, Hive Tyrant) and, as a house choice, the Ravener and Lictor, but not the Carnifex), no fear or pain within synapse, **Injury Tolerance (Damage Reduction)** (GURPS Powers p. 53, 25 points per level, level = divisor) on the large synapse-beasts and monsters (Warrior, Ravener and Lictor ÷2; Carnifex and Hive Tyrant ÷3; not gaunts, Genestealers or the Zoanthrope), immunity to disease and toxins, adapted biology (regeneration on larger forms), no language or society. Tyranid psychic powers use the Sorcery model with the Hive Mind as the source; they suffer Perils like other psykers but with Hive Mind flavour.
 
 Weapon-symbiote anchors:
 

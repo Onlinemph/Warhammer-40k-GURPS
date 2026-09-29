@@ -358,7 +358,7 @@ items:
       Skull) + 15 (Resistant to Disease and Toxins) + 0
       (Fungal Physiology) - 10 (Bloodlust) - 10 (Impulsiveness) - 5
       (Overconfidence) + 10 (Ork Kunnin' 1) + 5 (WAAAGH! Gestalt) + 6
-      (Fearlessness 3) = 201 points of physiology alone, before skills — see the Ork Boy template
+      (Fearlessness 3) + 50 (Injury Tolerance (Damage Reduction), divisor 2) = 251 points of physiology alone, before skills — see the Ork Boy template
       for a full character, and the growth lenses and Oddboy Talents below
       for Nobs, Warbosses, Meks, Painboyz and Weirdboyz built on top of it.
 
@@ -499,6 +499,22 @@ items:
           hulking, unmistakable brutes even among their already-oversized
           kind.
         design: 0-point size flag; see notes.
+      - name: "Injury Tolerance (Damage Reduction) upgrade"
+        points: 0
+        per_level: 25
+        levels: 1
+        ref: P53
+        tags: [Advantage, Physical, Xenos, Orks]
+        notes: >
+          Raises the divisor of the Ork Physiology package's Injury
+          Tolerance (Damage Reduction) by one
+          (divisor 2 becomes 3): total divisor 3. The simulator sums the levels of
+          the base trait and this upgrade.
+        lore: >
+          A Nob is a bigger, older Ork, and the extra bulk soaks up wounds that would drop a Boy: he shrugs off hits that would fell a smaller Ork (Codex: Orks background).
+        design: >
+          Injury Tolerance (Damage Reduction) (GURPS Powers p. 53, 25
+          points per level, level = divisor): 1 further level, 25 points.
     lore: >
       A Nob (short for "Nobz," itself short for "Nobber") is a Boy who has
       survived enough fights, and eaten enough of the mob's best food, to
@@ -507,8 +523,9 @@ items:
       meaner, and canny enough to have picked up real tactical sense the
       hard way.
     design: >
-      74 points, added to the Ork Physiology package's 201 for 275 points
-      of physiology before skills. See the Ork Nob template.
+      74 (Attribute Modifiers) + 25 (Injury Tolerance upgrade, divisor 3
+      total) = 99 points, added to the Ork Physiology package's 251 for 350
+      points of physiology before skills. See the Ork Nob template.
 
   - name: "Growth Lens: Warboss"
     container: meta_trait
@@ -538,6 +555,22 @@ items:
           own +4, for combined extra +8 over the new ST-32 base of 32,
           giving HP 40. SM +1 carries no cost beyond the ST discount
           already taken. 78+20+40+20+8 = 166 points.
+      - name: "Injury Tolerance (Damage Reduction) upgrade"
+        points: 0
+        per_level: 25
+        levels: 2
+        ref: P53
+        tags: [Advantage, Physical, Xenos, Orks]
+        notes: >
+          Raises the divisor of the Ork Physiology package's Injury
+          Tolerance (Damage Reduction) by two
+          (this lens replaces the Nob lens rather than stacking on it, so it carries both steps: divisor 2 becomes 4): total divisor 4. The simulator sums the levels of
+          the base trait and this upgrade.
+        lore: >
+          A Warboss is tougher than any Nob; wounds that would fell a smaller Ork barely slow the biggest of the breed (Codex: Orks background).
+        design: >
+          Injury Tolerance (Damage Reduction) (GURPS Powers p. 53, 25
+          points per level, level = divisor): 2 further levels, 50 points.
       - name: Combat Reflexes
         points: 15
         ref: B43
@@ -638,7 +671,9 @@ items:
       166 (Attribute Modifiers) + 15 (Combat Reflexes) + 8 (Fearlessness 4)
       + 10 (Regeneration) + 6 (further Hard to Kill 3) + 15 (Reputation) +
       15 (Charisma 3) + 10 (Basic Speed) + 5 (Basic Move +1) + 20 (Wealth)
-      = 270 points, added to the Ork Physiology package's 201 for 471 points of physiology and
+      + 50 (Injury Tolerance upgrade 2, divisor 4 total; the Warboss lens
+      replaces the Nob lens, so it carries both steps)
+      = 320 points, added to the Ork Physiology package's 251 for 571 points of physiology and
       command presence before skills. See the Ork Warboss template, which
       lands the full character just under the low end of framework.md's
       Astartes point tier (550-800) — appropriate for a solid, competent Warboss;

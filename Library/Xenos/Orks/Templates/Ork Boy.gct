@@ -1,12 +1,12 @@
 {
 	"version": 5,
 	"id": "BYS4S1Jt30Q6GLzDC",
-	"notes": "Baseline Ork infantry: the rank-and-file greenskin, a match for two or three Guardsmen in a straight fight and utterly indifferent to the odds. Point math (see Xenos/Orks/Traits/Ork Physiology.adq for the full derivation of every trait below): Ork Physiology 201 + skills 17 = 218 points. Stats: ST 22, DX 11, IQ 8, HT 13, HP 26, Will 8, Per 8, Move 9, SM 0 — landing exactly on framework.md's Boy anchor line. This sits above framework.md's \"Trained soldier\" tier (100-175) and at the very bottom of \"Elite human\" territory (200-350) almost entirely on the strength of raw ST and HP: the framework's own Ork anchor table asks for a body that outclasses a trained human soldier before a single skill point is spent, so the point total reflects that rather than any special training or intellect — this is a crude, low-IQ brawler who happens to be built like a small tank, not a disciplined veteran. Enable at most one Klan lens (from Xenos/Orks/Traits/Ork Physiology.adq, all disabled by default) for clan flavor; they are net-zero-point packages, not full sub-templates, per this project's Guardsman regimental-lens precedent. Culture: Freebooterz is a way of life rather than a Klan and may be combined with one Klan lens. Enable the Stormboy Rokkit Pack lens (17 points, disabled by default) to build a Stormboy: a young, fast Boy with a jump pack.\n",
+	"notes": "Baseline Ork infantry: the rank-and-file greenskin, a match for two or three Guardsmen in a straight fight and utterly indifferent to the odds. Point math (see Xenos/Orks/Traits/Ork Physiology.adq for the full derivation of every trait below): Ork Physiology 251 (incl. Injury Tolerance (Damage Reduction) 2, 50) + skills 17 = 268 points. Stats: ST 22, DX 11, IQ 8, HT 13, HP 26, Will 8, Per 8, Move 9, SM 0 — landing exactly on framework.md's Boy anchor line. This sits well above framework.md's \"Trained soldier\" tier (100-175) and in the middle of \"Elite human\" territory (200-350) almost entirely on the strength of raw ST, HP and the injury divisor (Injury Tolerance 2: a Boy shrugs off half of every wound that gets through his hide): the framework's own Ork anchor table asks for a body that outclasses a trained human soldier before a single skill point is spent, so the point total reflects that rather than any special training or intellect — this is a crude, low-IQ brawler who happens to be built like a small tank, not a disciplined veteran. Enable at most one Klan lens (from Xenos/Orks/Traits/Ork Physiology.adq, all disabled by default) for clan flavor; they are net-zero-point packages, not full sub-templates, per this project's Guardsman regimental-lens precedent. Culture: Freebooterz is a way of life rather than a Klan and may be combined with one Klan lens. Enable the Stormboy Rokkit Pack lens (17 points, disabled by default) to build a Stormboy: a young, fast Boy with a jump pack.\n",
 	"traits": [
 		{
 			"id": "T3_aztwsGjUqYJxAN",
 			"name": "Ork Physiology",
-			"local_notes": "Lore: An Ork Boy: the baseline greenskin warrior, grown fast, fed on violence, and built to get bigger and meaner the longer it survives. This trait is the shared baseline every growth lens (Nob, Warboss) and every Oddboy specialisation (Mek, Painboy, Weirdboy) builds on top of. Primary sources: Codex: Orks background across editions, Nate Crowley's Ghazghkull Thraka: Prophet of the Waaagh! and Mike Brooks' Brutal Kunnin', calibrated against Dark Heresy/Rogue Trader/Deathwatch/Only War Ork material for relative scale.\n\nDesign: 138 (Attribute Modifiers) + 15 (Basic Move +3) + 10 (Thick Hide) + 10 (High Pain Threshold) + 6 (Hard to Kill 3) + 5 (Rapid Healing) + 6 (Thick Skull) + 15 (Resistant to Disease and Toxins) + 0 (Fungal Physiology) - 10 (Bloodlust) - 10 (Impulsiveness) - 5 (Overconfidence) + 10 (Ork Kunnin' 1) + 5 (WAAAGH! Gestalt) + 6 (Fearlessness 3) = 201 points of physiology alone, before skills — see the Ork Boy template for a full character, and the growth lenses and Oddboy Talents below for Nobs, Warbosses, Meks, Painboyz and Weirdboyz built on top of it.",
+			"local_notes": "Lore: An Ork Boy: the baseline greenskin warrior, grown fast, fed on violence, and built to get bigger and meaner the longer it survives. This trait is the shared baseline every growth lens (Nob, Warboss) and every Oddboy specialisation (Mek, Painboy, Weirdboy) builds on top of. Primary sources: Codex: Orks background across editions, Nate Crowley's Ghazghkull Thraka: Prophet of the Waaagh! and Mike Brooks' Brutal Kunnin', calibrated against Dark Heresy/Rogue Trader/Deathwatch/Only War Ork material for relative scale.\n\nDesign: 138 (Attribute Modifiers) + 15 (Basic Move +3) + 10 (Thick Hide) + 10 (High Pain Threshold) + 6 (Hard to Kill 3) + 5 (Rapid Healing) + 6 (Thick Skull) + 15 (Resistant to Disease and Toxins) + 0 (Fungal Physiology) - 10 (Bloodlust) - 10 (Impulsiveness) - 5 (Overconfidence) + 10 (Ork Kunnin' 1) + 5 (WAAAGH! Gestalt) + 6 (Fearlessness 3) + 50 (Injury Tolerance (Damage Reduction), divisor 2) = 251 points of physiology alone, before skills — see the Ork Boy template for a full character, and the growth lenses and Oddboy Talents below for Nobs, Warbosses, Meks, Painboyz and Weirdboyz built on top of it.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -176,6 +176,22 @@
 						"Orks"
 					],
 					"base_points": 15
+				},
+				{
+					"id": "tOVkaC0Sq1ntNu-uh",
+					"name": "Injury Tolerance (Damage Reduction)",
+					"reference": "P53",
+					"local_notes": "Divisor 2 (level = divisor): after DR and wounding multipliers, all injury is divided by 2 (round down, minimum 1 if anything penetrated). The Nob and Warboss growth lenses raise the divisor through \"Injury Tolerance (Damage Reduction) upgrade\" levels; add the upgrade levels to this trait's 2 for the total divisor.\n\nLore: Orks survive and fight on through wounds that would kill a man: Codex: Orks background is full of Boyz who keep charging with holes in them, and the fungal-hardy greenskin body simply does not register damage the way a human one does. A big Ork is tougher still (see the growth lenses).\n\nDesign: Injury Tolerance (Damage Reduction) (GURPS Powers p. 53, 25 points per level, level = divisor): divisor 2 = 50 points. Bought as levels rather than a flat cost so the growth lenses can raise the divisor one step at a time. It is what keeps a Boy standing after two lasgun hits and makes bolt-pistol rounds a real but not instantly fatal threat, on top of Thick Hide's DR and the extra HP.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Orks"
+					],
+					"points_per_level": 25,
+					"can_level": true,
+					"levels": 2,
+					"base_points": 0
 				},
 				{
 					"id": "tq_zreZoSzzsCvnJ3",
