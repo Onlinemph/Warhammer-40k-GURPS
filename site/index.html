@@ -1833,14 +1833,14 @@ const SIM = (() => {
         const slamV = slamOK ? 0.25 * threatOf(tgt) * P3[cl(Math.max(u.dx, u.grapple) - skillPen(m) - 4)] * HORIZON : 0;
         const vMA = Wm * Math.max(kv(m, tgt, Ema), slamV) + GAMMA * Wm * worth - risk(m, arrive, "");
         add(vMA, `charge@${tgt.id}`, () => {
-          const moved = go(mv); if (stopped()) return; m.facing = faceToward(m.h, tgt.h);
+          const moved = go(mv); if (stopped() || !tgt.h) return; m.facing = faceToward(m.h, tgt.h);
           if (tgt.h && hexDist(m.h, tgt.h) <= reach) slamOK && slamV > kv(m, tgt, Ema) ? slam(m, tgt, Math.max(1, moved), false) : strike(m, w, tgt, { charge: true });
         });
         // All-Out Attack after a half move (B365): +4 to hit, no defence until next turn
         if (len <= Math.floor(mv / 2)) {
           const Eaoa = planAttack(m, w, tgt, w.level - skillPen(m) + 4, true).score;
           add(Wm * Math.max(kv(m, tgt, Eaoa), slamV) + GAMMA * Wm * worth - risk(m, arrive, "aoa"), `aoa-charge@${tgt.id}`, () => {
-            const moved = go(Math.floor(mv / 2)); if (stopped()) return; m.facing = faceToward(m.h, tgt.h);
+            const moved = go(Math.floor(mv / 2)); if (stopped() || !tgt.h) return; m.facing = faceToward(m.h, tgt.h);
             if (hexDist(m.h, tgt.h) <= reach) { m.aoa = true; L(`${m.id} charges in (All-Out Attack)`); slamOK && slamV > kv(m, tgt, Eaoa) ? slam(m, tgt, Math.max(1, moved), true) : strike(m, w, tgt, { determined: true }); }
           });
         }
