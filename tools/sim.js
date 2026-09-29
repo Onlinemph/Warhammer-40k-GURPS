@@ -1320,7 +1320,10 @@ const SIM = (() => {
         const isGun = !mw.includes(w);
         const lvl = isGun ? w.level + Math.min(0, w.bulk || 0) : w.level;
         const p = planAttack(m, w, t, lvl - skillPen(m), !isGun);
-        const s = p.score * (isGun ? Math.min(3, w.rof) : 1 + (u.flags.extraAttack || 0));
+        // a gun's harm averaged over its reloads (turns firing a magazine vs turns reloading it)
+        const fireTurns = w.shots && w.shots.mag !== Infinity ? w.shots.mag / Math.max(1, Math.min(3, w.rof)) : Infinity;
+        const sustain = isGun && fireTurns !== Infinity ? fireTurns / (fireTurns + w.shots.reload) : 1;
+        const s = p.score * (isGun ? Math.min(3, w.rof) * sustain : 1 + (u.flags.extraAttack || 0));
         if (!best || s > best.s) best = { t, w, s, isGun, p };
       }
       if (!best) return;
