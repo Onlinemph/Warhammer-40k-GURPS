@@ -979,7 +979,8 @@ const SIM = (() => {
       const near = nearestFoe(m, pool);
       const d = hexDist(m.h, near.h);
       // concentrating on a power
-      const rw = weaponsFor(m, false).filter(w => d <= w.range.max);
+      // an empty gun with a long reload (regrowing bio-ammunition) isn't a weapon until it refills
+      const rw = weaponsFor(m, false).filter(w => d <= w.range.max && !(w === u.ranged && m.ammo <= 0 && w.shots.reload > 3));
       const bestR = rw.map(w => ({ w, s: planAttack(m, w, near, w.level + rangePenalty(d) + near.u.sm + (w.acc || 0), false).score })).sort((a, b) => b.s - a.s)[0];
       // close to melee when ordered to charge, when no gun can hurt the target, or (unless ordered to
       // hold and shoot) when the blade does clearly more harm than the gun
