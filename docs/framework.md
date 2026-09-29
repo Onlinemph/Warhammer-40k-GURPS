@@ -112,6 +112,7 @@ Refractor fields, conversion fields, rosarii, iron halos and storm shields work 
 | Rosarius | 60 | 3 s | 10 | All |
 | Conversion field | 80 | 3 s | 10 | All; flash on big hits |
 | Iron halo | 120 | 3 s | 20 | All |
+| Custodes plate field (Auramite, Allarus) | 120 | 3 s | 20 | All; integrated in the armour |
 | Storm shield | 160 | 2 s | 20 | Front and shield side |
 
 Vehicle void shields will use the same rules at larger scale.

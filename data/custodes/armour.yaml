@@ -86,6 +86,23 @@ items:
         notes: The bulk of the suit's weight and cost, matching the parent item's own servo figures.
         lore: The core of what makes Auramite armour "powered" rather than merely thick.
         design: Duplicates the parent entry's own servo ST bonus for completeness of the container breakdown, as the Astartes Mark VII file does.
+      - name: Auramite Energy Field (Integrated)
+        weight: 0
+        cost: 20000
+        uses: 120
+        tags: [Force Field, Energy Shield]
+        notes: >-
+          Shield 120 SP. Recharge: after 3 seconds without taking damage, regains 20 SP per second
+          (twice the delay after it collapses). Blocks ranged and melee attacks, all locations.
+          Tracked with the Uses counter as for any field (framework.md "Personal force fields").
+        lore: >-
+          Custodes plate carries its own energy field, the source of the Custodians' invulnerable
+          protection on the tabletop (a 4+ save, the same as an Iron Halo) and of the fiction's
+          shots and blows that flare off a Custodian before they reach the gold.
+        design: >-
+          The Iron Halo's numbers (Imperium/Armour/Fields.eqp): the same 4+ invulnerable save in
+          the lore, so the same pool, delay and recharge. It holds a plasma bolt (avg 84) and a
+          krak grenade's average (84) and recovers in seconds; a lascannon still breaks it.
 
   - name: Allarus Terminator Armour
     tl: 12
@@ -132,6 +149,24 @@ items:
       requirement (a standard boltgun, eff. DR vs torso = 250/2 = 125):
       penetration is 0.0% by exact dice distribution, comfortably beneath
       even Auramite's own already-total immunity to bolter fire.
+    children:
+      - name: Allarus Energy Field (Integrated)
+        weight: 0
+        cost: 20000
+        uses: 120
+        tags: [Force Field, Energy Shield]
+        notes: >-
+          Shield 120 SP. Recharge: after 3 seconds without taking damage, regains 20 SP per second
+          (twice the delay after it collapses). Blocks ranged and melee attacks, all locations.
+          Tracked with the Uses counter as for any field (framework.md "Personal force fields").
+        lore: >-
+          Allarus plate carries its own energy field, the source of the Custodians' invulnerable
+          protection on the tabletop (a 4+ save, the same as an Iron Halo) and of the fiction's
+          shots and blows that flare off a Custodian before they reach the gold.
+        design: >-
+          The Iron Halo's numbers (Imperium/Armour/Fields.eqp): the same 4+ invulnerable save in
+          the lore, so the same pool, delay and recharge. It holds a plasma bolt (avg 84) and a
+          krak grenade's average (84) and recovers in seconds; a lascannon still breaks it.
 
   - name: Vratine Armour
     tl: 10

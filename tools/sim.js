@@ -633,8 +633,10 @@ const SIM = (() => {
     function explosion(att, w, at, raw) {
       for (const x of models) {
         if (x.state !== "ok" || !x.h) continue;
-        const d = hexDist(x.h, at), lv = w.explosion || 1;
+        let d = hexDist(x.h, at);
+        const lv = w.explosion || 1;
         if (d < 1 || d > 10 * lv) continue;
+        if (w.thrown && d <= 3 && x !== att && dive(x)) d += 1;
         // Explosion level L (B107): each level past the first widens the burst; distance counts as yards / L
         const splash = Math.floor(raw / (3 * Math.max(1, d / lv)));
         if (splash >= 1) { L(`  blast catches ${x.id} (${d} yd)`); applyHit(att, w, x, "torso", true, false, null, splash); }
@@ -1097,6 +1099,15 @@ const SIM = (() => {
       });
       return best;
     }
+    // Diving for cover (B377): someone who sees a grenade land beside them may Dodge; success puts them a yard
+    // further from the blast, prone
+    function dive(x) {
+      if (x.state !== "ok" || x.pinned || x.aoa || x.grips.length) return false;
+      const r = check(dodgeOf(x) - (x.stunned ? 4 : 0) - (x.prone ? 3 : 0));
+      if (!r.ok) return false;
+      x.prone = true; L(`  ${x.id} dives for cover`);
+      return true;
+    }
     function throwGrenade(m, g) {
       const w = m.u.grenades[g.i], c = g.c;
       m.grenadeReady = null; m.grenadesLeft[g.i]--; m.attacked = true;
@@ -1106,13 +1117,14 @@ const SIM = (() => {
       if (r.ok) {
         L(`${m.id} throws a ${w.name} at ${c.id} (skill ${g.lvl}): on target`);
         const at = c.h;
-        applyHit(m, w, c, "torso", true, false, null, raw);
+        if (dive(c)) { const sp = Math.floor(raw / 3); if (sp >= 1) applyHit(m, w, c, "torso", true, false, null, sp); }
+        else applyHit(m, w, c, "torso", true, false, null, raw);
         explosion(m, w, at, raw);
       } else {
         const off = DIRS[Math.floor(R() * 6)], at = { q: c.h.q + off[0] * 2, r: c.h.r + off[1] * 2 };
         L(`${m.id} throws a ${w.name} at ${c.id} (skill ${g.lvl}): it lands wide`);
         const hitX = occ.get(key(at.q, at.r));
-        if (hitX && hitX.state === "ok") applyHit(m, w, hitX, "torso", true, false, null, raw);
+        if (hitX && hitX.state === "ok") { if (dive(hitX)) { const sp = Math.floor(raw / 3); if (sp >= 1) applyHit(m, w, hitX, "torso", true, false, null, sp); } else applyHit(m, w, hitX, "torso", true, false, null, raw); }
         explosion(m, w, at, raw);
       }
     }
