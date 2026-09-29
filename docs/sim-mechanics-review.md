@@ -8,6 +8,8 @@ Numbers under "Measured" come from a scratch copy of the engine patched for that
 
 ## Summary
 
+**Status.** Items 1–5 and 7–17 are implemented, along with 19, 20 and 23 (see `docs/changelog.md`, mechanics review batches 1–5 and priority 2). Item 6 (Enhanced Move and sprinting) and the rest of priority 3 are still open. Rule numbers flagged below as from memory (the B389 line-of-fire −4 and stray roll of 9, parrying a gun, the Critical Miss Table rows) are in the engine as written and still need checking against the book.
+
 | # | Item | Kind | Source | Pri | Cost | Confidence |
 |---|---|---|---|---|---|---|
 | 1 | Attack maneuver includes a step; sim uses Move and Attack (skill cap 9) for a foe one hex out of reach | missing | B364–365, B368 | 1 | S | high |

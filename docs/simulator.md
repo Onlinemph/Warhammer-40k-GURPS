@@ -14,7 +14,7 @@ The simulator (`tools/sim.js`, the Combat Simulator page on the site) plays GURP
 
 Every model acts once per second in Basic Speed order (ties random), choosing one maneuver (B363–366):
 
-- **Move** (full Move), **Move and Attack** (ranged: −2 or Bulk, no Acc; melee: −4, skill capped at 9, B365), **Attack**, **Aim** (+Acc, +1 more after 2 turns and +2 after 3, B364), **Feint** (Quick Contest of weapon skill; margin comes off the foe's next defence, B365), **All-Out Attack** (Determined: +4 melee / +1 ranged; Double: two attacks; Strong: +2 damage or +1/die; no active defence until next turn, B365), **All-Out Defense** (Increased: +2 to the one defence the model will use, B366), **Ready** (reload, clear a jam, pick up a weapon), **Change Posture**, **Concentrate** (psychic powers that need it).
+- **Move** (full Move), **Move and Attack** (ranged: −2 or Bulk, no Acc; melee: −4, skill capped at 9, B365), **Attack**, **Aim** (+Acc, +1 more after 2 turns and +2 after 3, B364), **Feint** (Quick Contest of weapon skill; margin comes off the foe's next defence, B365), **All-Out Attack** (Determined: +4 melee / +1 ranged; Double: two attacks; Strong: +2 damage or +1/die; no active defence until next turn, B365), **All-Out Defense** (Increased: +2 to the one defence the model will use, B366), **Ready** (reload, clear a jam, pick up a weapon), **Change Posture** (a prone model rises to a kneel, then stands, B551; an Acrobatics roll springs straight up; kneeling is −2 to melee attacks and defences and −2 to be hit by ranged fire), **Concentrate** (psychic powers that need it).
 - A shooter whose aimed roll would be under 8 closes the range first; low-RoF weapons re-aim when the unaimed roll is under 10; the "advance" stance fires on the move only while that shot is 8 or better.
 - Shooters spread their fire: a foe that squad-mates are already shooting counts for less (expected harm ÷ (1 + shooters on it)), so a squad doesn't pour every shot into one model. A shooter aims only when the aimed roll hits more than 1.8 times as often as a shot now, since aiming costs a turn.
 - **Decision layer.** Each turn a model lists every option open to it (each weapon at each of the nearest foes, fired now or after an Aim, Move and Attack, closing without firing, suppression fire, Ready and throw a grenade, Wait, reload, Concentrate; in reach: a blow, Rapid Strike, All-Out Attack Determined, Double, Strong or with Mighty Blows, Feint, a point-blank shot, two weapons at once, grab, Shove, All-Out Defense; out of reach: charge with Move and Attack, All-Out Attack after a half move, or Slam, or just close in) and scores every one on the same scale:
@@ -52,7 +52,9 @@ A charging model whose weapon can barely hurt its foe (under 1 HP of expected in
 
 ## Defence
 
-Dodge, Parry and Block (B374–377; Block from Shield skill / 2 + 3, Combat Reflexes and Enhanced Block); a successful Parry of an unarmed attack (a grab or a punch) with a weapon injures the attacker's arm with the weapon's damage (B376); retreat once per turn (+3 Dodge, +1 Parry and Block); multiple parries −4 each; Block once per turn; a shield's Defense Bonus adds to all defences against attacks from the front or shield side (B287); Dodge and Drop against ranged attacks (+3, goes prone, B377); side −2, rear none; stunned −4 and no retreat.
+Dodge, Parry and Block (B374–377; Block from Shield skill / 2 + 3, Combat Reflexes and Enhanced Block); a successful Parry of an unarmed attack (a grab or a punch) with a weapon injures the attacker's arm with the weapon's damage (B376); retreat once per turn (+3 Dodge, +1 Parry and Block), which moves the defender a yard back or aside into a free hex and isn't allowed with nowhere to go, while held, prone or stunned, or after its own Move and Attack or Slam (B365, B377); multiple parries −4 each; Block once per turn; a shield's Defense Bonus adds to all defences against attacks from the front or shield side (B287); Dodge and Drop against ranged attacks (+3, goes prone, B377); side −2, rear none; stunned −4 and no retreat; off balance (after a critical miss) −2.
+
+**Critical hits and misses** (B556): a critical hit rolls 3d on the Critical Hit Table (3 or 18 triple damage, 4 or 17 armour at half DR, 5 or 16 double damage, 6 or 15 maximum damage, 7 or 13 a major wound, 8 or 14 double shock, 12 the victim drops its weapon, 9–11 normal). A melee critical miss rolls on the Critical Miss Table (the weapon may break, be dropped or strike the attacker; the attacker may fall or be left off balance; rows recalled from memory, to be checked against the book). A gun's critical miss jams it (1d turns of Ready) unless its data gives a Malf or overheat rule of its own.
 
 ## Injury
 
@@ -68,12 +70,13 @@ Standard GURPS HP (B377–420) or the user's Revised Fractional Health (see the 
 - **Deceptive Attack** (B369) may not take effective skill below 10.
 - **Extra Attack** (B53) adds to All-Out Attack (Double) and Rapid Strike.
 - **Bleeding** (B420): every minute, a model below full HP rolls HT or loses 1 HP (standard mode).
-- Shock, knockdown and stun, consciousness and death checks, Hard to Kill, Reanimation Protocols, morale (as before).
+- Shock, knockdown and stun, consciousness and death checks, Hard to Kill, Reanimation Protocols.
+- **Morale** is a Fright Check (B360) when a unit falls to half and to a quarter strength: Will plus Fearlessness, never above 13, so a roll of 14+ always fails; failure routs the unit. Unfazeable, Necrons and mindless models don't check. An Astartes squad (Will 14, Fearlessness 4) breaks on about 16% of checks.
 - **Regeneration** (B80): HP per second by tier (Extreme 10, Very Fast 1, Fast 1/60, Regular 1/3600), read from any Regeneration trait; under Fractional Health the healing clears the least severe wound box once it covers that level's threshold.
 
 ## Psychic powers
 
-Psykers use the attack and defence powers listed for their template in `data/sim/powers.yaml` (built from the psyker traits under the project's Sorcery model). A power with Malediction (B106) is a Quick Contest of skill against the target's Will (or HT) instead of an attack and a defence, at −1 per yard (level 1), normal range penalties (level 2) or none within 200 yd (level 3). Warp powers fail against a blank (Pariah Gene). A power is used like a weapon when its expected harm beats the psyker's weapon: it rolls its skill, pays its FP cost, and on the listed Perils trigger rolls the listed consequence. FP loss is tracked; a model at 0 FP or below rolls HT to act (B426).
+Psykers use the attack and defence powers listed for their template in `data/sim/powers.yaml` (built from the psyker traits under the project's Sorcery model). A power with Malediction (B106) is a Quick Contest of skill against the target's Will (or HT) instead of an attack and a defence, at −1 per yard (level 1), normal range penalties (level 2) or none within 200 yd (level 3). Warp powers fail against a blank (Pariah Gene). **Shadow in the Warp** (Tyranid traits): a psyker within the trait's radius of an enemy bioform (8 yards for a Ravener or Lictor, 16 for a Warrior or Zoanthrope, 32 for a Hive Tyrant) is at −3 to its powers and to the Will roll against Perils, and makes a Fright Check the first time it comes in range; failure stuns it. A power is used like a weapon when its expected harm beats the psyker's weapon: it rolls its skill, pays its FP cost, and on the listed Perils trigger rolls the listed consequence. FP loss is tracked; a model at 0 FP or below rolls HT to act (B426).
 
 ## Data the engine reads
 
@@ -85,4 +88,4 @@ Psykers use the attack and defence powers listed for their template in `data/sim
 
 ## Not modelled
 
-Vehicles, stealth detection beyond an ambush option, psychic powers other than attacks and defences, morale beyond the half and quarter checks.
+Vehicles, stealth detection beyond an ambush option, psychic powers other than attacks and defences, morale beyond the half and quarter Fright Checks (the full Fright Check table, B360, is reduced to rout or stun).
