@@ -1238,7 +1238,9 @@ const SIM = (() => {
       const u = m.u;
       if (m.armsLost >= 2 && u.melee.name === "Punch") return;
       const mv = moveOf(m), reach = u.melee.reachMax, near = pool[0], d = hexDist(m.h, near.h);
-      const route = d <= 3 * mv + 12 ? engagePath(m, reach, pool) : null;
+      // the path search (a mob flowing round its front rank) only matters once the foe is nearly in reach;
+      // further off a straight-line estimate and a greedy advance do
+      const route = d <= mv + reach + 2 ? engagePath(m, reach, pool, 600) : null;
       const tgt = route ? route.foe : near;
       const len = route ? route.path.length : Math.max(0, d - reach);
       const go = n => route ? followPath(m, route.path, n) : stepToward(m, near.h, n, reach);
