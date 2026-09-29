@@ -381,6 +381,10 @@ const SIM = (() => {
   const fromOffset = (col, row) => ({ q: col, r: row - (col - (col & 1)) / 2 });
 
   // called-shot locations and their penalties (B398-399)
+  // Chinks in Armor (B400): an aimed attack at a gap in the armour, -8 on the torso and -10 anywhere else, halves the armour's DR.
+  // Planned locations carry a "#c" suffix; only aiming attackers (elites by default) consider them.
+  const CHINK = loc => loc === "torso" ? -8 : -10;
+  const locName = l => l && l.endsWith("#c") ? "chink in the " + l.slice(0, -2) + " armour" : l;
   const AIM = { torso: 0, vitals: -3, skull: -7, eye: -9, face: -5, neck: -5, groin: -3, arm: -2, leg: -2, hand: -4, foot: -4 };
   const COVERED = new Set(["leg", "foot", "groin"]);
   const COVER_DR = { none: 0, light: 15, heavy: 60 };
@@ -544,6 +548,8 @@ const SIM = (() => {
 
     // ---- damage to a model at a location. Returns injury.
     function applyHit(att, w, t, loc, ranged, halfD, dmgOverride, rawOverride) {
+      const chink = loc.endsWith("#c");
+      if (chink) loc = loc.slice(0, -2);
       const dmg = dmgOverride || w.dmg;
       let raw = rawOverride != null ? rawOverride : rollDamage(dmg);
       if (halfD) raw = Math.floor(raw / 2);
@@ -556,13 +562,14 @@ const SIM = (() => {
         raw -= t.sp; t.sp = 0; t.spCollapsed = true; fraw = 0; L(`  shield collapses`);
       }
       const coverDR = ranged && COVERED.has(loc) && inCover(t) ? COVER_DR[cover[t.u.side]] : 0;
-      const armDR = drAt(t.u.arm.dr, loc === "vitals" ? (t.u.arm.dr.vitals != null ? "vitals" : "torso") : loc) + coverDR;
+      const armDR = Math.floor(drAt(t.u.arm.dr, loc === "vitals" ? (t.u.arm.dr.vitals != null ? "vitals" : "torso") : loc) / (chink ? 2 : 1)) + coverDR;
+      if (chink) L(`  strikes a chink in the armour`);
       const natDR = drAt(t.u.nat, loc === "vitals" ? "torso" : loc) + (loc === "skull" ? 2 : 0);
       const div = dmg.div;
       const eff = dr => dr <= 0 ? 0 : div === Infinity ? 0 : Math.max(1, Math.floor(dr / div));
       let DR = eff(armDR + natDR);
       let pen = raw - DR;
-      if (pen <= 0 && armDR > 0 && t.u.arm.wp && roll3() <= t.u.arm.wp) {
+      if (pen <= 0 && !chink && armDR > 0 && t.u.arm.wp && roll3() <= t.u.arm.wp) {
         DR = eff(Math.floor(armDR / 2) + natDR); pen = raw - DR;
         if (pen > 0) L(`  finds a weak point`);
       }
@@ -628,10 +635,12 @@ const SIM = (() => {
     // ---- expected injury of weapon w against unit tu at a location (cached per battle)
     const EXP = new Map();
     function expInj(w, tu, loc, dmgOverride) {
+      const chink = loc.endsWith("#c");
+      if (chink) loc = loc.slice(0, -2);
       const d = dmgOverride || w.dmg;
-      const k = w.id + "|" + tu.idx + "|" + loc + "|" + (dmgOverride ? "r" : "");
+      const k = w.id + "|" + tu.idx + "|" + loc + (chink ? "#c" : "") + "|" + (dmgOverride ? "r" : "");
       if (EXP.has(k)) return EXP.get(k);
-      const armDR = drAt(tu.arm.dr, loc === "vitals" ? (tu.arm.dr.vitals != null ? "vitals" : "torso") : loc);
+      const armDR = Math.floor(drAt(tu.arm.dr, loc === "vitals" ? (tu.arm.dr.vitals != null ? "vitals" : "torso") : loc) / (chink ? 2 : 1));
       const natDR = drAt(tu.nat, loc === "vitals" ? "torso" : loc) + (loc === "skull" ? 2 : 0);
       const effDR = d.div === Infinity ? 0 : Math.floor((armDR + natDR) / d.div);
       const red = tu.flags.dmgRed > 1 ? tu.flags.dmgRed : 1;
@@ -651,11 +660,11 @@ const SIM = (() => {
     }
     // best location and deceptive level: returns {loc, da, score, lvl}
     function planAttack(m, w, t, lvl, melee, dmgOverride) {
-      const locs = aimsShots(m) ? Object.keys(AIM) : ["random"];
+      const locs = aimsShots(m) ? [...Object.keys(AIM), ...Object.keys(AIM).filter(l => l !== "eye" && drAt(t.u.arm.dr, l === "vitals" ? "torso" : l) > 0).map(l => l + "#c")] : ["random"];
       const def0 = melee ? bestDefence(t, m, true) : w.malediction ? (w.fp && t.u.flags.blank ? 99 : w.resist === "HT" ? t.u.HT : t.u.will) - 2 : rangedDefence(t, m);
       let best = { loc: "torso", da: 0, score: 0, lvl };
       for (const loc of locs) {
-        const pen = loc === "random" ? 0 : AIM[loc];
+        const pen = loc === "random" ? 0 : loc.endsWith("#c") ? Math.min(AIM[loc.slice(0, -2)], CHINK(loc.slice(0, -2))) : AIM[loc];
         if (loc === "eye" && !(/^pi/.test(w.dmg.type) || w.dmg.type === "imp" || (w.dmg.type === "burn" && !w.dmg.ex && !w.cone))) continue;
         const e = loc === "random" ? expInj(w, t.u, "torso", dmgOverride) : expInj(w, t.u, loc, dmgOverride);
         if (e <= 0) continue;
@@ -786,7 +795,7 @@ const SIM = (() => {
         const r = check(plan.lvl), res = check(w.resist === "HT" ? target.u.HT : target.u.will);
         m.aimTurns = 0;
         const wins = r.ok && (!res.ok || r.margin > res.margin);
-        L(`${m.id} casts ${w.name} at ${target.id} (${d} yd${loc0 && loc0 !== "torso" ? ", aiming at the " + loc0 : ""}, skill ${plan.lvl} vs ${w.resist} ${w.resist === "HT" ? target.u.HT : target.u.will}): ${wins ? "it takes hold" : r.ok ? "resisted" : "fails"}`);
+        L(`${m.id} casts ${w.name} at ${target.id} (${d} yd${loc0 && loc0 !== "torso" ? ", aiming at the " + locName(loc0) : ""}, skill ${plan.lvl} vs ${w.resist} ${w.resist === "HT" ? target.u.HT : target.u.will}): ${wins ? "it takes hold" : r.ok ? "resisted" : "fails"}`);
         if (!wins) return;
         const raw = rollDamage(w.dmg);
         applyHit(m, w, target, loc0 || hitLocation(), true, false, null, raw);
@@ -815,12 +824,12 @@ const SIM = (() => {
         const r = check(lvl);
         if (i === 0 && jamCheck(m, w, r)) return;
         if (!r.ok && !w.cone) {
-          L(`${m.id} fires ${n > 1 ? n + " " : ""}at ${t.id} (${d} yd${loc0 && loc0 !== "torso" ? ", aiming at the " + loc0 : ""}, skill ${lvl}): misses`);
+          L(`${m.id} fires ${n > 1 ? n + " " : ""}at ${t.id} (${d} yd${loc0 && loc0 !== "torso" ? ", aiming at the " + locName(loc0) : ""}, skill ${lvl}): misses`);
           if (w.dmg.ex && i === 0) explosion(m, w, { q: t.h.q + DIRS[Math.floor(R() * 6)][0], r: t.h.r + DIRS[Math.floor(R() * 6)][1] }, rollDamage(w.dmg));
           return;
         }
         let hits = w.cone ? 1 : Math.min(n, 1 + Math.floor(Math.max(0, r.margin) / w.rcl));
-        L(`${m.id} ${w.usage === "power" ? "casts " + w.name + " at" : "fires " + (n > 1 ? n + " at" : "at")} ${t.id} (${d} yd${loc0 && loc0 !== "torso" ? ", aiming at the " + loc0 : ""}, skill ${lvl}): ${hits} hit${hits > 1 ? "s" : ""}`);
+        L(`${m.id} ${w.usage === "power" ? "casts " + w.name + " at" : "fires " + (n > 1 ? n + " at" : "at")} ${t.id} (${d} yd${loc0 && loc0 !== "torso" ? ", aiming at the " + locName(loc0) : ""}, skill ${lvl}): ${hits} hit${hits > 1 ? "s" : ""}`);
         if (!r.crit && !w.malediction) {
           const def = defend(t, m, false, 0, 0);
           if (def != null) { const dg = Math.min(hits, 1 + def); hits -= dg; L(`  ${t.id} dodges ${dg}`); }
@@ -866,13 +875,13 @@ const SIM = (() => {
         m.attacked = true;
         if (w.fp) m.fp -= w.fp;
         if (w.perils && perils(m, w)) continue;
-        if (!r.ok) { L(`${m.id} strikes at ${t.id} (${loc !== "torso" ? loc + ", " : ""}skill ${plan.lvl}): misses`); continue; }
+        if (!r.ok) { L(`${m.id} strikes at ${t.id} (${loc !== "torso" ? locName(loc) + ", " : ""}skill ${plan.lvl}): misses`); continue; }
         if (!r.crit) {
           const def = defend(t, m, true, plan.da, feint);
           if (def) { L(`${m.id} strikes at ${t.id}: ${def.how === "parry" ? "parried" : def.how === "block" ? "blocked" : "dodged"}`); continue; }
         }
         const rending = w.rend && (r.crit || r.margin >= w.rendBy);
-        L(`${m.id} strikes ${t.id}${loc !== "torso" ? " in the " + loc : ""} with ${w.name}${rending ? " (rending hit)" : ""}`);
+        L(`${m.id} strikes ${t.id}${loc !== "torso" ? " in the " + locName(loc) : ""} with ${w.name}${rending ? " (rending hit)" : ""}`);
         let raw = rollDamage(rending ? w.rend : w.dmg);
         if (opts.strong) raw += Math.max(2, w.dmg.n);
         applyHit(m, w, t, loc, false, false, rending ? w.rend : null, raw);
@@ -932,14 +941,23 @@ const SIM = (() => {
       if (!target) target = cands.map(f => ({ f, s: planAttack(m, w, f, w.level + rangePenalty(hexDist(m.h, f.h)) + f.u.sm, false).score }))
         .sort((a, b) => b.s - a.s)[0]?.f || near;
       m.facing = faceToward(m.h, target.h);
-      if (u.stance === "advance" && d > Math.min(w.range.half, 30)) {
+      // a shooter whose aimed roll would still be hopeless closes the range first (a power that costs FP isn't wasted)
+      const td = hexDist(m.h, target.h);
+      const unaimed = w.level - skillPen(m) + rangePenalty(td) + target.u.sm;
+      if (td > 3 && unaimed + (w.acc || 0) < 8) {
+        stepToward(m, target.h, moveOf(m), 2); m.facing = faceToward(m.h, target.h);
+        if (!w.fp) fireAt(m, w, target, { moved: true }); else L(`${m.id} closes in on ${target.id}`);
+        return;
+      }
+      // advance under fire (Move and Attack, B365) only while the moving shot is still worth taking
+      if (u.stance === "advance" && d > Math.min(w.range.half, 30) && unaimed + Math.min(-2, w.bulk || 0) >= 8) {
         stepToward(m, target.h, moveOf(m), 2); m.facing = faceToward(m.h, target.h);
         fireAt(m, w, target, { moved: true }); return;
       }
       // Aim (B364): low-RoF accurate weapons aim at a new target, snipers keep aiming up to 3 turns
       const threat = threatTo(m);
       const sniper = w.rof === 1 && w.acc >= 5 && d > 50;
-      if (w.acc >= 2 && w.rof <= 3 && (m.aimTarget !== target || (sniper && m.aimTurns < 3 && threat < 1))) {
+      if (w.acc >= 2 && w.rof <= 3 && (m.aimTarget !== target || (sniper && m.aimTurns < 3 && threat < 1) || (m.aimTurns === 0 && unaimed < 10))) {
         if (m.aimTarget !== target) m.aimTurns = 0;
         m.aimTarget = target; m.aimTurns++; L(`${m.id} aims at ${target.id}`); return;
       }
@@ -1225,7 +1243,7 @@ if (typeof document !== "undefined") (() => {
     wire();
     if (last) setupReplay();
   }
-  const HOW = `Every run plays a full GURPS 4e fight on a hex map, one yard per hex, second by second. Models act in Basic Speed order and an AI picks each one's maneuver: Aim, Attack, Move and Attack, All-Out Attack (Determined or Double) when nothing can hurt it, All-Out Defense when it can't hurt its foe, Feint and Deceptive Attack against strong defences, Rapid Strike, Ready to reload or clear a jam, Change Posture, and Concentrate for psychic powers. Facing matters: attacks from a flank cost the defender 2, from behind it gets no defence, so surrounding a foe pays. Elite attackers (templates of 200+ points with IQ 8 or more) aim at the location that does most harm (vitals, skull, eye lens, neck, limbs); everyone else hits random locations, with 1 in 6 face hits striking an eye lens. The setting can let everyone aim, as RAW allows, or no one. Ranged fire uses range penalties, the rapid-fire bonus and Recoil, spreads bursts over neighbours, and can malfunction or overheat; explosions splash neighbours, fragments fly, flamers hit the whole cone. Defenders Dodge, Parry or Block with retreat and shield DB, and shooters Dodge and Drop. Cover hides legs and groin and costs attackers 2; prone models are harder to shoot but fight badly. Armour divisors, Weak Points, regenerating shields, wounding, Injury Tolerance, Damage Reduction, follow-ups, crippling, knockback, bleeding, shock, stun, consciousness and death rolls, Reanimation Protocols, morale and Perils of the Warp all apply, with either standard HP or the Revised Fractional Health wound system. The full rule list with page references is docs/simulator.md. Not modelled: vehicles, grappling and stealth.`;
+  const HOW = `Every run plays a full GURPS 4e fight on a hex map, one yard per hex, second by second. Models act in Basic Speed order and an AI picks each one's maneuver: Aim, Attack, Move and Attack, All-Out Attack (Determined or Double) when nothing can hurt it, All-Out Defense when it can't hurt its foe, Feint and Deceptive Attack against strong defences, Rapid Strike, Ready to reload or clear a jam, Change Posture, and Concentrate for psychic powers. Facing matters: attacks from a flank cost the defender 2, from behind it gets no defence, so surrounding a foe pays. Elite attackers (templates of 200+ points with IQ 8 or more) aim at the location that does most harm (vitals, skull, eye lens, neck, limbs, or a chink in the armour at −8 or −10 that halves its DR); everyone else hits random locations, with 1 in 6 face hits striking an eye lens. The setting can let everyone aim, as RAW allows, or no one. Ranged fire uses range penalties, the rapid-fire bonus and Recoil, spreads bursts over neighbours, and can malfunction or overheat; explosions splash neighbours, fragments fly, flamers hit the whole cone. Defenders Dodge, Parry or Block with retreat and shield DB, and shooters Dodge and Drop. Cover hides legs and groin and costs attackers 2; prone models are harder to shoot but fight badly. Armour divisors, Weak Points, regenerating shields, wounding, Injury Tolerance, Damage Reduction, follow-ups, crippling, knockback, bleeding, shock, stun, consciousness and death rolls, Reanimation Protocols, morale and Perils of the Warp all apply, with either standard HP or the Revised Fractional Health wound system. The full rule list with page references is docs/simulator.md. Not modelled: vehicles, grappling and stealth.`;
 
   function results(r) {
     const pct = x => (100 * x / r.runs).toFixed(0) + "%";
