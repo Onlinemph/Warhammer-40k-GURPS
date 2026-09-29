@@ -408,6 +408,19 @@ const SIM = (() => {
   // Axial coordinates (q, r), flat-topped hexes, 1 yard each (B384).
   const DIRS = [[1, 0], [1, -1], [0, -1], [-1, 0], [-1, 1], [0, 1]];
   const hexDist = (a, b) => (Math.abs(a.q - b.q) + Math.abs(a.r - b.r) + Math.abs(a.q + a.r - b.q - b.r)) / 2;
+  // hexes strictly between a and b on the straight line (cube-coordinate lerp, nudged off hex edges)
+  function lineHexes(a, b) {
+    const n = hexDist(a, b), out = [];
+    for (let i = 1; i < n; i++) {
+      const t = i / n;
+      const x = a.q + (b.q - a.q) * t + 1e-6, z = a.r + (b.r - a.r) * t + 1e-6, y = -x - z;
+      let rx = Math.round(x), ry = Math.round(y), rz = Math.round(z);
+      const dx = Math.abs(rx - x), dy = Math.abs(ry - y), dz = Math.abs(rz - z);
+      if (dx > dy && dx > dz) rx = -ry - rz; else if (dy <= dz) rz = -rx - ry;
+      out.push({ q: rx, r: rz });
+    }
+    return out;
+  }
   const px = h => [1.5 * h.q, Math.sqrt(3) * (h.r + h.q / 2)];
   const key = (q, r) => q + "," + r;
   const DIRANG = DIRS.map(([q, r]) => { const [x, y] = px({ q, r }); return Math.atan2(y, x); });
@@ -892,6 +905,25 @@ const SIM = (() => {
       } else { m.jam = d6(); L(`  ${m.id}'s ${w.name} malfunctions (${m.jam} s to clear)`); }
       return true;
     }
+    // Line of fire (B389): every figure on the line between shooter and target, friend or foe, costs -4 to hit
+    // (simulator value from the Basic Set rule, to be checked against the book); a miss may hit one of them or
+    // someone beside the target instead, on a roll of 9 + its SM (likewise to be checked)
+    function between(a, b) {
+      if (!a || !b || hexDist(a, b) <= 1) return [];
+      const out = [];
+      for (const h of lineHexes(a, b)) { const x = occ.get(key(h.q, h.r)); if (x && x.state === "ok") out.push(x); }
+      return out;
+    }
+    function stray(m, w, t, inter, halfD) {
+      const near = models.filter(x => x !== m && x !== t && x.state === "ok" && x.h && t.h && hexDist(x.h, t.h) <= 1);
+      const cands = [...new Set([...inter, ...near])].sort((a, b) => hexDist(m.h, a.h) - hexDist(m.h, b.h));
+      for (const c of cands) {
+        if (!check(9 + c.u.sm - (c.prone ? 2 : 0)).ok) continue;
+        L(`  the shot goes astray and hits ${c.id}${c.u.side === m.u.side ? " (friendly fire)" : ""}`);
+        applyHit(m, w, c, hitLocation(), true, halfD);
+        return;
+      }
+    }
     function fireAt(m, w, target, opts) {
       const d = Math.max(1, hexDist(m.h, target.h));
       if (d > w.range.max) return;
@@ -933,14 +965,17 @@ const SIM = (() => {
       const halfD = d > w.range.half;
       targets.forEach((t, i) => {
         const n = w.cone ? 1 : Math.floor(shots / targets.length) + (i < shots % targets.length ? 1 : 0);
-        const plan = planAttack(m, w, t, base + rapidBonus(n), false);
+        const inter = w.cone ? [] : between(m.h, t.h).filter(x => x !== t);
+        const plan = planAttack(m, w, t, base + rapidBonus(n) - 4 * inter.length, false);
         const loc0 = plan.loc === "random" ? null : plan.loc;
         const lvl = plan.lvl;
         const r = check(lvl);
         if (i === 0 && jamCheck(m, w, r)) return;
+        const thru = inter.length ? `, through ${inter.length}` : "";
         if (!r.ok && !w.cone) {
-          L(`${m.id} fires ${n > 1 ? n + " " : ""}at ${t.id} (${d} yd${loc0 && loc0 !== "torso" ? ", aiming at the " + locName(loc0) : ""}, skill ${lvl}): misses`);
+          L(`${m.id} fires ${n > 1 ? n + " " : ""}at ${t.id} (${d} yd${loc0 && loc0 !== "torso" ? ", aiming at the " + locName(loc0) : ""}${thru}, skill ${lvl}): misses`);
           if (w.dmg.ex && i === 0) explosion(m, w, { q: t.h.q + DIRS[Math.floor(R() * 6)][0], r: t.h.r + DIRS[Math.floor(R() * 6)][1] }, rollDamage(w.dmg));
+          else if (!w.dmg.ex) stray(m, w, t, inter, halfD);
           return;
         }
         let hits = w.cone ? 1 : Math.min(n, 1 + Math.floor(Math.max(0, r.margin) / w.rcl));
@@ -1126,7 +1161,7 @@ const SIM = (() => {
         if (!t.h) continue;
         const d = Math.max(1, hexDist(h, t.h));
         if (d > w.range.max) continue;
-        const E = planAttack(m, w, t, w.level - skillPen(m) + rangePenalty(d) + t.u.sm, false).score * sustainOf(w);
+        const E = planAttack(m, w, t, w.level - skillPen(m) + rangePenalty(d) + t.u.sm - 4 * between(h, t.h).filter(x => x !== t && x !== m).length, false).score * sustainOf(w);
         best = Math.max(best, kv(m, t, E));
       }
       return best * stanceW(m, "ranged") * m.u.ai.aggression;
@@ -1222,22 +1257,26 @@ const SIM = (() => {
           const d = Math.max(1, hexDist(m.h, t.h));
           if (d > w.range.max) continue;
           const spread = 1 / (1 + 0.5 * u.ai.focus * claims(m, t));
-          const base = w.level - skillPen(m) + rangePenalty(d) + t.u.sm;
+          // figures in the line of fire cost -4 each, and a miss may hit a friend on the line or beside the target
+          const inter = w.malediction ? [] : between(m.h, t.h).filter(x => x !== t);
+          const base = w.level - skillPen(m) + rangePenalty(d) + t.u.sm - 4 * inter.length;
+          const pals = w.malediction || w.dmg.ex ? [] : [...new Set([...inter, ...models.filter(x => x !== m && x.state === "ok" && x.h && hexDist(x.h, t.h) <= 1)])].filter(x => x.u.side === u.side);
+          const ffCost = pals.length ? (1 - P3[cl(base)]) * pals.reduce((a, x) => a + P3[cl(9 + x.u.sm)] * Math.min(1, expInjRandom(w, x.u) / remOf(x)) * threatOf(x) * HORIZON, 0) * u.ai.caution : 0;
           const aimed = m.aimTarget === t && m.aimTurns > 0;
           const aimB = aimed ? w.acc + (m.aimTurns >= 3 ? 2 : m.aimTurns >= 2 ? 1 : 0) : 0;
           const Enow = planAttack(m, w, t, base + aimB, false).score * sustainOf(w) * spread;
-          const vNow = Wr * kv(m, t, Enow) - fpCost;
+          const vNow = Wr * kv(m, t, Enow) - fpCost - ffCost;
           add(vNow - rNow, `fire ${w.name}@${t.id}`, () => { m.aimTarget = t; m.facing = faceToward(m.h, t.h); fireAt(m, w, t, { aim: aimed }); });
           // All-Out Attack (Determined, +1 ranged): only worth it when little can hit back
           if (threatNow < 1) {
             const Eaoa = planAttack(m, w, t, base + aimB + 1, false).score * sustainOf(w) * spread;
-            add(Wr * kv(m, t, Eaoa) - fpCost - risk(m, m.h, "aoa"), `aoa-fire@${t.id}`, () => { m.aoa = true; m.aimTarget = t; m.facing = faceToward(m.h, t.h); fireAt(m, w, t, { aim: aimed, aoa: true }); });
+            add(Wr * kv(m, t, Eaoa) - fpCost - ffCost - risk(m, m.h, "aoa"), `aoa-fire@${t.id}`, () => { m.aoa = true; m.aimTarget = t; m.facing = faceToward(m.h, t.h); fireAt(m, w, t, { aim: aimed, aoa: true }); });
           }
           // Aim (B364): pay a turn now for Acc (and +1/+2 more on later turns) next turn
           if ((w.acc || 0) >= 1 && !(aimed && m.aimTurns >= 3)) {
             const nextB = (aimed ? aimB : 0) + (aimed ? 1 : w.acc);
             const Eaim = planAttack(m, w, t, base + nextB, false).score * sustainOf(w) * spread;
-            add(GAMMA * Wr * kv(m, t, Eaim) - rNow, `aim@${t.id}`, () => {
+            add(GAMMA * Wr * kv(m, t, Eaim) - GAMMA * ffCost - rNow, `aim@${t.id}`, () => {
               if (m.aimTarget !== t) m.aimTurns = 0;
               m.aimTarget = t; m.aimTurns++; m.facing = faceToward(m.h, t.h); L(`${m.id} aims at ${t.id}`);
             });
