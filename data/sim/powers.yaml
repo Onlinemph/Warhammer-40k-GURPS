@@ -3,8 +3,8 @@
 # (data/imperium/psykers/warp.yaml, data/xenos/*/traits.yaml, data/xenos/tyranids/psychic.yaml) at the levels each template buys.
 #
 # Fields: name (exact trait name), kind (ranged | melee | shield), damage (weapon damage string), acc, range (half-D/max),
-#   rof, skill (effective roll), fp (FP per use), concentrate (turns of Concentrate first), blast (explosion radius in yards),
-#   malediction (1 = Malediction, B36: no dodge, no range penalty; not modelled by the trait text beyond that), perils, note.
+#   rof, skill (effective roll), fp (FP per use), concentrate (turns of Concentrate first), blast (radius in yards for a non-explosive area power),
+#   malediction (level, B106: a Quick Contest against `resist` (Will or HT) instead of a defence; -1/yard at 1, normal range penalties at 2, none inside 200 yd at 3), explosion (Explosion level, B107), cone (yards), perils, note.
 #
 # skill: the effective Innate Attack roll (DX + relative level) from the built template: Sanctioned Psyker Beam DX+2 = 13,
 #   Farseer Projectile DX+3 = 17, Warlock Beam DX+2 = 16, Ork Weirdboy Projectile DX+2 = 13, Cryptek Beam DX+3 = 15
@@ -20,7 +20,7 @@
 Sanctioned Psyker:
 - name: Fire Bolt
   kind: ranged
-  damage: 1d burn
+  damage: 12d burn
   acc: 3
   range: 10/100
   rof: 1
@@ -33,15 +33,15 @@ Sanctioned Psyker:
     moderate: {damage: 1d, fizzle: true}
     major: {damage: 2d, stun: true, fizzle: true}
     catastrophic: {margin: 10, natural: 18}
-  note: Fire Bolt 1 level (Innate Attack burning, 5/die). Skill is the template's Innate Attack (Beam) at DX+2 = 13 (DX 11, 4 points). Perils Will 14 + Psyker Talent 3.
+  note: Fire Bolt 12 levels (Innate Attack burning, 5/die), bolter-class against flak. Skill is the template's Innate Attack (Beam) at DX+2 = 13 (DX 11, 4 points). Perils Will 14 + Psyker Talent 3.
 - name: Inferno
   kind: ranged
-  damage: 1d burn ex
+  damage: 8d burn ex
   acc: 3
   range: 10/100
   rof: 1
   skill: 13
-  blast: 2
+  explosion: 2
   fp: 1
   concentrate: 0
   perils:
@@ -50,10 +50,10 @@ Sanctioned Psyker:
     moderate: {damage: 1d, fizzle: true}
     major: {damage: 2d, stun: true, fizzle: true}
     catastrophic: {margin: 10, natural: 18}
-  note: Inferno 1 level (Innate Attack burning + Explosion, 2-yard burst); alternative ability with Molten Beam, one at a time. Skill Innate Attack (Beam) DX+2 = 13. Perils Will 14 + Talent 3.
+  note: Inferno 8 levels (Innate Attack burning + Explosion level 2); alternative ability with Molten Beam, one at a time. Skill Innate Attack (Beam) DX+2 = 13. Perils Will 14 + Talent 3.
 - name: Molten Beam
   kind: ranged
-  damage: 1d(3) burn
+  damage: 12d(10) burn
   acc: 3
   range: 10/100
   rof: 1
@@ -66,11 +66,28 @@ Sanctioned Psyker:
     moderate: {damage: 1d, fizzle: true}
     major: {damage: 2d, stun: true, fizzle: true}
     catastrophic: {margin: 10, natural: 18}
-  note: Molten Beam 1 level (Innate Attack burning + Armor Divisor (3)). Skill Innate Attack (Beam) DX+2 = 13. Perils Will 14 + Talent 3.
+  note: Molten Beam 12 levels (Innate Attack burning + Armor Divisor (10)), melta-class. Skill Innate Attack (Beam) DX+2 = 13. Perils Will 14 + Talent 3.
+- name: Flame Breath
+  kind: ranged
+  damage: 5d burn
+  acc: 3
+  range: 5/5
+  rof: 1
+  skill: 13
+  cone: 5
+  fp: 1
+  concentrate: 0
+  perils:
+    will: 17
+    minor: {fp: 1}
+    moderate: {damage: 1d, fizzle: true}
+    major: {damage: 2d, stun: true, fizzle: true}
+    catastrophic: {margin: 10, natural: 18}
+  note: Flame Breath 5 levels (Innate Attack burning + Cone), heavy-flamer class. Skill Innate Attack (Beam) DX+2 = 13. Perils Will 14 + Talent 3.
 Zoanthrope:
 - name: Warp Blast
   kind: ranged
-  damage: 6d(5) burn
+  damage: 20d(5) burn
   acc: 3
   range: 10/100
   rof: 1
@@ -83,7 +100,7 @@ Zoanthrope:
     moderate: {damage: 1d, fizzle: true}
     major: {damage: 2d, stun: true, fizzle: true}
     catastrophic: {margin: 10, natural: 18}
-  note: Warp Blast 6 levels. Skill is the template's Innate Attack (Beam) at DX+2 = 12 (DX 10, 4 points, DX/E). Perils Will 10 + Psyker Talent 2 (the trait says Hive Mind flavour, same table).
+  note: Warp Blast 20 levels, 20d(5) burn. Skill is the template's Innate Attack (Beam) at DX+2 = 12 (DX 10, 4 points, DX/E). Perils Will 10 + Psyker Talent 2 (the trait says Hive Mind flavour, same table).
 - name: Warp Field (Bio-Psychic Ward)
   kind: shield
   shield: {sp: 60, delay: 2, recharge: 10, collapse_delay: 4}
@@ -92,12 +109,13 @@ Zoanthrope:
 Farseer:
 - name: Executioner
   kind: ranged
-  damage: 1d(2) imp
+  damage: 10d(10) imp
   acc: 3
   range: 10/100
   rof: 1
   skill: 17
-  malediction: 1
+  malediction: 2
+  resist: Will
   fp: 1
   concentrate: 0
   perils:
@@ -106,15 +124,15 @@ Farseer:
     moderate: {damage: 1d, fizzle: true}
     major: {damage: 2d, stun: true, fizzle: true}
     catastrophic: {margin: 10, natural: 18}
-  note: Executioner 1 level (Innate Attack impaling, Malediction 1, Armor Divisor (2)). Skill is the template's Innate Attack (Projectile) at DX+3 = 17 (DX 14, 8 points). Perils Will 17 + Aeldari Talent 5 (only an unmodified 18 can trigger it); Aeldari Runes variant, same margin table.
+  note: Executioner 10 levels (Innate Attack impaling, Malediction 2, Armor Divisor (10)); a Quick Contest against the target's Will, not dodged. Skill is the template's Innate Attack (Projectile) at DX+3 = 17 (DX 14, 8 points). Perils Will 17 + Aeldari Talent 5 (only an unmodified 18 can trigger it); Aeldari Runes variant, same margin table.
 - name: Eldritch Storm
   kind: ranged
-  damage: 1d cr ex
+  damage: 8d(2) cr ex
   acc: 3
   range: 10/100
   rof: 1
   skill: 17
-  blast: 8
+  explosion: 3
   fp: 1
   concentrate: 0
   perils:
@@ -123,16 +141,16 @@ Farseer:
     moderate: {damage: 1d, fizzle: true}
     major: {damage: 2d, stun: true, fizzle: true}
     catastrophic: {margin: 10, natural: 18}
-  note: Eldritch Storm 1 level (Innate Attack crushing + Explosion at the 8-yard tier). Skill Innate Attack (Projectile) DX+3 = 17. Perils Will 17 + Talent 5; Severe Aeldari Perils limitation changes cost only, not the table.
+  note: Eldritch Storm 8 levels (Innate Attack crushing + Armor Divisor (2) + Explosion level 3). Skill Innate Attack (Projectile) DX+3 = 17. Perils Will 17 + Talent 5; Severe Aeldari Perils limitation changes cost only, not the table.
 Warlock:
 - name: Destructor
   kind: ranged
-  damage: 3d burn ex
+  damage: 7d(2) burn ex
   acc: 3
   range: 10/100
   rof: 1
   skill: 16
-  blast: 2
+  explosion: 1
   fp: 1
   concentrate: 0
   perils:
@@ -141,15 +159,17 @@ Warlock:
     moderate: {damage: 1d, fizzle: true}
     major: {damage: 2d, stun: true, fizzle: true}
     catastrophic: {margin: 10, natural: 18}
-  note: Destructor 3 levels (Innate Attack burning + Explosion, 2-yard burst); alternative ability with Embolden. Skill is the template's Innate Attack (Beam) at DX+2 = 16 (DX 14, 4 points). Perils Will 14 + Aeldari Talent 2.
+  note: Destructor 7 levels (Innate Attack burning + Armor Divisor (2) + Explosion); alternative ability with Embolden. Skill is the template's Innate Attack (Beam) at DX+2 = 16 (DX 14, 4 points). Perils Will 14 + Aeldari Talent 2.
 Ork Weirdboy:
 - name: '''Eadbanger'
   kind: ranged
-  damage: 2d cr
+  damage: 10d(10) cr
   acc: 3
   range: 10/100
   rof: 1
   skill: 13
+  malediction: 2
+  resist: Will
   waaagh_perils_bonus: 2
   fp: 1
   concentrate: 0
@@ -159,6 +179,6 @@ Ork Weirdboy:
     moderate: {damage: 1d, fizzle: true}
     major: {damage: 2d, stun: true, fizzle: true}
     catastrophic: {margin: 10, natural: 18}
-  note: '''Eadbanger 2 levels (Innate Attack crushing). Skill is the template''s Innate Attack (Projectile) at DX+2 = 13 (DX 11, 4 points). Perils Will 8 + Psyker Talent 2; +2 inside a WAAAGH! (WAAAGH! Gestalt). A catastrophic failure is the head exploding (template notes).'
+  note: '''Eadbanger 10 levels (Innate Attack crushing, Malediction 2, Armor Divisor (10)); a Quick Contest against the target''s Will. Skill is the template''s Innate Attack (Projectile) at DX+2 = 13 (DX 11, 4 points). Perils Will 8 + Psyker Talent 2; +2 inside a WAAAGH! (WAAAGH! Gestalt). A catastrophic failure is the head exploding (template notes).'
 Cryptek:
 - {name: Channelled Discharge, kind: ranged, damage: 6d(3) burn, acc: 3, range: 10/100, rof: 1, skill: 15, fp: 0, concentrate: 0, note: 'Plasmancy discipline: Innate Attack burning 6 levels + Armor Divisor (3). Skill is the template''s Innate Attack (Beam) at DX+3 = 15 (DX 12, 8 points). No Warp Sorcery or Perils in the trait (Necrons are invisible to the warp), so 0 FP and no Perils.'}

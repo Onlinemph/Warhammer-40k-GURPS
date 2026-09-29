@@ -40,7 +40,7 @@ Standard GURPS HP (B377–420) or the user's Revised Fractional Health (see the 
 
 ## Psychic powers
 
-Psykers use the attack and defence powers listed for their template in `data/sim/powers.yaml` (built from the psyker traits under the project's Sorcery model). A power is used like a weapon when its expected harm beats the psyker's weapon: it rolls its skill, pays its FP cost, and on the listed Perils trigger rolls the listed consequence. FP loss is tracked; a model at 0 FP or below rolls HT to act (B426).
+Psykers use the attack and defence powers listed for their template in `data/sim/powers.yaml` (built from the psyker traits under the project's Sorcery model). A power with Malediction (B106) is a Quick Contest of skill against the target's Will (or HT) instead of an attack and a defence, at −1 per yard (level 1), normal range penalties (level 2) or none within 200 yd (level 3). Warp powers fail against a blank (Pariah Gene). A power is used like a weapon when its expected harm beats the psyker's weapon: it rolls its skill, pays its FP cost, and on the listed Perils trigger rolls the listed consequence. FP loss is tracked; a model at 0 FP or below rolls HT to act (B426).
 
 ## Data the engine reads
 

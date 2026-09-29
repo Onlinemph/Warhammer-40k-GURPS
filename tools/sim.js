@@ -299,7 +299,7 @@ const SIM = (() => {
         perils: pp ? { will: Number(pp.will) || st.will, waaagh: Number(pp.waaagh_perils_bonus) || 0, fp: (pp.minor && pp.minor.fp) || 1,
           modDmg: pdm(pp.moderate && pp.moderate.damage), majDmg: pdm(pp.major && pp.major.damage),
           cat: (pp.catastrophic && pp.catastrophic.margin) || 10 } : null,
-        malediction: !!p.malediction, reachMax: 1, parry: null, malf: 0, cone: Number(p.cone) || 0, blast: Number(p.blast) || 0, explosion: Number(p.explosion) || 1 });
+        malediction: Number(p.malediction) || 0, resist: p.resist || "Will", reachMax: 1, parry: null, malf: 0, cone: Number(p.cone) || 0, blast: Number(p.blast) || 0, explosion: Number(p.explosion) || 1 });
     }
     const u = {
       side, name: spec.label || spec.template, template: spec.template, count: Math.max(1, spec.count | 0),
@@ -652,7 +652,7 @@ const SIM = (() => {
     // best location and deceptive level: returns {loc, da, score, lvl}
     function planAttack(m, w, t, lvl, melee, dmgOverride) {
       const locs = aimsShots(m) ? Object.keys(AIM) : ["random"];
-      const def0 = melee ? bestDefence(t, m, true) : rangedDefence(t, m);
+      const def0 = melee ? bestDefence(t, m, true) : w.malediction ? (w.fp && t.u.flags.blank ? 99 : w.resist === "HT" ? t.u.HT : t.u.will) - 2 : rangedDefence(t, m);
       let best = { loc: "torso", da: 0, score: 0, lvl };
       for (const loc of locs) {
         const pen = loc === "random" ? 0 : AIM[loc];
@@ -777,7 +777,24 @@ const SIM = (() => {
       if (w.fp) { m.fp -= w.fp; }
       if (w.perils && perils(m, w)) return;
       const aimBonus = opts.aim ? w.acc + (m.aimTurns >= 3 ? 2 : m.aimTurns >= 2 ? 1 : 0) : 0;
-      let base = w.level + (opts.pointBlank ? Math.min(0, w.bulk) : w.malediction ? 0 : rangePenalty(d)) + target.u.sm - skillPen(m) + aimBonus
+      // Malediction (B106): no active defence; a Quick Contest against the target's Will (or HT), with range penalties
+      // of -1/yard (level 1), the Size and Speed/Range Table (2) or long-distance modifiers (3, none inside 200 yd)
+      if (w.malediction) {
+        if (w.fp && target.u.flags.blank) { L(`${m.id} casts ${w.name} at ${target.id}: the power dies against a blank`); m.aimTurns = 0; return; }
+        const lvl = w.level - skillPen(m) + (w.malediction === 1 ? -d : w.malediction === 2 ? rangePenalty(d) : 0) + (opts.aoa ? 1 : 0);
+        const plan = planAttack(m, w, target, lvl, false), loc0 = plan.loc === "random" ? null : plan.loc;
+        const r = check(plan.lvl), res = check(w.resist === "HT" ? target.u.HT : target.u.will);
+        m.aimTurns = 0;
+        const wins = r.ok && (!res.ok || r.margin > res.margin);
+        L(`${m.id} casts ${w.name} at ${target.id} (${d} yd${loc0 && loc0 !== "torso" ? ", aiming at the " + loc0 : ""}, skill ${plan.lvl} vs ${w.resist} ${w.resist === "HT" ? target.u.HT : target.u.will}): ${wins ? "it takes hold" : r.ok ? "resisted" : "fails"}`);
+        if (!wins) return;
+        const raw = rollDamage(w.dmg);
+        applyHit(m, w, target, loc0 || hitLocation(), true, false, null, raw);
+        if (w.dmg.ex && target.h) explosion(m, w, target.h, raw);
+        return;
+      }
+      if (w.fp && target.u.flags.blank) { L(`${m.id} casts ${w.name} at ${target.id}: the power dies against a blank`); m.aimTurns = 0; return; }
+      let base = w.level + (opts.pointBlank ? Math.min(0, w.bulk) : rangePenalty(d)) + target.u.sm - skillPen(m) + aimBonus
         + (opts.moved ? Math.min(-2, w.bulk) : 0) + (opts.aoa ? 1 : 0) - (target.prone && !opts.pointBlank ? 2 : 0) - (inCover(target) && !opts.pointBlank ? 2 : 0);
       m.aimTurns = 0;
       // cones hit everyone in the cone; everything else may split automatic fire over neighbours (B373)

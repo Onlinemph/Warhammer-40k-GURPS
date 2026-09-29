@@ -76,7 +76,7 @@ Sanctioned Psyker:
   armour: ["Flak Jacket"]
   ranged: {item: "Laspistol, Common Pattern", mode: "Standard"}
   melee: {item: "Force Staff", mode: "Field on, swing"}
-  stance: advance
+  stance: shoot
   note: "Primaris Psyker per template: force staff (its template equipment), flak jacket, laspistol sidearm."
 
 # ------------------------------------------------------------------ Custodes
@@ -172,16 +172,16 @@ Warlock:
   armour: ["Rune Armour"]
   ranged: {item: "Shuriken Pistol", mode: "Standard"}
   melee: {item: "Witchblade", mode: "Field on"}
-  shield: {item: "Rune Armour", sp: 60, delay: 3, recharge: 10, ranged_only: false}
+  shield: {item: "Rune Armour", sp: 80, delay: 3, recharge: 10, ranged_only: false}
   stance: advance
-  note: "Witchblade and shuriken pistol; rune armour ward is 60 SP at Warp Empowerment 2 (template level)."
+  note: "Witchblade and shuriken pistol; rune armour ward is 80 SP at Warp Empowerment 6 (60 + 5 per level above 2)."
 Farseer:
   armour: ["Rune Armour"]
   ranged: {item: "Shuriken Pistol", mode: "Standard"}
   melee: {item: "Witchblade", mode: "Field on"}
-  shield: {item: "Rune Armour", sp: 120, delay: 3, recharge: 10, ranged_only: false}
-  stance: advance
-  note: "Witchblade, shuriken pistol; rune ward scaled to Warp Empowerment 5 (60 base + 20 per level above 2)."
+  shield: {item: "Rune Armour", sp: 155, delay: 3, recharge: 10, ranged_only: false}
+  stance: shoot
+  note: "Witchblade, shuriken pistol; rune ward 155 SP at Warp Empowerment 21 (60 + 5 per level above 2, cap 160)."
 
 # ------------------------------------------------------------------ Drukhari
 Kabalite Warrior:
@@ -333,8 +333,8 @@ Ork Warboss:
 Ork Weirdboy:
   armour: []
   melee: {item: "Weirdboy Staff", mode: "Swing"}
-  stance: charge
-  note: "Warpstaff only; psychic powers ignored."
+  stance: advance
+  note: "Warpstaff; fights with 'Eadbanger from data/sim/powers.yaml."
 Ork Meganob:
   armour: ["Mega Armour"]
   ranged: {item: "Kombi-Weapon, Shoota/Rokkit", mode: "Shoota barrel"}
@@ -465,4 +465,4 @@ Hive Tyrant:
 Zoanthrope:
   armour: []
   stance: shoot
-  note: "No weapon line exists; fights only with the Warp Blast power (ignored by the sim), so it punches."
+  note: "No weapon line; fights with Warp Blast and the Warp Field from data/sim/powers.yaml."

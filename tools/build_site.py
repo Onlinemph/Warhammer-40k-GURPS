@@ -295,6 +295,8 @@ def combat_flags(t, flags):
         for k in ("unliving", "homogenous", "diffuse", "no brain", "no vitals"):
             if k in low:
                 flags[k.replace(" ", "")] = 1
+    elif n.startswith("Pariah Gene"):
+        flags["blank"] = 1          # warp sorcery fails against a blank (framework "Psykers and the warp")
     elif n.startswith("Reanimation"):
         flags["reanimation"] = 1
         flags["noMorale"] = 1       # soulless machines: Necrons do not break
