@@ -16,6 +16,7 @@ Every model acts once per second in Basic Speed order (ties random), choosing on
 
 - **Move** (full Move), **Move and Attack** (ranged: −2 or Bulk, no Acc; melee: −4, skill capped at 9, B365), **Attack**, **Aim** (+Acc, +1 more after 2 turns and +2 after 3; +1 if braced, B364), **Evaluate** (+1 per turn up to +3 to the next melee attack on that foe), **Feint** (Quick Contest of weapon skill; margin comes off the foe's next defence, B365), **All-Out Attack** (Determined: +4 melee / +1 ranged; Double: two attacks; Strong: +2 damage or +1/die; no active defence until next turn, B365), **All-Out Defense** (Increased: +2 to one defence type, B366), **Ready** (reload, clear a jam, pick up a weapon), **Change Posture**, **Concentrate** (psychic powers that need it).
 - A shooter whose aimed roll would be under 8 closes the range first; low-RoF weapons re-aim when the unaimed roll is under 10; the "advance" stance fires on the move only while that shot is 8 or better.
+- Shooters spread their fire: a foe that squad-mates are already shooting counts for less (expected harm ÷ (1 + shooters on it)), so a squad doesn't pour every shot into one model. A shooter aims only when the aimed roll hits more than 1.8 times as often as a shot now, since aiming costs a turn.
 - The model's AI picks the maneuver with the best expected result: All-Out Attack when the foe cannot hurt it or it cannot be defended against anyway, Feint or Deceptive Attack against strong defences, Rapid Strike (two attacks at −6, B370) when skill allows, Aim for accurate low-RoF weapons at range, Evaluate when closing is not possible this turn, All-Out Defense when it cannot hurt its foe and is being attacked.
 
 ## Attacks
@@ -42,7 +43,7 @@ A charging model whose weapon can barely hurt its foe (under 1 HP of expected in
 
 ## Defence
 
-Dodge, Parry and Block (B374–377); retreat once per turn (+3 Dodge, +1 Parry and Block); multiple parries −4 each; Block once per turn; a shield's Defense Bonus adds to all defences against attacks from the front or shield side (B287); Dodge and Drop against ranged attacks (+3, goes prone, B377); side −2, rear none; stunned −4 and no retreat.
+Dodge, Parry and Block (B374–377); a successful Parry of an unarmed attack (a grab or a punch) with a weapon injures the attacker's arm with the weapon's damage (B376); retreat once per turn (+3 Dodge, +1 Parry and Block); multiple parries −4 each; Block once per turn; a shield's Defense Bonus adds to all defences against attacks from the front or shield side (B287); Dodge and Drop against ranged attacks (+3, goes prone, B377); side −2, rear none; stunned −4 and no retreat.
 
 ## Injury
 

@@ -1312,7 +1312,7 @@ const SIM = (() => {
         if (!r.ok) { L(`${m.id} strikes at ${t.id} (${loc !== "torso" ? locName(loc) + ", " : ""}skill ${plan.lvl}): misses`); continue; }
         if (!r.crit) {
           const def = defend(t, m, true, plan.da, feint);
-          if (def) { L(`${m.id} strikes at ${t.id}: ${def.how === "parry" ? "parried" : def.how === "block" ? "blocked" : "dodged"}`); continue; }
+          if (def) { L(`${m.id} strikes at ${t.id}: ${def.how === "parry" ? "parried" : def.how === "block" ? "blocked" : "dodged"}`); if (def.how === "parry" && w.name === "Punch") cutsArm(t, m); continue; }
         }
         const rending = w.rend && (r.crit || r.margin >= w.rendBy);
         L(`${m.id} strikes ${t.id}${loc !== "torso" ? " in the " + locName(loc) : ""} with ${w.name}${rending ? " (rending hit)" : ""}`);
@@ -1393,7 +1393,9 @@ const SIM = (() => {
       const cands = pool.filter(f => f.h).sort((a, b) => hexDist(m.h, a.h) - hexDist(m.h, b.h)).slice(0, 6)
         .filter(f => hexDist(m.h, f.h) <= w.range.max);
       let target = m.aimTarget && m.aimTarget.state === "ok" && cands.includes(m.aimTarget) ? m.aimTarget : null;
-      if (!target) target = cands.map(f => ({ f, s: planAttack(m, w, f, w.level + rangePenalty(hexDist(m.h, f.h)) + f.u.sm, false).score }))
+      // spread fire: a foe that squad-mates are already shooting is worth less to one more shooter (no overkill)
+      const claims = f => models.reduce((a, x) => a + (x !== m && x.u.side === u.side && x.state === "ok" && x.aimTarget === f ? 1 : 0), 0);
+      if (!target) target = cands.map(f => ({ f, s: planAttack(m, w, f, w.level + rangePenalty(hexDist(m.h, f.h)) + f.u.sm, false).score / (1 + claims(f)) }))
         .sort((a, b) => b.s - a.s)[0]?.f || near;
       m.facing = faceToward(m.h, target.h);
       if (w === u.ranged && !engaged(m)) {
@@ -1432,7 +1434,9 @@ const SIM = (() => {
       // Aim (B364): low-RoF accurate weapons aim at a new target, snipers keep aiming up to 3 turns
       const threat = threatTo(m);
       const sniper = w.rof === 1 && w.acc >= 5 && d > 50;
-      if (w.acc >= 2 && w.rof <= 3 && (m.aimTarget !== target || (sniper && m.aimTurns < 3 && threat < 1) || (m.aimTurns === 0 && unaimed < 10))) {
+      // Aim only when it pays for the lost turn: the aimed roll must hit well over twice as often as a shot now
+      const aimPays = P3[Math.max(0, Math.min(18, unaimed + w.acc + 1))] > 1.8 * P3[Math.max(0, Math.min(18, unaimed))];
+      if (w.acc >= 2 && w.rof <= 3 && m.aimTurns === 0 && aimPays || (sniper && m.aimTarget === target && m.aimTurns > 0 && m.aimTurns < 3 && threat < 1)) {
         if (m.aimTarget !== target) m.aimTurns = 0;
         m.aimTarget = target; m.aimTurns++; L(`${m.id} aims at ${target.id}`); return;
       }
@@ -1618,12 +1622,19 @@ const SIM = (() => {
       const ra = check(a), rb = check(b);
       return ra.ok && (!rb.ok || ra.margin > rb.margin);
     }
+    // Parrying an unarmed attack with a weapon (B376): the attacker's reaching arm takes the weapon's damage
+    function cutsArm(t, att) {
+      const w = t.u.melee;
+      if (!w || w.natural || w.name === "Punch" || t.state !== "ok" || att.state !== "ok") return;
+      L(`  ${t.id}'s ${w.name} catches ${att.id}'s arm`);
+      applyHit(t, w, att, "arm", false, false, null, rollDamage(w.dmg));
+    }
     function grab(m, t) {
       const lvl = m.u.grapple - skillPen(m) - (m.prone ? 4 : 0) - (m.grips.length ? 4 : 0);
       m.attacked = true;
       const r = check(lvl);
       if (!r.ok) { L(`${m.id} grabs at ${t.id} (skill ${lvl}): misses`); return; }
-      if (!r.crit) { const def = defend(t, m, true, 0, 0); if (def) { L(`${m.id} grabs at ${t.id}: ${def.how === "parry" ? "parried" : def.how === "block" ? "blocked" : "dodged"}`); return; } }
+      if (!r.crit) { const def = defend(t, m, true, 0, 0); if (def) { L(`${m.id} grabs at ${t.id}: ${def.how === "parry" ? "parried" : def.how === "block" ? "blocked" : "dodged"}`); if (def.how === "parry") cutsArm(t, m); return; } }
       release(m); m.holding = t; t.grips.push(m);
       L(`${m.id} grabs ${t.id} (${t.grips.length} holding on)`);
     }
