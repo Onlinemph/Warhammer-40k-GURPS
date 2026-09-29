@@ -1050,13 +1050,13 @@ const SIM = (() => {
       const td = hexDist(m.h, target.h);
       const unaimed = w.level - skillPen(m) + rangePenalty(td) + target.u.sm;
       if (td > 3 && unaimed + (w.acc || 0) < 8) {
-        stepToward(m, target.h, moveOf(m), 2); m.facing = faceToward(m.h, target.h);
+        stepToward(m, target.h, moveOf(m), 2); if (m.state !== "ok" || !m.h || m.stunned) return; m.facing = faceToward(m.h, target.h);
         if (!w.fp) fireAt(m, w, target, { moved: true }); else L(`${m.id} closes in on ${target.id}`);
         return;
       }
       // advance under fire (Move and Attack, B365) only while the moving shot is still worth taking
       if (u.stance === "advance" && d > Math.min(w.range.half, 30) && unaimed + Math.min(-2, w.bulk || 0) >= 8) {
-        stepToward(m, target.h, moveOf(m), 2); m.facing = faceToward(m.h, target.h);
+        stepToward(m, target.h, moveOf(m), 2); if (m.state !== "ok" || !m.h || m.stunned) return; m.facing = faceToward(m.h, target.h);
         fireAt(m, w, target, { moved: true }); return;
       }
       // Aim (B364): low-RoF accurate weapons aim at a new target, snipers keep aiming up to 3 turns
@@ -1130,7 +1130,7 @@ const SIM = (() => {
     function afterStep(m) {
       if (m.state !== "ok" || !m.h) return true;
       const k = key(m.h.q, m.h.r);
-      for (const z of zones) if (z.side !== m.u.side && z.owner.state === "ok" && z.hexes.has(k) && !z.hit.has(m)) suppressHit(z, m);
+      for (const z of zones) if (m.state === "ok" && m.h && z.side !== m.u.side && z.owner.state === "ok" && z.owner.h && z.hexes.has(k) && !z.hit.has(m)) suppressHit(z, m);
       if (m.state !== "ok" || m.stunned) return true;
       for (const f of models) {
         if (!f.waiting || f.state !== "ok" || !f.h || f.u.side === m.u.side || f.stunned) continue;
