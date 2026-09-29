@@ -505,6 +505,13 @@ const SIM = (() => {
     // below 1/3 HP (standard HP, B419), or halved by a Fractional Health wound or a crippled leg: half Move and
     // Dodge, rounding up
     const weak = m => !frac && m.hp < m.u.HP / 3;
+    // Shadow in the Warp (Tyranid traits): a psyker within the radius of an enemy bioform carrying it is at -3 to
+    // psychic skill and to the Will roll against Perils of the Warp
+    const psyker = u => u.powers.some(p => p.fp);
+    const shadowed = m => !!m.h && psyker(m.u) && models.some(x => x.state === "ok" && x.h && x.u.side !== m.u.side && x.u.flags.shadow && hexDist(x.h, m.h) <= x.u.flags.shadow);
+    const wl = (m, w) => w.level - (w.usage === "power" && w.fp && shadowed(m) ? 3 : 0);
+    // Fright Check (B360): Will plus Fearlessness, never better than 13
+    const fright = (u, mod = 0) => check(Math.min(13, u.will + (u.flags.fearless || 0)) + mod);
     const dodgeOf = t => (t.halfDodge || weak(t) ? Math.ceil(t.u.dodge / 2) : t.u.dodge);
     const moveOf = m => m.legsLost ? 1 : m.halfMove || weak(m) ? Math.max(1, Math.ceil(m.u.move / 2)) : m.u.move;
 
@@ -587,15 +594,17 @@ const SIM = (() => {
       const HP = t.u.HP, before = t.hp;
       t.hp -= inj;
       att.dmgDealt += inj;
-      // shock (B419): -1 per HP of injury, or per full HP/10 with 20+ HP, at most -4
-      if (!t.u.flags.hpt) t.shock = Math.min(4, t.shock + (HP >= 20 ? Math.floor(inj / (HP / 10)) : inj));
-      // crippling (B420-421): injury over HP/2 to a limb, HP/3 to an extremity
+      // shock (B419): -1 per HP of injury, or per full HP/10 with 20+ HP, at most -4 (a critical hit can double it, to -8)
+      const cShock = t.critShock, cMajor = t.critMajor;
+      t.critShock = t.critMajor = false;
+      if (!t.u.flags.hpt) t.shock = Math.min(cShock ? 8 : 4, t.shock + (HP >= 20 ? Math.floor(inj / (HP / 10)) : inj) * (cShock ? 2 : 1));
+      // crippling (B420-421): injury over HP/2 to a limb, HP/3 to an extremity (or any penetrating "double shock" crit)
       const lim = loc === "arm" || loc === "leg" ? HP / 2 : loc === "hand" || loc === "foot" ? HP / 3 : Infinity;
-      const crippled = inj > lim;
+      const crippled = inj > lim || (cShock && lim !== Infinity);
       if (crippled) cripple(t, loc);
       if (t.state !== "ok") return;
       // major wound (over HP/2, or any crippling): HT roll; failure stuns and knocks down, failure by 5+ knocks out
-      if (inj > HP / 2 || crippled) {
+      if (inj > HP / 2 || crippled || cMajor) {
         const mod = (t.u.flags.hpt ? 3 : 0) + (loc === "skull" || loc === "eye" ? -10 : loc === "face" || loc === "vitals" ? -5 : 0);
         const r = check(t.u.HT + mod);
         if (!r.ok && (r.margin <= -5 || r.fumble)) { incapacitate(t, "is knocked out"); return; }
@@ -617,12 +626,24 @@ const SIM = (() => {
       att.kills++;
     }
 
+    // Critical Hit Table (B556), rolled on 3d after a critical success
+    const CRIT = { 3: "triple damage", 4: "DR at half", 5: "double damage", 6: "maximum damage", 7: "a major wound", 8: "double shock",
+      12: "the victim drops its weapon", 13: "a major wound", 14: "double shock", 15: "maximum damage", 16: "double damage", 17: "DR at half", 18: "triple damage" };
     // ---- damage to a model at a location. Returns injury.
-    function applyHit(att, w, t, loc, ranged, halfD, dmgOverride, rawOverride) {
+    function applyHit(att, w, t, loc, ranged, halfD, dmgOverride, rawOverride, crit) {
       const chink = loc.endsWith("#c");
       if (chink) loc = loc.slice(0, -2);
       const dmg = dmgOverride || w.dmg;
       let raw = rawOverride != null ? rawOverride : rollDamage(dmg);
+      if (crit) {
+        L(`  critical hit: ${CRIT[crit] || "normal damage"}`);
+        if (crit === 3 || crit === 18) raw *= 3;
+        else if (crit === 5 || crit === 16) raw *= 2;
+        else if (crit === 6 || crit === 15) raw = Math.floor((dmg.n * 6 + dmg.add) * dmg.mult);
+        else if (crit === 12 && !t.u.bothReady && !t.u.melee.natural && t.inHand !== "none") { t.inHand = "none"; L(`  ${t.id} drops its weapon`); }
+        if (crit === 7 || crit === 13) t.critMajor = true;
+        if (crit === 8 || crit === 14) t.critShock = true;
+      }
       if (halfD) raw = Math.floor(raw / 2);
       let fraw = w.follow && rawOverride == null ? rollDamage(w.follow) : 0;
       const basic = raw;
@@ -639,6 +660,7 @@ const SIM = (() => {
       const div = dmg.div;
       const eff = dr => dr <= 0 ? 0 : div === Infinity ? 0 : Math.max(1, Math.floor(dr / div));
       let DR = eff(armDR + natDR);
+      if (crit === 4 || crit === 17) DR = Math.floor(DR / 2);
       let pen = raw - DR;
       if (pen <= 0 && !chink && armDR > 0 && t.u.arm.wp && roll3() <= t.u.arm.wp) {
         DR = eff(Math.floor(armDR / 2) + natDR); pen = raw - DR;
@@ -773,23 +795,38 @@ const SIM = (() => {
 
     // ---- defence
     function arcTo(t, att) { return att && att.h && t.h ? arcOf(t.h, t.facing, att.h) : "front"; }
+    // a free hex for a retreat: beside the defender and no closer to the attacker (back or to the side)
+    function retreatHex(t, att) {
+      if (!t.h || !att || !att.h) return null;
+      const d0 = hexDist(t.h, att.h);
+      let best = null, bd = -1;
+      for (const [dq, dr] of DIRS) {
+        const h = { q: t.h.q + dq, r: t.h.r + dr };
+        if (occ.has(key(h.q, h.r))) continue;
+        const dd = hexDist(h, att.h);
+        if (dd >= d0 && dd > bd) { bd = dd; best = h; }
+      }
+      return best;
+    }
+    const canRetreat = (t, att) => !t.retreated && !t.stunned && !t.mna && !t.grips.length && !t.prone && !!retreatHex(t, att);
     function bestDefence(t, att, melee) {
       if (t.state !== "ok" || t.aoa || t.pinned) return null;
       const arc = arcTo(t, att);
       if (arc === "rear") return null;
       const mod = (arc === "side" ? -2 : 0) - (t.stunned ? 4 : 0) - (t.prone ? 3 : 0) + (arc !== "rear" ? t.u.db : 0);
       const aod = how => t.aod && t.aodDef === how ? 2 : 0;   // All-Out Defense: +2 to the one defence chosen
-      let d = dodgeOf(t) + (melee && !t.retreated && !t.stunned ? 3 : 0) + aod("dodge");
+      const rt = melee && canRetreat(t, att);
+      let d = dodgeOf(t) + (rt ? 3 : 0) + aod("dodge");
       if (melee && t.u.parry != null && bladeReady(t) && !(t.u.melee.unbalanced && t.attacked) && t.armsLost < 2)
-        d = Math.max(d, t.u.parry + (!t.retreated && !t.stunned ? 1 : 0) - (t.u.flags.master ? 2 : 4) * t.parries + aod("parry"));
-      if (melee && t.u.db && !t.blocked) d = Math.max(d, t.u.block + (!t.retreated && !t.stunned ? 1 : 0) + aod("block"));
-      return d + mod;
+        d = Math.max(d, t.u.parry + (rt ? 1 : 0) - (t.u.flags.master ? 2 : 4) * t.parries + aod("parry"));
+      if (melee && t.u.db && !t.blocked) d = Math.max(d, t.u.block + (rt ? 1 : 0) + aod("block"));
+      return d + mod - (t.kneel ? 2 : 0) - (t.offBalance ? 2 : 0);
     }
     function rangedDefence(t, att) {
       if (t.state !== "ok" || t.aoa) return null;
       const arc = arcTo(t, att);
       if (arc === "rear") return null;
-      return dodgeOf(t) + (arc === "side" ? -2 : 0) - (t.stunned ? 4 : 0) - (t.prone ? 3 : 0) + (t.aod && t.aodDef === "dodge" ? 2 : 0) + t.u.db;
+      return dodgeOf(t) + (arc === "side" ? -2 : 0) - (t.stunned ? 4 : 0) - (t.prone ? 3 : 0) - (t.kneel ? 2 : 0) + (t.aod && t.aodDef === "dodge" ? 2 : 0) + t.u.db;
     }
     // resolve a defence roll; returns margin (>=0) on success or null
     function defend(t, att, melee, da, feint) {
@@ -797,7 +834,7 @@ const SIM = (() => {
       if (t.grips.length) t.retreated = true;   // held: no retreat
       const arc = arcTo(t, att);
       if (arc === "rear") return null;
-      const mod = (arc === "side" ? -2 : 0) - (t.stunned ? 4 : 0) - (t.prone ? 3 : 0) + t.u.db - da - (feint || 0);
+      const mod = (arc === "side" ? -2 : 0) - (t.stunned ? 4 : 0) - (t.prone ? 3 : 0) - (t.kneel ? 2 : 0) - (t.offBalance ? 2 : 0) + t.u.db - da - (feint || 0);
       const aod = how => t.aod && t.aodDef === how ? 2 : 0;
       if (!melee) {
         let d = dodgeOf(t) + mod + aod("dodge") + feverish(t, att, false, dodgeOf(t) + mod);
@@ -808,14 +845,16 @@ const SIM = (() => {
         if (drop) t.prone = true;
         return r.ok ? Math.max(0, r.margin) : null;
       }
-      const opts = [{ how: "dodge", v: dodgeOf(t) + (!t.retreated && !t.stunned ? 3 : 0) + aod("dodge"), retreat: true }];
+      const rt = canRetreat(t, att);
+      const opts = [{ how: "dodge", v: dodgeOf(t) + (rt ? 3 : 0) + aod("dodge"), retreat: rt }];
       if (t.u.parry != null && bladeReady(t) && !(t.u.melee.unbalanced && t.attacked) && t.armsLost < 2)
-        opts.push({ how: "parry", v: t.u.parry + (!t.retreated && !t.stunned ? 1 : 0) - (t.u.flags.master ? 2 : 4) * t.parries - (t.grips.length ? 4 : 0) + aod("parry"), retreat: true });
-      if (t.u.db && !t.blocked) opts.push({ how: "block", v: t.u.block + (!t.retreated && !t.stunned ? 1 : 0) + aod("block"), retreat: true });
+        opts.push({ how: "parry", v: t.u.parry + (rt ? 1 : 0) - (t.u.flags.master ? 2 : 4) * t.parries - (t.grips.length ? 4 : 0) + aod("parry"), retreat: rt });
+      if (t.u.db && !t.blocked) opts.push({ how: "block", v: t.u.block + (rt ? 1 : 0) + aod("block"), retreat: rt });
       const o = opts.reduce((a, b) => b.v > a.v ? b : a);
       if (o.how === "parry") t.parries++;
       if (o.how === "block") t.blocked = true;
-      if (o.retreat && !t.stunned) t.retreated = true;
+      // retreating is a real step back or aside, once per turn (B377)
+      if (o.retreat) { t.retreated = true; const h = retreatHex(t, att); if (h) place(t, h); }
       const r = check(o.v + mod + feverish(t, att, true, o.v + mod));
       return r.ok ? { how: o.how, margin: Math.max(0, r.margin) } : null;
     }
@@ -894,6 +933,7 @@ const SIM = (() => {
 
     // ---- attacks
     function jamCheck(m, w, r) {
+      if (r.fumble && !w.malf && w === m.u.ranged && !w.natural) { m.jam = d6(); L(`  critical miss: ${m.id}'s ${w.name} jams (${m.jam} s to clear)`); return true; }
       if (!w.malf || r.crit) return false;
       let malf = w.malf;
       if (/^Ork /.test(m.u.template) && m.u.models.filter(active).length >= 10) malf += 1;   // WAAAGH! (framework)
@@ -937,7 +977,7 @@ const SIM = (() => {
       // of -1/yard (level 1), the Size and Speed/Range Table (2) or long-distance modifiers (3, none inside 200 yd)
       if (w.malediction) {
         if (w.fp && target.u.flags.blank) { L(`${m.id} casts ${w.name} at ${target.id}: the power dies against a blank`); m.aimTurns = 0; return; }
-        const lvl = w.level - skillPen(m) + (w.malediction === 1 ? -d : w.malediction === 2 ? rangePenalty(d) : 0) + (opts.aoa ? 1 : 0);
+        const lvl = wl(m, w) - skillPen(m) + (w.malediction === 1 ? -d : w.malediction === 2 ? rangePenalty(d) : 0) + (opts.aoa ? 1 : 0);
         const plan = planAttack(m, w, target, lvl, false), loc0 = plan.loc === "random" ? null : plan.loc;
         const r = check(plan.lvl), res = check(w.resist === "HT" ? target.u.HT : target.u.will);
         m.aimTurns = 0;
@@ -950,8 +990,8 @@ const SIM = (() => {
         return;
       }
       if (w.fp && target.u.flags.blank) { L(`${m.id} casts ${w.name} at ${target.id}: the power dies against a blank`); m.aimTurns = 0; return; }
-      let base = w.level + (opts.pointBlank ? Math.min(0, w.bulk) : rangePenalty(d)) + target.u.sm - skillPen(m) + aimBonus - (opts.pen || 0)
-        + (opts.moved ? Math.min(-2, w.bulk) : 0) + (opts.aoa ? 1 : 0) - (target.prone && !opts.pointBlank ? 2 : 0) - (inCover(target) && !opts.pointBlank ? 2 : 0);
+      let base = wl(m, w) + (opts.pointBlank ? Math.min(0, w.bulk) : rangePenalty(d)) + target.u.sm - skillPen(m) + aimBonus - (opts.pen || 0)
+        + (opts.moved ? Math.min(-2, w.bulk) : 0) + (opts.aoa ? 1 : 0) - ((target.prone || target.kneel) && !opts.pointBlank ? 2 : 0) - (inCover(target) && !opts.pointBlank ? 2 : 0);
       m.aimTurns = 0;
       // cones hit everyone in the cone; everything else may split automatic fire over neighbours (B373)
       const targets = [target];
@@ -993,7 +1033,7 @@ const SIM = (() => {
         for (let k = 0; k < hits && t.state === "ok"; k++) {
           const loc = loc0 || hitLocation();
           const raw = rollDamage(w.dmg);
-          applyHit(m, w, t, loc, true, halfD, null, halfD ? raw : raw);
+          applyHit(m, w, t, loc, true, halfD, null, halfD ? raw : raw, r.crit && k === 0 ? roll3() : 0);
           if (w.dmg.ex && k === 0 && t.h) explosion(m, w, t.h, raw);
           else if (w.dmg.ex && k === 0) explosion(m, w, t.lastH || m.h, raw);
         }
@@ -1007,7 +1047,7 @@ const SIM = (() => {
     function perils(m, w) {
       const P = w.perils;
       const orks = /^Ork /.test(m.u.template) ? models.filter(x => x.state === "ok" && /^Ork /.test(x.u.template) && x.u.side === m.u.side).length : 0;
-      const r = check(P.will + (orks >= 10 ? P.waaagh : 0));
+      const r = check(P.will + (orks >= 10 ? P.waaagh : 0) - (shadowed(m) ? 3 : 0));
       if (r.ok) return false;
       const by = -r.margin;
       if (by >= P.cat || r.roll === 18) { kill(m, m, "consumed by the warp (Perils of the Warp)"); return true; }
@@ -1018,14 +1058,28 @@ const SIM = (() => {
       if (by >= 6 && m.state === "ok") m.stunned = true;
       return true;
     }
+    // Critical Miss Table for melee (B556), as far as the sim can show it: the weapon breaks, you hit yourself,
+    // lose your balance (-2 to defend until your next turn), must re-Ready or drop the weapon, or fall down.
+    // Natural weapons can't break or be dropped: those rows cost balance instead.
+    function critMiss(m, w) {
+      const row = roll3(), nat = w.natural || w.name === "Punch" || w.usage === "power";
+      const drop = why => { if (nat || m.u.bothReady && m.u.melee === w && m.u.ranged == null) { m.offBalance = true; L(`  critical miss: ${m.id} loses its balance`); return; } m.inHand = m.inHand === "both" ? (m.u.ranged ? "gun" : "none") : "none"; L(`  critical miss: ${m.id} ${why}`); };
+      if (row <= 4 || row >= 17) { if (nat) { m.offBalance = true; L(`  critical miss: ${m.id} loses its balance`); } else { m.meleeBroken = true; L(`  critical miss: ${m.id}'s ${w.name} breaks`); } }
+      else if (row === 5 || row === 6) { const raw = Math.floor(rollDamage(w.dmg) / (row === 6 ? 2 : 1)); L(`  critical miss: ${m.id} hits itself`); applyHit(m, w, m, R() < 0.5 ? "arm" : "leg", false, false, null, raw); }
+      else if (row === 7 || row === 13 || row === 15) { m.offBalance = true; L(`  critical miss: ${m.id} loses its balance`); }
+      else if (row === 8 || row === 12) drop("has its weapon turn in its hand (a Ready to recover)");
+      else if (row === 16) { m.prone = true; L(`  critical miss: ${m.id} falls down`); }
+      else drop("drops its weapon");
+    }
     function strike(m, w, t, opts) {
       // attacks this turn: 1, +1 for Double or Rapid Strike, + Extra Attack; Rapid Strike's penalty falls on
       // the two blows it makes (-6, or -3 for a Weapon Master or someone Trained by a Master)
       const n = 1 + (opts.double || opts.rapid ? 1 : 0) + (m.u.flags.extraAttack || 0);
+      if (opts.charge) m.mna = true;   // Move and Attack: no retreat until its next turn (B365)
       const rp = m.u.flags.master ? 3 : 6;
       for (let i = 0; i < n && t.state === "ok"; i++) {
-        let lvl = w.level - skillPen(m) - (opts.charge ? 4 : 0) + (opts.determined ? 4 : 0) - (opts.rapid && i < 2 ? rp : 0) + (m.evaluate && m.evaluate.t === t ? m.evaluate.n : 0)
-          - (m.prone ? 4 : 0) - (m.grips.length ? 4 : 0) - (opts.pen || 0);
+        let lvl = wl(m, w) - skillPen(m) - (opts.charge ? 4 : 0) + (opts.determined ? 4 : 0) - (opts.rapid && i < 2 ? rp : 0) + (m.evaluate && m.evaluate.t === t ? m.evaluate.n : 0)
+          - (m.prone ? 4 : 0) - (m.kneel ? 2 : 0) - (m.grips.length ? 4 : 0) - (opts.pen || 0);
         if (opts.charge) lvl = Math.min(lvl, 9);
         const plan = planAttack(m, w, t, lvl, true);
         const loc = plan.loc === "random" ? hitLocation() : plan.loc;
@@ -1034,7 +1088,7 @@ const SIM = (() => {
         m.attacked = true;
         if (w.fp) m.fp -= w.fp;
         if (w.perils && perils(m, w)) continue;
-        if (!r.ok) { L(`${m.id} strikes at ${t.id} (${loc !== "torso" ? locName(loc) + ", " : ""}skill ${plan.lvl}): misses`); continue; }
+        if (!r.ok) { L(`${m.id} strikes at ${t.id} (${loc !== "torso" ? locName(loc) + ", " : ""}skill ${plan.lvl}): misses`); if (r.fumble) critMiss(m, w); continue; }
         if (!r.crit) {
           const def = defend(t, m, true, plan.da, feint);
           if (def) { L(`${m.id} strikes at ${t.id}: ${def.how === "parry" ? "parried" : def.how === "block" ? "blocked" : "dodged"}`); if (def.how === "parry" && w.name === "Punch") cutsArm(t, m); continue; }
@@ -1045,18 +1099,19 @@ const SIM = (() => {
         // All-Out Attack (Strong, B365) and Mighty Blows (extra effort, 1 FP, B357): each +2 or +1/die, whichever is more
         if (opts.strong) raw += Math.max(2, w.dmg.n);
         if (opts.mighty && m.fp > 1) { m.fp -= 1; raw += Math.max(2, w.dmg.n); L(`  ${m.id} puts everything into it (Mighty Blows, 1 FP)`); }
-        applyHit(m, w, t, loc, false, false, rending ? w.rend : null, raw);
+        applyHit(m, w, t, loc, false, false, rending ? w.rend : null, raw, r.crit ? roll3() : 0);
       }
       m.feint = null; m.evaluate = null;
     }
 
     // ---- choose and carry out a maneuver
-    const gunReady = m => m.inHand !== "melee";
-    const bladeReady = m => m.inHand !== "gun";
+    const gunReady = m => m.inHand === "gun" || m.inHand === "both";
+    const bladeReady = m => (m.inHand === "melee" || m.inHand === "both") && !m.meleeBroken;
     // Ready (B382): swap gun and blade; with Fast-Draw a successful roll makes it free and the model acts at once
     function switchTo(m, hand) {
       const w = hand === "melee" ? m.u.melee : m.u.ranged;
-      m.inHand = hand;
+      // a model that holds both when it can picks both back up
+      m.inHand = m.u.bothReady ? "both" : hand;
       if (m.u.fastDraw > -Infinity && !m.fastDrew && check(m.u.fastDraw - skillPen(m)).ok) {
         L(`${m.id} fast-draws the ${w.name}`);
         m.fastDrew = true; act(m); m.fastDrew = false;
@@ -1161,7 +1216,7 @@ const SIM = (() => {
         if (!t.h) continue;
         const d = Math.max(1, hexDist(h, t.h));
         if (d > w.range.max) continue;
-        const E = planAttack(m, w, t, w.level - skillPen(m) + rangePenalty(d) + t.u.sm - 4 * between(h, t.h).filter(x => x !== t && x !== m).length, false).score * sustainOf(w);
+        const E = planAttack(m, w, t, wl(m, w) - skillPen(m) + rangePenalty(d) + t.u.sm - 4 * between(h, t.h).filter(x => x !== t && x !== m).length, false).score * sustainOf(w);
         best = Math.max(best, kv(m, t, E));
       }
       return best * stanceW(m, "ranged") * m.u.ai.aggression;
@@ -1169,7 +1224,7 @@ const SIM = (() => {
 
     function act(m) {
       const u = m.u, A = u.ai;
-      m.aoa = false; m.aod = false;
+      m.aoa = false; m.aod = false; m.mna = false; m.offBalance = false;
       clearZone(m); m.waiting = null;
       if (m.jam > 0) { m.jam--; if (!engaged(m)) { L(`${m.id} clears a jam`); return; } }
       const pool = foes(m).filter(f => f.h).sort((a, b) => hexDist(m.h, a.h) - hexDist(m.h, b.h));
@@ -1177,7 +1232,15 @@ const SIM = (() => {
       const adj = pool.filter(f => hexDist(f.h, m.h) <= u.melee.reachMax);
       const shooter = u.ranged || u.powers.some(p => !p.melee);
       // stand up (Change Posture) unless a shooter holding its ground is better off prone
-      if (m.prone && !m.legsLost && (adj.length || u.stance !== "shoot" || !shooter)) { m.prone = false; L(`${m.id} gets up`); return; }
+      if (m.kneel && !m.prone) { m.kneel = false; L(`${m.id} stands up`); return; }
+      if (m.prone && !m.legsLost && (adj.length || u.stance !== "shoot" || !shooter)) {
+        // lying to standing is two Change Postures, through kneeling (-2 to attack and defend); a successful
+        // Acrobatics roll makes it one (B551)
+        m.prone = false;
+        const acro = (u.stats.skills || []).find(s => s.name === "Acrobatics" && s.level != null);
+        if (acro && check(acro.level - skillPen(m)).ok) { L(`${m.id} springs to its feet`); return; }
+        m.kneel = true; L(`${m.id} gets up to a kneel`); return;
+      }
       // a model working a hold keeps at it: takedown, then pin; two pinners are enough, the rest go back to hacking
       if (m.holding) {
         const t = m.holding;
@@ -1196,9 +1259,9 @@ const SIM = (() => {
         if (bladeReady(m)) approachOptions(m, pool, add, Wm);
       }
       // Ready the other weapon (B382): worth what it could do next turn
-      if (!u.bothReady && !m.grips.length) {
+      if ((!u.bothReady || m.inHand !== "both") && !m.grips.length) {
         const tmp = [], save = m.inHand, push = v => { if (Number.isFinite(v)) tmp.push(v); };
-        if (!bladeReady(m) && u.melee && m.armsLost < 2) {
+        if (!bladeReady(m) && u.melee && m.armsLost < 2 && !m.meleeBroken) {
           m.inHand = "melee";
           if (adj.length) meleeOptions(m, adj, push, rNow, Wm, Wr, weaponsFor(m, true)); else approachOptions(m, pool, push, Wm);
           m.inHand = save;
@@ -1259,7 +1322,7 @@ const SIM = (() => {
           const spread = 1 / (1 + 0.5 * u.ai.focus * claims(m, t));
           // figures in the line of fire cost -4 each, and a miss may hit a friend on the line or beside the target
           const inter = w.malediction ? [] : between(m.h, t.h).filter(x => x !== t);
-          const base = w.level - skillPen(m) + rangePenalty(d) + t.u.sm - 4 * inter.length;
+          const base = wl(m, w) - skillPen(m) + rangePenalty(d) + t.u.sm - 4 * inter.length;
           const pals = w.malediction || w.dmg.ex ? [] : [...new Set([...inter, ...models.filter(x => x !== m && x.state === "ok" && x.h && hexDist(x.h, t.h) <= 1)])].filter(x => x.u.side === u.side);
           const ffCost = pals.length ? (1 - P3[cl(base)]) * pals.reduce((a, x) => a + P3[cl(9 + x.u.sm)] * Math.min(1, expInjRandom(w, x.u) / remOf(x)) * threatOf(x) * HORIZON, 0) * u.ai.caution : 0;
           const aimed = m.aimTarget === t && m.aimTurns > 0;
@@ -1287,7 +1350,7 @@ const SIM = (() => {
           const t = cands[0], d = hexDist(m.h, t.h);
           if (d > 3) {
             const mv = moveOf(m), nd = Math.max(2, d - mv);
-            const E = planAttack(m, w, t, w.level - skillPen(m) + rangePenalty(nd) + t.u.sm + Math.min(-2, w.bulk || 0), false).score * sustainOf(w);
+            const E = planAttack(m, w, t, wl(m, w) - skillPen(m) + rangePenalty(nd) + t.u.sm + Math.min(-2, w.bulk || 0), false).score * sustainOf(w);
             const h2 = stepHex(m.h, t.h, Math.min(mv, d - 2));
             const cont = GAMMA * (shotValueFrom(m, h2, pool) - shotValueFrom(m, m.h, pool));
             add(Wr * kv(m, t, E) + cont - risk(m, h2, ""), `advance-fire@${t.id}`, () => {
@@ -1666,6 +1729,7 @@ const SIM = (() => {
     // ---- Slam (B371): crash into a foe at speed; each side deals HP x velocity / 100 dice of crushing damage
     function slamDice(hp, v) { const n = hp * v / 100; return n >= 1 ? { n: Math.floor(n), add: Math.round((n - Math.floor(n)) * 3.5), mult: 1, div: 1, type: "cr", ex: false } : { n: 1, add: Math.max(-5, Math.round(-6 * (1 - n))), mult: 1, div: 1, type: "cr", ex: false }; }
     function slam(m, t, v, aoa) {
+      if (!aoa) m.mna = true;
       let lvl = Math.max(m.u.dx, m.u.grapple, m.u.melee.name === "Punch" ? m.u.melee.level : 0) - skillPen(m) - (m.grips.length ? 4 : 0);
       if (aoa) lvl += 4; else lvl = Math.min(9, lvl - 4);
       m.attacked = true;
@@ -1786,6 +1850,11 @@ const SIM = (() => {
         if (m.stunned) { if (check(m.u.HT).ok) { m.stunned = false; L(`${m.id} recovers from stun`); } m.shock = 0; continue; }
         if (m.holding && (m.holding.state !== "ok" || !m.holding.h || hexDist(m.h, m.holding.h) > 1)) release(m);
         if (gripsOn(m).length && (m.pinned || m.prone)) { breakFree(m); m.shock = 0; continue; }
+        if (!m.warpShadow && shadowed(m)) {
+          m.warpShadow = true;
+          if (!fright(m.u).ok) { m.stunned = true; L(`${m.id} feels the Shadow in the Warp close over its mind and freezes (failed Fright Check)`); m.shock = 0; continue; }
+          L(`${m.id} steels itself against the Shadow in the Warp`);
+        }
         act(m);
         m.shock = 0;
       }
@@ -1837,7 +1906,7 @@ const SIM = (() => {
         let need = false;
         if (frac2 <= 0.5 && !u.checked50) { u.checked50 = true; need = true; }
         if (frac2 <= 0.25 && !u.checked25) { u.checked25 = true; need = true; }
-        if (need && alive > 0 && !check(u.will + (u.flags.fearless || 0)).ok) {
+        if (need && alive > 0 && !fright(u).ok) {
           u.routed = true; u.models.forEach(m => { if (m.state === "ok") { m.state = "routed"; place(m, null); } });
           L(`${u.name} breaks and flees`);
         }

@@ -9,6 +9,7 @@ way GCS does (modifiers summed, -80% floor, rounded up; alternative abilities at
 """
 import json
 import math
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -308,6 +309,11 @@ def combat_flags(t, flags):
         flags["ambi"] = 1
     elif n.startswith("Pariah Gene"):
         flags["blank"] = 1          # warp sorcery fails against a blank (framework "Psykers and the warp")
+    elif n.startswith("Shadow in the Warp"):
+        # radius from the Area Effect modifier ("Area Effect, 16 yards"); psykers inside it are at -3
+        txt = " ".join(str(x.get("name", x) if isinstance(x, dict) else x) for x in t.get("modifiers", [])) + " " + n
+        yd = re.search(r"(\d+)\s*yards", txt)
+        flags["shadow"] = max(flags.get("shadow", 0), int(yd.group(1)) if yd else 16)
     elif n.startswith("Reanimation"):
         flags["reanimation"] = 1
         flags["noMorale"] = 1       # soulless machines: Necrons do not break
