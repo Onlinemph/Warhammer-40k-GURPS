@@ -1742,14 +1742,18 @@ const SIM = (() => {
             const inZ = pool.filter(x => hexDist(x.h, c.h) <= 1);
             if (inZ.length < 3) continue;
             const shots = w.shots.mag === Infinity ? w.rof : Math.min(w.rof, m.ammo);
-            const v = inZ.reduce((a, x) => a + kv(m, x, P3[cl(Math.min(6, w.level - skillPen(m) + rangePenalty(Math.max(1, hexDist(m.h, x.h)))) + rapidBonus(shots) + x.u.sm)] * expInjRandom(w, x.u) * sustainOf(w)), 0);
+            const Ez = x => P3[cl(Math.min(6, w.level - skillPen(m) + rangePenalty(Math.max(1, hexDist(m.h, x.h)))) + rapidBonus(shots) + x.u.sm)] * (1 - P3[cl(rangedDefence(x, m))]) * expInjRandom(w, x.u);
+            // the zone attacks friends in it too (B409): their loss counts against it
+            const pals = models.filter(x => x !== m && x.state === "ok" && x.h && x.u.side === u.side && hexDist(x.h, c.h) <= 1);
+            const v = inZ.reduce((a, x) => a + kv(m, x, Ez(x) * sustainOf(w)), 0)
+              - u.ai.caution * pals.reduce((a, x) => a + Math.min(1, Ez(x) / remOf(x)) * threatOf(x) * HORIZON, 0);
             if (!bestZ || v > bestZ.v) bestZ = { c, v };
           }
           if (bestZ) add(Wr * bestZ.v - rNow, "suppress", () => { m.facing = faceToward(m.h, bestZ.c.h); suppress(m, w, bestZ.c.h); });
         }
         // Wait (B366): hold fire for a charger heading for me; shoot it as it closes, maybe before it strikes
         if (isGun && !engaged(m)) {
-          const ch = pool.filter(f => f.u.melee && (f.u.stance === "charge" || !f.u.ranged)).map(f => ({ f, d: hexDist(m.h, f.h) }))
+          const ch = pool.filter(f => f.u.melee && (f.u.stance === "charge" || !f.u.ranged) && !f.waiting).map(f => ({ f, d: hexDist(m.h, f.h) }))
             .filter(x => x.d >= 3 && x.d - x.f.u.melee.reachMax <= moveOf(x.f) && nearestFoe(x.f) === m).sort((a, b) => a.d - b.d)[0];
           if (ch) {
             const E = planAttack(m, w, ch.f, w.level - skillPen(m) + ch.f.u.sm, false).score;
@@ -1761,7 +1765,8 @@ const SIM = (() => {
       }
       // a melee Wait (B366) with a long weapon: strike a charger as it steps into reach, before its own blow
       if (u.melee.reachMax >= 2 && !engaged(m)) {
-        const ch = pool.filter(f => f.u.melee && f.u.melee.reachMax < u.melee.reachMax).map(f => ({ f, d: hexDist(m.h, f.h) }))
+        // only a foe that means to close: a charger or a pure melee model, and not one itself waiting (two Waits deadlock)
+        const ch = pool.filter(f => f.u.melee && f.u.melee.reachMax < u.melee.reachMax && (f.u.stance === "charge" || !f.u.ranged) && !f.waiting).map(f => ({ f, d: hexDist(m.h, f.h) }))
           .filter(x => x.d > u.melee.reachMax && x.d - x.f.u.melee.reachMax <= moveOf(x.f) && nearestFoe(x.f) === m).sort((a, b) => a.d - b.d)[0];
         if (ch) {
           const E = planAttack(m, u.melee, ch.f, u.melee.level - skillPen(m), true).score * (1 + (u.flags.extraAttack || 0));
@@ -2074,7 +2079,7 @@ const SIM = (() => {
       const z = { owner: m, side: m.u.side, w, hexes, shots, hit: new Set() };
       zones.push(z); m.zone = z;
       L(`${m.id} lays down suppression fire (${shots} shots) over a 3-yard zone`);
-      for (const x of models) if (x.state === "ok" && x.h && x.u.side !== m.u.side && hexes.has(key(x.h.q, x.h.r))) suppressHit(z, x);
+      for (const x of models) if (x !== m && x.state === "ok" && x.h && hexes.has(key(x.h.q, x.h.r))) suppressHit(z, x);   // friend or foe (B409)
     }
     // anyone in the zone, or moving into it before the gunner's next turn, is attacked once at 6 or the gunner's
     // own effective skill if lower, plus the rapid-fire bonus, SM, posture and cover (B409); they may Dodge
