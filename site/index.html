@@ -669,8 +669,9 @@ const SIM = (() => {
     const u = {
       side, name: spec.label || spec.template, template: spec.template, count: Math.max(1, spec.count | 0),
       db, powers, fp: st.fp || st.ht, st: st.st, dx: st.dx, formation: spec.formation || "line",
-      // elites (framework tiers: 200+ points, and a mind that picks its shots) may call shots
-      elite: (T.t.points || 0) >= 200 && st.iq >= 8,
+      // elites call shots: a best combat skill (weapon or power) of 17+, two past a trained line soldier's 15,
+      // and a mind that picks its shots (IQ 8+). Points were a poor proxy: an Ork Boy's ST 28 costs 300+.
+      elite: Math.max(melee ? melee.level : 0, ranged ? ranged.level : 0, ...powers.map(p => p.level)) >= 17 && st.iq >= 8,
       stance: spec.stance || "shoot", stats: st, flags, speed: st.speed, move: Math.max(1, st.move + arm.move),
       dodge: st.dodge, HP: st.hp + arm.hp, HT: st.ht, will: st.will, sm: st.sm || 0,
       arm, nat, ranged, melee, parry: parryOf(melee), shield: spec.shield && spec.shield.sp ? { ...spec.shield } : pshield,
@@ -1012,16 +1013,24 @@ const SIM = (() => {
       const cap = loc === "arm" || loc === "leg" ? tu.HP / 2 + 1 : loc === "hand" || loc === "foot" ? tu.HP / 3 + 1 : Infinity;
       const avgF = w.follow ? (w.follow.n * 3.5 + w.follow.add) * w.follow.mult : 0;
       let tot = 0;
+      // Weak Points: a hit that fails to penetrate finds a gap on 3d <= rating and faces half the armour's DR
+      const wpP = !chink && armDR > 0 && tu.arm.wp ? P3[Math.min(18, tu.arm.wp)] : 0;
+      const halfDR = d.div === Infinity ? 0 : Math.floor((Math.floor(armDR / 2) + natDR) / d.div);
+      const injOf = pen => Math.min(cap, ((d.type === "tox" && tu.flags.poison === "immune" ? 0 : pen * woundMult(d.type, loc, tu.flags, d.ex)) + avgF) / red);
       for (let i = 0; i < 20; i++) {
-        const pen = rollDamage(d) - effDR;
-        if (pen <= 0) continue;
-        let inj = d.type === "tox" && tu.flags.poison === "immune" ? 0 : pen * woundMult(d.type, loc, tu.flags, d.ex);
-        inj += avgF;
-        tot += Math.min(cap, inj / red);
+        const raw = rollDamage(d), pen = raw - effDR;
+        if (pen > 0) tot += injOf(pen);
+        else if (wpP && raw - halfDR > 0) tot += wpP * injOf(raw - halfDR);
       }
       const v = tot / 20;
       EXP.set(k, v);
       return v;
+    }
+    const RANDOM_LOCS = [["skull", 4], ["face", 5], ["eye", 1], ["leg", 25 + 36], ["arm", 21 + 25], ["torso", 52], ["groin", 27], ["hand", 10], ["foot", 6], ["neck", 4]];
+    function expInjRandom(w, tu, dmgOverride) {
+      let s = 0;
+      for (const [loc, n] of RANDOM_LOCS) s += n * expInj(w, tu, loc, dmgOverride);
+      return s / 216;
     }
     // best location and deceptive level: returns {loc, da, score, lvl}
     function planAttack(m, w, t, lvl, melee, dmgOverride) {
@@ -1031,7 +1040,7 @@ const SIM = (() => {
       for (const loc of locs) {
         const pen = loc === "random" ? 0 : loc.endsWith("#c") ? Math.min(AIM[loc.slice(0, -2)], CHINK(loc.slice(0, -2))) : AIM[loc];
         if (loc === "eye" && !(/^pi/.test(w.dmg.type) || w.dmg.type === "imp" || (w.dmg.type === "burn" && !w.dmg.ex && !w.cone))) continue;
-        const e = loc === "random" ? expInj(w, t.u, "torso", dmgOverride) : expInj(w, t.u, loc, dmgOverride);
+        const e = loc === "random" ? expInjRandom(w, t.u, dmgOverride) : expInj(w, t.u, loc, dmgOverride);
         if (e <= 0) continue;
         const maxDa = melee ? 6 : 0;
         for (let da = 0; da <= maxDa; da++) {
@@ -1115,11 +1124,46 @@ const SIM = (() => {
           const n = { q: m.h.q + dq, r: m.h.r + dr };
           if (occ.has(key(n.q, n.r))) continue;
           const d = hexDist(n, goal);
-          if (d < bd || (d === bd && best && R() < 0.3)) { bd = d; best = n; }
+          if (d < bd || (d === bd && (!best || R() < 0.3))) { bd = d; best = n; }
         }
         if (!best) break;
         place(m, best); moved++;
       }
+      if (moved) { m.moved = true; m.aimTurns = 0; }
+      return moved;
+    }
+    // breadth-first search through free hexes for the nearest hex from which a foe is within reach: a mob flows
+    // around its own front rank and spreads over every foe with room left beside it, instead of queueing on one
+    function engagePath(m, reach, pool, maxNodes = 2500) {
+      const slots = new Map();
+      for (const f of pool) {
+        if (!f.h) continue;
+        for (let dq = -reach; dq <= reach; dq++) for (let dr = Math.max(-reach, -dq - reach); dr <= Math.min(reach, -dq + reach); dr++) {
+          if (!dq && !dr) continue;
+          const k = key(f.h.q + dq, f.h.r + dr);
+          if (!occ.has(k) && !slots.has(k)) slots.set(k, f);
+        }
+      }
+      if (!slots.size) return null;
+      const start = key(m.h.q, m.h.r), prev = new Map([[start, null]]), q = [m.h];
+      for (let i = 0; i < q.length && prev.size < maxNodes; i++) {
+        const h = q[i], hk = key(h.q, h.r);
+        if (hk !== start && slots.has(hk)) {
+          const path = [];
+          for (let k = hk, n = h; k !== start; ) { path.unshift(n); const p = prev.get(k); k = key(p.q, p.r); n = p; }
+          return { path, foe: slots.get(hk) };
+        }
+        for (const [dq, dr] of DIRS) {
+          const n = { q: h.q + dq, r: h.r + dr }, nk = key(n.q, n.r);
+          if (prev.has(nk) || occ.has(nk)) continue;
+          prev.set(nk, h); q.push(n);
+        }
+      }
+      return null;
+    }
+    function followPath(m, path, steps) {
+      let moved = 0;
+      for (const n of path) { if (moved >= steps || occ.has(key(n.q, n.r))) break; place(m, n); moved++; }
       if (moved) { m.moved = true; m.aimTurns = 0; }
       return moved;
     }
@@ -1284,14 +1328,20 @@ const SIM = (() => {
       const wantsMelee = u.stance === "charge" || !bestR || bestR.s <= 0 || (u.stance !== "shoot" && meleeScore > 1.5 * bestR.s);
       if (wantsMelee) {
         const mv = moveOf(m);
-        // All-Out Attack after a half move if that reaches (B365); otherwise Move and Attack or just close
         const reach = u.melee.reachMax;
-        if (d - reach <= Math.floor(mv / 2) && threatTo(m) < 1) {
-          stepToward(m, near.h, Math.floor(mv / 2), reach); m.facing = faceToward(m.h, near.h);
-          if (hexDist(m.h, near.h) <= reach) { m.aoa = true; L(`${m.id} charges in (All-Out Attack)`); strike(m, u.melee, near, { determined: true }); return; }
+        // close in: near the foe, path to the nearest open hex beside any foe (a mob spreads round them);
+        // far off, a straight greedy advance is enough
+        const route = d <= 3 * mv + 12 ? engagePath(m, reach, pool) : null;
+        const tgt = route ? route.foe : near;
+        const len = route ? route.path.length : d - reach;
+        const go = n => route ? followPath(m, route.path, n) : stepToward(m, near.h, n, reach);
+        // All-Out Attack after a half move if that reaches (B365); otherwise Move and Attack or just close
+        if (len <= Math.floor(mv / 2) && threatTo(m) < 1) {
+          go(Math.floor(mv / 2)); m.facing = faceToward(m.h, tgt.h);
+          if (hexDist(m.h, tgt.h) <= reach) { m.aoa = true; L(`${m.id} charges in (All-Out Attack)`); strike(m, u.melee, tgt, { determined: true }); return; }
         }
-        stepToward(m, near.h, mv, reach); m.facing = faceToward(m.h, near.h);
-        if (near.h && hexDist(m.h, near.h) <= reach) strike(m, u.melee, near, { charge: true });
+        go(mv); m.facing = faceToward(m.h, tgt.h);
+        if (tgt.h && hexDist(m.h, tgt.h) <= reach) strike(m, u.melee, tgt, { charge: true });
         return;
       }
       const w = bestR.w;
@@ -1355,6 +1405,8 @@ const SIM = (() => {
           if (m.reload === 0) m.reload = u.ranged.shots.reload;
           if (--m.reload <= 0) { m.reload = 0; m.ammo = u.ranged.shots.mag; } L(`${m.id} reloads in close combat`); return;
         }
+        // a charging mob keeps swinging for a lucky gap; anyone else defends
+        if (u.stance === "charge") { strike(m, best.isGun ? u.melee : best.w, best.t, {}); return; }
         if (threat > 0) { m.aod = true; L(`${m.id} goes on All-Out Defense`); }
         return;
       }
@@ -1608,7 +1660,7 @@ if (typeof document !== "undefined") (() => {
     wire();
     if (last) setupReplay();
   }
-  const HOW = `Every run plays a full GURPS 4e fight on a hex map, one yard per hex, second by second. Models act in Basic Speed order and an AI picks each one's maneuver: Aim, Attack, Move and Attack, All-Out Attack (Determined or Double) when nothing can hurt it, All-Out Defense when it can't hurt its foe, Feint and Deceptive Attack against strong defences, Rapid Strike, Ready to reload or clear a jam, Change Posture, and Concentrate for psychic powers. Facing matters: attacks from a flank cost the defender 2, from behind it gets no defence, so surrounding a foe pays. Elite attackers (templates of 200+ points with IQ 8 or more) aim at the location that does most harm (vitals, skull, eye lens, neck, limbs, or a chink in the armour at −8 or −10 that halves its DR); everyone else hits random locations, with 1 in 6 face hits striking an eye lens. The setting can let everyone aim, as RAW allows, or no one. Ranged fire uses range penalties, the rapid-fire bonus and Recoil, spreads bursts over neighbours, and can malfunction or overheat; explosions splash neighbours, fragments fly, flamers hit the whole cone. Defenders Dodge, Parry or Block with retreat and shield DB, and shooters Dodge and Drop. Cover hides legs and groin and costs attackers 2; prone models are harder to shoot but fight badly. Armour divisors, Weak Points, regenerating shields, wounding, Injury Tolerance, Damage Reduction, follow-ups, crippling, knockback, bleeding, shock, stun, consciousness and death rolls, Reanimation Protocols, morale and Perils of the Warp all apply, with either standard HP or the Revised Fractional Health wound system. The full rule list with page references is docs/simulator.md. Not modelled: vehicles, grappling and stealth.`;
+  const HOW = `Every run plays a full GURPS 4e fight on a hex map, one yard per hex, second by second. Models act in Basic Speed order and an AI picks each one's maneuver: Aim, Attack, Move and Attack, All-Out Attack (Determined or Double) when nothing can hurt it, All-Out Defense when it can't hurt its foe, Feint and Deceptive Attack against strong defences, Rapid Strike, Ready to reload or clear a jam, Change Posture, and Concentrate for psychic powers. Facing matters: attacks from a flank cost the defender 2, from behind it gets no defence, so surrounding a foe pays. Elite attackers (best combat skill 17+, IQ 8+) aim at the location that does most harm (vitals, skull, eye lens, neck, limbs, or a chink in the armour at −8 or −10 that halves its DR); everyone else hits random locations, with 1 in 6 face hits striking an eye lens. The setting can let everyone aim, as RAW allows, or no one. Ranged fire uses range penalties, the rapid-fire bonus and Recoil, spreads bursts over neighbours, and can malfunction or overheat; explosions splash neighbours, fragments fly, flamers hit the whole cone. Defenders Dodge, Parry or Block with retreat and shield DB, and shooters Dodge and Drop. Cover hides legs and groin and costs attackers 2; prone models are harder to shoot but fight badly. Armour divisors, Weak Points, regenerating shields, wounding, Injury Tolerance, Damage Reduction, follow-ups, crippling, knockback, bleeding, shock, stun, consciousness and death rolls, Reanimation Protocols, morale and Perils of the Warp all apply, with either standard HP or the Revised Fractional Health wound system. The full rule list with page references is docs/simulator.md. Not modelled: vehicles, grappling and stealth.`;
 
   function results(r) {
     const pct = x => (100 * x / r.runs).toFixed(0) + "%";
