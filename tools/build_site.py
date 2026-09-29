@@ -418,7 +418,7 @@ def main():
         f = ROOT / "data" / "sim" / name
         return (yaml.safe_load(f.read_text()) or {}) if f.exists() else {}
     data = json.dumps({"libraries": libs, "loadouts": sim_data("loadouts.yaml"), "simWeapons": sim_data("weapons.yaml"),
-                       "powers": sim_data("powers.yaml")}, ensure_ascii=False, separators=(",", ":"))
+                       "powers": sim_data("powers.yaml"), "ai": sim_data("ai.yaml")}, ensure_ascii=False, separators=(",", ":"))
     html = TEMPLATE.read_text().replace("/*__DATA__*/null", data.replace("</", "<\\/"))
     html = html.replace("/*__SIM__*/", SIM.read_text())
     OUT.parent.mkdir(exist_ok=True)

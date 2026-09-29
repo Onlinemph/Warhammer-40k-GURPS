@@ -110,9 +110,9 @@ const SIM = (() => {
   }
 
   // ------------------------------------------------------------ data index
-  let EQ = null, TEMPLATES = null, SIMW = {}, POWERS = {};
+  let EQ = null, TEMPLATES = null, SIMW = {}, POWERS = {}, AI = [];
   function index(data) {
-    EQ = new Map(); TEMPLATES = new Map(); SIMW = data.simWeapons || {}; POWERS = data.powers || {};
+    EQ = new Map(); TEMPLATES = new Map(); SIMW = data.simWeapons || {}; POWERS = data.powers || {}; AI = (data.ai && data.ai.profiles) || [];
     const walk = (e, src) => { if (!EQ.has(e.name)) EQ.set(e.name, { e, src }); (e.children || []).forEach(c => walk(c, src)); };
     for (const lib of data.libraries) {
       if (lib.kind === "equipment") lib.items.forEach(e => walk(e, lib));
@@ -185,6 +185,12 @@ const SIM = (() => {
     [25, "2d+2", "5d-1"], [26, "2d+2", "5d"], [27, "3d-1", "5d+1"], [29, "3d", "5d+2"], [31, "3d+1", "6d-1"],
     [33, "3d+2", "6d"], [35, "4d-1", "6d+1"], [37, "4d", "6d+2"], [39, "4d+1", "7d-1"], [45, "5d", "7d+1"],
     [50, "5d+2", "8d-1"], [55, "6d", "8d+1"], [60, "7d-1", "9d"], [65, "7d+1", "9d+2"], [70, "8d", "10d"]];
+  // decision weights for a template (data/sim/ai.yaml): first profile whose regex matches the template name
+  function aiProfile(name) {
+    const base = { name: "Default", aggression: 1, caution: 1, melee: 1, ranged: 1, focus: 1, noise: 0, prey: 1 };
+    const p = AI.find(x => { try { return new RegExp(x.match || "^$").test(name); } catch (e) { return false; } });
+    return p ? { ...base, ...p } : base;
+  }
   function stDamage(st) { let r = DMG[0]; for (const row of DMG) if (st >= row[0]) r = row; return { thr: r[1], sw: r[2] }; }
 
   function skillLevel(stats, skill, defaults) {
@@ -325,6 +331,7 @@ const SIM = (() => {
       elite: Math.max(melee ? melee.level : 0, ranged ? ranged.level : 0, ...powers.map(p => p.level)) >= 17 && st.iq >= 8,
       // grappling (B370): DX, or Wrestling, Judo or Sumo Wrestling if better
       grapple: Math.max(st.dx, ...(st.skills || []).filter(s => /^(Wrestling|Judo|Sumo Wrestling)\b/.test(s.name) && s.level != null).map(s => s.level)),
+      ai: aiProfile(spec.template),
       stance: spec.stance || "shoot", stats: st, flags, speed: st.speed, move: Math.max(1, st.move + arm.move),
       dodge: st.dodge, HP: st.hp + arm.hp, HT: st.ht, will: st.will, sm: st.sm || 0,
       arm, nat, ranged, melee, parry: parryOf(melee), shield: spec.shield && spec.shield.sp ? { ...spec.shield } : pshield,
@@ -968,119 +975,412 @@ const SIM = (() => {
       for (const p of m.u.powers) if (!!p.melee === melee && m.fp - p.fp >= 0) out.push(p);
       return out;
     }
+    // ================= decision layer: one value scale for every choice =================
+    // value of an option = aggression x SUM(share of a foe knocked out x that foe's threat)
+    //                    - caution x P(I'm knocked out next turn) x my own worth over the next few turns
+    //                    + delayed payoffs (Aim, Ready, reload, closing in) discounted GAMMA per turn.
+    // "Threat" is the share of an average enemy's HP a model takes off per turn, so harm dealt and harm taken
+    // share one currency. Personality weights (data/sim/ai.yaml) and stance (charge / advance / shoot) scale
+    // the terms; noise lets a disorderly faction pick among near-best options.
+    const GAMMA = 0.8, HORIZON = 4;
+    const cl = x => Math.max(0, Math.min(18, Math.round(x)));
+    const TV = new Map();
+    function threatOf(f) {
+      const k = f.u.idx;
+      if (TV.has(k)) return TV.get(k);
+      let best = 0.05;
+      for (const U of units) {
+        if (U.side === f.u.side) continue;
+        let v = 0;
+        const mw = f.u.melee;
+        if (mw) v = Math.max(v, expInjRandom(mw, U) * P3[cl(mw.level - 4)] * (1 + (f.u.flags.extraAttack || 0)));
+        const rw = f.u.ranged;
+        if (rw) v = Math.max(v, expInjRandom(rw, U) * P3[cl(rw.level - 6)] * Math.min(3, rw.rof || 1));
+        for (const p of f.u.powers) if (!p.melee && p.dmg) v = Math.max(v, expInjRandom(p, U) * P3[cl(p.level - 6)]);
+        best = Math.max(best, Math.min(3, v / Math.max(1, U.HP)));
+      }
+      TV.set(k, best);
+      return best;
+    }
+    // injury still needed to take a model out of the fight (standard HP: down to about -HP/2 where the
+    // consciousness rolls start to bite; Fractional Health: a flat share of HP)
+    const remOf = t => frac ? Math.max(1, t.u.HP * 0.75) : Math.max(t.u.HP * 0.3, t.hp + t.u.HP * 0.5);
+    // value of E expected injury on foe t, seen by model m (Drukhari "prey" favour the wounded); same horizon as risk()
+    function kv(m, t, E) {
+      if (!(E > 0) || !t) return 0;
+      const rem = remOf(t), share = Math.min(1, E / rem);
+      const prey = m && m.u.ai.prey > 1 && t.hp < t.u.HP ? m.u.ai.prey : 1;
+      return share * threatOf(t) * prey * HORIZON;   // a foe taken out stops hurting us for the rest of the fight
+    }
+    // expected injury to m next turn standing on hex h: "aoa" (no defence), "aod" (+2) or normal
+    function incoming(m, h, mode) {
+      let tot = 0;
+      const near = foes(m).filter(f => f.h && f.state === "ok").sort((a, b) => hexDist(a.h, h) - hexDist(b.h, h)).slice(0, 8);
+      for (const f of near) {
+        if (f.pinned || f.grips.length > 1) continue;
+        const d = hexDist(f.h, h);
+        // a foe spreads its attacks over the models of ours at least as close to it as this hex
+        const rivals = models.filter(x => x !== m && x.u.side === m.u.side && x.state === "ok" && x.h && hexDist(x.h, f.h) <= d).length;
+        const share = 1 / (1 + rivals);
+        let best = 0;
+        const mw = f.u.melee;
+        if (mw && d - mw.reachMax <= moveOf(f)) {
+          const lvl = mw.level - (d > mw.reachMax ? 4 : 0) - skillPen(f);
+          const def = mode === "aoa" ? null : Math.max(m.u.dodge + 3, m.u.parry != null ? m.u.parry + 1 : 0) + (mode === "aod" ? 2 : 0) - (m.stunned ? 4 : 0) - (m.prone ? 3 : 0) + m.u.db;
+          best = expInjRandom(mw, m.u) * P3[cl(lvl)] * (1 - (def == null ? 0 : P3[cl(def)])) * (1 + (f.u.flags.extraAttack || 0));
+        }
+        const rw = f.u.ranged;
+        if (rw && !f.gunBroken && d <= rw.range.max) {
+          const lvl = rw.level - skillPen(f) + rangePenalty(Math.max(1, d)) + m.u.sm - (m.prone ? 2 : 0) + Math.min(2, rw.acc || 0);
+          const def = mode === "aoa" ? null : m.u.dodge + (mode === "aod" ? 2 : 0) + m.u.db - (m.prone ? 3 : 0);
+          const hits = Math.min(rw.rof || 1, 1 + Math.max(0, lvl - 10) / (rw.rcl || 1));
+          best = Math.max(best, expInjRandom(rw, m.u) * P3[cl(lvl)] * (1 - (def == null ? 0 : P3[cl(def)])) * hits);
+        }
+        tot += best * share;
+      }
+      return tot;
+    }
+    // cost of standing on hex h in that posture: chance of being put down x what I'd do over the next turns
+    function risk(m, h, mode) {
+      const inc = incoming(m, h, mode);
+      return m.u.ai.caution * Math.min(1, inc / remOf(m)) * threatOf(m) * HORIZON;
+    }
+    const stanceW = (m, kind) => {
+      const s = m.u.stance, a = m.u.ai;
+      if (kind === "melee") return a.melee * (s === "charge" ? 1.6 : s === "shoot" ? 0.8 : 1);
+      return a.ranged * (s === "shoot" ? 1.2 : s === "charge" ? 0.6 : 1);
+    };
+    // how many squad-mates already have this foe in their sights (for spreading fire)
+    const claims = (m, f) => models.reduce((a, x) => a + (x !== m && x.u.side === m.u.side && x.state === "ok" && x.aimTarget === f ? 1 : 0), 0);
+    // sustained harm of a gun: turns firing a magazine vs turns reloading it
+    function sustainOf(w) {
+      if (!w.shots || w.shots.mag === Infinity) return 1;
+      const fire = w.shots.mag / Math.max(1, Math.min(3, w.rof || 1));
+      return fire / (fire + w.shots.reload);
+    }
+    // best shot value a model could take from hex h next turn (for comparing positions)
+    function shotValueFrom(m, h, pool) {
+      let best = 0;
+      for (const w of weaponsFor(m, false)) for (const t of pool.slice(0, 6)) {
+        if (!t.h) continue;
+        const d = Math.max(1, hexDist(h, t.h));
+        if (d > w.range.max) continue;
+        const E = planAttack(m, w, t, w.level - skillPen(m) + rangePenalty(d) + t.u.sm, false).score * sustainOf(w);
+        best = Math.max(best, kv(m, t, E));
+      }
+      return best * stanceW(m, "ranged") * m.u.ai.aggression;
+    }
+
     function act(m) {
-      const u = m.u;
+      const u = m.u, A = u.ai;
       m.aoa = false; m.aod = false;
       clearZone(m); m.waiting = null;
       if (m.jam > 0) { m.jam--; if (!engaged(m)) { L(`${m.id} clears a jam`); return; } }
-      const pool = foes(m);
+      const pool = foes(m).filter(f => f.h).sort((a, b) => hexDist(m.h, a.h) - hexDist(m.h, b.h));
       if (!pool.length) return;
-      // stand up to fight in melee or to move
-      const adj = pool.filter(f => f.h && hexDist(f.h, m.h) <= u.melee.reachMax);
+      const adj = pool.filter(f => hexDist(f.h, m.h) <= u.melee.reachMax);
       const shooter = u.ranged || u.powers.some(p => !p.melee);
+      // stand up (Change Posture) unless a shooter holding its ground is better off prone
       if (m.prone && !m.legsLost && (adj.length || u.stance !== "shoot" || !shooter)) { m.prone = false; L(`${m.id} gets up`); return; }
-      if (adj.length) return fightInMelee(m, adj);
-      const near = nearestFoe(m, pool);
-      const d = hexDist(m.h, near.h);
-      // concentrating on a power
-      // an empty bio-weapon regrowing its ammunition isn't a weapon until it refills
-      const rw = weaponsFor(m, false).filter(w => d <= w.range.max && !(w === u.ranged && w.natural && m.ammo <= 0 && w.shots.reload > 3));
-      const bestR = rw.map(w => ({ w, s: planAttack(m, w, near, w.level + rangePenalty(d) + near.u.sm + (w.acc || 0), false).score })).sort((a, b) => b.s - a.s)[0];
-      // close to melee when ordered to charge, when no gun can hurt the target, or (unless ordered to
-      // hold and shoot) when the blade does clearly more harm than the gun
-      const meleeScore = weaponsFor(m, true).reduce((s, w) => Math.max(s, planAttack(m, w, near, w.level, true).score * (1 + (u.flags.extraAttack || 0))), 0);
-      const wantsMelee = u.stance === "charge" || !bestR || bestR.s <= 0 || (u.stance !== "shoot" && meleeScore > 1.5 * bestR.s);
-      // grenades (B410): Ready one, then throw it at the best cluster (or the hardest target, for krak)
-      if (u.grenades.length && u.stance !== "charge" && !m.grips.length && m.armsLost < 1) {
-        const g = bestGrenade(m, pool);
-        if (g && m.grenadeReady === g.i) { throwGrenade(m, g); return; }
-        if (g && g.s > 2 * Math.max(bestR ? bestR.s : 0, wantsMelee ? meleeScore * 0.5 : 0)) { m.grenadeReady = g.i; L(`${m.id} readies a ${u.grenades[g.i].name}`); return; }
+      // a model working a hold keeps at it: takedown, then pin; two pinners are enough, the rest go back to hacking
+      if (m.holding) {
+        const t = m.holding;
+        if (t.state === "ok" && t.h && hexDist(m.h, t.h) <= 1) {
+          if (!t.pinned) { wrestle(m, t); return; }
+          if (t.grips.filter(g => g !== m).length >= 2) release(m); else return;
+        } else release(m);
       }
-      if (wantsMelee) {
-        const mv = moveOf(m);
-        const reach = u.melee.reachMax;
-        // close in: near the foe, path to the nearest open hex beside any foe (a mob spreads round them);
-        // far off, a straight greedy advance is enough
-        const route = d <= 3 * mv + 12 ? engagePath(m, reach, pool) : null;
-        const tgt = route ? route.foe : near;
-        const len = route ? route.path.length : d - reach;
-        const go = n => route ? followPath(m, route.path, n) : stepToward(m, near.h, n, reach);
-        const stopped = () => m.state !== "ok" || m.stunned || m.prone || !m.h;
-        // Slam (B371) when the weapon can't hurt the foe but the charger's mass can knock it down
-        const hard = expInjRandom(u.melee, tgt.u) < 1;   // the weapon can't get through even when it lands
-        const slamIt = len >= 2 && hard && !tgt.prone && !tgt.pinned && u.HP >= 0.8 * tgt.u.HP;
-        const hit = (aoa, moved) => slamIt ? slam(m, tgt, Math.max(1, moved), aoa) : strike(m, u.melee, tgt, aoa ? { determined: true } : { charge: true });
-        // All-Out Attack after a half move if that reaches (B365); otherwise Move and Attack or just close
-        if (len <= Math.floor(mv / 2) && threatTo(m) < 1) {
-          const moved = go(Math.floor(mv / 2)); if (stopped()) return; m.facing = faceToward(m.h, tgt.h);
-          if (hexDist(m.h, tgt.h) <= reach) { m.aoa = true; L(`${m.id} charges in (All-Out Attack)`); hit(true, moved); return; }
+      const opts = [];
+      const add = (v, label, run) => { if (Number.isFinite(v)) opts.push({ v, label, run }); };
+      const here = m.h, rNow = risk(m, here, ""), mw = weaponsFor(m, true);
+      const Wm = stanceW(m, "melee") * A.aggression, Wr = stanceW(m, "ranged") * A.aggression;
+      if (adj.length) meleeOptions(m, adj, add, rNow, Wm, Wr, mw);
+      else {
+        rangedOptions(m, pool, add, rNow, Wr);
+        approachOptions(m, pool, add, Wm);
+      }
+      // All-Out Defense (+2 to defences): only against hand-to-hand, a foe beside us or one that can reach us this turn
+      const meleeThreat = pool.some(f => f.u.melee && hexDist(f.h, m.h) - f.u.melee.reachMax <= moveOf(f) && expInjRandom(f.u.melee, u) >= 1);
+      if (meleeThreat) add(-risk(m, here, "aod"), "aod", () => { m.aod = true; L(`${m.id} goes on All-Out Defense`); });
+      if (!opts.length) return;
+      // pick the best; a disorderly faction picks among the near-best
+      const top = opts.reduce((a, b) => b.v > a.v ? b : a);
+      let pick = top;
+      if (A.noise > 0) {
+        const span = Math.max(0.05, Math.abs(top.v)) * A.noise;
+        const close = opts.filter(o => o.v >= top.v - span);
+        pick = close[Math.floor(R() * close.length)];
+      }
+      if (globalThis.SIM_DEBUG) globalThis.SIM_DEBUG(m, opts.slice().sort((a, b) => b.v - a.v).slice(0, 6).map(o => `${o.label}=${o.v.toFixed(3)}`).join("  "));
+      pick.run();
+    }
+
+    // ---- options at range: shoot (each weapon and target), aim, Move and Attack, suppression, grenades, Wait, reload
+    function rangedOptions(m, pool, add, rNow, Wr) {
+      const u = m.u;
+      const cands = pool.slice(0, 6);
+      const ws = weaponsFor(m, false).filter(w => !(w === u.ranged && w.natural && m.ammo <= 0 && w.shots.reload > 3));
+      const threatNow = threatTo(m);
+      for (const w of ws) {
+        const isGun = w === u.ranged;
+        if (isGun && m.reload > 0) {
+          add(GAMMA * shotValueFrom(m, m.h, pool) - rNow, "reloading", () => { if (--m.reload <= 0) { m.reload = 0; m.ammo = w.shots.mag; } });
+          continue;
         }
-        const moved = go(mv); if (stopped()) return; m.facing = faceToward(m.h, tgt.h);
-        if (tgt.h && hexDist(m.h, tgt.h) <= reach) hit(false, moved);
-        return;
-      }
-      const w = bestR.w;
-      if (m.reload > 0) { if (--m.reload <= 0) { m.reload = 0; m.ammo = w.shots.mag; } return; }
-      if (m.ammo <= 0 && w === u.ranged) { m.reload = Math.max(1, w.shots.reload); if (w.shots.reload > 3) m.reload = 0; L(`${m.id} reloads`); return; }
-      if (w.concentrate && m.conc < w.concentrate) { m.conc++; L(`${m.id} concentrates on ${w.name}`); return; }
-      m.conc = 0;
-      // choose the target: best expected harm among the nearest few
-      const cands = pool.filter(f => f.h).sort((a, b) => hexDist(m.h, a.h) - hexDist(m.h, b.h)).slice(0, 6)
-        .filter(f => hexDist(m.h, f.h) <= w.range.max);
-      let target = m.aimTarget && m.aimTarget.state === "ok" && cands.includes(m.aimTarget) ? m.aimTarget : null;
-      // spread fire: a foe that squad-mates are already shooting is worth less to one more shooter (no overkill)
-      const claims = f => models.reduce((a, x) => a + (x !== m && x.u.side === u.side && x.state === "ok" && x.aimTarget === f ? 1 : 0), 0);
-      if (!target) target = cands.map(f => ({ f, s: planAttack(m, w, f, w.level + rangePenalty(hexDist(m.h, f.h)) + f.u.sm, false).score / (1 + claims(f)) }))
-        .sort((a, b) => b.s - a.s)[0]?.f || near;
-      m.facing = faceToward(m.h, target.h);
-      if (w === u.ranged && !engaged(m)) {
-        // Wait (B366): hold fire for a dangerous charger that will reach us this turn, and shoot it as it closes
-        const ch = pool.filter(f => f.h && !f.u.ranged && f.u.melee).map(f => ({ f, d: hexDist(m.h, f.h) }))
-          .filter(x => x.d >= 3 && x.d - x.f.u.melee.reachMax <= moveOf(x.f) && nearestFoe(x.f) === m).sort((a, b) => a.d - b.d)[0];
-        if (ch && expInjRandom(ch.f.u.melee, u) >= u.HP / 4) { m.waiting = w; L(`${m.id} waits for ${ch.f.id} to close (Wait)`); return; }
-        // suppression fire (B409) over a cluster when it beats aimed fire
-        if (w.rof >= 5 && (w.shots.mag === Infinity || m.ammo >= 5)) {
+        if (isGun && m.ammo <= 0) {
+          const turns = Math.max(1, w.shots.reload);
+          add(Math.pow(GAMMA, turns) * shotValueFrom(m, m.h, pool) - rNow, "reload", () => { m.reload = turns; if (w.shots.reload > 3) m.reload = 0; L(`${m.id} reloads`); });
+          continue;
+        }
+        if (w.concentrate && m.conc < w.concentrate) {
+          add(Math.pow(GAMMA, w.concentrate - m.conc) * shotValueFrom(m, m.h, pool) - rNow, "concentrate", () => { m.conc++; L(`${m.id} concentrates on ${w.name}`); });
+          continue;
+        }
+        const fpCost = (w.fp || 0) * 0.02;
+        for (const t of cands) {
+          const d = Math.max(1, hexDist(m.h, t.h));
+          if (d > w.range.max) continue;
+          const spread = 1 / (1 + 0.5 * u.ai.focus * claims(m, t));
+          const base = w.level - skillPen(m) + rangePenalty(d) + t.u.sm;
+          const aimed = m.aimTarget === t && m.aimTurns > 0;
+          const aimB = aimed ? w.acc + (m.aimTurns >= 3 ? 2 : m.aimTurns >= 2 ? 1 : 0) : 0;
+          const Enow = planAttack(m, w, t, base + aimB, false).score * sustainOf(w) * spread;
+          const vNow = Wr * kv(m, t, Enow) - fpCost;
+          add(vNow - rNow, `fire ${w.name}@${t.id}`, () => { m.aimTarget = t; m.facing = faceToward(m.h, t.h); fireAt(m, w, t, { aim: aimed }); });
+          // All-Out Attack (Determined, +1 ranged): only worth it when little can hit back
+          if (threatNow < 1) {
+            const Eaoa = planAttack(m, w, t, base + aimB + 1, false).score * sustainOf(w) * spread;
+            add(Wr * kv(m, t, Eaoa) - fpCost - risk(m, m.h, "aoa"), `aoa-fire@${t.id}`, () => { m.aoa = true; m.aimTarget = t; m.facing = faceToward(m.h, t.h); fireAt(m, w, t, { aim: aimed, aoa: true }); });
+          }
+          // Aim (B364): pay a turn now for Acc (and +1/+2 more on later turns) next turn
+          if ((w.acc || 0) >= 1 && !(aimed && m.aimTurns >= 3)) {
+            const nextB = (aimed ? aimB : 0) + (aimed ? 1 : w.acc);
+            const Eaim = planAttack(m, w, t, base + nextB, false).score * sustainOf(w) * spread;
+            add(GAMMA * Wr * kv(m, t, Eaim) - rNow, `aim@${t.id}`, () => {
+              if (m.aimTarget !== t) m.aimTurns = 0;
+              m.aimTarget = t; m.aimTurns++; m.facing = faceToward(m.h, t.h); L(`${m.id} aims at ${t.id}`);
+            });
+          }
+        }
+        // Move and Attack (B365): step up the range and fire at -2 (or Bulk), no Aim; the new position counts next turn
+        if (u.stance !== "shoot" && cands.length && !(w.fp)) {
+          const t = cands[0], d = hexDist(m.h, t.h);
+          if (d > 3) {
+            const mv = moveOf(m), nd = Math.max(2, d - mv);
+            const E = planAttack(m, w, t, w.level - skillPen(m) + rangePenalty(nd) + t.u.sm + Math.min(-2, w.bulk || 0), false).score * sustainOf(w);
+            const h2 = stepHex(m.h, t.h, Math.min(mv, d - 2));
+            const cont = GAMMA * (shotValueFrom(m, h2, pool) - shotValueFrom(m, m.h, pool));
+            add(Wr * kv(m, t, E) + cont - risk(m, h2, ""), `advance-fire@${t.id}`, () => {
+              stepToward(m, t.h, mv, 2); if (m.state !== "ok" || !m.h || m.stunned || !t.h) return;
+              m.facing = faceToward(m.h, t.h); fireAt(m, w, t, { moved: true });
+            });
+          }
+        }
+        // close the range without firing (a power that costs FP isn't wasted on a hopeless roll)
+        if (cands.length) {
+          const t = cands[0], d = hexDist(m.h, t.h);
+          if (d > 3) {
+            const h2 = stepHex(m.h, t.h, Math.min(moveOf(m), d - 2));
+            add(GAMMA * shotValueFrom(m, h2, pool) - risk(m, h2, "") - 0.001, `move-closer@${t.id}`, () => {
+              stepToward(m, t.h, moveOf(m), 2); if (m.state !== "ok" || !m.h) return; if (t.h) m.facing = faceToward(m.h, t.h); L(`${m.id} closes in on ${t.id}`);
+            });
+          }
+        }
+        // suppression fire (B409) over a cluster
+        if (isGun && (w.rof || 1) >= 5 && (w.shots.mag === Infinity || m.ammo >= 5)) {
           let bestZ = null;
-          for (const c of pool) {
-            if (!c.h || hexDist(m.h, c.h) > w.range.max) continue;
-            const inZ = pool.filter(x => x.h && hexDist(x.h, c.h) <= 1);
+          for (const c of cands) {
+            if (hexDist(m.h, c.h) > w.range.max) continue;
+            const inZ = pool.filter(x => hexDist(x.h, c.h) <= 1);
             if (inZ.length < 3) continue;
             const shots = w.shots.mag === Infinity ? w.rof : Math.min(w.rof, m.ammo);
-            const v = inZ.reduce((a, x) => a + P3[Math.max(0, Math.min(18, Math.min(6, w.level - skillPen(m) + rangePenalty(Math.max(1, hexDist(m.h, x.h)))) + rapidBonus(shots) + x.u.sm))] * expInjRandom(w, x.u), 0);
+            const v = inZ.reduce((a, x) => a + kv(m, x, P3[cl(Math.min(6, w.level - skillPen(m) + rangePenalty(Math.max(1, hexDist(m.h, x.h)))) + rapidBonus(shots) + x.u.sm)] * expInjRandom(w, x.u) * sustainOf(w)), 0);
             if (!bestZ || v > bestZ.v) bestZ = { c, v };
           }
-          const now = planAttack(m, w, target, w.level - skillPen(m) + rangePenalty(hexDist(m.h, target.h)) + target.u.sm, false).score;
-          if (bestZ && bestZ.v > 1.3 * now) { m.facing = faceToward(m.h, bestZ.c.h); suppress(m, w, bestZ.c.h); return; }
+          if (bestZ) add(Wr * bestZ.v - rNow, "suppress", () => { m.facing = faceToward(m.h, bestZ.c.h); suppress(m, w, bestZ.c.h); });
+        }
+        // Wait (B366): hold fire for a charger heading for me; shoot it as it closes, maybe before it strikes
+        if (isGun && !engaged(m)) {
+          const ch = pool.filter(f => !f.u.ranged && f.u.melee).map(f => ({ f, d: hexDist(m.h, f.h) }))
+            .filter(x => x.d >= 3 && x.d - x.f.u.melee.reachMax <= moveOf(x.f) && nearestFoe(x.f) === m).sort((a, b) => a.d - b.d)[0];
+          if (ch) {
+            const E = planAttack(m, w, ch.f, w.level - skillPen(m) + ch.f.u.sm, false).score;
+            const stop = Math.min(1, E / remOf(ch.f));
+            const saved = stop * expInjRandom(ch.f.u.melee, u) / remOf(m) * threatOf(m) * u.ai.caution;
+            add(Wr * kv(m, ch.f, E) + saved - rNow, `wait@${ch.f.id}`, () => { m.waiting = w; L(`${m.id} waits for ${ch.f.id} to close (Wait)`); });
+          }
         }
       }
-      // a shooter whose aimed roll would still be hopeless closes the range first (a power that costs FP isn't wasted)
-      const td = hexDist(m.h, target.h);
-      const unaimed = w.level - skillPen(m) + rangePenalty(td) + target.u.sm;
-      if (td > 3 && unaimed + (w.acc || 0) < 8) {
-        stepToward(m, target.h, moveOf(m), 2); if (m.state !== "ok" || !m.h || m.stunned) return; m.facing = faceToward(m.h, target.h);
-        if (!w.fp) fireAt(m, w, target, { moved: true }); else L(`${m.id} closes in on ${target.id}`);
-        return;
+      // grenades (B410): Ready one, then throw it next turn
+      if (u.grenades.length && !m.grips.length && m.armsLost < 1) {
+        const g = bestGrenade(m, pool);
+        if (g) {
+          const gv = Wr * g.v;
+          if (m.grenadeReady === g.i) add(gv - rNow, "throw", () => throwGrenade(m, g));
+          else add(GAMMA * gv - rNow, "ready-grenade", () => { m.grenadeReady = g.i; L(`${m.id} readies a ${u.grenades[g.i].name}`); });
+        }
       }
-      // advance under fire (Move and Attack, B365) only while the moving shot is still worth taking
-      if (u.stance === "advance" && d > Math.min(w.range.half, 30) && unaimed + Math.min(-2, w.bulk || 0) >= 8) {
-        stepToward(m, target.h, moveOf(m), 2); if (m.state !== "ok" || !m.h || m.stunned) return; m.facing = faceToward(m.h, target.h);
-        fireAt(m, w, target, { moved: true }); return;
-      }
-      // Aim (B364): low-RoF accurate weapons aim at a new target, snipers keep aiming up to 3 turns
-      const threat = threatTo(m);
-      const sniper = w.rof === 1 && w.acc >= 5 && d > 50;
-      // Aim only when it pays for the lost turn: the aimed roll must hit well over twice as often as a shot now
-      const aimPays = P3[Math.max(0, Math.min(18, unaimed + w.acc + 1))] > 1.8 * P3[Math.max(0, Math.min(18, unaimed))];
-      if (w.acc >= 2 && w.rof <= 3 && m.aimTurns === 0 && aimPays || (sniper && m.aimTarget === target && m.aimTurns > 0 && m.aimTurns < 3 && threat < 1)) {
-        if (m.aimTarget !== target) m.aimTurns = 0;
-        m.aimTarget = target; m.aimTurns++; L(`${m.id} aims at ${target.id}`); return;
-      }
-      const aim = m.aimTarget === target && m.aimTurns > 0;
-      m.aimTarget = target;
-      const aoa = threat < 1 && !engaged(m);
-      if (aoa) m.aoa = true;
-      fireAt(m, w, target, { aim, aoa });
     }
+    // a hex up to n steps from a toward b (for valuing positions without moving)
+    function stepHex(a, b, n) {
+      let h = a;
+      for (let i = 0; i < n; i++) {
+        let best = null, bd = hexDist(h, b);
+        for (const [dq, dr] of DIRS) { const x = { q: h.q + dq, r: h.r + dr }; const dd = hexDist(x, b); if (dd < bd) { bd = dd; best = x; } }
+        if (!best) break;
+        h = best;
+      }
+      return h;
+    }
+
+    // ---- options to close for hand-to-hand: charge (Move and Attack, All-Out Attack, Slam) or just advance
+    function approachOptions(m, pool, add, Wm) {
+      const u = m.u;
+      if (m.armsLost >= 2 && u.melee.name === "Punch") return;
+      const mv = moveOf(m), reach = u.melee.reachMax, near = pool[0], d = hexDist(m.h, near.h);
+      const route = d <= 3 * mv + 12 ? engagePath(m, reach, pool) : null;
+      const tgt = route ? route.foe : near;
+      const len = route ? route.path.length : Math.max(0, d - reach);
+      const go = n => route ? followPath(m, route.path, n) : stepToward(m, near.h, n, reach);
+      const stopped = () => m.state !== "ok" || m.stunned || m.prone || !m.h;
+      const w = u.melee;
+      const helpers = models.filter(a => a !== m && a.u.side === u.side && a.state === "ok" && a.h && hexDist(a.h, tgt.h) <= moveOf(a) + 1).length;
+      const worth = meleeWorth(m, tgt, helpers);
+      const arrive = route && route.path.length ? route.path[Math.min(route.path.length, mv) - 1] : stepHex(m.h, tgt.h, Math.min(mv, len));
+      const hard = expInjRandom(w, tgt.u) < 1;
+      if (len <= mv) {
+        // arrives this turn: Move and Attack (-4, max 9) or a Slam if the weapon can't get through
+        const lvl = Math.min(9, w.level - skillPen(m) - 4);
+        const Ema = planAttack(m, w, tgt, lvl, true).score;
+        const slamOK = len >= 2 && hard && !tgt.prone && !tgt.pinned && u.HP >= 0.8 * tgt.u.HP;
+        // a Slam's worth: knocking the foe down sets up the pin (valued as a share of the foe taken out)
+        const slamV = slamOK ? 0.25 * threatOf(tgt) * P3[cl(Math.max(u.dx, u.grapple) - skillPen(m) - 4)] * HORIZON : 0;
+        const vMA = Wm * Math.max(kv(m, tgt, Ema), slamV) + GAMMA * Wm * worth - risk(m, arrive, "");
+        add(vMA, `charge@${tgt.id}`, () => {
+          const moved = go(mv); if (stopped()) return; m.facing = faceToward(m.h, tgt.h);
+          if (tgt.h && hexDist(m.h, tgt.h) <= reach) slamOK && slamV > kv(m, tgt, Ema) ? slam(m, tgt, Math.max(1, moved), false) : strike(m, w, tgt, { charge: true });
+        });
+        // All-Out Attack after a half move (B365): +4 to hit, no defence until next turn
+        if (len <= Math.floor(mv / 2)) {
+          const Eaoa = planAttack(m, w, tgt, w.level - skillPen(m) + 4, true).score;
+          add(Wm * Math.max(kv(m, tgt, Eaoa), slamV) + GAMMA * Wm * worth - risk(m, arrive, "aoa"), `aoa-charge@${tgt.id}`, () => {
+            const moved = go(Math.floor(mv / 2)); if (stopped()) return; m.facing = faceToward(m.h, tgt.h);
+            if (hexDist(m.h, tgt.h) <= reach) { m.aoa = true; L(`${m.id} charges in (All-Out Attack)`); slamOK && slamV > kv(m, tgt, Eaoa) ? slam(m, tgt, Math.max(1, moved), true) : strike(m, w, tgt, { determined: true }); }
+          });
+        }
+      } else {
+        // still out of reach: close the distance; the payoff is the fight when it arrives
+        const turns = Math.ceil((len - mv) / Math.max(1, mv)) + 1;
+        const v = Math.pow(GAMMA, turns) * Wm * worth - risk(m, arrive, "");
+        add(v, `close@${tgt.id}`, () => { go(mv); if (stopped()) return; if (tgt.h) m.facing = faceToward(m.h, tgt.h); });
+      }
+    }
+
+    // worth of grabbing t (B370): a pinned foe is out of the fight while friends hack at it; more hands, better odds
+    function grabValue(m, t, helpers) {
+      const u = m.u;
+      if (m.armsLost >= 1 || t.pinned) return 0;
+      const hit = P3[cl(u.grapple - skillPen(m))];
+      const def = bestDefence(t, m, true);
+      const pGrab = hit * (1 - (def == null ? 0 : P3[cl(def)]));
+      const hands = (t.grips ? t.grips.length : 0) + helpers + 1;
+      return pGrab * threatOf(t) * Math.min(1, hands / 4) * 0.8 * HORIZON;
+    }
+    // worth of being in reach of t: the best of a full blow (with Extra Attacks) and a grab
+    function meleeWorth(m, t, helpers) {
+      const w = m.u.melee;
+      const E = planAttack(m, w, t, w.level - skillPen(m), true).score * (1 + (m.u.flags.extraAttack || 0));
+      return Math.max(kv(m, t, E), grabValue(m, t, helpers));
+    }
+    // ---- options in hand-to-hand
+    function meleeOptions(m, adj, add, rNow, Wm, Wr, mw) {
+      const u = m.u;
+      const gun = m.grips.length ? null : (u.ranged && !m.gunBroken && !m.jam && m.armsLost < 2 ? u.ranged : null);
+      const threat = threatTo(m);
+      for (const t of adj) {
+        const face = () => { m.facing = faceToward(m.h, t.h); };
+        for (const w of mw) {
+          const lvl = w.level - skillPen(m) - (m.prone ? 4 : 0) - (m.grips.length ? 4 : 0);
+          const n = 1 + (u.flags.extraAttack || 0);
+          const E = planAttack(m, w, t, lvl, true).score * n;
+          add(Wm * kv(m, t, E) - rNow, `strike ${w.name}@${t.id}`, () => { face(); strike(m, w, t, {}); });
+          // Rapid Strike (B370): two blows at -6
+          if (!u.flags.extraAttack && lvl - 6 >= 10) {
+            const Er = 2 * planAttack(m, w, t, lvl - 6, true).score;
+            add(Wm * kv(m, t, Er) - rNow, `rapid@${t.id}`, () => { face(); strike(m, w, t, { rapid: true }); });
+          }
+          // All-Out Attack (B365): Determined +4, Double (two blows), Strong (+2 or +1/die), and Mighty Blows (1 FP)
+          const rA = risk(m, m.h, "aoa");
+          const Ed = planAttack(m, w, t, lvl + 4, true).score * n;
+          add(Wm * kv(m, t, Ed) - rA, `aoa-det@${t.id}`, () => { face(); m.aoa = true; strike(m, w, t, { determined: true }); });
+          const Edb = 2 * planAttack(m, w, t, lvl, true).score;
+          add(Wm * kv(m, t, Edb) - rA, `aoa-double@${t.id}`, () => { face(); m.aoa = true; strike(m, w, t, { double: true }); });
+          const Es = planAttack(m, w, t, lvl, true, boosted(w, 1)).score * n;
+          add(Wm * kv(m, t, Es) - rA, `aoa-strong@${t.id}`, () => { face(); m.aoa = true; strike(m, w, t, { strong: true }); });
+          if (m.fp > Math.max(4, m.u.fp / 3)) {
+            const Em = planAttack(m, w, t, lvl, true, boosted(w, 2)).score * n;
+            add(Wm * kv(m, t, Em) - rA - 0.02, `aoa-mighty@${t.id}`, () => { face(); m.aoa = true; strike(m, w, t, { strong: true, mighty: true }); });
+          }
+          // Feint (B365): spend this turn to take the foe's defence down next turn
+          const def = bestDefence(t, m, true);
+          if (def != null && !m.feint && P3[cl(def)] > 0.5) {
+            const skillT = Math.max(t.u.melee.level, t.u.dx);
+            const gain = Math.max(0, (lvl - skillT) / 2 + 1);
+            const Ef = planAttack(m, w, t, lvl + gain * 0, true).score * n;
+            const defP = P3[cl(def)], defP2 = P3[cl(def - gain)];
+            const Efeint = defP < 1 ? Ef * (1 - defP2) / Math.max(0.01, 1 - defP) : Ef;
+            add(GAMMA * Wm * kv(m, t, Efeint) - rNow, `feint@${t.id}`, () => {
+              face();
+              const mine = check(lvl), theirs = check(skillT);
+              const margin = (mine.ok ? mine.margin : -99) - (theirs.ok ? Math.max(0, theirs.margin) : 0);
+              m.feint = { t, n: mine.ok ? Math.max(0, margin) : 0 };
+              L(`${m.id} feints at ${t.id}${m.feint.n ? ` (-${m.feint.n} to its defence)` : " but it isn't fooled"}`);
+            });
+          }
+        }
+        // point-blank gun (Bulk penalty), averaged over its reloads
+        if (gun && (gun.shots.mag === Infinity || m.ammo > 0) && m.reload === 0) {
+          const E = planAttack(m, gun, t, gun.level + Math.min(0, gun.bulk || 0) - skillPen(m), false).score * Math.min(3, gun.rof || 1) * sustainOf(gun);
+          add(Wr * kv(m, t, E) - rNow, `point-blank@${t.id}`, () => { face(); fireAt(m, gun, t, { pointBlank: true }); });
+          // blade and pistol together (B417)
+          if (gun.oneHanded && u.melee.oneHanded && u.melee.name !== "Punch" && !m.armsLost) {
+            const pm = u.dualPen, pg = u.dualPen + u.offPen;
+            const Ed = planAttack(m, u.melee, t, u.melee.level - skillPen(m) - pm, true).score
+              + planAttack(m, gun, t, gun.level + Math.min(0, gun.bulk) - skillPen(m) - pg, false).score * Math.min(3, gun.rof);
+            add(Wm * kv(m, t, Ed) - rNow, `dual@${t.id}`, () => {
+              face(); L(`${m.id} attacks with both hands (${u.melee.name} and ${gun.name})`);
+              strike(m, u.melee, t, { pen: pm }); if (t.state === "ok") fireAt(m, gun, t, { pointBlank: true, pen: pg });
+            });
+          }
+        }
+        if (gun && gun.shots.mag !== Infinity && m.ammo < gun.shots.mag && gun.shots.reload <= 3) {
+          const turns = Math.max(1, gun.shots.reload - Math.max(0, m.reload > 0 ? gun.shots.reload - m.reload : 0));
+          const Eg = planAttack(m, gun, t, gun.level + Math.min(0, gun.bulk || 0) - skillPen(m), false).score * Math.min(3, gun.rof || 1);
+          add(Math.pow(GAMMA, turns) * Wr * kv(m, t, Eg) - rNow, `reload-cc`, () => {
+            if (m.reload === 0) m.reload = gun.shots.reload;
+            if (--m.reload <= 0) { m.reload = 0; m.ammo = gun.shots.mag; } L(`${m.id} reloads in close combat`);
+          });
+        }
+        // grappling (B370): grab a foe the weapon can't hurt; a pinned foe is out of the fight while friends hack at it
+        if (m.armsLost < 1 && !t.pinned && gripsOn(t).length < 4) {
+          const helpers = models.filter(a => a !== m && a.u.side === u.side && a.state === "ok" && a.h && hexDist(a.h, t.h) <= 1).length;
+          add(Wm * grabValue(m, t, helpers) - rNow, `grab@${t.id}`, () => { face(); grab(m, t); });
+        }
+        // Shove (B372): put a foe on the ground for friends who can hurt it
+        if (!t.prone && m.armsLost < 2) {
+          const friends = models.filter(a => a !== m && a.u.side === u.side && a.state === "ok" && a.h && hexDist(a.h, t.h) <= a.u.melee.reachMax);
+          if (friends.length) {
+            const sd = stDamage(u.st), thr = parseDamage("thr cr", sd.thr, sd.sw);
+            const kb = 2 * (thr.n * 3.5 + thr.add) / Math.max(1, t.u.st - 2);
+            const pDown = kb >= 1 ? 1 - P3[cl(t.u.dx - Math.floor(kb) + 1)] : 0;
+            const pHit = P3[cl(Math.max(u.dx, u.grapple) - skillPen(m))];
+            const vS = pHit * pDown * 0.3 * threatOf(t) * Math.min(1, friends.length / 2) * HORIZON;
+            add(vS - rNow, `shove@${t.id}`, () => { face(); shove(m, t); });
+          }
+        }
+      }
+    }
+
     // ---- grenades: expected harm of a throw at each foe (the one struck takes it all, the rest the blast and fragments)
     function bestGrenade(m, pool) {
       let best = null;
@@ -1093,16 +1393,17 @@ const SIM = (() => {
           const lvl = g.level - skillPen(m) + rangePenalty(d) + c.u.sm;
           // the target may Dodge (then it takes the blast at a yard, with no divisor)
           const dd = rangedDefence(c, m), pDodge = dd == null ? 0 : P3[Math.max(0, Math.min(18, dd))];
-          let v = (1 - pDodge) * expInj(g, c.u, "torso") + pDodge * expInj(g, c.u, "torso", { ...g.dmg, div: 1, mult: g.dmg.mult / 3, key: "s1nd" });
+          let v = kv(m, c, (1 - pDodge) * expInj(g, c.u, "torso") + pDodge * expInj(g, c.u, "torso", { ...g.dmg, div: 1, mult: g.dmg.mult / 3, key: "s1nd" }));
           for (const x of pool) {
             if (x === c || !x.h) continue;
             const k = hexDist(x.h, c.h);
             if (k > 3) continue;
-            v += expInj(g, x.u, "torso", { ...g.dmg, div: 1, mult: g.dmg.mult / (3 * k), key: "s" + k + "nd" });
-            if (g.dmg.frag) v += P3[Math.max(0, Math.min(18, 15 + rangePenalty(k)))] * expInj(g, x.u, "torso", { n: g.dmg.frag.n, add: 0, mult: 1, div: 1, type: g.dmg.frag.type, key: "f" });
+            let e = expInj(g, x.u, "torso", { ...g.dmg, div: 1, mult: g.dmg.mult / (3 * k), key: "s" + k + "nd" });
+            if (g.dmg.frag) e += P3[Math.max(0, Math.min(18, 15 + rangePenalty(k)))] * expInj(g, x.u, "torso", { n: g.dmg.frag.n, add: 0, mult: 1, div: 1, type: g.dmg.frag.type, key: "f" });
+            v += kv(m, x, e);
           }
           v *= P3[Math.max(0, Math.min(18, lvl))];
-          if (!best || v > best.s) best = { i, c, s: v, lvl };
+          if (!best || v > best.s) best = { i, c, s: v, v, lvl };
         }
       });
       return best;
@@ -1300,107 +1601,6 @@ const SIM = (() => {
     }
     // damage bonus for All-Out Attack (Strong) and Mighty Blows, for planning
     const boosted = (w, k) => ({ ...w.dmg, add: w.dmg.add + k * Math.max(2, w.dmg.n), key: "b" + k });
-
-    function fightInMelee(m, adj) {
-      const u = m.u;
-      // grappling: a model already holding a foe keeps working the hold (takedown, then pin; a pinner just holds)
-      if (m.holding) {
-        const t = m.holding;
-        if (t.state === "ok" && t.h && hexDist(m.h, t.h) <= 1) {
-          if (!t.pinned) { wrestle(m, t); return; }
-          if (t.grips.filter(g => g !== m).length >= 2) release(m);   // two can keep it pinned; the rest go back to hacking
-          else return;
-        } else release(m);
-      }
-      // prefer the foe we can hurt most, ideally from its flank or rear
-      let best = null;
-      const mw = weaponsFor(m, true);
-      const gun = m.grips.length ? [] : weaponsFor(m, false).filter(w => w.shots.reload <= 3 || w.shots.mag === Infinity);
-      for (const t of adj) for (const w of [...mw, ...gun]) {
-        const isGun = !mw.includes(w);
-        const lvl = isGun ? w.level + Math.min(0, w.bulk || 0) : w.level;
-        const p = planAttack(m, w, t, lvl - skillPen(m), !isGun);
-        // a gun's harm averaged over its reloads (turns firing a magazine vs turns reloading it)
-        const fireTurns = w.shots && w.shots.mag !== Infinity ? w.shots.mag / Math.max(1, Math.min(3, w.rof)) : Infinity;
-        const sustain = isGun && fireTurns !== Infinity ? fireTurns / (fireTurns + w.shots.reload) : 1;
-        const s = p.score * (isGun ? Math.min(3, w.rof) * sustain : 1 + (u.flags.extraAttack || 0));
-        if (!best || s > best.s) best = { t, w, s, isGun, p };
-      }
-      if (!best) return;
-      const { t, w } = best;
-      m.facing = faceToward(m.h, t.h);
-      const threat = threatTo(m);
-      // a charging mob that can barely hurt a foe grabs it instead, piling on until it's down and pinned (B370)
-      if (u.stance === "charge" && m.armsLost < 1) {
-        const holdable = adj.filter(x => !x.pinned && gripsOn(x).length < 4).sort((a, b) => b.grips.length - a.grips.length);
-        // "can't hurt it": under 1 HP of expected injury from a blow that lands (armour, not the foe's parry)
-        const hard = expInjRandom(u.melee, holdable.length ? holdable[0].u : t.u) < 1;
-        if (hard && holdable.length && !adj.some(x => x.pinned)) { m.facing = faceToward(m.h, holdable[0].h); grab(m, holdable[0]); return; }
-      }
-      // a helpless (pinned) foe draws everyone free to swing: All-Out Attack, Strong if the damage matters more
-      const pinnedFoe = adj.find(x => x.pinned);
-      if (pinnedFoe && !m.holding) {
-        const mw0 = u.melee, lv = mw0.level - skillPen(m) - (m.prone ? 4 : 0) - (m.grips.length ? 4 : 0);
-        const det = planAttack(m, mw0, pinnedFoe, lv + 4, true).score;
-        const strong = planAttack(m, mw0, pinnedFoe, lv, true, boosted(mw0, 1)).score;
-        const might = m.fp > 4 ? planAttack(m, mw0, pinnedFoe, lv, true, boosted(mw0, 2)).score : 0;
-        m.facing = faceToward(m.h, pinnedFoe.h);
-        m.aoa = true;
-        if (might > strong * 1.2 && might > det) { L(`${m.id} lays into the pinned ${pinnedFoe.id} (All-Out Attack, Strong)`); strike(m, mw0, pinnedFoe, { strong: true, mighty: true }); }
-        else if (strong > det) { L(`${m.id} lays into the pinned ${pinnedFoe.id} (All-Out Attack, Strong)`); strike(m, mw0, pinnedFoe, { strong: true }); }
-        else { L(`${m.id} lays into the pinned ${pinnedFoe.id} (All-Out Attack, Determined)`); strike(m, mw0, pinnedFoe, { determined: true }); }
-        return;
-      }
-      if (best.s <= 0.01) {
-        // nothing gets through: defend (All-Out Defense) if threatened, else reload a quick gun or wait
-        if (u.ranged && !m.gunBroken && m.ammo < u.ranged.shots.mag && u.ranged.shots.reload <= 3) {
-          if (m.reload === 0) m.reload = u.ranged.shots.reload;
-          if (--m.reload <= 0) { m.reload = 0; m.ammo = u.ranged.shots.mag; } L(`${m.id} reloads in close combat`); return;
-        }
-        // a charging mob keeps swinging for a lucky gap; anyone else defends
-        if (u.stance === "charge") { strike(m, best.isGun ? u.melee : best.w, best.t, {}); return; }
-        // Shove (B372) a foe we can't cut down so a friend who can gets it on the ground
-        const friend = models.some(a => a !== m && a.u.side === u.side && a.state === "ok" && a.h && hexDist(a.h, t.h) <= a.u.melee.reachMax);
-        if (friend && !t.prone && u.st >= t.u.st - 2) { m.facing = faceToward(m.h, t.h); shove(m, t); return; }
-        if (threat > 0) { m.aod = true; L(`${m.id} goes on All-Out Defense`); }
-        return;
-      }
-      if (best.isGun) {
-        if (m.reload > 0 || m.ammo <= 0) {
-          if (m.reload === 0) m.reload = Math.max(1, w.shots.reload);
-          if (--m.reload <= 0) { m.reload = 0; m.ammo = w.shots.mag; } L(`${m.id} reloads in close combat`); return;
-        }
-        fireAt(m, w, t, { pointBlank: true }); return;
-      }
-      // two weapons at once (B417): blade and pistol, each at -4 (the off hand -4 more without Ambidexterity)
-      const gun1 = u.ranged && u.ranged.oneHanded && !m.gunBroken && !m.jam && !m.grips.length && m.armsLost === 0 && m.reload === 0
-        && (u.ranged.shots.mag === Infinity || m.ammo > 0) ? u.ranged : null;
-      if (gun1 && u.melee.oneHanded && u.melee.name !== "Punch") {
-        const pm = u.dualPen, pg = u.dualPen + u.offPen;
-        const sM = planAttack(m, u.melee, t, u.melee.level - skillPen(m) - pm, true).score;
-        const sG = planAttack(m, gun1, t, gun1.level + Math.min(0, gun1.bulk) - skillPen(m) - pg, false).score * Math.min(3, gun1.rof);
-        if (sM + sG > best.s * 1.15) {
-          m.facing = faceToward(m.h, t.h);
-          L(`${m.id} attacks with both hands (${u.melee.name} and ${gun1.name})`);
-          strike(m, u.melee, t, { pen: pm });
-          if (t.state === "ok") fireAt(m, gun1, t, { pointBlank: true, pen: pg });
-          return;
-        }
-      }
-      // Feint (B365) when the foe's defence is the problem and we out-skill it
-      const def = bestDefence(t, m, true);
-      if (def != null && best.p.score > 0 && P3[Math.max(0, Math.min(18, def))] > 0.75 && w.level >= def + 2 && !m.feint) {
-        const mine = check(w.level - skillPen(m)), theirs = check(Math.max(t.u.melee.level, t.u.dx));
-        const margin = (mine.ok ? mine.margin : -99) - (theirs.ok ? Math.max(0, theirs.margin) : 0);
-        m.feint = { t, n: mine.ok ? Math.max(0, margin) : 0 };
-        L(`${m.id} feints at ${t.id}${m.feint.n ? ` (-${m.feint.n} to its defence)` : " but it isn't fooled"}`);
-        return;
-      }
-      // All-Out Attack when nothing here can hurt us; Rapid Strike when skill allows (B370)
-      if (threat < 1) { m.aoa = true; const dbl = w.level - skillPen(m) >= 16; strike(m, w, t, dbl ? { double: true } : { determined: true }); return; }
-      const rapid = w.level - skillPen(m) - 6 >= 14 && !u.flags.extraAttack;
-      strike(m, w, t, { rapid });
-    }
 
     let turn = 0;
     for (turn = 1; turn <= maxTurns; turn++) {

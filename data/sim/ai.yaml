@@ -1,0 +1,140 @@
+# Decision weights for the combat simulator's AI (tools/sim.js, "decision layer"; rules in docs/simulator.md).
+# Every choice a model makes is scored on one scale:
+#   value = aggression x (share of a foe knocked out x that foe's threat)
+#         - caution x (chance I'm knocked out next turn x my own worth)
+#         + delayed payoffs (Aim, Ready, reload, closing in) discounted per turn.
+# The weights below give each faction its temper. 1.0 is the neutral, purely optimal value.
+#   aggression  weight on harm dealt
+#   caution     weight on harm taken (low = reckless, high = values its own life)
+#   melee       weight on hand-to-hand options (charging, striking, grappling)
+#   ranged      weight on shooting options
+#   focus       how strongly a model avoids piling onto a foe squad-mates already shoot (discipline)
+#   noise       random spread in the choice (0 = always the best option; Orks improvise)
+# Profiles are matched to templates by the regex in `match` (first profile that matches wins).
+profiles:
+  - name: Orks
+    match: "^(Ork |Gretchin)"
+    aggression: 1.4
+    caution: 0.3
+    melee: 1.6
+    ranged: 0.7
+    focus: 0.4
+    noise: 0.35
+    lore: Orks live for the fight and love close combat; they shoot wildly, charge anything, and don't count the cost.
+  - name: Tyranids
+    match: "^(Termagant|Hormagaunt|Genestealer|Lictor|Ravener|Tyranid|Carnifex|Hive Tyrant|Zoanthrope)"
+    aggression: 1.3
+    caution: 0.15
+    melee: 1.3
+    ranged: 1.0
+    focus: 0.9
+    noise: 0.1
+    lore: The Hive Mind spends bodies without regret; synapse keeps the swarm on target.
+  - name: Necrons
+    match: "^(Necron|Lychguard|Deathmark|Cryptek|Flayed One|Skorpekh)"
+    aggression: 1.0
+    caution: 0.6
+    melee: 1.0
+    ranged: 1.1
+    focus: 1.3
+    noise: 0.0
+    lore: Methodical, relentless and unafraid of damage they will reanimate from; precise target selection.
+  - name: Custodes
+    match: "^(Custodian|Shield-Captain|Sister of Silence)"
+    aggression: 1.2
+    caution: 0.7
+    melee: 1.2
+    ranged: 1.0
+    focus: 1.3
+    noise: 0.0
+    lore: Supremely confident demigods and their null-maiden sisters; they close and finish the most dangerous foe first.
+  - name: Astartes
+    match: "^(Astartes|Primaris)"
+    aggression: 1.1
+    caution: 0.8
+    melee: 1.0
+    ranged: 1.0
+    focus: 1.3
+    noise: 0.0
+    lore: Disciplined, fearless, tactically near-optimal.
+  - name: Adepta Sororitas
+    match: "^Adepta Sororitas"
+    aggression: 1.1
+    caution: 0.8
+    melee: 0.9
+    ranged: 1.1
+    focus: 1.2
+    noise: 0.0
+    lore: Faith-driven and disciplined; bolter drill first.
+  - name: Adeptus Mechanicus
+    match: "^(Skitarii|Sicarian|Tech-Priest|Magos|Electro-Priest|Combat Servitor)"
+    aggression: 1.0
+    caution: 0.8
+    melee: 1.0
+    ranged: 1.0
+    focus: 1.3
+    noise: 0.0
+    lore: Doctrina-imperative logic; efficient to the point of coldness.
+  - name: Imperial Guard
+    match: "^(Astra Militarum|Militarum Tempestus|Commissar)"
+    aggression: 0.9
+    caution: 1.2
+    melee: 0.6
+    ranged: 1.2
+    focus: 1.1
+    noise: 0.05
+    lore: Drilled line troops; they hold, shoot and don't want to be in hand-to-hand.
+  - name: Inquisition and Psykers
+    match: "^(Inquisitor|Inquisitorial|Interrogator|Astropath|Navigator|Sanctioned Psyker)"
+    aggression: 1.0
+    caution: 1.1
+    melee: 0.9
+    ranged: 1.0
+    focus: 1.1
+    noise: 0.0
+    lore: Experienced agents who value their own lives.
+  - name: Aeldari
+    match: "^(Aeldari|Aspect Warrior|Exarch|Autarch|Warlock|Farseer)"
+    aggression: 1.0
+    caution: 1.4
+    melee: 0.9
+    ranged: 1.1
+    focus: 1.3
+    noise: 0.0
+    lore: A dying race that spends every life with care; precise, surgical strikes.
+  - name: Drukhari
+    match: "^(Kabalite|Wych|Succubus|Incubus|Archon|Haemonculus|Wrack|Mandrake|Scourge)"
+    aggression: 1.3
+    caution: 0.9
+    melee: 1.2
+    ranged: 1.0
+    focus: 0.9
+    noise: 0.05
+    lore: Cruel raiders who favour the kill in reach and the wounded victim.
+    prey: 1.5
+  - name: T'au
+    match: "^(Fire Warrior|Pathfinder|Battlesuit|Commander \\(Shas|Air Caste|Earth Caste|Water Caste|Ethereal|Gun Drone)"
+    aggression: 0.9
+    caution: 1.4
+    melee: 0.4
+    ranged: 1.3
+    focus: 1.4
+    noise: 0.0
+    lore: Coordinated firepower; close combat is a failure of doctrine.
+  - name: Kroot and Vespid
+    match: "^(Kroot|Vespid)"
+    aggression: 1.1
+    caution: 0.9
+    melee: 1.2
+    ranged: 1.0
+    focus: 1.0
+    noise: 0.1
+    lore: Hunters and auxiliaries; the Kroot like it close and bloody.
+  - name: Default
+    match: ".*"
+    aggression: 1.0
+    caution: 1.0
+    melee: 1.0
+    ranged: 1.0
+    focus: 1.0
+    noise: 0.0
