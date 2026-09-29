@@ -1007,7 +1007,7 @@ const SIM = (() => {
         const go = n => route ? followPath(m, route.path, n) : stepToward(m, near.h, n, reach);
         const stopped = () => m.state !== "ok" || m.stunned || m.prone || !m.h;
         // Slam (B371) when the weapon can't hurt the foe but the charger's mass can knock it down
-        const hard = planAttack(m, u.melee, tgt, u.melee.level, true).score < 1;
+        const hard = expInjRandom(u.melee, tgt.u) < 1;   // the weapon can't get through even when it lands
         const slamIt = len >= 2 && hard && !tgt.prone && !tgt.pinned && u.HP >= 0.8 * tgt.u.HP;
         const hit = (aoa, moved) => slamIt ? slam(m, tgt, Math.max(1, moved), aoa) : strike(m, u.melee, tgt, aoa ? { determined: true } : { charge: true });
         // All-Out Attack after a half move if that reaches (B365); otherwise Move and Attack or just close
@@ -1330,7 +1330,8 @@ const SIM = (() => {
       // a charging mob that can barely hurt a foe grabs it instead, piling on until it's down and pinned (B370)
       if (u.stance === "charge" && m.armsLost < 1) {
         const holdable = adj.filter(x => !x.pinned && gripsOn(x).length < 4).sort((a, b) => b.grips.length - a.grips.length);
-        const hard = best.s < 1;   // under 1 HP of expected injury per swing
+        // "can't hurt it": under 1 HP of expected injury from a blow that lands (armour, not the foe's parry)
+        const hard = expInjRandom(u.melee, holdable.length ? holdable[0].u : t.u) < 1;
         if (hard && holdable.length && !adj.some(x => x.pinned)) { m.facing = faceToward(m.h, holdable[0].h); grab(m, holdable[0]); return; }
       }
       // a helpless (pinned) foe draws everyone free to swing: All-Out Attack, Strong if the damage matters more
