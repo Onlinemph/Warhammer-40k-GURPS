@@ -140,6 +140,7 @@ Astra Militarum Guardsman:
   armour: ["Flak Full Suit (Cadian Pattern)", "Flak Helmet"]   # equipment names; a suit container counts as one
   ranged: {item: "Lasgun, Kantrael Pattern", mode: "Standard"} # mode = the weapon line's usage
   melee: {item: "Bayonet, Lug-Mounted", mode: "Fixed to lasgun"}   # or {trait: "Rending Claws"} for natural weapons
+  grenades: [{item: "Frag Grenade", mode: "Thrown", count: 2}]   # thrown grenades carried (lore-standard issue)
   shield: {item: "Refractor Field", sp: 40, delay: 2, recharge: 10, ranged_only: true}   # recharge 0 = one-shot
   stance: shoot    # shoot | advance | charge
   note: One line on what this kit is and any choice made.

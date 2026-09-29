@@ -1,5 +1,6 @@
 # Default battle loadouts for the combat simulator (one entry per character template; Add-Ons skipped).
 # Keys are the Library/**/*.gct file stems. Item / trait names and modes resolve against data/**.
+# grenades: [{item, mode, count}] thrown grenades carried (lore-standard issue; most templates omit them from their equipment).
 
 # ------------------------------------------------------------------ Imperium
 Astra Militarum Guardsman:
@@ -7,12 +8,14 @@ Astra Militarum Guardsman:
   ranged: {item: "Lasgun, Kantrael Pattern", mode: "Standard"}
   melee: {item: "Bayonet, Lug-Mounted", mode: "Fixed to lasgun"}
   stance: shoot
+  grenades: [{item: "Frag Grenade", mode: "Thrown", count: 2}]
   note: "Cadian-style line trooper: flak suit and helmet, Kantrael lasgun with bayonet fixed."
 Militarum Tempestus Scion:
   armour: ["Carapace Armour, Tempestus Pattern"]
   ranged: {item: "Hellgun", mode: "Standard"}
   melee: {item: "Combat Knife, Munitorum Pattern", mode: "Thrust"}
   stance: advance
+  grenades: [{item: "Frag Grenade", mode: "Thrown", count: 2}, {item: "Krak Grenade", mode: "Thrown, shaped charge", count: 1}]
   note: "Tempestus carapace, hot-shot lasgun (hellgun), combat knife; hellpistol sidearm not modelled."
 Commissar:
   armour: ["Flak Jacket"]
@@ -25,6 +28,7 @@ Adepta Sororitas Battle Sister:
   ranged: {item: "Boltgun, Sororitas/Human Pattern", mode: "Standard bolt"}
   melee: {item: "Combat Knife, Munitorum Pattern", mode: "Thrust"}
   stance: advance
+  grenades: [{item: "Frag Grenade", mode: "Thrown", count: 2}, {item: "Krak Grenade", mode: "Thrown, shaped charge", count: 1}]
   note: "Sororitas power armour and boltgun; knife as sidearm melee (no standard Battle Sister blade)."
 Inquisitor:
   armour: ["Mesh Armour"]
@@ -50,18 +54,21 @@ Astartes Battle-Brother:
   ranged: {item: "Boltgun, Godwyn Pattern", mode: "Standard bolt"}
   melee: {item: "Chainsword, Astartes Pattern", mode: "Swing"}
   stance: advance
+  grenades: [{item: "Frag Grenade", mode: "Thrown", count: 2}, {item: "Krak Grenade", mode: "Thrown, shaped charge", count: 1}]
   note: "Tactical Marine: Mk VII Aquila plate, boltgun, chainsword (per template notes)."
 Primaris Battle-Brother:
   armour: ["Power Armour, Mark X (Tacticus Pattern)"]
   ranged: {item: "Bolt Rifle, Primaris Pattern", mode: "Standard bolt"}
   melee: {item: "Combat Knife, Astartes Pattern", mode: "Thrust"}
   stance: advance
+  grenades: [{item: "Frag Grenade", mode: "Thrown", count: 2}, {item: "Krak Grenade", mode: "Thrown, shaped charge", count: 1}]
   note: "Intercessor: Mk X Tacticus, bolt rifle, combat knife."
 Astartes Scout:
   armour: ["Scout Armour"]
   ranged: {item: "Boltgun, Godwyn Pattern", mode: "Standard bolt"}
   melee: {item: "Combat Knife, Astartes Pattern", mode: "Thrust"}
   stance: shoot
+  grenades: [{item: "Frag Grenade", mode: "Thrown", count: 2}, {item: "Krak Grenade", mode: "Thrown, shaped charge", count: 1}]
   note: "Scout armour, boltgun, combat knife."
 Astropath:
   armour: []
@@ -144,6 +151,7 @@ Aeldari Guardian:
   armour: ["Guardian Mesh Armour"]
   ranged: {item: "Shuriken Catapult", mode: "Standard"}
   stance: shoot
+  grenades: [{item: "Plasma Grenade, Aeldari Pattern", mode: "Thrown", count: 2}]
   note: "Mesh armour and shuriken catapult (per template notes)."
 Aeldari Ranger:
   armour: ["Guardian Mesh Armour"]
@@ -155,6 +163,7 @@ Aspect Warrior:
   ranged: {item: "Shuriken Pistol", mode: "Standard"}
   melee: {item: "Power Sword, Aeldari Pattern", mode: "Field on"}
   stance: charge
+  grenades: [{item: "Plasma Grenade, Aeldari Pattern", mode: "Thrown", count: 2}]
   note: "Aspect lenses are optional; chose Howling Banshee (power sword, shuriken pistol, war-mask)."
 Exarch:
   armour: ["Exarch Armour", "Banshee War-Mask"]
@@ -188,6 +197,7 @@ Kabalite Warrior:
   armour: ["Kabalite Armour"]
   ranged: {item: "Splinter Rifle", mode: "Standard"}
   stance: shoot
+  grenades: [{item: "Plasma Grenade, Drukhari Pattern", mode: "Thrown", count: 1}]
   note: "Splinter rifle and Kabalite plate (per template notes); no standard melee weapon."
 Wych:
   armour: ["Wychsuit"]
@@ -287,18 +297,21 @@ Ork Boy:
   ranged: {item: "Slugga", mode: "Standard"}
   melee: {item: "Choppa", mode: "Swing"}
   stance: charge
+  grenades: [{item: "Stikkbomb (Frag)", mode: "Thrown", count: 2}]
   note: "Slugga and choppa; shoota is the alternative."
 Ork Nob:
   armour: ["'Eavy Armour"]
   ranged: {item: "Shoota", mode: "Dakka (full auto)"}
   melee: {item: "Choppa", mode: "Swing"}
   stance: advance
+  grenades: [{item: "Stikkbomb (Frag)", mode: "Thrown", count: 2}]
   note: "Nob with shoota and choppa in 'eavy armour."
 Ork Kommando:
   armour: []
   ranged: {item: "Slugga", mode: "Standard"}
   melee: {item: "Choppa", mode: "Swing"}
   stance: charge
+  grenades: [{item: "Stikkbomb (Frag)", mode: "Thrown", count: 3}]
   note: "Slugga and choppa; unarmoured infiltrator."
 Gretchin:
   armour: []
