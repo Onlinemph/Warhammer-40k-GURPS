@@ -509,7 +509,7 @@ const SIM = (() => {
   // and the ST and Move features a suit carries (servo ST lives on a child item).
   const LOCS = ["skull", "eye", "face", "neck", "torso", "vitals", "groin", "arm", "hand", "leg", "foot"];
   function armourProfile(names) {
-    const dr = {}; let wp = 0, wpTorso = -1, striking = 0, lifting = 0, move = 0, hp = 0;
+    const dr = {}; let wp = 0, wpTorso = -1, striking = 0, lifting = 0, move = 0, hp = 0, flexible = false;
     for (const nm of names || []) {
       const hit = EQ.get(nm);
       if (!hit) continue;
@@ -524,6 +524,7 @@ const SIM = (() => {
         }
         const w = /^Weak Points (\d+):/.exec(e.notes || "");
         if (w && torso >= wpTorso) { wp = Number(w[1]); wpTorso = torso; }
+        if (/Flexible armou?r/i.test(e.notes || "") && torso > 0) flexible = true;   // blunt trauma (B379)
         for (const o of (e.feat && e.feat.other) || []) {
           let m;
           if ((m = /^Striking St ([+-]\d+)/i.exec(o))) striking += Number(m[1]);
@@ -534,7 +535,7 @@ const SIM = (() => {
         }
       }
     }
-    return { dr, wp, striking, lifting, move, hp };
+    return { dr, wp, striking, lifting, move, hp, flexible };
   }
   function drAt(dr, loc) {
     const all = dr.all || 0;
@@ -602,6 +603,12 @@ const SIM = (() => {
     const baseStrike = st.st + ((st.bonus && st.bonus.striking_st) || 0);
     const dmgST = stDamage(baseStrike + arm.striking);
     const liftST = st.st + ((st.bonus && st.bonus.lifting_st) || 0) + arm.lifting;
+    // one hand? "†" needs two hands unless ST is 1.5x the listed ST, "‡" unless 3x (B270)
+    const oneHand = str => {
+      const m = /^(\d+)\s*([†‡]*)/.exec(String(str ?? ""));
+      if (!m || !m[2]) return true;
+      return liftST >= Number(m[1]) * (m[2].includes("‡") ? 3 : 1.5);
+    };
     const mkWeapon = (sel, melee) => {
       if (!sel) return null;
       let src = null, label = "";
@@ -632,7 +639,7 @@ const SIM = (() => {
         w.unbalanced = /U/.test(p);
         w.reach = String(line.reach ?? "1");
         w.reachMax = Math.max(1, ...(w.reach.match(/\d+/g) || ["1"]).map(Number));
-        w.oneHanded = !/[†‡]/.test(String(line.strength ?? ""));
+        w.oneHanded = oneHand(line.strength);
       } else {
         w.acc = accOf(line.accuracy); w.range = parseRange(line.range) || { half: 100, max: 300 };
         w.rof = parseRoF(line.rate_of_fire); w.rcl = Math.max(1, num(line.recoil, 1));
@@ -640,7 +647,7 @@ const SIM = (() => {
         const sm = /^(\d+)([MB†]*)/.exec(String(line.strength ?? ""));
         w.minST = sm && !/[MB]/.test(sm[2]) ? Number(sm[1]) : 0;
         if (w.minST && liftST < w.minST) w.level -= w.minST - liftST;
-        w.oneHanded = w.bulk >= -2 && !/[†‡]/.test(String(line.strength ?? ""));
+        w.oneHanded = w.bulk >= -2 && oneHand(line.strength);
       }
       return w;
     };
@@ -699,7 +706,13 @@ const SIM = (() => {
     const u = {
       side, name: spec.label || spec.template, template: spec.template, count: Math.max(1, spec.count | 0),
       db, powers, grenades, dualPen, offPen, fp: st.fp || st.ht,
-      block: Math.floor(skillLevel(st, "Shield", ["Shield", "DX-4"]) / 2) + 3 + (flags.cr ? 1 : 0) + (flags.enhBlock || 0), st: st.st, dx: st.dx, formation: spec.formation || "line",
+      block: Math.floor(skillLevel(st, "Shield", ["Shield", "DX-4"]) / 2) + 3 + (flags.cr ? 1 : 0) + (flags.enhBlock || 0),
+      // weapons in hand (B382): gun and blade are both ready when both are one-handed, when they're one weapon
+      // (a bayonet on the lasgun, a guardian spear's bolt caster) or when either is natural; otherwise switching
+      // is a Ready, free on a Fast-Draw roll (B194)
+      bothReady: !ranged || !melee || melee.name === "Punch" || !!melee.natural || !!ranged.natural || (spec.melee && spec.ranged && spec.melee.item && spec.melee.item === spec.ranged.item)
+        || /fixed to|mounted|underslung/i.test(melee.usage || "") || (!!ranged.oneHanded && !!melee.oneHanded),
+      fastDraw: Math.max(-Infinity, ...(st.skills || []).filter(s => /^Fast-Draw/.test(s.name) && !/Ammo/.test(s.name) && s.level != null).map(s => s.level)), st: st.st, dx: st.dx, formation: spec.formation || "line",
       // elites call shots: a best combat skill (weapon or power) of 17+, two past a trained line soldier's 15,
       // and a mind that picks its shots (IQ 8+). Points were a poor proxy: an Ork Boy's ST 28 costs 300+.
       elite: Math.max(melee ? melee.level : 0, ranged ? ranged.level : 0, ...powers.map(p => p.level)) >= 17 && st.iq >= 8,
@@ -823,6 +836,7 @@ const SIM = (() => {
           parries: 0, retreated: false, blocked: false, attacked: false, aoa: false, aod: false, feint: null,
           reanim: 0, dmgDealt: 0, kills: 0, armsLost: 0, legsLost: 0, grips: [], holding: null, pinned: false,
           waiting: null, zone: null, grenadesLeft: u.grenades.map(g => g.count), grenadeReady: null,
+          inHand: u.bothReady ? "both" : u.stance === "charge" ? "melee" : "gun",
           wounds: {}, pain: 0, painSev: 0, halfMove: false, halfDodge: false, gawd: 0, crippled: {} };
         let h = fromOffset(col, row);
         while (occ.has(key(h.q, h.r))) h = fromOffset(h.q + (u.side ? 1 : -1), row);
@@ -984,6 +998,12 @@ const SIM = (() => {
       }
       // knockback (B378) from crushing and cutting blows
       if ((dmg.type === "cr" || (dmg.type === "cut" && pen <= 0)) && !ranged && t.state === "ok" && !t.grips.length) knockback(att, t, basic);
+      // blunt trauma (B379): flexible armour that stops a hit still passes 1 HP per full 5 points of crushing
+      // damage, or per full 10 of cutting, impaling or piercing
+      if (pen <= 0 && t.u.arm.flexible && armDR > 0 && /^(cr|cut|imp|pi)/.test(dmg.type)) {
+        const bt = Math.floor(raw / (dmg.type === "cr" ? 5 : 10));
+        if (bt > 0) { L(`  ${raw} dmg to ${loc} stopped by flexible armour: ${bt} blunt trauma`); injure(att, t, bt, loc, "cr"); return bt; }
+      }
       if (pen <= 0) { L(`  ${raw} dmg to ${loc} fails to penetrate DR ${armDR + natDR}${div !== 1 ? "/" + (div === Infinity ? "∞" : div) : ""}`); return 0; }
       const flags = t.u.flags, poison = flags.poison;
       let inj = dmg.type === "tox" && poison === "immune" ? 0 : Math.max(1, Math.floor(pen * woundMult(dmg.type, loc, flags, dmg.ex)));
@@ -1112,7 +1132,7 @@ const SIM = (() => {
       const mod = (arc === "side" ? -2 : 0) - (t.stunned ? 4 : 0) - (t.prone ? 3 : 0) + (arc !== "rear" ? t.u.db : 0);
       const aod = how => t.aod && t.aodDef === how ? 2 : 0;   // All-Out Defense: +2 to the one defence chosen
       let d = dodgeOf(t) + (melee && !t.retreated && !t.stunned ? 3 : 0) + aod("dodge");
-      if (melee && t.u.parry != null && !(t.u.melee.unbalanced && t.attacked) && t.armsLost < 2)
+      if (melee && t.u.parry != null && bladeReady(t) && !(t.u.melee.unbalanced && t.attacked) && t.armsLost < 2)
         d = Math.max(d, t.u.parry + (!t.retreated && !t.stunned ? 1 : 0) - (t.u.flags.master ? 2 : 4) * t.parries + aod("parry"));
       if (melee && t.u.db && !t.blocked) d = Math.max(d, t.u.block + (!t.retreated && !t.stunned ? 1 : 0) + aod("block"));
       return d + mod;
@@ -1141,7 +1161,7 @@ const SIM = (() => {
         return r.ok ? Math.max(0, r.margin) : null;
       }
       const opts = [{ how: "dodge", v: dodgeOf(t) + (!t.retreated && !t.stunned ? 3 : 0) + aod("dodge"), retreat: true }];
-      if (t.u.parry != null && !(t.u.melee.unbalanced && t.attacked) && t.armsLost < 2)
+      if (t.u.parry != null && bladeReady(t) && !(t.u.melee.unbalanced && t.attacked) && t.armsLost < 2)
         opts.push({ how: "parry", v: t.u.parry + (!t.retreated && !t.stunned ? 1 : 0) - (t.u.flags.master ? 2 : 4) * t.parries - (t.grips.length ? 4 : 0) + aod("parry"), retreat: true });
       if (t.u.db && !t.blocked) opts.push({ how: "block", v: t.u.block + (!t.retreated && !t.stunned ? 1 : 0) + aod("block"), retreat: true });
       const o = opts.reduce((a, b) => b.v > a.v ? b : a);
@@ -1291,8 +1311,14 @@ const SIM = (() => {
         let hits = w.cone ? 1 : Math.min(n, 1 + Math.floor(Math.max(0, r.margin) / w.rcl));
         L(`${m.id} ${w.usage === "power" ? "casts " + w.name + " at" : "fires " + (n > 1 ? n + " at" : "at")} ${t.id} (${d} yd${loc0 && loc0 !== "torso" ? ", aiming at the " + locName(loc0) : ""}, skill ${lvl}): ${hits} hit${hits > 1 ? "s" : ""}`);
         if (!r.crit && !w.malediction) {
-          const def = defend(t, m, false, 0, 0);
-          if (def != null) { const dg = Math.min(hits, 1 + def); hits -= dg; L(`  ${t.id} dodges ${dg}`); }
+          if (d <= 1 && !w.cone) {
+            // in close combat the defender can parry the weapon (or step aside) instead of dodging the shot (B391)
+            const def = defend(t, m, true, 0, 0);
+            if (def) { const dg = def.how === "parry" ? hits : Math.min(hits, 1 + def.margin); hits -= dg; L(`  ${t.id} ${def.how === "parry" ? "knocks the gun aside" : def.how === "block" ? "blocks " + dg : "dodges " + dg}`); }
+          } else {
+            const def = defend(t, m, false, 0, 0);
+            if (def != null) { const dg = Math.min(hits, 1 + def); hits -= dg; L(`  ${t.id} dodges ${dg}`); }
+          }
         }
         for (let k = 0; k < hits && t.state === "ok"; k++) {
           const loc = loc0 || hitLocation();
@@ -1355,10 +1381,23 @@ const SIM = (() => {
     }
 
     // ---- choose and carry out a maneuver
+    const gunReady = m => m.inHand !== "melee";
+    const bladeReady = m => m.inHand !== "gun";
+    // Ready (B382): swap gun and blade; with Fast-Draw a successful roll makes it free and the model acts at once
+    function switchTo(m, hand) {
+      const w = hand === "melee" ? m.u.melee : m.u.ranged;
+      m.inHand = hand;
+      if (m.u.fastDraw > -Infinity && !m.fastDrew && check(m.u.fastDraw - skillPen(m)).ok) {
+        L(`${m.id} fast-draws the ${w.name}`);
+        m.fastDrew = true; act(m); m.fastDrew = false;
+        return;
+      }
+      L(`${m.id} readies the ${w.name}`);
+    }
     function weaponsFor(m, melee) {
       const out = [];
-      if (melee) { if (m.armsLost < 2) out.push(m.u.melee); }
-      else if (m.u.ranged && !m.gunBroken && !m.jam && m.armsLost < 2) out.push(m.u.ranged);
+      if (melee) { if (m.armsLost < 2 && bladeReady(m)) out.push(m.u.melee); }
+      else if (m.u.ranged && !m.gunBroken && !m.jam && m.armsLost < 2 && gunReady(m)) out.push(m.u.ranged);
       for (const p of m.u.powers) if (!!p.melee === melee && m.fp - p.fp >= 0) out.push(p);
       return out;
     }
@@ -1413,7 +1452,7 @@ const SIM = (() => {
         const mw = f.u.melee;
         if (mw && d - mw.reachMax <= moveOf(f)) {
           const lvl = mw.level - (d > mw.reachMax ? 4 : 0) - skillPen(f);
-          const def = mode === "aoa" ? null : Math.max(m.u.dodge + 3, m.u.parry != null ? m.u.parry + 1 : 0) + (mode === "aod" ? 2 : 0) - (m.stunned ? 4 : 0) - (m.prone ? 3 : 0) + m.u.db;
+          const def = mode === "aoa" ? null : Math.max(m.u.dodge + 3, m.u.parry != null && bladeReady(m) ? m.u.parry + 1 : 0) + (mode === "aod" ? 2 : 0) - (m.stunned ? 4 : 0) - (m.prone ? 3 : 0) + m.u.db;
           best = expInjRandom(mw, m.u) * P3[cl(lvl)] * (1 - (def == null ? 0 : P3[cl(def)])) * (1 + (f.u.flags.extraAttack || 0));
         }
         const rw = f.u.ranged;
@@ -1484,7 +1523,22 @@ const SIM = (() => {
       if (adj.length) meleeOptions(m, adj, add, rNow, Wm, Wr, mw);
       else {
         rangedOptions(m, pool, add, rNow, Wr);
-        approachOptions(m, pool, add, Wm);
+        if (bladeReady(m)) approachOptions(m, pool, add, Wm);
+      }
+      // Ready the other weapon (B382): worth what it could do next turn
+      if (!u.bothReady && !m.grips.length) {
+        const tmp = [], save = m.inHand, push = v => { if (Number.isFinite(v)) tmp.push(v); };
+        if (!bladeReady(m) && u.melee && m.armsLost < 2) {
+          m.inHand = "melee";
+          if (adj.length) meleeOptions(m, adj, push, rNow, Wm, Wr, weaponsFor(m, true)); else approachOptions(m, pool, push, Wm);
+          m.inHand = save;
+          if (tmp.length) add(GAMMA * Math.max(...tmp) - 0.001, `ready-blade`, () => switchTo(m, "melee"));
+        } else if (!gunReady(m) && u.ranged && !m.gunBroken) {
+          m.inHand = "gun";
+          if (adj.length) meleeOptions(m, adj, push, rNow, Wm, Wr, []); else rangedOptions(m, pool, push, rNow, Wr);
+          m.inHand = save;
+          if (tmp.length) add(GAMMA * Math.max(...tmp) - 0.001, `ready-gun`, () => switchTo(m, "gun"));
+        }
       }
       // All-Out Defense (+2 to defences): only against hand-to-hand, a foe beside us or one that can reach us this turn
       const meleeThreat = pool.some(f => f.u.melee && hexDist(f.h, m.h) - f.u.melee.reachMax <= moveOf(f) && expInjRandom(f.u.melee, u) >= 1);

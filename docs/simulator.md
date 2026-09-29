@@ -14,7 +14,7 @@ The simulator (`tools/sim.js`, the Combat Simulator page on the site) plays GURP
 
 Every model acts once per second in Basic Speed order (ties random), choosing one maneuver (B363–366):
 
-- **Move** (full Move), **Move and Attack** (ranged: −2 or Bulk, no Acc; melee: −4, skill capped at 9, B365), **Attack**, **Aim** (+Acc, +1 more after 2 turns and +2 after 3, B364), **Feint** (Quick Contest of weapon skill; margin comes off the foe's next defence, B365), **All-Out Attack** (Determined: +4 melee / +1 ranged; Double: two attacks; Strong: +2 damage or +1/die; no active defence until next turn, B365), **All-Out Defense** (Increased: +2 to one defence type, B366), **Ready** (reload, clear a jam, pick up a weapon), **Change Posture**, **Concentrate** (psychic powers that need it).
+- **Move** (full Move), **Move and Attack** (ranged: −2 or Bulk, no Acc; melee: −4, skill capped at 9, B365), **Attack**, **Aim** (+Acc, +1 more after 2 turns and +2 after 3, B364), **Feint** (Quick Contest of weapon skill; margin comes off the foe's next defence, B365), **All-Out Attack** (Determined: +4 melee / +1 ranged; Double: two attacks; Strong: +2 damage or +1/die; no active defence until next turn, B365), **All-Out Defense** (Increased: +2 to the one defence the model will use, B366), **Ready** (reload, clear a jam, pick up a weapon), **Change Posture**, **Concentrate** (psychic powers that need it).
 - A shooter whose aimed roll would be under 8 closes the range first; low-RoF weapons re-aim when the unaimed roll is under 10; the "advance" stance fires on the move only while that shot is 8 or better.
 - Shooters spread their fire: a foe that squad-mates are already shooting counts for less (expected harm ÷ (1 + shooters on it)), so a squad doesn't pour every shot into one model. A shooter aims only when the aimed roll hits more than 1.8 times as often as a shot now, since aiming costs a turn.
 - **Decision layer.** Each turn a model lists every option open to it (each weapon at each of the nearest foes, fired now or after an Aim, Move and Attack, closing without firing, suppression fire, Ready and throw a grenade, Wait, reload, Concentrate; in reach: a blow, Rapid Strike, All-Out Attack Determined, Double, Strong or with Mighty Blows, Feint, a point-blank shot, two weapons at once, grab, Shove, All-Out Defense; out of reach: charge with Move and Attack, All-Out Attack after a half move, or Slam, or just close in) and scores every one on the same scale:
@@ -28,6 +28,12 @@ Every model acts once per second in Basic Speed order (ties random), choosing on
 - **Malfunction** (B407): a roll at or above the weapon's Malf fails to fire and the weapon jams (1d turns of Ready to clear); a critical failure with a weapon marked `overheat` damages the firer as the data says (plasma).
 - Melee: reach, Deceptive Attack optimised against the defender's best defence, Rapid Strike, Extra Attack, unbalanced weapons (no parry after attacking), point-blank fire with a gun when it beats the blade, close-combat reloads when quick.
 - **Area effects** (B413–414): explosive (`ex`) damage also hits every model within range at damage ÷ (3 × yards), with no armour divisor (B414), and a power bought with a higher Explosion level (B107) counts distance as yards ÷ level; fragmentation (`[Nd]`) attacks every model within 5 × dice yards at skill 15 with range penalties from the blast point; cones (`Cone N yards` in the usage) hit every model in the cone, and each may Dodge.
+
+## Weapons in hand and close combat
+
+- A model holds its gun, its blade, or both (B382). Both are ready when both are one-handed (a † weapon counts as one-handed with 1.5× its ST, ‡ with 3×, B270; a gun also needs Bulk −2 or better), when they're one weapon (a bayonet on a lasgun, a guardian spear's bolt caster) or when either is a natural weapon. Otherwise a model starts with its gun (its blade on the charge stance) and switching is a Ready turn, free on a Fast-Draw roll (B194). Only a blade in hand can parry.
+- A shot from within reach can be parried: the defender knocks the gun aside (all the shots miss) or dodges and blocks as in melee (B391; the exact penalty for parrying a gun hasn't been checked against the book, so none is applied).
+- The Attack maneuver includes a step (B364–365): a foe one hex out of reach is attacked at full skill after the step, not with Move and Attack.
 
 ## Grappling
 
@@ -45,14 +51,21 @@ A charging model whose weapon can barely hurt its foe (under 1 HP of expected in
 
 ## Defence
 
-Dodge, Parry and Block (B374–377); a successful Parry of an unarmed attack (a grab or a punch) with a weapon injures the attacker's arm with the weapon's damage (B376); retreat once per turn (+3 Dodge, +1 Parry and Block); multiple parries −4 each; Block once per turn; a shield's Defense Bonus adds to all defences against attacks from the front or shield side (B287); Dodge and Drop against ranged attacks (+3, goes prone, B377); side −2, rear none; stunned −4 and no retreat.
+Dodge, Parry and Block (B374–377; Block from Shield skill / 2 + 3, Combat Reflexes and Enhanced Block); a successful Parry of an unarmed attack (a grab or a punch) with a weapon injures the attacker's arm with the weapon's damage (B376); retreat once per turn (+3 Dodge, +1 Parry and Block); multiple parries −4 each; Block once per turn; a shield's Defense Bonus adds to all defences against attacks from the front or shield side (B287); Dodge and Drop against ranged attacks (+3, goes prone, B377); side −2, rear none; stunned −4 and no retreat.
 
 ## Injury
 
 Standard GURPS HP (B377–420) or the user's Revised Fractional Health (see the rules document on the user's Drive; five boxes per level, multi-box hits). Both use armour divisors, Weak Points, regenerating shields, wounding multipliers, Injury Tolerance, Damage Reduction, follow-ups, and:
 
 - **Crippling** (B420–421): a crippled arm drops what it holds (a two-handed weapon becomes unusable); a crippled leg or foot drops the model prone and it can only crawl.
-- **Knockback** (B378): crushing and cutting damage over ST−2 moves the target 1 yard per (ST−2) and it must roll DX or fall prone.
+- **Knockback** (B378): crushing damage, and cutting damage that fails to penetrate, moves the target 1 yard per full (ST−2) of basic damage and it must roll DX or fall prone.
+- **Below 1/3 HP** (B419, standard HP): Move and Dodge are halved, rounding up.
+- **Shock** (B419): −1 per HP of injury, or per full HP/10 for models with 20+ HP, at most −4.
+- **Major wounds** (B420): a single injury over HP/2, or any crippling, calls for an HT roll; failure stuns and knocks down, failure by 5+ knocks out.
+- **Blunt trauma** (B379): flexible armour (marked in the item's notes) that stops a hit still passes 1 HP per full 5 points of crushing damage, or per full 10 of cutting, impaling or piercing.
+- **Weapon Master and Trained by a Master** (B93, B99): Rapid Strike at −3 and extra parries at −2; Weapon Master adds +1 per die of the ST-based damage at skill DX+1, +2 at DX+2.
+- **Deceptive Attack** (B369) may not take effective skill below 10.
+- **Extra Attack** (B53) adds to All-Out Attack (Double) and Rapid Strike.
 - **Bleeding** (B420): every minute, a model below full HP rolls HT or loses 1 HP (standard mode).
 - Shock, knockdown and stun, consciousness and death checks, Hard to Kill, Reanimation Protocols, morale (as before).
 - **Regeneration** (B80): HP per second by tier (Extreme 10, Very Fast 1, Fast 1/60, Regular 1/3600), read from any Regeneration trait; under Fractional Health the healing clears the least severe wound box once it covers that level's threshold.
