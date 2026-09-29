@@ -254,7 +254,7 @@ const SIM = (() => {
       const w = { id: ++WID, name: label, usage: line.usage, text: line.damage, dmg, follow: fdmg, followText: fl ? fl.damage : "", level,
         rend, rendBy, rendText: rl ? rl.damage : "", malf: facts.malf || 0,
         overheat: facts.overheat ? parseDamage(/[a-z]\s*$/.test(facts.overheat) ? facts.overheat : facts.overheat + " burn") : null,
-        cone, blast: facts.blast || 0 };
+        cone, blast: facts.blast || 0, natural: !!sel.trait };
       if (melee) {
         const p = String(line.parry ?? "0");
         w.parry = /no/i.test(p) ? null : num(p, 0);
@@ -979,8 +979,8 @@ const SIM = (() => {
       const near = nearestFoe(m, pool);
       const d = hexDist(m.h, near.h);
       // concentrating on a power
-      // an empty gun with a long reload (regrowing bio-ammunition) isn't a weapon until it refills
-      const rw = weaponsFor(m, false).filter(w => d <= w.range.max && !(w === u.ranged && m.ammo <= 0 && w.shots.reload > 3));
+      // an empty bio-weapon regrowing its ammunition isn't a weapon until it refills
+      const rw = weaponsFor(m, false).filter(w => d <= w.range.max && !(w === u.ranged && w.natural && m.ammo <= 0 && w.shots.reload > 3));
       const bestR = rw.map(w => ({ w, s: planAttack(m, w, near, w.level + rangePenalty(d) + near.u.sm + (w.acc || 0), false).score })).sort((a, b) => b.s - a.s)[0];
       // close to melee when ordered to charge, when no gun can hurt the target, or (unless ordered to
       // hold and shoot) when the blade does clearly more harm than the gun
