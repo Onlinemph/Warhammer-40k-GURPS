@@ -287,8 +287,10 @@ def combat_flags(t, flags):
         flags["fearless"] = flags.get("fearless", 0) + lv
     elif n.startswith("Unfazeable"):
         flags["unfazeable"] = 1
-    elif n.startswith("Weapon Master") or n.startswith("Trained By A Master"):
-        flags["master"] = 1
+    elif n.startswith("Weapon Master") or n.lower().startswith("trained by a master"):
+        flags["master"] = 1         # halves Rapid Strike and extra-parry penalties (B93, B99)
+        if n.startswith("Weapon Master"):
+            flags["wm"] = 1         # and adds damage with the weapon (B99)
     elif n.startswith("Injury Tolerance (Damage Reduction"):
         flags["dmgRed"] = flags.get("dmgRed", 0) + lv   # divisor; lens upgrades add a level each
     elif n.startswith("Injury Tolerance"):

@@ -280,6 +280,14 @@ const SIM = (() => {
       return w;
     };
     let melee = mkWeapon(spec.melee, true);
+    if (melee && flags.wm && !melee.natural && melee.level >= st.dx + 1 && melee.dmg) {
+      // per die of the ST-based thrust or swing the weapon line starts from, not the weapon's own added dice
+      const per = melee.level >= st.dx + 2 ? 2 : 1;
+      const base = /^\s*(thr|sw)/.exec(melee.text || "");
+      const dice = base ? Number((/^(\d+)d/.exec(base[1] === "thr" ? dmgST.thr : dmgST.sw) || [0, 0])[1]) : 0;
+      melee.dmg = { ...melee.dmg, add: melee.dmg.add + per * dice };
+      melee.text += ` (+${per}/die Weapon Master)`;
+    }
     if (!melee) {
       const lvl = skillLevel(st, "Brawling", ["Brawling", "DX", "Karate"]);
       const hasB = (st.skills || []).some(s => s.name === "Brawling" || s.name === "Karate");
@@ -325,7 +333,8 @@ const SIM = (() => {
     }
     const u = {
       side, name: spec.label || spec.template, template: spec.template, count: Math.max(1, spec.count | 0),
-      db, powers, grenades, dualPen, offPen, fp: st.fp || st.ht, st: st.st, dx: st.dx, formation: spec.formation || "line",
+      db, powers, grenades, dualPen, offPen, fp: st.fp || st.ht,
+      block: Math.floor(skillLevel(st, "Shield", ["Shield", "DX-4"]) / 2) + 3 + (flags.cr ? 1 : 0) + (flags.enhBlock || 0), st: st.st, dx: st.dx, formation: spec.formation || "line",
       // elites call shots: a best combat skill (weapon or power) of 17+, two past a trained line soldier's 15,
       // and a mind that picks its shots (IQ 8+). Points were a poor proxy: an Ork Boy's ST 28 costs 300+.
       elite: Math.max(melee ? melee.level : 0, ranged ? ranged.level : 0, ...powers.map(p => p.level)) >= 17 && st.iq >= 8,
@@ -466,8 +475,11 @@ const SIM = (() => {
 
     // skill penalty from shock (standard), or the larger of shock and pain plus wound effects (fractional)
     const skillPen = m => (frac ? Math.max(m.shock, m.pain) + m.gawd : Math.min(4, m.shock)) + (m.armsLost ? 4 : 0);
-    const dodgeOf = t => (t.halfDodge ? Math.floor(t.u.dodge / 2) : t.u.dodge);
-    const moveOf = m => m.legsLost ? 1 : m.halfMove ? Math.max(1, Math.floor(m.u.move / 2)) : m.u.move;
+    // below 1/3 HP (standard HP, B419), or halved by a Fractional Health wound or a crippled leg: half Move and
+    // Dodge, rounding up
+    const weak = m => !frac && m.hp < m.u.HP / 3;
+    const dodgeOf = t => (t.halfDodge || weak(t) ? Math.ceil(t.u.dodge / 2) : t.u.dodge);
+    const moveOf = m => m.legsLost ? 1 : m.halfMove || weak(m) ? Math.max(1, Math.ceil(m.u.move / 2)) : m.u.move;
 
     // ---- Revised Fractional Health (the user's house rule; after panoptesv.com's wound rules).
     const SEVN = ["", "Scratch", "Minor", "Moderate", "Major", "Critical", "Massive", "Gawdawful", "Destruction"];
@@ -548,14 +560,19 @@ const SIM = (() => {
       const HP = t.u.HP, before = t.hp;
       t.hp -= inj;
       att.dmgDealt += inj;
-      if (!t.u.flags.hpt) t.shock = Math.min(4, t.shock + inj);
+      // shock (B419): -1 per HP of injury, or per full HP/10 with 20+ HP, at most -4
+      if (!t.u.flags.hpt) t.shock = Math.min(4, t.shock + (HP >= 20 ? Math.floor(inj / (HP / 10)) : inj));
       // crippling (B420-421): injury over HP/2 to a limb, HP/3 to an extremity
       const lim = loc === "arm" || loc === "leg" ? HP / 2 : loc === "hand" || loc === "foot" ? HP / 3 : Infinity;
-      if (inj > lim) cripple(t, loc);
+      const crippled = inj > lim;
+      if (crippled) cripple(t, loc);
       if (t.state !== "ok") return;
-      if (inj > HP / 2) {
+      // major wound (over HP/2, or any crippling): HT roll; failure stuns and knocks down, failure by 5+ knocks out
+      if (inj > HP / 2 || crippled) {
         const mod = (t.u.flags.hpt ? 3 : 0) + (loc === "skull" || loc === "eye" ? -10 : loc === "face" || loc === "vitals" ? -5 : 0);
-        if (!check(t.u.HT + mod).ok) { t.stunned = true; t.prone = true; L(`  ${t.id} is knocked down and stunned`); }
+        const r = check(t.u.HT + mod);
+        if (!r.ok && (r.margin <= -5 || r.fumble)) { incapacitate(t, "is knocked out"); return; }
+        if (!r.ok) { t.stunned = true; t.prone = true; L(`  ${t.id} is knocked down and stunned`); }
       }
       if (t.hp <= -5 * HP) { kill(att, t, "destroyed"); return; }
       for (let k = 1; k <= 4; k++) {
@@ -601,7 +618,7 @@ const SIM = (() => {
         if (pen > 0) L(`  finds a weak point`);
       }
       // knockback (B378) from crushing and cutting blows
-      if ((dmg.type === "cr" || dmg.type === "cut") && !ranged && t.state === "ok" && !t.grips.length) knockback(att, t, basic);
+      if ((dmg.type === "cr" || (dmg.type === "cut" && pen <= 0)) && !ranged && t.state === "ok" && !t.grips.length) knockback(att, t, basic);
       if (pen <= 0) { L(`  ${raw} dmg to ${loc} fails to penetrate DR ${armDR + natDR}${div !== 1 ? "/" + (div === Infinity ? "∞" : div) : ""}`); return 0; }
       const flags = t.u.flags, poison = flags.poison;
       let inj = dmg.type === "tox" && poison === "immune" ? 0 : Math.max(1, Math.floor(pen * woundMult(dmg.type, loc, flags, dmg.ex)));
@@ -710,7 +727,7 @@ const SIM = (() => {
         const maxDa = melee ? 6 : 0;
         for (let da = 0; da <= maxDa; da++) {
           const eff = lvl + pen - 2 * da;
-          if (eff < 3) break;
+          if (eff < 3 || (da > 0 && eff < 10)) break;
           const pHit = P3[Math.min(18, eff)];
           const pDef = def0 == null ? 0 : P3[Math.max(0, Math.min(18, def0 - da))];
           const hits = melee ? 1 : Math.min(w.rof || 1, 1 + Math.max(0, eff - 10) / (w.rcl || 1));
@@ -727,18 +744,19 @@ const SIM = (() => {
       if (t.state !== "ok" || t.aoa || t.pinned) return null;
       const arc = arcTo(t, att);
       if (arc === "rear") return null;
-      const mod = (arc === "side" ? -2 : 0) - (t.stunned ? 4 : 0) - (t.prone ? 3 : 0) + (t.aod ? 2 : 0) + (arc !== "rear" ? t.u.db : 0);
-      let d = dodgeOf(t) + (melee && !t.retreated && !t.stunned ? 3 : 0);
+      const mod = (arc === "side" ? -2 : 0) - (t.stunned ? 4 : 0) - (t.prone ? 3 : 0) + (arc !== "rear" ? t.u.db : 0);
+      const aod = how => t.aod && t.aodDef === how ? 2 : 0;   // All-Out Defense: +2 to the one defence chosen
+      let d = dodgeOf(t) + (melee && !t.retreated && !t.stunned ? 3 : 0) + aod("dodge");
       if (melee && t.u.parry != null && !(t.u.melee.unbalanced && t.attacked) && t.armsLost < 2)
-        d = Math.max(d, t.u.parry + (!t.retreated && !t.stunned ? 1 : 0) - 4 * t.parries);
-      if (melee && t.u.db && !t.blocked) d = Math.max(d, Math.floor(t.u.dx / 2) + 3 + (!t.retreated && !t.stunned ? 1 : 0));
+        d = Math.max(d, t.u.parry + (!t.retreated && !t.stunned ? 1 : 0) - (t.u.flags.master ? 2 : 4) * t.parries + aod("parry"));
+      if (melee && t.u.db && !t.blocked) d = Math.max(d, t.u.block + (!t.retreated && !t.stunned ? 1 : 0) + aod("block"));
       return d + mod;
     }
     function rangedDefence(t, att) {
       if (t.state !== "ok" || t.aoa) return null;
       const arc = arcTo(t, att);
       if (arc === "rear") return null;
-      return dodgeOf(t) + (arc === "side" ? -2 : 0) - (t.stunned ? 4 : 0) - (t.prone ? 3 : 0) + (t.aod ? 2 : 0) + t.u.db;
+      return dodgeOf(t) + (arc === "side" ? -2 : 0) - (t.stunned ? 4 : 0) - (t.prone ? 3 : 0) + (t.aod && t.aodDef === "dodge" ? 2 : 0) + t.u.db;
     }
     // resolve a defence roll; returns margin (>=0) on success or null
     function defend(t, att, melee, da, feint) {
@@ -746,9 +764,10 @@ const SIM = (() => {
       if (t.grips.length) t.retreated = true;   // held: no retreat
       const arc = arcTo(t, att);
       if (arc === "rear") return null;
-      const mod = (arc === "side" ? -2 : 0) - (t.stunned ? 4 : 0) - (t.prone ? 3 : 0) + (t.aod ? 2 : 0) + t.u.db - da - (feint || 0);
+      const mod = (arc === "side" ? -2 : 0) - (t.stunned ? 4 : 0) - (t.prone ? 3 : 0) + t.u.db - da - (feint || 0);
+      const aod = how => t.aod && t.aodDef === how ? 2 : 0;
       if (!melee) {
-        let d = dodgeOf(t) + mod + feverish(t, att, false, dodgeOf(t) + mod);
+        let d = dodgeOf(t) + mod + aod("dodge") + feverish(t, att, false, dodgeOf(t) + mod);
         // Dodge and Drop (B377): a shooter not in melee drops prone for +3
         let drop = false;
         if (!t.prone && t.u.stance === "shoot" && (t.u.ranged || t.u.powers.some(p => !p.melee)) && !engaged(t)) { d += 3; drop = true; }
@@ -756,10 +775,10 @@ const SIM = (() => {
         if (drop) t.prone = true;
         return r.ok ? Math.max(0, r.margin) : null;
       }
-      const opts = [{ how: "dodge", v: dodgeOf(t) + (!t.retreated && !t.stunned ? 3 : 0), retreat: true }];
+      const opts = [{ how: "dodge", v: dodgeOf(t) + (!t.retreated && !t.stunned ? 3 : 0) + aod("dodge"), retreat: true }];
       if (t.u.parry != null && !(t.u.melee.unbalanced && t.attacked) && t.armsLost < 2)
-        opts.push({ how: "parry", v: t.u.parry + (!t.retreated && !t.stunned ? 1 : 0) - 4 * t.parries - (t.grips.length ? 4 : 0), retreat: true });
-      if (t.u.db && !t.blocked) opts.push({ how: "block", v: Math.floor(t.u.dx / 2) + 3 + (!t.retreated && !t.stunned ? 1 : 0), retreat: true });
+        opts.push({ how: "parry", v: t.u.parry + (!t.retreated && !t.stunned ? 1 : 0) - (t.u.flags.master ? 2 : 4) * t.parries - (t.grips.length ? 4 : 0) + aod("parry"), retreat: true });
+      if (t.u.db && !t.blocked) opts.push({ how: "block", v: t.u.block + (!t.retreated && !t.stunned ? 1 : 0) + aod("block"), retreat: true });
       const o = opts.reduce((a, b) => b.v > a.v ? b : a);
       if (o.how === "parry") t.parries++;
       if (o.how === "block") t.blocked = true;
@@ -885,7 +904,7 @@ const SIM = (() => {
       // cones hit everyone in the cone; everything else may split automatic fire over neighbours (B373)
       const targets = [target];
       if (w.cone) {
-        for (const x of models) if (x !== target && x.state === "ok" && x.h && x.u.side !== m.u.side && hexDist(x.h, target.h) <= Math.floor(w.cone / 2)) targets.push(x);
+        for (const x of models) if (x !== target && x !== m && x.state === "ok" && x.h && hexDist(x.h, target.h) <= Math.floor(w.cone / 2)) targets.push(x);
       } else if (shots >= 6) {
         const near = models.filter(x => x !== target && x.state === "ok" && x.h && x.u.side === target.u.side && hexDist(x.h, target.h) <= 2);
         const parts = Math.min(1 + near.length, shots >= 16 ? 3 : 2);
@@ -939,9 +958,12 @@ const SIM = (() => {
       return true;
     }
     function strike(m, w, t, opts) {
-      const n = opts.double ? 2 : opts.rapid ? 2 : 1 + (m.u.flags.extraAttack || 0);
+      // attacks this turn: 1, +1 for Double or Rapid Strike, + Extra Attack; Rapid Strike's penalty falls on
+      // the two blows it makes (-6, or -3 for a Weapon Master or someone Trained by a Master)
+      const n = 1 + (opts.double || opts.rapid ? 1 : 0) + (m.u.flags.extraAttack || 0);
+      const rp = m.u.flags.master ? 3 : 6;
       for (let i = 0; i < n && t.state === "ok"; i++) {
-        let lvl = w.level - skillPen(m) - (opts.charge ? 4 : 0) + (opts.determined ? 4 : 0) - (opts.rapid ? 6 : 0) + (m.evaluate && m.evaluate.t === t ? m.evaluate.n : 0)
+        let lvl = w.level - skillPen(m) - (opts.charge ? 4 : 0) + (opts.determined ? 4 : 0) - (opts.rapid && i < 2 ? rp : 0) + (m.evaluate && m.evaluate.t === t ? m.evaluate.n : 0)
           - (m.prone ? 4 : 0) - (m.grips.length ? 4 : 0) - (opts.pen || 0);
         if (opts.charge) lvl = Math.min(lvl, 9);
         const plan = planAttack(m, w, t, lvl, true);
@@ -1101,7 +1123,12 @@ const SIM = (() => {
       }
       // All-Out Defense (+2 to defences): only against hand-to-hand, a foe beside us or one that can reach us this turn
       const meleeThreat = pool.some(f => f.u.melee && hexDist(f.h, m.h) - f.u.melee.reachMax <= moveOf(f) && expInjRandom(f.u.melee, u) >= 1);
-      if (meleeThreat) add(-risk(m, here, "aod"), "aod", () => { m.aod = true; L(`${m.id} goes on All-Out Defense`); });
+      if (meleeThreat) add(-risk(m, here, "aod"), "aod", () => {
+        m.aod = true;
+        const par = u.parry != null ? u.parry + 1 : -1, blk = u.db ? u.block + 1 : -1, dod = u.dodge + 3;
+        m.aodDef = par >= dod && par >= blk ? "parry" : blk >= dod ? "block" : "dodge";
+        L(`${m.id} goes on All-Out Defense (+2 ${m.aodDef})`);
+      });
       if (!opts.length) return;
       // pick the best; a disorderly faction picks among the near-best
       const top = opts.reduce((a, b) => b.v > a.v ? b : a);
@@ -1201,7 +1228,7 @@ const SIM = (() => {
         }
         // Wait (B366): hold fire for a charger heading for me; shoot it as it closes, maybe before it strikes
         if (isGun && !engaged(m)) {
-          const ch = pool.filter(f => !f.u.ranged && f.u.melee).map(f => ({ f, d: hexDist(m.h, f.h) }))
+          const ch = pool.filter(f => f.u.melee && (f.u.stance === "charge" || !f.u.ranged)).map(f => ({ f, d: hexDist(m.h, f.h) }))
             .filter(x => x.d >= 3 && x.d - x.f.u.melee.reachMax <= moveOf(x.f) && nearestFoe(x.f) === m).sort((a, b) => a.d - b.d)[0];
           if (ch) {
             const E = planAttack(m, w, ch.f, w.level - skillPen(m) + ch.f.u.sm, false).score;
@@ -1209,6 +1236,17 @@ const SIM = (() => {
             const saved = stop * expInjRandom(ch.f.u.melee, u) / remOf(m) * threatOf(m) * u.ai.caution;
             add(Wr * kv(m, ch.f, E) + saved - rNow, `wait@${ch.f.id}`, () => { m.waiting = w; L(`${m.id} waits for ${ch.f.id} to close (Wait)`); });
           }
+        }
+      }
+      // a melee Wait (B366) with a long weapon: strike a charger as it steps into reach, before its own blow
+      if (u.melee.reachMax >= 2 && !engaged(m)) {
+        const ch = pool.filter(f => f.u.melee && f.u.melee.reachMax < u.melee.reachMax).map(f => ({ f, d: hexDist(m.h, f.h) }))
+          .filter(x => x.d > u.melee.reachMax && x.d - x.f.u.melee.reachMax <= moveOf(x.f) && nearestFoe(x.f) === m).sort((a, b) => a.d - b.d)[0];
+        if (ch) {
+          const E = planAttack(m, u.melee, ch.f, u.melee.level - skillPen(m), true).score * (1 + (u.flags.extraAttack || 0));
+          const stop = Math.min(1, E / remOf(ch.f));
+          const saved = stop * expInjRandom(ch.f.u.melee, u) / remOf(m) * threatOf(m) * u.ai.caution;
+          add(stanceW(m, "melee") * u.ai.aggression * kv(m, ch.f, E) + saved - rNow, `wait-melee@${ch.f.id}`, () => { m.waiting = u.melee; L(`${m.id} waits for ${ch.f.id} with ${u.melee.name} ready (Wait)`); });
         }
       }
       // grenades (B410): Ready one, then throw it next turn
@@ -1250,6 +1288,21 @@ const SIM = (() => {
       const worth = meleeWorth(m, tgt, helpers);
       const arrive = route && route.path.length ? route.path[Math.min(route.path.length, mv) - 1] : stepHex(m.h, tgt.h, Math.min(mv, len));
       const hard = expInjRandom(w, tgt.u) < 1;
+      if (route && route.path.length === 1) {
+        // one step short: the Attack maneuver's step, then a blow at full skill (B364-365), or All-Out Attack
+        const lvl = w.level - skillPen(m) - (m.prone ? 4 : 0);
+        const n = 1 + (u.flags.extraAttack || 0);
+        const stepIn = () => { followPath(m, route.path, 1); return !stopped() && tgt.h && hexDist(m.h, tgt.h) <= reach; };
+        add(Wm * kv(m, tgt, planAttack(m, w, tgt, lvl, true).score * n) - risk(m, arrive, ""), `step-strike@${tgt.id}`, () => {
+          if (stepIn()) { m.facing = faceToward(m.h, tgt.h); strike(m, w, tgt, {}); }
+        });
+        add(Wm * kv(m, tgt, planAttack(m, w, tgt, lvl + 4, true).score * n) - risk(m, arrive, "aoa"), `step-aoa@${tgt.id}`, () => {
+          if (stepIn()) { m.facing = faceToward(m.h, tgt.h); m.aoa = true; strike(m, w, tgt, { determined: true }); }
+        });
+        if (grabValue(m, tgt, 0) > 0) add(Wm * grabValue(m, tgt, helpers) - risk(m, arrive, ""), `step-grab@${tgt.id}`, () => {
+          if (stepIn() && hexDist(m.h, tgt.h) <= 1) { m.facing = faceToward(m.h, tgt.h); grab(m, tgt); }
+        });
+      }
       if (len <= mv) {
         // arrives this turn: Move and Attack (-4, max 9) or a Slam if the weapon can't get through
         const lvl = Math.min(9, w.level - skillPen(m) - 4);
@@ -1318,15 +1371,16 @@ const SIM = (() => {
           const E = planAttack(m, w, t, lvl, true).score * n;
           add(Wm * kv(m, t, E) - rNow, `strike ${w.name}@${t.id}`, () => { face(); strike(m, w, t, {}); });
           // Rapid Strike (B370): two blows at -6
-          if (!u.flags.extraAttack && lvl - 6 >= 10) {
-            const Er = 2 * planAttack(m, w, t, lvl - 6, true).score;
+          const rp = u.flags.master ? 3 : 6;
+          if (lvl - rp >= 10) {
+            const Er = 2 * planAttack(m, w, t, lvl - rp, true).score + (n - 1) * planAttack(m, w, t, lvl, true).score;
             add(Wm * kv(m, t, Er) - rNow, `rapid@${t.id}`, () => { face(); strike(m, w, t, { rapid: true }); });
           }
           // All-Out Attack (B365): Determined +4, Double (two blows), Strong (+2 or +1/die), and Mighty Blows (1 FP)
           const rA = risk(m, m.h, "aoa");
           const Ed = planAttack(m, w, t, lvl + 4, true).score * n;
           add(Wm * kv(m, t, Ed) - rA, `aoa-det@${t.id}`, () => { face(); m.aoa = true; strike(m, w, t, { determined: true }); });
-          const Edb = 2 * planAttack(m, w, t, lvl, true).score;
+          const Edb = (n + 1) * planAttack(m, w, t, lvl, true).score;
           add(Wm * kv(m, t, Edb) - rA, `aoa-double@${t.id}`, () => { face(); m.aoa = true; strike(m, w, t, { double: true }); });
           const Es = planAttack(m, w, t, lvl, true, boosted(w, 1)).score * n;
           add(Wm * kv(m, t, Es) - rA, `aoa-strong@${t.id}`, () => { face(); m.aoa = true; strike(m, w, t, { strong: true }); });
@@ -1482,7 +1536,7 @@ const SIM = (() => {
       if (m.state !== "ok" || m.stunned) return true;
       for (const f of models) {
         if (!f.waiting || f.state !== "ok" || !f.h || f.u.side === m.u.side || f.stunned) continue;
-        if (hexDist(f.h, m.h) > m.u.melee.reachMax + 1) continue;
+        if (hexDist(f.h, m.h) > (f.waiting === f.u.melee ? f.u.melee.reachMax : m.u.melee.reachMax + 1)) continue;
         const w = f.waiting; f.waiting = null;
         L(`${f.id} was waiting for ${m.id} (Wait)`);
         if (w === f.u.melee) { if (hexDist(f.h, m.h) <= w.reachMax) strike(f, w, m, {}); }
