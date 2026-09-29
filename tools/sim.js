@@ -630,6 +630,7 @@ const SIM = (() => {
     }
 
     // ---- area effects (B413-414)
+    const noDiv = dm => dm.div === 1 ? dm : { ...dm, div: 1, key: (dm.key || "") + "nd" };
     function explosion(att, w, at, raw) {
       for (const x of models) {
         if (x.state !== "ok" || !x.h) continue;
@@ -639,7 +640,8 @@ const SIM = (() => {
         if (w.thrown && d <= 3 && x !== att && dive(x)) d += 1;
         // Explosion level L (B107): each level past the first widens the burst; distance counts as yards / L
         const splash = Math.floor(raw / (3 * Math.max(1, d / lv)));
-        if (splash >= 1) { L(`  blast catches ${x.id} (${d} yd)`); applyHit(att, w, x, "torso", true, false, null, splash); }
+        // only the model struck directly faces the armour divisor; the blast around it has none (B414)
+        if (splash >= 1) { L(`  blast catches ${x.id} (${d} yd)`); applyHit(att, { dmg: noDiv(w.dmg), follow: null }, x, "torso", true, false, noDiv(w.dmg), splash); }
       }
       const fr = w.dmg.frag;
       if (fr) {
@@ -1085,12 +1087,14 @@ const SIM = (() => {
           const d = hexDist(m.h, c.h);
           if (d < 3 || d > g.range.max) continue;
           const lvl = g.level - skillPen(m) + rangePenalty(d) + c.u.sm;
-          let v = expInj(g, c.u, "torso");
+          // the target may Dodge (then it takes the blast at a yard, with no divisor)
+          const dd = rangedDefence(c, m), pDodge = dd == null ? 0 : P3[Math.max(0, Math.min(18, dd))];
+          let v = (1 - pDodge) * expInj(g, c.u, "torso") + pDodge * expInj(g, c.u, "torso", { ...g.dmg, div: 1, mult: g.dmg.mult / 3, key: "s1nd" });
           for (const x of pool) {
             if (x === c || !x.h) continue;
             const k = hexDist(x.h, c.h);
             if (k > 3) continue;
-            v += expInj(g, x.u, "torso", { ...g.dmg, mult: g.dmg.mult / (3 * k), key: "s" + k });
+            v += expInj(g, x.u, "torso", { ...g.dmg, div: 1, mult: g.dmg.mult / (3 * k), key: "s" + k + "nd" });
             if (g.dmg.frag) v += P3[Math.max(0, Math.min(18, 15 + rangePenalty(k)))] * expInj(g, x.u, "torso", { n: g.dmg.frag.n, add: 0, mult: 1, div: 1, type: g.dmg.frag.type, key: "f" });
           }
           v *= P3[Math.max(0, Math.min(18, lvl))];
@@ -1115,16 +1119,29 @@ const SIM = (() => {
       const r = check(g.lvl);
       const raw = rollDamage(w.dmg);
       if (r.ok) {
-        L(`${m.id} throws a ${w.name} at ${c.id} (skill ${g.lvl}): on target`);
+        // a thrown grenade is an attack on its target, who may Dodge it (B377); a dodged grenade goes off a yard away
+        const def = r.crit ? null : defend(c, m, false, 0, 0);
+        if (def != null) {
+          const off = DIRS[Math.floor(R() * 6)], at = { q: c.h.q + off[0], r: c.h.r + off[1] };
+          L(`${m.id} throws a ${w.name} at ${c.id} (skill ${g.lvl}): ${c.id} dodges and it goes off a yard away`);
+          const x0 = occ.get(key(at.q, at.r));
+          if (x0 && x0.state === "ok" && x0 !== c) applyHit(m, { dmg: noDiv(w.dmg), follow: null }, x0, "torso", true, false, noDiv(w.dmg), raw);
+          explosion(m, w, at, raw);
+          return;
+        }
+        L(`${m.id} throws a ${w.name} at ${c.id} (skill ${g.lvl}): direct hit`);
         const at = c.h;
-        if (dive(c)) { const sp = Math.floor(raw / 3); if (sp >= 1) applyHit(m, w, c, "torso", true, false, null, sp); }
-        else applyHit(m, w, c, "torso", true, false, null, raw);
+        applyHit(m, w, c, "torso", true, false, null, raw);
         explosion(m, w, at, raw);
       } else {
         const off = DIRS[Math.floor(R() * 6)], at = { q: c.h.q + off[0] * 2, r: c.h.r + off[1] * 2 };
         L(`${m.id} throws a ${w.name} at ${c.id} (skill ${g.lvl}): it lands wide`);
         const hitX = occ.get(key(at.q, at.r));
-        if (hitX && hitX.state === "ok") { if (dive(hitX)) { const sp = Math.floor(raw / 3); if (sp >= 1) applyHit(m, w, hitX, "torso", true, false, null, sp); } else applyHit(m, w, hitX, "torso", true, false, null, raw); }
+        if (hitX && hitX.state === "ok") {
+          const nd = noDiv(w.dmg);
+          if (dive(hitX)) { const sp = Math.floor(raw / 3); if (sp >= 1) applyHit(m, { dmg: nd, follow: null }, hitX, "torso", true, false, nd, sp); }
+          else applyHit(m, { dmg: nd, follow: null }, hitX, "torso", true, false, nd, raw);
+        }
         explosion(m, w, at, raw);
       }
     }
