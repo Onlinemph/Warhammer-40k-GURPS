@@ -271,7 +271,7 @@ def combat_flags(t, flags):
     if t.get("children") is not None:
         return
     low = n.lower()
-    if n.startswith("High Pain Threshold"):
+    if n.startswith("High Pain Threshold") or n.startswith("No Pain Receptors"):   # the Necron name for HPT
         flags["hpt"] = 1
     elif n.startswith("Combat Reflexes"):
         flags["cr"] = 1
