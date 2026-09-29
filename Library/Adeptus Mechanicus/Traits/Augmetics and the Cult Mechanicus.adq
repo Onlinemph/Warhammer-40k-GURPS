@@ -452,7 +452,41 @@
 			],
 			"points_per_level": 8,
 			"can_level": true,
-			"levels": 7
+			"levels": 7,
+			"weapons": [
+				{
+					"id": "WvsR0KWrsbeuBht7E",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "7d",
+						"armor_divisor": 2
+					},
+					"accuracy": "3",
+					"range": "10/100",
+					"rate_of_fire": "1",
+					"shots": "-",
+					"usage": "Lightning arc",
+					"usage_notes": "Innate Attack range and Acc for a burning beam (B61). Added so GCS and the combat simulator can roll the arc as a weapon.",
+					"defaults": [
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Innate Attack"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Beam"
+							}
+						},
+						{
+							"type": "dx",
+							"modifier": -4
+						}
+					]
+				}
+			]
 		},
 		{
 			"id": "tPhcwxIxovrADUG3m",

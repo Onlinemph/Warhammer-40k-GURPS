@@ -90,7 +90,7 @@ const SIM = (() => {
   }
   function parseShots(s) {
     const str = String(s ?? "");
-    if (/∞|inf/i.test(str) || !str) return { mag: Infinity, reload: 0 };
+    if (/∞|inf/i.test(str) || !str || /^[-–—]$/.test(str.trim())) return { mag: Infinity, reload: 0 };
     const m = /(\d+)\s*(?:\+\d+)?\s*\((\d+)/.exec(str);
     if (m) return { mag: Number(m[1]), reload: Number(m[2]) };
     const t = /T\((\d+)\)/.exec(str);

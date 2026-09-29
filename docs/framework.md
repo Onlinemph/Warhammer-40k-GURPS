@@ -154,7 +154,7 @@ Damage anchors aren't enough on their own: Acc, RoF, Shots, ST, Bulk, Recoil and
 **RoF** reflects the actual mechanism:
 - 1: single-shot, bolt/lever/pump action, anything that must recharge, vent or cool between shots (plasma, melta, lascannon, long-las, missile and grenade launchers).
 - 3: semi-automatic weapons fired as fast as the trigger allows (most pistols, semi-auto rifles), per GURPS convention. Use only when the weapon really is semi-automatic.
-- Automatic weapons use their cyclic rate in GURPS terms: lasguns and autoguns on auto around 10–12; bolters fire slower, heavier rounds (boltgun 3 semi or burst, storm bolter 3×2 or 6, heavy bolter around 8); heavy stubbers and assault cannons high (15–20+); multi-lasers are rapid emitters (8–10).
+- Automatic weapons use their cyclic rate in GURPS terms: lasguns and autoguns on auto around 10–12 (lasguns Rcl 2 on auto: a hand-held rifle wanders over a long burst, even without kick); bolters fire slower, heavier rounds (boltgun 3 semi or burst, storm bolter 3×2 or 6, heavy bolter around 8); heavy stubbers and assault cannons high (15–20+); multi-lasers are rapid emitters (8–10).
 
 **Shots** come from the lore magazine or charge-pack capacity; (N) is reload time in seconds.
 
