@@ -143,7 +143,7 @@ const SIM = (() => {
   // and the ST and Move features a suit carries (servo ST lives on a child item).
   const LOCS = ["skull", "eye", "face", "neck", "torso", "vitals", "groin", "arm", "hand", "leg", "foot"];
   function armourProfile(names) {
-    const dr = {}; let wp = 0, wpTorso = -1, striking = 0, lifting = 0, move = 0;
+    const dr = {}; let wp = 0, wpTorso = -1, striking = 0, lifting = 0, move = 0, hp = 0;
     for (const nm of names || []) {
       const hit = EQ.get(nm);
       if (!hit) continue;
@@ -164,10 +164,11 @@ const SIM = (() => {
           else if ((m = /^Lifting St ([+-]\d+)/i.exec(o))) lifting += Number(m[1]);
           else if ((m = /^ST ([+-]\d+)/.exec(o))) { striking += Number(m[1]); lifting += Number(m[1]); }
           else if ((m = /^Basic Move ([+-]\d+)/i.exec(o))) move += Number(m[1]);
+          else if ((m = /^HP ([+-]\d+)/.exec(o))) hp += Number(m[1]);   // battlesuit structure
         }
       }
     }
-    return { dr, wp, striking, lifting, move };
+    return { dr, wp, striking, lifting, move, hp };
   }
   function drAt(dr, loc) {
     const all = dr.all || 0;
@@ -276,7 +277,7 @@ const SIM = (() => {
     const u = {
       side, name: spec.label || spec.template, template: spec.template, count: Math.max(1, spec.count | 0),
       stance: spec.stance || "shoot", stats: st, flags, speed: st.speed, move: Math.max(1, st.move + arm.move),
-      dodge: st.dodge, HP: st.hp, HT: st.ht, will: st.will, sm: st.sm || 0,
+      dodge: st.dodge, HP: st.hp + arm.hp, HT: st.ht, will: st.will, sm: st.sm || 0,
       arm, nat, ranged, melee, parry: parryOf(melee), shield: spec.shield && spec.shield.sp ? { ...spec.shield } : null,
     };
     return u;
@@ -284,7 +285,7 @@ const SIM = (() => {
   function describe(u) {
     const tor = drAt(u.arm.dr, "torso") + drAt(u.nat, "torso"), eye = drAt(u.arm.dr, "eye") + drAt(u.nat, "eye");
     return {
-      hp: u.HP, ht: u.HT, dodge: u.dodge, parry: u.parry, move: u.move, drTorso: tor, drEye: eye, wp: u.arm.wp,
+      hp: u.HP, ht: u.HT, dodge: u.dodge, dmgRed: u.flags.dmgRed > 1 ? u.flags.dmgRed : 0, parry: u.parry, move: u.move, drTorso: tor, drEye: eye, wp: u.arm.wp,
       ranged: u.ranged && { name: u.ranged.name, usage: u.ranged.usage, dmg: u.ranged.text, follow: u.ranged.followText, skill: u.ranged.level, acc: u.ranged.acc, rof: u.ranged.rof, range: u.ranged.range },
       melee: u.melee && { name: u.melee.name, usage: u.melee.usage, dmg: u.melee.text + (u.melee.dmg ? ` = ${fmtDice(u.melee.dmg)}` : "") + (u.melee.rend ? `; rending hit (${u.melee.rendBy}+) ${fmtDice(u.melee.rend)}` : ""), skill: u.melee.level },
       shield: u.shield,
@@ -396,6 +397,9 @@ const SIM = (() => {
       const poison = flags.poison;
       let inj = dmg.type === "tox" && poison === "immune" ? 0 : Math.max(1, Math.floor(pen * woundMult(dmg.type, loc, flags, dmg.ex)));
       if (dmg.type === "tox" && poison === "resist") inj = Math.floor(inj / 2);
+      // Injury Tolerance (Damage Reduction), Powers p. 53: injury divided by the divisor
+      const red = flags.dmgRed > 1 ? flags.dmgRed : 1;
+      if (red > 1 && inj > 0) inj = Math.max(1, Math.floor(inj / red));
       if (loc === "arm" || loc === "leg") inj = Math.min(inj, Math.floor(t.u.HP / 2) + 1);
       if (loc === "hand" || loc === "foot") inj = Math.min(inj, Math.floor(t.u.HP / 3) + 1);
       let finj = 0;
@@ -404,6 +408,7 @@ const SIM = (() => {
         if (!(ft === "tox" && poison === "immune")) {
           finj = Math.max(1, Math.floor(fraw * woundMult(ft, loc === "arm" || loc === "leg" ? loc : "torso", flags, w.follow.ex)));
           if (ft === "tox" && poison === "resist") finj = Math.floor(finj / 2);
+          if (red > 1 && finj > 0) finj = Math.max(1, Math.floor(finj / red));
         }
       }
       L(`  ${raw} dmg to ${loc} (DR ${armDR + natDR}${div !== 1 ? "/" + (div === Infinity ? "∞" : div) : ""}): ${inj} injury${finj ? ` + ${finj} follow-up` : ""}; ${t.id} at ${t.hp - inj - finj}/${t.u.HP} HP`);
@@ -715,7 +720,7 @@ if (typeof document !== "undefined") (() => {
     try {
       const d = SIM.describe(SIM.buildUnit({ ...u, count: 1 }, 0));
       const r = d.ranged, m = d.melee;
-      return `<div class="prof"><span><b>HP</b>${d.hp}</span><span><b>DR</b>${d.drTorso} torso · ${d.drEye} eye${d.wp ? ` · WP ${d.wp}` : ""}</span>
+      return `<div class="prof"><span><b>HP</b>${d.hp}${d.dmgRed ? ` · injury ÷${d.dmgRed}` : ""}</span><span><b>DR</b>${d.drTorso} torso · ${d.drEye} eye${d.wp ? ` · WP ${d.wp}` : ""}</span>
         <span><b>Dodge</b>${d.dodge}</span>${d.parry != null ? `<span><b>Parry</b>${d.parry}</span>` : ""}<span><b>Move</b>${d.move}</span>
         ${d.shield ? `<span><b>Shield</b>${d.shield.sp} SP${d.shield.recharge ? "" : ", no recharge"}</span>` : ""}</div>
         <div class="prof">${r ? `<span><b>Ranged</b>${esc(r.name)}: ${esc(r.dmg)}${r.follow ? " + " + esc(r.follow) : ""}, skill ${r.skill}, Acc ${r.acc}, RoF ${r.rof}, ${r.range.half}/${r.range.max} yd</span>` : ""}
@@ -760,7 +765,7 @@ if (typeof document !== "undefined") (() => {
       <details class="more"><summary>How the simulator works</summary><p>${esc(HOW)}</p></details>`;
     wire();
   }
-  const HOW = `Each second every model acts in Basic Speed order. Shooters aim once at each new target (+Acc), then fire every turn with range penalties (B550), the rapid-fire bonus and Recoil for extra hits, spreading automatic bursts across two or three models (B373); targets Dodge, and every point of margin dodges one more round. Units set to advance move and fire (−2 or Bulk, no Acc); units set to charge run in and strike, with Move and Attack penalties on the turn they arrive. In close combat a model with a gun fires it point-blank (Bulk as a penalty) when that does more harm than its melee weapon. In melee, defenders use the better of Dodge (+3 retreat) and Parry (+1 retreat, −4 per extra parry), and skilled attackers make Deceptive Attacks. Hits land on a random location (B552), with 1 in 6 face hits striking an eye lens. Regenerating shields soak damage first; armour divisors, Weak Points, wounding multipliers, Injury Tolerance, limb caps and follow-up damage all apply. Shock, knockdown, stun, the HT rolls to stay conscious and to survive at −1×HP and below, Hard to Kill and Necron Reanimation Protocols are modelled. With morale on, a unit checks Will (+Fearlessness) when it falls to half and to a quarter strength, and breaks on a failure; Unfazeable units, machines with Slave Mentality and Necrons never break, and Tyranids are assumed to be within synapse range (Fearlessness 5). Not modelled: cover and terrain, explosion splash and fragmentation, crippled-limb effects, psychic powers, vehicles and drones' support roles.`;
+  const HOW = `Each second every model acts in Basic Speed order. Shooters aim once at each new target (+Acc), then fire every turn with range penalties (B550), the rapid-fire bonus and Recoil for extra hits, spreading automatic bursts across two or three models (B373); targets Dodge, and every point of margin dodges one more round. Units set to advance move and fire (−2 or Bulk, no Acc); units set to charge run in and strike, with Move and Attack penalties on the turn they arrive. In close combat a model with a gun fires it point-blank (Bulk as a penalty) when that does more harm than its melee weapon. In melee, defenders use the better of Dodge (+3 retreat) and Parry (+1 retreat, −4 per extra parry), and skilled attackers make Deceptive Attacks. Hits land on a random location (B552), with 1 in 6 face hits striking an eye lens. Regenerating shields soak damage first; armour divisors, Weak Points, wounding multipliers, Injury Tolerance (including Damage Reduction), limb caps, battlesuit structure HP and follow-up damage all apply. Shock, knockdown, stun, the HT rolls to stay conscious and to survive at −1×HP and below, Hard to Kill and Necron Reanimation Protocols are modelled. With morale on, a unit checks Will (+Fearlessness) when it falls to half and to a quarter strength, and breaks on a failure; Unfazeable units, machines with Slave Mentality and Necrons never break, and Tyranids are assumed to be within synapse range (Fearlessness 5). Not modelled: cover and terrain, explosion splash and fragmentation, crippled-limb effects, psychic powers, vehicles and drones' support roles.`;
 
   function results(r) {
     const pct = x => (100 * x / r.runs).toFixed(0) + "%";

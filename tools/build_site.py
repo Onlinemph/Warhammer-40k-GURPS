@@ -289,6 +289,8 @@ def combat_flags(t, flags):
         flags["unfazeable"] = 1
     elif n.startswith("Weapon Master") or n.startswith("Trained By A Master"):
         flags["master"] = 1
+    elif n.startswith("Injury Tolerance (Damage Reduction"):
+        flags["dmgRed"] = flags.get("dmgRed", 0) + lv   # divisor; lens upgrades add a level each
     elif n.startswith("Injury Tolerance"):
         for k in ("unliving", "homogenous", "diffuse", "no brain", "no vitals"):
             if k in low:
