@@ -269,9 +269,9 @@ Orks are fungal-based greenskins who grow bigger, stronger and tougher the longe
 | Ork | ST | DX | IQ | HT | HP | SM | Notes |
 |---|---|---|---|---|---|---|---|
 | Gretchin | 8 | 11 | 9 | 10 | 8 | −1 | Cowardly, sneaky, expendable. |
-| Boy | 22 | 11 | 8 | 13 | 26 | 0 | Stooped but heavy; brawnier than a man, far clumsier than a Marine. |
-| Nob | 26 | 11 | 9 | 14 | 32 | 0 (+1 for big ones) | A Boy who survived long enough to grow. |
-| Warboss | 32 | 12 | 10 | 15 | 40 | +1 | Out-muscles a Space Marine; sheer bulk. |
+| Boy | 28 | 11 | 8 | 13 | 32 | 0 | Stooped but heavy; far brawnier than a man and nearly a Marine's match in muscle, far clumsier than one. |
+| Nob | 34 | 11 | 9 | 14 | 40 | 0 (+1 for big ones) | A Boy who survived long enough to grow. |
+| Warboss | 42 | 12 | 10 | 15 | 50 | +1 | Out-muscles a Space Marine; sheer bulk. |
 
 Ork physiology traits: very high pain tolerance, Hard to Kill, fast healing and survivability of wounds that kill other species (heads sewn back on by Painboyz), **Injury Tolerance (Damage Reduction)** (GURPS Powers p. 53, 25 points per level, level = divisor: injury after DR and wounding multipliers is divided by it; Boy ÷2, Nob ÷3, Warboss ÷4, Gretchin none, with the Nob and Warboss lenses adding upgrade levels), love of violence (Bloodlust, Impulsiveness), growth with age as template lenses. Orks reproduce by spores, have no fear to speak of, and the Weirdboy's psychic power is fed by nearby Orks' WAAAGH! energy.
 
@@ -431,14 +431,14 @@ Necrons are ancient minds transferred into bodies of living metal (necrodermis) 
 
 | Necron | ST | DX | IQ | HT | HP | Natural DR (torso) | Mind |
 |---|---|---|---|---|---|---|---|
-| Warrior | 18 | 10 | 6 | 14 | 24 | 50 | Mindless automaton (Slave Mentality, Reprogrammable-style obedience) |
-| Immortal | 20 | 11 | 8 | 15 | 28 | 80 | Dim but capable of tactical thought |
-| Deathmark | 18 | 13 | 9 | 14 | 24 | 60 | Hunter; minimal personality |
-| Lychguard | 22 | 12 | 9 | 15 | 30 | 90 | Honour-bound bodyguard, some awareness |
-| Flayed One | 18 | 12 | 6 | 14 | 24 | 50 | Cursed by the flayer virus: madness and bloodlust |
-| Lord / Overlord | 22–25 | 13 | 14 | 15 | 32–36 | 100 | Full personality, often eccentric |
-| Cryptek | 18 | 12 | 16 | 14 | 24 | 60 | Technosorcerer, genius |
-| Skorpekh Destroyer | 26 | 12 | 6 | 16 | 34 | 100 | War-form rebuilt for slaughter; nihilistic, fractured mind |
+| Warrior | 26 | 10 | 6 | 14 | 32 | 50 | Mindless automaton (Slave Mentality, Reprogrammable-style obedience) |
+| Immortal | 28 | 11 | 8 | 15 | 36 | 80 | Dim but capable of tactical thought |
+| Deathmark | 26 | 13 | 9 | 14 | 32 | 60 | Hunter; minimal personality |
+| Lychguard | 32 | 12 | 9 | 15 | 40 | 90 | Honour-bound bodyguard, some awareness |
+| Flayed One | 26 | 12 | 6 | 14 | 32 | 50 | Cursed by the flayer virus: madness and bloodlust |
+| Lord / Overlord | 34 | 13 | 14 | 15 | 44 | 100 | Full personality, often eccentric |
+| Cryptek | 26 | 12 | 16 | 14 | 32 | 60 | Technosorcerer, genius |
+| Skorpekh Destroyer | 36 | 12 | 6 | 16 | 44 | 100 | War-form rebuilt for slaughter; nihilistic, fractured mind |
 
 Necron traits: Machine body (no need to breathe, eat or sleep; immune to disease and poison; pain resistance is plain High Pain Threshold), Injury Tolerance (Unliving: no blood, no vitals), living metal self-repair (Regeneration), and **Reanimation Protocols**: a Necron reduced below −1×HP is not destroyed unless the damage exceeds −5×HP; roll HT at the end of each of the next few turns to rise again with some HP restored, and on failure it phases out (teleports home to its tomb). Biotransference bound their consciousness into metal and burned out the soul, so Necrons are invisible to the warp: immune to psychic mind control and possession, and largely beneath daemons' notice. Weak Points on necrodermis are low (joints and eye-slits: Warriors 4, nobles and Lychguard 3), and glowing optics have eye DR about half the torso.
 
