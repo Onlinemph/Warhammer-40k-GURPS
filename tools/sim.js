@@ -22,6 +22,10 @@ const SIM = (() => {
       t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
   }
   const d6 = () => 1 + Math.floor(R() * 6);
+  // P3[n] = chance that 3d6 rolls n or less (success chance at effective skill n, crits aside)
+  const P3 = (() => { const c = Array(19).fill(0); for (let a = 1; a <= 6; a++) for (let b = 1; b <= 6; b++) for (let d = 1; d <= 6; d++) c[a + b + d]++;
+    const out = []; let t = 0; for (let n = 0; n <= 18; n++) { t += c[n]; out.push(Math.min(n >= 17 ? 1 : 1, t / 216)); }
+    out[3] = out[4] = Math.max(out[4], 4 / 216); return out; })();
   const roll3 = () => d6() + d6() + d6();
   const pick = a => a[Math.floor(R() * a.length)];
   // success roll: {ok, margin, crit}
@@ -237,9 +241,14 @@ const SIM = (() => {
       const dmg = parseDamage(line.damage, dmgST.thr, dmgST.sw);
       if (!dmg) return null;
       const fl = followLine(lines, line);
+      // "Rending hit (success by 5+ or critical)": same attack, better divisor on a good hit
+      const rl = lines.find(x => x !== line && !!x.melee === melee && /success by (\d+)\+|rending hit/i.test(x.usage || ""));
+      const rend = rl ? parseDamage(rl.damage, dmgST.thr, dmgST.sw) : null;
+      const rendBy = rl ? Number((/success by (\d+)\+/i.exec(rl.usage) || [0, 5])[1]) : 0;
       const fdmg = fl ? parseDamage(fl.damage, dmgST.thr, dmgST.sw) : null;
       const level = skillLevel(st, line.skill, [line.skill, ...(line.defaults || [])]);
-      const w = { name: label, usage: line.usage, text: line.damage, dmg, follow: fdmg, followText: fl ? fl.damage : "", level };
+      const w = { name: label, usage: line.usage, text: line.damage, dmg, follow: fdmg, followText: fl ? fl.damage : "", level,
+        rend, rendBy, rendText: rl ? rl.damage : "" };
       if (melee) {
         const p = String(line.parry ?? "0");
         w.parry = /no/i.test(p) ? null : num(p, 0);
@@ -277,7 +286,7 @@ const SIM = (() => {
     return {
       hp: u.HP, ht: u.HT, dodge: u.dodge, parry: u.parry, move: u.move, drTorso: tor, drEye: eye, wp: u.arm.wp,
       ranged: u.ranged && { name: u.ranged.name, usage: u.ranged.usage, dmg: u.ranged.text, follow: u.ranged.followText, skill: u.ranged.level, acc: u.ranged.acc, rof: u.ranged.rof, range: u.ranged.range },
-      melee: u.melee && { name: u.melee.name, usage: u.melee.usage, dmg: u.melee.text + (u.melee.dmg ? ` = ${fmtDice(u.melee.dmg)}` : ""), skill: u.melee.level },
+      melee: u.melee && { name: u.melee.name, usage: u.melee.usage, dmg: u.melee.text + (u.melee.dmg ? ` = ${fmtDice(u.melee.dmg)}` : "") + (u.melee.rend ? `; rending hit (${u.melee.rendBy}+) ${fmtDice(u.melee.rend)}` : ""), skill: u.melee.level },
       shield: u.shield,
     };
   }
@@ -362,8 +371,9 @@ const SIM = (() => {
     }
 
     // one hit on target t at loc; returns injury dealt
-    function applyHit(att, w, t, loc, ranged, halfD) {
-      let raw = rollDamage(w.dmg);
+    function applyHit(att, w, t, loc, ranged, halfD, dmgOverride) {
+      const dmg = dmgOverride || w.dmg;
+      let raw = rollDamage(dmg);
       if (halfD) raw = Math.floor(raw / 2);
       let fraw = w.follow ? rollDamage(w.follow) : 0;
       const sh = t.u.shield;
@@ -373,7 +383,7 @@ const SIM = (() => {
         raw -= t.sp; t.sp = 0; t.spCollapsed = true; fraw = 0; L(`  shield collapses`);
       }
       const armDR = drAt(t.u.arm.dr, loc), natDR = drAt(t.u.nat, loc) + (loc === "skull" ? 2 : 0);
-      const div = w.dmg.div;
+      const div = dmg.div;
       const eff = dr => dr <= 0 ? 0 : div === Infinity ? 0 : Math.max(1, Math.floor(dr / div));
       let DR = eff(armDR + natDR);
       let pen = raw - DR;
@@ -381,11 +391,11 @@ const SIM = (() => {
         DR = eff(Math.floor(armDR / 2) + natDR); pen = raw - DR;
         if (pen > 0) L(`  finds a weak point`);
       }
-      if (pen <= 0) { L(`  ${raw} dmg to ${loc} fails to penetrate DR ${armDR + natDR}`); return 0; }
+      if (pen <= 0) { L(`  ${raw} dmg to ${loc} fails to penetrate DR ${armDR + natDR}${div !== 1 ? "/" + (div === Infinity ? "∞" : div) : ""}`); return 0; }
       const flags = t.u.flags;
       const poison = flags.poison;
-      let inj = w.dmg.type === "tox" && poison === "immune" ? 0 : Math.max(1, Math.floor(pen * woundMult(w.dmg.type, loc, flags, w.dmg.ex)));
-      if (w.dmg.type === "tox" && poison === "resist") inj = Math.floor(inj / 2);
+      let inj = dmg.type === "tox" && poison === "immune" ? 0 : Math.max(1, Math.floor(pen * woundMult(dmg.type, loc, flags, dmg.ex)));
+      if (dmg.type === "tox" && poison === "resist") inj = Math.floor(inj / 2);
       if (loc === "arm" || loc === "leg") inj = Math.min(inj, Math.floor(t.u.HP / 2) + 1);
       if (loc === "hand" || loc === "foot") inj = Math.min(inj, Math.floor(t.u.HP / 3) + 1);
       let finj = 0;
@@ -401,6 +411,11 @@ const SIM = (() => {
       return inj + finj;
     }
 
+    function bestDefence(t) {
+      let d = t.u.dodge + 3 - (t.stunned ? 4 : 0);
+      if (t.u.parry != null && !(t.u.melee.unbalanced && t.attacked)) d = Math.max(d, t.u.parry + 1 - 4 * t.parries - (t.stunned ? 4 : 0));
+      return d;
+    }
     function defend(t, melee, da = 0) {
       if (t.state !== "ok") return false;
       let dodge = t.u.dodge + (melee ? 3 : 0) - (t.stunned ? 4 : 0) - da;
@@ -414,32 +429,67 @@ const SIM = (() => {
       return r.ok ? { how, margin: Math.max(0, r.margin) } : null;
     }
 
-    function rangedAttack(m, target, moved) {
+    // rough expected injury of one attack on t: chance to hit x average penetration x wounding
+    function expected(w, t, lvl, n) {
+      if (!w || !w.dmg) return 0;
+      const avg = d => (d.n * 3.5 + d.add) * d.mult;
+      const dr = drAt(t.u.arm.dr, "torso") + drAt(t.u.nat, "torso");
+      const eff = w.dmg.div === Infinity ? 0 : Math.floor(dr / w.dmg.div);
+      // expected penetration over the damage roll's spread, so a long shot still beats nothing
+      let pen = 0, got = 0;
+      for (let i = 0; i < 24; i++) { const p = rollDamage(w.dmg) - eff; if (p > 0) { pen += p; got++; } }
+      pen /= 24;
+      const fol = w.follow ? avg(w.follow) * got / 24 : 0;
+      return P3[Math.max(0, Math.min(18, lvl))] * n * (pen * woundMult(w.dmg.type, "torso", t.u.flags, w.dmg.ex) + fol);
+    }
+    function rangedAttack(m, target, moved, pointBlank) {
       const w = m.u.ranged, u = m.u;
       if (m.reload > 0) { m.reload--; if (m.reload === 0) m.ammo = w.shots.mag; return; }
       if (m.ammo <= 0) { m.reload = Math.max(1, w.shots.reload); L(`${m.id} reloads`); return; }
       const d = Math.max(1, dist(u, target.u));
       if (d > w.range.max) return;
+      if (pointBlank) {
+        const shots = Math.min(w.rof, m.ammo, 3);
+        m.ammo -= shots; m.attacked = true; m.aimed = false;
+        const lvl = w.level + Math.min(0, w.bulk) + rapidBonus(shots) - Math.min(4, m.shock);
+        const r = check(lvl);
+        if (!r.ok) { L(`${m.id} fires point-blank at ${target.id} (skill ${lvl}): misses`); return; }
+        let hits = Math.min(shots, 1 + Math.floor(Math.max(0, r.margin) / w.rcl));
+        L(`${m.id} fires point-blank at ${target.id} (skill ${lvl}): ${hits} hit${hits > 1 ? "s" : ""}`);
+        if (!r.crit) { const def = defend(target, false); if (def) { const dg = Math.min(hits, 1 + def.margin); hits -= dg; L(`  ${target.id} dodges ${dg}`); } }
+        for (let k = 0; k < hits && target.state === "ok"; k++) applyHit(m, w, target, hitLocation(), true, false);
+        return;
+      }
       // Aim once at each new target (B364), then keep firing; Acc applies to the first volley only
       if (u.stance === "shoot" && !moved && !m.aimed && m.lastTarget !== target) { m.aimed = true; m.aimTarget = target; m.lastTarget = target; L(`${m.id} aims at ${target.id}`); return; }
       m.lastTarget = target;
-      const shots = Math.min(w.rof, m.ammo);
-      m.ammo -= shots;
-      let lvl = w.level + rangePenalty(d) + rapidBonus(shots) + target.u.sm - Math.min(4, m.shock);
-      if (moved) lvl += Math.min(-2, w.bulk);
-      else if (m.aimed) lvl += w.acc;
+      const total = Math.min(w.rof, m.ammo);
+      m.ammo -= total;
+      const acc = !moved && m.aimed ? w.acc : 0;
       m.aimed = false;
-      const r = check(lvl);
       m.attacked = true;
-      if (!r.ok) { L(`${m.id} fires ${shots} at ${target.id} (${d} yd, skill ${lvl}): misses`); return; }
-      let hits = Math.min(shots, 1 + Math.floor(Math.max(0, r.margin) / w.rcl));
-      L(`${m.id} fires ${shots} at ${target.id} (${d} yd, skill ${lvl}): ${hits} hit${hits > 1 ? "s" : ""}`);
-      if (!r.crit) {
-        const def = defend(target, false);
-        if (def) { const dodged = Math.min(hits, 1 + def.margin); hits -= dodged; L(`  ${target.id} dodges ${dodged}`); }
-      }
-      const halfD = d > w.range.half;
-      for (let i = 0; i < hits && target.state === "ok"; i++) applyHit(m, w, target, hitLocation(), true, halfD);
+      // Automatic fire is spread across neighbouring models in the target unit (rapid fire
+      // against several targets, B373): a burst of 6+ splits between two, 16+ between three,
+      // each part rolled separately with its own rapid-fire bonus. Low-RoF weapons keep to one.
+      const pool = target.u.models.filter(x => x.state === "ok" && x !== target);
+      const parts = Math.min(1 + pool.length, total >= 16 ? 3 : total >= 6 ? 2 : 1);
+      const targets = [target];
+      while (targets.length < parts) targets.push(pool.splice(Math.floor(R() * pool.length), 1)[0]);
+      targets.forEach((t, i) => {
+        const shots = Math.floor(total / parts) + (i < total % parts ? 1 : 0);
+        let lvl = w.level + rangePenalty(d) + rapidBonus(shots) + t.u.sm - Math.min(4, m.shock) + acc;
+        if (moved) lvl += Math.min(-2, w.bulk);
+        const r = check(lvl);
+        if (!r.ok) { L(`${m.id} fires ${shots} at ${t.id} (${d} yd, skill ${lvl}): misses`); return; }
+        let hits = Math.min(shots, 1 + Math.floor(Math.max(0, r.margin) / w.rcl));
+        L(`${m.id} fires ${shots} at ${t.id} (${d} yd, skill ${lvl}): ${hits} hit${hits > 1 ? "s" : ""}`);
+        if (!r.crit) {
+          const def = defend(t, false);
+          if (def) { const dodged = Math.min(hits, 1 + def.margin); hits -= dodged; L(`  ${t.id} dodges ${dodged}`); }
+        }
+        const halfD = d > w.range.half;
+        for (let k = 0; k < hits && t.state === "ok"; k++) applyHit(m, w, t, hitLocation(), true, halfD);
+      });
     }
 
     function meleeAttack(m, target, charged) {
@@ -447,8 +497,14 @@ const SIM = (() => {
       for (let i = 0; i < n && target.state === "ok"; i++) {
         let lvl = w.level - Math.min(4, m.shock) - (charged ? 4 : 0);
         if (charged) lvl = Math.min(lvl, 9);
-        // Deceptive Attack (B369): trade skill above 16 at -2 per -1 to the defence
-        const da = lvl > 16 ? Math.floor((lvl - 16) / 2) : 0;
+        // Deceptive Attack (B369): -2 skill per -1 to the defence, at the level that
+        // gives the best chance to land a blow against this defender's best defence
+        const def0 = bestDefence(target);
+        let da = 0, bestP = -1;
+        for (let k = 0; lvl - 2 * k >= 3 && k <= 10; k++) {
+          const p = P3[Math.max(0, Math.min(18, lvl - 2 * k))] * (1 - P3[Math.max(0, Math.min(18, def0 - k))]);
+          if (p > bestP + 1e-9) { bestP = p; da = k; }
+        }
         lvl -= 2 * da;
         const r = check(lvl);
         m.attacked = true;
@@ -457,8 +513,9 @@ const SIM = (() => {
           const def = defend(target, true, da);
           if (def) { L(`${m.id} strikes at ${target.id}: ${def.how === "parry" ? "parried" : "dodged"}`); continue; }
         }
-        L(`${m.id} strikes ${target.id} with ${w.name}`);
-        applyHit(m, w, target, hitLocation(), false, false);
+        const rending = w.rend && (r.crit || r.margin >= w.rendBy);
+        L(`${m.id} strikes ${target.id} with ${w.name}${rending ? " (rending hit)" : ""}`);
+        applyHit(m, w, target, hitLocation(), false, false, rending ? w.rend : null);
         if (charged) break;
       }
     }
@@ -506,7 +563,15 @@ const SIM = (() => {
         const engaged = enemiesOf(u).filter(v => dist(u, v) <= 1);
         if (engaged.length) {
           const pool = engaged.flatMap(v => v.models.filter(active));
-          if (pool.length) meleeAttack(m, pick(pool), charged.has(u));
+          if (pool.length) {
+            const t = pick(pool);
+            // In close combat a fighter may shoot at point-blank range instead (Bulk as a penalty,
+            // no Acc); choose whichever attack does more expected harm to this target
+            if (u.ranged && !charged.has(u) && m.reload === 0 && m.ammo > 0 &&
+                expected(u.ranged, t, u.ranged.level + Math.min(0, u.ranged.bulk), Math.min(3, u.ranged.rof)) >
+                expected(u.melee, t, u.melee.level, 1 + (u.flags.extraAttack || 0))) rangedAttack(m, t, false, true);
+            else meleeAttack(m, t, charged.has(u));
+          }
         } else if (u.ranged && u.stance !== "charge") {
           const foes = enemiesOf(u).filter(v => dist(u, v) <= u.ranged.range.max);
           if (foes.length) {
@@ -695,7 +760,7 @@ if (typeof document !== "undefined") (() => {
       <details class="more"><summary>How the simulator works</summary><p>${esc(HOW)}</p></details>`;
     wire();
   }
-  const HOW = `Each second every model acts in Basic Speed order. Shooters aim once at each new target (+Acc), then fire every turn with range penalties (B550), the rapid-fire bonus and Recoil for extra hits; targets Dodge, and every point of margin dodges one more round. Units set to advance move and fire (−2 or Bulk, no Acc); units set to charge run in and strike, with Move and Attack penalties on the turn they arrive. In melee, defenders use the better of Dodge (+3 retreat) and Parry (+1 retreat, −4 per extra parry), and skilled attackers make Deceptive Attacks. Hits land on a random location (B552), with 1 in 6 face hits striking an eye lens. Regenerating shields soak damage first; armour divisors, Weak Points, wounding multipliers, Injury Tolerance, limb caps and follow-up damage all apply. Shock, knockdown, stun, the HT rolls to stay conscious and to survive at −1×HP and below, Hard to Kill and Necron Reanimation Protocols are modelled. With morale on, a unit checks Will (+Fearlessness) when it falls to half and to a quarter strength, and breaks on a failure. Not modelled: cover and terrain, explosion splash and fragmentation, crippled-limb effects, psychic powers, vehicles and drones' support roles.`;
+  const HOW = `Each second every model acts in Basic Speed order. Shooters aim once at each new target (+Acc), then fire every turn with range penalties (B550), the rapid-fire bonus and Recoil for extra hits, spreading automatic bursts across two or three models (B373); targets Dodge, and every point of margin dodges one more round. Units set to advance move and fire (−2 or Bulk, no Acc); units set to charge run in and strike, with Move and Attack penalties on the turn they arrive. In close combat a model with a gun fires it point-blank (Bulk as a penalty) when that does more harm than its melee weapon. In melee, defenders use the better of Dodge (+3 retreat) and Parry (+1 retreat, −4 per extra parry), and skilled attackers make Deceptive Attacks. Hits land on a random location (B552), with 1 in 6 face hits striking an eye lens. Regenerating shields soak damage first; armour divisors, Weak Points, wounding multipliers, Injury Tolerance, limb caps and follow-up damage all apply. Shock, knockdown, stun, the HT rolls to stay conscious and to survive at −1×HP and below, Hard to Kill and Necron Reanimation Protocols are modelled. With morale on, a unit checks Will (+Fearlessness) when it falls to half and to a quarter strength, and breaks on a failure; Unfazeable units, machines with Slave Mentality and Necrons never break, and Tyranids are assumed to be within synapse range (Fearlessness 5). Not modelled: cover and terrain, explosion splash and fragmentation, crippled-limb effects, psychic powers, vehicles and drones' support roles.`;
 
   function results(r) {
     const pct = x => (100 * x / r.runs).toFixed(0) + "%";

@@ -260,7 +260,7 @@ Ork physiology traits: very high pain tolerance, Hard to Kill, fast healing and 
 | Shoota | Heavy slugs, 9d pi+, RoF 10, Acc 1–2, Malf 14 (gets through flak about 58%) |
 | Big shoota | Heavy machine gun, 13d pi+, RoF 15+ |
 | Rokkit launcha | Anti-armour, about 6d×4(3) cr ex, Acc 0–1, Malf 14 |
-| Choppa | Crude cleaver, sw+3 cut, parry −1U |
+| Choppa | Crude cleaver, sw+1d(2) cut, parry −1U (big choppa sw+2d(2), two-handed). Revised from sw+3 cut, which could not get through flak 30 |
 | Power klaw | Power-field weapon: thr+8d(10) cr, like a power fist but cruder |
 | 'Eavy armour | Torso DR 45, Weak Points 7 |
 | Mega armour | Torso DR 150, Weak Points 6: an Ork answer to Terminator plate |

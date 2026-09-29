@@ -4,7 +4,7 @@
 		{
 			"id": "eMn1QRTBuT8gYdY7x",
 			"description": "Choppa",
-			"local_notes": "Ork blades are all edge and mass, not balance; a choppa is never \"sharp\" in the fine sense, but a Boy's own strength does the real work.\n\nLore: The choppa is the other half of every Boy's standard loadout alongside the slugga: a heavy, crudely-forged cleaver, machete or cut-down sword welded from scrap and scavenged plate, and the single most common Ork melee weapon in Codex: Orks background, Deathwatch's Mark of the Xenos, and every piece of Ork army art the game has ever produced.\n\nDesign: Matches the framework's Ork anchor (\"Choppa | Crude cleaver, sw+3 cut, parry -1U\"). At a Boy's ST 22 (sw 4d) a choppa swing is 4d+3 (avg 17), and 5d+3 for a Nob (ST 26, sw 5d): exact dice distribution gives 0% through flak (DR 30) for a Boy and about 0.3% for a Nob, so it is a horde-and-infantry weapon with no motor or armour divisor, the framework's point that Ork weapons compensate for crude construction with a Boy's raw strength, not with mechanism. Handling: weight 10 lb, heavier than any human-scale cutting weapon on this project's Imperium melee page (the Chainaxe, at 15 lb, is the closest comparison) for the crude, over-thick, badly balanced blade every choppa depiction shows; min ST 11 (a blade this heavy needs real strength to swing with control) is trivial for a Boy and out of easy reach for an unaugmented human, matching the constant depiction of looted choppas being unwieldy in human hands. Skill Axe/Mace and parry -1U, per the anchor and consistent with every other heavy chopping weapon on the Imperium melee page (the Chainaxe, Power Axe, etc.). Being unpowered, no choppa swing can hurt Astartes power armour (DR 100) by strength alone; only a Weak Point hit or a power weapon does, which is the intended gap between mundane Ork blades and the klaw.",
+			"local_notes": "Ork blades are all edge and mass, not balance; a choppa is never \"sharp\" in the fine sense, but a Boy's own strength does the real work.\n\nLore: The choppa is the other half of every Boy's standard loadout alongside the slugga: a heavy, crudely-forged cleaver, machete or cut-down sword welded from scrap and scavenged plate, and the single most common Ork melee weapon in Codex: Orks background, Deathwatch's Mark of the Xenos, and every piece of Ork army art the game has ever produced.\n\nDesign: Framework Ork anchor, revised after the combat simulator showed the old sw+3 cut could not get through flak 30 at all: a Boy's charge did no damage to a Guard line, against every depiction of Ork assaults. The choppa is now sw+1d(2) cut, the chainsword's divisor and one die less: the edge is crude, but a heavy scrap-steel cleaver swung by an Ork's strength splits flak plates the way a chainsword's teeth do. At a Boy's ST 22 (5d(2)) it penetrates flak (eff. 15) 69.5% of the time, carapace (eff. 35) never, and power armour never except at a Weak Point (1.6% of those); at a Nob's ST 26 (6d(2)) flak 90.4%, carapace still 0%. Power armour stays the job of the klaw and the big choppa's weight. Handling: weight 10 lb, min ST 11, skill Axe/Mace and parry -1U, as a crude, badly balanced cleaver.",
 			"tags": [
 				"Melee Weapon",
 				"Xenos",
@@ -21,7 +21,8 @@
 					"damage": {
 						"type": "cut",
 						"st": "sw",
-						"base": "3"
+						"base": "1d",
+						"armor_divisor": 2
 					},
 					"reach": "1",
 					"parry": "-1U",
@@ -63,7 +64,7 @@
 		{
 			"id": "ee0pTiPLbzZ9a7jnW",
 			"description": "Big Choppa",
-			"local_notes": "A big two-handed cleaver, often favoured by Nobz who forgo a shield hand.\n\nLore: A two-handed, oversized choppa favoured by Nobz and mob bosses who want more reach and more raw hitting power than a one-handed choppa without going as far as a power klaw; a recurring silhouette in Codex: Orks Nob artwork and background, distinguished from the standard choppa mainly by size and the two-handed grip.\n\nDesign: One step up the same two-handed-over-one-handed relationship this project uses elsewhere (the Imperium Eviscerator over the Chainaxe, or the Thunder Hammer's two-handed grip over a one-handed power maul): +1 die-equivalent over the Choppa anchor's sw+3 cut, giving sw+4 cut, two-handed, reach 1,2. At a Nob's ST 26 (sw 5d) this is 5d+4 (avg 21.5), a brutal blow against unarmoured or lightly armoured targets, with no armour divisor and, by exact dice distribution, about 0.7% through flak (DR 30) and 0% against anything heavier, so like the plain choppa it is a horde and infantry weapon, not a threat to real armour, exactly the niche a mundane Ork blade should occupy relative to the power klaw. Handling: weight 18 lb (heavier than the one- handed choppa's 10 lb for the bigger blade and two-handed haft), min ST 15 (comfortable for a Nob, a stretch for a Boy, unreachable for an unaugmented human), Two-Handed Axe/Mace skill and parry -1U as every heavy chopping weapon on this and the Imperium melee page.",
+			"local_notes": "A big two-handed cleaver, often favoured by Nobz who forgo a shield hand.\n\nLore: A two-handed, oversized choppa favoured by Nobz and mob bosses who want more reach and more raw hitting power than a one-handed choppa without going as far as a power klaw; a recurring silhouette in Codex: Orks Nob artwork and background, distinguished from the standard choppa mainly by size and the two-handed grip.\n\nDesign: One step up from the choppa, the same two-handed-over-one-handed step the Eviscerator takes over the chainsword: sw+2d(2) cut, two-handed, reach 1,2 (revised with the choppa after the combat simulator showed mundane Ork blades doing nothing to flak). At a Nob's ST 26 (7d(2)) it penetrates flak 97.8%, carapace 0.6%, and power armour only at a Weak Point, where it gets through 41% of the time: the one Ork blade short of a klaw that can open a Marine's armour at the seams.",
 			"tags": [
 				"Melee Weapon",
 				"Xenos",
@@ -80,7 +81,8 @@
 					"damage": {
 						"type": "cut",
 						"st": "sw",
-						"base": "4"
+						"base": "2d",
+						"armor_divisor": 2
 					},
 					"reach": "1,2",
 					"parry": "-1U",

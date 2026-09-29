@@ -295,6 +295,9 @@ def combat_flags(t, flags):
                 flags[k.replace(" ", "")] = 1
     elif n.startswith("Reanimation"):
         flags["reanimation"] = 1
+        flags["noMorale"] = 1       # soulless machines: Necrons do not break
+    elif n.startswith("Synapse Discipline"):
+        flags["fearless"] = flags.get("fearless", 0) + 5   # Fearlessness 5 while linked; the sim assumes synapse is near
     elif "slave mentality" in low or "machine mind" in low:
         flags["noMorale"] = 1
     if ("metabolic hazards" in low or "toxins" in low or "poison" in low) and (
