@@ -26,6 +26,10 @@ Every model acts once per second in Basic Speed order (ties random), choosing on
 - Melee: reach, Deceptive Attack optimised against the defender's best defence, Rapid Strike, Extra Attack, unbalanced weapons (no parry after attacking), point-blank fire with a gun when it beats the blade, close-combat reloads when quick.
 - **Area effects** (B413–414): explosive (`ex`) damage also hits every model within range at damage ÷ (3 × yards), and a power bought with a higher Explosion level (B107) counts distance as yards ÷ level; fragmentation (`[Nd]`) attacks every model within 5 × dice yards at skill 15 with range penalties from the blast point; cones (`Cone N yards` in the usage) hit every model in the cone, and each may Dodge.
 
+## Grappling
+
+A charging model whose weapon can barely hurt its foe (under 1 HP of expected injury per swing) grabs it (B370): an attack with DX or Wrestling, Judo or Sumo Wrestling, defended normally. Holders then try a **takedown** (Quick Contest of the higher of ST, DX or grappling skill; the held model is at −4 DX) and, with the foe on the ground, a **pin** (Quick Contest of ST). Several grapplers pull together with the strongest one's ST plus a fifth of each other's (a simulator rule; Basic gives no formula). A held model can't retreat, parries and attacks at −4, can't fire a gun and isn't knocked back. On the ground or pinned it spends its turn trying to break free (Quick Contest of ST, one grip per success). A pinned model is helpless: no active defence, and any attacker may aim at it, chinks included. Two grapplers keep a pin; the others use All-Out Attack (Strong or Determined, B365) and Mighty Blows (1 FP for +2 damage or +1 per die, B357).
+
 ## Defence
 
 Dodge, Parry and Block (B374–377); retreat once per turn (+3 Dodge, +1 Parry and Block); multiple parries −4 each; Block once per turn; a shield's Defense Bonus adds to all defences against attacks from the front or shield side (B287); Dodge and Drop against ranged attacks (+3, goes prone, B377); side −2, rear none; stunned −4 and no retreat.
@@ -53,4 +57,4 @@ Psykers use the attack and defence powers listed for their template in `data/sim
 
 ## Not modelled
 
-Vehicles, grappling, stealth detection beyond an ambush option, psychic powers other than attacks and defences, morale beyond the half and quarter checks.
+Vehicles, stealth detection beyond an ambush option, psychic powers other than attacks and defences, morale beyond the half and quarter checks.

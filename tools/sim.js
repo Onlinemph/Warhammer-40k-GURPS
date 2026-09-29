@@ -307,6 +307,8 @@ const SIM = (() => {
       // elites call shots: a best combat skill (weapon or power) of 17+, two past a trained line soldier's 15,
       // and a mind that picks its shots (IQ 8+). Points were a poor proxy: an Ork Boy's ST 28 costs 300+.
       elite: Math.max(melee ? melee.level : 0, ranged ? ranged.level : 0, ...powers.map(p => p.level)) >= 17 && st.iq >= 8,
+      // grappling (B370): DX, or Wrestling, Judo or Sumo Wrestling if better
+      grapple: Math.max(st.dx, ...(st.skills || []).filter(s => /^(Wrestling|Judo|Sumo Wrestling)\b/.test(s.name) && s.level != null).map(s => s.level)),
       stance: spec.stance || "shoot", stats: st, flags, speed: st.speed, move: Math.max(1, st.move + arm.move),
       dodge: st.dodge, HP: st.hp + arm.hp, HT: st.ht, will: st.will, sm: st.sm || 0,
       arm, nat, ranged, melee, parry: parryOf(melee), shield: spec.shield && spec.shield.sp ? { ...spec.shield } : pshield,
@@ -422,7 +424,7 @@ const SIM = (() => {
           ammo: u.ranged ? u.ranged.shots.mag : 0, reload: 0, jam: 0, gunBroken: false, conc: 0,
           sp: u.shield ? u.shield.sp : 0, spHit: -99, spCollapsed: false,
           parries: 0, retreated: false, blocked: false, attacked: false, aoa: false, aod: false, feint: null,
-          reanim: 0, dmgDealt: 0, kills: 0, armsLost: 0, legsLost: 0,
+          reanim: 0, dmgDealt: 0, kills: 0, armsLost: 0, legsLost: 0, grips: [], holding: null, pinned: false,
           wounds: {}, pain: 0, painSev: 0, halfMove: false, halfDodge: false, gawd: 0, crippled: {} };
         let h = fromOffset(col, row);
         while (occ.has(key(h.q, h.r))) h = fromOffset(h.q + (u.side ? 1 : -1), row);
@@ -575,7 +577,7 @@ const SIM = (() => {
         if (pen > 0) L(`  finds a weak point`);
       }
       // knockback (B378) from crushing and cutting blows
-      if ((dmg.type === "cr" || dmg.type === "cut") && !ranged && t.state === "ok") knockback(att, t, basic);
+      if ((dmg.type === "cr" || dmg.type === "cut") && !ranged && t.state === "ok" && !t.grips.length) knockback(att, t, basic);
       if (pen <= 0) { L(`  ${raw} dmg to ${loc} fails to penetrate DR ${armDR + natDR}${div !== 1 ? "/" + (div === Infinity ? "∞" : div) : ""}`); return 0; }
       const flags = t.u.flags, poison = flags.poison;
       let inj = dmg.type === "tox" && poison === "immune" ? 0 : Math.max(1, Math.floor(pen * woundMult(dmg.type, loc, flags, dmg.ex)));
@@ -639,7 +641,7 @@ const SIM = (() => {
       const chink = loc.endsWith("#c");
       if (chink) loc = loc.slice(0, -2);
       const d = dmgOverride || w.dmg;
-      const k = w.id + "|" + tu.idx + "|" + loc + (chink ? "#c" : "") + "|" + (dmgOverride ? "r" : "");
+      const k = w.id + "|" + tu.idx + "|" + loc + (chink ? "#c" : "") + "|" + (dmgOverride ? dmgOverride.key || "r" : "");
       if (EXP.has(k)) return EXP.get(k);
       const armDR = Math.floor(drAt(tu.arm.dr, loc === "vitals" ? (tu.arm.dr.vitals != null ? "vitals" : "torso") : loc) / (chink ? 2 : 1));
       const natDR = drAt(tu.nat, loc === "vitals" ? "torso" : loc) + (loc === "skull" ? 2 : 0);
@@ -669,7 +671,7 @@ const SIM = (() => {
     }
     // best location and deceptive level: returns {loc, da, score, lvl}
     function planAttack(m, w, t, lvl, melee, dmgOverride) {
-      const locs = aimsShots(m) ? [...Object.keys(AIM), ...Object.keys(AIM).filter(l => l !== "eye" && drAt(t.u.arm.dr, l === "vitals" ? "torso" : l) > 0).map(l => l + "#c")] : ["random"];
+      const locs = aimsShots(m) || (melee && t.pinned) ? [...Object.keys(AIM), ...Object.keys(AIM).filter(l => l !== "eye" && drAt(t.u.arm.dr, l === "vitals" ? "torso" : l) > 0).map(l => l + "#c")] : ["random"];
       const def0 = melee ? bestDefence(t, m, true) : w.malediction ? (w.fp && t.u.flags.blank ? 99 : w.resist === "HT" ? t.u.HT : t.u.will) - 2 : rangedDefence(t, m);
       let best = { loc: "torso", da: 0, score: 0, lvl };
       for (const loc of locs) {
@@ -694,7 +696,7 @@ const SIM = (() => {
     // ---- defence
     function arcTo(t, att) { return att && att.h && t.h ? arcOf(t.h, t.facing, att.h) : "front"; }
     function bestDefence(t, att, melee) {
-      if (t.state !== "ok" || t.aoa) return null;
+      if (t.state !== "ok" || t.aoa || t.pinned) return null;
       const arc = arcTo(t, att);
       if (arc === "rear") return null;
       const mod = (arc === "side" ? -2 : 0) - (t.stunned ? 4 : 0) - (t.prone ? 3 : 0) + (t.aod ? 2 : 0) + (arc !== "rear" ? t.u.db : 0);
@@ -712,7 +714,8 @@ const SIM = (() => {
     }
     // resolve a defence roll; returns margin (>=0) on success or null
     function defend(t, att, melee, da, feint) {
-      if (t.state !== "ok" || t.aoa) return null;
+      if (t.state !== "ok" || t.aoa || t.pinned) return null;
+      if (t.grips.length) t.retreated = true;   // held: no retreat
       const arc = arcTo(t, att);
       if (arc === "rear") return null;
       const mod = (arc === "side" ? -2 : 0) - (t.stunned ? 4 : 0) - (t.prone ? 3 : 0) + (t.aod ? 2 : 0) + t.u.db - da - (feint || 0);
@@ -727,7 +730,7 @@ const SIM = (() => {
       }
       const opts = [{ how: "dodge", v: dodgeOf(t) + (!t.retreated && !t.stunned ? 3 : 0), retreat: true }];
       if (t.u.parry != null && !(t.u.melee.unbalanced && t.attacked) && t.armsLost < 2)
-        opts.push({ how: "parry", v: t.u.parry + (!t.retreated && !t.stunned ? 1 : 0) - 4 * t.parries, retreat: true });
+        opts.push({ how: "parry", v: t.u.parry + (!t.retreated && !t.stunned ? 1 : 0) - 4 * t.parries - (t.grips.length ? 4 : 0), retreat: true });
       if (t.u.db && !t.blocked) opts.push({ how: "block", v: Math.floor(t.u.dx / 2) + 3 + (!t.retreated && !t.stunned ? 1 : 0), retreat: true });
       const o = opts.reduce((a, b) => b.v > a.v ? b : a);
       if (o.how === "parry") t.parries++;
@@ -910,7 +913,7 @@ const SIM = (() => {
       const n = opts.double ? 2 : opts.rapid ? 2 : 1 + (m.u.flags.extraAttack || 0);
       for (let i = 0; i < n && t.state === "ok"; i++) {
         let lvl = w.level - skillPen(m) - (opts.charge ? 4 : 0) + (opts.determined ? 4 : 0) - (opts.rapid ? 6 : 0) + (m.evaluate && m.evaluate.t === t ? m.evaluate.n : 0)
-          - (m.prone ? 4 : 0);
+          - (m.prone ? 4 : 0) - (m.grips.length ? 4 : 0);
         if (opts.charge) lvl = Math.min(lvl, 9);
         const plan = planAttack(m, w, t, lvl, true);
         const loc = plan.loc === "random" ? hitLocation() : plan.loc;
@@ -927,7 +930,9 @@ const SIM = (() => {
         const rending = w.rend && (r.crit || r.margin >= w.rendBy);
         L(`${m.id} strikes ${t.id}${loc !== "torso" ? " in the " + locName(loc) : ""} with ${w.name}${rending ? " (rending hit)" : ""}`);
         let raw = rollDamage(rending ? w.rend : w.dmg);
+        // All-Out Attack (Strong, B365) and Mighty Blows (extra effort, 1 FP, B357): each +2 or +1/die, whichever is more
         if (opts.strong) raw += Math.max(2, w.dmg.n);
+        if (opts.mighty && m.fp > 1) { m.fp -= 1; raw += Math.max(2, w.dmg.n); L(`  ${m.id} puts everything into it (Mighty Blows, 1 FP)`); }
         applyHit(m, w, t, loc, false, false, rending ? w.rend : null, raw);
       }
       m.feint = null; m.evaluate = null;
@@ -1017,12 +1022,80 @@ const SIM = (() => {
       if (aoa) m.aoa = true;
       fireAt(m, w, target, { aim, aoa });
     }
+    // ---- grappling (B370-371): grab, take down, pin; a pinned model is helpless until it breaks free
+    function gripsOn(t) {
+      t.grips = t.grips.filter(g => g.state === "ok" && g.holding === t && g.h && t.h && hexDist(g.h, t.h) <= 1);
+      if (!t.grips.length) t.pinned = false;
+      return t.grips;
+    }
+    function release(m) {
+      const t = m.holding;
+      if (!t) return;
+      m.holding = null;
+      t.grips = t.grips.filter(g => g !== m);
+      if (!t.grips.length) t.pinned = false;
+    }
+    // several grapplers pull together: the strongest one's ST plus a fifth of each other's (simulator rule)
+    function gripST(t) {
+      const g = gripsOn(t).map(x => x.u.st).sort((a, b) => b - a);
+      return g.length ? g[0] + g.slice(1).reduce((a, x) => a + x / 5, 0) : 0;
+    }
+    function contest(a, b) {
+      const ra = check(a), rb = check(b);
+      return ra.ok && (!rb.ok || ra.margin > rb.margin);
+    }
+    function grab(m, t) {
+      const lvl = m.u.grapple - skillPen(m) - (m.prone ? 4 : 0) - (m.grips.length ? 4 : 0);
+      m.attacked = true;
+      const r = check(lvl);
+      if (!r.ok) { L(`${m.id} grabs at ${t.id} (skill ${lvl}): misses`); return; }
+      if (!r.crit) { const def = defend(t, m, true, 0, 0); if (def) { L(`${m.id} grabs at ${t.id}: ${def.how === "parry" ? "parried" : def.how === "block" ? "blocked" : "dodged"}`); return; } }
+      release(m); m.holding = t; t.grips.push(m);
+      L(`${m.id} grabs ${t.id} (${t.grips.length} holding on)`);
+    }
+    function wrestle(m, t) {
+      if (!t.prone) {
+        // Takedown: Quick Contest of the higher of ST, DX or grappling skill
+        // the held model is at -4 DX (B370)
+        const a = Math.max(gripST(t), m.u.dx, m.u.grapple) - skillPen(m), d = Math.max(t.u.st, t.u.dx - 4, t.u.grapple - 4) - skillPen(t);
+        if (contest(a, d)) { t.prone = true; L(`${m.id}${t.grips.length > 1 ? ` and ${t.grips.length - 1} more` : ""} drag ${t.id} to the ground`); }
+        else L(`${m.id} tries to drag ${t.id} down (${Math.round(a)} vs ${d}): it keeps its feet`);
+      } else if (!t.pinned) {
+        // Pin: Quick Contest of ST against a foe on the ground
+        if (contest(gripST(t) - skillPen(m), t.u.st - skillPen(t))) { t.pinned = true; L(`${m.id} pins ${t.id} (${t.grips.length} holding it down)`); }
+        else L(`${m.id} tries to pin ${t.id}: it struggles free of the hold`);
+      }
+    }
+    // the held model's turn: break one grip (Quick Contest of ST, or grappling skill if better)
+    function breakFree(m) {
+      const g = gripsOn(m);
+      if (!g.length) return false;
+      const a = Math.max(m.u.st, m.u.grapple - 4) - skillPen(m), d = gripST(m);
+      if (contest(a, d)) {
+        const strongest = g.slice().sort((x, y) => y.u.st - x.u.st)[0];
+        release(strongest); m.pinned = false;
+        L(`${m.id} breaks free of ${strongest.id}${m.grips.length ? ` (${m.grips.length} still holding)` : ""}`);
+      } else L(`${m.id} strains against ${g.length} grappler${g.length > 1 ? "s" : ""} (ST ${Math.round(a)} vs ${Math.round(d)})`);
+      return true;
+    }
+    // damage bonus for All-Out Attack (Strong) and Mighty Blows, for planning
+    const boosted = (w, k) => ({ ...w.dmg, add: w.dmg.add + k * Math.max(2, w.dmg.n), key: "b" + k });
+
     function fightInMelee(m, adj) {
       const u = m.u;
+      // grappling: a model already holding a foe keeps working the hold (takedown, then pin; a pinner just holds)
+      if (m.holding) {
+        const t = m.holding;
+        if (t.state === "ok" && t.h && hexDist(m.h, t.h) <= 1) {
+          if (!t.pinned) { wrestle(m, t); return; }
+          if (t.grips.filter(g => g !== m).length >= 2) release(m);   // two can keep it pinned; the rest go back to hacking
+          else return;
+        } else release(m);
+      }
       // prefer the foe we can hurt most, ideally from its flank or rear
       let best = null;
       const mw = weaponsFor(m, true);
-      const gun = weaponsFor(m, false).filter(w => w.shots.reload <= 3 || w.shots.mag === Infinity);
+      const gun = m.grips.length ? [] : weaponsFor(m, false).filter(w => w.shots.reload <= 3 || w.shots.mag === Infinity);
       for (const t of adj) for (const w of [...mw, ...gun]) {
         const isGun = !mw.includes(w);
         const lvl = isGun ? w.level + Math.min(0, w.bulk || 0) : w.level;
@@ -1034,6 +1107,26 @@ const SIM = (() => {
       const { t, w } = best;
       m.facing = faceToward(m.h, t.h);
       const threat = threatTo(m);
+      // a charging mob that can barely hurt a foe grabs it instead, piling on until it's down and pinned (B370)
+      if (u.stance === "charge" && m.armsLost < 1) {
+        const holdable = adj.filter(x => !x.pinned && gripsOn(x).length < 4).sort((a, b) => b.grips.length - a.grips.length);
+        const hard = best.s < 1;   // under 1 HP of expected injury per swing
+        if (hard && holdable.length && !adj.some(x => x.pinned)) { m.facing = faceToward(m.h, holdable[0].h); grab(m, holdable[0]); return; }
+      }
+      // a helpless (pinned) foe draws everyone free to swing: All-Out Attack, Strong if the damage matters more
+      const pinnedFoe = adj.find(x => x.pinned);
+      if (pinnedFoe && !m.holding) {
+        const mw0 = u.melee, lv = mw0.level - skillPen(m) - (m.prone ? 4 : 0) - (m.grips.length ? 4 : 0);
+        const det = planAttack(m, mw0, pinnedFoe, lv + 4, true).score;
+        const strong = planAttack(m, mw0, pinnedFoe, lv, true, boosted(mw0, 1)).score;
+        const might = m.fp > 4 ? planAttack(m, mw0, pinnedFoe, lv, true, boosted(mw0, 2)).score : 0;
+        m.facing = faceToward(m.h, pinnedFoe.h);
+        m.aoa = true;
+        if (might > strong * 1.2 && might > det) { L(`${m.id} lays into the pinned ${pinnedFoe.id} (All-Out Attack, Strong)`); strike(m, mw0, pinnedFoe, { strong: true, mighty: true }); }
+        else if (strong > det) { L(`${m.id} lays into the pinned ${pinnedFoe.id} (All-Out Attack, Strong)`); strike(m, mw0, pinnedFoe, { strong: true }); }
+        else { L(`${m.id} lays into the pinned ${pinnedFoe.id} (All-Out Attack, Determined)`); strike(m, mw0, pinnedFoe, { determined: true }); }
+        return;
+      }
       if (best.s <= 0.01) {
         // nothing gets through: defend (All-Out Defense) if threatened, else reload a quick gun or wait
         if (u.ranged && !m.gunBroken && m.ammo < u.ranged.shots.mag && u.ranged.shots.reload <= 3) {
@@ -1089,6 +1182,8 @@ const SIM = (() => {
         }
         if (m.fp <= 0 && !check(m.u.HT).ok) { L(`${m.id} is too exhausted to act`); m.shock = 0; continue; }
         if (m.stunned) { if (check(m.u.HT).ok) { m.stunned = false; L(`${m.id} recovers from stun`); } m.shock = 0; continue; }
+        if (m.holding && (m.holding.state !== "ok" || !m.holding.h || hexDist(m.h, m.holding.h) > 1)) release(m);
+        if (gripsOn(m).length && (m.pinned || m.prone)) { breakFree(m); m.shock = 0; continue; }
         act(m);
         m.shock = 0;
       }
@@ -1295,7 +1390,7 @@ if (typeof document !== "undefined") (() => {
     wire();
     if (last) setupReplay();
   }
-  const HOW = `Every run plays a full GURPS 4e fight on a hex map, one yard per hex, second by second. Models act in Basic Speed order and an AI picks each one's maneuver: Aim, Attack, Move and Attack, All-Out Attack (Determined or Double) when nothing can hurt it, All-Out Defense when it can't hurt its foe, Feint and Deceptive Attack against strong defences, Rapid Strike, Ready to reload or clear a jam, Change Posture, and Concentrate for psychic powers. Facing matters: attacks from a flank cost the defender 2, from behind it gets no defence, so surrounding a foe pays. Elite attackers (best combat skill 17+, IQ 8+) aim at the location that does most harm (vitals, skull, eye lens, neck, limbs, or a chink in the armour at −8 or −10 that halves its DR); everyone else hits random locations, with 1 in 6 face hits striking an eye lens. The setting can let everyone aim, as RAW allows, or no one. Ranged fire uses range penalties, the rapid-fire bonus and Recoil, spreads bursts over neighbours, and can malfunction or overheat; explosions splash neighbours, fragments fly, flamers hit the whole cone. Defenders Dodge, Parry or Block with retreat and shield DB, and shooters Dodge and Drop. Cover hides legs and groin and costs attackers 2; prone models are harder to shoot but fight badly. Armour divisors, Weak Points, regenerating shields, wounding, Injury Tolerance, Damage Reduction, follow-ups, crippling, knockback, bleeding, shock, stun, consciousness and death rolls, Reanimation Protocols, morale and Perils of the Warp all apply, with either standard HP or the Revised Fractional Health wound system. The full rule list with page references is docs/simulator.md. Not modelled: vehicles, grappling and stealth.`;
+  const HOW = `Every run plays a full GURPS 4e fight on a hex map, one yard per hex, second by second. Models act in Basic Speed order and an AI picks each one's maneuver: Aim, Attack, Move and Attack, All-Out Attack (Determined or Double) when nothing can hurt it, All-Out Defense when it can't hurt its foe, Feint and Deceptive Attack against strong defences, Rapid Strike, Ready to reload or clear a jam, Change Posture, and Concentrate for psychic powers. Facing matters: attacks from a flank cost the defender 2, from behind it gets no defence, so surrounding a foe pays. Elite attackers (best combat skill 17+, IQ 8+) aim at the location that does most harm (vitals, skull, eye lens, neck, limbs, or a chink in the armour at −8 or −10 that halves its DR); everyone else hits random locations, with 1 in 6 face hits striking an eye lens. The setting can let everyone aim, as RAW allows, or no one. Ranged fire uses range penalties, the rapid-fire bonus and Recoil, spreads bursts over neighbours, and can malfunction or overheat; explosions splash neighbours, fragments fly, flamers hit the whole cone. Defenders Dodge, Parry or Block with retreat and shield DB, and shooters Dodge and Drop. Cover hides legs and groin and costs attackers 2; prone models are harder to shoot but fight badly. Armour divisors, Weak Points, regenerating shields, wounding, Injury Tolerance, Damage Reduction, follow-ups, crippling, knockback, bleeding, shock, stun, consciousness and death rolls, Reanimation Protocols, morale and Perils of the Warp all apply, with either standard HP or the Revised Fractional Health wound system. The full rule list with page references is docs/simulator.md. A charging mob that can barely hurt its foe grabs it, drags it down and pins it (B370), then the rest lay in with All-Out Attack (Strong) and Mighty Blows (1 FP). Not modelled: vehicles and stealth.`;
 
   function results(r) {
     const pct = x => (100 * x / r.runs).toFixed(0) + "%";
