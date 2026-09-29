@@ -681,7 +681,7 @@ const SIM = (() => {
 
   // ------------------------------------------------------------------ battle
   function runBattle(unitSpecs, opt = {}) {
-    const distance = opt.distance ?? 100, maxTurns = opt.maxTurns ?? 60, morale = opt.morale !== false;
+    const distance = opt.distance ?? 100, maxTurns = opt.maxTurns ?? 1200, morale = opt.morale !== false;
     const frac = opt.health === "fractional", boxes = opt.boxes || 5;
     const log = opt.log ? [] : null;
     const L = s => { if (log && log.length < 4000) log.push(s); };
@@ -863,6 +863,11 @@ const SIM = (() => {
           if (red > 1 && finj > 0) finj = Math.max(1, Math.floor(finj / red));
         }
       }
+      // the limb cap covers everything one attack does to a limb, follow-up included
+      if (!frac && finj > 0) {
+        const cap = loc === "arm" || loc === "leg" ? Math.floor(t.u.HP / 2) + 1 : loc === "hand" || loc === "foot" ? Math.floor(t.u.HP / 3) + 1 : Infinity;
+        finj = Math.max(0, Math.min(finj, cap - inj));
+      }
       L(`  ${raw} dmg to ${loc} (DR ${armDR + natDR}${div !== 1 ? "/" + (div === Infinity ? "∞" : div) : ""}): ${inj} injury${finj ? ` + ${finj} follow-up` : ""}${frac ? "" : `; ${t.id} at ${t.hp - inj - finj}/${t.u.HP} HP`}`);
       injure(att, t, inj + finj, loc, dmg.type);
       return inj + finj;
@@ -901,8 +906,11 @@ const SIM = (() => {
     }
     function rangedAttack(m, target, moved, pointBlank) {
       const w = m.u.ranged, u = m.u;
-      if (m.reload > 0) { m.reload--; if (m.reload === 0) m.ammo = w.shots.mag; return; }
-      if (m.ammo <= 0) { m.reload = Math.max(1, w.shots.reload); L(`${m.id} reloads`); return; }
+      if (w.shots.reload > 3) { if (m.ammo <= 0) return; }   // regrowing ammunition: handled each turn
+      else {
+        if (m.reload > 0) { m.reload--; if (m.reload === 0) m.ammo = w.shots.mag; return; }
+        if (m.ammo <= 0) { m.reload = Math.max(1, w.shots.reload); L(`${m.id} reloads`); return; }
+      }
       const d = Math.max(1, dist(u, target.u));
       if (d > w.range.max) return;
       if (pointBlank) {
@@ -1024,9 +1032,15 @@ const SIM = (() => {
             const t = pick(pool);
             // In close combat a fighter may shoot at point-blank range instead (Bulk as a penalty,
             // no Acc); choose whichever attack does more expected harm to this target
-            if (u.ranged && !charged.has(u) && m.reload === 0 && m.ammo > 0 &&
-                expected(u.ranged, t, u.ranged.level + Math.min(0, u.ranged.bulk), Math.min(3, u.ranged.rof)) >
-                expected(u.melee, t, u.melee.level, 1 + (u.flags.extraAttack || 0))) rangedAttack(m, t, false, true);
+            const gunBetter = u.ranged && !charged.has(u) &&
+              expected(u.ranged, t, u.ranged.level + Math.min(0, u.ranged.bulk), Math.min(3, u.ranged.rof)) >
+              expected(u.melee, t, u.melee.level, 1 + (u.flags.extraAttack || 0));
+            if (gunBetter && m.reload === 0 && m.ammo > 0) rangedAttack(m, t, false, true);
+            // an empty gun that beats the blade is worth reloading even in close combat (Ready maneuvers)
+            else if (gunBetter && (m.reload > 0 || m.ammo <= 0) && u.ranged.shots.reload <= 3) {
+              if (m.reload === 0) { m.reload = Math.max(1, u.ranged.shots.reload); L(`${m.id} reloads in close combat`); }
+              if (--m.reload <= 0) { m.reload = 0; m.ammo = u.ranged.shots.mag; }
+            }
             else meleeAttack(m, t, charged.has(u));
           }
         } else if (u.ranged && u.stance !== "charge") {
@@ -1041,6 +1055,13 @@ const SIM = (() => {
           if (foes.length) { const t = pick(foes[0].models.filter(active)); if (t) rangedAttack(m, t, false); }
         }
         m.shock = 0;
+      }
+      // weapons with long reload times (Tyranid bio-weapons regrowing ammunition) recover on their own
+      for (const m of models) {
+        const w = m.u.ranged;
+        if (!w || m.state !== "ok" || w.shots.reload <= 3 || m.ammo > 0) continue;
+        if (m.reload <= 0) m.reload = w.shots.reload;
+        if (--m.reload <= 0) { m.reload = 0; m.ammo = w.shots.mag; }
       }
       // reanimation
       for (const m of models) {
@@ -1065,9 +1086,11 @@ const SIM = (() => {
     }
     const a = sideActive(0), b = sideActive(1);
     const winner = a && !b ? 0 : b && !a ? 1 : -1;
-    L(winner < 0 ? `Battle undecided after ${turn - 1} turns` : `Side ${winner === 0 ? "A" : "B"} wins in ${turn - 1} turns`);
+    const timeout = a && b;   // both still fighting when time ran out (else both were destroyed or fled)
+    L(winner >= 0 ? `Side ${winner === 0 ? "A" : "B"} wins in ${turn - 1} turns` :
+      timeout ? `Still fighting when the ${maxTurns}-second limit ran out` : `Both sides destroyed or broken after ${turn - 1} turns`);
     return {
-      winner, turns: turn - 1, log,
+      winner, timeout, turns: turn - 1, log,
       units: units.map(u => ({
         name: u.name, side: u.side, count: u.count, routed: u.routed,
         standing: u.models.filter(m => m.state === "ok").length,
@@ -1083,11 +1106,11 @@ const SIM = (() => {
   function monteCarlo(unitSpecs, opt = {}) {
     const runs = opt.runs ?? 200;
     if (opt.seed != null) seed(opt.seed);
-    const res = { runs, wins: [0, 0], draws: 0, turns: 0, units: null, sample: null };
+    const res = { runs, wins: [0, 0], draws: 0, timeouts: 0, mutual: 0, turns: 0, units: null, sample: null };
     for (let i = 0; i < runs; i++) {
       const r = runBattle(unitSpecs, { ...opt, log: i === 0 });
       if (i === 0) res.sample = r;
-      if (r.winner < 0) res.draws++; else res.wins[r.winner]++;
+      if (r.winner < 0) { res.draws++; if (r.timeout) res.timeouts++; else res.mutual++; } else res.wins[r.winner]++;
       res.turns += r.turns;
       if (!res.units) res.units = r.units.map(u => ({ name: u.name, side: u.side, count: u.count, standing: 0, dead: 0, wiped: 0, routed: 0, dmg: 0, kills: 0 }));
       r.units.forEach((u, k) => {
@@ -1132,7 +1155,8 @@ if (typeof document !== "undefined") (() => {
   const KEY = "sim-state-v1";
   let S;
   try { S = JSON.parse(localStorage.getItem(KEY)); } catch (_) { S = null; }
-  if (!S || !S.sides) S = { distance: 100, runs: 200, maxTurns: 60, morale: true, sides: [[], []] };
+  if (!S || !S.sides) S = { distance: 100, runs: 200, maxTurns: 1200, morale: true, sides: [[], []] };
+  if (S.maxTurns === 60 || S.maxTurns === 300) S.maxTurns = 1200;   // old defaults
   const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (_) {} };
 
   function newUnit(template, count) {
@@ -1208,7 +1232,7 @@ if (typeof document !== "undefined") (() => {
       <div class="sset">
         <label>Starting distance <input type="number" min="1" max="3000" value="${S.distance}" data-g="distance"> yd</label>
         <label>Runs <input type="number" min="1" max="2000" value="${S.runs}" data-g="runs"></label>
-        <label>Turn limit <input type="number" min="5" max="600" value="${S.maxTurns}" data-g="maxTurns"> s</label>
+        <label>Turn limit <input type="number" min="5" max="3600" value="${S.maxTurns}" data-g="maxTurns"> s</label>
         <label><input type="checkbox" data-g="morale"${S.morale ? " checked" : ""}> Morale checks</label>
         <label>Wounds <select data-h aria-label="Wound rules"><option value="standard"${S.health !== "fractional" ? " selected" : ""}>Standard GURPS HP</option><option value="fractional"${S.health === "fractional" ? " selected" : ""}>Revised Fractional Health</option></select></label>
         ${S.health === "fractional" ? `<label>Boxes per level <input type="number" min="1" max="9" value="${S.boxes || 5}" data-g="boxes"></label>` : ""}
@@ -1225,7 +1249,7 @@ if (typeof document !== "undefined") (() => {
     const pct = x => (100 * x / r.runs).toFixed(0) + "%";
     const bar = `<div class="sbar"><span class="a" style="width:${100 * r.wins[0] / r.runs}%"></span><span class="d" style="width:${100 * r.draws / r.runs}%"></span><span class="b" style="width:${100 * r.wins[1] / r.runs}%"></span></div>`;
     return `<h2>Result over ${r.runs} battles</h2>
-      <div class="tsum"><div>Side A wins<b>${pct(r.wins[0])}</b></div><div>Side B wins<b>${pct(r.wins[1])}</b></div><div>Undecided<b>${pct(r.draws)}</b></div><div>Average length<b>${r.turns.toFixed(1)} s</b></div></div>
+      <div class="tsum"><div>Side A wins<b>${pct(r.wins[0])}</b></div><div>Side B wins<b>${pct(r.wins[1])}</b></div>${r.timeouts ? `<div>Still fighting at the limit<b>${pct(r.timeouts)}</b></div>` : ""}${r.mutual ? `<div>Both sides broken<b>${pct(r.mutual)}</b></div>` : ""}<div>Average length<b>${r.turns.toFixed(1)} s</b></div></div>
       ${bar}
       <div class="tablewrap" style="max-width:1100px"><table><thead><tr><th>Side</th><th>Unit</th><th>Models</th><th>Still standing (avg)</th><th>Killed (avg)</th><th>Wiped out</th><th>Broke and fled</th><th>Injury dealt (avg)</th></tr></thead><tbody>
       ${r.units.map(u => `<tr><td>${"AB"[u.side]}</td><td>${esc(u.name)}</td><td class="n">${u.count}</td><td class="n">${u.standing.toFixed(1)}</td><td class="n">${u.dead.toFixed(1)}</td><td class="n">${pct(u.wiped)}</td><td class="n">${pct(u.routed)}</td><td class="n">${u.dmg.toFixed(0)} HP</td></tr>`).join("")}

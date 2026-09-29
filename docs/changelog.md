@@ -91,3 +91,8 @@ Anchor and rule changes to `framework.md`, with the reason for each.
 ## Strength ladder
 
 - **One strength scale** (framework "Strength ladder", anchored on Astartes ST 30): the xenos had been drafted against the old Astartes ST and never rescaled. Ork Boyz 28, Nobz 34, Warboss 42; Necron Warriors, Flayed Ones, Deathmarks, Crypteks 26, Immortals 28, Lychguard 32, Overlord 34, Skorpekh 36; Genestealer 26, Hormagaunt 12, Ravener 32, Tyranid Warrior 34, Lictor 36, Hive Tyrant 55. HP rises with ST (each template keeps its HP bonus). Weapon notes quoting damage at the old ST are recomputed.
+
+## Undecided fights
+
+- **Why fights stalled:** the 60-second limit was too short for armoured grinds; fighters in close combat never reloaded an empty gun, so Marines ended up duelling with knives that couldn't penetrate; and a Hive Tyrant stood still for a minute waiting for its regrowing venom cannon.
+- **Fixes:** a model in melee reloads when its gun beats its blade and the reload is quick (3 s or less); bio-weapons with long reloads regrow ammunition on their own while the creature fights; the limb injury cap now covers the follow-up as well as the bolt (B420); the default limit is 1,200 s; results separate "still fighting at the limit" from "both sides broken". No reference fight now times out under either wound system.
