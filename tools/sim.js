@@ -356,10 +356,14 @@ const SIM = (() => {
     // ---- Revised Fractional Health (the user's house rule; after panoptesv.com's wound rules).
     // No HP pool: each hit is a wound whose severity is its injury as a fraction of HP.
     const SEVN = ["", "Scratch", "Minor", "Moderate", "Major", "Critical", "Massive", "Gawdawful", "Destruction"];
-    function severity(inj, HP) {
-      const r = inj / HP;
-      return r < 1 / 16 ? 0 : r < 1 / 8 ? 1 : r < 1 / 4 ? 2 : r < 1 / 2 ? 3 : r < 1 ? 4 : r < 2 ? 5 : r < 4 ? 6 : r < 8 ? 7 : 8;
-    }
+    // Level thresholds as fractions of HP, rounded as on the Fractional Health 40k sheet (min 1)
+    const FRAC = [0, 1 / 16, 1 / 8, 1 / 4, 1 / 2, 1, 2, 4, 8];
+    // column multipliers; the sheet's Minor row steps differently from the rest
+    const COLS = lvl => lvl === 2 ? [1, 1.125, 1.375, 1.625] : [1, 1.25, 1.5, 1.75];
+    const thr = (HP, lvl, col = 1) => Math.max(1, Math.round(HP * FRAC[lvl] * COLS(lvl)[col - 1]));
+    function severity(inj, HP) { let s = 0; for (let l = 1; l <= 8; l++) if (inj >= thr(HP, l)) s = l; return s; }
+    // boxes one hit marks: the sheet's columns 1-4 are the thresholds for 1, 2, 3 and 4 boxes
+    function boxesFor(inj, HP, lvl) { let n = 0; for (let c = 1; c <= 4; c++) if (inj >= thr(HP, lvl, c)) n = c; return Math.max(1, n); }
     function incapacitate(t, why) { if (t.state === "ok") { t.state = "out"; L(`  ${t.id} ${why}`); } }
     function fracInjure(att, t, inj, loc, type) {
       att.dmgDealt += inj;
@@ -372,10 +376,20 @@ const SIM = (() => {
       const key = limb ? loc + (R() < 0.5 ? "L" : "R") : loc;
       const W = t.wounds[key] ||= Array(9).fill(0);
       const prevBad = W[4] + W[5];
-      // Assumption (the rules are silent): each location has five boxes per severity, as on the
-      // Fractional Health 40k sheet; a wound that finds its row full counts one level higher.
-      if (!(type === "cr" && sev <= 2)) { while (sev < 8 && W[sev] >= boxes) sev++; W[sev]++; }
-      L(`  ${SEVN[sev]} wound to ${loc} (${inj} injury vs HP ${t.u.HP})`);
+      // Each location has five boxes per level (the user's table rule). A hit marks as many boxes
+      // of its level as its injury reaches on the sheet's 1-4 columns; boxes that find the row
+      // full spill into the next level up, and the worst level reached sets the wound's effects.
+      const nBox = boxesFor(inj, t.u.HP, sev);
+      if (!(type === "cr" && sev <= 2)) {
+        let top = sev;
+        for (let k = 0; k < nBox; k++) {
+          let l = sev;
+          while (l < 8 && W[l] >= boxes) l++;
+          W[l]++; top = Math.max(top, l);
+        }
+        sev = top;
+      }
+      L(`  ${SEVN[sev]} wound to ${loc} (${inj} injury vs HP ${t.u.HP}, ${nBox} box${nBox > 1 ? "es" : ""})`);
       if (sev === 8) { kill(att, t, "destroyed"); return; }
       const head = loc === "skull" || loc === "eye" || loc === "face", brain = loc === "skull" || loc === "eye";
       if (!numb && !f.hpt) t.shock = Math.max(t.shock, sev);
@@ -839,7 +853,7 @@ if (typeof document !== "undefined") (() => {
         <label>Turn limit <input type="number" min="5" max="600" value="${S.maxTurns}" data-g="maxTurns"> s</label>
         <label><input type="checkbox" data-g="morale"${S.morale ? " checked" : ""}> Morale checks</label>
         <label>Wounds <select data-h aria-label="Wound rules"><option value="standard"${S.health !== "fractional" ? " selected" : ""}>Standard GURPS HP</option><option value="fractional"${S.health === "fractional" ? " selected" : ""}>Revised Fractional Health</option></select></label>
-        ${S.health === "fractional" ? `<label>Wounds per level before the next one steps up <input type="number" min="1" max="9" value="${S.boxes || 5}" data-g="boxes"></label>` : ""}
+        ${S.health === "fractional" ? `<label>Boxes per level <input type="number" min="1" max="9" value="${S.boxes || 5}" data-g="boxes"></label>` : ""}
         <button class="run" id="simrun">Run simulation</button>
       </div>
       <div class="sgrid">${side(0)}${side(1)}</div>
@@ -847,7 +861,7 @@ if (typeof document !== "undefined") (() => {
       <details class="more"><summary>How the simulator works</summary><p>${esc(HOW)}</p></details>`;
     wire();
   }
-  const HOW = `Each second every model acts in Basic Speed order. Shooters aim once at each new target (+Acc), then fire every turn with range penalties (B550), the rapid-fire bonus and Recoil for extra hits, spreading automatic bursts across two or three models (B373); targets Dodge, and every point of margin dodges one more round. Units set to advance move and fire (−2 or Bulk, no Acc); units set to charge run in and strike, with Move and Attack penalties on the turn they arrive. In close combat a model with a gun fires it point-blank (Bulk as a penalty) when that does more harm than its melee weapon. In melee, defenders use the better of Dodge (+3 retreat) and Parry (+1 retreat, −4 per extra parry), and skilled attackers make Deceptive Attacks. Hits land on a random location (B552), with 1 in 6 face hits striking an eye lens. Regenerating shields soak damage first; armour divisors, Weak Points, wounding multipliers, Injury Tolerance (including Damage Reduction), limb caps, battlesuit structure HP and follow-up damage all apply. Shock, knockdown, stun, the HT rolls to stay conscious and to survive at −1×HP and below, Hard to Kill and Necron Reanimation Protocols are modelled. With morale on, a unit checks Will (+Fearlessness) when it falls to half and to a quarter strength, and breaks on a failure; Unfazeable units, machines with Slave Mentality and Necrons never break, and Tyranids are assumed to be within synapse range (Fearlessness 5). With Revised Fractional Health selected there is no HP pool: each hit is a Scratch to Gawdawful wound by its injury as a fraction of HP, with that level's shock, stun and knockout roll, brain, neck and "break" checks, Progressive Limb Trauma and impairment (pain, or Agony that takes the model out). The rules don't say how repeated wounds combine, so the simulator assumes the five boxes per level on the Fractional Health 40k sheet: a wound that finds its row full on that location counts one level higher. The number of boxes is a setting (1 means a second wound at a level counts one level higher). Not modelled: cover and terrain, explosion splash and fragmentation, crippled-limb effects, psychic powers, vehicles and drones' support roles.`;
+  const HOW = `Each second every model acts in Basic Speed order. Shooters aim once at each new target (+Acc), then fire every turn with range penalties (B550), the rapid-fire bonus and Recoil for extra hits, spreading automatic bursts across two or three models (B373); targets Dodge, and every point of margin dodges one more round. Units set to advance move and fire (−2 or Bulk, no Acc); units set to charge run in and strike, with Move and Attack penalties on the turn they arrive. In close combat a model with a gun fires it point-blank (Bulk as a penalty) when that does more harm than its melee weapon. In melee, defenders use the better of Dodge (+3 retreat) and Parry (+1 retreat, −4 per extra parry), and skilled attackers make Deceptive Attacks. Hits land on a random location (B552), with 1 in 6 face hits striking an eye lens. Regenerating shields soak damage first; armour divisors, Weak Points, wounding multipliers, Injury Tolerance (including Damage Reduction), limb caps, battlesuit structure HP and follow-up damage all apply. Shock, knockdown, stun, the HT rolls to stay conscious and to survive at −1×HP and below, Hard to Kill and Necron Reanimation Protocols are modelled. With morale on, a unit checks Will (+Fearlessness) when it falls to half and to a quarter strength, and breaks on a failure; Unfazeable units, machines with Slave Mentality and Necrons never break, and Tyranids are assumed to be within synapse range (Fearlessness 5). With Revised Fractional Health selected there is no HP pool: each hit is a Scratch to Gawdawful wound by its injury as a fraction of HP, with that level's shock, stun and knockout roll, brain, neck and "break" checks, Progressive Limb Trauma and impairment (pain, or Agony that takes the model out). Each location has five boxes per level, and a hit marks as many boxes as its injury reaches on the sheet's columns (the level's threshold ×1, ×1.25, ×1.5 and ×1.75 for 1 to 4 boxes; ×1, ×1.125, ×1.375 and ×1.625 for Minor, as the sheet does); boxes that find the row full spill into the next level, and the worst level reached sets the wound's effects. Not modelled: cover and terrain, explosion splash and fragmentation, crippled-limb effects, psychic powers, vehicles and drones' support roles.`;
 
   function results(r) {
     const pct = x => (100 * x / r.runs).toFixed(0) + "%";

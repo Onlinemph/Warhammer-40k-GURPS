@@ -4,6 +4,8 @@ Reference fights run with `tools/sim.js` against the current data: 300 battles e
 
 Rerun after data changes to see what moved. The two scripts that produced this table live in the session scratchpad; `node tools/sim_test.js` runs a smaller set.
 
+## Standard GURPS HP
+
 | Fight | Result | Length | Side A | Side B |
 |---|---|---|---|---|
 | 10 Astra Militarum Guardsman vs 10 Ork Boy @15yd | A 96% B 3% draw 1% | 10s | 8.1/10 up, 0.2 dead | 0.1/10 up, 0.9 dead |
@@ -84,34 +86,82 @@ Rerun after data changes to see what moved. The two scripts that produced this t
 
 ## Revised Fractional Health
 
-The same engine with the user's Revised Fractional Health wound rules, under two readings of how repeated wounds stack (the rules don't say): five boxes per level before a wound steps up (as on the Fractional Health 40k sheet), and one box, so a second wound at a level counts one level higher. 300 battles each.
+The user's wound rules: no HP pool; five boxes per level per location; a hit marks as many boxes of its level as its injury reaches on the sheet's 1-4 columns, spilling into the next level when a row is full. Here "up" still counts models fighting and "dead" those killed outright; the rest were knocked out, broke, or collapsed in agony.
 
-```
-== standard
-  10 Astra Militarum Guardsman vs 10 Ork Boy: A 97% B 3% draw 0% 10s
-  5 Astartes Battle-Brother vs 10 Necron Warrior: A 100% B 0% draw 0% 20s
-  5 Primaris Battle-Brother vs 5 Astartes Battle-Brother: A 12% B 0% draw 88% 57s
-  3 Custodian Guardian vs 10 Astartes Battle-Brother: A 100% B 0% draw 0% 22s
-  5 Ork Nob vs 5 Astartes Battle-Brother: A 0% B 100% draw 0% 6s
-  5 Astartes Battle-Brother vs 10 Flayed One: A 100% B 0% draw 0% 11s
-  10 Adepta Sororitas Battle Sister vs 15 Ork Boy: A 100% B 0% draw 0% 6s
-  30 Astra Militarum Guardsman vs 5 Genestealer: A 100% B 0% draw 0% 4s
-== frac 5 boxes
-  10 Astra Militarum Guardsman vs 10 Ork Boy: A 20% B 79% draw 2% 18s
-  5 Astartes Battle-Brother vs 10 Necron Warrior: A 0% B 0% draw 100% 60s
-  5 Primaris Battle-Brother vs 5 Astartes Battle-Brother: A 1% B 0% draw 99% 60s
-  3 Custodian Guardian vs 10 Astartes Battle-Brother: A 71% B 0% draw 29% 52s
-  5 Ork Nob vs 5 Astartes Battle-Brother: A 0% B 27% draw 73% 52s
-  5 Astartes Battle-Brother vs 10 Flayed One: A 6% B 0% draw 94% 59s
-  10 Adepta Sororitas Battle Sister vs 15 Ork Boy: A 72% B 0% draw 28% 22s
-  30 Astra Militarum Guardsman vs 5 Genestealer: A 50% B 48% draw 3% 19s
-== frac 2 = next
-  10 Astra Militarum Guardsman vs 10 Ork Boy: A 53% B 46% draw 1% 14s
-  5 Astartes Battle-Brother vs 10 Necron Warrior: A 87% B 0% draw 13% 45s
-  5 Primaris Battle-Brother vs 5 Astartes Battle-Brother: A 0% B 0% draw 100% 60s
-  3 Custodian Guardian vs 10 Astartes Battle-Brother: A 100% B 0% draw 0% 33s
-  5 Ork Nob vs 5 Astartes Battle-Brother: A 0% B 100% draw 0% 8s
-  5 Astartes Battle-Brother vs 10 Flayed One: A 100% B 0% draw 0% 21s
-  10 Adepta Sororitas Battle Sister vs 15 Ork Boy: A 99% B 0% draw 1% 6s
-  30 Astra Militarum Guardsman vs 5 Genestealer: A 100% B 0% draw 0% 2s
-```
+| Fight | Result | Length | Side A | Side B |
+|---|---|---|---|---|
+| 10 Astra Militarum Guardsman vs 10 Ork Boy @15yd | A 33% B 67% draw 0% | 15s | 2.6/10 up, 0.7 dead | 5.0/10 up, 0.3 dead |
+| 20 Astra Militarum Guardsman vs 20 Ork Boy @40yd | A 100% B 0% draw 0% | 5s | 20.0/20 up, 0.0 dead | 0.0/20 up, 1.0 dead |
+| 10 Ork Boy vs 5 Astartes Battle-Brother @10yd | A 0% B 100% draw 0% | 6s | 0.0/10 up, 0.5 dead | 5.0/5 up, 0.0 dead |
+| 5 Ork Nob vs 5 Astartes Battle-Brother @10yd | A 0% B 96% draw 4% | 28s | 0.1/5 up, 0.1 dead | 5.0/5 up, 0.0 dead |
+| 1 Ork Warboss vs 3 Astartes Battle-Brother @10yd | A 5% B 81% draw 14% | 30s | 0.2/1 up, 0.0 dead | 2.7/3 up, 0.1 dead |
+| 3 Ork Meganob vs 5 Astartes Battle-Brother @15yd | A 9% B 0% draw 91% | 59s | 3.0/3 up, 0.0 dead | 3.0/5 up, 0.4 dead |
+| 5 Genestealer vs 5 Astartes Battle-Brother @10yd | A 0% B 100% draw 0% | 2s | 0.0/5 up, 0.3 dead | 5.0/5 up, 0.0 dead |
+| 10 Genestealer vs 20 Astra Militarum Guardsman @30yd | A 98% B 2% draw 0% | 8s | 8.4/10 up, 0.2 dead | 0.3/20 up, 0.9 dead |
+| 20 Hormagaunt vs 10 Astra Militarum Guardsman @20yd | A 47% B 50% draw 3% | 7s | 6.0/20 up, 0.2 dead | 3.6/10 up, 0.6 dead |
+| 1 Carnifex vs 5 Astartes Battle-Brother @10yd | A 0% B 0% draw 100% | 60s | 1.0/1 up, 0.0 dead | 4.8/5 up, 0.1 dead |
+| 1 Hive Tyrant vs 5 Astartes Battle-Brother @30yd | A 0% B 0% draw 100% | 60s | 1.0/1 up, 0.0 dead | 4.9/5 up, 0.0 dead |
+| 3 Tyranid Warrior vs 5 Astartes Battle-Brother @30yd | A 0% B 97% draw 3% | 11s | 0.0/3 up, 0.2 dead | 5.0/5 up, 0.0 dead |
+| 5 Astartes Battle-Brother vs 10 Necron Warrior @60yd | A 3% B 0% draw 97% | 60s | 4.9/5 up, 0.1 dead | 6.1/10 up, 0.0 dead |
+| 5 Necron Immortal vs 5 Astartes Battle-Brother @60yd | A 0% B 0% draw 100% | 60s | 4.7/5 up, 0.0 dead | 4.6/5 up, 0.2 dead |
+| 5 Lychguard vs 5 Astartes Battle-Brother @10yd | A 1% B 0% draw 99% | 60s | 4.9/5 up, 0.0 dead | 4.3/5 up, 0.2 dead |
+| 10 Flayed One vs 10 Astra Militarum Guardsman @20yd | A 100% B 0% draw 0% | 13s | 10.0/10 up, 0.0 dead | 0.0/10 up, 0.7 dead |
+| 3 Skorpekh Destroyer vs 5 Astartes Battle-Brother @15yd | A 11% B 0% draw 89% | 59s | 3.0/3 up, 0.0 dead | 2.9/5 up, 0.4 dead |
+| 5 Aspect Warrior vs 10 Ork Boy @15yd | A 97% B 0% draw 3% | 33s | 4.8/5 up, 0.0 dead | 0.1/10 up, 0.1 dead |
+| 1 Exarch vs 2 Astartes Battle-Brother @10yd | A 0% B 99% draw 1% | 3s | 0.0/1 up, 0.0 dead | 2.0/2 up, 0.0 dead |
+| 10 Aeldari Guardian vs 10 Astra Militarum Guardsman @50yd | A 100% B 0% draw 0% | 2s | 9.9/10 up, 0.0 dead | 0.0/10 up, 0.8 dead |
+| 10 Wych vs 10 Ork Boy @15yd | A 46% B 54% draw 1% | 16s | 3.4/10 up, 0.2 dead | 3.7/10 up, 0.1 dead |
+| 5 Incubus vs 5 Astartes Battle-Brother @10yd | A 0% B 100% draw 0% | 3s | 0.0/5 up, 0.2 dead | 5.0/5 up, 0.0 dead |
+| 10 Kabalite Warrior vs 10 Fire Warrior (Shas'la) @100yd | A 6% B 93% draw 2% | 5s | 0.3/10 up, 0.3 dead | 6.6/10 up, 0.1 dead |
+| 10 Fire Warrior (Shas'la) vs 5 Astartes Battle-Brother @150yd | A 0% B 100% draw 0% | 15s | 0.0/10 up, 0.3 dead | 4.7/5 up, 0.1 dead |
+| 3 Battlesuit Pilot (Shas'vre) vs 20 Ork Boy @60yd | A 100% B 0% draw 0% | 8s | 3.0/3 up, 0.0 dead | 0.0/20 up, 1.4 dead |
+| 10 Kroot Carnivore vs 10 Astra Militarum Guardsman @30yd | A 0% B 100% draw 0% | 2s | 0.0/10 up, 0.5 dead | 9.8/10 up, 0.0 dead |
+| 3 Custodian Guardian vs 10 Astartes Battle-Brother @20yd | A 100% B 0% draw 0% | 40s | 3.0/3 up, 0.0 dead | 0.0/10 up, 2.2 dead |
+| 5 Sister of Silence vs 10 Astra Militarum Guardsman @20yd | A 76% B 23% draw 1% | 16s | 2.5/5 up, 0.2 dead | 2.1/10 up, 0.3 dead |
+| 10 Adepta Sororitas Battle Sister vs 15 Ork Boy @30yd | A 87% B 0% draw 13% | 15s | 10.0/10 up, 0.0 dead | 0.5/15 up, 0.7 dead |
+| 10 Militarum Tempestus Scion vs 3 Astartes Battle-Brother @60yd | A 0% B 85% draw 15% | 23s | 0.5/10 up, 0.5 dead | 2.9/3 up, 0.1 dead |
+| 5 Primaris Battle-Brother vs 5 Astartes Battle-Brother @60yd | A 0% B 0% draw 100% | 60s | 4.8/5 up, 0.1 dead | 4.3/5 up, 0.1 dead |
+| 5 Sicarian Ruststalker vs 10 Astra Militarum Guardsman @15yd | A 100% B 0% draw 0% | 11s | 4.8/5 up, 0.0 dead | 0.0/10 up, 0.6 dead |
+| 10 Skitarii Ranger vs 10 Aeldari Guardian @100yd | A 100% B 0% draw 0% | 5s | 10.0/10 up, 0.0 dead | 0.0/10 up, 0.1 dead |
+| 10 Astra Militarum Guardsman vs 10 Kabalite Warrior @100yd | A 5% B 94% draw 1% | 3s | 0.2/10 up, 0.5 dead | 7.5/10 up, 0.0 dead |
+| 10 Astra Militarum Guardsman vs 10 Fire Warrior (Shas'la) @150yd | A 0% B 99% draw 0% | 5s | 0.0/10 up, 0.4 dead | 8.6/10 up, 0.0 dead |
+| 10 Astra Militarum Guardsman vs 10 Skitarii Ranger @100yd | A 0% B 100% draw 0% | 7s | 0.0/10 up, 0.6 dead | 9.5/10 up, 0.0 dead |
+| 30 Astra Militarum Guardsman vs 5 Genestealer @30yd | A 100% B 0% draw 0% | 5s | 29.4/30 up, 0.0 dead | 0.0/5 up, 0.3 dead |
+| 20 Astra Militarum Guardsman vs 20 Termagant @60yd | A 100% B 0% draw 0% | 2s | 20.0/20 up, 0.0 dead | 0.0/20 up, 0.4 dead |
+| 10 Astra Militarum Guardsman vs 10 Necron Warrior @60yd | A 0% B 100% draw 0% | 8s | 0.0/10 up, 0.4 dead | 10.0/10 up, 0.0 dead |
+| 1 Commissar vs 3 Ork Boy @10yd | A 2% B 98% draw 0% | 6s | 0.0/1 up, 0.1 dead | 2.7/3 up, 0.0 dead |
+| 1 Inquisitor vs 2 Genestealer @10yd | A 29% B 71% draw 0% | 6s | 0.3/1 up, 0.1 dead | 1.3/2 up, 0.0 dead |
+| 5 Adepta Sororitas Battle Sister vs 10 Wych @20yd | A 98% B 0% draw 2% | 7s | 5.0/5 up, 0.0 dead | 0.0/10 up, 0.3 dead |
+| 10 Militarum Tempestus Scion vs 10 Kabalite Warrior @80yd | A 100% B 0% draw 0% | 7s | 9.3/10 up, 0.1 dead | 0.0/10 up, 0.2 dead |
+| 5 Astartes Scout vs 10 Kroot Carnivore @80yd | A 98% B 1% draw 1% | 11s | 4.8/5 up, 0.0 dead | 0.1/10 up, 0.3 dead |
+| 5 Astartes Battle-Brother vs 5 Aspect Warrior @40yd | A 100% B 0% draw 0% | 3s | 5.0/5 up, 0.0 dead | 0.0/5 up, 0.1 dead |
+| 5 Astartes Battle-Brother vs 5 Incubus @30yd | A 100% B 0% draw 0% | 4s | 5.0/5 up, 0.0 dead | 0.0/5 up, 0.3 dead |
+| 5 Astartes Battle-Brother vs 10 Flayed One @30yd | A 26% B 0% draw 74% | 56s | 5.0/5 up, 0.0 dead | 3.1/10 up, 0.0 dead |
+| 1 Shield-Captain vs 1 Necron Overlord @10yd | A 99% B 0% draw 1% | 29s | 1.0/1 up, 0.0 dead | 0.0/1 up, 0.0 dead |
+| 1 Custodian Guardian vs 3 Lychguard @10yd | A 3% B 1% draw 96% | 59s | 1.0/1 up, 0.0 dead | 2.6/3 up, 0.0 dead |
+| 5 Sister of Silence vs 5 Aspect Warrior @15yd | A 34% B 66% draw 0% | 8s | 1.2/5 up, 0.1 dead | 2.7/5 up, 0.1 dead |
+| 10 Skitarii Vanguard vs 15 Ork Boy @40yd | A 35% B 0% draw 65% | 41s | 9.7/10 up, 0.0 dead | 4.5/15 up, 0.6 dead |
+| 10 Electro-Priest vs 10 Ork Boy @15yd | A 99% B 1% draw 0% | 17s | 9.3/10 up, 0.1 dead | 0.1/10 up, 0.3 dead |
+| 5 Sicarian Ruststalker vs 5 Wych @15yd | A 100% B 0% draw 0% | 6s | 4.9/5 up, 0.0 dead | 0.0/5 up, 0.2 dead |
+| 5 Ork Nob vs 5 Aspect Warrior @15yd | A 0% B 26% draw 74% | 58s | 2.7/5 up, 0.0 dead | 4.3/5 up, 0.0 dead |
+| 3 Ork Meganob vs 1 Custodian Guardian @15yd | A 8% B 15% draw 77% | 55s | 1.9/3 up, 0.0 dead | 0.9/1 up, 0.1 dead |
+| 1 Ork Warboss vs 1 Tyranid Warrior @10yd | A 99% B 0% draw 1% | 25s | 1.0/1 up, 0.0 dead | 0.0/1 up, 0.1 dead |
+| 1 Ork Weirdboy vs 5 Astra Militarum Guardsman @20yd | A 0% B 100% draw 0% | 2s | 0.0/1 up, 0.0 dead | 5.0/5 up, 0.0 dead |
+| 20 Gretchin vs 5 Astra Militarum Guardsman @40yd | A 0% B 100% draw 0% | 5s | 0.0/20 up, 0.6 dead | 5.0/5 up, 0.0 dead |
+| 1 Lictor vs 5 Astra Militarum Guardsman @10yd | A 100% B 0% draw 0% | 18s | 1.0/1 up, 0.0 dead | 0.0/5 up, 0.2 dead |
+| 3 Ravener vs 10 Astra Militarum Guardsman @20yd | A 100% B 0% draw 0% | 20s | 3.0/3 up, 0.0 dead | 0.0/10 up, 0.7 dead |
+| 1 Zoanthrope vs 5 Astra Militarum Guardsman @60yd | A 0% B 100% draw 0% | 6s | 0.0/1 up, 0.1 dead | 5.0/5 up, 0.0 dead |
+| 1 Necron Overlord vs 3 Astartes Battle-Brother @20yd | A 2% B 3% draw 95% | 58s | 1.0/1 up, 0.0 dead | 2.6/3 up, 0.1 dead |
+| 5 Deathmark vs 10 Astra Militarum Guardsman @150yd | A 100% B 0% draw 0% | 9s | 5.0/5 up, 0.0 dead | 0.0/10 up, 0.6 dead |
+| 1 Cryptek vs 5 Ork Boy @20yd | A 3% B 0% draw 97% | 60s | 1.0/1 up, 0.0 dead | 4.3/5 up, 0.0 dead |
+| 1 Autarch vs 3 Ork Nob @15yd | A 4% B 5% draw 91% | 58s | 0.9/1 up, 0.0 dead | 2.5/3 up, 0.0 dead |
+| 1 Farseer vs 5 Astra Militarum Guardsman @20yd | A 0% B 100% draw 0% | 2s | 0.0/1 up, 0.0 dead | 4.9/5 up, 0.0 dead |
+| 5 Aeldari Ranger vs 10 Astra Militarum Guardsman @300yd | A 3% B 96% draw 1% | 7s | 0.1/5 up, 0.1 dead | 8.4/10 up, 0.1 dead |
+| 1 Archon vs 2 Astartes Battle-Brother @15yd | A 2% B 98% draw 0% | 5s | 0.0/1 up, 0.1 dead | 1.9/2 up, 0.0 dead |
+| 1 Succubus vs 2 Ork Nob @10yd | A 0% B 100% draw 0% | 11s | 0.0/1 up, 0.1 dead | 2.0/2 up, 0.0 dead |
+| 5 Mandrake vs 10 Astra Militarum Guardsman @10yd | A 0% B 100% draw 0% | 3s | 0.0/5 up, 0.2 dead | 9.8/10 up, 0.0 dead |
+| 5 Scourge vs 10 Fire Warrior (Shas'la) @100yd | A 0% B 100% draw 0% | 2s | 0.0/5 up, 0.2 dead | 9.9/10 up, 0.0 dead |
+| 1 Commander (Shas'o) vs 3 Astartes Battle-Brother @60yd | A 0% B 50% draw 50% | 35s | 0.5/1 up, 0.0 dead | 2.9/3 up, 0.0 dead |
+| 10 Pathfinder vs 10 Ork Boy @60yd | A 100% B 0% draw 0% | 4s | 10.0/10 up, 0.0 dead | 0.0/10 up, 0.7 dead |
+| 5 Vespid Stingwing vs 3 Astartes Battle-Brother @40yd | A 0% B 100% draw 0% | 4s | 0.0/5 up, 0.2 dead | 3.0/3 up, 0.0 dead |
+| 4 Gun Drone vs 5 Astra Militarum Guardsman @60yd | A 0% B 99% draw 1% | 10s | 0.0/4 up, 0.5 dead | 4.8/5 up, 0.0 dead |
