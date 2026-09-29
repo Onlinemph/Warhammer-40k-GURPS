@@ -988,7 +988,7 @@ const SIM = (() => {
     function threatOf(f) {
       const k = f.u.idx;
       if (TV.has(k)) return TV.get(k);
-      let best = 0.05;
+      let best = 0.15;   // even a harmless foe has to be put down to win
       for (const U of units) {
         if (U.side === f.u.side) continue;
         let v = 0;
@@ -1286,7 +1286,18 @@ const SIM = (() => {
       const def = bestDefence(t, m, true);
       const pGrab = hit * (1 - (def == null ? 0 : P3[cl(def)]));
       const hands = (t.grips ? t.grips.length : 0) + helpers + 1;
-      return pGrab * threatOf(t) * Math.min(1, hands / 4) * 0.8 * HORIZON;
+      // the hold only matters if the grapplers can then take the foe down and pin it: Quick Contests of their
+      // pooled ST (the strongest plus a fifth of each other) against the foe's ST, DX or grappling skill
+      const pooled = u.st * (1 + 0.2 * Math.min(3, hands - 1));
+      const contest = (a, d) => Math.max(0.02, Math.min(0.98, 0.5 + 0.08 * (a - d)));
+      const pDown = t.prone ? 1 : contest(Math.max(pooled, u.dx, u.grapple), Math.max(t.u.st, t.u.dx - 4, t.u.grapple - 4));
+      const pPin = contest(pooled, t.u.st);
+      // and only if someone can then hurt the helpless foe (any location, chinks included); a foe nobody can
+      // cut is just held, which doesn't win the fight
+      const hurt = models.filter(a => a.u.side === u.side && a.state === "ok" && a.h && hexDist(a.h, t.h) <= moveOf(a) + 1)
+        .reduce((b, a) => Math.max(b, ...["torso#c", "neck#c", "skull#c", "vitals", "neck"].map(l => expInj(a.u.melee, t.u, l))), 0);
+      const kill = Math.max(0.05, Math.min(1, hurt / remOf(t)));
+      return pGrab * pDown * pPin * kill * threatOf(t) * Math.min(1, hands / 4) * 0.8 * HORIZON;
     }
     // worth of being in reach of t: the best of a full blow (with Extra Attacks) and a grab
     function meleeWorth(m, t, helpers) {
