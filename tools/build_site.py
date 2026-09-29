@@ -295,6 +295,13 @@ def combat_flags(t, flags):
         for k in ("unliving", "homogenous", "diffuse", "no brain", "no vitals"):
             if k in low:
                 flags[k.replace(" ", "")] = 1
+    elif n.startswith("Regeneration"):
+        # HP per second (B80); the tier is in the name or the notes ("Regeneration (Very Fast)")
+        txt = n + " " + str(t.get("notes", "")) + " " + str(t.get("local_notes", ""))
+        for tier, rate in (("Extreme", 10), ("Very Fast", 1), ("Fast", 1 / 60), ("Regular", 1 / 3600)):
+            if "(" + tier + ")" in txt:
+                flags["regen"] = max(flags.get("regen", 0), rate)
+                break
     elif n.startswith("Ambidexterity"):
         flags["ambi"] = 1
     elif n.startswith("Pariah Gene"):

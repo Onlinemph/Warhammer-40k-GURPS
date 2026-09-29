@@ -1426,6 +1426,21 @@ const SIM = (() => {
         act(m);
         m.shock = 0;
       }
+      // Regeneration (B80): HP back each second; under Fractional Health the healing clears the least severe
+      // wound box once enough has built up to cover that level's threshold
+      for (const m of models) {
+        const rate = m.u.flags.regen;
+        if (!rate || (m.state !== "ok" && m.state !== "down")) continue;
+        if (!frac) { if (m.hp < m.u.HP) m.hp = Math.min(m.u.HP, m.hp + rate); continue; }
+        m.regenAcc = (m.regenAcc || 0) + rate;
+        for (let l = 1; l <= 7; l++) {
+          const need = Math.max(1, m.u.HP * FRAC[l]);
+          const k = Object.keys(m.wounds).find(x => m.wounds[x][l] > 0);
+          if (!k) continue;
+          if (m.regenAcc >= need) { m.wounds[k][l]--; m.regenAcc -= need; L(`${m.id}'s living metal knits a ${SEVN[l]} wound to ${k.replace(/[LR]$/, "")}`); }
+          break;
+        }
+      }
       // regrowing bio-weapon ammunition
       for (const m of models) {
         const w = m.u.ranged;
