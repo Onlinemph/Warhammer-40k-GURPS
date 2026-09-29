@@ -5,15 +5,15 @@ notes: >
   chassis as every other psyker in this project (Imperium/Traits/Psykers
   and the Warp.adq), reskinned Ork-flavour and gated by Warp Empowerment
   exactly as an Astropath or Librarian is, just tuned for raw destructive
-  power over control. The template buys Warp Empowerment 4 (cap 50). A
-  Weirdboy inside a WAAAGH! (the WAAAGH! Gestalt trait, included as part
-  of Ork Physiology below) treats his own Warp Empowerment as one level
-  higher, 5 (cap 60), for the purpose of which known powers he may safely
-  reach for. Da Jump costs 60, so he can cast it only inside a WAAAGH!:
-  the mechanical reason Weirdboyz cut loose with Da Jump mid-battle
-  instead of in careful isolation, and why an isolated Weirdboy is far
-  less dangerous than one embedded in his mob. The rest of his powers
-  (each 18 or less) work at any time.
+  power over control. The template buys Warp Empowerment 18 (cap 190), the
+  lowest level that covers 'Eadbanger at its full 10 dice (185): the
+  psychic blow that bursts a target's head, built at lore scale rather
+  than party balance. That cap also covers Da Jump (60) and Warpath (18),
+  so this Weirdboy needs no WAAAGH! to cast anything. The WAAAGH! Gestalt
+  bonus (one Empowerment level higher, +10 cap, while in a WAAAGH!, from
+  Ork Physiology below) only matters to a less-developed Weirdboy: at
+  Empowerment 4 (cap 50) Da Jump (60) is castable only inside a WAAAGH!,
+  which is how Weirdboyz cut loose with Da Jump mid-battle.
 
   Perils of the Warp is unchanged from the human-scale rules (Imperium/
   Traits/Psykers and the Warp.adq): Catastrophic failure (fail the Will
@@ -25,23 +25,23 @@ notes: >
   wrench, a shock-lash, sometimes a special hat) to relieve the pressure
   before it gets that far — flavour for play, not a separate mechanic.
 
-  Point math: Ork Physiology 311 + psychic package 83 (10 Unusual
-  Background + 20 Psyker Talent 2 + 50 Warp Empowerment 4 + 8 Witch-sight
-  - 5 Social Stigma) + powers 92 modified (7 'Eadbanger x2 + 7 Fists of
-  Gork x2 + 18 Warpath + 60 Da Jump) + skills 15 (Innate Attack (Projectile) 4 included) = 501 points, inside
-  framework.md's Senior Agents range — a rare, powerful, and dangerous
-  Ork specialist, matching how the fiction treats a proper Weirdboy as a
-  small strategic asset (or liability) in his own right. A "young,"
-  less-developed Weirdboy who hasn't grown into Da Jump yet should drop
-  Warp Empowerment to level 2 (cap 30, saving 20 points) and disable Da
-  Jump until later.
+  Point math: Ork Physiology 311 + psychic package 223 (10 Unusual
+  Background + 20 Psyker Talent 2 + 190 Warp Empowerment 18 + 8 Witch-sight
+  - 5 Social Stigma) + powers 270 modified (185 'Eadbanger x10 + 7 Fists of
+  Gork x2 + 18 Warpath + 60 Da Jump) + skills 15 (Innate Attack (Projectile) 4 included) = 819 points,
+  above framework.md's Senior Agents range because the 'Eadbanger is at lore
+  scale: a rare, dangerous Ork specialist who can pop a head at a glance,
+  a small strategic asset (or liability) in his own right. A "young,"
+  less-developed Weirdboy should buy fewer 'Eadbanger levels and the
+  matching lower Empowerment (for example 'Eadbanger x2 at Empowerment 4,
+  cap 50, which is the old 501-point build with Da Jump gated to a WAAAGH!).
 traits:
   - include: "xenos/orks/traits.yaml#Ork Physiology"
   - include: "imperium/psykers/warp.yaml#Unusual Background (Latent Psychic Potential)"
   - include: "imperium/psykers/warp.yaml#Psyker"
     levels: 2
   - include: "imperium/psykers/warp.yaml#Warp Empowerment"
-    levels: 4
+    levels: 18
   - include: "imperium/psykers/warp.yaml#Witch-sight"
   - name: "Social Stigma (Dangerous 'Ead)"
     points: -5
@@ -60,7 +60,7 @@ traits:
       Sanctioned Psyker Social Stigma since Ork society has no legal
       apparatus to register or license a Weirdboy in the first place.
   - include: "xenos/orks/traits.yaml#'Eadbanger"
-    levels: 2
+    levels: 10
   - include: "xenos/orks/traits.yaml#Fists of Gork (an' Mork)"
     levels: 2
   - include: "xenos/orks/traits.yaml#Warpath"

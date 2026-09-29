@@ -3,15 +3,16 @@ output: Xenos/Tyranids/Templates/Zoanthrope.gct
 notes: >
   NPC creature stat block, not a player-facing race. Point math: Tyranid
   Biology 20 + Body Lens: Zoanthrope 304 + Unusual Background 10 + Warp
-  Empowerment 6 (70) + Psyker (Talent) 2 (20) + Warp Blast 6 (66) +
-  skills 4 = 494 points. Stats: SM +1, ST 8, DX 10, IQ 10, HT 12, HP 20,
+  Empowerment 21 (220) + Psyker (Talent) 2 (20) + Warp Blast 20 (220) +
+  skills 4 = 798 points. Stats: SM +1, ST 8, DX 10, IQ 10, HT 12, HP 20,
   Will 10 (+2 from Psyker Talent, see Psyniscience/Perils notes on that
   trait), Per 10, natural chitin torso DR 40 (Weak Points 6, eye DR 20)
   plus a regenerating psychic Warp Field, Synapse Creature (16 yards),
   Shadow in the Warp (16 yards) — framework.md's Zoanthrope anchor line
-  exactly. This sits in framework.md's Senior Agents tier (350-600):
-  dedicated psychic artillery with a 6d(5) Warp Blast that burns through
-  carapace and threatens power armour, physically frail (its ST 8 and thin
+  exactly. This sits above framework.md's Senior Agents tier (350-600) because Warp
+  Blast is at lore scale, not party balance: dedicated psychic artillery
+  with a 20d(5) Warp Blast (Empowerment 21, cap 220, the lowest level that
+  covers its 220 cost) that kills Battle-Brothers and Guardians in one hit, physically frail (its ST 8 and thin
   chitin are well below any melee bioform's) and escorted rather than fielded alone, exactly
   as Codex background treats it. The point total is for GM reference
   only.
@@ -24,11 +25,11 @@ traits:
   - include: "xenos/tyranids/traits.yaml#Body Lens: Zoanthrope"
   - include: "imperium/psykers/warp.yaml#Unusual Background (Latent Psychic Potential)"
   - include: "imperium/psykers/warp.yaml#Warp Empowerment"
-    levels: 6
+    levels: 21
   - include: "imperium/psykers/warp.yaml#Psyker"
     levels: 2
   - include: "xenos/tyranids/psychic.yaml#Warp Blast"
-    levels: 6
+    levels: 20
 skills:
   - name: Innate Attack
     spec: Beam

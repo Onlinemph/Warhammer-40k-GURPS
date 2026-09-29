@@ -841,11 +841,15 @@ items:
       Runes) modified costs:
         Level      | Cap (10+10/lvl) | What the cap reaches
         1          | 20              | most Runes of Battle basics and most single-level Runes of Fate at their starting level
-        2-3        | 30-40           | Runes of Fate pushed to a second or third level; typical Warlock ceiling
-        5          | 60              | the full Runes of Fate and Runes of Battle roster, with real headroom to push a known leveled Rune higher — typical Farseer ceiling
-      A Warlock need not, and typically doesn't, buy this anywhere near a
-      Farseer's ceiling: see each template's own notes for the level it
-      actually buys.
+        2-3        | 30-40           | the non-attack Runes of Fate and the Runes of Battle basics (each 19 or less) with headroom
+        6          | 70              | Destructor at its full 7 dice (62) plus every other Rune of Battle — typical Warlock ceiling
+        10         | 110             | Eldritch Storm at its full 8 dice (108)
+        18         | 190             | Executioner at its full 10 dice (188): the Farseer's killing stroke — typical Farseer ceiling
+      The attack Runes (Executioner, Eldritch Storm, Destructor) are built
+      at lore scale rather than party scale, so their caps are far above
+      the rest of the roster; a psyker who knows only the small Runes buys
+      only the level those need. A Warlock is far below a Farseer's
+      ceiling: see each template's own notes for the level it actually buys.
     lore: >
       What actually gates a Rune of Battle or Rune of Fate is not raw
       willingness to learn it, in Codex background's own telling, but how
@@ -962,29 +966,40 @@ items:
           needs Aeldari Warp Empowerment level 1 (cap 20).
       - name: Executioner
         per_level: 5
-        levels: 1
+        levels: 10
         tags: [Advantage, Mental, Xenos, Aeldari, Psyker]
         modifiers:
           - "Malediction 1, +100%"
-          - "Armor Divisor (2), +50%"
+          - "Armor Divisor (10), +200%"
           - "Warp Sorcery, -20%"
           - "Perils of the Warp (Aeldari Runes), -5%"
         lore: >
-          A psychically-guided killing stroke, most often called on a target
-          already Doomed: the blow finds the gap in armour that pure skill
-          alone would have missed.
+          The psychic blade that slays its target outright: on the tabletop
+          the Executioner inflicts mortal wounds that no armour or ward
+          turns aside, and most often it is called on a target already
+          Doomed. Here it is a killing stroke that ignores armour almost
+          entirely.
         design: >
-          Innate Attack (Impaling, 5/die, B61) with Malediction (+100%),
-          Armor Divisor (2) (+50%, B103), Warp Sorcery (-20%), Perils
-          (Aeldari Runes, -5%). Net +125%. Full modified cost: 5 x 2.25 =
-          11.25, rounded up to 12 points/level; needs Aeldari Warp Empowerment
-          level 1 (cap 20).
+          Innate Attack (Impaling, 5/die, B61) bought at 10 levels, 10d(10)
+          imp, with Malediction 1 (+100%, B36; resisted by Will, not
+          dodged), Armor Divisor (10) (+200%, B102), Warp Sorcery (-20%) and
+          Perils (Aeldari Runes, -5%). Net +275%. Per level: 5 x (1 + 1 + 2
+          - 0.20 - 0.05) = 18.75; full modified cost 187.5, rounded up to
+          188; needs Aeldari Warp Empowerment level 18 (cap 190). Scale
+          check: 10d(10) averages 35 before armour. A
+          Battle-Brother (torso DR 103, effective 10.3) takes about 25
+          penetrating x2 = 49 injury against HP 34; a Guardian (flak 30,
+          effective 3) about 64 against HP 11; a Carnifex (DR 150, effective
+          15, then Damage Reduction 3) about 20 x2 / 3 = 13 against HP 70,
+          so it survives one hit that a Battle-Brother or Guardian does not.
+          A lesser psyker may buy fewer levels; the template buys the full 10.
       - name: Eldritch Storm
         per_level: 5
-        levels: 1
+        levels: 8
         tags: [Advantage, Mental, Xenos, Aeldari, Psyker]
         modifiers:
           - "Explosion, +150%"
+          - "Armor Divisor (2), +50%"
           - "Warp Sorcery, -20%"
           - "Perils of the Warp (Aeldari Runes, Severe), -10%"
         lore: >
@@ -992,11 +1007,13 @@ items:
           ground — a Farseer's answer to a stalled advance or a densely
           packed enemy line.
         design: >
-          Innate Attack (Crushing, 5/die) with Explosion at the 8-yard tier
-          (+150%, B106), Warp Sorcery (-20%), Perils (Aeldari Runes, Severe,
+          Innate Attack (Crushing, 5/die) bought at 8 levels, 8d(2) cr ex,
+          with Explosion at the 8-yard tier (+150%, B106), Armor Divisor (2)
+          (+50%, B102), Warp Sorcery (-20%), Perils (Aeldari Runes, Severe,
           -10%, matching this project's own area-bombardment tier
-          precedent). Net +120%. Full modified cost: 5 x 2.2 = 11
-          points/level; needs Aeldari Warp Empowerment level 1 (cap 20).
+          precedent). Net +170%. Per level: 5 x 2.7 = 13.5; full modified
+          cost 108; needs Aeldari Warp Empowerment level 10 (cap 110). A
+          lesser psyker may buy fewer levels; the template buys all 8.
       - name: Mind War
         per_level: 10
         levels: 1
@@ -1184,20 +1201,23 @@ items:
         children:
           - name: Destructor
             per_level: 5
-            levels: 3
+            levels: 7
             tags: [Advantage, Mental, Xenos, Aeldari, Psyker]
             modifiers:
               - "Explosion, +50%"
+              - "Armor Divisor (2), +50%"
               - "Warp Sorcery, -20%"
               - "Perils of the Warp (Aeldari Runes), -5%"
             lore: A blast of psychic flame that bursts on the target and scorches everything nearby.
             design: >
-              Innate Attack (Burning, 5/die, B61) with Explosion (+50%, B106,
-              2-yard burst, as this project's Imperium Inferno), Warp Sorcery
-              (-20%) and Perils (Aeldari Runes, -5%). Net +25%. Full modified
-              cost: 5 x 1.25 = 6.25 per die, 3 dice, 19 points (the costlier
-              child, so it sets the container's cap requirement); needs Aeldari
-              Warp Empowerment level 2 (cap 30), the Warlock's own level.
+              Innate Attack (Burning, 5/die, B61) bought at 7 levels, 7d(2)
+              burn ex, with Explosion (+50%, B106, 2-yard burst, as this
+              project's Imperium Inferno), Armor Divisor (2) (+50%, B102),
+              Warp Sorcery (-20%) and Perils (Aeldari Runes, -5%). Net +75%.
+              Per die: 5 x 1.75 = 8.75; 7 dice 61.25, rounded up to 62 (the
+              costlier child, so it sets the container's cap requirement);
+              needs Aeldari Warp Empowerment level 6 (cap 70), the Warlock's
+              own level. A lesser Warlock may buy fewer dice.
           - name: Embolden
             points: 10
             tags: [Advantage, Mental, Xenos, Aeldari, Psyker]
