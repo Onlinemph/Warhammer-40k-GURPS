@@ -1,7 +1,7 @@
 {
 	"version": 5,
 	"id": "BvkuEX6vpQaVvCRoG",
-	"notes": "NPC creature stat block, not a player-facing race. Point math: Tyranid Biology 20 + Body Lens: Hormagaunt 125 + Scything Talons (Hormagaunt) 45 + skills 4 = 194 points. Stats: SM -1, ST 10, DX 13, IQ 4, HT 11, HP 10, Will 4, Per 4, natural chitin torso DR 25 (Weak Points 7, eye DR 12), Basic Move 12 (Basic Speed 6.0) with Enhanced Move (Ground) 1/2, Super Jump 1 (leaping musculature) — framework.md's Hormagaunt anchor line exactly. This lands in the middle of framework.md's Trained Soldier tier (100-175): a genuinely fast, dangerous close-combat swarm killer, but still disposable biomass rather than an individual threat outside a swarm. The point total is for GM reference only.\nWeapon-symbiote: carries Scything Talons (Hormagaunt), 5d(2) cut at its ST 10 (the ST-24 anchor version would give only 3d(2) and could not hurt flak), built as a natural-attack trait in data/xenos/tyranids/bio-weapons.yaml.\n",
+	"notes": "NPC creature stat block, not a player-facing race. Point math: Tyranid Biology 20 + Body Lens: Hormagaunt 145 + Scything Talons (Hormagaunt) 45 + skills 4 = 214 points. Stats: SM -1, ST 12, DX 13, IQ 4, HT 11, HP 12, Will 4, Per 4, natural chitin torso DR 25 (Weak Points 7, eye DR 12), Basic Move 12 (Basic Speed 6.0) with Enhanced Move (Ground) 1/2, Super Jump 1 (leaping musculature) — framework.md's Hormagaunt anchor line exactly. This lands in the lower half of framework.md's Elite Human tier (200-350): a genuinely fast, dangerous close-combat swarm killer, but still disposable biomass rather than an individual threat outside a swarm. The point total is for GM reference only.\nWeapon-symbiote: carries Scything Talons (Hormagaunt), 5d+2(2) cut at its ST 12 (the ST-34 Warrior version would give only 3d+2(2) and could not reliably hurt flak), built as a natural-attack trait in data/xenos/tyranids/bio-weapons.yaml.\n",
 	"traits": [
 		{
 			"id": "TDC2AU70ysgAE2WL7",
@@ -123,7 +123,7 @@
 		{
 			"id": "TzpM4G03Mz1oCUJae",
 			"name": "Body Lens: Hormagaunt",
-			"local_notes": "Lore: The Hormagaunt: a close-combat swarm killer bred for speed over firepower, closing on its target in long bounding leaps rather than a flat sprint before its scything talons go to work. Codex background across editions and Black Library's Hive Fleet fiction both treat Hormagaunts as the swarm's fastest melee threat at this tier.\n\nDesign: -20 (Attribute Modifiers) + 125 (Chitin DR 25) + 10 (Leaping Musculature) + 10 (Enhanced Move 1/2) = 125 points, added to Tyranid Biology's 20 for 145 points of physiology alone before skills and its weapon-symbiote. See the Hormagaunt template. NPC creature stat block only.",
+			"local_notes": "Lore: The Hormagaunt: a close-combat swarm killer bred for speed over firepower, closing on its target in long bounding leaps rather than a flat sprint before its scything talons go to work. Codex background across editions and Black Library's Hive Fleet fiction both treat Hormagaunts as the swarm's fastest melee threat at this tier.\n\nDesign: 0 (Attribute Modifiers) + 125 (Chitin DR 25) + 10 (Leaping Musculature) + 10 (Enhanced Move 1/2) = 145 points, added to Tyranid Biology's 20 for 145 points of physiology alone before skills and its weapon-symbiote. See the Hormagaunt template. NPC creature stat block only.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -135,16 +135,21 @@
 				{
 					"id": "tcQVx41GImpvGy4ET",
 					"name": "Attribute Modifiers (Hormagaunt)",
-					"local_notes": "Design: Framework target: SM -1, ST 10, DX 13, IQ 4, HT 11, HP 10. ST 10 is human baseline (0 points). Increased DX +3 (B15, 20/level, 60) for DX 13 -- a bounding, close-combat killer well past a Termagant's steadier aim. Decreased IQ -6 (-120) for IQ 4, as debased as a Termagant's. Increased HT +1 (10) for HT 11. Base HP from ST 10 is already 10, the framework target, so no separate Extra Hit Points purchase. SM -1 carries no independent cost, as the Termagant lens above. Increased Basic Move +6 (B17, 5/level, 30): Basic Speed 6.0 gives Move 6, so +6 makes Basic Move 12, the swarm's fastest sprinter short of a Genestealer (see also Enhanced Move 1/2 below). 60-120+10+30 = -20.",
+					"local_notes": "Design: Framework target: SM -1, ST 12, DX 13, IQ 4, HT 11, HP 12. Increased ST +2 (B14, 10/level, 20) for ST 12 (strength ladder: a Hormagaunt is a lean, wiry killer, a little stronger than a human; no discount, per the negative-SM note below). Increased DX +3 (B15, 20/level, 60) for DX 13 -- a bounding, close-combat killer well past a Termagant's steadier aim. Decreased IQ -6 (-120) for IQ 4, as debased as a Termagant's. Increased HT +1 (10) for HT 11. Base HP from ST 12 is already 12, the framework target, so no separate Extra Hit Points purchase. SM -1 carries no independent cost, as the Termagant lens above. Increased Basic Move +6 (B17, 5/level, 30): Basic Speed 6.0 gives Move 6, so +6 makes Basic Move 12, the swarm's fastest sprinter short of a Genestealer (see also Enhanced Move 1/2 below). 20+60-120+10+30 = 0.",
 					"tags": [
 						"Physical"
 					],
-					"base_points": -20,
+					"base_points": 0,
 					"features": [
 						{
 							"type": "attribute_bonus",
 							"attribute": "sm",
 							"amount": -1
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "st",
+							"amount": 2
 						},
 						{
 							"type": "attribute_bonus",
@@ -228,7 +233,7 @@
 			"id": "tnpHmBbZRXo30hwaa",
 			"name": "Scything Talons (Hormagaunt)",
 			"reference": "B88",
-			"local_notes": "Lore: The Hormagaunt's own scything talons: a leaping killer's blades, swung in a frenzy by a body built to close on prey and shred it. Codex: Tyranids background treats the Hormagaunt as the swarm's melee shock troop, whose whole purpose is to cut down infantry in the open; a Hormagaunt brood that cannot hurt a flak-armoured Guardsman would not be worth growing.\n\nDesign: Framework.md's Scything Talons anchor (sw+2d(2) cut) is written at a Tyranid Warrior's ST 24; at a Hormagaunt's ST 10 (sw 1d) it yields only 3d(2), which penetrates flak (DR 30, eff. 15) 4.6% of the time and left the swarm's leaping killer unable to hurt the Guardsmen it exists to shred (weaker than a Termagant's fleshborer, 6d(2) at 90%). This entry keeps the same build with four dice of Innate Attack instead of two: Cutting Striker (B88, 7 points) with Armor Divisor (2) (B102, +50%) = 10.5, rounded to 11, for the bare sw(2) baseline; Innate Attack (Cut) (B61, 7/die) at 4 dice = 28, with Armor Divisor (2) (+50%) and Melee Attack, Reach C (-30%): net +20%, 28x1.2=33.6, rounded to 34. Total 11+34 = 45. Checked by exact dice distribution at ST 10 (sw+4d(2) = 5d(2)): averages 17.5 and penetrates flak 69.5% of the time, carapace (DR 70, eff. 35) 0%, and nothing heavier - a real killer of unarmoured and flak-armoured infantry (a brood of them certainly is) and no threat to rigid plate.",
+			"local_notes": "Lore: The Hormagaunt's own scything talons: a leaping killer's blades, swung in a frenzy by a body built to close on prey and shred it. Codex: Tyranids background treats the Hormagaunt as the swarm's melee shock troop, whose whole purpose is to cut down infantry in the open; a Hormagaunt brood that cannot hurt a flak-armoured Guardsman would not be worth growing.\n\nDesign: Framework.md's Scything Talons anchor (sw+2d(2) cut) is written at a Tyranid Warrior's ST 34; at a Hormagaunt's ST 12 (sw 1d+2) it yields only 3d+2(2), which penetrates flak (DR 30, eff. 15) 16.2% of the time and leaves the swarm's leaping killer unable to reliably hurt the Guardsmen it exists to shred (weaker than a Termagant's fleshborer, 6d(2) at 90%). This entry keeps the same build with four dice of Innate Attack instead of two: Cutting Striker (B88, 7 points) with Armor Divisor (2) (B102, +50%) = 10.5, rounded to 11, for the bare sw(2) baseline; Innate Attack (Cut) (B61, 7/die) at 4 dice = 28, with Armor Divisor (2) (+50%) and Melee Attack, Reach C (-30%): net +20%, 28x1.2=33.6, rounded to 34. Total 11+34 = 45. Checked by exact dice distribution at ST 12 (sw+4d(2) = 5d+2(2)): averages 19.5 and penetrates flak 84.8% of the time, carapace (DR 70, eff. 35) 0%, and nothing heavier - a real killer of unarmoured and flak-armoured infantry (a brood of them certainly is) and no threat to rigid plate.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -249,7 +254,7 @@
 					"reach": "1",
 					"parry": "0",
 					"usage": "Standard",
-					"usage_notes": "Written for a Hormagaunt-scale bearer (ST 10, sw 1d, giving a total of 5d(2) cut). The +4d Innate Attack component is what makes a small, weak bioform a threat to flak; rebuild it for any other bearer's own ST per this file's header note.",
+					"usage_notes": "Written for a Hormagaunt-scale bearer (ST 12, sw 1d+2, giving a total of 5d+2(2) cut). The +4d Innate Attack component is what makes a small, weak bioform a threat to flak; rebuild it for any other bearer's own ST per this file's header note.",
 					"defaults": [
 						{
 							"type": "dx",

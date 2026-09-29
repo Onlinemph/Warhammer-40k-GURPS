@@ -34,8 +34,8 @@ items:
   #   Attack (Reach C) limitation (B112, -30%), added to the same weapon
   #   line. Armor Divisor is charged against both pieces, since divisor and
   #   Striker together describe one physical claw or blade. This is worked
-  #   out at one representative wielder per entry (Genestealer ST18,
-  #   Tyranid Warrior ST24, Carnifex ST60, Ravener ST22 — framework.md's own
+  #   out at one representative wielder per entry (Genestealer ST26,
+  #   Tyranid Warrior ST34, Carnifex ST60, Ravener ST32 — framework.md's own
   #   bioform table) and stated plainly in each `design` field; a template
   #   that hands the same symbiote to a different-ST bioform should rebuild
   #   the bonus-dice Innate Attack component for that ST rather than reuse
@@ -501,8 +501,8 @@ items:
         parry: 0
         skill: Brawling
         notes: >-
-          Written for a Tyranid Warrior-scale bearer (ST 24, sw 4d+2, giving
-          a total of 6d+2(2) cut); rebuild the +2d Innate Attack component
+          Written for a Tyranid Warrior-scale bearer (ST 34, sw 6d, giving
+          a total of 8d(2) cut; a Ravener at ST 32, sw 6d-1, gets 8d-1(2)); rebuild the +2d Innate Attack component
           for any other bearer's own ST per this file's header note.
     lore: >-
       A pair of long, chitinous cutting blades grown from the forearms —
@@ -514,20 +514,21 @@ items:
       heaviest personal armour.
     design: >-
       Framework.md's own anchor: "Scything talons | sw+2d(2) cut." Built at
-      a Tyranid Warrior's own ST 24 (sw 4d+2, framework's bioform table):
+      a Tyranid Warrior's own ST 34 (sw 6d, framework's bioform table):
       Cutting Striker (B88, 7 points) with Armor Divisor (2) (B102, +50%)
       = 7x1.5=10.5, rounded to 11, for the bare sw+0(2) cut baseline the
       wielder's own ST already provides for free; the anchor's own +2d on
       top is bought separately as Innate Attack (Cut) (B61, 7/die) at 2
       dice = 14, with Armor Divisor (2) (+50%) and Melee Attack, Reach C
       (B112, -30%): net +20%, 14x1.2=16.8, rounded to 17. Total 11+17=28.
-      Checked by exact dice distribution at ST 24 (sw+2d(2) = 6d+2(2)):
-      averages 23 and penetrates flak (DR 30, eff. 15) 96.4% of the time,
-      carapace (DR 70, eff. 35) 0.06%, and rounds to 0% against anything
-      heavier — a real killer of unarmoured and flak-armoured targets and
-      essentially no threat to rigid plate, matching "lethal against
-      anything short of the heaviest personal armour" without overstating
-      it against carapace. Skill: Brawling, per framework.md's own weapon-
+      Checked by exact dice distribution at ST 34 (sw+2d(2) = 8d(2)):
+      averages 28 and penetrates flak (DR 30, eff. 15) 99.6% of the time,
+      carapace (DR 70, eff. 35) 6.1%, and rounds to 0% against Astartes
+      plate (eff. 50) and Terminators — a real killer of unarmoured and
+      flak-armoured targets and only a marginal threat to carapace and
+      none to rigid plate, matching "lethal against anything short of the
+      heaviest personal armour" without overstating it against carapace.
+      (A Ravener at ST 32, 8d-1(2): flak 99.3%, carapace 3.9%.) Skill: Brawling, per framework.md's own weapon-
       skill table for natural close-combat weapons (power fist/lightning
       claws use the same skill).
 
@@ -542,8 +543,8 @@ items:
         parry: 0
         skill: Brawling
         notes: >-
-          Written for a Hormagaunt-scale bearer (ST 10, sw 1d, giving a
-          total of 5d(2) cut). The +4d Innate Attack component is what makes
+          Written for a Hormagaunt-scale bearer (ST 12, sw 1d+2, giving a
+          total of 5d+2(2) cut). The +4d Innate Attack component is what makes
           a small, weak bioform a threat to flak; rebuild it for any other
           bearer's own ST per this file's header note.
     lore: >-
@@ -555,9 +556,9 @@ items:
       Guardsman would not be worth growing.
     design: >-
       Framework.md's Scything Talons anchor (sw+2d(2) cut) is written at a
-      Tyranid Warrior's ST 24; at a Hormagaunt's ST 10 (sw 1d) it yields
-      only 3d(2), which penetrates flak (DR 30, eff. 15) 4.6% of the time
-      and left the swarm's leaping killer unable to hurt the Guardsmen it
+      Tyranid Warrior's ST 34; at a Hormagaunt's ST 12 (sw 1d+2) it yields
+      only 3d+2(2), which penetrates flak (DR 30, eff. 15) 16.2% of the time
+      and leaves the swarm's leaping killer unable to reliably hurt the Guardsmen it
       exists to shred (weaker than a Termagant's fleshborer, 6d(2) at
       90%). This entry keeps the same build with four dice of Innate Attack
       instead of two: Cutting Striker (B88, 7 points) with Armor Divisor
@@ -565,7 +566,7 @@ items:
       Innate Attack (Cut) (B61, 7/die) at 4 dice = 28, with Armor Divisor
       (2) (+50%) and Melee Attack, Reach C (-30%): net +20%, 28x1.2=33.6,
       rounded to 34. Total 11+34 = 45. Checked by exact dice distribution
-      at ST 10 (sw+4d(2) = 5d(2)): averages 17.5 and penetrates flak 69.5%
+      at ST 12 (sw+4d(2) = 5d+2(2)): averages 19.5 and penetrates flak 84.8%
       of the time, carapace (DR 70, eff. 35) 0%, and nothing heavier - a
       real killer of unarmoured and flak-armoured infantry (a brood of them
       certainly is) and no threat to rigid plate.
@@ -604,7 +605,7 @@ items:
     design: >-
       Framework.md's own anchor: "Rending claws | sw+2d(3) cut; rending: a
       hit that succeeds by 5+ or is a critical uses armour divisor (10)
-      instead." Built at a Genestealer's own ST 18 (sw 3d, framework's
+      instead." Built at a Genestealer's own ST 26 (sw 5d, framework's
       bioform table): Cutting Striker (B88, 7 points) with Armor Divisor
       (3) (B102, +100%) = 14 for the sw+0(3) baseline; the anchor's own +2d
       is bought as Innate Attack (Cut) (B61, 7/die) at 2 dice = 14, with
@@ -614,16 +615,18 @@ items:
       the same points already paid above — only the armour divisor applied
       to a hit that already succeeded well changes, exactly as
       framework.md's own rule describes it (a chance-based crit effect, not
-      a bought capability). Checked by exact dice distribution at ST 18
-      (sw+2d = 5d): the ordinary (3) line averages 17.5 and penetrates flak
-      96.8%, carapace (eff. 23.3) 5.9%, Sororitas (eff. 28.3) 0.08%, and 0%
-      against Astartes plate or heavier — a solid but unremarkable melee
-      weapon on an ordinary hit. The Rending hit's (10) line, same 5d
-      average 17.5: flak 100%, carapace (eff. 7) 99.7%, Sororitas (eff.
-      8.5) 99.3%, Astartes plate (eff. 10) 96.8%, and even a Terminator
-      (eff. 20) 22.2% — genuinely "shears through ceramite," exactly what
+      a bought capability). Checked by exact dice distribution at ST 26
+      (sw+2d = 7d): the ordinary (3) line averages 24.5 and penetrates flak
+      (eff. 10) 99.96%, carapace (eff. 23.3) 58.6%, Astartes plate (eff.
+      33.3) 2.2%, and 0% against a Terminator (eff. 63.3) — a solid melee
+      weapon on an ordinary hit, a fair carapace-cracker and no Marine-killer.
+      The Rending hit's (10) line, same 7d
+      average 24.5: flak 100%, carapace (eff. 7) 100%, Astartes plate (eff.
+      10) 99.96%, and even a Terminator (eff. 19) 86.3% — genuinely "shears through ceramite," exactly what
       the anchor's own text claims, and only on the hits the rending rule
-      says should count.
+      says should count. (A Lictor at ST 36 has sw 6d+1, so 8d+1: ordinary
+      line flak 100%, carapace 87.0%, Astartes plate 17.9%, Terminator 0%;
+      Rending line Astartes plate 100%, Terminator 97.6%.)
 
   - name: Bonesword
     points: 78
@@ -636,8 +639,8 @@ items:
         parry: 0
         skill: Brawling
         notes: >-
-          Written for a Tyranid Warrior/Prime-scale bearer (ST 24, sw
-          4d+2, giving a total of 7d+2(10) cut); rebuild the +3d Innate
+          Written for a Tyranid Warrior/Prime-scale bearer (ST 34, sw
+          6d, giving a total of 9d(10) cut); rebuild the +3d Innate
           Attack component for any other bearer's own ST per this file's
           header note.
     lore: >-
@@ -651,7 +654,7 @@ items:
     design: >-
       Framework.md's own anchor: "Bonesword | Psychically charged bone
       blade: sw+3d(10) cut (power-field class)." Built at a Tyranid
-      Warrior's own ST 24 (sw 4d+2): Cutting Striker (B88, 7 points) with
+      Warrior's own ST 34 (sw 6d): Cutting Striker (B88, 7 points) with
       Armor Divisor (10) (B102, +200%) = 21 for the sw+0(10) baseline; the
       anchor's own +3d is bought as Innate Attack (Cut) (B61, 7/die) at 3
       dice = 21, with Armor Divisor (10) (+200%) and Melee Attack, Reach C
@@ -659,10 +662,10 @@ items:
       priced in the same tier as this project's Custodes power weapons for
       the same reason: a divisor-(10) weapon is always expensive to buy as
       a character trait, whatever grows or forges it. Checked by exact
-      dice distribution at ST 24 (sw+3d(10) = 7d+2(10)): averages 26.5 and
+      dice distribution at ST 34 (sw+3d(10) = 9d(10)): averages 31.5 and
       clears every personal-armour DR at 100%, including Astartes plate
-      (DR 100, eff. 10) at 100%, and a Terminator (DR 200, eff. 20) at
-      90.6% — a genuine Marine-and-near-Terminator killer, matching "same
+      (DR 100, eff. 10) at 100%, and a Terminator (DR 190, eff. 19) at
+      99.2% — a genuine Marine-and-near-Terminator killer, matching "same
       armour-shredding tier as a power sword" (framework's own power sword
       anchor, sw+3d+1(10), sits almost exactly here) without exceeding it.
 
@@ -695,8 +698,9 @@ items:
       No framework anchor gives this weapon exact numbers, only its
       control-weapon role, so it is built directly on that role: Binding
       (B41, 2 points/level) at level 20, matching a Tyranid Warrior/Prime's
-      own ST 24 minus some slack for the whip's own flexibility versus a
-      solid limb's grip = 40 points, plus a minor Crushing Striker (B88,
+      own ST 24 (the figure this entry was priced at, before the strength
+      ladder raised the Warrior to ST 34; Binding is a fixed trait and is not
+      rescaled, and a whip grips less than a solid limb) = 40 points, plus a minor Crushing Striker (B88,
       5 points) with the Long 1 enhancement for its extra reach (this
       project's own estimated +40%/level, since Basic Set's core rules
       don't tabulate a Claws/Striker reach extension and this project's
@@ -720,7 +724,7 @@ items:
         skill: Brawling
         notes: >-
           Written for a Carnifex-scale bearer (ST 60, sw 9d, giving a total
-          of 13d(3) cut); a Hive Tyrant (ST 45, sw 7d+1) totals 11d+1(3).
+          of 13d(3) cut); a Hive Tyrant (ST 55, sw 8d+1) totals 12d+1(3).
           Rebuild the +4d Innate Attack component for any other bearer's own
           ST per this file's header note.
     lore: >-
@@ -740,8 +744,8 @@ items:
       48. Total 14+48=62. Checked by exact dice distribution at ST 60
       (sw+4d(3) = 13d(3)): averages 45.5 and penetrates Astartes plate (DR
       100, eff. 33.3) 97.5% of the time, Gravis (DR 130) 62.6%, and a
-      Terminator (DR 200, eff. 66.7) 0%. A Hive Tyrant at ST 45
-      (11d+1(3)) gets 85.3% against Astartes plate, 24.2% against Gravis
+      Terminator (DR 200, eff. 66.7) 0%. A Hive Tyrant at ST 55
+      (12d+1(3), average 43) gets 94.6% against Astartes plate, 46.7% against Gravis
       and 0% against a Terminator. Against vehicles at ST 60: AV10 97.5%,
       AV11 21.0%, AV12 and up 0%. That is a decisive Marine-killer and a
       light-vehicle cracker, but not a Terminator-killer: the crushing
@@ -814,14 +818,14 @@ items:
     design: >-
       No framework anchor names Flesh Hooks by dice, only by role (grapple
       and drag), so it is built as a plain natural weapon at a Ravener's
-      own ST 22 (thr 2d) with no bonus dice bought on top, since its point
+      own ST 36 (thr 4d-1; a Ravener at ST 32 has 3d+1) with no bonus dice bought on top, since its point
       is the grab, not the kill: Impaling Striker (B88, 8 points, the
       hooked-barb reading of a Piercing Striker's family) with the Long 1
       enhancement (this project's own estimated +40%/level, as the Lash
       Whip above) for the extra reach the hooks need to snag at range 2:
       8x1.4=11.2, rounded to 11. No exact-dice penetration table is given
       since Flesh Hooks are not built or priced as an armour-cracking
-      weapon; thr imp at ST 22 (2d imp) is a believable puncture against
+      weapon; thr imp at ST 36 (4d-1 imp) is a believable puncture against
       flesh and unarmoured targets, and the grapple note above is the
       symbiote's actual battlefield function.
 

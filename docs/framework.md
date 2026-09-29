@@ -465,13 +465,13 @@ The Tyranids are a galaxy-devouring swarm of bio-engineered organisms directed b
 | Bioform | SM | ST | DX | IQ | HT | HP | Chitin DR (torso) | Role |
 |---|---|---|---|---|---|---|---|---|
 | Termagant | −1 | 9 | 11 | 4 | 11 | 9 | 25 | Gun-beast; swarm |
-| Hormagaunt | −1 | 10 | 13 | 4 | 11 | 10 | 25 | Leaping killer; swarm |
-| Genestealer | 0 | 18 | 17 | 6 | 13 | 20 | 50 | Fastest killer in the swarm; rending claws |
-| Ravener | +1 | 22 | 14 | 5 | 14 | 26 | 60 | Burrower |
-| Tyranid Warrior | +1 | 24 | 13 | 8 | 14 | 30 | 60 | Synapse creature, officer of the swarm |
-| Lictor | +1 | 22 | 15 | 8 | 13 | 26 | 60 | Chameleonic stalker |
+| Hormagaunt | −1 | 12 | 13 | 4 | 11 | 12 | 25 | Leaping killer; swarm |
+| Genestealer | 0 | 26 | 17 | 6 | 13 | 28 | 50 | Fastest killer in the swarm; rending claws |
+| Ravener | +1 | 32 | 14 | 5 | 14 | 36 | 60 | Burrower |
+| Tyranid Warrior | +1 | 34 | 13 | 8 | 14 | 40 | 60 | Synapse creature, officer of the swarm |
+| Lictor | +1 | 36 | 15 | 8 | 13 | 40 | 60 | Chameleonic stalker |
 | Zoanthrope | +1 | 8 | 10 | 10 | 12 | 20 | 40 + psychic shield | Psychic artillery |
-| Hive Tyrant | +2 | 45 | 13 | 12 | 16 | 60 | 120 | Synapse lord, psyker |
+| Hive Tyrant | +2 | 55 | 13 | 12 | 16 | 70 | 120 | Synapse lord, psyker |
 | Carnifex | +2 | 60 | 10 | 4 | 16 | 70 | 150 | Living battering ram |
 
 Tyranid traits: Hive Mind link and **synapse** (within range of a synapse creature, Tyranids fight with total discipline and no fear; outside it they revert to instinct: feeding or fleeing, a disadvantage built honestly), **Shadow in the Warp** (the Hive Mind's presence smothers nearby psykers: a penalty to psychic power and a Fright Check risk, built as an aura; carried by synapse creatures (Warrior, Zoanthrope, Hive Tyrant) and, as a house choice, the Ravener and Lictor, but not the Carnifex), no fear or pain within synapse, **Injury Tolerance (Damage Reduction)** (GURPS Powers p. 53, 25 points per level, level = divisor) on the large synapse-beasts and monsters (Warrior, Ravener and Lictor ÷2; Carnifex and Hive Tyrant ÷3; not gaunts, Genestealers or the Zoanthrope), immunity to disease and toxins, adapted biology (regeneration on larger forms), no language or society. Tyranid psychic powers use the Sorcery model with the Hive Mind as the source; they suffer Perils like other psykers but with Hive Mind flavour.

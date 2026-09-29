@@ -775,21 +775,23 @@ items:
     tags: [Advantage, Physical, Xenos, Tyranids]
     children:
       - name: "Attribute Modifiers (Hormagaunt)"
-        points: -20
-        attributes: {sm: -1, dx: 3, iq: -6, ht: 1, basic_move: 6}
+        points: 0
+        attributes: {sm: -1, st: 2, dx: 3, iq: -6, ht: 1, basic_move: 6}
         tags: [Physical]
         design: >
-          Framework target: SM -1, ST 10, DX 13, IQ 4, HT 11, HP 10. ST
-          10 is human baseline (0 points). Increased DX +3 (B15, 20/level,
+          Framework target: SM -1, ST 12, DX 13, IQ 4, HT 11, HP 12.
+          Increased ST +2 (B14, 10/level, 20) for ST 12 (strength ladder:
+          a Hormagaunt is a lean, wiry killer, a little stronger than a
+          human; no discount, per the negative-SM note below). Increased DX +3 (B15, 20/level,
           60) for DX 13 -- a bounding, close-combat killer well past a
           Termagant's steadier aim. Decreased IQ -6 (-120) for IQ 4, as
           debased as a Termagant's. Increased HT +1 (10) for HT 11. Base
-          HP from ST 10 is already 10, the framework target, so no
+          HP from ST 12 is already 12, the framework target, so no
           separate Extra Hit Points purchase. SM -1 carries no
           independent cost, as the Termagant lens above. Increased Basic
           Move +6 (B17, 5/level, 30): Basic Speed 6.0 gives Move 6, so +6
           makes Basic Move 12, the swarm's fastest sprinter short of a
-          Genestealer (see also Enhanced Move 1/2 below). 60-120+10+30 = -20.
+          Genestealer (see also Enhanced Move 1/2 below). 20+60-120+10+30 = 0.
       - name: "Chitin (Hormagaunt)"
         <<: *chitin
         levels: 25
@@ -809,8 +811,8 @@ items:
       both treat Hormagaunts as the swarm's fastest melee threat at this
       tier.
     design: >
-      -20 (Attribute Modifiers) + 125 (Chitin DR 25) + 10 (Leaping
-      Musculature) + 10 (Enhanced Move 1/2) = 125 points, added to
+      0 (Attribute Modifiers) + 125 (Chitin DR 25) + 10 (Leaping
+      Musculature) + 10 (Enhanced Move 1/2) = 145 points, added to
       Tyranid Biology's 20 for 145
       points of physiology alone before skills and its weapon-symbiote.
       See the Hormagaunt template. NPC creature stat block only.
@@ -820,22 +822,23 @@ items:
     tags: [Advantage, Physical, Xenos, Tyranids]
     children:
       - name: "Attribute Modifiers (Genestealer)"
-        points: 209
-        attributes: {st: 8, dx: 7, iq: -4, ht: 3, hp: 2, basic_move: 7}
+        points: 289
+        attributes: {st: 16, dx: 7, iq: -4, ht: 3, hp: 2, basic_move: 7}
         tags: [Physical]
         design: >
-          Framework target: SM 0, ST 18, DX 17, IQ 6, HT 13, HP 20.
-          Increased ST +8 (B14, 10/level, 80) for ST 18. Increased DX +7
+          Framework target: SM 0, ST 26, DX 17, IQ 6, HT 13, HP 28.
+          Increased ST +16 (B14, 10/level, 160) for ST 26 (strength
+          ladder: a Necron Warrior's strength, short of a Marine's 30). Increased DX +7
           (B15, 20/level, 140) for DX 17 -- past an Astartes Battle-
           Brother's own precision, the fiction's "fastest killer in the
           swarm" made literal. Decreased IQ -4 (B16, 20/level, -80) for IQ
           6 -- animal-cunning-plus, enough for a genuinely dangerous
           infiltration predator without any real reasoning. Increased HT
           +3 (B15, 10/level, 30) for HT 13. Extra Hit Points +2 (B16,
-          2/level, 4) on top of the ST-18 base of 18, for HP 20. Increased
+          2/level, 4) on top of the ST-26 base of 26, for HP 28. Increased
           Basic Move +7 (B17, 5/level, 35): Basic Speed is (17+13)/4 =
-          7.5, Move 7, so +7 lands Basic Move at exactly 14. 80+140-80+30+4+35
-          = 209.
+          7.5, Move 7, so +7 lands Basic Move at exactly 14. 160+140-80+30+4+35
+          = 289.
       - name: "Chitin (Genestealer)"
         <<: *chitin
         levels: 50
@@ -857,9 +860,9 @@ items:
       recurring Black Library horror-fiction staple (an infiltrating
       Genestealer moving faster than anyone in the room can react).
     design: >
-      209 (Attribute Modifiers) + 250 (Chitin DR 50) + 20 (Enhanced Move
-      1) + 10 (Infravision) + 25 (Extra Attack) = 514 points, added
-      to Tyranid Biology's 20 for 534 points of physiology alone before
+      289 (Attribute Modifiers) + 250 (Chitin DR 50) + 20 (Enhanced Move
+      1) + 10 (Infravision) + 25 (Extra Attack) = 594 points, added
+      to Tyranid Biology's 20 for 614 points of physiology alone before
       skills and its weapon-symbiote. See the Genestealer template. NPC
       creature stat block only; a Genestealer's broodline-infestation
       role is a GM plot hook, not a point-costed trait.
@@ -869,23 +872,24 @@ items:
     tags: [Advantage, Physical, Xenos, Tyranids]
     children:
       - name: "Attribute Modifiers (Ravener)"
-        points: 161
-        attributes: {sm: 1, st: 12, dx: 4, iq: -5, ht: 4, hp: 4, basic_move: 5}
+        points: 251
+        attributes: {sm: 1, st: 22, dx: 4, iq: -5, ht: 4, hp: 4, basic_move: 5}
         tags: [Physical]
         design: >
-          Framework target: SM +1, ST 22, DX 14, IQ 5, HT 14, HP 26.
-          Increased ST +12 (B14, 10/level, 120) for ST 22, with the SM +1
+          Framework target: SM +1, ST 32, DX 14, IQ 5, HT 14, HP 36.
+          Increased ST +22 (B14, 10/level, 220) for ST 32 (strength
+          ladder: a Primaris Marine's strength), with the SM +1
           cost break (-10% per B18's Size and Strength Table for a
           creature whose bulk matches its size, the same discount this
           project's Ork Warboss and Custodes Attribute Modifiers entries
-          take): 120 x 0.9 = 108. Increased DX +4 (B15, 20/level, 80) for
+          take): 220 x 0.9 = 198. Increased DX +4 (B15, 20/level, 80) for
           DX 14 -- a serpentine burrowing predator, quick despite its
           bulk. Decreased IQ -5 (B16, 20/level, -100) for IQ 5, barely
           above a Termagant's. Increased HT +4 (B15, 10/level, 40) for HT
-          14. Extra Hit Points +4 (B16, 2/level, 8) on top of the ST-22
-          base of 22, for HP 26. Increased Basic Move +5 (B17, 5/level, 25):
+          14. Extra Hit Points +4 (B16, 2/level, 8) on top of the ST-32
+          base of 32, for HP 36. Increased Basic Move +5 (B17, 5/level, 25):
           Basic Speed 7.0 gives Move 7, so +5 lands Basic Move at 12.
-          108+80-100+40+8+25 = 161.
+          198+80-100+40+8+25 = 251.
       - name: "Chitin (Ravener)"
         <<: *chitin
         levels: 60
@@ -921,9 +925,9 @@ items:
       it. Codex background across editions is explicit that this ambush
       capability, not raw combat stats, is the Ravener's whole purpose.
     design: >
-      161 (Attribute Modifiers) + 300 (Chitin DR 60) + 39 (Tunnelling) +
-      20 (Shadow in the Warp) + 50 (Injury Tolerance 2) = 570 points, added to Tyranid Biology's 20
-      for 590 points of physiology alone before skills and its weapon-
+      251 (Attribute Modifiers) + 300 (Chitin DR 60) + 39 (Tunnelling) +
+      20 (Shadow in the Warp) + 50 (Injury Tolerance 2) = 660 points, added to Tyranid Biology's 20
+      for 680 points of physiology alone before skills and its weapon-
       symbiote. See the Ravener template. NPC creature stat block only.
 
   - name: "Body Lens: Tyranid Warrior"
@@ -931,20 +935,21 @@ items:
     tags: [Advantage, Physical, Xenos, Tyranids]
     children:
       - name: "Attribute Modifiers (Tyranid Warrior)"
-        points: 213
-        attributes: {sm: 1, st: 14, dx: 3, iq: -2, ht: 4, hp: 6, basic_move: 3}
+        points: 303
+        attributes: {sm: 1, st: 24, dx: 3, iq: -2, ht: 4, hp: 6, basic_move: 3}
         tags: [Physical]
         design: >
-          Framework target: SM +1, ST 24, DX 13, IQ 8, HT 14, HP 30.
-          Increased ST +14 (B14, 10/level, 140) for ST 24, with the SM +1
-          discount: 140 x 0.9 = 126. Increased DX +3 (B15, 20/level, 60)
+          Framework target: SM +1, ST 34, DX 13, IQ 8, HT 14, HP 40.
+          Increased ST +24 (B14, 10/level, 240) for ST 34 (strength
+          ladder: level with an Ork Nob), with the SM +1
+          discount: 240 x 0.9 = 216. Increased DX +3 (B15, 20/level, 60)
           for DX 13. Decreased IQ -2 (B16, 20/level, -40) for IQ 8 -- a
           genuine officer of the swarm, sharp enough for real tactical
           judgement without approaching a human genius. Increased HT +4
           (40) for HT 14. Extra Hit Points +6 (B16, 2/level, 12) on top of
-          the ST-24 base of 24, for HP 30. Increased Basic Move +3 (B17,
+          the ST-34 base of 34, for HP 40. Increased Basic Move +3 (B17,
           5/level, 15): Basic Speed 6.75 gives Move 6, so +3 lands Basic
-          Move at 9. 126+60-40+40+12+15 = 213.
+          Move at 9. 216+60-40+40+12+15 = 303.
       - name: "Chitin (Tyranid Warrior)"
         <<: *chitin
         levels: 60
@@ -982,11 +987,11 @@ items:
       (chiefly the Deathwatch novels' portrayal of Warriors as the
       dangerous, thinking edge of an otherwise mindless tide).
     design: >
-      213 (Attribute Modifiers) + 300 (Chitin DR 60) + 25 (Synapse
-      Creature) + 25 (Shadow in the Warp) + 50 (Injury Tolerance 2) = 613 points, added to Tyranid
-      Biology's 20 for 633 points of physiology alone before skills and
-      its weapon-symbiotes -- deep in framework.md's Astartes point tier
-      (550-800), matching a Warrior's role as the swarm's single most
+      303 (Attribute Modifiers) + 300 (Chitin DR 60) + 25 (Synapse
+      Creature) + 25 (Shadow in the Warp) + 50 (Injury Tolerance 2) = 703 points, added to Tyranid
+      Biology's 20 for 723 points of physiology alone before skills and
+      its weapon-symbiotes -- in framework.md's Astartes point tier
+      (550-850), matching a Warrior's role as the swarm's single most
       dangerous common bioform. See the Tyranid Warrior template. NPC
       creature stat block only; do not read this total as a measure of
       individual threat the way a similarly-costed human character would
@@ -998,20 +1003,21 @@ items:
     tags: [Advantage, Physical, Xenos, Tyranids]
     children:
       - name: "Attribute Modifiers (Lictor)"
-        points: 226
-        attributes: {sm: 1, st: 12, dx: 5, iq: -2, ht: 3, hp: 4, basic_move: 4}
+        points: 352
+        attributes: {sm: 1, st: 26, dx: 5, iq: -2, ht: 3, hp: 4, basic_move: 4}
         tags: [Physical]
         design: >
-          Framework target: SM +1, ST 22, DX 15, IQ 8, HT 13, HP 26.
-          Increased ST +12 (120) with the SM +1 discount: 120 x 0.9 = 108.
+          Framework target: SM +1, ST 36, DX 15, IQ 8, HT 13, HP 40.
+          Increased ST +26 (260) for ST 36 (strength ladder: level with a
+          Skorpekh Destroyer) with the SM +1 discount: 260 x 0.9 = 234.
           Increased DX +5 (B15, 20/level, 100) for DX 15 -- a stalking
           ambush predator with the swarm's best reflexes outside a
           Genestealer's. Decreased IQ -2 (-40) for IQ 8, sharp enough for
           patient, solo infiltration work rather than raw instinct.
           Increased HT +3 (30) for HT 13. Extra Hit Points +4 (8) on top
-          of the ST-22 base of 22, for HP 26. Increased Basic Move +4 (B17, 5/level, 20):
+          of the ST-36 base of 36, for HP 40. Increased Basic Move +4 (B17, 5/level, 20):
           Basic Speed 7.0 gives Move 7, so +4 lands Basic Move at 11.
-          108+100-40+30+8+20 = 226.
+          234+100-40+30+8+20 = 352.
       - name: "Chitin (Lictor)"
         <<: *chitin
         levels: 60
@@ -1049,11 +1055,11 @@ items:
       basis for the classic "something was watching, then it wasn't"
       Black Library beat.
     design: >
-      226 (Attribute Modifiers) + 300 (Chitin DR 60) + 20 (Chameleonic
-      Hide) + 1 (Pheromone Trail) + 20 (Shadow in the Warp) + 50 (Injury Tolerance 2) = 617 points,
-      added to Tyranid Biology's 20 for 637 points of physiology alone
-      before skills and its weapon-symbiotes, on a par with the Tyranid
-      Warrior lens. See the Lictor template. NPC creature stat block
+      352 (Attribute Modifiers) + 300 (Chitin DR 60) + 20 (Chameleonic
+      Hide) + 1 (Pheromone Trail) + 20 (Shadow in the Warp) + 50 (Injury Tolerance 2) = 743 points,
+      added to Tyranid Biology's 20 for 763 points of physiology alone
+      before skills and its weapon-symbiotes, about 40 points above the
+      Tyranid Warrior lens (ST 36 against 34). See the Lictor template. NPC creature stat block
       only.
 
   - name: "Body Lens: Zoanthrope"
@@ -1108,22 +1114,22 @@ items:
     tags: [Advantage, Physical, Xenos, Tyranids]
     children:
       - name: "Attribute Modifiers (Hive Tyrant)"
-        points: 485
-        attributes: {sm: 2, st: 35, dx: 3, iq: 2, ht: 6, hp: 15, basic_move: 3}
+        points: 565
+        attributes: {sm: 2, st: 45, dx: 3, iq: 2, ht: 6, hp: 15, basic_move: 3}
         tags: [Physical]
         design: >
-          Framework target: SM +2, ST 45, DX 13, IQ 12, HT 16, HP 60.
-          Increased ST +35 (B14, 10/level, 350) for ST 45, with the SM +2
+          Framework target: SM +2, ST 55, DX 13, IQ 12, HT 16, HP 70.
+          Increased ST +45 (B14, 10/level, 450) for ST 55, with the SM +2
           discount (-10% per point of positive SM, per B18, the same rate
           this project's Ork Warboss and Custodes entries use, here two
-          steps): 350 x 0.8 = 280. Increased DX +3 (60) for DX 13.
+          steps): 450 x 0.8 = 360. Increased DX +3 (60) for DX 13.
           Increased IQ +2 (B16, 20/level, 40) for IQ 12 -- a genuine
           synapse lord and psyker, sharper than any lesser bioform.
           Increased HT +6 (B15, 10/level, 60) for HT 16. Extra Hit Points
-          +15 (B16, 2/level, 30) on top of the ST-45 base of 45, for HP
-          60. Increased Basic Move +3 (B17, 5/level, 15): Basic Speed 7.25
-          gives Move 7, so +3 lands Basic Move at 10. 280+60+40+60+30+15 =
-          485.
+          +15 (B16, 2/level, 30) on top of the ST-55 base of 55, for HP
+          70. Increased Basic Move +3 (B17, 5/level, 15): Basic Speed 7.25
+          gives Move 7, so +3 lands Basic Move at 10. 360+60+40+60+30+15 =
+          565.
       - name: "Chitin (Hive Tyrant)"
         <<: *chitin
         levels: 120
@@ -1164,10 +1170,10 @@ items:
       routinely treats a confirmed Hive Tyrant kill as a campaign-level
       victory.
     design: >
-      485 (Attribute Modifiers) + 600 (Chitin DR 120) + 25 (Regeneration)
-      + 30 (Synapse Creature) + 30 (Shadow in the Warp) + 75 (Injury Tolerance 3) = 1245 points
+      565 (Attribute Modifiers) + 600 (Chitin DR 120) + 25 (Regeneration)
+      + 30 (Synapse Creature) + 30 (Shadow in the Warp) + 75 (Injury Tolerance 3) = 1325 points
       (Wings disabled by default, +30 more if enabled), added to Tyranid
-      Biology's 20 for 1265 points of physiology alone before skills,
+      Biology's 20 for 1345 points of physiology alone before skills,
       psychic powers (data/xenos/tyranids/psychic.yaml) and weapon-
       symbiotes -- squarely in framework.md's Heroes and Legends tier
       (1,000-3,000), appropriate for the swarm's synapse lord. See the
