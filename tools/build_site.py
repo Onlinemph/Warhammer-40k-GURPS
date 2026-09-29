@@ -402,12 +402,12 @@ def main():
             entry["items"] = [fn(r) for r in d["rows"]]
             entry["count"] = len(entry["items"])
         libs.append(entry)
-    loadouts = {}
-    lp = ROOT / "data" / "sim" / "loadouts.yaml"
-    if lp.exists():
-        import yaml
-        loadouts = yaml.safe_load(lp.read_text()) or {}
-    data = json.dumps({"libraries": libs, "loadouts": loadouts}, ensure_ascii=False, separators=(",", ":"))
+    import yaml
+    def sim_data(name):
+        f = ROOT / "data" / "sim" / name
+        return (yaml.safe_load(f.read_text()) or {}) if f.exists() else {}
+    data = json.dumps({"libraries": libs, "loadouts": sim_data("loadouts.yaml"), "simWeapons": sim_data("weapons.yaml"),
+                       "powers": sim_data("powers.yaml")}, ensure_ascii=False, separators=(",", ":"))
     html = TEMPLATE.read_text().replace("/*__DATA__*/null", data.replace("</", "<\\/"))
     html = html.replace("/*__SIM__*/", SIM.read_text())
     OUT.parent.mkdir(exist_ok=True)

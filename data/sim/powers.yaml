@@ -1,0 +1,164 @@
+# Psychic attack and defence powers per template (read by tools/sim.js; contract in docs/simulator.md).
+# Keys are Library/**/*.gct file stems. Numbers come from the psyker traits under the project's Sorcery model
+# (data/imperium/psykers/warp.yaml, data/xenos/*/traits.yaml, data/xenos/tyranids/psychic.yaml) at the levels each template buys.
+#
+# Fields: name (exact trait name), kind (ranged | melee | shield), damage (weapon damage string), acc, range (half-D/max),
+#   rof, skill (effective roll), fp (FP per use), concentrate (turns of Concentrate first), blast (explosion radius in yards),
+#   malediction (1 = Malediction, B36: no dodge, no range penalty; not modelled by the trait text beyond that), perils, note.
+#
+# skill: none of these templates buys Innate Attack except the Zoanthrope, so the roll is the Innate Attack default,
+#   DX-4 (B201), the way GURPS resolves an unbought skill. Psyker (Talent) helps only Psyniscience, Meditation, Hidden Lore
+#   (the Warp) and the Perils Will roll, so it does not raise these rolls.
+# fp: Warp Sorcery costs 1 FP per casting (framework.md "Psykers and the warp"). Powers without Warp Sorcery cost 0.
+# concentrate: no attack power in the data carries Preparation Required or a Concentrate rule, so 0 throughout.
+# range/acc/rof: Innate Attack defaults (B61): Acc 3, range 10/100, RoF 1; no trait overrides them.
+# perils: Perils of the Warp (warp.yaml) is a Will roll made whenever the power is used, not a threshold on the attack roll.
+#   will = the roll (Will + Psyker Talent levels, which the Talent adds to this roll). Success: no effect. Failure by margin:
+#   1-2 minor (lose 1 FP), 3-5 moderate (1d damage ignoring DR, power fizzles), 6-9 major (2d ignoring DR, stunned, power
+#   fizzles), 10+ or an unmodified 18 catastrophic (rift or possession; the power still fires out of control). No Pushing is assumed.
+Sanctioned Psyker:
+- name: Fire Bolt
+  kind: ranged
+  damage: 1d burn
+  acc: 3
+  range: 10/100
+  rof: 1
+  skill: 7
+  fp: 1
+  concentrate: 0
+  perils:
+    will: 17
+    minor: {fp: 1}
+    moderate: {damage: 1d, fizzle: true}
+    major: {damage: 2d, stun: true, fizzle: true}
+    catastrophic: {margin: 10, natural: 18}
+  note: Fire Bolt 1 level (Innate Attack burning, 5/die). Skill is Innate Attack default DX 11-4; the template buys no Innate Attack. Perils Will 14 + Psyker Talent 3.
+- name: Inferno
+  kind: ranged
+  damage: 1d burn ex
+  acc: 3
+  range: 10/100
+  rof: 1
+  skill: 7
+  blast: 2
+  fp: 1
+  concentrate: 0
+  perils:
+    will: 17
+    minor: {fp: 1}
+    moderate: {damage: 1d, fizzle: true}
+    major: {damage: 2d, stun: true, fizzle: true}
+    catastrophic: {margin: 10, natural: 18}
+  note: Inferno 1 level (Innate Attack burning + Explosion, 2-yard burst); alternative ability with Molten Beam, one at a time. Skill DX 11-4 default. Perils Will 14 + Talent 3.
+- name: Molten Beam
+  kind: ranged
+  damage: 1d(3) burn
+  acc: 3
+  range: 10/100
+  rof: 1
+  skill: 7
+  fp: 1
+  concentrate: 0
+  perils:
+    will: 17
+    minor: {fp: 1}
+    moderate: {damage: 1d, fizzle: true}
+    major: {damage: 2d, stun: true, fizzle: true}
+    catastrophic: {margin: 10, natural: 18}
+  note: Molten Beam 1 level (Innate Attack burning + Armor Divisor (3)). Skill DX 11-4 default. Perils Will 14 + Talent 3.
+Zoanthrope:
+- name: Warp Blast
+  kind: ranged
+  damage: 6d(5) burn
+  acc: 3
+  range: 10/100
+  rof: 1
+  skill: 12
+  fp: 1
+  concentrate: 0
+  perils:
+    will: 12
+    minor: {fp: 1}
+    moderate: {damage: 1d, fizzle: true}
+    major: {damage: 2d, stun: true, fizzle: true}
+    catastrophic: {margin: 10, natural: 18}
+  note: Warp Blast 6 levels. Skill is the template's Innate Attack (Beam) at DX+2 = 12 (DX 10, 4 points, DX/E). Perils Will 10 + Psyker Talent 2 (the trait says Hive Mind flavour, same table).
+- name: Warp Field (Bio-Psychic Ward)
+  kind: shield
+  shield: {sp: 60, delay: 2, recharge: 10, collapse_delay: 4}
+  fp: 0
+  note: 'Warp Field trait: 60 SP, recharge 10 SP/s after 2 s undamaged, 4 s if knocked to 0, all locations; always on, a body trait so no FP or Perils.'
+Farseer:
+- name: Executioner
+  kind: ranged
+  damage: 1d(2) imp
+  acc: 3
+  range: 10/100
+  rof: 1
+  skill: 10
+  malediction: 1
+  fp: 1
+  concentrate: 0
+  perils:
+    will: 22
+    minor: {fp: 1}
+    moderate: {damage: 1d, fizzle: true}
+    major: {damage: 2d, stun: true, fizzle: true}
+    catastrophic: {margin: 10, natural: 18}
+  note: Executioner 1 level (Innate Attack impaling, Malediction 1, Armor Divisor (2)). Skill DX 14-4 default. Perils Will 17 + Aeldari Talent 5 (only an unmodified 18 can trigger it); Aeldari Runes variant, same margin table.
+- name: Eldritch Storm
+  kind: ranged
+  damage: 1d cr ex
+  acc: 3
+  range: 10/100
+  rof: 1
+  skill: 10
+  blast: 8
+  fp: 1
+  concentrate: 0
+  perils:
+    will: 22
+    minor: {fp: 1}
+    moderate: {damage: 1d, fizzle: true}
+    major: {damage: 2d, stun: true, fizzle: true}
+    catastrophic: {margin: 10, natural: 18}
+  note: Eldritch Storm 1 level (Innate Attack crushing + Explosion at the 8-yard tier). Skill DX 14-4 default. Perils Will 17 + Talent 5; Severe Aeldari Perils limitation changes cost only, not the table.
+Warlock:
+- name: Destructor
+  kind: ranged
+  damage: 3d burn ex
+  acc: 3
+  range: 10/100
+  rof: 1
+  skill: 10
+  blast: 2
+  fp: 1
+  concentrate: 0
+  perils:
+    will: 16
+    minor: {fp: 1}
+    moderate: {damage: 1d, fizzle: true}
+    major: {damage: 2d, stun: true, fizzle: true}
+    catastrophic: {margin: 10, natural: 18}
+  note: Destructor 3 levels (Innate Attack burning + Explosion, 2-yard burst); alternative ability with Embolden. Skill DX 14-4 default. Perils Will 14 + Aeldari Talent 2.
+Ork Weirdboy:
+- name: '''Eadbanger'
+  kind: ranged
+  damage: 2d cr
+  acc: 3
+  range: 10/100
+  rof: 1
+  skill: 7
+  waaagh_perils_bonus: 2
+  fp: 1
+  concentrate: 0
+  perils:
+    will: 10
+    minor: {fp: 1}
+    moderate: {damage: 1d, fizzle: true}
+    major: {damage: 2d, stun: true, fizzle: true}
+    catastrophic: {margin: 10, natural: 18}
+  note: '''Eadbanger 2 levels (Innate Attack crushing). Skill DX 11-4 default (no Innate Attack bought). Perils Will 8 + Psyker Talent 2; +2 inside a WAAAGH! (WAAAGH! Gestalt). A catastrophic failure is the head exploding (template notes).'
+Cryptek:
+- {name: Channelled Discharge, kind: ranged, damage: 6d(3) burn, acc: 3, range: 10/100, rof: 1, skill: 8, fp: 0, concentrate: 0, note: 'Plasmancy discipline: Innate Attack burning 6 levels + Armor Divisor (3). Skill DX 12-4 default (the template buys no
+    Innate Attack). No Warp Sorcery or Perils in the trait (Necrons are invisible to the warp), so 0 FP and no Perils.'}

@@ -1,0 +1,100 @@
+# Facts a weapon's stat line does not carry (read by tools/sim.js; contract in docs/simulator.md).
+# Keys: exact equipment `name`, then exact weapon-line `usage` (or `_item` for item-level facts).
+#   malf      base Malf (B407); Ork values are the base, the engine adds +1 in a WAAAGH! (framework.md)
+#   overheat  damage to the firer on a malfunction / critical failure, as the item's notes state it
+#   cone      cone length in yards (usage text, or the line's range when the notes say "cone out to the listed range")
+#   db        shield Defense Bonus (B287), from the item's `block` attribute
+#   blast     radius in yards for an area line whose damage string has no "ex" / [frag]
+# Only numbers the data states are recorded.
+Plasma Pistol:
+  Standard: {malf: 16, overheat: 2dx4(3) burn ex}
+  Supercharged: {malf: 14, overheat: 2dx4(3) burn ex}
+Plasma Gun:
+  Standard: {malf: 16, overheat: 3dx4(3) burn ex}
+  Supercharged: {malf: 14, overheat: 3dx4(3) burn ex}
+Plasma Cannon:
+  Supercharged: {malf: 15, overheat: 4dx4(3) burn ex}
+Plasma Incinerator, Primaris Pattern:
+  Supercharged: {malf: 15, overheat: 3dx4(3) burn ex}
+Heavy Plasma Incinerator, Primaris Pattern:
+  Supercharged: {malf: 15, overheat: 4dx4(3) burn ex}
+Combat Shield:
+  _item: {db: 2}
+Boarding Shield:
+  _item: {db: 3}
+Storm Shield:
+  _item: {db: 3}
+Hand Flamer:
+  Cone attack (3 yards): {cone: 3}
+Flamer:
+  Cone attack (5 yards): {cone: 5}
+Heavy Flamer:
+  Cone attack (8 yards): {cone: 8}
+Combi-Weapon, Bolter/Flamer:
+  Flamer barrel (single burst): {cone: 5}
+Incinerator:
+  Cone attack (10 yards): {cone: 10}
+Pyrithite Spear:
+  Pyrithite cone (6 yards): {cone: 6}
+Praesidium Shield:
+  _item: {db: 3}
+Witchseeker Flamer (Vratine Pattern):
+  Cone attack (5 yards): {cone: 5}
+Shredder:
+  Cone (6 yards): {cone: 6}
+Liquifier Gun:
+  Cone (5 yards): {cone: 5}
+Ion Rifle:
+  Overcharged (area burst): {malf: 15, overheat: 3d burn}
+Cyclic Ion Blaster:
+  Overcharged, mounted (area burst): {malf: 15, overheat: 3d burn}
+Flamer, T'au Pattern:
+  Cone attack (5 yards): {cone: 5}
+D-scythe:
+  Cone attack (8 yards): {cone: 8}
+Slugga:
+  Standard: {malf: 14}
+Rokkit Pistol:
+  Standard: {malf: 14}
+Shoota:
+  Dakka (full auto): {malf: 14}
+Kustom Shoota:
+  Dakka (full auto): {malf: 13}
+Snazzgun:
+  Dakka (full auto): {malf: 15}
+Big Shoota:
+  Dakka (full auto): {malf: 14}
+Twin Big Shoota:
+  Dakka (both barrels): {malf: 14}
+Deffgun:
+  Braced/mounted: {malf: 14}
+Rokkit Launcha:
+  Standard: {malf: 14}
+Kustom Mega-Slugga:
+  Standard: {malf: 13}
+Kustom Mega-Blasta:
+  Standard: {malf: 13, overheat: 3d(5) burn ex}
+Zzap Gun:
+  Braced/mounted: {malf: 12, overheat: 3d(5) burn ex}
+Burna:
+  Flame jet (single burst): {malf: 13, cone: 4}
+Skorcha:
+  Flame jet (single burst): {malf: 14, cone: 7}
+Grot Blasta:
+  Standard: {malf: 14}
+Kombi-Weapon, Shoota/Rokkit:
+  Shoota barrel: {malf: 14}
+  Rokkit barrel (single shot): {malf: 14}
+Kombi-Weapon, Shoota/Burna:
+  Shoota barrel: {malf: 14}
+  Burna barrel (single burst): {malf: 13, cone: 4}
+Shokk Attack Gun:
+  Standard (see design): {malf: 13}
+Plasma Caliver:
+  Supercharged: {malf: 14, overheat: 2d(5) burn ex}
+Incendine Combustor:
+  Cone attack (4 yards): {cone: 4}
+Cognis Flamer:
+  Cone attack (7 yards): {cone: 7}
+Stun Grenade:
+  Concussion: {blast: 3}
