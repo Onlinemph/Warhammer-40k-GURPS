@@ -299,7 +299,7 @@ const SIM = (() => {
         perils: pp ? { will: Number(pp.will) || st.will, waaagh: Number(pp.waaagh_perils_bonus) || 0, fp: (pp.minor && pp.minor.fp) || 1,
           modDmg: pdm(pp.moderate && pp.moderate.damage), majDmg: pdm(pp.major && pp.major.damage),
           cat: (pp.catastrophic && pp.catastrophic.margin) || 10 } : null,
-        malediction: !!p.malediction, reachMax: 1, parry: null, malf: 0, cone: 0, blast: Number(p.blast) || 0 });
+        malediction: !!p.malediction, reachMax: 1, parry: null, malf: 0, cone: Number(p.cone) || 0, blast: Number(p.blast) || 0, explosion: Number(p.explosion) || 1 });
     }
     const u = {
       side, name: spec.label || spec.template, template: spec.template, count: Math.max(1, spec.count | 0),
@@ -606,9 +606,10 @@ const SIM = (() => {
     function explosion(att, w, at, raw) {
       for (const x of models) {
         if (x.state !== "ok" || !x.h) continue;
-        const d = hexDist(x.h, at);
-        if (d < 1 || d > 10) continue;
-        const splash = Math.floor(raw / (3 * d));
+        const d = hexDist(x.h, at), lv = w.explosion || 1;
+        if (d < 1 || d > 10 * lv) continue;
+        // Explosion level L (B107): each level past the first widens the burst; distance counts as yards / L
+        const splash = Math.floor(raw / (3 * Math.max(1, d / lv)));
         if (splash >= 1) { L(`  blast catches ${x.id} (${d} yd)`); applyHit(att, w, x, "torso", true, false, null, splash); }
       }
       const fr = w.dmg.frag;
@@ -655,6 +656,7 @@ const SIM = (() => {
       let best = { loc: "torso", da: 0, score: 0, lvl };
       for (const loc of locs) {
         const pen = loc === "random" ? 0 : AIM[loc];
+        if (loc === "eye" && !(/^pi/.test(w.dmg.type) || w.dmg.type === "imp" || (w.dmg.type === "burn" && !w.dmg.ex && !w.cone))) continue;
         const e = loc === "random" ? expInj(w, t.u, "torso", dmgOverride) : expInj(w, t.u, loc, dmgOverride);
         if (e <= 0) continue;
         const maxDa = melee ? 6 : 0;
@@ -813,7 +815,7 @@ const SIM = (() => {
           if (w.dmg.ex && k === 0 && t.h) explosion(m, w, t.h, raw);
           else if (w.dmg.ex && k === 0) explosion(m, w, t.lastH || m.h, raw);
         }
-        if (w.blast && t.h) for (const x of models) if (x !== t && x.state === "ok" && x.h && hexDist(x.h, t.h) <= w.blast) {
+        if (w.blast && !w.dmg.ex && t.h) for (const x of models) if (x !== t && x.state === "ok" && x.h && hexDist(x.h, t.h) <= w.blast) {
           if (defend(x, m, false, 0, 0) == null) applyHit(m, w, x, "torso", true, halfD);
         }
       });
