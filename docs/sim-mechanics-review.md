@@ -65,7 +65,7 @@ Items the engine already gets right are listed at the end, so nobody spends time
 
 **What the sim does.** `applyHit` calls `knockback` for every melee `cr` or `cut` hit, before the penetration test, so a chainsword that cuts through still pushes the target away.
 
-**Why it matters.** This is the second half of item 1. A Marine chainsword (`sw+2d(2) cut`, ST 30) knocks an Ork Boy (ST 28) back about half the time and knocks him down on a failed DX roll. The Ork then loses his next turn standing up, or charges back at skill 9. Genestealer and Lictor rending claws, Scything Talons, power swords and choppas all do the same. Penetrating cuts should not knock back, which keeps more fights in place. Measured: see the table under "Measured effects".
+**Why it matters.** This is the second half of item 1. A Marine chainsword (`sw+2d(2) cut`, ST 30) knocks an Ork Boy (ST 28) back about half the time and knocks him down on a failed DX roll. The Ork then loses his next turn standing up, or charges back at skill 9. Genestealer and Lictor rending claws, Scything Talons, power swords and choppas all do the same. Penetrating cuts should not knock back, which keeps more fights in place. Measured alone, the fix moves win rates by only a few points (see the table under "Measured effects"). Its value is mostly alongside item 1.
 
 **Cost: S.** Test `dmg.type === "cr" || (dmg.type === "cut" && pen <= 0)`.
 
@@ -135,7 +135,7 @@ This is the user's example. It has three parts.
 
 **What the sim does.** `injure` sets `shock = min(4, shock + inj)` for every model. A Carnifex (70 HP, no High Pain Threshold) takes −4 from 4 HP of injury. RAW it would take 28. Active defences are correctly left out: `skillPen` feeds attacks, not defences.
 
-**Why it matters.** The rule only bites on large models without High Pain Threshold: Genestealers (28 HP), Tyranid Warriors and Lictors (40), the Carnifex, and the Hive Tyrant. These models lose attack skill much too easily now, so the fix helps Tyranids against Marines and Guardsmen.
+**Why it matters.** The rule only bites on large models without High Pain Threshold: Genestealers (28 HP), Tyranid Warriors and Lictors (40), the Carnifex, and the Hive Tyrant. These models lose attack skill much too easily now, so the fix helps Tyranids against Marines and Guardsmen. Measured, though, it changed nothing in the tested fights (see the table below). It is a correctness fix more than an outcome changer.
 
 **Cost: S.** Measured: see the table.
 
@@ -385,7 +385,26 @@ This is the user's example. It has three parts.
 
 Items 2 (knockback only from crushing or non-penetrating cutting), 5 (below 1/3 HP halves Move and Dodge) and 7 (shock scaled for 20+ HP) were each patched into a scratch copy of `sim.js`, alone and together. Each fight was run for 300 battles with seed 1. Side A win % / side B win %, then average length:
 
-MEASURED_TABLE
+| Fight | Current engine | Knockback fix (2) | 1/3 HP fix (5) | Shock fix (7) | All three |
+|---|---|---|---|---|---|
+| 10 Ork Boy v 5 Battle-Brother @10 | 0/100, 8 s | 0/100, 8 s | 0/100, 7 s | 0/100, 8 s | 0/100, 7 s |
+| 30 Ork Boy v 5 Battle-Brother @30 | 0/100, 20 s | 0/100, 21 s | 0/100, 21 s | 0/100, 20 s | 0/100, 21 s |
+| 20 Ork Boy v 5 Battle-Brother @30 | 0/100, 21 s | 0/100, 21 s | 0/100, 21 s | 0/100, 21 s | 0/100, 21 s |
+| 10 Genestealer v 20 Guardsman @30 | 3/96, 24 s | 2/98, 23 s | **17/82, 18 s** | 4/96, 23 s | **17/82, 18 s** |
+| 3 Tyranid Warrior v 5 Battle-Brother @30 | 0/100, 8 s | 0/100, 9 s | 0/100, 8 s | 0/100, 9 s | 0/100, 9 s |
+| 5 Aspect Warrior v 10 Ork Boy @15 | 93/7, 12 s | 90/9, 12 s | 93/7, 12 s | 93/7, 12 s | 91/9, 11 s |
+| 5 Incubus v 5 Battle-Brother @10 | 2/98, 6 s | 4/96, 6 s | 4/96, 6 s | 2/98, 6 s | 4/96, 6 s |
+| 1 Ork Warboss v 1 Tyranid Warrior @10 | 100/0, 4 s | 100/0, 4 s | 100/0, 4 s | 100/0, 4 s | 100/0, 4 s |
+| 5 Lychguard v 5 Battle-Brother @10 | 93/3, 79 s | 92/4, 71 s | 90/5, 89 s | 93/3, 79 s | 90/5, 87 s |
+| 10 Wych v 10 Ork Boy @15 | 10/89, 9 s | 16/84, 9 s | 16/82, 9 s | 10/89, 9 s | 12/87, 9 s |
+
+What this shows:
+
+- **Most of these fights are one-sided** (0/100 or 100/0), so a single fix rarely flips a winner. The fixes matter in close fights. That is a reason to re-run the whole results table, not to skip the fixes.
+- **The knockback fix alone (item 2) moves little**: a few points in Wych v Ork and Aspect v Ork, and 8 seconds off the Lychguard fight. It needs the step rule (item 1) to show its full effect, and that was not measured here because it is AI work. On measurement alone, item 2 would rank as priority 2. It stays at priority 1 because it is paired with item 1.
+- **The 1/3 HP fix (item 5)** is the one that shows up: Genestealers against Guardsmen goes from 3% to 17%, and that fight ends 6 seconds sooner.
+- **The shock fix (item 7)** changed nothing in these fights. The big models it affects lose either way here, so treat it as a correctness fix (priority 2 to 3).
+- The current engine's baselines already differ from `docs/sim-results.md`. For example, 30 Ork Boyz now lose to 5 Marines every time, where the doc shows the Orks winning 94%. That is presumably the AI refactor in progress, so compare fixes against a fresh baseline.
 
 These runs use the engine as it was when copied. The AI refactor now in progress will move the baselines.
 
