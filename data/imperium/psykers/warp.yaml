@@ -50,19 +50,24 @@ items:
       Imperial Assignment scale (Adeptus Astra Telepathica / Black Ships)
       mapped to Warp Empowerment level and the point cap that gives, worked
       out from this file's actual (Warp Sorcery -20% + Perils of the Warp)
-      modified costs:
+      modified costs. Attack powers are bought at lore levels (Smite and
+      Molten Beam 12 levels at 162 points, Inferno 68, Crush 88, Fire Bolt
+      42, Flame Breath 30, Assail 28), so only a strong psyker can hold one
+      at full strength; a weaker one buys the same power at fewer levels
+      (cost is per level: Smite and Molten Beam 13.5, Inferno 8.5, Crush 11,
+      Flame Breath 6, Fire Bolt and Assail 3.5).
 
         Grade      | Empowerment level | Cap (10+10/lvl) | What the cap reaches
-        Iota       | 1                  | 20              | every power whose modified cost is 20 or less: Smite (3), Endurance (2), Iron Arm (4), Fire Bolt (4), Assail (4), Molten Beam (9), Crush (11), Psychic Scream (12), Heroic Feats of Strength (12), Sanctuary (13), Mind Probe (14), Foresight (18), Haemorrhage (19), Astrotelepathy (20) — register but rarely learn more than one or two
+        Iota       | 1                  | 20              | every non-attack power costing 20 or less: Endurance (2), Iron Arm (4), Warp Speed (4), Forewarning (11), Psychic Scream (12), Heroic Feats of Strength (12), Sanctuary (13), Mind Probe (14), Foresight (18), Misfortune (18), Haemorrhage (19), Astrotelepathy (20). Attack powers only at reduced levels: Smite 1 level, Fire Bolt or Assail up to 5 levels, Crush 1 level
         Zeta       | 1                  | 20              | as Iota; low Psyker Talent limits skill use, not what they can know
-        Eta        | 1                  | 20              | as Zeta
-        Theta      | 2                  | 30              | adds Mental Interrogation (21), Null Zone (23), Terrify (28)
-        Epsilon    | 2                  | 30              | as Theta (typical Wyrdvane conscript)
-        Delta      | 3                  | 40              | adds Scrier's Gaze (35), Dominate (35), Gate of Infinity (40) — the full non-Great-Power roster (typical Sanctioned Primaris Psyker)
-        Gamma      | 3                  | 40              | as Delta, better skills from a higher Psyker Talent
-        Beta       | 4                  | 50              | full roster, with headroom to push a known leveled power to a higher level/more dice (many Astropaths)
-        Alpha      | 5                  | 60              | full roster, generous headroom for high-level workings (Astartes Librarians, Black Ship candidates)
-        Alpha-Plus | 7+ (GM only)       | 80+             | approaching Great Power territory; Vortex of Doom (280+ as usually bought) is still normally out of reach even here
+        Eta        | 2                  | 30              | adds Mental Interrogation (21), Null Zone (23), Terrify (28), Assail at full (28), Flame Breath at full (30). Smite 2 levels, Fire Bolt 8 levels, Crush 2 levels
+        Theta      | 3                  | 40              | adds Scrier's Gaze (35), Dominate (35), Gate of Infinity (40): the full non-attack roster. Fire Bolt 11 levels, Crush 3 levels, Smite 2 levels
+        Epsilon    | 5                  | 60              | Fire Bolt at full (42) with Flame Breath (30) and Assail (28) at full (a typical Wyrdvane battlefield psyker); Smite, Molten Beam or Crush at 4-5 levels
+        Delta      | 16                 | 170             | Smite and Molten Beam at full 12 levels (162), Inferno at full (68), Crush at full (88): the whole Imperial attack roster (a typical Sanctioned Primaris Psyker)
+        Gamma      | 16                 | 170             | as Delta, better skills from a higher Psyker Talent
+        Beta       | 18                 | 190             | as Delta with headroom to push one attack to 14 levels (189)
+        Alpha      | 20                 | 210             | full roster with headroom for high-level workings, up to 15 levels of Smite or Molten Beam (203) (Astartes Librarians, Black Ship candidates)
+        Alpha-Plus | 25+ (GM only)      | 260+            | 19 levels of Smite (257) and beyond; Vortex of Doom (280 as usually bought) needs level 27, so it stays just out of reach here
 
       A character need not buy Warp Empowerment up to their grade's full
       ceiling: templates in this project buy only the level their actually-
@@ -88,9 +93,11 @@ items:
       is derived, not asserted: it walks every power in this file's actual
       modified cost (recomputed under the new Warp Sorcery -20% modifier, see
       below) and finds the cheapest Empowerment level whose cap clears it, so
-      "Iota can only cast minor powers" and "Alpha can cast the biggest
-      non-Great-Power ability" are literally true of the numbers, not just
-      flavour text.
+      "Iota can only cast minor powers at full strength" and "Alpha can
+      hold every attack power at full lore strength with room to spare" are
+      literally true of the numbers, not just flavour text. Levels were
+      raised well past the old 1-7 range because attack powers now cost 162
+      points at lore scale rather than a handful.
 
   - name: Warp Sorcery (Power Modifier)
     points: 0
@@ -557,15 +564,25 @@ items:
     design: Talent-linked group; see each child for build math. All children take Warp Sorcery (-20%) and Perils of the Warp (-10%) unless noted.
     children:
       - name: Smite
-        per_level: 4
-        levels: 1
+        per_level: 5
+        levels: 12
         tags: [Advantage, Mental, Psyker, Imperium]
-        modifiers: ["Warp Sorcery, -20%", "Perils of the Warp, -10%"]
-        lore: A short-ranged bolt of biomantic force that ruptures vessels and boils blood.
+        modifiers: ["Armor Divisor (10), +200%", "Warp Sorcery, -20%", "Perils of the Warp, -10%"]
+        lore: >
+          A bolt of warp lightning that arcs from the psyker's hand and burns
+          through armour, the way tabletop Smite's mortal wounds ignore it. On
+          an average hit it drops an Astartes Battle-Brother (HP 34, torso DR
+          103) to the brink of death; a Guardsman is simply gone.
         design: >
-          Innate Attack (Toxic, 4/die, B61) with the standard Warp Sorcery/
-          Perils pair, net -30%. Full modified cost: 4 x 0.7 = ~3 points/level;
-          needs Warp Empowerment level 1 (cap 20).
+          Innate Attack (Burning, 5/die, B61) with Armor Divisor (10) (+200%,
+          B103) plus Warp Sorcery/Perils, net +170%. Full modified cost:
+          5 x 2.7 = 13.5 points/level. Bought at 12 levels (12d(10) burn) for
+          162 points, the default a trained battlefield psyker buys; a lesser
+          psyker may buy fewer levels. Math: 12d averages 42, and at (10) a
+          Battle-Brother's DR 103 becomes about 10, so an average hit puts
+          about 32 burn damage into HP 34 (two HP short of dead, and any roll
+          above average finishes him). Needs Warp Empowerment level 16
+          (cap 170) at 12 levels, or level 1 (cap 20) for a single level.
       - name: Endurance
         per_level: 3
         levels: 1
@@ -685,14 +702,16 @@ items:
     children:
       - name: Fire Bolt
         per_level: 5
-        levels: 1
+        levels: 12
         tags: [Advantage, Mental, Psyker, Imperium]
         modifiers: ["Warp Sorcery, -20%", "Perils of the Warp, -10%"]
         lore: A thrown bolt of raw fire, the pyromancer's most basic attack.
         design: >
           Innate Attack (Burning, 5/die, B61) with Warp Sorcery/Perils, net
-          -30%. Full modified cost: 5 x 0.7 = ~4 points/level; needs Warp
-          Empowerment level 1 (cap 20).
+          -30%. Full modified cost: 5 x 0.7 = 3.5 points/level. Bought at 12
+          levels (12d burn) for 42 points, the default a trained battlefield
+          psyker buys (a lesser psyker may buy fewer); compare a lasgun's
+          7d(2) burn. Needs Warp Empowerment level 4 (cap 50) at 12 levels.
       - name: Inferno/Molten Beam
         container: alternative_abilities
         tags: [Advantage, Mental, Psyker, Imperium]
@@ -708,38 +727,47 @@ items:
         children:
           - name: Inferno
             per_level: 5
-            levels: 1
+            levels: 8
             tags: [Advantage, Mental, Psyker, Imperium]
-            modifiers: ["Explosion, +50%", "Warp Sorcery, -20%", "Perils of the Warp, -10%"]
+            modifiers: ["Explosion, +100%", "Warp Sorcery, -20%", "Perils of the Warp, -10%"]
             lore: A bursting fireball that engulfs a small area.
             design: >
-              Innate Attack (Burning, 5/die) with Explosion (+50%, B106,
-              2-yard burst) plus Warp Sorcery/Perils, net +20%. Full modified
-              cost: 5 x 1.2 = 6 points/level (discounted to a fifth as the
-              cheaper alternative ability); needs Warp Empowerment level 1
-              (cap 20) at its full-price rate.
+              Innate Attack (Burning, 5/die) with Explosion level 2 (+100%,
+              B106) plus Warp Sorcery/Perils, net +70%. Full modified cost:
+              5 x 1.7 = 8.5 points/level. Bought at 8 levels (8d burn ex) for
+              68 points at full price (charged at a fifth, about 14, as the
+              cheaper alternative ability); a lesser psyker may buy fewer
+              levels. Needs Warp Empowerment level 6 (cap 70) at its
+              full-price rate.
           - name: Molten Beam
             per_level: 5
-            levels: 1
+            levels: 12
             tags: [Advantage, Mental, Psyker, Imperium]
-            modifiers: ["Armor Divisor (3), +100%", "Warp Sorcery, -20%", "Perils of the Warp, -10%"]
-            lore: A focused beam of molten matter that burns straight through armour.
+            modifiers: ["Armor Divisor (10), +200%", "Warp Sorcery, -20%", "Perils of the Warp, -10%"]
+            lore: >
+              A focused beam of molten matter that burns straight through
+              armour, in the class of a meltagun (8dx6(10) burn) or a
+              lascannon.
             design: >
-              Innate Attack (Burning, 5/die) with Armor Divisor (3) (+100%,
-              B103) plus Warp Sorcery/Perils, net +70%. Full modified cost:
-              5 x 1.7 = ~9 points/level (the costlier child, so it sets the
-              alternative_abilities container's cap requirement); needs Warp
-              Empowerment level 1 (cap 20).
+              Innate Attack (Burning, 5/die) with Armor Divisor (10) (+200%,
+              B103) plus Warp Sorcery/Perils, net +170%. Full modified cost:
+              5 x 2.7 = 13.5 points/level. Bought at 12 levels (12d(10) burn)
+              for 162 points, the default a trained battlefield psyker buys (a
+              lesser psyker may buy fewer levels). It is the costlier child, so
+              it sets the alternative_abilities container's cap requirement:
+              Warp Empowerment level 16 (cap 170).
       - name: Flame Breath
         per_level: 5
-        levels: 1
+        levels: 5
         tags: [Advantage, Mental, Psyker, Imperium]
         modifiers: ["Cone, +50%", "Warp Sorcery, -20%", "Perils of the Warp, -10%"]
         lore: A gout of fire breathed out in a cone in front of the caster.
         design: >
           Innate Attack (Burning, 5/die) with Cone (+50%, B103) plus Warp
           Sorcery/Perils, net +20%. Full modified cost: 5 x 1.2 = 6
-          points/level; needs Warp Empowerment level 1 (cap 20).
+          points/level. Bought at 5 levels (5d burn cone) for 30 points, a
+          heavy flamer's damage; a lesser psyker may buy fewer levels. Needs
+          Warp Empowerment level 2 (cap 30) at 5 levels.
 
   - name: Telekinesis
     container: group
@@ -754,14 +782,16 @@ items:
     children:
       - name: Assail
         per_level: 5
-        levels: 1
+        levels: 8
         tags: [Advantage, Mental, Psyker, Imperium]
         modifiers: ["Warp Sorcery, -20%", "Perils of the Warp, -10%"]
         lore: Hurls the nearest loose object, or the target themselves, with bruising force.
         design: >
           Innate Attack (Crushing, 5/die, B61) with Warp Sorcery/Perils, net
-          -30%. Full modified cost: 5 x 0.7 = ~4 points/level; needs Warp
-          Empowerment level 1 (cap 20).
+          -30%. Full modified cost: 5 x 0.7 = 3.5 points/level. Bought at 8
+          levels (8d cr) for 28 points, the default a trained battlefield
+          psyker buys (a lesser psyker may buy fewer). Needs Warp Empowerment
+          level 2 (cap 30) at 8 levels.
       - name: Force Dome/Kinetic Shield
         container: alternative_abilities
         tags: [Advantage, Mental, Psyker, Imperium]
@@ -795,15 +825,17 @@ items:
               Empowerment level 1 (cap 20).
       - name: Crush
         per_level: 5
-        levels: 1
+        levels: 8
         tags: [Advantage, Mental, Psyker, Imperium]
         modifiers: ["Malediction 1, +100%", "Armor Divisor (2), +50%", "Warp Sorcery, -20%", "Perils of the Warp, -10%"]
         lore: An invisible telekinetic grip that closes on a target's throat or chest, ignoring armour and impossible to dodge.
         design: >
           Innate Attack (Crushing, 5/die) with Malediction (+100%, B36) and
           Armor Divisor (2) (+50%, B103), plus Warp Sorcery/Perils, net
-          +120%. Full modified cost: 5 x 2.2 = 11 points/level; needs Warp
-          Empowerment level 1 (cap 20).
+          +120%. Full modified cost: 5 x 2.2 = 11 points/level. Bought at 8
+          levels (8d(2) cr, Malediction) for 88 points, the default a trained
+          battlefield psyker buys (a lesser psyker may buy fewer). Needs Warp
+          Empowerment level 8 (cap 90) at 8 levels.
       - name: Gate of Infinity
         points: 100
         tags: [Advantage, Mental, Psyker, Imperium]
@@ -1051,8 +1083,9 @@ items:
       5 x 2.8 = 14 points/level, and this Great Power's minimum purchase is
       20 levels (280 points) — deliberately priced in the framework's
       "Beyond play" tier. Even Alpha-Plus's GM-only Warp Empowerment ceiling
-      (cap ~80+) falls well short of 280: per the framework, Great Powers may
-      exceed any PC's (or ordinary NPC's) Warp Empowerment outright. A GM
+      (level 25, cap 260) falls short of 280 (it takes level 27): per the
+      framework, Great Powers may exceed any PC's (or ordinary NPC's) Warp
+      Empowerment outright. A GM
       allowing a named NPC to cast it at all should treat the cap rule as
       waived for this entry specifically, exactly as Thaumatology: Sorcery's
       own greater rituals routinely exceed an individual sorcerer's own

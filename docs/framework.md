@@ -512,6 +512,11 @@ full build):
   may know, and it is what the Adeptus Astra Telepathica's Assignment scale
   (Iota through Alpha, Alpha-Plus beyond play) is calibrated against — see
   the Warp Empowerment trait's notes for the full grade-to-level table.
+  Attack powers are bought at lore strength, not party balance (Smite and
+  Molten Beam are 12d(10) burn at 162 points, Crush 88, Inferno 68, Fire
+  Bolt 42, Flame Breath 30, Assail 28), so holding one at full strength
+  takes a high Empowerment level (Primaris/Delta-Gamma 16, cap 170;
+  Librarians/Alpha 20, cap 210), while lesser psykers buy fewer levels.
 - **Psyker (Talent)** is this setting's Sorcery Talent (TSOR5, 10/level): it
   sharpens Psyniscience, Meditation, Hidden Lore (the Warp), and the Will
   roll to resist Perils of the Warp, exactly as Sorcery Talent aids a

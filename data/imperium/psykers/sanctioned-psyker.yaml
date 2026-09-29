@@ -7,30 +7,30 @@ notes: >
   Thaumatology: Sorcery model (see framework.md and Imperium/Traits/Psykers
   and the Warp.adq): Psyker (Talent, the Sorcery Talent analogue) sharpens
   skills, while Warp Empowerment (Sorcerous Empowerment analogue) gates
-  which powers can be known. This loadout's costliest known power is Molten
-  Beam (full modified cost 9), so it only needs Warp Empowerment level 1
-  (cap 20, points 20) — well under Delta's theoretical ceiling of level 3
-  (cap 40); a GM growing this psyker into costlier Pyromancy or a different
-  discipline should raise Warp Empowerment's level (and points) to match
-  whatever they buy next, up to Delta's cap.
+  which powers can be known. This loadout's costliest known power is Molten Beam (12 levels, 12d(10)
+  burn, full modified cost 162), so it needs Warp Empowerment level 16 (cap
+  170, points 170), the Delta-grade level on the Assignment table in Warp
+  Empowerment's notes. The Pyromancy powers are bought at lore strength
+  (Fire Bolt 12d burn, Inferno 8d burn ex, Molten Beam 12d(10) burn, Flame
+  Breath 5d burn cone); a lesser psyker may buy fewer levels of each and a
+  lower Empowerment level to match.
 
   Point math: 80 (attributes: DX 20 + IQ 40 + HT 10 + Will 10) + 10 (Unusual
-  Background) + 30 (Psyker 3) + 20 (Warp Empowerment 1) - 15 (Sanctioned
-  Psyker) + 8 (Witch-sight, 10 base x 0.8 Warp Sorcery) + 21 (Pyromancy
-  discipline at each power's default starting level: Fire Bolt 4 + Inferno/
-  Molten Beam alt 9+2 + Flame Breath 6) + 19 (skills, Innate Attack (Beam) 4 included) = 173 points, between
-  framework.md's "Trained soldier" and "Elite human" tiers — well above a
-  plain Guardsman, matching how rare and valuable a Sanctioned Psyker is to
-  a regiment, and comfortably inside the 150-250 range expected of a Guard
-  Primaris psyker. For a weaker Wyrdvane conscript-psyker (Epsilon grade),
-  drop Psyker to level 2 and Warp Empowerment stays at level 1 (Epsilon's
-  cap of 30 isn't needed by this discipline either), remove the discipline's
-  higher-level purchases (keep each power at its base/level-1 cost), and add
-  a Reputation or Social Stigma reflecting how nervously line troopers treat
+  Background) + 30 (Psyker 3) + 170 (Warp Empowerment 16) - 15 (Sanctioned
+  Psyker) + 8 (Witch-sight, 10 base x 0.8 Warp Sorcery) + 248 (Pyromancy
+  at lore levels: Fire Bolt 42 + Inferno/Molten Beam alt 162+14 + Flame
+  Breath 30) + 19 (skills, Innate Attack (Beam) 4 included) = 550 points.
+  That is far above a plain Guardsman and above framework.md's "Elite
+  human" tier, which is deliberate: the project scales to the lore, not to
+  party balance, and a Primaris Psyker who can burn a Battle-Brother down
+  with one bolt is worth that. For a weaker Wyrdvane conscript-psyker
+  (Epsilon grade), drop Psyker to level 2 and Warp Empowerment to level 5
+  (cap 60): keep Fire Bolt (42) and Flame Breath (30) at full, and buy
+  Inferno/Molten Beam at 4 levels or fewer, then add a
+  Reputation or Social Stigma reflecting how nervously line troopers treat
   them. Swap the Pyromancy include for any other discipline in Imperium/
-  Traits/Psykers and the Warp.adq for a different specialty — remember to
-  re-check Warp Empowerment's level against the new discipline's costliest
-  power.
+  Traits/Psykers and the Warp.adq for a different specialty, and re-check
+  Warp Empowerment's level against the new discipline's costliest power.
 traits:
   - name: ST
     points: 0
@@ -62,7 +62,7 @@ traits:
   - include: "imperium/psykers/warp.yaml#Psyker"
     levels: 3
   - include: "imperium/psykers/warp.yaml#Warp Empowerment"
-    levels: 1
+    levels: 16
   - include: "imperium/psykers/warp.yaml#Sanctioned Psyker"
   - include: "imperium/psykers/warp.yaml#Witch-sight"
   - include: "imperium/psykers/warp.yaml#Pyromancy"
