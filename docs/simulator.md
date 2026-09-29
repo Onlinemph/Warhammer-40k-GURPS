@@ -19,7 +19,7 @@ Every model acts once per second in Basic Speed order (ties random), choosing on
 
 ## Attacks
 
-- **Target location** (B398–400): attackers choose where to hit, weighing the penalty against the damage: torso 0, vitals −3 (imp, pi, tight-beam burn ×3), skull −7 (×4, DR +2), eye −9 (via the helmet's eye DR), face −5, neck −5, arm or leg −2, hand −4, foot −4, groin −3. An option switches back to random hit locations (with the framework's 1-in-6 eye-lens rule on face hits).
+- **Target location** (B398–400): by default only elites call shots (user direction): a template of 200+ points (the framework's Elite tier and up) with IQ 8+. Everyone else hits random locations (B552) with the framework's 1-in-6 eye-lens rule. Settings let everyone aim (RAW) or no one. An aiming attacker chooses where to hit, weighing the penalty against the damage: torso 0, vitals −3 (imp, pi, tight-beam burn ×3), skull −7 (×4, DR +2), eye −9 (via the helmet's eye DR), face −5, neck −5, arm or leg −2, hand −4, foot −4, groin −3.
 - Ranged: range penalty (B550), rapid-fire bonus and Recoil (B373), spreading automatic fire over two or three models, Min ST, ½D (half damage). Shots, reloads (Ready maneuvers), regrowing bio-weapon ammunition.
 - **Malfunction** (B407): a roll at or above the weapon's Malf fails to fire and the weapon jams (1d turns of Ready to clear); a critical failure with a weapon marked `overheat` damages the firer as the data says (plasma).
 - Melee: reach, Deceptive Attack optimised against the defender's best defence, Rapid Strike, Extra Attack, unbalanced weapons (no parry after attacking), point-blank fire with a gun when it beats the blade, close-combat reloads when quick.

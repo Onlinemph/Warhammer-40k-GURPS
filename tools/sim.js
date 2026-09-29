@@ -304,6 +304,8 @@ const SIM = (() => {
     const u = {
       side, name: spec.label || spec.template, template: spec.template, count: Math.max(1, spec.count | 0),
       db, powers, fp: st.fp || st.ht, st: st.st, dx: st.dx, formation: spec.formation || "line",
+      // elites (framework tiers: 200+ points, and a mind that picks its shots) may call shots
+      elite: (T.t.points || 0) >= 200 && st.iq >= 8,
       stance: spec.stance || "shoot", stats: st, flags, speed: st.speed, move: Math.max(1, st.move + arm.move),
       dodge: st.dodge, HP: st.hp + arm.hp, HT: st.ht, will: st.will, sm: st.sm || 0,
       arm, nat, ranged, melee, parry: parryOf(melee), shield: spec.shield && spec.shield.sp ? { ...spec.shield } : pshield,
@@ -387,7 +389,9 @@ const SIM = (() => {
   function runBattle(unitSpecs, opt = {}) {
     const distance = Math.max(2, Math.round(opt.distance ?? 100)), maxTurns = opt.maxTurns ?? 1200, morale = opt.morale !== false;
     const frac = opt.health === "fractional", boxes = opt.boxes || 5;
-    const aimed = opt.locations !== "random";
+    // hit locations: "elite" (default: elites aim, everyone else hits random locations), "aimed" (everyone, RAW), "random"
+    const locMode = opt.locations || "elite";
+    const aimsShots = m => locMode === "aimed" || (locMode === "elite" && m.u.elite);
     const cover = opt.cover || ["none", "none"];
     const log = opt.log ? [] : null;
     const frames = opt.frames ? [] : null;
@@ -615,7 +619,7 @@ const SIM = (() => {
           const d = hexDist(x.h, at);
           if (d > 5 * fr.n) continue;
           const r = check(15 + rangePenalty(Math.max(1, d)) + x.u.sm - (x.prone ? 2 : 0));
-          if (r.ok) { L(`  fragment hits ${x.id}`); applyHit(att, { dmg: fd, follow: null }, x, aimed ? "torso" : hitLocation(), true, false, fd); }
+          if (r.ok) { L(`  fragment hits ${x.id}`); applyHit(att, { dmg: fd, follow: null }, x, hitLocation(), true, false, fd); }
         }
       }
     }
@@ -646,7 +650,7 @@ const SIM = (() => {
     }
     // best location and deceptive level: returns {loc, da, score, lvl}
     function planAttack(m, w, t, lvl, melee, dmgOverride) {
-      const locs = aimed ? Object.keys(AIM) : ["random"];
+      const locs = aimsShots(m) ? Object.keys(AIM) : ["random"];
       const def0 = melee ? bestDefence(t, m, true) : rangedDefence(t, m);
       let best = { loc: "torso", da: 0, score: 0, lvl };
       for (const loc of locs) {
@@ -1189,7 +1193,7 @@ if (typeof document !== "undefined") (() => {
         <label>Runs <input type="number" min="1" max="2000" value="${S.runs}" data-g="runs"></label>
         <label>Turn limit <input type="number" min="5" max="3600" value="${S.maxTurns}" data-g="maxTurns"> s</label>
         <label><input type="checkbox" data-g="morale"${S.morale ? " checked" : ""}> Morale checks</label>
-        <label>Hit locations <select data-o="locations" aria-label="Hit locations"><option value="aimed"${S.locations !== "random" ? " selected" : ""}>Aimed (RAW)</option><option value="random"${S.locations === "random" ? " selected" : ""}>Random</option></select></label>
+        <label>Hit locations <select data-o="locations" aria-label="Hit locations"><option value="elite"${!S.locations || S.locations === "elite" ? " selected" : ""}>Elites aim, others random</option><option value="aimed"${S.locations === "aimed" ? " selected" : ""}>Everyone aims (RAW)</option><option value="random"${S.locations === "random" ? " selected" : ""}>Random</option></select></label>
         <label>Cover, side A <select data-o="coverA"><option${(S.coverA || "none") === "none" ? " selected" : ""}>none</option><option${S.coverA === "light" ? " selected" : ""}>light</option><option${S.coverA === "heavy" ? " selected" : ""}>heavy</option></select></label>
         <label>side B <select data-o="coverB"><option${(S.coverB || "none") === "none" ? " selected" : ""}>none</option><option${S.coverB === "light" ? " selected" : ""}>light</option><option${S.coverB === "heavy" ? " selected" : ""}>heavy</option></select></label>
         <label>Wounds <select data-h aria-label="Wound rules"><option value="standard"${S.health !== "fractional" ? " selected" : ""}>Standard GURPS HP</option><option value="fractional"${S.health === "fractional" ? " selected" : ""}>Revised Fractional Health</option></select></label>
@@ -1202,7 +1206,7 @@ if (typeof document !== "undefined") (() => {
     wire();
     if (last) setupReplay();
   }
-  const HOW = `Every run plays a full GURPS 4e fight on a hex map, one yard per hex, second by second. Models act in Basic Speed order and an AI picks each one's maneuver: Aim, Attack, Move and Attack, All-Out Attack (Determined or Double) when nothing can hurt it, All-Out Defense when it can't hurt its foe, Feint and Deceptive Attack against strong defences, Rapid Strike, Ready to reload or clear a jam, Change Posture, and Concentrate for psychic powers. Facing matters: attacks from a flank cost the defender 2, from behind it gets no defence, so surrounding a foe pays. Attackers aim at the location that does most harm (vitals, skull, eye lens, neck, limbs) unless hit locations are set to random. Ranged fire uses range penalties, the rapid-fire bonus and Recoil, spreads bursts over neighbours, and can malfunction or overheat; explosions splash neighbours, fragments fly, flamers hit the whole cone. Defenders Dodge, Parry or Block with retreat and shield DB, and shooters Dodge and Drop. Cover hides legs and groin and costs attackers 2; prone models are harder to shoot but fight badly. Armour divisors, Weak Points, regenerating shields, wounding, Injury Tolerance, Damage Reduction, follow-ups, crippling, knockback, bleeding, shock, stun, consciousness and death rolls, Reanimation Protocols, morale and Perils of the Warp all apply, with either standard HP or the Revised Fractional Health wound system. The full rule list with page references is docs/simulator.md. Not modelled: vehicles, grappling and stealth.`;
+  const HOW = `Every run plays a full GURPS 4e fight on a hex map, one yard per hex, second by second. Models act in Basic Speed order and an AI picks each one's maneuver: Aim, Attack, Move and Attack, All-Out Attack (Determined or Double) when nothing can hurt it, All-Out Defense when it can't hurt its foe, Feint and Deceptive Attack against strong defences, Rapid Strike, Ready to reload or clear a jam, Change Posture, and Concentrate for psychic powers. Facing matters: attacks from a flank cost the defender 2, from behind it gets no defence, so surrounding a foe pays. Elite attackers (templates of 200+ points with IQ 8 or more) aim at the location that does most harm (vitals, skull, eye lens, neck, limbs); everyone else hits random locations, with 1 in 6 face hits striking an eye lens. The setting can let everyone aim, as RAW allows, or no one. Ranged fire uses range penalties, the rapid-fire bonus and Recoil, spreads bursts over neighbours, and can malfunction or overheat; explosions splash neighbours, fragments fly, flamers hit the whole cone. Defenders Dodge, Parry or Block with retreat and shield DB, and shooters Dodge and Drop. Cover hides legs and groin and costs attackers 2; prone models are harder to shoot but fight badly. Armour divisors, Weak Points, regenerating shields, wounding, Injury Tolerance, Damage Reduction, follow-ups, crippling, knockback, bleeding, shock, stun, consciousness and death rolls, Reanimation Protocols, morale and Perils of the Warp all apply, with either standard HP or the Revised Fractional Health wound system. The full rule list with page references is docs/simulator.md. Not modelled: vehicles, grappling and stealth.`;
 
   function results(r) {
     const pct = x => (100 * x / r.runs).toFixed(0) + "%";
@@ -1290,7 +1294,7 @@ if (typeof document !== "undefined") (() => {
       $("#simout").innerHTML = `<p class="empty">Fighting ${S.runs} battles…</p>`;
       setTimeout(() => {
         try { last = SIM.monteCarlo(specs, { runs: S.runs, distance: S.distance, maxTurns: S.maxTurns, morale: S.morale, health: S.health, boxes: S.boxes || 5,
-          locations: S.locations || "aimed", cover: [S.coverA || "none", S.coverB || "none"] }); $("#simout").innerHTML = results(last); setupReplay(); }
+          locations: S.locations || "elite", cover: [S.coverA || "none", S.coverB || "none"] }); $("#simout").innerHTML = results(last); setupReplay(); }
         catch (e) { $("#simout").innerHTML = `<p class="empty">Could not run: ${esc(e.message)}</p>`; }
       }, 20);
     };
