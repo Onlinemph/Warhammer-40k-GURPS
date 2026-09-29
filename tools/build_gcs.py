@@ -564,7 +564,9 @@ def main():
     ap.add_argument("--check", action="store_true", help="validate only, write nothing")
     ap.add_argument("files", nargs="*", help="specific data/*.yaml files (default: all)")
     a = ap.parse_args()
-    srcs = [Path(f).resolve() for f in a.files] or sorted(DATA.rglob("*.yaml"))
+    # data/sim/ holds the combat simulator's loadouts, not GCS libraries
+    srcs = [Path(f).resolve() for f in a.files] or sorted(
+        p for p in DATA.rglob("*.yaml") if p.relative_to(DATA).parts[0] != "sim")
     outputs, built = {}, 0
     for src in srcs:
         try:
