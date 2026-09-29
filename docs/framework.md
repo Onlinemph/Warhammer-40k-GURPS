@@ -184,6 +184,29 @@ Anti-tank weapons must beat the DR they are known to beat in the fiction.
 
 Attributes 10, HP 10. Imperial citizens are human; abhumans (Ogryn, Ratling, Squat, Beastman) are racial templates built off human.
 
+### Strength ladder
+
+One scale for raw physical strength across every faction, anchored on the user's Astartes figure. The codex Strength characteristic sets the ordering and the fiction sets the gaps; worn armour and servos add ST on top (they're equipment). HP moves with ST: templates keep their HP bonus, so a stronger body is also a larger, harder-to-kill one.
+
+| ST | Who |
+|---|---|
+| 8–10 | Gretchin, Termagant, Air caste, Aeldari and Drukhari civilians and psykers |
+| 10–12 | Humans (Guardsman 11, Scion or Battle Sister 12), Aeldari warriors, T'au, Kroot, Hormagaunt 12 |
+| 13–16 | Surgically bulked or augmented: Wrack, Haemonculus, Combat Servitor |
+| 24 | Astartes Scout (a neophyte, gene-seed still maturing) |
+| 26 | Necron Warrior, Flayed One, Deathmark, Cryptek; Genestealer |
+| 28 | Ork Boy (about a Marine's match in muscle, a little less); Necron Immortal |
+| 30 | Space Marine |
+| 32 | Primaris Marine; Necron Lychguard; Ravener |
+| 34 | Ork Nob, Meganob, Big Mek; Necron Overlord; Tyranid Warrior |
+| 36 | Skorpekh Destroyer; Lictor |
+| 40 | Custodian |
+| 42 | Ork Warboss (SM +1) |
+| 55 | Hive Tyrant (SM +2) |
+| 60 | Carnifex (SM +2) |
+
+Before this ladder the xenos were drafted against the old Astartes ST (18–24) and never rescaled when Marines went to 30: a Necron Overlord at 24 was weaker than a Scout.
+
 ### Point-scale targets (lore scale, not a party-balance guide)
 
 | Tier | Typical total | Examples |
