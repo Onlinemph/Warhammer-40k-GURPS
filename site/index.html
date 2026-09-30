@@ -9,7 +9,7 @@
 :root{
   --ground:#e7e9e6; --paper:#fbfbf8; --well:#f1f2ee; --ink:#15161b; --dim:#5a5d66; --rule:#d2d5d1;
   --blood:#9a1c1f; --blood-wash:#9a1c1f12; --gild:#86621a; --gild-wash:#86621a17; --steel:#2c5064; --steel-wash:#2c50641a; --warp:#6b3fa0;
-  --rail:#121318; --rail-2:#1b1c23; --rail-ink:#dcd8ce; --rail-dim:#8d8b95; --rail-rule:#2a2b33; --rail-gild:#d2ae5c;
+  --wall:#34363e; --rail:#121318; --rail-2:#1b1c23; --rail-ink:#dcd8ce; --rail-dim:#8d8b95; --rail-rule:#2a2b33; --rail-gild:#d2ae5c;
   --display:"Cormorant SC","Cormorant Garamond",Georgia,"Times New Roman",serif;
   --body:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;
   --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
@@ -21,12 +21,12 @@
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --ground:#0f1014; --paper:#16171d; --well:#1d1e25; --ink:#e9e5da; --dim:#9d9aa5; --rule:#2b2d35;
   --blood:#e4645a; --blood-wash:#e4645a1c; --gild:#d4b060; --gild-wash:#d4b0601f; --steel:#8ab2c8; --steel-wash:#8ab2c81f; --warp:#b692e6;
-  --rail:#0a0b0e; --rail-2:#13141a; --rail-ink:#dcd8ce; --rail-dim:#86848e; --rail-rule:#22232a; --rail-gild:#d4b060;
+  --wall:#40434d; --rail:#0a0b0e; --rail-2:#13141a; --rail-ink:#dcd8ce; --rail-dim:#86848e; --rail-rule:#22232a; --rail-gild:#d4b060;
   --shadow:0 1px 0 #ffffff08,0 10px 30px -20px #000000cc; color-scheme:dark;}}
 :root[data-theme="dark"]{
   --ground:#0f1014; --paper:#16171d; --well:#1d1e25; --ink:#e9e5da; --dim:#9d9aa5; --rule:#2b2d35;
   --blood:#e4645a; --blood-wash:#e4645a1c; --gild:#d4b060; --gild-wash:#d4b0601f; --steel:#8ab2c8; --steel-wash:#8ab2c81f; --warp:#b692e6;
-  --rail:#0a0b0e; --rail-2:#13141a; --rail-ink:#dcd8ce; --rail-dim:#86848e; --rail-rule:#22232a; --rail-gild:#d4b060;
+  --wall:#40434d; --rail:#0a0b0e; --rail-2:#13141a; --rail-ink:#dcd8ce; --rail-dim:#86848e; --rail-rule:#22232a; --rail-gild:#d4b060;
   --shadow:0 1px 0 #ffffff08,0 10px 30px -20px #000000cc; color-scheme:dark;}
 *{box-sizing:border-box}
 html,body{height:100%}
@@ -194,23 +194,109 @@ input[type=number],.sunit select,.addu,.sset select{font:inherit;font-size:.84re
 .lgrid .sh{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.lgrid .sh input[type=number]{width:4.5em}
 .lonote{font-size:.8rem;color:var(--dim);margin:6px 0 0}
 .addu{width:100%;background:var(--paper)}
-#simout .tsum{width:auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
-#simout .tsum div:nth-child(1) b{color:var(--blood)}#simout .tsum div:nth-child(2) b{color:var(--gild)}#simout .tsum div:first-child b{color:var(--blood)}
-.sbar{display:flex;height:10px;border-radius:1px;overflow:hidden;margin:-8px 0 22px;background:var(--well)}
-.sbar .a{background:var(--blood)}.sbar .d{background:var(--rule)}.sbar .b{background:var(--gild)}
-.replay{min-width:0}
-.replay svg{width:100%;height:auto;max-height:560px;background:var(--paper);border:1px solid var(--rule);border-radius:2px;display:block}
-.replay .sa circle{fill:var(--blood)}.replay .sb circle{fill:var(--gild)}
-.replay circle.stun{stroke:var(--ink);stroke-width:.18;stroke-dasharray:.3 .2}
-.replay line{stroke:var(--ink);stroke-width:.16}
-.replay svg.fac{background:color-mix(in srgb,var(--ink) 70%,var(--paper))}.replay .floor{fill:var(--paper)}.replay .crate{stroke:var(--dim);stroke-width:.12}.replay .crate.light{fill:var(--rule)}.replay .crate.heavy{fill:var(--dim)}.replay .door{stroke:var(--gild);stroke-width:.2}.replay .door.shut{fill:var(--gild)}.replay .door.open{fill:var(--paper)}.replay .rubble{fill:var(--paper);stroke:var(--dim);stroke-width:.15;stroke-dasharray:.25 .2}
-.rctl{display:flex;gap:12px;align-items:center;margin:10px 0}.rctl input{flex:1;accent-color:var(--blood)}
-.rctl button{cursor:pointer;color:var(--ink);background:var(--paper);border:1px solid var(--rule);border-radius:2px;padding:3px 10px}
-.rctl span{font-family:var(--mono);font-size:.74rem;color:var(--dim)}
-.rleg{font-size:.78rem;color:var(--dim);margin:0 0 8px}.rleg .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin:0 4px 0 10px;vertical-align:middle}
+/* results: a verdict banner, then two charts, then the battle itself */
+.verdict{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:stretch;background:var(--paper);border:1px solid var(--rule);border-radius:2px;box-shadow:var(--shadow);overflow:hidden;margin-top:8px}
+.vside{padding:18px 22px 16px;display:grid;gap:4px;align-content:start;position:relative}
+.vside.b{text-align:right}
+.vside::before{content:"";position:absolute;top:0;bottom:0;width:4px;background:currentColor;opacity:.9}
+.vside.a{color:var(--blood)}.vside.a::before{left:0}
+.vside.b{color:var(--gild)}.vside.b::before{right:0}
+.vlab{font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
+.vside b{font-family:var(--display);font-weight:700;font-size:clamp(3rem,7vw,4.6rem);line-height:.95;font-variant-numeric:lining-nums tabular-nums}
+.vside b small{font-size:.45em;margin-left:2px;opacity:.8}
+.vside:not(.lead) b{opacity:.55}
+.vros{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:.84rem;color:var(--ink)}
+.vside.b .vros{justify-content:flex-end}
+.vmid{display:grid;align-content:center;justify-items:center;gap:4px;padding:14px 18px;border-inline:1px solid var(--rule);background:var(--well);text-align:center;max-width:220px}
+.vsays{font-family:var(--mono);font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink)}
+.vvs{font-family:var(--display);font-weight:700;font-size:1.8rem;color:var(--dim);line-height:1}
+.vmeta{font-size:.76rem;color:var(--dim);line-height:1.4}
+.vbar{display:flex;height:8px;margin:0 0 22px;background:var(--well)}
+.vbar span{min-width:0}.vbar .a{background:var(--blood)}.vbar .d{background:var(--rule)}.vbar .b{background:var(--gild)}
+.rgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.rcard{margin:0;background:var(--paper);border:1px solid var(--rule);border-radius:2px;padding:14px 16px 12px;box-shadow:var(--shadow);min-width:0}
+.rcard figcaption{font-family:var(--mono);font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gild);margin-bottom:10px}
+.hist{width:100%;height:auto;display:block}
+.hist rect.a{fill:var(--blood)}.hist rect.b{fill:var(--gild)}.hist rect.d{fill:var(--dim);opacity:.5}
+.hist text{font-family:var(--mono);font-size:9px;fill:var(--dim)}
+.hist .axis{stroke:var(--ink);stroke-width:1}.hist .tk{stroke:var(--dim)}.hist .grid{stroke:var(--rule);stroke-dasharray:3 3}
+.cas{display:grid;gap:14px}
+.cname{display:flex;align-items:baseline;gap:8px;font-size:.88rem;font-weight:500}
+.cname b{font-family:var(--mono);font-size:.62rem;padding:1px 5px;border-radius:2px;color:var(--paper)}
+.cname b.sa{background:var(--blood)}.cname b.sb{background:var(--gild)}
+.cname span{margin-left:auto;font-family:var(--mono);font-size:.72rem;color:var(--dim);font-weight:400;white-space:nowrap}
+.cbar{display:flex;height:14px;margin-top:5px;gap:2px}
+.cbar span{min-width:0}
+.cbar .up.sa{background:var(--blood)}.cbar .up.sb{background:var(--gild)}
+.cbar .down{background:repeating-linear-gradient(135deg,var(--dim) 0 2px,transparent 2px 5px);opacity:.7}
+.cbar .dead{background:var(--ink);opacity:.8}
+.cfoot{display:flex;flex-wrap:wrap;gap:2px 14px;margin-top:4px;font-family:var(--mono);font-size:.68rem;color:var(--dim)}
+.ckey{margin:2px 0 0;font-size:.72rem;color:var(--dim);display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px}
+.ckey .k{display:inline-block;width:14px;height:8px;vertical-align:middle}
+.ckey .k.up{background:linear-gradient(90deg,var(--blood) 50%,var(--gild) 50%)}.ckey .k.down{background:repeating-linear-gradient(135deg,var(--dim) 0 2px,transparent 2px 5px)}.ckey .k.dead{background:var(--ink);opacity:.8}
+
+/* the battle: map on the left, the second's log on the right */
+.theatre{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:0;background:var(--paper);border:1px solid var(--rule);border-radius:2px;box-shadow:var(--shadow);overflow:hidden}
+.stage{position:relative;min-width:0;background:var(--paper);display:grid;align-items:center}
+.replay svg,#rmap{width:100%;height:auto;max-height:600px;display:block;background:var(--paper)}
+#rmap.fac{background:var(--wall)}
+#rmap .grid{fill:none;stroke:var(--rule);stroke-width:.05}
+#rmap .floor{fill:var(--paper);stroke:var(--paper);stroke-width:.1}#rmap .crate{stroke:var(--dim);stroke-width:.12}#rmap .crate.light{fill:var(--rule)}#rmap .crate.heavy{fill:var(--dim)}
+#rmap .door{stroke:var(--gild);stroke-width:.2}#rmap .door.shut{fill:var(--gild)}#rmap .door.open{fill:var(--paper)}
+#rmap .rubble{fill:var(--paper);stroke:var(--dim);stroke-width:.15;stroke-dasharray:.25 .2}
+#rmap .tok .body{stroke:var(--paper);stroke-width:.12}
+#rmap .tok.sa .body{fill:var(--blood)}#rmap .tok.sb .body{fill:var(--gild)}
+#rmap .tok .hpr{fill:none;stroke-width:.16;opacity:.85}
+#rmap .tok.sa .hpr{stroke:var(--blood)}#rmap .tok.sb .hpr{stroke:var(--gild)}
+#rmap .tok line{stroke:var(--paper);stroke-width:.16;stroke-linecap:round}
+#rmap .tok.stun .body{stroke:var(--ink);stroke-dasharray:.25 .18;stroke-width:.14}
+#rmap .tok.prone .hpr{opacity:.5}
+#rmap .shot{stroke-width:.09;stroke-linecap:round;opacity:.35;stroke-dasharray:.5 .35}
+#rmap .shot.hit{stroke-width:.14;opacity:.95;stroke-dasharray:none}
+#rmap .shot.sa{stroke:var(--blood)}#rmap .shot.sb{stroke:var(--gild)}
+#rmap .spark{fill:var(--paper);stroke-width:.14}#rmap .spark.sa{stroke:var(--blood)}#rmap .spark.sb{stroke:var(--gild)}
+#rmap .blow line{stroke-width:.3;stroke-linecap:round;opacity:.5}
+#rmap .blow.sa line{stroke:var(--blood)}#rmap .blow.sb line{stroke:var(--gild)}
+#rmap .blow circle{fill:none;stroke-width:.14;opacity:.5}
+#rmap .blow.hit circle{opacity:1;stroke-width:.22}
+#rmap .blow.sa circle{stroke:var(--blood)}#rmap .blow.sb circle{stroke:var(--gild)}
+#rmap .burst{fill:var(--gild-wash);stroke:var(--gild);stroke-width:.14;transform-box:fill-box;transform-origin:center;animation:burst .45s ease-out}
+#rmap .burst.core{fill:var(--gild);opacity:.55;stroke:none}
+#rmap .fell path{stroke:var(--dim);stroke-width:.14;stroke-linecap:round;opacity:.45}
+#rmap .fell.dead path{stroke-width:.2}
+#rmap .fell.fresh path{opacity:1;stroke-width:.24}
+#rmap .fell.fresh.sa path{stroke:var(--blood)}#rmap .fell.fresh.sb path{stroke:var(--gild)}
+#rmap .act>*{animation:flash .35s ease-out}
+@keyframes flash{from{opacity:0}}
+@keyframes burst{from{transform:scale(.3);opacity:1}}
+.hud{position:absolute;top:10px;left:10px;right:10px;display:flex;justify-content:space-between;align-items:center;pointer-events:none;gap:8px}
+.hud span{font-family:var(--mono);font-size:.74rem;font-weight:600;padding:3px 9px;border-radius:2px;background:var(--paper);border:1px solid var(--rule);font-variant-numeric:tabular-nums}
+.hud .hud-a{color:var(--blood)}.hud .hud-b{color:var(--gild)}
+.hud .clock{color:var(--ink);letter-spacing:.08em}
+.feed{border-left:1px solid var(--rule);display:flex;flex-direction:column;min-width:0;max-height:600px}
+.feedhead{font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gild);padding:10px 14px;border-bottom:1px solid var(--rule)}
+.feed .slog{border:0;border-radius:0;flex:1;max-height:none;background:none;font-size:.7rem}
+#rlog{max-height:none}
+.rctl{display:flex;gap:12px;align-items:center;margin:12px 0 8px;flex-wrap:wrap}
+.rctl input[type=range]{flex:1;min-width:160px;accent-color:var(--blood)}
+.rctl button{cursor:pointer;font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;background:var(--ink);color:var(--paper);border:0;border-radius:2px;padding:8px 16px;min-width:6.5em}
+.rctl label{font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);display:flex;gap:6px;align-items:center}
+.rctl select{font:inherit;font-size:.8rem;padding:3px 6px;border:1px solid var(--rule);border-radius:2px;background:var(--paper);color:var(--ink)}
+.rleg{font-size:.76rem;color:var(--dim);margin:0 0 8px;line-height:1.6}.rleg .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin:0 4px 0 10px;vertical-align:middle}
 .rleg .dot.a{background:var(--blood)}.rleg .dot.b{background:var(--gild)}
-#rlog{max-height:220px}
 .slog{font-family:var(--mono);font-size:.74rem;line-height:1.55;white-space:pre-wrap;max-height:480px;overflow:auto;background:var(--paper);border:1px solid var(--rule);padding:12px 14px;border-radius:2px;margin:0}
+/* unit cards: a pip per model */
+.pips{display:flex;flex-wrap:wrap;gap:3px;margin:9px 0 2px;align-items:center}
+.pips i{width:7px;height:7px;border-radius:50%;background:currentColor}
+.pips em{font-style:normal;font-family:var(--mono);font-size:.66rem;margin-left:4px;color:var(--dim)}
+.sside:nth-child(1) .pips{color:var(--blood)}.sside:nth-child(2) .pips{color:var(--gild)}
+.shead b small{display:block;font-family:var(--mono);font-weight:400;font-size:.66rem;color:var(--dim);letter-spacing:.04em}
+.sside h2 small{font-family:var(--mono);font-size:.7rem;font-weight:400;letter-spacing:.06em;color:var(--dim);order:3}
+@media (max-width:820px){
+  .verdict{grid-template-columns:1fr 1fr}.vmid{grid-column:1/-1;grid-row:2;max-width:none;border-inline:0;border-top:1px solid var(--rule)}
+  .theatre{grid-template-columns:1fr}.feed{border-left:0;border-top:1px solid var(--rule);max-height:260px}
+}
+@media (prefers-reduced-motion:reduce){#rmap .burst,#rmap .act>*{animation:none}}
 .chip.tag[data-open]{cursor:pointer;font-family:var(--mono);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase}
 
 @media (max-width:820px){
@@ -991,6 +1077,10 @@ const SIM = (() => {
     const cover = opt.cover || ["none", "none"];
     const log = opt.log ? [] : null;
     const frames = opt.frames ? [] : null;
+    // what happened each second, for the replay: shots, blows, blasts and casualties
+    const fx = frames ? [] : null;
+    let fxb = [];
+    const FX = e => { if (fx) fxb.push(e); };
     const L = s => { if (log && log.length < 5000) log.push(s); };
     const units = unitSpecs.map(s => buildUnit(s.spec, s.side));
     const models = [];
@@ -1172,7 +1262,7 @@ const SIM = (() => {
     const thr = (HP, lvl, col = 1) => Math.max(1, Math.round(HP * FRAC[lvl] * COLS(lvl)[col - 1]));
     function severity(inj, HP) { let s = 0; for (let l = 1; l <= 8; l++) if (inj >= thr(HP, l)) s = l; return s; }
     function boxesFor(inj, HP, lvl) { let n = 0; for (let c = 1; c <= 4; c++) if (inj >= thr(HP, lvl, c)) n = c; return Math.max(1, n); }
-    function incapacitate(t, why) { if (t.state === "ok") { t.state = "out"; place(t, null); L(`  ${t.id} ${why}`); } }
+    function incapacitate(t, why) { if (t.state === "ok") { if (t.h) FX(["d", t.h.q, t.h.r, t.u.side, 0]); t.state = "out"; place(t, null); L(`  ${t.id} ${why}`); } }
     function cripple(t, loc) {
       if (loc === "arm" || loc === "hand") {
         if (++t.armsLost >= 2) { incapacitate(t, "has lost the use of both arms"); return; }
@@ -1269,6 +1359,7 @@ const SIM = (() => {
     }
     function kill(att, t, how) {
       if (t.state !== "ok") return;
+      if (t.h) FX(["d", t.h.q, t.h.r, t.u.side, 1]);
       place(t, null);
       if (t.u.flags.reanimation && how !== "destroyed" && t.hp > -5 * t.u.HP) {
         t.state = "down"; t.reanim = 3; L(`  ${t.id} falls; reanimation protocols engage`);
@@ -1336,13 +1427,14 @@ const SIM = (() => {
       if (w.follow && fraw > 0) {
         const ft = w.follow.type;
         if (!(ft === "tox" && poison === "immune")) {
-          finj = Math.max(1, Math.floor(fraw * woundMult(ft, ["arm", "leg", "hand", "foot"].includes(loc) ? loc : "torso", flags, w.follow.ex)));
+          // an explosive follow-up that gets inside goes off within the body: triple damage, no DR (B414)
+          finj = Math.max(1, Math.floor(fraw * (w.follow.ex ? 3 : 1) * woundMult(ft, ["arm", "leg", "hand", "foot"].includes(loc) ? loc : "torso", flags, w.follow.ex)));
           if (ft === "tox" && poison === "resist") finj = Math.floor(finj / 2);
           if (red > 1 && finj > 0) finj = Math.max(1, Math.floor(finj / red));
           finj = Math.max(0, Math.min(finj, cap - inj));
         }
       }
-      L(`  ${raw} dmg to ${loc} (DR ${armDR + natDR}${div !== 1 ? "/" + (div === Infinity ? "∞" : div) : ""}): ${inj} injury${finj ? ` + ${finj} follow-up` : ""}${frac ? "" : `; ${t.id} at ${t.hp - inj - finj}/${t.u.HP} HP`}`);
+      L(`  ${raw} dmg to ${loc} (DR ${armDR + natDR}${div !== 1 ? "/" + (div === Infinity ? "∞" : div) : ""}): ${inj} injury${finj ? ` + ${finj} ${w.follow.ex ? "from the internal explosion" : "follow-up"}` : ""}${frac ? "" : `; ${t.id} at ${t.hp - inj - finj}/${t.u.HP} HP`}`);
       injure(att, t, inj + finj, loc, dmg.type);
       return inj + finj;
     }
@@ -1361,6 +1453,7 @@ const SIM = (() => {
     // ---- area effects (B413-414)
     const noDiv = dm => dm.div === 1 ? dm : { ...dm, div: 1, key: (dm.key || "") + "nd" };
     function explosion(att, w, at, raw) {
+      FX(["b", at.q, at.r, Math.min(6, 1 + Math.floor(Math.log2(Math.max(2, raw)) / 2) * (w.explosion || 1))]);
       // a blast also batters the walls and doors beside it (B558; no armour divisor)
       if (terr) for (const [dq, dr] of [[0, 0], ...DIRS]) { const i = idx(key(at.q + dq, at.r + dr)); if (i != null && structOf(i)) damageStructure(i, Math.floor(raw / 3), w.dmg, false); }
       for (const x of models) {
@@ -1400,7 +1493,7 @@ const SIM = (() => {
       const effDR = d.div === Infinity ? 0 : Math.floor((armDR + natDR) / d.div);
       const red = tu.flags.dmgRed > 1 ? tu.flags.dmgRed : 1;
       const cap = loc === "arm" || loc === "leg" ? tu.HP / 2 + 1 : loc === "hand" || loc === "foot" ? tu.HP / 3 + 1 : Infinity;
-      const avgF = w.follow ? (w.follow.n * 3.5 + w.follow.add) * w.follow.mult : 0;
+      const avgF = w.follow ? (w.follow.n * 3.5 + w.follow.add) * w.follow.mult * (w.follow.ex ? 3 : 1) : 0;   // an explosive follow-up bursts inside: x3 (B414)
       let tot = 0;
       // Weak Points: a hit that fails to penetrate finds a gap on 3d <= rating and faces half the armour's DR
       const wpP = !chink && armDR > 0 && tu.arm.wp ? P3[Math.min(18, tu.arm.wp)] : 0;
@@ -1702,11 +1795,13 @@ const SIM = (() => {
         const thru = (inter.length ? `, through ${inter.length}` : "") + (plan.da ? `, deceptive -${plan.da}` : "");
         if (!r.ok && !w.cone) {
           L(`${m.id} fires ${n > 1 ? n + " " : ""}at ${t.id} (${d} yd${loc0 && loc0 !== "torso" ? ", aiming at the " + locName(loc0) : ""}${thru}, skill ${lvl}): misses`);
+          FX(["s", m.h.q, m.h.r, t.h.q, t.h.r, m.u.side, 0]);
           if (w.dmg.ex && i === 0) explosion(m, w, { q: t.h.q + DIRS[Math.floor(R() * 6)][0], r: t.h.r + DIRS[Math.floor(R() * 6)][1] }, rollDamage(w.dmg));
           else if (!w.dmg.ex) stray(m, w, t, inter, halfD);
           return;
         }
         let hits = got;
+        FX(["s", m.h.q, m.h.r, t.h.q, t.h.r, m.u.side, got ? 1 : 0]);
         L(`${m.id} ${w.usage === "power" ? "casts " + w.name + " at" : "fires " + (n > 1 ? n + " at" : "at")} ${t.id} (${d} yd${loc0 && loc0 !== "torso" ? ", aiming at the " + locName(loc0) : ""}${thru}, skill ${lvl}${k0 ? " from -" + k0 * w.rcl : ""}${nb > 1 || k0 ? ", -" + w.rcl + " a round" : ""}): ${hits} hit${hits > 1 ? "s" : ""}`);
         if (hits > crits && !w.malediction) {
           const open = hits - crits;   // critical rounds can't be defended
@@ -1777,6 +1872,7 @@ const SIM = (() => {
         m.attacked = true;
         if (w.fp) m.fp -= w.fp;
         if (w.perils && perils(m, w)) continue;
+        if (m.h && t.h) FX(["m", m.h.q, m.h.r, t.h.q, t.h.r, m.u.side, r.ok ? 1 : 0]);
         if (!r.ok) { L(`${m.id} strikes at ${t.id} (${loc !== "torso" ? locName(loc) + ", " : ""}skill ${plan.lvl}): misses`); if (r.fumble) critMiss(m, w); continue; }
         if (!r.crit) {
           const def = defend(t, m, true, plan.da, feint);
@@ -2681,11 +2777,19 @@ const SIM = (() => {
     // damage bonus for All-Out Attack (Strong) and Mighty Blows, for planning
     const boosted = (w, k) => ({ ...w.dmg, add: w.dmg.add + k * Math.max(2, w.dmg.n), key: "b" + k });
 
+    // a model's condition for the replay: share of HP left, or the worst wound box under Fractional Health
+    const vit = m => {
+      if (!frac) return Math.max(0, Math.min(1, m.hp / m.u.HP));
+      let worst = 0;
+      for (const W of Object.values(m.wounds)) for (let l = 8; l > worst; l--) if (W[l] > 0) { worst = l; break; }
+      return 1 - worst / 8;
+    };
+    const snap = () => models.map(m => m.h ? [m.h.q, m.h.r, m.u.side, m.state === "ok" ? (m.stunned ? 2 : m.prone ? 3 : 1) : 0, m.facing, Math.round(vit(m) * 100) / 100] : null);
     let turn = 0;
     for (turn = 1; turn <= maxTurns; turn++) {
       if (!sideActive(0) || !sideActive(1)) break;
       L(`— Turn ${turn} —`); fieldCache.clear(); turnNow = turn - 1;
-      if (frames) frames.push(models.map(m => m.h ? [m.h.q, m.h.r, m.u.side, m.state === "ok" ? (m.stunned ? 2 : m.prone ? 3 : 1) : 0, m.facing] : null));
+      if (frames) { if (turn > 1) { fx.push(fxb); fxb = []; } frames.push(snap()); }
       for (const m of models) {
         m.parries = 0; m.retreated = false; m.blocked = false; m.attacked = false;
         const sh = m.u.shield;
@@ -2700,7 +2804,7 @@ const SIM = (() => {
         if (!sideActive(0) || !sideActive(1)) break;
         if (!frac && m.hp <= 0) {
           const k = Math.floor(-m.hp / m.u.HP);
-          if (!check(m.u.HT - k).ok) { m.state = "out"; place(m, null); L(`${m.id} collapses unconscious`); continue; }
+          if (!check(m.u.HT - k).ok) { FX(["d", m.h.q, m.h.r, m.u.side, 0]); m.state = "out"; place(m, null); L(`${m.id} collapses unconscious`); continue; }
         }
         if (m.fp <= 0 && !check(m.u.HT).ok) { L(`${m.id} is too exhausted to act`); m.shock = 0; continue; }
         if (m.stunned) { if (check(m.u.HT).ok) { m.stunned = false; L(`${m.id} recovers from stun`); } m.shock = 0; continue; }
@@ -2769,13 +2873,14 @@ const SIM = (() => {
       }
       for (const m of models) if (m.h) m.lastH = m.h;
     }
+    if (frames) { fx.push(fxb); fxb = []; frames.push(snap()); fx.push([]); }
     const a = sideActive(0), b = sideActive(1);
     const winner = a && !b ? 0 : b && !a ? 1 : -1;
     const timeout = a && b;
     L(winner >= 0 ? `Side ${winner === 0 ? "A" : "B"} wins in ${turn - 1} turns` :
       timeout ? `Still fighting when the ${maxTurns}-second limit ran out` : `Both sides destroyed or broken after ${turn - 1} turns`);
     return {
-      winner, timeout, turns: turn - 1, log, frames, terrain: frames && terr ? { floor: [...terr.floor], crates: [...terr.crates], doors: [...terr.doors], shut: [...startShut], events: tev } : null, roster: models.map(m => ({ id: m.id, side: m.u.side, unit: m.u.idx })),
+      winner, timeout, turns: turn - 1, log, frames, fx, terrain: frames && terr ? { floor: [...terr.floor], crates: [...terr.crates], doors: [...terr.doors], shut: [...startShut], events: tev } : null, roster: models.map(m => ({ id: m.id, side: m.u.side, unit: m.u.idx })),
       units: units.map(u => ({
         name: u.name, side: u.side, count: u.count, routed: u.routed,
         standing: u.models.filter(m => m.state === "ok").length,
@@ -2791,12 +2896,13 @@ const SIM = (() => {
   function monteCarlo(unitSpecs, opt = {}) {
     const runs = opt.runs ?? 200;
     if (opt.seed != null) seed(opt.seed);
-    const res = { runs, wins: [0, 0], draws: 0, timeouts: 0, mutual: 0, turns: 0, units: null, sample: null };
+    const res = { runs, wins: [0, 0], draws: 0, timeouts: 0, mutual: 0, turns: 0, units: null, sample: null, runsList: [] };
     const terrain = opt.terrain || (opt.battlefield === "facility" ? facilityMap(opt.mapSeed || 1) : null);
     for (let i = 0; i < runs; i++) {
       const r = runBattle(unitSpecs, { ...opt, terrain, log: i === 0, frames: i === 0 });
       if (i === 0) res.sample = r;
       if (r.winner < 0) { res.draws++; if (r.timeout) res.timeouts++; else res.mutual++; } else res.wins[r.winner]++;
+      res.runsList.push([r.turns, r.winner]);
       res.turns += r.turns;
       if (!res.units) res.units = r.units.map(u => ({ name: u.name, side: u.side, count: u.count, standing: 0, dead: 0, wiped: 0, routed: 0, dmg: 0, kills: 0 }));
       r.units.forEach((u, k) => {
@@ -2891,11 +2997,16 @@ if (typeof document !== "undefined") (() => {
         <span><b>Melee</b>${esc(m.name)}: ${esc(m.dmg)}, skill ${m.skill}</span></div>`;
     } catch (e) { return `<div class="prof err">${esc(e.message)}</div>`; }
   }
+  const ptsOf = name => { const l = TEMPL.find(x => x.title === name); return l ? l.template.points : 0; };
+  // one pip per model (up to 30), so a mob looks like a mob
+  const pips = n => `<span class="pips" aria-hidden="true">${"<i></i>".repeat(Math.min(n, 30))}${n > 30 ? `<em>+${n - 30}</em>` : ""}</span>`;
   function unitCard(u, si, ui) {
+    const p = ptsOf(u.template);
     return `<div class="sunit" data-s="${si}" data-u="${ui}">
-      <div class="shead"><input type="number" min="1" max="200" value="${u.count}" data-f="count" aria-label="Models"><b>${esc(u.template)}</b>
+      <div class="shead"><input type="number" min="1" max="200" value="${u.count}" data-f="count" aria-label="Models"><b>${esc(u.template)}${p ? `<small>${p.toLocaleString("en-US")} pts each</small>` : ""}</b>
         <select data-f="stance" aria-label="Stance">${["shoot", "advance", "charge"].map(s => `<option${s === u.stance ? " selected" : ""}>${s}</option>`).join("")}</select>
         <button class="x" data-del aria-label="Remove unit">×</button></div>
+      ${pips(u.count)}
       ${profile(u)}
       <details class="lo"><summary>Loadout</summary><div class="lgrid">
         <label>Armour ${armourSelect(u, 0)}</label><label>Armour 2 ${armourSelect(u, 1)}</label>
@@ -2912,7 +3023,8 @@ if (typeof document !== "undefined") (() => {
 
   let last = null;
   function render() {
-    const side = si => `<section class="sside"><h2>Side ${"AB"[si]}</h2>${S.sides[si].map((u, ui) => unitCard(u, si, ui)).join("") || `<p class="empty">No units yet.</p>`}
+    const sidePts = si => S.sides[si].reduce((a, u) => a + u.count * ptsOf(u.template), 0);
+    const side = si => `<section class="sside"><h2>Side ${"AB"[si]}${sidePts(si) ? `<small>${sidePts(si).toLocaleString("en-US")} pts</small>` : ""}</h2>${S.sides[si].map((u, ui) => unitCard(u, si, ui)).join("") || `<p class="empty">No units yet.</p>`}
       <select class="addu" data-add="${si}" aria-label="Add a unit to side ${"AB"[si]}">${tmplOptions()}</select></section>`;
     $("#main").innerHTML = `<header class="libhead"><div class="eyebrow">Tools</div><h1>Combat Simulator</h1>
       <p>Pit units against each other using their templates and default loadouts. Every run plays a full GURPS fight second by second; the result is the spread over many runs.</p></header>
@@ -2946,66 +3058,146 @@ if (typeof document !== "undefined") (() => {
   const HOW = `Every run plays a full GURPS 4e fight on a hex map, one yard per hex, second by second. Models act in Basic Speed order and an AI picks each one's maneuver: Aim, Attack, Move and Attack, All-Out Attack (Determined or Double) when nothing can hurt it, All-Out Defense when it can't hurt its foe, Feint and Deceptive Attack against strong defences, Rapid Strike, Ready to reload or clear a jam, Change Posture, and Concentrate for psychic powers. Facing matters: attacks from a flank cost the defender 2, from behind it gets no defence, so surrounding a foe pays. Elite attackers (best combat skill 17+, IQ 8+) aim at the location that does most harm (vitals, skull, eye lens at −10, neck, limbs, or a chink in the armour at −8 or −10 that halves its DR); everyone else hits random locations, with 1 in 6 face hits striking an eye lens. The setting can let everyone aim, as RAW allows, or no one. Ranged fire uses range penalties, per-round rolls with climbing Recoil for automatic fire, and can malfunction or overheat; explosions splash neighbours, fragments fly, flamers hit the whole cone. Defenders Dodge, Parry or Block with retreat and shield DB, and shooters Dodge and Drop. Cover hides legs and groin and costs attackers 2; prone models are harder to shoot but fight badly. Armour divisors, Weak Points, regenerating shields, wounding, Injury Tolerance, Damage Reduction, follow-ups, crippling, knockback, bleeding, shock, stun, consciousness and death rolls, Reanimation Protocols, morale and Perils of the Warp all apply, with either standard HP or the Revised Fractional Health wound system. The full rule list with page references is docs/simulator.md. A charging mob that can barely hurt its foe grabs it, drags it down and pins it (B370), then the rest lay in with All-Out Attack (Strong) and Mighty Blows (1 FP). Not modelled: vehicles and stealth.`;
 
   function results(r) {
-    const pct = x => (100 * x / r.runs).toFixed(0) + "%";
-    const bar = `<div class="sbar"><span class="a" style="width:${100 * r.wins[0] / r.runs}%"></span><span class="d" style="width:${100 * r.draws / r.runs}%"></span><span class="b" style="width:${100 * r.wins[1] / r.runs}%"></span></div>`;
-    return `<h2>Result over ${r.runs} battles</h2>
-      <div class="tsum"><div>Side A wins<b>${pct(r.wins[0])}</b></div><div>Side B wins<b>${pct(r.wins[1])}</b></div>${r.timeouts ? `<div>Still fighting at the limit<b>${pct(r.timeouts)}</b></div>` : ""}${r.mutual ? `<div>Both sides broken<b>${pct(r.mutual)}</b></div>` : ""}<div>Average length<b>${r.turns.toFixed(1)} s</b></div></div>
-      ${bar}
-      <div class="tablewrap" style="max-width:1100px"><table><thead><tr><th>Side</th><th>Unit</th><th>Models</th><th>Still standing (avg)</th><th>Killed (avg)</th><th>Wiped out</th><th>Broke and fled</th><th>Injury dealt (avg)</th></tr></thead><tbody>
-      ${r.units.map(u => `<tr><td>${"AB"[u.side]}</td><td>${esc(u.name)}</td><td class="n">${u.count}</td><td class="n">${u.standing.toFixed(1)}</td><td class="n">${u.dead.toFixed(1)}</td><td class="n">${pct(u.wiped)}</td><td class="n">${pct(u.routed)}</td><td class="n">${u.dmg.toFixed(0)} HP</td></tr>`).join("")}
-      </tbody></table></div>
-      <h2>One battle on the map</h2>
-      <div class="replay"><svg id="rmap" role="img" aria-label="Battle map"></svg>
-        <div class="rctl"><button id="rplay" class="chip tag" aria-label="Play">▶</button><input id="rturn" type="range" min="0" max="${Math.max(0, r.sample.frames.length - 1)}" value="0" aria-label="Turn"><span id="rlab" class="n"></span></div>
-        <p class="rleg"><span class="dot a"></span>Side A <span class="dot b"></span>Side B · ring: stunned · small: prone · tick: facing${r.sample.terrain ? " · pale: floor, dark: walls, grey hexes: crates (light) and barricades (heavy), brass: doors (solid when shut), hatched: breaches" : ""}</p>
-        <pre class="slog" id="rlog"></pre></div>
+    const pct = x => Math.round(100 * x / r.runs);
+    const sideUnits = si => r.units.filter(u => u.side === si);
+    const roster = si => sideUnits(si).map(u => `<span>${u.count} × ${esc(u.name)}</span>`).join("");
+    const wA = pct(r.wins[0]), wB = pct(r.wins[1]), wD = 100 - wA - wB;
+    const lead = wA > wB + 10 ? 0 : wB > wA + 10 ? 1 : -1;
+    const verdict = lead < 0 ? "Too close to call" : `Side ${"AB"[lead]} is favoured`;
+    return `<section class="verdict" aria-label="Result over ${r.runs} battles">
+        <div class="vside a${lead === 0 ? " lead" : ""}"><span class="vlab">Side A wins</span><b>${wA}<small>%</small></b><div class="vros">${roster(0)}</div></div>
+        <div class="vmid"><span class="vsays">${verdict}</span><span class="vvs">vs</span><span class="vmeta">${r.runs} battles · average ${r.turns.toFixed(1)} s${r.timeouts ? ` · ${pct(r.timeouts)}% ran out of time` : ""}${r.mutual ? ` · ${pct(r.mutual)}% mutual ruin` : ""}</span></div>
+        <div class="vside b${lead === 1 ? " lead" : ""}"><span class="vlab">Side B wins</span><b>${wB}<small>%</small></b><div class="vros">${roster(1)}</div></div>
+      </section>
+      <div class="vbar" role="img" aria-label="Side A ${wA}%, neither ${wD}%, side B ${wB}%"><span class="a" style="flex:${wA}"></span><span class="d" style="flex:${wD}"></span><span class="b" style="flex:${wB}"></span></div>
+      <div class="rgrid">
+        <figure class="rcard"><figcaption>How long the battles lasted</figcaption>${histogram(r)}</figure>
+        <figure class="rcard"><figcaption>What was left of each unit (average)</figcaption>${casualties(r)}</figure>
+      </div>
+      <h2>One battle, second by second</h2>
+      <div class="theatre">
+        <div class="stage"><svg id="rmap" role="img" aria-label="Battle map"></svg>
+          <div class="hud"><span class="hud-a" id="hudA"></span><span class="clock" id="rlab"></span><span class="hud-b" id="hudB"></span></div></div>
+        <div class="feed"><div class="feedhead">Battle log</div><pre class="slog" id="rlog"></pre></div>
+      </div>
+      <div class="rctl">
+        <button id="rplay" type="button" aria-label="Play">Play</button>
+        <input id="rturn" type="range" min="0" max="${Math.max(0, r.sample.frames.length - 1)}" value="0" aria-label="Second">
+        <label for="rspeed">Speed <select id="rspeed"><option value="700">½×</option><option value="350" selected>1×</option><option value="170">2×</option><option value="80">4×</option></select></label>
+      </div>
+      <p class="rleg"><span class="dot a"></span>Side A <span class="dot b"></span>Side B · ring: health left · dashed ring: stunned · small: prone · lines: shots (bright when they hit) · flash: melee blow · burst: explosion · ×: fallen${r.sample.terrain ? " · pale: floor, dark: walls, grey: crates and barricades, brass: doors (solid when shut)" : ""}</p>
       <details class="more"><summary>Blow-by-blow of the whole battle</summary><pre class="slog">${esc(r.sample.log.join("\n"))}</pre></details>`;
   }
+  // battle lengths, stacked by who won
+  function histogram(r) {
+    const runs = r.runsList || [];
+    if (!runs.length) return "";
+    const lens = runs.map(x => x[0]).sort((a, b) => a - b);
+    const hi = Math.max(2, lens[Math.min(lens.length - 1, Math.floor(lens.length * 0.97))]);
+    const nb = Math.min(24, Math.max(6, hi));
+    const bw = hi / nb;
+    const bins = Array.from({ length: nb }, () => [0, 0, 0]);
+    for (const [t, w] of runs) bins[Math.min(nb - 1, Math.floor(Math.min(t, hi) / bw * 0.99999))][w === 0 ? 0 : w === 1 ? 1 : 2]++;
+    const top = Math.max(1, ...bins.map(b => b[0] + b[1] + b[2]));
+    const W = 320, H = 150, L = 28, B = 22, T = 8, cw = (W - L - 6) / nb;
+    const y = v => T + (H - T - B) * (1 - v / top);
+    let bars = "";
+    bins.forEach((b, k) => {
+      let acc = 0;
+      [[0, "a"], [2, "d"], [1, "b"]].forEach(([i, c]) => { if (!b[i]) return; const y0 = y(acc), y1 = y(acc + b[i]); bars += `<rect class="${c}" x="${(L + k * cw + 1).toFixed(1)}" y="${y1.toFixed(1)}" width="${Math.max(1, cw - 2).toFixed(1)}" height="${(y0 - y1).toFixed(1)}"/>`; acc += b[i]; });
+    });
+    const ticks = [0, 0.25, 0.5, 0.75, 1].map(f => { const x = L + f * nb * cw; return `<line class="tk" x1="${x.toFixed(1)}" x2="${x.toFixed(1)}" y1="${H - B}" y2="${H - B + 4}"/><text x="${x.toFixed(1)}" y="${H - 6}" text-anchor="middle">${Math.round(f * hi)}${f === 1 ? "s" : ""}</text>`; }).join("");
+    return `<svg class="hist" viewBox="0 0 ${W} ${H}" role="img" aria-label="Battle lengths"><line class="grid" x1="${L}" x2="${W - 6}" y1="${y(top / 2)}" y2="${y(top / 2)}"/><text x="${L - 5}" y="${y(top) + 4}" text-anchor="end">${top}</text><text x="${L - 5}" y="${y(top / 2) + 4}" text-anchor="end">${Math.round(top / 2)}</text>${bars}<line class="axis" x1="${L}" x2="${W - 6}" y1="${H - B}" y2="${H - B}"/>${ticks}</svg>`;
+  }
+  // per unit: still standing, fled, fallen but alive, killed
+  function casualties(r) {
+    return `<div class="cas">${r.units.map(u => {
+      const dead = u.dead, up = u.standing, down = Math.max(0, u.count - up - dead);
+      const seg = (v, c, t) => v > 0.005 ? `<span class="${c}" style="flex:${v.toFixed(3)}" title="${t}: ${v.toFixed(1)}"></span>` : "";
+      return `<div class="crow"><div class="cname"><b class="s${u.side ? "b" : "a"}">${"AB"[u.side]}</b>${esc(u.name)}<span>${up.toFixed(1)} of ${u.count} standing</span></div>
+        <div class="cbar">${seg(up, "up s" + (u.side ? "b" : "a"), "Standing")}${seg(down, "down", "Down or fled")}${seg(dead, "dead", "Killed")}</div>
+        <div class="cfoot"><span>${u.dead.toFixed(1)} killed</span><span>${Math.round(100 * u.wiped / r.runs)}% wiped out</span><span>${Math.round(100 * u.routed / r.runs)}% broke</span><span>${u.dmg.toFixed(0)} HP dealt</span></div></div>`;
+    }).join("")}<p class="ckey"><span class="k up"></span>standing <span class="k down"></span>down or fled <span class="k dead"></span>killed</p></div>`;
+  }
 
-  // draw one battle's frames on an SVG hex map
+  // draw one battle's frames on an SVG hex map, with shots, blows, blasts and the fallen
   let timer = null;
   function setupReplay() {
     const svg = document.getElementById("rmap"); if (!svg || !last) return;
-    const fr = last.sample.frames, log = last.sample.log, T = last.sample.terrain;
-    const pts = []; fr.forEach(f => f.forEach(x => { if (x) pts.push(SIM.px({ q: x[0], r: x[1] })); }));
-    // a facility: floor hexes over a wall-coloured ground, crates on top
-    const hexPoly = (q, r, cls) => { const [cx, cy] = SIM.px({ q, r }); return `<polygon class="${cls}" points="${[0, 1, 2, 3, 4, 5].map(i => `${(cx + Math.cos(i * Math.PI / 3) * 1.01).toFixed(2)},${(cy + Math.sin(i * Math.PI / 3) * 1.01).toFixed(2)}`).join(" ")}"/>`; };
-    let ground = "";
+    if (timer) { clearInterval(timer); timer = null; }
+    const fr = last.sample.frames, fx = last.sample.fx || [], log = last.sample.log, T = last.sample.terrain, roster = last.sample.roster || [];
+    const P = (q, r) => SIM.px({ q, r });
+    const pts = []; fr.forEach(f => f.forEach(x => { if (x) pts.push(P(x[0], x[1])); }));
+    if (!pts.length) return;
+    const hexPts = (cx, cy, k = 1.01) => [0, 1, 2, 3, 4, 5].map(i => `${(cx + Math.cos(i * Math.PI / 3) * k).toFixed(2)},${(cy + Math.sin(i * Math.PI / 3) * k).toFixed(2)}`).join(" ");
+    const hexPoly = (q, r, cls) => { const [cx, cy] = P(q, r); return `<polygon class="${cls}" points="${hexPts(cx, cy)}"/>`; };
     const doorSet = new Set(T ? T.doors || [] : []);
+    let ground = "";
     if (T) {
       const cr = new Map(T.crates);
-      ground = T.floor.filter(k => !doorSet.has(k)).map(k => { const [q, r] = k.split(",").map(Number); pts.push(SIM.px({ q, r })); return hexPoly(q, r, cr.has(k) ? "crate " + cr.get(k) : "floor"); }).join("");
+      ground = T.floor.filter(k => !doorSet.has(k)).map(k => { const [q, r] = k.split(",").map(Number); pts.push(P(q, r)); return hexPoly(q, r, cr.has(k) ? "crate " + cr.get(k) : "floor"); }).join("");
     }
-    // doors and breaches as they stood at second t
+    const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]);
+    const pad = 3, minX = Math.min(...xs) - pad, minY = Math.min(...ys) - pad, W = Math.max(...xs) - minX + pad, H = Math.max(...ys) - minY + pad;
+    svg.setAttribute("viewBox", `${minX.toFixed(1)} ${minY.toFixed(1)} ${W.toFixed(1)} ${H.toFixed(1)}`);
+    svg.classList.toggle("fac", !!T);
+    if (!T) {
+      // open ground: a faint hex grid under everything, as one path
+      let d = "";
+      const q0 = Math.floor(minX / 1.5) - 1, q1 = Math.ceil((minX + W) / 1.5) + 1;
+      for (let q = q0; q <= q1; q++) {
+        const r0 = Math.floor(minY / Math.sqrt(3) - q / 2) - 1, r1 = Math.ceil((minY + H) / Math.sqrt(3) - q / 2) + 1;
+        if ((q1 - q0) * (r1 - r0) > 9000) break;
+        for (let r = r0; r <= r1; r++) { const [cx, cy] = P(q, r); d += `M${hexPts(cx, cy, 1).split(" ").join("L")}Z`; }
+      }
+      ground = `<path class="grid" d="${d}"/>`;
+    }
     const groundAt = t => {
-      if (!T) return "";
+      if (!T) return ground;
       const st = new Map([...doorSet].map(k => [k, (T.shut || []).includes(k) ? "door shut" : "door open"]));
       for (const [tt, k, what] of T.events || []) if (tt <= t) st.set(k, what === "broken" ? "rubble" : what === "closed" ? "door shut" : "door open");
       return ground + [...st].map(([k, cls]) => { const [q, r] = k.split(",").map(Number); return hexPoly(q, r, cls); }).join("");
     };
-    svg.classList.toggle("fac", !!T);
-    if (!pts.length) return;
-    const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]);
-    const pad = 3, minX = Math.min(...xs) - pad, minY = Math.min(...ys) - pad, W = Math.max(...xs) - minX + pad, H = Math.max(...ys) - minY + pad;
-    svg.setAttribute("viewBox", `${minX} ${minY} ${W} ${H}`);
-    const turnLog = t => { const a = log.findIndex(l => l === `— Turn ${t + 1} —`), b = log.findIndex(l => l === `— Turn ${t + 2} —`); return a < 0 ? "" : log.slice(a + 1, b < 0 ? undefined : b).join("\n"); };
+    // the fallen so far, and this second's action
+    const fallen = [];
+    fx.forEach((es, k) => es.forEach(e => { if (e[0] === "d") fallen.push([k + 1, e]); }));
+    const C = 2 * Math.PI * 0.82;
+    const action = t => (fx[t - 1] || []).map(e => {
+      if (e[0] === "s" || e[0] === "m") {
+        const [ax, ay] = P(e[1], e[2]), [bx, by] = P(e[3], e[4]), side = e[5] ? "b" : "a";
+        if (e[0] === "m") return `<g class="blow s${side}${e[6] ? " hit" : ""}"><line x1="${ax}" y1="${ay}" x2="${bx}" y2="${by}"/><circle cx="${bx}" cy="${by}" r="${e[6] ? 0.9 : 0.5}"/></g>`;
+        return `<line class="shot s${side}${e[6] ? " hit" : ""}" x1="${ax}" y1="${ay}" x2="${bx}" y2="${by}"/>${e[6] ? `<circle class="spark s${side}" cx="${bx}" cy="${by}" r=".45"/>` : ""}`;
+      }
+      if (e[0] === "b") { const [cx, cy] = P(e[1], e[2]); return `<circle class="burst" cx="${cx}" cy="${cy}" r="${e[3] * 1.5}"/><circle class="burst core" cx="${cx}" cy="${cy}" r="${Math.max(0.8, e[3] * 0.6)}"/>`; }
+      return "";
+    }).join("");
+    const bodies = t => fallen.filter(([k]) => k <= t).map(([k, e]) => { const [cx, cy] = P(e[1], e[2]); return `<g class="fell s${e[3] ? "b" : "a"}${k === t ? " fresh" : ""}${e[4] ? " dead" : ""}"><path d="M${cx - .45},${cy - .45}L${cx + .45},${cy + .45}M${cx + .45},${cy - .45}L${cx - .45},${cy + .45}"/></g>`; }).join("");
+    const tokens = f => f.map((x, i) => {
+      if (!x) return "";
+      const [cx, cy] = P(x[0], x[1]), st = x[3], rad = st === 3 ? 0.42 : 0.6, hp = x[5] == null ? 1 : x[5];
+      const a = [0, -60, -120, 180, 120, 60][x[4]] * Math.PI / 180;
+      return `<g class="tok ${x[2] ? "sb" : "sa"}${st === 2 ? " stun" : ""}${st === 3 ? " prone" : ""}"><circle class="hpr" cx="${cx}" cy="${cy}" r=".82" stroke-dasharray="${(hp * C).toFixed(2)} ${C.toFixed(2)}" transform="rotate(-90 ${cx} ${cy})"/><circle class="body" cx="${cx}" cy="${cy}" r="${rad}"/><line x1="${(cx + Math.cos(a) * rad * 0.2).toFixed(2)}" y1="${(cy + Math.sin(a) * rad * 0.2).toFixed(2)}" x2="${(cx + Math.cos(a) * 1.05).toFixed(2)}" y2="${(cy + Math.sin(a) * 1.05).toFixed(2)}"/></g>`;
+    }).join("");
+    const count = (f, s) => f.filter(x => x && x[2] === s && x[3]).length, total = s => roster.filter(m => m.side === s).length || fr[0].filter(x => x && x[2] === s).length;
+    const turnLog = t => { const a = log.findIndex(l => l === `— Turn ${t} —`), b = log.findIndex(l => l === `— Turn ${t + 1} —`); return a < 0 ? (t === 0 ? "The sides deploy." : log.slice(-3).join("\n")) : log.slice(a + 1, b < 0 ? undefined : b).join("\n"); };
     const show = t => {
       const f = fr[t] || [];
-      svg.innerHTML = groundAt(t) + f.map(x => {
-        if (!x) return "";
-        const [cx, cy] = SIM.px({ q: x[0], r: x[1] }), st = x[3], rad = st === 3 ? 0.4 : 0.6;
-        const a = [0, -60, -120, 180, 120, 60][x[4]] * Math.PI / 180;
-        return `<g class="${x[2] ? "sb" : "sa"}"><circle cx="${cx}" cy="${cy}" r="${rad}"${st === 2 ? ' class="stun"' : ""}/><line x1="${cx}" y1="${cy}" x2="${cx + Math.cos(a) * 0.95}" y2="${cy + Math.sin(a) * 0.95}"/></g>`;
-      }).join("");
-      document.getElementById("rlab").textContent = `second ${t + 1} of ${fr.length}`;
+      svg.innerHTML = `<g class="ground">${groundAt(t)}</g><g class="bodies">${bodies(t)}</g><g class="act">${action(t)}</g><g class="toks">${tokens(f)}</g>`;
+      document.getElementById("rlab").textContent = t === 0 ? "Deployment" : t === fr.length - 1 ? `End · ${t} s` : `${t} s`;
+      document.getElementById("hudA").textContent = `A ${count(f, 0)}/${total(0)}`;
+      document.getElementById("hudB").textContent = `B ${count(f, 1)}/${total(1)}`;
       document.getElementById("rlog").textContent = turnLog(t);
     };
-    const slider = document.getElementById("rturn");
-    slider.oninput = () => show(+slider.value);
-    document.getElementById("rplay").onclick = () => {
-      if (timer) { clearInterval(timer); timer = null; return; }
-      timer = setInterval(() => { if (+slider.value >= fr.length - 1) { clearInterval(timer); timer = null; return; } slider.value = +slider.value + 1; show(+slider.value); }, 350);
+    const slider = document.getElementById("rturn"), play = document.getElementById("rplay"), speed = document.getElementById("rspeed");
+    const stop = () => { if (timer) clearInterval(timer); timer = null; play.textContent = "Play"; play.setAttribute("aria-label", "Play"); };
+    const go = () => {
+      if (+slider.value >= fr.length - 1) slider.value = 0;
+      play.textContent = "Pause"; play.setAttribute("aria-label", "Pause");
+      timer = setInterval(() => { if (+slider.value >= fr.length - 1) { stop(); return; } slider.value = +slider.value + 1; show(+slider.value); }, +speed.value);
     };
+    slider.oninput = () => { stop(); show(+slider.value); };
+    play.onclick = () => { if (timer) stop(); else go(); };
+    speed.onchange = () => { if (timer) { stop(); go(); } };
     show(0);
   }
 
