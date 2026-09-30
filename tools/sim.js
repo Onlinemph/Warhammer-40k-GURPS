@@ -2546,7 +2546,9 @@ const SIM = (() => {
         // All-Out Attack after a half move (B365): +4 to hit, no defence until next turn
         if (len <= Math.floor(mv / 2)) {
           const Eaoa = planAttack(m, w, tgt, w.level - skillPen(m) + 4, true).score;
-          add(Wm * Math.max(kv(m, tgt, Eaoa), slamV) + GAMMA * Wm * worth - risk(m, arrive, "aoa"), `aoa-charge@${tgt.id}`, () => {
+          const grabNear = models.filter(f => f.u.side !== u.side && f.state === "ok" && f.h && hexDist(f.h, tgt.h) <= 2 && f.armsLost < 1).length;
+          const rG = grabNear >= 3 ? 0.5 * threatOf(m) * HORIZON * Math.max(0.3, u.ai.caution) : 0;   // a crowd could drag an All-Out Attacker down (MA114)
+          add(Wm * Math.max(kv(m, tgt, Eaoa), slamV) + GAMMA * Wm * worth - risk(m, arrive, "aoa") - rG, `aoa-charge@${tgt.id}`, () => {
             const moved = go(Math.floor(mv / 2)); if (stopped() || !tgt.h) return; m.facing = faceToward(m.h, tgt.h);
             if (hexDist(m.h, tgt.h) <= reach) { m.aoa = true; L(`${m.id} charges in (All-Out Attack)`); slamOK && slamV > kv(m, tgt, Eaoa) ? slam(m, tgt, Math.max(1, moved), true) : strike(m, w, tgt, { determined: true }); }
           });
@@ -2616,7 +2618,10 @@ const SIM = (() => {
           const gainOf = L2 => Math.max(0, 1.2 + 0.7 * (L2 - skillT));
           const Pfd = (L2, g) => { if (def == null) return P(L2); const a = P3[cl(def)], b = P3[cl(def - g)]; return a < 1 ? P(L2) * (1 - b) / Math.max(0.01, 1 - a) : P(L2); };
           // All-Out Attack (B365): Determined +4, Double (two blows), Strong (+2 or +1/die), Feint (a feint, then a blow, MA97)
-          const rA = risk(m, m.h, "aoa");
+          // an All-Out Attacker loses every grapple contest (MA114): held, or with two foes beside it who could grab,
+          // that risks being dragged down and pinned, which is as good as out of the fight
+          const grabbers = adj.filter(f => f.armsLost < 1 && !f.grips.length).length;
+          const rA = risk(m, m.h, "aoa") + (m.grips.length || grabbers >= 2 ? 0.5 * threatOf(m) * HORIZON * Math.max(0.3, u.ai.caution) : 0);
           add(Wm * kv(m, t, P(lvl + 4) * n) - rA, `aoa-det@${t.id}`, () => { face(); m.aoa = true; strike(m, w, t, { determined: true }); });
           add(Wm * kv(m, t, (n + 1) * P(lvl)) - rA, `aoa-double@${t.id}`, () => { face(); m.aoa = true; strike(m, w, t, { double: true }); });
           add(Wm * kv(m, t, P(lvl, boosted(w, 1)) * n) - rA, `aoa-strong@${t.id}`, () => { face(); m.aoa = true; strike(m, w, t, { strong: true }); });
@@ -2627,7 +2632,7 @@ const SIM = (() => {
             // a Rapid Strike that opens with a feint (MA127): feint and blow both at -6
             if (lvl - rp >= 10) add(Wm * kv(m, t, Pfd(lvl - rp, gainOf(lvl - rp)) + (n - 1) * P(lvl)) - rNow, `rapid-feint@${t.id}`, () => { face(); strike(m, w, t, { rapid: true, feintFirst: true }); });
             // Committed Attack (MA99): +2 to hit or +1 damage per two dice, defences at -2 with no retreat or parry
-            const rC = risk(m, m.h, "ca");
+            const rC = risk(m, m.h, "ca") + (m.grips.length || grabbers >= 2 ? 0.2 * threatOf(m) * HORIZON * Math.max(0.3, u.ai.caution) : 0);   // -2 in grapple contests (MA114)
             add(Wm * kv(m, t, P(lvl + 2) * n) - rC, `ca-det@${t.id}`, () => { face(); strike(m, w, t, { committed: "det" }); });
             add(Wm * kv(m, t, P(lvl, boosted(w, 0.5)) * n) - rC, `ca-strong@${t.id}`, () => { face(); strike(m, w, t, { committed: "str" }); });
             // attack and fly out: a long weapon strikes, then steps back out of a shorter foe's reach
