@@ -280,6 +280,8 @@ def combat_flags(t, flags):
         flags["hpt"] = 1
     elif n.startswith("Combat Reflexes"):
         flags["cr"] = 1
+    elif n.startswith("Enhanced Move (Ground)"):
+        flags["enhMove"] = flags.get("enhMove", 0) + float(lv)   # B52: top speed x2 per level, reached by accelerating
     elif n.startswith("Hard to Kill"):
         flags["htk"] = flags.get("htk", 0) + lv
     elif n.startswith("Enhanced Parry"):
