@@ -2134,7 +2134,8 @@ const SIM = (() => {
       if (terr && !m.grips.length) { doorOptions(m, pool, add, rNow); if (!adj.length) breachOptions(m, pool, add, rNow, Wm); }
       // All-Out Defense (+2 to defences): only against hand-to-hand, a foe beside us or one that can reach us this turn
       const meleeThreat = pool.some(f => f.u.melee && hexDist(f.h, m.h) - f.u.melee.reachMax <= moveOf(f) && expInjRandom(f.u.melee, u) >= 1);
-      if (meleeThreat) add(-risk(m, here, "aod"), "aod", () => {
+      // it only buys time: worth the risk it saves only as far as squad-mates can use that time to put the threat down
+      if (meleeThreat) add(-(rNow - (rNow - risk(m, here, "aod")) * aodHelp(m, pool)), "aod", () => {
         m.aod = true;
         const par = u.parry != null ? u.parry + 1 : -1, blk = u.db ? u.block + 1 : -1, dod = u.dodge + 3;
         m.aodDef = par >= dod && par >= blk ? "parry" : blk >= dod ? "block" : "dodge";
@@ -2312,6 +2313,26 @@ const SIM = (() => {
       return h;
     }
 
+    // how much of the hand-to-hand threat to m its squad-mates could remove over the next couple of turns (0-1)
+    function aodHelp(m, pool) {
+      let best = 0;
+      for (const f of pool) {
+        if (!f.u.melee || hexDist(f.h, m.h) - f.u.melee.reachMax > moveOf(f)) continue;
+        let inj = 0;
+        for (const a of models) {
+          if (a === m || a.state !== "ok" || !a.h || a.u.side !== m.u.side) continue;
+          const d = hexDist(a.h, f.h);
+          const mw = a.u.melee, rw = a.u.ranged;
+          let e = 0;
+          if (mw && d - mw.reachMax <= moveOf(a)) e = expInjRandom(mw, f.u) * 0.5;
+          if (rw && d <= rw.range.max && los(a.h, f.h)) e = Math.max(e, expInjRandom(rw, f.u) * 0.5 * Math.min(3, rw.rof || 1));
+          inj += e;
+        }
+        if (f.u.shield && f.sp > 0) inj *= 0.3;   // a field that's up takes most of it first
+        best = Math.max(best, Math.min(1, 2 * inj / remOf(f)));
+      }
+      return best;
+    }
     // ---- in a facility: shut a door that a foe is shooting through (a Ready, B382), when that's safer than anything else
     function doorOptions(m, pool, add, rNow) {
       if (!pool.some(f => los(f.h, m.h))) return;
