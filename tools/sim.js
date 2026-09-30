@@ -105,11 +105,20 @@ const SIM = (() => {
     [100, -10], [150, -11], [200, -12], [300, -13], [500, -14], [700, -15], [1000, -16], [1500, -17],
     [2000, -18], [3000, -19], [5000, -20], [7000, -21], [10000, -22]];
   function rangePenalty(yd) { for (const [r, p] of RANGE) if (yd <= r) return p; return -23; }
-  // Automatic fire, house rule after GURPS 3e: every round is rolled on its own, each one after the first at a
-  // further -Recoil (the 4e rapid-fire bonus and margin-per-Recoil hits, B373, aren't used). Expected hits:
-  function burstHits(eff, n, rcl) {
+  // Progressive Recoil (the user's house rule, replacing B373): every round of a burst is rolled on its own. Round k
+  // (the first is 0) is at -k x Rcl; a weapon whose natural Rcl is 1 takes a flat -1 on every round after the first
+  // instead, except "Rcl 1*" weapons such as lasguns, which stay progressive. Braced, Rcl is halved (rounding up) for
+  // the progression and every round gets +1 (the caller adds it); Aim helps only the first round.
+  function rclPen(w, k, braced) {
+    if (!k) return 0;
+    const r = (w && w.rcl) || 1;
+    if (r === 1 && !(w && w.rclStar)) return 1;
+    return k * (braced ? Math.max(1, Math.ceil(r / 2)) : r);
+  }
+  // expected hits from n rounds at effective skill eff (aim: the Aim bonus inside eff, first round only)
+  function burstHits(eff, n, w, aim = 0, braced = false) {
     let h = 0;
-    for (let k = 0; k < n; k++) { const l = eff - k * (rcl || 1); if (l < 3) break; h += P3[Math.min(18, l)]; }
+    for (let k = 0; k < n; k++) { const l = eff - (k ? aim : 0) - rclPen(w, k, braced); if (l < 3) break; h += P3[Math.min(18, l)]; }
     return h;
   }
   function rapidBonus(shots) {
@@ -286,7 +295,7 @@ const SIM = (() => {
         w.fencing = /^(Rapier|Saber|Smallsword|Main-Gauche)/.test(line.skill || "");   // B208: +3 retreating parry, -2 per extra parry
       } else {
         w.acc = accOf(line.accuracy); w.range = parseRange(line.range) || { half: 100, max: 300 };
-        w.rof = parseRoF(line.rate_of_fire); w.rcl = Math.max(1, num(line.recoil, 1));
+        w.rof = parseRoF(line.rate_of_fire); w.rcl = Math.max(1, num(line.recoil, 1)); w.rclStar = /\*/.test(String(line.recoil ?? ""));
         w.shots = parseShots(line.shots); w.bulk = num(line.bulk, 0);
         const sm = /^(\d+)([MB†]*)/.exec(String(line.strength ?? ""));
         w.minST = sm && !/[MB]/.test(sm[2]) ? Number(sm[1]) : 0;
@@ -1086,7 +1095,7 @@ const SIM = (() => {
       return s / 216;
     }
     // best location and deceptive level: returns {loc, da, score, lvl}
-    function planAttack(m, w, t, lvl, melee, dmgOverride) {
+    function planAttack(m, w, t, lvl, melee, dmgOverride, fo = {}) {
       // a regenerating shield that's up soaks the blow before armour: a called shot is wasted on it, so aim at the
       // body (or not at all) until it's down, and count only what the shield won't absorb
       const sh = t.u.shield, shUp = !!(sh && t.sp > 0 && (!melee || !sh.ranged_only) && !w.malediction && (!sh.arc || shieldCovers(t, m)));
@@ -1105,7 +1114,7 @@ const SIM = (() => {
           const eff = lvl + pen - 2 * da;
           if (eff < 3 || (da > 0 && eff < 10)) break;
           const pDef = def0 == null ? 0 : P3[Math.max(0, Math.min(18, def0 - da))];
-          const hits = melee ? P3[Math.min(18, eff)] : burstHits(eff, w.cone ? 1 : (w.rof || 1), w.rcl);
+          const hits = melee ? P3[Math.min(18, eff)] : burstHits(eff, w.cone ? 1 : (w.rof || 1), w, fo.aim || 0, !!fo.braced);
           let score = (1 - pDef) * e * hits;
           if (shUp) {
             // the share of this attack's raw damage the shield absorbs is lost; stripping it is worth a quarter
@@ -1364,6 +1373,16 @@ const SIM = (() => {
         return;
       }
     }
+    // Bracing (the user's Progressive Recoil rule): a gun fired without moving from a mount or bipod line, from prone,
+    // over a crate, barricade or wall in the next hex toward the target, or from a kneel behind a carried shield
+    function bracedFor(m, w, t, moved) {
+      if (moved || !m.h || !t || !t.h || w.usage === "power" || w.thrown || w.cone) return false;
+      if (/mount|braced|bipod|tripod/i.test(w.usage || "")) return true;
+      if (m.prone) return true;
+      if (m.kneel && shieldDB(m)) return true;
+      if (terr) { const [dq, dr] = DIRS[faceToward(m.h, t.h)], i = idx(key(m.h.q + dq, m.h.r + dr)); if (i != null && (terr.crateI[i] || (terr.wallI[i] && !broken[i]))) return true; }
+      return false;
+    }
     function fireAt(m, w, target, opts) {
       if (m.state !== "ok" || !m.h || !target.h || !los(m.h, target.h)) return;   // the attacker fell, the target left, or a wall is in the way
       const d = Math.max(1, hexDist(m.h, target.h));
@@ -1393,7 +1412,8 @@ const SIM = (() => {
         return;
       }
       if (w.fp && target.u.flags.blank) { L(`${m.id} casts ${w.name} at ${target.id}: the power dies against a blank`); m.aimTurns = 0; return; }
-      let base = wl(m, w) + (opts.pointBlank ? Math.min(0, w.bulk) : rangePenalty(d + (target.steps || 0)))   // a moving target adds its speed to the range (B550)
+      const braced = bracedFor(m, w, target, opts.moved || m.moved);
+      let base = wl(m, w) + (braced ? 1 : 0) + (opts.pointBlank ? Math.min(0, w.bulk) : rangePenalty(d + (target.steps || 0)))   // a moving target adds its speed to the range (B550)
         + target.u.sm - skillPen(m) + aimBonus - (opts.pen || 0)
         + (opts.moved ? Math.min(-2, w.bulk) : 0) + (opts.aoa ? 1 : 0) - ((target.prone || target.kneel) && !opts.pointBlank ? 2 : 0) - (inCover(target, m.h) && !opts.pointBlank ? 2 : 0);
       m.aimTurns = 0;
@@ -1408,17 +1428,17 @@ const SIM = (() => {
       targets.forEach((t, i) => {
         const n = w.cone ? 1 : Math.floor(shots / targets.length) + (i < shots % targets.length ? 1 : 0);
         const inter = w.cone ? [] : between(m.h, t.h, m.u.side).filter(x => x !== t);
-        const plan = planAttack(m, w, t, base - 4 * inter.length, false);
+        const plan = planAttack(m, w, t, base - 4 * inter.length, false, null, { aim: aimBonus, braced });
         const loc0 = plan.loc === "random" ? null : plan.loc;
         const lvl = plan.lvl;
         const nb = w.cone ? 1 : n, k0 = fired;
         fired += nb;
-        if (lvl - k0 * w.rcl < 3) { L(`${m.id} can't hope to hit ${t.id} (skill ${lvl - k0 * w.rcl})`); return; }   // B344
-        const r = check(lvl - k0 * w.rcl);
+        if (lvl < 3) { L(`${m.id} can't hope to hit ${t.id} (skill ${lvl})`); return; }   // B344
+        const r = check(lvl);
         if (i === 0 && jamCheck(m, w, r)) return;
-        // every round rolled on its own at a further -Recoil (house rule after 3e); criticals can't be dodged
+        // every round rolled on its own (Progressive Recoil); Aim counts on the first only; criticals can't be dodged
         let got = r.ok ? 1 : 0, crits = r.crit ? 1 : 0;
-        for (let k = 1; k < nb; k++) { const lk = lvl - (k0 + k) * w.rcl; if (lk < 3) break; const rk = check(lk); if (rk.ok) { got++; if (rk.crit) crits++; } }   // no roll below 3 (B344)
+        for (let k = 1; k < nb; k++) { const lk = lvl - aimBonus - rclPen(w, k, braced); if (lk < 3) break; const rk = check(lk); if (rk.ok) { got++; if (rk.crit) crits++; } }   // no roll below 3 (B344)
         r.ok = got > 0;
         const thru = (inter.length ? `, through ${inter.length}` : "") + (plan.da ? `, deceptive -${plan.da}` : "");
         if (!r.ok && !w.cone) {
@@ -1430,7 +1450,7 @@ const SIM = (() => {
         }
         let hits = got;
         FX(["s", m.h.q, m.h.r, t.h.q, t.h.r, m.u.side, got ? 1 : 0, m.ix, t.ix, lvl, got, nb]);
-        L(`${m.id} ${w.usage === "power" ? "casts " + w.name + " at" : "fires " + (n > 1 ? n + " at" : "at")} ${t.id} (${d} yd${loc0 && loc0 !== "torso" ? ", aiming at the " + locName(loc0) : ""}${thru}, skill ${lvl}${k0 ? " from -" + k0 * w.rcl : ""}${nb > 1 || k0 ? ", -" + w.rcl + " a round" : ""}): ${hits} hit${hits > 1 ? "s" : ""}`);
+        L(`${m.id} ${w.usage === "power" ? "casts " + w.name + " at" : "fires " + (n > 1 ? n + " at" : "at")} ${t.id} (${d} yd${loc0 && loc0 !== "torso" ? ", aiming at the " + locName(loc0) : ""}${thru}, skill ${lvl}${braced ? ", braced" : ""}${nb > 1 ? (w.rcl === 1 && !w.rclStar ? ", then -1" : `, then -${braced ? Math.max(1, Math.ceil(w.rcl / 2)) : w.rcl} a round`) + (aimBonus ? ` unaimed` : "") : ""}): ${hits} hit${hits > 1 ? "s" : ""}`);
         if (hits > crits && !w.malediction) {
           const open = hits - crits;   // critical rounds can't be defended
           if (d <= 1 && !w.cone) {
@@ -1659,7 +1679,7 @@ const SIM = (() => {
         if (rw && !f.gunBroken && d <= rw.range.max && los(f.h, h)) {
           const lvl = rw.level - skillPen(f) + rangePenalty(Math.max(1, d) + (h === m.h ? m.steps || 0 : hexDist(m.h, h))) + m.u.sm - (m.prone ? 2 : 0) + Math.min(2, rw.acc || 0) - (coverAt(h, f.h, m) !== "none" ? 2 : 0);
           const def = mode === "aoa" ? null : m.u.dodge + (mode === "aod" ? 2 : 0) + m.u.db - (m.prone ? 3 : 0);
-          best = Math.max(best, expInjRandom(rw, m.u) * burstHits(lvl, rw.rof || 1, rw.rcl) * (1 - (def == null ? 0 : P3[cl(def)])));
+          best = Math.max(best, expInjRandom(rw, m.u) * burstHits(lvl, rw.rof || 1, rw) * (1 - (def == null ? 0 : P3[cl(def)])));
         }
         tot += best * share;
       }
@@ -1698,7 +1718,7 @@ const SIM = (() => {
 
     function act(m) {
       const u = m.u, A = u.ai;
-      m.aoa = false; m.aod = false; m.mna = false; m.offBalance = false; m.readied = false; m.steps = 0;
+      m.aoa = false; m.aod = false; m.mna = false; m.offBalance = false; m.readied = false; m.steps = 0; m.moved = false;
       clearZone(m); m.waiting = null;
       if (m.doNothing) { m.doNothing = false; L(`${m.id} reels from the blow (Do Nothing)`); return; }
       if (m.blockLost) { m.blockLost = false; L(`${m.id} recovers its shield (Ready)`); return; }
@@ -1819,18 +1839,19 @@ const SIM = (() => {
           const ffCost = pals.length ? (1 - P3[cl(base)]) * pals.reduce((a, x) => a + P3[cl(9 + x.u.sm)] * Math.min(1, expInjRandom(w, x.u) / remOf(x)) * threatOf(x) * HORIZON, 0) * u.ai.caution : 0;
           const aimed = m.aimTarget === t && m.aimTurns > 0;
           const aimB = aimed ? w.acc + (m.aimTurns >= 3 ? 2 : m.aimTurns >= 2 ? 1 : 0) : 0;
-          const Enow = planAttack(m, w, t, base + aimB, false).score * sustainOf(w) * spread;
+          const br = bracedFor(m, w, t, m.moved), bB = br ? 1 : 0;
+          const Enow = planAttack(m, w, t, base + bB + aimB, false, null, { aim: aimB, braced: br }).score * sustainOf(w) * spread;
           const vNow = Wr * kv(m, t, Enow) - fpCost - ffCost;
           add(vNow - rNow, `fire ${w.name}@${t.id}`, () => { m.aimTarget = t; m.facing = faceToward(m.h, t.h); fireAt(m, w, t, { aim: aimed }); });
           // All-Out Attack (Determined, +1 ranged): only worth it when little can hit back
           if (threatNow < 1) {
-            const Eaoa = planAttack(m, w, t, base + aimB + 1, false).score * sustainOf(w) * spread;
+            const Eaoa = planAttack(m, w, t, base + bB + aimB + 1, false, null, { aim: aimB, braced: br }).score * sustainOf(w) * spread;
             add(Wr * kv(m, t, Eaoa) - fpCost - ffCost - risk(m, m.h, "aoa"), `aoa-fire@${t.id}`, () => { m.aoa = true; m.aimTarget = t; m.facing = faceToward(m.h, t.h); fireAt(m, w, t, { aim: aimed, aoa: true }); });
           }
           // Aim (B364): pay a turn now for Acc (and +1/+2 more on later turns) next turn
           if ((w.acc || 0) >= 1 && !(aimed && m.aimTurns >= 3)) {
             const nextB = (aimed ? aimB : 0) + (aimed ? 1 : w.acc);
-            const Eaim = planAttack(m, w, t, base + nextB, false).score * sustainOf(w) * spread;
+            const Eaim = planAttack(m, w, t, base + bB + nextB, false, null, { aim: nextB, braced: br }).score * sustainOf(w) * spread;
             add(GAMMA * Wr * kv(m, t, Eaim) - GAMMA * ffCost - rNow, `aim@${t.id}`, () => {
               if (m.aimTarget !== t) m.aimTurns = 0;
               m.aimTarget = t; m.aimTurns++; m.facing = faceToward(m.h, t.h); L(`${m.id} aims at ${t.id}`);
@@ -1987,7 +2008,7 @@ const SIM = (() => {
           const dm = w.dmg, mean = (dm.n * 3.5 + dm.add) * (dm.mult || 1);
           const per = Math.max(0, mean - Math.floor(st.dr / (dm.div || 1))) * woundMult(dm.type, "torso", { homogenous: 1 }, dm.ex);
           const lvl = melee ? w.level - skillPen(m) : wl(m, w) - skillPen(m) + rangePenalty(jd);
-          const E = per * (melee ? P3[cl(lvl)] : burstHits(lvl, isGun && w.shots.mag !== Infinity ? Math.min(w.rof || 1, m.ammo) : (w.rof || 1), w.rcl));
+          const E = per * (melee ? P3[cl(lvl)] : burstHits(lvl, isGun && w.shots.mag !== Infinity ? Math.min(w.rof || 1, m.ammo) : (w.rof || 1), w));
           if (!(E > 0)) continue;
           const T = Math.ceil(hp / E);
           if (T > 4 || T - 1 > (wk - hd) / mv) continue;   // walking round would be as quick
@@ -2032,7 +2053,7 @@ const SIM = (() => {
       L(`${m.id} ${melee ? "strikes at" : w.usage === "power" ? "casts " + w.name + " at" : "fires " + (n > 1 ? n + " " : "") + "at"} the ${name} to breach it (skill ${lvl})`);
       let hits = 0, inj = 0;
       for (let k = 0; k < n && !broken[j]; k++) {
-        if (!check(lvl - (melee ? 0 : k * (w.rcl || 1))).ok) continue;
+        if (!check(lvl - (melee ? 0 : rclPen(w, k, false))).ok) continue;
         hits++;
         const raw = rollDamage(w.dmg);
         inj += damageStructure(j, raw, w.dmg, true);
