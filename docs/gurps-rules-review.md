@@ -729,7 +729,7 @@ Totals: 94 findings, 4 big, 29 medium, 61 small.
 - Batch A (items 2, 5, 6, 7, 22, 36, 37, 38, 72, 73, 74, 75): implemented.
 - Batch C (items 1, 8, 20, 24, 52, 53, 54, 55, 76, 78, 95, 96, 97; 77 for Slams and Shoves only): implemented. Open: #56, #77 for weapons. Shield DR and HP values await the user.
 - #109 (Machines have no FP): done for Necrons; the Gun Drone's Machine Mind isn't flagged yet. #110: keep Regeneration (user).
-- #98-#101 (Progressive Recoil as written): done; flat −1 later limited to true lasers with Rcl 1 (data "1L"), everything else stacks (user). #102 (suppression) still open.
+- #98-#101 (Progressive Recoil as written): done; flat −1 later limited to true lasers with Rcl 1 (data "1L"), everything else stacks (user). #102: suppression keeps B409 as the one exception to Progressive Recoil (user decision).
 - Tactical Shooting: #114-#126 done (#118 drilled factions chosen by me: Astartes, Custodes, Sororitas, Mechanicus, Guard, Aeldari, T'au, Necrons); #127 as an option, off; #130 done; #128, #129 done (awareness a setting, limited by default in facilities); #131 as an option, off; #122 slicing the pie done (user). Not done: #132 by design (conflicts with Progressive Recoil).
 - Martial Arts: #150-#161, #164, #167 (All-Out and Committed; not extra arms or Sprawl), #168, #169, #173, #175 done; #162 stop thrust only; #163 Riposte only; #165 limited dodges and #172 Heroic Charge as options, off; #166 already in; #170, #171, #174 not modelled; #176 through the new options. Also #3 (Mighty Blows with Attack only), and #63 (Damage Table above ST 70).
 
