@@ -301,6 +301,7 @@ const SIM = (() => {
         w.minST = sm && !/[MB]/.test(sm[2]) ? Number(sm[1]) : 0;
         if (w.minST && liftST < w.minST) w.level -= w.minST - liftST;
         w.oneHanded = w.bulk >= -2 && oneHand(line.strength);
+        w.pistol = /Pistol/.test(line.skill || "");
       }
       return w;
     };
@@ -556,12 +557,17 @@ const SIM = (() => {
   const locName = l => l && l.endsWith("#c") ? "chink in the " + l.slice(0, -2) + " armour" : l;
   const AIM = { torso: 0, vitals: -3, skull: -7, eye: -9, face: -5, neck: -5, groin: -3, arm: -2, leg: -2, hand: -4, foot: -4 };
   const COVERED = new Set(["leg", "foot", "groin"]);
-  const COVER_DR = { none: 0, light: 15, heavy: 60 };
+  // cover (Tactical Shooting p. 28): what it takes off a foe's shot at you, and what it costs you to shoot back from
+  // behind it unless braced and aiming; its DR for the legs and groin it hides (B407)
+  const COVER_DR = { none: 0, crate: 15, barricade: 60, corner: 60, light: 15, heavy: 60 };
+  const COVER_PEN = { none: 0, crate: 2, corner: 2, light: 2, barricade: 3, heavy: 4 };
+  const COVER_OWN = { none: 0, crate: 0, corner: 0, light: 0, barricade: 2, heavy: 4 };
 
   // ------------------------------------------------------------------ battle
   function runBattle(unitSpecs, opt = {}) {
     const distance = Math.max(2, Math.round(opt.distance ?? 100)), maxTurns = opt.maxTurns ?? 1200, morale = opt.morale !== false;
     const frac = opt.health === "fractional", boxes = opt.boxes || 5;
+    const SIGHTED = !!opt.sightedShots;   // Tactical Shooting option: an aimed shot is All-Out Attack (Determined)
     // hit locations: "elite" (default: elites aim, everyone else hits random locations), "aimed" (everyone, RAW), "random"
     const locMode = opt.locations || "elite";
     const aimsShots = m => locMode === "aimed" || (locMode === "elite" && m.u.elite);
@@ -623,22 +629,39 @@ const SIM = (() => {
     // cover for a figure on hex h against fire from hex f (B407): a crate in the next hex toward the shooter
     // hides its legs and groin; a wall edge that only one of the two lines clears (a corner or a door frame)
     // hides more of it; on open ground, the side's cover setting while it stands still
-    function coverAt(h, f, m) {
+    // cover for h against fire from f: { kind, i } with i the crate hex (for wear) or -1
+    function coverOf(h, f, m) {
       if (terr && h && f && hexDist(h, f) > 1) {
         const k = NK(h.q, h.r) * 16777216 + NK(f.q, f.r);
         let c = terr.covC.get(k);
         if (c === undefined) {
           const a = lineHexes(h, f, 1)[0], b = lineHexes(h, f, -1)[0];
-          c = terr.crates.get(key(a.q, a.r)) || terr.crates.get(key(b.q, b.r)) || null;
+          c = [idx(key(a.q, a.r)), idx(key(b.q, b.r))].filter(i => i != null && terr.crateI[i]);
           if (terr.covC.size > 3e6) terr.covC.clear();
           terr.covC.set(k, c);
         }
-        if (c) return c;
+        for (const i of c) if (!crateGone[i]) return { kind: terr.crates.get(key(terr.hx[i].q, terr.hx[i].r)) === "heavy" ? "barricade" : "crate", i };
         const e = lineEntry(h, f);
-        if (lineOpen(e[0]) !== lineOpen(e[1])) return "heavy";
+        if (lineOpen(e[0]) !== lineOpen(e[1])) return { kind: "corner", i: -1 };
       }
-      return m && cover[m.u.side] !== "none" && !m.moved ? cover[m.u.side] : "none";
+      return { kind: m && cover[m.u.side] !== "none" && !m.moved ? cover[m.u.side] : "none", i: -1 };
     }
+    const coverAt = (h, f, m) => coverOf(h, f, m).kind;
+    // crates and barricades are semi-ablative (TS p. 29, B559): every 10 points of damage they stop wears 1 DR off
+    const crateGone = terr ? new Uint8Array(terr.hx.length) : null, crateWear = terr ? new Float64Array(terr.hx.length) : null;
+    function wearCover(i, stopped) {
+      if (i < 0 || stopped < 10) return;
+      crateWear[i] += Math.floor(stopped / 10);
+      const base = COVER_DR[terr.crates.get(key(terr.hx[i].q, terr.hx[i].r)) === "heavy" ? "barricade" : "crate"];
+      if (crateWear[i] >= base) {
+        crateGone[i] = 1; pass[i] = 1; fieldCache.clear();
+        tev.push([turnNow, key(terr.hx[i].q, terr.hx[i].r), "broken"]);
+        L(`  the cover at ${terr.hx[i].q},${terr.hx[i].r} is shot to pieces`);
+      }
+    }
+    const coverDRof = cv => cv.i >= 0 ? Math.max(0, COVER_DR[cv.kind] - crateWear[cv.i]) : COVER_DR[cv.kind];
+    // what a model's own cover costs it to shoot out from (TS p. 28): nothing behind light cover, -2 from medium, -4 from heavy
+    const ownCoverPen = (m, tH, bracedAimed) => bracedAimed || !m.h || !tH ? 0 : COVER_OWN[coverAt(m.h, tH, m)];
     // structures (B558): interior walls are plasteel partitions (DR 50, 60 HP a yard) and doors DR 30, 40 HP;
     // both are Homogeneous (B380), so bullets do little and blasts, plasma, melta and power weapons break through
     const STRUCT = { wall: { dr: 50, hp: 60 }, door: { dr: 30, hp: 40 } };
@@ -730,6 +753,10 @@ const SIM = (() => {
     const sideActive = s => units.some(u => u.side === s && unitActive(u));
     const foes = m => models.filter(x => x.state === "ok" && x.u.side !== m.u.side && !x.u.routed);
     const inCover = (t, f) => coverAt(t.h, f, t) !== "none";
+    const coverPen = (t, f) => COVER_PEN[coverAt(t.h, f, t)];
+    // drilled squads (TS p. 22-23, 37): a drilled shooter fires past a drilled friend at -2, not -4, and doesn't hit him by mistake
+    const drilled = x => !!(x && x.u.ai.drilled);
+    const linePen = (m, inter) => inter.reduce((a, x) => a + (drilled(m) && x.u.side === m.u.side && drilled(x) ? 2 : 4), 0);
 
     // skill penalty from shock (standard), or the larger of shock and pain plus wound effects (fractional)
     const skillPen = m => (frac ? Math.max(m.shock, m.pain) + m.gawd : Math.min(4, m.shock)) + (m.armsLost ? 4 : 0);
@@ -938,7 +965,9 @@ const SIM = (() => {
         if (raw <= t.sp) { t.sp -= raw; if (fraw) t.sp = Math.max(0, t.sp - fraw); if (t.h) FX(["f", t.ix, raw, t.h.q, t.h.r]); L(`  shield holds (${t.sp} SP left)`); return 0; }
         raw -= t.sp; t.sp = 0; t.spCollapsed = true; L(`  shield collapses`);   // what gets through still carries its follow-up
       }
-      const coverDR = ranged && COVERED.has(loc) ? COVER_DR[coverAt(t.h, att && att.h, t)] : 0;
+      const cv = ranged && COVERED.has(loc) ? coverOf(t.h, att && att.h, t) : null;
+      const coverDR = cv ? coverDRof(cv) : 0;
+      if (cv && cv.i >= 0 && coverDR > 0) wearCover(cv.i, Math.min(raw, coverDR));
       const armDR = Math.floor(drAt(t.u.arm.dr, loc === "vitals" ? (t.u.arm.dr.vitals != null ? "vitals" : "torso") : loc) / (chink ? 2 : 1)) + coverDR;
       if (chink) L(`  strikes a chink in the armour`);
       const natDR = drAt(t.u.nat, loc === "vitals" ? "torso" : loc) + (loc === "skull" ? 2 : 0);
@@ -1167,6 +1196,8 @@ const SIM = (() => {
         let v = t.u.parry + (rt ? (w.fencing || (bare && t.u.judo) ? 3 : 1) : 0) - step * t.parries - (t.grips.length ? 4 : 0) + aod("parry");
         // bare hands against a weapon: -3 unless it's a thrust or the defender knows Judo or Karate (B377)
         if (bare && aw && !aw.natural && aw.name !== "Punch" && !/^imp|^pi/.test((aw.dmg || {}).type || "") && !t.u.judo) v -= 3;
+        // a gun held close in (TS p. 25): -2 to parry a handgun, -1 a long arm
+        if (kind === "pb" && aw) v -= aw.pistol ? 2 : 1;
         // nobody parries a weapon (or a body) heavier than their Basic Lift, twice that two-handed (B376)
         if (!(aw && aw.weight && aw.weight > t.u.bl * (w.oneHanded === false ? 2 : 1))) opts.push({ how: "parry", v, retreat: rt });
       }
@@ -1184,6 +1215,14 @@ const SIM = (() => {
     function defend(t, att, melee, da, feint, aw) {
       t.shieldStruck = false;
       if (t.state !== "ok" || t.aoa || t.pinned) return null;
+      // an active defence spoils any Aim and follow-up aim (B364, TS p. 14): an aiming model lets a shot come when
+      // dodging is a long shot or the shot can barely hurt it, and keeps its aim
+      if ((t.aimTurns || t.follow) && melee !== true && melee !== "pb" && melee !== "thrown") {
+        const dd = rangedDefence(t, att), rw = aw || (att && att.u.ranged);
+        const harm = rw ? expInjRandom(rw, t.u) : 0;
+        if (dd == null || P3[cl(dd)] < 0.3 || harm < 0.15 * remOf(t)) return null;
+      }
+      if (t.aimTurns || t.follow) { t.aimTurns = 0; t.follow = null; }
       if (t.grips.length) t.retreated = true;   // held: no retreat
       // a shield at 0 HP or less may give out whenever it's used (HT roll, B483)
       if (t.u.cs && t.u.cs.hp != null && t.shHP <= 0 && t.shState === "ok" && !check(t.u.cs.ht).ok) { t.shState = "disabled"; L(`  ${t.id}'s ${t.u.cs.name} gives out`); }
@@ -1367,6 +1406,7 @@ const SIM = (() => {
       const near = models.filter(x => x !== m && x !== t && x.state === "ok" && x.h && t.h && hexDist(x.h, t.h) <= 1);
       const cands = [...new Set([...inter, ...near])].sort((a, b) => hexDist(m.h, a.h) - hexDist(m.h, b.h));
       for (const c of cands) {
+        if (c.u.side === m.u.side && drilled(m) && drilled(c)) continue;
         if (!check(9 + c.u.sm - (c.prone ? 2 : 0)).ok) continue;
         L(`  the shot goes astray and hits ${c.id}${c.u.side === m.u.side ? " (friendly fire)" : ""}`);
         applyHit(m, w, c, hitLocation(), true, halfD);
@@ -1375,12 +1415,14 @@ const SIM = (() => {
     }
     // Bracing (the user's Progressive Recoil rule): a gun fired without moving from a mount or bipod line, from prone,
     // over a crate, barricade or wall in the next hex toward the target, or from a kneel behind a carried shield
-    function bracedFor(m, w, t, moved) {
+    // (TS p. 12, 28): and an aimed pistol shot held in both hands, when the off hand is free
+    function bracedFor(m, w, t, moved, aimed) {
       if (moved || !m.h || !t || !t.h || w.usage === "power" || w.thrown || w.cone) return false;
       if (/mount|braced|bipod|tripod/i.test(w.usage || "")) return true;
       if (m.prone) return true;
       if (m.kneel && shieldDB(m)) return true;
-      if (terr) { const [dq, dr] = DIRS[faceToward(m.h, t.h)], i = idx(key(m.h.q + dq, m.h.r + dr)); if (i != null && (terr.crateI[i] || (terr.wallI[i] && !broken[i]))) return true; }
+      if (aimed && w.pistol && !m.u.cs && (m.inHand !== "both" || !m.u.melee || m.u.melee.natural || m.u.melee.name === "Punch")) return true;
+      if (terr) { const [dq, dr] = DIRS[faceToward(m.h, t.h)], i = idx(key(m.h.q + dq, m.h.r + dr)); if (i != null && ((terr.crateI[i] && !crateGone[i]) || (terr.wallI[i] && !broken[i]))) return true; }
       return false;
     }
     function fireAt(m, w, target, opts) {
@@ -1393,6 +1435,10 @@ const SIM = (() => {
       if (w.fp) { m.fp -= w.fp; }
       if (w.perils && perils(m, w)) return;
       const aimBonus = opts.aim ? w.acc + (m.aimTurns >= 3 ? 2 : m.aimTurns >= 2 ? 1 : 0) : 0;
+      // follow-up shots (TS p. 14): after an aimed shot, later shots at the same target keep half the base Acc (all of
+      // it braced at RoF 1) until the shooter moves, defends, or switches target or weapon; first round only
+      const fAcc = !opts.aim && m.follow && m.follow.t === target && m.follow.w === w && !m.moved ? m.follow.acc : 0;
+      const firstB = aimBonus + fAcc;
       // Malediction (B106): no active defence; a Quick Contest against the target's Will (or HT), with range penalties
       // of -1/yard (level 1), the Size and Speed/Range Table (2) or long-distance modifiers (3, none inside 200 yd)
       if (w.malediction) {
@@ -1412,11 +1458,17 @@ const SIM = (() => {
         return;
       }
       if (w.fp && target.u.flags.blank) { L(`${m.id} casts ${w.name} at ${target.id}: the power dies against a blank`); m.aimTurns = 0; return; }
-      const braced = bracedFor(m, w, target, opts.moved || m.moved);
+      const braced = bracedFor(m, w, target, opts.moved || m.moved, firstB > 0);
+      // sighted and aimed shots as All-Out Attack (Determined) (TS p. 13-14; an option): +1, no defence till next turn
+      const sighted = SIGHTED && opts.aim && !opts.aoa;
+      if (sighted) { m.aoa = true; L(`${m.id} settles into the sights (All-Out Attack)`); }
       let base = wl(m, w) + (braced ? 1 : 0) + (opts.pointBlank ? Math.min(0, w.bulk) : rangePenalty(d + (target.steps || 0)))   // a moving target adds its speed to the range (B550)
-        + target.u.sm - skillPen(m) + aimBonus - (opts.pen || 0)
-        + (opts.moved ? Math.min(-2, w.bulk) : 0) + (opts.aoa ? 1 : 0) - ((target.prone || target.kneel) && !opts.pointBlank ? 2 : 0) - (inCover(target, m.h) && !opts.pointBlank ? 2 : 0);
+        + target.u.sm - skillPen(m) + firstB - (opts.pen || 0)
+        // All-Out Attack (Determined): +1, or +4 for a gun fired at a foe within reach (TS p. 25)
+        + (opts.moved ? Math.min(-2, w.bulk) : 0) + (opts.aoa || sighted ? (opts.pointBlank ? 4 : 1) : 0) - ((target.prone || target.kneel) && !opts.pointBlank ? 2 : 0)
+        - (opts.pointBlank ? 0 : coverPen(target, m.h) + ownCoverPen(m, target.h, braced && firstB > 0));
       m.aimTurns = 0;
+      m.follow = firstB > 0 && !w.cone && !w.malediction ? { t: target, w, acc: braced && (w.rof || 1) === 1 ? w.acc : Math.floor(w.acc / 2) } : null;
       // cones hit everyone in the cone; a burst goes at one target (with recoil climbing per round, spreading it
       // over neighbours as B373 allows would only put the later rounds at worse odds)
       const targets = [target];
@@ -1428,7 +1480,7 @@ const SIM = (() => {
       targets.forEach((t, i) => {
         const n = w.cone ? 1 : Math.floor(shots / targets.length) + (i < shots % targets.length ? 1 : 0);
         const inter = w.cone ? [] : between(m.h, t.h, m.u.side).filter(x => x !== t);
-        const plan = planAttack(m, w, t, base - 4 * inter.length, false, null, { aim: aimBonus, braced });
+        const plan = planAttack(m, w, t, base - linePen(m, inter), false, null, { aim: firstB, braced });
         const loc0 = plan.loc === "random" ? null : plan.loc;
         const lvl = plan.lvl;
         const nb = w.cone ? 1 : n, k0 = fired;
@@ -1438,7 +1490,7 @@ const SIM = (() => {
         if (i === 0 && jamCheck(m, w, r)) return;
         // every round rolled on its own (Progressive Recoil); Aim counts on the first only; criticals can't be dodged
         let got = r.ok ? 1 : 0, crits = r.crit ? 1 : 0;
-        for (let k = 1; k < nb; k++) { const lk = lvl - aimBonus - rclPen(w, k, braced); if (lk < 3) break; const rk = check(lk); if (rk.ok) { got++; if (rk.crit) crits++; } }   // no roll below 3 (B344)
+        for (let k = 1; k < nb; k++) { const lk = lvl - firstB - rclPen(w, k, braced); if (lk < 3) break; const rk = check(lk); if (rk.ok) { got++; if (rk.crit) crits++; } }   // no roll below 3 (B344)
         r.ok = got > 0;
         const thru = (inter.length ? `, through ${inter.length}` : "") + (plan.da ? `, deceptive -${plan.da}` : "");
         if (!r.ok && !w.cone) {
@@ -1450,7 +1502,7 @@ const SIM = (() => {
         }
         let hits = got;
         FX(["s", m.h.q, m.h.r, t.h.q, t.h.r, m.u.side, got ? 1 : 0, m.ix, t.ix, lvl, got, nb]);
-        L(`${m.id} ${w.usage === "power" ? "casts " + w.name + " at" : "fires " + (n > 1 ? n + " at" : "at")} ${t.id} (${d} yd${loc0 && loc0 !== "torso" ? ", aiming at the " + locName(loc0) : ""}${thru}, skill ${lvl}${braced ? ", braced" : ""}${nb > 1 ? (w.rcl === 1 && !w.rclStar ? ", then -1" : `, then -${braced ? Math.max(1, Math.ceil(w.rcl / 2)) : w.rcl} a round`) + (aimBonus ? ` unaimed` : "") : ""}): ${hits} hit${hits > 1 ? "s" : ""}`);
+        L(`${m.id} ${w.usage === "power" ? "casts " + w.name + " at" : "fires " + (n > 1 ? n + " at" : "at")} ${t.id} (${d} yd${loc0 && loc0 !== "torso" ? ", aiming at the " + locName(loc0) : ""}${thru}, skill ${lvl}${braced ? ", braced" : ""}${nb > 1 ? (w.rcl === 1 && !w.rclStar ? ", then -1" : `, then -${braced ? Math.max(1, Math.ceil(w.rcl / 2)) : w.rcl} a round`) + (firstB ? ` unaimed` : "") : ""}): ${hits} hit${hits > 1 ? "s" : ""}`);
         if (hits > crits && !w.malediction) {
           const open = hits - crits;   // critical rounds can't be defended
           if (d <= 1 && !w.cone) {
@@ -1677,7 +1729,7 @@ const SIM = (() => {
         }
         const rw = f.u.ranged;
         if (rw && !f.gunBroken && d <= rw.range.max && los(f.h, h)) {
-          const lvl = rw.level - skillPen(f) + rangePenalty(Math.max(1, d) + (h === m.h ? m.steps || 0 : hexDist(m.h, h))) + m.u.sm - (m.prone ? 2 : 0) + Math.min(2, rw.acc || 0) - (coverAt(h, f.h, m) !== "none" ? 2 : 0);
+          const lvl = rw.level - skillPen(f) + rangePenalty(Math.max(1, d) + (h === m.h ? m.steps || 0 : hexDist(m.h, h))) + m.u.sm - (m.prone ? 2 : 0) + Math.min(2, rw.acc || 0) - COVER_PEN[coverAt(h, f.h, m)] - (f.h ? ownCoverPen(f, h, false) : 0);
           const def = mode === "aoa" ? null : m.u.dodge + (mode === "aod" ? 2 : 0) + m.u.db - (m.prone ? 3 : 0);
           best = Math.max(best, expInjRandom(rw, m.u) * burstHits(lvl, rw.rof || 1, rw) * (1 - (def == null ? 0 : P3[cl(def)])));
         }
@@ -1710,7 +1762,7 @@ const SIM = (() => {
         if (!t.h || !los(h, t.h)) continue;
         const d = Math.max(1, hexDist(h, t.h));
         if (d > w.range.max) continue;
-        const E = planAttack(m, w, t, wl(m, w) - skillPen(m) + rangePenalty(d + (t.steps || 0)) + t.u.sm - (coverAt(t.h, h, t) !== "none" ? 2 : 0) - 4 * between(h, t.h, m.u.side).filter(x => x !== t && x !== m).length, false).score * sustainOf(w);
+        const E = planAttack(m, w, t, wl(m, w) - skillPen(m) + rangePenalty(d + (t.steps || 0)) + t.u.sm - COVER_PEN[coverAt(t.h, h, t)] - COVER_OWN[coverAt(h, t.h, null)] - linePen(m, between(h, t.h, m.u.side).filter(x => x !== t && x !== m)), false).score * sustainOf(w);
         best = Math.max(best, kv(m, t, E));
       }
       return best * stanceW(m, "ranged") * m.u.ai.aggression;
@@ -1834,24 +1886,27 @@ const SIM = (() => {
           const spread = 1 / (1 + 0.5 * u.ai.focus * claims(m, t));
           // figures in the line of fire cost -4 each, and a miss may hit a friend on the line or beside the target
           const inter = w.malediction ? [] : between(m.h, t.h, m.u.side).filter(x => x !== t);
-          const base = wl(m, w) - skillPen(m) + rangePenalty(d + (t.steps || 0)) + t.u.sm - 4 * inter.length - (!w.malediction && inCover(t, m.h) ? 2 : 0);
-          const pals = w.malediction || w.dmg.ex ? [] : [...new Set([...inter, ...models.filter(x => x !== m && x.state === "ok" && x.h && hexDist(x.h, t.h) <= 1)])].filter(x => x.u.side === u.side);
+          const base = wl(m, w) - skillPen(m) + rangePenalty(d + (t.steps || 0)) + t.u.sm - linePen(m, inter) - (!w.malediction ? coverPen(t, m.h) : 0);
+          const pals = w.malediction || w.dmg.ex ? [] : [...new Set([...inter, ...models.filter(x => x !== m && x.state === "ok" && x.h && hexDist(x.h, t.h) <= 1)])].filter(x => x.u.side === u.side && !(drilled(m) && drilled(x)));
           const ffCost = pals.length ? (1 - P3[cl(base)]) * pals.reduce((a, x) => a + P3[cl(9 + x.u.sm)] * Math.min(1, expInjRandom(w, x.u) / remOf(x)) * threatOf(x) * HORIZON, 0) * u.ai.caution : 0;
           const aimed = m.aimTarget === t && m.aimTurns > 0;
           const aimB = aimed ? w.acc + (m.aimTurns >= 3 ? 2 : m.aimTurns >= 2 ? 1 : 0) : 0;
-          const br = bracedFor(m, w, t, m.moved), bB = br ? 1 : 0;
-          const Enow = planAttack(m, w, t, base + bB + aimB, false, null, { aim: aimB, braced: br }).score * sustainOf(w) * spread;
+          const fA = !aimed && m.follow && m.follow.t === t && m.follow.w === w && !m.moved ? m.follow.acc : 0;
+          const br = bracedFor(m, w, t, m.moved, aimB + fA > 0), bB = br ? 1 : 0;
+          const own = w.malediction ? 0 : ownCoverPen(m, t.h, br && aimB + fA > 0);
+          const Enow = planAttack(m, w, t, base + bB + aimB + fA - own, false, null, { aim: aimB + fA, braced: br }).score * sustainOf(w) * spread;
           const vNow = Wr * kv(m, t, Enow) - fpCost - ffCost;
           add(vNow - rNow, `fire ${w.name}@${t.id}`, () => { m.aimTarget = t; m.facing = faceToward(m.h, t.h); fireAt(m, w, t, { aim: aimed }); });
           // All-Out Attack (Determined, +1 ranged): only worth it when little can hit back
           if (threatNow < 1) {
-            const Eaoa = planAttack(m, w, t, base + bB + aimB + 1, false, null, { aim: aimB, braced: br }).score * sustainOf(w) * spread;
+            const Eaoa = planAttack(m, w, t, base + bB + aimB + fA - own + 1, false, null, { aim: aimB + fA, braced: br }).score * sustainOf(w) * spread;
             add(Wr * kv(m, t, Eaoa) - fpCost - ffCost - risk(m, m.h, "aoa"), `aoa-fire@${t.id}`, () => { m.aoa = true; m.aimTarget = t; m.facing = faceToward(m.h, t.h); fireAt(m, w, t, { aim: aimed, aoa: true }); });
           }
           // Aim (B364): pay a turn now for Acc (and +1/+2 more on later turns) next turn
           if ((w.acc || 0) >= 1 && !(aimed && m.aimTurns >= 3)) {
             const nextB = (aimed ? aimB : 0) + (aimed ? 1 : w.acc);
-            const Eaim = planAttack(m, w, t, base + bB + nextB, false, null, { aim: nextB, braced: br }).score * sustainOf(w) * spread;
+            const brA = bracedFor(m, w, t, false, true);
+            const Eaim = planAttack(m, w, t, base + (brA ? 1 : 0) + nextB - ownCoverPen(m, t.h, brA), false, null, { aim: nextB, braced: brA }).score * sustainOf(w) * spread;
             add(GAMMA * Wr * kv(m, t, Eaim) - GAMMA * ffCost - rNow, `aim@${t.id}`, () => {
               if (m.aimTarget !== t) m.aimTurns = 0;
               m.aimTarget = t; m.aimTurns++; m.facing = faceToward(m.h, t.h); L(`${m.id} aims at ${t.id}`);
@@ -2071,7 +2126,7 @@ const SIM = (() => {
         const { h, d } = q[i];
         if (d > 0 && DIRS.some(([dq, dr]) => wallAt(key(h.q + dq, h.r + dr)))) {
           let sc = 0;
-          for (const f of near) if (los(h, f.h)) sc += coverAt(h, f.h, null) !== "none" ? 1 : -0.6;
+          for (const f of near) if (los(h, f.h)) { const c = coverAt(h, f.h, null); sc += c !== "none" ? COVER_PEN[c] / 2 : -0.6; }
           if (sc > 0) spots.push({ h, sc: sc - d * 0.01 });
         }
         if (d >= mv) continue;
@@ -2233,6 +2288,9 @@ const SIM = (() => {
         if (gun && (gun.shots.mag === Infinity || m.ammo > 0) && m.reload === 0) {
           const E = planAttack(m, gun, t, gun.level + Math.min(0, gun.bulk || 0) - skillPen(m), false).score * sustainOf(gun);
           add(Wr * kv(m, t, E) - rNow, `point-blank@${t.id}`, () => { face(); fireAt(m, gun, t, { pointBlank: true }); });
+          // All-Out Attack (Determined) with a gun at a foe in reach: +4 (TS p. 25)
+          const E4 = planAttack(m, gun, t, gun.level + Math.min(0, gun.bulk || 0) - skillPen(m) + 4, false).score * sustainOf(gun);
+          add(Wr * kv(m, t, E4) - risk(m, m.h, "aoa"), `aoa-point-blank@${t.id}`, () => { face(); m.aoa = true; fireAt(m, gun, t, { pointBlank: true, aoa: true }); });
           // blade and pistol together (B417)
           if (gun.oneHanded && u.melee.oneHanded && u.melee.name !== "Punch" && !m.armsLost) {
             const pm = u.dualPen, pg = u.dualPen + u.offPen;
@@ -2405,7 +2463,7 @@ const SIM = (() => {
       if (!los(z.owner.h, x.h)) return;
       const m = z.owner, w = z.w, d = Math.max(1, hexDist(m.h, x.h));
       const eff = w.level - skillPen(m) + rangePenalty(d);
-      const lvl = Math.min(6, eff) + rapidBonus(z.shots) + x.u.sm - (x.prone ? 2 : 0) - (inCover(x, m.h) ? 2 : 0);
+      const lvl = Math.min(6, eff) + rapidBonus(z.shots) + x.u.sm - (x.prone ? 2 : 0) - coverPen(x, m.h);
       const r = check(lvl);
       if (!r.ok) { L(`  suppression fire misses ${x.id}`); return; }
       let hits = Math.min(3, z.shots, 1 + Math.floor(Math.max(0, r.margin) / w.rcl));
