@@ -713,6 +713,21 @@ Totals: 94 findings, 4 big, 29 medium, 61 small.
 13. Are M (mounted) weapons always fired from their mounts in the sim (#88)?
 14. Berserk (Skorpekh Destroyer) and Cowardice (Gretchin) aren't modelled, and their pages (B124-129) weren't available. Can someone supply them? Cowardice likely penalises Gretchin morale.
 
+## User decisions
+
+1. Shields: force-field shields are shields like any other: Defense Bonus against every attack (house rule for firearms and beams), plus the shield's own DR and HP and the force field. The AI should also exploit a shield's downsides (it covers only the front and shield side, occupies an arm, and can be struck).
+2. Necrons are Machines (no extra effort from FP).
+3. Use the book's tables: a ranged critical miss rolls the Critical Miss Table; guns with a Malf number use the Malfunction Table. **Done in batch A.**
+6. Morale uses the Fright Check Table. **Done in batch A.**
+7. Keep natural eye DR (house rule), or every monster gets shot in the eye every time.
+10. Crates are easier to step over the bigger you are.
+11. Not ruled on; the simulator treats power, force and relic weapons as fine (breakage-resistant), chainswords as ordinary.
+14. The pages are in the Drive after all; see the supplement below.
+
+## Progress
+
+- Batch A (items 2, 5, 6, 7, 22, 36, 37, 38, 72, 73, 74, 75): implemented.
+
 ## Status of the earlier from-memory review
 
 Items of `docs/sim-mechanics-review.md`:
@@ -826,3 +841,188 @@ Items of `docs/sim-mechanics-review.md`:
 - Regeneration tiers and rates (B80); Slow correctly ignored.
 - Natural DR subtracted after armour, before wounding (B46), apart from eyes (#14).
 - End-of-battle FP costs correctly left out (B426).
+
+## Supplement: pages read later
+
+A later reviewer read the pages the first five couldn't: B124-129 and the other mental disadvantages the templates carry (B124-162), the Machine meta-trait (B263) with Machines and Fatigue (B16) and Immunity to Metabolic Hazards (B80), B427-434 (Afflictions, Mortal Conditions, Collisions and Falling, electricity, fire), Shields (B287), Overpenetration (B408) and Damage to Objects and Damage to Shields (B483-484). The reviewer also compared the user's written house rule "House Rules: Progressive Recoil System for GURPS 4e" (Google Doc, version 2025-04-05) with `fireAt`. That document is the user's own rule, so where the sim differs from it, the sim is wrong. Line numbers are approximate: `tools/sim.js` was being edited during the review, so function names are the reliable pointer. New batch **H. Disadvantages and machines** covers the trait findings.
+
+| # | Finding | Pages | Verdict | Impact | Batch |
+|---|---|---|---|---|---|
+| 95 | Shields have no DR or HP (Damage to Shields) | B484, B287, B408 | missing | medium to big | C |
+| 96 | Shield DB against firearms is RAW once Damage to Shields is used; the arc limit still applies | B287, B374 | revises #20 | small | C |
+| 97 | Storm-shield force field soaks hits from every direction | data, B287 | wrong | medium | C |
+| 98 | Natural Rcl 1 weapons: flat -1, not cumulative | house rule §5 | wrong | big | E |
+| 99 | Aim bonus only on the first shot of a burst | house rule §7 | wrong | medium to big | E |
+| 100 | Bracing halves Rcl and gives +1 to every shot | house rule §6 | missing | medium | E |
+| 101 | Planner and shot count follow the old progression | house rule §3-5 | partial | small | E |
+| 102 | Suppression fire still uses the rapid-fire bonus | house rule §3, §8 | question | small | E |
+| 103 | Berserk (Skorpekh Destroyer) | B124 | missing | medium | H |
+| 104 | Cowardice (Gretchin) | B129 | missing | small to medium | H |
+| 105 | Overconfidence | B148 | missing | small | H |
+| 106 | Impulsiveness (Orks) | B139 | missing | small | H |
+| 107 | Bloodlust | B125 | missing | small | H |
+| 108 | Other mental traits: no combat effect; Slave Mentality → no morale isn't RAW | B124-162 | partial | small | H |
+| 109 | Machines have no FP | B16, B263 | wrong | medium | H |
+| 110 | Machine's Unhealing (Total) vs Necron Regeneration | B263, B160, B80 | question | medium | H |
+| 111 | What Machine does and doesn't change | B263, B80, B483 | partial | small | H |
+| 112 | Affliction effects (supplements #93) | B428-429 | missing | small to medium | F |
+| 113 | Catching fire | B433-434 | missing | small to medium | E |
+
+### 95. Damage to Shields: shield DR and HP (medium to big, C)
+- **Rule** (B484): "If your shield's DB makes the difference between success and failure on any active defense (not just a block), the blow struck the shield squarely, and may damage it. Apply the attack's damage to the shield. Subtract the shield's DR. If no damage penetrates the shield, there is no effect . . . but you experience full knockback!" Damage that penetrates comes off the shield's HP under Damage to Objects; "ordinary shields are Homogenous, with HT 12. If the shield is disabled or destroyed, it no longer provides its DB, but it still encumbers you until dropped. If it is completely destroyed (-10×HP), it falls off." Punch-through: "The shield acts as cover, with 'cover DR' equal to its DR + (HP/4). Damage in excess of cover DR penetrates the shield and possibly injures you … roll 1d: on 1-2, apply damage to your shield arm; on 3-6, apply it to the location targeted by the attacker." B483 (artifacts): at 0 HP or less, roll HT each second the object is under stress (in use) or it's disabled; at -1×HP and each further multiple, roll HT or it's destroyed (as B419); destroyed automatically at -5×HP. B408: cover DR takes the armour divisor ("Finally, apply any armor divisor"). B287 figures: Medium Shield DB 2, DR 7, HP 40; Large Shield DB 3, DR 9, HP 60; Force Shield DB 3, DR 100, no HP. "This DR protects the shield, not the wielder."
+- **Sim**: shields are only a Defense Bonus (`_item.db` in `data/sim/weapons.yaml`, summed in `buildUnit` around 339) and a Block score (362). They have no DR or HP and never take damage. The storm shield's field is a separate SP pool (`applyHit`, around 918).
+- **Fix** (the user's decision: every shield keeps its DB against every attack, has its own DR and HP, and keeps any field it carries):
+  1. **Data.** Add `dr`, `hp` and optionally `ht` (default 12) to each shield's `_item` in `data/sim/weapons.yaml`. Combat Shield (a Medium Shield) takes 7/40 and Boarding Shield (a Large Shield) 9/60, both from B287. The user sets values for the Storm Shield and Praesidium Shield plates; their data entries give only DB 3. In `buildUnit`, store `shield: {db, dr, hp, ht}`, and per model keep `m.shHP = hp` and `m.shState = "ok" | "disabled" | "destroyed" | "gone"`.
+  2. **When the shield is hit.** Only on a successful active defence, from the front or the shield side (see #96), where the roll was higher than the effective defence minus DB, that is, it would have failed without DB. This applies to Dodge, Parry, Block, Dodge and Drop, and to a dodge against cones. Critical hits and explosions get no defence, so they never damage the shield. Against a burst where the dodge removes `1 + margin` hits (B375): if margin < DB, every hit removed struck the shield; otherwise the DB accounts for DB of the removed hits, which strike the shield. The burst case is an extension; B484 covers one attack.
+  3. **Damage order.** Roll the attack's damage. A storm shield's field, if up and covering that arc (#97), absorbs first as now. Then subtract the shield's DR, divided by the armour divisor. If nothing penetrates, the shield is unharmed, and crushing or cutting damage applies full knockback to the wielder from the basic damage (the existing `knockback`). If damage penetrates, the shield loses `max(1, floor(penetration × HOMOG[type]))` HP, using the existing `HOMOG` multipliers (pi- 1/10, pi 1/5, pi+ 1/3, pi++ and imp 1/2, others x1).
+  4. **Punch-through.** `coverDR = floor((DR + fullHP/4) / divisor)`, with no divisor for (∞). Basic damage above coverDR goes to the wielder: on 1d 1-2 the shield arm, on 3-6 the location the attacker aimed at (or the random location). The wielder's armour, wounding and follow-up then apply as usual. A follow-up (bolt shell) is spent on the shield unless the carrier punches through. That is a judgement call, consistent with #80.
+  5. **Shield condition.** At `shHP <= 0`, roll HT (12) at the start of each of the wielder's turns and each time the shield is used to defend. On a failure it's disabled: no DB, no Block, still carried. On crossing -1×, -2×, -3× and -4× HP, roll HT or it's destroyed. At -5×HP it's destroyed automatically, and at -10×HP it falls off. A disabled or destroyed shield still blocks two-handed weapons until dropped. Dropping it is a Ready, which the AI can take when it has a two-handed option. A Force Shield with no HP (B287 style) never loses DB.
+  6. **Log and FX.** Log "shield takes N (M HP left)", "shield disabled" and "shield smashed", and add the shield's HP to the token sheet.
+- **Impact**: medium to big. Storm-shield Terminators, Boarding Marines, Custodes and Guard shield squads currently keep DB 2-3 forever against lascannon and power-fist hits. With DR/HP a Large-Shield-class plate (9/60, cover DR 24) survives small arms but is punched through or wrecked by meltas, lascannons and heavy melee in a few hits.
+
+### 96. Shield DB against firearms is RAW with Damage to Shields; the arc limit stands (small, C)
+- **Rule** (B287): DB applies "against attacks from the front or shield side … only against melee or muscle-powered ranged weapons – not against firearms, unless you use the optional Damage to Shields rule (p. 484)." B374 says the same.
+- **Sim**: `bestDefence`, `rangedDefence` and `defend` add `t.u.db` against every attack from any non-rear arc, both sides included.
+- **Fix**: this revises #20. With #95 adopted, the user's "DB against every attack" is RAW, not a house rule, so drop the firearms half of #20's fix. Keep its arc half: `arcOf` should return `left` or `right` for side hexes, and DB (and Block) should apply only from the front and the shield side (left, unless the model is left-handed). Also add B552's -4 to hit the shield arm (-8 the shield hand) if shields are ever aimed at (#44).
+- **Impact**: small; it closes #20 and Question 1.
+
+### 97. Storm-shield force field covers every direction (medium, C)
+- **Rule**: `data/imperium/armour/fields.yaml`, Storm Shield (Field Component): "Covers only attacks from the front and the shield-arm side (the arcs a shield covers); attacks from behind or the off side bypass it." This matches B287's arcs for a shield.
+- **Sim**: `applyHit` (around 918) soaks with `t.sp` whenever the shield is up, whatever direction the attack comes from. The planner check (`shUp`, around 1040) doesn't check the arc either.
+- **Fix**: give the field an `arc: "shield"` property (fields worn as personal fields, such as refractor or rosarius, keep all-round cover). Soak only when `arcOf` is front or the shield side. Do the same in the planner so flankers know to ignore the field.
+- **Impact**: medium. Surrounding a storm-shield Terminator, or shooting from its weapon side, becomes the way to beat it, as the data intends.
+
+### 98. Progressive Recoil: natural Rcl 1 weapons take a flat -1 (big, E)
+- **Rule** (house rule §5): "Weapons with a natural Recoil value of 1 … Shot 2 onwards: Roll against Skill - 1. This is a flat -1 penalty applied to every shot after the first in the burst; it does not accumulate further." §4 (Rcl 2+): shot n at Skill - (n-1)×Rcl.
+- **Sim**: `fireAt` rolls shot k at `lvl - (k0 + k) * w.rcl` (the per-round loop, around 1339-1343) for every weapon, so a lasgun's tenth round is at -9 (`docs/simulator.md` line 35 says so explicitly).
+- **Fix**: `const pen = k => k === 0 ? 0 : (w.rcl === 1 && !braced) ? 1 : k * effRcl` (`effRcl` from #100). Apply it to the first-target roll, the loop and the log text, and update `docs/simulator.md`. With 48 Rcl 1 automatic weapons in the data (every lasgun and hellgun, splinter, shuriken, pulse and gauss weapons, Burst Cannon, Avenger), this is the biggest single change to ranged fire.
+- **Impact**: big. Expected hits at effective skill 10: lasgun (RoF 10) 1.5 now vs 3.9 under the house rule; Burst Cannon (RoF 20) 1.5 vs 7.6. At effective 6 (unaimed at range): lasgun 0.16 vs 0.51. Rcl 2+ weapons are unchanged (bolter 0.85 either way).
+
+### 99. Progressive Recoil: Aim applies to the first shot only (medium to big, E)
+- **Rule** (house rule §7): "Bonuses gained from an Aim maneuver apply fully only to the first shot roll of a rapid-fire burst. Subsequent shots in the same burst do not benefit from that specific Aim bonus." §4: shot 1 is at normal effective skill "including … aiming, bracing Acc".
+- **Sim**: `aimBonus` (Acc + 1 or 2 for extra seconds, around 1298) is part of `base`, so every round of the burst gets it.
+- **Fix**: keep `aimBonus` out of `base`. Add it to shot 1 only (the first-target roll when `k0 === 0`). Rounds 2+ use `lvl - aimBonus - pen(k)`. The planner (`burstHits`) needs the same split (#101). All-Out Attack (Determined) +1 is not Aim, so it stays on every shot.
+- **Impact**: medium to big. An aimed lasgun burst (Acc 6) at effective 6 now expects 2.8 hits (+6 on all ten rounds, climbing -1). Under the house rule (#98 and #99 together) it's 1.2: one good shot and nine at -1 unaimed. Aiming automatic weapons becomes much less valuable, and Acc matters mainly for single shots.
+
+### 100. Progressive Recoil: bracing (medium, E)
+- **Rule** (house rule §6): bracing (bipod, a wall, a vehicle frame, a deployed shield) (A) halves Rcl for the cumulative penalty, rounding 0.5 up (Rcl 2 → 1, Rcl 3 → 2, Rcl 4 → 2). (B) gives its Acc bonus, usually +1, to all attack rolls in the braced burst. "If bracing reduces a weapon's effective Rcl to 1 … you still use the standard cumulative penalty progression … You do not switch to the special non-cumulative rule from section 5".
+- **Sim**: no bracing at all. #88 notes bipod weapons are never braced.
+- **Fix**: `braced = !moved && (prone || mounted || bipod && prone || adjacent crate/barricade/wall toward the target || carrying a shield with DB >= 2 and kneeling or behind it)`. The exact list is the user's choice; the house rule names bipod, wall, vehicle and deployed shield. Then `effRcl = braced ? Math.max(1, Math.ceil(w.rcl / 2)) : w.rcl`, cumulative even when it comes to 1, and +1 on every shot. Give the AI a reason to fire from cover or prone with heavy weapons. Bracing a natural-Rcl-1 weapon gains only the +1 (effective Rcl stays 1, cumulative), so for those weapons bracing is worse than not bracing past shot 2. The house rule says exactly that ("Rcl 1 weapon braced remains effective Rcl 1" together with §6's clarification); flag it for the user.
+- **Impact**: medium. Heavy stubbers, heavy bolters and big shootas (Rcl 3-4) nearly double their useful rounds when braced.
+
+### 101. Progressive Recoil: planner and shot count (small, E)
+- **Rule** (house rule §3): "A weapon's listed RoF determines the maximum number of shots … you can choose to make". §8: "Each successful roll is one hit."
+- **Sim**: `burstHits` (110) mirrors the cumulative -Rcl and applies `eff` (which includes Aim) to every round. It's used by the AI in `planAttack` and the option scoring (around 1571 and 1899). `fireAt` always fires `min(RoF, ammo)` and stops rolling below 3 but still spends the rounds.
+- **Fix**: `burstHits(eff, n, rcl, aim, braced)` with the #98-#100 progression. Optionally, stop the burst at the first round whose skill is below the "Can't hope to hit" floor of 3 and keep the rest of the ammunition. The house rule lets the shooter choose. That matters only for Rcl 3-4 weapons with small magazines. Dodge against the burst stays at `1 + margin` hits removed (B375); the house rule is silent there, and `docs/simulator.md` records it.
+- **Impact**: small, but the AI's choice between Aim and fire and between weapons follows the real odds only once this matches #98-#100.
+
+### 102. Suppression fire and the house rule (small, E, question)
+- **Rule** (house rule §1): the rules "replace the standard GURPS 4th Edition rapid-fire system described on p. B408 … and p. 373". §3: "RoF does not grant any bonus to your skill rolls under this system." Suppression fire (B409) is the rapid-fire rule on those pages.
+- **Sim**: `suppressHit` (around 2290) rolls once per model at `min(6, skill) + rapidBonus(shots)` with `1 + margin/Rcl` hits (capped at 3), and `docs/simulator.md` says "Suppression fire keeps B409". The AI's suppression score (around 1781) uses the same.
+- **Fix**: ask the user. If the house rule covers suppression, one version is: each model in the zone faces `min(shots, 3)` rolls, the first at `min(6, skill)` and later ones at the #98/#100 recoil progression, with no `rapidBonus`. Otherwise record "suppression keeps B409" as an explicit exception in the house-rules list.
+- **Impact**: small; suppression is a minor AI option.
+
+### 103. Berserk (medium, H)
+- **Rule** (B124): "Make a self-control roll any time you suffer damage over 1/4 your HP in the space of one second". On a failure you go berserk (automatically if you fail a Bad Temper roll; deliberately with Concentrate and a Will roll). While berserk:
+  - "If armed with a hand weapon, you must make an All-Out Attack each turn a foe is in range. If no foe is in range, you must use a Move maneuver to get as close as possible to a foe – and if you can Move and Attack, or end your Move with a slam, you will."
+  - "If the enemy is more than 20 yards away, you may attack with a ranged weapon … but you may not take the Aim maneuver. If using a gun, you blaze away at your maximum rate of fire until your gun is empty. You cannot reload" (unless it takes a second or less).
+  - "You are immune to stun and shock, and your injuries cause no penalty to your Move score. You make all rolls to remain conscious or alive at +4 to HT. If you don't fail any rolls, you remain alive and madly attacking until you reach -5×HP."
+  - "When you down a foe, you may … attempt another self-control roll to see if you snap out", with one extra roll when no foes remain. "Once you snap out of the berserk state, all your wounds immediately affect you. Roll at normal HT to see whether you remain conscious and alive."
+  - Battle Rage (+50%): berserk in any combat unless you make a self-control roll on entering combat.
+  - Pain (B126 area) reduces self-control rolls against Berserk.
+- **Sim**: not modelled; `combat_flags` doesn't read it. Only the Skorpekh Destroyer carries it (Destroyer Cult mind, `data/xenos/necrons/traits.yaml` around 929, CR 12).
+- **Fix**: flag `berserk: cr`. In `injure`, when one second's injury exceeds HP/4, roll `3d <= cr` (minus any pain penalty). On a failure set `m.berserk = true`. While berserk, the AI's menu is reduced to melee All-Out Attack (Determined or Double; Strong needs no FP, but Mighty Blows does, see #109), charge or Move and Attack, or slam when in reach. It never uses Aim, All-Out Defense, retreat, Wait or cover; since All-Out Attack gives no defence, `defend` already returns null. Ignore stun and shock, don't halve Move below 1/3 HP, and add +4 to consciousness and death rolls. The model doesn't die before -5×HP unless it fails a death roll. On each foe it downs, roll cr to snap out; on success, roll HT for consciousness at the current HP. It's exempt from morale. Data: B124 prices Berserk at -10 at CR 12; the trait records -15, which is the Battle Rage price. If "attacks organic life on sight" is meant, add Battle Rage (+50%) and roll on entering combat; otherwise correct the points.
+- **Impact**: medium for Skorpekh Destroyers. They stop parrying once hurt (All-Out Attack) but ignore stun and fight to -5×HP. As Necrons they already have High Pain Threshold, so the shock immunity adds little.
+
+### 104. Cowardice (small to medium, H)
+- **Rule** (B129): "Make a self-control roll any time you are called on to risk physical danger. Roll at -5 if you must risk death. If you fail, you must refuse to endanger yourself unless threatened with greater danger! Cowardice gives a penalty to Fright Checks whenever physical danger is involved": self-control 6 → -4, 9 → -3, 12 → -2, 15 → -1. B428: Tipsy and Drunk penalties don't apply to Cowardice rolls, which is irrelevant here.
+- **Sim**: not modelled. Gretchin carry Cowardice (12) (`data/xenos/orks/traits.yaml` around 426).
+- **Fix**: flag `coward: cr`. In `frightLevel` (727), take `-2` at CR 12 (table above) for morale checks and any other Fright Check in combat. In the AI, when a Gretchin picks an option that risks physical danger (charging into melee, advancing into a foe's line of fire out of cover, moving adjacent to a foe), roll CR; roll at -5 when the move risks death (a melee foe that can kill it in one blow, or a model already below 1/3 HP). On a failure, choose among options that don't close with the enemy: shoot from where it stands, take cover, fall back, All-Out Defense. Being in melee already, or being the target of a charge, is "greater danger", so it fights back normally.
+- **Impact**: small to medium. Gretchin hang back and rout more easily, as their fiction suggests; units that rely on grot screens change.
+
+### 105. Overconfidence (small, H)
+- **Rule** (B148): "You must make a self-control roll any time the GM feels you show an unreasonable degree of caution. If you fail, you must go ahead as though you were able to handle the situation! Caution is not an option."
+- **Sim**: not modelled. It's on Stormtroopers, Interrogators, Wyches, Succubi, Scourges, Archons and Necron Nobles, at CR 12 where given.
+- **Fix**: when the AI picks a cautious option (All-Out Defense, withdrawing, Dodge and Drop, going prone, waiting in cover while a foe is in reach or range), roll CR. On a failure, take the best aggressive option instead. Skip if the AI personality code already makes these units aggressive.
+- **Impact**: small.
+
+### 106. Impulsiveness (small, H)
+- **Rule** (B139): "You hate talk and debate. You prefer action! … act first and think later." The self-control roll applies "when it would be wise to wait and ponder"; on a failure you act. B120 self-control numbers: 6, 9, 12, 15.
+- **Sim**: not modelled. It's in the Ork package (`data/xenos/orks/traits.yaml` around 163, CR 12).
+- **Fix**: when an Ork's AI picks Wait, a second or third turn of Aim, or holding in cover for a better shot, roll 12. On a failure it takes its best immediate attack or advance instead.
+- **Impact**: small; Orks already favour charging.
+
+### 107. Bloodlust (small, H)
+- **Rule** (B125): "In battle, you must go for killing blows, and put in an extra shot to make sure of a downed foe." The self-control roll applies to accepting surrender, taking prisoners and evading sentries.
+- **Sim**: not modelled. It's on Orks, the Blood Angels' Red Thirst (as Bloodlust), Flayed Ones and Destroyer Cult Necrons.
+- **Fix**: when a Bloodlust model downs a foe in reach or range, and no standing foe threatens it this turn, its next attack goes into the downed model. Against a downed Necron awaiting reanimation (`state "down"`) that's useful: it finishes the model, per whatever rule the sim uses for attacking downed Necrons. Otherwise it's a wasted action. "Killing blows" can bias called shots toward vitals and skull for elites who already call shots.
+- **Impact**: small; it slightly slows Bloodlust units and helps them against reanimation.
+
+### 108. Other mental traits (small, H)
+- **Rule**: Bad Temper (B124): "Make a self-control roll in any stressful situation. If you fail, you lose your temper and must insult, attack, or otherwise act against the cause of the stress". In a fight that changes nothing unless the model also has Berserk (then a failure triggers Berserk). Fanaticism (B136) has no roll. Only Extreme Fanaticism gives "+3 on Will rolls to resist Brainwashing, Interrogation, and supernatural mind control"; there's nothing for Fright Checks. Callous (B125), Sadism, Megalomania, Paranoia, Low Empathy and Intolerance are social. Slave Mentality (B154): "You must make an IQ roll at -8 before you can take any action that isn't either obeying a direct order or part of an established routine", and you "automatically fail any Will roll to assert yourself or resist social influence". The Automaton meta-trait (B263) is Hidebound, Incurious, Low Empathy, No Sense of Humor and Slave Mentality; none of them exempts from Fright Checks.
+- **Sim**: none of these is modelled, correctly for all but one. `combat_flags` sets `noMorale` for "slave mentality" and "machine mind" (build_site.py around 322).
+- **Fix**: no change for Bad Temper (the Aeldari trait), Fanaticism, Callous and the social traits. Label `noMorale` from Slave Mentality as a house rule in `docs/simulator.md`, or drop it. RAW, a Slave Mentality drone or Necron Warrior still makes morale Fright Checks. Necrons keep `noMorale` from Reanimation Protocols, so only T'au drones and servitors change.
+- **Impact**: small.
+
+### 109. Machines have no FP (medium, H)
+- **Rule** (B263, Machine): "You neither have nor can spend Fatigue Points; see Machines and Fatigue (p. 16)." B16: "Those with the Machine meta-trait … should list FP as 'N/A' … machines do not fatigue, but they cannot spend FP to use extra effort or fuel special abilities. When a machine operates beyond its normal limits, it risks lasting structural damage. This takes the form of reduced HT, not lost FP."
+- **Sim**: every model gets `fp: st.fp || st.ht` (`buildUnit`, 361). Necrons (the user has decided they are Machines) can therefore use Mighty Blows (around 1485, and `aoa-mighty` around 2098) and Feverish Defense (`feverish`, around 2236), and they roll the 0-FP exhaustion check (around 2442) after a Fright Check table result or warp strain costs FP.
+- **Fix**: `combat_flags` sets `machine: 1` for the Machine meta-trait and for "Necrodermis Machine-Body" (and T'au drones and servitors if they carry Machine; data has 59 mentions). `buildUnit` then sets `fp: Infinity` and `machine: true`, with no FP to spend: `feverish` returns 0, the Mighty Blows options aren't offered, FP-cost powers can't be used (every Necron power in `data/sim/powers.yaml` is already 0 FP), `frightTable`'s FP loss is ignored, and there's no exhaustion check. All-Out Attack (Strong) still works without Mighty Blows. Optional, per B16: a "redline" extra effort that costs HT instead of FP isn't in the Basic Set as a mechanic; leave it out.
+- **Impact**: medium. Necron Lychguard, Destroyers and Nobles lose +2 on a defence per fight and the Mighty Blows damage bump.
+
+### 110. Machine's Unhealing (Total) vs Necron Regeneration (medium, H, question)
+- **Rule** (B263): Machine "includes Immunity to Metabolic Hazards [30], Injury Tolerance (No Blood, Unliving) [25], Unhealing (Total) [-30], and several 0-point features". "Your Unhealing disadvantage means that the only way for you to regain lost HP is through repairs with Mechanic or Electronics Repair skill". B160, Unhealing (Total): "You can never heal naturally". Accelerated natural healing "is useless".
+- **Sim**: Necrons regenerate every second (the Regeneration block around 2458; `Regeneration (Necrodermis Self-Repair)` for all, `Very Fast` for Lychguard, Nobles, Crypteks and Destroyers).
+- **Fix**: the user's call. Either Necron Machines drop Unhealing from the package (Machine without Unhealing is a common GURPS build for self-repairing robots, costed +30 points) and keep Regeneration as "living metal self-repair", or they take Machine as written and lose Regeneration. The first keeps current sim behaviour and only needs the Necron trait notes to say so.
+- **Impact**: medium if Regeneration were removed; nil if the user confirms the exception.
+
+### 111. What Machine does and doesn't change in a fight (small, H)
+- **Rule** (B263, B80, B483): Machine gives Immunity to Metabolic Hazards: "all threats that only affect the living, including all disease and poison, plus such syndromes as altitude sickness, the bends, seasickness, and jet lag" (B80). It also gives Injury Tolerance (No Blood, Unliving) and no FP. It doesn't give Doesn't Breathe, High Pain Threshold, No Vitals, or any immunity to shock, stun, knockdown or major wounds. B483's "Knockdown and Stunning: A non-sentient artifact ignores these effects. A sentient machine (IQ 1+) can suffer these results as a damage-induced malfunction" confirms that sentient machines are stunned and knocked down normally. Heart Attack (B429): "Injury Tolerance (Diffuse, Homogenous, or No Vitals) grants immunity".
+- **Sim**: Necrons already have Unliving, No Blood and No Vitals (the trait file), High Pain Threshold through "No Pain Receptors" (build_site.py around 275), and poison immunity through `flags.poison === "immune"` (the `injOf` line around 1000). Stun, knockdown and major wounds apply to them as to anyone, which is correct.
+- **Fix**: none beyond #109 and #110. For #112: a Machine is immune to afflictions delivered as poison or disease (toxins, gas agents) and to biological conditions (Coughing, Nauseated, Retching, Heart Attack, drug Coma). It still suffers Daze, Paralysis, Agony (halved by High Pain Threshold to -3 per B428, see #112), Seizure and Unconsciousness from non-metabolic afflictions such as stun weapons and psychic powers.
+- **Impact**: small.
+
+### 112. Affliction effects (small to medium, F; supplements #93)
+- **Rule** (B428-429): an affliction is resisted with HT and lasts as the source says.
+  - Irritating conditions:
+    - Coughing or Sneezing: -3 DX, -1 IQ.
+    - Nauseated: -2 to all attribute and skill rolls, -1 to active defences.
+    - Pain: -2/-4/-6 to DX, IQ, skill and self-control rolls (Moderate, Severe, Terrible); High Pain Threshold halves, Low Pain Threshold doubles.
+    - Euphoria: -3.
+    - Tipsy: -1 DX and IQ.
+    - Drunk: -2 DX and IQ.
+  - Incapacitating conditions: "you're effectively stunned (-4 to active defenses). In combat, you must Do Nothing on your turn."
+    - Agony: fall down; lose 1 FP per minute. High Pain Threshold lets you function at -3 to DX, IQ, skill and self-control rolls.
+    - Choking: only drop; none with Doesn't Breathe or Homogenous.
+    - Daze: stay upright; "If you are struck, slapped, or shaken, you recover on your next turn."
+    - Paralysis: fall over.
+    - Retching: -5 DX, IQ and Per; no Concentrate actions; 1 FP at the end.
+    - Seizure: fall, 1d FP at the end.
+    - Unconsciousness.
+  - Mortal conditions: Coma (as if at -1×HP and unconscious) and Heart Attack (drop to -1×FP, die in HT/3 minutes; immune with Diffuse, Homogenous or No Vitals). In a battle both mean the model is out.
+  - Electricity (B432): non-lethal electrical attacks stun on a failed HT roll (DR of non-metallic armour adds; metallic armour counts as DR 1). An instantaneous jolt stuns for one second, then HT each second to recover; EMD at HT-5 knocks down and paralyses.
+- **Sim**: `parseDamage` returns `null` for `aff`, `fat` and `spec`, so none of this happens (#93).
+- **Fix**: add to #93's minimal Affliction path an `effect` field per weapon line in `data/sim/weapons.yaml` (`stun`, `daze`, `agony`, `paralysis`, `nauseated`, `unconscious`) with duration or recovery. Map `daze`, `agony`, `paralysis` and `seizure` to the existing stun state (Do Nothing, -4 defences, no retreat). Agony and paralysis also drop the model prone; Daze ends when the model is hit. `nauseated` gives -2 to skills and -1 to defences for the duration; `unconscious` takes the model out as unconscious. The Agoniser's agony with High Pain Threshold becomes -3 to skills instead of stun. Apply the Machine immunities in #111.
+- **Impact**: small to medium for Drukhari Agonisers, stun and photon grenades, and Tyranid toxin sacs if any are affliction lines.
+
+### 113. Catching fire (small to medium, E)
+- **Rule** (B433-434):
+  - Clothes catching fire:
+    - "A single hit that inflicts at least 3 points of basic burning damage ignites part of the victim's clothing." This does 1d-4 burning per second and "-2 to DX, unless the damage simply cannot harm the target". Putting it out takes a DX roll, and each attempt is a Ready.
+    - "A single hit that inflicts 10 or more points of basic burning damage ignites all of the victim's clothes." This does 1d-1 per second and -3 DX. Putting it out means rolling on the ground: a DX roll, three Ready maneuvers per attempt.
+  - Standing in fire: "If you spend part of a turn in a fire … you take 1d-3 burning damage. If you spend all of a turn in a fire of ordinary intensity – or if you are on fire – you take 1d-1 damage per second." It uses Large-Area Injury (B400).
+  - Making Things Burn (B433): "Divide damage by 10 for tight-beam burning attacks." Flesh is Highly Resistant (30 points); metal, brick and rock are Nonflammable.
+  - Incendiary attacks add 1 point of linked burning.
+  - "If a wooden shield takes 10 or more points of burning damage in one second, the bearer is at -2 to DX, and takes 1d-5 burning damage per second until he gets rid of it."
+- **Sim**: burning damage is applied once; nothing ignites and there's no ongoing fire.
+- **Fix**: on a hit by a non-tight-beam burning attack (flamers, cones, incendiary follow-ups, `burn ex`), with basic damage 3+ (or 10+) before DR, set `m.onFire = 1` (part) or `2` (all). Apply this only to models whose outer layer can burn: cloth, flak or light armour (Guard, Gretchin, Orks, cultists, Drukhari wychsuits). Sealed power or Terminator armour, carapace, necrodermis and chitin are Nonflammable or Highly Resistant. Each turn the model takes 1d-4 or 1d-1 burning, with armour DR as a large-area hit, and -2 or -3 DX to skills. The AI can spend Ready maneuvers (1, or 3 prone) and a DX roll to put it out, or ignore it. Tight-beam lasers use damage/10 and effectively never ignite. Wooden-shield ignition doesn't apply to the metal shields in the data.
+- **Impact**: small to medium. Flamers against Guard and Orks gain a lingering effect and pull targets into Ready maneuvers; power-armoured targets are unaffected.
+
+### Checked in these pages, no change needed
+- Collisions (B430) use the same dice rounding as slams (B371). This confirms #84's fix: below 1d, 1d-3/-2/-1 at 0.25/0.5/more; otherwise round to the nearest die with no adds.
+- Falling (B431), falling objects, overruns and whiplash: no elevation or vehicles in the sim, so not applicable.
+- Coma and Heart Attack (B429) are relevant only through afflictions (#112); Necrons' No Vitals already gives immunity to Heart Attack.
+- Lethal electrical damage (B432) is overridden by specific weapon stats ("If a specific attack or scenario gives different rules, they override the guidelines"), so tesla and arc weapons keep their listed damage.
+- Unliving and No Blood for Necrons match the Machine meta-trait's Injury Tolerance (B263).
+- Fanaticism, Callous, Sadism and Bad Temper (without Berserk) correctly have no combat mechanics in the sim.
+- The house rule's "RoF does not grant any bonus" and "each successful roll is one hit" match `fireAt`'s per-round loop. The cumulative progression for Rcl 2+ weapons matches §4 exactly, and recoil keeps climbing across a split burst, consistent with "within the same Attack maneuver".
