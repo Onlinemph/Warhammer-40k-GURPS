@@ -123,7 +123,8 @@ const SIM = (() => {
   }
   function rapidBonus(shots) {
     if (shots < 5) return 0; if (shots <= 8) return 1; if (shots <= 12) return 2; if (shots <= 16) return 3;
-    if (shots <= 24) return 4; if (shots <= 49) return 5; if (shots <= 99) return 6; return 7;
+    if (shots <= 24) return 4; if (shots <= 49) return 5; if (shots <= 99) return 6;
+    return 6 + Math.floor(Math.log2(shots / 50));   // +1 per doubling past 50-99 (B373)
   }
 
   // ------------------------------------------------------------ data index
@@ -248,6 +249,8 @@ const SIM = (() => {
 
   // ------------------------------------------------------------ unit build
   // spec: {template, count, armour:[names], ranged:{item,mode}, melee:{item|trait,mode}, shield:{sp,delay,recharge,ranged_only}, stance}
+  const FLAMMABLE = /flak|robe|wychsuit|hide|cloth|coat|fatigue/i;
+  const UNCLOTHED = /Tyranid|gaunt|Genestealer|Lictor|Ravener|Carnifex|Hive Tyrant|Zoanthrope|Necron|Deathmark|Lychguard|Cryptek|Flayed|Skorpekh|Servitor|Drone|Vespid|Wrack/;
   function buildUnit(spec, side) {
     const T = TEMPLATES.get(spec.template);
     if (!T) throw new Error("Unknown template: " + spec.template);
@@ -288,6 +291,9 @@ const SIM = (() => {
         rend, rendBy, rendText: rl ? rl.damage : "", malf: facts.malf || 0,
         overheat: facts.overheat ? parseDamage(/[a-z]\s*$/.test(facts.overheat) ? facts.overheat : facts.overheat + " burn") : null,
         cone, blast: facts.blast || 0, natural: !!sel.trait };
+      // a "per turn while ablaze" line is the burning the flames leave on a target that catches fire (B434), not a
+      // second hit
+      if (fl && /ablaze|catches fire/i.test(fl.usage || "")) { w.ablaze = fdmg; w.follow = null; w.followText = ""; }
       if (melee) {
         const p = String(line.parry ?? "0");
         w.parry = /no/i.test(p) ? null : num(p, 0);
@@ -399,6 +405,9 @@ const SIM = (() => {
       dodge: st.dodge, HP: st.hp + arm.hp, HT: st.ht, will: st.will, sm: st.sm || 0,
       arm, nat, ranged, melee, parry: parryOf(melee), cs, judo: (st.skills || []).some(s => /^(Judo|Karate|Boxing)/.test(s.name) && s.level != null), bl: Math.round(liftST * liftST / 5),
       shield: spec.shield && spec.shield.sp ? { ...spec.shield } : cs && cs.field ? { item: cs.name + " field", ...cs.field, ranged_only: false, arc: "shield" } : pshield,
+      // clothing that can catch fire (B433-434): cloth, flak, robes and hides; sealed plate, carapace, chitin and
+      // machine bodies are Nonflammable or Highly Resistant; the unarmoured burn unless bare chitin or machine
+      burns: !flags.machine && ((spec.armour || []).length ? (spec.armour || []).some(n => FLAMMABLE.test(n)) : !UNCLOTHED.test(spec.template)),
     };
     return u;
   }
@@ -439,6 +448,16 @@ const SIM = (() => {
     if (flags.homogenous && HOMOG[type] != null) m = Math.min(m, HOMOG[type]);
     else if (flags.unliving && UNLIVING[type] != null && loc !== "skull" && loc !== "eye") m = Math.min(m, UNLIVING[type]);
     return m;
+  }
+  // Large-area injury (B400): cones, area effects and external explosions strike the torso with the average of the
+  // torso's DR and the least protected location's, rounded up. Returns { arm, nat } like a location's DR
+  const AREA_LOCS = ["skull", "face", "neck", "torso", "groin", "arm", "hand", "leg", "foot"];
+  function areaDR(u) {
+    const tot = l => drAt(u.arm.dr, l) + natDRat(u, l);
+    let lo = Infinity;
+    for (const l of AREA_LOCS) lo = Math.min(lo, tot(l));
+    const all = Math.ceil((tot("torso") + lo) / 2), nat = Math.min(natDRat(u, "torso"), all);
+    return { arm: all - nat, nat };
   }
   function hitLocation() {
     const r = roll3();
@@ -575,7 +594,6 @@ const SIM = (() => {
   const CHINK = loc => loc === "torso" ? -8 : -10;
   const locName = l => l && l.endsWith("#c") ? "chink in the " + l.slice(0, -2) + " armour" : l;
   const AIM = { torso: 0, vitals: -3, skull: -7, eye: -9, face: -5, neck: -5, groin: -3, arm: -2, leg: -2, hand: -4, foot: -4 };
-  const COVERED = new Set(["leg", "foot", "groin"]);
   // an aimed attack at one of these that misses by exactly 1 hits the torso instead (B552 note 1)
   const NEAR_TORSO = new Set(["eye", "skull", "face", "groin", "neck", "vitals"]);
   // cover (Tactical Shooting p. 28): what it takes off a foe's shot at you, and what it costs you to shoot back from
@@ -583,6 +601,17 @@ const SIM = (() => {
   const COVER_DR = { none: 0, crate: 15, barricade: 60, corner: 60, light: 15, heavy: 60 };
   const COVER_PEN = { none: 0, crate: 2, corner: 2, light: 2, barricade: 3, heavy: 4 };
   const COVER_OWN = { none: 0, crate: 0, corner: 0, light: 0, barricade: 2, heavy: 4 };
+  // what each kind of cover hides (B407): 1 covered, 0.5 half exposed (a random hit there strikes the cover on 4-6).
+  // A crate or light cover is waist-high; a barricade chest-high; heavy cover a firing slit; a corner hides one side
+  const LEGS = { leg: 1, foot: 1, groin: 1 };
+  const HIDES = {
+    crate: LEGS, light: LEGS,
+    barricade: { ...LEGS, torso: 0.5, vitals: 0.5, arm: 0.5, hand: 0.5 },
+    heavy: { ...LEGS, torso: 1, vitals: 1, arm: 0.5, hand: 0.5 },
+    corner: { torso: 0.5, vitals: 0.5, groin: 0.5, arm: 0.5, hand: 0.5, leg: 0.5, foot: 0.5 },
+  };
+  // a crouching, kneeling or lying target is an extra -2 to hit in these (B548)
+  const LOW = new Set(["torso", "vitals", "groin", "leg", "foot"]);
 
   // ------------------------------------------------------------------ battle
   function runBattle(unitSpecs, opt = {}) {
@@ -817,6 +846,30 @@ const SIM = (() => {
         for (const x of models) if (x.state === "ok" && x.h && x.u.side === side && !check((x.u.stats.iq || 10) + (x.u.flags.cr ? 6 : 0)).ok) x.surprised = true;
       }
     }
+    // target speed (B373): below Move 10 the book drops it and lets the target's Dodge stand for its movement
+    const spdOf = n => n > 10 ? n : 0;
+    // how much of location loc the cover of kind k hides on t; a model firing a two-handed gun from behind it
+    // exposes its arms and hands and half its torso (B407)
+    function hideOf(k, loc, t) {
+      const h = (HIDES[k] || {})[loc] || 0;
+      if (!h || !t || !t.attacked || !t.u.ranged || t.u.ranged.pistol || !gunReady(t)) return h;
+      return loc === "arm" || loc === "hand" ? 0 : loc === "torso" || loc === "vitals" ? Math.min(h, 0.5) : h;
+    }
+    // cover and posture against a shot at t from hex f (B407, B548, B551): an aimed shot at a location the cover
+    // hides is -2 and meets the cover's DR; a random one strikes the cover whenever it lands there, at no penalty.
+    // A kneeling or lying target is -2 to hit in the torso, groin, legs and feet, and to random fire.
+    // keep: the planner's share of a hit's harm that isn't lost in the cover
+    function shotFx(t, f, pb) {
+      const k = pb || !t.h || !f ? "none" : coverAt(t.h, f, t), low = (t.prone || t.kneel) && !pb;
+      let hid = 0;
+      for (const [l, n] of RANDOM_LOCS) hid += n * hideOf(k, l, t) / 216;
+      return {
+        pen: loc => loc === "random" ? (low ? -2 : 0) : (low && LOW.has(loc) ? -2 : 0) - (hideOf(k, loc, t) > 0 ? 2 : 0),
+        keep: loc => 1 - 0.7 * (loc === "random" ? hid : hideOf(k, loc, t)),
+      };
+    }
+    // random hit location on t: a lying figure can't be hit in the groin, legs or feet, only the torso (B551)
+    const hitLocOn = t => { const l = hitLocation(); return t && t.prone && (l === "groin" || l === "leg" || l === "foot") ? "torso" : l; };
     const inCover = (t, f) => coverAt(t.h, f, t) !== "none";
     const coverPen = (t, f) => COVER_PEN[coverAt(t.h, f, t)];
     // drilled squads (TS p. 22-23, 37): a drilled shooter fires past a drilled friend at -2, not -4, and doesn't hit him by mistake
@@ -824,7 +877,8 @@ const SIM = (() => {
     const linePen = (m, inter) => inter.reduce((a, x) => a + (drilled(m) && x.u.side === m.u.side && drilled(x) ? 2 : 4), 0);
 
     // skill penalty from shock (standard), or the larger of shock and pain plus wound effects (fractional)
-    const skillPen = m => (frac ? Math.max(m.shock, m.pain) + m.gawd : Math.min(m.shockCap || 4, m.shock));
+    // (burning clothes are -2 DX, or -3 when all of them are alight, B434)
+    const skillPen = m => (frac ? Math.max(m.shock, m.pain) + m.gawd : Math.min(m.shockCap || 4, m.shock)) + (m.onFire ? m.onFire + 1 : 0);
     // below 1/3 HP (standard HP, B419), or halved by a Fractional Health wound or a crippled leg: half Move and
     // Dodge, rounding up
     const weak = m => !frac && m.hp < m.u.HP / 3;
@@ -1100,7 +1154,10 @@ const SIM = (() => {
     const HEADCRIT = { 3: "maximum damage, no DR", 4: "DR halved, a major wound", 5: "DR halved, a major wound", 6: "strikes the eye", 7: "strikes the eye",
       8: "knocked off balance", 14: "the victim drops its weapon", 15: "maximum damage", 16: "double damage", 17: "DR halved", 18: "triple damage" };
     // ---- damage to a model at a location. Returns injury.
+    let hitFrom = null;   // where a hit comes from when it isn't the attacker's hex (a blast's fragments), for cover
     function applyHit(att, w, t, loc, ranged, halfD, dmgOverride, rawOverride, crit) {
+      const area = loc === "area";
+      if (area) loc = "torso";
       const chink = loc.endsWith("#c");
       if (chink) loc = loc.slice(0, -2);
       const dmg = dmgOverride || w.dmg;
@@ -1139,12 +1196,19 @@ const SIM = (() => {
         if (raw <= t.sp) { t.sp -= raw; if (fraw) t.sp = Math.max(0, t.sp - fraw); if (t.h) FX(["f", t.ix, raw, t.h.q, t.h.r]); L(`  shield holds (${t.sp} SP left)`); return 0; }
         raw -= t.sp; t.sp = 0; t.spCollapsed = true; L(`  shield collapses`);   // what gets through still carries its follow-up
       }
-      const cv = ranged && COVERED.has(loc) ? coverOf(t.h, att && att.h, t) : null;
+      // a flame or burning blast of 3+ basic damage sets clothing alight, 10+ all of it (B433-434); tight beams don't
+      if (dmg.type === "burn" && (dmg.ex || w.cone) && raw >= 3 && t.u.burns && t.state === "ok") ignite(att, t, raw >= 10 ? 2 : 1, w.ablaze);
+      let cv = null;
+      if (ranged && t.h && !area) {
+        const c = coverOf(t.h, hitFrom || (att && att.h), t), hd = hideOf(c.kind, loc, t);
+        if (hd >= 1 || (hd > 0 && d6() >= 4)) cv = c;
+      }
       const coverDR = cv ? coverDRof(cv) : 0;
       if (cv && cv.i >= 0 && coverDR > 0) wearCover(cv.i, Math.min(raw, coverDR));
-      const armDR = Math.floor(drAt(t.u.arm.dr, loc === "vitals" ? (t.u.arm.dr.vitals != null ? "vitals" : "torso") : loc) / (chink ? 2 : 1)) + coverDR;
+      const aDR = area ? areaDR(t.u) : null;
+      const armDR = (area ? aDR.arm : Math.floor(drAt(t.u.arm.dr, loc === "vitals" ? (t.u.arm.dr.vitals != null ? "vitals" : "torso") : loc) / (chink ? 2 : 1))) + coverDR;
       if (chink) L(`  strikes a chink in the armour`);
-      const natDR = natDRat(t.u, loc);
+      const natDR = area ? aDR.nat : natDRat(t.u, loc);
       const div = dmg.div;
       const eff = dr => dr <= 0 ? 0 : div === Infinity ? 0 : Math.floor(dr / div);   // round down, minimum 0 (B378)
       let DR = eff(armDR + natDR);
@@ -1197,10 +1261,36 @@ const SIM = (() => {
         }
       }
       if (side && finj) t.limbInj[side] += finj;
-      L(`  ${raw} dmg to ${loc} (DR ${armDR + natDR}${div !== 1 ? "/" + (div === Infinity ? "∞" : div) : ""}): ${inj} injury${finj ? ` + ${finj} ${w.follow.ex ? "from the internal explosion" : "follow-up"}` : ""}${frac ? "" : `; ${t.id} at ${t.hp - inj - finj}/${t.u.HP} HP`}`);
+      L(`  ${raw} dmg to ${area ? "the body (large area)" : loc} (DR ${armDR + natDR}${div !== 1 ? "/" + (div === Infinity ? "∞" : div) : ""}): ${inj} injury${finj ? ` + ${finj} ${w.follow.ex ? "from the internal explosion" : "follow-up"}` : ""}${frac ? "" : `; ${t.id} at ${t.hp - inj - finj}/${t.u.HP} HP`}`);
       if (t.h) FX(["h", t.ix, inj + finj, loc, t.h.q, t.h.r]);
       injure(att, t, inj + finj, loc, dmg.type);
       return inj + finj;
+    }
+    // Catching fire (B434): part of the clothing burns for 1d-4 a second, all of it for 1d-1, as large-area injury
+    const FIRE = [null, parseDamage("1d-4 burn"), parseDamage("1d-1 burn")];
+    // a weapon's own "per turn while ablaze" damage (promethium clinging) replaces the clothing's
+    function ignite(att, t, lv, ablaze) {
+      if ((t.onFire || 0) >= lv && !(ablaze && !t.fireDmg)) return;
+      const a = areaDR(t.u), dm = ablaze || FIRE[lv];
+      if (a.arm + a.nat >= Math.floor((dm.n * 6 + dm.add) * dm.mult)) return;   // flames that can't get through its gear are no bother
+      t.onFire = Math.max(t.onFire || 0, lv); t.fireBy = att; t.fireWork = 0; if (ablaze) t.fireDmg = ablaze;
+      L(`  ${t.id}'s ${lv === 2 ? "clothes go up in flames" : "clothing catches fire"}`);
+    }
+    function burn(m) {
+      const dm = m.fireDmg || FIRE[m.onFire];
+      L(`${m.id} is on fire`);
+      applyHit(m.fireBy || m, { dmg: dm, follow: null }, m, "area", false, false, dm, rollDamage(dm));
+    }
+    // putting it out (B434): a Ready and a DX roll; with all its clothes alight it must roll on the ground, three
+    // Readies to an attempt
+    function beatFlames(m) {
+      if (m.onFire === 2) {
+        m.prone = true; m.kneel = false; m.fireWork = (m.fireWork || 0) + 1;
+        if (m.fireWork < 3) { L(`${m.id} rolls on the ground to smother the flames`); return; }
+        m.fireWork = 0;
+      }
+      if (check(m.u.dx - skillPen(m)).ok) { m.onFire = 0; m.fireDmg = null; L(`${m.id} beats out the flames`); }
+      else L(`${m.id} fails to put out the flames`);
     }
     // Damage to Shields (B484): a defence that only succeeded thanks to the shield's DB means the attack struck the
     // shield. Its field (if any) takes it first, then the shield's DR; penetrating damage costs HP as a Homogeneous
@@ -1252,23 +1342,30 @@ const SIM = (() => {
 
     // ---- area effects (B413-414)
     const noDiv = dm => dm.div === 1 ? dm : { ...dm, div: 1, key: (dm.key || "") + "nd" };
-    function explosion(att, w, at, raw) {
+    // struck: the model the explosive hit directly (it takes the full blast already, and every fragment roll hits it)
+    function explosion(att, w, at, raw, struck) {
       FX(["b", at.q, at.r, Math.min(6, 1 + Math.floor(Math.log2(Math.max(2, raw)) / 2) * (w.explosion || 1))]);
       // a blast also batters the walls and doors beside it (B558; no armour divisor)
       if (terr) for (const [dq, dr] of [[0, 0], ...DIRS]) { const i = idx(key(at.q + dq, at.r + dr)); if (i != null && structOf(i)) damageStructure(i, Math.floor(raw / 3), w.dmg, false); }
-      const zone = 2 * (w.dmg.n || 1) * (w.explosion || 1);   // the blast zone for Fright Checks: 2 yards per die (TS p. 34)
+      const lv = w.explosion || 1;
+      const zone = 2 * (w.dmg.n || 1) * lv;   // the blast zone for Fright Checks: 2 yards per die (TS p. 34)
+      // collateral reaches 2 yards per die of damage (B414); Explosion level L (B107) widens it: distance counts as yards / L
+      const reach = 2 * (w.dmg.n || 1) * (w.dmg.mult || 1) * lv;
+      hitFrom = at;
       for (const x of models) {
         if (x.state !== "ok" || !x.h || !los(at, x.h)) continue;
         let d = hexDist(x.h, at);
         if (d <= zone && x !== att) ev(x).blast = true;
-        const lv = w.explosion || 1;
-        if (d < 1 || d > 10 * lv) continue;
+        if (d < 1 || d > reach) continue;
         if (w.thrown && d <= 3 && x !== att && dive(x)) d += 1;
-        // Explosion level L (B107): each level past the first widens the burst; distance counts as yards / L
         const splash = Math.floor(raw / (3 * Math.max(1, d / lv)));
-        // only the model struck directly faces the armour divisor; the blast around it has none (B414)
-        if (splash >= 1) { L(`  blast catches ${x.id} (${d} yd)`); applyHit(att, { dmg: noDiv(w.dmg), follow: null }, x, "torso", true, false, noDiv(w.dmg), splash); }
+        // only the model struck directly faces the armour divisor; the blast around it has none, and it lands as
+        // large-area injury (B400, B414)
+        if (splash >= 1) { L(`  blast catches ${x.id} (${d} yd)`); applyHit(att, { dmg: noDiv(w.dmg), follow: null }, x, "area", true, false, noDiv(w.dmg), splash); }
       }
+      // fragments (B414): everyone within 5 yards per die is attacked at 15, modified only by range, posture and SM;
+      // one more fragment for every 3 points of success; the model struck directly is hit by at least one. Random
+      // locations, and a location behind cover from the blast hits the cover
       const fr = w.dmg.frag;
       if (fr) {
         const fd = parseDamage(`${fr.n}d ${fr.type}`);
@@ -1276,10 +1373,21 @@ const SIM = (() => {
           if (x.state !== "ok" || !x.h || !los(at, x.h)) continue;
           const d = hexDist(x.h, at);
           if (d > 5 * fr.n) continue;
-          const r = check(15 + rangePenalty(Math.max(1, d)) + x.u.sm - (x.prone ? 2 : 0));
-          if (r.ok) { L(`  fragment hits ${x.id}`); applyHit(att, { dmg: fd, follow: null }, x, hitLocation(), true, false, fd); }
+          const r = check(15 + rangePenalty(Math.max(1, d)) + x.u.sm - (x.prone || x.kneel ? 2 : 0));
+          let n = r.ok ? 1 + Math.floor(Math.max(0, r.margin) / 3) : 0;
+          if (x === struck) n = Math.max(1, n);
+          for (let k = 0; k < n && x.state === "ok"; k++) { L(`  fragment hits ${x.id}`); applyHit(att, { dmg: fd, follow: null }, x, hitLocOn(x), true, false, fd); }
         }
       }
+      hitFrom = null;
+    }
+    // an explosive that comes down on an occupied hex: the one there may dive clear (B377, taking a third) or
+    // takes the full blast, as large-area injury with no armour divisor
+    function landOn(m, w, at, raw) {
+      const x = occ.get(key(at.q, at.r));
+      if (!x || x.state !== "ok") return;
+      const nd = noDiv(w.dmg), full = !dive(x), dmg = full ? raw : Math.floor(raw / 3);
+      if (dmg >= 1) applyHit(m, { dmg: nd, follow: null }, x, "area", true, false, nd, dmg);
     }
 
     // ---- expected injury of weapon w against unit tu at a location (cached per battle)
@@ -1300,8 +1408,10 @@ const SIM = (() => {
       const d = dmgOverride || w.dmg;
       const k = w.id + "|" + tu.idx + "|" + loc + (chink ? "#c" : "") + "|" + (dmgOverride ? dmgOverride.key || "r" : "");
       if (EXP.has(k)) return EXP.get(k);
-      const armDR = Math.floor(drAt(tu.arm.dr, loc === "vitals" ? (tu.arm.dr.vitals != null ? "vitals" : "torso") : loc) / (chink ? 2 : 1));
-      const natDR = natDRat(tu, loc);
+      const aDR = loc === "area" ? areaDR(tu) : null;
+      if (aDR) loc = "torso";
+      const armDR = aDR ? aDR.arm : Math.floor(drAt(tu.arm.dr, loc === "vitals" ? (tu.arm.dr.vitals != null ? "vitals" : "torso") : loc) / (chink ? 2 : 1));
+      const natDR = aDR ? aDR.nat : natDRat(tu, loc);
       const effDR = d.div === Infinity ? 0 : Math.floor((armDR + natDR) / d.div);
       const red = tu.flags.dmgRed > 1 ? tu.flags.dmgRed : 1;
       const cap = loc === "arm" || loc === "leg" ? tu.HP / 2 + 1 : loc === "hand" || loc === "foot" ? tu.HP / 3 + 1 : Infinity;
@@ -1335,15 +1445,15 @@ const SIM = (() => {
       // a regenerating shield that's up soaks the blow before armour: a called shot is wasted on it, so aim at the
       // body (or not at all) until it's down, and count only what the shield won't absorb
       const sh = t.u.shield, shUp = !!(sh && t.sp > 0 && (!melee || !sh.ranged_only) && !w.malediction && (!sh.arc || shieldCovers(t, m)));
-      const locs = shUp ? [aimsShots(m) ? "torso" : "random"] : aimsShots(m) || (melee && t.pinned) ? [...Object.keys(AIM), ...Object.keys(AIM).filter(l => l !== "eye" && drAt(t.u.arm.dr, l === "vitals" ? "torso" : l) > 0).map(l => l + "#c")] : ["random"];
+      const locs = w.cone ? ["area"] : shUp ? [aimsShots(m) ? "torso" : "random"] : aimsShots(m) || (melee && t.pinned) ? [...Object.keys(AIM), ...Object.keys(AIM).filter(l => l !== "eye" && drAt(t.u.arm.dr, l === "vitals" ? "torso" : l) > 0).map(l => l + "#c")] : ["random"];
       const def0 = melee ? bestDefence(t, m, true, w) : w.malediction ? (w.fp && t.u.flags.blank ? 99 : w.resist === "HT" ? t.u.HT : t.u.will) - 2 : rangedDefence(t, m);
       let best = { loc: "torso", da: 0, score: 0, lvl };
       for (const loc of locs) {
-        const pen = loc === "random" ? 0 : loc.endsWith("#c") ? Math.min(AIM[loc.slice(0, -2)], CHINK(loc.slice(0, -2))) : loc === "eye" && drAt(t.u.arm.dr, "eye") > 0 ? -10 : AIM[loc];   // an eye behind a helmet lens or visor is -10 (B399-400)
+        const pen = (fo.fx ? fo.fx.pen(loc.replace("#c", "")) : 0) + (loc === "random" || loc === "area" ? 0 : loc.endsWith("#c") ? Math.min(AIM[loc.slice(0, -2)], CHINK(loc.slice(0, -2))) : loc === "eye" && drAt(t.u.arm.dr, "eye") > 0 ? -10 : AIM[loc]);   // an eye behind a helmet lens or visor is -10 (B399-400)
         const pointed = /^pi/.test(w.dmg.type) || w.dmg.type === "imp" || (w.dmg.type === "burn" && !w.dmg.ex && !w.cone);
         if ((loc === "eye" || loc === "vitals" || loc.endsWith("#c")) && !pointed) continue;   // B398, B400
         if (t.limbFull && t.limbFull[loc.replace("#c", "")]) continue;   // both already crippled: nothing more to take there
-        const e = loc === "random" ? expInjRandom(w, t.u, dmgOverride) : expInj(w, t.u, loc, dmgOverride);
+        const e = (loc === "area" ? expInj(w, t.u, "area", dmgOverride) : loc === "random" ? expInjRandom(w, t.u, dmgOverride) : expInj(w, t.u, loc, dmgOverride)) * (fo.fx ? fo.fx.keep(loc.replace("#c", "")) : 1);
         if (e <= 0) continue;
         // Deceptive Shot (house rule): a shooter may trade 2 skill for each -1 to the target's Dodge, as Deceptive
         // Attack (B369) does in melee; not for area attacks or Malediction
@@ -1685,7 +1795,7 @@ const SIM = (() => {
         hits++;
         const raw = rollDamage(w.dmg), st = structOf(i), sDR = st ? (w.dmg.div === Infinity ? 0 : Math.floor(st.dr / (w.dmg.div || 1))) : 0;
         if (st) damageStructure(i, raw, w.dmg, true);
-        if (raw > sDR && t.h) applyHit(m, w, t, hitLocation(), true, hexDist(m.h, t.h) > w.range.half, null, raw - sDR);
+        if (raw > sDR && t.h) applyHit(m, w, t, hitLocation(), true, hexDist(m.h, t.h) >= w.range.half, null, raw - sDR);
         else L(`  the ${hexName(i)} stops it`);
       }
       if (!hits) L(`  no round finds its mark`);
@@ -1706,16 +1816,63 @@ const SIM = (() => {
       }
       return out;
     }
-    function stray(m, w, t, inter, halfD) {
-      const near = models.filter(x => x !== m && x !== t && x.state === "ok" && x.h && t.h && hexDist(x.h, t.h) <= 1);
-      const cands = [...new Set([...inter, ...near])].sort((a, b) => hexDist(m.h, a.h) - hexDist(m.h, b.h));
-      for (const c of cands) {
-        if (c.u.side === m.u.side && drilled(m) && drilled(c)) continue;
-        if (!check(9 + c.u.sm - (c.prone ? 2 : 0)).ok) continue;
-        L(`  the shot goes astray and hits ${c.id}${c.u.side === m.u.side ? " (friendly fire)" : ""}`);
-        applyHit(m, w, c, hitLocation(), true, halfD);
-        return;
+    // Hitting the wrong target (B389, B392): each figure that might be hit, closest first, is attacked at a flat 9 or
+    // what the shooter would need to hit it on purpose, whichever is worse; it defends as it would against a shot
+    // at it. The first that is hit, or defends, ends the round's flight. Drilled squads don't hit each other by mistake
+    function strayAt(m, w, c, raw) {
+      if (!c.h || c.state !== "ok") return false;
+      if (c.u.side === m.u.side && drilled(m) && drilled(c)) return false;
+      const d = Math.max(1, hexDist(m.h, c.h));
+      const lvl = Math.min(9, wl(m, w) - skillPen(m) + rangePenalty(d) + c.u.sm + shotFx(c, m.h, false).pen("random"));
+      if (lvl < 3 || !check(lvl).ok) return false;
+      if (defend(c, m, false, 0, 0) != null) { L(`  a stray round goes past ${c.id}, who ducks`); return true; }
+      L(`  a stray round hits ${c.id}${c.u.side === m.u.side ? " (friendly fire)" : ""}`);
+      applyHit(m, w, c, hitLocOn(c), true, raw == null && d >= w.range.half, null, raw);
+      return true;
+    }
+    // the first figure beyond hex tH on the line of fire from m, within the weapon's range (up to 20 yards on)
+    function beyond(m, w, tH) {
+      const d = hexDist(m.h, tH), ext = Math.min(20, w.range.max - d);
+      if (d < 1 || ext < 1) return null;
+      const far = { q: tH.q + Math.round((tH.q - m.h.q) * ext / d), r: tH.r + Math.round((tH.r - m.h.r) * ext / d) };
+      for (const h of [...lineHexes(tH, far), far]) {
+        if (terr && !los(tH, h)) return null;
+        const x = occ.get(key(h.q, h.r));
+        if (x && x.state === "ok" && x !== m) return x;
       }
+      return null;
+    }
+    // the candidates: figures on the line of fire, then (when the target is in a close combat, B392) those fighting
+    // beside it, then whoever is beyond it
+    function stray(m, w, t, inter) {
+      const melee = t.h && models.some(x => x.u.side !== t.u.side && x.state === "ok" && x.h && hexDist(x.h, t.h) <= 1);
+      const near = melee ? models.filter(x => x !== m && x !== t && x.state === "ok" && x.h && hexDist(x.h, t.h) <= 1) : [];
+      const cands = [...new Set([...inter, ...near])].sort((a, b) => hexDist(m.h, a.h) - hexDist(m.h, b.h));
+      for (const c of cands) if (strayAt(m, w, c)) return;
+      const b = t.h && beyond(m, w, t.h);
+      if (b && !cands.includes(b)) strayAt(m, w, b);
+    }
+    // Overpenetration (B408-409): a piercing, impaling or tight-beam burning shot whose basic damage beats the
+    // target's cover DR (its DR front and back plus its HP; half HP if Unliving, a quarter if Homogeneous) goes on
+    // to whoever is behind, less that cover DR
+    const pointedW = w => /^pi/.test(w.dmg.type) || w.dmg.type === "imp" || (w.dmg.type === "burn" && !w.dmg.ex && !w.cone);
+    function overpen(m, w, t, tH, loc, basic) {
+      if (!tH || w.cone || w.dmg.ex || !pointedW(w)) return;
+      const l = loc.replace("#c", ""), f = t.u.flags;
+      const dr = drAt(t.u.arm.dr, l === "vitals" ? "torso" : l) + natDRat(t.u, l);
+      const cov = (w.dmg.div === Infinity ? 0 : Math.floor(2 * dr / (w.dmg.div || 1))) + Math.floor(t.u.HP * (f.homogenous ? 0.25 : f.unliving ? 0.5 : 1));
+      if (basic <= cov) return;
+      const x = beyond(m, w, tH);
+      if (!x) return;
+      L(`  the shot punches through ${t.id}`);
+      strayAt(m, w, x, basic - cov);
+    }
+    // a missed or dodged explosive lands n yards off in a random direction (B414), short of any wall
+    function scatter(at, n) {
+      const [dq, dr] = DIRS[Math.floor(R() * 6)];
+      let h = at;
+      for (let i = 0; i < n; i++) { const x = { q: h.q + dq, r: h.r + dr }; if (terr && (idx(key(x.q, x.r)) == null || wallAt(key(x.q, x.r)))) break; h = x; }
+      return h;
     }
     // Bracing (the user's Progressive Recoil rule): a gun fired without moving from a mount or bipod line, from prone,
     // over a crate, barricade or wall in the next hex toward the target, or from a kneel behind a carried shield
@@ -1759,7 +1916,7 @@ const SIM = (() => {
         if (!wins) return;
         const raw = rollDamage(w.dmg);
         applyHit(m, w, target, loc0 || hitLocation(), true, false, null, raw);
-        if (w.dmg.ex && target.h) explosion(m, w, target.h, raw);
+        if (w.dmg.ex && target.h) explosion(m, w, target.h, raw, target);
         return;
       }
       if (w.fp && target.u.flags.blank) { L(`${m.id} casts ${w.name} at ${target.id}: the power dies against a blank`); m.aimTurns = 0; return; }
@@ -1767,80 +1924,131 @@ const SIM = (() => {
       // sighted and aimed shots as All-Out Attack (Determined) (TS p. 13-14; an option): +1, no defence till next turn
       const sighted = SIGHTED && opts.aim && !opts.aoa;
       if (sighted) { m.aoa = true; L(`${m.id} settles into the sights (All-Out Attack)`); }
-      let base = wl(m, w) + (braced ? 1 : 0) + (opts.pointBlank ? Math.min(0, w.bulk) : rangePenalty(d + (target.steps || 0)))   // a moving target adds its speed to the range (B550)
+      let base = wl(m, w) + (braced ? 1 : 0) + (opts.pointBlank ? Math.min(0, w.bulk) : rangePenalty(d + spdOf(target.steps || 0)))   // a target moving faster than Move 10 adds its speed to the range (B373, B550)
         + target.u.sm - skillPen(m) + firstB - (opts.pen || 0)
         // All-Out Attack (Determined): +1, or +4 for a gun fired at a foe within reach (TS p. 25)
-        + (opts.moved ? Math.min(-2, w.bulk) : 0) + (opts.aoa || sighted ? (opts.pointBlank ? 4 : 1) : 0) - ((target.prone || target.kneel) && !opts.pointBlank ? 2 : 0)
-        - (opts.pointBlank ? 0 : coverPen(target, m.h) + ownCoverPen(m, target.h, braced && firstB > 0));
+        + (opts.moved ? Math.min(-2, w.bulk) : 0) + (opts.aoa || sighted ? (opts.pointBlank ? 4 : 1) : 0)
+        - (opts.pointBlank ? 0 : ownCoverPen(m, target.h, braced && firstB > 0));
       m.aimTurns = 0;
       m.follow = firstB > 0 && !w.cone && !w.malediction ? { t: target, w, acc: braced && (w.rof || 1) === 1 ? w.acc : Math.floor(w.acc / 2) } : null;
-      // cones hit everyone in the cone; a burst goes at one target (with recoil climbing per round, spreading it
-      // over neighbours as B373 allows would only put the later rounds at worse odds)
-      const targets = [target];
-      if (w.cone) {
-        for (const x of models) if (x !== target && x !== m && x.state === "ok" && x.h && hexDist(x.h, target.h) <= Math.floor(w.cone / 2) && los(m.h, x.h)) targets.push(x);
+      if (w.cone) { coneFire(m, w, target, base, d); return; }
+      // a burst goes at one target (with recoil climbing per round, spreading it over neighbours as B373 allows
+      // would only put the later rounds at worse odds)
+      const t = target;
+      const halfD = d >= w.range.half;   // at or beyond 1/2D (B378)
+      const n = shots;
+      const inter = between(m.h, t.h, m.u.side).filter(x => x !== t);
+      const plan = planAttack(m, w, t, base - linePen(m, inter), false, null, { aim: firstB, braced, fx: shotFx(t, m.h, opts.pointBlank) });
+      const loc0 = plan.loc === "random" ? null : plan.loc;
+      const lvl = plan.lvl;
+      const nb = n;
+      if (lvl < 3) { L(`${m.id} can't hope to hit ${t.id} (skill ${lvl})`); return; }   // B344
+      const r = check(lvl);
+      if (jamCheck(m, w, r)) return;
+      // every round rolled on its own (Progressive Recoil); Aim counts on the first only; criticals can't be dodged.
+      // misses: the margin of each round that missed (for strays and scatter); rounds below skill 3 aren't rolled
+      const toTorso = loc0 && NEAR_TORSO.has(loc0) ? 1 : 0;
+      let got = r.ok ? 1 : 0, crits = r.crit ? 1 : 0, near = !r.ok && r.margin >= -2, tg = toTorso && !r.ok && !r.fumble && r.margin === -1 ? 1 : 0;
+      const misses = r.ok || (toTorso && !r.fumble && r.margin === -1) ? [] : [r.margin];
+      for (let k = 1; k < nb; k++) {
+        const lk = lvl - firstB - rclPen(w, k, braced);
+        if (lk < 3) { misses.push(-3); continue; }   // no roll below 3 (B344): a wild round
+        const rk = check(lk);
+        if (rk.ok) { got++; if (rk.crit) crits++; }
+        else { if (rk.margin >= -2) near = true; if (toTorso && rk.margin === -1 && !rk.fumble) tg++; else misses.push(rk.margin); }
       }
-      const halfD = d > w.range.half;
-      let fired = 0;   // recoil keeps climbing through the whole burst, across targets
-      targets.forEach((t, i) => {
-        const n = w.cone ? 1 : Math.floor(shots / targets.length) + (i < shots % targets.length ? 1 : 0);
-        const inter = w.cone ? [] : between(m.h, t.h, m.u.side).filter(x => x !== t);
-        const plan = planAttack(m, w, t, base - linePen(m, inter), false, null, { aim: firstB, braced });
-        const loc0 = plan.loc === "random" ? null : plan.loc;
-        const lvl = plan.lvl;
-        const nb = w.cone ? 1 : n, k0 = fired;
-        fired += nb;
-        if (lvl < 3) { L(`${m.id} can't hope to hit ${t.id} (skill ${lvl})`); return; }   // B344
-        const r = check(lvl);
-        if (i === 0 && jamCheck(m, w, r)) return;
-        // every round rolled on its own (Progressive Recoil); Aim counts on the first only; criticals can't be dodged
-        const toTorso = loc0 && NEAR_TORSO.has(loc0) ? 1 : 0;
-        let got = r.ok ? 1 : 0, crits = r.crit ? 1 : 0, near = !r.ok && r.margin >= -2, tg = toTorso && !r.ok && !r.fumble && r.margin === -1 ? 1 : 0;
-        for (let k = 1; k < nb; k++) { const lk = lvl - firstB - rclPen(w, k, braced); if (lk < 3) break; const rk = check(lk); if (rk.ok) { got++; if (rk.crit) crits++; } else { if (rk.margin >= -2) near = true; if (toTorso && rk.margin === -1 && !rk.fumble) tg++; } }   // no roll below 3 (B344)
-        const aimedGot = got; got += tg;
-        const e = ev(t); e.shotAt = m; e.vol = Math.max(e.vol || 0, nb); if (near) e.near = true;
-        r.ok = got > 0;
-        const thru = (inter.length ? `, through ${inter.length}` : "") + (plan.da ? `, deceptive -${plan.da}` : "");
-        if (!r.ok && !w.cone) {
-          L(`${m.id} fires ${n > 1 ? n + " " : ""}at ${t.id} (${d} yd${loc0 && loc0 !== "torso" ? ", aiming at the " + locName(loc0) : ""}${thru}, skill ${lvl}): misses`);
-          FX(["s", m.h.q, m.h.r, t.h.q, t.h.r, m.u.side, 0, m.ix, t.ix, lvl, 0, nb]);
-          if (w.dmg.ex && i === 0) explosion(m, w, { q: t.h.q + DIRS[Math.floor(R() * 6)][0], r: t.h.r + DIRS[Math.floor(R() * 6)][1] }, rollDamage(w.dmg));
-          else if (!w.dmg.ex) stray(m, w, t, inter, halfD);
-          return;
+      const aimedGot = got; got += tg;
+      const e = ev(t); e.shotAt = m; e.vol = Math.max(e.vol || 0, nb); if (near) e.near = true;
+      const thru = (inter.length ? `, through ${inter.length}` : "") + (plan.da ? `, deceptive -${plan.da}` : "");
+      // a missed explosive lands its margin of failure in yards off, at most half the distance (B414); any other
+      // missed round may strike someone on the line, beside the target or beyond it (B389, B392)
+      const wild = () => {
+        for (const mg of misses) {
+          if (w.dmg.ex) { const at = t.h || t.lastH; if (at) explosion(m, w, scatter(at, Math.max(1, Math.min(Math.ceil(d / 2), -mg))), rollDamage(w.dmg)); }
+          else if (t.h) stray(m, w, t, inter);
         }
-        let hits = got;
-        FX(["s", m.h.q, m.h.r, t.h.q, t.h.r, m.u.side, got ? 1 : 0, m.ix, t.ix, lvl, got, nb]);
-        L(`${m.id} ${w.usage === "power" ? "casts " + w.name + " at" : "fires " + (n > 1 ? n + " at" : "at")} ${t.id} (${d} yd${loc0 && loc0 !== "torso" ? ", aiming at the " + locName(loc0) : ""}${thru}, skill ${lvl}${braced ? ", braced" : ""}${nb > 1 ? (w.rcl === 1 && w.rclFlat ? ", then -1" : `, then -${braced ? Math.max(1, Math.ceil(w.rcl / 2)) : w.rcl} a round`) + (firstB ? ` unaimed` : "") : ""}): ${hits} hit${hits > 1 ? "s" : ""}`);
-        if (hits > crits && !w.malediction) {
-          const open = hits - crits;   // critical rounds can't be defended
-          if (d <= 1 && !w.cone) {
-            // in close combat the defender can parry the weapon (or step aside) instead of dodging the shot (B391)
-            const def = defend(t, m, "pb", plan.da, 0, w);
-            if (def) {
-              const dg = def.how === "parry" ? open : Math.min(open, 1 + def.margin); hits -= dg; L(`  ${t.id} ${def.how === "parry" ? "knocks the gun aside" : "dodges " + dg}`);
-              if (t.shieldStruck && def.how !== "parry") for (let k = 0; k < dg; k++) shieldHit(m, w, t, loc0 || "random", true);
-            }
-          } else {
-            const def = defend(t, m, false, plan.da, 0);
-            if (def != null) {
-              const dg = Math.min(open, 1 + def); hits -= dg; L(`  ${t.id} dodges ${dg}`);
-              // the rounds the shield's DB turned aside struck it: all of them if the dodge needed the DB, else DB of them
-              const struck = t.shieldStruck ? dg : Math.min(dg, t.defDB || 0);
-              for (let k = 0; k < struck && t.state === "ok"; k++) shieldHit(m, w, t, loc0 || "random", true);
-            }
+      };
+      if (!got) {
+        L(`${m.id} fires ${n > 1 ? n + " " : ""}at ${t.id} (${d} yd${loc0 && loc0 !== "torso" ? ", aiming at the " + locName(loc0) : ""}${thru}, skill ${lvl}): misses`);
+        FX(["s", m.h.q, m.h.r, t.h.q, t.h.r, m.u.side, 0, m.ix, t.ix, lvl, 0, nb]);
+        wild();
+        return;
+      }
+      let hits = got;
+      FX(["s", m.h.q, m.h.r, t.h.q, t.h.r, m.u.side, got ? 1 : 0, m.ix, t.ix, lvl, got, nb]);
+      L(`${m.id} ${w.usage === "power" ? "casts " + w.name + " at" : "fires " + (n > 1 ? n + " at" : "at")} ${t.id} (${d} yd${loc0 && loc0 !== "torso" ? ", aiming at the " + locName(loc0) : ""}${thru}, skill ${lvl}${braced ? ", braced" : ""}${nb > 1 ? (w.rcl === 1 && w.rclFlat ? ", then -1" : `, then -${braced ? Math.max(1, Math.ceil(w.rcl / 2)) : w.rcl} a round`) + (firstB ? ` unaimed` : "") : ""}): ${hits} hit${hits > 1 ? "s" : ""}`);
+      let dodged = 0, dMargin = 0;
+      if (hits > crits && !w.malediction) {
+        const open = hits - crits;   // critical rounds can't be defended
+        if (d <= 1) {
+          // in close combat the defender can parry the weapon (or step aside) instead of dodging the shot (B391)
+          const def = defend(t, m, "pb", plan.da, 0, w);
+          if (def) {
+            const dg = def.how === "parry" ? open : Math.min(open, 1 + def.margin); hits -= dg; L(`  ${t.id} ${def.how === "parry" ? "knocks the gun aside" : "dodges " + dg}`);
+            if (def.how !== "parry") { dodged = dg; dMargin = def.margin; }
+            if (t.shieldStruck && def.how !== "parry") for (let k = 0; k < dg; k++) shieldHit(m, w, t, loc0 || "random", true);
+          }
+        } else {
+          const def = defend(t, m, false, plan.da, 0);
+          if (def != null) {
+            const dg = Math.min(open, 1 + def); hits -= dg; L(`  ${t.id} dodges ${dg}`);
+            // the rounds the shield's DB turned aside struck it: all of them if the dodge needed the DB, else DB of them
+            const struck = t.shieldStruck ? dg : Math.min(dg, t.defDB || 0);
+            for (let k = 0; k < struck && t.state === "ok"; k++) shieldHit(m, w, t, loc0 || "random", true);
+            dodged = dg - struck; dMargin = def;
           }
         }
-        for (let k = 0; k < hits && t.state === "ok"; k++) {
-          const loc = k < aimedGot ? (loc0 || hitLocation()) : "torso";
-          const raw = rollDamage(w.dmg);
-          applyHit(m, w, t, loc, true, halfD, null, halfD ? raw : raw, k < crits ? roll3() : 0);
-          if (w.dmg.ex && k === 0 && t.h) explosion(m, w, t.h, raw);
-          else if (w.dmg.ex && k === 0) explosion(m, w, t.lastH || m.h, raw);
-        }
-        if (w.blast && !w.dmg.ex && t.h) for (const x of models) if (x !== t && x.state === "ok" && x.h && hexDist(x.h, t.h) <= w.blast) {
-          if (defend(x, m, false, 0, 0) == null) applyHit(m, w, x, "torso", true, halfD);
-        }
-      });
+      }
+      const tH = t.h;
+      for (let k = 0; k < hits && t.state === "ok"; k++) {
+        const loc = k < aimedGot ? (loc0 || hitLocOn(t)) : "torso";
+        const raw = rollDamage(w.dmg);
+        applyHit(m, w, t, loc, true, halfD, null, raw, k < crits ? roll3() : 0);
+        // every explosive round that hits bursts on its own (B414)
+        if (w.dmg.ex) { const at = t.h || t.lastH; if (at) explosion(m, w, at, raw, t); }
+        else overpen(m, w, t, tH, loc, halfD ? Math.floor(raw / 2) : raw);
+      }
+      // a dodged round flies on: an explosive lands the dodge's margin of success in yards away (B414), a bullet
+      // may hit someone behind (B389)
+      for (let k = 0; k < dodged; k++) {
+        if (w.dmg.ex) { const at = tH || t.lastH; if (at) explosion(m, w, scatter(at, Math.max(1, dMargin)), rollDamage(w.dmg)); }
+        else if (tH) { const b = beyond(m, w, tH); if (b) strayAt(m, w, b); }
+      }
+      wild();
+      if (w.blast && !w.dmg.ex && tH) for (const x of models) if (x !== t && x.state === "ok" && x.h && hexDist(x.h, tH) <= w.blast) {
+        if (defend(x, m, false, 0, 0) == null) applyHit(m, w, x, "area", true, halfD);
+      }
+    }
+    // Cones (B413): one attack roll at the aim point; everyone in the wedge (a yard wide at the muzzle, widening
+    // to the full width at maximum range) whom the shooter can see is caught, and may dodge. Large-area injury (B400)
+    function coneCaught(m, w, target, from = m.h) {
+      const S = Math.sqrt(3), [ax, ay] = px(from), [bx, by] = px(target.h);
+      const len = Math.hypot(bx - ax, by - ay) || 1, ux = (bx - ax) / len, uy = (by - ay) / len;
+      const caught = [target];
+      for (const x of models) {
+        if (x === m || x === target || x.state !== "ok" || !x.h) continue;
+        const [xx, xy] = px(x.h), along = ((xx - ax) * ux + (xy - ay) * uy) / S, off = Math.abs((xx - ax) * uy - (xy - ay) * ux) / S;
+        if (along <= 0 || along > w.range.max + 0.5) continue;
+        if (off > Math.max(1, w.cone * along / w.range.max) / 2 + 0.5) continue;   // half a hex for the hex grid
+        if (los(from, x.h)) caught.push(x);
+      }
+      return caught;
+    }
+    function coneFire(m, w, target, base, d) {
+      const caught = coneCaught(m, w, target);
+      const lvl = base;
+      if (lvl < 3) { L(`${m.id} can't hope to hit ${target.id} (skill ${lvl})`); return; }
+      const r = check(lvl);
+      if (jamCheck(m, w, r)) return;
+      FX(["s", m.h.q, m.h.r, target.h.q, target.h.r, m.u.side, r.ok ? 1 : 0, m.ix, target.ix, lvl, r.ok ? 1 : 0, 1]);
+      for (const x of caught) { const e = ev(x); e.shotAt = m; e.vol = Math.max(e.vol || 0, 1); e.near = true; }
+      if (!r.ok) { L(`${m.id} ${w.usage === "power" ? "casts " + w.name + " at" : "fires at"} ${target.id} (${d} yd, skill ${lvl}): the ${w.name} goes wide`); return; }
+      L(`${m.id} ${w.usage === "power" ? "casts " + w.name + " at" : "fires at"} ${target.id} (${d} yd, skill ${lvl}): the ${w.name} catches ${caught.map(x => x.id).join(", ")}`);
+      for (const x of caught) {
+        if (x.state !== "ok") continue;
+        if (!r.crit && defend(x, m, false, 0, 0) != null) { L(`  ${x.id} dives clear`); continue; }
+        applyHit(m, w, x, "area", true, hexDist(m.h, x.h) >= w.range.half);
+      }
     }
     // Perils of the Warp (framework, warp.yaml): a Will roll on every casting; failure by 1-2 costs FP, 3-5 hurts
     // and fizzles, 6-9 hurts, stuns and fizzles, 10+ or a natural 18 is catastrophic. Returns true if the power fizzles.
@@ -2125,7 +2333,7 @@ const SIM = (() => {
         }
         const rw = f.u.ranged;
         if (rw && !f.gunBroken && d <= rw.range.max && los(f.h, h)) {
-          const lvl = rw.level - skillPen(f) + rangePenalty(Math.max(1, d) + (h === m.h ? m.steps || 0 : hexDist(m.h, h))) + m.u.sm - (m.prone ? 2 : 0) + Math.min(2, rw.acc || 0) - COVER_PEN[coverAt(h, f.h, m)] - (f.h ? ownCoverPen(f, h, false) : 0);
+          const lvl = rw.level - skillPen(f) + rangePenalty(Math.max(1, d) + spdOf(h === m.h ? m.steps || 0 : hexDist(m.h, h))) + m.u.sm - (m.prone ? 2 : 0) + Math.min(2, rw.acc || 0) - COVER_PEN[coverAt(h, f.h, m)] - (f.h ? ownCoverPen(f, h, false) : 0);
           const def = mode === "aoa" ? null : m.u.dodge + (mode === "aod" ? 2 : 0) + m.u.db - (m.prone ? 3 : 0);
           best = Math.max(best, expInjRandom(rw, m.u) * burstHits(lvl, rw.rof || 1, rw) * (1 - (def == null ? 0 : P3[cl(def)])) * (covered(m, f) ? 1 - pinOf(f) : 1));
         }
@@ -2158,7 +2366,7 @@ const SIM = (() => {
         if (!t.h || !los(h, t.h)) continue;
         const d = Math.max(1, hexDist(h, t.h));
         if (d > w.range.max) continue;
-        const E = planAttack(m, w, t, wl(m, w) - skillPen(m) + rangePenalty(d + (t.steps || 0)) + t.u.sm - COVER_PEN[coverAt(t.h, h, t)] - COVER_OWN[coverAt(h, t.h, null)] - linePen(m, between(h, t.h, m.u.side).filter(x => x !== t && x !== m)), false).score * sustainOf(w);
+        const E = planAttack(m, w, t, wl(m, w) - skillPen(m) + rangePenalty(d + spdOf(t.steps || 0)) + t.u.sm - COVER_OWN[coverAt(h, t.h, null)] - linePen(m, between(h, t.h, m.u.side).filter(x => x !== t && x !== m)), false, null, { fx: shotFx(t, h, false) }).score * sustainOf(w);
         best = Math.max(best, kv(m, t, E));
       }
       return best * stanceW(m, "ranged") * m.u.ai.aggression;
@@ -2222,6 +2430,12 @@ const SIM = (() => {
       const opts = [];
       const add = (v, label, run) => { if (Number.isFinite(v)) opts.push({ v, label, run }); };
       const here = m.h, rNow = risk(m, here, ""), mw = weaponsFor(m, true);
+      if (m.onFire) {
+        // what burning on for another five seconds or so would cost it, against the chance this attempt ends it
+        const a = areaDR(u), dm = m.fireDmg || FIRE[m.onFire], per = Math.max(1, (dm.n * 3.5 + dm.add) * dm.mult - (a.arm + a.nat));
+        const loss = u.ai.caution * Math.min(1, per * 5 / remOf(m)) * threatOf(m) * HORIZON;
+        add(P3[cl(u.dx - skillPen(m))] * loss / (m.onFire === 2 ? 3 : 1) - rNow, "beat-flames", () => beatFlames(m));
+      }
       // evasive movement toward the gunman that worries it most (Tactical Dodging option)
       if (TDODGE) m.evading = pool.filter(f => f.u.ranged && f.h && los(f.h, m.h)).sort((a, b) => threatOf(b) / Math.max(1, hexDist(b.h, m.h)) - threatOf(a) / Math.max(1, hexDist(a.h, m.h)))[0] || null;
       const Wm = stanceW(m, "melee") * A.aggression, Wr = stanceW(m, "ranged") * A.aggression;
@@ -2374,27 +2588,30 @@ const SIM = (() => {
           const spread = 1 / (1 + 0.5 * u.ai.focus * claims(m, t));
           // figures in the line of fire cost -4 each, and a miss may hit a friend on the line or beside the target
           const inter = w.malediction ? [] : between(m.h, t.h, m.u.side).filter(x => x !== t);
-          const base = wl(m, w) - skillPen(m) + rangePenalty(d + (t.steps || 0)) + t.u.sm - linePen(m, inter) - (!w.malediction ? coverPen(t, m.h) : 0);
+          const base = wl(m, w) - skillPen(m) + rangePenalty(d + spdOf(t.steps || 0)) + t.u.sm - linePen(m, inter);
+          const fx = w.malediction ? null : shotFx(t, m.h, false);
           const pals = w.malediction || w.dmg.ex ? [] : [...new Set([...inter, ...models.filter(x => x !== m && x.state === "ok" && x.h && hexDist(x.h, t.h) <= 1)])].filter(x => x.u.side === u.side && !(drilled(m) && drilled(x)));
-          const ffCost = pals.length ? (1 - P3[cl(base)]) * pals.reduce((a, x) => a + P3[cl(9 + x.u.sm)] * Math.min(1, expInjRandom(w, x.u) / remOf(x)) * threatOf(x) * HORIZON, 0) * u.ai.caution : 0;
+          // a cone catches every friend in the wedge (who may dive clear)
+          const coneFF = w.cone ? P3[cl(base)] * coneCaught(m, w, t).filter(x => x.u.side === u.side).reduce((a, x) => { const dd = rangedDefence(x, m); return a + (1 - (dd == null ? 0 : P3[cl(dd)])) * Math.min(1, expInj(w, x.u, "area") / remOf(x)) * threatOf(x) * HORIZON; }, 0) * u.ai.caution : 0;
+          const ffCost = coneFF + (pals.length && !w.cone ? (1 - P3[cl(base)]) * pals.reduce((a, x) => a + P3[cl(9 + x.u.sm)] * Math.min(1, expInjRandom(w, x.u) / remOf(x)) * threatOf(x) * HORIZON, 0) * u.ai.caution : 0);
           const aimed = m.aimTarget === t && m.aimTurns > 0;
           const aimB = aimed ? Math.min(2 * w.acc, w.acc + (m.aimTurns >= 3 ? 2 : m.aimTurns >= 2 ? 1 : 0)) : 0;
           const fA = !aimed && m.follow && m.follow.t === t && m.follow.w === w && !m.moved ? m.follow.acc : 0;
           const br = bracedFor(m, w, t, m.moved, aimB + fA > 0), bB = br ? 1 : 0;
           const own = w.malediction ? 0 : ownCoverPen(m, t.h, br && aimB + fA > 0);
-          const Enow = planAttack(m, w, t, base + bB + aimB + fA - own, false, null, { aim: aimB + fA, braced: br }).score * sustainOf(w) * spread;
+          const Enow = planAttack(m, w, t, base + bB + aimB + fA - own, false, null, { aim: aimB + fA, braced: br, fx }).score * sustainOf(w) * spread;
           const vNow = Wr * kv(m, t, Enow) - fpCost - ffCost;
           add(vNow - rNow, `fire ${w.name}@${t.id}`, () => { m.aimTarget = t; faceTo(m, t.h); fireAt(m, w, t, { aim: aimed }); });
           // All-Out Attack (Determined, +1 ranged): only worth it when little can hit back
           if (threatNow < 1) {
-            const Eaoa = planAttack(m, w, t, base + bB + aimB + fA - own + 1, false, null, { aim: aimB + fA, braced: br }).score * sustainOf(w) * spread;
+            const Eaoa = planAttack(m, w, t, base + bB + aimB + fA - own + 1, false, null, { aim: aimB + fA, braced: br, fx }).score * sustainOf(w) * spread;
             add(Wr * kv(m, t, Eaoa) - fpCost - ffCost - risk(m, m.h, "aoa"), `aoa-fire@${t.id}`, () => { m.aoa = true; m.aimTarget = t; faceTo(m, t.h); fireAt(m, w, t, { aim: aimed, aoa: true }); });
           }
           // Aim (B364): pay a turn now for Acc (and +1/+2 more on later turns) next turn
           if ((w.acc || 0) >= 1 && !(aimed && m.aimTurns >= 3)) {
             const nextB = Math.min(2 * w.acc, (aimed ? aimB : 0) + (aimed ? 1 : w.acc));
             const brA = bracedFor(m, w, t, false, true);
-            const Eaim = planAttack(m, w, t, base + (brA ? 1 : 0) + nextB - ownCoverPen(m, t.h, brA), false, null, { aim: nextB, braced: brA }).score * sustainOf(w) * spread;
+            const Eaim = planAttack(m, w, t, base + (brA ? 1 : 0) + nextB - ownCoverPen(m, t.h, brA), false, null, { aim: nextB, braced: brA, fx }).score * sustainOf(w) * spread;
             add(GAMMA * Wr * kv(m, t, Eaim) - GAMMA * ffCost - rNow, `aim@${t.id}`, () => {
               if (m.aimTarget !== t) m.aimTurns = 0;
               m.aimTarget = t; m.aimTurns++; faceTo(m, t.h); L(`${m.id} aims at ${t.id}`);
@@ -2406,7 +2623,7 @@ const SIM = (() => {
           const t = cands[0], d = hexDist(m.h, t.h);
           if (d > 3) {
             const mv = moveOf(m), nd = Math.max(2, d - mv);
-            const E = planAttack(m, w, t, wl(m, w) - skillPen(m) + rangePenalty(nd + (t.steps || 0)) + t.u.sm + Math.min(-2, w.bulk || 0), false).score * sustainOf(w);
+            const E = planAttack(m, w, t, wl(m, w) - skillPen(m) + rangePenalty(nd + spdOf(t.steps || 0)) + t.u.sm + Math.min(-2, w.bulk || 0), false).score * sustainOf(w);
             const h2 = stepHex(m.h, t.h, Math.min(mv, d - 2));
             const cont = GAMMA * (shotValueFrom(m, h2, pool) - shotValueFrom(m, m.h, pool));
             add(Wr * kv(m, t, E) + cont - risk(m, h2, ""), `advance-fire@${t.id}`, () => {
@@ -2906,20 +3123,30 @@ const SIM = (() => {
           if (!c.h || !los(m.h, c.h)) continue;
           const d = hexDist(m.h, c.h);
           if (d < 3 || d > g.range.max) continue;
-          const lvl = g.level - skillPen(m) + rangePenalty(d + (c.steps || 0)) + c.u.sm;
+          const lvl = g.level - skillPen(m) + rangePenalty(d + spdOf(c.steps || 0)) + c.u.sm;
           // the target may Dodge (then it takes the blast at a yard, with no divisor)
           const dd = rangedDefence(c, m), pDodge = dd == null ? 0 : P3[Math.max(0, Math.min(18, dd))];
-          let v = kv(m, c, (1 - pDodge) * expInj(g, c.u, "torso") + pDodge * expInj(g, c.u, "torso", { ...g.dmg, div: 1, mult: g.dmg.mult / 3, key: "s1nd" }));
-          for (const x of pool) {
-            if (x === c || !x.h) continue;
-            const k = hexDist(x.h, c.h);
-            if (k > 3) continue;
-            let e = expInj(g, x.u, "torso", { ...g.dmg, div: 1, mult: g.dmg.mult / (3 * k), key: "s" + k + "nd" });
-            if (g.dmg.frag) e += P3[Math.max(0, Math.min(18, 15 + rangePenalty(k)))] * expInj(g, x.u, "torso", { n: g.dmg.frag.n, add: 0, mult: 1, div: 1, type: g.dmg.frag.type, key: "f" });
-            v += kv(m, x, e);
+          const third = { ...g.dmg, div: 1, mult: g.dmg.mult / 3, key: "s1nd" };
+          const direct = kv(m, c, (1 - pDodge) * expInj(g, c.u, "torso") + pDodge * expInj(g, c.u, "area", third));
+          // everyone else in reach of the blast (3 yards counted) and the fragments, friends (and the thrower) included
+          let others = 0;
+          const fr = g.dmg.frag, fR = fr ? 5 * fr.n : 0;
+          for (const x of models) {
+            if (x === c || !x.h || x.state !== "ok") continue;
+            const k = Math.max(1, hexDist(x.h, c.h));
+            if (k > Math.max(3, fR) || !los(c.h, x.h)) continue;
+            let e = k <= 3 ? expInj(g, x.u, "area", { ...g.dmg, div: 1, mult: g.dmg.mult / (3 * k), key: "s" + k + "nd" }) : 0;
+            // expected fragments: the chance of success by 0, 3, 6... (one more per 3 points, B414)
+            if (fr && k <= fR) { let nF = 0; for (let j = 15 + rangePenalty(k) + x.u.sm - (x.prone || x.kneel ? 2 : 0); j >= 3; j -= 3) nF += P3[Math.min(18, j)]; e += nF * expInjRandom(g, x.u, { n: fr.n, add: 0, mult: 1, div: 1, type: fr.type, key: "f" }); }
+            others += x.u.side === m.u.side ? -m.u.ai.caution * Math.min(1, e / remOf(x)) * threatOf(x) * HORIZON : kv(m, x, e);
           }
-          v *= P3[Math.max(0, Math.min(18, lvl))];
+          const v = (direct + others) * P3[Math.max(0, Math.min(18, lvl))];
           if (!best || v > best.s) best = { i, c, s: v, v, lvl };
+          // or at its feet (Attacking an area, B414): +4 and no defence, though it may dive for cover
+          const pDive = c.aoa || c.pinned || c.grips.length ? 0 : P3[cl(dodgeOf(c) - (c.stunned ? 4 : 0) - (c.prone ? 3 : 0))];
+          const feet = kv(m, c, (1 - pDive) * expInj(g, c.u, "area", { ...g.dmg, div: 1, key: "s0nd" }) + pDive * expInj(g, c.u, "area", third));
+          const vF = (feet + others) * P3[cl(lvl + 4)];
+          if (vF > best.s) best = { i, c, hex: c.h, feet: true, s: vF, v: vF, lvl: lvl + 4 };
         }
         // through a doorway or round a corner (TS p. 24): a foe out of sight, a hex we can see that it can see
         if (terr) for (const c of pool.slice(0, 6)) {
@@ -2929,13 +3156,13 @@ const SIM = (() => {
             if (xi == null || !pass[xi] || closed[xi] || !los(m.h, X) || !los(X, c.h)) continue;
             const d = hexDist(m.h, X);
             if (d < 3 || d > g.range.max) continue;
-            const lvl = g.level - skillPen(m) + rangePenalty(d);
+            const lvl = g.level - skillPen(m) + rangePenalty(d) + 4;   // a throw at a hex (B414)
             let v = 0;
             for (const x of models) {
               if (x.state !== "ok" || !x.h || !los(X, x.h)) continue;
               const k = Math.max(1, hexDist(x.h, X));
               if (k > 3) continue;
-              const e = expInj(g, x.u, "torso", { ...g.dmg, div: 1, mult: g.dmg.mult / (3 * k), key: "s" + k + "nd" });
+              const e = expInj(g, x.u, "area", { ...g.dmg, div: 1, mult: g.dmg.mult / (3 * k), key: "s" + k + "nd" });
               v += x.u.side === m.u.side ? -m.u.ai.caution * Math.min(1, e / remOf(x)) * threatOf(x) * HORIZON : kv(m, x, e);
             }
             v *= P3[Math.max(0, Math.min(18, lvl))];
@@ -2959,12 +3186,15 @@ const SIM = (() => {
       m.grenadeReady = null; m.grenadesLeft[g.i]--; m.attacked = true;
       reveal(m);
       if (g.hex) {
-        // lobbed through a door or round a corner at a hex: no defence against a throw at the floor
+        // Attacking an area (B414): a throw at a hex is +4 (in g.lvl), with no defence, though anyone there may dive
+        // for cover; a miss lands its margin of failure in yards off, at most half the distance
         faceTo(m, g.hex);
-        const r = g.lvl < 3 ? { ok: false } : check(g.lvl), raw = rollDamage(w.dmg);
-        let at = g.hex;
-        if (!r.ok) { const off = DIRS[Math.floor(R() * 6)], n = { q: at.q + off[0], r: at.r + off[1] }; if (!(terr && wallAt(key(n.q, n.r)))) at = n; }
-        L(`${m.id} lobs a ${w.name} ${terr && terr.doorI[idx(key(g.hex.q, g.hex.r))] ? "through the doorway" : "round the corner"} at ${c.id}${r.ok ? "" : " (a yard off)"}`);
+        const r = g.lvl < 3 ? { ok: false, margin: g.lvl - 10 } : check(g.lvl), raw = rollDamage(w.dmg);
+        const off = r.ok ? 0 : Math.max(1, Math.min(Math.ceil(hexDist(m.h, g.hex) / 2), -r.margin));
+        const at = off ? scatter(g.hex, off) : g.hex;
+        const how = g.feet ? `at ${c.id}'s feet` : terr && terr.doorI[idx(key(g.hex.q, g.hex.r))] ? `through the doorway at ${c.id}` : `round the corner at ${c.id}`;
+        L(`${m.id} lobs a ${w.name} ${how} (skill ${g.lvl})${off ? `: ${off} yd off` : ""}`);
+        landOn(m, w, at, raw);
         explosion(m, w, at, raw);
         return;
       }
@@ -2972,32 +3202,24 @@ const SIM = (() => {
       const r = g.lvl < 3 ? { ok: false, margin: g.lvl - 10, crit: false, fumble: false } : check(g.lvl);   // no roll below 3 (B344): a wild throw
       const raw = rollDamage(w.dmg);
       if (r.ok) {
-        // a thrown grenade is an attack on its target, who may Dodge it (B377); a dodged grenade goes off a yard away
-        // a thrown grenade can be dodged or blocked (B373-375); either way it goes off a yard away
+        // a thrown grenade can be dodged or blocked (B373-375); it then lands the defence's margin of success in
+        // yards away (B414)
         const def = r.crit ? null : defend(c, m, "thrown", 0, 0, w);
         if (def != null) {
-          const off = DIRS[Math.floor(R() * 6)]; let at = { q: c.h.q + off[0], r: c.h.r + off[1] };
-          if (terr && wallAt(key(at.q, at.r))) at = c.h;
-          L(`${m.id} throws a ${w.name} at ${c.id} (skill ${g.lvl}): ${c.id} ${def.how === "block" ? "knocks it aside" : "dodges"} and it goes off a yard away`);
-          const x0 = occ.get(key(at.q, at.r));
-          if (x0 && x0.state === "ok" && x0 !== c) applyHit(m, { dmg: noDiv(w.dmg), follow: null }, x0, "torso", true, false, noDiv(w.dmg), raw);
+          const off = Math.max(1, def.margin), at = scatter(c.h, off);
+          L(`${m.id} throws a ${w.name} at ${c.id} (skill ${g.lvl}): ${c.id} ${def.how === "block" ? "knocks it aside" : "dodges"} and it goes off ${off} yd away`);
+          landOn(m, w, at, raw);
           explosion(m, w, at, raw);
           return;
         }
         L(`${m.id} throws a ${w.name} at ${c.id} (skill ${g.lvl}): direct hit`);
         const at = c.h;
         applyHit(m, w, c, "torso", true, false, null, raw);
-        explosion(m, w, at, raw);
+        explosion(m, w, at, raw, c);
       } else {
-        const off = DIRS[Math.floor(R() * 6)]; let at = { q: c.h.q + off[0] * 2, r: c.h.r + off[1] * 2 };
-        if (terr && (wallAt(key(at.q, at.r)) || !los(c.h, at))) at = c.h;
-        L(`${m.id} throws a ${w.name} at ${c.id} (skill ${g.lvl}): it lands wide`);
-        const hitX = occ.get(key(at.q, at.r));
-        if (hitX && hitX.state === "ok") {
-          const nd = noDiv(w.dmg);
-          if (dive(hitX)) { const sp = Math.floor(raw / 3); if (sp >= 1) applyHit(m, { dmg: nd, follow: null }, hitX, "torso", true, false, nd, sp); }
-          else applyHit(m, { dmg: nd, follow: null }, hitX, "torso", true, false, nd, raw);
-        }
+        const off = Math.max(1, Math.min(Math.ceil(hexDist(m.h, c.h) / 2), -r.margin)), at = scatter(c.h, off);
+        L(`${m.id} throws a ${w.name} at ${c.id} (skill ${g.lvl}): it lands ${off} yd wide`);
+        landOn(m, w, at, raw);
         explosion(m, w, at, raw);
       }
     }
@@ -3080,20 +3302,23 @@ const SIM = (() => {
       L(`${m.id} lays down suppression fire (${shots} shots) over a 3-yard zone`);
       for (const x of models) if (x !== m && x.state === "ok" && x.h && hexes.has(key(x.h.q, x.h.r))) suppressHit(z, x);   // friend or foe (B409)
     }
-    // anyone in the zone, or moving into it before the gunner's next turn, is attacked once at 6 or the gunner's
-    // own effective skill if lower, plus the rapid-fire bonus, SM, posture and cover (B409); they may Dodge
+    // anyone in the zone, or moving into it before the gunner's next turn, is attacked once at the gunner's effective
+    // skill with every modifier (rapid-fire bonus, SM, posture), capped at 6 + the rapid-fire bonus (B409); one hit
+    // plus one per full Rcl of margin, up to the shots fired; random locations, so cover takes what hits behind it.
+    // They may Dodge
     function suppressHit(z, x) {
       z.hit.add(x);
       { const e = ev(x); e.supp = true; e.shotAt = z.owner; e.vol = Math.max(e.vol || 0, z.shots); }
       if (!los(z.owner.h, x.h)) return;
       const m = z.owner, w = z.w, d = Math.max(1, hexDist(m.h, x.h));
       const eff = w.level - skillPen(m) + rangePenalty(d);
-      const lvl = Math.min(6, eff) + rapidBonus(z.shots) + x.u.sm - (x.prone ? 2 : 0) - coverPen(x, m.h);
+      const rb = rapidBonus(z.shots);
+      const lvl = Math.min(6 + rb, eff + rb + x.u.sm + shotFx(x, m.h, false).pen("random"));
       const r = check(lvl);
       if (!r.ok) { L(`  suppression fire misses ${x.id}`); return; }
-      let hits = Math.min(3, z.shots, 1 + Math.floor(Math.max(0, r.margin) / w.rcl));
+      let hits = Math.min(z.shots, 1 + Math.floor(Math.max(0, r.margin) / Math.max(1, w.rcl)));
       if (!r.crit) { const def = defend(x, m, false, 0, 0); if (def != null) { const dg = Math.min(hits, 1 + def); hits -= dg; L(`  ${x.id} dodges ${dg}`); } }
-      for (let k = 0; k < hits && x.state === "ok"; k++) { L(`  suppression fire hits ${x.id}`); applyHit(m, w, x, hitLocation(), true, d > w.range.half); }
+      for (let k = 0; k < hits && x.state === "ok"; k++) { L(`  suppression fire hits ${x.id}`); applyHit(m, w, x, hitLocOn(x), true, d >= w.range.half); }
     }
     function clearZone(m) { if (m.zone) { zones.splice(zones.indexOf(m.zone), 1); m.zone = null; } }
 
@@ -3251,6 +3476,7 @@ const SIM = (() => {
           const k = Math.floor(-m.hp / m.u.HP);
           if (!check(m.u.HT - k).ok) { FX(["d", m.h.q, m.h.r, m.u.side, 0]); m.state = "out"; place(m, null); L(`${m.id} collapses unconscious`); continue; }
         }
+        if (m.onFire) { burn(m); if (m.state !== "ok") continue; }
         // at 0 FP or less, a Will roll before each maneuver; failure collapses it for the fight (B426)
         if (m.fp <= 0 && !m.u.flags.machine && !check(m.u.will).ok) { incapacitate(m, "collapses from exhaustion"); continue; }
         // a stunned model that recovers still defends at -4, without retreating, until its next turn (B364)
