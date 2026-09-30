@@ -4,96 +4,96 @@ Reference fights run with `tools/sim.js` (the 2D hex engine; rules in docs/simul
 
 ## Standard GURPS HP, elites aim (default)
 
-Only elites (best combat skill 17+, IQ 8+) call shots, including Chinks in Armor (B400); everyone else hits random locations. Psychic powers are at lore damage and the Zoanthrope's Warp Field is 200 SP; the last eleven rows are three Ork mob charges and eight psyker fights. Grappling, Wait, suppression fire, grenades, Slam, Shove, two-weapon attacks and Feverish Defense are on. The "everyone aims" and random tables below predate the power rescale, chinks and the latest AI changes. Decisions come from the value-based decision layer with faction personalities (docs/simulator.md, data/sim/ai.yaml). Every item of the mechanics review through priority 2 is on (Attack steps, weapons in hand, line of fire, retreat into a free hex, kneeling, critical hit and miss tables, Fright Check morale, Shadow in the Warp).
+Only elites (best combat skill 17+, IQ 8+) call shots, including Chinks in Armor (B400); everyone else hits random locations. Psychic powers are at lore damage and the Zoanthrope's Warp Field is 200 SP; the last eleven rows are three Ork mob charges and eight psyker fights. Grappling, Wait, suppression fire, grenades, Slam, Shove, two-weapon attacks and Feverish Defense are on. The "everyone aims" and random tables below predate the power rescale, chinks and the latest AI changes. Decisions come from the value-based decision layer with faction personalities (docs/simulator.md, data/sim/ai.yaml). Every item of the mechanics review through priority 2 is on (Attack steps, weapons in hand, line of fire, retreat into a free hex, kneeling, critical hit and miss tables, Fright Check morale, Shadow in the Warp), plus firing lines (kneeling figures and adjacent friends don't block a shot) and eye lenses at three-quarters of the helmet with aimed eye shots at −10.
 
 | Fight | Result | Length | Side A | Side B |
 |---|---|---|---|---|
-| 10 Astra Militarum Guardsman vs 10 Ork Boy @15yd | A 83% B 15% timeout 0% mutual 3% | 7s | A 5.8/10 up, 0.9 dead | B 0.6/10 up, 1.3 dead |
-| 20 Astra Militarum Guardsman vs 20 Ork Boy @40yd | A 76% B 20% timeout 0% mutual 3% | 10s | A 9.2/20 up, 2.0 dead | B 1.3/20 up, 2.0 dead |
-| 10 Ork Boy vs 5 Astartes Battle-Brother @10yd | A 0% B 100% timeout 0% mutual 0% | 8s | A 0.0/10 up, 1.6 dead | B 5.0/5 up, 0.0 dead |
-| 5 Ork Nob vs 5 Astartes Battle-Brother @10yd | A 0% B 100% timeout 0% mutual 0% | 11s | A 0.0/5 up, 0.4 dead | B 5.0/5 up, 0.0 dead |
-| 1 Ork Warboss vs 3 Astartes Battle-Brother @10yd | A 2% B 98% timeout 0% mutual 0% | 5s | A 0.0/1 up, 0.3 dead | B 2.7/3 up, 0.1 dead |
-| 3 Ork Meganob vs 5 Astartes Battle-Brother @15yd | A 3% B 97% timeout 0% mutual 0% | 8s | A 0.1/3 up, 0.0 dead | B 4.4/5 up, 0.0 dead |
-| 5 Genestealer vs 5 Astartes Battle-Brother @10yd | A 0% B 100% timeout 0% mutual 0% | 3s | A 0.0/5 up, 1.8 dead | B 4.9/5 up, 0.0 dead |
-| 10 Genestealer vs 20 Astra Militarum Guardsman @30yd | A 100% B 0% timeout 0% mutual 0% | 6s | A 9.5/10 up, 0.0 dead | B 0.0/20 up, 7.7 dead |
-| 20 Hormagaunt vs 10 Astra Militarum Guardsman @20yd | A 12% B 84% timeout 0% mutual 4% | 5s | A 1.2/20 up, 4.0 dead | B 6.6/10 up, 0.7 dead |
-| 1 Carnifex vs 5 Astartes Battle-Brother @10yd | A 100% B 0% timeout 0% mutual 0% | 114s | A 1.0/1 up, 0.0 dead | B 0.0/5 up, 0.5 dead |
-| 1 Hive Tyrant vs 5 Astartes Battle-Brother @30yd | A 96% B 4% timeout 0% mutual 0% | 149s | A 1.0/1 up, 0.0 dead | B 0.1/5 up, 0.5 dead |
+| 10 Astra Militarum Guardsman vs 10 Ork Boy @15yd | A 81% B 16% timeout 0% mutual 2% | 7s | A 5.7/10 up, 1.0 dead | B 0.7/10 up, 1.6 dead |
+| 20 Astra Militarum Guardsman vs 20 Ork Boy @40yd | A 82% B 14% timeout 0% mutual 5% | 9s | A 10.0/20 up, 2.3 dead | B 0.8/20 up, 2.3 dead |
+| 10 Ork Boy vs 5 Astartes Battle-Brother @10yd | A 0% B 100% timeout 0% mutual 0% | 8s | A 0.0/10 up, 1.7 dead | B 5.0/5 up, 0.0 dead |
+| 5 Ork Nob vs 5 Astartes Battle-Brother @10yd | A 0% B 100% timeout 0% mutual 0% | 11s | A 0.0/5 up, 0.7 dead | B 5.0/5 up, 0.0 dead |
+| 1 Ork Warboss vs 3 Astartes Battle-Brother @10yd | A 0% B 100% timeout 0% mutual 0% | 5s | A 0.0/1 up, 0.4 dead | B 2.8/3 up, 0.1 dead |
+| 3 Ork Meganob vs 5 Astartes Battle-Brother @15yd | A 94% B 6% timeout 0% mutual 0% | 20s | A 2.4/3 up, 0.0 dead | B 0.1/5 up, 0.6 dead |
+| 5 Genestealer vs 5 Astartes Battle-Brother @10yd | A 0% B 100% timeout 0% mutual 0% | 3s | A 0.0/5 up, 1.7 dead | B 4.8/5 up, 0.0 dead |
+| 10 Genestealer vs 20 Astra Militarum Guardsman @30yd | A 100% B 0% timeout 0% mutual 0% | 6s | A 9.2/10 up, 0.0 dead | B 0.0/20 up, 8.1 dead |
+| 20 Hormagaunt vs 10 Astra Militarum Guardsman @20yd | A 13% B 82% timeout 0% mutual 5% | 5s | A 1.2/20 up, 4.4 dead | B 6.3/10 up, 0.7 dead |
+| 1 Carnifex vs 5 Astartes Battle-Brother @10yd | A 100% B 0% timeout 0% mutual 0% | 110s | A 1.0/1 up, 0.0 dead | B 0.0/5 up, 0.5 dead |
+| 1 Hive Tyrant vs 5 Astartes Battle-Brother @30yd | A 95% B 5% timeout 0% mutual 0% | 163s | A 0.9/1 up, 0.0 dead | B 0.2/5 up, 0.4 dead |
 | 3 Tyranid Warrior vs 5 Astartes Battle-Brother @30yd | A 0% B 100% timeout 0% mutual 0% | 7s | A 0.0/3 up, 0.7 dead | B 5.0/5 up, 0.0 dead |
-| 5 Astartes Battle-Brother vs 10 Necron Warrior @60yd | A 88% B 12% timeout 0% mutual 0% | 88s | A 2.9/5 up, 0.1 dead | B 0.3/10 up, 0.2 dead |
-| 5 Necron Immortal vs 5 Astartes Battle-Brother @60yd | A 99% B 1% timeout 0% mutual 0% | 57s | A 4.2/5 up, 0.0 dead | B 0.0/5 up, 0.6 dead |
-| 5 Lychguard vs 5 Astartes Battle-Brother @10yd | A 98% B 2% timeout 0% mutual 0% | 14s | A 4.1/5 up, 0.0 dead | B 0.1/5 up, 1.1 dead |
-| 10 Flayed One vs 10 Astra Militarum Guardsman @20yd | A 100% B 0% timeout 0% mutual 0% | 9s | A 9.1/10 up, 0.0 dead | B 0.0/10 up, 1.9 dead |
-| 3 Skorpekh Destroyer vs 5 Astartes Battle-Brother @15yd | A 76% B 23% timeout 0% mutual 0% | 53s | A 1.6/3 up, 0.1 dead | B 0.9/5 up, 0.7 dead |
-| 5 Aspect Warrior vs 10 Ork Boy @15yd | A 92% B 8% timeout 0% mutual 0% | 9s | A 3.8/5 up, 0.1 dead | B 0.4/10 up, 0.1 dead |
-| 1 Exarch vs 2 Astartes Battle-Brother @10yd | A 7% B 93% timeout 0% mutual 0% | 6s | A 0.1/1 up, 0.3 dead | B 1.8/2 up, 0.0 dead |
-| 10 Aeldari Guardian vs 10 Astra Militarum Guardsman @50yd | A 91% B 7% timeout 0% mutual 2% | 6s | A 6.4/10 up, 0.7 dead | B 0.3/10 up, 2.6 dead |
-| 10 Wych vs 10 Ork Boy @15yd | A 41% B 59% timeout 0% mutual 1% | 7s | A 2.2/10 up, 2.9 dead | B 3.3/10 up, 0.1 dead |
-| 5 Incubus vs 5 Astartes Battle-Brother @10yd | A 18% B 82% timeout 0% mutual 1% | 6s | A 0.5/5 up, 0.8 dead | B 3.0/5 up, 0.5 dead |
-| 10 Kabalite Warrior vs 10 Fire Warrior (Shas'la) @100yd | A 0% B 100% timeout 0% mutual 0% | 6s | A 0.0/10 up, 6.0 dead | B 9.0/10 up, 0.0 dead |
-| 10 Fire Warrior (Shas'la) vs 5 Astartes Battle-Brother @150yd | A 47% B 52% timeout 0% mutual 1% | 25s | A 2.5/10 up, 2.4 dead | B 1.9/5 up, 0.0 dead |
-| 3 Battlesuit Pilot (Shas'vre) vs 20 Ork Boy @60yd | A 100% B 0% timeout 0% mutual 0% | 13s | A 3.0/3 up, 0.0 dead | B 0.0/20 up, 7.6 dead |
-| 10 Kroot Carnivore vs 10 Astra Militarum Guardsman @30yd | A 0% B 100% timeout 0% mutual 0% | 4s | A 0.0/10 up, 3.6 dead | B 9.4/10 up, 0.2 dead |
-| 3 Custodian Guardian vs 10 Astartes Battle-Brother @20yd | A 44% B 56% timeout 0% mutual 0% | 14s | A 0.9/3 up, 1.1 dead | B 2.8/10 up, 2.8 dead |
-| 5 Sister of Silence vs 10 Astra Militarum Guardsman @20yd | A 15% B 84% timeout 0% mutual 0% | 10s | A 0.4/5 up, 0.4 dead | B 6.1/10 up, 0.9 dead |
-| 10 Adepta Sororitas Battle Sister vs 15 Ork Boy @30yd | A 100% B 0% timeout 0% mutual 0% | 10s | A 9.7/10 up, 0.0 dead | B 0.0/15 up, 4.5 dead |
-| 10 Militarum Tempestus Scion vs 3 Astartes Battle-Brother @60yd | A 100% B 0% timeout 0% mutual 0% | 8s | A 8.6/10 up, 0.5 dead | B 0.0/3 up, 0.6 dead |
-| 5 Primaris Battle-Brother vs 5 Astartes Battle-Brother @60yd | A 77% B 23% timeout 0% mutual 0% | 88s | A 2.4/5 up, 0.2 dead | B 0.7/5 up, 0.9 dead |
-| 5 Sicarian Ruststalker vs 10 Astra Militarum Guardsman @15yd | A 12% B 86% timeout 0% mutual 1% | 7s | A 0.4/5 up, 0.3 dead | B 6.5/10 up, 0.7 dead |
+| 5 Astartes Battle-Brother vs 10 Necron Warrior @60yd | A 91% B 9% timeout 0% mutual 0% | 92s | A 2.9/5 up, 0.1 dead | B 0.2/10 up, 0.1 dead |
+| 5 Necron Immortal vs 5 Astartes Battle-Brother @60yd | A 100% B 0% timeout 0% mutual 0% | 59s | A 4.0/5 up, 0.0 dead | B 0.0/5 up, 0.6 dead |
+| 5 Lychguard vs 5 Astartes Battle-Brother @10yd | A 99% B 1% timeout 0% mutual 0% | 14s | A 4.2/5 up, 0.0 dead | B 0.0/5 up, 1.1 dead |
+| 10 Flayed One vs 10 Astra Militarum Guardsman @20yd | A 100% B 0% timeout 0% mutual 0% | 9s | A 9.2/10 up, 0.0 dead | B 0.0/10 up, 1.8 dead |
+| 3 Skorpekh Destroyer vs 5 Astartes Battle-Brother @15yd | A 76% B 24% timeout 1% mutual 0% | 55s | A 1.6/3 up, 0.0 dead | B 0.9/5 up, 0.8 dead |
+| 5 Aspect Warrior vs 10 Ork Boy @15yd | A 94% B 6% timeout 0% mutual 0% | 8s | A 4.0/5 up, 0.1 dead | B 0.3/10 up, 0.1 dead |
+| 1 Exarch vs 2 Astartes Battle-Brother @10yd | A 7% B 93% timeout 0% mutual 0% | 7s | A 0.1/1 up, 0.4 dead | B 1.8/2 up, 0.0 dead |
+| 10 Aeldari Guardian vs 10 Astra Militarum Guardsman @50yd | A 93% B 5% timeout 0% mutual 1% | 6s | A 6.6/10 up, 0.7 dead | B 0.2/10 up, 2.8 dead |
+| 10 Wych vs 10 Ork Boy @15yd | A 45% B 50% timeout 0% mutual 4% | 7s | A 2.3/10 up, 3.0 dead | B 2.9/10 up, 0.1 dead |
+| 5 Incubus vs 5 Astartes Battle-Brother @10yd | A 14% B 85% timeout 0% mutual 1% | 6s | A 0.4/5 up, 1.1 dead | B 3.1/5 up, 0.4 dead |
+| 10 Kabalite Warrior vs 10 Fire Warrior (Shas'la) @100yd | A 0% B 100% timeout 0% mutual 0% | 6s | A 0.0/10 up, 6.2 dead | B 9.0/10 up, 0.0 dead |
+| 10 Fire Warrior (Shas'la) vs 5 Astartes Battle-Brother @150yd | A 51% B 49% timeout 0% mutual 0% | 25s | A 2.8/10 up, 2.4 dead | B 1.8/5 up, 0.0 dead |
+| 3 Battlesuit Pilot (Shas'vre) vs 20 Ork Boy @60yd | A 100% B 0% timeout 0% mutual 0% | 13s | A 3.0/3 up, 0.0 dead | B 0.0/20 up, 7.7 dead |
+| 10 Kroot Carnivore vs 10 Astra Militarum Guardsman @30yd | A 0% B 100% timeout 0% mutual 0% | 4s | A 0.0/10 up, 3.5 dead | B 9.3/10 up, 0.2 dead |
+| 3 Custodian Guardian vs 10 Astartes Battle-Brother @20yd | A 90% B 10% timeout 0% mutual 0% | 18s | A 2.0/3 up, 0.5 dead | B 0.4/10 up, 3.9 dead |
+| 5 Sister of Silence vs 10 Astra Militarum Guardsman @20yd | A 18% B 80% timeout 0% mutual 1% | 10s | A 0.4/5 up, 0.3 dead | B 5.9/10 up, 0.8 dead |
+| 10 Adepta Sororitas Battle Sister vs 15 Ork Boy @30yd | A 100% B 0% timeout 0% mutual 0% | 9s | A 9.7/10 up, 0.0 dead | B 0.0/15 up, 4.6 dead |
+| 10 Militarum Tempestus Scion vs 3 Astartes Battle-Brother @60yd | A 100% B 0% timeout 0% mutual 0% | 8s | A 8.8/10 up, 0.6 dead | B 0.0/3 up, 0.5 dead |
+| 5 Primaris Battle-Brother vs 5 Astartes Battle-Brother @60yd | A 84% B 16% timeout 0% mutual 0% | 93s | A 2.7/5 up, 0.2 dead | B 0.4/5 up, 0.9 dead |
+| 5 Sicarian Ruststalker vs 10 Astra Militarum Guardsman @15yd | A 9% B 90% timeout 0% mutual 1% | 8s | A 0.3/5 up, 0.4 dead | B 7.0/10 up, 0.7 dead |
 | 10 Skitarii Ranger vs 10 Aeldari Guardian @100yd | A 100% B 0% timeout 0% mutual 0% | 8s | A 10.0/10 up, 0.0 dead | B 0.0/10 up, 2.1 dead |
-| 50 Ork Boy vs 5 Astartes Battle-Brother @30yd | A 0% B 100% timeout 0% mutual 0% | 24s | A 0.0/50 up, 4.3 dead | B 5.0/5 up, 0.0 dead |
-| 30 Ork Boy vs 5 Astartes Battle-Brother @30yd | A 0% B 100% timeout 0% mutual 0% | 18s | A 0.0/30 up, 3.6 dead | B 5.0/5 up, 0.0 dead |
-| 20 Ork Boy vs 5 Astartes Battle-Brother @30yd | A 0% B 100% timeout 0% mutual 0% | 19s | A 0.0/20 up, 3.7 dead | B 5.0/5 up, 0.0 dead |
+| 50 Ork Boy vs 5 Astartes Battle-Brother @30yd | A 0% B 100% timeout 0% mutual 0% | 25s | A 0.0/50 up, 4.3 dead | B 5.0/5 up, 0.0 dead |
+| 30 Ork Boy vs 5 Astartes Battle-Brother @30yd | A 0% B 100% timeout 0% mutual 0% | 20s | A 0.0/30 up, 3.8 dead | B 5.0/5 up, 0.0 dead |
+| 20 Ork Boy vs 5 Astartes Battle-Brother @30yd | A 0% B 100% timeout 0% mutual 0% | 19s | A 0.0/20 up, 3.6 dead | B 5.0/5 up, 0.0 dead |
 | 1 Sanctioned Psyker vs 5 Astra Militarum Guardsman @20yd | A 0% B 100% timeout 0% mutual 0% | 2s | A 0.0/1 up, 0.4 dead | B 5.0/5 up, 0.0 dead |
 | 1 Sanctioned Psyker vs 1 Astartes Battle-Brother @20yd | A 0% B 100% timeout 0% mutual 0% | 3s | A 0.0/1 up, 0.7 dead | B 1.0/1 up, 0.0 dead |
-| 1 Warlock vs 5 Astra Militarum Guardsman @20yd | A 0% B 100% timeout 0% mutual 0% | 2s | A 0.0/1 up, 0.4 dead | B 5.0/5 up, 0.0 dead |
-| 1 Farseer vs 3 Astartes Battle-Brother @20yd | A 0% B 100% timeout 0% mutual 0% | 3s | A 0.0/1 up, 0.7 dead | B 3.0/3 up, 0.0 dead |
-| 1 Ork Weirdboy vs 1 Astartes Battle-Brother @20yd | A 0% B 100% timeout 0% mutual 0% | 5s | A 0.0/1 up, 0.2 dead | B 1.0/1 up, 0.0 dead |
+| 1 Warlock vs 5 Astra Militarum Guardsman @20yd | A 0% B 100% timeout 0% mutual 0% | 2s | A 0.0/1 up, 0.3 dead | B 5.0/5 up, 0.0 dead |
+| 1 Farseer vs 3 Astartes Battle-Brother @20yd | A 0% B 100% timeout 0% mutual 0% | 3s | A 0.0/1 up, 0.8 dead | B 3.0/3 up, 0.0 dead |
+| 1 Ork Weirdboy vs 1 Astartes Battle-Brother @20yd | A 0% B 100% timeout 0% mutual 0% | 4s | A 0.0/1 up, 0.2 dead | B 1.0/1 up, 0.0 dead |
 | 1 Zoanthrope vs 3 Astartes Battle-Brother @60yd | A 0% B 100% timeout 0% mutual 0% | 4s | A 0.0/1 up, 0.6 dead | B 3.0/3 up, 0.0 dead |
-| 1 Zoanthrope vs 1 Carnifex @40yd | A 20% B 80% timeout 1% mutual 0% | 32s | A 0.2/1 up, 0.2 dead | B 0.8/1 up, 0.0 dead |
-| 1 Farseer vs 3 Sister of Silence @20yd | A 83% B 17% timeout 0% mutual 0% | 11s | A 0.8/1 up, 0.0 dead | B 0.3/3 up, 1.5 dead |
-| 10 Astra Militarum Guardsman vs 10 Kabalite Warrior @100yd | A 59% B 40% timeout 0% mutual 1% | 13s | A 3.3/10 up, 3.2 dead | B 1.9/10 up, 1.5 dead |
-| 10 Astra Militarum Guardsman vs 10 Fire Warrior (Shas'la) @150yd | A 0% B 100% timeout 0% mutual 0% | 7s | A 0.0/10 up, 6.0 dead | B 9.3/10 up, 0.0 dead |
-| 10 Astra Militarum Guardsman vs 10 Skitarii Ranger @100yd | A 0% B 100% timeout 0% mutual 0% | 9s | A 0.0/10 up, 2.9 dead | B 9.6/10 up, 0.0 dead |
-| 30 Astra Militarum Guardsman vs 5 Genestealer @30yd | A 60% B 37% timeout 0% mutual 3% | 10s | A 9.1/30 up, 6.4 dead | B 1.0/5 up, 0.5 dead |
-| 20 Astra Militarum Guardsman vs 20 Termagant @60yd | A 100% B 0% timeout 0% mutual 0% | 12s | A 18.4/20 up, 0.1 dead | B 0.0/20 up, 4.8 dead |
-| 10 Astra Militarum Guardsman vs 10 Necron Warrior @60yd | A 0% B 100% timeout 0% mutual 0% | 21s | A 0.0/10 up, 2.0 dead | B 8.4/10 up, 0.0 dead |
-| 1 Commissar vs 3 Ork Boy @10yd | A 1% B 99% timeout 0% mutual 0% | 4s | A 0.0/1 up, 0.4 dead | B 2.8/3 up, 0.0 dead |
-| 1 Inquisitor vs 2 Genestealer @10yd | A 20% B 80% timeout 0% mutual 0% | 3s | A 0.2/1 up, 0.4 dead | B 1.5/2 up, 0.1 dead |
-| 5 Adepta Sororitas Battle Sister vs 10 Wych @20yd | A 96% B 3% timeout 0% mutual 0% | 7s | A 4.3/5 up, 0.1 dead | B 0.2/10 up, 3.7 dead |
+| 1 Zoanthrope vs 1 Carnifex @40yd | A 20% B 79% timeout 1% mutual 0% | 37s | A 0.2/1 up, 0.2 dead | B 0.8/1 up, 0.0 dead |
+| 1 Farseer vs 3 Sister of Silence @20yd | A 84% B 16% timeout 0% mutual 0% | 8s | A 0.8/1 up, 0.0 dead | B 0.3/3 up, 1.6 dead |
+| 10 Astra Militarum Guardsman vs 10 Kabalite Warrior @100yd | A 58% B 39% timeout 0% mutual 3% | 13s | A 3.2/10 up, 3.2 dead | B 2.0/10 up, 1.5 dead |
+| 10 Astra Militarum Guardsman vs 10 Fire Warrior (Shas'la) @150yd | A 0% B 100% timeout 0% mutual 0% | 7s | A 0.0/10 up, 6.2 dead | B 9.3/10 up, 0.0 dead |
+| 10 Astra Militarum Guardsman vs 10 Skitarii Ranger @100yd | A 0% B 100% timeout 0% mutual 0% | 9s | A 0.0/10 up, 2.9 dead | B 9.7/10 up, 0.0 dead |
+| 30 Astra Militarum Guardsman vs 5 Genestealer @30yd | A 87% B 13% timeout 0% mutual 0% | 9s | A 16.2/30 up, 5.1 dead | B 0.3/5 up, 0.9 dead |
+| 20 Astra Militarum Guardsman vs 20 Termagant @60yd | A 100% B 0% timeout 0% mutual 0% | 10s | A 19.9/20 up, 0.0 dead | B 0.0/20 up, 5.4 dead |
+| 10 Astra Militarum Guardsman vs 10 Necron Warrior @60yd | A 0% B 100% timeout 0% mutual 0% | 21s | A 0.0/10 up, 1.9 dead | B 8.5/10 up, 0.0 dead |
+| 1 Commissar vs 3 Ork Boy @10yd | A 1% B 99% timeout 0% mutual 0% | 4s | A 0.0/1 up, 0.3 dead | B 2.9/3 up, 0.0 dead |
+| 1 Inquisitor vs 2 Genestealer @10yd | A 19% B 79% timeout 0% mutual 2% | 3s | A 0.2/1 up, 0.4 dead | B 1.5/2 up, 0.0 dead |
+| 5 Adepta Sororitas Battle Sister vs 10 Wych @20yd | A 98% B 2% timeout 0% mutual 0% | 6s | A 4.5/5 up, 0.0 dead | B 0.1/10 up, 4.2 dead |
 | 10 Militarum Tempestus Scion vs 10 Kabalite Warrior @80yd | A 100% B 0% timeout 0% mutual 0% | 3s | A 10.0/10 up, 0.0 dead | B 0.0/10 up, 5.7 dead |
-| 5 Astartes Scout vs 10 Kroot Carnivore @80yd | A 1% B 99% timeout 0% mutual 0% | 15s | A 0.0/5 up, 0.0 dead | B 8.5/10 up, 0.6 dead |
+| 5 Astartes Scout vs 10 Kroot Carnivore @80yd | A 0% B 100% timeout 0% mutual 0% | 14s | A 0.0/5 up, 0.0 dead | B 8.7/10 up, 0.5 dead |
 | 5 Astartes Battle-Brother vs 5 Aspect Warrior @40yd | A 100% B 0% timeout 0% mutual 0% | 7s | A 5.0/5 up, 0.0 dead | B 0.0/5 up, 2.4 dead |
-| 5 Astartes Battle-Brother vs 5 Incubus @30yd | A 92% B 8% timeout 0% mutual 0% | 7s | A 3.6/5 up, 0.3 dead | B 0.2/5 up, 0.8 dead |
-| 5 Astartes Battle-Brother vs 10 Flayed One @30yd | A 100% B 0% timeout 0% mutual 0% | 28s | A 4.5/5 up, 0.0 dead | B 0.0/10 up, 0.6 dead |
-| 1 Shield-Captain vs 1 Necron Overlord @10yd | A 99% B 1% timeout 0% mutual 0% | 16s | A 1.0/1 up, 0.0 dead | B 0.0/1 up, 0.3 dead |
-| 1 Custodian Guardian vs 3 Lychguard @10yd | A 98% B 1% timeout 0% mutual 0% | 13s | A 1.0/1 up, 0.0 dead | B 0.0/3 up, 1.0 dead |
-| 5 Sister of Silence vs 5 Aspect Warrior @15yd | A 60% B 39% timeout 0% mutual 1% | 7s | A 1.7/5 up, 0.4 dead | B 1.1/5 up, 1.5 dead |
-| 10 Skitarii Vanguard vs 15 Ork Boy @40yd | A 100% B 0% timeout 0% mutual 0% | 12s | A 9.8/10 up, 0.0 dead | B 0.0/15 up, 4.1 dead |
-| 10 Electro-Priest vs 10 Ork Boy @15yd | A 87% B 11% timeout 0% mutual 1% | 15s | A 4.9/10 up, 1.1 dead | B 0.6/10 up, 0.3 dead |
-| 5 Sicarian Ruststalker vs 5 Wych @15yd | A 33% B 59% timeout 0% mutual 8% | 4s | A 1.0/5 up, 0.0 dead | B 2.1/5 up, 0.2 dead |
-| 5 Ork Nob vs 5 Aspect Warrior @15yd | A 62% B 38% timeout 0% mutual 0% | 13s | A 1.9/5 up, 0.1 dead | B 1.1/5 up, 0.5 dead |
-| 3 Ork Meganob vs 1 Custodian Guardian @15yd | A 0% B 100% timeout 0% mutual 0% | 6s | A 0.0/3 up, 0.0 dead | B 1.0/1 up, 0.0 dead |
+| 5 Astartes Battle-Brother vs 5 Incubus @30yd | A 92% B 8% timeout 0% mutual 0% | 7s | A 3.6/5 up, 0.3 dead | B 0.2/5 up, 1.1 dead |
+| 5 Astartes Battle-Brother vs 10 Flayed One @30yd | A 99% B 1% timeout 0% mutual 0% | 28s | A 4.5/5 up, 0.0 dead | B 0.0/10 up, 0.5 dead |
+| 1 Shield-Captain vs 1 Necron Overlord @10yd | A 100% B 0% timeout 0% mutual 0% | 16s | A 1.0/1 up, 0.0 dead | B 0.0/1 up, 0.3 dead |
+| 1 Custodian Guardian vs 3 Lychguard @10yd | A 99% B 1% timeout 0% mutual 0% | 9s | A 1.0/1 up, 0.0 dead | B 0.0/3 up, 0.9 dead |
+| 5 Sister of Silence vs 5 Aspect Warrior @15yd | A 55% B 41% timeout 0% mutual 4% | 7s | A 1.6/5 up, 0.4 dead | B 1.2/5 up, 1.6 dead |
+| 10 Skitarii Vanguard vs 15 Ork Boy @40yd | A 100% B 0% timeout 0% mutual 0% | 11s | A 9.9/10 up, 0.0 dead | B 0.0/15 up, 4.4 dead |
+| 10 Electro-Priest vs 10 Ork Boy @15yd | A 88% B 12% timeout 0% mutual 0% | 13s | A 5.3/10 up, 1.1 dead | B 0.5/10 up, 0.4 dead |
+| 5 Sicarian Ruststalker vs 5 Wych @15yd | A 33% B 60% timeout 0% mutual 7% | 3s | A 1.1/5 up, 0.0 dead | B 2.1/5 up, 0.2 dead |
+| 5 Ork Nob vs 5 Aspect Warrior @15yd | A 59% B 41% timeout 0% mutual 0% | 14s | A 1.7/5 up, 0.1 dead | B 1.2/5 up, 0.5 dead |
+| 3 Ork Meganob vs 1 Custodian Guardian @15yd | A 1% B 99% timeout 0% mutual 0% | 6s | A 0.0/3 up, 0.1 dead | B 1.0/1 up, 0.0 dead |
 | 1 Ork Warboss vs 1 Tyranid Warrior @10yd | A 100% B 0% timeout 0% mutual 0% | 3s | A 1.0/1 up, 0.0 dead | B 0.0/1 up, 0.0 dead |
 | 1 Ork Weirdboy vs 5 Astra Militarum Guardsman @20yd | A 0% B 100% timeout 0% mutual 0% | 2s | A 0.0/1 up, 0.5 dead | B 5.0/5 up, 0.0 dead |
-| 20 Gretchin vs 5 Astra Militarum Guardsman @40yd | A 0% B 100% timeout 0% mutual 0% | 10s | A 0.0/20 up, 6.8 dead | B 5.0/5 up, 0.0 dead |
-| 1 Lictor vs 5 Astra Militarum Guardsman @10yd | A 99% B 1% timeout 0% mutual 0% | 20s | A 1.0/1 up, 0.0 dead | B 0.0/5 up, 1.8 dead |
-| 3 Ravener vs 10 Astra Militarum Guardsman @20yd | A 100% B 0% timeout 0% mutual 0% | 18s | A 3.0/3 up, 0.0 dead | B 0.0/10 up, 2.6 dead |
-| 1 Zoanthrope vs 5 Astra Militarum Guardsman @60yd | A 0% B 100% timeout 0% mutual 0% | 4s | A 0.0/1 up, 0.3 dead | B 5.0/5 up, 0.0 dead |
-| 1 Necron Overlord vs 3 Astartes Battle-Brother @20yd | A 55% B 44% timeout 1% mutual 0% | 51s | A 0.6/1 up, 0.0 dead | B 1.2/3 up, 0.2 dead |
-| 5 Deathmark vs 10 Astra Militarum Guardsman @150yd | A 100% B 0% timeout 0% mutual 0% | 15s | A 5.0/5 up, 0.0 dead | B 0.0/10 up, 2.7 dead |
-| 1 Cryptek vs 5 Ork Boy @20yd | A 12% B 87% timeout 0% mutual 0% | 17s | A 0.1/1 up, 0.0 dead | B 3.5/5 up, 0.0 dead |
-| 1 Autarch vs 3 Ork Nob @15yd | A 72% B 28% timeout 0% mutual 0% | 20s | A 0.7/1 up, 0.0 dead | B 0.6/3 up, 0.2 dead |
-| 1 Farseer vs 5 Astra Militarum Guardsman @20yd | A 6% B 93% timeout 0% mutual 1% | 3s | A 0.1/1 up, 0.3 dead | B 3.7/5 up, 0.9 dead |
-| 5 Aeldari Ranger vs 10 Astra Militarum Guardsman @300yd | A 8% B 91% timeout 0% mutual 1% | 13s | A 0.2/5 up, 0.7 dead | B 6.8/10 up, 0.7 dead |
-| 1 Archon vs 2 Astartes Battle-Brother @15yd | A 4% B 96% timeout 0% mutual 0% | 4s | A 0.0/1 up, 0.4 dead | B 1.8/2 up, 0.0 dead |
-| 1 Succubus vs 2 Ork Nob @10yd | A 0% B 100% timeout 0% mutual 0% | 6s | A 0.0/1 up, 0.5 dead | B 2.0/2 up, 0.0 dead |
-| 5 Mandrake vs 10 Astra Militarum Guardsman @10yd | A 0% B 100% timeout 0% mutual 0% | 3s | A 0.0/5 up, 2.6 dead | B 8.9/10 up, 0.4 dead |
-| 5 Scourge vs 10 Fire Warrior (Shas'la) @100yd | A 0% B 100% timeout 0% mutual 0% | 4s | A 0.0/5 up, 3.7 dead | B 10.0/10 up, 0.0 dead |
-| 1 Commander (Shas'o) vs 3 Astartes Battle-Brother @60yd | A 38% B 62% timeout 0% mutual 0% | 47s | A 0.4/1 up, 0.0 dead | B 1.7/3 up, 0.2 dead |
-| 10 Pathfinder vs 10 Ork Boy @60yd | A 100% B 0% timeout 0% mutual 0% | 6s | A 10.0/10 up, 0.0 dead | B 0.0/10 up, 4.2 dead |
-| 5 Vespid Stingwing vs 3 Astartes Battle-Brother @40yd | A 0% B 100% timeout 0% mutual 0% | 6s | A 0.0/5 up, 2.9 dead | B 3.0/3 up, 0.0 dead |
-| 4 Gun Drone vs 5 Astra Militarum Guardsman @60yd | A 0% B 100% timeout 0% mutual 0% | 10s | A 0.0/4 up, 1.4 dead | B 4.8/5 up, 0.1 dead |
+| 20 Gretchin vs 5 Astra Militarum Guardsman @40yd | A 0% B 100% timeout 0% mutual 0% | 10s | A 0.0/20 up, 6.7 dead | B 5.0/5 up, 0.0 dead |
+| 1 Lictor vs 5 Astra Militarum Guardsman @10yd | A 98% B 2% timeout 0% mutual 0% | 20s | A 1.0/1 up, 0.0 dead | B 0.1/5 up, 1.8 dead |
+| 3 Ravener vs 10 Astra Militarum Guardsman @20yd | A 100% B 0% timeout 0% mutual 0% | 18s | A 3.0/3 up, 0.0 dead | B 0.0/10 up, 2.5 dead |
+| 1 Zoanthrope vs 5 Astra Militarum Guardsman @60yd | A 0% B 100% timeout 0% mutual 0% | 4s | A 0.0/1 up, 0.4 dead | B 5.0/5 up, 0.0 dead |
+| 1 Necron Overlord vs 3 Astartes Battle-Brother @20yd | A 54% B 44% timeout 2% mutual 0% | 66s | A 0.6/1 up, 0.0 dead | B 1.2/3 up, 0.2 dead |
+| 5 Deathmark vs 10 Astra Militarum Guardsman @150yd | A 100% B 0% timeout 0% mutual 0% | 15s | A 5.0/5 up, 0.0 dead | B 0.0/10 up, 2.6 dead |
+| 1 Cryptek vs 5 Ork Boy @20yd | A 13% B 86% timeout 1% mutual 0% | 26s | A 0.1/1 up, 0.0 dead | B 3.5/5 up, 0.0 dead |
+| 1 Autarch vs 3 Ork Nob @15yd | A 72% B 28% timeout 0% mutual 0% | 22s | A 0.7/1 up, 0.0 dead | B 0.5/3 up, 0.2 dead |
+| 1 Farseer vs 5 Astra Militarum Guardsman @20yd | A 9% B 89% timeout 0% mutual 1% | 3s | A 0.1/1 up, 0.2 dead | B 3.5/5 up, 1.2 dead |
+| 5 Aeldari Ranger vs 10 Astra Militarum Guardsman @300yd | A 8% B 92% timeout 0% mutual 0% | 13s | A 0.2/5 up, 0.8 dead | B 7.1/10 up, 0.7 dead |
+| 1 Archon vs 2 Astartes Battle-Brother @15yd | A 5% B 95% timeout 0% mutual 0% | 4s | A 0.1/1 up, 0.4 dead | B 1.8/2 up, 0.0 dead |
+| 1 Succubus vs 2 Ork Nob @10yd | A 1% B 99% timeout 0% mutual 0% | 6s | A 0.0/1 up, 0.5 dead | B 2.0/2 up, 0.0 dead |
+| 5 Mandrake vs 10 Astra Militarum Guardsman @10yd | A 0% B 100% timeout 0% mutual 0% | 3s | A 0.0/5 up, 2.6 dead | B 9.1/10 up, 0.3 dead |
+| 5 Scourge vs 10 Fire Warrior (Shas'la) @100yd | A 0% B 100% timeout 0% mutual 0% | 4s | A 0.0/5 up, 3.8 dead | B 10.0/10 up, 0.0 dead |
+| 1 Commander (Shas'o) vs 3 Astartes Battle-Brother @60yd | A 12% B 88% timeout 0% mutual 0% | 30s | A 0.1/1 up, 0.0 dead | B 2.2/3 up, 0.1 dead |
+| 10 Pathfinder vs 10 Ork Boy @60yd | A 100% B 0% timeout 0% mutual 0% | 7s | A 10.0/10 up, 0.0 dead | B 0.0/10 up, 4.4 dead |
+| 5 Vespid Stingwing vs 3 Astartes Battle-Brother @40yd | A 0% B 100% timeout 0% mutual 0% | 6s | A 0.0/5 up, 3.0 dead | B 3.0/3 up, 0.0 dead |
+| 4 Gun Drone vs 5 Astra Militarum Guardsman @60yd | A 0% B 100% timeout 0% mutual 0% | 10s | A 0.0/4 up, 1.3 dead | B 4.8/5 up, 0.1 dead |
 
 ## Standard GURPS HP, everyone aims (RAW)
 
@@ -261,89 +261,89 @@ The user's wound rules: no HP pool; five boxes per level per location; a hit mar
 
 | Fight | Result | Length | Side A | Side B |
 |---|---|---|---|---|
-| 10 Astra Militarum Guardsman vs 10 Ork Boy @15yd | A 37% B 61% timeout 0% mutual 2% | 9s | A 2.4/10 up, 0.4 dead | B 3.8/10 up, 0.2 dead |
-| 20 Astra Militarum Guardsman vs 20 Ork Boy @40yd | A 21% B 76% timeout 0% mutual 3% | 11s | A 1.7/20 up, 2.0 dead | B 9.4/20 up, 0.2 dead |
-| 10 Ork Boy vs 5 Astartes Battle-Brother @10yd | A 0% B 100% timeout 0% mutual 0% | 7s | A 0.0/10 up, 0.5 dead | B 5.0/5 up, 0.0 dead |
-| 5 Ork Nob vs 5 Astartes Battle-Brother @10yd | A 0% B 100% timeout 0% mutual 0% | 8s | A 0.0/5 up, 0.2 dead | B 5.0/5 up, 0.0 dead |
-| 1 Ork Warboss vs 3 Astartes Battle-Brother @10yd | A 0% B 100% timeout 0% mutual 0% | 4s | A 0.0/1 up, 0.1 dead | B 2.9/3 up, 0.1 dead |
-| 3 Ork Meganob vs 5 Astartes Battle-Brother @15yd | A 0% B 100% timeout 0% mutual 0% | 9s | A 0.0/3 up, 0.7 dead | B 4.8/5 up, 0.0 dead |
+| 10 Astra Militarum Guardsman vs 10 Ork Boy @15yd | A 48% B 51% timeout 0% mutual 1% | 9s | A 3.1/10 up, 0.5 dead | B 3.1/10 up, 0.2 dead |
+| 20 Astra Militarum Guardsman vs 20 Ork Boy @40yd | A 35% B 62% timeout 0% mutual 2% | 12s | A 3.2/20 up, 1.7 dead | B 7.5/20 up, 0.3 dead |
+| 10 Ork Boy vs 5 Astartes Battle-Brother @10yd | A 0% B 100% timeout 0% mutual 0% | 7s | A 0.0/10 up, 0.7 dead | B 5.0/5 up, 0.0 dead |
+| 5 Ork Nob vs 5 Astartes Battle-Brother @10yd | A 0% B 100% timeout 0% mutual 0% | 8s | A 0.0/5 up, 0.1 dead | B 5.0/5 up, 0.0 dead |
+| 1 Ork Warboss vs 3 Astartes Battle-Brother @10yd | A 0% B 100% timeout 0% mutual 0% | 5s | A 0.0/1 up, 0.1 dead | B 2.8/3 up, 0.1 dead |
+| 3 Ork Meganob vs 5 Astartes Battle-Brother @15yd | A 59% B 41% timeout 0% mutual 0% | 36s | A 1.5/3 up, 0.1 dead | B 1.7/5 up, 0.4 dead |
 | 5 Genestealer vs 5 Astartes Battle-Brother @10yd | A 0% B 100% timeout 0% mutual 0% | 3s | A 0.0/5 up, 0.0 dead | B 5.0/5 up, 0.0 dead |
-| 10 Genestealer vs 20 Astra Militarum Guardsman @30yd | A 100% B 0% timeout 0% mutual 0% | 5s | A 9.8/10 up, 0.0 dead | B 0.0/20 up, 0.7 dead |
-| 20 Hormagaunt vs 10 Astra Militarum Guardsman @20yd | A 18% B 80% timeout 0% mutual 3% | 5s | A 1.8/20 up, 0.2 dead | B 6.1/10 up, 0.2 dead |
-| 1 Carnifex vs 5 Astartes Battle-Brother @10yd | A 100% B 0% timeout 0% mutual 0% | 281s | A 1.0/1 up, 0.0 dead | B 0.0/5 up, 0.8 dead |
-| 1 Hive Tyrant vs 5 Astartes Battle-Brother @30yd | A 98% B 2% timeout 0% mutual 0% | 388s | A 1.0/1 up, 0.0 dead | B 0.1/5 up, 0.7 dead |
+| 10 Genestealer vs 20 Astra Militarum Guardsman @30yd | A 100% B 0% timeout 0% mutual 0% | 5s | A 9.7/10 up, 0.0 dead | B 0.0/20 up, 0.7 dead |
+| 20 Hormagaunt vs 10 Astra Militarum Guardsman @20yd | A 12% B 85% timeout 0% mutual 4% | 5s | A 1.3/20 up, 0.2 dead | B 6.5/10 up, 0.3 dead |
+| 1 Carnifex vs 5 Astartes Battle-Brother @10yd | A 100% B 0% timeout 0% mutual 0% | 281s | A 1.0/1 up, 0.0 dead | B 0.0/5 up, 0.7 dead |
+| 1 Hive Tyrant vs 5 Astartes Battle-Brother @30yd | A 99% B 1% timeout 0% mutual 0% | 436s | A 1.0/1 up, 0.0 dead | B 0.0/5 up, 0.6 dead |
 | 3 Tyranid Warrior vs 5 Astartes Battle-Brother @30yd | A 0% B 100% timeout 0% mutual 0% | 6s | A 0.0/3 up, 0.2 dead | B 5.0/5 up, 0.0 dead |
-| 5 Astartes Battle-Brother vs 10 Necron Warrior @60yd | A 100% B 0% timeout 0% mutual 0% | 61s | A 4.9/5 up, 0.1 dead | B 0.0/10 up, 0.2 dead |
-| 5 Necron Immortal vs 5 Astartes Battle-Brother @60yd | A 0% B 100% timeout 0% mutual 0% | 85s | A 0.0/5 up, 0.4 dead | B 4.5/5 up, 0.2 dead |
-| 5 Lychguard vs 5 Astartes Battle-Brother @10yd | A 100% B 0% timeout 0% mutual 0% | 19s | A 4.7/5 up, 0.0 dead | B 0.0/5 up, 0.7 dead |
-| 10 Flayed One vs 10 Astra Militarum Guardsman @20yd | A 100% B 0% timeout 0% mutual 0% | 8s | A 9.9/10 up, 0.0 dead | B 0.0/10 up, 0.6 dead |
-| 3 Skorpekh Destroyer vs 5 Astartes Battle-Brother @15yd | A 98% B 1% timeout 0% mutual 0% | 70s | A 2.8/3 up, 0.0 dead | B 0.1/5 up, 0.8 dead |
-| 5 Aspect Warrior vs 10 Ork Boy @15yd | A 44% B 56% timeout 0% mutual 0% | 11s | A 1.6/5 up, 0.1 dead | B 3.9/10 up, 0.8 dead |
-| 1 Exarch vs 2 Astartes Battle-Brother @10yd | A 1% B 99% timeout 0% mutual 0% | 4s | A 0.0/1 up, 0.1 dead | B 1.9/2 up, 0.1 dead |
-| 10 Aeldari Guardian vs 10 Astra Militarum Guardsman @50yd | A 85% B 13% timeout 0% mutual 3% | 5s | A 5.7/10 up, 0.0 dead | B 0.5/10 up, 0.5 dead |
-| 10 Wych vs 10 Ork Boy @15yd | A 23% B 73% timeout 0% mutual 4% | 5s | A 1.2/10 up, 0.2 dead | B 5.1/10 up, 0.3 dead |
-| 5 Incubus vs 5 Astartes Battle-Brother @10yd | A 14% B 86% timeout 0% mutual 0% | 5s | A 0.4/5 up, 1.7 dead | B 3.5/5 up, 1.0 dead |
-| 10 Kabalite Warrior vs 10 Fire Warrior (Shas'la) @100yd | A 0% B 100% timeout 0% mutual 0% | 8s | A 0.0/10 up, 0.0 dead | B 8.0/10 up, 0.0 dead |
-| 10 Fire Warrior (Shas'la) vs 5 Astartes Battle-Brother @150yd | A 5% B 95% timeout 0% mutual 0% | 32s | A 0.3/10 up, 0.0 dead | B 4.5/5 up, 0.0 dead |
+| 5 Astartes Battle-Brother vs 10 Necron Warrior @60yd | A 100% B 0% timeout 0% mutual 0% | 61s | A 5.0/5 up, 0.0 dead | B 0.0/10 up, 0.2 dead |
+| 5 Necron Immortal vs 5 Astartes Battle-Brother @60yd | A 0% B 100% timeout 0% mutual 0% | 80s | A 0.0/5 up, 0.4 dead | B 4.8/5 up, 0.1 dead |
+| 5 Lychguard vs 5 Astartes Battle-Brother @10yd | A 100% B 0% timeout 0% mutual 0% | 19s | A 4.8/5 up, 0.0 dead | B 0.0/5 up, 0.6 dead |
+| 10 Flayed One vs 10 Astra Militarum Guardsman @20yd | A 100% B 0% timeout 0% mutual 0% | 8s | A 9.9/10 up, 0.0 dead | B 0.0/10 up, 0.7 dead |
+| 3 Skorpekh Destroyer vs 5 Astartes Battle-Brother @15yd | A 95% B 5% timeout 0% mutual 0% | 66s | A 2.7/3 up, 0.0 dead | B 0.2/5 up, 0.7 dead |
+| 5 Aspect Warrior vs 10 Ork Boy @15yd | A 54% B 45% timeout 0% mutual 0% | 15s | A 2.0/5 up, 0.0 dead | B 3.1/10 up, 1.0 dead |
+| 1 Exarch vs 2 Astartes Battle-Brother @10yd | A 4% B 96% timeout 0% mutual 0% | 4s | A 0.0/1 up, 0.1 dead | B 1.9/2 up, 0.1 dead |
+| 10 Aeldari Guardian vs 10 Astra Militarum Guardsman @50yd | A 89% B 8% timeout 0% mutual 3% | 5s | A 5.9/10 up, 0.0 dead | B 0.3/10 up, 0.6 dead |
+| 10 Wych vs 10 Ork Boy @15yd | A 22% B 73% timeout 0% mutual 5% | 5s | A 1.2/10 up, 0.3 dead | B 4.8/10 up, 0.3 dead |
+| 5 Incubus vs 5 Astartes Battle-Brother @10yd | A 14% B 86% timeout 0% mutual 0% | 5s | A 0.4/5 up, 0.4 dead | B 3.6/5 up, 0.9 dead |
+| 10 Kabalite Warrior vs 10 Fire Warrior (Shas'la) @100yd | A 1% B 99% timeout 0% mutual 0% | 8s | A 0.0/10 up, 0.0 dead | B 8.0/10 up, 0.0 dead |
+| 10 Fire Warrior (Shas'la) vs 5 Astartes Battle-Brother @150yd | A 5% B 95% timeout 0% mutual 0% | 33s | A 0.2/10 up, 0.0 dead | B 4.5/5 up, 0.0 dead |
 | 3 Battlesuit Pilot (Shas'vre) vs 20 Ork Boy @60yd | A 100% B 0% timeout 0% mutual 0% | 14s | A 3.0/3 up, 0.0 dead | B 0.0/20 up, 0.0 dead |
-| 10 Kroot Carnivore vs 10 Astra Militarum Guardsman @30yd | A 0% B 100% timeout 0% mutual 0% | 3s | A 0.0/10 up, 0.4 dead | B 9.2/10 up, 0.0 dead |
-| 3 Custodian Guardian vs 10 Astartes Battle-Brother @20yd | A 75% B 25% timeout 0% mutual 0% | 20s | A 1.8/3 up, 1.1 dead | B 1.3/10 up, 1.6 dead |
-| 5 Sister of Silence vs 10 Astra Militarum Guardsman @20yd | A 12% B 88% timeout 0% mutual 0% | 13s | A 0.4/5 up, 0.4 dead | B 7.2/10 up, 0.2 dead |
-| 10 Adepta Sororitas Battle Sister vs 15 Ork Boy @30yd | A 100% B 0% timeout 0% mutual 0% | 9s | A 9.4/10 up, 0.0 dead | B 0.0/15 up, 0.1 dead |
-| 10 Militarum Tempestus Scion vs 3 Astartes Battle-Brother @60yd | A 100% B 0% timeout 0% mutual 0% | 8s | A 9.4/10 up, 0.0 dead | B 0.0/3 up, 1.3 dead |
-| 5 Primaris Battle-Brother vs 5 Astartes Battle-Brother @60yd | A 69% B 31% timeout 0% mutual 0% | 111s | A 2.9/5 up, 1.2 dead | B 1.4/5 up, 1.4 dead |
-| 5 Sicarian Ruststalker vs 10 Astra Militarum Guardsman @15yd | A 7% B 92% timeout 0% mutual 1% | 7s | A 0.2/5 up, 0.2 dead | B 7.3/10 up, 1.0 dead |
+| 10 Kroot Carnivore vs 10 Astra Militarum Guardsman @30yd | A 0% B 100% timeout 0% mutual 0% | 3s | A 0.0/10 up, 0.3 dead | B 9.3/10 up, 0.0 dead |
+| 3 Custodian Guardian vs 10 Astartes Battle-Brother @20yd | A 94% B 6% timeout 0% mutual 0% | 17s | A 2.6/3 up, 0.3 dead | B 0.3/10 up, 0.8 dead |
+| 5 Sister of Silence vs 10 Astra Militarum Guardsman @20yd | A 13% B 87% timeout 0% mutual 0% | 15s | A 0.4/5 up, 0.1 dead | B 7.2/10 up, 0.1 dead |
+| 10 Adepta Sororitas Battle Sister vs 15 Ork Boy @30yd | A 100% B 0% timeout 0% mutual 0% | 8s | A 9.7/10 up, 0.0 dead | B 0.0/15 up, 0.0 dead |
+| 10 Militarum Tempestus Scion vs 3 Astartes Battle-Brother @60yd | A 100% B 0% timeout 0% mutual 0% | 8s | A 9.4/10 up, 0.0 dead | B 0.0/3 up, 0.4 dead |
+| 5 Primaris Battle-Brother vs 5 Astartes Battle-Brother @60yd | A 93% B 7% timeout 0% mutual 0% | 126s | A 3.9/5 up, 0.3 dead | B 0.2/5 up, 1.9 dead |
+| 5 Sicarian Ruststalker vs 10 Astra Militarum Guardsman @15yd | A 8% B 92% timeout 0% mutual 0% | 6s | A 0.3/5 up, 0.1 dead | B 7.5/10 up, 1.0 dead |
 | 10 Skitarii Ranger vs 10 Aeldari Guardian @100yd | A 100% B 0% timeout 0% mutual 0% | 7s | A 10.0/10 up, 0.0 dead | B 0.0/10 up, 0.1 dead |
-| 50 Ork Boy vs 5 Astartes Battle-Brother @30yd | A 0% B 100% timeout 0% mutual 0% | 42s | A 0.0/50 up, 2.1 dead | B 5.0/5 up, 0.0 dead |
-| 30 Ork Boy vs 5 Astartes Battle-Brother @30yd | A 0% B 100% timeout 0% mutual 0% | 29s | A 0.0/30 up, 1.8 dead | B 5.0/5 up, 0.0 dead |
-| 20 Ork Boy vs 5 Astartes Battle-Brother @30yd | A 0% B 100% timeout 0% mutual 0% | 22s | A 0.0/20 up, 1.1 dead | B 5.0/5 up, 0.0 dead |
+| 50 Ork Boy vs 5 Astartes Battle-Brother @30yd | A 0% B 100% timeout 0% mutual 0% | 41s | A 0.0/50 up, 2.1 dead | B 5.0/5 up, 0.0 dead |
+| 30 Ork Boy vs 5 Astartes Battle-Brother @30yd | A 0% B 100% timeout 0% mutual 0% | 30s | A 0.0/30 up, 1.7 dead | B 5.0/5 up, 0.0 dead |
+| 20 Ork Boy vs 5 Astartes Battle-Brother @30yd | A 0% B 100% timeout 0% mutual 0% | 23s | A 0.0/20 up, 1.0 dead | B 5.0/5 up, 0.0 dead |
 | 1 Sanctioned Psyker vs 5 Astra Militarum Guardsman @20yd | A 0% B 100% timeout 0% mutual 0% | 2s | A 0.0/1 up, 0.1 dead | B 5.0/5 up, 0.0 dead |
 | 1 Sanctioned Psyker vs 1 Astartes Battle-Brother @20yd | A 0% B 100% timeout 0% mutual 0% | 3s | A 0.0/1 up, 0.0 dead | B 1.0/1 up, 0.0 dead |
 | 1 Warlock vs 5 Astra Militarum Guardsman @20yd | A 0% B 100% timeout 0% mutual 0% | 2s | A 0.0/1 up, 0.0 dead | B 5.0/5 up, 0.0 dead |
 | 1 Farseer vs 3 Astartes Battle-Brother @20yd | A 0% B 100% timeout 0% mutual 0% | 3s | A 0.0/1 up, 0.0 dead | B 3.0/3 up, 0.0 dead |
 | 1 Ork Weirdboy vs 1 Astartes Battle-Brother @20yd | A 0% B 100% timeout 0% mutual 0% | 8s | A 0.0/1 up, 0.0 dead | B 1.0/1 up, 0.0 dead |
 | 1 Zoanthrope vs 3 Astartes Battle-Brother @60yd | A 0% B 100% timeout 0% mutual 0% | 6s | A 0.0/1 up, 0.0 dead | B 3.0/3 up, 0.0 dead |
-| 1 Zoanthrope vs 1 Carnifex @40yd | A 0% B 100% timeout 0% mutual 0% | 17s | A 0.0/1 up, 0.1 dead | B 1.0/1 up, 0.0 dead |
-| 1 Farseer vs 3 Sister of Silence @20yd | A 84% B 16% timeout 0% mutual 0% | 14s | A 0.8/1 up, 0.0 dead | B 0.2/3 up, 0.5 dead |
-| 10 Astra Militarum Guardsman vs 10 Kabalite Warrior @100yd | A 17% B 82% timeout 0% mutual 2% | 8s | A 0.8/10 up, 0.0 dead | B 5.8/10 up, 0.0 dead |
+| 1 Zoanthrope vs 1 Carnifex @40yd | A 1% B 99% timeout 0% mutual 0% | 19s | A 0.0/1 up, 0.1 dead | B 1.0/1 up, 0.0 dead |
+| 1 Farseer vs 3 Sister of Silence @20yd | A 84% B 16% timeout 0% mutual 0% | 15s | A 0.8/1 up, 0.0 dead | B 0.2/3 up, 0.4 dead |
+| 10 Astra Militarum Guardsman vs 10 Kabalite Warrior @100yd | A 14% B 85% timeout 0% mutual 1% | 9s | A 0.7/10 up, 0.0 dead | B 5.8/10 up, 0.0 dead |
 | 10 Astra Militarum Guardsman vs 10 Fire Warrior (Shas'la) @150yd | A 0% B 100% timeout 0% mutual 0% | 8s | A 0.0/10 up, 0.0 dead | B 9.1/10 up, 0.0 dead |
-| 10 Astra Militarum Guardsman vs 10 Skitarii Ranger @100yd | A 0% B 100% timeout 0% mutual 0% | 7s | A 0.0/10 up, 0.1 dead | B 9.6/10 up, 0.0 dead |
-| 30 Astra Militarum Guardsman vs 5 Genestealer @30yd | A 2% B 98% timeout 0% mutual 0% | 10s | A 0.2/30 up, 1.3 dead | B 4.2/5 up, 0.1 dead |
-| 20 Astra Militarum Guardsman vs 20 Termagant @60yd | A 100% B 0% timeout 0% mutual 0% | 10s | A 19.1/20 up, 0.1 dead | B 0.0/20 up, 0.2 dead |
-| 10 Astra Militarum Guardsman vs 10 Necron Warrior @60yd | A 0% B 100% timeout 0% mutual 0% | 18s | A 0.0/10 up, 0.3 dead | B 9.9/10 up, 0.0 dead |
-| 1 Commissar vs 3 Ork Boy @10yd | A 1% B 99% timeout 0% mutual 0% | 3s | A 0.0/1 up, 0.1 dead | B 2.7/3 up, 0.0 dead |
-| 1 Inquisitor vs 2 Genestealer @10yd | A 21% B 78% timeout 0% mutual 0% | 3s | A 0.2/1 up, 0.1 dead | B 1.4/2 up, 0.0 dead |
-| 5 Adepta Sororitas Battle Sister vs 10 Wych @20yd | A 97% B 3% timeout 0% mutual 0% | 4s | A 4.6/5 up, 0.0 dead | B 0.3/10 up, 1.1 dead |
+| 10 Astra Militarum Guardsman vs 10 Skitarii Ranger @100yd | A 0% B 100% timeout 0% mutual 0% | 7s | A 0.0/10 up, 0.1 dead | B 9.7/10 up, 0.0 dead |
+| 30 Astra Militarum Guardsman vs 5 Genestealer @30yd | A 17% B 82% timeout 0% mutual 1% | 11s | A 2.3/30 up, 1.3 dead | B 3.3/5 up, 0.1 dead |
+| 20 Astra Militarum Guardsman vs 20 Termagant @60yd | A 100% B 0% timeout 0% mutual 0% | 8s | A 19.9/20 up, 0.0 dead | B 0.0/20 up, 0.3 dead |
+| 10 Astra Militarum Guardsman vs 10 Necron Warrior @60yd | A 0% B 100% timeout 0% mutual 0% | 19s | A 0.0/10 up, 0.3 dead | B 9.9/10 up, 0.0 dead |
+| 1 Commissar vs 3 Ork Boy @10yd | A 1% B 99% timeout 0% mutual 0% | 3s | A 0.0/1 up, 0.1 dead | B 2.8/3 up, 0.0 dead |
+| 1 Inquisitor vs 2 Genestealer @10yd | A 16% B 84% timeout 0% mutual 0% | 3s | A 0.2/1 up, 0.0 dead | B 1.5/2 up, 0.0 dead |
+| 5 Adepta Sororitas Battle Sister vs 10 Wych @20yd | A 95% B 5% timeout 0% mutual 0% | 4s | A 4.5/5 up, 0.0 dead | B 0.4/10 up, 1.1 dead |
 | 10 Militarum Tempestus Scion vs 10 Kabalite Warrior @80yd | A 100% B 0% timeout 0% mutual 0% | 3s | A 10.0/10 up, 0.0 dead | B 0.0/10 up, 0.0 dead |
-| 5 Astartes Scout vs 10 Kroot Carnivore @80yd | A 6% B 94% timeout 0% mutual 1% | 17s | A 0.2/5 up, 0.0 dead | B 7.5/10 up, 0.1 dead |
+| 5 Astartes Scout vs 10 Kroot Carnivore @80yd | A 7% B 92% timeout 0% mutual 1% | 17s | A 0.3/5 up, 0.0 dead | B 7.4/10 up, 0.1 dead |
 | 5 Astartes Battle-Brother vs 5 Aspect Warrior @40yd | A 100% B 0% timeout 0% mutual 0% | 5s | A 5.0/5 up, 0.0 dead | B 0.0/5 up, 0.0 dead |
-| 5 Astartes Battle-Brother vs 5 Incubus @30yd | A 91% B 9% timeout 0% mutual 0% | 7s | A 3.8/5 up, 0.8 dead | B 0.3/5 up, 1.4 dead |
-| 5 Astartes Battle-Brother vs 10 Flayed One @30yd | A 93% B 7% timeout 0% mutual 0% | 46s | A 4.1/5 up, 0.4 dead | B 0.5/10 up, 0.0 dead |
+| 5 Astartes Battle-Brother vs 5 Incubus @30yd | A 90% B 10% timeout 0% mutual 0% | 7s | A 3.8/5 up, 0.8 dead | B 0.3/5 up, 0.4 dead |
+| 5 Astartes Battle-Brother vs 10 Flayed One @30yd | A 94% B 6% timeout 0% mutual 0% | 46s | A 4.3/5 up, 0.3 dead | B 0.4/10 up, 0.0 dead |
 | 1 Shield-Captain vs 1 Necron Overlord @10yd | A 99% B 0% timeout 1% mutual 0% | 27s | A 1.0/1 up, 0.0 dead | B 0.0/1 up, 0.0 dead |
-| 1 Custodian Guardian vs 3 Lychguard @10yd | A 91% B 0% timeout 9% mutual 0% | 120s | A 1.0/1 up, 0.0 dead | B 0.2/3 up, 0.1 dead |
-| 5 Sister of Silence vs 5 Aspect Warrior @15yd | A 92% B 8% timeout 0% mutual 0% | 6s | A 3.3/5 up, 0.4 dead | B 0.3/5 up, 1.4 dead |
+| 1 Custodian Guardian vs 3 Lychguard @10yd | A 93% B 0% timeout 7% mutual 0% | 96s | A 1.0/1 up, 0.0 dead | B 0.1/3 up, 0.0 dead |
+| 5 Sister of Silence vs 5 Aspect Warrior @15yd | A 88% B 11% timeout 0% mutual 1% | 6s | A 3.1/5 up, 0.4 dead | B 0.3/5 up, 1.4 dead |
 | 10 Skitarii Vanguard vs 15 Ork Boy @40yd | A 100% B 0% timeout 0% mutual 0% | 6s | A 10.0/10 up, 0.0 dead | B 0.0/15 up, 0.0 dead |
-| 10 Electro-Priest vs 10 Ork Boy @15yd | A 16% B 84% timeout 0% mutual 0% | 18s | A 0.9/10 up, 0.8 dead | B 6.6/10 up, 0.1 dead |
-| 5 Sicarian Ruststalker vs 5 Wych @15yd | A 28% B 67% timeout 0% mutual 5% | 4s | A 0.9/5 up, 0.0 dead | B 2.3/5 up, 0.3 dead |
-| 5 Ork Nob vs 5 Aspect Warrior @15yd | A 77% B 22% timeout 0% mutual 1% | 11s | A 3.1/5 up, 0.3 dead | B 0.7/5 up, 0.1 dead |
-| 3 Ork Meganob vs 1 Custodian Guardian @15yd | A 0% B 100% timeout 0% mutual 0% | 7s | A 0.0/3 up, 1.1 dead | B 1.0/1 up, 0.0 dead |
-| 1 Ork Warboss vs 1 Tyranid Warrior @10yd | A 100% B 0% timeout 0% mutual 0% | 3s | A 1.0/1 up, 0.0 dead | B 0.0/1 up, 0.6 dead |
-| 1 Ork Weirdboy vs 5 Astra Militarum Guardsman @20yd | A 0% B 100% timeout 0% mutual 0% | 3s | A 0.0/1 up, 0.1 dead | B 5.0/5 up, 0.0 dead |
-| 20 Gretchin vs 5 Astra Militarum Guardsman @40yd | A 0% B 100% timeout 0% mutual 0% | 9s | A 0.0/20 up, 0.5 dead | B 5.0/5 up, 0.0 dead |
-| 1 Lictor vs 5 Astra Militarum Guardsman @10yd | A 100% B 0% timeout 0% mutual 0% | 24s | A 1.0/1 up, 0.0 dead | B 0.0/5 up, 0.9 dead |
-| 3 Ravener vs 10 Astra Militarum Guardsman @20yd | A 100% B 0% timeout 0% mutual 0% | 15s | A 3.0/3 up, 0.0 dead | B 0.0/10 up, 0.4 dead |
+| 10 Electro-Priest vs 10 Ork Boy @15yd | A 14% B 86% timeout 0% mutual 0% | 17s | A 0.7/10 up, 0.7 dead | B 6.8/10 up, 0.2 dead |
+| 5 Sicarian Ruststalker vs 5 Wych @15yd | A 21% B 76% timeout 0% mutual 3% | 4s | A 0.6/5 up, 0.0 dead | B 2.8/5 up, 0.2 dead |
+| 5 Ork Nob vs 5 Aspect Warrior @15yd | A 80% B 20% timeout 0% mutual 0% | 11s | A 3.1/5 up, 0.3 dead | B 0.7/5 up, 0.1 dead |
+| 3 Ork Meganob vs 1 Custodian Guardian @15yd | A 1% B 99% timeout 0% mutual 0% | 8s | A 0.0/3 up, 0.9 dead | B 1.0/1 up, 0.0 dead |
+| 1 Ork Warboss vs 1 Tyranid Warrior @10yd | A 99% B 0% timeout 1% mutual 0% | 11s | A 1.0/1 up, 0.0 dead | B 0.0/1 up, 0.6 dead |
+| 1 Ork Weirdboy vs 5 Astra Militarum Guardsman @20yd | A 0% B 100% timeout 0% mutual 0% | 3s | A 0.0/1 up, 0.0 dead | B 5.0/5 up, 0.0 dead |
+| 20 Gretchin vs 5 Astra Militarum Guardsman @40yd | A 0% B 100% timeout 0% mutual 0% | 9s | A 0.0/20 up, 0.5 dead | B 4.9/5 up, 0.0 dead |
+| 1 Lictor vs 5 Astra Militarum Guardsman @10yd | A 100% B 0% timeout 0% mutual 0% | 24s | A 1.0/1 up, 0.0 dead | B 0.0/5 up, 1.0 dead |
+| 3 Ravener vs 10 Astra Militarum Guardsman @20yd | A 100% B 0% timeout 0% mutual 0% | 16s | A 3.0/3 up, 0.0 dead | B 0.0/10 up, 0.3 dead |
 | 1 Zoanthrope vs 5 Astra Militarum Guardsman @60yd | A 0% B 100% timeout 0% mutual 0% | 6s | A 0.0/1 up, 0.1 dead | B 5.0/5 up, 0.0 dead |
-| 1 Necron Overlord vs 3 Astartes Battle-Brother @20yd | A 80% B 16% timeout 4% mutual 0% | 132s | A 0.8/1 up, 0.0 dead | B 0.6/3 up, 0.4 dead |
-| 5 Deathmark vs 10 Astra Militarum Guardsman @150yd | A 100% B 0% timeout 0% mutual 0% | 14s | A 5.0/5 up, 0.0 dead | B 0.0/10 up, 0.7 dead |
-| 1 Cryptek vs 5 Ork Boy @20yd | A 54% B 38% timeout 8% mutual 0% | 181s | A 0.6/1 up, 0.0 dead | B 1.9/5 up, 0.1 dead |
-| 1 Autarch vs 3 Ork Nob @15yd | A 85% B 15% timeout 0% mutual 0% | 21s | A 0.8/1 up, 0.0 dead | B 0.4/3 up, 0.6 dead |
-| 1 Farseer vs 5 Astra Militarum Guardsman @20yd | A 5% B 93% timeout 0% mutual 2% | 3s | A 0.1/1 up, 0.0 dead | B 3.7/5 up, 0.0 dead |
-| 5 Aeldari Ranger vs 10 Astra Militarum Guardsman @300yd | A 9% B 89% timeout 0% mutual 1% | 11s | A 0.2/5 up, 0.0 dead | B 6.8/10 up, 0.0 dead |
-| 1 Archon vs 2 Astartes Battle-Brother @15yd | A 3% B 97% timeout 0% mutual 0% | 4s | A 0.0/1 up, 0.0 dead | B 1.8/2 up, 0.1 dead |
-| 1 Succubus vs 2 Ork Nob @10yd | A 0% B 100% timeout 0% mutual 0% | 4s | A 0.0/1 up, 0.1 dead | B 2.0/2 up, 0.0 dead |
-| 5 Mandrake vs 10 Astra Militarum Guardsman @10yd | A 1% B 97% timeout 0% mutual 2% | 2s | A 0.0/5 up, 0.2 dead | B 7.7/10 up, 0.4 dead |
+| 1 Necron Overlord vs 3 Astartes Battle-Brother @20yd | A 73% B 24% timeout 3% mutual 0% | 121s | A 0.8/1 up, 0.0 dead | B 0.8/3 up, 0.4 dead |
+| 5 Deathmark vs 10 Astra Militarum Guardsman @150yd | A 100% B 0% timeout 0% mutual 0% | 14s | A 5.0/5 up, 0.0 dead | B 0.0/10 up, 0.8 dead |
+| 1 Cryptek vs 5 Ork Boy @20yd | A 55% B 39% timeout 6% mutual 0% | 147s | A 0.6/1 up, 0.0 dead | B 1.9/5 up, 0.1 dead |
+| 1 Autarch vs 3 Ork Nob @15yd | A 89% B 11% timeout 0% mutual 0% | 25s | A 0.9/1 up, 0.0 dead | B 0.3/3 up, 0.7 dead |
+| 1 Farseer vs 5 Astra Militarum Guardsman @20yd | A 7% B 92% timeout 0% mutual 1% | 3s | A 0.1/1 up, 0.0 dead | B 3.6/5 up, 0.0 dead |
+| 5 Aeldari Ranger vs 10 Astra Militarum Guardsman @300yd | A 7% B 93% timeout 0% mutual 0% | 11s | A 0.2/5 up, 0.0 dead | B 7.3/10 up, 0.0 dead |
+| 1 Archon vs 2 Astartes Battle-Brother @15yd | A 2% B 98% timeout 0% mutual 0% | 4s | A 0.0/1 up, 0.0 dead | B 1.9/2 up, 0.1 dead |
+| 1 Succubus vs 2 Ork Nob @10yd | A 1% B 99% timeout 0% mutual 0% | 4s | A 0.0/1 up, 0.1 dead | B 2.0/2 up, 0.0 dead |
+| 5 Mandrake vs 10 Astra Militarum Guardsman @10yd | A 0% B 100% timeout 0% mutual 0% | 2s | A 0.0/5 up, 0.2 dead | B 8.6/10 up, 0.3 dead |
 | 5 Scourge vs 10 Fire Warrior (Shas'la) @100yd | A 0% B 100% timeout 0% mutual 0% | 4s | A 0.0/5 up, 0.0 dead | B 10.0/10 up, 0.0 dead |
-| 1 Commander (Shas'o) vs 3 Astartes Battle-Brother @60yd | A 17% B 83% timeout 0% mutual 0% | 65s | A 0.2/1 up, 0.1 dead | B 2.4/3 up, 0.0 dead |
+| 1 Commander (Shas'o) vs 3 Astartes Battle-Brother @60yd | A 1% B 99% timeout 0% mutual 0% | 35s | A 0.0/1 up, 0.0 dead | B 2.8/3 up, 0.0 dead |
 | 10 Pathfinder vs 10 Ork Boy @60yd | A 100% B 0% timeout 0% mutual 0% | 6s | A 10.0/10 up, 0.0 dead | B 0.0/10 up, 0.0 dead |
 | 5 Vespid Stingwing vs 3 Astartes Battle-Brother @40yd | A 0% B 100% timeout 0% mutual 0% | 6s | A 0.0/5 up, 0.0 dead | B 3.0/3 up, 0.0 dead |
-| 4 Gun Drone vs 5 Astra Militarum Guardsman @60yd | A 0% B 100% timeout 0% mutual 0% | 8s | A 0.0/4 up, 0.0 dead | B 4.8/5 up, 0.0 dead |
+| 4 Gun Drone vs 5 Astra Militarum Guardsman @60yd | A 0% B 100% timeout 0% mutual 0% | 9s | A 0.0/4 up, 0.0 dead | B 4.9/5 up, 0.0 dead |
