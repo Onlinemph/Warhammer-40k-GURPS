@@ -733,6 +733,7 @@ Totals: 94 findings, 4 big, 29 medium, 61 small.
 - Tactical Shooting: #114-#126 done (#118 drilled factions chosen by me: Astartes, Custodes, Sororitas, Mechanicus, Guard, Aeldari, T'au, Necrons); #127 as an option, off; #130 done; #128, #129 done (awareness a setting, limited by default in facilities); #131 as an option, off; #122 slicing the pie done (user). Not done: #132 by design (conflicts with Progressive Recoil).
 - Martial Arts: #150-#161, #164, #167 (All-Out and Committed; not extra arms or Sprawl), #168, #169, #173, #175 done; #162 stop thrust only; #163 Riposte only; #165 limited dodges and #172 Heroic Charge as options, off; #166 already in; #170, #171, #174 not modelled; #176 through the new options. Also #3 (Mighty Blows with Attack only), and #63 (Damage Table above ST 70).
 - Batch B: #4, #9, #23, #33, #47, #48, #49, #50 (Move and Dodge; ST in contests not halved), #51, #67, #69 (not Shield-skill resistance), #70, #71, #89 (not the backward-move cost), #90 done; #3 and #68 earlier.
+- Batch D: all done (#14 as half natural DR on the eye; #40 without the groin case; #43 without blinding; #44 without the shield-arm penalty; #80 without per-turn burning).
 
 ## Status of the earlier from-memory review
 

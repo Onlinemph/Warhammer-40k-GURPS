@@ -280,6 +280,8 @@ def combat_flags(t, flags):
         flags["hpt"] = 1
     elif n.startswith("Combat Reflexes"):
         flags["cr"] = 1
+    elif n.startswith("Perfect Balance"):
+        flags["pbal"] = 1           # +4 to keep one's feet against knockback (B74, B378)
     elif n.startswith("Enhanced Move (Ground)"):
         flags["enhMove"] = flags.get("enhMove", 0) + float(lv)   # B52: top speed x2 per level, reached by accelerating
     elif n.startswith("Hard to Kill"):
@@ -301,7 +303,7 @@ def combat_flags(t, flags):
     elif n.startswith("Injury Tolerance (Damage Reduction"):
         flags["dmgRed"] = flags.get("dmgRed", 0) + lv   # divisor; lens upgrades add a level each
     elif n.startswith("Injury Tolerance"):
-        for k in ("unliving", "homogenous", "diffuse", "no brain", "no vitals"):
+        for k in ("unliving", "homogenous", "diffuse", "no brain", "no vitals", "no blood"):
             if k in low:
                 flags[k.replace(" ", "")] = 1
     elif n.startswith("Regeneration"):

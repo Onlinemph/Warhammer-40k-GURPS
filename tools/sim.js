@@ -403,7 +403,7 @@ const SIM = (() => {
     return u;
   }
   function describe(u) {
-    const tor = drAt(u.arm.dr, "torso") + drAt(u.nat, "torso"), eye = drAt(u.arm.dr, "eye") + drAt(u.nat, "eye");
+    const tor = drAt(u.arm.dr, "torso") + drAt(u.nat, "torso"), eye = drAt(u.arm.dr, "eye") + natDRat(u, "eye");
     return {
       hp: u.HP, ht: u.HT, dodge: u.dodge, dmgRed: u.flags.dmgRed > 1 ? u.flags.dmgRed : 0, parry: u.parry, move: u.move, drTorso: tor, drEye: eye, wp: u.arm.wp,
       ranged: u.ranged && { name: u.ranged.name, usage: u.ranged.usage, dmg: u.ranged.text, follow: u.ranged.followText, skill: u.ranged.level, acc: u.ranged.acc, rof: u.ranged.rof, range: u.ranged.range },
@@ -419,11 +419,18 @@ const SIM = (() => {
   const BASE = { "pi-": 0.5, pi: 1, "pi+": 1.5, "pi++": 2, imp: 2, cut: 1.5, cr: 1, burn: 1, tox: 1, cor: 1 };
   const UNLIVING = { "pi-": 0.2, pi: 1 / 3, "pi+": 0.5, "pi++": 1, imp: 1 };
   const HOMOG = { "pi-": 0.1, pi: 0.2, "pi+": 1 / 3, "pi++": 0.5, imp: 0.5 };
+  // natural DR at a location: the skull's +2 only for those with a brain (No Brain treats the skull as the face, B61);
+  // the eye half the hide's DR unless a trait gives an eye value (every template note gives exactly half)
+  function natDRat(u, loc) {
+    const nb = u.flags.nobrain || u.flags.homogenous || u.flags.diffuse;
+    if (loc === "eye") return u.nat.eye != null ? drAt(u.nat, "eye") : Math.floor(drAt(u.nat, "eye") / 2);
+    return drAt(u.nat, loc === "vitals" ? "torso" : loc) + (loc === "skull" && !nb ? 2 : 0);
+  }
   function woundMult(type, loc, flags, ex) {
     const brain = (loc === "skull" || loc === "eye") && !flags.nobrain && !flags.homogenous;
     if (loc === "skull" && brain) return type === "tox" ? 1 : 4;
-    if (loc === "eye" && brain && (type.startsWith("pi") || type === "imp" || (type === "burn" && !ex))) return 4;
-    if (loc === "vitals" && (flags.unliving || flags.homogenous || flags.novitals)) loc = "torso";
+    if (loc === "eye" && brain) return type === "tox" ? 1 : 4;
+    if (loc === "vitals" && (flags.homogenous || flags.novitals || flags.diffuse)) loc = "torso";
     if (loc === "vitals") return type.startsWith("pi") || type === "imp" ? 3 : type === "burn" && !ex ? 2 : BASE[type] ?? 1;
     let m = BASE[type] ?? 1;
     if (loc === "face" && type === "cor") m = 1.5;
@@ -569,6 +576,8 @@ const SIM = (() => {
   const locName = l => l && l.endsWith("#c") ? "chink in the " + l.slice(0, -2) + " armour" : l;
   const AIM = { torso: 0, vitals: -3, skull: -7, eye: -9, face: -5, neck: -5, groin: -3, arm: -2, leg: -2, hand: -4, foot: -4 };
   const COVERED = new Set(["leg", "foot", "groin"]);
+  // an aimed attack at one of these that misses by exactly 1 hits the torso instead (B552 note 1)
+  const NEAR_TORSO = new Set(["eye", "skull", "face", "groin", "neck", "vitals"]);
   // cover (Tactical Shooting p. 28): what it takes off a foe's shot at you, and what it costs you to shoot back from
   // behind it unless braced and aiming; its DR for the legs and groin it hides (B407)
   const COVER_DR = { none: 0, crate: 15, barricade: 60, corner: 60, light: 15, heavy: 60 };
@@ -815,7 +824,7 @@ const SIM = (() => {
     const linePen = (m, inter) => inter.reduce((a, x) => a + (drilled(m) && x.u.side === m.u.side && drilled(x) ? 2 : 4), 0);
 
     // skill penalty from shock (standard), or the larger of shock and pain plus wound effects (fractional)
-    const skillPen = m => (frac ? Math.max(m.shock, m.pain) + m.gawd : Math.min(4, m.shock)) + (m.armsLost ? 4 : 0);
+    const skillPen = m => (frac ? Math.max(m.shock, m.pain) + m.gawd : Math.min(m.shockCap || 4, m.shock));
     // below 1/3 HP (standard HP, B419), or halved by a Fractional Health wound or a crippled leg: half Move and
     // Dodge, rounding up
     const weak = m => !frac && m.hp < m.u.HP / 3;
@@ -823,7 +832,8 @@ const SIM = (() => {
     // psychic skill and to the Will roll against Perils of the Warp
     const psyker = u => u.powers.some(p => p.fp);
     const shadowed = m => !!m.h && psyker(m.u) && models.some(x => x.state === "ok" && x.h && x.u.side !== m.u.side && x.u.flags.shadow && hexDist(x.h, m.h) <= x.u.flags.shadow);
-    const wl = (m, w) => w.level - (w.usage === "power" && w.fp && shadowed(m) ? 3 : 0);
+    // a model whose weapon arm is crippled fights with the other hand: -4 unless ambidextrous (B421, B417)
+    const wl = (m, w) => w.level - (w.usage === "power" && w.fp && shadowed(m) ? 3 : 0) - (m.weaponArmLost && !w.natural && w.usage !== "power" ? m.u.offPen : 0);
     // Fright Check (B360): Will plus Fearlessness, never better than 13
     // capped at 13 (B360) only for Shadow in the Warp; morale and the Fright Checks under fire aren't capped (user
     // direction: superhuman nerve should tell), so only a 17 or 18 breaks a Marine
@@ -933,12 +943,19 @@ const SIM = (() => {
     function severity(inj, HP) { let s = 0; for (let l = 1; l <= 8; l++) if (inj >= thr(HP, l)) s = l; return s; }
     function boxesFor(inj, HP, lvl) { let n = 0; for (let c = 1; c <= 4; c++) if (inj >= thr(HP, lvl, c)) n = c; return Math.max(1, n); }
     function incapacitate(t, why) { if (t.state === "ok") { sawFall(t); if (t.h) FX(["d", t.h.q, t.h.r, t.u.side, 0]); t.state = "out"; place(t, null); L(`  ${t.id} ${why}`); } }
+    // crippling (B421): an arm or hand drops what it holds and can't hold anything; the weapon goes to the other
+    // hand (off-hand -4), two-handed weapons can't be used, and a crippled shield arm loses the shield. A leg drops
+    // the model, which can fight lying down and crawl
     function cripple(t, loc) {
       if (loc === "arm" || loc === "hand") {
         if (++t.armsLost >= 2) { incapacitate(t, "has lost the use of both arms"); return; }
-        L(`  ${t.id}'s ${loc} is crippled: fights one-handed (-4)`);
+        const weaponArm = !t.u.cs || R() < 0.5;
+        if (weaponArm) t.weaponArmLost = true; else t.shState = "gone";
+        const drop = weaponArm && !t.u.melee.natural && t.inHand !== "none";
+        if (drop) t.inHand = "none";
+        L(`  ${t.id}'s ${loc} is crippled${weaponArm ? (drop ? ": it drops its weapon" : "") : ": its shield hangs useless"}`);
       } else {
-        t.legsLost++; t.prone = true; t.halfDodge = true;
+        t.legsLost++; t.prone = true; if (frac) t.halfDodge = true;
         L(`  ${t.id}'s ${loc} is crippled: falls and can only crawl`);
       }
     }
@@ -977,7 +994,11 @@ const SIM = (() => {
       }
       if ((head || loc === "neck") && sev >= 6) { kill(att, t, "killed outright"); return; }
       if (loc === "vitals" && sev >= 6) { incapacitate(t, "goes down with a destroyed organ"); return; }
-      if (brain && sev === 5 && !check(HT - 3 + (f.htk || 0)).ok) { kill(att, t, "dies of a brain wound"); return; }
+      if (brain && sev === 5) {
+        const r = check(HT - 3 + (f.htk || 0));
+        if (!r.ok) { kill(att, t, "dies of a brain wound"); return; }
+        if (f.htk && r.roll > HT - 3) { incapacitate(t, "collapses, apparently dead (Hard to Kill)"); return; }
+      }
       if ((loc === "neck" || loc === "vitals") && sev === 5 && !check(HT - 3 - (loc === "neck" ? 0 : 0)).ok) { incapacitate(t, "goes down, paralysed or bleeding out"); return; }
       if (sev === 6 && !check(HT - 3).ok) { incapacitate(t, "breaks and is incapacitated"); return; }
       if (sev === 7) {
@@ -1007,13 +1028,21 @@ const SIM = (() => {
       ev(t).wounded = true;
       if ((t.aimTurns || t.follow) && !check(t.u.will).ok) { t.aimTurns = 0; t.follow = null; L(`  ${t.id} loses its aim`); }
       if (frac) return fracInjure(att, t, inj, loc, type);
-      const HP = t.u.HP, before = t.hp;
+      const HP = t.u.HP, before = t.hp, f = t.u.flags;
+      if (/^(cut|imp|pi)/.test(type)) t.bleeds = true;   // bleeding wounds (B420)
+      const nb = f.nobrain || f.homogenous || f.diffuse, nv = f.novitals || f.homogenous || f.diffuse;
       t.hp -= inj;
       att.dmgDealt += inj;
-      // shock (B419): -1 per HP of injury, or per full HP/10 with 20+ HP, at most -4 (a critical hit can double it, to -8)
+      // shock (B419): -1 per HP of injury this turn, or per full HP/10 with 20+ HP (fractions dropped over the
+      // turn's total), at most -4; a critical hit can double it, to -8 (B556)
       const cShock = t.critShock, cMajor = t.critMajor;
       t.critShock = t.critMajor = false;
-      if (!t.u.flags.hpt) t.shock = Math.min(cShock ? 8 : 4, t.shock + (HP >= 20 ? Math.floor(inj / (HP / 10)) : inj) * (cShock ? 2 : 1));
+      const shock0 = t.shock;
+      if (!f.hpt) {
+        t.shockInj = (t.shockInj || 0) + inj * (cShock ? 2 : 1);
+        if (cShock) t.shockCap = 8;
+        t.shock = Math.min(t.shockCap || 4, HP >= 20 ? Math.floor(t.shockInj / Math.floor(HP / 10)) : t.shockInj);
+      }
       // crippling (B420-421): injury over HP/2 to a limb, HP/3 to an extremity
       const lim = loc === "arm" || loc === "leg" ? HP / 2 : loc === "hand" || loc === "foot" ? HP / 3 : Infinity;
       const crippled = inj > lim;
@@ -1024,17 +1053,32 @@ const SIM = (() => {
         else { t.prone = true; L(`  ${t.id}'s ${loc} goes numb: it falls`); }
       }
       if (t.state !== "ok") return;
-      // major wound (over HP/2, or any crippling): HT roll; failure stuns and knocks down, failure by 5+ knocks out
-      if (inj > HP / 2 || crippled || cMajor) {
-        const mod = (t.u.flags.hpt ? 3 : 0) + (loc === "skull" || loc === "eye" ? -10 : loc === "face" || loc === "vitals" ? -5 : 0);
+      // knockdown and stun (B420): an HT roll on a major wound (over HP/2, any crippling, a crit's "major wound"),
+      // and on a head (skull, face, eye) or vitals hit that causes shock; the -10 / -5 for the head and vitals apply
+      // only to major wounds, and not to those without a brain or vitals (B420); High Pain Threshold +3
+      const major = inj > HP / 2 || crippled || cMajor;
+      const headV = (loc === "skull" || loc === "eye" || loc === "face") ? !nb || loc === "face" : loc === "vitals" ? !nv : false;
+      if (major || (headV && t.shock > shock0)) {
+        const mod = (f.hpt ? 3 : 0) + (major && headV ? (loc === "skull" || loc === "eye" ? -10 : -5) : 0);
         const r = check(t.u.HT + mod);
         if (!r.ok && (r.margin <= -5 || r.fumble)) { incapacitate(t, "is knocked out"); return; }
-        if (!r.ok) { t.stunned = true; t.prone = true; L(`  ${t.id} is knocked down and stunned`); }
+        if (!r.ok) {
+          t.stunned = true; t.prone = true;
+          // a knocked-down model drops what it holds (B420)
+          const drop = !t.u.melee.natural && t.inHand !== "none";
+          if (drop) t.inHand = "none";
+          L(`  ${t.id} is knocked down and stunned${drop ? ", dropping its weapon" : ""}`);
+        }
       }
       if (t.hp <= -5 * HP) { kill(att, t, "destroyed"); return; }
       for (let k = 1; k <= 4; k++) {
         if (before > -k * HP && t.hp <= -k * HP && t.state === "ok") {
-          if (!check(t.u.HT + (t.u.flags.htk || 0)).ok) { kill(att, t, "killed"); return; }
+          // death check (B419): failure by 1-2 is a mortal wound (out of the fight, dying), worse is death; a success
+          // that needed Hard to Kill leaves it collapsed, apparently dead (B58)
+          const r = check(t.u.HT + (f.htk || 0));
+          if (!r.ok && r.margin >= -2) { if (f.reanimation) kill(att, t, "mortally wounded"); else incapacitate(t, "is mortally wounded"); return; }
+          if (!r.ok) { kill(att, t, "killed"); return; }
+          if (f.htk && r.roll > t.u.HT) { incapacitate(t, "collapses, apparently dead (Hard to Kill)"); return; }
         }
       }
     }
@@ -1100,9 +1144,9 @@ const SIM = (() => {
       if (cv && cv.i >= 0 && coverDR > 0) wearCover(cv.i, Math.min(raw, coverDR));
       const armDR = Math.floor(drAt(t.u.arm.dr, loc === "vitals" ? (t.u.arm.dr.vitals != null ? "vitals" : "torso") : loc) / (chink ? 2 : 1)) + coverDR;
       if (chink) L(`  strikes a chink in the armour`);
-      const natDR = drAt(t.u.nat, loc === "vitals" ? "torso" : loc) + (loc === "skull" ? 2 : 0);
+      const natDR = natDRat(t.u, loc);
       const div = dmg.div;
-      const eff = dr => dr <= 0 ? 0 : div === Infinity ? 0 : Math.max(1, Math.floor(dr / div));
+      const eff = dr => dr <= 0 ? 0 : div === Infinity ? 0 : Math.floor(dr / div);   // round down, minimum 0 (B378)
       let DR = eff(armDR + natDR);
       if (noDR) DR = 0; else if (halfDR) DR = Math.ceil(DR / 2);
       let pen = raw - DR;
@@ -1111,18 +1155,29 @@ const SIM = (() => {
         if (pen > 0) L(`  finds a weak point`);
       }
       // knockback (B378) from crushing and cutting blows
-      if ((dmg.type === "cr" || (dmg.type === "cut" && pen <= 0)) && !ranged && t.state === "ok" && !t.grips.length) knockback(att, t, basic);
+      if ((dmg.type === "cr" || (dmg.type === "cut" && pen <= 0 && !ranged)) && !dmg.ex && t.state === "ok" && !t.grips.length) knockback(att, t, basic);
       // blunt trauma: armour that stops a hit still passes some of its force (see bluntOf)
-      if (pen <= 0 && armDR > 0) {
-        const bt = bluntOf(raw, dmg.type, t.u.arm.flexible, dmg.ex);
+      // (only what gets past cover can bruise through the armour beneath, B379)
+      if (pen <= 0 && armDR - coverDR > 0 && raw > coverDR) {
+        const bt = bluntOf(raw - coverDR, dmg.type, t.u.arm.flexible, dmg.ex);
         if (bt > 0) { L(`  ${raw} dmg to ${loc} stopped by ${t.u.arm.flexible ? "flexible" : "rigid"} armour: ${bt} blunt trauma`); injure(att, t, bt, loc, "cr"); return bt; }
       }
-      if (pen <= 0) { if (t.h) FX(["h", t.ix, 0, loc, t.h.q, t.h.r]); L(`  ${raw} dmg to ${loc} fails to penetrate DR ${armDR + natDR}${div !== 1 ? "/" + (div === Infinity ? "∞" : div) : ""}`); return 0; }
+      if (pen <= 0) {
+        if (t.h) FX(["h", t.ix, 0, loc, t.h.q, t.h.r]); L(`  ${raw} dmg to ${loc} fails to penetrate DR ${armDR + natDR}${div !== 1 ? "/" + (div === Infinity ? "∞" : div) : ""}`);
+        // an explosive follow-up still goes off against the armour that stopped its carrier (B381)
+        if (w.follow && w.follow.ex && fraw > armDR + natDR && t.state === "ok") {
+          const fi = Math.max(1, Math.floor((fraw - armDR - natDR) * woundMult(w.follow.type, loc, t.u.flags, true)));
+          L(`  the shell bursts on the armour: ${fi} injury`); injure(att, t, fi, loc, w.follow.type); return fi;
+        }
+        return 0;
+      }
       const flags = t.u.flags, poison = flags.poison;
       let inj = dmg.type === "tox" && poison === "immune" ? 0 : Math.max(1, Math.floor(pen * woundMult(dmg.type, loc, flags, dmg.ex)));
       if (dmg.type === "tox" && poison === "resist") inj = Math.floor(inj / 2);
       const red = flags.dmgRed > 1 ? flags.dmgRed : 1;
       if (red > 1 && inj > 0) inj = Math.max(1, Math.floor(inj / red));
+      // Diffuse (B380): at most 1 HP from impaling or piercing and 2 from anything else, but not from areas and cones
+      if (flags.diffuse && !frac && !dmg.ex && !w.cone && inj > 0) inj = Math.min(inj, /^(imp|pi)/.test(dmg.type) ? 1 : 2);
       // a limb or extremity takes no more injury than it needs to be crippled, over all the hits it takes (B420);
       // left or right is a coin toss
       const lim0 = loc === "arm" || loc === "leg" ? Math.floor(t.u.HP / 2) + 1 : loc === "hand" || loc === "foot" ? Math.floor(t.u.HP / 3) + 1 : Infinity;
@@ -1190,7 +1245,8 @@ const SIM = (() => {
       let h = t.h;
       for (let i = 0; i < kb; i++) { const n = { q: h.q + DIRS[dir][0], r: h.r + DIRS[dir][1] }; if (taken(key(n.q, n.r))) break; h = n; }
       if (h !== t.h) place(t, h);
-      if (!check(t.u.dx - (kb - 1)).ok) { t.prone = true; L(`  ${t.id} is knocked back ${kb} yd and falls`); }
+      const sk = n => ((t.u.stats.skills || []).find(x => x.name === n && x.level != null) || {}).level || 0;
+      if (!check(Math.max(t.u.dx, sk("Acrobatics"), sk("Judo")) + (t.u.flags.pbal ? 4 : 0) - (kb - 1)).ok) { t.prone = true; L(`  ${t.id} is knocked back ${kb} yd and falls`); }
       else L(`  ${t.id} is knocked back ${kb} yd`);
     }
 
@@ -1245,7 +1301,7 @@ const SIM = (() => {
       const k = w.id + "|" + tu.idx + "|" + loc + (chink ? "#c" : "") + "|" + (dmgOverride ? dmgOverride.key || "r" : "");
       if (EXP.has(k)) return EXP.get(k);
       const armDR = Math.floor(drAt(tu.arm.dr, loc === "vitals" ? (tu.arm.dr.vitals != null ? "vitals" : "torso") : loc) / (chink ? 2 : 1));
-      const natDR = drAt(tu.nat, loc === "vitals" ? "torso" : loc) + (loc === "skull" ? 2 : 0);
+      const natDR = natDRat(tu, loc);
       const effDR = d.div === Infinity ? 0 : Math.floor((armDR + natDR) / d.div);
       const red = tu.flags.dmgRed > 1 ? tu.flags.dmgRed : 1;
       const cap = loc === "arm" || loc === "leg" ? tu.HP / 2 + 1 : loc === "hand" || loc === "foot" ? tu.HP / 3 + 1 : Infinity;
@@ -1284,7 +1340,8 @@ const SIM = (() => {
       let best = { loc: "torso", da: 0, score: 0, lvl };
       for (const loc of locs) {
         const pen = loc === "random" ? 0 : loc.endsWith("#c") ? Math.min(AIM[loc.slice(0, -2)], CHINK(loc.slice(0, -2))) : loc === "eye" && drAt(t.u.arm.dr, "eye") > 0 ? -10 : AIM[loc];   // an eye behind a helmet lens or visor is -10 (B399-400)
-        if (loc === "eye" && !(/^pi/.test(w.dmg.type) || w.dmg.type === "imp" || (w.dmg.type === "burn" && !w.dmg.ex && !w.cone))) continue;
+        const pointed = /^pi/.test(w.dmg.type) || w.dmg.type === "imp" || (w.dmg.type === "burn" && !w.dmg.ex && !w.cone);
+        if ((loc === "eye" || loc === "vitals" || loc.endsWith("#c")) && !pointed) continue;   // B398, B400
         if (t.limbFull && t.limbFull[loc.replace("#c", "")]) continue;   // both already crippled: nothing more to take there
         const e = loc === "random" ? expInjRandom(w, t.u, dmgOverride) : expInj(w, t.u, loc, dmgOverride);
         if (e <= 0) continue;
@@ -1297,6 +1354,7 @@ const SIM = (() => {
           const pDef = def0 == null ? 0 : P3[Math.max(0, Math.min(18, def0 - da))];
           const hits = melee ? P3[Math.min(18, eff)] : burstHits(eff, w.cone ? 1 : (w.rof || 1), w, fo.aim || 0, !!fo.braced);
           let score = (1 - pDef) * e * hits;
+          if (melee && NEAR_TORSO.has(loc)) score += (1 - pDef) * (P3[Math.min(18, eff + 1)] - P3[Math.min(18, eff)]) * expInj(w, t.u, "torso", dmgOverride);
           if (shUp) {
             // the share of this attack's raw damage the shield absorbs is lost; stripping it is worth a quarter
             const dm = dmgOverride || w.dmg, raw = Math.max(1, (dm.n * 3.5 + dm.add) * (dm.mult || 1) * hits);
@@ -1338,7 +1396,7 @@ const SIM = (() => {
     // shields cover the front and the shield (left) side (B287)
     const shieldCovers = (t, att) => { const a = arcTo(t, att); return a === "front" || (a === "side" && sideOf(t.h, t.facing, att.h) === "L"); };
     const shieldDB = t => t.u.cs && t.shState === "ok" && !t.blockLost ? t.u.cs.db : 0;
-    const canParry = t => t.u.parry != null && bladeReady(t) && !(t.u.melee.unbalanced && t.attacked && !t.defAtk) && t.armsLost < 2 && !t.mna;
+    const canParry = t => t.u.parry != null && bladeReady(t) && !(t.u.melee.unbalanced && t.attacked && !t.defAtk) && t.armsLost < 2 && (!t.armsLost || t.u.melee.oneHanded !== false) && !t.mna;
     // the defences open to t against att: kind is melee, ranged, pb (a gun fired at point-blank) or thrown.
     // With Damage to Shields in play (B484) a shield's DB counts against every attack from its arcs (B287)
     function defOpts(t, att, kind, aw) {
@@ -1736,8 +1794,10 @@ const SIM = (() => {
         const r = check(lvl);
         if (i === 0 && jamCheck(m, w, r)) return;
         // every round rolled on its own (Progressive Recoil); Aim counts on the first only; criticals can't be dodged
-        let got = r.ok ? 1 : 0, crits = r.crit ? 1 : 0, near = !r.ok && r.margin >= -2;
-        for (let k = 1; k < nb; k++) { const lk = lvl - firstB - rclPen(w, k, braced); if (lk < 3) break; const rk = check(lk); if (rk.ok) { got++; if (rk.crit) crits++; } else if (rk.margin >= -2) near = true; }   // no roll below 3 (B344)
+        const toTorso = loc0 && NEAR_TORSO.has(loc0) ? 1 : 0;
+        let got = r.ok ? 1 : 0, crits = r.crit ? 1 : 0, near = !r.ok && r.margin >= -2, tg = toTorso && !r.ok && !r.fumble && r.margin === -1 ? 1 : 0;
+        for (let k = 1; k < nb; k++) { const lk = lvl - firstB - rclPen(w, k, braced); if (lk < 3) break; const rk = check(lk); if (rk.ok) { got++; if (rk.crit) crits++; } else { if (rk.margin >= -2) near = true; if (toTorso && rk.margin === -1 && !rk.fumble) tg++; } }   // no roll below 3 (B344)
+        const aimedGot = got; got += tg;
         const e = ev(t); e.shotAt = m; e.vol = Math.max(e.vol || 0, nb); if (near) e.near = true;
         r.ok = got > 0;
         const thru = (inter.length ? `, through ${inter.length}` : "") + (plan.da ? `, deceptive -${plan.da}` : "");
@@ -1771,7 +1831,7 @@ const SIM = (() => {
           }
         }
         for (let k = 0; k < hits && t.state === "ok"; k++) {
-          const loc = loc0 || hitLocation();
+          const loc = k < aimedGot ? (loc0 || hitLocation()) : "torso";
           const raw = rollDamage(w.dmg);
           applyHit(m, w, t, loc, true, halfD, null, halfD ? raw : raw, k < crits ? roll3() : 0);
           if (w.dmg.ex && k === 0 && t.h) explosion(m, w, t.h, raw);
@@ -1895,7 +1955,7 @@ const SIM = (() => {
           - (m.prone ? 4 : 0) - (m.kneel && !m.prone ? 2 : 0) - closePen(m, w) - (opts.pen || 0) + smMelee(m, t);
         if (opts.charge && !opts.heroic) lvl = Math.min(lvl, 9);
         const plan = planAttack(m, w, t, lvl, true, null, { noDa: !trained(m, w) });
-        const loc = plan.loc === "random" ? hitLocation() : plan.loc;
+        let loc = plan.loc === "random" ? hitLocation() : plan.loc;
         if (plan.lvl < 3) { m.attacked = true; L(`${m.id} can't hope to hit ${t.id} (skill ${plan.lvl})`); continue; }   // B344
         // Telegraphic Attack (MA113): +4 to hit but +2 to every defence, and the crit range of the unmodified skill
         const tele = !!plan.tele, r = check(plan.lvl);
@@ -1907,6 +1967,7 @@ const SIM = (() => {
         if (w.fp) spendFP(m, w.fp);
         if (w.perils && perils(m, w)) continue;
         if (m.h && t.h) FX(["m", m.h.q, m.h.r, t.h.q, t.h.r, m.u.side, r.ok ? 1 : 0, m.ix, t.ix, plan.lvl, r.roll]);
+        if (!r.ok && !r.fumble && r.margin === -1 && plan.loc !== "random" && NEAR_TORSO.has(plan.loc)) { r.ok = true; r.margin = 0; L(`  (just misses the ${plan.loc}: the blow lands on the torso)`); loc = "torso"; }
         if (!r.ok) { L(`${m.id} strikes at ${t.id} (${loc !== "torso" ? locName(loc) + ", " : ""}skill ${plan.lvl}${tele ? ", telegraphic" : ""}): misses`); if (r.fumble) critMiss(m, w); continue; }
         if (!r.crit) {
           // two weapons at one foe: it defends at -1 against both (B417)
@@ -1991,8 +2052,8 @@ const SIM = (() => {
     }
     function weaponsFor(m, melee) {
       const out = [];
-      if (melee) { if (m.armsLost < 2 && bladeReady(m)) out.push(m.u.melee); }
-      else if (m.u.ranged && !m.gunBroken && !m.jam && m.armsLost < 2 && gunReady(m)) out.push(m.u.ranged);
+      if (melee) { if (m.armsLost < 2 && bladeReady(m) && (!m.armsLost || m.u.melee.oneHanded !== false)) out.push(m.u.melee); }
+      else if (m.u.ranged && !m.gunBroken && !m.jam && m.armsLost < 2 && gunReady(m) && (!m.armsLost || m.u.ranged.oneHanded)) out.push(m.u.ranged);
       for (const p of m.u.powers) if (!!p.melee === melee && m.fp - p.fp >= 0) out.push(p);
       return out;
     }
@@ -3194,21 +3255,21 @@ const SIM = (() => {
         if (m.fp <= 0 && !m.u.flags.machine && !check(m.u.will).ok) { incapacitate(m, "collapses from exhaustion"); continue; }
         // a stunned model that recovers still defends at -4, without retreating, until its next turn (B364)
         if (m.stunned) { m.ev = null; }
-        if (m.stunned) { if (recoverStun(m)) { m.stunned = false; m.stunRec = null; m.stunT = 0; m.stunRecovering = true; L(`${m.id} recovers from stun`); } m.shock = 0; continue; }
-        if (underFire(m)) { m.shock = 0; continue; }
+        if (m.stunned) { if (recoverStun(m)) { m.stunned = false; m.stunRec = null; m.stunT = 0; m.stunRecovering = true; L(`${m.id} recovers from stun`); } m.shock = 0; m.shockInj = 0; m.shockCap = 0; continue; }
+        if (underFire(m)) { m.shock = 0; m.shockInj = 0; m.shockCap = 0; continue; }
         if (m.holding && (m.holding.state !== "ok" || !m.holding.h || hexDist(m.h, m.holding.h) > 1)) release(m);
         // grapplers it out-muscles more than twice over, or that are far smaller, are only extra encumbrance (B370)
         { const weak = gripsOn(m).filter(g => hangsOn(g, m)); if (weak.length && weak.length === gripsOn(m).length && !m.pinned) { for (const g of weak) release(g); L(`${m.id} shrugs off ${weak.length} clinging foe${weak.length > 1 ? "s" : ""}`); } }
         // pinned, all it can do is struggle; held on the ground it may also fight back from where it lies
-        if (gripsOn(m).length && m.pinned) { breakFree(m); m.shock = 0; continue; }
+        if (gripsOn(m).length && m.pinned) { breakFree(m); m.shock = 0; m.shockInj = 0; m.shockCap = 0; continue; }
         if (!m.warpShadow && shadowed(m) && !m.u.flags.unfazeable && !m.u.flags.noMorale) {
           m.warpShadow = true;
           const fc = fright(m.u);
-          if (!fc.ok) { L(`${m.id} feels the Shadow in the Warp close over its mind`); frightTable(m, -fc.margin, "Shadow in the Warp"); m.shock = 0; if (m.state !== "ok" || m.stunned) continue; }
+          if (!fc.ok) { L(`${m.id} feels the Shadow in the Warp close over its mind`); frightTable(m, -fc.margin, "Shadow in the Warp"); m.shock = 0; m.shockInj = 0; m.shockCap = 0; if (m.state !== "ok" || m.stunned) continue; }
           L(`${m.id} steels itself against the Shadow in the Warp`);
         }
         act(m);
-        m.shock = 0;
+        m.shock = 0; m.shockInj = 0; m.shockCap = 0;
       }
       // Regeneration (B80): HP back each second; under Fractional Health the healing clears the least severe
       // wound box once enough has built up to cover that level's threshold
@@ -3232,8 +3293,16 @@ const SIM = (() => {
         if (m.reload <= 0) m.reload = w.shots.reload;
         if (--m.reload <= 0) { m.reload = 0; m.ammo = w.shots.mag; }
       }
-      // bleeding (B420), once a minute in standard mode
-      if (!frac && turn % 60 === 0) for (const m of models) if (m.state === "ok" && m.hp < m.u.HP && !m.u.flags.unliving && !check(m.u.HT).ok) { m.hp -= 1; L(`${m.id} bleeds (${m.hp}/${m.u.HP} HP)`); }
+      // bleeding (B420), once a minute in standard mode: HT at -1 per 5 HP lost; a failure costs 1 HP (3 on a critical
+      // failure); a critical success or three successes in a row stop it; No Blood and Diffuse don't bleed, and nor do
+      // wounds that were all crushing or burning
+      if (!frac && turn % 60 === 0) for (const m of models) {
+        if (m.state !== "ok" || m.hp >= m.u.HP || m.u.flags.noblood || m.u.flags.diffuse || m.u.flags.machine || !m.bleeds || m.bleedStop) continue;
+        const r = check(m.u.HT - Math.floor((m.u.HP - m.hp) / 5));
+        if (r.ok) { m.bleedOK = (m.bleedOK || 0) + 1; if (r.crit || m.bleedOK >= 3) { m.bleedStop = true; L(`${m.id}'s bleeding stops`); } continue; }
+        m.bleedOK = 0; const lose = r.fumble ? 3 : 1; m.hp -= lose; L(`${m.id} bleeds (${lose} HP)`);
+        if (m.hp <= 0 && !check(m.u.HT).ok) incapacitate(m, "bleeds out");
+      }
       // reanimation
       for (const m of models) {
         if (m.state !== "down") continue;
