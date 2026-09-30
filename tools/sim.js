@@ -460,7 +460,7 @@ const SIM = (() => {
     let st = (seed * 2654435761) >>> 0;
     const rnd = () => { st = (st + 0x6D2B79F5) >>> 0; let t = st; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
     const ri = (a, b) => a + Math.floor(rnd() * (b - a + 1));
-    const W = 64, H = 37, floor = new Set(), crates = new Map();
+    const W = 64, H = 37, floor = new Set(), crates = new Map(), doors = new Set();
     const K = (c, r) => { const h = fromOffset(c, r); return key(h.q, h.r); };
     const carve = (c0, r0, c1, r1) => { for (let c = c0; c <= c1; c++) for (let r = r0; r <= r1; r++) if (c > 0 && r > 0 && c < W - 1 && r < H - 1) floor.add(K(c, r)); };
     carve(1, 1, 7, H - 2); carve(W - 8, 1, W - 2, H - 2);                     // staging bays
@@ -474,10 +474,12 @@ const SIM = (() => {
     for (const [y0, y1] of bandsY) for (const [x0, x1] of bandsX) {
       if (y1 - y0 < 1 || x1 - x0 < 2 || rnd() < 0.12) continue;
       carve(x0, y0, x1, y1); rooms.push([x0, y0, x1, y1]);
-      const up = () => { const c = ri(x0, x1 - 1); carve(c, y0 - 1, c + 1, y0 - 1); };
-      const down = () => { const c = ri(x0, x1 - 1); carve(c, y1 + 1, c + 1, y1 + 2); };
-      const left = () => { const r = ri(y0, Math.max(y0, y1 - 1)); carve(x0 - 2, r, x0 - 1, r + 1); };
-      const right = () => { const r = ri(y0, Math.max(y0, y1 - 1)); carve(x1 + 1, r, x1 + 2, r + 1); };
+      // a door is the two wall hexes cut through to the hallway or corridor
+      const door = (c0, r0, c1, r1) => { carve(c0, r0, c1, r1); for (let c = c0; c <= c1; c++) for (let r = r0; r <= r1; r++) doors.add(K(c, r)); };
+      const up = () => { const c = ri(x0, x1 - 1); door(c, y0 - 1, c + 1, y0 - 1); };
+      const down = () => { const c = ri(x0, x1 - 1); door(c, y1 + 1, c + 1, y1 + 1); carve(c, y1 + 2, c + 1, y1 + 2); };
+      const left = () => { const r = ri(y0, Math.max(y0, y1 - 1)); door(x0 - 1, r, x0 - 1, r + 1); carve(x0 - 2, r, x0 - 2, r + 1); };
+      const right = () => { const r = ri(y0, Math.max(y0, y1 - 1)); door(x1 + 1, r, x1 + 1, r + 1); carve(x1 + 2, r, x1 + 2, r + 1); };
       if (y0 > 1 && (y1 >= H - 2 || rnd() < 0.5)) up(); else down();        // always a door to a hallway
       if (rnd() < 0.6) [up, down, left, right][ri(0, 3)]();
     }
@@ -499,19 +501,21 @@ const SIM = (() => {
     let want = reach();
     for (const [c, r] of cands) {
       const k = K(c, r);
-      if (!floor.has(k) || crates.has(k) || spawn.some(sp => hexDist(sp, fromOffset(c, r)) <= 2)) continue;
+      if (!floor.has(k) || crates.has(k) || doors.has(k) || spawn.some(sp => hexDist(sp, fromOffset(c, r)) <= 2)) continue;
       crates.set(k, rnd() < 0.5 ? "light" : "heavy");
       const got = reach();
       if (got < want - 1) crates.delete(k); else want = got;
     }
-    // walkable graph (floor less crates) as indices, for fast distance fields
+    // every hex inside the outer wall, as indices: floor, crates, doors and the interior walls (which can be
+    // breached); the outer wall can't
     const ids = new Map(), hx = [];
-    for (const k of floor) if (!crates.has(k)) { ids.set(k, hx.length); const [q, r] = k.split(",").map(Number); hx.push({ q, r }); }
+    for (let c = 1; c < W - 1; c++) for (let r = 1; r < H - 1; r++) { const h = fromOffset(c, r), k = key(h.q, h.r); ids.set(k, hx.length); hx.push(h); }
     const nb = hx.map(h => DIRS.map(([dq, dr]) => ids.get(key(h.q + dq, h.r + dr))).filter(i => i != null));
-    const NK = (q, r) => (q + 2048) * 4096 + (r + 2048);
-    const floorN = new Set([...floor].map(k => { const [q, r] = k.split(",").map(Number); return NK(q, r); }));
-    // line of sight and cover depend only on the walls and crates, so they're cached per map
-    const map = { floor, crates, spawn, W, H, ids, hx, nb, floorN, losC: new Map(), covC: new Map() };
+    const ks = hx.map(h => key(h.q, h.r));
+    const wallI = Uint8Array.from(ks, k => floor.has(k) ? 0 : 1), crateI = Uint8Array.from(ks, k => crates.has(k) ? 1 : 0), doorI = Uint8Array.from(ks, k => doors.has(k) ? 1 : 0);
+    // line of sight and cover geometry never change, so they're cached per map; what a line crosses that can
+    // change (walls, doors) is stored with it and checked against the battle's own state
+    const map = { floor, crates, doors, spawn, W, H, ids, hx, nb, wallI, crateI, doorI, lineC: new Map(), covC: new Map() };
     MAPS.set(seed, map);
     return map;
   }
@@ -540,29 +544,48 @@ const SIM = (() => {
     const models = [];
     const occ = new Map();
     const place = (m, h) => { if (m.h) occ.delete(key(m.h.q, m.h.r)); m.h = h; if (h) occ.set(key(h.q, h.r), m); };
-    // terrain: walls block movement and sight; crates block movement only
+    // terrain: walls block movement and sight until breached; crates block movement only; doors block both
+    // while closed. The map is shared by every run; what changes in a battle (doors, breaches, wall damage) lives here
     const terr = opt.terrain || (opt.battlefield === "facility" ? facilityMap(opt.mapSeed || 1) : null);
-    const wallAt = k => !!terr && (!terr.floor.has(k) || terr.crates.has(k));
+    const nH = terr ? terr.hx.length : 0;
+    const pass = terr ? Uint8Array.from(terr.wallI, (w, i) => w || terr.crateI[i] ? 0 : 1) : null;   // walkable (closed doors count: they open)
+    const broken = new Uint8Array(nH), closed = new Uint8Array(nH), shp = new Float64Array(nH).fill(-1);
+    const tev = [];            // terrain changes for the replay: [second, "q,r", "open" | "closed" | "broken"]
+    let turnNow = 0;
+    if (terr) for (let i = 0; i < nH; i++) if (terr.doorI[i] && R() < 0.5) closed[i] = 1;   // half the doors start shut
+    const idx = k => terr.ids.get(k);
+    const startShut = terr ? new Set([...terr.doors].filter(k => closed[idx(k)])) : null;
+    const blocker = i => (terr.wallI[i] && !broken[i]) || closed[i];
+    const walkable = k => { const i = idx(k); return i != null && pass[i] && !closed[i]; };
+    const wallAt = k => !!terr && !walkable(k);
     const taken = k => occ.has(k) || wallAt(k);
     const NK = (q, r) => (q + 2048) * 4096 + (r + 2048);
-    function clearLine(a, b, sgn) {
-      const n = hexDist(a, b), F = terr.floorN;
+    // the hexes a line crosses that could block it (walls, doors), or null if it leaves the facility
+    function lineBlockers(a, b, sgn) {
+      const n = hexDist(a, b), out = [];
       for (let i = 1; i < n; i++) {
         const t = i / n, x = a.q + (b.q - a.q) * t + 1e-6 * sgn, z = a.r + (b.r - a.r) * t + 1e-6 * sgn, y = -x - z;
         let rx = Math.round(x), ry = Math.round(y), rz = Math.round(z);
         const dx = Math.abs(rx - x), dy = Math.abs(ry - y), dz = Math.abs(rz - z);
         if (dx > dy && dx > dz) rx = -ry - rz; else if (dy <= dz) rz = -rx - ry;
-        if (!F.has(NK(rx, rz))) return false;
+        const j = idx(key(rx, rz));
+        if (j == null) return null;
+        if (terr.wallI[j] || terr.doorI[j]) { out.push(j); if (out.length > 4) return null; }   // past four walls: no line
       }
-      return true;
+      return out;
     }
+    function lineEntry(a, b) {
+      const k = NK(a.q, a.r) * 16777216 + NK(b.q, b.r);
+      let e = terr.lineC.get(k);
+      if (e === undefined) { e = [lineBlockers(a, b, 1), lineBlockers(a, b, -1)]; if (terr.lineC.size > 3e6) terr.lineC.clear(); terr.lineC.set(k, e); }
+      return e;
+    }
+    const lineOpen = L2 => L2 !== null && L2.every(i => !blocker(i));
     // line of sight: either of the two lines nudged off the hex edges is clear (a figure at a corner can be seen)
     function los(a, b) {
       if (!terr || !a || !b) return true;
-      const k = NK(a.q, a.r) * 16777216 + NK(b.q, b.r);
-      let v = terr.losC.get(k);
-      if (v === undefined) { v = clearLine(a, b, 1) || clearLine(a, b, -1); if (terr.losC.size > 3e6) terr.losC.clear(); terr.losC.set(k, v); }
-      return v;
+      const e = lineEntry(a, b);
+      return lineOpen(e[0]) || lineOpen(e[1]);
     }
     // cover for a figure on hex h against fire from hex f (B407): a crate in the next hex toward the shooter
     // hides its legs and groin; a wall edge that only one of the two lines clears (a corner or a door frame)
@@ -573,13 +596,41 @@ const SIM = (() => {
         let c = terr.covC.get(k);
         if (c === undefined) {
           const a = lineHexes(h, f, 1)[0], b = lineHexes(h, f, -1)[0];
-          c = terr.crates.get(key(a.q, a.r)) || terr.crates.get(key(b.q, b.r)) || (clearLine(h, f, 1) !== clearLine(h, f, -1) ? "heavy" : null);
+          c = terr.crates.get(key(a.q, a.r)) || terr.crates.get(key(b.q, b.r)) || null;
           if (terr.covC.size > 3e6) terr.covC.clear();
           terr.covC.set(k, c);
         }
         if (c) return c;
+        const e = lineEntry(h, f);
+        if (lineOpen(e[0]) !== lineOpen(e[1])) return "heavy";
       }
       return m && cover[m.u.side] !== "none" && !m.moved ? cover[m.u.side] : "none";
+    }
+    // structures (B558): interior walls are plasteel partitions (DR 50, 60 HP a yard) and doors DR 30, 40 HP;
+    // both are Homogeneous (B380), so bullets do little and blasts, plasma, melta and power weapons break through
+    const STRUCT = { wall: { dr: 50, hp: 60 }, door: { dr: 30, hp: 40 } };
+    const structOf = i => terr.wallI[i] && !broken[i] ? STRUCT.wall : terr.doorI[i] && !broken[i] ? STRUCT.door : null;
+    const hpOf = i => shp[i] < 0 ? structOf(i).hp : shp[i];
+    const hexName = i => (terr.wallI[i] ? "wall" : "door") + " at " + terr.hx[i].q + "," + terr.hx[i].r;
+    function damageStructure(i, raw, dm, direct) {
+      const st = structOf(i);
+      if (!st) return 0;
+      const div = direct ? (dm.div || 1) : 1;
+      const inj = Math.floor(Math.max(0, raw - Math.floor(st.dr / div)) * woundMult(dm.type, "torso", { homogenous: 1 }, dm.ex));
+      if (inj <= 0) return 0;
+      shp[i] = hpOf(i) - inj;
+      if (shp[i] <= 0) {
+        broken[i] = 1; pass[i] = 1; closed[i] = 0; fieldCache.clear();
+        tev.push([turnNow, key(terr.hx[i].q, terr.hx[i].r), "broken"]);
+        L(`  the ${hexName(i)} is breached`);
+      }
+      return inj;
+    }
+    function setDoor(i, shut, who) {
+      closed[i] = shut ? 1 : 0;
+      tev.push([turnNow, key(terr.hx[i].q, terr.hx[i].r), shut ? "closed" : "open"]);
+      L(`${who.id} ${shut ? "closes" : "opens"} a door (Ready)`);
+      who.readied = true;
     }
     // walking distance to a goal round the walls, from a breadth-first field cached for the second
     // (typed arrays over the map's walkable hexes; F.get(key) keeps the Map-like use)
@@ -591,9 +642,9 @@ const SIM = (() => {
       const D = new Int16Array(terr.hx.length).fill(-1), g = terr.ids.get(gk);
       const q = new Int32Array(terr.hx.length); let n = 0;
       if (g != null) { q[n++] = g; D[g] = 0; }
-      else for (const [dq, dr] of DIRS) { const i = terr.ids.get(key(goal.q + dq, goal.r + dr)); if (i != null && D[i] < 0) { D[i] = 1; q[n++] = i; } }
+      else for (const [dq, dr] of DIRS) { const i = terr.ids.get(key(goal.q + dq, goal.r + dr)); if (i != null && D[i] < 0 && pass[i]) { D[i] = 1; q[n++] = i; } }
       {
-        for (let i = 0; i < n; i++) { const c = q[i], d = D[c] + 1; for (const x of terr.nb[c]) if (D[x] < 0) { D[x] = d; q[n++] = x; } }
+        for (let i = 0; i < n; i++) { const c = q[i], d = D[c] + 1; for (const x of terr.nb[c]) if (D[x] < 0 && pass[x]) { D[x] = d; q[n++] = x; } }
       }
       F = { get: k => { const i = terr.ids.get(k); return i == null || D[i] < 0 ? undefined : D[i]; }, D };
       fieldCache.set(gk, F);
@@ -602,7 +653,7 @@ const SIM = (() => {
     // walking distance (symmetric): the field is built from b, so pass the foe's hex second
     const walk = (a, b) => !terr ? hexDist(a, b) : (field(b).get(key(a.q, a.r)) ?? 999);
     // deployment in a facility: each side fills its staging bay outward from its spawn point, a yard apart
-    const spawnList = terr ? terr.spawn.map(sp => { const F = field(sp); return terr.hx.map((h, i) => [key(h.q, h.r), F.D[i]]).filter(x => x[1] >= 0).sort((x, y) => x[1] - y[1]).map(x => x[0]); }) : null;
+    const spawnList = terr ? terr.spawn.map(sp => { const F = field(sp); return terr.hx.map((h, i) => [key(h.q, h.r), F.D[i]]).filter(x => x[1] >= 0 && !terr.doorI[idx(x[0])]).sort((x, y) => x[1] - y[1]).map(x => x[0]); }) : null;
     const spawnAt = [0, 0];
     function nextSpawn(side) {
       const L2 = spawnList[side];
@@ -858,6 +909,8 @@ const SIM = (() => {
     // ---- area effects (B413-414)
     const noDiv = dm => dm.div === 1 ? dm : { ...dm, div: 1, key: (dm.key || "") + "nd" };
     function explosion(att, w, at, raw) {
+      // a blast also batters the walls and doors beside it (B558; no armour divisor)
+      if (terr) for (const [dq, dr] of [[0, 0], ...DIRS]) { const i = idx(key(at.q + dq, at.r + dr)); if (i != null && structOf(i)) damageStructure(i, Math.floor(raw / 3), w.dmg, false); }
       for (const x of models) {
         if (x.state !== "ok" || !x.h || !los(at, x.h)) continue;
         let d = hexDist(x.h, at);
@@ -1031,12 +1084,14 @@ const SIM = (() => {
           if (cur <= stopAt && los(m.h, goal)) break;
           let best = null, bd = cur;
           for (const [dq, dr] of DIRS) {
-            const n = { q: m.h.q + dq, r: m.h.r + dr }, nk = key(n.q, n.r);
-            if (taken(nk)) continue;
+            const n = { q: m.h.q + dq, r: m.h.r + dr }, nk = key(n.q, n.r), i = idx(nk);
+            if (occ.has(nk) || i == null || !pass[i]) continue;
             const d = F.get(nk) ?? 999;
             if (d < bd || (d === bd && best && R() < 0.3)) { bd = d; best = n; }
           }
           if (!best) break;
+          const bi = idx(key(best.q, best.r));
+          if (closed[bi]) { if (!moved) setDoor(bi, false, m); break; }   // opening a door is a Ready (B382)
           place(m, best); moved++;
           if (afterStep(m)) break;
         }
@@ -1166,7 +1221,8 @@ const SIM = (() => {
         return;
       }
       if (w.fp && target.u.flags.blank) { L(`${m.id} casts ${w.name} at ${target.id}: the power dies against a blank`); m.aimTurns = 0; return; }
-      let base = wl(m, w) + (opts.pointBlank ? Math.min(0, w.bulk) : rangePenalty(d)) + target.u.sm - skillPen(m) + aimBonus - (opts.pen || 0)
+      let base = wl(m, w) + (opts.pointBlank ? Math.min(0, w.bulk) : rangePenalty(d + (target.steps || 0)))   // a moving target adds its speed to the range (B550)
+        + target.u.sm - skillPen(m) + aimBonus - (opts.pen || 0)
         + (opts.moved ? Math.min(-2, w.bulk) : 0) + (opts.aoa ? 1 : 0) - ((target.prone || target.kneel) && !opts.pointBlank ? 2 : 0) - (inCover(target, m.h) && !opts.pointBlank ? 2 : 0);
       m.aimTurns = 0;
       // cones hit everyone in the cone; a burst goes at one target (with recoil climbing per round, spreading it
@@ -1363,7 +1419,7 @@ const SIM = (() => {
         }
         const rw = f.u.ranged;
         if (rw && !f.gunBroken && d <= rw.range.max && los(f.h, h)) {
-          const lvl = rw.level - skillPen(f) + rangePenalty(Math.max(1, d)) + m.u.sm - (m.prone ? 2 : 0) + Math.min(2, rw.acc || 0) - (coverAt(h, f.h, m) !== "none" ? 2 : 0);
+          const lvl = rw.level - skillPen(f) + rangePenalty(Math.max(1, d) + (h === m.h ? m.steps || 0 : hexDist(m.h, h))) + m.u.sm - (m.prone ? 2 : 0) + Math.min(2, rw.acc || 0) - (coverAt(h, f.h, m) !== "none" ? 2 : 0);
           const def = mode === "aoa" ? null : m.u.dodge + (mode === "aod" ? 2 : 0) + m.u.db - (m.prone ? 3 : 0);
           best = Math.max(best, expInjRandom(rw, m.u) * burstHits(lvl, rw.rof || 1, rw.rcl) * (1 - (def == null ? 0 : P3[cl(def)])));
         }
@@ -1396,7 +1452,7 @@ const SIM = (() => {
         if (!t.h || !los(h, t.h)) continue;
         const d = Math.max(1, hexDist(h, t.h));
         if (d > w.range.max) continue;
-        const E = planAttack(m, w, t, wl(m, w) - skillPen(m) + rangePenalty(d) + t.u.sm - (coverAt(t.h, h, t) !== "none" ? 2 : 0) - 4 * between(h, t.h, m.u.side).filter(x => x !== t && x !== m).length, false).score * sustainOf(w);
+        const E = planAttack(m, w, t, wl(m, w) - skillPen(m) + rangePenalty(d + (t.steps || 0)) + t.u.sm - (coverAt(t.h, h, t) !== "none" ? 2 : 0) - 4 * between(h, t.h, m.u.side).filter(x => x !== t && x !== m).length, false).score * sustainOf(w);
         best = Math.max(best, kv(m, t, E));
       }
       return best * stanceW(m, "ranged") * m.u.ai.aggression;
@@ -1404,7 +1460,7 @@ const SIM = (() => {
 
     function act(m) {
       const u = m.u, A = u.ai;
-      m.aoa = false; m.aod = false; m.mna = false; m.offBalance = false;
+      m.aoa = false; m.aod = false; m.mna = false; m.offBalance = false; m.readied = false; m.steps = 0;
       clearZone(m); m.waiting = null;
       if (m.jam > 0) { m.jam--; if (!engaged(m)) { L(`${m.id} clears a jam`); return; } }
       const pool = foes(m).filter(f => f.h).sort((a, b) => walk(m.h, a.h) - walk(m.h, b.h));
@@ -1456,6 +1512,7 @@ const SIM = (() => {
           if (tmp.length) add(GAMMA * Math.max(...tmp) - 0.001, `ready-gun`, () => switchTo(m, "gun"));
         }
       }
+      if (terr && !m.grips.length) { doorOptions(m, pool, add, rNow); if (!adj.length) breachOptions(m, pool, add, rNow, Wm); }
       // All-Out Defense (+2 to defences): only against hand-to-hand, a foe beside us or one that can reach us this turn
       const meleeThreat = pool.some(f => f.u.melee && hexDist(f.h, m.h) - f.u.melee.reachMax <= moveOf(f) && expInjRandom(f.u.melee, u) >= 1);
       if (meleeThreat) add(-risk(m, here, "aod"), "aod", () => {
@@ -1516,7 +1573,7 @@ const SIM = (() => {
           const spread = 1 / (1 + 0.5 * u.ai.focus * claims(m, t));
           // figures in the line of fire cost -4 each, and a miss may hit a friend on the line or beside the target
           const inter = w.malediction ? [] : between(m.h, t.h, m.u.side).filter(x => x !== t);
-          const base = wl(m, w) - skillPen(m) + rangePenalty(d) + t.u.sm - 4 * inter.length - (!w.malediction && inCover(t, m.h) ? 2 : 0);
+          const base = wl(m, w) - skillPen(m) + rangePenalty(d + (t.steps || 0)) + t.u.sm - 4 * inter.length - (!w.malediction && inCover(t, m.h) ? 2 : 0);
           const pals = w.malediction || w.dmg.ex ? [] : [...new Set([...inter, ...models.filter(x => x !== m && x.state === "ok" && x.h && hexDist(x.h, t.h) <= 1)])].filter(x => x.u.side === u.side);
           const ffCost = pals.length ? (1 - P3[cl(base)]) * pals.reduce((a, x) => a + P3[cl(9 + x.u.sm)] * Math.min(1, expInjRandom(w, x.u) / remOf(x)) * threatOf(x) * HORIZON, 0) * u.ai.caution : 0;
           const aimed = m.aimTarget === t && m.aimTurns > 0;
@@ -1544,11 +1601,11 @@ const SIM = (() => {
           const t = cands[0], d = hexDist(m.h, t.h);
           if (d > 3) {
             const mv = moveOf(m), nd = Math.max(2, d - mv);
-            const E = planAttack(m, w, t, wl(m, w) - skillPen(m) + rangePenalty(nd) + t.u.sm + Math.min(-2, w.bulk || 0), false).score * sustainOf(w);
+            const E = planAttack(m, w, t, wl(m, w) - skillPen(m) + rangePenalty(nd + (t.steps || 0)) + t.u.sm + Math.min(-2, w.bulk || 0), false).score * sustainOf(w);
             const h2 = stepHex(m.h, t.h, Math.min(mv, d - 2));
             const cont = GAMMA * (shotValueFrom(m, h2, pool) - shotValueFrom(m, m.h, pool));
             add(Wr * kv(m, t, E) + cont - risk(m, h2, ""), `advance-fire@${t.id}`, () => {
-              stepToward(m, t.h, mv, 2); if (m.state !== "ok" || !m.h || m.stunned || !t.h) return;
+              stepToward(m, t.h, mv, 2); if (m.state !== "ok" || !m.h || m.stunned || !t.h || m.readied) return;
               m.facing = faceToward(m.h, t.h); fireAt(m, w, t, { moved: true });
             });
           }
@@ -1636,6 +1693,93 @@ const SIM = (() => {
       return h;
     }
 
+    // ---- in a facility: shut a door that a foe is shooting through (a Ready, B382), when that's safer than anything else
+    function doorOptions(m, pool, add, rNow) {
+      if (!pool.some(f => los(f.h, m.h))) return;
+      for (const [dq, dr] of DIRS) {
+        const k = key(m.h.q + dq, m.h.r + dr), i = idx(k);
+        if (i == null || !terr.doorI[i] || broken[i] || closed[i] || occ.has(k)) continue;
+        // no shutting a door on a foe in or beside the doorway: it would just push it open again
+        const dh = terr.hx[i];
+        if (pool.some(f => f.h && hexDist(f.h, dh) <= 1)) continue;
+        closed[i] = 1; const r2 = risk(m, m.h, ""); closed[i] = 0;
+        if (r2 < rNow - 1e-6) add(-r2 - 0.001, `close-door@${k}`, () => setDoor(i, true, m));
+      }
+    }
+    // ---- breaching (B558): when the way round to the nearest foe is much longer than the way through, attack the
+    // first wall or shut door on the straight line: a gun or power at a wall in sight, a blow at one within reach.
+    // Worth what the opening gives (a shot through it, or the charge it shortens) once the turns to break it pass
+    function breachOptions(m, pool, add, rNow, Wm) {
+      const f = pool[0];
+      if (!f || !f.h || los(m.h, f.h)) return;
+      const hd = hexDist(m.h, f.h), wk = walk(m.h, f.h), mv = moveOf(m);
+      if (wk - hd < 2) return;
+      let j = null, jd = 99;
+      for (const L2 of lineEntry(m.h, f.h)) if (L2) for (const i of L2) if (blocker(i)) { const d = hexDist(m.h, terr.hx[i]); if (d < jd) { jd = d; j = i; } break; }
+      if (j == null || !structOf(j)) return;
+      const th = terr.hx[j], st = structOf(j), hp = hpOf(j);
+      for (const melee of [true, false]) {
+        if (melee ? jd > m.u.melee.reachMax : !los(m.h, th)) continue;
+        for (const w of weaponsFor(m, melee)) {
+          const isGun = w === m.u.ranged;
+          if (!melee && (jd > w.range.max || w.malediction || w.cone || (isGun && (m.ammo <= 0 || m.reload > 0)))) continue;
+          const dm = w.dmg, mean = (dm.n * 3.5 + dm.add) * (dm.mult || 1);
+          const per = Math.max(0, mean - Math.floor(st.dr / (dm.div || 1))) * woundMult(dm.type, "torso", { homogenous: 1 }, dm.ex);
+          const lvl = melee ? w.level - skillPen(m) : wl(m, w) - skillPen(m) + rangePenalty(jd);
+          const E = per * (melee ? P3[cl(lvl)] : burstHits(lvl, isGun && w.shots.mag !== Infinity ? Math.min(w.rof || 1, m.ammo) : (w.rof || 1), w.rcl));
+          if (!(E > 0)) continue;
+          const T = Math.ceil(hp / E);
+          if (T > 4 || T - 1 > (wk - hd) / mv) continue;   // walking round would be as quick
+          let V;
+          broken[j] = 1;
+          if (!melee && shotValueFrom(m, m.h, pool) > 0) V = shotValueFrom(m, m.h, pool);
+          else V = Wm * kv(m, f, planAttack(m, m.u.melee, f, m.u.melee.level - skillPen(m), true).score) * Math.pow(GAMMA, Math.ceil(hd / mv));
+          broken[j] = 0;
+          if (V > 0) add(Math.pow(GAMMA, T - 1) * V - rNow, `breach@${th.q},${th.r}`, () => attackStructure(m, w, j, melee));
+        }
+      }
+      // a grenade (krak, above all) against the wall: Ready it, then throw
+      if (los(m.h, th) && jd >= 2) m.u.grenades.forEach((g, gi) => {
+        if (!m.grenadesLeft[gi] || jd > g.range.max) return;
+        const dm = g.dmg, mean = (dm.n * 3.5 + dm.add) * (dm.mult || 1);
+        const lvl = g.level - skillPen(m) + rangePenalty(jd);
+        const E = P3[cl(lvl)] * Math.max(0, mean - Math.floor(st.dr / (dm.div || 1))) * woundMult(dm.type, "torso", { homogenous: 1 }, dm.ex);
+        if (!(E > 0)) return;
+        const T = Math.ceil(hp / E) * (m.grenadeReady === gi ? 1 : 2);
+        if (T > 4 || T - 1 > (wk - hd) / mv || m.grenadesLeft[gi] * 2 < T) return;
+        broken[j] = 1;
+        const V = shotValueFrom(m, m.h, pool) || Wm * kv(m, f, planAttack(m, m.u.melee, f, m.u.melee.level - skillPen(m), true).score) * Math.pow(GAMMA, Math.ceil(hd / mv));
+        broken[j] = 0;
+        if (V > 0) add(Math.pow(GAMMA, T - 1) * V - rNow, `breach-grenade@${th.q},${th.r}`, () => {
+          if (m.grenadeReady !== gi) { m.grenadeReady = gi; L(`${m.id} readies a ${g.name} to breach the ${hexName(j)}`); return; }
+          m.grenadeReady = null; m.grenadesLeft[gi]--; m.attacked = true; m.facing = faceToward(m.h, th);
+          const r = check(lvl), raw = rollDamage(dm);
+          L(`${m.id} throws a ${g.name} at the ${hexName(j)} (skill ${lvl}): ${r.ok ? "it goes off against it" : "it bounces wide"}`);
+          if (r.ok) { damageStructure(j, raw, dm, true); if (!broken[j]) L(`  ${hpOf(j)} HP of it left`); explosion(m, g, th, raw); }
+          else explosion(m, g, stepHex(th, m.h, 1), raw);
+        });
+      });
+    }
+    function attackStructure(m, w, j, melee) {
+      const th = terr.hx[j], d = hexDist(m.h, th), isGun = w === m.u.ranged, name = hexName(j);
+      m.facing = faceToward(m.h, th); m.attacked = true; m.aimTurns = 0;
+      if (w.fp) m.fp -= w.fp;
+      if (w.perils && perils(m, w)) return;
+      const n = melee ? 1 : isGun ? (w.shots.mag === Infinity ? w.rof : Math.min(w.rof, m.ammo)) : (w.rof || 1);
+      if (isGun && w.shots.mag !== Infinity) m.ammo -= n;
+      const lvl = melee ? w.level - skillPen(m) : wl(m, w) - skillPen(m) + rangePenalty(d);
+      L(`${m.id} ${melee ? "strikes at" : w.usage === "power" ? "casts " + w.name + " at" : "fires " + (n > 1 ? n + " " : "") + "at"} the ${name} to breach it (skill ${lvl})`);
+      let hits = 0, inj = 0;
+      for (let k = 0; k < n && !broken[j]; k++) {
+        if (!check(lvl - (melee ? 0 : k * (w.rcl || 1))).ok) continue;
+        hits++;
+        const raw = rollDamage(w.dmg);
+        inj += damageStructure(j, raw, w.dmg, true);
+        if (w.dmg.ex) explosion(m, w, th, raw);
+      }
+      if (!broken[j]) L(`  ${hits} hit${hits === 1 ? "" : "s"}, ${inj} damage; ${hpOf(j)} HP of the ${terr.wallI[j] ? "wall" : "door"} left`);
+    }
+
     // ---- in a facility: move to a spot beside a crate or a corner that has a line of fire and cover against
     // the foes in sight; valued like any move (the shot it gives next turn less the risk of standing there)
     function coverOptions(m, pool, add) {
@@ -1678,7 +1822,7 @@ const SIM = (() => {
       const tgt = route ? route.foe : near;
       const len = route ? route.path.length : Math.max(0, d - reach);
       const go = n => route ? followPath(m, route.path, n) : stepToward(m, near.h, n, reach);
-      const stopped = () => m.state !== "ok" || m.stunned || m.prone || !m.h;
+      const stopped = () => m.state !== "ok" || m.stunned || m.prone || !m.h || m.readied;
       const w = u.melee;
       const helpers = models.filter(a => a !== m && a.u.side === u.side && a.state === "ok" && a.h && hexDist(a.h, tgt.h) <= moveOf(a) + 1).length;
       const worth = meleeWorth(m, tgt, helpers);
@@ -1853,7 +1997,7 @@ const SIM = (() => {
           if (!c.h || !los(m.h, c.h)) continue;
           const d = hexDist(m.h, c.h);
           if (d < 3 || d > g.range.max) continue;
-          const lvl = g.level - skillPen(m) + rangePenalty(d) + c.u.sm;
+          const lvl = g.level - skillPen(m) + rangePenalty(d + (c.steps || 0)) + c.u.sm;
           // the target may Dodge (then it takes the blast at a yard, with no divisor)
           const dd = rangedDefence(c, m), pDodge = dd == null ? 0 : P3[Math.max(0, Math.min(18, dd))];
           let v = kv(m, c, (1 - pDodge) * expInj(g, c.u, "torso") + pDodge * expInj(g, c.u, "torso", { ...g.dmg, div: 1, mult: g.dmg.mult / 3, key: "s1nd" }));
@@ -1891,7 +2035,7 @@ const SIM = (() => {
         const def = r.crit ? null : defend(c, m, false, 0, 0);
         if (def != null) {
           const off = DIRS[Math.floor(R() * 6)]; let at = { q: c.h.q + off[0], r: c.h.r + off[1] };
-          if (terr && !terr.floor.has(key(at.q, at.r))) at = c.h;
+          if (terr && wallAt(key(at.q, at.r))) at = c.h;
           L(`${m.id} throws a ${w.name} at ${c.id} (skill ${g.lvl}): ${c.id} dodges and it goes off a yard away`);
           const x0 = occ.get(key(at.q, at.r));
           if (x0 && x0.state === "ok" && x0 !== c) applyHit(m, { dmg: noDiv(w.dmg), follow: null }, x0, "torso", true, false, noDiv(w.dmg), raw);
@@ -1904,7 +2048,7 @@ const SIM = (() => {
         explosion(m, w, at, raw);
       } else {
         const off = DIRS[Math.floor(R() * 6)]; let at = { q: c.h.q + off[0] * 2, r: c.h.r + off[1] * 2 };
-        if (terr && (!terr.floor.has(key(at.q, at.r)) || !los(c.h, at))) at = c.h;
+        if (terr && (wallAt(key(at.q, at.r)) || !los(c.h, at))) at = c.h;
         L(`${m.id} throws a ${w.name} at ${c.id} (skill ${g.lvl}): it lands wide`);
         const hitX = occ.get(key(at.q, at.r));
         if (hitX && hitX.state === "ok") {
@@ -1943,6 +2087,7 @@ const SIM = (() => {
     }
     function afterStep(m) {
       if (m.state !== "ok" || !m.h) return true;
+      m.steps = (m.steps || 0) + 1;   // yards moved this turn: a moving target is harder to hit (B550)
       if (m.kneelVol) { m.kneel = m.kneelVol = false; }   // it rose as the step's start
       const k = key(m.h.q, m.h.r);
       for (const z of zones) if (m.state === "ok" && m.h && z.side !== m.u.side && z.owner.state === "ok" && z.owner.h && z.hexes.has(k) && !z.hit.has(m)) suppressHit(z, m);
@@ -2087,7 +2232,7 @@ const SIM = (() => {
     let turn = 0;
     for (turn = 1; turn <= maxTurns; turn++) {
       if (!sideActive(0) || !sideActive(1)) break;
-      L(`— Turn ${turn} —`); fieldCache.clear();
+      L(`— Turn ${turn} —`); fieldCache.clear(); turnNow = turn - 1;
       if (frames) frames.push(models.map(m => m.h ? [m.h.q, m.h.r, m.u.side, m.state === "ok" ? (m.stunned ? 2 : m.prone ? 3 : 1) : 0, m.facing] : null));
       for (const m of models) {
         m.parries = 0; m.retreated = false; m.blocked = false; m.attacked = false;
@@ -2178,7 +2323,7 @@ const SIM = (() => {
     L(winner >= 0 ? `Side ${winner === 0 ? "A" : "B"} wins in ${turn - 1} turns` :
       timeout ? `Still fighting when the ${maxTurns}-second limit ran out` : `Both sides destroyed or broken after ${turn - 1} turns`);
     return {
-      winner, timeout, turns: turn - 1, log, frames, terrain: frames && terr ? { floor: [...terr.floor], crates: [...terr.crates] } : null, roster: models.map(m => ({ id: m.id, side: m.u.side, unit: m.u.idx })),
+      winner, timeout, turns: turn - 1, log, frames, terrain: frames && terr ? { floor: [...terr.floor], crates: [...terr.crates], doors: [...terr.doors], shut: [...startShut], events: tev } : null, roster: models.map(m => ({ id: m.id, side: m.u.side, unit: m.u.idx })),
       units: units.map(u => ({
         name: u.name, side: u.side, count: u.count, routed: u.routed,
         standing: u.models.filter(m => m.state === "ok").length,
@@ -2354,7 +2499,7 @@ if (typeof document !== "undefined") (() => {
       <h2>One battle on the map</h2>
       <div class="replay"><svg id="rmap" role="img" aria-label="Battle map"></svg>
         <div class="rctl"><button id="rplay" class="chip tag" aria-label="Play">▶</button><input id="rturn" type="range" min="0" max="${Math.max(0, r.sample.frames.length - 1)}" value="0" aria-label="Turn"><span id="rlab" class="n"></span></div>
-        <p class="rleg"><span class="dot a"></span>Side A <span class="dot b"></span>Side B · ring: stunned · small: prone · tick: facing${r.sample.terrain ? " · pale: floor, dark: walls, grey hexes: crates (light) and barricades (heavy)" : ""}</p>
+        <p class="rleg"><span class="dot a"></span>Side A <span class="dot b"></span>Side B · ring: stunned · small: prone · tick: facing${r.sample.terrain ? " · pale: floor, dark: walls, grey hexes: crates (light) and barricades (heavy), brass: doors (solid when shut), hatched: breaches" : ""}</p>
         <pre class="slog" id="rlog"></pre></div>
       <details class="more"><summary>Blow-by-blow of the whole battle</summary><pre class="slog">${esc(r.sample.log.join("\n"))}</pre></details>`;
   }
@@ -2368,10 +2513,18 @@ if (typeof document !== "undefined") (() => {
     // a facility: floor hexes over a wall-coloured ground, crates on top
     const hexPoly = (q, r, cls) => { const [cx, cy] = SIM.px({ q, r }); return `<polygon class="${cls}" points="${[0, 1, 2, 3, 4, 5].map(i => `${(cx + Math.cos(i * Math.PI / 3) * 1.01).toFixed(2)},${(cy + Math.sin(i * Math.PI / 3) * 1.01).toFixed(2)}`).join(" ")}"/>`; };
     let ground = "";
+    const doorSet = new Set(T ? T.doors || [] : []);
     if (T) {
       const cr = new Map(T.crates);
-      ground = T.floor.map(k => { const [q, r] = k.split(",").map(Number); pts.push(SIM.px({ q, r })); return hexPoly(q, r, cr.has(k) ? "crate " + cr.get(k) : "floor"); }).join("");
+      ground = T.floor.filter(k => !doorSet.has(k)).map(k => { const [q, r] = k.split(",").map(Number); pts.push(SIM.px({ q, r })); return hexPoly(q, r, cr.has(k) ? "crate " + cr.get(k) : "floor"); }).join("");
     }
+    // doors and breaches as they stood at second t
+    const groundAt = t => {
+      if (!T) return "";
+      const st = new Map([...doorSet].map(k => [k, (T.shut || []).includes(k) ? "door shut" : "door open"]));
+      for (const [tt, k, what] of T.events || []) if (tt <= t) st.set(k, what === "broken" ? "rubble" : what === "closed" ? "door shut" : "door open");
+      return ground + [...st].map(([k, cls]) => { const [q, r] = k.split(",").map(Number); return hexPoly(q, r, cls); }).join("");
+    };
     svg.classList.toggle("fac", !!T);
     if (!pts.length) return;
     const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]);
@@ -2380,7 +2533,7 @@ if (typeof document !== "undefined") (() => {
     const turnLog = t => { const a = log.findIndex(l => l === `— Turn ${t + 1} —`), b = log.findIndex(l => l === `— Turn ${t + 2} —`); return a < 0 ? "" : log.slice(a + 1, b < 0 ? undefined : b).join("\n"); };
     const show = t => {
       const f = fr[t] || [];
-      svg.innerHTML = ground + f.map(x => {
+      svg.innerHTML = groundAt(t) + f.map(x => {
         if (!x) return "";
         const [cx, cy] = SIM.px({ q: x[0], r: x[1] }), st = x[3], rad = st === 3 ? 0.4 : 0.6;
         const a = [0, -60, -120, 180, 120, 60][x[4]] * Math.PI / 180;
