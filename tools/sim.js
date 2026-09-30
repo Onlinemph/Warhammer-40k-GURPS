@@ -547,7 +547,7 @@ const SIM = (() => {
     const units = unitSpecs.map(s => buildUnit(s.spec, s.side));
     const models = [];
     const occ = new Map();
-    const place = (m, h) => { if (m.h) occ.delete(key(m.h.q, m.h.r)); m.h = h; if (h) occ.set(key(h.q, h.r), m); };
+    const place = (m, h) => { if (m.h) occ.delete(key(m.h.q, m.h.r)); m.h = h; if (h) { occ.set(key(h.q, h.r), m); if (frames && m.trail) m.trail.push([h.q, h.r]); } };
     // terrain: walls block movement and sight until breached; crates block movement only; doors block both
     // while closed. The map is shared by every run; what changes in a battle (doors, breaches, wall damage) lives here
     const terr = opt.terrain || (opt.battlefield === "facility" ? facilityMap(opt.mapSeed || 1) : null);
@@ -691,7 +691,7 @@ const SIM = (() => {
         let h = terr ? nextSpawn(u.side) : fromOffset(col, row);
         if (!terr) while (occ.has(key(h.q, h.r))) h = fromOffset(h.q + (u.side ? 1 : -1), row);
         place(m, h);
-        u.models.push(m); models.push(m);
+        m.ix = models.length; m.trail = []; u.models.push(m); models.push(m);
       }
       row0[u.side] += 2 * perRank + 4;
     });
@@ -853,7 +853,7 @@ const SIM = (() => {
       const sh = t.u.shield;
       if (sh && t.sp > 0 && (ranged || !sh.ranged_only)) {
         t.spHit = turn;
-        if (raw <= t.sp) { t.sp -= raw; if (fraw) t.sp = Math.max(0, t.sp - fraw); L(`  shield holds (${t.sp} SP left)`); return 0; }
+        if (raw <= t.sp) { t.sp -= raw; if (fraw) t.sp = Math.max(0, t.sp - fraw); if (t.h) FX(["f", t.ix, raw, t.h.q, t.h.r]); L(`  shield holds (${t.sp} SP left)`); return 0; }
         raw -= t.sp; t.sp = 0; t.spCollapsed = true; L(`  shield collapses`);   // what gets through still carries its follow-up
       }
       const coverDR = ranged && COVERED.has(loc) ? COVER_DR[coverAt(t.h, att && att.h, t)] : 0;
@@ -877,7 +877,7 @@ const SIM = (() => {
         const bt = Math.floor(raw / (dmg.type === "cr" ? 5 : 10));
         if (bt > 0) { L(`  ${raw} dmg to ${loc} stopped by flexible armour: ${bt} blunt trauma`); injure(att, t, bt, loc, "cr"); return bt; }
       }
-      if (pen <= 0) { L(`  ${raw} dmg to ${loc} fails to penetrate DR ${armDR + natDR}${div !== 1 ? "/" + (div === Infinity ? "∞" : div) : ""}`); return 0; }
+      if (pen <= 0) { if (t.h) FX(["h", t.ix, 0, loc, t.h.q, t.h.r]); L(`  ${raw} dmg to ${loc} fails to penetrate DR ${armDR + natDR}${div !== 1 ? "/" + (div === Infinity ? "∞" : div) : ""}`); return 0; }
       const flags = t.u.flags, poison = flags.poison;
       let inj = dmg.type === "tox" && poison === "immune" ? 0 : Math.max(1, Math.floor(pen * woundMult(dmg.type, loc, flags, dmg.ex)));
       if (dmg.type === "tox" && poison === "resist") inj = Math.floor(inj / 2);
@@ -897,6 +897,7 @@ const SIM = (() => {
         }
       }
       L(`  ${raw} dmg to ${loc} (DR ${armDR + natDR}${div !== 1 ? "/" + (div === Infinity ? "∞" : div) : ""}): ${inj} injury${finj ? ` + ${finj} ${w.follow.ex ? "from the internal explosion" : "follow-up"}` : ""}${frac ? "" : `; ${t.id} at ${t.hp - inj - finj}/${t.u.HP} HP`}`);
+      if (t.h) FX(["h", t.ix, inj + finj, loc, t.h.q, t.h.r]);
       injure(att, t, inj + finj, loc, dmg.type);
       return inj + finj;
     }
@@ -1073,6 +1074,7 @@ const SIM = (() => {
       // retreating is a real step back or aside, once per turn (B377)
       if (o.retreat) { t.retreated = true; const h = retreatHex(t, att); if (h) place(t, h); }
       const r = check(o.v + mod + feverish(t, att, true, o.v + mod));
+      if (r.ok && t.h) FX(["v", t.ix, o.how, t.h.q, t.h.r]);
       return r.ok ? { how: o.how, margin: Math.max(0, r.margin) } : null;
     }
 
@@ -1266,13 +1268,13 @@ const SIM = (() => {
         const thru = (inter.length ? `, through ${inter.length}` : "") + (plan.da ? `, deceptive -${plan.da}` : "");
         if (!r.ok && !w.cone) {
           L(`${m.id} fires ${n > 1 ? n + " " : ""}at ${t.id} (${d} yd${loc0 && loc0 !== "torso" ? ", aiming at the " + locName(loc0) : ""}${thru}, skill ${lvl}): misses`);
-          FX(["s", m.h.q, m.h.r, t.h.q, t.h.r, m.u.side, 0]);
+          FX(["s", m.h.q, m.h.r, t.h.q, t.h.r, m.u.side, 0, m.ix, t.ix, lvl, 0, nb]);
           if (w.dmg.ex && i === 0) explosion(m, w, { q: t.h.q + DIRS[Math.floor(R() * 6)][0], r: t.h.r + DIRS[Math.floor(R() * 6)][1] }, rollDamage(w.dmg));
           else if (!w.dmg.ex) stray(m, w, t, inter, halfD);
           return;
         }
         let hits = got;
-        FX(["s", m.h.q, m.h.r, t.h.q, t.h.r, m.u.side, got ? 1 : 0]);
+        FX(["s", m.h.q, m.h.r, t.h.q, t.h.r, m.u.side, got ? 1 : 0, m.ix, t.ix, lvl, got, nb]);
         L(`${m.id} ${w.usage === "power" ? "casts " + w.name + " at" : "fires " + (n > 1 ? n + " at" : "at")} ${t.id} (${d} yd${loc0 && loc0 !== "torso" ? ", aiming at the " + locName(loc0) : ""}${thru}, skill ${lvl}${k0 ? " from -" + k0 * w.rcl : ""}${nb > 1 || k0 ? ", -" + w.rcl + " a round" : ""}): ${hits} hit${hits > 1 ? "s" : ""}`);
         if (hits > crits && !w.malediction) {
           const open = hits - crits;   // critical rounds can't be defended
@@ -1343,7 +1345,7 @@ const SIM = (() => {
         m.attacked = true;
         if (w.fp) m.fp -= w.fp;
         if (w.perils && perils(m, w)) continue;
-        if (m.h && t.h) FX(["m", m.h.q, m.h.r, t.h.q, t.h.r, m.u.side, r.ok ? 1 : 0]);
+        if (m.h && t.h) FX(["m", m.h.q, m.h.r, t.h.q, t.h.r, m.u.side, r.ok ? 1 : 0, m.ix, t.ix, plan.lvl, r.roll]);
         if (!r.ok) { L(`${m.id} strikes at ${t.id} (${loc !== "torso" ? locName(loc) + ", " : ""}skill ${plan.lvl}): misses`); if (r.fumble) critMiss(m, w); continue; }
         if (!r.crit) {
           const def = defend(t, m, true, plan.da, feint);
@@ -2257,7 +2259,14 @@ const SIM = (() => {
       for (const W of Object.values(m.wounds)) for (let l = 8; l > worst; l--) if (W[l] > 0) { worst = l; break; }
       return 1 - worst / 8;
     };
-    const snap = () => models.map(m => m.h ? [m.h.q, m.h.r, m.u.side, m.state === "ok" ? (m.stunned ? 2 : m.prone ? 3 : 1) : 0, m.facing, Math.round(vit(m) * 100) / 100] : null);
+    // condition bits for the replay: 1 stunned, 2 prone, 4 kneeling, 8 held, 16 holding, 32 All-Out Defense,
+    // 64 All-Out Attack, 128 aiming, 256 pinned, 512 waiting
+    const bits = m => (m.stunned ? 1 : 0) | (m.prone ? 2 : 0) | (m.kneel ? 4 : 0) | (m.grips.length ? 8 : 0) | (m.holding ? 16 : 0) | (m.aod ? 32 : 0) | (m.aoa ? 64 : 0) | (m.aimTurns > 0 ? 128 : 0) | (m.pinned ? 256 : 0) | (m.waiting ? 512 : 0);
+    const snap = () => models.map(m => {
+      const path = m.trail; m.trail = [];
+      return m.h ? [m.h.q, m.h.r, m.u.side, m.state === "ok" ? (m.stunned ? 2 : m.prone ? 3 : 1) : 0, m.facing, Math.round(vit(m) * 100) / 100, path,
+        bits(m), m.u.shield ? Math.round(100 * Math.max(0, m.sp) / m.u.shield.sp) / 100 : -1, m.aimTarget && m.aimTurns > 0 ? m.aimTarget.ix : -1] : null;
+    });
     let turn = 0;
     for (turn = 1; turn <= maxTurns; turn++) {
       if (!sideActive(0) || !sideActive(1)) break;
@@ -2353,7 +2362,8 @@ const SIM = (() => {
     L(winner >= 0 ? `Side ${winner === 0 ? "A" : "B"} wins in ${turn - 1} turns` :
       timeout ? `Still fighting when the ${maxTurns}-second limit ran out` : `Both sides destroyed or broken after ${turn - 1} turns`);
     return {
-      winner, timeout, turns: turn - 1, log, frames, fx, terrain: frames && terr ? { floor: [...terr.floor], crates: [...terr.crates], doors: [...terr.doors], shut: [...startShut], events: tev } : null, roster: models.map(m => ({ id: m.id, side: m.u.side, unit: m.u.idx })),
+      winner, timeout, turns: turn - 1, log, frames, fx, terrain: frames && terr ? { floor: [...terr.floor], crates: [...terr.crates], doors: [...terr.doors], shut: [...startShut], events: tev } : null, roster: models.map(m => { const u = m.u; return { id: m.id, side: u.side, unit: u.idx, template: u.template, faction: u.ai.name, speed: u.speed, move: u.move, hp: u.HP, st: u.st, dx: u.dx, dodge: u.dodge, parry: u.parry, dr: drAt(u.arm.dr, "torso") + drAt(u.nat, "torso"), sp: u.shield ? u.shield.sp : 0,
+        ranged: u.ranged ? `${u.ranged.name} (${u.ranged.text}${u.ranged.followText ? " + " + u.ranged.followText : ""})` : "", melee: `${u.melee.name} (${u.melee.text})`, kills: m.kills, fate: m.state }; }),
       units: units.map(u => ({
         name: u.name, side: u.side, count: u.count, routed: u.routed,
         standing: u.models.filter(m => m.state === "ok").length,
@@ -2390,7 +2400,7 @@ const SIM = (() => {
     return res;
   }
 
-  return { index, buildUnit, describe, runBattle, monteCarlo, parseDamage, seed, woundMult, fmtDice, px, facilityMap, fromOffset,
+  return { index, buildUnit, describe, runBattle, monteCarlo, parseDamage, seed, woundMult, fmtDice, px, facilityMap, fromOffset, rangePenalty, DIRS,
     get templates() { return TEMPLATES; }, get equipment() { return EQ; }, traitWeapons };
 })();
 if (typeof module !== "undefined") module.exports = SIM;
@@ -2547,18 +2557,34 @@ if (typeof document !== "undefined") (() => {
         <figure class="rcard"><figcaption>How long the battles lasted</figcaption>${histogram(r)}</figure>
         <figure class="rcard"><figcaption>What was left of each unit (average)</figcaption>${casualties(r)}</figure>
       </div>
-      <h2>One battle, second by second</h2>
-      <div class="theatre">
-        <div class="stage"><svg id="rmap" role="img" aria-label="Battle map"></svg>
-          <div class="hud"><span class="hud-a" id="hudA"></span><span class="clock" id="rlab"></span><span class="hud-b" id="hudB"></span></div></div>
-        <div class="feed"><div class="feedhead">Battle log</div><pre class="slog" id="rlog"></pre></div>
+      <h2>One battle on the table</h2>
+      <div class="vtt" id="vtt">
+        <div class="vtt-main">
+          <canvas class="vtt-c" id="vtt-c" aria-label="Battle map. Drag to pan, scroll or pinch to zoom, click a token to see its sheet."></canvas>
+          <div class="vtt-hud"><span class="hud-a" id="hudA"></span><span class="clock" id="rlab"></span><span class="hud-b" id="hudB"></span></div>
+          <div class="vtt-tools" role="toolbar" aria-label="Map tools">
+            <button type="button" data-tool="fit" title="Fit the battle to the view">Fit</button>
+            <button type="button" data-tool="grid" aria-pressed="true" title="Show the hex grid">Grid</button>
+            <button type="button" data-tool="trails" aria-pressed="true" title="Show each model's path this second">Paths</button>
+            <button type="button" data-tool="measure" aria-pressed="false" title="Drag between two hexes to measure range">Measure</button>
+          </div>
+          <div class="vtt-tip" id="vtt-tip" hidden></div>
+        </div>
+        <aside class="vtt-side">
+          <div class="vtt-tabs" role="tablist"><button type="button" role="tab" data-tab="init" aria-selected="true">Initiative</button><button type="button" role="tab" data-tab="chat" aria-selected="false">Log</button><button type="button" role="tab" data-tab="sheet" aria-selected="false">Sheet</button></div>
+          <div class="vtt-pane" id="vtt-init"></div>
+          <div class="vtt-pane" id="vtt-chat" hidden></div>
+          <div class="vtt-pane" id="vtt-sheet" hidden><p class="vtt-empty">Click a token on the map, or a name in the initiative list.</p></div>
+        </aside>
+        <div class="vtt-time">
+          <button type="button" id="rback" title="Back one second" aria-label="Back one second">◂◂</button>
+          <button type="button" id="rplay" class="primary" aria-label="Play">Play</button>
+          <button type="button" id="rstep" title="Forward one second" aria-label="Forward one second">▸▸</button>
+          <div class="vtt-track"><div class="vtt-ticks" id="vtt-ticks"></div><input id="rturn" type="range" min="0" max="${Math.max(0, r.sample.frames.length - 1)}" value="0" aria-label="Second"></div>
+          <label for="rspeed">Speed <select id="rspeed"><option value="1400">½×</option><option value="800" selected>1×</option><option value="420">2×</option><option value="200">4×</option></select></label>
+        </div>
       </div>
-      <div class="rctl">
-        <button id="rplay" type="button" aria-label="Play">Play</button>
-        <input id="rturn" type="range" min="0" max="${Math.max(0, r.sample.frames.length - 1)}" value="0" aria-label="Second">
-        <label for="rspeed">Speed <select id="rspeed"><option value="700">½×</option><option value="350" selected>1×</option><option value="170">2×</option><option value="80">4×</option></select></label>
-      </div>
-      <p class="rleg"><span class="dot a"></span>Side A <span class="dot b"></span>Side B · ring: health left · dashed ring: stunned · small: prone · lines: shots (bright when they hit) · flash: melee blow · burst: explosion · ×: fallen${r.sample.terrain ? " · pale: floor, dark: walls, grey: crates and barricades, brass: doors (solid when shut)" : ""}</p>
+      <p class="rleg">Drag to pan, scroll or pinch to zoom, click a token for its sheet. Space plays and pauses; the arrow keys step. Tokens: rim colour is the side, bar is health (blue above it is a shield). Badges: <b>S</b> stunned, <b>P</b> prone, <b>K</b> kneeling, <b>G</b> held, <b>H</b> holding, <b>D</b> All-Out Defense, <b>A</b> All-Out Attack, <b>W</b> waiting; a dotted line shows what a model is aiming at. Floating numbers are injury; grey is a hit armour stopped.</p>
       <details class="more"><summary>Blow-by-blow of the whole battle</summary><pre class="slog">${esc(r.sample.log.join("\n"))}</pre></details>`;
   }
   // battle lengths, stacked by who won
@@ -2593,85 +2619,397 @@ if (typeof document !== "undefined") (() => {
     }).join("")}<p class="ckey"><span class="k up"></span>standing <span class="k down"></span>down or fled <span class="k dead"></span>killed</p></div>`;
   }
 
-  // draw one battle's frames on an SVG hex map, with shots, blows, blasts and the fallen
-  let timer = null;
+  // ================= the tabletop: one battle replayed on a canvas, like a virtual tabletop =================
+  // The map is painted once to an offscreen canvas (a battle-map palette, the same in either theme); tokens,
+  // paths, shots, blows, blasts and floating injury are drawn over it each animation frame. Drag pans, the wheel
+  // or a pinch zooms, a click opens a token's sheet.
+  const MAP = { earth: "#5a5344", earth2: "#4c4638", rock: "#3a352c", crater: "#2b271f", wall: "#23262c", wallHi: "#6b717b", plate: "#5d6167", plate2: "#54585e",
+    seam: "#3b3e44", grate: "#44484e", crateL: "#7a5a35", crateLd: "#4e3a22", crateH: "#8a8a84", crateHd: "#55554f", hazard: "#d4a52a", door: "#9aa1a8", doorD: "#2f3338",
+    gridO: "rgba(0,0,0,.22)", gridF: "rgba(255,255,255,.07)", sideA: "#c23a30", sideB: "#d6a73c", sideAl: "#f08a7e", sideBl: "#f1d38a", ink: "#15161a", paper: "#f4f1e8",
+    shield: "#58b6e8", hpHi: "#5fbf6a", hpMid: "#e3b341", hpLo: "#e0564b", shot: "#fff3c4", miss: "rgba(255,255,255,.35)", blast: "#ffb347" };
+  const SQ3 = Math.sqrt(3), rangePenalty = SIM.rangePenalty, DIRN = SIM.DIRS;
+  // the two corners bounding the edge toward each neighbour in DIRS (flat-topped hexes, corner i at i x 60 degrees)
+  const EDGE = [[0, 1], [5, 0], [4, 5], [3, 4], [2, 3], [1, 2]];
+  const hexCorner = (cx, cy, i, k = 1) => [cx + Math.cos(i * Math.PI / 3) * k, cy + Math.sin(i * Math.PI / 3) * k];
+  function hexPath(g, cx, cy, k = 1) { g.beginPath(); for (let i = 0; i < 6; i++) { const [x, y] = hexCorner(cx, cy, i, k); i ? g.lineTo(x, y) : g.moveTo(x, y); } g.closePath(); }
+  // a small repeatable random for textures, so the same map always looks the same
+  const hash = (a, b) => { let h = (a * 374761393 + b * 668265263) | 0; h = Math.imul(h ^ (h >>> 13), 1274126177); return ((h ^ (h >>> 16)) >>> 0) / 4294967296; };
+  // faction emblems: simple generated marks, drawn in unit space (radius about 0.45)
+  const GLYPH = {
+    Astartes(g) { g.beginPath(); g.moveTo(-.34, -.3); g.lineTo(.34, -.3); g.lineTo(.3, .12); g.lineTo(0, .38); g.lineTo(-.3, .12); g.closePath(); g.fill(); g.fillStyle = MAP.ink; g.fillRect(-.22, -.08, .44, .09); },
+    Custodes(g) { g.fillRect(-.04, -.42, .08, .84); g.beginPath(); g.moveTo(0, -.46); g.lineTo(.13, -.26); g.lineTo(-.13, -.26); g.closePath(); g.fill(); g.lineWidth = .07; g.beginPath(); g.arc(0, .06, .3, Math.PI * .15, Math.PI * .85); g.stroke(); },
+    "Adepta Sororitas"(g) { g.beginPath(); g.moveTo(0, -.4); g.lineTo(.12, -.08); g.lineTo(.4, 0); g.lineTo(.12, .08); g.lineTo(0, .4); g.lineTo(-.12, .08); g.lineTo(-.4, 0); g.lineTo(-.12, -.08); g.closePath(); g.fill(); },
+    "Adeptus Mechanicus"(g) { g.beginPath(); for (let i = 0; i < 16; i++) { const a = i * Math.PI / 8, r = i % 2 ? .3 : .42; g.lineTo(Math.cos(a) * r, Math.sin(a) * r); } g.closePath(); g.fill(); g.fillStyle = MAP.ink; g.beginPath(); g.arc(0, 0, .14, 0, 7); g.fill(); },
+    "Imperial Guard"(g) { g.beginPath(); for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + i * Math.PI / 5, r = i % 2 ? .17 : .42; g.lineTo(Math.cos(a) * r, Math.sin(a) * r); } g.closePath(); g.fill(); },
+    "Inquisition and Psykers"(g) { g.lineWidth = .1; g.beginPath(); g.moveTo(-.2, -.36); g.lineTo(.2, .36); g.moveTo(.2, -.36); g.lineTo(-.2, .36); g.stroke(); g.beginPath(); g.arc(0, 0, .16, 0, 7); g.fill(); },
+    Orks(g) { g.beginPath(); g.moveTo(-.36, -.26); g.lineTo(.36, -.26); g.lineTo(.3, .1); g.lineTo(.16, .36); g.lineTo(-.16, .36); g.lineTo(-.3, .1); g.closePath(); g.fill(); g.fillStyle = MAP.ink; g.beginPath(); g.moveTo(-.24, -.14); g.lineTo(-.04, -.04); g.lineTo(-.22, .04); g.closePath(); g.moveTo(.24, -.14); g.lineTo(.04, -.04); g.lineTo(.22, .04); g.closePath(); g.fill(); g.fillRect(-.14, .18, .28, .06); },
+    Tyranids(g) { g.lineWidth = .09; g.lineCap = "round"; for (const s of [-1, 0, 1]) { g.beginPath(); g.moveTo(s * .22, .34); g.quadraticCurveTo(s * .3 + .02, -.1, s * .08 + .12, -.38); g.stroke(); } },
+    Necrons(g) { g.lineWidth = .08; g.beginPath(); g.arc(0, -.12, .2, 0, 7); g.stroke(); g.fillRect(-.04, .02, .08, .38); g.fillRect(-.24, .12, .48, .07); },
+    Aeldari(g) { g.beginPath(); g.moveTo(0, -.42); g.lineTo(.12, 0); g.lineTo(0, .42); g.lineTo(-.12, 0); g.closePath(); g.fill(); g.lineWidth = .06; g.beginPath(); g.arc(0, 0, .3, Math.PI * 1.15, Math.PI * 1.85); g.stroke(); g.beginPath(); g.arc(0, 0, .3, Math.PI * .15, Math.PI * .85); g.stroke(); },
+    Drukhari(g) { g.beginPath(); g.moveTo(-.34, .3); g.lineTo(.38, -.4); g.lineTo(.08, .06); g.lineTo(.3, .1); g.lineTo(-.2, .36); g.closePath(); g.fill(); },
+    "T'au"(g) { g.lineWidth = .07; g.beginPath(); g.arc(0, 0, .34, 0, 7); g.stroke(); g.beginPath(); g.arc(0, .06, .14, 0, 7); g.fill(); g.fillRect(-.03, -.34, .06, .2); },
+    "Kroot and Vespid"(g) { g.beginPath(); g.moveTo(-.34, .3); g.quadraticCurveTo(0, -.6, .34, .3); g.quadraticCurveTo(0, .02, -.34, .3); g.fill(); },
+    Default(g) { g.beginPath(); g.moveTo(0, -.38); g.lineTo(.3, 0); g.lineTo(0, .38); g.lineTo(-.3, 0); g.closePath(); g.fill(); },
+  };
+  const BADGES = [[1, "S", "#e3b341"], [2, "P", "#b9b4a8"], [4, "K", "#b9b4a8"], [8, "G", "#e0564b"], [16, "H", "#e0564b"], [32, "D", "#58b6e8"], [64, "A", "#e0564b"], [512, "W", "#b9b4a8"], [256, "N", "#e0564b"]];
+
+  let vtt = null;
   function setupReplay() {
-    const svg = document.getElementById("rmap"); if (!svg || !last) return;
-    if (timer) { clearInterval(timer); timer = null; }
-    const fr = last.sample.frames, fx = last.sample.fx || [], log = last.sample.log, T = last.sample.terrain, roster = last.sample.roster || [];
+    if (vtt) vtt.stop();
+    const cv = document.getElementById("vtt-c");
+    if (!cv || !last || !last.sample.frames.length) return;
+    vtt = makeTable(last.sample, cv);
+  }
+
+  function makeTable(sample, cv) {
+    const fr = sample.frames, fx = sample.fx || [], log = sample.log, T = sample.terrain, ros = sample.roster || [];
     const P = (q, r) => SIM.px({ q, r });
-    const pts = []; fr.forEach(f => f.forEach(x => { if (x) pts.push(P(x[0], x[1])); }));
-    if (!pts.length) return;
-    const hexPts = (cx, cy, k = 1.01) => [0, 1, 2, 3, 4, 5].map(i => `${(cx + Math.cos(i * Math.PI / 3) * k).toFixed(2)},${(cy + Math.sin(i * Math.PI / 3) * k).toFixed(2)}`).join(" ");
-    const hexPoly = (q, r, cls) => { const [cx, cy] = P(q, r); return `<polygon class="${cls}" points="${hexPts(cx, cy)}"/>`; };
-    const doorSet = new Set(T ? T.doors || [] : []);
-    let ground = "";
-    if (T) {
-      const cr = new Map(T.crates);
-      ground = T.floor.filter(k => !doorSet.has(k)).map(k => { const [q, r] = k.split(",").map(Number); pts.push(P(q, r)); return hexPoly(q, r, cr.has(k) ? "crate " + cr.get(k) : "floor"); }).join("");
-    }
-    const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]);
-    const pad = 3, minX = Math.min(...xs) - pad, minY = Math.min(...ys) - pad, W = Math.max(...xs) - minX + pad, H = Math.max(...ys) - minY + pad;
-    svg.setAttribute("viewBox", `${minX.toFixed(1)} ${minY.toFixed(1)} ${W.toFixed(1)} ${H.toFixed(1)}`);
-    svg.classList.toggle("fac", !!T);
+    const g = cv.getContext("2d");
+    const reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const st = { t: 0, p: 1, playing: false, grid: true, trails: true, measure: false, sel: -1, hover: -1, meas: null };
+    // ---- the map, painted once
+    const pts = [];
+    fr.forEach(f => f.forEach(x => { if (x) pts.push(P(x[0], x[1])); }));
+    const floor = T ? new Set(T.floor) : null, crates = T ? new Map(T.crates) : null, doors = T ? new Set(T.doors || []) : null;
+    if (T) for (const k of T.floor) { const [q, r] = k.split(",").map(Number); pts.push(P(q, r)); }
+    let x0 = Math.min(...pts.map(p => p[0])) - 4, x1 = Math.max(...pts.map(p => p[0])) + 4, y0 = Math.min(...pts.map(p => p[1])) - 4, y1 = Math.max(...pts.map(p => p[1])) + 4;
+    if (!T) { const padX = Math.max(0, 24 - (x1 - x0)) / 2, padY = Math.max(0, 16 - (y1 - y0)) / 2; x0 -= padX; x1 += padX; y0 -= padY; y1 += padY; }
+    const RES = Math.max(8, Math.min(24, Math.floor(4200 / Math.max(x1 - x0, y1 - y0))));
+    const bg = document.createElement("canvas");
+    bg.width = Math.ceil((x1 - x0) * RES); bg.height = Math.ceil((y1 - y0) * RES);
+    const b = bg.getContext("2d");
+    b.setTransform(RES, 0, 0, RES, -x0 * RES, -y0 * RES);
+    const eachHex = fn => { for (let q = Math.floor(x0 / 1.5) - 1; q <= Math.ceil(x1 / 1.5) + 1; q++) for (let r = Math.floor(y0 / SQ3 - q / 2) - 1; r <= Math.ceil(y1 / SQ3 - q / 2) + 1; r++) fn(q, r); };
     if (!T) {
-      // open ground: a faint hex grid under everything, as one path
-      let d = "";
-      const q0 = Math.floor(minX / 1.5) - 1, q1 = Math.ceil((minX + W) / 1.5) + 1;
-      for (let q = q0; q <= q1; q++) {
-        const r0 = Math.floor(minY / Math.sqrt(3) - q / 2) - 1, r1 = Math.ceil((minY + H) / Math.sqrt(3) - q / 2) + 1;
-        if ((q1 - q0) * (r1 - r0) > 9000) break;
-        for (let r = r0; r <= r1; r++) { const [cx, cy] = P(q, r); d += `M${hexPts(cx, cy, 1).split(" ").join("L")}Z`; }
+      // open ground: churned earth, speckle, stones and old craters
+      b.fillStyle = MAP.earth; b.fillRect(x0, y0, x1 - x0, y1 - y0);
+      eachHex((q, r) => { const [cx, cy] = P(q, r), h = hash(q, r); b.fillStyle = h < .5 ? "rgba(0,0,0,.06)" : "rgba(255,255,255,.035)"; hexPath(b, cx, cy, 1.02); b.fill(); });
+      const area = (x1 - x0) * (y1 - y0);
+      for (let i = 0; i < area * 5; i++) { const x = x0 + hash(i, 7) * (x1 - x0), y = y0 + hash(i, 13) * (y1 - y0), s = .03 + hash(i, 3) * .08; b.fillStyle = hash(i, 5) < .5 ? MAP.earth2 : "rgba(255,255,255,.08)"; b.fillRect(x, y, s, s); }
+      for (let i = 0; i < area / 110; i++) {
+        const x = x0 + hash(i, 101) * (x1 - x0), y = y0 + hash(i, 103) * (y1 - y0), rr = .8 + hash(i, 107) * 2.2;
+        const gr = b.createRadialGradient(x, y, rr * .1, x, y, rr); gr.addColorStop(0, "rgba(43,39,31,.7)"); gr.addColorStop(.7, "rgba(40,36,28,.3)"); gr.addColorStop(1, "rgba(90,83,68,0)");
+        b.fillStyle = gr; b.beginPath(); b.arc(x, y, rr, 0, 7); b.fill();
       }
-      ground = `<path class="grid" d="${d}"/>`;
+      for (let i = 0; i < area / 12; i++) { const x = x0 + hash(i, 211) * (x1 - x0), y = y0 + hash(i, 223) * (y1 - y0), rr = .08 + hash(i, 227) * .18; b.fillStyle = MAP.rock; b.beginPath(); b.ellipse(x, y, rr, rr * .7, hash(i, 229) * 3, 0, 7); b.fill(); }
+    } else {
+      // a facility: gunmetal walls, deck plates with seams, grates, bulkhead edges, crates and barricades
+      b.fillStyle = MAP.wall; b.fillRect(x0, y0, x1 - x0, y1 - y0);
+      for (let i = 0; i < (x1 - x0) * (y1 - y0) * 2; i++) { b.fillStyle = "rgba(255,255,255,.025)"; b.fillRect(x0 + hash(i, 31) * (x1 - x0), y0 + hash(i, 37) * (y1 - y0), .25, .04); }
+      for (const k of T.floor) {
+        const [q, r] = k.split(",").map(Number), [cx, cy] = P(q, r), h = hash(q, r);
+        b.fillStyle = h < .5 ? MAP.plate : MAP.plate2; hexPath(b, cx, cy, 1.02); b.fill();
+        if (h > .9) { b.save(); hexPath(b, cx, cy, .8); b.clip(); b.strokeStyle = MAP.grate; b.lineWidth = .06; for (let d = -1; d <= 1; d += .2) { b.beginPath(); b.moveTo(cx - 1, cy + d); b.lineTo(cx + 1, cy + d); b.stroke(); } b.restore(); }
+        b.strokeStyle = MAP.seam; b.lineWidth = .04; hexPath(b, cx, cy, 1); b.stroke();
+        if (h < .12) { b.fillStyle = "rgba(0,0,0,.18)"; b.beginPath(); b.ellipse(cx + (h - .06) * 4, cy, .5, .28, h * 9, 0, 7); b.fill(); }
+      }
+      // bulkhead edges where floor meets wall
+      b.lineCap = "round";
+      for (const k of T.floor) {
+        const [q, r] = k.split(",").map(Number), [cx, cy] = P(q, r);
+        DIRN.forEach(([dq, dr], i) => {
+          if (floor.has((q + dq) + "," + (r + dr))) return;
+          const [ax, ay] = hexCorner(cx, cy, EDGE[i][0]), [bx, by] = hexCorner(cx, cy, EDGE[i][1]);
+          b.strokeStyle = "rgba(0,0,0,.55)"; b.lineWidth = .28; b.beginPath(); b.moveTo(ax, ay); b.lineTo(bx, by); b.stroke();
+          b.strokeStyle = MAP.wallHi; b.lineWidth = .08; b.beginPath(); b.moveTo(ax, ay); b.lineTo(bx, by); b.stroke();
+        });
+      }
+      for (const [k, kind] of crates) {
+        const [q, r] = k.split(",").map(Number), [cx, cy] = P(q, r);
+        b.fillStyle = "rgba(0,0,0,.35)"; b.fillRect(cx - .62, cy - .5, 1.3, 1.1);
+        if (kind === "light") {
+          b.fillStyle = MAP.crateL; b.fillRect(cx - .7, cy - .6, 1.3, 1.1); b.strokeStyle = MAP.crateLd; b.lineWidth = .08; b.strokeRect(cx - .7, cy - .6, 1.3, 1.1);
+          b.beginPath(); b.moveTo(cx - .7, cy - .6); b.lineTo(cx + .6, cy + .5); b.moveTo(cx + .6, cy - .6); b.lineTo(cx - .7, cy + .5); b.stroke();
+        } else {
+          b.fillStyle = MAP.crateH; b.fillRect(cx - .75, cy - .55, 1.4, 1.05); b.save(); b.beginPath(); b.rect(cx - .75, cy + .25, 1.4, .25); b.clip();
+          for (let d = -1; d < 1.6; d += .3) { b.fillStyle = MAP.hazard; b.beginPath(); b.moveTo(cx - .75 + d, cy + .5); b.lineTo(cx - .6 + d, cy + .5); b.lineTo(cx - .35 + d, cy + .25); b.lineTo(cx - .5 + d, cy + .25); b.fill(); }
+          b.restore(); b.strokeStyle = MAP.crateHd; b.lineWidth = .07; b.strokeRect(cx - .75, cy - .55, 1.4, 1.05);
+        }
+      }
     }
-    const groundAt = t => {
-      if (!T) return ground;
-      const st = new Map([...doorSet].map(k => [k, (T.shut || []).includes(k) ? "door shut" : "door open"]));
-      for (const [tt, k, what] of T.events || []) if (tt <= t) st.set(k, what === "broken" ? "rubble" : what === "closed" ? "door shut" : "door open");
-      return ground + [...st].map(([k, cls]) => { const [q, r] = k.split(",").map(Number); return hexPoly(q, r, cls); }).join("");
+    // ---- camera
+    const cam = { s: 20, x: x0, y: y0 };
+    let W = 0, H = 0, dpr = 1;
+    // the first view frames where the fighting happens; Fit shows the whole map
+    const tp = []; fr.forEach(f => f.forEach(x => { if (x) tp.push(P(x[0], x[1])); }));
+    const act = [Math.min(...tp.map(p2 => p2[0])) - 5, Math.min(...tp.map(p2 => p2[1])) - 5, Math.max(...tp.map(p2 => p2[0])) + 5, Math.max(...tp.map(p2 => p2[1])) + 5];
+    const frame = (ax0, ay0, ax1, ay1) => { cam.s = Math.min(W / (ax1 - ax0), H / (ay1 - ay0)); cam.x = ax0 - (W / cam.s - (ax1 - ax0)) / 2; cam.y = ay0 - (H / cam.s - (ay1 - ay0)) / 2; };
+    const fit = () => frame(x0, y0, x1, y1);
+    const resize = () => {
+      const r = cv.getBoundingClientRect(); dpr = Math.min(2, window.devicePixelRatio || 1);
+      const w = Math.max(200, Math.round(r.width)), h = Math.round(Math.min(640, Math.max(280, w * 0.62)));
+      cv.style.height = h + "px"; cv.width = w * dpr; cv.height = h * dpr;
+      const side = cv.closest(".vtt").querySelector(".vtt-side"); if (side) side.style.height = window.innerWidth > 820 ? h + "px" : "";
+      const firstFit = !W; W = w; H = h; if (firstFit) frame(...act); draw();
     };
-    // the fallen so far, and this second's action
+    const toWorld = (sx, sy) => [sx / cam.s + cam.x, sy / cam.s + cam.y];
+    // world point to hex (flat-topped, size 1)
+    const toHex = (wx, wy) => {
+      const q = wx / 1.5, r = wy / SQ3 - q / 2;
+      let x = q, z = r, y = -x - z, rx = Math.round(x), ry = Math.round(y), rz = Math.round(z);
+      const dx = Math.abs(rx - x), dy = Math.abs(ry - y), dz = Math.abs(rz - z);
+      if (dx > dy && dx > dz) rx = -ry - rz; else if (dy <= dz) rz = -rx - ry;
+      return { q: rx, r: rz };
+    };
+    const hexDistUI = (a, b2) => (Math.abs(a.q - b2.q) + Math.abs(a.r - b2.r) + Math.abs(a.q + a.r - b2.q - b2.r)) / 2;
+    // ---- where each model stands at second t, progress p through that second (moving along its path)
+    const along = (path, p) => {
+      if (path.length < 2) return path[0];
+      let L = 0; const seg = [];
+      for (let i = 1; i < path.length; i++) { const d = Math.hypot(path[i][0] - path[i - 1][0], path[i][1] - path[i - 1][1]); seg.push(d); L += d; }
+      let want = L * p;
+      for (let i = 0; i < seg.length; i++) { if (want <= seg[i] || i === seg.length - 1) { const f = seg[i] ? Math.min(1, want / seg[i]) : 1; return [path[i][0] + (path[i + 1][0] - path[i][0]) * f, path[i][1] + (path[i + 1][1] - path[i][1]) * f]; } want -= seg[i]; }
+      return path[path.length - 1];
+    };
+    const posAt = (i, t, p) => {
+      const cur = fr[t] && fr[t][i], prev = t > 0 && fr[t - 1] ? fr[t - 1][i] : null;
+      if (!cur) return prev && p < 0.6 ? P(prev[0], prev[1]) : null;
+      if (!prev || p >= 1) return P(cur[0], cur[1]);
+      const path = [P(prev[0], prev[1]), ...(cur[6] || []).map(([q, r]) => P(q, r))];
+      if (path.length === 1) path.push(P(cur[0], cur[1]));
+      return along(path, Math.min(1, p / 0.7));
+    };
+    // the fallen: where and when each model went down, from the casualty events
     const fallen = [];
-    fx.forEach((es, k) => es.forEach(e => { if (e[0] === "d") fallen.push([k + 1, e]); }));
-    const C = 2 * Math.PI * 0.82;
-    const action = t => (fx[t - 1] || []).map(e => {
-      if (e[0] === "s" || e[0] === "m") {
-        const [ax, ay] = P(e[1], e[2]), [bx, by] = P(e[3], e[4]), side = e[5] ? "b" : "a";
-        if (e[0] === "m") return `<g class="blow s${side}${e[6] ? " hit" : ""}"><line x1="${ax}" y1="${ay}" x2="${bx}" y2="${by}"/><circle cx="${bx}" cy="${by}" r="${e[6] ? 0.9 : 0.5}"/></g>`;
-        return `<line class="shot s${side}${e[6] ? " hit" : ""}" x1="${ax}" y1="${ay}" x2="${bx}" y2="${by}"/>${e[6] ? `<circle class="spark s${side}" cx="${bx}" cy="${by}" r=".45"/>` : ""}`;
+    fx.forEach((es, k) => es.forEach(e => { if (e[0] === "d") fallen.push({ t: k + 1, q: e[1], r: e[2], side: e[3], dead: e[4] }); }));
+    const ticks = document.getElementById("vtt-ticks");
+    if (ticks) ticks.innerHTML = fallen.map(f => `<i class="s${f.side ? "b" : "a"}${f.dead ? " dead" : ""}" style="left:${(100 * f.t / Math.max(1, fr.length - 1)).toFixed(2)}%"></i>`).join("");
+    const names = ros.map(r => r.id), sideOf = i => ros[i] ? ros[i].side : 0;
+    const order = ros.map((r, i) => i).sort((a, c) => (ros[c].speed - ros[a].speed) || a - c);
+
+    // ---- drawing
+    function token(i, x, y, f, alpha) {
+      const r = ros[i] || {}, side = f[2], hp = f[5] == null ? 1 : f[5], bitsv = f[7] || 0, prone = bitsv & 2, rad = prone ? .62 : .78;
+      g.save(); g.globalAlpha = alpha; g.translate(x, y);
+      g.fillStyle = "rgba(0,0,0,.45)"; g.beginPath(); g.ellipse(.08, .12, rad, rad * .9, 0, 0, 7); g.fill();
+      g.fillStyle = side ? MAP.sideB : MAP.sideA; g.beginPath(); g.arc(0, 0, rad, 0, 7); g.fill();
+      g.fillStyle = MAP.ink; g.beginPath(); g.arc(0, 0, rad - .13, 0, 7); g.fill();
+      if (i === st.sel || i === st.hover) { g.strokeStyle = i === st.sel ? "#fff" : "rgba(255,255,255,.6)"; g.lineWidth = .1; g.beginPath(); g.arc(0, 0, rad + .12, 0, 7); g.stroke(); }
+      // facing notch
+      const a = [0, -60, -120, 180, 120, 60][f[4]] * Math.PI / 180;
+      g.fillStyle = side ? MAP.sideB : MAP.sideA; g.beginPath(); g.moveTo(Math.cos(a) * (rad + .22), Math.sin(a) * (rad + .22)); g.lineTo(Math.cos(a + .35) * rad, Math.sin(a + .35) * rad); g.lineTo(Math.cos(a - .35) * rad, Math.sin(a - .35) * rad); g.closePath(); g.fill();
+      // emblem
+      g.save(); g.scale(rad / .78, rad / .78); g.fillStyle = side ? MAP.sideBl : MAP.sideAl; g.strokeStyle = g.fillStyle; (GLYPH[r.faction] || GLYPH.Default)(g); g.restore();
+      if (bitsv & 1) { g.strokeStyle = MAP.hpMid; g.lineWidth = .08; g.setLineDash([.18, .12]); g.beginPath(); g.arc(0, 0, rad + .02, 0, 7); g.stroke(); g.setLineDash([]); }
+      // health and shield bars
+      const bw = 1.5, by = rad + .18;
+      g.fillStyle = "rgba(0,0,0,.6)"; g.fillRect(-bw / 2 - .03, by - .03, bw + .06, .22);
+      g.fillStyle = hp > .6 ? MAP.hpHi : hp > .3 ? MAP.hpMid : MAP.hpLo; g.fillRect(-bw / 2, by, bw * Math.max(0, hp), .16);
+      if (f[8] >= 0) { g.fillStyle = "rgba(0,0,0,.6)"; g.fillRect(-bw / 2 - .03, by - .25, bw + .06, .18); g.fillStyle = MAP.shield; g.fillRect(-bw / 2, by - .22, bw * f[8], .12); }
+      // condition badges
+      let n = 0;
+      for (const [bit, ch, col] of BADGES) {
+        if (!(bitsv & bit)) continue;
+        const ang = -Math.PI / 4 + n * .62, bx = Math.cos(ang) * (rad + .12), byy = Math.sin(ang) * (rad + .12) - .1;
+        g.fillStyle = MAP.ink; g.beginPath(); g.arc(bx, byy, .26, 0, 7); g.fill(); g.strokeStyle = col; g.lineWidth = .06; g.stroke();
+        g.fillStyle = col; g.font = "bold .3px ui-monospace,monospace"; g.textAlign = "center"; g.textBaseline = "middle"; g.fillText(ch, bx, byy + .02); n++;
       }
-      if (e[0] === "b") { const [cx, cy] = P(e[1], e[2]); return `<circle class="burst" cx="${cx}" cy="${cy}" r="${e[3] * 1.5}"/><circle class="burst core" cx="${cx}" cy="${cy}" r="${Math.max(0.8, e[3] * 0.6)}"/>`; }
-      return "";
-    }).join("");
-    const bodies = t => fallen.filter(([k]) => k <= t).map(([k, e]) => { const [cx, cy] = P(e[1], e[2]); return `<g class="fell s${e[3] ? "b" : "a"}${k === t ? " fresh" : ""}${e[4] ? " dead" : ""}"><path d="M${cx - .45},${cy - .45}L${cx + .45},${cy + .45}M${cx + .45},${cy - .45}L${cx - .45},${cy + .45}"/></g>`; }).join("");
-    const tokens = f => f.map((x, i) => {
-      if (!x) return "";
-      const [cx, cy] = P(x[0], x[1]), st = x[3], rad = st === 3 ? 0.42 : 0.6, hp = x[5] == null ? 1 : x[5];
-      const a = [0, -60, -120, 180, 120, 60][x[4]] * Math.PI / 180;
-      return `<g class="tok ${x[2] ? "sb" : "sa"}${st === 2 ? " stun" : ""}${st === 3 ? " prone" : ""}"><circle class="hpr" cx="${cx}" cy="${cy}" r=".82" stroke-dasharray="${(hp * C).toFixed(2)} ${C.toFixed(2)}" transform="rotate(-90 ${cx} ${cy})"/><circle class="body" cx="${cx}" cy="${cy}" r="${rad}"/><line x1="${(cx + Math.cos(a) * rad * 0.2).toFixed(2)}" y1="${(cy + Math.sin(a) * rad * 0.2).toFixed(2)}" x2="${(cx + Math.cos(a) * 1.05).toFixed(2)}" y2="${(cy + Math.sin(a) * 1.05).toFixed(2)}"/></g>`;
-    }).join("");
-    const count = (f, s) => f.filter(x => x && x[2] === s && x[3]).length, total = s => roster.filter(m => m.side === s).length || fr[0].filter(x => x && x[2] === s).length;
-    const turnLog = t => { const a = log.findIndex(l => l === `— Turn ${t} —`), b = log.findIndex(l => l === `— Turn ${t + 1} —`); return a < 0 ? (t === 0 ? "The sides deploy." : log.slice(-3).join("\n")) : log.slice(a + 1, b < 0 ? undefined : b).join("\n"); };
-    const show = t => {
+      g.restore();
+    }
+    function draw() {
+      const t = st.t, p = st.p;
+      g.setTransform(dpr, 0, 0, dpr, 0, 0); g.fillStyle = T ? MAP.wall : MAP.earth; g.fillRect(0, 0, W, H);
+      g.setTransform(dpr * cam.s, 0, 0, dpr * cam.s, -cam.x * cam.s * dpr, -cam.y * cam.s * dpr);
+      g.imageSmoothingEnabled = true; g.drawImage(bg, x0, y0, x1 - x0, y1 - y0);
+      // doors and breaches as they stand
+      if (T) {
+        const state = new Map([...doors].map(k => [k, (T.shut || []).includes(k) ? "shut" : "open"]));
+        for (const [tt, k, what] of T.events || []) if (tt <= t) state.set(k, what === "broken" ? "rubble" : what === "closed" ? "shut" : "open");
+        for (const [k, s2] of state) {
+          const [q, r] = k.split(",").map(Number), [cx, cy] = P(q, r);
+          if (s2 === "shut") { g.fillStyle = MAP.door; hexPath(g, cx, cy, .96); g.fill(); g.strokeStyle = MAP.doorD; g.lineWidth = .1; g.beginPath(); g.moveTo(cx - .8, cy); g.lineTo(cx + .8, cy); g.stroke(); g.strokeStyle = MAP.hazard; g.lineWidth = .06; hexPath(g, cx, cy, .9); g.stroke(); }
+          else if (s2 === "open") { g.strokeStyle = MAP.door; g.lineWidth = .08; g.setLineDash([.2, .15]); hexPath(g, cx, cy, .9); g.stroke(); g.setLineDash([]); }
+          else { g.fillStyle = MAP.plate2; hexPath(g, cx, cy, 1); g.fill(); for (let i = 0; i < 6; i++) { g.fillStyle = MAP.seam; g.beginPath(); g.arc(cx + (hash(q + i, r) - .5) * 1.2, cy + (hash(q, r + i) - .5) * 1.2, .08 + hash(i, q) * .1, 0, 7); g.fill(); } }
+        }
+        for (const [tt, k, what] of T.events || []) if (what === "broken" && tt <= t && !doors.has(k)) {
+          const [q, r] = k.split(",").map(Number), [cx, cy] = P(q, r);
+          g.fillStyle = MAP.plate2; hexPath(g, cx, cy, 1.02); g.fill();
+          for (let i = 0; i < 7; i++) { g.fillStyle = i % 2 ? MAP.seam : MAP.wallHi; g.beginPath(); g.arc(cx + (hash(q + i, r) - .5) * 1.3, cy + (hash(q, r + i) - .5) * 1.3, .07 + hash(i, q) * .12, 0, 7); g.fill(); }
+        }
+      }
+      // hex grid over the visible area
+      if (st.grid && cam.s > 6) {
+        const [vx0, vy0] = toWorld(0, 0), [vx1, vy1] = toWorld(W, H);
+        g.strokeStyle = T ? MAP.gridF : MAP.gridO; g.lineWidth = 1 / cam.s; g.beginPath();
+        for (let q = Math.floor(vx0 / 1.5) - 1; q <= Math.ceil(vx1 / 1.5) + 1; q++) for (let r = Math.floor(vy0 / SQ3 - q / 2) - 1; r <= Math.ceil(vy1 / SQ3 - q / 2) + 1; r++) {
+          const [cx, cy] = P(q, r); for (let i = 0; i < 3; i++) { const [ax, ay] = hexCorner(cx, cy, i), [bx, by] = hexCorner(cx, cy, i + 1); g.moveTo(ax, ay); g.lineTo(bx, by); }
+        }
+        g.stroke();
+      }
+      // the fallen
+      for (const f of fallen) {
+        if (f.t > t || (f.t === t && p < 0.6)) continue;
+        const [cx, cy] = P(f.q, f.r);
+        g.globalAlpha = f.t === t ? 1 : .55; g.fillStyle = "rgba(0,0,0,.35)"; g.beginPath(); g.arc(cx, cy, .62, 0, 7); g.fill();
+        g.strokeStyle = f.side ? MAP.sideB : MAP.sideA; g.lineWidth = f.dead ? .16 : .1; g.beginPath(); g.moveTo(cx - .38, cy - .38); g.lineTo(cx + .38, cy + .38); g.moveTo(cx + .38, cy - .38); g.lineTo(cx - .38, cy + .38); g.stroke();
+        g.globalAlpha = 1;
+      }
       const f = fr[t] || [];
-      svg.innerHTML = `<g class="ground">${groundAt(t)}</g><g class="bodies">${bodies(t)}</g><g class="act">${action(t)}</g><g class="toks">${tokens(f)}</g>`;
-      document.getElementById("rlab").textContent = t === 0 ? "Deployment" : t === fr.length - 1 ? `End · ${t} s` : `${t} s`;
-      document.getElementById("hudA").textContent = `A ${count(f, 0)}/${total(0)}`;
-      document.getElementById("hudB").textContent = `B ${count(f, 1)}/${total(1)}`;
-      document.getElementById("rlog").textContent = turnLog(t);
-    };
+      // paths walked this second
+      if (st.trails && t > 0) {
+        g.lineWidth = .1; g.setLineDash([.25, .2]); g.lineCap = "round";
+        f.forEach((x, i) => { if (!x || !x[6] || !x[6].length || !fr[t - 1][i]) return; const pr = fr[t - 1][i]; g.strokeStyle = x[2] ? "rgba(214,167,60,.55)" : "rgba(194,58,48,.55)"; g.beginPath(); const [sx, sy] = P(pr[0], pr[1]); g.moveTo(sx, sy); for (const [q, r] of x[6]) { const [px2, py2] = P(q, r); g.lineTo(px2, py2); } g.stroke(); });
+        g.setLineDash([]);
+      }
+      // aim lines
+      g.setLineDash([.12, .18]); g.lineWidth = .06;
+      f.forEach((x, i) => { if (!x || x[9] == null || x[9] < 0 || !f[x[9]]) return; const a = posAt(i, t, p), c = posAt(x[9], t, p); if (!a || !c) return; g.strokeStyle = x[2] ? "rgba(241,211,138,.5)" : "rgba(240,138,126,.5)"; g.beginPath(); g.moveTo(a[0], a[1]); g.lineTo(c[0], c[1]); g.stroke(); });
+      g.setLineDash([]);
+      // tokens
+      const drawn = [];
+      f.forEach((x, i) => { const at = posAt(i, t, p); if (x && at) { token(i, at[0], at[1], x, 1); drawn.push([i, at]); } });
+      if (t > 0 && p < 0.6) (fr[t - 1] || []).forEach((x, i) => { if (x && !f[i]) { const at = posAt(i, t, p); if (at) token(i, at[0], at[1], x, 1 - p / 0.6); } });
+      st.drawn = drawn;
+      // this second's action: shots, blows, blasts, and what the hits did
+      if (t > 0) {
+        const es = fx[t - 1] || [];
+        let k = 0;
+        for (const e of es) {
+          const lag = Math.min(0.3, k++ * 0.012), q2 = reduce ? 1 : Math.max(0, Math.min(1, (p - lag) / 0.45));
+          if (e[0] === "s") {
+            const [ax, ay] = P(e[1], e[2]), [bx, by] = P(e[3], e[4]);
+            g.strokeStyle = e[6] ? (e[5] ? "rgba(241,211,138,.8)" : "rgba(255,160,140,.8)") : MAP.miss; g.lineWidth = e[6] ? .08 : .05;
+            if (!e[6]) g.setLineDash([.3, .25]);
+            g.globalAlpha = p >= 1 ? .45 : 1; g.beginPath(); g.moveTo(ax, ay); g.lineTo(ax + (bx - ax) * q2, ay + (by - ay) * q2); g.stroke(); g.setLineDash([]);
+            if (q2 < 1) { g.fillStyle = MAP.shot; g.beginPath(); g.arc(ax + (bx - ax) * q2, ay + (by - ay) * q2, .16, 0, 7); g.fill(); }
+            else if (e[6]) { g.fillStyle = MAP.shot; g.globalAlpha = p >= 1 ? .6 : 1; g.beginPath(); g.arc(bx, by, .28, 0, 7); g.fill(); }
+            g.globalAlpha = 1;
+          } else if (e[0] === "m") {
+            const [ax, ay] = P(e[1], e[2]), [bx, by] = P(e[3], e[4]), ang = Math.atan2(by - ay, bx - ax);
+            g.strokeStyle = e[5] ? MAP.sideBl : MAP.sideAl; g.lineWidth = e[6] ? .16 : .08; g.globalAlpha = e[6] ? 1 : .5; g.lineCap = "round";
+            g.beginPath(); g.arc(bx - Math.cos(ang) * .3, by - Math.sin(ang) * .3, .75, ang - 1.1 * q2, ang + 1.1 * q2); g.stroke(); g.globalAlpha = 1;
+          } else if (e[0] === "b") {
+            const [cx, cy] = P(e[1], e[2]), rr = e[3] * 1.4 * (reduce ? 1 : Math.min(1, .25 + p));
+            const gr = g.createRadialGradient(cx, cy, 0, cx, cy, rr); gr.addColorStop(0, `rgba(255,220,140,${p >= 1 ? .35 : .9})`); gr.addColorStop(.6, `rgba(255,140,40,${p >= 1 ? .2 : .55})`); gr.addColorStop(1, "rgba(255,120,30,0)");
+            g.fillStyle = gr; g.beginPath(); g.arc(cx, cy, rr, 0, 7); g.fill();
+          }
+        }
+        // floating numbers
+        const seen = new Map();
+        g.textAlign = "center"; g.textBaseline = "middle";
+        for (const e of es) {
+          if (e[0] !== "h" && e[0] !== "v" && e[0] !== "f") continue;
+          const q0 = e[0] === "h" ? e[4] : e[3], r0 = e[0] === "h" ? e[5] : e[4];
+          if (q0 == null) continue;
+          const key2 = q0 + "," + r0, n = seen.get(key2) || 0; seen.set(key2, n + 1);
+          const lift = reduce ? .6 : .3 + Math.min(1, Math.max(0, (p - .35) / .65)) * 1.1;
+          const [cx, cy] = P(q0, r0), txt = e[0] === "h" ? (e[2] > 0 ? "−" + e[2] : "no pen") : e[0] === "f" ? "shield" : e[2];
+          const col = e[0] === "h" ? (e[2] > 0 ? "#ffd2c8" : "#c9c6bd") : e[0] === "f" ? "#a8dcf6" : "#f4f1e8";
+          if (p < .35 && !reduce) continue;
+          g.font = `bold ${e[0] === "h" && e[2] > 0 ? .62 : .48}px ui-monospace,monospace`;
+          g.lineWidth = .14; g.strokeStyle = "rgba(0,0,0,.75)"; g.globalAlpha = p >= 1 ? .85 : Math.min(1, (1.15 - p) * 2 + .3);
+          const yy = cy - 1 - lift - n * .55; g.strokeText(txt, cx + .6, yy); g.fillStyle = col; g.fillText(txt, cx + .6, yy); g.globalAlpha = 1;
+        }
+      }
+      // the measuring tape
+      if (st.meas) {
+        const [a, c] = st.meas, [ax, ay] = P(a.q, a.r), [cx, cy] = P(c.q, c.r), d = hexDistUI(a, c);
+        g.strokeStyle = "#fff"; g.lineWidth = .1; g.setLineDash([.3, .2]); g.beginPath(); g.moveTo(ax, ay); g.lineTo(cx, cy); g.stroke(); g.setLineDash([]);
+        for (const [x, y] of [[ax, ay], [cx, cy]]) { g.strokeStyle = "#fff"; g.lineWidth = .08; hexPath(g, x, y, .95); g.stroke(); }
+        const lab = `${d} yd · ${rangePenalty(Math.max(1, d))}`;
+        g.font = "bold .6px ui-monospace,monospace"; g.textAlign = "center"; g.lineWidth = .16; g.strokeStyle = "rgba(0,0,0,.8)"; g.strokeText(lab, (ax + cx) / 2, (ay + cy) / 2 - .6); g.fillStyle = "#fff"; g.fillText(lab, (ax + cx) / 2, (ay + cy) / 2 - .6);
+      }
+    }
+    // ---- side panels
+    const hudA = document.getElementById("hudA"), hudB = document.getElementById("hudB"), clock = document.getElementById("rlab");
+    const initEl = document.getElementById("vtt-init"), chatEl = document.getElementById("vtt-chat"), sheetEl = document.getElementById("vtt-sheet");
+    const idRe = names.length ? new RegExp(names.map(n => n.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).sort((a, c) => c.length - a.length).join("|"), "g") : null;
+    const idSide = new Map(names.map((n, i) => [n, sideOf(i)]));
+    const COND = [[1, "stunned"], [2, "prone"], [4, "kneeling"], [8, "held"], [16, "holding a foe"], [32, "All-Out Defense"], [64, "All-Out Attack"], [128, "aiming"], [256, "pinned"], [512, "waiting"]];
+    const fate = (i, t) => { const x = fr[t] && fr[t][i]; if (x) return x[3] === 2 ? "stunned" : x[3] === 3 ? "prone" : ""; const f = fallen.find(v => v.q != null && v.t <= t && ros[i] && sideOf(i) === v.side && fr[v.t - 1] && fr[v.t - 1][i] && fr[v.t - 1][i][0] === v.q && fr[v.t - 1][i][1] === v.r); return f ? (f.dead ? "killed" : "down") : "out of the fight"; };
+    function panels() {
+      const t = st.t, f = fr[t] || [];
+      const up = s => f.filter(x => x && x[2] === s && x[3]).length, tot = s => ros.filter(r => r.side === s).length;
+      hudA.textContent = `A ${up(0)}/${tot(0)}`; hudB.textContent = `B ${up(1)}/${tot(1)}`;
+      clock.textContent = t === 0 ? "Deployment" : t === fr.length - 1 ? `End · ${t} s` : `${t} s`;
+      initEl.innerHTML = `<ol class="vtt-init">${order.map(i => { const x = f[i], r = ros[i], hp = x ? x[5] : 0;
+        return `<li data-i="${i}" class="s${r.side ? "b" : "a"}${x ? "" : " gone"}${i === st.sel ? " sel" : ""}"><span class="spd">${r.speed.toFixed(2)}</span><span class="nm">${esc(r.id)}</span><span class="hb"><i style="width:${Math.round(100 * Math.max(0, hp))}%"></i></span><span class="st">${x ? COND.filter(([bit]) => x[7] & bit).map(c => c[1]).join(", ") : esc(fate(i, t))}</span></li>`; }).join("")}</ol>`;
+      const a = log.findIndex(l => l === `— Turn ${t} —`), b2 = log.findIndex(l => l === `— Turn ${t + 1} —`);
+      const lines = t === 0 ? ["The sides deploy."] : a < 0 ? log.slice(-3) : log.slice(a + 1, b2 < 0 ? undefined : b2);
+      chatEl.innerHTML = lines.map(l => { const sub = l.startsWith("  "); let h = esc(l.trim()); if (idRe) h = h.replace(idRe, m2 => `<b class="s${idSide.get(m2) ? "b" : "a"}">${m2}</b>`); return `<p class="${sub ? "sub" : "act"}">${h}</p>`; }).join("");
+      if (st.sel >= 0) {
+        const i = st.sel, r = ros[i], x = f[i];
+        sheetEl.innerHTML = `<div class="vtt-sheet s${r.side ? "b" : "a"}"><div class="sh-top"><span class="side">Side ${"AB"[r.side]}</span><h3>${esc(r.id)}</h3><p>${esc(r.template)} · ${esc(r.faction)}</p></div>
+          <dl class="sh-grid"><div><dt>ST</dt><dd>${r.st}</dd></div><div><dt>DX</dt><dd>${r.dx}</dd></div><div><dt>Speed</dt><dd>${r.speed}</dd></div><div><dt>Move</dt><dd>${r.move}</dd></div>
+          <div><dt>HP</dt><dd>${x ? Math.round(x[5] * r.hp) + " / " : ""}${r.hp}</dd></div><div><dt>Dodge</dt><dd>${r.dodge}</dd></div><div><dt>Parry</dt><dd>${r.parry ?? "—"}</dd></div><div><dt>DR</dt><dd>${r.dr}</dd></div>
+          ${r.sp ? `<div><dt>Shield</dt><dd>${x && x[8] >= 0 ? Math.round(x[8] * r.sp) + " / " : ""}${r.sp}</dd></div>` : ""}</dl>
+          <p class="sh-w"><b>Ranged</b>${r.ranged ? esc(r.ranged) : "none"}</p><p class="sh-w"><b>Melee</b>${esc(r.melee)}</p>
+          <p class="sh-w"><b>Now</b>${x ? (COND.filter(([bit]) => x[7] & bit).map(c => c[1]).join(", ") || "ready") : esc(fate(i, st.t))}</p>
+          <p class="sh-w"><b>Whole battle</b>${r.kills} kill${r.kills === 1 ? "" : "s"}; ended ${r.fate === "ok" ? "still fighting" : r.fate === "dead" ? "dead" : r.fate === "routed" ? "fleeing" : "out of the fight"}</p></div>`;
+      }
+    }
+    const tabs = [...document.querySelectorAll(".vtt-tabs [data-tab]")];
+    const showTab = name => { tabs.forEach(b2 => b2.setAttribute("aria-selected", b2.dataset.tab === name)); [initEl, chatEl, sheetEl].forEach(el => el.hidden = el.id !== "vtt-" + name); };
+    tabs.forEach(b2 => b2.onclick = () => showTab(b2.dataset.tab));
+    initEl.onclick = e => { const li = e.target.closest("li[data-i]"); if (!li) return; st.sel = +li.dataset.i; panels(); draw(); showTab("sheet"); };
+    // ---- time
     const slider = document.getElementById("rturn"), play = document.getElementById("rplay"), speed = document.getElementById("rspeed");
-    const stop = () => { if (timer) clearInterval(timer); timer = null; play.textContent = "Play"; play.setAttribute("aria-label", "Play"); };
-    const go = () => {
-      if (+slider.value >= fr.length - 1) slider.value = 0;
-      play.textContent = "Pause"; play.setAttribute("aria-label", "Pause");
-      timer = setInterval(() => { if (+slider.value >= fr.length - 1) { stop(); return; } slider.value = +slider.value + 1; show(+slider.value); }, +speed.value);
+    let raf = 0, t0 = 0;
+    const setT = (t, animate) => { st.t = Math.max(0, Math.min(fr.length - 1, t)); slider.value = st.t; st.p = animate && !reduce ? 0 : 1; t0 = performance.now(); panels(); if (animate && !reduce) loop(); else draw(); };
+    function loop() {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(now => {
+        const dur = +speed.value;
+        st.p = Math.min(1, (now - t0) / (dur * 0.85));
+        draw();
+        if (st.p < 1) loop();
+        else if (st.playing) { if (st.t >= fr.length - 1) stopPlay(); else setTimeout(() => { if (st.playing) setT(st.t + 1, true); }, dur * 0.15); }
+      });
+    }
+    const stopPlay = () => { st.playing = false; play.textContent = "Play"; play.setAttribute("aria-label", "Play"); };
+    const startPlay = () => { if (st.t >= fr.length - 1) setT(0, false); st.playing = true; play.textContent = "Pause"; play.setAttribute("aria-label", "Pause"); setT(st.t + 1, true); };
+    play.onclick = () => st.playing ? stopPlay() : startPlay();
+    document.getElementById("rback").onclick = () => { stopPlay(); setT(st.t - 1, false); };
+    document.getElementById("rstep").onclick = () => { stopPlay(); setT(st.t + 1, true); };
+    slider.oninput = () => { stopPlay(); setT(+slider.value, false); };
+    const root = document.getElementById("vtt");
+    root.tabIndex = -1;
+    const onKey = e => { if (!root.contains(document.activeElement) && document.activeElement !== document.body) return; if (e.key === " ") { e.preventDefault(); play.click(); } else if (e.key === "ArrowRight") { stopPlay(); setT(st.t + 1, true); } else if (e.key === "ArrowLeft") { stopPlay(); setT(st.t - 1, false); } };
+    root.addEventListener("keydown", onKey);
+    // ---- tools
+    const toolBtn = n => root.querySelector(`[data-tool="${n}"]`);
+    toolBtn("fit").onclick = () => { fit(); draw(); };
+    toolBtn("grid").onclick = e => { st.grid = !st.grid; e.currentTarget.setAttribute("aria-pressed", st.grid); draw(); };
+    toolBtn("trails").onclick = e => { st.trails = !st.trails; e.currentTarget.setAttribute("aria-pressed", st.trails); draw(); };
+    toolBtn("measure").onclick = e => { st.measure = !st.measure; e.currentTarget.setAttribute("aria-pressed", st.measure); if (!st.measure) st.meas = null; cv.classList.toggle("measuring", st.measure); draw(); };
+    // ---- pan, zoom, pick
+    const pointers = new Map(); let drag = null, pinch = null;
+    const tip = document.getElementById("vtt-tip");
+    const pick = (sx, sy) => { const [wx, wy] = toWorld(sx, sy); let best = -1, bd = 0.9; for (const [i, [x, y]] of st.drawn || []) { const d = Math.hypot(x - wx, y - wy); if (d < bd) { bd = d; best = i; } } return best; };
+    const local = e => { const r = cv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+    cv.addEventListener("pointerdown", e => {
+      cv.setPointerCapture(e.pointerId); pointers.set(e.pointerId, local(e));
+      if (pointers.size === 2) { const [a, c] = [...pointers.values()]; pinch = { d: Math.hypot(a[0] - c[0], a[1] - c[1]), s: cam.s, m: [(a[0] + c[0]) / 2, (a[1] + c[1]) / 2] }; drag = null; return; }
+      const [sx, sy] = local(e);
+      if (st.measure) { const [wx, wy] = toWorld(sx, sy); const h = toHex(wx, wy); st.meas = [h, h]; drag = { measure: true }; draw(); return; }
+      drag = { sx, sy, cx: cam.x, cy: cam.y, moved: false };
+    });
+    cv.addEventListener("pointermove", e => {
+      if (pointers.has(e.pointerId)) pointers.set(e.pointerId, local(e));
+      const [sx, sy] = local(e);
+      if (pinch && pointers.size === 2) {
+        const [a, c] = [...pointers.values()], d = Math.hypot(a[0] - c[0], a[1] - c[1]);
+        const [wx, wy] = toWorld(pinch.m[0], pinch.m[1]); cam.s = Math.max(2, Math.min(90, pinch.s * d / pinch.d)); cam.x = wx - pinch.m[0] / cam.s; cam.y = wy - pinch.m[1] / cam.s; draw(); return;
+      }
+      if (drag && drag.measure) { const [wx, wy] = toWorld(sx, sy); st.meas[1] = toHex(wx, wy); draw(); return; }
+      if (drag) { const dx = sx - drag.sx, dy = sy - drag.sy; if (Math.abs(dx) + Math.abs(dy) > 4) drag.moved = true; cam.x = drag.cx - dx / cam.s; cam.y = drag.cy - dy / cam.s; draw(); return; }
+      const i = pick(sx, sy);
+      if (i !== st.hover) { st.hover = i; draw(); }
+      if (i >= 0) { const x = (fr[st.t] || [])[i], r = ros[i]; tip.hidden = false; tip.style.left = sx + 14 + "px"; tip.style.top = sy + 10 + "px"; tip.innerHTML = `<b>${esc(r.id)}</b><span>${x ? Math.round(x[5] * r.hp) : 0} / ${r.hp} HP${x && x[8] >= 0 ? ` · shield ${Math.round(x[8] * r.sp)}` : ""}</span>`; }
+      else tip.hidden = true;
+    });
+    const end = e => {
+      pointers.delete(e.pointerId);
+      if (pointers.size < 2) pinch = null;
+      if (drag && !drag.measure && !drag.moved) { const [sx, sy] = local(e); const i = pick(sx, sy); st.sel = i; panels(); draw(); if (i >= 0) showTab("sheet"); }
+      drag = null;
     };
-    slider.oninput = () => { stop(); show(+slider.value); };
-    play.onclick = () => { if (timer) stop(); else go(); };
-    speed.onchange = () => { if (timer) { stop(); go(); } };
-    show(0);
+    cv.addEventListener("pointerup", end); cv.addEventListener("pointercancel", end);
+    cv.addEventListener("pointerleave", () => { tip.hidden = true; if (st.hover >= 0) { st.hover = -1; draw(); } });
+    cv.addEventListener("wheel", e => { e.preventDefault(); const [sx, sy] = local(e), [wx, wy] = toWorld(sx, sy); cam.s = Math.max(2, Math.min(90, cam.s * Math.exp(-e.deltaY * 0.0015))); cam.x = wx - sx / cam.s; cam.y = wy - sy / cam.s; draw(); }, { passive: false });
+    const ro = new ResizeObserver(() => resize()); ro.observe(cv);
+    resize(); panels(); draw();
+    return { stop() { stopPlay(); cancelAnimationFrame(raf); ro.disconnect(); root.removeEventListener("keydown", onKey); } };
   }
 
   function wire() {

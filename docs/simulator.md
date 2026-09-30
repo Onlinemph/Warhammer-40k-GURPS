@@ -100,3 +100,8 @@ Psykers use the attack and defence powers listed for their template in `data/sim
 ## Not modelled
 
 Vehicles, stealth detection beyond an ambush option, psychic powers other than attacks and defences, morale beyond the half and quarter Fright Checks (the full Fright Check table, B360, is reduced to rout or stun).
+
+## The tabletop replay
+
+The simulator page replays the first battle of a run on a canvas map. Its data comes from the sample run only: each second's frame holds every model's hex, facing, health (share of HP, or the worst wound box under Fractional Health), the hexes it walked, condition bits (stunned, prone, kneeling, held, holding, All-Out Defense, All-Out Attack, aiming, pinned, waiting), shield share and aim target; each second's events hold shots and blows (who, whom, skill, hits), blasts, hits (injury and location, or none when armour stopped it), defences, shield absorptions and casualties. The map texture is generated from the layout (no image files), the same in light and dark themes.
+
