@@ -779,7 +779,9 @@ const SIM = (() => {
         if (loc === "eye" && !(/^pi/.test(w.dmg.type) || w.dmg.type === "imp" || (w.dmg.type === "burn" && !w.dmg.ex && !w.cone))) continue;
         const e = loc === "random" ? expInjRandom(w, t.u, dmgOverride) : expInj(w, t.u, loc, dmgOverride);
         if (e <= 0) continue;
-        const maxDa = melee ? 6 : 0;
+        // Deceptive Shot (house rule): a shooter may trade 2 skill for each -1 to the target's Dodge, as Deceptive
+        // Attack (B369) does in melee; not for area attacks or Malediction
+        const maxDa = melee || !(w.malediction || w.cone || w.dmg.ex || w.blast) ? 6 : 0;
         for (let da = 0; da <= maxDa; da++) {
           const eff = lvl + pen - 2 * da;
           if (eff < 3 || (da > 0 && eff < 10)) break;
@@ -1019,7 +1021,7 @@ const SIM = (() => {
         const lvl = plan.lvl;
         const r = check(lvl);
         if (i === 0 && jamCheck(m, w, r)) return;
-        const thru = inter.length ? `, through ${inter.length}` : "";
+        const thru = (inter.length ? `, through ${inter.length}` : "") + (plan.da ? `, deceptive -${plan.da}` : "");
         if (!r.ok && !w.cone) {
           L(`${m.id} fires ${n > 1 ? n + " " : ""}at ${t.id} (${d} yd${loc0 && loc0 !== "torso" ? ", aiming at the " + locName(loc0) : ""}${thru}, skill ${lvl}): misses`);
           if (w.dmg.ex && i === 0) explosion(m, w, { q: t.h.q + DIRS[Math.floor(R() * 6)][0], r: t.h.r + DIRS[Math.floor(R() * 6)][1] }, rollDamage(w.dmg));
@@ -1027,14 +1029,14 @@ const SIM = (() => {
           return;
         }
         let hits = w.cone ? 1 : Math.min(n, 1 + Math.floor(Math.max(0, r.margin) / w.rcl));
-        L(`${m.id} ${w.usage === "power" ? "casts " + w.name + " at" : "fires " + (n > 1 ? n + " at" : "at")} ${t.id} (${d} yd${loc0 && loc0 !== "torso" ? ", aiming at the " + locName(loc0) : ""}, skill ${lvl}): ${hits} hit${hits > 1 ? "s" : ""}`);
+        L(`${m.id} ${w.usage === "power" ? "casts " + w.name + " at" : "fires " + (n > 1 ? n + " at" : "at")} ${t.id} (${d} yd${loc0 && loc0 !== "torso" ? ", aiming at the " + locName(loc0) : ""}${thru}, skill ${lvl}): ${hits} hit${hits > 1 ? "s" : ""}`);
         if (!r.crit && !w.malediction) {
           if (d <= 1 && !w.cone) {
             // in close combat the defender can parry the weapon (or step aside) instead of dodging the shot (B391)
-            const def = defend(t, m, true, 0, 0);
+            const def = defend(t, m, true, plan.da, 0);
             if (def) { const dg = def.how === "parry" ? hits : Math.min(hits, 1 + def.margin); hits -= dg; L(`  ${t.id} ${def.how === "parry" ? "knocks the gun aside" : def.how === "block" ? "blocks " + dg : "dodges " + dg}`); }
           } else {
-            const def = defend(t, m, false, 0, 0);
+            const def = defend(t, m, false, plan.da, 0);
             if (def != null) { const dg = Math.min(hits, 1 + def); hits -= dg; L(`  ${t.id} dodges ${dg}`); }
           }
         }
