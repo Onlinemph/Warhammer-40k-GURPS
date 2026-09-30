@@ -459,7 +459,8 @@ const SIM = (() => {
   // the eye half the hide's DR unless a trait gives an eye value (every template note gives exactly half)
   function natDRat(u, loc) {
     const nb = u.flags.nobrain || u.flags.homogenous || u.flags.diffuse;
-    if (loc === "eye") return u.nat.eye != null ? drAt(u.nat, "eye") : Math.floor(drAt(u.nat, "eye") / 2);
+    // a hide's eye is as tough as its head (user direction), unless the template gives the eye its own DR
+    if (loc === "eye") return u.nat.eye != null ? drAt(u.nat, "eye") : drAt(u.nat, "skull");
     return drAt(u.nat, loc === "vitals" ? "torso" : loc) + (loc === "skull" && !nb ? 2 : 0);
   }
   function woundMult(type, loc, flags, ex) {
