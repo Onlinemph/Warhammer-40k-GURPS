@@ -2022,7 +2022,10 @@ const SIM = (() => {
           if (x.state !== "ok" || !x.h || !los(at, x.h)) continue;
           const d = hexDist(x.h, at);
           if (d > 5 * fr.n) continue;
-          const r = check(15 + rangePenalty(Math.max(1, d)) + x.u.sm - (x.prone || x.kneel ? 2 : 0));
+          // bodies between the blast and the target shield it like any figure in a line of fire: -4 each (B389);
+          // kneeling and lying figures don't block, as for shots
+          const screen = x === struck ? 0 : 4 * between(at, x.h, null).filter(y => y !== x).length;
+          const r = check(15 + rangePenalty(Math.max(1, d)) + x.u.sm - (x.prone || x.kneel ? 2 : 0) - screen);
           let n = r.ok ? 1 + Math.floor(Math.max(0, r.margin) / 3) : 0;
           if (x === struck) n = Math.max(1, n);
           for (let k = 0; k < n && x.state === "ok"; k++) { L(`  fragment hits ${x.id}`); applyHit(att, { dmg: fd, follow: null }, x, hitLocOn(x), true, false, fd); }
@@ -3882,7 +3885,7 @@ const SIM = (() => {
             if (k > Math.max(3, fR) || !los(c.h, x.h)) continue;
             let e = k <= 3 ? expInj(g, x.u, "area", { ...g.dmg, div: 1, mult: g.dmg.mult / (3 * k), key: "s" + k + "nd" }) : 0;
             // expected fragments: the chance of success by 0, 3, 6... (one more per 3 points, B414)
-            if (fr && k <= fR) { let nF = 0; for (let j = 15 + rangePenalty(k) + x.u.sm - (x.prone || x.kneel ? 2 : 0); j >= 3; j -= 3) nF += P3[Math.min(18, j)]; e += nF * expInjRandom(g, x.u, { n: fr.n, add: 0, mult: 1, div: 1, type: fr.type, key: "f" }); }
+            if (fr && k <= fR) { let nF = 0; for (let j = 15 + rangePenalty(k) + x.u.sm - (x.prone || x.kneel ? 2 : 0) - 4 * between(c.h, x.h, null).filter(y => y !== x).length; j >= 3; j -= 3) nF += P3[Math.min(18, j)]; e += nF * expInjRandom(g, x.u, { n: fr.n, add: 0, mult: 1, div: 1, type: fr.type, key: "f" }); }
             others += x.u.side === m.u.side ? -m.u.ai.caution * Math.min(1, e / remOf(x)) * threatOf(x) * HORIZON : kv(m, x, e);
           }
           const v = (direct + others) * P3[Math.max(0, Math.min(18, lvl))];
