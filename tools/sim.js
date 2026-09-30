@@ -383,7 +383,7 @@ const SIM = (() => {
       // grappling (B370): DX, or Wrestling, Judo or Sumo Wrestling if better
       grapple: Math.max(st.dx, ...(st.skills || []).filter(s => /^(Wrestling|Judo|Sumo Wrestling)\b/.test(s.name) && s.level != null).map(s => s.level)),
       ai: aiProfile(spec.template),
-      stance: spec.stance || "shoot", stats: st, flags, speed: st.speed, move: Math.max(1, st.move + arm.move),
+      stance: spec.stance || "shoot", ambush: !!spec.ambush, stats: st, flags, speed: st.speed, move: Math.max(1, st.move + arm.move),
       dodge: st.dodge, HP: st.hp + arm.hp, HT: st.ht, will: st.will, sm: st.sm || 0,
       arm, nat, ranged, melee, parry: parryOf(melee), cs, judo: (st.skills || []).some(s => /^(Judo|Karate|Boxing)/.test(s.name) && s.level != null), bl: Math.round(liftST * liftST / 5),
       shield: spec.shield && spec.shield.sp ? { ...spec.shield } : cs && cs.field ? { item: cs.name + " field", ...cs.field, ranged_only: false, arc: "shield" } : pshield,
@@ -567,7 +567,8 @@ const SIM = (() => {
   function runBattle(unitSpecs, opt = {}) {
     const distance = Math.max(2, Math.round(opt.distance ?? 100)), maxTurns = opt.maxTurns ?? 1200, morale = opt.morale !== false;
     const frac = opt.health === "fractional", boxes = opt.boxes || 5;
-    const SIGHTED = !!opt.sightedShots;   // Tactical Shooting option: an aimed shot is All-Out Attack (Determined)
+    const SIGHTED = !!opt.sightedShots;
+    const TDODGE = !!opt.tacticalDodge;   // Tactical Shooting option (p. 17): Dodge firearms only from the one gunman you watch   // Tactical Shooting option: an aimed shot is All-Out Attack (Determined)
     // hit locations: "elite" (default: elites aim, everyone else hits random locations), "aimed" (everyone, RAW), "random"
     const locMode = opt.locations || "elite";
     const aimsShots = m => locMode === "aimed" || (locMode === "elite" && m.u.elite);
@@ -582,7 +583,7 @@ const SIM = (() => {
     const units = unitSpecs.map(s => buildUnit(s.spec, s.side));
     const models = [];
     const occ = new Map();
-    const place = (m, h) => { if (m.h) occ.delete(key(m.h.q, m.h.r)); m.h = h; if (h) { occ.set(key(h.q, h.r), m); if (frames && m.trail) m.trail.push([h.q, h.r]); } };
+    const place = (m, h) => { if (m.h) occ.delete(key(m.h.q, m.h.r)); m.prevH = m.h; m.h = h; if (h) { occ.set(key(h.q, h.r), m); if (frames && m.trail) m.trail.push([h.q, h.r]); } };
     // terrain: walls block movement and sight until breached; crates block movement only; doors block both
     // while closed. The map is shared by every run; what changes in a battle (doors, breaches, wall damage) lives here
     const terr = opt.terrain || (opt.battlefield === "facility" ? facilityMap(opt.mapSeed || 1) : null);
@@ -752,6 +753,34 @@ const SIM = (() => {
     const unitActive = u => !u.routed && u.models.some(active);
     const sideActive = s => units.some(u => u.side === s && unitActive(u));
     const foes = m => models.filter(x => x.state === "ok" && x.u.side !== m.u.side && !x.u.routed);
+    // situational awareness (Tactical Shooting p. 11, 21, 27-28): in a facility each side knows only the foes some
+    // friend has seen in the last few seconds (a shooter gives itself away to within a yard, B548); models that
+    // ambush stay unseen until they attack or a foe comes within 5 yards. "omniscient" restores the old knowledge.
+    const AWARE = opt.awareness ? opt.awareness === "limited" : !!terr;
+    const seenAt = [new Map(), new Map()];
+    const contact = [0, 0];   // the last second each side saw a foe
+    const spot = (side, f) => { contact[side] = turn; if (!seenAt[side].has(f) && f.u.ambush && !f.revealed) L(`  ${f.id} is spotted`); seenAt[side].set(f, turn); f.lastSeenH = f.h; };
+    function lookAround() {
+      if (!AWARE) return;
+      for (const f of models) {
+        if (f.state !== "ok" || !f.h) continue;
+        const hidden = f.u.ambush && !f.revealed;
+        for (const x of models) if (x.state === "ok" && x.h && x.u.side !== f.u.side && (hidden ? hexDist(x.h, f.h) <= 5 : true) && los(x.h, f.h)) { spot(x.u.side, f); break; }
+      }
+    }
+    const known = m => !AWARE ? foes(m) : foes(m).filter(f => (seenAt[m.u.side].get(f) ?? -99) >= turn - 5);
+    // an ambusher that attacks gives itself away; foes who hadn't seen it are partly surprised (B393): each must make
+    // an IQ roll (+6 with Combat Reflexes) or lose its next turn
+    function reveal(m) {
+      if (!AWARE) return;
+      const side = 1 - m.u.side, fresh = !seenAt[side].has(m);
+      m.revealed = true; seenAt[side].set(m, turn); m.lastSeenH = m.h;
+      if (fresh && m.u.ambush && !m.u.sprung) {
+        m.u.sprung = true;
+        L(`  ${m.u.name} spring their ambush`);
+        for (const x of models) if (x.state === "ok" && x.h && x.u.side === side && !check((x.u.stats.iq || 10) + (x.u.flags.cr ? 6 : 0)).ok) x.surprised = true;
+      }
+    }
     const inCover = (t, f) => coverAt(t.h, f, t) !== "none";
     const coverPen = (t, f) => COVER_PEN[coverAt(t.h, f, t)];
     // drilled squads (TS p. 22-23, 37): a drilled shooter fires past a drilled friend at -2, not -4, and doesn't hit him by mistake
@@ -805,7 +834,7 @@ const SIM = (() => {
     }
     function underFire(m) {
       const e = m.ev; m.ev = null; m.headsDown = false;
-      if (!e || m.u.flags.unfazeable || m.u.flags.noMorale) return false;
+      if (!e || !morale || m.u.flags.unfazeable || m.u.flags.noMorale) return false;
       const covered = e.shotAt && e.shotAt.h && m.h && inCover(m, e.shotAt.h);
       if (e.supp || e.near || e.blast || e.wounded || e.allyDown) {
         const why = e.blast ? "a blast" : e.allyDown ? "a comrade falls" : e.wounded ? "wounded" : e.supp ? "suppression fire" : "a near miss";
@@ -1236,7 +1265,9 @@ const SIM = (() => {
       const mod = (arc === "side" ? -2 : 0) - (t.stunned || t.stunRecovering ? 4 : 0) - (t.prone ? 3 : 0) - (t.kneel && !t.prone ? 2 : 0) - (t.offBalance ? 2 : 0) + db;
       const aod = how => t.aod && t.aodDef === how ? 2 : 0;
       const rt = kind === "melee" && canRetreat(t, att);
-      const opts = [{ how: "dodge", v: dodgeOf(t) + (rt ? 3 : 0) + aod("dodge"), retreat: rt }];
+      // Tactical Dodging (TS p. 17, an option): a model can dodge gunfire only from the one shooter it chose to watch
+      if (TDODGE && kind === "ranged" && t.evading && t.evading !== att) return null;
+      const opts = TDODGE && kind === "pb" && t.evading && t.evading !== att ? [] : [{ how: "dodge", v: dodgeOf(t) + (rt ? 3 : 0) + aod("dodge"), retreat: rt }];
       if ((kind === "melee" || kind === "pb") && canParry(t)) {
         const w = t.u.melee, bare = w.name === "Punch", master = !!t.u.flags.master;
         const step = w.fencing && master ? 1 : w.fencing || master ? 2 : 4;   // B376
@@ -1254,7 +1285,7 @@ const SIM = (() => {
     }
     function bestDefence(t, att, melee, aw) {
       const d = defOpts(t, att, melee ? "melee" : "ranged", aw);
-      return d ? Math.max(...d.opts.map(o => o.v)) + d.mod : null;
+      return d && d.opts.length ? Math.max(...d.opts.map(o => o.v)) + d.mod : null;
     }
     function rangedDefence(t, att) { return bestDefence(t, att, false); }
     // resolve a defence roll; a melee (or point-blank) defence returns { how, margin } or null, a ranged one the margin or null.
@@ -1290,6 +1321,7 @@ const SIM = (() => {
         return r.ok ? Math.max(0, r.margin) : null;
       }
       const opts = D.opts;
+      if (!opts.length) return null;
       const o = opts.reduce((a, b) => b.v > a.v ? b : a);
       if (o.how === "parry") t.parries++;
       if (o.how === "block") t.blocked = true;
@@ -1433,6 +1465,24 @@ const SIM = (() => {
       } else { m.jam = d6(); L(`  ${m.id}'s ${w.name} malfunctions (${m.jam} s to clear)`); }
       return true;
     }
+    function fireThrough(m, w, t, i, lvl) {
+      const shots = w.shots.mag === Infinity ? (w.rof || 1) : Math.min(w.rof || 1, m.ammo);
+      if (w.shots.mag !== Infinity) m.ammo -= shots;
+      m.attacked = true; m.aimTurns = 0; if (w.fp) m.fp -= w.fp; reveal(m);
+      m.facing = faceToward(m.h, t.h);
+      L(`${m.id} fires ${shots > 1 ? shots + " " : ""}through the ${hexName(i)} at ${t.id} (skill ${lvl})`);
+      let hits = 0;
+      for (let k = 0; k < shots && t.state === "ok"; k++) {
+        const lk = lvl - rclPen(w, k, false);
+        if (lk < 3 || !check(lk).ok) continue;
+        hits++;
+        const raw = rollDamage(w.dmg), st = structOf(i), sDR = st ? (w.dmg.div === Infinity ? 0 : Math.floor(st.dr / (w.dmg.div || 1))) : 0;
+        if (st) damageStructure(i, raw, w.dmg, true);
+        if (raw > sDR && t.h) applyHit(m, w, t, hitLocation(), true, hexDist(m.h, t.h) > w.range.half, null, raw - sDR);
+        else L(`  the ${hexName(i)} stops it`);
+      }
+      if (!hits) L(`  no round finds its mark`);
+    }
     // Line of fire (B389): every figure on the line between shooter and target, friend or foe, costs -4 to hit
     // (simulator value from the Basic Set rule, to be checked against the book); a miss may hit one of them or
     // someone beside the target instead, on a roll of 9 + its SM (likewise to be checked)
@@ -1474,6 +1524,7 @@ const SIM = (() => {
     }
     function fireAt(m, w, target, opts) {
       if (m.state !== "ok" || !m.h || !target.h || !los(m.h, target.h)) return;   // the attacker fell, the target left, or a wall is in the way
+      reveal(m);
       const d = Math.max(1, hexDist(m.h, target.h));
       if (d > w.range.max) return;
       const shots = w.shots.mag === Infinity ? w.rof : Math.min(w.rof, m.ammo);
@@ -1659,6 +1710,7 @@ const SIM = (() => {
       return best;
     }
     function strike(m, w, t, opts) {
+      reveal(m);
       w = bestMode(m, w, t);
       // attacks this turn: 1, +1 for Double or Rapid Strike, + Extra Attack; Rapid Strike's penalty falls on
       // the two blows it makes (-6, or -3 for a Weapon Master or someone Trained by a Master)
@@ -1704,6 +1756,7 @@ const SIM = (() => {
     const bladeReady = m => (m.inHand === "melee" || m.inHand === "both") && !m.meleeBroken;
     // Ready (B382): swap gun and blade; with Fast-Draw a successful roll makes it free and the model acts at once
     function switchTo(m, hand) {
+      m.lastSwitch = turn;
       const w = hand === "melee" ? m.u.melee : m.u.ranged;
       // a model that holds both when it can picks both back up
       m.inHand = m.u.bothReady ? "both" : hand;
@@ -1773,7 +1826,7 @@ const SIM = (() => {
       || models.some(x => x !== m && x.u.side === m.u.side && x.state === "ok" && x.role === "cover" && x.aimTarget === f);
     function incoming(m, h, mode) {
       let tot = 0;
-      const near = foes(m).filter(f => f.h && f.state === "ok").sort((a, b) => walk(h, a.h) - walk(h, b.h)).slice(0, 8);
+      const near = known(m).filter(f => f.h && f.state === "ok").sort((a, b) => walk(h, a.h) - walk(h, b.h)).slice(0, 8);
       for (const f of near) {
         if (f.pinned || f.grips.length > 1) continue;
         const d = hexDist(f.h, h);
@@ -1828,15 +1881,33 @@ const SIM = (() => {
       return best * stanceW(m, "ranged") * m.u.ai.aggression;
     }
 
+    // nobody known: head for where a foe was last seen, or else for the far side's staging bay, and look; a unit that
+    // holds (shooting stance) or lies in ambush stays put and waits
+    function search(m) {
+      // a holding unit waits 10 quiet seconds before it goes looking, an ambush a minute
+      const quiet = turn - contact[m.u.side];
+      if ((m.u.ambush && !m.u.sprung && quiet < 60) || (m.u.stance === "shoot" && quiet < 10)) return;
+      let goal = null, best = -99;
+      for (const [f, t] of seenAt[m.u.side]) if (t > best && f.state === "ok" && f.lastSeenH) { best = t; goal = f.lastSeenH; }
+      if (!goal || hexDist(goal, m.h) <= 1) {
+        // then the far staging bay, then sweep the facility room by room (a random walkable hex at a time)
+        if (!m.searchGoal) m.searchGoal = terr.spawn[1 - m.u.side];
+        while (hexDist(m.searchGoal, m.h) <= 2) { const i = Math.floor(R() * terr.hx.length); if (pass[i]) m.searchGoal = terr.hx[i]; }
+        goal = m.searchGoal;
+      }
+      if (stepToward(m, goal, moveOf(m), 1)) L(`${m.id} searches ahead`);
+    }
     function act(m) {
       const u = m.u, A = u.ai;
       m.aoa = false; m.aod = false; m.mna = false; m.offBalance = false; m.readied = false; m.steps = 0; m.moved = false;
       clearZone(m); m.waiting = null; m.watch = false;
       if (m.doNothing) { m.doNothing = false; L(`${m.id} reels from the blow (Do Nothing)`); return; }
+      if (m.surprised) { m.surprised = false; L(`${m.id} is caught by surprise`); return; }
+      if (m.skipNext) { m.skipNext = false; L(`${m.id} already acted this second (it saw the foe first)`); return; }
       if (m.blockLost) { m.blockLost = false; L(`${m.id} recovers its shield (Ready)`); return; }
       if (m.jam > 0) { m.jam--; if (!engaged(m)) { L(`${m.id} clears a jam`); return; } }
-      const pool = foes(m).filter(f => f.h).sort((a, b) => walk(m.h, a.h) - walk(m.h, b.h));
-      if (!pool.length) return;
+      const pool = known(m).filter(f => f.h).sort((a, b) => walk(m.h, a.h) - walk(m.h, b.h));
+      if (!pool.length) { if (AWARE) search(m); return; }
       const adj = pool.filter(f => hexDist(f.h, m.h) <= u.melee.reachMax && los(m.h, f.h));
       const shooter = u.ranged || u.powers.some(p => !p.melee);
       // stand up (Change Posture) unless a shooter holding its ground is better off prone
@@ -1863,6 +1934,8 @@ const SIM = (() => {
       const opts = [];
       const add = (v, label, run) => { if (Number.isFinite(v)) opts.push({ v, label, run }); };
       const here = m.h, rNow = risk(m, here, ""), mw = weaponsFor(m, true);
+      // evasive movement toward the gunman that worries it most (Tactical Dodging option)
+      if (TDODGE) m.evading = pool.filter(f => f.u.ranged && f.h && los(f.h, m.h)).sort((a, b) => threatOf(b) / Math.max(1, hexDist(b.h, m.h)) - threatOf(a) / Math.max(1, hexDist(a.h, m.h)))[0] || null;
       const Wm = stanceW(m, "melee") * A.aggression, Wr = stanceW(m, "ranged") * A.aggression;
       if (adj.length) meleeOptions(m, adj, add, rNow, Wm, Wr, mw);
       else {
@@ -1870,7 +1943,8 @@ const SIM = (() => {
         if (bladeReady(m)) approachOptions(m, pool, add, Wm);
       }
       // Ready the other weapon (B382): worth what it could do next turn
-      if ((!u.bothReady || m.inHand !== "both") && !m.grips.length) {
+      // (not straight back to what it just put away: swapping every second is a deadlock, not a plan)
+      if ((!u.bothReady || m.inHand !== "both") && !m.grips.length && turn - (m.lastSwitch ?? -99) >= 4) {
         const tmp = [], save = m.inHand, push = v => { if (Number.isFinite(v)) tmp.push(v); };
         if (!bladeReady(m) && u.melee && m.armsLost < 2 && !m.meleeBroken) {
           m.inHand = "melee";
@@ -1953,6 +2027,23 @@ const SIM = (() => {
           const E = planAttack(m, w, t, wl(m, w) - skillPen(m) + rangePenalty(Math.max(1, Math.min(wd, 10))) + t.u.sm, false).score;
           const comes = t.u.stance === "shoot" ? 0.3 : 0.6;
           add(GAMMA * comes * Wr * kv(m, t, E) + comes * 0.2 * threatOf(m) * u.ai.caution - rNow, `watch@${t.id}`, () => { m.waiting = w; m.watch = true; m.watchN = (m.watchN || 0) + 1; L(`${m.id} covers the approach (Wait)`); });
+        }
+      }
+      // through a wall or a shut door (TS p. 28, B408): a foe seen a moment ago on the far side of one partition can be
+      // shot through it, at random hit location, with the structure's DR on top of its own; the partition takes the hits
+      if (terr && AWARE) for (const t of pool.slice(0, 6)) {
+        if (!t.h || los(m.h, t.h) || (seenAt[u.side].get(t) ?? -99) < turn - 1) continue;
+        const d = hexDist(m.h, t.h), line = lineHexes(m.h, t.h).map(h => idx(key(h.q, h.r))).filter(i => i != null && blocker(i));
+        if (line.length !== 1) continue;
+        const i = line[0], st = structOf(i) || STRUCT.door;
+        for (const w of ws) {
+          const isGun = w === u.ranged;
+          if (w.malediction || w.cone || d > w.range.max || (isGun && (m.ammo <= 0 || m.reload > 0))) continue;
+          const dm = w.dmg, sDR = dm.div === Infinity ? 0 : Math.floor(st.dr / (dm.div || 1));
+          const dO = { ...dm, add: dm.add - sDR / (dm.mult || 1), key: (dm.key || "") + "thru" + sDR };
+          const lvl = wl(m, w) - skillPen(m) + rangePenalty(d) + t.u.sm;
+          const E = burstHits(lvl, w.rof || 1, w) * expInjRandom(w, t.u, dO) * sustainOf(w);
+          if (E > 0.05 * remOf(t)) add(Wr * kv(m, t, E) - rNow, `fire-through@${t.id}`, () => fireThrough(m, w, t, i, lvl));
         }
       }
       // reloads (TS p. 20): top up a part-used magazine while nobody can see us; when empty under fire, step out of
@@ -2517,6 +2608,7 @@ const SIM = (() => {
     function throwGrenade(m, g) {
       const w = m.u.grenades[g.i], c = g.c;
       m.grenadeReady = null; m.grenadesLeft[g.i]--; m.attacked = true;
+      reveal(m);
       if (g.hex) {
         // lobbed through a door or round a corner at a hex: no defence against a throw at the floor
         m.facing = faceToward(m.h, g.hex);
@@ -2589,6 +2681,7 @@ const SIM = (() => {
     function afterStep(m) {
       if (m.state !== "ok" || !m.h) return true;
       m.steps = (m.steps || 0) + 1;   // yards moved this turn: a moving target is harder to hit (B550)
+      if (AWARE) { const hidden = m.u.ambush && !m.revealed; for (const x of models) if (x.state === "ok" && x.h && x.u.side !== m.u.side && (!hidden || hexDist(x.h, m.h) <= 5) && los(x.h, m.h)) { spot(x.u.side, m); break; } }
       if (m.kneelVol) { m.kneel = m.kneelVol = false; }   // it rose as the step's start
       const k = key(m.h.q, m.h.r);
       for (const z of zones) if (m.state === "ok" && m.h && z.side !== m.u.side && z.owner.state === "ok" && z.owner.h && z.hexes.has(k) && !z.hit.has(m)) suppressHit(z, m);
@@ -2604,9 +2697,29 @@ const SIM = (() => {
         else fireAt(f, w, m, { pointBlank: hexDist(f.h, m.h) <= 1 });
         if (m.state !== "ok" || m.stunned || m.prone) return true;
       }
+      // slicing the pie (TS p. 23-24): a careful mover in a facility stops at the step that first shows it a foe, so
+      // it meets it at the corner with the corner as light cover for both; if neither was waiting, a Quick Contest of
+      // Per (+1 for Combat Reflexes) says who acts first, and a foe that wins shoots now and loses its next turn
+      if (AWARE && terr && m.prevH && !((m.u.ai.zeal || 0) > 0) && m.u.stance !== "charge") {
+        const newly = models.filter(x => x.state === "ok" && x.h && x.u.side !== m.u.side && !x.u.routed && hexDist(x.h, m.h) <= 10 && los(m.h, x.h) && !los(m.prevH, x.h));
+        if (newly.length) {
+          for (const x of newly) {
+            if (x.waiting || x.stunned || x.early === turn || m.state !== "ok") continue;
+            const xw = weaponsFor(x, false).find(w => w.range && hexDist(x.h, m.h) <= w.range.max && (w !== x.u.ranged || x.ammo > 0 || w.shots.mag === Infinity));
+            if (!xw || x.reload > 0 || x.jam) continue;
+            const per = u => (u.stats.per || u.stats.iq || 10) + (u.flags.cr ? 1 : 0);
+            const a = check(per(m.u)), b = check(per(x.u));
+            const xWins = a.ok !== b.ok ? b.ok : b.margin > a.margin;
+            if (xWins) { L(`${x.id} sees ${m.id} round the corner first`); x.early = turn; x.skipNext = true; fireAt(x, xw, m, {}); }
+          }
+          if (m.state === "ok") L(`${m.id} slices the pie and stops at the corner`);
+          return true;
+        }
+      }
       return false;
     }
     function suppress(m, w, center) {
+      reveal(m);
       const shots = w.shots.mag === Infinity ? w.rof : Math.min(w.rof, m.ammo);
       if (w.shots.mag !== Infinity) m.ammo -= shots;
       m.attacked = true;
@@ -2763,6 +2876,7 @@ const SIM = (() => {
         if (turn - m.spHit > delay) { m.sp = Math.min(sh.sp, m.sp + sh.recharge); if (m.sp >= sh.sp) m.spCollapsed = false; }
       }
       for (const m of models) if (m.state === "ok" && m.h && !m.u.routed && !m.stunned) firingLine(m);
+      lookAround();
       assignRoles();
       const order = models.filter(active).sort((a, b) => (b.u.speed - a.u.speed) || (R() - 0.5));
       for (const m of order) {
@@ -2987,6 +3101,7 @@ if (typeof document !== "undefined") (() => {
       <details class="lo"><summary>Loadout</summary><div class="lgrid">
         <label>Armour ${armourSelect(u, 0)}</label><label>Armour 2 ${armourSelect(u, 1)}</label>
         <label>Ranged ${weaponSelect(u, "ranged")}</label><label>Melee ${weaponSelect(u, "melee")}</label>
+        <label class="chk"><input type="checkbox" data-amb${u.ambush ? " checked" : ""}> Lies in ambush (facility)</label>
         <label>Carried shield <select data-cs><option value="">None</option>${shieldOpts.map(n => `<option${n === u.carried ? " selected" : ""}>${esc(n)}</option>`).join("")}</select></label>
         <label class="sh">Energy field <input type="checkbox" data-sh${u.shield ? " checked" : ""}>
           ${u.shield ? `SP <input type="number" data-shf="sp" value="${u.shield.sp}"> delay <input type="number" data-shf="delay" value="${u.shield.delay}"> recharge/s <input type="number" data-shf="recharge" value="${u.shield.recharge}">` : ""}</label>
@@ -3016,10 +3131,13 @@ if (typeof document !== "undefined") (() => {
         <fieldset><legend>Rules</legend>
           <label for="s-loc">Hit locations <select id="s-loc" data-o="locations"><option value="elite"${!S.locations || S.locations === "elite" ? " selected" : ""}>Elites aim</option><option value="aimed"${S.locations === "aimed" ? " selected" : ""}>Everyone aims (RAW)</option><option value="random"${S.locations === "random" ? " selected" : ""}>Random</option></select></label>
           <label for="s-hp">Wounds <select id="s-hp" data-h><option value="standard"${S.health !== "fractional" ? " selected" : ""}>Standard HP</option><option value="fractional"${S.health === "fractional" ? " selected" : ""}>Fractional Health</option></select></label>
+          <label class="chk" for="s-sight"><input id="s-sight" type="checkbox" data-g="sightedShots"${S.sightedShots ? " checked" : ""}> Aimed shots are All-Out Attacks (Tactical Shooting)</label>
+          <label class="chk" for="s-tdodge"><input id="s-tdodge" type="checkbox" data-g="tacticalDodge"${S.tacticalDodge ? " checked" : ""}> Dodge gunfire from one shooter only (Tactical Shooting)</label>
           ${S.health === "fractional" ? `<label for="s-box">Boxes per level <input id="s-box" type="number" min="1" max="9" value="${S.boxes || 5}" data-g="boxes"></label>` : ""}
         </fieldset>
         <fieldset><legend>Battlefield</legend>
           <label for="s-bf">Ground <select id="s-bf" data-o="battlefield"><option value="open"${S.battlefield !== "facility" ? " selected" : ""}>Open ground</option><option value="facility"${S.battlefield === "facility" ? " selected" : ""}>Facility</option></select></label>
+          ${S.battlefield === "facility" ? `<label for="s-aw">Knowledge <select id="s-aw" data-o="awareness"><option value="limited"${S.awareness !== "omniscient" ? " selected" : ""}>Only what they've seen</option><option value="omniscient"${S.awareness === "omniscient" ? " selected" : ""}>Everyone sees everything</option></select></label>` : ""}
           ${S.battlefield === "facility" ? `<label for="s-map">Layout number <input id="s-map" type="number" min="1" max="9999" value="${S.mapSeed || 1}" data-g="mapSeed"></label>` : ""}
           <label for="s-ca">Cover, side A <select id="s-ca" data-o="coverA"><option${(S.coverA || "none") === "none" ? " selected" : ""}>none</option><option${S.coverA === "light" ? " selected" : ""}>light</option><option${S.coverA === "heavy" ? " selected" : ""}>heavy</option></select></label>
           <label for="s-cb">Cover, side B <select id="s-cb" data-o="coverB"><option${(S.coverB || "none") === "none" ? " selected" : ""}>none</option><option${S.coverB === "light" ? " selected" : ""}>light</option><option${S.coverB === "heavy" ? " selected" : ""}>heavy</option></select></label>
@@ -3532,6 +3650,8 @@ if (typeof document !== "undefined") (() => {
         else { const [k, rest] = [v.slice(0, 2), v.slice(2)]; const [name, mode] = rest.split("\u0000"); u[el.dataset.w] = k === "t:" ? { trait: name, mode } : { item: name, mode }; }
         upd();
       });
+      const amb = card.querySelector("[data-amb]");
+      if (amb) amb.onchange = () => { u.ambush = amb.checked; save(); };
       const cs = card.querySelector("[data-cs]");
       if (cs) cs.onchange = () => { u.carried = cs.value || null; upd(); };
       const sh = card.querySelector("[data-sh]");
@@ -3546,7 +3666,8 @@ if (typeof document !== "undefined") (() => {
       $("#simout").innerHTML = `<p class="empty">Fighting ${S.runs} battles…</p>`;
       setTimeout(() => {
         try { last = SIM.monteCarlo(specs, { runs: S.runs, distance: S.distance, maxTurns: S.maxTurns, morale: S.morale, health: S.health, boxes: S.boxes || 5,
-          locations: S.locations || "elite", cover: [S.coverA || "none", S.coverB || "none"], battlefield: S.battlefield || "open", mapSeed: S.mapSeed || 1 }); $("#simout").innerHTML = results(last); setupReplay(); }
+          locations: S.locations || "elite", cover: [S.coverA || "none", S.coverB || "none"], battlefield: S.battlefield || "open", mapSeed: S.mapSeed || 1,
+          awareness: S.battlefield === "facility" ? S.awareness || "limited" : undefined, sightedShots: !!S.sightedShots, tacticalDodge: !!S.tacticalDodge }); $("#simout").innerHTML = results(last); setupReplay(); }
         catch (e) { $("#simout").innerHTML = `<p class="empty">Could not run: ${esc(e.message)}</p>`; }
       }, 20);
     };

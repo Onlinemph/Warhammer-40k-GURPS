@@ -730,7 +730,7 @@ Totals: 94 findings, 4 big, 29 medium, 61 small.
 - Batch C (items 1, 8, 20, 24, 52, 53, 54, 55, 76, 78, 95, 96, 97; 77 for Slams and Shoves only): implemented. Open: #56, #77 for weapons. Shield DR and HP values await the user.
 - #109 (Machines have no FP): done for Necrons; the Gun Drone's Machine Mind isn't flagged yet. #110: keep Regeneration (user).
 - #98-#101 (Progressive Recoil as written): done, with the user's "Rcl 1*" for weapons that stay progressive (Imperial las family). #102 (suppression) still open.
-- Tactical Shooting: #114-#126 done (#118 drilled factions chosen by me: Astartes, Custodes, Sororitas, Mechanicus, Guard, Aeldari, T'au, Necrons); #127 as an option, off; #130 done; #128, #129, #131 next.
+- Tactical Shooting: #114-#126 done (#118 drilled factions chosen by me: Astartes, Custodes, Sororitas, Mechanicus, Guard, Aeldari, T'au, Necrons); #127 as an option, off; #130 done; #128, #129 done (awareness a setting, limited by default in facilities); #131 as an option, off; #122 slicing the pie done (user). Not done: #132 by design (conflicts with Progressive Recoil).
 
 ## Status of the earlier from-memory review
 
