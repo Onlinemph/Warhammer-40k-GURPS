@@ -7,7 +7,12 @@ The simulator (`tools/sim.js`, the Combat Simulator page on the site) plays GURP
 - Hex grid, 1 yard per hex (B384), axial coordinates. The two sides deploy facing each other at the chosen distance; each unit deploys in a line with models 2 yards apart unless it has a formation setting.
 - Every model has a facing (six directions). Front arc: the front hex and the two front-side hexes; side: the two flank hexes; rear: the back hex (B385). An attack from a side hex gives the defender −2 to active defences; from the rear, no active defence (B390–391).
 - Movement costs 1 per hex. A model closing to melee searches for the nearest free hex beside any foe (breadth-first through free hexes), so a mob surrounds its targets instead of queueing. A model may change facing freely at the end of any maneuver that lets it move.
-- Terrain: an optional cover setting per side. A model in cover has legs, feet and groin behind it: attacks on those locations hit the cover (its DR) first, and ranged attacks on the model take −2 (half exposed) (B407).
+- Terrain on open ground: an optional cover setting per side. A model in cover has legs, feet and groin behind it: attacks on those locations hit the cover (its DR) first, and ranged attacks on the model take −2 (half exposed) (B407).
+- **Facility battlefield** (user direction; "Battlefield" setting, with a layout number). A generated complex about 64 × 37 yards: a staging bay at each end where the sides deploy, three hallways three yards wide running its length, cross corridors in pieces, rooms off them through two-yard doors, and crates (light cover, DR 15) and barricades (heavy cover, DR 60) in the rooms, bays and hallways. The same layout number always gives the same facility, and every run of a Monte Carlo uses it.
+  - Walls block movement and line of sight; crates block movement but not sight. Line of sight is a straight hex line; if either of the two lines nudged off the hex edges is clear, the figures see each other (so a figure at a corner or in a doorway can shoot and be shot).
+  - Cover is positional: a figure with a crate in the next hex toward the shooter has that crate's cover; one whose line of sight only one of the two lines clears (a corner or a door frame) has heavy cover. Both give −2 to hit and cover DR on the legs, feet and groin (B407). Cover counts against suppression fire too.
+  - No shot, thrown grenade, suppression or cone goes through a wall; a blast and its fragments stop at walls; a grenade that would land inside a wall goes off at its target.
+  - Movement follows the walking distance round the walls (a breadth-first field from the goal). Models with nobody in sight advance toward the nearest foe on foot; models with guns may move to a spot beside a crate or a corner that has a line of fire and cover against the foes in sight, valued like any other move (the shot it gives next turn less the risk of standing there, where the risk counts only foes that can see the spot and the cover it gives). Squad behaviour (firing lines, Wait on a doorway, suppression down a hallway, spreading fire) comes from the same decision layer.
 - Posture: standing or prone. Prone: −4 to melee attacks, −3 to defences, and ranged attacks against the model are at −2; standing up is a Change Posture maneuver (B551).
 
 ## Turn and maneuvers
@@ -90,4 +95,4 @@ Psykers use the attack and defence powers listed for their template in `data/sim
 
 ## Not modelled
 
-Vehicles, stealth detection beyond an ambush option, psychic powers other than attacks and defences, morale beyond the half and quarter Fright Checks (the full Fright Check table, B360, is reduced to rout or stun).
+Vehicles, doors that open and close, destructible walls, stealth detection beyond an ambush option, psychic powers other than attacks and defences, morale beyond the half and quarter Fright Checks (the full Fright Check table, B360, is reduced to rout or stun).
