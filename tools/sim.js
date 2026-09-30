@@ -1901,7 +1901,7 @@ const SIM = (() => {
     function stray(m, w, t, inter) {
       const melee = t.h && models.some(x => x.u.side !== t.u.side && x.state === "ok" && x.h && hexDist(x.h, t.h) <= 1);
       const near = melee ? models.filter(x => x !== m && x !== t && x.state === "ok" && x.h && hexDist(x.h, t.h) <= 1) : [];
-      const cands = [...new Set([...inter, ...near])].sort((a, b) => hexDist(m.h, a.h) - hexDist(m.h, b.h));
+      const cands = [...new Set([...inter, ...near])].filter(x => x.h && x.state === "ok").sort((a, b) => hexDist(m.h, a.h) - hexDist(m.h, b.h));
       for (const c of cands) if (strayAt(m, w, c)) return;
       const b = t.h && beyond(m, w, t.h);
       if (b && !cands.includes(b)) strayAt(m, w, b);
