@@ -69,6 +69,7 @@ Dodge, Parry and Block (B374–377; Block from Shield skill / 2 + 3, Combat Refl
 
 Standard GURPS HP (B377–420) or the user's Revised Fractional Health (see the rules document on the user's Drive; five boxes per level, multi-box hits). Both use armour divisors, Weak Points, regenerating shields, wounding multipliers, Injury Tolerance, Damage Reduction, follow-ups, and:
 
+- **Shields**: a regenerating shield that's up absorbs each hit before armour; whatever gets through keeps its follow-up. Attackers don't aim at locations or chinks while it's up.
 - **Follow-ups** (B381): a follow-up (a bolt's explosive core, an inferno bolt's burn, a toxin) applies only when the main hit penetrates, and ignores DR. An explosive follow-up bursts inside the body: triple damage (B414, internal explosion), then its wounding multiplier.
 - **Crippling** (B420–421): a crippled arm drops what it holds (a two-handed weapon becomes unusable); a crippled leg or foot drops the model prone and it can only crawl.
 - **Knockback** (B378): crushing damage, and cutting damage that fails to penetrate, moves the target 1 yard per full (ST−2) of basic damage and it must roll DX or fall prone.

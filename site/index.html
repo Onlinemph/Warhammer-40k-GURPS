@@ -1386,13 +1386,13 @@ const SIM = (() => {
         if (crit === 8 || crit === 14) t.critShock = true;
       }
       if (halfD) raw = Math.floor(raw / 2);
-      let fraw = w.follow && rawOverride == null ? rollDamage(w.follow) : 0;
+      let fraw = w.follow ? rollDamage(w.follow) : 0;   // splash and fragments pass follow: null
       const basic = raw;
       const sh = t.u.shield;
       if (sh && t.sp > 0 && (ranged || !sh.ranged_only)) {
         t.spHit = turn;
         if (raw <= t.sp) { t.sp -= raw; if (fraw) t.sp = Math.max(0, t.sp - fraw); L(`  shield holds (${t.sp} SP left)`); return 0; }
-        raw -= t.sp; t.sp = 0; t.spCollapsed = true; fraw = 0; L(`  shield collapses`);
+        raw -= t.sp; t.sp = 0; t.spCollapsed = true; L(`  shield collapses`);   // what gets through still carries its follow-up
       }
       const coverDR = ranged && COVERED.has(loc) ? COVER_DR[coverAt(t.h, att && att.h, t)] : 0;
       const armDR = Math.floor(drAt(t.u.arm.dr, loc === "vitals" ? (t.u.arm.dr.vitals != null ? "vitals" : "torso") : loc) / (chink ? 2 : 1)) + coverDR;
@@ -1516,7 +1516,10 @@ const SIM = (() => {
     }
     // best location and deceptive level: returns {loc, da, score, lvl}
     function planAttack(m, w, t, lvl, melee, dmgOverride) {
-      const locs = aimsShots(m) || (melee && t.pinned) ? [...Object.keys(AIM), ...Object.keys(AIM).filter(l => l !== "eye" && drAt(t.u.arm.dr, l === "vitals" ? "torso" : l) > 0).map(l => l + "#c")] : ["random"];
+      // a regenerating shield that's up soaks the blow before armour: a called shot is wasted on it, so aim at the
+      // body (or not at all) until it's down, and count only what the shield won't absorb
+      const sh = t.u.shield, shUp = !!(sh && t.sp > 0 && (!melee || !sh.ranged_only) && !w.malediction);
+      const locs = shUp ? [aimsShots(m) ? "torso" : "random"] : aimsShots(m) || (melee && t.pinned) ? [...Object.keys(AIM), ...Object.keys(AIM).filter(l => l !== "eye" && drAt(t.u.arm.dr, l === "vitals" ? "torso" : l) > 0).map(l => l + "#c")] : ["random"];
       const def0 = melee ? bestDefence(t, m, true) : w.malediction ? (w.fp && t.u.flags.blank ? 99 : w.resist === "HT" ? t.u.HT : t.u.will) - 2 : rangedDefence(t, m);
       let best = { loc: "torso", da: 0, score: 0, lvl };
       for (const loc of locs) {
@@ -1532,7 +1535,13 @@ const SIM = (() => {
           if (eff < 3 || (da > 0 && eff < 10)) break;
           const pDef = def0 == null ? 0 : P3[Math.max(0, Math.min(18, def0 - da))];
           const hits = melee ? P3[Math.min(18, eff)] : burstHits(eff, w.cone ? 1 : (w.rof || 1), w.rcl);
-          const score = (1 - pDef) * e * hits;
+          let score = (1 - pDef) * e * hits;
+          if (shUp) {
+            // the share of this attack's raw damage the shield absorbs is lost; stripping it is worth a quarter
+            const dm = dmgOverride || w.dmg, raw = Math.max(1, (dm.n * 3.5 + dm.add) * (dm.mult || 1) * hits);
+            const soak = Math.min(1, t.sp / raw);
+            score *= (1 - soak) + soak * 0.25;
+          }
           if (score > best.score) best = { loc, da, score, lvl: eff };
         }
       }
