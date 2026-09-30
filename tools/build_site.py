@@ -284,6 +284,14 @@ def combat_flags(t, flags):
         flags["chameleon"] = flags.get("chameleon", 0) + lv   # its notes: -1/level to spot it still, half moving
     elif n.startswith("Acute Vision"):
         flags["acuteVision"] = flags.get("acuteVision", 0) + lv
+    elif n.startswith("Night Vision"):
+        flags["nightVision"] = flags.get("nightVision", 0) + lv   # B71: darkness penalties less this
+    elif n.startswith("Dark Vision"):
+        flags["darkVision"] = 1                                     # B47: no darkness penalty
+    elif n.startswith("Infravision"):
+        flags["infravision"] = 1                                    # B60: sees warm bodies in the dark
+    elif n == "Chameleon":
+        flags["chamShadow"] = flags.get("chamShadow", 0) + lv       # the Mandrake's: +2/level to Stealth, shadow only
     elif n.startswith("Perfect Balance"):
         flags["pbal"] = 1           # +4 to keep one's feet against knockback (B74, B378)
     elif n.startswith("Enhanced Move (Ground)"):

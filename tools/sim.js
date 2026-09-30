@@ -611,7 +611,13 @@ const SIM = (() => {
     const wallI = Uint8Array.from(ks, k => floor.has(k) ? 0 : 1), crateI = Uint8Array.from(ks, k => crates.has(k) ? 1 : 0), doorI = Uint8Array.from(ks, k => doors.has(k) ? 1 : 0);
     // line of sight and cover geometry never change, so they're cached per map; what a line crosses that can
     // change (walls, doors) is stored with it and checked against the battle's own state
-    const map = { floor, crates, doors, spawn, W, H, ids, hx, nb, wallI, crateI, doorI, lineC: new Map(), covC: new Map() };
+    // lighting (B394): the bays and hallways are lit, the cross corridors dim (-2), and each room lit, dim (-3) or
+    // dark (-7), drawn after everything else so the layout itself is unchanged
+    const lightAt = new Map();
+    for (const x of vx) for (let c = x - 1; c <= x + 1; c++) for (let r = 1; r < H - 1; r++) if (!hy.some(y => Math.abs(r - y) <= 1)) lightAt.set(K(c, r), -2);
+    for (const [x0, y0, x1, y1] of rooms) { const v = rnd(), L0 = v < 0.4 ? 0 : v < 0.75 ? -3 : -7; for (let c = x0; c <= x1; c++) for (let r = y0; r <= y1; r++) lightAt.set(K(c, r), L0); }
+    const light = Int8Array.from(ks, k => floor.has(k) ? lightAt.get(k) || 0 : 0);
+    const map = { floor, crates, doors, spawn, W, H, ids, hx, nb, wallI, crateI, doorI, light, lineC: new Map(), covC: new Map() };
     MAPS.set(seed, map);
     return map;
   }
@@ -667,6 +673,9 @@ const SIM = (() => {
     // terrain: walls block movement and sight until breached; crates block movement only; doors block both
     // while closed. The map is shared by every run; what changes in a battle (doors, breaches, wall damage) lives here
     const terr = opt.terrain || (opt.battlefield === "facility" ? facilityMap(opt.mapSeed || 1) : null);
+    // lighting (B394): "mixed" (a facility's default: lit hallways, dim corridors, rooms lit, dim or dark), "lit",
+    // or "dark" (-7 everywhere). Open ground is lit
+    const LIGHT = terr ? opt.lighting || "mixed" : "lit";
     const nH = terr ? terr.hx.length : 0;
     const pass = terr ? Uint8Array.from(terr.wallI, (w, i) => w || terr.crateI[i] ? 0 : 1) : null;   // walkable (closed doors count: they open)
     const broken = new Uint8Array(nH), closed = new Uint8Array(nH), shp = new Float64Array(nH).fill(-1);
@@ -728,6 +737,10 @@ const SIM = (() => {
       return { kind: m && cover[m.u.side] !== "none" && !m.moved ? cover[m.u.side] : "none", i: -1 };
     }
     const coverAt = (h, f, m) => coverOf(h, f, m).kind;
+    const darkAt = h => { if (LIGHT === "lit" || !h) return 0; if (LIGHT === "dark") return -7; const i = idx(key(h.q, h.r)); return i == null || !terr.light ? 0 : terr.light[i]; };
+    // what darkness at t's hex costs viewer v to see or strike it: less Night Vision, nothing with Dark Vision, nor with
+    // Infravision against a warm body (B47, B60, B71, B394)
+    const darkPen = (v, t) => { const L = -darkAt(t.h); if (!L || v.u.flags.darkVision || (v.u.flags.infravision && !t.u.flags.machine)) return 0; return Math.max(0, L - (v.u.flags.nightVision || 0)); };
     // crates and barricades are semi-ablative (TS p. 29, B559): every 10 points of damage they stop wears 1 DR off
     const crateGone = terr ? new Uint8Array(terr.hx.length) : null, crateWear = terr ? new Float64Array(terr.hx.length) : null;
     function wearCover(i, stopped) {
@@ -863,7 +876,7 @@ const SIM = (() => {
     const spotOf = u => u._sp ?? (u._sp = Math.max(u.stats.per || u.stats.iq || 10, skillOf(u, /^Observation/)) + (u.flags.acuteVision || 0));
     function concealed(f, x) {
       if ((f.loudAt ?? -99) >= turn - 1) return false;
-      return f.prone || !!f.u.flags.chameleon || hexDist(x.h, f.h) >= 20 || coverAt(f.h, x.h, f) !== "none";
+      return f.prone || !!f.u.flags.chameleon || darkAt(f.h) <= -3 || hexDist(x.h, f.h) >= 20 || coverAt(f.h, x.h, f) !== "none";
     }
     function trySpot(f) {
       const S = 1 - f.u.side, viewers = models.filter(x => x.state === "ok" && x.h && x.u.side === S && los(x.h, f.h));
@@ -876,9 +889,9 @@ const SIM = (() => {
       if ((f.spotRoll || [])[S] === turn) return;   // one roll a second per side
       (f.spotRoll ||= [])[S] = turn;
       let best = -Infinity;
-      for (const x of viewers) best = Math.max(best, spotOf(x.u) - skillPen(x) + rangePenalty(Math.max(1, hexDist(x.h, f.h))) + f.u.sm);
+      for (const x of viewers) best = Math.max(best, spotOf(x.u) - skillPen(x) + rangePenalty(Math.max(1, hexDist(x.h, f.h))) + f.u.sm - darkPen(x, f));
       const cham = f.u.flags.chameleon || 0, still = !(f.steps > 0);
-      const st = stealthOf(f.u) - (f.steps > moveOf(f) / 2 ? 5 : 0) + (still ? cham : Math.floor(cham / 2)) - skillPen(f);
+      const st = stealthOf(f.u) - (f.steps > moveOf(f) / 2 ? 5 : 0) + (still ? cham : Math.floor(cham / 2)) - skillPen(f) + (darkAt(f.h) <= -3 ? 2 * (f.u.flags.chamShadow || 0) : 0);
       const a = check(best), b = check(st);
       if (a.ok && (!b.ok || a.margin > b.margin)) { L(`  ${f.id} is spotted (Per ${best} vs Stealth ${st})`); spot(S, f); }
     }
@@ -909,7 +922,7 @@ const SIM = (() => {
       } else if (unseen) {
         // any attack out of hiding is a surprise attack (B393): foes who see it or are within 10 yards roll IQ
         // (+6 with Combat Reflexes) or lose their next turn
-        L(`  ${m.id} strikes from hiding`);
+        L(`  ${m.id} strikes from hiding`); m.hiddenStrike = turn;
         for (const x of models) if (x.state === "ok" && x.h && x.u.side === side && (los(x.h, m.h) || hexDist(x.h, m.h) <= 10) && !check((x.u.stats.iq || 10) + (x.u.flags.cr ? 6 : 0)).ok) x.surprised = true;
       }
     }
@@ -1001,6 +1014,10 @@ const SIM = (() => {
         const r = fright(m.u, e.vol && !covered ? -rapidBonus(e.vol) : 0, Infinity);
         if (!r.ok) { frightTable(m, -r.margin, why); if (m.stunned || m.state !== "ok" || m.u.routed) return true; }
       }
+      if (e.horror != null) {
+        const r = fright(m.u, -e.horror, Infinity);
+        if (!r.ok) { frightTable(m, -r.margin, `${e.horrorWhy}, -${e.horror}`); if (m.stunned || m.state !== "ok" || m.u.routed) return true; }
+      }
       if (covered && !m.u.flags.cr && !check(m.u.will - 2).ok) m.headsDown = true;
       return false;
     }
@@ -1063,7 +1080,8 @@ const SIM = (() => {
     const thr = (HP, lvl, col = 1) => Math.max(1, Math.round(HP * FRAC[lvl] * COLS(lvl)[col - 1]));
     function severity(inj, HP) { let s = 0; for (let l = 1; l <= 8; l++) if (inj >= thr(HP, l)) s = l; return s; }
     function boxesFor(inj, HP, lvl) { let n = 0; for (let c = 1; c <= 4; c++) if (inj >= thr(HP, lvl, c)) n = c; return Math.max(1, n); }
-    function incapacitate(t, why) { if (t.state === "ok") { sawFall(t); if (t.h) FX(["d", t.h.q, t.h.r, t.u.side, 0]); t.state = "out"; place(t, null); L(`  ${t.id} ${why}`); } }
+    // a model cut down by wounds (at 0 HP or below) is as horrible to see as one killed outright
+    function incapacitate(t, why) { if (t.state === "ok") { sawFall(t); if (frac ? t.lastHitBy : t.hp <= 0) horror(t.lastHitBy, t); if (t.h) FX(["d", t.h.q, t.h.r, t.u.side, 0]); t.state = "out"; place(t, null); L(`  ${t.id} ${why}`); } }
     // crippling (B421): an arm or hand drops what it holds and can't hold anything; the weapon goes to the other
     // hand (off-hand -4), two-handed weapons can't be used, and a crippled shield arm loses the shield. A leg drops
     // the model, which can fight lying down and crawl
@@ -1145,6 +1163,7 @@ const SIM = (() => {
       }
     }
     function injure(att, t, inj, loc, type) {
+      if (att && att !== t) t.lastHitBy = att;
       if (inj <= 0 || t.state !== "ok") return;
       ev(t).wounded = true;
       if ((t.aimTurns || t.follow) && !check(t.u.will).ok) { t.aimTurns = 0; t.follow = null; L(`  ${t.id} loses its aim`); }
@@ -1203,9 +1222,23 @@ const SIM = (() => {
         }
       }
     }
+    // Horror (user direction): every comrade who sees a model cut down (in sight, within 20 yards, not blind in the
+    // dark) makes a Fright Check at -1, -1 more for each one it has already seen this fight, -2 if it was up close in
+    // melee, -2 if it was grisly (the body taken past -2 x HP), -3 if the killer struck out of hiding
+    function horror(att, t) {
+      if (!t.h || !morale) return;
+      const close = !!(att && att.h && att !== t && hexDist(att.h, t.h) <= 1);
+      const gore = !frac && t.hp <= -2 * t.u.HP, hidden = !!(att && att.hiddenStrike === turn);
+      for (const x of models) {
+        if (x === t || x.state !== "ok" || !x.h || x.u.side !== t.u.side || hexDist(x.h, t.h) > 20 || !los(x.h, t.h) || darkPen(x, t) >= 5) continue;
+        const pen = 1 + (x.horror || 0) + (close ? 2 : 0) + (gore ? 2 : 0) + (hidden ? 3 : 0);
+        const e = ev(x); e.horror = Math.max(e.horror ?? -1, pen); e.horrorWhy = close ? "a comrade torn apart" : "a comrade killed";
+        x.horror = (x.horror || 0) + 1;
+      }
+    }
     function kill(att, t, how) {
       if (t.state !== "ok") return;
-      sawFall(t);
+      sawFall(t); horror(att, t);
       if (t.h) FX(["d", t.h.q, t.h.r, t.u.side, 1]);
       place(t, null);
       if (t.u.flags.reanimation && how !== "destroyed" && t.hp > -5 * t.u.HP) {
@@ -1611,7 +1644,7 @@ const SIM = (() => {
       // shield helps
       const huge = !!(aw && aw.huge);
       const db = !huge && att && att.h && t.h && shieldCovers(t, att) ? shieldDB(t) : 0;
-      const mod = (arc === "side" ? -2 : 0) - (t.stunned || t.stunRecovering ? 4 : 0) - (t.prone ? 3 : 0) - (t.kneel && !t.prone ? 2 : 0) - (t.offBalance ? 2 : 0) + db;
+      const mod = (arc === "side" ? -2 : 0) - (t.stunned || t.stunRecovering ? 4 : 0) - (t.prone ? 3 : 0) - (t.kneel && !t.prone ? 2 : 0) - (t.offBalance ? 2 : 0) + db - (att && att.h ? darkPen(t, att) : 0);
       const aod = how => t.aod && t.aodDef === how ? 2 : 0;
       const rt = kind === "melee" && canRetreat(t, att);
       const slip = rt && t.retreatFrom !== att && (retreatHex(t, att) || {}).side ? 1 : 0;
@@ -1743,11 +1776,18 @@ const SIM = (() => {
     // among the steps that gain as much ground, it takes the one with fewest squad-mates beside it (user direction:
     // charging mobs too)
     const nearFriends = (m, h) => { let c = 0; for (const [dq, dr] of DIRS) { const x = occ.get(key(h.q + dq, h.r + dr)); if (x && x !== m && x.u.side === m.u.side && x.state === "ok") c++; } return c; };
+    // a stalker: a stealthy model (Stealth 14+ or a chameleon hide) that fights hand to hand and hasn't been seen
+    const stalker = m => AWARE && m.h && (stealthOf(m.u) >= 14 || !!m.u.flags.chameleon || !!m.u.flags.chamShadow)
+      && (!m.u.ranged || m.u.stance === "charge" || m.u.ai.melee > m.u.ai.ranged) && (seenAt[1 - m.u.side].get(m) ?? -99) < turn - 1;
     const grenadeThreat = m => known(m).some(f => f.h && f.state === "ok" && f.u.grenades.length && f.grenadesLeft.some(n => n > 0) && hexDist(f.h, m.h) <= Math.max(...f.u.grenades.map(g => g.range.max)) + moveOf(m));
     function stepToward(m, goal, steps, stopAt = 1) {
       let moved = 0;
-      const spread = grenadeThreat(m);
-      const better = (n, d, bd, best) => d < bd || (d === bd && best && (spread ? nearFriends(m, n) < nearFriends(m, best) || (nearFriends(m, n) === nearFriends(m, best) && R() < 0.3) : R() < 0.3));
+      const spread = grenadeThreat(m), stalk = stalker(m);
+      // a stalker near its prey moves at half Move (no -5 to Stealth) and keeps to steps the foe can't see, then the dark
+      if (stalk && hexDist(m.h, goal) <= 20) steps = Math.min(steps, Math.max(1, Math.floor(moveOf(m) / 2)));
+      const foesK = stalk ? known(m).filter(f => f.h) : [];
+      const sc = n => (stalk ? (foesK.some(f => los(f.h, n)) ? 10 : 0) + (darkAt(n) <= -3 ? 0 : 1) : 0) + (spread ? nearFriends(m, n) : 0);
+      const better = (n, d, bd, best) => d < bd || (d === bd && best && (sc(n) < sc(best) || (sc(n) === sc(best) && R() < 0.3)));
       if (terr) {
         // round the walls: each step goes to a free neighbour nearer the goal on foot, hopping crates it's big
         // enough to jump and friends in the way
@@ -1822,7 +1862,10 @@ const SIM = (() => {
       if (!slots.size) return null;
       // a shield (and a storm shield's field) covers only the front and the shield side: go round to the weapon
       // side or the back when that's no more than two steps further (B287)
+      const stalk = stalker(m);
       const guarded = (hk, f) => {
+        // a stalker goes for the flank or the back (the front is a last resort)
+        if (stalk) { const [q, r] = hk.split(",").map(Number); if (arcOf(f.h, f.facing, { q, r }) === "front") return true; }
         if (!(shieldDB(f) || (f.u.shield && f.u.shield.arc && f.sp > 0))) return false;
         const [q, r] = hk.split(",").map(Number), h = { q, r }, a = arcOf(f.h, f.facing, h);
         return a === "front" || (a === "side" && sideOf(f.h, f.facing, h) === "L");
@@ -1852,7 +1895,7 @@ const SIM = (() => {
     function followPath(m, path, steps) {
       let moved = 0;
       // still more than a move out and under grenade threat: head for the same end but fan out on the way
-      if (path.length > steps + 1 && grenadeThreat(m)) return stepToward(m, path[path.length - 1], steps, 0);
+      if (path.length > steps + 1 && (grenadeThreat(m) || stalker(m))) return stepToward(m, path[path.length - 1], steps, 0);
       // a friend on the path is passed through for an extra movement point (B368), never stopped on
       for (const n of path) {
         const nk = key(n.q, n.r);
@@ -1936,7 +1979,7 @@ const SIM = (() => {
       if (!c.h || c.state !== "ok" || !m.h) return false;
       if (c.u.side === m.u.side && drilled(m) && drilled(c)) return false;
       const d = Math.max(1, hexDist(m.h, c.h));
-      const lvl = Math.min(9, wl(m, w) - skillPen(m) + rangePenalty(d) + c.u.sm + shotFx(c, m.h, false).pen("random"));
+      const lvl = Math.min(9, wl(m, w) - skillPen(m) + rangePenalty(d) + c.u.sm + shotFx(c, m.h, false).pen("random") - darkPen(m, c));
       if (lvl < 3 || !check(lvl).ok) return false;
       if (defend(c, m, false, 0, 0) != null) { L(`  a stray round goes past ${c.id}, who ducks`); return true; }
       L(`  a stray round hits ${c.id}${c.u.side === m.u.side ? " (friendly fire)" : ""}`);
@@ -2040,7 +2083,7 @@ const SIM = (() => {
       const sighted = SIGHTED && opts.aim && !opts.aoa;
       if (sighted) { m.aoa = true; L(`${m.id} settles into the sights (All-Out Attack)`); }
       let base = wl(m, w) + (braced ? 1 : 0) + (opts.pointBlank ? Math.min(0, w.bulk) : rangePenalty(d + spdOf(target.steps || 0)))   // a target moving faster than Move 10 adds its speed to the range (B373, B550)
-        + target.u.sm - skillPen(m) + firstB - (opts.pen || 0)
+        + target.u.sm - skillPen(m) + firstB - (opts.pen || 0) - darkPen(m, target)
         // All-Out Attack (Determined): +1, or +4 for a gun fired at a foe within reach (TS p. 25)
         + (opts.moved ? Math.min(-2, w.bulk) : 0) + (opts.aoa || sighted ? (opts.pointBlank ? 4 : 1) : 0)
         - (opts.pointBlank ? 0 : ownCoverPen(m, target.h, braced && firstB > 0));
@@ -2277,7 +2320,7 @@ const SIM = (() => {
         const dfe = t.feintDef && t.feintDef.t === m && turn - t.feintDef.turn <= 1 ? t.feintDef.n : 0;
         if (dfe) t.feintDef = null;
         let lvl = -dfe + wl(m, w) - skillPen(m) - (opts.charge && !opts.heroic ? 4 : 0) + (opts.determined ? 4 : 0) + (opts.committed === "det" ? 2 : 0) - rapidPen + ev
-          - (m.prone ? 4 : 0) - (m.kneel && !m.prone ? 2 : 0) - closePen(m, w) - (opts.pen || 0) + smMelee(m, t);
+          - (m.prone ? 4 : 0) - (m.kneel && !m.prone ? 2 : 0) - closePen(m, w) - (opts.pen || 0) + smMelee(m, t) - darkPen(m, t);
         if (opts.charge && !opts.heroic) lvl = Math.min(lvl, 9);
         const plan = planAttack(m, w, t, lvl, true, null, { noDa: !trained(m, w) });
         let loc = plan.loc === "random" ? hitLocation() : plan.loc;
@@ -2511,7 +2554,7 @@ const SIM = (() => {
         if (!t.h || !los(h, t.h)) continue;
         const d = Math.max(1, hexDist(h, t.h));
         if (d > w.range.max) continue;
-        const E = planAttack(m, w, t, wl(m, w) - skillPen(m) + rangePenalty(d + spdOf(t.steps || 0)) + t.u.sm - COVER_OWN[coverAt(h, t.h, null)] - linePen(m, between(h, t.h, m.u.side).filter(x => x !== t && x !== m)), false, null, { fx: shotFx(t, h, false) }).score * sustainOf(w);
+        const E = planAttack(m, w, t, wl(m, w) - skillPen(m) + rangePenalty(d + spdOf(t.steps || 0)) + t.u.sm - darkPen(m, t) - COVER_OWN[coverAt(h, t.h, null)] - linePen(m, between(h, t.h, m.u.side).filter(x => x !== t && x !== m)), false, null, { fx: shotFx(t, h, false) }).score * sustainOf(w);
         best = Math.max(best, kv(m, t, E));
       }
       return best * stanceW(m, "ranged") * m.u.ai.aggression;
@@ -2741,7 +2784,7 @@ const SIM = (() => {
           const spread = 1 / (1 + 0.5 * u.ai.focus * claims(m, t));
           // figures in the line of fire cost -4 each, and a miss may hit a friend on the line or beside the target
           const inter = w.malediction ? [] : between(m.h, t.h, m.u.side).filter(x => x !== t);
-          const base = wl(m, w) - skillPen(m) + rangePenalty(d + spdOf(t.steps || 0)) + t.u.sm - linePen(m, inter);
+          const base = wl(m, w) - skillPen(m) + rangePenalty(d + spdOf(t.steps || 0)) + t.u.sm - linePen(m, inter) - darkPen(m, t);
           const fx = w.malediction ? null : shotFx(t, m.h, false);
           const pals = w.malediction || w.dmg.ex ? [] : [...new Set([...inter, ...models.filter(x => x !== m && x.state === "ok" && x.h && hexDist(x.h, t.h) <= 1)])].filter(x => x.u.side === u.side && !(drilled(m) && drilled(x)));
           // a cone catches every friend in the wedge (who may dive clear)
@@ -3484,7 +3527,7 @@ const SIM = (() => {
         const newly = models.filter(x => x.state === "ok" && x.h && x.u.side !== m.u.side && !x.u.routed && hexDist(x.h, m.h) <= 10 && los(m.h, x.h) && !los(m.prevH, x.h));
         if (newly.length) {
           for (const x of newly) {
-            if (x.waiting || x.stunned || x.early === turn || m.state !== "ok") continue;
+            if (x.waiting || x.stunned || x.early === turn || m.state !== "ok" || !m.h || x.state !== "ok" || !x.h) continue;
             const xw = weaponsFor(x, false).find(w => w.range && hexDist(x.h, m.h) <= w.range.max && (w !== x.u.ranged || x.ammo > 0 || w.shots.mag === Infinity));
             if (!xw || x.reload > 0 || x.jam) continue;
             const per = u => (u.stats.per || u.stats.iq || 10) + (u.flags.cr ? 1 : 0);
@@ -3518,7 +3561,7 @@ const SIM = (() => {
       { const e = ev(x); e.supp = true; e.shotAt = z.owner; e.vol = Math.max(e.vol || 0, z.shots); }
       if (!los(z.owner.h, x.h)) return;
       const m = z.owner, w = z.w, d = Math.max(1, hexDist(m.h, x.h));
-      const eff = w.level - skillPen(m) + rangePenalty(d);
+      const eff = w.level - skillPen(m) + rangePenalty(d) - darkPen(m, x);
       const rb = rapidBonus(z.shots);
       const lvl = Math.min(6 + rb, eff + rb + x.u.sm + shotFx(x, m.h, false).pen("random"));
       const r = check(lvl);
@@ -3790,7 +3833,7 @@ const SIM = (() => {
     L(winner >= 0 ? `Side ${winner === 0 ? "A" : "B"} wins in ${turn - 1} turns` :
       timeout ? `Still fighting when the ${maxTurns}-second limit ran out` : `Both sides destroyed or broken after ${turn - 1} turns`);
     return {
-      winner, timeout, turns: turn - 1, log, frames, fx, terrain: frames && terr ? { floor: [...terr.floor], crates: [...terr.crates], doors: [...terr.doors], shut: [...startShut], events: tev } : null, roster: models.map(m => { const u = m.u; return { id: m.id, side: u.side, unit: u.idx, template: u.template, faction: u.ai.name, speed: u.speed, move: u.move, hp: u.HP, st: u.st, dx: u.dx, dodge: u.dodge, parry: u.parry, dr: drAt(u.arm.dr, "torso") + drAt(u.nat, "torso"), sp: u.shield ? u.shield.sp : 0,
+      winner, timeout, turns: turn - 1, log, frames, fx, terrain: frames && terr ? { floor: [...terr.floor], crates: [...terr.crates], doors: [...terr.doors], shut: [...startShut], events: tev, light: [...terr.floor].map(k => { const [q, r] = k.split(",").map(Number); return [k, darkAt({ q, r })]; }).filter(x => x[1]) } : null, roster: models.map(m => { const u = m.u; return { id: m.id, side: u.side, unit: u.idx, template: u.template, faction: u.ai.name, speed: u.speed, move: u.move, hp: u.HP, st: u.st, dx: u.dx, dodge: u.dodge, parry: u.parry, dr: drAt(u.arm.dr, "torso") + drAt(u.nat, "torso"), sp: u.shield ? u.shield.sp : 0,
         ranged: u.ranged ? `${u.ranged.name} (${u.ranged.text}${u.ranged.followText ? " + " + u.ranged.followText : ""})` : "", melee: `${u.melee.name} (${u.melee.text})`, kills: m.kills, fate: m.state }; }),
       units: units.map(u => ({
         name: u.name, side: u.side, count: u.count, routed: u.routed,
@@ -3962,7 +4005,8 @@ if (typeof document !== "undefined") (() => {
         </fieldset>
         <fieldset><legend>Battlefield</legend>
           <label for="s-bf">Ground <select id="s-bf" data-o="battlefield"><option value="open"${S.battlefield !== "facility" ? " selected" : ""}>Open ground</option><option value="facility"${S.battlefield === "facility" ? " selected" : ""}>Facility</option></select></label>
-          ${S.battlefield === "facility" ? `<label for="s-aw">Knowledge <select id="s-aw" data-o="awareness"><option value="limited"${S.awareness !== "omniscient" ? " selected" : ""}>Only what they've seen</option><option value="omniscient"${S.awareness === "omniscient" ? " selected" : ""}>Everyone sees everything</option></select></label>` : ""}
+          ${S.battlefield === "facility" ? `<label for="s-aw">Knowledge <select id="s-aw" data-o="awareness"><option value="limited"${S.awareness !== "omniscient" ? " selected" : ""}>Only what they've seen</option><option value="omniscient"${S.awareness === "omniscient" ? " selected" : ""}>Everyone sees everything</option></select></label>
+          <label for="s-lt">Lighting <select id="s-lt" data-o="lighting"><option value="mixed"${!S.lighting || S.lighting === "mixed" ? " selected" : ""}>Mixed (dim and dark rooms)</option><option value="lit"${S.lighting === "lit" ? " selected" : ""}>All lit</option><option value="dark"${S.lighting === "dark" ? " selected" : ""}>Dark (−7)</option></select></label>` : ""}
           ${S.battlefield === "facility" ? `<label for="s-map">Layout number <input id="s-map" type="number" min="1" max="9999" value="${S.mapSeed || 1}" data-g="mapSeed"></label>` : ""}
           <label for="s-ca">Cover, side A <select id="s-ca" data-o="coverA"><option${(S.coverA || "none") === "none" ? " selected" : ""}>none</option><option${S.coverA === "light" ? " selected" : ""}>light</option><option${S.coverA === "heavy" ? " selected" : ""}>heavy</option></select></label>
           <label for="s-cb">Cover, side B <select id="s-cb" data-o="coverB"><option${(S.coverB || "none") === "none" ? " selected" : ""}>none</option><option${S.coverB === "light" ? " selected" : ""}>light</option><option${S.coverB === "heavy" ? " selected" : ""}>heavy</option></select></label>
@@ -4140,6 +4184,8 @@ if (typeof document !== "undefined") (() => {
         b.strokeStyle = MAP.seam; b.lineWidth = .04; hexPath(b, cx, cy, 1); b.stroke();
         if (h < .12) { b.fillStyle = "rgba(0,0,0,.18)"; b.beginPath(); b.ellipse(cx + (h - .06) * 4, cy, .5, .28, h * 9, 0, 7); b.fill(); }
       }
+      // lighting: dim corridors and dim or dark rooms shaded
+      for (const [k, v] of T.light || []) { const [q, r] = k.split(",").map(Number), [cx, cy] = P(q, r); b.fillStyle = `rgba(0,0,0,${v <= -7 ? .55 : v <= -3 ? .35 : .18})`; hexPath(b, cx, cy, 1.02); b.fill(); }
       // bulkhead edges where floor meets wall
       b.lineCap = "round";
       for (const k of T.floor) {
@@ -4492,7 +4538,7 @@ if (typeof document !== "undefined") (() => {
       setTimeout(() => {
         try { last = SIM.monteCarlo(specs, { runs: S.runs, distance: S.distance, maxTurns: S.maxTurns, morale: S.morale, health: S.health, boxes: S.boxes || 5,
           locations: S.locations || "elite", cover: [S.coverA || "none", S.coverB || "none"], battlefield: S.battlefield || "open", mapSeed: S.mapSeed || 1,
-          awareness: S.battlefield === "facility" ? S.awareness || "limited" : undefined, sightedShots: !!S.sightedShots, tacticalDodge: !!S.tacticalDodge, limitedDodges: !!S.limitedDodges, cinematicEffort: !!S.cinematicEffort }); $("#simout").innerHTML = results(last); setupReplay(); }
+          awareness: S.battlefield === "facility" ? S.awareness || "limited" : undefined, lighting: S.lighting || "mixed", sightedShots: !!S.sightedShots, tacticalDodge: !!S.tacticalDodge, limitedDodges: !!S.limitedDodges, cinematicEffort: !!S.cinematicEffort }); $("#simout").innerHTML = results(last); setupReplay(); }
         catch (e) { $("#simout").innerHTML = `<p class="empty">Could not run: ${esc(e.message)}</p>`; }
       }, 20);
     };
