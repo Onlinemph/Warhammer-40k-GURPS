@@ -2465,20 +2465,26 @@ if (typeof document !== "undefined") (() => {
     $("#main").innerHTML = `<header class="libhead"><div class="eyebrow">Tools</div><h1>Combat Simulator</h1>
       <p>Pit units against each other using their templates and default loadouts. Every run plays a full GURPS fight second by second; the result is the spread over many runs.</p></header>
       <div class="spresets">${PRESETS.map((p, i) => `<button class="chip tag" data-preset="${i}">${esc(p[0])}</button>`).join("")}</div>
-      <div class="sset">
-        <label>Starting distance <input type="number" min="1" max="3000" value="${S.distance}" data-g="distance"> yd</label>
-        <label>Runs <input type="number" min="1" max="2000" value="${S.runs}" data-g="runs"></label>
-        <label>Turn limit <input type="number" min="5" max="3600" value="${S.maxTurns}" data-g="maxTurns"> s</label>
-        <label><input type="checkbox" data-g="morale"${S.morale ? " checked" : ""}> Morale checks</label>
-        <label>Hit locations <select data-o="locations" aria-label="Hit locations"><option value="elite"${!S.locations || S.locations === "elite" ? " selected" : ""}>Elites aim, others random</option><option value="aimed"${S.locations === "aimed" ? " selected" : ""}>Everyone aims (RAW)</option><option value="random"${S.locations === "random" ? " selected" : ""}>Random</option></select></label>
-        <label>Battlefield <select data-o="battlefield" aria-label="Battlefield"><option value="open"${S.battlefield !== "facility" ? " selected" : ""}>Open ground</option><option value="facility"${S.battlefield === "facility" ? " selected" : ""}>Facility (hallways and rooms)</option></select></label>
-        ${S.battlefield === "facility" ? `<label>Layout <input type="number" min="1" max="9999" value="${S.mapSeed || 1}" data-g="mapSeed"></label>` : ""}
-        <label>Cover, side A <select data-o="coverA"><option${(S.coverA || "none") === "none" ? " selected" : ""}>none</option><option${S.coverA === "light" ? " selected" : ""}>light</option><option${S.coverA === "heavy" ? " selected" : ""}>heavy</option></select></label>
-        <label>side B <select data-o="coverB"><option${(S.coverB || "none") === "none" ? " selected" : ""}>none</option><option${S.coverB === "light" ? " selected" : ""}>light</option><option${S.coverB === "heavy" ? " selected" : ""}>heavy</option></select></label>
-        <label>Wounds <select data-h aria-label="Wound rules"><option value="standard"${S.health !== "fractional" ? " selected" : ""}>Standard GURPS HP</option><option value="fractional"${S.health === "fractional" ? " selected" : ""}>Revised Fractional Health</option></select></label>
-        ${S.health === "fractional" ? `<label>Boxes per level <input type="number" min="1" max="9" value="${S.boxes || 5}" data-g="boxes"></label>` : ""}
-        <button class="run" id="simrun">Run simulation</button>
-      </div>
+      <form class="sset" onsubmit="return false">
+        <fieldset><legend>Engagement</legend>
+          <label for="s-dist">Starting distance <span><input id="s-dist" type="number" min="1" max="3000" value="${S.distance}" data-g="distance"> yd</span></label>
+          <label for="s-runs">Battles to fight <input id="s-runs" type="number" min="1" max="2000" value="${S.runs}" data-g="runs"></label>
+          <label for="s-turns">Time limit <span><input id="s-turns" type="number" min="5" max="3600" value="${S.maxTurns}" data-g="maxTurns"> s</span></label>
+          <label class="chk" for="s-morale"><input id="s-morale" type="checkbox" data-g="morale"${S.morale ? " checked" : ""}> Morale (Fright Checks)</label>
+        </fieldset>
+        <fieldset><legend>Rules</legend>
+          <label for="s-loc">Hit locations <select id="s-loc" data-o="locations"><option value="elite"${!S.locations || S.locations === "elite" ? " selected" : ""}>Elites aim</option><option value="aimed"${S.locations === "aimed" ? " selected" : ""}>Everyone aims (RAW)</option><option value="random"${S.locations === "random" ? " selected" : ""}>Random</option></select></label>
+          <label for="s-hp">Wounds <select id="s-hp" data-h><option value="standard"${S.health !== "fractional" ? " selected" : ""}>Standard HP</option><option value="fractional"${S.health === "fractional" ? " selected" : ""}>Fractional Health</option></select></label>
+          ${S.health === "fractional" ? `<label for="s-box">Boxes per level <input id="s-box" type="number" min="1" max="9" value="${S.boxes || 5}" data-g="boxes"></label>` : ""}
+        </fieldset>
+        <fieldset><legend>Battlefield</legend>
+          <label for="s-bf">Ground <select id="s-bf" data-o="battlefield"><option value="open"${S.battlefield !== "facility" ? " selected" : ""}>Open ground</option><option value="facility"${S.battlefield === "facility" ? " selected" : ""}>Facility</option></select></label>
+          ${S.battlefield === "facility" ? `<label for="s-map">Layout number <input id="s-map" type="number" min="1" max="9999" value="${S.mapSeed || 1}" data-g="mapSeed"></label>` : ""}
+          <label for="s-ca">Cover, side A <select id="s-ca" data-o="coverA"><option${(S.coverA || "none") === "none" ? " selected" : ""}>none</option><option${S.coverA === "light" ? " selected" : ""}>light</option><option${S.coverA === "heavy" ? " selected" : ""}>heavy</option></select></label>
+          <label for="s-cb">Cover, side B <select id="s-cb" data-o="coverB"><option${(S.coverB || "none") === "none" ? " selected" : ""}>none</option><option${S.coverB === "light" ? " selected" : ""}>light</option><option${S.coverB === "heavy" ? " selected" : ""}>heavy</option></select></label>
+        </fieldset>
+        <div class="go"><button class="run" id="simrun" type="button">Run simulation</button><p>${S.battlefield === "facility" ? "Each side deploys in its staging bay; starting distance is ignored." : "Sides deploy in lines facing each other at the starting distance."}</p></div>
+      </form>
       <div class="sgrid">${side(0)}${side(1)}</div>
       <div id="simout">${last ? results(last) : ""}</div>
       <details class="more"><summary>How the simulator works</summary><p>${esc(HOW)}</p></details>`;
