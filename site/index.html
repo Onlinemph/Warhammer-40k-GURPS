@@ -469,6 +469,13 @@ const SIM = (() => {
     [100, -10], [150, -11], [200, -12], [300, -13], [500, -14], [700, -15], [1000, -16], [1500, -17],
     [2000, -18], [3000, -19], [5000, -20], [7000, -21], [10000, -22]];
   function rangePenalty(yd) { for (const [r, p] of RANGE) if (yd <= r) return p; return -23; }
+  // Automatic fire, house rule after GURPS 3e: every round is rolled on its own, each one after the first at a
+  // further -Recoil (the 4e rapid-fire bonus and margin-per-Recoil hits, B373, aren't used). Expected hits:
+  function burstHits(eff, n, rcl) {
+    let h = 0;
+    for (let k = 0; k < n; k++) { const l = eff - k * (rcl || 1); if (l < 3) break; h += P3[Math.min(18, l)]; }
+    return h;
+  }
   function rapidBonus(shots) {
     if (shots < 5) return 0; if (shots <= 8) return 1; if (shots <= 12) return 2; if (shots <= 16) return 3;
     if (shots <= 24) return 4; if (shots <= 49) return 5; if (shots <= 99) return 6; return 7;
@@ -1150,10 +1157,9 @@ const SIM = (() => {
         for (let da = 0; da <= maxDa; da++) {
           const eff = lvl + pen - 2 * da;
           if (eff < 3 || (da > 0 && eff < 10)) break;
-          const pHit = P3[Math.min(18, eff)];
           const pDef = def0 == null ? 0 : P3[Math.max(0, Math.min(18, def0 - da))];
-          const hits = melee ? 1 : Math.min(w.rof || 1, 1 + Math.max(0, eff - 10) / (w.rcl || 1));
-          const score = pHit * (1 - pDef) * e * hits;
+          const hits = melee ? P3[Math.min(18, eff)] : burstHits(eff, w.cone ? 1 : (w.rof || 1), w.rcl);
+          const score = (1 - pDef) * e * hits;
           if (score > best.score) best = { loc, da, score, lvl: eff };
         }
       }
@@ -1381,11 +1387,16 @@ const SIM = (() => {
       targets.forEach((t, i) => {
         const n = w.cone ? 1 : Math.floor(shots / targets.length) + (i < shots % targets.length ? 1 : 0);
         const inter = w.cone ? [] : between(m.h, t.h, m.u.side).filter(x => x !== t);
-        const plan = planAttack(m, w, t, base + rapidBonus(n) - 4 * inter.length, false);
+        const plan = planAttack(m, w, t, base - 4 * inter.length, false);
         const loc0 = plan.loc === "random" ? null : plan.loc;
         const lvl = plan.lvl;
+        const nb = w.cone ? 1 : n;
         const r = check(lvl);
         if (i === 0 && jamCheck(m, w, r)) return;
+        // every round rolled on its own at a further -Recoil (house rule after 3e); criticals can't be dodged
+        let got = r.ok ? 1 : 0, crits = r.crit ? 1 : 0;
+        for (let k = 1; k < nb; k++) { const rk = check(lvl - k * w.rcl); if (rk.ok) { got++; if (rk.crit) crits++; } }
+        r.ok = got > 0;
         const thru = (inter.length ? `, through ${inter.length}` : "") + (plan.da ? `, deceptive -${plan.da}` : "");
         if (!r.ok && !w.cone) {
           L(`${m.id} fires ${n > 1 ? n + " " : ""}at ${t.id} (${d} yd${loc0 && loc0 !== "torso" ? ", aiming at the " + locName(loc0) : ""}${thru}, skill ${lvl}): misses`);
@@ -1393,22 +1404,23 @@ const SIM = (() => {
           else if (!w.dmg.ex) stray(m, w, t, inter, halfD);
           return;
         }
-        let hits = w.cone ? 1 : Math.min(n, 1 + Math.floor(Math.max(0, r.margin) / w.rcl));
-        L(`${m.id} ${w.usage === "power" ? "casts " + w.name + " at" : "fires " + (n > 1 ? n + " at" : "at")} ${t.id} (${d} yd${loc0 && loc0 !== "torso" ? ", aiming at the " + locName(loc0) : ""}${thru}, skill ${lvl}): ${hits} hit${hits > 1 ? "s" : ""}`);
-        if (!r.crit && !w.malediction) {
+        let hits = got;
+        L(`${m.id} ${w.usage === "power" ? "casts " + w.name + " at" : "fires " + (n > 1 ? n + " at" : "at")} ${t.id} (${d} yd${loc0 && loc0 !== "torso" ? ", aiming at the " + locName(loc0) : ""}${thru}, skill ${lvl}${nb > 1 ? ", -" + w.rcl + " a round" : ""}): ${hits} hit${hits > 1 ? "s" : ""}`);
+        if (hits > crits && !w.malediction) {
+          const open = hits - crits;   // critical rounds can't be defended
           if (d <= 1 && !w.cone) {
             // in close combat the defender can parry the weapon (or step aside) instead of dodging the shot (B391)
             const def = defend(t, m, true, plan.da, 0);
-            if (def) { const dg = def.how === "parry" ? hits : Math.min(hits, 1 + def.margin); hits -= dg; L(`  ${t.id} ${def.how === "parry" ? "knocks the gun aside" : def.how === "block" ? "blocks " + dg : "dodges " + dg}`); }
+            if (def) { const dg = def.how === "parry" ? open : Math.min(open, 1 + def.margin); hits -= dg; L(`  ${t.id} ${def.how === "parry" ? "knocks the gun aside" : def.how === "block" ? "blocks " + dg : "dodges " + dg}`); }
           } else {
             const def = defend(t, m, false, plan.da, 0);
-            if (def != null) { const dg = Math.min(hits, 1 + def); hits -= dg; L(`  ${t.id} dodges ${dg}`); }
+            if (def != null) { const dg = Math.min(open, 1 + def); hits -= dg; L(`  ${t.id} dodges ${dg}`); }
           }
         }
         for (let k = 0; k < hits && t.state === "ok"; k++) {
           const loc = loc0 || hitLocation();
           const raw = rollDamage(w.dmg);
-          applyHit(m, w, t, loc, true, halfD, null, halfD ? raw : raw, r.crit && k === 0 ? roll3() : 0);
+          applyHit(m, w, t, loc, true, halfD, null, halfD ? raw : raw, k < crits ? roll3() : 0);
           if (w.dmg.ex && k === 0 && t.h) explosion(m, w, t.h, raw);
           else if (w.dmg.ex && k === 0) explosion(m, w, t.lastH || m.h, raw);
         }
@@ -1559,8 +1571,7 @@ const SIM = (() => {
         if (rw && !f.gunBroken && d <= rw.range.max) {
           const lvl = rw.level - skillPen(f) + rangePenalty(Math.max(1, d)) + m.u.sm - (m.prone ? 2 : 0) + Math.min(2, rw.acc || 0);
           const def = mode === "aoa" ? null : m.u.dodge + (mode === "aod" ? 2 : 0) + m.u.db - (m.prone ? 3 : 0);
-          const hits = Math.min(rw.rof || 1, 1 + Math.max(0, lvl - 10) / (rw.rcl || 1));
-          best = Math.max(best, expInjRandom(rw, m.u) * P3[cl(lvl)] * (1 - (def == null ? 0 : P3[cl(def)])) * hits);
+          best = Math.max(best, expInjRandom(rw, m.u) * burstHits(lvl, rw.rof || 1, rw.rcl) * (1 - (def == null ? 0 : P3[cl(def)])));
         }
         tot += best * share;
       }
@@ -1946,13 +1957,13 @@ const SIM = (() => {
         }
         // point-blank gun (Bulk penalty), averaged over its reloads
         if (gun && (gun.shots.mag === Infinity || m.ammo > 0) && m.reload === 0) {
-          const E = planAttack(m, gun, t, gun.level + Math.min(0, gun.bulk || 0) - skillPen(m), false).score * Math.min(3, gun.rof || 1) * sustainOf(gun);
+          const E = planAttack(m, gun, t, gun.level + Math.min(0, gun.bulk || 0) - skillPen(m), false).score * sustainOf(gun);
           add(Wr * kv(m, t, E) - rNow, `point-blank@${t.id}`, () => { face(); fireAt(m, gun, t, { pointBlank: true }); });
           // blade and pistol together (B417)
           if (gun.oneHanded && u.melee.oneHanded && u.melee.name !== "Punch" && !m.armsLost) {
             const pm = u.dualPen, pg = u.dualPen + u.offPen;
             const Ed = planAttack(m, u.melee, t, u.melee.level - skillPen(m) - pm, true).score
-              + planAttack(m, gun, t, gun.level + Math.min(0, gun.bulk) - skillPen(m) - pg, false).score * Math.min(3, gun.rof);
+              + planAttack(m, gun, t, gun.level + Math.min(0, gun.bulk) - skillPen(m) - pg, false).score;
             add(Wm * kv(m, t, Ed) - rNow, `dual@${t.id}`, () => {
               face(); L(`${m.id} attacks with both hands (${u.melee.name} and ${gun.name})`);
               strike(m, u.melee, t, { pen: pm }); if (t.state === "ok") fireAt(m, gun, t, { pointBlank: true, pen: pg });
@@ -1961,7 +1972,7 @@ const SIM = (() => {
         }
         if (gun && gun.shots.mag !== Infinity && m.ammo < gun.shots.mag && gun.shots.reload <= 3) {
           const turns = Math.max(1, gun.shots.reload - Math.max(0, m.reload > 0 ? gun.shots.reload - m.reload : 0));
-          const Eg = planAttack(m, gun, t, gun.level + Math.min(0, gun.bulk || 0) - skillPen(m), false).score * Math.min(3, gun.rof || 1);
+          const Eg = planAttack(m, gun, t, gun.level + Math.min(0, gun.bulk || 0) - skillPen(m), false).score;
           add(Math.pow(GAMMA, turns) * Wr * kv(m, t, Eg) - rNow, `reload-cc`, () => {
             if (m.reload === 0) m.reload = gun.shots.reload;
             if (--m.reload <= 0) { m.reload = 0; m.ammo = gun.shots.mag; } L(`${m.id} reloads in close combat`);
