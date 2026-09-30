@@ -820,13 +820,13 @@ const SIM = (() => {
       if (melee && t.u.parry != null && bladeReady(t) && !(t.u.melee.unbalanced && t.attacked) && t.armsLost < 2)
         d = Math.max(d, t.u.parry + (rt ? 1 : 0) - (t.u.flags.master ? 2 : 4) * t.parries + aod("parry"));
       if (melee && t.u.db && !t.blocked) d = Math.max(d, t.u.block + (rt ? 1 : 0) + aod("block"));
-      return d + mod - (t.kneel ? 2 : 0) - (t.offBalance ? 2 : 0);
+      return d + mod - (t.kneel && !t.prone ? 2 : 0) - (t.offBalance ? 2 : 0);
     }
     function rangedDefence(t, att) {
       if (t.state !== "ok" || t.aoa) return null;
       const arc = arcTo(t, att);
       if (arc === "rear") return null;
-      return dodgeOf(t) + (arc === "side" ? -2 : 0) - (t.stunned ? 4 : 0) - (t.prone ? 3 : 0) - (t.kneel ? 2 : 0) + (t.aod && t.aodDef === "dodge" ? 2 : 0) + t.u.db;
+      return dodgeOf(t) + (arc === "side" ? -2 : 0) - (t.stunned ? 4 : 0) - (t.prone ? 3 : 0) - (t.kneel && !t.prone ? 2 : 0) + (t.aod && t.aodDef === "dodge" ? 2 : 0) + t.u.db;
     }
     // resolve a defence roll; returns margin (>=0) on success or null
     function defend(t, att, melee, da, feint) {
@@ -834,7 +834,7 @@ const SIM = (() => {
       if (t.grips.length) t.retreated = true;   // held: no retreat
       const arc = arcTo(t, att);
       if (arc === "rear") return null;
-      const mod = (arc === "side" ? -2 : 0) - (t.stunned ? 4 : 0) - (t.prone ? 3 : 0) - (t.kneel ? 2 : 0) - (t.offBalance ? 2 : 0) + t.u.db - da - (feint || 0);
+      const mod = (arc === "side" ? -2 : 0) - (t.stunned ? 4 : 0) - (t.prone ? 3 : 0) - (t.kneel && !t.prone ? 2 : 0) - (t.offBalance ? 2 : 0) + t.u.db - da - (feint || 0);
       const aod = how => t.aod && t.aodDef === how ? 2 : 0;
       if (!melee) {
         let d = dodgeOf(t) + mod + aod("dodge") + feverish(t, att, false, dodgeOf(t) + mod);
@@ -948,10 +948,17 @@ const SIM = (() => {
     // Line of fire (B389): every figure on the line between shooter and target, friend or foe, costs -4 to hit
     // (simulator value from the Basic Set rule, to be checked against the book); a miss may hit one of them or
     // someone beside the target instead, on a roll of 9 + its SM (likewise to be checked)
-    function between(a, b) {
+    // figures on the line from a to b that block it; a kneeling or prone figure is shot over, and a friend of the
+    // shooter's in the next hex is fired past (house rule: a front rank kneels or a man leans past his neighbour)
+    function between(a, b, side) {
       if (!a || !b || hexDist(a, b) <= 1) return [];
       const out = [];
-      for (const h of lineHexes(a, b)) { const x = occ.get(key(h.q, h.r)); if (x && x.state === "ok") out.push(x); }
+      for (const h of lineHexes(a, b)) {
+        const x = occ.get(key(h.q, h.r));
+        if (!x || x.state !== "ok" || x.kneel || x.prone) continue;
+        if (side != null && x.u.side === side && hexDist(a, x.h) <= 1) continue;
+        out.push(x);
+      }
       return out;
     }
     function stray(m, w, t, inter, halfD) {
@@ -1006,7 +1013,7 @@ const SIM = (() => {
       const halfD = d > w.range.half;
       targets.forEach((t, i) => {
         const n = w.cone ? 1 : Math.floor(shots / targets.length) + (i < shots % targets.length ? 1 : 0);
-        const inter = w.cone ? [] : between(m.h, t.h).filter(x => x !== t);
+        const inter = w.cone ? [] : between(m.h, t.h, m.u.side).filter(x => x !== t);
         const plan = planAttack(m, w, t, base + rapidBonus(n) - 4 * inter.length, false);
         const loc0 = plan.loc === "random" ? null : plan.loc;
         const lvl = plan.lvl;
@@ -1080,7 +1087,7 @@ const SIM = (() => {
       const rp = m.u.flags.master ? 3 : 6;
       for (let i = 0; i < n && t.state === "ok" && t.h && m.state === "ok" && m.h; i++) {
         let lvl = wl(m, w) - skillPen(m) - (opts.charge ? 4 : 0) + (opts.determined ? 4 : 0) - (opts.rapid && i < 2 ? rp : 0) + (m.evaluate && m.evaluate.t === t ? m.evaluate.n : 0)
-          - (m.prone ? 4 : 0) - (m.kneel ? 2 : 0) - (m.grips.length ? 4 : 0) - (opts.pen || 0);
+          - (m.prone ? 4 : 0) - (m.kneel && !m.prone ? 2 : 0) - (m.grips.length ? 4 : 0) - (opts.pen || 0);
         if (opts.charge) lvl = Math.min(lvl, 9);
         const plan = planAttack(m, w, t, lvl, true);
         const loc = plan.loc === "random" ? hitLocation() : plan.loc;
@@ -1217,7 +1224,7 @@ const SIM = (() => {
         if (!t.h) continue;
         const d = Math.max(1, hexDist(h, t.h));
         if (d > w.range.max) continue;
-        const E = planAttack(m, w, t, wl(m, w) - skillPen(m) + rangePenalty(d) + t.u.sm - 4 * between(h, t.h).filter(x => x !== t && x !== m).length, false).score * sustainOf(w);
+        const E = planAttack(m, w, t, wl(m, w) - skillPen(m) + rangePenalty(d) + t.u.sm - 4 * between(h, t.h, m.u.side).filter(x => x !== t && x !== m).length, false).score * sustainOf(w);
         best = Math.max(best, kv(m, t, E));
       }
       return best * stanceW(m, "ranged") * m.u.ai.aggression;
@@ -1233,7 +1240,10 @@ const SIM = (() => {
       const adj = pool.filter(f => hexDist(f.h, m.h) <= u.melee.reachMax);
       const shooter = u.ranged || u.powers.some(p => !p.melee);
       // stand up (Change Posture) unless a shooter holding its ground is better off prone
-      if (m.kneel && !m.prone) { m.kneel = false; L(`${m.id} stands up`); return; }
+      // a firing line (house rule on B364/B551: kneeling to or from standing is the step of a maneuver): a shooter
+      // holding its ground with friends behind it kneels to fire, so they shoot over it; it rises when a foe closes
+      // to 3 yards, when it moves (afterStep) or when its squad charges
+      if (m.kneel && !m.prone && !m.kneelVol) { m.kneel = false; L(`${m.id} stands up`); return; }
       if (m.prone && !m.legsLost && (adj.length || u.stance !== "shoot" || !shooter)) {
         // lying to standing is two Change Postures, through kneeling (-2 to attack and defend); a successful
         // Acrobatics roll makes it one (B551)
@@ -1322,7 +1332,7 @@ const SIM = (() => {
           if (d > w.range.max) continue;
           const spread = 1 / (1 + 0.5 * u.ai.focus * claims(m, t));
           // figures in the line of fire cost -4 each, and a miss may hit a friend on the line or beside the target
-          const inter = w.malediction ? [] : between(m.h, t.h).filter(x => x !== t);
+          const inter = w.malediction ? [] : between(m.h, t.h, m.u.side).filter(x => x !== t);
           const base = wl(m, w) - skillPen(m) + rangePenalty(d) + t.u.sm - 4 * inter.length;
           const pals = w.malediction || w.dmg.ex ? [] : [...new Set([...inter, ...models.filter(x => x !== m && x.state === "ok" && x.h && hexDist(x.h, t.h) <= 1)])].filter(x => x.u.side === u.side);
           const ffCost = pals.length ? (1 - P3[cl(base)]) * pals.reduce((a, x) => a + P3[cl(9 + x.u.sm)] * Math.min(1, expInjRandom(w, x.u) / remOf(x)) * threatOf(x) * HORIZON, 0) * u.ai.caution : 0;
@@ -1691,8 +1701,23 @@ const SIM = (() => {
 
     // ---- Wait (B366) and suppression fire (B409) both interrupt a foe's movement
     const zones = [];
+    // the firing line, settled for everyone at the start of the second so the rear rank sees the front rank down
+    function firingLine(m) {
+      if (m.prone) { m.kneelVol = false; return; }
+      const pool = foes(m).filter(f => f.h).sort((a, b) => hexDist(m.h, a.h) - hexDist(m.h, b.h));
+      if (!pool.length) return;
+      const u = m.u, near = hexDist(pool[0].h, m.h) <= 3;
+      if (m.kneelVol && (near || u.stance === "charge")) { m.kneel = m.kneelVol = false; L(`${m.id} rises`); }
+      else if (!m.kneel && u.ranged && u.stance !== "charge" && !near && !m.grips.length && gunReady(m)) {
+        const d0 = hexDist(m.h, pool[0].h);
+        if (u.models.some(x => x !== m && x.state === "ok" && x.h && !x.kneelVol && hexDist(x.h, m.h) <= 4 && hexDist(x.h, pool[0].h) > d0)) {
+          m.kneel = m.kneelVol = true; L(`${m.id} kneels to fire`);
+        }
+      }
+    }
     function afterStep(m) {
       if (m.state !== "ok" || !m.h) return true;
+      if (m.kneelVol) { m.kneel = m.kneelVol = false; }   // it rose as the step's start
       const k = key(m.h.q, m.h.r);
       for (const z of zones) if (m.state === "ok" && m.h && z.side !== m.u.side && z.owner.state === "ok" && z.owner.h && z.hexes.has(k) && !z.hit.has(m)) suppressHit(z, m);
       if (m.state !== "ok" || m.stunned) return true;
@@ -1844,6 +1869,7 @@ const SIM = (() => {
         const delay = (sh.delay || 2) * (m.spCollapsed ? 2 : 1);
         if (turn - m.spHit > delay) { m.sp = Math.min(sh.sp, m.sp + sh.recharge); if (m.sp >= sh.sp) m.spCollapsed = false; }
       }
+      for (const m of models) if (m.state === "ok" && m.h && !m.u.routed && !m.stunned) firingLine(m);
       const order = models.filter(active).sort((a, b) => (b.u.speed - a.u.speed) || (R() - 0.5));
       for (const m of order) {
         if (m.state !== "ok" || m.u.routed || !m.h) continue;
