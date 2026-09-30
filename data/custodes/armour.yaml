@@ -8,7 +8,7 @@ items:
     cost: 250000
     weight: 320
     tags: [Body Armor, Imperium, Adeptus Custodes]
-    dr: {"torso,vitals,groin": 150, arm: 132, leg: 132, neck: 95, skull: 150, face: 113, eye: 60, hand: 95, foot: 113}
+    dr: {"torso,vitals,groin": 150, arm: 132, leg: 132, neck: 95, skull: 150, face: 113, eye: 112, hand: 95, foot: 113}
     weak_points: 3
     attributes: {lifting_st: 10, striking_st: 6}
     notes: >
@@ -32,11 +32,10 @@ items:
       (Imperium/Armour/Imperial Armour.eqp), scaled by 150/100 = 1.5x: arm/
       leg 88x1.5=132, neck 63x1.5=94.5 rounded to 95, skull 100x1.5=150,
       face 75x1.5=112.5 rounded to 113, hand 63x1.5=94.5 rounded to 95,
-      foot 75x1.5=112.5 rounded to 113. Eye lenses are set to 60, level with
-      Terminator lenses and a step above the Astartes 40 (framework.md eye-lens rule) -
-      a coincidental match with the framework's own Terminator eye-lens
-      figure, kept as-is since it already lands at a sensible value one
-      step above the Astartes eye lens (40). Servo bonus (lifting_st +10,
+      foot 75x1.5=112.5 rounded to 113. Eye lenses are set to 112, three-quarters of
+      the helmet's 150 (framework.md eye-lens rule, 112.5 rounded down),
+      well above the Astartes Mk VII lens (75) because the helmet is
+      half again as tough. Servo bonus (lifting_st +10,
       striking_st +6) is set a clear step above the Astartes Mark VII
       suite's own +9/+5, reflecting superior Custodes-grade actuators on
       top of the wearer's already much higher ST 40. Checked against the
@@ -110,7 +109,7 @@ items:
     cost: 400000
     weight: 480
     tags: [Body Armor, Imperium, Adeptus Custodes]
-    dr: {"torso,vitals,groin": 250, arm: 220, leg: 220, neck: 158, skull: 250, face: 188, eye: 70, hand: 158, foot: 188}
+    dr: {"torso,vitals,groin": 250, arm: 220, leg: 220, neck: 158, skull: 250, face: 188, eye: 188, hand: 158, foot: 188}
     weak_points: 3
     attributes: {lifting_st: 22, striking_st: 12, sm: 1, basic_move: -1}
     notes: >
@@ -136,10 +135,11 @@ items:
       neck disproportionately strong relative to the arm/leg figures;
       skull 200x1.25=250, face 150x1.25=187.5 rounded to 188, hand
       125x1.25=156.25 rounded to 158, foot 150x1.25=187.5 rounded to 188.
-      Eye lenses set to 70, a clear step above both the Astartes
-      Terminator's 60 and this file's own Auramite figure of 60, matching
-      Allarus plate's status as the single best infantry armour modelled
-      in this project. Servo bonus (lifting_st +22, striking_st +12) sits
+      Eye lenses set to 188, three-quarters of
+      the helmet's 250 (framework.md eye-lens rule, 187.5 rounded up), a
+      clear step above the Astartes Terminator's 150 and this file's own
+      Auramite lens (112), matching Allarus plate's status as the single
+      best infantry armour modelled in this project. Servo bonus (lifting_st +22, striking_st +12) sits
       above the Astartes Indomitus Terminator suite's own +20/+10. An
       extra +1 SM (stacking to SM +2 total with the wearer's own
       unarmoured SM +1) reflects Allarus plate's even greater bulk than
@@ -174,7 +174,7 @@ items:
     cost: 2200
     weight: 32
     tags: [Body Armor, Imperium, Sisters of Silence]
-    dr: {"torso,vitals,groin": 70, arm: 56, leg: 56, neck: 64, skull: 70, face: 53, eye: 20, hand: 36, foot: 42}
+    dr: {"torso,vitals,groin": 70, arm: 56, leg: 56, neck: 64, skull: 70, face: 53, eye: 52, hand: 36, foot: 42}
     weak_points: 4
     notes: >
       Full-enclosure ceramite plate over a padded underlayer; imposes the
@@ -197,11 +197,12 @@ items:
       (Tempestus, Arbites patterns). Non-torso figures scale from the
       Arbites Pattern carapace suit's own full-head-enclosure, hands-and-
       feet-covered profile (Imperium/Armour/Imperial Armour.eqp: arm/leg
-      36, neck 41, skull 45, face 34, eye/hand 23, foot 27) by the
+      36, neck 41, skull 45, face 34, hand 23, foot 27) by the
       anchor's own move from 45 to 70 (x14/9), since Vratine armour's
       enclosed, masked helm is closer to that design brief than the
       open-faced Guard pattern's: arm/leg 56, neck 64, skull 70, face 53,
-      hand 36, eye 20, foot 42.
+      hand 36, foot 42; eye 52 is three-quarters of the helmet (framework.md
+      eye-lens rule), not scaled.
     children:
       - name: Vratine Visor
         weight: 2

@@ -67,13 +67,13 @@ GURPS real-world baseline for scale: a modern soft vest with ceramic plate is ro
 | Mesh | 36, flexible | Hive-noble and assassin wear. Flexible: blunt trauma applies. |
 | Carapace | 70 | User's figure. Rigid plate, near-immune to las (lasgun 0.6%, long-las 6%); a hellgun (82%) or bolter (79%) goes through. |
 | Adepta Sororitas power armour | 85 | Raised with carapace so power armour stays above it; lighter than Astartes plate. A bolter penetrates 45%. |
-| Astartes power armour (Mk VII baseline) | 100 | Ignores las and stub fire. A bolter penetrates about one shot in seven. Limbs a little lower. Eye lenses DR 40. Marks vary ±10–15 around this. |
+| Astartes power armour (Mk VII baseline) | 100 | Ignores las and stub fire. A bolter penetrates about one shot in seven. Limbs a little lower. Eye lenses DR 75 (three-quarters of the helmet). Marks vary ±10–15 around this. |
 | Mk X Gravis | 130 | Between power armour and Terminator plate. |
 | Tactical Dreadnought (Terminator) | 200 | Ignores bolters. Plasma, lascannon, power fist and thunder hammer still kill. |
 
 Limbs are usually a few DR below torso. Specify every location explicitly.
 
-Additional armour set in the audit: Mk II (torso 92, Weak Points 6), Tartaros Terminator (torso 190, Weak Points 3), Gravis eye lens 50, Phobos eye lens 36. The displacer field is not a Shield Point field: it teleports the wearer instead.
+Additional armour set in the audit: Mk II (torso 92, Weak Points 6), Tartaros Terminator (torso 190, Weak Points 3), Gravis eye lens 98, Phobos eye lens 66. The displacer field is not a Shield Point field: it teleports the wearer instead.
 
 **GCS containers.** GCS adds a container's children to its own weight and cost, so a container item (e.g. power armour with subsystems) carries only its own share. Mk VII assembles to 240 lb, Indomitus Terminator 480 lb, Sororitas plate 80 lb. Servo Lifting/Striking ST lives on the servo child only.
 
@@ -94,7 +94,7 @@ Massed fire brings down heavily armoured targets in the fiction, so armour has g
 | Astartes Mk VII | 4 | 0.8% | 21% |
 | Terminator, Auramite, Allarus | 3 | 0 (bolter vs Terminator 0.07%) | |
 
-**Eye lenses.** Helmet eye lenses and visors have much lower DR than the rest of the helmet: carapace visors 20, Sororitas 30, Astartes 40, Terminator and Auramite 60, Allarus 70. A hit through an eye counts as a brain hit for piercing, impaling and tight-beam burning (las) damage (B399). House rule: when a random hit location comes up face, roll 1d; on a 1 the hit struck an eye lens instead (about 0.5% of random hits). A lasgun that finds an Astartes lens penetrates 81% of the time.
+**Eye lenses.** Helmet eye lenses and visors have DR equal to three-quarters of the helmet's skull DR, rounded: tougher than a chink in armour (which halves DR), weaker than the helmet itself. Examples: Guard carapace 48, Sororitas 60, Astartes Mk VII 75, Terminator 150, Auramite 112, Allarus 188. A hit through an eye counts as a brain hit for piercing, impaling and tight-beam burning (las) damage (B399). House rule: when a random hit location comes up face, roll 1d; on a 1 the hit struck an eye lens instead (about 0.5% of random hits). A lasgun (7d(2) burn) that finds an Astartes Mk VII lens penetrates 0.1% of the time (effective DR 37.5 against the (2) divisor, and 7d reaches 38 or more on 330 of its 279,936 rolls); a bolter (6d×2(2)) penetrates it 72% of the time.
 
 ### Personal force fields (regenerating shields)
 
@@ -417,10 +417,10 @@ T'au technology is TL11 science without the ^ superscience tag, except drone AI 
 | EMP grenade | Haywire-like, machines only |
 | Kroot rifle | T'au-made charged slug in a Kroot-built long gun: 7d(2) pi; blade-fitted stock for melee |
 | Neutron blaster (Vespid) | 5d×2(4) burn, short range |
-| Fire Warrior combat armour | Composite plates: DR 70 (carapace class), Weak Points 5, eye 20 |
+| Fire Warrior combat armour | Composite plates: DR 70 (carapace class), Weak Points 5, eye 48 |
 | Recon armour (Pathfinder) | Flexible, DR 36, Weak Points 5 |
 | XV25 Stealth battlesuit | DR 85, Weak Points 4, stealth field (a large visual-concealment bonus, not DR), jump jets |
-| XV8 Crisis battlesuit | DR 110, Weak Points 3, eye 45; about 2.5 m (SM +1); servo ST for the suit (child item per the GCS container rule); suit HP +30 for the wearer while worn (XV25 +10, XV88 +40); jet pack for short flight bursts; three hardpoints for weapon and support systems |
+| XV8 Crisis battlesuit | DR 110, Weak Points 3, eye 82; about 2.5 m (SM +1); servo ST for the suit (child item per the GCS container rule); suit HP +30 for the wearer while worn (XV25 +10, XV88 +40); jet pack for short flight bursts; three hardpoints for weapon and support systems |
 | XV88 Broadside battlesuit | DR 170, Weak Points 3; heavy and slow, no jet pack |
 | Shield generator | Regenerating shield, iron-halo class (120 SP, 3 s, 20/s) |
 | Shield drone | Projects 80 SP onto its charge; the drone dies when the shield breaks through |
