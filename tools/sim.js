@@ -1891,7 +1891,7 @@ const SIM = (() => {
     // what the shooter would need to hit it on purpose, whichever is worse; it defends as it would against a shot
     // at it. The first that is hit, or defends, ends the round's flight. Drilled squads don't hit each other by mistake
     function strayAt(m, w, c, raw) {
-      if (!c.h || c.state !== "ok") return false;
+      if (!c.h || c.state !== "ok" || !m.h) return false;
       if (c.u.side === m.u.side && drilled(m) && drilled(c)) return false;
       const d = Math.max(1, hexDist(m.h, c.h));
       const lvl = Math.min(9, wl(m, w) - skillPen(m) + rangePenalty(d) + c.u.sm + shotFx(c, m.h, false).pen("random"));
@@ -1903,6 +1903,7 @@ const SIM = (() => {
     }
     // the first figure beyond hex tH on the line of fire from m, within the weapon's range (up to 20 yards on)
     function beyond(m, w, tH) {
+      if (!m.h || !tH) return null;   // the shooter fell during its own burst
       const d = hexDist(m.h, tH), ext = Math.min(20, w.range.max - d);
       if (d < 1 || ext < 1) return null;
       const far = { q: tH.q + Math.round((tH.q - m.h.q) * ext / d), r: tH.r + Math.round((tH.r - m.h.r) * ext / d) };
@@ -1916,6 +1917,7 @@ const SIM = (() => {
     // the candidates: figures on the line of fire, then (when the target is in a close combat, B392) those fighting
     // beside it, then whoever is beyond it
     function stray(m, w, t, inter) {
+      if (!m.h) return;
       const melee = t.h && models.some(x => x.u.side !== t.u.side && x.state === "ok" && x.h && hexDist(x.h, t.h) <= 1);
       const near = melee ? models.filter(x => x !== m && x !== t && x.state === "ok" && x.h && hexDist(x.h, t.h) <= 1) : [];
       const cands = [...new Set([...inter, ...near])].filter(x => x.h && x.state === "ok").sort((a, b) => hexDist(m.h, a.h) - hexDist(m.h, b.h));
