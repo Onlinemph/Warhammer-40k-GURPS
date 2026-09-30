@@ -321,6 +321,8 @@ def combat_flags(t, flags):
         flags["fearless"] = flags.get("fearless", 0) + 5   # Fearlessness 5 while linked; the sim assumes synapse is near
     elif "slave mentality" in low or "machine mind" in low:
         flags["noMorale"] = 1
+    if n.startswith("Necrodermis Machine-Body") or n.startswith("Machine Body") or n.startswith("Machine Mind") or n == "Machine":
+        flags["machine"] = 1        # Machines have no FP to spend on extra effort (B16, B263; user direction for Necrons)
     if ("metabolic hazards" in low or "toxins" in low or "poison" in low) and (
             n.startswith("Immunity") or n.startswith("Resistant")):
         immune = n.startswith("Immunity") or any(m.get("name", "").startswith("Immunity") and not m.get("disabled")

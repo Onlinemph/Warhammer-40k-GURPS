@@ -728,6 +728,7 @@ Totals: 94 findings, 4 big, 29 medium, 61 small.
 
 - Batch A (items 2, 5, 6, 7, 22, 36, 37, 38, 72, 73, 74, 75): implemented.
 - Batch C (items 1, 8, 20, 24, 52, 53, 54, 55, 76, 78, 95, 96, 97; 77 for Slams and Shoves only): implemented. Open: #56, #77 for weapons. Shield DR and HP values await the user.
+- #109 (Machines have no FP): done for Necrons; the Gun Drone's Machine Mind isn't flagged yet.
 
 ## Status of the earlier from-memory review
 

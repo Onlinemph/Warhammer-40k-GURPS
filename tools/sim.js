@@ -2187,7 +2187,7 @@ const SIM = (() => {
           add(Wm * kv(m, t, Edb) - rA, `aoa-double@${t.id}`, () => { face(); m.aoa = true; strike(m, w, t, { double: true }); });
           const Es = planAttack(m, w, t, lvl, true, boosted(w, 1)).score * n;
           add(Wm * kv(m, t, Es) - rA, `aoa-strong@${t.id}`, () => { face(); m.aoa = true; strike(m, w, t, { strong: true }); });
-          if (m.fp > Math.max(4, m.u.fp / 3)) {
+          if (m.fp > Math.max(4, m.u.fp / 3) && !u.flags.machine) {
             const Em = planAttack(m, w, t, lvl, true, boosted(w, 2)).score * n;
             add(Wm * kv(m, t, Em) - rA - 0.02, `aoa-mighty@${t.id}`, () => { face(); m.aoa = true; strike(m, w, t, { strong: true, mighty: true }); });
           }
@@ -2326,7 +2326,7 @@ const SIM = (() => {
 
     // ---- Feverish Defense (extra effort, B357): 1 FP for +2 to an active defence against a blow worth fearing
     function feverish(t, att, melee, v) {
-      if (!att || v < 5 || v > 15 || t.fp <= Math.max(3, Math.floor(t.u.fp / 3))) return 0;
+      if (!att || t.u.flags.machine || v < 5 || v > 15 || t.fp <= Math.max(3, Math.floor(t.u.fp / 3))) return 0;
       const aw = melee ? att.u.melee : att.u.ranged;
       if (!aw || expInjRandom(aw, t.u) < t.u.HP / 5) return 0;
       t.fp -= 1; L(`  ${t.id} defends feverishly (1 FP, +2)`);
@@ -2533,7 +2533,7 @@ const SIM = (() => {
           const k = Math.floor(-m.hp / m.u.HP);
           if (!check(m.u.HT - k).ok) { FX(["d", m.h.q, m.h.r, m.u.side, 0]); m.state = "out"; place(m, null); L(`${m.id} collapses unconscious`); continue; }
         }
-        if (m.fp <= 0 && !check(m.u.HT).ok) { L(`${m.id} is too exhausted to act`); m.shock = 0; continue; }
+        if (m.fp <= 0 && !m.u.flags.machine && !check(m.u.HT).ok) { L(`${m.id} is too exhausted to act`); m.shock = 0; continue; }
         // a stunned model that recovers still defends at -4, without retreating, until its next turn (B364)
         if (m.stunned) { if (recoverStun(m)) { m.stunned = false; m.stunRec = null; m.stunT = 0; m.stunRecovering = true; L(`${m.id} recovers from stun`); } m.shock = 0; continue; }
         if (m.holding && (m.holding.state !== "ok" || !m.holding.h || hexDist(m.h, m.holding.h) > 1)) release(m);

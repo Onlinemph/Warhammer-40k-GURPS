@@ -97,6 +97,7 @@ Standard GURPS HP (B377–420) or the user's Revised Fractional Health (see the 
 - **Bleeding** (B420): every minute, a model below full HP rolls HT or loses 1 HP (standard mode).
 - Shock, knockdown and stun, consciousness and death checks, Hard to Kill, Reanimation Protocols.
 - **Morale** is a Fright Check (B360) for every model still standing when its unit falls to half and to a quarter strength: Will + Fearlessness + 5 (the heat of battle) + 2 for Combat Reflexes, never above 13, so a roll of 14+ always fails. A failure rolls 3d plus the margin of failure on the Fright Check Table (B360-361): low results stun for a second or until a Will roll, middling ones stun for 1d or 2d seconds, cost FP or leave it retching, 21 panics it into flight, and 17+ otherwise takes it out of the fight. The unit routs only when no model in it is left fighting. Unfazeable, Necrons and mindless models don't check. Mental stun is shaken off on Will (or IQ, +6 with Combat Reflexes, after Perils of the Warp); physical stun on HT.
+- **Machines** (B16, B263): Necrons have no FP to spend, so no Mighty Blows, Feverish Defense or exhaustion roll.
 - **Regeneration** (B80): HP per second by tier (Extreme 10, Very Fast 1, Fast 1/60, Regular 1/3600), read from any Regeneration trait; under Fractional Health the healing clears the least severe wound box once it covers that level's threshold.
 
 ## Psychic powers
