@@ -1370,6 +1370,49 @@ const SIM = (() => {
     const frightLevel = (u, mod = 0) => Math.min(13, u.will + (u.flags.fearless || 0) + (u.flags.cr ? 2 : 0) + 5 + mod);
     const fright = (u, mod = 0) => check(frightLevel(u, mod));
     // a failed Fright Check rolls 3d + the margin of failure on the Fright Check Table (B360-361)
+    // what happened to a model since its last turn, for keeping its head down and Fright Checks under fire (TS p. 21, 34)
+    const ev = m => m.ev || (m.ev = {});
+    function sawFall(t) {
+      if (!t.h) return;
+      for (const x of models) if (x !== t && x.state === "ok" && x.h && x.u.side === t.u.side && hexDist(x.h, t.h) <= 5 && los(x.h, t.h)) ev(x).allyDown = true;
+    }
+    // under fire (Tactical Shooting): a Fright Check after suppression, a near miss (by 2 or less), a blast within 2
+    // yards per die, a wound or a friend going down nearby, at minus the volume of fire (the rapid-fire table as a
+    // measure of it) unless in cover (p. 34); then anyone shot at while in cover rolls Will-2 or keeps its head down
+    // this turn, unless it has Combat Reflexes (p. 21). Unfazeable and fearless-by-nature models ignore both.
+    // fire and movement (TS p. 21): each shooting squad that advances pairs off; one of each pair covers while the
+    // other bounds, swapping every two seconds. Zealots (Orks, Tyranids) and chargers just go.
+    function assignRoles() {
+      for (const u of units) {
+        const ms = models.filter(x => x.u === u && x.state === "ok" && x.h && !u.routed);
+        // peeling (TS p. 22-23): cautious line troops outgunned by what they can see fall back by pairs out of its
+        // sight and hold there (shooting stance), covering each other
+        if (!u.peel && u.ai.caution >= 1.1 && !((u.ai.zeal || 0) > 0) && u.ranged && ms.length >= 2 && turn > 3) {
+          const ours = ms.reduce((a, x) => a + threatOf(x), 0);
+          const seen = models.filter(f => f.u.side !== u.side && f.state === "ok" && f.h && ms.some(x => los(x.h, f.h)));
+          const theirs = seen.reduce((a, f) => a + threatOf(f), 0);
+          if (ours < 0.35 * theirs) { u.peel = true; u.stance = "shoot"; L(`${u.name} fall back by pairs (peeling)`); }
+        }
+        if ((u.stance !== "advance" && !u.peel) || (u.ai.zeal || 0) > 0 || !u.ranged || ms.length < 2) { for (const x of ms) x.role = null; continue; }
+        const f0 = models.find(x => x.u.side !== u.side && x.state === "ok" && x.h);
+        if (!f0) continue;
+        ms.sort((a, b) => hexDist(a.h, f0.h) - hexDist(b.h, f0.h) || a.h.q - b.h.q || a.h.r - b.h.r);
+        const phase = Math.floor(turn / 2) % 2;
+        ms.forEach((x, i) => { x.role = (Math.floor(i / 2) + i + phase) % 2 ? "bound" : "cover"; });
+      }
+    }
+    function underFire(m) {
+      const e = m.ev; m.ev = null; m.headsDown = false;
+      if (!e || m.u.flags.unfazeable || m.u.flags.noMorale) return false;
+      const covered = e.shotAt && e.shotAt.h && m.h && inCover(m, e.shotAt.h);
+      if (e.supp || e.near || e.blast || e.wounded || e.allyDown) {
+        const why = e.blast ? "a blast" : e.allyDown ? "a comrade falls" : e.wounded ? "wounded" : e.supp ? "suppression fire" : "a near miss";
+        const r = fright(m.u, e.vol && !covered ? -rapidBonus(e.vol) : 0);
+        if (!r.ok) { frightTable(m, -r.margin, why); if (m.stunned || m.state !== "ok" || m.u.routed) return true; }
+      }
+      if (covered && !m.u.flags.cr && !check(m.u.will - 2).ok) m.headsDown = true;
+      return false;
+    }
     function frightTable(m, by, why) {
       const r = roll3() + by, u = m.u;
       const stun = (sec, how, txt) => { m.stunned = true; m.stunT = sec; m.stunRec = how; L(`  ${m.id} ${txt || "freezes"} (${why}, Fright Check Table ${r})`); };
@@ -1403,7 +1446,7 @@ const SIM = (() => {
     const thr = (HP, lvl, col = 1) => Math.max(1, Math.round(HP * FRAC[lvl] * COLS(lvl)[col - 1]));
     function severity(inj, HP) { let s = 0; for (let l = 1; l <= 8; l++) if (inj >= thr(HP, l)) s = l; return s; }
     function boxesFor(inj, HP, lvl) { let n = 0; for (let c = 1; c <= 4; c++) if (inj >= thr(HP, lvl, c)) n = c; return Math.max(1, n); }
-    function incapacitate(t, why) { if (t.state === "ok") { if (t.h) FX(["d", t.h.q, t.h.r, t.u.side, 0]); t.state = "out"; place(t, null); L(`  ${t.id} ${why}`); } }
+    function incapacitate(t, why) { if (t.state === "ok") { sawFall(t); if (t.h) FX(["d", t.h.q, t.h.r, t.u.side, 0]); t.state = "out"; place(t, null); L(`  ${t.id} ${why}`); } }
     function cripple(t, loc) {
       if (loc === "arm" || loc === "hand") {
         if (++t.armsLost >= 2) { incapacitate(t, "has lost the use of both arms"); return; }
@@ -1475,6 +1518,7 @@ const SIM = (() => {
     }
     function injure(att, t, inj, loc, type) {
       if (inj <= 0 || t.state !== "ok") return;
+      ev(t).wounded = true;
       if (frac) return fracInjure(att, t, inj, loc, type);
       const HP = t.u.HP, before = t.hp;
       t.hp -= inj;
@@ -1509,6 +1553,7 @@ const SIM = (() => {
     }
     function kill(att, t, how) {
       if (t.state !== "ok") return;
+      sawFall(t);
       if (t.h) FX(["d", t.h.q, t.h.r, t.u.side, 1]);
       place(t, null);
       if (t.u.flags.reanimation && how !== "destroyed" && t.hp > -5 * t.u.HP) {
@@ -1663,9 +1708,11 @@ const SIM = (() => {
       FX(["b", at.q, at.r, Math.min(6, 1 + Math.floor(Math.log2(Math.max(2, raw)) / 2) * (w.explosion || 1))]);
       // a blast also batters the walls and doors beside it (B558; no armour divisor)
       if (terr) for (const [dq, dr] of [[0, 0], ...DIRS]) { const i = idx(key(at.q + dq, at.r + dr)); if (i != null && structOf(i)) damageStructure(i, Math.floor(raw / 3), w.dmg, false); }
+      const zone = 2 * (w.dmg.n || 1) * (w.explosion || 1);   // the blast zone for Fright Checks: 2 yards per die (TS p. 34)
       for (const x of models) {
         if (x.state !== "ok" || !x.h || !los(at, x.h)) continue;
         let d = hexDist(x.h, at);
+        if (d <= zone && x !== att) ev(x).blast = true;
         const lv = w.explosion || 1;
         if (d < 1 || d > 10 * lv) continue;
         if (w.thrown && d <= 3 && x !== att && dive(x)) d += 1;
@@ -1813,7 +1860,13 @@ const SIM = (() => {
     function defend(t, att, melee, da, feint, aw) {
       t.shieldStruck = false;
       if (t.state !== "ok" || t.aoa || t.pinned) return null;
-      // an active defence spoils any Aim and follow-up aim (B364, TS p. 14)
+      // an active defence spoils any Aim and follow-up aim (B364, TS p. 14): an aiming model lets a shot come when
+      // dodging is a long shot or the shot can barely hurt it, and keeps its aim
+      if ((t.aimTurns || t.follow) && melee !== true && melee !== "pb" && melee !== "thrown") {
+        const dd = rangedDefence(t, att), rw = aw || (att && att.u.ranged);
+        const harm = rw ? expInjRandom(rw, t.u) : 0;
+        if (dd == null || P3[cl(dd)] < 0.3 || harm < 0.15 * remOf(t)) return null;
+      }
       if (t.aimTurns || t.follow) { t.aimTurns = 0; t.follow = null; }
       if (t.grips.length) t.retreated = true;   // held: no retreat
       // a shield at 0 HP or less may give out whenever it's used (HT roll, B483)
@@ -2081,8 +2134,9 @@ const SIM = (() => {
         const r = check(lvl);
         if (i === 0 && jamCheck(m, w, r)) return;
         // every round rolled on its own (Progressive Recoil); Aim counts on the first only; criticals can't be dodged
-        let got = r.ok ? 1 : 0, crits = r.crit ? 1 : 0;
-        for (let k = 1; k < nb; k++) { const lk = lvl - firstB - rclPen(w, k, braced); if (lk < 3) break; const rk = check(lk); if (rk.ok) { got++; if (rk.crit) crits++; } }   // no roll below 3 (B344)
+        let got = r.ok ? 1 : 0, crits = r.crit ? 1 : 0, near = !r.ok && r.margin >= -2;
+        for (let k = 1; k < nb; k++) { const lk = lvl - firstB - rclPen(w, k, braced); if (lk < 3) break; const rk = check(lk); if (rk.ok) { got++; if (rk.crit) crits++; } else if (rk.margin >= -2) near = true; }   // no roll below 3 (B344)
+        const e = ev(t); e.shotAt = m; e.vol = Math.max(e.vol || 0, nb); if (near) e.near = true;
         r.ok = got > 0;
         const thru = (inter.length ? `, through ${inter.length}` : "") + (plan.da ? `, deceptive -${plan.da}` : "");
         if (!r.ok && !w.cone) {
@@ -2303,6 +2357,18 @@ const SIM = (() => {
       return share * threatOf(t) * prey * HORIZON;   // a foe taken out stops hurting us for the rest of the fight
     }
     // expected injury to m next turn standing on hex h: "aoa" (no defence), "aod" (+2) or normal
+    // chance a foe under our fire keeps its head down or freezes (TS p. 21, 34): Will-2 in cover without Combat
+    // Reflexes, and a Fright Check for suppression; the unafraid ignore both
+    function pinOf(f) {
+      if (f.u.flags.unfazeable || f.u.flags.noMorale) return 0;
+      const down = f.u.flags.cr ? 0 : 1 - P3[cl(f.u.will - 2)];
+      const scare = 1 - P3[cl(frightLevel(f.u))];
+      return Math.min(0.9, down * 0.7 + scare * 0.5);
+    }
+    // a foe a friend is covering (an overwatch shooter's target, or inside a friend's suppression zone) shoots back
+    // at less than full effect: that's what covering fire is for (TS p. 21)
+    const covered = (m, f) => zones.some(z => z.side === m.u.side && z.owner.state === "ok" && f.h && z.hexes.has(key(f.h.q, f.h.r)))
+      || models.some(x => x !== m && x.u.side === m.u.side && x.state === "ok" && x.role === "cover" && x.aimTarget === f);
     function incoming(m, h, mode) {
       let tot = 0;
       const near = foes(m).filter(f => f.h && f.state === "ok").sort((a, b) => walk(h, a.h) - walk(h, b.h)).slice(0, 8);
@@ -2323,7 +2389,7 @@ const SIM = (() => {
         if (rw && !f.gunBroken && d <= rw.range.max && los(f.h, h)) {
           const lvl = rw.level - skillPen(f) + rangePenalty(Math.max(1, d) + (h === m.h ? m.steps || 0 : hexDist(m.h, h))) + m.u.sm - (m.prone ? 2 : 0) + Math.min(2, rw.acc || 0) - COVER_PEN[coverAt(h, f.h, m)] - (f.h ? ownCoverPen(f, h, false) : 0);
           const def = mode === "aoa" ? null : m.u.dodge + (mode === "aod" ? 2 : 0) + m.u.db - (m.prone ? 3 : 0);
-          best = Math.max(best, expInjRandom(rw, m.u) * burstHits(lvl, rw.rof || 1, rw) * (1 - (def == null ? 0 : P3[cl(def)])));
+          best = Math.max(best, expInjRandom(rw, m.u) * burstHits(lvl, rw.rof || 1, rw) * (1 - (def == null ? 0 : P3[cl(def)])) * (covered(m, f) ? 1 - pinOf(f) : 1));
         }
         tot += best * share;
       }
@@ -2363,7 +2429,7 @@ const SIM = (() => {
     function act(m) {
       const u = m.u, A = u.ai;
       m.aoa = false; m.aod = false; m.mna = false; m.offBalance = false; m.readied = false; m.steps = 0; m.moved = false;
-      clearZone(m); m.waiting = null;
+      clearZone(m); m.waiting = null; m.watch = false;
       if (m.doNothing) { m.doNothing = false; L(`${m.id} reels from the blow (Do Nothing)`); return; }
       if (m.blockLost) { m.blockLost = false; L(`${m.id} recovers its shield (Ready)`); return; }
       if (m.jam > 0) { m.jam--; if (!engaged(m)) { L(`${m.id} clears a jam`); return; } }
@@ -2426,6 +2492,23 @@ const SIM = (() => {
         m.aodDef = par >= dod && par >= blk ? "parry" : blk >= dod ? "block" : "dodge";
         L(`${m.id} goes on All-Out Defense (+2 ${m.aodDef})`);
       });
+      if (u.peel && m.role === "bound" && !adj.length) {
+        const hide = hideHex(m, pool);
+        if (hide) { const top0 = opts.reduce((a, b) => b.v > a.v ? b : a, { v: 0 }); add(top0.v + 0.3 * Math.max(0.02, Math.abs(top0.v)), "peel", () => { followPath(m, hide.path, moveOf(m)); L(`${m.id} falls back out of sight`); }); }
+      }
+      // fire and movement: the covering half leans to shooting (and aiming), the bounding half to moving up
+      if (m.role && !adj.length && !(pool[0] && hexDist(pool[0].h, m.h) <= 5)) {
+        const moveL = /^(advance@|move-closer@|cover@|advance-fire@|close@)/, fireL = /^(fire |aim@|aoa-fire@|suppress|wait@|watch@)/;
+        const top0 = opts.reduce((a, b) => b.v > a.v ? b : a, { v: 0 });
+        const bonus = 0.3 * Math.max(0.02, Math.abs(top0.v));
+        for (const o of opts) if ((m.role === "bound" ? moveL : fireL).test(o.label)) o.v += bonus;
+      }
+      // keeping its head down (TS p. 21): only what doesn't expose it: reload, ready, defend, a door, or stay down
+      if (m.headsDown && !adj.length) {
+        const safe = opts.filter(o => /^(reload|reloading|tac-reload|ready-|aod|concentrate|close-door|door)/.test(o.label));
+        opts.length = 0; opts.push(...safe);
+        add(-rNow * 0.5, "heads-down", () => L(`${m.id} keeps its head down`));
+      }
       if (!opts.length) return;
       // pick the best; a disorderly faction picks among the near-best
       const top = opts.reduce((a, b) => b.v > a.v ? b : a);
@@ -2456,6 +2539,27 @@ const SIM = (() => {
         coverOptions(m, pool, add);
       }
       const threatNow = threatTo(m);
+      // corners and doorways (TS p. 23-24): with no foe in sight but one close enough to come round the corner or
+      // through the door, hold a Wait for the first to appear rather than walk into it; not for zealots or chargers
+      if (terr && !cands.length && pool[0] && ws.length && !m.waiting && u.stance !== "charge" && !((u.ai.zeal || 0) > 0)) {
+        const t = pool[0], w = ws[0], wd = walk(m.h, t.h);
+        if (wd <= moveOf(t) * 2 + 2 && (w !== u.ranged || m.ammo > 0 || w.shots.mag === Infinity)) {
+          const E = planAttack(m, w, t, wl(m, w) - skillPen(m) + rangePenalty(Math.max(1, Math.min(wd, 10))) + t.u.sm, false).score;
+          const comes = t.u.stance === "shoot" ? 0.3 : 0.6;
+          add(GAMMA * comes * Wr * kv(m, t, E) + comes * 0.2 * threatOf(m) * u.ai.caution - rNow, `watch@${t.id}`, () => { m.waiting = w; m.watch = true; L(`${m.id} covers the approach (Wait)`); });
+        }
+      }
+      // reloads (TS p. 20): top up a part-used magazine while nobody can see us; when empty under fire, step out of
+      // sight first if there's somewhere within a move
+      if (u.ranged && !m.gunBroken && m.reload === 0 && u.ranged.shots.mag !== Infinity && m.ammo < u.ranged.shots.mag && u.ranged.shots.reload > 0 && u.ranged.shots.reload <= 3) {
+        const w = u.ranged, turns = Math.max(1, w.shots.reload);
+        if (!cands.length && m.ammo > 0 && m.ammo < w.shots.mag * 0.6)
+          add(Math.pow(GAMMA, turns) * 0.5 * shotValueFrom(m, m.h, pool) - rNow + 0.002 * (1 - m.ammo / w.shots.mag), "tac-reload", () => { m.reload = turns; L(`${m.id} tops up its magazine`); });
+        if (terr && cands.length && m.ammo <= 0) {
+          const hide = hideHex(m, pool);
+          if (hide) add(Math.pow(GAMMA, turns + 1) * shotValueFrom(m, m.h, pool) - risk(m, hide.h, ""), "reload-cover", () => { followPath(m, hide.path, moveOf(m)); L(`${m.id} steps out of sight to reload`); });
+        }
+      }
       for (const w of ws) {
         const isGun = w === u.ranged;
         if (isGun && m.reload > 0) {
@@ -2535,12 +2639,15 @@ const SIM = (() => {
           for (const c of cands) {
             if (hexDist(m.h, c.h) > w.range.max) continue;
             const inZ = pool.filter(x => hexDist(x.h, c.h) <= 1);
-            if (inZ.length < 3) continue;
+            // area denial (TS p. 18): a cluster, or a lone foe in cover or in a doorway
+            if (inZ.length < 3 && !(inCover(c, m.h) || (terr && terr.doorI[idx(key(c.h.q, c.h.r))]))) continue;
             const shots = w.shots.mag === Infinity ? w.rof : Math.min(w.rof, m.ammo);
             const Ez = x => P3[cl(Math.min(6, w.level - skillPen(m) + rangePenalty(Math.max(1, hexDist(m.h, x.h)))) + rapidBonus(shots) + x.u.sm)] * (1 - P3[cl(rangedDefence(x, m))]) * expInjRandom(w, x.u);
             // the zone attacks friends in it too (B409): their loss counts against it
             const pals = models.filter(x => x !== m && x.state === "ok" && x.h && x.u.side === u.side && hexDist(x.h, c.h) <= 1);
-            const v = inZ.reduce((a, x) => a + kv(m, x, Ez(x) * sustainOf(w)), 0)
+            // pinning them is worth the harm their fire won't do while our squad moves (TS p. 21)
+            const pinV = inZ.reduce((a, x) => a + pinOf(x) * Math.min(1, threatOf(x)) * 0.25 * HORIZON * (x.u.ranged ? 1 : 0.3), 0);
+            const v = pinV + inZ.reduce((a, x) => a + kv(m, x, Ez(x) * sustainOf(w)), 0)
               - u.ai.caution * pals.reduce((a, x) => a + Math.min(1, Ez(x) / remOf(x)) * threatOf(x) * HORIZON, 0);
             if (!bestZ || v > bestZ.v) bestZ = { c, v };
           }
@@ -2711,6 +2818,26 @@ const SIM = (() => {
 
     // ---- in a facility: move to a spot beside a crate or a corner that has a line of fire and cover against
     // the foes in sight; valued like any move (the shot it gives next turn less the risk of standing there)
+    // the nearest hex within a move that no known foe can see (to reload or rally out of their fire)
+    function hideHex(m, pool) {
+      const mv = moveOf(m), start = key(m.h.q, m.h.r), prev = new Map([[start, null]]), q = [{ h: m.h, d: 0 }];
+      const near = pool.slice(0, 8);
+      for (let i = 0; i < q.length; i++) {
+        const { h, d } = q[i];
+        if (d > 0 && !near.some(f => f.h && los(h, f.h))) {
+          const path = [];
+          for (let k = key(h.q, h.r), n = h; k !== start; ) { path.unshift(n); const p = prev.get(k); k = key(p.q, p.r); n = p; }
+          return { h, path };
+        }
+        if (d >= mv) continue;
+        for (const [dq, dr] of DIRS) {
+          const n = { q: h.q + dq, r: h.r + dr }, nk = key(n.q, n.r);
+          if (prev.has(nk) || taken(nk)) continue;
+          prev.set(nk, h); q.push({ h: n, d: d + 1 });
+        }
+      }
+      return null;
+    }
     function coverOptions(m, pool, add) {
       const mv = moveOf(m), start = key(m.h.q, m.h.r), prev = new Map([[start, null]]), q = [{ h: m.h, d: 0 }], spots = [];
       const near = pool.slice(0, 6);
@@ -2719,6 +2846,8 @@ const SIM = (() => {
         if (d > 0 && DIRS.some(([dq, dr]) => wallAt(key(h.q + dq, h.r + dr)))) {
           let sc = 0;
           for (const f of near) if (los(h, f.h)) { const c = coverAt(h, f.h, null); sc += c !== "none" ? COVER_PEN[c] / 2 : -0.6; }
+            // don't hug a corner a hidden foe could come round and grab you at (TS p. 23)
+            else if (f.u.melee && walk(h, f.h) <= moveOf(f) + f.u.melee.reachMax) sc -= 1;
           if (sc > 0) spots.push({ h, sc: sc - d * 0.01 });
         }
         if (d >= mv) continue;
@@ -2946,6 +3075,27 @@ const SIM = (() => {
           v *= P3[Math.max(0, Math.min(18, lvl))];
           if (!best || v > best.s) best = { i, c, s: v, v, lvl };
         }
+        // through a doorway or round a corner (TS p. 24): a foe out of sight, a hex we can see that it can see
+        if (terr) for (const c of pool.slice(0, 6)) {
+          if (!c.h || los(m.h, c.h) || hexDist(m.h, c.h) > g.range.max + 2) continue;
+          for (const [dq, dr] of [...DIRS, ...DIRS.map(([a, b]) => [2 * a, 2 * b])]) {
+            const X = { q: c.h.q + dq, r: c.h.r + dr }, xi = idx(key(X.q, X.r));
+            if (xi == null || !pass[xi] || closed[xi] || !los(m.h, X) || !los(X, c.h)) continue;
+            const d = hexDist(m.h, X);
+            if (d < 3 || d > g.range.max) continue;
+            const lvl = g.level - skillPen(m) + rangePenalty(d);
+            let v = 0;
+            for (const x of models) {
+              if (x.state !== "ok" || !x.h || !los(X, x.h)) continue;
+              const k = Math.max(1, hexDist(x.h, X));
+              if (k > 3) continue;
+              const e = expInj(g, x.u, "torso", { ...g.dmg, div: 1, mult: g.dmg.mult / (3 * k), key: "s" + k + "nd" });
+              v += x.u.side === m.u.side ? -m.u.ai.caution * Math.min(1, e / remOf(x)) * threatOf(x) * HORIZON : kv(m, x, e);
+            }
+            v *= P3[Math.max(0, Math.min(18, lvl))];
+            if (v > 0 && (!best || v > best.s)) best = { i, c, hex: X, s: v, v, lvl };
+          }
+        }
       });
       return best;
     }
@@ -2961,6 +3111,16 @@ const SIM = (() => {
     function throwGrenade(m, g) {
       const w = m.u.grenades[g.i], c = g.c;
       m.grenadeReady = null; m.grenadesLeft[g.i]--; m.attacked = true;
+      if (g.hex) {
+        // lobbed through a door or round a corner at a hex: no defence against a throw at the floor
+        m.facing = faceToward(m.h, g.hex);
+        const r = g.lvl < 3 ? { ok: false } : check(g.lvl), raw = rollDamage(w.dmg);
+        let at = g.hex;
+        if (!r.ok) { const off = DIRS[Math.floor(R() * 6)], n = { q: at.q + off[0], r: at.r + off[1] }; if (!(terr && wallAt(key(n.q, n.r)))) at = n; }
+        L(`${m.id} lobs a ${w.name} ${terr && terr.doorI[idx(key(g.hex.q, g.hex.r))] ? "through the doorway" : "round the corner"} at ${c.id}${r.ok ? "" : " (a yard off)"}`);
+        explosion(m, w, at, raw);
+        return;
+      }
       m.facing = faceToward(m.h, c.h);
       const r = g.lvl < 3 ? { ok: false, margin: g.lvl - 10, crit: false, fumble: false } : check(g.lvl);   // no roll below 3 (B344): a wild throw
       const raw = rollDamage(w.dmg);
@@ -3029,8 +3189,10 @@ const SIM = (() => {
       if (m.state !== "ok" || m.stunned) return true;
       for (const f of models) {
         if (!f.waiting || f.state !== "ok" || !f.h || f.u.side === m.u.side || f.stunned) continue;
-        if (hexDist(f.h, m.h) > (f.waiting === f.u.melee ? f.u.melee.reachMax : m.u.melee.reachMax + 1)) continue;
-        const w = f.waiting; f.waiting = null;
+        // a Wait on a door or corner fires at the first foe to step into view and range; any other at a charger closing in
+        if (f.watch) { if (!los(f.h, m.h) || hexDist(f.h, m.h) > f.waiting.range.max) continue; }
+        else if (hexDist(f.h, m.h) > (f.waiting === f.u.melee ? f.u.melee.reachMax : m.u.melee.reachMax + 1)) continue;
+        const w = f.waiting; f.waiting = null; f.watch = false;
         L(`${f.id} was waiting for ${m.id} (Wait)`);
         if (w === f.u.melee) { if (hexDist(f.h, m.h) <= w.reachMax) strike(f, w, m, {}); }
         else fireAt(f, w, m, { pointBlank: hexDist(f.h, m.h) <= 1 });
@@ -3052,6 +3214,7 @@ const SIM = (() => {
     // own effective skill if lower, plus the rapid-fire bonus, SM, posture and cover (B409); they may Dodge
     function suppressHit(z, x) {
       z.hit.add(x);
+      { const e = ev(x); e.supp = true; e.shotAt = z.owner; e.vol = Math.max(e.vol || 0, z.shots); }
       if (!los(z.owner.h, x.h)) return;
       const m = z.owner, w = z.w, d = Math.max(1, hexDist(m.h, x.h));
       const eff = w.level - skillPen(m) + rangePenalty(d);
@@ -3194,6 +3357,7 @@ const SIM = (() => {
         if (turn - m.spHit > delay) { m.sp = Math.min(sh.sp, m.sp + sh.recharge); if (m.sp >= sh.sp) m.spCollapsed = false; }
       }
       for (const m of models) if (m.state === "ok" && m.h && !m.u.routed && !m.stunned) firingLine(m);
+      assignRoles();
       const order = models.filter(active).sort((a, b) => (b.u.speed - a.u.speed) || (R() - 0.5));
       for (const m of order) {
         if (m.state !== "ok" || m.u.routed || !m.h) continue;
@@ -3206,7 +3370,9 @@ const SIM = (() => {
         }
         if (m.fp <= 0 && !m.u.flags.machine && !check(m.u.HT).ok) { L(`${m.id} is too exhausted to act`); m.shock = 0; continue; }
         // a stunned model that recovers still defends at -4, without retreating, until its next turn (B364)
+        if (m.stunned) { m.ev = null; }
         if (m.stunned) { if (recoverStun(m)) { m.stunned = false; m.stunRec = null; m.stunT = 0; m.stunRecovering = true; L(`${m.id} recovers from stun`); } m.shock = 0; continue; }
+        if (underFire(m)) { m.shock = 0; continue; }
         if (m.holding && (m.holding.state !== "ok" || !m.holding.h || hexDist(m.h, m.holding.h) > 1)) release(m);
         if (gripsOn(m).length && (m.pinned || m.prone)) { breakFree(m); m.shock = 0; continue; }
         if (!m.warpShadow && shadowed(m) && !m.u.flags.unfazeable && !m.u.flags.noMorale) {
