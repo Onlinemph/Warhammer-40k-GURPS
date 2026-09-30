@@ -280,6 +280,10 @@ def combat_flags(t, flags):
         flags["hpt"] = 1
     elif n.startswith("Combat Reflexes"):
         flags["cr"] = 1
+    elif n.startswith("Chameleonic Hide"):
+        flags["chameleon"] = flags.get("chameleon", 0) + lv   # its notes: -1/level to spot it still, half moving
+    elif n.startswith("Acute Vision"):
+        flags["acuteVision"] = flags.get("acuteVision", 0) + lv
     elif n.startswith("Perfect Balance"):
         flags["pbal"] = 1           # +4 to keep one's feet against knockback (B74, B378)
     elif n.startswith("Enhanced Move (Ground)"):

@@ -853,25 +853,64 @@ const SIM = (() => {
     const seenAt = [new Map(), new Map()];
     const contact = [0, 0];   // the last second each side saw a foe
     const spot = (side, f) => { contact[side] = turn; if (!seenAt[side].has(f) && f.u.ambush && !f.revealed) L(`  ${f.id} is spotted`); seenAt[side].set(f, turn); f.lastSeenH = f.h; };
+    // ---- stealth (B222, B47): a model with something to hide behind (cover from the viewer, lying down, a chameleon
+    // hide, or 20+ yards) and that hasn't given itself away this second or the last is spotted only by winning a
+    // Quick Contest: the viewing side's best Perception (or Observation) plus Acute Vision, the range penalty and the
+    // target's SM, against the target's Stealth (DX-5 untrained), -5 if it moved more than half its Move, plus its
+    // chameleon hide. Once seen it stays seen while anyone keeps it in sight; one roll a second per side
+    const skillOf = (u, re) => Math.max(-Infinity, ...(u.stats.skills || []).filter(x => re.test(x.name) && x.level != null).map(x => x.level));
+    const stealthOf = u => u._st ?? (u._st = Math.max(u.dx - 5, skillOf(u, /^Stealth/)));
+    const spotOf = u => u._sp ?? (u._sp = Math.max(u.stats.per || u.stats.iq || 10, skillOf(u, /^Observation/)) + (u.flags.acuteVision || 0));
+    function concealed(f, x) {
+      if ((f.loudAt ?? -99) >= turn - 1) return false;
+      return f.prone || !!f.u.flags.chameleon || hexDist(x.h, f.h) >= 20 || coverAt(f.h, x.h, f) !== "none";
+    }
+    function trySpot(f) {
+      const S = 1 - f.u.side, viewers = models.filter(x => x.state === "ok" && x.h && x.u.side === S && los(x.h, f.h));
+      if (!viewers.length) return;
+      const hidden = f.u.ambush && !f.revealed;
+      if (hidden && !viewers.some(x => hexDist(x.h, f.h) <= 5)) return;   // an ambush shows only up close
+      if ((seenAt[S].get(f) ?? -99) >= turn - 1) { spot(S, f); return; }   // still being watched
+      const hid = viewers.filter(x => concealed(f, x));
+      if (hid.length < viewers.length && !hidden) { spot(S, f); return; }   // someone has a clear look at it
+      if ((f.spotRoll || [])[S] === turn) return;   // one roll a second per side
+      (f.spotRoll ||= [])[S] = turn;
+      let best = -Infinity;
+      for (const x of viewers) best = Math.max(best, spotOf(x.u) - skillPen(x) + rangePenalty(Math.max(1, hexDist(x.h, f.h))) + f.u.sm);
+      const cham = f.u.flags.chameleon || 0, still = !(f.steps > 0);
+      const st = stealthOf(f.u) - (f.steps > moveOf(f) / 2 ? 5 : 0) + (still ? cham : Math.floor(cham / 2)) - skillPen(f);
+      const a = check(best), b = check(st);
+      if (a.ok && (!b.ok || a.margin > b.margin)) { L(`  ${f.id} is spotted (Per ${best} vs Stealth ${st})`); spot(S, f); }
+    }
     function lookAround() {
       if (!AWARE) return;
-      for (const f of models) {
-        if (f.state !== "ok" || !f.h) continue;
-        const hidden = f.u.ambush && !f.revealed;
-        for (const x of models) if (x.state === "ok" && x.h && x.u.side !== f.u.side && (hidden ? hexDist(x.h, f.h) <= 5 : true) && los(x.h, f.h)) { spot(x.u.side, f); break; }
-      }
+      for (const f of models) if (f.state === "ok" && f.h) trySpot(f);
     }
-    const known = m => !AWARE ? foes(m) : foes(m).filter(f => (seenAt[m.u.side].get(f) ?? -99) >= turn - 5);
+    // what a side knows: foes in sight now, and for 5 seconds those last seen that haven't moved since; one that
+    // slipped out of sight and moved is only a last known position (search goes there)
+    const known = m => !AWARE ? foes(m) : foes(m).filter(f => { const t = seenAt[m.u.side].get(f) ?? -99; return t >= turn - 1 || (t >= turn - 5 && f.h && f.lastSeenH && f.h.q === f.lastSeenH.q && f.h.r === f.lastSeenH.r); });
     // an ambusher that attacks gives itself away; foes who hadn't seen it are partly surprised (B393): each must make
     // an IQ roll (+6 with Combat Reflexes) or lose its next turn
-    function reveal(m) {
-      if (!AWARE) return;
-      const side = 1 - m.u.side, fresh = !seenAt[side].has(m);
-      m.revealed = true; seenAt[side].set(m, turn); m.lastSeenH = m.h;
+    // an attack gives the attacker away: a gunshot to every foe within earshot (40 yards, walls or not), anything
+    // quieter (a blade, a throw, a splinter or shuriken weapon, a psychic power) only to foes that can see it
+    const QUIET = /splinter|shuriken|needle|bow\b|crossbow|silenced|stake|shardcarbine|Kroot/i;
+    function reveal(m, w) {
+      if (!AWARE || !m.h) return;
+      const loud = !!w && !w.thrown && w.usage !== "power" && !QUIET.test(w.name || "");
+      m.loudAt = turn;
+      const side = 1 - m.u.side, fresh = !seenAt[side].has(m), unseen = (seenAt[side].get(m) ?? -99) < turn - 1;
+      m.revealed = true;
+      if (!models.some(x => x.state === "ok" && x.h && x.u.side === side && (loud ? hexDist(x.h, m.h) <= 40 : los(x.h, m.h)))) return;
+      seenAt[side].set(m, turn); m.lastSeenH = m.h; contact[side] = turn;
       if (fresh && m.u.ambush && !m.u.sprung) {
         m.u.sprung = true;
         L(`  ${m.u.name} spring their ambush`);
         for (const x of models) if (x.state === "ok" && x.h && x.u.side === side && !check((x.u.stats.iq || 10) + (x.u.flags.cr ? 6 : 0)).ok) x.surprised = true;
+      } else if (unseen) {
+        // any attack out of hiding is a surprise attack (B393): foes who see it or are within 10 yards roll IQ
+        // (+6 with Combat Reflexes) or lose their next turn
+        L(`  ${m.id} strikes from hiding`);
+        for (const x of models) if (x.state === "ok" && x.h && x.u.side === side && (los(x.h, m.h) || hexDist(x.h, m.h) <= 10) && !check((x.u.stats.iq || 10) + (x.u.flags.cr ? 6 : 0)).ok) x.surprised = true;
       }
     }
     // target speed (B373): below Move 10 the book drops it and lets the target's Dodge stand for its movement
@@ -1859,7 +1898,7 @@ const SIM = (() => {
     function fireThrough(m, w, t, i, lvl) {
       const shots = w.shots.mag === Infinity ? (w.rof || 1) : Math.min(w.rof || 1, m.ammo);
       if (w.shots.mag !== Infinity) m.ammo -= shots;
-      m.attacked = true; m.aimTurns = 0; if (w.fp) spendFP(m, w.fp); reveal(m);
+      m.attacked = true; m.aimTurns = 0; if (w.fp) spendFP(m, w.fp); reveal(m, w);
       faceTo(m, t.h);
       L(`${m.id} fires ${shots > 1 ? shots + " " : ""}through the ${hexName(i)} at ${t.id} (skill ${lvl})`);
       let hits = 0;
@@ -1964,7 +2003,7 @@ const SIM = (() => {
     }
     function fireAt(m, w, target, opts) {
       if (m.state !== "ok" || !m.h || !target.h || !los(m.h, target.h)) return;   // the attacker fell, the target left, or a wall is in the way
-      reveal(m);
+      reveal(m, w);
       const d = Math.max(1, hexDist(m.h, target.h));
       if (d > w.range.max) return;
       const shots = w.shots.mag === Infinity ? w.rof : Math.min(w.rof, m.ammo);
@@ -3265,11 +3304,20 @@ const SIM = (() => {
     }
 
     // ---- grenades: expected harm of a throw at each foe (the one struck takes it all, the rest the blast and fragments)
+    // figures screening x from a blast at hex a, cached for the second (the planner asks the same pairs often)
+    const SCR = new Map(); let scrTurn = -1;
+    function screenN(a, x) {
+      if (scrTurn !== turn) { SCR.clear(); scrTurn = turn; }
+      const k = a.q + "," + a.r + ">" + x.ix;
+      let n = SCR.get(k);
+      if (n === undefined) { n = between(a, x.h, null).filter(y => y !== x).length; SCR.set(k, n); }
+      return n;
+    }
     function bestGrenade(m, pool) {
       let best = null;
       m.u.grenades.forEach((g, i) => {
         if (!m.grenadesLeft[i]) return;
-        for (const c of pool) {
+        for (const c of pool.slice(0, 8)) {
           if (!c.h || !los(m.h, c.h)) continue;
           const d = hexDist(m.h, c.h);
           if (d < 3 || d > g.range.max) continue;
@@ -3287,7 +3335,7 @@ const SIM = (() => {
             if (k > Math.max(3, fR) || !los(c.h, x.h)) continue;
             let e = k <= 3 ? expInj(g, x.u, "area", { ...g.dmg, div: 1, mult: g.dmg.mult / (3 * k), key: "s" + k + "nd" }) : 0;
             // expected fragments: the chance of success by 0, 3, 6... (one more per 3 points, B414)
-            if (fr && k <= fR) { let nF = 0; for (let j = 15 + rangePenalty(k) + x.u.sm - (x.prone || x.kneel ? 2 : 0) - 4 * between(c.h, x.h, null).filter(y => y !== x).length; j >= 3; j -= 3) nF += P3[Math.min(18, j)]; e += nF * expInjRandom(g, x.u, { n: fr.n, add: 0, mult: 1, div: 1, type: fr.type, key: "f" }); }
+            if (fr && k <= fR) { let nF = 0; for (let j = 15 + rangePenalty(k) + x.u.sm - (x.prone || x.kneel ? 2 : 0) - 4 * screenN(c.h, x); j >= 3; j -= 3) nF += P3[Math.min(18, j)]; e += nF * expInjRandom(g, x.u, { n: fr.n, add: 0, mult: 1, div: 1, type: fr.type, key: "f" }); }
             others += x.u.side === m.u.side ? -m.u.ai.caution * Math.min(1, e / remOf(x)) * threatOf(x) * HORIZON : kv(m, x, e);
           }
           const v = (direct + others) * P3[Math.max(0, Math.min(18, lvl))];
@@ -3413,7 +3461,7 @@ const SIM = (() => {
       m.steps = (m.steps || 0) + 1;   // yards moved this turn: a moving target is harder to hit (B550)
       if (m.prevH) m.facing = faceToward(m.prevH, m.h);
       if (m.steps > moveOf(m) / 2) m.movedFar = true;
-      if (AWARE) { const hidden = m.u.ambush && !m.revealed; for (const x of models) if (x.state === "ok" && x.h && x.u.side !== m.u.side && (!hidden || hexDist(x.h, m.h) <= 5) && los(x.h, m.h)) { spot(x.u.side, m); break; } }
+      if (AWARE) trySpot(m);   // stepping into view: seen at once in the open, a Stealth contest from concealment
       if (m.kneelVol) { m.kneel = m.kneelVol = false; }   // it rose as the step's start
       const k = key(m.h.q, m.h.r);
       for (const z of zones) if (m.state === "ok" && m.h && z.side !== m.u.side && z.owner.state === "ok" && z.owner.h && z.hexes.has(k) && !z.hit.has(m)) suppressHit(z, m);
@@ -3451,7 +3499,7 @@ const SIM = (() => {
       return false;
     }
     function suppress(m, w, center) {
-      reveal(m);
+      reveal(m, w);
       const shots = w.shots.mag === Infinity ? w.rof : Math.min(w.rof, m.ammo);
       if (w.shots.mag !== Infinity) m.ammo -= shots;
       m.attacked = true;
