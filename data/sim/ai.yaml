@@ -10,6 +10,7 @@
 #   ranged      weight on shooting options
 #   focus       how strongly a model avoids piling onto a foe squad-mates already shoot (discipline)
 #   noise       random spread in the choice (0 = always the best option; Orks improvise)
+#   zeal        0-1: how little a hand-to-hand fight still several turns away is discounted (Orks run at the enemy)
 # Profiles are matched to templates by the regex in `match` (first profile that matches wins).
 profiles:
   - name: Orks
@@ -20,6 +21,7 @@ profiles:
     ranged: 0.7
     focus: 0.4
     noise: 0.35
+    zeal: 0.6
     lore: Orks live for the fight and love close combat; they shoot wildly, charge anything, and don't count the cost.
   - name: Tyranids
     match: "^(Termagant|Hormagaunt|Genestealer|Lictor|Ravener|Tyranid|Carnifex|Hive Tyrant|Zoanthrope)"
@@ -29,6 +31,7 @@ profiles:
     ranged: 1.0
     focus: 0.9
     noise: 0.1
+    zeal: 0.5
     lore: The Hive Mind spends bodies without regret; synapse keeps the swarm on target.
   - name: Necrons
     match: "^(Necron|Lychguard|Deathmark|Cryptek|Flayed One|Skorpekh)"

@@ -195,7 +195,7 @@ const SIM = (() => {
     [50, "5d+2", "8d-1"], [55, "6d", "8d+1"], [60, "7d-1", "9d"], [65, "7d+1", "9d+2"], [70, "8d", "10d"]];
   // decision weights for a template (data/sim/ai.yaml): first profile whose regex matches the template name
   function aiProfile(name) {
-    const base = { name: "Default", aggression: 1, caution: 1, melee: 1, ranged: 1, focus: 1, noise: 0, prey: 1 };
+    const base = { name: "Default", aggression: 1, caution: 1, melee: 1, ranged: 1, focus: 1, noise: 0, prey: 1, zeal: 0 };
     const p = AI.find(x => { try { return new RegExp(x.match || "^$").test(name); } catch (e) { return false; } });
     return p ? { ...base, ...p } : base;
   }
@@ -1884,8 +1884,10 @@ const SIM = (() => {
         }
       } else {
         // still out of reach: close the distance; the payoff is the fight when it arrives
-        const turns = Math.ceil((len - mv) / Math.max(1, mv)) + 1;
-        const v = Math.pow(GAMMA, turns) * Wm * worth - risk(m, arrive, "");
+        // zeal (faction profile): how little a far-off fight is discounted; Orks and the swarm run at the enemy
+        // and zealots run in on faith: they half-ignore the fire on the way and believe the fight is worth having
+        const z = u.ai.zeal || 0, turns = (Math.ceil((len - mv) / Math.max(1, mv)) + 1) * (1 - z);
+        const v = Math.pow(GAMMA, turns) * Wm * Math.max(worth, z * 0.1 * threatOf(tgt) * HORIZON) - risk(m, arrive, "") * (1 - z / 2);
         add(v, `close@${tgt.id}`, () => { go(mv); if (stopped()) return; if (tgt.h) m.facing = faceToward(m.h, tgt.h); });
       }
     }
