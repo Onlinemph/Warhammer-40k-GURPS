@@ -202,7 +202,10 @@ const SIM = (() => {
     [20, "2d-1", "3d+2"], [21, "2d", "4d-1"], [22, "2d", "4d"], [23, "2d+1", "4d+1"], [24, "2d+1", "4d+2"],
     [25, "2d+2", "5d-1"], [26, "2d+2", "5d"], [27, "3d-1", "5d+1"], [29, "3d", "5d+2"], [31, "3d+1", "6d-1"],
     [33, "3d+2", "6d"], [35, "4d-1", "6d+1"], [37, "4d", "6d+2"], [39, "4d+1", "7d-1"], [45, "5d", "7d+1"],
-    [50, "5d+2", "8d-1"], [55, "6d", "8d+1"], [60, "7d-1", "9d"], [65, "7d+1", "9d+2"], [70, "8d", "10d"]];
+    [50, "5d+2", "8d-1"], [55, "6d", "8d+1"], [60, "7d-1", "9d"], [65, "7d+1", "9d+2"], [70, "8d", "10d"],
+    [75, "8d+2", "10d+2"], [80, "9d", "11d"], [85, "9d+2", "11d+2"], [90, "10d", "12d"], [95, "10d+2", "12d+2"], [100, "11d", "13d"],
+    // above ST 100: +1d thrust and swing per full 10 ST (B16)
+    ...Array.from({ length: 90 }, (_, i) => [110 + 10 * i, `${12 + i}d`, `${14 + i}d`])];
   // decision weights for a template (data/sim/ai.yaml): first profile whose regex matches the template name
   function aiProfile(name) {
     const base = { name: "Default", aggression: 1, caution: 1, melee: 1, ranged: 1, focus: 1, noise: 0, prey: 1, zeal: 0 };
