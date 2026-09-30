@@ -293,14 +293,24 @@ const SIM = (() => {
       }
       return w;
     };
-    let melee = mkWeapon(spec.melee, true);
-    if (melee && flags.wm && !melee.natural && melee.level >= st.dx + 1 && melee.dmg) {
+    const weaponMaster = w => {
+      if (!w || !flags.wm || w.natural || w.level < st.dx + 1 || !w.dmg) return w;
       // per die of the ST-based thrust or swing the weapon line starts from, not the weapon's own added dice
-      const per = melee.level >= st.dx + 2 ? 2 : 1;
-      const base = /^\s*(thr|sw)/.exec(melee.text || "");
+      const per = w.level >= st.dx + 2 ? 2 : 1;
+      const base = /^\s*(thr|sw)/.exec(w.text || "");
       const dice = base ? Number((/^(\d+)d/.exec(base[1] === "thr" ? dmgST.thr : dmgST.sw) || [0, 0])[1]) : 0;
-      melee.dmg = { ...melee.dmg, add: melee.dmg.add + per * dice };
-      melee.text += ` (+${per}/die Weapon Master)`;
+      w.dmg = { ...w.dmg, add: w.dmg.add + per * dice };
+      w.text += ` (+${per}/die Weapon Master)`;
+      return w;
+    };
+    let melee = weaponMaster(mkWeapon(spec.melee, true));
+    // the same blade's other way of hitting (a sword's thrust beside its swing, B271): same field setting,
+    // chosen blow by blow
+    if (melee && spec.melee && spec.melee.item) {
+      const h = EQ.get(spec.melee.item);
+      const norm = u => String(u || "").toLowerCase().replace(/^(thrust|swing)[,\s]*/, "").replace(/[()]/g, "").trim();
+      const alt = h && h.e ? weaponLines(h.e).filter(l => l.melee && l.usage !== melee.usage && !/follow|force strike|thrown/i.test(l.usage || "") && norm(l.usage) === norm(melee.usage)) : [];
+      melee.alt = alt.map(l => weaponMaster(mkWeapon({ item: spec.melee.item, mode: l.usage }, true))).filter(w => w && w.dmg && w.reachMax === melee.reachMax);
     }
     if (!melee) {
       const lvl = skillLevel(st, "Brawling", ["Brawling", "DX", "Karate"]);
@@ -1328,7 +1338,15 @@ const SIM = (() => {
       else if (row === 16) { m.prone = true; L(`  critical miss: ${m.id} falls down`); }
       else drop("drops its weapon");
     }
+    // the better of a weapon's ways of hitting (swing or thrust) against this foe
+    function bestMode(m, w, t) {
+      if (!w.alt || !w.alt.length) return w;
+      let best = w, bs = planAttack(m, w, t, w.level - skillPen(m), true).score;
+      for (const a of w.alt) { const sc = planAttack(m, a, t, a.level - skillPen(m), true).score; if (sc > bs) { bs = sc; best = a; } }
+      return best;
+    }
     function strike(m, w, t, opts) {
+      w = bestMode(m, w, t);
       // attacks this turn: 1, +1 for Double or Rapid Strike, + Extra Attack; Rapid Strike's penalty falls on
       // the two blows it makes (-6, or -3 for a Weapon Master or someone Trained by a Master)
       const n = 1 + (opts.double || opts.rapid ? 1 : 0) + (m.u.flags.extraAttack || 0);
@@ -1352,7 +1370,7 @@ const SIM = (() => {
           if (def) { L(`${m.id} strikes at ${t.id}: ${def.how === "parry" ? "parried" : def.how === "block" ? "blocked" : "dodged"}`); if (def.how === "parry" && w.name === "Punch") cutsArm(t, m); continue; }
         }
         const rending = w.rend && (r.crit || r.margin >= w.rendBy);
-        L(`${m.id} strikes ${t.id}${loc !== "torso" ? " in the " + locName(loc) : ""} with ${w.name}${rending ? " (rending hit)" : ""}`);
+        L(`${m.id} strikes ${t.id}${loc !== "torso" ? " in the " + locName(loc) : ""} with ${w.name}${w.alt || /^thrust/i.test(w.usage || "") ? (/thrust/i.test(w.usage || "") ? " (thrust)" : " (swing)") : ""}${rending ? " (rending hit)" : ""}`);
         let raw = rollDamage(rending ? w.rend : w.dmg);
         // All-Out Attack (Strong, B365) and Mighty Blows (extra effort, 1 FP, B357): each +2 or +1/die, whichever is more
         if (opts.strong) raw += Math.max(2, w.dmg.n);
