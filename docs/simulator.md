@@ -40,7 +40,7 @@ Every model acts once per second in Basic Speed order (ties random), choosing on
 - **Follow-up shots** (TS p. 14): after an aimed shot, later shots at the same target keep half the weapon's Acc (all of it braced at RoF 1) on their first round, until the shooter moves, defends, or changes target or weapon. Any active defence spoils Aim and follow-up aim (B364), so an aiming model lets a shot come rather than dodge when its Dodge is under a 30% chance or the shot can barely hurt it.
 - **Close-contact shots** (TS p. 25): All-Out Attack (Determined) with a gun at a foe in reach is +4, not +1; a gun held close in is −2 to parry (a handgun) or −1 (a long arm). An aimed pistol shot held in both hands counts as braced (TS p. 12) when the off hand is free.
 - **Sighted shots** (TS p. 13-14, an option, off by default: `sightedShots`): a shot that uses Aim is All-Out Attack (Determined), +1 and no defence until the model's next turn.
-- **Under fire** (Tactical Shooting p. 21, 34): at the start of its turn a model that since its last turn was caught in suppression fire, missed by 2 or less, inside a blast (2 yards per die), wounded, or saw a friend within 5 yards go down makes one Fright Check (the heat-of-battle +5 and the cap of 13 apply), at minus the volume of fire it took (the rapid-fire table used as a measure of it) unless it's in cover; failure rolls the Fright Check Table. A model shot at while in cover then rolls Will−2 unless it has Combat Reflexes, and on a failure keeps its head down: it may only reload, ready, defend, work a door or stay down that turn. Unfazeable models, Necrons and mindless models ignore both.
+- **Under fire** (Tactical Shooting p. 21, 34): at the start of its turn a model that since its last turn was caught in suppression fire, missed by 2 or less, inside a blast (2 yards per die), wounded, or saw a friend within 5 yards go down makes one Fright Check (with the heat-of-battle +5 but no cap of 13, by user direction: superhuman nerve is rewarded, so only a 17 or 18 breaks an Astartes), at minus the volume of fire it took (the rapid-fire table used as a measure of it) unless it's in cover; failure rolls the Fright Check Table. A model shot at while in cover then rolls Will−2 unless it has Combat Reflexes, and on a failure keeps its head down: it may only reload, ready, defend, work a door or stay down that turn. Unfazeable models, Necrons and mindless models ignore both.
 - **Fire and movement** (TS p. 21): a shooting squad on the advance (not zealots or chargers) pairs off each second; one of each pair covers (leaning to fire, Aim and suppression) while the other bounds (leaning to moving up and into cover), swapping every two seconds. A foe that a covering friend is shooting at, or that sits in a friend's suppression zone, counts as shooting back at less than full effect, by the chance it keeps its head down or freezes.
 - **Suppression as area denial** (TS p. 18): a gunner may suppress a lone foe in cover or in a doorway, not only a cluster of three, and values the zone for the fire it stops as well as the harm it does.
 - **Corners and doorways** (TS p. 23-24): a model with no foe in sight but one that means to come on within about two moves takes a Wait covering the approach and shoots the first foe to step into view and range; after three quiet seconds it goes to look. A model choosing cover avoids hugging a corner a hidden foe could come round and reach it at. Grenades can be lobbed through a doorway or round a corner at a hex the thrower can see and the foe can see (no defence against a throw at the floor; a miss lands a yard off).
@@ -95,13 +95,38 @@ Defence rolls crit too (B381-382): a critical success against a melee attack sen
 
 Success rolls follow B343-348: 3 and 4 always succeed, 17 and 18 always fail, and no attack is rolled at effective skill below 3 (a burst stops at the round that would need it). Quick Contests go to whoever succeeds, or to the smaller failure when both fail (a tie changes nothing). Resisted Maledictions use the Rule of 16.
 
+## Martial Arts options
+
+The melee layer follows GURPS Martial Arts (MA) where it adds to or clarifies the Basic Set:
+
+- **Committed Attack** (MA99): +2 to hit, or +1 damage per two dice; the attacker's defences are −2 until its next turn, with no retreat and no parry. A long weapon can strike and then step back out of a shorter foe's reach ("attack and fly out").
+- **Defensive Attack** (MA100): −2 damage or −1 per die, and +1 to a parry or block until the next turn; it lets an unbalanced weapon parry after swinging.
+- **All-Out Attack (Feint)** (MA97): a feint, then a blow at the lowered defence. **All-Out Attack (Double) with a Rapid Strike** gives three blows, two of them at −6 (−3 for masters). A Rapid Strike may open with a feint (MA127).
+- **Telegraphic Attack** (MA113): +4 to hit, +2 to every defence against it, with the critical range of the unmodified skill; open to anyone, weighed against Deceptive Attack for each blow and each hit location.
+- **Feints** (B365, MA100-101): the AI values a feint's margin at about 1.2 plus 0.7 per point of skill edge. A **Beat** is a ST-based feint against the Parry or Block that turned the beater's blow (or that it parried), and it lowers that defence against every attacker until the end of the beater's next turn. A **Ruse** is IQ-based, resisted by Per. A **Defensive Feint** takes its margin off the foe's next attack instead.
+- **Evaluate** (B364, MA100): +1 a turn up to +3 on the next blow at that foe, and the bonus cancels that foe's feint and Deceptive Attack penalties against the evaluator.
+- **Riposte** (MA124): a model with an effective Parry of 14+ facing a single foe takes up to −4 on its parry; if the parry holds, that foe's next defence against it is lowered as much.
+- **Trained fighters only** (MA113): feints, Committed and Defensive Attack, Deceptive Attack and Rapid Strike need at least DX level in the weapon's skill.
+- **Extra blows move on** (MA127, B370): a blow left over when its target falls goes to another foe in reach, losing one blow for each hex skipped between the two.
+- **Two weapons at one foe** (B417): it defends at −1 against both.
+- **Weights and parries** (B376): a weapon's weight comes from its item (a limb, claw or fist weighs ST/10 lb); a weapon heavier than the parrier's Basic Lift (twice with a two-handed weapon) can't be parried, and a parried weapon three or more times the parrying weapon's weight breaks it on 2 in 6, one more per extra multiple, one less for fine (power and force) weapons.
+- **Retreat** (MA123-124): a step straight back gets the full +3/+1; a step to the side is a Sideslip at one less.
+- **Held models** (MA117, B391): −4 for being grappled and −4 more per yard of the weapon's reach (reach C weapons and fists only the −4), the Parry half that.
+- **Tip Slash** (MA113): a weapon that thrusts to impale may swing its tip for cutting at its impaling damage −2.
+- **Grappling** (MA114): a foe on All-Out Attack loses takedown and pin contests outright; a Committed attacker is −2 in them.
+- **Stop thrust** (B366): a thrust from a melee Wait adds +1 damage per two full yards the charger ran.
+- **Acrobatic Stand** (MA98): Acrobatics at −6 (and encumbrance) to spring up.
+- **Mighty Blows and Feverish Defense** (MA131): Mighty Blows goes with a plain Attack only, not All-Out Attack, and Feverish Defense isn't open to a model on Committed or All-Out Attack.
+- **Options, off by default**: −1 per extra dodge in a turn (MA122; masters exempt) and cinematic extra effort (MA132; Heroic Charge: 1 FP to ignore Move and Attack's −4 and skill cap of 9).
+- **Not modelled**: Counterattack and Targeted Attack (no template carries the techniques), Stop Hits, Slip and Dive, Defensive and Reversed Grip, Harsh Realism for unarmed fighters, the other cinematic skills, and MA's realistic-injury options.
+
 ## Injury
 
 Standard GURPS HP (B377–420) or the user's Revised Fractional Health (see the rules document on the user's Drive; five boxes per level, multi-box hits). Both use armour divisors, Weak Points, regenerating shields, wounding multipliers, Injury Tolerance, Damage Reduction, follow-ups, and:
 
 - **Shields**: a regenerating shield that's up absorbs each hit before armour; whatever gets through keeps its follow-up. Attackers don't aim at locations or chinks while it's up.
 - **Follow-ups** (B381): a follow-up (a bolt's explosive core, an inferno bolt's burn, a toxin) applies only when the main hit penetrates, and ignores DR. An explosive follow-up bursts inside the body: triple damage (B414, internal explosion), then its wounding multiplier.
-- **Crippling** (B420–421): a crippled arm drops what it holds (a two-handed weapon becomes unusable); a crippled leg or foot drops the model prone and it can only crawl.
+- **Crippling** (B420–421): a limb or extremity takes no more injury in all than it needs to be crippled, so repeated shots at a crippled hand stop hurting (and the AI stops aiming there); a crippled arm drops what it holds (a two-handed weapon becomes unusable); a crippled leg or foot drops the model prone and it can only crawl.
 - **Knockback** (B378): crushing damage, and cutting damage that fails to penetrate, moves the target 1 yard per full (ST−2) of basic damage and it must roll DX or fall prone.
 - **Below 1/3 HP** (B419, standard HP): Move and Dodge are halved, rounding up.
 - **Shock** (B419): −1 per HP of injury, or per full HP/10 for models with 20+ HP, at most −4.

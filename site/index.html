@@ -890,7 +890,9 @@ const SIM = (() => {
         w.reach = String(line.reach ?? "1");
         w.reachMax = Math.max(1, ...(w.reach.match(/\d+/g) || ["1"]).map(Number));
         w.oneHanded = oneHand(line.strength);
-        w.fencing = /^(Rapier|Saber|Smallsword|Main-Gauche)/.test(line.skill || "");   // B208: +3 retreating parry, -2 per extra parry
+        w.fencing = /^(Rapier|Saber|Smallsword|Main-Gauche)/.test(line.skill || "");
+        // weight for parrying (B376): the item's, or ST/10 lb for a limb, claw or fist
+        w.weight = sel.trait ? st.st / 10 : parseFloat(src.weight) || 0;   // B208: +3 retreating parry, -2 per extra parry
       } else {
         w.acc = accOf(line.accuracy); w.range = parseRange(line.range) || { half: 100, max: 300 };
         w.rof = parseRoF(line.rate_of_fire); w.rcl = Math.max(1, num(line.recoil, 1)); w.rclStar = /\*/.test(String(line.recoil ?? ""));
@@ -922,11 +924,17 @@ const SIM = (() => {
       const alt = h && h.e ? weaponLines(h.e).filter(l => l.melee && l.usage !== melee.usage && !/follow|force strike|thrown/i.test(l.usage || "") && norm(l.usage) === norm(melee.usage)) : [];
       melee.alt = alt.map(l => weaponMaster(mkWeapon({ item: spec.melee.item, mode: l.usage }, true))).filter(w => w && w.dmg && w.reachMax === melee.reachMax);
     }
+    // Tip Slash (MA113): a weapon that thrusts to impale can swing its tip across the target for cutting at its
+    // impaling damage -2, at the same reach
+    if (melee && melee.dmg) {
+      const imp = [melee, ...(melee.alt || [])].find(w => w.dmg && w.dmg.type === "imp");
+      if (imp) (melee.alt ||= []).push({ ...imp, id: ++WID, alt: undefined, usage: "Tip slash", text: imp.text + " (tip slash)", dmg: { ...imp.dmg, type: "cut", add: imp.dmg.add - 2, key: (imp.dmg.key || "") + "ts" } });
+    }
     if (!melee) {
       const lvl = skillLevel(st, "Brawling", ["Brawling", "DX", "Karate"]);
       const hasB = (st.skills || []).some(s => s.name === "Brawling" || s.name === "Karate");
       const pd = parseDamage("thr" + (hasB ? "" : "-1") + " cr", dmgST.thr, dmgST.sw);
-      melee = { id: ++WID, name: "Punch", usage: "Punch", text: "thr cr", dmg: pd, follow: null, level: lvl, parry: 0, unbalanced: false, reach: "C", reachMax: 1, malf: 0 };
+      melee = { id: ++WID, name: "Punch", usage: "Punch", text: "thr cr", dmg: pd, follow: null, level: lvl, parry: 0, unbalanced: false, reach: "C", reachMax: 1, malf: 0, weight: st.st / 10 };
     }
     const ranged = mkWeapon(spec.ranged, false);
     // thrown grenades (B410): Throwing skill, range from ST and weight (B355), one per Ready + Attack
@@ -1166,7 +1174,9 @@ const SIM = (() => {
     const distance = Math.max(2, Math.round(opt.distance ?? 100)), maxTurns = opt.maxTurns ?? 1200, morale = opt.morale !== false;
     const frac = opt.health === "fractional", boxes = opt.boxes || 5;
     const SIGHTED = !!opt.sightedShots;
-    const TDODGE = !!opt.tacticalDodge;   // Tactical Shooting option (p. 17): Dodge firearms only from the one gunman you watch   // Tactical Shooting option: an aimed shot is All-Out Attack (Determined)
+    const TDODGE = !!opt.tacticalDodge;
+    const LIMDODGE = !!opt.limitedDodges;   // Martial Arts option (MA122): -1 per dodge after the first each turn
+    const CINEMATIC = !!opt.cinematicEffort;   // Martial Arts option (MA131-132): Heroic Charge and other extra effort   // Tactical Shooting option (p. 17): Dodge firearms only from the one gunman you watch   // Tactical Shooting option: an aimed shot is All-Out Attack (Determined)
     // hit locations: "elite" (default: elites aim, everyone else hits random locations), "aimed" (everyone, RAW), "random"
     const locMode = opt.locations || "elite";
     const aimsShots = m => locMode === "aimed" || (locMode === "elite" && m.u.elite);
@@ -1396,8 +1406,10 @@ const SIM = (() => {
     const shadowed = m => !!m.h && psyker(m.u) && models.some(x => x.state === "ok" && x.h && x.u.side !== m.u.side && x.u.flags.shadow && hexDist(x.h, m.h) <= x.u.flags.shadow);
     const wl = (m, w) => w.level - (w.usage === "power" && w.fp && shadowed(m) ? 3 : 0);
     // Fright Check (B360): Will plus Fearlessness, never better than 13
-    const frightLevel = (u, mod = 0) => Math.min(13, u.will + (u.flags.fearless || 0) + (u.flags.cr ? 2 : 0) + 5 + mod);
-    const fright = (u, mod = 0) => check(frightLevel(u, mod));
+    // capped at 13 (B360) for morale and the warp; the Fright Checks under fire aren't capped (user direction:
+    // superhuman nerve should tell), so only a 17 or 18 breaks a Marine there
+    const frightLevel = (u, mod = 0, cap = 13) => Math.min(cap, u.will + (u.flags.fearless || 0) + (u.flags.cr ? 2 : 0) + 5 + mod);
+    const fright = (u, mod = 0, cap = 13) => check(frightLevel(u, mod, cap));
     // a failed Fright Check rolls 3d + the margin of failure on the Fright Check Table (B360-361)
     // what happened to a model since its last turn, for keeping its head down and Fright Checks under fire (TS p. 21, 34)
     const ev = m => m.ev || (m.ev = {});
@@ -1436,7 +1448,7 @@ const SIM = (() => {
       const covered = e.shotAt && e.shotAt.h && m.h && inCover(m, e.shotAt.h);
       if (e.supp || e.near || e.blast || e.wounded || e.allyDown) {
         const why = e.blast ? "a blast" : e.allyDown ? "a comrade falls" : e.wounded ? "wounded" : e.supp ? "suppression fire" : "a near miss";
-        const r = fright(m.u, e.vol && !covered ? -rapidBonus(e.vol) : 0);
+        const r = fright(m.u, e.vol && !covered ? -rapidBonus(e.vol) : 0, Infinity);
         if (!r.ok) { frightTable(m, -r.margin, why); if (m.stunned || m.state !== "ok" || m.u.routed) return true; }
       }
       if (covered && !m.u.flags.cr && !check(m.u.will - 2).ok) m.headsDown = true;
@@ -1666,8 +1678,13 @@ const SIM = (() => {
       if (dmg.type === "tox" && poison === "resist") inj = Math.floor(inj / 2);
       const red = flags.dmgRed > 1 ? flags.dmgRed : 1;
       if (red > 1 && inj > 0) inj = Math.max(1, Math.floor(inj / red));
-      const cap = frac ? Infinity : loc === "arm" || loc === "leg" ? Math.floor(t.u.HP / 2) + 1 : loc === "hand" || loc === "foot" ? Math.floor(t.u.HP / 3) + 1 : Infinity;
+      // a limb or extremity takes no more injury than it needs to be crippled, over all the hits it takes (B420);
+      // left or right is a coin toss
+      const lim0 = loc === "arm" || loc === "leg" ? Math.floor(t.u.HP / 2) + 1 : loc === "hand" || loc === "foot" ? Math.floor(t.u.HP / 3) + 1 : Infinity;
+      const side = lim0 === Infinity || frac ? null : loc + (R() < 0.5 ? "L" : "R"), took = side ? ((t.limbInj ||= {})[side] || 0) : 0;
+      const cap = frac ? Infinity : Math.max(0, lim0 - took);
       inj = Math.min(inj, cap);
+      if (side) { t.limbInj[side] = took + inj; if (t.limbInj[loc + "L"] >= lim0 && t.limbInj[loc + "R"] >= lim0) (t.limbFull ||= {})[loc] = true; }
       let finj = 0;
       if (w.follow && fraw > 0) {
         const ft = w.follow.type;
@@ -1679,6 +1696,7 @@ const SIM = (() => {
           finj = Math.max(0, Math.min(finj, cap - inj));
         }
       }
+      if (side && finj) t.limbInj[side] += finj;
       L(`  ${raw} dmg to ${loc} (DR ${armDR + natDR}${div !== 1 ? "/" + (div === Infinity ? "∞" : div) : ""}): ${inj} injury${finj ? ` + ${finj} ${w.follow.ex ? "from the internal explosion" : "follow-up"}` : ""}${frac ? "" : `; ${t.id} at ${t.hp - inj - finj}/${t.u.HP} HP`}`);
       if (t.h) FX(["h", t.ix, inj + finj, loc, t.h.q, t.h.r]);
       injure(att, t, inj + finj, loc, dmg.type);
@@ -1808,11 +1826,12 @@ const SIM = (() => {
       for (const loc of locs) {
         const pen = loc === "random" ? 0 : loc.endsWith("#c") ? Math.min(AIM[loc.slice(0, -2)], CHINK(loc.slice(0, -2))) : loc === "eye" && drAt(t.u.arm.dr, "eye") > 0 ? -10 : AIM[loc];   // an eye behind a helmet lens or visor is -10 (B399-400)
         if (loc === "eye" && !(/^pi/.test(w.dmg.type) || w.dmg.type === "imp" || (w.dmg.type === "burn" && !w.dmg.ex && !w.cone))) continue;
+        if (t.limbFull && t.limbFull[loc.replace("#c", "")]) continue;   // both already crippled: nothing more to take there
         const e = loc === "random" ? expInjRandom(w, t.u, dmgOverride) : expInj(w, t.u, loc, dmgOverride);
         if (e <= 0) continue;
         // Deceptive Shot (house rule): a shooter may trade 2 skill for each -1 to the target's Dodge, as Deceptive
         // Attack (B369) does in melee; not for area attacks or Malediction
-        const maxDa = melee || !(w.malediction || w.cone || w.dmg.ex || w.blast) ? 6 : 0;
+        const maxDa = fo.noDa ? 0 : melee || !(w.malediction || w.cone || w.dmg.ex || w.blast) ? 6 : 0;
         for (let da = 0; da <= maxDa; da++) {
           const eff = lvl + pen - 2 * da;
           if (eff < 3 || (da > 0 && eff < 10)) break;
@@ -1826,6 +1845,13 @@ const SIM = (() => {
             score *= (1 - soak) + soak * 0.25;
           }
           if (score > best.score) best = { loc, da, score, lvl: eff };
+        }
+        // Telegraphic Attack (MA113): +4 to hit, +2 to the foe's defences; not with Deceptive Attack
+        if (melee && !fo.noTele && lvl + pen + 4 >= 3) {
+          const eff = lvl + pen + 4, pDef = def0 == null ? 0 : P3[cl(def0 + 2)];
+          let score = (1 - pDef) * e * P3[Math.min(18, eff)];
+          if (shUp) { const dm = dmgOverride || w.dmg, raw = Math.max(1, (dm.n * 3.5 + dm.add) * (dm.mult || 1)); const soak = Math.min(1, t.sp / raw); score *= (1 - soak) + soak * 0.25; }
+          if (score > best.score) best = { loc, da: 0, score, lvl: eff, tele: true };
         }
       }
       return best;
@@ -1844,6 +1870,7 @@ const SIM = (() => {
         const dd = hexDist(h, att.h);
         if (dd >= d0 && dd > bd) { bd = dd; best = h; }
       }
+      if (best) best.side = bd === d0;   // a step to the side is a Sideslip: the retreat bonus -1 (MA124)
       return best;
     }
     // retreat (B377): melee only, once per turn, not while held, stunned, kneeling or after a Move and Attack; the bonus
@@ -1852,7 +1879,7 @@ const SIM = (() => {
     // shields cover the front and the shield (left) side (B287)
     const shieldCovers = (t, att) => { const a = arcTo(t, att); return a === "front" || (a === "side" && sideOf(t.h, t.facing, att.h) === "L"); };
     const shieldDB = t => t.u.cs && t.shState === "ok" && !t.blockLost ? t.u.cs.db : 0;
-    const canParry = t => t.u.parry != null && bladeReady(t) && !(t.u.melee.unbalanced && t.attacked) && t.armsLost < 2 && !t.mna;
+    const canParry = t => t.u.parry != null && bladeReady(t) && !(t.u.melee.unbalanced && t.attacked && !t.defAtk) && t.armsLost < 2 && !t.mna;
     // the defences open to t against att: kind is melee, ranged, pb (a gun fired at point-blank) or thrown.
     // With Damage to Shields in play (B484) a shield's DB counts against every attack from its arcs (B287)
     function defOpts(t, att, kind, aw) {
@@ -1863,13 +1890,21 @@ const SIM = (() => {
       const mod = (arc === "side" ? -2 : 0) - (t.stunned || t.stunRecovering ? 4 : 0) - (t.prone ? 3 : 0) - (t.kneel && !t.prone ? 2 : 0) - (t.offBalance ? 2 : 0) + db;
       const aod = how => t.aod && t.aodDef === how ? 2 : 0;
       const rt = kind === "melee" && canRetreat(t, att);
+      const slip = rt && t.retreatFrom !== att && (retreatHex(t, att) || {}).side ? 1 : 0;
+      // Committed Attack (MA99): -2 to every defence, no retreat, no parry with the weapon that struck; Defensive
+      // Attack (MA100): +1 to a parry or block; Beats (MA100) lower one defence against everyone
+      const beat = t.beat && t.beat.until >= turn ? t.beat : null;
+      const ca = t.committed ? 2 : 0, dA = t.defAtk ? 1 : 0;
+      // Limiting Multiple Dodges (MA122, an option): -1 per dodge after the first this turn, not for masters
+      const dLim = LIMDODGE && !t.u.flags.master ? t.dodges || 0 : 0;
       // Tactical Dodging (TS p. 17, an option): a model can dodge gunfire only from the one shooter it chose to watch
       if (TDODGE && kind === "ranged" && t.evading && t.evading !== att) return null;
-      const opts = TDODGE && kind === "pb" && t.evading && t.evading !== att ? [] : [{ how: "dodge", v: dodgeOf(t) + (rt ? 3 : 0) + aod("dodge"), retreat: rt }];
-      if ((kind === "melee" || kind === "pb") && canParry(t)) {
+      const opts = TDODGE && kind === "pb" && t.evading && t.evading !== att ? [] : [{ how: "dodge", v: dodgeOf(t) + (rt ? 3 - slip : 0) + aod("dodge") - ca - dLim, retreat: rt && !ca }];
+      if ((kind === "melee" || kind === "pb") && canParry(t) && !t.committed) {
         const w = t.u.melee, bare = w.name === "Punch", master = !!t.u.flags.master;
         const step = w.fencing && master ? 1 : w.fencing || master ? 2 : 4;   // B376
-        let v = t.u.parry + (rt ? (w.fencing || (bare && t.u.judo) ? 3 : 1) : 0) - step * t.parries - (t.grips.length ? 4 : 0) + aod("parry");
+        // held: the reach penalty of close combat lowers the parry too (half, as Parry is half skill, MA117)
+        let v = t.u.parry + (rt ? (w.fencing || (bare && t.u.judo) ? 3 : 1) - slip : 0) - step * t.parries - Math.ceil(closePen(t, w) / 2) + aod("parry") + dA - (beat && beat.how === "parry" ? beat.n : 0);
         // bare hands against a weapon: -3 unless it's a thrust or the defender knows Judo or Karate (B377)
         if (bare && aw && !aw.natural && aw.name !== "Punch" && !/^imp|^pi/.test((aw.dmg || {}).type || "") && !t.u.judo) v -= 3;
         // a gun held close in (TS p. 25): -2 to parry a handgun, -1 a long arm
@@ -1878,7 +1913,7 @@ const SIM = (() => {
         if (!(aw && aw.weight && aw.weight > t.u.bl * (w.oneHanded === false ? 2 : 1))) opts.push({ how: "parry", v, retreat: rt });
       }
       // no blocking bullets or beams (B375); thrown weapons and melee blows can be blocked
-      if ((kind === "melee" || kind === "thrown") && db && !t.blocked) opts.push({ how: "block", v: t.u.block + (rt ? 1 : 0) + aod("block"), retreat: rt });
+      if ((kind === "melee" || kind === "thrown") && db && !t.blocked) opts.push({ how: "block", v: t.u.block + (rt ? 1 - slip : 0) + aod("block") - ca + dA - (beat && beat.how === "block" ? beat.n : 0), retreat: rt && !ca });
       return { arc, mod, db, opts };
     }
     function bestDefence(t, att, melee, aw) {
@@ -1905,13 +1940,17 @@ const SIM = (() => {
       const kind = melee === true ? "melee" : melee || "ranged";
       const D = defOpts(t, att, kind, aw);
       if (!D) return null;
-      const mod = D.mod - da - (feint || 0);
+      // an Evaluate bonus against this attacker cancels its feint and Deceptive Attack penalties (MA100), never below 0
+      const evC = t.evaluate && t.evaluate.t === att && feint > 0 ? Math.min(t.evaluate.n, Math.max(0, da) + Math.max(0, feint)) : 0;
+      const mod = D.mod - da - (feint || 0) + evC;
       const aod = how => t.aod && t.aodDef === how ? 2 : 0;
       if (kind === "ranged") {
         let d = dodgeOf(t) + mod + aod("dodge") + feverish(t, att, false, dodgeOf(t) + mod);
         // Dodge and Drop (B377): a shooter not in melee drops prone for +3
         let drop = false;
         if (!t.prone && t.u.stance === "shoot" && (t.u.ranged || t.u.powers.some(p => !p.melee)) && !engaged(t)) { d += 3; drop = true; }
+        if (LIMDODGE && !t.u.flags.master) d -= t.dodges || 0;
+        t.dodges = (t.dodges || 0) + 1;
         const r = check(d);
         if (drop || r.fumble) t.prone = true;
         if (r.ok && r.margin < D.db) t.shieldStruck = true;
@@ -1922,12 +1961,20 @@ const SIM = (() => {
       if (!opts.length) return null;
       const o = opts.reduce((a, b) => b.v > a.v ? b : a);
       if (o.how === "parry") t.parries++;
+      if (o.how === "dodge") t.dodges = (t.dodges || 0) + 1;
+      // Riposte (MA124): a strong parrier facing one foe trades part of its Parry for a lower defence on its next blow
+      let rip = 0;
+      if (o.how === "parry" && kind === "melee" && trained(t, t.u.melee)) {
+        const v = o.v + mod, alone = models.filter(x => x.state === "ok" && x.h && x.u.side === att.u.side && hexDist(x.h, t.h) <= x.u.melee.reachMax).length <= 1;
+        if (alone && v >= 14) { rip = Math.min(4, v - 12, Math.max(0, t.u.parry - 8)); o.v -= rip; }
+      }
       if (o.how === "block") t.blocked = true;
       // retreating is a real step back or aside, once per turn (B377)
       if (o.retreat && t.retreatFrom !== att) { t.retreated = true; t.retreatFrom = att; const h = retreatHex(t, att); if (h) place(t, h); }
       const r = check(o.v + mod + feverish(t, att, true, o.v + mod));
       if (r.ok && r.margin < D.db) t.shieldStruck = true;
       t.defDB = D.db;
+      if (rip && r.ok) { t.riposte = { t: att, n: rip }; L(`  ${t.id} parries into a riposte (-${rip})`); }
       if (r.ok && t.h) FX(["v", t.ix, o.how, t.h.q, t.h.r]);
       // criticals on defence (B381-382): a critical success sends the attacker to the Critical Miss Table;
       // a botched Dodge falls down, a botched Block loses the shield until a Ready, a botched parry rolls the table
@@ -2310,43 +2357,108 @@ const SIM = (() => {
     function strike(m, w, t, opts) {
       reveal(m);
       w = bestMode(m, w, t);
-      // attacks this turn: 1, +1 for Double or Rapid Strike, + Extra Attack; Rapid Strike's penalty falls on
-      // the two blows it makes (-6, or -3 for a Weapon Master or someone Trained by a Master)
-      const n = 1 + (opts.double || opts.rapid ? 1 : 0) + (m.u.flags.extraAttack || 0);
+      // attacks this turn: 1, +1 for All-Out Attack (Double), +1 for Rapid Strike (both together make three, MA97),
+      // + Extra Attack; Rapid Strike's penalty falls on the two blows it makes (-6, or -3 for a master)
+      const n = 1 + (opts.double ? 1 : 0) + (opts.rapid ? 1 : 0) + (m.u.flags.extraAttack || 0);
       if (opts.charge) m.mna = true;   // Move and Attack: no retreat until its next turn (B365)
+      if (opts.committed) m.committed = true;   // Committed Attack (MA99): defences -2, no retreat, no parry with this weapon
+      if (opts.defensive) m.defAtk = true;      // Defensive Attack (MA100): +1 to a parry or block, even after an unbalanced swing
       const rp = m.u.flags.master ? 3 : 6;
-      for (let i = 0; i < n && t.state === "ok" && t.h && m.state === "ok" && m.h; i++) {
-        let lvl = wl(m, w) - skillPen(m) - (opts.charge ? 4 : 0) + (opts.determined ? 4 : 0) - (opts.rapid && i < 2 ? rp : 0) + (m.evaluate && m.evaluate.t === t ? m.evaluate.n : 0)
-          - (m.prone ? 4 : 0) - (m.kneel && !m.prone ? 2 : 0) - (m.grips.length ? 4 : 0) - (opts.pen || 0);
-        if (opts.charge) lvl = Math.min(lvl, 9);
-        const plan = planAttack(m, w, t, lvl, true);
+      const ev = m.evaluate && m.evaluate.t === t && m.evaluate.turn === turn - 1 ? m.evaluate.n : 0;
+      let feintNow = m.feint && m.feint.t === t ? m.feint.n : 0;
+      for (let i = 0; i < n && m.state === "ok" && m.h; i++) {
+        // a foe that falls leaves the rest of the blows for another in reach (MA127, B370): each hex skipped round the
+        // attacker between the two costs a blow
+        if (t.state !== "ok" || !t.h) {
+          const last = t.h || t.prevH;
+          const next = models.filter(x => x.state === "ok" && x.h && x.u.side !== m.u.side && hexDist(x.h, m.h) <= w.reachMax && los(m.h, x.h))
+            .sort((a, b) => (last ? hexDist(a.h, last) - hexDist(b.h, last) : 0))[0];
+          if (!next) break;
+          const skip = last ? Math.max(0, hexDist(next.h, last) - 1) : 0;
+          i += skip; if (i >= n) break;
+          L(`${m.id} turns on ${next.id}${skip ? ` (${skip} blow${skip > 1 ? "s" : ""} lost turning)` : ""}`);
+          t = next; m.facing = faceToward(m.h, t.h); feintNow = 0;
+        }
+        const rapidPen = opts.rapid && i < 2 ? rp : 0;
+        // a feint in place of the first attack (All-Out Attack (Feint) or a Rapid Strike opening with one, MA97, MA127)
+        if (i === 0 && opts.feintFirst) {
+          const r0 = feintRoll(m, w, t, wl(m, w) - skillPen(m) - rapidPen + (opts.determined ? 4 : 0));
+          feintNow = r0; continue;
+        }
+        const dfe = t.feintDef && t.feintDef.t === m && turn - t.feintDef.turn <= 1 ? t.feintDef.n : 0;
+        if (dfe) t.feintDef = null;
+        let lvl = -dfe + wl(m, w) - skillPen(m) - (opts.charge && !opts.heroic ? 4 : 0) + (opts.determined ? 4 : 0) + (opts.committed === "det" ? 2 : 0) - rapidPen + ev
+          - (m.prone ? 4 : 0) - (m.kneel && !m.prone ? 2 : 0) - closePen(m, w) - (opts.pen || 0);
+        if (opts.charge && !opts.heroic) lvl = Math.min(lvl, 9);
+        const plan = planAttack(m, w, t, lvl, true, null, { noDa: !trained(m, w) });
         const loc = plan.loc === "random" ? hitLocation() : plan.loc;
-        const feint = m.feint && m.feint.t === t ? m.feint.n : 0;
         if (plan.lvl < 3) { m.attacked = true; L(`${m.id} can't hope to hit ${t.id} (skill ${plan.lvl})`); continue; }   // B344
-        const r = check(plan.lvl);
+        // Telegraphic Attack (MA113): +4 to hit but +2 to every defence, and the crit range of the unmodified skill
+        const tele = !!plan.tele, r = check(plan.lvl);
+        if (tele && r.crit && r.roll > (plan.lvl - 4 >= 16 ? 6 : plan.lvl - 4 >= 15 ? 5 : 4)) r.crit = false;
         m.attacked = true;
         if (w.fp) m.fp -= w.fp;
         if (w.perils && perils(m, w)) continue;
         if (m.h && t.h) FX(["m", m.h.q, m.h.r, t.h.q, t.h.r, m.u.side, r.ok ? 1 : 0, m.ix, t.ix, plan.lvl, r.roll]);
-        if (!r.ok) { L(`${m.id} strikes at ${t.id} (${loc !== "torso" ? locName(loc) + ", " : ""}skill ${plan.lvl}): misses`); if (r.fumble) critMiss(m, w); continue; }
+        if (!r.ok) { L(`${m.id} strikes at ${t.id} (${loc !== "torso" ? locName(loc) + ", " : ""}skill ${plan.lvl}${tele ? ", telegraphic" : ""}): misses`); if (r.fumble) critMiss(m, w); continue; }
         if (!r.crit) {
-          const def = defend(t, m, true, plan.da, feint, w);
+          // two weapons at one foe: it defends at -1 against both (B417)
+          const def = defend(t, m, true, plan.da, feintNow + (opts.dual ? 1 : 0) - (tele ? 2 : 0) + (m.riposte && m.riposte.t === t ? m.riposte.n : 0), w);
           if (def) {
-            L(`${m.id} strikes at ${t.id}: ${def.how === "parry" ? "parried" : def.how === "block" ? "blocked" : "dodged"}`);
+            L(`${m.id} strikes at ${t.id}${tele ? " (telegraphic)" : ""}: ${def.how === "parry" ? "parried" : def.how === "block" ? "blocked" : "dodged"}`);
+            if (def.how === "parry" || def.how === "block") m.parriedBy = { t, how: def.how, turn };
             if (def.how === "parry" && (w.name === "Punch" || w.natural)) cutsArm(t, m);
             else if (t.shieldStruck) shieldHit(m, w, t, loc, false);
+            if (def.how === "parry") parryBreak(t, w);
             continue;
           }
         }
         const rending = w.rend && (r.crit || r.margin >= w.rendBy);
-        L(`${m.id} strikes ${t.id}${loc !== "torso" ? " in the " + locName(loc) : ""} with ${w.name}${w.alt || /^thrust/i.test(w.usage || "") ? (/thrust/i.test(w.usage || "") ? " (thrust)" : " (swing)") : ""}${rending ? " (rending hit)" : ""}`);
+        L(`${m.id} strikes ${t.id}${loc !== "torso" ? " in the " + locName(loc) : ""} with ${w.name}${w.alt || /^thrust/i.test(w.usage || "") ? (/thrust/i.test(w.usage || "") ? " (thrust)" : /tip slash/i.test(w.usage || "") ? " (tip slash)" : " (swing)") : ""}${rending ? " (rending hit)" : ""}`);
         let raw = rollDamage(rending ? w.rend : w.dmg);
-        // All-Out Attack (Strong, B365) and Mighty Blows (extra effort, 1 FP, B357): each +2 or +1/die, whichever is more
+        // All-Out Attack (Strong, B365) and Mighty Blows (extra effort, 1 FP, B357; with Attack only, MA131): each +2 or +1/die
         if (opts.strong) raw += Math.max(2, w.dmg.n);
+        if (opts.committed === "str") raw += Math.max(1, Math.floor(w.dmg.n / 2));   // Committed Attack (Strong), MA99
+        if (opts.defensive) raw -= Math.max(2, w.dmg.n);                              // Defensive Attack: -2 or -1/die, MA100
         if (opts.mighty && m.fp > 1) { m.fp -= 1; raw += Math.max(2, w.dmg.n); L(`  ${m.id} puts everything into it (Mighty Blows, 1 FP)`); }
-        applyHit(m, w, t, loc, false, false, rending ? w.rend : null, raw, r.crit ? roll3() : 0);
+        // a stop thrust on a Wait (B366): +1 damage per two full yards the charger ran onto it
+        if (opts.stopYd && (w.dmg.type === "imp" || /thrust/i.test(w.usage || ""))) raw += Math.floor(opts.stopYd / 2);
+        applyHit(m, w, t, loc, false, false, rending ? w.rend : null, Math.max(0, raw), r.crit ? roll3() : 0);
       }
-      m.feint = null; m.evaluate = null;
+      m.feint = null; m.evaluate = null; m.riposte = null;
+      // attack and fly out (MA99): a long weapon's Committed Attack may step back out of a shorter foe's reach
+      if (opts.flyOut && m.state === "ok" && m.h && t.h && t.state === "ok" && !m.grips.length) {
+        const h = retreatHex(m, t);
+        if (h && hexDist(h, t.h) <= w.reachMax) { place(m, h); m.facing = faceToward(m.h, t.h); L(`${m.id} steps back out of ${t.id}'s reach`); }
+      }
+    }
+    // a feint roll (B365, MA101): Quick Contest of skill against the foe's best of weapon skill and DX; the margin comes
+    // off its next defence against this attacker. A Beat (MA100) uses ST-based skill against the Parry or Block and
+    // helps every attacker; a Ruse is IQ-based; a Defensive Feint takes the margin off the foe's next attack instead.
+    function feintRoll(m, w, t, lvl, kind = "feint") {
+      const u = m.u, T = t.u;
+      const skillT = Math.max(T.melee.level, T.dx);
+      const mine = check(kind === "beat" ? lvl + u.st - u.dx : kind === "ruse" ? lvl + (u.stats.iq || 10) - u.dx : lvl);
+      const res = kind === "beat" ? Math.max(skillT, skillT + T.st - T.dx) : kind === "ruse" ? Math.max(skillT, skillT + (T.stats.per || T.stats.iq || 10) - T.dx) : skillT;
+      const theirs = check(res);
+      const n = mine.ok ? Math.max(0, mine.margin - (theirs.ok ? Math.max(0, theirs.margin) : 0)) : 0;
+      const what = { feint: "feints at", beat: "beats at the guard of", ruse: "tricks", dfeint: "feints to throw off" }[kind];
+      L(`${m.id} ${what} ${t.id}${n ? ` (-${n})` : " but it isn't fooled"}`);
+      return n;
+    }
+    // trained fighters only (MA113): Committed and Defensive Attack, feints, Deceptive Attack and Rapid Strike need at
+    // least DX level in the weapon's skill; anyone may make a Telegraphic Attack
+    const trained = (m, w) => !w || w.natural || w.name === "Punch" ? m.u.grapple >= m.u.dx || (m.u.melee && m.u.melee.level >= m.u.dx) : w.level >= m.u.dx;
+    // close combat while held (B391, MA117): -4 for being grappled, and -4 more per yard of the weapon's reach
+    const closePen = (m, w) => !m.grips.length ? 0 : 4 + (w && !/C/.test(w.reach || "") && w.reachMax >= 1 ? 4 * w.reachMax : 0);
+    // a parried weapon three or more times the parrying weapon's weight may break it (B376): 2 in 6, +1 per multiple past 3
+    function parryBreak(t, aw) {
+      const pw = t.u.melee;
+      if (!pw || pw.natural || pw.name === "Punch" || !aw || !aw.weight || !pw.weight) return;
+      const ratio = aw.weight / pw.weight;
+      if (ratio < 3) return;
+      const odds = 2 + Math.floor(ratio - 3) - (FINE.test(pw.name) ? 1 : 0);
+      if (d6() <= odds) { t.meleeBroken = true; t.inHand = t.inHand === "both" ? (t.u.ranged ? "gun" : "none") : "none"; L(`  ${t.id}'s ${pw.name} breaks under the blow`); }
     }
 
     // ---- choose and carry out a maneuver
@@ -2415,7 +2527,7 @@ const SIM = (() => {
     function pinOf(f) {
       if (f.u.flags.unfazeable || f.u.flags.noMorale) return 0;
       const down = f.u.flags.cr ? 0 : 1 - P3[cl(f.u.will - 2)];
-      const scare = 1 - P3[cl(frightLevel(f.u))];
+      const scare = 1 - P3[cl(frightLevel(f.u, 0, Infinity))];
       return Math.min(0.9, down * 0.7 + scare * 0.5);
     }
     // a foe a friend is covering (an overwatch shooter's target, or inside a friend's suppression zone) shoots back
@@ -2435,7 +2547,7 @@ const SIM = (() => {
         const mw = f.u.melee;
         if (mw && (terr ? walk(h, f.h) : d) - mw.reachMax <= moveOf(f)) {
           const lvl = mw.level - (d > mw.reachMax ? 4 : 0) - skillPen(f);
-          const def = mode === "aoa" ? null : Math.max(m.u.dodge + 3, m.u.parry != null && bladeReady(m) ? m.u.parry + 1 : 0) + (mode === "aod" ? 2 : 0) - (m.stunned ? 4 : 0) - (m.prone ? 3 : 0) + m.u.db;
+          const def = mode === "aoa" ? null : (mode === "ca" ? Math.max(m.u.dodge, m.u.db ? m.u.block : 0) - 2 : Math.max(m.u.dodge + 3, m.u.parry != null && bladeReady(m) ? m.u.parry + 1 : 0) + (mode === "da" ? 1 : 0)) + (mode === "aod" ? 2 : 0) - (m.stunned ? 4 : 0) - (m.prone ? 3 : 0) + m.u.db;
           best = expInjRandom(mw, m.u) * P3[cl(lvl)] * (1 - (def == null ? 0 : P3[cl(def)])) * (1 + (f.u.flags.extraAttack || 0));
         }
         const rw = f.u.ranged;
@@ -2518,7 +2630,7 @@ const SIM = (() => {
         // Acrobatics roll makes it one (B551)
         m.prone = false;
         const acro = (u.stats.skills || []).find(s => s.name === "Acrobatics" && s.level != null);
-        if (acro && check(acro.level - skillPen(m)).ok) { L(`${m.id} springs to its feet`); return; }
+        if (acro && check(acro.level - 6 - (u.stats.enc || 0) - skillPen(m)).ok) { L(`${m.id} springs to its feet (Acrobatics -6, MA98)`); return; }
         m.kneel = true; L(`${m.id} gets up to a kneel`); return;
       }
       // a model working a hold keeps at it: takedown, then pin; two pinners are enough, the rest go back to hacking
@@ -3008,6 +3120,14 @@ const SIM = (() => {
           const moved = go(mv); if (stopped() || !tgt.h) return; m.facing = faceToward(m.h, tgt.h);
           if (tgt.h && hexDist(m.h, tgt.h) <= reach) slamOK && slamV > kv(m, tgt, Ema) ? slam(m, tgt, Math.max(1, moved), false) : strike(m, w, tgt, { charge: true });
         });
+        // Heroic Charge (MA132, cinematic option): 1 FP to ignore the Move and Attack penalty and cap
+        if (CINEMATIC && !u.flags.machine && m.fp > Math.max(3, u.fp / 3)) {
+          const Eh = planAttack(m, w, tgt, w.level - skillPen(m), true).score;
+          add(Wm * kv(m, tgt, Eh) + GAMMA * Wm * worth - risk(m, arrive, "") - 0.02, `heroic-charge@${tgt.id}`, () => {
+            go(mv); if (stopped() || !tgt.h) return; m.facing = faceToward(m.h, tgt.h);
+            if (hexDist(m.h, tgt.h) <= reach) { m.fp -= 1; L(`${m.id} makes a heroic charge (1 FP)`); strike(m, w, tgt, { charge: true, heroic: true }); }
+          });
+        }
         // All-Out Attack after a half move (B365): +4 to hit, no defence until next turn
         if (len <= Math.floor(mv / 2)) {
           const Eaoa = planAttack(m, w, tgt, w.level - skillPen(m) + 4, true).score;
@@ -3061,43 +3181,75 @@ const SIM = (() => {
       for (const t of adj) {
         const face = () => { m.facing = faceToward(m.h, t.h); };
         for (const w of mw) {
-          const lvl = w.level - skillPen(m) - (m.prone ? 4 : 0) - (m.grips.length ? 4 : 0);
-          const n = 1 + (u.flags.extraAttack || 0);
-          const E = planAttack(m, w, t, lvl, true).score * n;
-          add(Wm * kv(m, t, E) - rNow, `strike ${w.name}@${t.id}`, () => { face(); strike(m, w, t, {}); });
-          // Rapid Strike (B370): two blows at -6
+          const lvl = w.level - skillPen(m) - (m.prone ? 4 : 0) - closePen(m, w);
+          const n = 1 + (u.flags.extraAttack || 0), tr = trained(m, w), P = (L2, d) => planAttack(m, w, t, L2, true, d, { noDa: !tr }).score;
+          const ev = m.evaluate && m.evaluate.t === t && m.evaluate.turn === turn - 1 ? m.evaluate.n : 0;
+          const base = P(lvl + ev);
+          add(Wm * kv(m, t, base * n) - rNow, `strike ${w.name}@${t.id}`, () => { face(); strike(m, w, t, {}); });
+          // Mighty Blows (extra effort, 1 FP, B357): with an Attack only (MA131)
+          if (m.fp > Math.max(4, m.u.fp / 3) && !u.flags.machine)
+            add(Wm * kv(m, t, P(lvl + ev, boosted(w, 1)) * n) - rNow - 0.02, `mighty@${t.id}`, () => { face(); strike(m, w, t, { mighty: true }); });
+          // Rapid Strike (B370): two blows at -6 (-3 for a master); trained fighters only (MA113)
           const rp = u.flags.master ? 3 : 6;
-          if (lvl - rp >= 10) {
-            const Er = 2 * planAttack(m, w, t, lvl - rp, true).score + (n - 1) * planAttack(m, w, t, lvl, true).score;
+          if (tr && lvl - rp >= 10) {
+            const Er = 2 * P(lvl - rp) + (n - 1) * P(lvl);
             add(Wm * kv(m, t, Er) - rNow, `rapid@${t.id}`, () => { face(); strike(m, w, t, { rapid: true }); });
           }
-          // All-Out Attack (B365): Determined +4, Double (two blows), Strong (+2 or +1/die), and Mighty Blows (1 FP)
+          // the foe's best defence now, and what a feint's margin is worth: the chance to win the contest times the
+          // margin (about 1.2 at equal skill, +0.7 a point of edge, MA101)
+          const def = bestDefence(t, m, true, w), skillT = Math.max(t.u.melee.level, t.u.dx);
+          const gainOf = L2 => Math.max(0, 1.2 + 0.7 * (L2 - skillT));
+          const Pfd = (L2, g) => { if (def == null) return P(L2); const a = P3[cl(def)], b = P3[cl(def - g)]; return a < 1 ? P(L2) * (1 - b) / Math.max(0.01, 1 - a) : P(L2); };
+          // All-Out Attack (B365): Determined +4, Double (two blows), Strong (+2 or +1/die), Feint (a feint, then a blow, MA97)
           const rA = risk(m, m.h, "aoa");
-          const Ed = planAttack(m, w, t, lvl + 4, true).score * n;
-          add(Wm * kv(m, t, Ed) - rA, `aoa-det@${t.id}`, () => { face(); m.aoa = true; strike(m, w, t, { determined: true }); });
-          const Edb = (n + 1) * planAttack(m, w, t, lvl, true).score;
-          add(Wm * kv(m, t, Edb) - rA, `aoa-double@${t.id}`, () => { face(); m.aoa = true; strike(m, w, t, { double: true }); });
-          const Es = planAttack(m, w, t, lvl, true, boosted(w, 1)).score * n;
-          add(Wm * kv(m, t, Es) - rA, `aoa-strong@${t.id}`, () => { face(); m.aoa = true; strike(m, w, t, { strong: true }); });
-          if (m.fp > Math.max(4, m.u.fp / 3) && !u.flags.machine) {
-            const Em = planAttack(m, w, t, lvl, true, boosted(w, 2)).score * n;
-            add(Wm * kv(m, t, Em) - rA - 0.02, `aoa-mighty@${t.id}`, () => { face(); m.aoa = true; strike(m, w, t, { strong: true, mighty: true }); });
+          add(Wm * kv(m, t, P(lvl + 4) * n) - rA, `aoa-det@${t.id}`, () => { face(); m.aoa = true; strike(m, w, t, { determined: true }); });
+          add(Wm * kv(m, t, (n + 1) * P(lvl)) - rA, `aoa-double@${t.id}`, () => { face(); m.aoa = true; strike(m, w, t, { double: true }); });
+          add(Wm * kv(m, t, P(lvl, boosted(w, 1)) * n) - rA, `aoa-strong@${t.id}`, () => { face(); m.aoa = true; strike(m, w, t, { strong: true }); });
+          if (tr) {
+            add(Wm * kv(m, t, Pfd(lvl, gainOf(lvl)) * n) - rA, `aoa-feint@${t.id}`, () => { face(); m.aoa = true; strike(m, w, t, { double: true, feintFirst: true }); });
+            // All-Out Attack (Double) with a Rapid Strike: three blows, two of them at -6 (MA97)
+            if (lvl - rp >= 10) add(Wm * kv(m, t, 2 * P(lvl - rp) + n * P(lvl)) - rA, `aoa-rapid@${t.id}`, () => { face(); m.aoa = true; strike(m, w, t, { double: true, rapid: true }); });
+            // a Rapid Strike that opens with a feint (MA127): feint and blow both at -6
+            if (lvl - rp >= 10) add(Wm * kv(m, t, Pfd(lvl - rp, gainOf(lvl - rp)) + (n - 1) * P(lvl)) - rNow, `rapid-feint@${t.id}`, () => { face(); strike(m, w, t, { rapid: true, feintFirst: true }); });
+            // Committed Attack (MA99): +2 to hit or +1 damage per two dice, defences at -2 with no retreat or parry
+            const rC = risk(m, m.h, "ca");
+            add(Wm * kv(m, t, P(lvl + 2) * n) - rC, `ca-det@${t.id}`, () => { face(); strike(m, w, t, { committed: "det" }); });
+            add(Wm * kv(m, t, P(lvl, boosted(w, 0.5)) * n) - rC, `ca-strong@${t.id}`, () => { face(); strike(m, w, t, { committed: "str" }); });
+            // attack and fly out: a long weapon strikes, then steps back out of a shorter foe's reach
+            if (w.reachMax >= 2 && t.u.melee.reachMax < w.reachMax && hexDist(m.h, t.h) < w.reachMax) {
+              const h = retreatHex(m, t);
+              if (h && hexDist(h, t.h) <= w.reachMax) add(Wm * kv(m, t, P(lvl) * n) - risk(m, h, "ca"), `ca-flyout@${t.id}`, () => { face(); strike(m, w, t, { committed: "fly", flyOut: true }); });
+            }
+            // Defensive Attack (MA100): -2 damage or -1/die, +1 to a parry or block
+            add(Wm * kv(m, t, P(lvl, boosted(w, -1)) * n) - risk(m, m.h, "da"), `da-strike@${t.id}`, () => { face(); strike(m, w, t, { defensive: true }); });
           }
-          // Feint (B365): spend this turn to take the foe's defence down next turn
-          const def = bestDefence(t, m, true);
-          if (def != null && !m.feint && P3[cl(def)] > 0.5) {
-            const skillT = Math.max(t.u.melee.level, t.u.dx);
-            const gain = Math.max(0, (lvl - skillT) / 2 + 1);
-            const Ef = planAttack(m, w, t, lvl + gain * 0, true).score * n;
-            const defP = P3[cl(def)], defP2 = P3[cl(def - gain)];
-            const Efeint = defP < 1 ? Ef * (1 - defP2) / Math.max(0.01, 1 - defP) : Ef;
-            add(GAMMA * Wm * kv(m, t, Efeint) - rNow, `feint@${t.id}`, () => {
-              face();
-              const mine = check(lvl), theirs = check(skillT);
-              const margin = (mine.ok ? mine.margin : -99) - (theirs.ok ? Math.max(0, theirs.margin) : 0);
-              m.feint = { t, n: mine.ok ? Math.max(0, margin) : 0 };
-              L(`${m.id} feints at ${t.id}${m.feint.n ? ` (-${m.feint.n} to its defence)` : " but it isn't fooled"}`);
-            });
+          // Feint, Beat, Ruse (B365, MA100-101): this turn, for the next; trained fighters only (MA113)
+          if (tr && def != null && !m.feint && P3[cl(def)] > 0.4) {
+            const g = gainOf(lvl);
+            add(GAMMA * Wm * kv(m, t, Pfd(lvl, g) * n) - rNow, `feint@${t.id}`, () => { face(); m.feint = { t, n: feintRoll(m, w, t, lvl) }; });
+            // a Ruse (IQ-based) when wits beat hands
+            const iqE = (u.stats.iq || 10) - u.dx, perE = (t.u.stats.per || t.u.stats.iq || 10) - t.u.dx;
+            if (iqE > 0 && iqE > perE) add(GAMMA * Wm * kv(m, t, Pfd(lvl, gainOf(lvl + iqE - Math.max(0, perE))) * n) - rNow, `ruse@${t.id}`, () => { face(); m.feint = { t, n: feintRoll(m, w, t, lvl, "ruse") }; });
+            // a Beat (ST-based) against the Parry or Block that turned our blow, or that we parried: it helps the whole squad
+            if (m.parriedBy && m.parriedBy.t === t && turn - m.parriedBy.turn <= 1) {
+              const stE = u.st - u.dx - Math.max(0, t.u.st - t.u.dx), pals = models.filter(x => x !== m && x.u.side === u.side && x.state === "ok" && x.h && hexDist(x.h, t.h) <= x.u.melee.reachMax).length;
+              const how = m.parriedBy.how;
+              add(GAMMA * Wm * kv(m, t, Pfd(lvl, gainOf(lvl + stE)) * n * (1 + 0.6 * pals)) - rNow, `beat@${t.id}`, () => {
+                face(); const b = feintRoll(m, w, t, lvl, "beat");
+                if (b) t.beat = { how, n: b, until: turn + 1 };
+              });
+            }
+          }
+          // Defensive Feint (MA101): throw off the foe's next blow when its weapon is the thing to fear
+          if (tr && lvl - skillT >= 4 && !m.feintDef && t.u.melee) {
+            const g = gainOf(lvl), fl = t.u.melee.level;
+            const cut = rNow * Math.max(0, 1 - P3[cl(fl - g)] / Math.max(0.01, P3[cl(fl)]));
+            add(cut * 0.8 - rNow * 0.2, `dfeint@${t.id}`, () => { face(); m.feintDef = { t, n: feintRoll(m, w, t, lvl, "dfeint"), turn }; });
+          }
+          // Evaluate (B364): +1 a turn (to +3) on the next blow at this foe, and it cancels its feints against us (MA100)
+          if (!m.grips.length) {
+            const e1 = Math.min(3, (m.evaluate && m.evaluate.t === t ? m.evaluate.n : 0) + 1);
+            add(GAMMA * Wm * kv(m, t, P(lvl + e1) * n) - rNow - 0.01, `evaluate@${t.id}`, () => { face(); m.evaluate = { t, n: e1, turn }; L(`${m.id} evaluates ${t.id} (+${e1})`); });
           }
         }
         // point-blank gun (Bulk penalty), averaged over its reloads
@@ -3253,7 +3405,7 @@ const SIM = (() => {
 
     // ---- Feverish Defense (extra effort, B357): 1 FP for +2 to an active defence against a blow worth fearing
     function feverish(t, att, melee, v) {
-      if (!att || t.u.flags.machine || v < 5 || v > 15 || t.fp <= Math.max(3, Math.floor(t.u.fp / 3))) return 0;
+      if (!att || t.u.flags.machine || t.committed || t.aoa || v < 5 || v > 15 || t.fp <= Math.max(3, Math.floor(t.u.fp / 3))) return 0;
       const aw = melee ? att.u.melee : att.u.ranged;
       if (!aw || expInjRandom(aw, t.u) < t.u.HP / 5) return 0;
       t.fp -= 1; L(`  ${t.id} defends feverishly (1 FP, +2)`);
@@ -3291,7 +3443,7 @@ const SIM = (() => {
         else if (hexDist(f.h, m.h) > (f.waiting === f.u.melee ? f.u.melee.reachMax : m.u.melee.reachMax + 1)) continue;
         const w = f.waiting; f.waiting = null; f.watch = false;
         L(`${f.id} was waiting for ${m.id} (Wait)`);
-        if (w === f.u.melee) { if (hexDist(f.h, m.h) <= w.reachMax) strike(f, w, m, {}); }
+        if (w === f.u.melee) { if (hexDist(f.h, m.h) <= w.reachMax) strike(f, w, m, { stopYd: m.steps || 0 }); }
         else fireAt(f, w, m, { pointBlank: hexDist(f.h, m.h) <= 1 });
         if (m.state !== "ok" || m.stunned || m.prone) return true;
       }
@@ -3423,12 +3575,13 @@ const SIM = (() => {
       if (!t.prone) {
         // Takedown: Quick Contest of the higher of ST, DX or grappling skill
         // the held model is at -4 DX (B370)
-        const a = Math.max(gripST(t), m.u.dx, m.u.grapple) - skillPen(m), d = Math.max(t.u.st, t.u.dx - 4, t.u.grapple - 4) - skillPen(t);
-        if (contest(a, d)) { t.prone = true; L(`${m.id}${t.grips.length > 1 ? ` and ${t.grips.length - 1} more` : ""} drag ${t.id} to the ground`); }
+        const a = Math.max(gripST(t), m.u.dx, m.u.grapple) - skillPen(m), d = Math.max(t.u.st, t.u.dx - 4, t.u.grapple - 4) - skillPen(t) - (t.committed ? 2 : 0);
+        // a foe on All-Out Attack is truly defenceless: it loses the contest outright (MA114)
+        if (t.aoa || contest(a, d)) { t.prone = true; L(`${m.id}${t.grips.length > 1 ? ` and ${t.grips.length - 1} more` : ""} drag ${t.id} to the ground`); }
         else L(`${m.id} tries to drag ${t.id} down (${Math.round(a)} vs ${d}): it keeps its feet`);
       } else if (!t.pinned) {
         // Pin: Quick Contest of ST against a foe on the ground
-        if (contest(gripST(t) - skillPen(m), t.u.st - skillPen(t))) { t.pinned = true; L(`${m.id} pins ${t.id} (${t.grips.length} holding it down)`); }
+        if (t.aoa || contest(gripST(t) - skillPen(m), t.u.st - skillPen(t) - (t.committed ? 2 : 0))) { t.pinned = true; L(`${m.id} pins ${t.id} (${t.grips.length} holding it down)`); }
         else L(`${m.id} tries to pin ${t.id}: it struggles free of the hold`);
       }
     }
@@ -3481,7 +3634,8 @@ const SIM = (() => {
         if (m.state !== "ok" || m.u.routed || !m.h) continue;
         if (!sideActive(0) || !sideActive(1)) break;
         // per-turn defence limits last from one of the model's turns to the next (B363, B375-377)
-        m.parries = 0; m.retreated = false; m.retreatFrom = null; m.blocked = false; m.attacked = false; m.stunRecovering = false;
+        m.parries = 0; m.dodges = 0; m.retreated = false; m.retreatFrom = null; m.blocked = false; m.attacked = false; m.stunRecovering = false;
+        m.committed = false; m.defAtk = false;
         if (!frac && m.hp <= 0) {
           const k = Math.floor(-m.hp / m.u.HP);
           if (!check(m.u.HT - k).ok) { FX(["d", m.h.q, m.h.r, m.u.side, 0]); m.state = "out"; place(m, null); L(`${m.id} collapses unconscious`); continue; }
@@ -3730,6 +3884,8 @@ if (typeof document !== "undefined") (() => {
           <label for="s-loc">Hit locations <select id="s-loc" data-o="locations"><option value="elite"${!S.locations || S.locations === "elite" ? " selected" : ""}>Elites aim</option><option value="aimed"${S.locations === "aimed" ? " selected" : ""}>Everyone aims (RAW)</option><option value="random"${S.locations === "random" ? " selected" : ""}>Random</option></select></label>
           <label for="s-hp">Wounds <select id="s-hp" data-h><option value="standard"${S.health !== "fractional" ? " selected" : ""}>Standard HP</option><option value="fractional"${S.health === "fractional" ? " selected" : ""}>Fractional Health</option></select></label>
           <label class="chk" for="s-sight"><input id="s-sight" type="checkbox" data-g="sightedShots"${S.sightedShots ? " checked" : ""}> Aimed shots are All-Out Attacks (Tactical Shooting)</label>
+          <label class="chk" for="s-ldodge"><input id="s-ldodge" type="checkbox" data-g="limitedDodges"${S.limitedDodges ? " checked" : ""}> -1 per extra dodge in a turn (Martial Arts)</label>
+          <label class="chk" for="s-cine"><input id="s-cine" type="checkbox" data-g="cinematicEffort"${S.cinematicEffort ? " checked" : ""}> Cinematic extra effort: Heroic Charge (Martial Arts)</label>
           <label class="chk" for="s-tdodge"><input id="s-tdodge" type="checkbox" data-g="tacticalDodge"${S.tacticalDodge ? " checked" : ""}> Dodge gunfire from one shooter only (Tactical Shooting)</label>
           ${S.health === "fractional" ? `<label for="s-box">Boxes per level <input id="s-box" type="number" min="1" max="9" value="${S.boxes || 5}" data-g="boxes"></label>` : ""}
         </fieldset>
@@ -4265,7 +4421,7 @@ if (typeof document !== "undefined") (() => {
       setTimeout(() => {
         try { last = SIM.monteCarlo(specs, { runs: S.runs, distance: S.distance, maxTurns: S.maxTurns, morale: S.morale, health: S.health, boxes: S.boxes || 5,
           locations: S.locations || "elite", cover: [S.coverA || "none", S.coverB || "none"], battlefield: S.battlefield || "open", mapSeed: S.mapSeed || 1,
-          awareness: S.battlefield === "facility" ? S.awareness || "limited" : undefined, sightedShots: !!S.sightedShots, tacticalDodge: !!S.tacticalDodge }); $("#simout").innerHTML = results(last); setupReplay(); }
+          awareness: S.battlefield === "facility" ? S.awareness || "limited" : undefined, sightedShots: !!S.sightedShots, tacticalDodge: !!S.tacticalDodge, limitedDodges: !!S.limitedDodges, cinematicEffort: !!S.cinematicEffort }); $("#simout").innerHTML = results(last); setupReplay(); }
         catch (e) { $("#simout").innerHTML = `<p class="empty">Could not run: ${esc(e.message)}</p>`; }
       }, 20);
     };

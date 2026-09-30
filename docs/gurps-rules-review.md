@@ -731,6 +731,7 @@ Totals: 94 findings, 4 big, 29 medium, 61 small.
 - #109 (Machines have no FP): done for Necrons; the Gun Drone's Machine Mind isn't flagged yet. #110: keep Regeneration (user).
 - #98-#101 (Progressive Recoil as written): done, with the user's "Rcl 1*" for weapons that stay progressive (Imperial las family). #102 (suppression) still open.
 - Tactical Shooting: #114-#126 done (#118 drilled factions chosen by me: Astartes, Custodes, Sororitas, Mechanicus, Guard, Aeldari, T'au, Necrons); #127 as an option, off; #130 done; #128, #129 done (awareness a setting, limited by default in facilities); #131 as an option, off; #122 slicing the pie done (user). Not done: #132 by design (conflicts with Progressive Recoil).
+- Martial Arts: #150-#161, #164, #167 (All-Out and Committed; not extra arms or Sprawl), #168, #169, #173, #175 done; #162 stop thrust only; #163 Riposte only; #165 limited dodges and #172 Heroic Charge as options, off; #166 already in; #170, #171, #174 not modelled; #176 through the new options. Also #3 (Mighty Blows with Attack only).
 
 ## Status of the earlier from-memory review
 
