@@ -2196,7 +2196,7 @@ const SIM = (() => {
         }
         // Wait (B366): hold fire for a charger heading for me; shoot it as it closes, maybe before it strikes
         if (isGun && !engaged(m)) {
-          const ch = pool.filter(f => f.u.melee && (f.u.stance === "charge" || !f.u.ranged) && !f.waiting).map(f => ({ f, d: hexDist(m.h, f.h) }))
+          const ch = pool.filter(f => f.u.melee && (f.u.stance === "charge" || !f.u.ranged) && !f.waiting && !f.aod).map(f => ({ f, d: hexDist(m.h, f.h) }))
             .filter(x => x.d >= 3 && x.d - x.f.u.melee.reachMax <= moveOf(x.f) && nearestFoe(x.f) === m).sort((a, b) => a.d - b.d)[0];
           if (ch) {
             const E = planAttack(m, w, ch.f, w.level - skillPen(m) + ch.f.u.sm, false).score;
@@ -2208,8 +2208,8 @@ const SIM = (() => {
       }
       // a melee Wait (B366) with a long weapon: strike a charger as it steps into reach, before its own blow
       if (u.melee.reachMax >= 2 && !engaged(m)) {
-        // only a foe that means to close: a charger or a pure melee model, and not one itself waiting (two Waits deadlock)
-        const ch = pool.filter(f => f.u.melee && f.u.melee.reachMax < u.melee.reachMax && (f.u.stance === "charge" || !f.u.ranged) && !f.waiting).map(f => ({ f, d: hexDist(m.h, f.h) }))
+        // only a foe that means to close: a charger or a pure melee model, not one itself waiting or dug in on All-Out Defense (either deadlocks)
+        const ch = pool.filter(f => f.u.melee && f.u.melee.reachMax < u.melee.reachMax && (f.u.stance === "charge" || !f.u.ranged) && !f.waiting && !f.aod).map(f => ({ f, d: hexDist(m.h, f.h) }))
           .filter(x => x.d > u.melee.reachMax && x.d - x.f.u.melee.reachMax <= moveOf(x.f) && nearestFoe(x.f) === m).sort((a, b) => a.d - b.d)[0];
         if (ch) {
           const E = planAttack(m, u.melee, ch.f, u.melee.level - skillPen(m), true).score * (1 + (u.flags.extraAttack || 0));
