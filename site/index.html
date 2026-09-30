@@ -859,11 +859,12 @@ const SIM = (() => {
     const baseStrike = st.st + ((st.bonus && st.bonus.striking_st) || 0);
     const dmgST = stDamage(baseStrike + arm.striking);
     const liftST = st.st + ((st.bonus && st.bonus.lifting_st) || 0) + arm.lifting;
-    // one hand? "†" needs two hands unless ST is 1.5x the listed ST, "‡" unless 3x (B270)
+    // one hand? "†" needs two hands unless ST is 2x the listed ST, "‡" unless 3x (B270). Between 1.5x and 2x a †
+    // weapon can be swung or fired one-handed but must be readied again after each use; the sim counts it as two-handed
     const oneHand = str => {
       const m = /^(\d+)\s*([†‡]*)/.exec(String(str ?? ""));
       if (!m || !m[2]) return true;
-      return liftST >= Number(m[1]) * (m[2].includes("‡") ? 3 : 1.5);
+      return liftST >= Number(m[1]) * (m[2].includes("‡") ? 3 : 2);
     };
     const mkWeapon = (sel, melee) => {
       if (!sel) return null;
@@ -874,21 +875,27 @@ const SIM = (() => {
       const lines = weaponLines(src);
       const line = chooseLine(lines, sel.mode, melee);
       if (!line) return null;
-      const dmg = parseDamage(line.damage, dmgST.thr, dmgST.sw);
+      // a melee weapon's minimum ST (B270): -1 to skill per point short, and damage from no more than 3x it
+      const mST = melee && !sel.trait ? Number((/^(\d+)/.exec(String(line.strength ?? "")) || [0, 0])[1]) : 0;
+      const dST = mST && baseStrike + arm.striking > 3 * mST ? stDamage(3 * mST) : dmgST;
+      const dmg = parseDamage(line.damage, dST.thr, dST.sw);
       if (!dmg) return null;
       const fl = followLine(lines, line);
       // "Rending hit (success by 5+ or critical)": same attack, better divisor on a good hit
       const rl = lines.find(x => x !== line && !!x.melee === melee && /success by (\d+)\+|rending hit/i.test(x.usage || ""));
-      const rend = rl ? parseDamage(rl.damage, dmgST.thr, dmgST.sw) : null;
+      const rend = rl ? parseDamage(rl.damage, dST.thr, dST.sw) : null;
       const rendBy = rl ? Number((/success by (\d+)\+/i.exec(rl.usage) || [0, 5])[1]) : 0;
-      const fdmg = fl ? parseDamage(fl.damage, dmgST.thr, dmgST.sw) : null;
-      const level = skillLevel(st, line.skill, [line.skill, ...(line.defaults || [])]);
+      const fdmg = fl ? parseDamage(fl.damage, dST.thr, dST.sw) : null;
+      const level = skillLevel(st, line.skill, [line.skill, ...(line.defaults || [])]) - (mST && liftST < mST ? mST - liftST : 0);
       const facts = (SIMW[label] || {})[line.usage] || {};
       const cone = facts.cone || Number((/cone[^0-9]*(\d+)\s*(?:yards|yd)/i.exec(line.usage || "") || [])[1] || 0);
       const w = { id: ++WID, name: label, usage: line.usage, text: line.damage, dmg, follow: fdmg, followText: fl ? fl.damage : "", level,
         rend, rendBy, rendText: rl ? rl.damage : "", malf: facts.malf || 0,
         overheat: facts.overheat ? parseDamage(/[a-z]\s*$/.test(facts.overheat) ? facts.overheat : facts.overheat + " burn") : null,
-        cone, blast: facts.blast || 0, natural: !!sel.trait };
+        cone, blast: facts.blast || 0, natural: !!sel.trait, dST };
+      // an Agoniser's agony follow-up (B428): HT-N or Severe Pain (-4, -2 with High Pain Threshold); a critical
+      // failure also stuns
+      if (fl && !fdmg && /agony/i.test(fl.usage || "")) w.agony = -Number((/HT-(\d+)/.exec(fl.notes || "") || [0, 3])[1]);
       // a "per turn while ablaze" line is the burning the flames leave on a target that catches fire (B434), not a
       // second hit
       if (fl && /ablaze|catches fire/i.test(fl.usage || "")) { w.ablaze = fdmg; w.follow = null; w.followText = ""; }
@@ -907,9 +914,14 @@ const SIM = (() => {
         w.acc = accOf(line.accuracy); w.range = parseRange(line.range) || { half: 100, max: 300 };
         w.rof = parseRoF(line.rate_of_fire); w.rcl = Math.max(1, num(line.recoil, 1)); w.rclFlat = /L/i.test(String(line.recoil ?? ""));
         w.shots = parseShots(line.shots); w.bulk = num(line.bulk, 0);
-        const sm = /^(\d+)([MB†]*)/.exec(String(line.strength ?? ""));
-        w.minST = sm && !/[MB]/.test(sm[2]) ? Number(sm[1]) : 0;
-        if (w.minST && liftST < w.minST) w.level -= w.minST - liftST;
+        // M: the ST and Bulk only matter off the mount (the sim always fires it mounted); B: the listed ST standing,
+        // 2/3 of it (round up) fired prone from the bipod, which is braced (B270)
+        const sm = /^(\d+)([MB†‡]*)/.exec(String(line.strength ?? ""));
+        w.minST = sm && !/M/.test(sm[2]) ? Number(sm[1]) : 0;
+        w.bipod = !!(sm && /B/.test(sm[2])); w.mounted = !!(sm && /M/.test(sm[2]));
+        w.stPen = w.minST && liftST < w.minST ? w.minST - liftST : 0;
+        w.stPenProne = w.bipod ? Math.max(0, Math.ceil(2 * w.minST / 3) - liftST) : w.stPen;
+        w.level -= w.stPenProne; w.stStand = w.stPen - w.stPenProne;   // the rest only when not fired prone
         w.oneHanded = w.bulk >= -2 && oneHand(line.strength);
         w.pistol = /Pistol/.test(line.skill || "");
       }
@@ -920,7 +932,7 @@ const SIM = (() => {
       // per die of the ST-based thrust or swing the weapon line starts from, not the weapon's own added dice
       const per = w.level >= st.dx + 2 ? 2 : 1;
       const base = /^\s*(thr|sw)/.exec(w.text || "");
-      const dice = base ? Number((/^(\d+)d/.exec(base[1] === "thr" ? dmgST.thr : dmgST.sw) || [0, 0])[1]) : 0;
+      const sd = w.dST || dmgST, dice = base ? Number((/^(\d+)d/.exec(base[1] === "thr" ? sd.thr : sd.sw) || [0, 0])[1]) : 0;
       w.dmg = { ...w.dmg, add: w.dmg.add + per * dice };
       w.text += ` (+${per}/die Weapon Master)`;
       return w;
@@ -952,11 +964,23 @@ const SIM = (() => {
     const grenades = (spec.grenades || []).map(g => {
       const w = mkWeapon({ item: g.item, mode: g.mode }, false);
       if (!w) return null;
-      const h = EQ.get(g.item), lb = parseFloat((h && h.e && h.e.weight) || 1) || 1, ratio = lb / (liftST * liftST / 5);
-      const dist = Math.max(2, Math.floor(liftST * ((THROW.find(([r]) => ratio <= r) || [0, 0.2])[1])));
-      Object.assign(w, { range: { half: dist, max: dist }, acc: 0, rof: 1, rcl: 1, bulk: 0, shots: { mag: Infinity, reload: 0 }, thrown: true, count: g.count || 1, oneHanded: true, minST: 0 });
+      const h = EQ.get(g.item), lb = parseFloat((h && h.e && h.e.weight) || 1) || 1;
+      // Throwing at DX+1 adds 1 to ST for distance, DX+2 or better 2 (B356)
+      const tST = liftST + (w.level >= st.dx + 2 ? 2 : w.level >= st.dx + 1 ? 1 : 0);
+      const dist = Math.max(2, Math.floor(tST * ((THROW.find(([r]) => r >= lb / (tST * tST / 5)) || [0, 0.2])[1])));
+      Object.assign(w, { range: { half: dist, max: dist }, acc: 0, rof: 1, rcl: 1, bulk: 0, shots: { mag: Infinity, reload: 0 }, thrown: true, count: g.count || 1, oneHanded: true, minST: 0, stStand: 0 });
       return w;
     }).filter(Boolean);
+    // Encumbrance (B17): the loadout's weight against Basic Lift (Lifting ST); powered armour and battlesuits carry
+    // themselves, and a mounted gun its mount. None, Light (x2 BL), Medium (x3), Heavy (x6), Extra-Heavy (x10)
+    const POWERED = /Power Armour|Battlesuit|Mega Armour|Auramite|Terminator|Gravis|Cataphractii/i;
+    const lbOf = n => { const h = n && EQ.get(n); return h ? parseFloat(h.e.weight) || 0 : 0; };
+    const load = (spec.armour || []).filter(n => !POWERED.test(n)).reduce((a, n) => a + lbOf(n), 0)
+      + (spec.ranged && spec.ranged.item && !(ranged && ranged.mounted) ? lbOf(spec.ranged.item) : 0)
+      + (spec.melee && spec.melee.item && (!spec.ranged || spec.melee.item !== spec.ranged.item) ? lbOf(spec.melee.item) : 0)
+      + (spec.grenades || []).reduce((a, g) => a + lbOf(g.item) * (g.count || 1), 0) + lbOf(spec.carried);
+    const BL = liftST * liftST / 5;
+    const enc = load <= BL ? 0 : load <= 2 * BL ? 1 : load <= 3 * BL ? 2 : load <= 6 * BL ? 3 : 4;
     // two weapons at once (B417): -4 each, the off hand -4 more unless Ambidexterity; Dual-Weapon Attack buys the -4 off
     const dwa = (st.skills || []).find(s => /^Dual-Weapon Attack/.test(s.name) && s.level != null);
     const dualPen = dwa && melee ? Math.max(0, melee.level - dwa.level) : 4;
@@ -992,15 +1016,18 @@ const SIM = (() => {
       // is a Ready, free on a Fast-Draw roll (B194)
       bothReady: cs ? !ranged || !melee || !!melee.natural || !!ranged.natural || (spec.melee && spec.ranged && spec.melee.item === spec.ranged.item) : !ranged || !melee || melee.name === "Punch" || !!melee.natural || !!ranged.natural || (spec.melee && spec.ranged && spec.melee.item && spec.melee.item === spec.ranged.item)
         || /fixed to|mounted|underslung/i.test(melee.usage || "") || (!!ranged.oneHanded && !!melee.oneHanded),
-      fastDraw: Math.max(-Infinity, ...(st.skills || []).filter(s => /^Fast-Draw/.test(s.name) && !/Ammo/.test(s.name) && s.level != null).map(s => s.level)), st: st.st, dx: st.dx, formation: spec.formation || "line",
+      liftST,   // Lifting ST counts in grappling (B65)
+      // Fast-Draw, +1 with Combat Reflexes (B43); Fast-Draw (Grenade) on its own
+      fastDraw: Math.max(-Infinity, ...(st.skills || []).filter(s => /^Fast-Draw/.test(s.name) && !/Ammo|Grenade/.test(s.name) && s.level != null).map(s => s.level)) + (flags.cr ? 1 : 0),
+      fdGrenade: Math.max(-Infinity, ...(st.skills || []).filter(s => /^Fast-Draw \(Grenade/.test(s.name) && s.level != null).map(s => s.level)) + (flags.cr ? 1 : 0), st: st.st, dx: st.dx, formation: spec.formation || "line",
       // elites call shots: a best combat skill (weapon or power) of 17+, two past a trained line soldier's 15,
       // and a mind that picks its shots (IQ 8+). Points were a poor proxy: an Ork Boy's ST 28 costs 300+.
       elite: Math.max(melee ? melee.level : 0, ranged ? ranged.level : 0, ...powers.map(p => p.level)) >= 17 && st.iq >= 8,
       // grappling (B370): DX, or Wrestling, Judo or Sumo Wrestling if better
       grapple: Math.max(st.dx, ...(st.skills || []).filter(s => /^(Wrestling|Judo|Sumo Wrestling)\b/.test(s.name) && s.level != null).map(s => s.level)),
       ai: aiProfile(spec.template),
-      stance: spec.stance || "shoot", ambush: !!spec.ambush, stats: st, flags, speed: st.speed, move: Math.max(1, st.move + arm.move),
-      dodge: st.dodge, HP: st.hp + arm.hp, HT: st.ht, will: st.will, sm: st.sm || 0,
+      stance: spec.stance || "shoot", ambush: !!spec.ambush, stats: st, flags, speed: st.speed, move: Math.max(1, Math.floor((st.move + arm.move) * [1, 0.8, 0.6, 0.4, 0.2][enc])),
+      dodge: st.dodge - enc, enc, HP: st.hp + arm.hp, HT: st.ht, will: st.will, sm: st.sm || 0,
       arm, nat, ranged, melee, parry: parryOf(melee), cs, judo: (st.skills || []).some(s => /^(Judo|Karate|Boxing)/.test(s.name) && s.level != null), bl: Math.round(liftST * liftST / 5),
       shield: spec.shield && spec.shield.sp ? { ...spec.shield } : cs && cs.field ? { item: cs.name + " field", ...cs.field, ranged_only: false, arc: "shield" } : pshield,
       // clothing that can catch fire (B433-434): cloth, flak, robes and hides; sealed plate, carapace, chitin and
@@ -1476,7 +1503,7 @@ const SIM = (() => {
 
     // skill penalty from shock (standard), or the larger of shock and pain plus wound effects (fractional)
     // (burning clothes are -2 DX, or -3 when all of them are alight, B434)
-    const skillPen = m => (frac ? Math.max(m.shock, m.pain) + m.gawd : Math.min(m.shockCap || 4, m.shock)) + (m.onFire ? m.onFire + 1 : 0);
+    const skillPen = m => (frac ? Math.max(m.shock, m.pain) + m.gawd : Math.min(m.shockCap || 4, m.shock)) + (m.onFire ? m.onFire + 1 : 0) + (m.painAff || 0);
     // below 1/3 HP (standard HP, B419), or halved by a Fractional Health wound or a crippled leg: half Move and
     // Dodge, rounding up
     const weak = m => !frac && m.hp < m.u.HP / 3;
@@ -1485,7 +1512,7 @@ const SIM = (() => {
     const psyker = u => u.powers.some(p => p.fp);
     const shadowed = m => !!m.h && psyker(m.u) && models.some(x => x.state === "ok" && x.h && x.u.side !== m.u.side && x.u.flags.shadow && hexDist(x.h, m.h) <= x.u.flags.shadow);
     // a model whose weapon arm is crippled fights with the other hand: -4 unless ambidextrous (B421, B417)
-    const wl = (m, w) => w.level - (w.usage === "power" && w.fp && shadowed(m) ? 3 : 0) - (m.weaponArmLost && !w.natural && w.usage !== "power" ? m.u.offPen : 0);
+    const wl = (m, w) => w.level - (m.prone ? 0 : w.stStand || 0) - (w.usage === "power" && w.fp && shadowed(m) ? 3 : 0) - (m.weaponArmLost && !w.natural && w.usage !== "power" ? m.u.offPen : 0);
     // Fright Check (B360): Will plus Fearlessness, never better than 13
     // capped at 13 (B360) only for Shadow in the Warp; morale and the Fright Checks under fire aren't capped (user
     // direction: superhuman nerve should tell), so only a 17 or 18 breaks a Marine
@@ -1717,7 +1744,7 @@ const SIM = (() => {
         if (!r.ok) {
           t.stunned = true; t.prone = true;
           // a knocked-down model drops what it holds (B420)
-          const drop = !t.u.melee.natural && t.inHand !== "none";
+          const drop = (gunReady(t) && !!t.u.ranged && !t.u.ranged.natural) || (bladeReady(t) && !t.u.melee.natural && t.u.melee.name !== "Punch");
           if (drop) t.inHand = "none";
           L(`  ${t.id} is knocked down and stunned${drop ? ", dropping its weapon" : ""}`);
         }
@@ -1761,7 +1788,7 @@ const SIM = (() => {
       const dmg = dmgOverride || w.dmg;
       let raw = rawOverride != null ? rawOverride : rollDamage(dmg);
       const maxD = () => Math.floor((dmg.n * 6 + dmg.add) * dmg.mult);
-      const dropAll = () => { if (!t.u.bothReady && !t.u.melee.natural && t.inHand !== "none") { t.inHand = "none"; L(`  ${t.id} drops its weapon`); } };
+      const dropAll = () => { if (!t.u.bothReady && ((gunReady(t) && t.u.ranged && !t.u.ranged.natural) || (bladeReady(t) && !t.u.melee.natural && t.u.melee.name !== "Punch"))) { t.inHand = "none"; L(`  ${t.id} drops its weapon`); } };
       let noDR = false, halfDR = false;
       if (crit && HEAD.has(loc)) {
         // Critical Head Blow Table (B556) for skull, face and eye
@@ -1817,7 +1844,14 @@ const SIM = (() => {
         if (pen > 0) L(`  finds a weak point`);
       }
       // knockback (B378) from crushing and cutting blows
-      if ((dmg.type === "cr" || (dmg.type === "cut" && pen <= 0 && !ranged)) && !dmg.ex && t.state === "ok" && !t.grips.length) knockback(att, t, basic);
+      if ((dmg.type === "cr" || (dmg.type === "cut" && pen <= 0 && !ranged)) && !dmg.ex && !w.slam && t.state === "ok" && !t.grips.length) knockback(att, t, basic);
+      // Hurting yourself (B379): a punch or kick at DR 3+ does its striker 1 crushing per 5 points of basic damage,
+      // up to that DR, against the striker's own DR there
+      if (!ranged && att && att !== t && (w.name === "Punch" || w.name === "Kick") && armDR + natDR >= 3 && basic >= 5) {
+        const back = Math.min(Math.floor(basic / 5), armDR + natDR), cr = parseDamage("1d cr");
+        L(`  ${att.id} hurts its ${w.name === "Kick" ? "foot" : "hand"} on the armour`);
+        applyHit(t, { dmg: cr, follow: null, slam: true }, att, w.name === "Kick" ? "foot" : "hand", false, false, cr, back);
+      }
       // blunt trauma: armour that stops a hit still passes some of its force (see bluntOf)
       // (only what gets past cover can bruise through the armour beneath, B379)
       if (pen <= 0 && armDR - coverDR > 0 && raw > coverDR) {
@@ -1862,6 +1896,16 @@ const SIM = (() => {
       L(`  ${raw} dmg to ${area ? "the body (large area)" : loc} (DR ${armDR + natDR}${div !== 1 ? "/" + (div === Infinity ? "∞" : div) : ""}): ${inj} injury${finj ? ` + ${finj} ${w.follow.ex ? "from the internal explosion" : "follow-up"}` : ""}${frac ? "" : `; ${t.id} at ${t.hp - inj - finj}/${t.u.HP} HP`}`);
       if (t.h) FX(["h", t.ix, inj + finj, loc, t.h.q, t.h.r]);
       injure(att, t, inj + finj, loc, dmg.type);
+      // agony (B428): HT (+3 with High Pain Threshold) at the weapon's penalty, or Severe Pain for the rest of the
+      // fight (-4, -2 with High Pain Threshold); a critical failure stuns too. Machines feel nothing
+      if (w.agony != null && inj > 0 && t.state === "ok" && !t.u.flags.machine) {
+        const r = check(t.u.HT + w.agony + (t.u.flags.hpt ? 3 : 0));
+        if (!r.ok) {
+          t.painAff = Math.max(t.painAff || 0, t.u.flags.hpt ? 2 : 4);
+          L(`  ${t.id} is wracked with agony (-${t.painAff})`);
+          if (r.fumble) { t.stunned = true; t.stunRec = "ht"; }
+        }
+      }
       return inj + finj;
     }
     // Catching fire (B434): part of the clothing burns for 1d-4 a second, all of it for 1d-1, as large-area injury
@@ -2377,7 +2421,17 @@ const SIM = (() => {
         L(`  ${m.id}'s ${w.name} overheats`);
         applyHit(m, { dmg: w.overheat, follow: null }, m, "torso", false, false, w.overheat);
         m.gunBroken = true;
-      } else { m.jam = d6(); L(`  ${m.id}'s ${w.name} malfunctions (${m.jam} s to clear)`); }
+        return true;
+      }
+      // Malfunction table (B407-408): 3-4 and 15-18 a mechanical or electrical problem, out for the fight; 9-11 a
+      // stoppage (the round fires, then it jams; a beam weapon's is a mechanical problem): three Readies and an
+      // Armoury roll, or IQ-based weapon skill -4, per attempt; otherwise a misfire (no shot): a Ready to find it, then
+      // three Readies and Armoury +2 per attempt
+      const t = roll3(), sk = (m.u.stats.skills || []).find(x => /^Armoury/.test(x.name) && x.level != null);
+      const armoury = sk ? sk.level : (m.u.stats.iq || 10) - 5, iqGun = w.level - m.u.dx + (m.u.stats.iq || 10) - 4;
+      if (t <= 4 || t >= 15 || (t <= 11 && t >= 9 && BEAM.test(w.name))) { m.gunBroken = true; L(`  ${m.id}'s ${w.name} breaks down (malfunction)`); return true; }
+      if (t >= 9 && t <= 11) { m.jam = 3; m.jamSkill = Math.max(armoury, iqGun); L(`  ${m.id}'s ${w.name} fires once and jams`); return "one"; }
+      m.jam = 4; m.jamSkill = armoury + 2; L(`  ${m.id}'s ${w.name} misfires`);
       return true;
     }
     function fireThrough(m, w, t, i, lvl) {
@@ -2539,10 +2593,12 @@ const SIM = (() => {
       const plan = planAttack(m, w, t, base - linePen(m, inter), false, null, { aim: firstB, braced, fx: shotFx(t, m.h, opts.pointBlank) });
       const loc0 = plan.loc === "random" ? null : plan.loc;
       const lvl = plan.lvl;
-      const nb = n;
+      let nb = n;
       if (lvl < 3) { L(`${m.id} can't hope to hit ${t.id} (skill ${lvl})`); return; }   // B344
       const r = check(lvl);
-      if (jamCheck(m, w, r)) return;
+      const jc = jamCheck(m, w, r);
+      if (jc === true) return;
+      if (jc === "one") nb = 1;
       // every round rolled on its own (Progressive Recoil); Aim counts on the first only; criticals can't be dodged.
       // misses: the margin of each round that missed (for strays and scatter); rounds below skill 3 aren't rolled
       const toTorso = loc0 && NEAR_TORSO.has(loc0) ? 1 : 0;
@@ -2637,7 +2693,7 @@ const SIM = (() => {
       const lvl = base;
       if (lvl < 3) { L(`${m.id} can't hope to hit ${target.id} (skill ${lvl})`); return; }
       const r = check(lvl);
-      if (jamCheck(m, w, r)) return;
+      if (jamCheck(m, w, r) === true) return;
       FX(["s", m.h.q, m.h.r, target.h.q, target.h.r, m.u.side, r.ok ? 1 : 0, m.ix, target.ix, lvl, r.ok ? 1 : 0, 1]);
       for (const x of caught) { const e = ev(x); e.shotAt = m; e.vol = Math.max(e.vol || 0, 1); e.near = true; }
       if (!r.ok) { L(`${m.id} ${w.usage === "power" ? "casts " + w.name + " at" : "fires at"} ${target.id} (${d} yd, skill ${lvl}): the ${w.name} goes wide`); return; }
@@ -2997,7 +3053,14 @@ const SIM = (() => {
       if (m.surprised) { m.surprised = false; L(`${m.id} is caught by surprise`); return; }
       if (m.skipNext) { m.skipNext = false; L(`${m.id} already acted this second (it saw the foe first)`); return; }
       if (m.blockLost) { m.blockLost = false; L(`${m.id} recovers its shield (Ready)`); return; }
-      if (m.jam > 0) { m.jam--; if (!engaged(m)) { L(`${m.id} clears a jam`); return; } }
+      // working on a jammed or misfired gun: Readies, then a roll that clears it or starts another attempt
+      if (m.jam > 0 && !engaged(m) && u.ranged) {
+        m.jam--;
+        if (m.jam > 0) { L(`${m.id} works on its ${u.ranged.name}`); return; }
+        if (check(m.jamSkill - skillPen(m)).ok) L(`${m.id} clears its ${u.ranged.name}`);
+        else { m.jam = 3; L(`${m.id} fails to clear its ${u.ranged.name}`); }
+        return;
+      }
       const pool = known(m).filter(f => f.h).sort((a, b) => walk(m.h, a.h) - walk(m.h, b.h));
       if (!pool.length) { if (AWARE) search(m); return; }
       const adj = pool.filter(f => hexDist(f.h, m.h) <= u.melee.reachMax && los(m.h, f.h));
@@ -3061,7 +3124,7 @@ const SIM = (() => {
       if (terr && !m.grips.length) { doorOptions(m, pool, add, rNow); if (!adj.length) breachOptions(m, pool, add, rNow, Wm); }
       // held (not pinned): struggle free, worth more on the ground where the hold becomes a pin
       if (gripsOn(m).length) {
-        const a = Math.max(u.st, u.grapple - 4) - skillPen(m), d = gripST(m);
+        const lead = leadGrip(m), a = u.liftST - skillPen(m), d = gripST(m) + holdBonus(m, lead);
         const pWin = Math.max(0.02, Math.min(0.98, 0.5 + 0.08 * (a - d)));
         add(pWin * (m.prone ? 0.8 : 0.4) * Math.max(rNow, 0.1 * threatOf(m) * HORIZON), "break-free", () => breakFree(m));
       }
@@ -3284,15 +3347,26 @@ const SIM = (() => {
           add(stanceW(m, "melee") * u.ai.aggression * kv(m, ch.f, E) + saved - rNow, `wait-melee@${ch.f.id}`, () => { m.waiting = u.melee; L(`${m.id} waits for ${ch.f.id} with ${u.melee.name} ready (Wait)`); });
         }
       }
-      // grenades (B410): Ready one, then throw it next turn
+      // grenades (B410): a Ready to grab one, a second to arm it, then throw
       if (u.grenades.length && !m.grips.length && m.armsLost < 1) {
         const g = bestGrenade(m, pool);
         if (g) {
-          const gv = Wr * g.v;
-          if (m.grenadeReady === g.i) add(gv - rNow, "throw", () => throwGrenade(m, g));
-          else add(GAMMA * gv - rNow, "ready-grenade", () => { m.grenadeReady = g.i; L(`${m.id} readies a ${u.grenades[g.i].name}`); });
+          const gv = Wr * g.v, left = 2 - grenadeStage(m, g.i);
+          if (!left) add(gv - rNow, "throw", () => throwGrenade(m, g));
+          else add(Math.pow(GAMMA, left) * gv - rNow, "ready-grenade", () => readyGrenade(m, g.i));
         }
       }
+    }
+    // a grenade in hand: 0 none, 1 drawn, 2 armed. A Ready draws it (Fast-Draw (Grenade) makes that free, and the
+    // same Ready arms it), a second arms it (B410)
+    const grenadeStage = (m, gi) => m.grenadeReady === gi ? (m.grenadeArmed ? 2 : 1) : 0;
+    function readyGrenade(m, gi, why = "") {
+      const nm = m.u.grenades[gi].name;
+      if (m.grenadeReady !== gi) {
+        m.grenadeReady = gi; m.grenadeArmed = false;
+        if (m.u.fdGrenade > -Infinity && check(m.u.fdGrenade - skillPen(m)).ok) { m.grenadeArmed = true; L(`${m.id} fast-draws and arms a ${nm}${why}`); }
+        else L(`${m.id} draws a ${nm}${why}`);
+      } else { m.grenadeArmed = true; L(`${m.id} arms its ${nm}${why}`); }
     }
     // a hex up to n steps from a toward b (for valuing positions without moving)
     function stepHex(a, b, n) {
@@ -3388,14 +3462,14 @@ const SIM = (() => {
         const lvl = g.level - skillPen(m) + rangePenalty(jd);
         const E = P3[cl(lvl)] * Math.max(0, mean - Math.floor(st.dr / (dm.div || 1))) * woundMult(dm.type, "torso", { homogenous: 1 }, dm.ex);
         if (!(E > 0)) return;
-        const T = Math.ceil(hp / E) * (m.grenadeReady === gi ? 1 : 2);
-        if (T > 4 || T - 1 > (wk - hd) / mv || m.grenadesLeft[gi] * 2 < T) return;
+        const T = Math.ceil(hp / E) * 3 - grenadeStage(m, gi);
+        if (T > 4 || T - 1 > (wk - hd) / mv || m.grenadesLeft[gi] * 3 < T) return;
         broken[j] = 1;
         const V = shotValueFrom(m, m.h, pool) || Wm * kv(m, f, planAttack(m, m.u.melee, f, m.u.melee.level - skillPen(m), true).score) * Math.pow(GAMMA, Math.ceil(hd / mv));
         broken[j] = 0;
         if (V > 0) add(Math.pow(GAMMA, T - 1) * V - rNow, `breach-grenade@${th.q},${th.r}`, () => {
-          if (m.grenadeReady !== gi) { m.grenadeReady = gi; L(`${m.id} readies a ${g.name} to breach the ${hexName(j)}`); return; }
-          m.grenadeReady = null; m.grenadesLeft[gi]--; m.attacked = true; faceTo(m, th);
+          if (grenadeStage(m, gi) < 2) { readyGrenade(m, gi, ` to breach the ${hexName(j)}`); return; }
+          m.grenadeReady = null; m.grenadeArmed = false; m.grenadesLeft[gi]--; m.attacked = true; faceTo(m, th);
           const r = check(lvl), raw = rollDamage(dm);
           L(`${m.id} throws a ${g.name} at the ${hexName(j)} (skill ${lvl}): ${r.ok ? "it goes off against it" : "it bounces wide"}`);
           if (r.ok) { damageStructure(j, raw, dm, true); if (!broken[j]) L(`  ${hpOf(j)} HP of it left`); explosion(m, g, th, raw); }
@@ -3515,7 +3589,7 @@ const SIM = (() => {
         const Ema = planAttack(m, w, tgt, lvl, true).score;
         const slamOK = len >= 2 && hard && !tgt.prone && !tgt.pinned && u.HP >= 0.8 * tgt.u.HP;
         // a Slam's worth: knocking the foe down sets up the pin (valued as a share of the foe taken out)
-        const slamV = slamOK ? 0.25 * threatOf(tgt) * P3[cl(Math.max(u.dx, u.grapple) - skillPen(m) - 4)] * HORIZON : 0;
+        const slamV = slamOK ? 0.25 * threatOf(tgt) * P3[cl(Math.max(u.dx, u.grapple) - skillPen(m))] * HORIZON : 0;
         const vMA = Wm * Math.max(kv(m, tgt, Ema), slamV) + GAMMA * Wm * worth - risk(m, arrive, "");
         add(vMA, `charge@${tgt.id}`, () => {
           const moved = go(mv); if (stopped() || !tgt.h) return; faceTo(m, tgt.h);
@@ -3559,10 +3633,10 @@ const SIM = (() => {
       const hands = (t.grips ? t.grips.length : 0) + helpers + 1;
       // the hold only matters if the grapplers can then take the foe down and pin it: Quick Contests of their
       // pooled ST (the strongest plus a fifth of each other) against the foe's ST, DX or grappling skill
-      const pooled = u.st * (1 + 0.2 * Math.min(3, hands - 1));
+      const pooled = u.liftST * (1 + 0.2 * Math.min(3, hands - 1));
       const contest = (a, d) => Math.max(0.02, Math.min(0.98, 0.5 + 0.08 * (a - d)));
-      const pDown = t.prone ? 1 : contest(Math.max(pooled, u.dx, u.grapple), Math.max(t.u.st, t.u.dx - 4, t.u.grapple - 4));
-      const dSM = t.u.sm - u.sm, pPin = contest(pooled + (dSM < 0 ? -3 * dSM : 0), t.u.st + (dSM > 0 ? 3 * dSM : 0));
+      const pDown = t.prone ? 1 : contest(Math.max(pooled, u.dx, u.grapple), Math.max(t.u.liftST, t.u.dx - 4, t.u.grapple - 4));
+      const dSM = t.u.sm - u.sm, pPin = contest(pooled + (dSM < 0 ? -3 * dSM : 0), t.u.liftST + (dSM > 0 ? 3 * dSM : 0));
       // and only if someone can then hurt the helpless foe (any location, chinks included); a foe nobody can
       // cut is just held, which doesn't win the fight
       const hurt = models.filter(a => a.u.side === u.side && a.state === "ok" && a.h && hexDist(a.h, t.h) <= moveOf(a) + 1)
@@ -3638,7 +3712,7 @@ const SIM = (() => {
             add(Wm * kv(m, t, P(lvl, boosted(w, -1)) * n) - risk(m, m.h, "da"), `da-strike@${t.id}`, () => { face(); strike(m, w, t, { defensive: true }); });
           }
           // Feint, Beat, Ruse (B365, MA100-101): this turn, for the next; trained fighters only (MA113)
-          if (tr && def != null && !m.feint && P3[cl(def)] > 0.4) {
+          if (tr && def != null && !m.feint && !m.grips.length && P3[cl(def)] > 0.4) {   // no Feint while held (B371)
             const g = gainOf(lvl);
             add(GAMMA * Wm * kv(m, t, Pfd(lvl, g) * n) - rNow, `feint@${t.id}`, () => { face(); m.feint = { t, n: feintRoll(m, w, t, lvl), turn }; });
             // a Ruse (IQ-based) when wits beat hands
@@ -3781,7 +3855,7 @@ const SIM = (() => {
     }
     function throwGrenade(m, g) {
       const w = m.u.grenades[g.i], c = g.c;
-      m.grenadeReady = null; m.grenadesLeft[g.i]--; m.attacked = true;
+      m.grenadeReady = null; m.grenadeArmed = false; m.grenadesLeft[g.i]--; m.attacked = true;
       reveal(m);
       if (g.hex) {
         // Attacking an area (B414): a throw at a hex is +4 (in g.lvl), with no defence, though anyone there may dive
@@ -3921,11 +3995,13 @@ const SIM = (() => {
     function clearZone(m) { if (m.zone) { zones.splice(zones.indexOf(m.zone), 1); m.zone = null; } }
 
     // ---- Slam (B371): crash into a foe at speed; each side deals HP x velocity / 100 dice of crushing damage
-    function slamDice(hp, v) { const n = hp * v / 100; return n >= 1 ? { n: Math.floor(n), add: Math.round((n - Math.floor(n)) * 3.5), mult: 1, div: 1, type: "cr", ex: false } : { n: 1, add: Math.max(-5, Math.round(-6 * (1 - n))), mult: 1, div: 1, type: "cr", ex: false }; }
+    // HP x velocity / 100 dice (B371): a fraction of 0.5 or more rounds up to a full die; below one die, 1d-3 up to
+    // 0.25, 1d-2 up to 0.5, else 1d-1
+    function slamDice(hp, v) { const n = hp * v / 100; return n >= 1 ? { n: n % 1 >= 0.5 ? Math.ceil(n) : Math.floor(n), add: 0, mult: 1, div: 1, type: "cr", ex: false } : { n: 1, add: n <= 0.25 ? -3 : n <= 0.5 ? -2 : -1, mult: 1, div: 1, type: "cr", ex: false }; }
     function slam(m, t, v, aoa) {
       if (!aoa) m.mna = true;
       let lvl = Math.max(m.u.dx, m.u.grapple, m.u.melee.name === "Punch" ? m.u.melee.level : 0) - skillPen(m) - (m.grips.length ? 4 : 0);
-      if (aoa) lvl += 4; else lvl = Math.min(9, lvl - 4);
+      if (aoa) lvl += 4;   // a slam at the end of a Move and Attack takes neither its -4 nor its cap of 9 (B371)
       m.attacked = true;
       const r = check(lvl);
       if (!r.ok) { L(`${m.id} slams at ${t.id} (skill ${lvl}): misses`); return; }
@@ -3933,13 +4009,13 @@ const SIM = (() => {
       const dm = slamDice(m.u.HP, v), dt = slamDice(t.u.HP, v);
       const a = rollDamage(dm), b = rollDamage(dt);
       L(`${m.id} slams into ${t.id} at ${v} yd/s (${a} vs ${b})`);
-      applyHit(m, { dmg: dm, follow: null }, t, "torso", false, false, dm, a);
-      applyHit(t, { dmg: dt, follow: null }, m, "torso", false, false, dt, b);
+      // slams knock down rather than back (B371)
+      applyHit(m, { dmg: dm, follow: null, slam: true }, t, "torso", false, false, dm, a);
+      applyHit(t, { dmg: dt, follow: null, slam: true }, m, "torso", false, false, dt, b);
       const fall = x => { if (x.state === "ok" && !x.prone) { x.prone = true; L(`  ${x.id} is bowled over`); } };
       if (a >= 2 * b) fall(t);
       else if (b >= 2 * a) fall(m);
-      else if (a > b) { if (!check(t.u.dx - (t.grips.length ? 4 : 0)).ok) fall(t); }
-      else if (b > a) { if (!check(m.u.dx).ok) fall(m); }
+      else if (a >= b) { if (!check(t.u.dx - (t.grips.length ? 4 : 0)).ok) fall(t); }
     }
     // ---- Shove (B372): push instead of strike; knockback as a thrust with double dice, DX to stay standing
     function shove(m, t) {
@@ -3973,17 +4049,25 @@ const SIM = (() => {
     // exploit a hold (take down, pin) on a part where that bonus plus the location's grappling penalty is 0 or less:
     // it goes for the neck (-3), and against something more than 3 SM bigger it can only hang on. So can anyone the
     // foe out-muscles more than twice over (B370): it's just extra encumbrance. In the pin, the larger gets +3 per SM.
-    const hangsOn = (g, t) => t.u.sm - g.u.sm > 3 || t.u.st > 2 * g.u.st;
+    const hangsOn = (g, t) => t.u.sm - g.u.sm > 3 || t.u.liftST > 2 * g.u.liftST;
     const smGrab = (m, t) => { const d = t.u.sm - m.u.sm; return d > 0 ? (d <= 3 ? Math.min(4, d) - 3 : 4) : Math.min(4, -d); };
     function gripST(t) {
-      const g = gripsOn(t).filter(x => !hangsOn(x, t)).map(x => x.u.st).sort((a, b) => b - a);
+      const g = gripsOn(t).filter(x => !hangsOn(x, t)).map(x => x.u.liftST).sort((a, b) => b - a);
       return g.length ? g[0] + g.slice(1).reduce((a, x) => a + x / 5, 0) : 0;
     }
-    function contest(a, b) {
+    function contest(a, b) { return contest3(a, b) > 0; }
+    // Quick Contest (B348): 1 a win, -1 a loss, 0 a tie (both fail, or equal margins)
+    function contest3(a, b) {
       const ra = check(a), rb = check(b);
-      if (ra.ok !== rb.ok) return ra.ok;
-      return ra.margin > rb.margin;
+      if (ra.ok !== rb.ok) return ra.ok ? 1 : -1;
+      if (!ra.ok) return 0;
+      return Math.sign(ra.margin - rb.margin);
     }
+    // the grappler whose hold counts, and what the hold is worth in a break-free contest (B371): +5 with two hands,
+    // pinned +10 (+5 with one); -4 if it's stunned
+    const leadGrip = t => gripsOn(t).filter(x => !hangsOn(x, t)).sort((x, y) => y.u.liftST - x.u.liftST)[0] || gripsOn(t)[0];
+    const twoHands = g => g.armsLost < 1 && (g.inHand === "none" || g.inHand === "gun" || !g.u.melee || g.u.melee.natural || g.u.melee.name === "Punch");
+    const holdBonus = (t, g) => !g ? 0 : (t.pinned ? (twoHands(g) ? 10 : 5) : (twoHands(g) ? 5 : 0)) - (g.stunned ? 4 : 0);
     // Parrying an unarmed attack with a weapon (B376): the attacker's reaching arm takes the weapon's damage
     function cutsArm(t, att) {
       const w = t.u.melee;
@@ -4008,13 +4092,16 @@ const SIM = (() => {
       if (!t.prone) {
         // Takedown: Quick Contest of the higher of ST, DX or grappling skill
         // the held model is at -4 DX (B370)
-        const a = Math.max(gripST(t), m.u.dx, m.u.grapple) - skillPen(m), d = Math.max(t.u.st, t.u.dx - 4, t.u.grapple - 4) - skillPen(t) - (t.committed ? 2 : 0);
-        // a foe on All-Out Attack is truly defenceless: it loses the contest outright (MA114)
-        if (t.aoa || contest(a, d)) { t.prone = true; L(`${m.id}${t.grips.length > 1 ? ` and ${t.grips.length - 1} more` : ""} drag ${t.id} to the ground`); }
+        const a = Math.max(gripST(t), m.u.dx, m.u.grapple) - skillPen(m), d = Math.max(t.u.liftST, t.u.dx - 4, t.u.grapple - 4) - skillPen(t) - (t.committed ? 2 : 0);
+        // a foe on All-Out Attack is truly defenceless: it loses the contest outright (MA114); a grappler that loses
+        // the contest suffers the takedown itself (B370): it goes down and loses its hold
+        const c = t.aoa ? 1 : contest3(a, d);
+        if (c > 0) { t.prone = true; L(`${m.id}${t.grips.length > 1 ? ` and ${t.grips.length - 1} more` : ""} drag ${t.id} to the ground`); }
+        else if (c < 0) { L(`${m.id} tries to drag ${t.id} down (${Math.round(a)} vs ${d}) and is thrown down itself`); release(m); m.prone = true; }
         else L(`${m.id} tries to drag ${t.id} down (${Math.round(a)} vs ${d}): it keeps its feet`);
       } else if (!t.pinned) {
         // Pin: Quick Contest of ST against a foe on the ground
-        if (t.aoa || contest(gripST(t) - skillPen(m) + (dSM < 0 ? -3 * dSM : 0), t.u.st - skillPen(t) - (t.committed ? 2 : 0) + (dSM > 0 ? 3 * dSM : 0))) { t.pinned = true; L(`${m.id} pins ${t.id} (${t.grips.length} holding it down)`); }
+        if (t.aoa || contest(gripST(t) - skillPen(m) + (dSM < 0 ? -3 * dSM : 0), t.u.liftST - skillPen(t) - (t.committed ? 2 : 0) + (dSM > 0 ? 3 * dSM : 0))) { t.pinned = true; L(`${m.id} pins ${t.id} (${t.grips.length} holding it down)`); }
         else L(`${m.id} tries to pin ${t.id}: it struggles free of the hold`);
       }
     }
@@ -4022,9 +4109,11 @@ const SIM = (() => {
     function breakFree(m) {
       const g = gripsOn(m);
       if (!g.length) return false;
-      const a = Math.max(m.u.st, m.u.grapple - 4) - skillPen(m), d = gripST(m);
+      // a Quick Contest of ST (B371); pinned, one attempt every 10 seconds
+      const lead = leadGrip(m), a = m.u.liftST - skillPen(m), d = gripST(m) + holdBonus(m, lead);
+      if (m.pinned) m.nextBreak = turn + 10;
       if (contest(a, d)) {
-        const strongest = g.slice().sort((x, y) => y.u.st - x.u.st)[0];
+        const strongest = lead;
         release(strongest); m.pinned = false;
         L(`${m.id} breaks free of ${strongest.id}${m.grips.length ? ` (${m.grips.length} still holding)` : ""}`);
       } else L(`${m.id} strains against ${g.length} grappler${g.length > 1 ? "s" : ""} (ST ${Math.round(a)} vs ${Math.round(d)})`);
@@ -4085,7 +4174,7 @@ const SIM = (() => {
         // grapplers it out-muscles more than twice over, or that are far smaller, are only extra encumbrance (B370)
         { const weak = gripsOn(m).filter(g => hangsOn(g, m)); if (weak.length && weak.length === gripsOn(m).length && !m.pinned) { for (const g of weak) release(g); L(`${m.id} shrugs off ${weak.length} clinging foe${weak.length > 1 ? "s" : ""}`); } }
         // pinned, all it can do is struggle; held on the ground it may also fight back from where it lies
-        if (gripsOn(m).length && m.pinned) { breakFree(m); m.shock = 0; m.shockInj = 0; m.shockCap = 0; continue; }
+        if (gripsOn(m).length && m.pinned) { if ((m.nextBreak || 0) <= turn) breakFree(m); else L(`${m.id} lies pinned`); m.shock = 0; m.shockInj = 0; m.shockCap = 0; continue; }
         if (!m.warpShadow && shadowed(m) && !m.u.flags.unfazeable && !m.u.flags.noMorale) {
           m.warpShadow = true;
           const fc = fright(m.u);

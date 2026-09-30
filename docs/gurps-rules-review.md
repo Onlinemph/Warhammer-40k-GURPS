@@ -735,6 +735,8 @@ Totals: 94 findings, 4 big, 29 medium, 61 small.
 - Batch B: #4, #9, #23, #33, #47, #48, #49, #50 (Move and Dodge; ST in contests not halved), #51, #67, #69 (not Shield-skill resistance), #70, #71, #89 (not the backward-move cost), #90 done; #3 and #68 earlier.
 - Batch D: all done (#14 as half natural DR on the eye; #40 without the groin case; #43 without blinding; #44 without the shield-arm penalty; #80 without per-turn burning).
 - Batch E: #25 (zone and swath left as they were), #26, #27 ("beside the target" only when it's in a close combat, B392), #28, #29, #30 (not for a model struck directly by an `ex` shot), #31, #34, #57, #58, #59, #60, #61, #91 (at a foe's feet and round corners), #92, #113 (clothing only; not standing in fire or wooden shields) done. #80's per-turn burning is covered by #113.
+- Batch F: #18, #19 (1.5x-2x counted as two-handed), #32, #62, #64, #87, #88, #93/#112 (the Agoniser only; no loadout carries the other affliction lines), #94 done.
+- Batch G: #15, #16, #65, #84, #85 (no free-hands bonus), #86 done; #17 as far as Martial Arts' close-combat table allows (no Feint while held; long weapons stay usable at MA's penalty instead of RAW's ban).
 
 ## Status of the earlier from-memory review
 
