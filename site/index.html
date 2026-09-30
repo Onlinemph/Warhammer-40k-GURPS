@@ -1860,7 +1860,7 @@ const SIM = (() => {
         if (bt > 0) { L(`  ${raw} dmg to ${loc} stopped by ${t.u.arm.flexible ? "flexible" : "rigid"} armour: ${bt} blunt trauma`); injure(att, t, bt, loc, "cr"); return bt; }
       }
       if (pen <= 0) {
-        if (t.h) FX(["h", t.ix, 0, loc, t.h.q, t.h.r]); L(`  ${raw} dmg to ${loc} fails to penetrate DR ${armDR + natDR}${div !== 1 ? "/" + (div === Infinity ? "∞" : div) : ""}`);
+        if (t.h) FX(["h", t.ix, 0, loc, t.h.q, t.h.r]); L(`  ${raw} dmg to ${loc} ${coverDR > 0 && raw <= coverDR ? `stopped by the cover (DR ${coverDR})` : "fails to penetrate"} DR ${armDR + natDR}${div !== 1 ? "/" + (div === Infinity ? "∞" : div) : ""}`);
         // an explosive follow-up still goes off against the armour that stopped its carrier (B381)
         if (w.follow && w.follow.ex && fraw > armDR + natDR && t.state === "ok") {
           const fi = Math.max(1, Math.floor((fraw - armDR - natDR) * woundMult(w.follow.type, loc, t.u.flags, true)));
@@ -2000,7 +2000,13 @@ const SIM = (() => {
         let d = hexDist(x.h, at);
         if (d <= zone && x !== att) ev(x).blast = true;
         if (d < 1 || d > reach) continue;
-        if (w.thrown && d <= 3 && x !== att && dive(x)) d += 1;
+        // diving for cover (B377): anyone who sees a grenade land close enough to fear it may dive
+        const fearR = Math.max(3, w.dmg.frag ? Math.ceil(5 * w.dmg.frag.n / 2) : 0);
+        if (w.thrown && d <= fearR && x !== att && dive(x, at)) {
+          if (!x.h || !los(at, x.h)) { L(`  ${x.id} is out of the blast`); continue; }
+          d = hexDist(x.h, at);
+          if (d < 1) d = 1;
+        }
         const splash = Math.floor(raw / (3 * Math.max(1, d / lv)));
         // only the model struck directly faces the armour divisor; the blast around it has none, and it lands as
         // large-area injury (B400, B414)
@@ -2029,7 +2035,8 @@ const SIM = (() => {
     function landOn(m, w, at, raw) {
       const x = occ.get(key(at.q, at.r));
       if (!x || x.state !== "ok") return;
-      const nd = noDiv(w.dmg), full = !dive(x), dmg = full ? raw : Math.floor(raw / 3);
+      const nd = noDiv(w.dmg), full = !dive(x, at), dmg = full ? raw : Math.floor(raw / 3);
+      if (!full && x.h && !los(at, x.h)) { L(`  ${x.id} gets clear of it`); return; }
       if (dmg >= 1) applyHit(m, { dmg: nd, follow: null }, x, "area", true, false, nd, dmg);
     }
 
@@ -2994,7 +3001,35 @@ const SIM = (() => {
         }
         tot += best * share;
       }
-      return tot;
+      return tot + grenadeRisk(m, h, near);
+    }
+    // grenades (B414): the worst a foe with a grenade left, and a throw that reaches h, can do to m there with one
+    // landing a yard or two away, weighted by how tempting a target the spot is (the more of us within 2 yards, the
+    // likelier the throw). Cover from the thrower, kneeling and lying all cut the fragments that land (B414, B551)
+    function grenadeRisk(m, h, near) {
+      let worst = 0;
+      const crowd = models.filter(x => x !== m && x.u.side === m.u.side && x.state === "ok" && x.h && hexDist(x.h, h) <= 2).length;
+      const low = m.prone || m.kneel;
+      for (const f of near) {
+        if (!f.u.grenades.length || f.grips.length || f.armsLost >= 1) continue;
+        const d = hexDist(f.h, h);
+        f.u.grenades.forEach((g, i) => {
+          if (!f.grenadesLeft[i] || d < 3 || d > g.range.max || !los(f.h, h)) return;
+          const k = coverAt(h, f.h, m);
+          let hid = 0;
+          for (const [l, n] of RANDOM_LOCS) hid += n * hideOf(k, l, m) / 216;
+          let e = expInj(g, m.u, "area", { ...g.dmg, div: 1, mult: g.dmg.mult / 3, key: "s1nd" });
+          const fr = g.dmg.frag;
+          if (fr) {
+            let nF = 0;
+            for (let j = 15 + rangePenalty(2) + m.u.sm - (low ? 2 : 0); j >= 3; j -= 3) nF += P3[Math.min(18, j)];
+            e += nF * (1 - hid) * expInjRandom(g, m.u, { n: fr.n, add: 0, mult: 1, div: 1, type: fr.type, key: "f" });
+          }
+          const pHit = P3[cl(g.level - skillPen(f) + rangePenalty(d))];
+          worst = Math.max(worst, e * pHit * Math.min(1, 0.15 + 0.25 * crowd));
+        });
+      }
+      return worst;
     }
     // cost of standing on hex h in that posture: chance of being put down x what I'd do over the next turns
     function risk(m, h, mode) {
@@ -3186,6 +3221,7 @@ const SIM = (() => {
         }
         coverOptions(m, pool, add);
       }
+      spreadOptions(m, pool, add);
       const threatNow = threatTo(m);
       // corners and doorways (TS p. 23-24): with no foe in sight but one close enough to come round the corner or
       // through the door, hold a Wait for the first to appear rather than walk into it; not for zealots or chargers
@@ -3520,6 +3556,31 @@ const SIM = (() => {
       }
       return null;
     }
+    // spread out (TS p. 21-22): with a foe in grenade range and squad-mates within 2 yards, a step or two to a spot
+    // with fewer of them close (and cover from the thrower if there is one), valued like any move
+    function spreadOptions(m, pool, add) {
+      if (m.grips.length || m.prone || !m.h) return;
+      const near = pool.slice(0, 8);
+      const g0 = grenadeRisk(m, m.h, near);
+      if (!(g0 > 0)) return;
+      const crowd = h => models.filter(x => x !== m && x.u.side === m.u.side && x.state === "ok" && x.h && hexDist(x.h, h) <= 2).length;
+      const c0 = crowd(m.h);
+      if (!c0) return;
+      const spots = [];
+      for (const [dq, dr] of DIRS) for (const k of [1, 2]) {
+        const h = { q: m.h.q + dq * k, r: m.h.r + dr * k };
+        if (taken(key(h.q, h.r)) || (terr && !walkable(key(h.q, h.r))) || (k === 2 && taken(key(m.h.q + dq, m.h.r + dr)))) continue;
+        if (crowd(h) < c0) spots.push(h);
+      }
+      spots.sort((a, b) => grenadeRisk(m, a, near) - grenadeRisk(m, b, near));
+      for (const h of spots.slice(0, 2)) {
+        add(GAMMA * shotValueFrom(m, h, pool) - risk(m, h, ""), `spread@${h.q},${h.r}`, () => {
+          stepToward(m, h, hexDist(m.h, h), 0); if (m.state !== "ok" || !m.h) return;
+          const f = pool.find(x => x.h && los(m.h, x.h)); if (f) faceTo(m, f.h);
+          L(`${m.id} spreads out from its squad-mates`);
+        });
+      }
+    }
     function coverOptions(m, pool, add) {
       const mv = moveOf(m), start = key(m.h.q, m.h.r), prev = new Map([[start, null]]), q = [{ h: m.h, d: 0 }], spots = [];
       const near = pool.slice(0, 6);
@@ -3815,11 +3876,8 @@ const SIM = (() => {
           }
           const v = (direct + others) * P3[Math.max(0, Math.min(18, lvl))];
           if (!best || v > best.s) best = { i, c, s: v, v, lvl };
-          // or at its feet (Attacking an area, B414): +4 and no defence, though it may dive for cover
-          const pDive = c.aoa || c.pinned || c.grips.length ? 0 : P3[cl(dodgeOf(c) - (c.stunned ? 4 : 0) - (c.prone ? 3 : 0))];
-          const feet = kv(m, c, (1 - pDive) * expInj(g, c.u, "area", { ...g.dmg, div: 1, key: "s0nd" }) + pDive * expInj(g, c.u, "area", third));
-          const vF = (feet + others) * P3[cl(lvl + 4)];
-          if (vF > best.s) best = { i, c, hex: c.h, feet: true, s: vF, v: vF, lvl: lvl + 4 };
+          // (a foe in sight is thrown at, and may dodge; the +4 throw at a hex is kept for foes out of sight, below:
+          // user direction)
         }
         // through a doorway or round a corner (TS p. 24): a foe out of sight, a hex we can see that it can see
         if (terr) for (const c of pool.slice(0, 6)) {
@@ -3847,11 +3905,23 @@ const SIM = (() => {
     }
     // Diving for cover (B377): someone who sees a grenade land beside them may Dodge; success puts them a yard
     // further from the blast, prone
-    function dive(x) {
+    // Diving for cover (B377): someone who sees a grenade land may Dodge; success puts them a yard further from it,
+    // prone, and into a hex out of its sight (behind a crate, a wall or a corner) when there is one
+    function dive(x, at) {
       if (x.state !== "ok" || x.pinned || x.aoa || x.grips.length) return false;
       const r = check(dodgeOf(x) - (x.stunned ? 4 : 0) - (x.prone ? 3 : 0));
       if (!r.ok) return false;
-      x.prone = true; L(`  ${x.id} dives for cover`);
+      if (at && x.h) {
+        let best = null, bs = -1;
+        for (const [dq, dr] of DIRS) {
+          const h = { q: x.h.q + dq, r: x.h.r + dr };
+          if (taken(key(h.q, h.r)) || (terr && !walkable(key(h.q, h.r)))) continue;
+          const sc = (los(at, h) ? 0 : 10) + hexDist(h, at);
+          if (hexDist(h, at) >= hexDist(x.h, at) && sc > bs) { bs = sc; best = h; }
+        }
+        if (best) place(x, best);
+      }
+      x.prone = true; x.kneel = false; L(`  ${x.id} dives for cover`);
       return true;
     }
     function throwGrenade(m, g) {
