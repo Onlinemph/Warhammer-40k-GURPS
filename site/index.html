@@ -2295,8 +2295,15 @@ const SIM = (() => {
       place(m, target);
       return true;
     }
+    // a mover under grenade threat (a known foe with a grenade left and within a move of throwing range) spreads out:
+    // among the steps that gain as much ground, it takes the one with fewest squad-mates beside it (user direction:
+    // charging mobs too)
+    const nearFriends = (m, h) => { let c = 0; for (const [dq, dr] of DIRS) { const x = occ.get(key(h.q + dq, h.r + dr)); if (x && x !== m && x.u.side === m.u.side && x.state === "ok") c++; } return c; };
+    const grenadeThreat = m => known(m).some(f => f.h && f.state === "ok" && f.u.grenades.length && f.grenadesLeft.some(n => n > 0) && hexDist(f.h, m.h) <= Math.max(...f.u.grenades.map(g => g.range.max)) + moveOf(m));
     function stepToward(m, goal, steps, stopAt = 1) {
       let moved = 0;
+      const spread = grenadeThreat(m);
+      const better = (n, d, bd, best) => d < bd || (d === bd && best && (spread ? nearFriends(m, n) < nearFriends(m, best) || (nearFriends(m, n) === nearFriends(m, best) && R() < 0.3) : R() < 0.3));
       if (terr) {
         // round the walls: each step goes to a free neighbour nearer the goal on foot, hopping crates it's big
         // enough to jump and friends in the way
@@ -2310,7 +2317,7 @@ const SIM = (() => {
             if (i == null) continue;
             if (!occ.has(nk) && pass[i]) {
               const d = F.get(nk) ?? 999;
-              if (d < bd || (d === bd && best && !via && R() < 0.3)) { bd = d; best = n; via = null; bc = 1; }
+              if (d < bd || (d === bd && best && !via && better(n, d, bd, best))) { bd = d; best = n; via = null; bc = 1; }
               continue;
             }
             // a friend or an obstacle in the way: hop it to the free hex straight beyond
@@ -2339,7 +2346,7 @@ const SIM = (() => {
           const n = { q: m.h.q + dq, r: m.h.r + dr }, nk = key(n.q, n.r);
           if (!taken(nk)) {
             const d = hexDist(n, goal);
-            if (d < bd || (d === bd && (!best || R() < 0.3))) { bd = d; best = n; via = null; }
+            if (d < bd || (d === bd && (!best || better(n, d, bd, best)))) { bd = d; best = n; via = null; }
             continue;
           }
           // through a friend: +1 movement point, onto the hex beyond
@@ -2400,6 +2407,8 @@ const SIM = (() => {
     }
     function followPath(m, path, steps) {
       let moved = 0;
+      // still more than a move out and under grenade threat: head for the same end but fan out on the way
+      if (path.length > steps + 1 && grenadeThreat(m)) return stepToward(m, path[path.length - 1], steps, 0);
       // a friend on the path is passed through for an extra movement point (B368), never stopped on
       for (const n of path) {
         const nk = key(n.q, n.r);
