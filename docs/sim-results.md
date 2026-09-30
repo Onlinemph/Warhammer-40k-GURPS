@@ -347,3 +347,58 @@ The user's wound rules: no HP pool; five boxes per level per location; a hit mar
 | 10 Pathfinder vs 10 Ork Boy @60yd | A 100% B 0% timeout 0% mutual 0% | 6s | A 10.0/10 up, 0.0 dead | B 0.0/10 up, 0.0 dead |
 | 5 Vespid Stingwing vs 3 Astartes Battle-Brother @40yd | A 0% B 100% timeout 0% mutual 0% | 5s | A 0.0/5 up, 0.0 dead | B 3.0/3 up, 0.0 dead |
 | 4 Gun Drone vs 5 Astra Militarum Guardsman @60yd | A 0% B 100% timeout 0% mutual 0% | 9s | A 0.0/4 up, 0.1 dead | B 4.9/5 up, 0.0 dead |
+
+## Facility battlefield
+
+The generated facility (docs/simulator.md, "Facility battlefield"): each side deploys in its staging bay at opposite ends, about 55 yards apart by the hallways, with walls blocking sight and movement and crates, barricades, corners and door frames giving cover. 100 battles each, elites aim, morale on. Layout 1 unless noted.
+
+### Standard GURPS HP, layout 1
+
+| Fight | Result | Length | Side A | Side B |
+|---|---|---|---|---|
+| 5 Astartes Battle-Brother vs 10 Genestealer | A 90% B 8% timeout 0% mutual 2% | 8s | A 3.7/5 up, 0.3 dead | B 0.3/10 up, 2.5 dead |
+| 5 Astartes Battle-Brother vs 20 Ork Boy | A 100% B 0% timeout 0% mutual 0% | 21s | A 5.0/5 up, 0.0 dead | B 0.0/20 up, 1.9 dead |
+| 20 Astra Militarum Guardsman vs 20 Ork Boy | A 76% B 22% timeout 0% mutual 2% | 13s | A 9.1/20 up, 1.9 dead | B 1.4/20 up, 3.0 dead |
+| 20 Astra Militarum Guardsman vs 5 Genestealer | A 48% B 50% timeout 0% mutual 2% | 13s | A 4.7/20 up, 5.7 dead | B 1.5/5 up, 0.6 dead |
+| 5 Astartes Battle-Brother vs 20 Astra Militarum Guardsman | A 100% B 0% timeout 0% mutual 0% | 22s | A 5.0/5 up, 0.0 dead | B 0.0/20 up, 8.6 dead |
+| 10 Fire Warrior (Shas'la) vs 5 Astartes Battle-Brother | A 45% B 55% timeout 0% mutual 0% | 26s | A 2.0/10 up, 2.5 dead | B 2.0/5 up, 0.2 dead |
+| 10 Necron Warrior vs 5 Astartes Battle-Brother | A 10% B 88% timeout 2% mutual 0% | 117s | A 0.3/10 up, 0.2 dead | B 3.1/5 up, 0.0 dead |
+| 3 Custodian Guardian vs 10 Astartes Battle-Brother | A 99% B 1% timeout 0% mutual 0% | 19s | A 2.6/3 up, 0.1 dead | B 0.0/10 up, 4.7 dead |
+| 10 Kabalite Warrior vs 10 Fire Warrior (Shas'la) | A 0% B 99% timeout 0% mutual 1% | 7s | A 0.0/10 up, 4.5 dead | B 8.6/10 up, 0.0 dead |
+| 5 Aspect Warrior vs 10 Ork Boy | A 96% B 3% timeout 0% mutual 1% | 21s | A 4.0/5 up, 0.1 dead | B 0.2/10 up, 0.1 dead |
+| 1 Lictor vs 5 Astra Militarum Guardsman | A 82% B 18% timeout 0% mutual 0% | 25s | A 0.8/1 up, 0.0 dead | B 0.7/5 up, 1.6 dead |
+| 20 Hormagaunt vs 10 Astra Militarum Guardsman | A 2% B 98% timeout 0% mutual 0% | 8s | A 0.1/20 up, 4.9 dead | B 9.1/10 up, 0.2 dead |
+
+### Revised Fractional Health, layout 1
+
+| Fight | Result | Length | Side A | Side B |
+|---|---|---|---|---|
+| 5 Astartes Battle-Brother vs 10 Genestealer | A 99% B 1% timeout 0% mutual 0% | 7s | A 4.5/5 up, 0.1 dead | B 0.0/10 up, 0.1 dead |
+| 5 Astartes Battle-Brother vs 20 Ork Boy | A 100% B 0% timeout 0% mutual 0% | 25s | A 5.0/5 up, 0.0 dead | B 0.0/20 up, 1.3 dead |
+| 20 Astra Militarum Guardsman vs 20 Ork Boy | A 33% B 66% timeout 0% mutual 1% | 17s | A 2.8/20 up, 1.8 dead | B 7.4/20 up, 0.3 dead |
+| 20 Astra Militarum Guardsman vs 5 Genestealer | A 6% B 94% timeout 0% mutual 0% | 12s | A 0.7/20 up, 0.6 dead | B 4.0/5 up, 0.1 dead |
+| 5 Astartes Battle-Brother vs 20 Astra Militarum Guardsman | A 100% B 0% timeout 0% mutual 0% | 18s | A 5.0/5 up, 0.0 dead | B 0.0/20 up, 1.1 dead |
+| 10 Fire Warrior (Shas'la) vs 5 Astartes Battle-Brother | A 4% B 95% timeout 1% mutual 0% | 48s | A 0.2/10 up, 0.1 dead | B 4.2/5 up, 0.3 dead |
+| 10 Necron Warrior vs 5 Astartes Battle-Brother | A 0% B 99% timeout 1% mutual 0% | 114s | A 0.1/10 up, 0.2 dead | B 4.9/5 up, 0.1 dead |
+| 3 Custodian Guardian vs 10 Astartes Battle-Brother | A 100% B 0% timeout 0% mutual 0% | 21s | A 2.9/3 up, 0.1 dead | B 0.0/10 up, 1.1 dead |
+| 10 Kabalite Warrior vs 10 Fire Warrior (Shas'la) | A 0% B 100% timeout 0% mutual 0% | 6s | A 0.0/10 up, 0.2 dead | B 8.6/10 up, 0.0 dead |
+| 5 Aspect Warrior vs 10 Ork Boy | A 70% B 30% timeout 0% mutual 0% | 25s | A 2.5/5 up, 0.0 dead | B 1.9/10 up, 1.0 dead |
+| 1 Lictor vs 5 Astra Militarum Guardsman | A 98% B 2% timeout 0% mutual 0% | 30s | A 1.0/1 up, 0.0 dead | B 0.1/5 up, 0.8 dead |
+| 20 Hormagaunt vs 10 Astra Militarum Guardsman | A 0% B 100% timeout 0% mutual 0% | 8s | A 0.0/20 up, 0.2 dead | B 9.3/10 up, 0.1 dead |
+
+### Standard GURPS HP, layout 2
+
+| Fight | Result | Length | Side A | Side B |
+|---|---|---|---|---|
+| 5 Astartes Battle-Brother vs 10 Genestealer | A 84% B 14% timeout 0% mutual 2% | 8s | A 3.5/5 up, 0.4 dead | B 0.7/10 up, 2.6 dead |
+| 5 Astartes Battle-Brother vs 20 Ork Boy | A 100% B 0% timeout 0% mutual 0% | 23s | A 5.0/5 up, 0.0 dead | B 0.0/20 up, 2.1 dead |
+| 20 Astra Militarum Guardsman vs 20 Ork Boy | A 73% B 25% timeout 0% mutual 2% | 13s | A 9.4/20 up, 1.9 dead | B 1.5/20 up, 3.1 dead |
+| 20 Astra Militarum Guardsman vs 5 Genestealer | A 37% B 60% timeout 0% mutual 3% | 12s | A 3.9/20 up, 5.6 dead | B 1.9/5 up, 0.5 dead |
+| 5 Astartes Battle-Brother vs 20 Astra Militarum Guardsman | A 100% B 0% timeout 0% mutual 0% | 26s | A 5.0/5 up, 0.0 dead | B 0.0/20 up, 8.1 dead |
+| 10 Fire Warrior (Shas'la) vs 5 Astartes Battle-Brother | A 53% B 47% timeout 0% mutual 0% | 25s | A 2.4/10 up, 2.6 dead | B 1.8/5 up, 0.1 dead |
+| 10 Necron Warrior vs 5 Astartes Battle-Brother | A 11% B 86% timeout 3% mutual 0% | 124s | A 0.5/10 up, 0.3 dead | B 3.3/5 up, 0.0 dead |
+| 3 Custodian Guardian vs 10 Astartes Battle-Brother | A 95% B 5% timeout 0% mutual 0% | 20s | A 2.4/3 up, 0.2 dead | B 0.2/10 up, 4.9 dead |
+| 10 Kabalite Warrior vs 10 Fire Warrior (Shas'la) | A 0% B 99% timeout 0% mutual 1% | 7s | A 0.0/10 up, 4.1 dead | B 8.9/10 up, 0.1 dead |
+| 5 Aspect Warrior vs 10 Ork Boy | A 92% B 8% timeout 0% mutual 0% | 19s | A 4.0/5 up, 0.0 dead | B 0.4/10 up, 0.1 dead |
+| 1 Lictor vs 5 Astra Militarum Guardsman | A 72% B 27% timeout 0% mutual 1% | 23s | A 0.7/1 up, 0.0 dead | B 1.0/5 up, 1.5 dead |
+| 20 Hormagaunt vs 10 Astra Militarum Guardsman | A 3% B 97% timeout 0% mutual 0% | 9s | A 0.1/20 up, 5.2 dead | B 8.5/10 up, 0.3 dead |
