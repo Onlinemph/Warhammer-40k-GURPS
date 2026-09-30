@@ -106,13 +106,13 @@ const SIM = (() => {
     [2000, -18], [3000, -19], [5000, -20], [7000, -21], [10000, -22]];
   function rangePenalty(yd) { for (const [r, p] of RANGE) if (yd <= r) return p; return -23; }
   // Progressive Recoil (the user's house rule, replacing B373): every round of a burst is rolled on its own. Round k
-  // (the first is 0) is at -k x Rcl; a weapon whose natural Rcl is 1 takes a flat -1 on every round after the first
-  // instead, except "Rcl 1*" weapons such as lasguns, which stay progressive. Braced, Rcl is halved (rounding up) for
+  // (the first is 0) is at -k x Rcl; only true laser weapons with Rcl 1 (marked "1L" in the data: lascannon,
+  // multi-laser, lasblaster, scatter laser) take a flat -1 on every round after the first instead (user direction). Braced, Rcl is halved (rounding up) for
   // the progression and every round gets +1 (the caller adds it); Aim helps only the first round.
   function rclPen(w, k, braced) {
     if (!k) return 0;
     const r = (w && w.rcl) || 1;
-    if (r === 1 && !(w && w.rclStar)) return 1;
+    if (r === 1 && w && w.rclFlat) return 1;
     return k * (braced ? Math.max(1, Math.ceil(r / 2)) : r);
   }
   // expected hits from n rounds at effective skill eff (aim: the Aim bonus inside eff, first round only)
@@ -301,7 +301,7 @@ const SIM = (() => {
         w.weight = sel.trait ? st.st * st.st / 100 : parseFloat(src.weight) || 0;
       } else {
         w.acc = accOf(line.accuracy); w.range = parseRange(line.range) || { half: 100, max: 300 };
-        w.rof = parseRoF(line.rate_of_fire); w.rcl = Math.max(1, num(line.recoil, 1)); w.rclStar = /\*/.test(String(line.recoil ?? ""));
+        w.rof = parseRoF(line.rate_of_fire); w.rcl = Math.max(1, num(line.recoil, 1)); w.rclFlat = /L/i.test(String(line.recoil ?? ""));
         w.shots = parseShots(line.shots); w.bulk = num(line.bulk, 0);
         const sm = /^(\d+)([MB†]*)/.exec(String(line.strength ?? ""));
         w.minST = sm && !/[MB]/.test(sm[2]) ? Number(sm[1]) : 0;
@@ -812,8 +812,8 @@ const SIM = (() => {
     const shadowed = m => !!m.h && psyker(m.u) && models.some(x => x.state === "ok" && x.h && x.u.side !== m.u.side && x.u.flags.shadow && hexDist(x.h, m.h) <= x.u.flags.shadow);
     const wl = (m, w) => w.level - (w.usage === "power" && w.fp && shadowed(m) ? 3 : 0);
     // Fright Check (B360): Will plus Fearlessness, never better than 13
-    // capped at 13 (B360) for morale and the warp; the Fright Checks under fire aren't capped (user direction:
-    // superhuman nerve should tell), so only a 17 or 18 breaks a Marine there
+    // capped at 13 (B360) only for Shadow in the Warp; morale and the Fright Checks under fire aren't capped (user
+    // direction: superhuman nerve should tell), so only a 17 or 18 breaks a Marine
     const frightLevel = (u, mod = 0, cap = 13) => Math.min(cap, u.will + (u.flags.fearless || 0) + (u.flags.cr ? 2 : 0) + 5 + mod);
     const fright = (u, mod = 0, cap = 13) => check(frightLevel(u, mod, cap));
     // a failed Fright Check rolls 3d + the margin of failure on the Fright Check Table (B360-361)
@@ -880,7 +880,7 @@ const SIM = (() => {
     function recoverStun(m) {
       if (m.stunT > 0) { m.stunT--; if (m.stunT > 0) return false; if (m.stunRec === "auto") return true; }
       const u = m.u, how = m.stunRec || "ht";
-      const lvl = how === "will" ? u.will : how === "willmod" ? frightLevel(u) : how === "iq" ? (u.stats.iq || 10) + (u.flags.cr ? 6 : 0) : u.HT + (u.flags.hpt && !frac ? 3 : 0);
+      const lvl = how === "will" ? u.will : how === "willmod" ? frightLevel(u, 0, Infinity) : how === "iq" ? (u.stats.iq || 10) + (u.flags.cr ? 6 : 0) : u.HT + (u.flags.hpt && !frac ? 3 : 0);
       return check(lvl).ok;
     }
     const dodgeOf = t => (t.halfDodge || weak(t) ? Math.ceil(t.u.dodge / 2) : t.u.dodge);
@@ -1669,7 +1669,7 @@ const SIM = (() => {
         }
         let hits = got;
         FX(["s", m.h.q, m.h.r, t.h.q, t.h.r, m.u.side, got ? 1 : 0, m.ix, t.ix, lvl, got, nb]);
-        L(`${m.id} ${w.usage === "power" ? "casts " + w.name + " at" : "fires " + (n > 1 ? n + " at" : "at")} ${t.id} (${d} yd${loc0 && loc0 !== "torso" ? ", aiming at the " + locName(loc0) : ""}${thru}, skill ${lvl}${braced ? ", braced" : ""}${nb > 1 ? (w.rcl === 1 && !w.rclStar ? ", then -1" : `, then -${braced ? Math.max(1, Math.ceil(w.rcl / 2)) : w.rcl} a round`) + (firstB ? ` unaimed` : "") : ""}): ${hits} hit${hits > 1 ? "s" : ""}`);
+        L(`${m.id} ${w.usage === "power" ? "casts " + w.name + " at" : "fires " + (n > 1 ? n + " at" : "at")} ${t.id} (${d} yd${loc0 && loc0 !== "torso" ? ", aiming at the " + locName(loc0) : ""}${thru}, skill ${lvl}${braced ? ", braced" : ""}${nb > 1 ? (w.rcl === 1 && w.rclFlat ? ", then -1" : `, then -${braced ? Math.max(1, Math.ceil(w.rcl / 2)) : w.rcl} a round`) + (firstB ? ` unaimed` : "") : ""}): ${hits} hit${hits > 1 ? "s" : ""}`);
         if (hits > crits && !w.malediction) {
           const open = hits - crits;   // critical rounds can't be defended
           if (d <= 1 && !w.cone) {
@@ -3156,7 +3156,7 @@ const SIM = (() => {
         if (frac2 <= 0.25 && !u.checked25) { u.checked25 = true; need = true; }
         if (need && alive > 0) {
           L(`${u.name} takes heavy losses: Fright Checks`);
-          for (const m of u.models) { if (m.state !== "ok") continue; const fc = fright(u); if (!fc.ok) frightTable(m, -fc.margin, "casualties"); }
+          for (const m of u.models) { if (m.state !== "ok") continue; const fc = fright(u, 0, Infinity); if (!fc.ok) frightTable(m, -fc.margin, "casualties"); }
           if (!u.models.some(active)) { u.routed = true; L(`${u.name} breaks and flees`); }
         }
       }

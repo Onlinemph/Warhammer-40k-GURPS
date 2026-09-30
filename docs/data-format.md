@@ -55,7 +55,7 @@ items: [...]             # for equipment / traits / skills
     - {name: Overcharge pack, cost: "+50", cost_type: to_original_cost, notes: ...}
 ```
 
-`rcl: "1*"` marks an Rcl 1 weapon that still takes the progressive recoil penalty in the simulator (the Imperial las family); a plain `rcl: 1` takes the flat −1 of the user's Progressive Recoil rule.
+`rcl: "1L"` marks a true laser weapon with Rcl 1 (lascannon, multi-laser, lasblaster, scatter laser): in the simulator it takes the flat −1 of the user's Progressive Recoil rule after the first round. Every other weapon, a plain `rcl: 1` included (lasguns and the rest of the Imperial las family), takes the stacking −Rcl per round.
 
 Melee weapons use `reach`, `parry`, `block`, `st` instead of the ranged keys. `skill` gets a standard default family for: Beam Weapons, Guns, Gunner, Liquid Projector, Throwing, Artillery, Broadsword, Shortsword, Knife, Axe/Mace, Two-Handed Axe/Mace, Two-Handed Sword, Spear, Polearm, Staff, Force Sword, Flail, Brawling, Shield. For anything else give `defaults: ["DX-4", "Karate", "Brawling-2"]`.
 
