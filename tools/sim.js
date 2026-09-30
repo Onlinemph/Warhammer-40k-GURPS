@@ -1009,28 +1009,27 @@ const SIM = (() => {
       let base = wl(m, w) + (opts.pointBlank ? Math.min(0, w.bulk) : rangePenalty(d)) + target.u.sm - skillPen(m) + aimBonus - (opts.pen || 0)
         + (opts.moved ? Math.min(-2, w.bulk) : 0) + (opts.aoa ? 1 : 0) - ((target.prone || target.kneel) && !opts.pointBlank ? 2 : 0) - (inCover(target) && !opts.pointBlank ? 2 : 0);
       m.aimTurns = 0;
-      // cones hit everyone in the cone; everything else may split automatic fire over neighbours (B373)
+      // cones hit everyone in the cone; a burst goes at one target (with recoil climbing per round, spreading it
+      // over neighbours as B373 allows would only put the later rounds at worse odds)
       const targets = [target];
       if (w.cone) {
         for (const x of models) if (x !== target && x !== m && x.state === "ok" && x.h && hexDist(x.h, target.h) <= Math.floor(w.cone / 2)) targets.push(x);
-      } else if (shots >= 6) {
-        const near = models.filter(x => x !== target && x.state === "ok" && x.h && x.u.side === target.u.side && hexDist(x.h, target.h) <= 2);
-        const parts = Math.min(1 + near.length, shots >= 16 ? 3 : 2);
-        while (targets.length < parts) targets.push(near.splice(Math.floor(R() * near.length), 1)[0]);
       }
       const halfD = d > w.range.half;
+      let fired = 0;   // recoil keeps climbing through the whole burst, across targets
       targets.forEach((t, i) => {
         const n = w.cone ? 1 : Math.floor(shots / targets.length) + (i < shots % targets.length ? 1 : 0);
         const inter = w.cone ? [] : between(m.h, t.h, m.u.side).filter(x => x !== t);
         const plan = planAttack(m, w, t, base - 4 * inter.length, false);
         const loc0 = plan.loc === "random" ? null : plan.loc;
         const lvl = plan.lvl;
-        const nb = w.cone ? 1 : n;
-        const r = check(lvl);
+        const nb = w.cone ? 1 : n, k0 = fired;
+        fired += nb;
+        const r = check(lvl - k0 * w.rcl);
         if (i === 0 && jamCheck(m, w, r)) return;
         // every round rolled on its own at a further -Recoil (house rule after 3e); criticals can't be dodged
         let got = r.ok ? 1 : 0, crits = r.crit ? 1 : 0;
-        for (let k = 1; k < nb; k++) { const rk = check(lvl - k * w.rcl); if (rk.ok) { got++; if (rk.crit) crits++; } }
+        for (let k = 1; k < nb; k++) { const rk = check(lvl - (k0 + k) * w.rcl); if (rk.ok) { got++; if (rk.crit) crits++; } }
         r.ok = got > 0;
         const thru = (inter.length ? `, through ${inter.length}` : "") + (plan.da ? `, deceptive -${plan.da}` : "");
         if (!r.ok && !w.cone) {
@@ -1040,7 +1039,7 @@ const SIM = (() => {
           return;
         }
         let hits = got;
-        L(`${m.id} ${w.usage === "power" ? "casts " + w.name + " at" : "fires " + (n > 1 ? n + " at" : "at")} ${t.id} (${d} yd${loc0 && loc0 !== "torso" ? ", aiming at the " + locName(loc0) : ""}${thru}, skill ${lvl}${nb > 1 ? ", -" + w.rcl + " a round" : ""}): ${hits} hit${hits > 1 ? "s" : ""}`);
+        L(`${m.id} ${w.usage === "power" ? "casts " + w.name + " at" : "fires " + (n > 1 ? n + " at" : "at")} ${t.id} (${d} yd${loc0 && loc0 !== "torso" ? ", aiming at the " + locName(loc0) : ""}${thru}, skill ${lvl}${k0 ? " from -" + k0 * w.rcl : ""}${nb > 1 || k0 ? ", -" + w.rcl + " a round" : ""}): ${hits} hit${hits > 1 ? "s" : ""}`);
         if (hits > crits && !w.malediction) {
           const open = hits - crits;   // critical rounds can't be defended
           if (d <= 1 && !w.cone) {
@@ -2121,7 +2120,7 @@ if (typeof document !== "undefined") (() => {
     wire();
     if (last) setupReplay();
   }
-  const HOW = `Every run plays a full GURPS 4e fight on a hex map, one yard per hex, second by second. Models act in Basic Speed order and an AI picks each one's maneuver: Aim, Attack, Move and Attack, All-Out Attack (Determined or Double) when nothing can hurt it, All-Out Defense when it can't hurt its foe, Feint and Deceptive Attack against strong defences, Rapid Strike, Ready to reload or clear a jam, Change Posture, and Concentrate for psychic powers. Facing matters: attacks from a flank cost the defender 2, from behind it gets no defence, so surrounding a foe pays. Elite attackers (best combat skill 17+, IQ 8+) aim at the location that does most harm (vitals, skull, eye lens at −10, neck, limbs, or a chink in the armour at −8 or −10 that halves its DR); everyone else hits random locations, with 1 in 6 face hits striking an eye lens. The setting can let everyone aim, as RAW allows, or no one. Ranged fire uses range penalties, the rapid-fire bonus and Recoil, spreads bursts over neighbours, and can malfunction or overheat; explosions splash neighbours, fragments fly, flamers hit the whole cone. Defenders Dodge, Parry or Block with retreat and shield DB, and shooters Dodge and Drop. Cover hides legs and groin and costs attackers 2; prone models are harder to shoot but fight badly. Armour divisors, Weak Points, regenerating shields, wounding, Injury Tolerance, Damage Reduction, follow-ups, crippling, knockback, bleeding, shock, stun, consciousness and death rolls, Reanimation Protocols, morale and Perils of the Warp all apply, with either standard HP or the Revised Fractional Health wound system. The full rule list with page references is docs/simulator.md. A charging mob that can barely hurt its foe grabs it, drags it down and pins it (B370), then the rest lay in with All-Out Attack (Strong) and Mighty Blows (1 FP). Not modelled: vehicles and stealth.`;
+  const HOW = `Every run plays a full GURPS 4e fight on a hex map, one yard per hex, second by second. Models act in Basic Speed order and an AI picks each one's maneuver: Aim, Attack, Move and Attack, All-Out Attack (Determined or Double) when nothing can hurt it, All-Out Defense when it can't hurt its foe, Feint and Deceptive Attack against strong defences, Rapid Strike, Ready to reload or clear a jam, Change Posture, and Concentrate for psychic powers. Facing matters: attacks from a flank cost the defender 2, from behind it gets no defence, so surrounding a foe pays. Elite attackers (best combat skill 17+, IQ 8+) aim at the location that does most harm (vitals, skull, eye lens at −10, neck, limbs, or a chink in the armour at −8 or −10 that halves its DR); everyone else hits random locations, with 1 in 6 face hits striking an eye lens. The setting can let everyone aim, as RAW allows, or no one. Ranged fire uses range penalties, per-round rolls with climbing Recoil for automatic fire, and can malfunction or overheat; explosions splash neighbours, fragments fly, flamers hit the whole cone. Defenders Dodge, Parry or Block with retreat and shield DB, and shooters Dodge and Drop. Cover hides legs and groin and costs attackers 2; prone models are harder to shoot but fight badly. Armour divisors, Weak Points, regenerating shields, wounding, Injury Tolerance, Damage Reduction, follow-ups, crippling, knockback, bleeding, shock, stun, consciousness and death rolls, Reanimation Protocols, morale and Perils of the Warp all apply, with either standard HP or the Revised Fractional Health wound system. The full rule list with page references is docs/simulator.md. A charging mob that can barely hurt its foe grabs it, drags it down and pins it (B370), then the rest lay in with All-Out Attack (Strong) and Mighty Blows (1 FP). Not modelled: vehicles and stealth.`;
 
   function results(r) {
     const pct = x => (100 * x / r.runs).toFixed(0) + "%";
