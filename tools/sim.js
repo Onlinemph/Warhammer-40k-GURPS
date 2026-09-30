@@ -1068,11 +1068,10 @@ const SIM = (() => {
       }
       // knockback (B378) from crushing and cutting blows
       if ((dmg.type === "cr" || (dmg.type === "cut" && pen <= 0)) && !ranged && t.state === "ok" && !t.grips.length) knockback(att, t, basic);
-      // blunt trauma (B379): flexible armour that stops a hit still passes 1 HP per full 5 points of crushing
-      // damage, or per full 10 of cutting, impaling or piercing
-      if (pen <= 0 && t.u.arm.flexible && armDR > 0 && /^(cr|cut|imp|pi)/.test(dmg.type)) {
-        const bt = Math.floor(raw / (dmg.type === "cr" ? 5 : 10));
-        if (bt > 0) { L(`  ${raw} dmg to ${loc} stopped by flexible armour: ${bt} blunt trauma`); injure(att, t, bt, loc, "cr"); return bt; }
+      // blunt trauma: armour that stops a hit still passes some of its force (see bluntOf)
+      if (pen <= 0 && armDR > 0) {
+        const bt = bluntOf(raw, dmg.type, t.u.arm.flexible, dmg.ex);
+        if (bt > 0) { L(`  ${raw} dmg to ${loc} stopped by ${t.u.arm.flexible ? "flexible" : "rigid"} armour: ${bt} blunt trauma`); injure(att, t, bt, loc, "cr"); return bt; }
       }
       if (pen <= 0) { if (t.h) FX(["h", t.ix, 0, loc, t.h.q, t.h.r]); L(`  ${raw} dmg to ${loc} fails to penetrate DR ${armDR + natDR}${div !== 1 ? "/" + (div === Infinity ? "∞" : div) : ""}`); return 0; }
       const flags = t.u.flags, poison = flags.poison;
@@ -1185,6 +1184,16 @@ const SIM = (() => {
 
     // ---- expected injury of weapon w against unit tu at a location (cached per battle)
     const EXP = new Map();
+    // blunt trauma (B379, extended by user direction): flexible armour that stops a hit passes 1 HP per full 5 points
+    // of crushing damage, or per full 10 of impaling or piercing; a cutting blow that doesn't get through lands as a
+    // crushing one; rigid armour passes crushing force too, at half the rate (1 per full 10). Burning, toxic, corrosive
+    // and explosive damage pass nothing this way.
+    function bluntOf(raw, type, flexible, ex) {
+      if (ex) return 0;
+      const crushy = /^cr/.test(type) || /^cut/.test(type);
+      if (flexible) return Math.floor(raw / (crushy ? 5 : /^(imp|pi)/.test(type) ? 10 : Infinity));
+      return crushy ? Math.floor(raw / 10) : 0;
+    }
     function expInj(w, tu, loc, dmgOverride) {
       const chink = loc.endsWith("#c");
       if (chink) loc = loc.slice(0, -2);
@@ -1205,7 +1214,11 @@ const SIM = (() => {
       for (let i = 0; i < 20; i++) {
         const raw = rollDamage(d), pen = raw - effDR;
         if (pen > 0) tot += injOf(pen);
-        else if (wpP && raw - halfDR > 0) tot += wpP * injOf(raw - halfDR);
+        else {
+          const bt = armDR > 0 ? Math.min(cap, bluntOf(raw, d.type, tu.arm.flexible, d.ex) / red) : 0;
+          if (wpP && raw - halfDR > 0) tot += wpP * injOf(raw - halfDR) + (1 - wpP) * bt;
+          else tot += bt;
+        }
       }
       const v = tot / 20;
       EXP.set(k, v);

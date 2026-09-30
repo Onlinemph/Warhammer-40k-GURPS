@@ -131,7 +131,7 @@ Standard GURPS HP (B377–420) or the user's Revised Fractional Health (see the 
 - **Below 1/3 HP** (B419, standard HP): Move and Dodge are halved, rounding up.
 - **Shock** (B419): −1 per HP of injury, or per full HP/10 for models with 20+ HP, at most −4.
 - **Major wounds** (B420): a single injury over HP/2, or any crippling, calls for an HT roll; failure stuns and knocks down, failure by 5+ knocks out.
-- **Blunt trauma** (B379): flexible armour (marked in the item's notes) that stops a hit still passes 1 HP per full 5 points of crushing damage, or per full 10 of cutting, impaling or piercing.
+- **Blunt trauma** (B379, extended by user direction): armour that stops a hit still passes some of its force as crushing injury. Flexible armour passes 1 HP per full 5 points of crushing damage, or per full 10 of impaling or piercing (B379). A cutting blow that doesn't get through lands as a crushing one, so it counts at the crushing rate (user direction). Rigid armour passes crushing force too, at 1 HP per full 10 points (a simulator value, half the flexible rate; the Basic Set gives rigid armour none). Burning, toxic and explosive damage pass nothing this way. The AI's damage estimates include it.
 - **Weapon Master and Trained by a Master** (B93, B99): Rapid Strike at −3 and extra parries at −2; Weapon Master adds +1 per die of the ST-based damage at skill DX+1, +2 at DX+2.
 - **Deceptive Attack** (B369) may not take effective skill below 10.
 - **Extra Attack** (B53) adds to All-Out Attack (Double) and Rapid Strike.
