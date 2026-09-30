@@ -715,7 +715,7 @@ Totals: 94 findings, 4 big, 29 medium, 61 small.
 
 ## User decisions
 
-1. Shields: force-field shields are shields like any other: Defense Bonus against every attack (house rule for firearms and beams), plus the shield's own DR and HP and the force field. The AI should also exploit a shield's downsides (it covers only the front and shield side, occupies an arm, and can be struck).
+1. Shields: force-field shields are shields like any other: Defense Bonus against every attack (by the book once Damage to Shields is used, #96: a defence that passes only thanks to the DB puts the round into the shield), plus the shield's own DR and HP and the force field. The AI should also exploit a shield's downsides (it covers only the front and shield side, occupies an arm, and can be struck).
 2. Necrons are Machines (no extra effort from FP).
 3. Use the book's tables: a ranged critical miss rolls the Critical Miss Table; guns with a Malf number use the Malfunction Table. **Done in batch A.**
 6. Morale uses the Fright Check Table. **Done in batch A.**
@@ -727,6 +727,7 @@ Totals: 94 findings, 4 big, 29 medium, 61 small.
 ## Progress
 
 - Batch A (items 2, 5, 6, 7, 22, 36, 37, 38, 72, 73, 74, 75): implemented.
+- Batch C (items 1, 8, 20, 24, 52, 53, 54, 55, 76, 78, 95, 96, 97; 77 for Slams and Shoves only): implemented. Open: #56, #77 for weapons. Shield DR and HP values await the user.
 
 ## Status of the earlier from-memory review
 

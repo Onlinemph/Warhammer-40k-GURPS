@@ -283,6 +283,7 @@ const SIM = (() => {
         w.reach = String(line.reach ?? "1");
         w.reachMax = Math.max(1, ...(w.reach.match(/\d+/g) || ["1"]).map(Number));
         w.oneHanded = oneHand(line.strength);
+        w.fencing = /^(Rapier|Saber|Smallsword|Main-Gauche)/.test(line.skill || "");   // B208: +3 retreating parry, -2 per extra parry
       } else {
         w.acc = accOf(line.accuracy); w.range = parseRange(line.range) || { half: 100, max: 300 };
         w.rof = parseRoF(line.rate_of_fire); w.rcl = Math.max(1, num(line.recoil, 1));
@@ -335,10 +336,10 @@ const SIM = (() => {
     const dualPen = dwa && melee ? Math.max(0, melee.level - dwa.level) : 4;
     const offPen = flags.ambi || (st.skills || []).some(s => /^Off-Hand Weapon Training/.test(s.name)) ? 0 : 4;
     const parryOf = w => w && w.parry != null ? Math.floor(w.level / 2) + 3 + w.parry + (flags.enhParry || 0) + (flags.cr ? 1 : 0) : null;
-    // shield Defense Bonus from any carried item (data/sim/weapons.yaml _item.db)
-    let db = 0;
-    for (const nm of [...(spec.armour || []), spec.melee && spec.melee.item, spec.ranged && spec.ranged.item, spec.shield && spec.shield.item])
-      if (nm && SIMW[nm] && SIMW[nm]._item && SIMW[nm]._item.db) db = Math.max(db, SIMW[nm]._item.db);
+    // a carried shield (data/sim/weapons.yaml _item): Defense Bonus, and its own DR and HP under Damage to Shields (B484)
+    let db = 0, cs = null;
+    for (const nm of [spec.carried, ...(spec.armour || []), spec.melee && spec.melee.item, spec.ranged && spec.ranged.item, spec.shield && spec.shield.item])
+      if (nm && SIMW[nm] && SIMW[nm]._item && SIMW[nm]._item.db > db) { const it = SIMW[nm]._item; db = it.db; cs = { name: nm, db: it.db, dr: it.dr ?? null, hp: it.hp ?? null, ht: it.ht || 12, field: it.field || null }; }
     // psychic powers (data/sim/powers.yaml)
     const powers = [];
     let pshield = null;
@@ -363,7 +364,7 @@ const SIM = (() => {
       // weapons in hand (B382): gun and blade are both ready when both are one-handed, when they're one weapon
       // (a bayonet on the lasgun, a guardian spear's bolt caster) or when either is natural; otherwise switching
       // is a Ready, free on a Fast-Draw roll (B194)
-      bothReady: !ranged || !melee || melee.name === "Punch" || !!melee.natural || !!ranged.natural || (spec.melee && spec.ranged && spec.melee.item && spec.melee.item === spec.ranged.item)
+      bothReady: cs ? !ranged || !melee || !!melee.natural || !!ranged.natural || (spec.melee && spec.ranged && spec.melee.item === spec.ranged.item) : !ranged || !melee || melee.name === "Punch" || !!melee.natural || !!ranged.natural || (spec.melee && spec.ranged && spec.melee.item && spec.melee.item === spec.ranged.item)
         || /fixed to|mounted|underslung/i.test(melee.usage || "") || (!!ranged.oneHanded && !!melee.oneHanded),
       fastDraw: Math.max(-Infinity, ...(st.skills || []).filter(s => /^Fast-Draw/.test(s.name) && !/Ammo/.test(s.name) && s.level != null).map(s => s.level)), st: st.st, dx: st.dx, formation: spec.formation || "line",
       // elites call shots: a best combat skill (weapon or power) of 17+, two past a trained line soldier's 15,
@@ -374,7 +375,8 @@ const SIM = (() => {
       ai: aiProfile(spec.template),
       stance: spec.stance || "shoot", stats: st, flags, speed: st.speed, move: Math.max(1, st.move + arm.move),
       dodge: st.dodge, HP: st.hp + arm.hp, HT: st.ht, will: st.will, sm: st.sm || 0,
-      arm, nat, ranged, melee, parry: parryOf(melee), shield: spec.shield && spec.shield.sp ? { ...spec.shield } : pshield,
+      arm, nat, ranged, melee, parry: parryOf(melee), cs, judo: (st.skills || []).some(s => /^(Judo|Karate|Boxing)/.test(s.name) && s.level != null), bl: Math.round(liftST * liftST / 5),
+      shield: spec.shield && spec.shield.sp ? { ...spec.shield } : cs && cs.field ? { item: cs.name + " field", ...cs.field, ranged_only: false, arc: "shield" } : pshield,
     };
     return u;
   }
@@ -384,7 +386,7 @@ const SIM = (() => {
       hp: u.HP, ht: u.HT, dodge: u.dodge, dmgRed: u.flags.dmgRed > 1 ? u.flags.dmgRed : 0, parry: u.parry, move: u.move, drTorso: tor, drEye: eye, wp: u.arm.wp,
       ranged: u.ranged && { name: u.ranged.name, usage: u.ranged.usage, dmg: u.ranged.text, follow: u.ranged.followText, skill: u.ranged.level, acc: u.ranged.acc, rof: u.ranged.rof, range: u.ranged.range },
       melee: u.melee && { name: u.melee.name, usage: u.melee.usage, dmg: u.melee.text + (u.melee.dmg ? ` = ${fmtDice(u.melee.dmg)}` : "") + (u.melee.rend ? `; rending hit (${u.melee.rendBy}+) ${fmtDice(u.melee.rend)}` : ""), skill: u.melee.level },
-      shield: u.shield,
+      shield: u.shield, db: u.db, carried: u.cs && { name: u.cs.name, db: u.cs.db, dr: u.cs.dr, hp: u.cs.hp },
     };
   }
   function fmtDice(d) {
@@ -448,6 +450,13 @@ const SIM = (() => {
     let d = Math.abs(Math.atan2(by - ay, bx - ax) - DIRANG[facing]) * 180 / Math.PI;
     if (d > 180) d = 360 - d;
     return d <= 91 ? "front" : d <= 151 ? "side" : "rear";
+  }
+  // which side a figure in a side or front hex is on: "L" or "R" (the shield arm is the left)
+  function sideOf(at, facing, from) {
+    const [ax, ay] = px(at), [bx, by] = px(from);
+    let d = Math.atan2(by - ay, bx - ax) - DIRANG[facing];
+    while (d > Math.PI) d -= 2 * Math.PI; while (d < -Math.PI) d += 2 * Math.PI;
+    return d < 0 ? "L" : "R";
   }
   function faceToward(at, to) {
     const [ax, ay] = px(at), [bx, by] = px(to);
@@ -693,7 +702,7 @@ const SIM = (() => {
         const m = { u, id: `${u.name} #${i + 1}`, hp: u.HP, fp: u.fp, state: "ok", shock: 0, stunned: false,
           facing: u.side === 0 ? 0 : 3, prone: false, moved: false, aimTurns: 0, aimTarget: null, lastTarget: null,
           ammo: u.ranged ? u.ranged.shots.mag : 0, reload: 0, jam: 0, gunBroken: false, conc: 0,
-          sp: u.shield ? u.shield.sp : 0, spHit: -99, spCollapsed: false,
+          sp: u.shield ? u.shield.sp : 0, spHit: -99, spCollapsed: false, shHP: u.cs && u.cs.hp != null ? u.cs.hp : 0, shState: "ok",
           parries: 0, retreated: false, blocked: false, attacked: false, aoa: false, aod: false, feint: null,
           reanim: 0, dmgDealt: 0, kills: 0, armsLost: 0, legsLost: 0, grips: [], holding: null, pinned: false,
           waiting: null, zone: null, grenadesLeft: u.grenades.map(g => g.count), grenadeReady: null,
@@ -915,7 +924,7 @@ const SIM = (() => {
       let fraw = w.follow ? rollDamage(w.follow) : 0;   // splash and fragments pass follow: null
       const basic = raw;
       const sh = t.u.shield;
-      if (sh && t.sp > 0 && (ranged || !sh.ranged_only)) {
+      if (sh && t.sp > 0 && (ranged || !sh.ranged_only) && (!sh.arc || !att || !att.h || !t.h || shieldCovers(t, att))) {
         t.spHit = turn;
         if (raw <= t.sp) { t.sp -= raw; if (fraw) t.sp = Math.max(0, t.sp - fraw); if (t.h) FX(["f", t.ix, raw, t.h.q, t.h.r]); L(`  shield holds (${t.sp} SP left)`); return 0; }
         raw -= t.sp; t.sp = 0; t.spCollapsed = true; L(`  shield collapses`);   // what gets through still carries its follow-up
@@ -964,6 +973,41 @@ const SIM = (() => {
       if (t.h) FX(["h", t.ix, inj + finj, loc, t.h.q, t.h.r]);
       injure(att, t, inj + finj, loc, dmg.type);
       return inj + finj;
+    }
+    // Damage to Shields (B484): a defence that only succeeded thanks to the shield's DB means the attack struck the
+    // shield. Its field (if any) takes it first, then the shield's DR; penetrating damage costs HP as a Homogeneous
+    // object, and damage beyond DR + HP/4 punches through to the bearer (the shield arm on 1-2, else where aimed)
+    function shieldHit(att, w, t, loc, ranged) {
+      const cs = t.u.cs;
+      if (!cs || t.shState === "gone" || t.state !== "ok" || !w || !w.dmg) return;
+      let raw = rollDamage(w.dmg);
+      const sh = t.u.shield;
+      L(`  the ${ranged ? "shot" : "blow"} strikes ${t.id}'s ${cs.name}`);
+      if (sh && t.sp > 0 && (ranged || !sh.ranged_only) && (!sh.arc || shieldCovers(t, att))) {
+        t.spHit = turn;
+        if (raw <= t.sp) { t.sp -= raw; if (t.h) FX(["f", t.ix, raw, t.h.q, t.h.r]); L(`  its field holds (${t.sp} SP left)`); return; }
+        raw -= t.sp; t.sp = 0; t.spCollapsed = true; L(`  its field collapses`);
+      }
+      if (cs.dr == null) return;
+      const div = w.dmg.div, dr = div === Infinity ? 0 : Math.floor(cs.dr / div);
+      if (raw <= dr) {
+        if (t.h) FX(["h", t.ix, 0, "shield", t.h.q, t.h.r]);
+        L(`  ${raw} dmg fails to penetrate the shield (DR ${cs.dr})`);
+        if (!ranged && /^(cr|cut)/.test(w.dmg.type)) knockback(att, t, raw);   // full knockback (B484)
+        return;
+      }
+      const loss = Math.max(1, Math.floor((raw - dr) * (HOMOG[w.dmg.type] ?? 1))), before = t.shHP;
+      t.shHP -= loss;
+      L(`  the shield takes ${loss} (${t.shHP}/${cs.hp} HP)`);
+      const hp = cs.hp;
+      if (t.shHP <= -10 * hp) { t.shState = "gone"; L(`  ${t.id}'s ${cs.name} is torn away`); }
+      else if (t.shHP <= -5 * hp) { if (t.shState !== "destroyed") L(`  ${t.id}'s ${cs.name} is smashed`); t.shState = "destroyed"; }
+      else {
+        for (let k = 1; k <= 4; k++) if (before > -k * hp && t.shHP <= -k * hp && t.shState !== "destroyed" && !check(cs.ht).ok) { t.shState = "destroyed"; L(`  ${t.id}'s ${cs.name} is smashed`); }
+        if (t.shHP <= 0 && t.shState === "ok" && !check(cs.ht).ok) { t.shState = "disabled"; L(`  ${t.id}'s ${cs.name} gives out`); }
+      }
+      const cover = div === Infinity ? 0 : Math.floor((cs.dr + hp / 4) / div);
+      if (raw > cover) { L(`  and punches through`); applyHit(att, w, t, d6() <= 2 ? "arm" : loc === "random" ? hitLocation() : loc, ranged, false, null, raw - cover); }
     }
     function knockback(att, t, basic) {
       const st = Math.max(3, t.u.st + (t.u.arm.lifting || 0));
@@ -1045,9 +1089,9 @@ const SIM = (() => {
     function planAttack(m, w, t, lvl, melee, dmgOverride) {
       // a regenerating shield that's up soaks the blow before armour: a called shot is wasted on it, so aim at the
       // body (or not at all) until it's down, and count only what the shield won't absorb
-      const sh = t.u.shield, shUp = !!(sh && t.sp > 0 && (!melee || !sh.ranged_only) && !w.malediction);
+      const sh = t.u.shield, shUp = !!(sh && t.sp > 0 && (!melee || !sh.ranged_only) && !w.malediction && (!sh.arc || shieldCovers(t, m)));
       const locs = shUp ? [aimsShots(m) ? "torso" : "random"] : aimsShots(m) || (melee && t.pinned) ? [...Object.keys(AIM), ...Object.keys(AIM).filter(l => l !== "eye" && drAt(t.u.arm.dr, l === "vitals" ? "torso" : l) > 0).map(l => l + "#c")] : ["random"];
-      const def0 = melee ? bestDefence(t, m, true) : w.malediction ? (w.fp && t.u.flags.blank ? 99 : w.resist === "HT" ? t.u.HT : t.u.will) - 2 : rangedDefence(t, m);
+      const def0 = melee ? bestDefence(t, m, true, w) : w.malediction ? (w.fp && t.u.flags.blank ? 99 : w.resist === "HT" ? t.u.HT : t.u.will) - 2 : rangedDefence(t, m);
       let best = { loc: "torso", da: 0, score: 0, lvl };
       for (const loc of locs) {
         const pen = loc === "random" ? 0 : loc.endsWith("#c") ? Math.min(AIM[loc.slice(0, -2)], CHINK(loc.slice(0, -2))) : loc === "eye" && drAt(t.u.arm.dr, "eye") > 0 ? -10 : AIM[loc];   // an eye behind a helmet lens or visor is -10 (B399-400)
@@ -1090,54 +1134,75 @@ const SIM = (() => {
       }
       return best;
     }
-    const canRetreat = (t, att) => !t.retreated && !t.stunned && !t.mna && !t.grips.length && !t.prone && !!retreatHex(t, att);
-    function bestDefence(t, att, melee) {
+    // retreat (B377): melee only, once per turn, not while held, stunned, kneeling or after a Move and Attack; the bonus
+    // then holds against every attack by the same foe until the defender's next turn
+    const canRetreat = (t, att) => t.retreatFrom === att || (!t.retreated && !t.stunned && !t.stunRecovering && !t.mna && !t.grips.length && !(t.kneel && !t.prone) && !!retreatHex(t, att));
+    // shields cover the front and the shield (left) side (B287)
+    const shieldCovers = (t, att) => { const a = arcTo(t, att); return a === "front" || (a === "side" && sideOf(t.h, t.facing, att.h) === "L"); };
+    const shieldDB = t => t.u.cs && t.shState === "ok" && !t.blockLost ? t.u.cs.db : 0;
+    const canParry = t => t.u.parry != null && bladeReady(t) && !(t.u.melee.unbalanced && t.attacked) && t.armsLost < 2 && !t.mna;
+    // the defences open to t against att: kind is melee, ranged, pb (a gun fired at point-blank) or thrown.
+    // With Damage to Shields in play (B484) a shield's DB counts against every attack from its arcs (B287)
+    function defOpts(t, att, kind, aw) {
       if (t.state !== "ok" || t.aoa || t.pinned) return null;
       const arc = arcTo(t, att);
       if (arc === "rear") return null;
-      const mod = (arc === "side" ? -2 : 0) - (t.stunned ? 4 : 0) - (t.prone ? 3 : 0) + (arc !== "rear" ? t.u.db : 0);
-      const aod = how => t.aod && t.aodDef === how ? 2 : 0;   // All-Out Defense: +2 to the one defence chosen
-      const rt = melee && canRetreat(t, att);
-      let d = dodgeOf(t) + (rt ? 3 : 0) + aod("dodge");
-      if (melee && t.u.parry != null && bladeReady(t) && !(t.u.melee.unbalanced && t.attacked) && t.armsLost < 2)
-        d = Math.max(d, t.u.parry + (rt ? 1 : 0) - (t.u.flags.master ? 2 : 4) * t.parries + aod("parry"));
-      if (melee && t.u.db && !t.blocked) d = Math.max(d, t.u.block + (rt ? 1 : 0) + aod("block"));
-      return d + mod - (t.kneel && !t.prone ? 2 : 0) - (t.offBalance ? 2 : 0);
+      const db = att && att.h && t.h && shieldCovers(t, att) ? shieldDB(t) : 0;
+      const mod = (arc === "side" ? -2 : 0) - (t.stunned || t.stunRecovering ? 4 : 0) - (t.prone ? 3 : 0) - (t.kneel && !t.prone ? 2 : 0) - (t.offBalance ? 2 : 0) + db;
+      const aod = how => t.aod && t.aodDef === how ? 2 : 0;
+      const rt = kind === "melee" && canRetreat(t, att);
+      const opts = [{ how: "dodge", v: dodgeOf(t) + (rt ? 3 : 0) + aod("dodge"), retreat: rt }];
+      if ((kind === "melee" || kind === "pb") && canParry(t)) {
+        const w = t.u.melee, bare = w.name === "Punch", master = !!t.u.flags.master;
+        const step = w.fencing && master ? 1 : w.fencing || master ? 2 : 4;   // B376
+        let v = t.u.parry + (rt ? (w.fencing || (bare && t.u.judo) ? 3 : 1) : 0) - step * t.parries - (t.grips.length ? 4 : 0) + aod("parry");
+        // bare hands against a weapon: -3 unless it's a thrust or the defender knows Judo or Karate (B377)
+        if (bare && aw && !aw.natural && aw.name !== "Punch" && !/^imp|^pi/.test((aw.dmg || {}).type || "") && !t.u.judo) v -= 3;
+        // nobody parries a weapon (or a body) heavier than their Basic Lift, twice that two-handed (B376)
+        if (!(aw && aw.weight && aw.weight > t.u.bl * (w.oneHanded === false ? 2 : 1))) opts.push({ how: "parry", v, retreat: rt });
+      }
+      // no blocking bullets or beams (B375); thrown weapons and melee blows can be blocked
+      if ((kind === "melee" || kind === "thrown") && db && !t.blocked) opts.push({ how: "block", v: t.u.block + (rt ? 1 : 0) + aod("block"), retreat: rt });
+      return { arc, mod, db, opts };
     }
-    function rangedDefence(t, att) {
-      if (t.state !== "ok" || t.aoa) return null;
-      const arc = arcTo(t, att);
-      if (arc === "rear") return null;
-      return dodgeOf(t) + (arc === "side" ? -2 : 0) - (t.stunned ? 4 : 0) - (t.prone ? 3 : 0) - (t.kneel && !t.prone ? 2 : 0) + (t.aod && t.aodDef === "dodge" ? 2 : 0) + t.u.db;
+    function bestDefence(t, att, melee, aw) {
+      const d = defOpts(t, att, melee ? "melee" : "ranged", aw);
+      return d ? Math.max(...d.opts.map(o => o.v)) + d.mod : null;
     }
-    // resolve a defence roll; returns margin (>=0) on success or null
+    function rangedDefence(t, att) { return bestDefence(t, att, false); }
+    // resolve a defence roll; a melee (or point-blank) defence returns { how, margin } or null, a ranged one the margin or null.
+    // t.shieldStruck: the defence only succeeded thanks to the shield's DB, so the attack struck the shield (B484)
     function defend(t, att, melee, da, feint, aw) {
+      t.shieldStruck = false;
       if (t.state !== "ok" || t.aoa || t.pinned) return null;
       if (t.grips.length) t.retreated = true;   // held: no retreat
-      const arc = arcTo(t, att);
-      if (arc === "rear") return null;
-      const mod = (arc === "side" ? -2 : 0) - (t.stunned ? 4 : 0) - (t.prone ? 3 : 0) - (t.kneel && !t.prone ? 2 : 0) - (t.offBalance ? 2 : 0) + (t.blockLost ? 0 : t.u.db) - da - (feint || 0);
+      // a shield at 0 HP or less may give out whenever it's used (HT roll, B483)
+      if (t.u.cs && t.u.cs.hp != null && t.shHP <= 0 && t.shState === "ok" && !check(t.u.cs.ht).ok) { t.shState = "disabled"; L(`  ${t.id}'s ${t.u.cs.name} gives out`); }
+      const kind = melee === true ? "melee" : melee || "ranged";
+      const D = defOpts(t, att, kind, aw);
+      if (!D) return null;
+      const mod = D.mod - da - (feint || 0);
       const aod = how => t.aod && t.aodDef === how ? 2 : 0;
-      if (!melee) {
+      if (kind === "ranged") {
         let d = dodgeOf(t) + mod + aod("dodge") + feverish(t, att, false, dodgeOf(t) + mod);
         // Dodge and Drop (B377): a shooter not in melee drops prone for +3
         let drop = false;
         if (!t.prone && t.u.stance === "shoot" && (t.u.ranged || t.u.powers.some(p => !p.melee)) && !engaged(t)) { d += 3; drop = true; }
         const r = check(d);
         if (drop || r.fumble) t.prone = true;
+        if (r.ok && r.margin < D.db) t.shieldStruck = true;
+        t.defDB = D.db;
         return r.ok ? Math.max(0, r.margin) : null;
       }
-      const rt = canRetreat(t, att);
-      const opts = [{ how: "dodge", v: dodgeOf(t) + (rt ? 3 : 0) + aod("dodge"), retreat: rt }];
-      if (t.u.parry != null && bladeReady(t) && !(t.u.melee.unbalanced && t.attacked) && t.armsLost < 2)
-        opts.push({ how: "parry", v: t.u.parry + (rt ? 1 : 0) - (t.u.flags.master ? 2 : 4) * t.parries - (t.grips.length ? 4 : 0) + aod("parry"), retreat: rt });
-      if (t.u.db && !t.blocked && !t.blockLost) opts.push({ how: "block", v: t.u.block + (rt ? 1 : 0) + aod("block"), retreat: rt });
+      const opts = D.opts;
       const o = opts.reduce((a, b) => b.v > a.v ? b : a);
       if (o.how === "parry") t.parries++;
       if (o.how === "block") t.blocked = true;
       // retreating is a real step back or aside, once per turn (B377)
-      if (o.retreat) { t.retreated = true; const h = retreatHex(t, att); if (h) place(t, h); }
+      if (o.retreat && t.retreatFrom !== att) { t.retreated = true; t.retreatFrom = att; const h = retreatHex(t, att); if (h) place(t, h); }
       const r = check(o.v + mod + feverish(t, att, true, o.v + mod));
+      if (r.ok && r.margin < D.db) t.shieldStruck = true;
+      t.defDB = D.db;
       if (r.ok && t.h) FX(["v", t.ix, o.how, t.h.q, t.h.r]);
       // criticals on defence (B381-382): a critical success sends the attacker to the Critical Miss Table;
       // a botched Dodge falls down, a botched Block loses the shield until a Ready, a botched parry rolls the table
@@ -1216,21 +1281,34 @@ const SIM = (() => {
         }
       }
       if (!slots.size) return null;
-      const start = key(m.h.q, m.h.r), prev = new Map([[start, null]]), q = [m.h];
+      // a shield (and a storm shield's field) covers only the front and the shield side: go round to the weapon
+      // side or the back when that's no more than two steps further (B287)
+      const guarded = (hk, f) => {
+        if (!(shieldDB(f) || (f.u.shield && f.u.shield.arc && f.sp > 0))) return false;
+        const [q, r] = hk.split(",").map(Number), h = { q, r }, a = arcOf(f.h, f.facing, h);
+        return a === "front" || (a === "side" && sideOf(f.h, f.facing, h) === "L");
+      };
+      const start = key(m.h.q, m.h.r), prev = new Map([[start, null]]), dist = new Map([[start, 0]]), q = [m.h];
+      let fallback = null;
+      const route = (hk, h) => {
+        const path = [];
+        for (let k = hk, n = h; k !== start; ) { path.unshift(n); const p = prev.get(k); k = key(p.q, p.r); n = p; }
+        return { path, foe: slots.get(hk) };
+      };
       for (let i = 0; i < q.length && prev.size < maxNodes; i++) {
         const h = q[i], hk = key(h.q, h.r);
+        if (fallback && dist.get(hk) > fallback.d + 2) break;
         if (hk !== start && slots.has(hk)) {
-          const path = [];
-          for (let k = hk, n = h; k !== start; ) { path.unshift(n); const p = prev.get(k); k = key(p.q, p.r); n = p; }
-          return { path, foe: slots.get(hk) };
+          if (!guarded(hk, slots.get(hk))) return route(hk, h);
+          if (!fallback) fallback = { hk, h, d: dist.get(hk) };
         }
         for (const [dq, dr] of DIRS) {
           const n = { q: h.q + dq, r: h.r + dr }, nk = key(n.q, n.r);
           if (prev.has(nk) || taken(nk)) continue;
-          prev.set(nk, h); q.push(n);
+          prev.set(nk, h); dist.set(nk, dist.get(hk) + 1); q.push(n);
         }
       }
-      return null;
+      return fallback ? route(fallback.hk, fallback.h) : null;
     }
     function followPath(m, path, steps) {
       let moved = 0;
@@ -1357,11 +1435,19 @@ const SIM = (() => {
           const open = hits - crits;   // critical rounds can't be defended
           if (d <= 1 && !w.cone) {
             // in close combat the defender can parry the weapon (or step aside) instead of dodging the shot (B391)
-            const def = defend(t, m, true, plan.da, 0);
-            if (def) { const dg = def.how === "parry" ? open : Math.min(open, 1 + def.margin); hits -= dg; L(`  ${t.id} ${def.how === "parry" ? "knocks the gun aside" : def.how === "block" ? "blocks " + dg : "dodges " + dg}`); }
+            const def = defend(t, m, "pb", plan.da, 0, w);
+            if (def) {
+              const dg = def.how === "parry" ? open : Math.min(open, 1 + def.margin); hits -= dg; L(`  ${t.id} ${def.how === "parry" ? "knocks the gun aside" : "dodges " + dg}`);
+              if (t.shieldStruck && def.how !== "parry") for (let k = 0; k < dg; k++) shieldHit(m, w, t, loc0 || "random", true);
+            }
           } else {
             const def = defend(t, m, false, plan.da, 0);
-            if (def != null) { const dg = Math.min(open, 1 + def); hits -= dg; L(`  ${t.id} dodges ${dg}`); }
+            if (def != null) {
+              const dg = Math.min(open, 1 + def); hits -= dg; L(`  ${t.id} dodges ${dg}`);
+              // the rounds the shield's DB turned aside struck it: all of them if the dodge needed the DB, else DB of them
+              const struck = t.shieldStruck ? dg : Math.min(dg, t.defDB || 0);
+              for (let k = 0; k < struck && t.state === "ok"; k++) shieldHit(m, w, t, loc0 || "random", true);
+            }
           }
         }
         for (let k = 0; k < hits && t.state === "ok"; k++) {
@@ -1475,7 +1561,12 @@ const SIM = (() => {
         if (!r.ok) { L(`${m.id} strikes at ${t.id} (${loc !== "torso" ? locName(loc) + ", " : ""}skill ${plan.lvl}): misses`); if (r.fumble) critMiss(m, w); continue; }
         if (!r.crit) {
           const def = defend(t, m, true, plan.da, feint, w);
-          if (def) { L(`${m.id} strikes at ${t.id}: ${def.how === "parry" ? "parried" : def.how === "block" ? "blocked" : "dodged"}`); if (def.how === "parry" && w.name === "Punch") cutsArm(t, m); continue; }
+          if (def) {
+            L(`${m.id} strikes at ${t.id}: ${def.how === "parry" ? "parried" : def.how === "block" ? "blocked" : "dodged"}`);
+            if (def.how === "parry" && (w.name === "Punch" || w.natural)) cutsArm(t, m);
+            else if (t.shieldStruck) shieldHit(m, w, t, loc, false);
+            continue;
+          }
         }
         const rending = w.rend && (r.crit || r.margin >= w.rendBy);
         L(`${m.id} strikes ${t.id}${loc !== "torso" ? " in the " + locName(loc) : ""} with ${w.name}${w.alt || /^thrust/i.test(w.usage || "") ? (/thrust/i.test(w.usage || "") ? " (thrust)" : " (swing)") : ""}${rending ? " (rending hit)" : ""}`);
@@ -1756,7 +1847,7 @@ const SIM = (() => {
             const cont = GAMMA * (shotValueFrom(m, h2, pool) - shotValueFrom(m, m.h, pool));
             add(Wr * kv(m, t, E) + cont - risk(m, h2, ""), `advance-fire@${t.id}`, () => {
               stepToward(m, t.h, mv, 2); if (m.state !== "ok" || !m.h || m.stunned || !t.h || m.readied) return;
-              m.facing = faceToward(m.h, t.h); fireAt(m, w, t, { moved: true });
+              m.facing = faceToward(m.h, t.h); m.mna = true; fireAt(m, w, t, { moved: true });
             });
           }
         }
@@ -2204,11 +2295,12 @@ const SIM = (() => {
       const raw = rollDamage(w.dmg);
       if (r.ok) {
         // a thrown grenade is an attack on its target, who may Dodge it (B377); a dodged grenade goes off a yard away
-        const def = r.crit ? null : defend(c, m, false, 0, 0);
+        // a thrown grenade can be dodged or blocked (B373-375); either way it goes off a yard away
+        const def = r.crit ? null : defend(c, m, "thrown", 0, 0, w);
         if (def != null) {
           const off = DIRS[Math.floor(R() * 6)]; let at = { q: c.h.q + off[0], r: c.h.r + off[1] };
           if (terr && wallAt(key(at.q, at.r))) at = c.h;
-          L(`${m.id} throws a ${w.name} at ${c.id} (skill ${g.lvl}): ${c.id} dodges and it goes off a yard away`);
+          L(`${m.id} throws a ${w.name} at ${c.id} (skill ${g.lvl}): ${c.id} ${def.how === "block" ? "knocks it aside" : "dodges"} and it goes off a yard away`);
           const x0 = occ.get(key(at.q, at.r));
           if (x0 && x0.state === "ok" && x0 !== c) applyHit(m, { dmg: noDiv(w.dmg), follow: null }, x0, "torso", true, false, noDiv(w.dmg), raw);
           explosion(m, w, at, raw);
@@ -2310,7 +2402,7 @@ const SIM = (() => {
       m.attacked = true;
       const r = check(lvl);
       if (!r.ok) { L(`${m.id} slams at ${t.id} (skill ${lvl}): misses`); return; }
-      if (!r.crit) { const def = defend(t, m, true, 0, 0, UNARMED); if (def) { L(`${m.id} slams at ${t.id}: ${def.how === "dodge" ? "dodged" : def.how + "ed"}`); return; } }
+      if (!r.crit) { const def = defend(t, m, true, 0, 0, { ...UNARMED, weight: m.u.st }); if (def) { L(`${m.id} slams at ${t.id}: ${def.how === "dodge" ? "dodged" : def.how + "ed"}`); return; } }
       const dm = slamDice(m.u.HP, v), dt = slamDice(t.u.HP, v);
       const a = rollDamage(dm), b = rollDamage(dt);
       L(`${m.id} slams into ${t.id} at ${v} yd/s (${a} vs ${b})`);
@@ -2328,7 +2420,7 @@ const SIM = (() => {
       m.attacked = true;
       const r = check(lvl);
       if (!r.ok) { L(`${m.id} shoves at ${t.id} (skill ${lvl}): misses`); return; }
-      if (!r.crit) { const def = defend(t, m, true, 0, 0, UNARMED); if (def) { L(`${m.id} shoves at ${t.id}: ${def.how === "dodge" ? "dodged" : def.how + "ed"}`); return; } }
+      if (!r.crit) { const def = defend(t, m, true, 0, 0, { ...UNARMED, weight: m.u.st }); if (def) { L(`${m.id} shoves at ${t.id}: ${def.how === "dodge" ? "dodged" : def.how + "ed"}`); return; } }
       const sd = stDamage(m.u.st), thr = parseDamage("thr cr", sd.thr, sd.sw);
       L(`${m.id} shoves ${t.id}`);
       if (t.grips.length) { if (!check(t.u.dx - 4).ok) { t.prone = true; L(`  ${t.id} goes down`); } return; }
@@ -2362,6 +2454,7 @@ const SIM = (() => {
     function cutsArm(t, att) {
       const w = t.u.melee;
       if (!w || w.natural || w.name === "Punch" || t.state !== "ok" || att.state !== "ok") return;
+      if (!check(w.level - skillPen(t) - (att.u.judo ? 4 : 0)).ok) return;   // B376: a skill roll to strike the limb squarely
       L(`  ${t.id}'s ${w.name} catches ${att.id}'s arm`);
       applyHit(t, w, att, "arm", false, false, null, rollDamage(w.dmg));
     }
@@ -2424,7 +2517,6 @@ const SIM = (() => {
       L(`— Turn ${turn} —`); fieldCache.clear(); turnNow = turn - 1;
       if (frames) { if (turn > 1) { fx.push(fxb); fxb = []; } frames.push(snap()); }
       for (const m of models) {
-        m.parries = 0; m.retreated = false; m.blocked = false; m.attacked = false;
         const sh = m.u.shield;
         if (!sh || m.state !== "ok" || m.sp >= sh.sp || !sh.recharge) continue;
         const delay = (sh.delay || 2) * (m.spCollapsed ? 2 : 1);
@@ -2435,12 +2527,15 @@ const SIM = (() => {
       for (const m of order) {
         if (m.state !== "ok" || m.u.routed || !m.h) continue;
         if (!sideActive(0) || !sideActive(1)) break;
+        // per-turn defence limits last from one of the model's turns to the next (B363, B375-377)
+        m.parries = 0; m.retreated = false; m.retreatFrom = null; m.blocked = false; m.attacked = false; m.stunRecovering = false;
         if (!frac && m.hp <= 0) {
           const k = Math.floor(-m.hp / m.u.HP);
           if (!check(m.u.HT - k).ok) { FX(["d", m.h.q, m.h.r, m.u.side, 0]); m.state = "out"; place(m, null); L(`${m.id} collapses unconscious`); continue; }
         }
         if (m.fp <= 0 && !check(m.u.HT).ok) { L(`${m.id} is too exhausted to act`); m.shock = 0; continue; }
-        if (m.stunned) { if (recoverStun(m)) { m.stunned = false; m.stunRec = null; m.stunT = 0; L(`${m.id} recovers from stun`); } m.shock = 0; continue; }
+        // a stunned model that recovers still defends at -4, without retreating, until its next turn (B364)
+        if (m.stunned) { if (recoverStun(m)) { m.stunned = false; m.stunRec = null; m.stunT = 0; m.stunRecovering = true; L(`${m.id} recovers from stun`); } m.shock = 0; continue; }
         if (m.holding && (m.holding.state !== "ok" || !m.holding.h || hexDist(m.h, m.holding.h) > 1)) release(m);
         if (gripsOn(m).length && (m.pinned || m.prone)) { breakFree(m); m.shock = 0; continue; }
         if (!m.warpShadow && shadowed(m) && !m.u.flags.unfazeable && !m.u.flags.noMorale) {
@@ -2566,6 +2661,7 @@ if (typeof document !== "undefined") (() => {
   const flatEq = e => [e, ...(e.children || []).flatMap(flatEq)];
   const EQS = DATA.libraries.filter(l => l.kind === "equipment").flatMap(l => l.items.flatMap(flatEq).map(e => ({ e, lib: l })));
   const isFollow = w => /follow-?up/i.test(w.usage || "");
+  const shieldOpts = Object.keys(DATA.simWeapons || {}).filter(n => DATA.simWeapons[n]._item && DATA.simWeapons[n]._item.db).sort();
   const armourOpts = [...new Set(EQS.filter(x => x.e.feat && x.e.feat.dr && x.e.feat.dr.some(r => !r.vs)).map(x => x.e.name))].sort();
   const lineOpts = melee => {
     const out = [], seen = new Set();
@@ -2591,7 +2687,7 @@ if (typeof document !== "undefined") (() => {
     const lo = LO[template] || {};
     return { template, count: count || 5, stance: lo.stance || "advance", armour: [...(lo.armour || [])],
       ranged: lo.ranged ? { ...lo.ranged } : null, melee: lo.melee ? { ...lo.melee } : null,
-      shield: lo.shield ? { ...lo.shield } : null };
+      shield: lo.shield ? { ...lo.shield } : null, carried: lo.carried || null };
   }
   const PRESETS = [
     ["20 Guardsmen vs 5 Space Marines", [["Astra Militarum Guardsman", 20]], [["Astartes Battle-Brother", 5]], 150],
@@ -2628,7 +2724,8 @@ if (typeof document !== "undefined") (() => {
       const r = d.ranged, m = d.melee;
       return `<div class="prof"><span><b>HP</b>${d.hp}${d.dmgRed ? ` · injury ÷${d.dmgRed}` : ""}</span><span><b>DR</b>${d.drTorso} torso · ${d.drEye} eye${d.wp ? ` · WP ${d.wp}` : ""}</span>
         <span><b>Dodge</b>${d.dodge}</span>${d.parry != null ? `<span><b>Parry</b>${d.parry}</span>` : ""}<span><b>Move</b>${d.move}</span>
-        ${d.shield ? `<span><b>Shield</b>${d.shield.sp} SP${d.shield.recharge ? "" : ", no recharge"}</span>` : ""}</div>
+        ${d.carried ? `<span><b>${esc(d.carried.name)}</b>DB ${d.carried.db}${d.carried.dr != null ? ` · DR ${d.carried.dr} · ${d.carried.hp} HP` : ""}</span>` : ""}
+        ${d.shield ? `<span><b>Field</b>${d.shield.sp} SP${d.shield.recharge ? "" : ", no recharge"}</span>` : ""}</div>
         <div class="prof">${r ? `<span><b>Ranged</b>${esc(r.name)}: ${esc(r.dmg)}${r.follow ? " + " + esc(r.follow) : ""}, skill ${r.skill}, Acc ${r.acc}, RoF ${r.rof}, ${r.range.half}/${r.range.max} yd</span>` : ""}
         <span><b>Melee</b>${esc(m.name)}: ${esc(m.dmg)}, skill ${m.skill}</span></div>`;
     } catch (e) { return `<div class="prof err">${esc(e.message)}</div>`; }
@@ -2647,7 +2744,8 @@ if (typeof document !== "undefined") (() => {
       <details class="lo"><summary>Loadout</summary><div class="lgrid">
         <label>Armour ${armourSelect(u, 0)}</label><label>Armour 2 ${armourSelect(u, 1)}</label>
         <label>Ranged ${weaponSelect(u, "ranged")}</label><label>Melee ${weaponSelect(u, "melee")}</label>
-        <label class="sh">Shield <input type="checkbox" data-sh${u.shield ? " checked" : ""}>
+        <label>Carried shield <select data-cs><option value="">None</option>${shieldOpts.map(n => `<option${n === u.carried ? " selected" : ""}>${esc(n)}</option>`).join("")}</select></label>
+        <label class="sh">Energy field <input type="checkbox" data-sh${u.shield ? " checked" : ""}>
           ${u.shield ? `SP <input type="number" data-shf="sp" value="${u.shield.sp}"> delay <input type="number" data-shf="delay" value="${u.shield.delay}"> recharge/s <input type="number" data-shf="recharge" value="${u.shield.recharge}">` : ""}</label>
       </div>${LO[u.template] && LO[u.template].note ? `<p class="lonote">${esc(LO[u.template].note)}</p>` : ""}</details></div>`;
   }
@@ -3191,6 +3289,8 @@ if (typeof document !== "undefined") (() => {
         else { const [k, rest] = [v.slice(0, 2), v.slice(2)]; const [name, mode] = rest.split("\u0000"); u[el.dataset.w] = k === "t:" ? { trait: name, mode } : { item: name, mode }; }
         upd();
       });
+      const cs = card.querySelector("[data-cs]");
+      if (cs) cs.onchange = () => { u.carried = cs.value || null; upd(); };
       const sh = card.querySelector("[data-sh]");
       sh.onchange = () => { u.shield = sh.checked ? (LO[u.template] && LO[u.template].shield ? { ...LO[u.template].shield } : { sp: 40, delay: 2, recharge: 10, ranged_only: true }) : null; upd(); };
       card.querySelectorAll("[data-shf]").forEach(el => el.onchange = () => { u.shield[el.dataset.shf] = Number(el.value) || 0; upd(); });

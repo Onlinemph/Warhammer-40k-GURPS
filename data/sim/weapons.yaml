@@ -4,6 +4,9 @@
 #   overheat  damage to the firer on a malfunction / critical failure, as the item's notes state it
 #   cone      cone length in yards (usage text, or the line's range when the notes say "cone out to the listed range")
 #   db        shield Defense Bonus (B287), from the item's `block` attribute
+#   dr, hp    the shield's own DR and HP under Damage to Shields (B484; Homogeneous, HT 12). Simulator values
+#             scaled to this project's armour (Astartes plate DR 100), not in the item data: to be confirmed
+#   field     the shield's energy field (its Force Field entry): SP, delay and recharge; covers the front and shield side
 #   blast     radius in yards for an area line whose damage string has no "ex" / [frag]
 # Only numbers the data states are recorded.
 Plasma Pistol:
@@ -19,11 +22,11 @@ Plasma Incinerator, Primaris Pattern:
 Heavy Plasma Incinerator, Primaris Pattern:
   Supercharged: {malf: 15, overheat: 4dx4(3) burn ex}
 Combat Shield:
-  _item: {db: 2}
+  _item: {db: 2, dr: 50, hp: 40}
 Boarding Shield:
-  _item: {db: 3}
+  _item: {db: 3, dr: 60, hp: 60}
 Storm Shield:
-  _item: {db: 3}
+  _item: {db: 3, dr: 100, hp: 65, field: {sp: 160, delay: 2, recharge: 20}}
 Hand Flamer:
   Cone attack (3 yards): {cone: 3}
 Flamer:
@@ -37,7 +40,9 @@ Incinerator:
 Pyrithite Spear:
   Pyrithite cone (6 yards): {cone: 6}
 Praesidium Shield:
-  _item: {db: 3}
+  _item: {db: 3, dr: 150, hp: 60, field: {sp: 220, delay: 2, recharge: 25}}
+Dispersion Shield:
+  _item: {db: 2, dr: 100, hp: 40, field: {sp: 150, delay: 2, recharge: 20}}
 Witchseeker Flamer (Vratine Pattern):
   Cone attack (5 yards): {cone: 5}
 Shredder:
