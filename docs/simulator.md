@@ -95,6 +95,14 @@ Defence rolls crit too (B381-382): a critical success against a melee attack sen
 
 Success rolls follow B343-348: 3 and 4 always succeed, 17 and 18 always fail, and no attack is rolled at effective skill below 3 (a burst stops at the round that would need it). Quick Contests go to whoever succeeds, or to the smaller failure when both fail (a tie changes nothing). Resisted Maledictions use the Rule of 16.
 
+## Size (Pyramid 3/77, "Combat Writ Large")
+
+- **Melee to-hit** (p. 7): the smaller fighter adds the SM difference to its melee attacks (at most +4); the larger subtracts it. A Carnifex (SM +2) is −2 to hit a Marine, who is +2 to hit it.
+- **Grappling** (B370, p. 9-10): +1 per SM of difference to grab, either way, at most +4. A smaller grappler can only take down or pin a larger foe if it grabs a part where that bonus plus the grappling penalty comes to 0 or less, so it goes for the neck (−3); against a foe more than 3 SM bigger it can only hang on. Anyone the foe out-muscles more than twice over is only extra encumbrance (B370) and is shrugged off. In the pin contest the larger fighter gets +3 per SM of difference.
+- **Parrying big attacks** (p. 8): a claw, fist or bite counts as weighing ST x ST / 100 lb, a slam or shove ST x ST / 10 lb (Quadratic Natural Attacks), and an armed blow as the heavier of its weapon and the wielder's fist (Weapon Power), against the parrier's Basic Lift and for breaking the parrying weapon.
+- **Huge slams** (p. 9): against a slam or shove by something 3 or more SM bigger, the only defence is diving aside, and shields don't help.
+- **Not modelled**: multi-hex figures, reach from size, height effects on hit locations, trampling, evading and climbing big foes, and the special attacks table.
+
 ## Martial Arts options
 
 The melee layer follows GURPS Martial Arts (MA) where it adds to or clarifies the Basic Set:

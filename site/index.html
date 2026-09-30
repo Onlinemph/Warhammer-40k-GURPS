@@ -890,9 +890,10 @@ const SIM = (() => {
         w.reach = String(line.reach ?? "1");
         w.reachMax = Math.max(1, ...(w.reach.match(/\d+/g) || ["1"]).map(Number));
         w.oneHanded = oneHand(line.strength);
-        w.fencing = /^(Rapier|Saber|Smallsword|Main-Gauche)/.test(line.skill || "");
-        // weight for parrying (B376): the item's, or ST/10 lb for a limb, claw or fist
-        w.weight = sel.trait ? st.st / 10 : parseFloat(src.weight) || 0;   // B208: +3 retreating parry, -2 per extra parry
+        w.fencing = /^(Rapier|Saber|Smallsword|Main-Gauche)/.test(line.skill || "");   // B208: +3 retreating parry, -2 per extra parry
+        // weight for parrying (B376): the item's, or for a limb, claw or fist 1/20 of Basic Lift, ST x ST / 100
+        // (Quadratic Natural Attacks, Pyramid 3/77 p. 8)
+        w.weight = sel.trait ? st.st * st.st / 100 : parseFloat(src.weight) || 0;
       } else {
         w.acc = accOf(line.accuracy); w.range = parseRange(line.range) || { half: 100, max: 300 };
         w.rof = parseRoF(line.rate_of_fire); w.rcl = Math.max(1, num(line.recoil, 1)); w.rclStar = /\*/.test(String(line.recoil ?? ""));
@@ -934,7 +935,7 @@ const SIM = (() => {
       const lvl = skillLevel(st, "Brawling", ["Brawling", "DX", "Karate"]);
       const hasB = (st.skills || []).some(s => s.name === "Brawling" || s.name === "Karate");
       const pd = parseDamage("thr" + (hasB ? "" : "-1") + " cr", dmgST.thr, dmgST.sw);
-      melee = { id: ++WID, name: "Punch", usage: "Punch", text: "thr cr", dmg: pd, follow: null, level: lvl, parry: 0, unbalanced: false, reach: "C", reachMax: 1, malf: 0, weight: st.st / 10 };
+      melee = { id: ++WID, name: "Punch", usage: "Punch", text: "thr cr", dmg: pd, follow: null, level: lvl, parry: 0, unbalanced: false, reach: "C", reachMax: 1, malf: 0, weight: st.st * st.st / 100 };
     }
     const ranged = mkWeapon(spec.ranged, false);
     // thrown grenades (B410): Throwing skill, range from ST and weight (B355), one per Ready + Attack
@@ -1899,7 +1900,10 @@ const SIM = (() => {
       if (t.state !== "ok" || t.aoa || t.pinned) return null;
       const arc = arcTo(t, att);
       if (arc === "rear") return null;
-      const db = att && att.h && t.h && shieldCovers(t, att) ? shieldDB(t) : 0;
+      // a slam by something three or more SM bigger (Pyramid 3/77 p. 9): diving aside is the only defence, and no
+      // shield helps
+      const huge = !!(aw && aw.huge);
+      const db = !huge && att && att.h && t.h && shieldCovers(t, att) ? shieldDB(t) : 0;
       const mod = (arc === "side" ? -2 : 0) - (t.stunned || t.stunRecovering ? 4 : 0) - (t.prone ? 3 : 0) - (t.kneel && !t.prone ? 2 : 0) - (t.offBalance ? 2 : 0) + db;
       const aod = how => t.aod && t.aodDef === how ? 2 : 0;
       const rt = kind === "melee" && canRetreat(t, att);
@@ -1913,7 +1917,7 @@ const SIM = (() => {
       // Tactical Dodging (TS p. 17, an option): a model can dodge gunfire only from the one shooter it chose to watch
       if (TDODGE && kind === "ranged" && t.evading && t.evading !== att) return null;
       const opts = TDODGE && kind === "pb" && t.evading && t.evading !== att ? [] : [{ how: "dodge", v: dodgeOf(t) + (rt ? 3 - slip : 0) + aod("dodge") - ca - dLim, retreat: rt && !ca }];
-      if ((kind === "melee" || kind === "pb") && canParry(t) && !t.committed) {
+      if ((kind === "melee" || kind === "pb") && canParry(t) && !t.committed && !huge) {
         const w = t.u.melee, bare = w.name === "Punch", master = !!t.u.flags.master;
         const step = w.fencing && master ? 1 : w.fencing || master ? 2 : 4;   // B376
         // held: the reach penalty of close combat lowers the parry too (half, as Parry is half skill, MA117)
@@ -1923,10 +1927,11 @@ const SIM = (() => {
         // a gun held close in (TS p. 25): -2 to parry a handgun, -1 a long arm
         if (kind === "pb" && aw) v -= aw.pistol ? 2 : 1;
         // nobody parries a weapon (or a body) heavier than their Basic Lift, twice that two-handed (B376)
-        if (!(aw && aw.weight && aw.weight > t.u.bl * (w.oneHanded === false ? 2 : 1))) opts.push({ how: "parry", v, retreat: rt });
+        // Weapon Power (Pyramid 3/77 p. 8): an armed blow counts as the heavier of the weapon and the wielder's own fist
+        if (!(aw && attackWeight(att, aw) > t.u.bl * (w.oneHanded === false ? 2 : 1))) opts.push({ how: "parry", v, retreat: rt });
       }
       // no blocking bullets or beams (B375); thrown weapons and melee blows can be blocked
-      if ((kind === "melee" || kind === "thrown") && db && !t.blocked) opts.push({ how: "block", v: t.u.block + (rt ? 1 - slip : 0) + aod("block") - ca + dA - (beat && beat.how === "block" ? beat.n : 0), retreat: rt && !ca });
+      if ((kind === "melee" || kind === "thrown") && db && !t.blocked && !huge) opts.push({ how: "block", v: t.u.block + (rt ? 1 - slip : 0) + aod("block") - ca + dA - (beat && beat.how === "block" ? beat.n : 0), retreat: rt && !ca });
       return { arc, mod, db, opts };
     }
     function bestDefence(t, att, melee, aw) {
@@ -2401,7 +2406,7 @@ const SIM = (() => {
         const dfe = t.feintDef && t.feintDef.t === m && turn - t.feintDef.turn <= 1 ? t.feintDef.n : 0;
         if (dfe) t.feintDef = null;
         let lvl = -dfe + wl(m, w) - skillPen(m) - (opts.charge && !opts.heroic ? 4 : 0) + (opts.determined ? 4 : 0) + (opts.committed === "det" ? 2 : 0) - rapidPen + ev
-          - (m.prone ? 4 : 0) - (m.kneel && !m.prone ? 2 : 0) - closePen(m, w) - (opts.pen || 0);
+          - (m.prone ? 4 : 0) - (m.kneel && !m.prone ? 2 : 0) - closePen(m, w) - (opts.pen || 0) + smMelee(m, t);
         if (opts.charge && !opts.heroic) lvl = Math.min(lvl, 9);
         const plan = planAttack(m, w, t, lvl, true, null, { noDa: !trained(m, w) });
         const loc = plan.loc === "random" ? hitLocation() : plan.loc;
@@ -2422,7 +2427,7 @@ const SIM = (() => {
             if (def.how === "parry" || def.how === "block") m.parriedBy = { t, how: def.how, turn };
             if (def.how === "parry" && (w.name === "Punch" || w.natural)) cutsArm(t, m);
             else if (t.shieldStruck) shieldHit(m, w, t, loc, false);
-            if (def.how === "parry") parryBreak(t, w);
+            if (def.how === "parry") parryBreak(t, w, m);
             continue;
           }
         }
@@ -2463,12 +2468,16 @@ const SIM = (() => {
     // least DX level in the weapon's skill; anyone may make a Telegraphic Attack
     const trained = (m, w) => !w || w.natural || w.name === "Punch" ? m.u.grapple >= m.u.dx || (m.u.melee && m.u.melee.level >= m.u.dx) : w.level >= m.u.dx;
     // close combat while held (B391, MA117): -4 for being grappled, and -4 more per yard of the weapon's reach
+    // Size Modifiers in Melee Combat (Pyramid 3/77 p. 7): the smaller fighter gets the SM difference as a bonus (at most
+    // +4), the larger takes it as a penalty
+    const smMelee = (m, t) => { const d = t.u.sm - m.u.sm; return d > 0 ? Math.min(4, d) : d; };
     const closePen = (m, w) => !m.grips.length ? 0 : 4 + (w && !/C/.test(w.reach || "") && w.reachMax >= 1 ? 4 * w.reachMax : 0);
     // a parried weapon three or more times the parrying weapon's weight may break it (B376): 2 in 6, +1 per multiple past 3
-    function parryBreak(t, aw) {
+    const attackWeight = (att, aw) => Math.max(aw.weight || 0, att && att.u && !aw.huge && aw !== UNARMED ? att.u.st * att.u.st / 100 : 0);
+    function parryBreak(t, aw, att) {
       const pw = t.u.melee;
-      if (!pw || pw.natural || pw.name === "Punch" || !aw || !aw.weight || !pw.weight) return;
-      const ratio = aw.weight / pw.weight;
+      if (!pw || pw.natural || pw.name === "Punch" || !aw || !pw.weight) return;
+      const ratio = attackWeight(att, aw) / pw.weight;
       if (ratio < 3) return;
       const odds = 2 + Math.floor(ratio - 3) - (FINE.test(pw.name) ? 1 : 0);
       if (d6() <= odds) { t.meleeBroken = true; t.inHand = t.inHand === "both" ? (t.u.ranged ? "gun" : "none") : "none"; L(`  ${t.id}'s ${pw.name} breaks under the blow`); }
@@ -2559,7 +2568,7 @@ const SIM = (() => {
         let best = 0;
         const mw = f.u.melee;
         if (mw && (terr ? walk(h, f.h) : d) - mw.reachMax <= moveOf(f)) {
-          const lvl = mw.level - (d > mw.reachMax ? 4 : 0) - skillPen(f);
+          const lvl = mw.level - (d > mw.reachMax ? 4 : 0) - skillPen(f) + smMelee(f, m);
           const def = mode === "aoa" ? null : (mode === "ca" ? Math.max(m.u.dodge, m.u.db ? m.u.block : 0) - 2 : Math.max(m.u.dodge + 3, m.u.parry != null && bladeReady(m) ? m.u.parry + 1 : 0) + (mode === "da" ? 1 : 0)) + (mode === "aod" ? 2 : 0) - (m.stunned ? 4 : 0) - (m.prone ? 3 : 0) + m.u.db;
           best = expInjRandom(mw, m.u) * P3[cl(lvl)] * (1 - (def == null ? 0 : P3[cl(def)])) * (1 + (f.u.flags.extraAttack || 0));
         }
@@ -2638,7 +2647,7 @@ const SIM = (() => {
       // holding its ground with friends behind it kneels to fire, so they shoot over it; it rises when a foe closes
       // to 3 yards, when it moves (afterStep) or when its squad charges
       if (m.kneel && !m.prone && !m.kneelVol) { m.kneel = false; L(`${m.id} stands up`); return; }
-      if (m.prone && !m.legsLost && (adj.length || u.stance !== "shoot" || !shooter)) {
+      if (m.prone && !m.legsLost && !gripsOn(m).length && (adj.length || u.stance !== "shoot" || !shooter)) {
         // lying to standing is two Change Postures, through kneeling (-2 to attack and defend); a successful
         // Acrobatics roll makes it one (B551)
         m.prone = false;
@@ -2682,6 +2691,12 @@ const SIM = (() => {
         }
       }
       if (terr && !m.grips.length) { doorOptions(m, pool, add, rNow); if (!adj.length) breachOptions(m, pool, add, rNow, Wm); }
+      // held (not pinned): struggle free, worth more on the ground where the hold becomes a pin
+      if (gripsOn(m).length) {
+        const a = Math.max(u.st, u.grapple - 4) - skillPen(m), d = gripST(m);
+        const pWin = Math.max(0.02, Math.min(0.98, 0.5 + 0.08 * (a - d)));
+        add(pWin * (m.prone ? 0.8 : 0.4) * Math.max(rNow, 0.1 * threatOf(m) * HORIZON), "break-free", () => breakFree(m));
+      }
       // All-Out Defense (+2 to defences): only against hand-to-hand, a foe beside us or one that can reach us this turn
       const meleeThreat = pool.some(f => f.u.melee && hexDist(f.h, m.h) - f.u.melee.reachMax <= moveOf(f) && expInjRandom(f.u.melee, u) >= 1);
       // it only buys time: worth the risk it saves only as far as squad-mates can use that time to put the threat down
@@ -3108,7 +3123,7 @@ const SIM = (() => {
       const hard = expInjRandom(w, tgt.u) < 1;
       if (route && route.path.length === 1) {
         // one step short: the Attack maneuver's step, then a blow at full skill (B364-365), or All-Out Attack
-        const lvl = w.level - skillPen(m) - (m.prone ? 4 : 0);
+        const lvl = w.level - skillPen(m) - (m.prone ? 4 : 0) + smMelee(m, tgt);
         const n = 1 + (u.flags.extraAttack || 0);
         const stepIn = () => { followPath(m, route.path, 1); return !stopped() && tgt.h && hexDist(m.h, tgt.h) <= reach; };
         add(Wm * kv(m, tgt, planAttack(m, w, tgt, lvl, true).score * n) - risk(m, arrive, ""), `step-strike@${tgt.id}`, () => {
@@ -3123,7 +3138,7 @@ const SIM = (() => {
       }
       if (len <= mv) {
         // arrives this turn: Move and Attack (-4, max 9) or a Slam if the weapon can't get through
-        const lvl = Math.min(9, w.level - skillPen(m) - 4);
+        const lvl = Math.min(9, w.level - skillPen(m) - 4 + smMelee(m, tgt));
         const Ema = planAttack(m, w, tgt, lvl, true).score;
         const slamOK = len >= 2 && hard && !tgt.prone && !tgt.pinned && u.HP >= 0.8 * tgt.u.HP;
         // a Slam's worth: knocking the foe down sets up the pin (valued as a share of the foe taken out)
@@ -3143,7 +3158,7 @@ const SIM = (() => {
         }
         // All-Out Attack after a half move (B365): +4 to hit, no defence until next turn
         if (len <= Math.floor(mv / 2)) {
-          const Eaoa = planAttack(m, w, tgt, w.level - skillPen(m) + 4, true).score;
+          const Eaoa = planAttack(m, w, tgt, w.level - skillPen(m) + 4 + smMelee(m, tgt), true).score;
           const grabNear = models.filter(f => f.u.side !== u.side && f.state === "ok" && f.h && hexDist(f.h, tgt.h) <= 2 && f.armsLost < 1).length;
           const rG = grabNear >= 3 ? 0.5 * threatOf(m) * HORIZON * Math.max(0.3, u.ai.caution) : 0;   // a crowd could drag an All-Out Attacker down (MA114)
           add(Wm * Math.max(kv(m, tgt, Eaoa), slamV) + GAMMA * Wm * worth - risk(m, arrive, "aoa") - rG, `aoa-charge@${tgt.id}`, () => {
@@ -3164,8 +3179,8 @@ const SIM = (() => {
     // worth of grabbing t (B370): a pinned foe is out of the fight while friends hack at it; more hands, better odds
     function grabValue(m, t, helpers) {
       const u = m.u;
-      if (m.armsLost >= 1 || t.pinned) return 0;
-      const hit = P3[cl(u.grapple - skillPen(m))];
+      if (m.armsLost >= 1 || t.pinned || hangsOn(m, t)) return 0;
+      const hit = P3[cl(u.grapple - skillPen(m) + smGrab(m, t))];
       const def = bestDefence(t, m, true);
       const pGrab = hit * (1 - (def == null ? 0 : P3[cl(def)]));
       const hands = (t.grips ? t.grips.length : 0) + helpers + 1;
@@ -3174,7 +3189,7 @@ const SIM = (() => {
       const pooled = u.st * (1 + 0.2 * Math.min(3, hands - 1));
       const contest = (a, d) => Math.max(0.02, Math.min(0.98, 0.5 + 0.08 * (a - d)));
       const pDown = t.prone ? 1 : contest(Math.max(pooled, u.dx, u.grapple), Math.max(t.u.st, t.u.dx - 4, t.u.grapple - 4));
-      const pPin = contest(pooled, t.u.st);
+      const dSM = t.u.sm - u.sm, pPin = contest(pooled + (dSM < 0 ? -3 * dSM : 0), t.u.st + (dSM > 0 ? 3 * dSM : 0));
       // and only if someone can then hurt the helpless foe (any location, chinks included); a foe nobody can
       // cut is just held, which doesn't win the fight
       const hurt = models.filter(a => a.u.side === u.side && a.state === "ok" && a.h && hexDist(a.h, t.h) <= moveOf(a) + 1)
@@ -3196,7 +3211,7 @@ const SIM = (() => {
       for (const t of adj) {
         const face = () => { m.facing = faceToward(m.h, t.h); };
         for (const w of mw) {
-          const lvl = w.level - skillPen(m) - (m.prone ? 4 : 0) - closePen(m, w);
+          const lvl = w.level - skillPen(m) - (m.prone ? 4 : 0) - closePen(m, w) + smMelee(m, t);
           const n = 1 + (u.flags.extraAttack || 0), tr = trained(m, w), P = (L2, d) => planAttack(m, w, t, L2, true, d, { noDa: !tr }).score;
           const ev = m.evaluate && m.evaluate.t === t && m.evaluate.turn === turn - 1 ? m.evaluate.n : 0;
           const base = P(lvl + ev);
@@ -3523,7 +3538,7 @@ const SIM = (() => {
       m.attacked = true;
       const r = check(lvl);
       if (!r.ok) { L(`${m.id} slams at ${t.id} (skill ${lvl}): misses`); return; }
-      if (!r.crit) { const def = defend(t, m, true, 0, 0, { ...UNARMED, weight: m.u.st }); if (def) { L(`${m.id} slams at ${t.id}: ${def.how === "dodge" ? "dodged" : def.how + "ed"}`); return; } }
+      if (!r.crit) { const def = defend(t, m, true, 0, 0, { ...UNARMED, weight: m.u.st * m.u.st / 10, huge: m.u.sm - t.u.sm >= 3 }); if (def) { L(`${m.id} slams at ${t.id}: ${def.how === "dodge" ? "dodged" : def.how + "ed"}`); return; } }
       const dm = slamDice(m.u.HP, v), dt = slamDice(t.u.HP, v);
       const a = rollDamage(dm), b = rollDamage(dt);
       L(`${m.id} slams into ${t.id} at ${v} yd/s (${a} vs ${b})`);
@@ -3541,7 +3556,7 @@ const SIM = (() => {
       m.attacked = true;
       const r = check(lvl);
       if (!r.ok) { L(`${m.id} shoves at ${t.id} (skill ${lvl}): misses`); return; }
-      if (!r.crit) { const def = defend(t, m, true, 0, 0, { ...UNARMED, weight: m.u.st }); if (def) { L(`${m.id} shoves at ${t.id}: ${def.how === "dodge" ? "dodged" : def.how + "ed"}`); return; } }
+      if (!r.crit) { const def = defend(t, m, true, 0, 0, { ...UNARMED, weight: m.u.st * m.u.st / 10, huge: m.u.sm - t.u.sm >= 3 }); if (def) { L(`${m.id} shoves at ${t.id}: ${def.how === "dodge" ? "dodged" : def.how + "ed"}`); return; } }
       const sd = stDamage(m.u.st), thr = parseDamage("thr cr", sd.thr, sd.sw);
       L(`${m.id} shoves ${t.id}`);
       if (t.grips.length) { if (!check(t.u.dx - 4).ok) { t.prone = true; L(`  ${t.id} goes down`); } return; }
@@ -3562,8 +3577,15 @@ const SIM = (() => {
       if (!t.grips.length) t.pinned = false;
     }
     // several grapplers pull together: the strongest one's ST plus a fifth of each other's (simulator rule)
+    // Grappling and size (B370, Pyramid 3/77 p. 9-10): the larger fighter gets +1 per SM of difference to grab (at
+    // most +4), and so does a smaller one, "because there's so much to hang on to", but a smaller grappler can only
+    // exploit a hold (take down, pin) on a part where that bonus plus the location's grappling penalty is 0 or less:
+    // it goes for the neck (-3), and against something more than 3 SM bigger it can only hang on. So can anyone the
+    // foe out-muscles more than twice over (B370): it's just extra encumbrance. In the pin, the larger gets +3 per SM.
+    const hangsOn = (g, t) => t.u.sm - g.u.sm > 3 || t.u.st > 2 * g.u.st;
+    const smGrab = (m, t) => { const d = t.u.sm - m.u.sm; return d > 0 ? (d <= 3 ? Math.min(4, d) - 3 : 4) : Math.min(4, -d); };
     function gripST(t) {
-      const g = gripsOn(t).map(x => x.u.st).sort((a, b) => b - a);
+      const g = gripsOn(t).filter(x => !hangsOn(x, t)).map(x => x.u.st).sort((a, b) => b - a);
       return g.length ? g[0] + g.slice(1).reduce((a, x) => a + x / 5, 0) : 0;
     }
     function contest(a, b) {
@@ -3580,7 +3602,7 @@ const SIM = (() => {
       applyHit(t, w, att, "arm", false, false, null, rollDamage(w.dmg));
     }
     function grab(m, t) {
-      const lvl = m.u.grapple - skillPen(m) - (m.prone ? 4 : 0) - (m.grips.length ? 4 : 0);
+      const lvl = m.u.grapple - skillPen(m) - (m.prone ? 4 : 0) - (m.grips.length ? 4 : 0) + smGrab(m, t);
       m.attacked = true;
       if (lvl < 3) return;   // B344
       const r = check(lvl);
@@ -3590,6 +3612,8 @@ const SIM = (() => {
       L(`${m.id} grabs ${t.id} (${t.grips.length} holding on)`);
     }
     function wrestle(m, t) {
+      if (hangsOn(m, t)) { L(`${m.id} hangs on to ${t.id} but can do nothing more with it`); return; }
+      const dSM = t.u.sm - m.u.sm;
       if (!t.prone) {
         // Takedown: Quick Contest of the higher of ST, DX or grappling skill
         // the held model is at -4 DX (B370)
@@ -3599,7 +3623,7 @@ const SIM = (() => {
         else L(`${m.id} tries to drag ${t.id} down (${Math.round(a)} vs ${d}): it keeps its feet`);
       } else if (!t.pinned) {
         // Pin: Quick Contest of ST against a foe on the ground
-        if (t.aoa || contest(gripST(t) - skillPen(m), t.u.st - skillPen(t) - (t.committed ? 2 : 0))) { t.pinned = true; L(`${m.id} pins ${t.id} (${t.grips.length} holding it down)`); }
+        if (t.aoa || contest(gripST(t) - skillPen(m) + (dSM < 0 ? -3 * dSM : 0), t.u.st - skillPen(t) - (t.committed ? 2 : 0) + (dSM > 0 ? 3 * dSM : 0))) { t.pinned = true; L(`${m.id} pins ${t.id} (${t.grips.length} holding it down)`); }
         else L(`${m.id} tries to pin ${t.id}: it struggles free of the hold`);
       }
     }
@@ -3653,7 +3677,7 @@ const SIM = (() => {
         if (!sideActive(0) || !sideActive(1)) break;
         // per-turn defence limits last from one of the model's turns to the next (B363, B375-377)
         m.parries = 0; m.dodges = 0; m.retreated = false; m.retreatFrom = null; m.blocked = false; m.attacked = false; m.stunRecovering = false;
-        m.committed = false; m.defAtk = false;
+        m.committed = false; m.defAtk = false; m.aoa = false; m.aod = false; m.mna = false; m.offBalance = false;   // "until its next turn", whatever it does with it
         if (!frac && m.hp <= 0) {
           const k = Math.floor(-m.hp / m.u.HP);
           if (!check(m.u.HT - k).ok) { FX(["d", m.h.q, m.h.r, m.u.side, 0]); m.state = "out"; place(m, null); L(`${m.id} collapses unconscious`); continue; }
@@ -3664,7 +3688,10 @@ const SIM = (() => {
         if (m.stunned) { if (recoverStun(m)) { m.stunned = false; m.stunRec = null; m.stunT = 0; m.stunRecovering = true; L(`${m.id} recovers from stun`); } m.shock = 0; continue; }
         if (underFire(m)) { m.shock = 0; continue; }
         if (m.holding && (m.holding.state !== "ok" || !m.holding.h || hexDist(m.h, m.holding.h) > 1)) release(m);
-        if (gripsOn(m).length && (m.pinned || m.prone)) { breakFree(m); m.shock = 0; continue; }
+        // grapplers it out-muscles more than twice over, or that are far smaller, are only extra encumbrance (B370)
+        { const weak = gripsOn(m).filter(g => hangsOn(g, m)); if (weak.length && weak.length === gripsOn(m).length && !m.pinned) { for (const g of weak) release(g); L(`${m.id} shrugs off ${weak.length} clinging foe${weak.length > 1 ? "s" : ""}`); } }
+        // pinned, all it can do is struggle; held on the ground it may also fight back from where it lies
+        if (gripsOn(m).length && m.pinned) { breakFree(m); m.shock = 0; continue; }
         if (!m.warpShadow && shadowed(m) && !m.u.flags.unfazeable && !m.u.flags.noMorale) {
           m.warpShadow = true;
           const fc = fright(m.u);
