@@ -126,9 +126,9 @@ Vehicle void shields will use the same rules at larger scale.
 | Lasgun | 7d(2) burn | User's figure. Punches flak (98%); almost never carapace (0.6%). Useless against power armour. |
 | Long-las | 8d(2) burn | Sniper. |
 | Hellgun / hot-shot | 8d(3) burn | Built to beat carapace (eff. DR 23): 82%. |
-| Boltgun (Godwyn/standard) | 6d×2(2) pi++, follow-up 6d cr ex | Turns an unarmoured man to paste; always penetrates carapace. Against Astartes power armour (eff. DR 50) penetrates about one shot in seven (14%): a Marine takes several bolts to kill another Marine. |
-| Human-scale boltgun / bolt pistol | 6d×2(2) pi, follow-up 3d cr ex / 5d×2(2) pi, follow-up 2d cr ex | Sororitas, Inquisition and Commissar pattern: smaller bolts with a lighter mass-reactive charge (user direction). |
-| Heavy bolter | 7d×2(2) pi++, follow-up 8d cr ex | Chews light vehicles (AV10, eff. DR 50) about 40% of the time. |
+| Boltgun (Godwyn/standard) | 6d×2(2) pi++, follow-up 3d cr ex | Turns an unarmoured man to paste; always penetrates carapace. Against Astartes power armour (eff. DR 50) penetrates about one shot in seven (14%): a Marine takes several bolts to kill another Marine. Explosive follow-ups that penetrate burst inside for triple damage (B414), so bolt cores are 3d. |
+| Human-scale boltgun / bolt pistol | 6d×2(2) pi, follow-up 1d+2 cr ex / 5d×2(2) pi, follow-up 1d cr ex | Sororitas, Inquisition and Commissar pattern: smaller bolts with a lighter mass-reactive charge (user direction). |
+| Heavy bolter | 7d×2(2) pi++, follow-up 4d cr ex | Chews light vehicles (AV10, eff. DR 50) about 40% of the time. |
 | Plasma gun | 6d×4(3) burn ex | Kills Marines through power armour (eff. DR 33); penetrates Terminators (eff. DR 67) more often than not. Overheat risk. |
 | Meltagun | 8d×6(10) burn to ½D; beyond ½D 4d×6(3) | Kills AV14 (eff. DR 35) at short range; past ½D still wrecks AV12 (76%), almost never beats AV14 (5%). |
 | Lascannon | 8d×8(5) burn | Kills tanks (AV14 eff. DR 70) and Terminators. |
@@ -140,7 +140,7 @@ Vehicle void shields will use the same rules at larger scale.
 
 **Power-field rule.** Every disruption-field weapon (power sword, axe, maul, lance, fist, chainfist, thunder hammer, lightning claw) has armour divisor (10) with the field on, and a second weapon line for field-off at the mundane baseline. Bladed/mace power weapons add +3d over the mundane weapon; thunder hammers +6d; power fists thr+8d.
 
-Follow-up damage (B414): the follow-up applies only when the penetrator gets through DR. In GCS, add the follow-up as a second weapon line with usage like "Follow-up (if bolt penetrates)".
+Follow-up damage (B414): the follow-up applies only when the penetrator gets through DR. An explosive follow-up that penetrates bursts inside the body for triple damage (B414), so bolt cores are 3d (about 31 average injury, close to what a 6d core did before the rule). In GCS, add the follow-up as a second weapon line with usage like "Follow-up (if bolt penetrates)".
 
 Anything in the same family scales from the nearest anchor (bolt pistol from boltgun, plasma pistol from plasma gun) and explains the step in `design`.
 
@@ -237,7 +237,7 @@ Custodes armour and arms:
 | Auramite power armour (Aquilon pattern) | Torso DR 150 |
 | Allarus Terminator armour | Torso DR 250 |
 | Custodes power weapons | Field-on = mundane baseline +4d, divisor (10): one step above Astartes power weapons, reflecting master-crafted Custodian arms |
-| Bolt casters on Custodes weapons (guardian spear, sentinel blade) | Boltgun anchor, 6d×2(2) pi++ with 6d cr ex follow-up |
+| Bolt casters on Custodes weapons (guardian spear, sentinel blade) | Boltgun anchor, 6d×2(2) pi++ with 3d cr ex follow-up |
 
 Sisters of Silence are unaugmented human Pariahs (see the Pariah Gene traits) in Vratine armour, which is carapace-class.
 
