@@ -965,6 +965,7 @@ const SIM = (() => {
       }
     }
     function fireAt(m, w, target, opts) {
+      if (m.state !== "ok" || !m.h || !target.h) return;   // the attacker fell (or the target left) earlier this turn
       const d = Math.max(1, hexDist(m.h, target.h));
       if (d > w.range.max) return;
       const shots = w.shots.mag === Infinity ? w.rof : Math.min(w.rof, m.ammo);
@@ -1077,7 +1078,7 @@ const SIM = (() => {
       const n = 1 + (opts.double || opts.rapid ? 1 : 0) + (m.u.flags.extraAttack || 0);
       if (opts.charge) m.mna = true;   // Move and Attack: no retreat until its next turn (B365)
       const rp = m.u.flags.master ? 3 : 6;
-      for (let i = 0; i < n && t.state === "ok"; i++) {
+      for (let i = 0; i < n && t.state === "ok" && t.h && m.state === "ok" && m.h; i++) {
         let lvl = wl(m, w) - skillPen(m) - (opts.charge ? 4 : 0) + (opts.determined ? 4 : 0) - (opts.rapid && i < 2 ? rp : 0) + (m.evaluate && m.evaluate.t === t ? m.evaluate.n : 0)
           - (m.prone ? 4 : 0) - (m.kneel ? 2 : 0) - (m.grips.length ? 4 : 0) - (opts.pen || 0);
         if (opts.charge) lvl = Math.min(lvl, 9);
