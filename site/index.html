@@ -2153,7 +2153,7 @@ const SIM = (() => {
         if (d < 1 || d > reach) continue;
         // diving for cover (B377): anyone who sees a grenade land close enough to fear it may dive
         const fearR = Math.max(3, w.dmg.frag ? Math.ceil(5 * w.dmg.frag.n / 2) : 0);
-        if (w.thrown && d <= fearR && x !== att && dive(x, at)) {
+        if (w.thrown && d <= fearR && x !== att && blastBites(x, w, d, lv) && dive(x, at)) {
           if (!x.h || !los(at, x.h)) { L(`  ${x.id} is out of the blast`); continue; }
           d = hexDist(x.h, at);
           if (d < 1) d = 1;
@@ -2183,6 +2183,15 @@ const SIM = (() => {
         }
       }
       hitFrom = null;
+    }
+    // worth diving from? Only if the blast at that distance, at its worst, or a fragment could get through the
+    // model's armour: a Marine doesn't throw itself flat in a melee for a grenade that can't scratch its plate
+    function blastBites(x, w, d, lv) {
+      const dm = w.dmg, mx = ((dm.n || 1) * 6 + (dm.add || 0)) * (dm.mult || 1), a = areaDR(x.u);
+      if (mx / (3 * Math.max(1, d / lv)) > a.arm + a.nat) return true;
+      const fr = dm.frag;
+      if (fr && d <= 5 * fr.n) { const weak = Math.min(...["neck", "face", "arm", "leg"].map(l => drAt(x.u.arm.dr, l) + drAt(x.u.nat, l))); if (fr.n * 6 + (fr.add || 0) > weak) return true; }
+      return false;
     }
     // an explosive that comes down on an occupied hex: the one there may dive clear (B377, taking a third) or
     // takes the full blast, as large-area injury with no armour divisor
@@ -3394,7 +3403,10 @@ const SIM = (() => {
           m.inHand = save; m.gunOneHand = false;
           const best = Math.max(tmp.length ? Math.max(...tmp) : -Infinity, early / GAMMA);
           if (Number.isFinite(best)) add(GAMMA * best - 0.001, early / GAMMA >= (tmp.length ? Math.max(...tmp) : -Infinity) ? `draw-early` : `ready-blade`, () => switchTo(m, "melee"));
-        } else if ((!gunReady(m) || m.gunOneHand) && u.ranged && !m.gunBroken) {
+        }
+        // (both are offered when neither is in hand: a dropped gun is worth picking back up)
+        if ((!gunReady(m) || m.gunOneHand) && u.ranged && !m.gunBroken) {
+          tmp.length = 0;
           const sp = m.gunSpent, oh = m.gunOneHand;
           m.inHand = "gun"; m.gunSpent = false; m.gunOneHand = false;
           if (adj.length) meleeOptions(m, adj, push, rNow, Wm, Wr, []); else rangedOptions(m, pool, push, rNow, Wr);
@@ -3439,7 +3451,12 @@ const SIM = (() => {
         add(pWin * (m.prone ? 0.8 : 0.4) * Math.max(rNow, 0.1 * threatOf(m) * HORIZON), "break-free", () => breakFree(m));
       }
       // All-Out Defense (+2 to defences): only against hand-to-hand, a foe beside us or one that can reach us this turn
-      const meleeThreat = pool.some(f => f.u.melee && hexDist(f.h, m.h) - f.u.melee.reachMax <= moveOf(f) && expInjRandom(f.u.melee, u) >= 1);
+      // a foe already in reach, or one set on closing (a charger, a zealot, one with its blade out or no gun) that can
+      // reach us this turn; a gunman who could walk up but will shoot instead isn't a hand-to-hand threat
+      // (a model with a gun ready shoots a charger rather than bracing for it)
+      const canShoot = weaponsFor(m, false).some(w => w !== u.ranged || m.ammo > 0 || w.shots.mag === Infinity);
+      const meleeThreat = pool.some(f => f.u.melee && expInjRandom(f.u.melee, u) >= 1 && (hexDist(f.h, m.h) <= f.u.melee.reachMax
+        || (!canShoot && (f.u.stance === "charge" || (f.u.ai.zeal || 0) > 0 || !f.u.ranged || (bladeReady(f) && !gunReady(f))) && hexDist(f.h, m.h) - f.u.melee.reachMax <= moveOf(f))));
       // it only buys time: worth the risk it saves only as far as squad-mates can use that time to put the threat down
       if (meleeThreat) add(-(rNow - (rNow - risk(m, here, "aod")) * aodHelp(m, pool)), "aod", () => {
         m.aod = true;
@@ -3565,11 +3582,12 @@ const SIM = (() => {
       if (keepC.has(m)) return keepC.get(m);
       let p = 1;
       for (const f of models) {
-        if (f.u.side === m.u.side || f.state !== "ok" || !f.h || !m.h || f.stunned || f.pinned) continue;
-        const d = hexDist(f.h, m.h), reach = f.u.melee ? f.u.melee.reachMax : 1;
-        if (d <= reach) { p *= 0.3; continue; }
+        if (f.u.side === m.u.side || f.state !== "ok" || !f.h || !m.h || f.pinned) continue;
+        // a stunned foe may shake it off and come on this very turn: half the threat
+        const d = hexDist(f.h, m.h), reach = f.u.melee ? f.u.melee.reachMax : 1, half = x => f.stunned ? 1 - (1 - x) / 2 : x;
+        if (d <= reach) { p *= half(0.3); continue; }
         const closer = f.u.melee && (f.u.stance === "charge" || (f.u.ai.zeal || 0) > 0 || bladeReady(f)) && d <= moveOf(f) + reach;
-        if (closer) { p *= 0.5; continue; }
+        if (closer) { p *= half(0.5); continue; }
         if (f.u.ranged && d <= f.u.ranged.range.max && los(f.h, m.h)) {
           const mine = models.filter(x => x.u.side === m.u.side && x.state === "ok" && x.h && hexDist(f.h, x.h) <= f.u.ranged.range.max).length;
           p *= 1 - 0.5 / Math.max(1, mine);
@@ -3640,7 +3658,7 @@ const SIM = (() => {
       for (const w of ws) {
         const isGun = w === u.ranged;
         if (isGun && m.reload > 0) {
-          add(GAMMA * shotValueFrom(m, m.h, pool) - rNow, "reloading", () => { if (--m.reload <= 0) { m.reload = 0; refill(m, w); } });
+          add(GAMMA * shotValueFrom(m, m.h, pool) - rNow, "reloading", () => { if (--m.reload <= 0) { m.reload = 0; refill(m, w); L(`${m.id} finishes reloading`); } else L(`${m.id} keeps reloading`); });
           continue;
         }
         if (isGun && m.ammo <= 0) {
@@ -3707,12 +3725,14 @@ const SIM = (() => {
           }
         }
         // close the range without firing (a power that costs FP isn't wasted on a hopeless roll)
+        // only when the shot from here is poor (-3 or worse for range, 7 yards and more): a soldier with a fair shot
+        // takes it, or advances firing, rather than walking up to arm's length for one; and a gunman stops 3 yards off
         if (cands.length) {
-          const t = cands[0], d = hexDist(m.h, t.h);
-          if (d > 3) {
-            const h2 = stepHex(m.h, t.h, Math.min(moveOf(m), d - 2));
+          const t = cands[0], d = hexDist(m.h, t.h), stop = u.stance === "charge" ? 2 : 3;
+          if (d > stop + 1 && (rangePenalty(d) <= -3 || w.fp)) {
+            const h2 = stepHex(m.h, t.h, Math.min(moveOf(m), d - stop));
             add(GAMMA * shotValueFrom(m, h2, pool) - risk(m, h2, "") - 0.001, `move-closer@${t.id}`, () => {
-              stepToward(m, t.h, moveOf(m), 2); if (m.state !== "ok" || !m.h) return; if (t.h) faceTo(m, t.h); L(`${m.id} closes in on ${t.id}`);
+              stepToward(m, t.h, moveOf(m), stop); if (m.state !== "ok" || !m.h) return; if (t.h) faceTo(m, t.h); L(`${m.id} closes in on ${t.id}`);
             });
           }
         }
@@ -4032,6 +4052,7 @@ const SIM = (() => {
         add(vMA, `charge@${tgt.id}`, () => {
           const moved = go(mv); if (stopped() || !tgt.h) return; faceTo(m, tgt.h);
           if (tgt.h && hexDist(m.h, tgt.h) <= reach) slamOK && slamV > kv(m, tgt, Ema) ? slam(m, tgt, Math.max(1, moved), false) : strike(m, w, tgt, { charge: true });
+          else L(`${m.id} charges at ${tgt.id} but can't get through to it`);
         });
         // Heroic Charge (MA132, cinematic option): 1 FP to ignore the Move and Attack penalty and cap
         if (CINEMATIC && !u.flags.machine && m.fp > Math.max(3, u.fp / 3)) {
@@ -4049,6 +4070,7 @@ const SIM = (() => {
           add(Wm * Math.max(kv(m, tgt, Eaoa), slamV) + GAMMA * Wm * worth - risk(m, arrive, "aoa") - rG, `aoa-charge@${tgt.id}`, () => {
             const moved = go(Math.max(2, Math.ceil(mv / 2))); if (stopped() || !tgt.h) return; faceTo(m, tgt.h);
             if (hexDist(m.h, tgt.h) <= reach) { m.aoa = true; L(`${m.id} charges in (All-Out Attack)`); slamOK && slamV > kv(m, tgt, Eaoa) ? slam(m, tgt, Math.max(1, moved), true) : strike(m, w, tgt, { determined: true }); }
+            else L(`${m.id} rushes at ${tgt.id} but can't get through to it`);
           });
         }
       } else {
@@ -4057,7 +4079,7 @@ const SIM = (() => {
         // and zealots run in on faith: they half-ignore the fire on the way and believe the fight is worth having
         const z = u.ai.zeal || 0, rm = Math.max(mv, runMove(m) + (u.flags.enhMove ? mv : 0)), turns = (Math.ceil((len - mv) / Math.max(1, rm)) + 1) * (1 - z);
         const v = Math.pow(GAMMA, turns) * Wm * Math.max(worth, z * 0.1 * threatOf(tgt) * HORIZON) - risk(m, arrive, "") * (1 - z / 2);
-        add(v, `close@${tgt.id}`, () => { if (go(runMove(m)) >= mv - 1) m.runK = m.runPrev + 1; if (stopped()) return; if (tgt.h) faceTo(m, tgt.h); });
+        add(v, `close@${tgt.id}`, () => { const n = go(runMove(m)); if (n >= mv - 1) m.runK = m.runPrev + 1; if (stopped()) return; if (tgt.h) faceTo(m, tgt.h); L(n ? `${m.id} moves in on ${tgt.id}` : `${m.id} can't find a way to ${tgt.id}`); });
       }
     }
 
@@ -4702,7 +4724,7 @@ const SIM = (() => {
         const w = m.u.ranged;
         if (!w || m.state !== "ok" || w.shots.reload <= 3 || m.ammo > 0) continue;
         if (m.reload <= 0) m.reload = w.shots.reload;
-        if (--m.reload <= 0) { m.reload = 0; refill(m, w); }
+        if (--m.reload <= 0) { m.reload = 0; m.ammo = w.shots.mag; }   // grown, not carried: no magazines used
       }
       // bleeding (B420), once a minute in standard mode: HT at -1 per 5 HP lost; a failure costs 1 HP (3 on a critical
       // failure); a critical success or three successes in a row stop it; No Blood and Diffuse don't bleed, and nor do
