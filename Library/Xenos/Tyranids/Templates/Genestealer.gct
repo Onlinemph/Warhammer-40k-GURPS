@@ -1,7 +1,7 @@
 {
 	"version": 5,
 	"id": "BoMXY1dnvni8g8Je0",
-	"notes": "NPC creature stat block, not a player-facing race. Point math: Tyranid Biology 20 + Body Lens: Genestealer 701 + Rending Claws 38 + skills 12 = 771 points. Stats: SM 0, ST 26, DX 17, IQ 6, HT 13, HP 34, Will 6, Per 6, natural chitin torso DR 50 (Weak Points 5, eye DR 25), Basic Move 14 (Basic Speed 7.5) with Enhanced Move (Ground) 1, Infravision, Extra Attack (second claw), Lightning Reflexes (Combat Reflexes, Enhanced Dodge 2) and Injury Tolerance (Damage Reduction) 2 — framework.md's Genestealer anchor line (ST raised to 26 per the strength ladder, HP 34 from Extra HP), with DX raised to 17 and Basic Move bought up to 14 so it outruns even a Space Marine (Move 12, Enhanced Move 1/2). This sits in framework.md's Astartes tier (550-850): the fastest and most dangerous single killer the swarm fields below a Warrior, though still without any independent tactical will outside a broodline's own infiltration plans. The point total is for GM reference only; a Genestealer's broodline-infestation hook is a GM plot tool, not a purchased trait.\nWeapon-symbiote: carries Rending Claws, built as a natural-attack trait in data/xenos/tyranids/bio-weapons.yaml (the Extra Attack trait above lets a Genestealer make two such attacks per turn).\n",
+	"notes": "NPC creature stat block, not a player-facing race. Point math: Tyranid Biology 20 + Body Lens: Genestealer 721 + Rending Claws 38 + skills 12 = 791 points. Stats: SM 0, ST 26, DX 17, IQ 6, HT 13, HP 34, Will 6, Per 6, natural chitin torso DR 50 (Weak Points 5, eye DR 25), Basic Move 14 (Basic Speed 7.5) with Enhanced Move (Ground) 1, Infravision, Extra Attack (second claw), Clinging, Lightning Reflexes (Combat Reflexes, Enhanced Dodge 2) and Injury Tolerance (Damage Reduction) 2 — framework.md's Genestealer anchor line (ST raised to 26 per the strength ladder, HP 34 from Extra HP), with DX raised to 17 and Basic Move bought up to 14 so it outruns even a Space Marine (Move 12, Enhanced Move 1/2). This sits in framework.md's Astartes tier (550-850): the fastest and most dangerous single killer the swarm fields below a Warrior, though still without any independent tactical will outside a broodline's own infiltration plans. The point total is for GM reference only; a Genestealer's broodline-infestation hook is a GM plot tool, not a purchased trait.\nWeapon-symbiote: carries Rending Claws, built as a natural-attack trait in data/xenos/tyranids/bio-weapons.yaml (the Extra Attack trait above lets a Genestealer make two such attacks per turn).\n",
 	"traits": [
 		{
 			"id": "T1PQ-A01meI4z4R5Q",
@@ -123,7 +123,7 @@
 		{
 			"id": "TSGW7bi6im8cTmRYJ",
 			"name": "Body Lens: Genestealer",
-			"local_notes": "Lore: The Genestealer: the fastest, most dangerous close-quarters killer the swarm fields at this tier, and the origin point of a broodline infestation that can subvert a whole world before the main Hive Fleet arrives. Consistent Codex background across editions and a recurring Black Library horror-fiction staple (an infiltrating Genestealer moving faster than anyone in the room can react).\n\nDesign: 301 (Attribute Modifiers) + 250 (Chitin DR 50) + 20 (Enhanced Move 1) + 10 (Infravision) + 25 (Extra Attack) + 45 (Lightning Reflexes) + 50 (Injury Tolerance 2) = 701 points, added to Tyranid Biology's 20 for 721 points of physiology alone before skills and its weapon-symbiote. See the Genestealer template. NPC creature stat block only; a Genestealer's broodline-infestation role is a GM plot hook, not a point-costed trait.",
+			"local_notes": "Lore: The Genestealer: the fastest, most dangerous close-quarters killer the swarm fields at this tier, and the origin point of a broodline infestation that can subvert a whole world before the main Hive Fleet arrives. Consistent Codex background across editions and a recurring Black Library horror-fiction staple (an infiltrating Genestealer moving faster than anyone in the room can react).\n\nDesign: 301 (Attribute Modifiers) + 250 (Chitin DR 50) + 20 (Enhanced Move 1) + 20 (Clinging) + 10 (Infravision) + 25 (Extra Attack) + 45 (Lightning Reflexes) + 50 (Injury Tolerance 2) = 721 points, added to Tyranid Biology's 20 for 741 points of physiology alone before skills and its weapon-symbiote. See the Genestealer template. NPC creature stat block only; a Genestealer's broodline-infestation role is a GM plot hook, not a point-costed trait.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -211,6 +211,19 @@
 					"points_per_level": 20,
 					"can_level": true,
 					"levels": 1
+				},
+				{
+					"id": "t8VyJmbdV_HtOCPi2",
+					"name": "Clinging",
+					"reference": "B43",
+					"local_notes": "Walks or crawls up walls and across ceilings at half Move, no Climbing roll.\n\nLore: Genestealers and Lictors move through a ruin as easily up its walls as along its floor: Space Hulk's broods come out of the ceiling vents, and the Lictor waits on the underside of a gantry or the face of a hab-block until its prey walks beneath. Codex background has both scale sheer surfaces with hooked claws and barbed limbs.\n\nDesign: Basic Set Clinging (B43, 20 points), unmodified.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Tyranids"
+					],
+					"base_points": 20
 				},
 				{
 					"id": "tXYdUi-PVsjPue6WY",

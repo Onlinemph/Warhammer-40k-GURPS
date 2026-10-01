@@ -1,7 +1,7 @@
 {
 	"version": 5,
 	"id": "Bzsl-h5nDGyAkxL3K",
-	"notes": "NPC creature stat block, not a player-facing race. Point math: Tyranid Biology 20 + Body Lens: Lictor 743 (incl. Injury Tolerance 2) + Flesh Hooks 11 + Rending Claws 38 + Extra Attack (Scything Talons) 25 + skills 12 = 849 points. Stats: SM +1, ST 36, DX 15, IQ 8, HT 13, HP 40, Will 8, Per 8, natural chitin torso DR 60 (Weak Points 5, eye DR 30), Basic Move 11, Chameleonic Hide (-4/-2 to others' Vision rolls), Pheromone Trail, Shadow in the Warp (8 yards) — framework.md's Lictor anchor line exactly. This lands just below the Tyranid Warrior template, in the upper half of framework.md's Astartes point tier (550-850): a solitary ambush predator built to scout, terrorise and mark a kill zone rather than to hold a line. The point total is for GM reference only; do not read it as a measure of how a lone Lictor performs in a stand-up fight, which is never its role in the fiction.\nWeapon-symbiotes: carries Flesh Hooks (a ranged grapple/snare) plus Rending Claws for its actual kill, both built as natural-attack traits in data/xenos/tyranids/bio-weapons.yaml. The Lash Whip (a Bonesword companion carried by Warriors) was removed from the Lictor; the Codex gives Lictors flesh hooks, grasping talons and rending claws. There is no Grasping Talons entry yet.\n",
+	"notes": "NPC creature stat block, not a player-facing race. Point math: Tyranid Biology 20 + Body Lens: Lictor 763 (incl. Injury Tolerance 2, Clinging) + Flesh Hooks 11 + Rending Claws 38 + Extra Attack (Scything Talons) 25 + skills 12 = 869 points. Stats: SM +1, ST 36, DX 15, IQ 8, HT 13, HP 40, Will 8, Per 8, natural chitin torso DR 60 (Weak Points 5, eye DR 30), Basic Move 11, Chameleonic Hide (-4/-2 to others' Vision rolls), Pheromone Trail, Shadow in the Warp (8 yards) — framework.md's Lictor anchor line exactly. This lands just below the Tyranid Warrior template, in the upper half of framework.md's Astartes point tier (550-850): a solitary ambush predator built to scout, terrorise and mark a kill zone rather than to hold a line. The point total is for GM reference only; do not read it as a measure of how a lone Lictor performs in a stand-up fight, which is never its role in the fiction.\nWeapon-symbiotes: carries Flesh Hooks (a ranged grapple/snare) plus Rending Claws for its actual kill, both built as natural-attack traits in data/xenos/tyranids/bio-weapons.yaml. The Lash Whip (a Bonesword companion carried by Warriors) was removed from the Lictor; the Codex gives Lictors flesh hooks, grasping talons and rending claws. There is no Grasping Talons entry yet.\n",
 	"traits": [
 		{
 			"id": "TamW7k7hQJE7T5Dsy",
@@ -123,7 +123,7 @@
 		{
 			"id": "TaQgnWzvB4Sj64Jud",
 			"name": "Body Lens: Lictor",
-			"local_notes": "Lore: The Lictor: a solitary, chameleonic stalker sent ahead of a landing to scout, terrorise, and mark a kill zone for the swarm that follows -- consistent Codex background across editions, and the basis for the classic \"something was watching, then it wasn't\" Black Library beat.\n\nDesign: 352 (Attribute Modifiers) + 300 (Chitin DR 60) + 20 (Chameleonic Hide) + 1 (Pheromone Trail) + 20 (Shadow in the Warp) + 50 (Injury Tolerance 2) = 743 points, added to Tyranid Biology's 20 for 763 points of physiology alone before skills and its weapon-symbiotes, about 40 points above the Tyranid Warrior lens (ST 36 against 34). See the Lictor template. NPC creature stat block only.",
+			"local_notes": "Lore: The Lictor: a solitary, chameleonic stalker sent ahead of a landing to scout, terrorise, and mark a kill zone for the swarm that follows -- consistent Codex background across editions, and the basis for the classic \"something was watching, then it wasn't\" Black Library beat.\n\nDesign: 352 (Attribute Modifiers) + 300 (Chitin DR 60) + 20 (Chameleonic Hide) + 20 (Clinging) + 1 (Pheromone Trail) + 20 (Shadow in the Warp) + 50 (Injury Tolerance 2) = 763 points, added to Tyranid Biology's 20 for 763 points of physiology alone before skills and its weapon-symbiotes, about 40 points above the Tyranid Warrior lens (ST 36 against 34). See the Lictor template. NPC creature stat block only.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -216,6 +216,19 @@
 					"points_per_level": 5,
 					"can_level": true,
 					"levels": 4
+				},
+				{
+					"id": "t6m4UMKj4QCjTEKt2",
+					"name": "Clinging",
+					"reference": "B43",
+					"local_notes": "Walks or crawls up walls and across ceilings at half Move, no Climbing roll.\n\nLore: Genestealers and Lictors move through a ruin as easily up its walls as along its floor: Space Hulk's broods come out of the ceiling vents, and the Lictor waits on the underside of a gantry or the face of a hab-block until its prey walks beneath. Codex background has both scale sheer surfaces with hooked claws and barbed limbs.\n\nDesign: Basic Set Clinging (B43, 20 points), unmodified.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Tyranids"
+					],
+					"base_points": 20
 				},
 				{
 					"id": "ta6J1XPN6Xemz7ZMb",

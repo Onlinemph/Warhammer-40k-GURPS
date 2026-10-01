@@ -684,6 +684,103 @@ const SIM = (() => {
     return map;
   }
 
+  // ruins (user direction): a shattered city block. Open streets with rubble, and six to nine ruined buildings of one
+  // to three storeys. Each storey is 3 yards; an upper floor that still stands covers part of its building (solid
+  // beneath, in this one-surface-per-hex map), reached by a stair of 1-yard steps. Outer walls stand at full height in
+  // places and are broken down elsewhere: to a parapet a yard and a bit above a floor, to a stump, to rubble (a
+  // barricade) or to a gap. Each wall hex keeps its height for sight (wallTop)
+  function ruinsMap(seed = 1) {
+    seed = Math.max(1, Math.floor(seed));
+    const mk = "ruins" + seed;
+    if (MAPS.has(mk)) return MAPS.get(mk);
+    let st = (seed * 3266489917 + 668265263) >>> 0;
+    const rnd = () => { st = (st + 0x6D2B79F5) >>> 0; let t = st; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+    const ri = (a, b) => a + Math.floor(rnd() * (b - a + 1));
+    const W = 64, H = 37, floor = new Set(), crates = new Map(), doors = new Set(), zAt = new Map(), top = new Map(), inside = new Set();
+    const K = (c, r) => { const h = fromOffset(c, r); return key(h.q, h.r); };
+    for (let c = 1; c < W - 1; c++) for (let r = 1; r < H - 1; r++) floor.add(K(c, r));
+    const xb = [[10, 22], [26, 38], [42, 53]], yb = [[2, 11], [14, 22], [25, 34]];
+    const blds = [];
+    for (const [bx0, bx1] of xb) for (const [by0, by1] of yb) {
+      if (rnd() < 0.15) continue;   // an open square
+      const x0 = bx0 + ri(0, 2), x1 = bx1 - ri(0, 2), y0 = by0 + ri(0, 1), y1 = by1 - ri(0, 1);
+      const S = rnd() < 0.25 ? 1 : rnd() < 0.6 ? 2 : 3, Hb = 3 * S + 2;
+      const b = { x0, y0, x1, y1, S, Hb, gaps: [] };
+      blds.push(b);
+      for (let c = x0 + 1; c < x1; c++) for (let r = y0 + 1; r < y1; r++) inside.add(K(c, r));
+      // upper floors: the first covers the building's left or right part, the second the top or bottom of that
+      if (S >= 2) {
+        const left = rnd() < 0.5, w = x1 - x0 - 1, sw = Math.max(3, Math.min(w - 4, Math.round(w * (0.45 + rnd() * 0.2))));
+        const sx0 = left ? x0 + 1 : x1 - sw, sx1 = left ? x0 + sw : x1 - 1;
+        for (let c = sx0; c <= sx1; c++) for (let r = y0 + 1; r < y1; r++) zAt.set(K(c, r), 3);
+        let ry0 = -1, ry1 = -2;
+        const third = S === 3 && y1 - y0 >= 7, up = rnd() < 0.5;
+        if (third) { const h = y1 - y0 - 1, sh = Math.max(2, Math.round(h * 0.45)); ry0 = up ? y0 + 1 : y1 - sh; ry1 = up ? y0 + sh : y1 - 1; }
+        // a stair down into the ground floor: 2 then 1 yard, on a row clear of the walls and of the floor above
+        const rows = []; for (let r = y0 + 2; r <= y1 - 2; r++) if (r < ry0 - 1 || r > ry1 + 1) rows.push(r);
+        const sr = rows.length ? rows[ri(0, rows.length - 1)] : y1 - 2, dir = left ? 1 : -1, e = left ? sx1 : sx0;
+        zAt.set(K(e + dir, sr), 2); zAt.set(K(e + 2 * dir, sr), 1);
+        b.stair = [K(e + dir, sr), K(e + 2 * dir, sr), K(e + 3 * dir, sr)];
+        if (third) {
+          for (let c = sx0; c <= sx1; c++) for (let r = ry0; r <= ry1; r++) zAt.set(K(c, r), 6);
+          const sc = ri(sx0 + 1, sx1 - 1), d2 = up ? 1 : -1, e2 = up ? ry1 : ry0;
+          zAt.set(K(sc, e2 + d2), 5); zAt.set(K(sc, e2 + 2 * d2), 4);
+          b.stair.push(K(sc, e2 + d2), K(sc, e2 + 2 * d2), K(sc, e2 + 3 * d2));
+        } else if (S === 3) b.S = S - 1;
+      }
+      // the outer wall, hex by hex
+      const zIn = (c, r) => zAt.get(K(Math.max(x0 + 1, Math.min(x1 - 1, c)), Math.max(y0 + 1, Math.min(y1 - 1, r)))) || 0;
+      for (let c = x0; c <= x1; c++) for (let r = y0; r <= y1; r++) {
+        if (c > x0 && c < x1 && r > y0 && r < y1) continue;
+        const k = K(c, r), corner = (c === x0 || c === x1) && (r === y0 || r === y1), zi = zIn(c, r), v = rnd();
+        if (!corner && v < 0.16) { b.gaps.push([c, r, zi]); continue; }                          // a gap: open floor
+        if (!corner && v < 0.32) { crates.set(k, rnd() < 0.7 ? "heavy" : "light"); continue; }    // fallen to rubble
+        floor.delete(k);
+        const full = corner || v < 0.62;
+        top.set(k, full ? 3 * b.S + 2 : Math.min(3 * b.S + 2, zi > 0 ? zi + 1.2 : [2, 4.2, 7.2][ri(0, Math.max(0, b.S - 1))]));
+      }
+      // at least two ways in at street level
+      for (let tries = 0; b.gaps.filter(g => g[2] === 0).length < 2 && tries < 60; tries++) {
+        const side = ri(0, 3), c = side < 2 ? ri(x0 + 1, x1 - 1) : side === 2 ? x0 : x1, r = side < 2 ? (side ? y1 : y0) : ri(y0 + 1, y1 - 1);
+        if (zIn(c, r) > 0 || b.gaps.some(g => g[0] === c && g[1] === r)) continue;
+        const k = K(c, r); floor.add(k); top.delete(k); crates.delete(k); b.gaps.push([c, r, 0]);
+      }
+    }
+    const spawn = [fromOffset(4, Math.floor(H / 2)), fromOffset(W - 5, Math.floor(H / 2))];
+    // rubble in the streets and the deployment zones, kept only if every street hex stays reachable
+    const reach = () => {
+      const k0 = key(spawn[0].q, spawn[0].r), seen = new Set([k0]), q = [spawn[0]];
+      for (let i = 0; i < q.length; i++) for (const [dq, dr] of DIRS) {
+        const n = { q: q[i].q + dq, r: q[i].r + dr }, nk = key(n.q, n.r);
+        if (!seen.has(nk) && floor.has(nk) && !crates.has(nk) && Math.abs((zAt.get(nk) || 0) - (zAt.get(key(q[i].q, q[i].r)) || 0)) <= 1.01) { seen.add(nk); q.push(n); }
+      }
+      return seen.size;
+    };
+    let want = reach();
+    for (let i = 0; i < 70; i++) {
+      const c = ri(2, W - 3), r = ri(2, H - 3), k = K(c, r);
+      if (!floor.has(k) || crates.has(k) || inside.has(k) || zAt.get(k) || spawn.some(sp => hexDist(sp, fromOffset(c, r)) <= 2)) continue;
+      crates.set(k, rnd() < 0.45 ? "heavy" : "light");
+      const got = reach();
+      if (got < want - 1) crates.delete(k); else want = got;
+    }
+    // rubble that walls off a stair or a gap goes
+    for (const b of blds) { for (const k of b.stair || []) crates.delete(k); for (const [c, r] of b.gaps) crates.delete(K(c, r)); }
+    const ids = new Map(), hx = [];
+    for (let c = 1; c < W - 1; c++) for (let r = 1; r < H - 1; r++) { const h = fromOffset(c, r), k = key(h.q, h.r); ids.set(k, hx.length); hx.push(h); }
+    const nb = hx.map(h => DIRS.map(([dq, dr]) => ids.get(key(h.q + dq, h.r + dr))).filter(i => i != null));
+    const ks = hx.map(h => key(h.q, h.r));
+    const wallI = Uint8Array.from(ks, k => floor.has(k) ? 0 : 1), crateI = Uint8Array.from(ks, k => crates.has(k) ? 1 : 0), doorI = new Uint8Array(ks.length);
+    // the ground floors inside the shells are dim (-2): smoke, dust, the floor above
+    const light = Int8Array.from(ks, k => floor.has(k) && inside.has(k) && !zAt.get(k) ? -2 : 0);
+    const elev = Float32Array.from(ks, k => floor.has(k) ? zAt.get(k) || 0 : 0);
+    const wallTop = Float32Array.from(ks, k => floor.has(k) ? 0 : top.get(k) || 99);
+    const map = { kind: "ruins", floor, crates, doors, spawn, W, H, ids, hx, nb, wallI, crateI, doorI, light, elev, wallTop, lineC: new Map(), covC: new Map() };
+    MAPS.set(mk, map);
+    return map;
+  }
+  const battleMap = opt => opt.terrain || (opt.battlefield === "facility" ? facilityMap(opt.mapSeed || 1) : opt.battlefield === "ruins" ? ruinsMap(opt.mapSeed || 1) : null);
+
   // called-shot locations and their penalties (B398-399)
   // Chinks in Armor (B400): an aimed attack at a gap in the armour, -8 on the torso and -10 anywhere else, halves the armour's DR.
   // Planned locations carry a "#c" suffix; only aiming attackers (elites by default) consider them.
@@ -694,14 +791,14 @@ const SIM = (() => {
   const NEAR_TORSO = new Set(["eye", "skull", "face", "groin", "neck", "vitals"]);
   // cover (Tactical Shooting p. 28): what it takes off a foe's shot at you, and what it costs you to shoot back from
   // behind it unless braced and aiming; its DR for the legs and groin it hides (B407)
-  const COVER_DR = { none: 0, crate: 15, barricade: 60, corner: 60, light: 15, heavy: 60, crest: 200 };
-  const COVER_PEN = { none: 0, crate: 2, corner: 2, light: 2, barricade: 3, heavy: 4, crest: 2 };
-  const COVER_OWN = { none: 0, crate: 0, corner: 0, light: 0, barricade: 2, heavy: 4, crest: 0 };
+  const COVER_DR = { none: 0, crate: 15, barricade: 60, corner: 60, light: 15, heavy: 60, crest: 200, parapet: 50 };
+  const COVER_PEN = { none: 0, crate: 2, corner: 2, light: 2, barricade: 3, heavy: 4, crest: 2, parapet: 3 };
+  const COVER_OWN = { none: 0, crate: 0, corner: 0, light: 0, barricade: 2, heavy: 4, crest: 0, parapet: 0 };
   // what each kind of cover hides (B407): 1 covered, 0.5 half exposed (a random hit there strikes the cover on 4-6).
   // A crate or light cover is waist-high; a barricade chest-high; heavy cover a firing slit; a corner hides one side
   const LEGS = { leg: 1, foot: 1, groin: 1 };
   const HIDES = {
-    crate: LEGS, light: LEGS, crest: LEGS,
+    crate: LEGS, light: LEGS, crest: LEGS, parapet: { ...LEGS, vitals: 0.5, torso: 0.5 },
     barricade: { ...LEGS, torso: 0.5, vitals: 0.5, arm: 0.5, hand: 0.5 },
     heavy: { ...LEGS, torso: 1, vitals: 1, arm: 0.5, hand: 0.5 },
     corner: { torso: 0.5, vitals: 0.5, groin: 0.5, arm: 0.5, hand: 0.5, leg: 0.5, foot: 0.5 },
@@ -739,7 +836,7 @@ const SIM = (() => {
     const place = (m, h) => { if (m.h) occ.delete(key(m.h.q, m.h.r)); m.prevH = m.h; m.h = h; if (h) { occ.set(key(h.q, h.r), m); if (frames && m.trail) m.trail.push([h.q, h.r]); } };
     // terrain: walls block movement and sight until breached; crates block movement only; doors block both
     // while closed. The map is shared by every run; what changes in a battle (doors, breaches, wall damage) lives here
-    const terr = opt.terrain || (opt.battlefield === "facility" ? facilityMap(opt.mapSeed || 1) : null);
+    const terr = battleMap(opt);
     // lighting (B394): "mixed" (a facility's default: lit hallways, dim corridors, rooms lit, dim or dark), "lit",
     // or "dark" (-7 everywhere). Open ground is lit
     const LIGHT = terr ? opt.lighting || "mixed" : "lit";
@@ -785,8 +882,13 @@ const SIM = (() => {
       return z0 + t * (z1 - z0) >= RIDGE.H - 1e-6;
     }
     // the hexes a line crosses that could block it (walls, doors), or null if it leaves the facility
+    // in the ruins, sight runs from eyes 1.6 yards above the floor to the same height over the target's: a wall blocks
+    // it only where it stands taller than the line, and a floor (or the solid mass under an upper floor) taller than
+    // the line blocks it outright
+    const WT = terr && terr.wallTop ? terr.wallTop : null;
     function lineBlockers(a, b, sgn) {
       const n = hexDist(a, b), out = [];
+      const za = WT ? terr.elev[idx(key(a.q, a.r))] + 1.6 : 0, zb = WT ? terr.elev[idx(key(b.q, b.r))] + 1.6 : 0;
       for (let i = 1; i < n; i++) {
         const t = i / n, x = a.q + (b.q - a.q) * t + 1e-6 * sgn, z = a.r + (b.r - a.r) * t + 1e-6 * sgn, y = -x - z;
         let rx = Math.round(x), ry = Math.round(y), rz = Math.round(z);
@@ -794,6 +896,11 @@ const SIM = (() => {
         if (dx > dy && dx > dz) rx = -ry - rz; else if (dy <= dz) rz = -rx - ry;
         const j = idx(key(rx, rz));
         if (j == null) return null;
+        if (WT) {
+          const lz = za + (zb - za) * t;
+          if (terr.wallI[j] ? WT[j] <= lz : terr.elev[j] <= lz) continue;
+          if (!terr.wallI[j]) return null;
+        }
         if (terr.wallI[j] || terr.doorI[j]) { out.push(j); if (out.length > 4) return null; }   // past four walls: no line
       }
       return out;
@@ -827,6 +934,16 @@ const SIM = (() => {
           terr.covC.set(k, c);
         }
         for (const i of c) if (!crateGone[i]) return { kind: terr.crates.get(key(terr.hx[i].q, terr.hx[i].r)) === "heavy" ? "barricade" : "crate", i };
+        // a broken wall in front of a target whose head clears it but whose waist doesn't: a parapet (ruins)
+        if (WT) {
+          const hi = idx(key(h.q, h.r)), fi = idx(key(f.q, f.r)), n = hexDist(h, f);
+          for (const x of [lineHexes(h, f, 1)[0], lineHexes(h, f, -1)[0]]) {
+            const j = idx(key(x.q, x.r));
+            if (j == null || !terr.wallI[j] || broken[j] || hi == null || fi == null) continue;
+            const zw = terr.elev[hi] + 0.9, zf = terr.elev[fi] + 1.6, lz = zw + (zf - zw) / n;
+            if (WT[j] > lz && los(h, f)) return { kind: "parapet", i: -1 };
+          }
+        }
         const e = lineEntry(h, f);
         if (lineOpen(e[0]) !== lineOpen(e[1])) return { kind: "corner", i: -1 };
       }
@@ -937,10 +1054,12 @@ const SIM = (() => {
     // up to a yard and a half three more (hands and a knee up); higher can't be climbed in a fight. Dropping a yard is
     // free, two yards a point more (a jump down), and anything higher isn't risked. A big model (9 feet and up)
     // manages half as much again; fliers ignore it. cc: 0 man-sized, 1 big, 2 flier
-    const climbCls = m => m.u.body === "flying" ? 2 : heightOf(m.u) >= 9 ? 1 : 0;
+    // Clinging (B43): up or down a wall at half Move, any height: 2 movement points a yard (cc 3)
+    const climbCls = m => m.u.body === "flying" ? 2 : m.u.flags.clinging ? 3 : heightOf(m.u) >= 9 ? 1 : 0;
     function climb(i, j, cc = 0) {
       if (!EL || cc === 2 || i == null || j == null) return 0;
-      const dz = EL[j] - EL[i], s = cc ? 1.5 : 1;
+      const dz = EL[j] - EL[i], s = cc === 1 ? 1.5 : 1;
+      if (cc === 3) return Math.abs(dz) <= 0.5 ? 0 : Math.round(2 * Math.abs(dz)) - 1;
       if (dz > 0) return dz <= 0.5 * s ? 0 : dz <= 1 * s + 0.01 ? 1 : dz <= 1.5 * s ? 3 : Infinity;
       return -dz <= 1 * s + 0.01 ? 0 : -dz <= 2 * s + 0.01 ? 1 : Infinity;
     }
@@ -4404,7 +4523,8 @@ const SIM = (() => {
       timeout ? `Still fighting when the ${maxTurns}-second limit ran out` : `Both sides destroyed or broken after ${turn - 1} turns`);
     return {
       winner, timeout, turns: turn - 1, log, frames, fx, terrain: frames && terr ? { floor: [...terr.floor], crates: [...terr.crates], doors: [...terr.doors], shut: [...startShut], events: tev, light: [...terr.floor].map(k => { const [q, r] = k.split(",").map(Number); return [k, darkAt({ q, r })]; }).filter(x => x[1]),
-        elev: EL ? terr.hx.map((h, i) => [key(h.q, h.r), EL[i]]).filter(x => x[1]) : [] } : null,
+        elev: EL ? terr.hx.map((h, i) => [key(h.q, h.r), EL[i]]).filter(x => x[1]) : [], kind: terr.kind || "facility",
+        wallTop: WT ? terr.hx.map((h, i) => [key(h.q, h.r), WT[i]]).filter((x, i) => terr.wallI[i] && x[1] < 99) : null } : null,
       ridge: frames && RIDGE ? { ...RIDGE } : null, roster: models.map(m => { const u = m.u; return { id: m.id, side: u.side, unit: u.idx, template: u.template, faction: u.ai.name, speed: u.speed, move: u.move, hp: u.HP, st: u.st, dx: u.dx, dodge: u.dodge, parry: u.parry, dr: drAt(u.arm.dr, "torso") + drAt(u.nat, "torso"), sp: u.shield ? u.shield.sp : 0, sm: u.sm || 0, body: u.body || "upright",
         ranged: u.ranged ? `${u.ranged.name} (${u.ranged.text}${u.ranged.followText ? " + " + u.ranged.followText : ""})` : "", melee: `${u.melee.name} (${u.melee.text})`, kills: m.kills, fate: m.state }; }),
       units: units.map(u => ({
@@ -4423,7 +4543,7 @@ const SIM = (() => {
     const runs = opt.runs ?? 200;
     if (opt.seed != null) seed(opt.seed);
     const res = { runs, wins: [0, 0], draws: 0, timeouts: 0, mutual: 0, turns: 0, units: null, sample: null, runsList: [] };
-    const terrain = opt.terrain || (opt.battlefield === "facility" ? facilityMap(opt.mapSeed || 1) : null);
+    const terrain = battleMap(opt);
     for (let i = 0; i < runs; i++) {
       const r = runBattle(unitSpecs, { ...opt, terrain, log: i === 0, frames: i === 0 });
       if (i === 0) res.sample = r;
@@ -4443,7 +4563,7 @@ const SIM = (() => {
     return res;
   }
 
-  return { index, buildUnit, describe, runBattle, monteCarlo, parseDamage, seed, woundMult, fmtDice, px, facilityMap, fromOffset, rangePenalty, DIRS, squadSpecs,
+  return { index, buildUnit, describe, runBattle, monteCarlo, parseDamage, seed, woundMult, fmtDice, px, facilityMap, ruinsMap, fromOffset, rangePenalty, DIRS, squadSpecs,
     get squads() { return SQUADS; },
     get templates() { return TEMPLATES; }, get equipment() { return EQ; }, traitWeapons };
 })();
@@ -4485,6 +4605,7 @@ if (typeof document !== "undefined") (() => {
       ranged: lo.ranged ? { ...lo.ranged } : null, melee: lo.melee ? { ...lo.melee } : null,
       ranged2: lo.ranged2 ? { ...lo.ranged2 } : null, shield: lo.shield ? { ...lo.shield } : null, carried: lo.carried || null, grenades: (lo.grenades || []).map(g => ({ ...g })), body: lo.body, mags: lo.mags, knife: lo.knife ? { ...lo.knife } : null, skills: lo.skills ? { ...lo.skills } : undefined };
   }
+  const MAPPED = () => S.battlefield === "facility" || S.battlefield === "ruins";
   const PRESETS = [
     ["20 Guardsmen vs 5 Space Marines", [["Astra Militarum Guardsman", 20]], [["Astartes Battle-Brother", 5]], 150],
     ["10 Ork Boyz charge 5 Marines", [["Ork Boy", 10]], [["Astartes Battle-Brother", 5]], 40],
@@ -4494,6 +4615,8 @@ if (typeof document !== "undefined") (() => {
     ["Genestealers vs Marines", [["Genestealer", 5]], [["Astartes Battle-Brother", 5]], 40],
     ["Facility: 5 Marines vs 10 Genestealers", [["Astartes Battle-Brother", 5]], [["Genestealer", 10]], 60, "facility"],
     ["Facility: 20 Guardsmen vs 20 Ork Boyz", [["Astra Militarum Guardsman", 20]], [["Ork Boy", 20]], 60, "facility"],
+    ["Ruins: 10 Genestealers vs a Tactical squad", [["Genestealer", 10]], [["squad:Astartes Tactical Squad"]], 60, "ruins"],
+    ["Ruins: 2 Guard squads vs Ork Boyz", [["squad:Astra Militarum Infantry Squad"], ["squad:Astra Militarum Infantry Squad"]], [["squad:Ork Boyz Mob"]], 60, "ruins"],
     ["Squads: Commissar's squad vs Ork Boyz", [["squad:Astra Militarum Infantry Squad with Commissar"]], [["squad:Ork Boyz Mob"]], 80],
     ["Squads: Tactical vs Chaos", [["squad:Astartes Tactical Squad"]], [["squad:Chaos Space Marine Squad"]], 40],
     ["Squads: 3 Guard squads vs a Tactical squad", [["squad:Astra Militarum Infantry Squad"], ["squad:Astra Militarum Infantry Squad"], ["squad:Astra Militarum Infantry Squad"]], [["squad:Astartes Tactical Squad"]], 100],
@@ -4593,16 +4716,16 @@ if (typeof document !== "undefined") (() => {
           ${S.health === "fractional" ? `<label for="s-box">Boxes per level <input id="s-box" type="number" min="1" max="9" value="${S.boxes || 5}" data-g="boxes"></label>` : ""}
         </fieldset>
         <fieldset><legend>Battlefield</legend>
-          <label for="s-bf">Ground <select id="s-bf" data-o="battlefield"><option value="open"${S.battlefield !== "facility" ? " selected" : ""}>Open ground</option><option value="facility"${S.battlefield === "facility" ? " selected" : ""}>Facility</option></select></label>
-          ${S.battlefield === "facility" ? `<label for="s-aw">Knowledge <select id="s-aw" data-o="awareness"><option value="limited"${S.awareness !== "omniscient" ? " selected" : ""}>Only what they've seen</option><option value="omniscient"${S.awareness === "omniscient" ? " selected" : ""}>Everyone sees everything</option></select></label>
+          <label for="s-bf">Ground <select id="s-bf" data-o="battlefield"><option value="open"${!S.battlefield || S.battlefield === "open" ? " selected" : ""}>Open ground</option><option value="facility"${S.battlefield === "facility" ? " selected" : ""}>Facility</option><option value="ruins"${S.battlefield === "ruins" ? " selected" : ""}>Ruins</option></select></label>
+          ${MAPPED() ? `<label for="s-aw">Knowledge <select id="s-aw" data-o="awareness"><option value="limited"${S.awareness !== "omniscient" ? " selected" : ""}>Only what they've seen</option><option value="omniscient"${S.awareness === "omniscient" ? " selected" : ""}>Everyone sees everything</option></select></label>
           <label for="s-lt">Lighting <select id="s-lt" data-o="lighting"><option value="mixed"${!S.lighting || S.lighting === "mixed" ? " selected" : ""}>Mixed (dim and dark rooms)</option><option value="lit"${S.lighting === "lit" ? " selected" : ""}>All lit</option><option value="dark"${S.lighting === "dark" ? " selected" : ""}>Dark (−7)</option></select></label>` : ""}
-          ${S.battlefield !== "facility" ? `<label for="s-rg">Ridge <select id="s-rg" data-o="ridge"><option value=""${!S.ridge ? " selected" : ""}>none (flat)</option><option value="0"${S.ridge === "0" ? " selected" : ""}>held by side A</option><option value="1"${S.ridge === "1" ? " selected" : ""}>held by side B</option></select></label>
+          ${!MAPPED() ? `<label for="s-rg">Ridge <select id="s-rg" data-o="ridge"><option value=""${!S.ridge ? " selected" : ""}>none (flat)</option><option value="0"${S.ridge === "0" ? " selected" : ""}>held by side A</option><option value="1"${S.ridge === "1" ? " selected" : ""}>held by side B</option></select></label>
           ${S.ridge ? `<label for="s-rh">Ridge height <span><input id="s-rh" type="number" min="1" max="30" value="${S.ridgeH || 8}" data-g="ridgeH"> yd</span></label>` : ""}` : ""}
-          ${S.battlefield === "facility" ? `<label for="s-map">Layout number <input id="s-map" type="number" min="1" max="9999" value="${S.mapSeed || 1}" data-g="mapSeed"></label>` : ""}
+          ${MAPPED() ? `<label for="s-map">Layout number <input id="s-map" type="number" min="1" max="9999" value="${S.mapSeed || 1}" data-g="mapSeed"></label>` : ""}
           <label for="s-ca">Cover, side A <select id="s-ca" data-o="coverA"><option${(S.coverA || "none") === "none" ? " selected" : ""}>none</option><option${S.coverA === "light" ? " selected" : ""}>light</option><option${S.coverA === "heavy" ? " selected" : ""}>heavy</option></select></label>
           <label for="s-cb">Cover, side B <select id="s-cb" data-o="coverB"><option${(S.coverB || "none") === "none" ? " selected" : ""}>none</option><option${S.coverB === "light" ? " selected" : ""}>light</option><option${S.coverB === "heavy" ? " selected" : ""}>heavy</option></select></label>
         </fieldset>
-        <div class="go"><button class="run" id="simrun" type="button">Run simulation</button><p>${S.battlefield === "facility" ? "Each side deploys in its staging bay; starting distance is ignored." : "Sides deploy in lines facing each other at the starting distance."}</p></div>
+        <div class="go"><button class="run" id="simrun" type="button">Run simulation</button><p>${S.battlefield === "facility" ? "Each side deploys in its staging bay; starting distance is ignored." : S.battlefield === "ruins" ? "Each side deploys at its end of the ruined block; starting distance is ignored." : "Sides deploy in lines facing each other at the starting distance."}</p></div>
       </form>
       <div class="sgrid">${side(0)}${side(1)}</div>
       <div id="simout">${last ? results(last) : ""}</div>
@@ -4796,7 +4919,7 @@ if (typeof document !== "undefined") (() => {
     const keyHex = k => k.split(",").map(Number);
     const dark = new Map(T && T.light ? T.light : []);
     const shade = v => v == null ? 1 : v <= -7 ? .42 : v <= -3 ? .62 : .82;
-    let walls = null, wallList = [], doorMesh = null, doorList = [], rubble = [];
+    let walls = null, wallList = [], wallH = [], doorMesh = null, doorList = [], rubble = [];
     const gridLines = [];
     const floorSet = T ? new Set(T.floor) : null;
     if (T) {
@@ -4804,7 +4927,7 @@ if (typeof document !== "undefined") (() => {
       inst(hexGeo(.15, .985), mat(0xffffff), floor, (im, k, i) => {
         const [q, r] = keyHex(k), [x, y] = P(q, r);
         m4.makeTranslation(x, zOf(q, r) - .15, y); im.setMatrixAt(i, m4);
-        const h = hash(q, r), base = new THREE.Color(h < .5 ? 0x5d6167 : 0x54585e).multiplyScalar(shade(dark.get(k)));
+        const h = hash(q, r), base = new THREE.Color(T.kind === "ruins" ? (h < .5 ? 0x67625a : 0x5f5a52) : h < .5 ? 0x5d6167 : 0x54585e).multiplyScalar(shade(dark.get(k)));
         im.setColorAt(i, base);
       });
       // walls: every hex beside the floor that isn't floor
@@ -4814,7 +4937,10 @@ if (typeof document !== "undefined") (() => {
       const ws = new Set();
       for (const k of floor) { const [q, r] = keyHex(k); for (const [dq, dr] of DIRN) { const k2 = (q + dq) + "," + (r + dr); if (!floorSet.has(k2)) ws.add(k2); } }
       wallList = [...ws];
-      walls = inst(hexGeo(2.4 + Math.max(0, ...floor.map(k => zOf(...keyHex(k))))), mat(0x2c3037, { roughness: .9 }), wallList, (im, k, i) => { const [q, r] = keyHex(k), [x, y] = P(q, r); m4.makeTranslation(x, 0, y); im.setMatrixAt(i, m4); });
+      // each wall's height: a facility's walls clear its highest deck; a ruin's stand as tall as they're left
+      const wTop = new Map(T.wallTop || []), wFull = 2.4 + Math.max(0, ...floor.map(k => zOf(...keyHex(k))));
+      wallH = wallList.map(k => wTop.get(k) || wFull);
+      walls = inst(hexGeo(1), mat(T.kind === "ruins" ? 0x9a9184 : 0x2c3037, { roughness: .9 }), wallList, (im, k, i) => { const [q, r] = keyHex(k), [x, y] = P(q, r); m4.compose(W3(x, y, 0), new THREE.Quaternion(), new THREE.Vector3(1, wallH[i], 1)); im.setMatrixAt(i, m4); });
       walls.castShadow = true;
       const crates = [...(T.crates || [])];
       const cGeo = keep(new THREE.BoxGeometry(1.15, 1, 1.15));
@@ -5013,7 +5139,7 @@ if (typeof document !== "undefined") (() => {
         for (const [tt, k, what] of T.events || []) if (tt <= t) { if (what === "broken") broken.add(k); if (state.has(k)) state.set(k, what === "broken" ? "rubble" : what === "closed" ? "shut" : "open"); }
         doorList.forEach((k, i) => { const [q, r] = keyHex(k), [x, y] = P(q, r), s2 = state.get(k); m4.compose(W3(x, y, 0), new THREE.Quaternion(), new THREE.Vector3(1, s2 === "shut" ? 1 : .02, 1)); doorMesh.setMatrixAt(i, m4); doorMesh.setColorAt(i, col.set(s2 === "shut" ? 0x9aa1a8 : 0xd4a52a)); });
         doorMesh.instanceMatrix.needsUpdate = true; if (doorMesh.instanceColor) doorMesh.instanceColor.needsUpdate = true;
-        wallList.forEach((k, i) => { const [q, r] = keyHex(k), [x, y] = P(q, r); m4.compose(W3(x, y, 0), new THREE.Quaternion(), new THREE.Vector3(1, broken.has(k) ? .001 : (st.lowWalls ? .25 : 1), 1)); walls.setMatrixAt(i, m4); });
+        wallList.forEach((k, i) => { const [q, r] = keyHex(k), [x, y] = P(q, r); m4.compose(W3(x, y, 0), new THREE.Quaternion(), new THREE.Vector3(1, broken.has(k) ? .001 : wallH[i] * (st.lowWalls ? .25 : 1), 1)); walls.setMatrixAt(i, m4); });
         walls.instanceMatrix.needsUpdate = true;
       }
       for (const o2 of fxObjs) o2.run(o.reduce ? 1 : Math.max(0, Math.min(1, (p - o2.lag) / .45)), p);
@@ -5119,15 +5245,24 @@ if (typeof document !== "undefined") (() => {
       // a facility: gunmetal walls, deck plates with seams, grates, bulkhead edges, crates and barricades
       b.fillStyle = MAP.wall; b.fillRect(x0, y0, x1 - x0, y1 - y0);
       for (let i = 0; i < (x1 - x0) * (y1 - y0) * 2; i++) { b.fillStyle = "rgba(255,255,255,.025)"; b.fillRect(x0 + hash(i, 31) * (x1 - x0), y0 + hash(i, 37) * (y1 - y0), .25, .04); }
+      const RU = T.kind === "ruins";
       for (const k of T.floor) {
         const [q, r] = k.split(",").map(Number), [cx, cy] = P(q, r), h = hash(q, r);
-        b.fillStyle = h < .5 ? MAP.plate : MAP.plate2; hexPath(b, cx, cy, 1.02); b.fill();
+        b.fillStyle = RU ? (h < .5 ? "#67625a" : "#5f5a52") : h < .5 ? MAP.plate : MAP.plate2; hexPath(b, cx, cy, 1.02); b.fill();
+        if (RU) { for (let i = 0; i < 3; i++) { b.fillStyle = hash(q + i, r - i) < .5 ? "rgba(0,0,0,.18)" : "rgba(255,255,255,.07)"; b.fillRect(cx + (hash(q, r + i) - .5) * 1.3, cy + (hash(q + i, r) - .5) * 1.3, .12, .09); } continue; }
         if (h > .9) { b.save(); hexPath(b, cx, cy, .8); b.clip(); b.strokeStyle = MAP.grate; b.lineWidth = .06; for (let d = -1; d <= 1; d += .2) { b.beginPath(); b.moveTo(cx - 1, cy + d); b.lineTo(cx + 1, cy + d); b.stroke(); } b.restore(); }
         b.strokeStyle = MAP.seam; b.lineWidth = .04; hexPath(b, cx, cy, 1); b.stroke();
         if (h < .12) { b.fillStyle = "rgba(0,0,0,.18)"; b.beginPath(); b.ellipse(cx + (h - .06) * 4, cy, .5, .28, h * 9, 0, 7); b.fill(); }
       }
       // lighting: dim corridors and dim or dark rooms shaded
       for (const [k, v] of T.light || []) { const [q, r] = k.split(",").map(Number), [cx, cy] = P(q, r); b.fillStyle = `rgba(0,0,0,${v <= -7 ? .55 : v <= -3 ? .35 : .18})`; hexPath(b, cx, cy, 1.02); b.fill(); }
+      // ruined walls: the taller, the darker and heavier; stumps and parapets lighter, with a broken top edge
+      for (const [k, tp] of T.wallTop || []) {
+        const [q, r] = k.split(",").map(Number), [cx, cy] = P(q, r);
+        b.fillStyle = tp >= 8 ? "#34312e" : tp >= 5 ? "#46423e" : tp >= 3 ? "#5a554f" : "#6e685f"; hexPath(b, cx, cy, 1.02); b.fill();
+        b.strokeStyle = tp >= 5 ? "rgba(255,255,255,.12)" : "rgba(255,255,255,.22)"; b.lineWidth = .07; hexPath(b, cx, cy, .82); b.stroke();
+        if (tp < 5 && hash(q, r) < .5) { b.fillStyle = "rgba(255,255,255,.5)"; b.font = ".5px ui-monospace, monospace"; b.textAlign = "center"; b.fillText(`${Math.round(tp * 3)}ft`, cx, cy + .18); }
+      }
       // gantries, stairs and docks: lighter deck, a dark lip where it drops a yard or more, the height marked
       for (const [k, z] of ZM) {
         const [q, r] = k.split(",").map(Number), [cx, cy] = P(q, r);
@@ -5138,7 +5273,7 @@ if (typeof document !== "undefined") (() => {
           b.strokeStyle = "rgba(0,0,0,.7)"; b.lineWidth = .2; b.beginPath(); b.moveTo(ax, ay); b.lineTo(bx, by); b.stroke();
           b.strokeStyle = MAP.hazard; b.lineWidth = .06; b.beginPath(); b.moveTo(ax, ay); b.lineTo(bx, by); b.stroke();
         });
-        if (hash(q, r) < .25 || z < 3) { b.fillStyle = "rgba(255,255,255,.55)"; b.font = ".55px ui-monospace, monospace"; b.textAlign = "center"; b.fillText(`+${Math.round(z * 3)}ft`, cx, cy + .2); }
+        if (T.kind === "ruins" ? z % 3 !== 0 || hash(q, r) < .06 : hash(q, r) < .25 || z < 3) { b.fillStyle = "rgba(255,255,255,.55)"; b.font = ".55px ui-monospace, monospace"; b.textAlign = "center"; b.fillText(`+${Math.round(z * 3)}ft`, cx, cy + .2); }
       }
       // bulkhead edges where floor meets wall
       b.lineCap = "round";
@@ -5530,8 +5665,8 @@ if (typeof document !== "undefined") (() => {
       setTimeout(() => {
         try { last = SIM.monteCarlo(specs, { runs: S.runs, distance: S.distance, maxTurns: S.maxTurns, morale: S.morale, health: S.health, boxes: S.boxes || 5,
           locations: S.locations || "elite", cover: [S.coverA || "none", S.coverB || "none"], battlefield: S.battlefield || "open", mapSeed: S.mapSeed || 1,
-          ridge: S.battlefield !== "facility" && S.ridge ? { side: +S.ridge, height: S.ridgeH || 8 } : null,
-          awareness: S.battlefield === "facility" ? S.awareness || "limited" : undefined, lighting: S.lighting || "mixed", sightedShots: !!S.sightedShots, tacticalDodge: !!S.tacticalDodge, limitedDodges: !!S.limitedDodges, cinematicEffort: !!S.cinematicEffort }); $("#simout").innerHTML = results(last); setupReplay(); }
+          ridge: !MAPPED() && S.ridge ? { side: +S.ridge, height: S.ridgeH || 8 } : null,
+          awareness: MAPPED() ? S.awareness || "limited" : undefined, lighting: S.lighting || "mixed", sightedShots: !!S.sightedShots, tacticalDodge: !!S.tacticalDodge, limitedDodges: !!S.limitedDodges, cinematicEffort: !!S.cinematicEffort }); $("#simout").innerHTML = results(last); setupReplay(); }
         catch (e) { $("#simout").innerHTML = `<p class="empty">Could not run: ${esc(e.message)}</p>`; }
       }, 20);
     };

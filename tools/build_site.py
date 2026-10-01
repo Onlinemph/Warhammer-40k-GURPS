@@ -306,6 +306,8 @@ def combat_flags(t, flags):
         flags["nightVision"] = flags.get("nightVision", 0) + lv   # B71: darkness penalties less this
     elif n.startswith("Dark Vision"):
         flags["darkVision"] = 1                                     # B47: no darkness penalty
+    elif n.startswith("Clinging"):
+        flags["clinging"] = 1                                       # B43: walks up walls at half Move
     elif n.startswith("Infravision"):
         flags["infravision"] = 1                                    # B60: sees warm bodies in the dark
     elif n == "Chameleon":

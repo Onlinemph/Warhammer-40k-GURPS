@@ -469,10 +469,10 @@ The Tyranids are a galaxy-devouring swarm of bio-engineered organisms directed b
 |---|---|---|---|---|---|---|---|---|
 | Termagant | −1 | 9 | 11 | 4 | 11 | 9 | 25 | Gun-beast; swarm |
 | Hormagaunt | −1 | 12 | 13 | 4 | 11 | 12 | 25 | Leaping killer; swarm |
-| Genestealer | 0 | 26 | 17 | 6 | 13 | 34 | 50 | Fastest killer in the swarm; rending claws; Lightning Reflexes (Combat Reflexes, Enhanced Dodge 2), Damage Reduction ÷2 |
+| Genestealer | 0 | 26 | 17 | 6 | 13 | 34 | 50 | Fastest killer in the swarm; rending claws; Lightning Reflexes (Combat Reflexes, Enhanced Dodge 2), Damage Reduction ÷2; Clinging (B43) |
 | Ravener | +1 | 32 | 14 | 5 | 14 | 36 | 60 | Burrower |
 | Tyranid Warrior | +1 | 34 | 13 | 8 | 14 | 40 | 60 | Synapse creature, officer of the swarm |
-| Lictor | +1 | 36 | 15 | 8 | 13 | 40 | 60 | Chameleonic stalker |
+| Lictor | +1 | 36 | 15 | 8 | 13 | 40 | 60 | Chameleonic stalker; Clinging (B43) |
 | Zoanthrope | +1 | 8 | 10 | 10 | 12 | 20 | 40 + psychic shield | Psychic artillery |
 | Hive Tyrant | +2 | 100 | 13 | 12 | 16 | 130 | 150 | Synapse lord, psyker |
 | Carnifex | +2 | 120 | 10 | 4 | 16 | 150 | 150 | Living battering ram |

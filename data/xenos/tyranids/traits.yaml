@@ -503,6 +503,20 @@ items:
       With Basic Move 12 (bought in the Attribute Modifiers) a Hormagaunt
       sprints at Move 18, matching a Space Marine's top speed.
 
+  - &tyranid_clinging
+    name: Clinging
+    points: 20
+    ref: B43
+    tags: [Advantage, Physical, Xenos, Tyranids]
+    notes: "Walks or crawls up walls and across ceilings at half Move, no Climbing roll."
+    lore: >
+      Genestealers and Lictors move through a ruin as easily up its walls as
+      along its floor: Space Hulk's broods come out of the ceiling vents, and
+      the Lictor waits on the underside of a gantry or the face of a hab-block
+      until its prey walks beneath. Codex background has both scale sheer
+      surfaces with hooked claws and barbed limbs.
+    design: Basic Set Clinging (B43, 20 points), unmodified.
+
   - &genestealer_speed
     name: "Enhanced Move (Ground)"
     per_level: 20
@@ -871,6 +885,7 @@ items:
           hit that fails to penetrate, roll 3d; 5 or less halves DR (25).
           Eye clusters run at DR 25 rather than 50.
       - *genestealer_speed
+      - *tyranid_clinging
       - *genestealer_infravision
       - *genestealer_extra_attack
       - name: Lightning Reflexes
@@ -920,9 +935,9 @@ items:
       Genestealer moving faster than anyone in the room can react).
     design: >
       301 (Attribute Modifiers) + 250 (Chitin DR 50) + 20 (Enhanced Move
-      1) + 10 (Infravision) + 25 (Extra Attack) + 45 (Lightning Reflexes) +
-      50 (Injury Tolerance 2) = 701 points, added
-      to Tyranid Biology's 20 for 721 points of physiology alone before
+      1) + 20 (Clinging) + 10 (Infravision) + 25 (Extra Attack) + 45 (Lightning Reflexes) +
+      50 (Injury Tolerance 2) = 721 points, added
+      to Tyranid Biology's 20 for 741 points of physiology alone before
       skills and its weapon-symbiote. See the Genestealer template. NPC
       creature stat block only; a Genestealer's broodline-infestation
       role is a GM plot hook, not a point-costed trait.
@@ -1088,6 +1103,7 @@ items:
           on a hit that fails to penetrate, roll 3d; 5 or less halves DR
           (30). Eye clusters run at DR 30 rather than 60.
       - *lictor_chameleon
+      - *tyranid_clinging
       - *lictor_pheromone_trail
       - *shadow_in_the_warp_lictor
       - name: "Injury Tolerance (Damage Reduction)"
@@ -1116,7 +1132,7 @@ items:
       Black Library beat.
     design: >
       352 (Attribute Modifiers) + 300 (Chitin DR 60) + 20 (Chameleonic
-      Hide) + 1 (Pheromone Trail) + 20 (Shadow in the Warp) + 50 (Injury Tolerance 2) = 743 points,
+      Hide) + 20 (Clinging) + 1 (Pheromone Trail) + 20 (Shadow in the Warp) + 50 (Injury Tolerance 2) = 763 points,
       added to Tyranid Biology's 20 for 763 points of physiology alone
       before skills and its weapon-symbiotes, about 40 points above the
       Tyranid Warrior lens (ST 36 against 34). See the Lictor template. NPC creature stat block
