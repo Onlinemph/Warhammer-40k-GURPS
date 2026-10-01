@@ -57,6 +57,35 @@ items: [...]             # for equipment / traits / skills
 
 `rcl: "1L"` marks a true laser weapon with Rcl 1 (lascannon, multi-laser, lasblaster, scatter laser): in the simulator it takes the flat −1 of the user's Progressive Recoil rule after the first round. Every other weapon, a plain `rcl: 1` included (lasguns and the rest of the Imperial las family), takes the stacking −Rcl per round.
 
+A vehicle is an equipment item with a `vehicle` block (Basic Set stat block, B462-463). `build_gcs.py` writes it as a stat line at the head of the item's notes and stores the block in the item's `third_party` data for the simulator:
+
+```yaml
+vehicle:
+  st_hp: 200            # ST and HP (4 x cube root of curb weight in lb)
+  hnd: -3               # Handling
+  sr: 5                 # Stability Rating
+  ht: 12
+  ht_code: f            # c, f or x (B462)
+  move: [1, 11]         # Acceleration / Top Speed, yd/s
+  lwt: 63               # tons
+  load: 0.6
+  sm: 5
+  occ: "6S"
+  dr: {front: 350, side: 275, rear: 100, top: 100, under: 100}
+  turret: {front: 350, side: 275, rear: 200}   # optional
+  locations: 2CT        # B554 codes: C tracks, T main turret, t independent turret, X exposed mount, nW wheels, nL legs, O open cab
+  control: Driving (Tracked)
+  crew_template: Astra Militarum Guardsman
+  skills: {"Driving (Tracked)": 13, "Gunner (Cannon)": 13}
+  crew:                 # one station each, in priority order
+    - {role: Driver, station: driver}
+    - {role: Gunner, station: turret, arc: turret, weapon: {item: Battle Cannon, mode: HE shell}, stabilised: true}
+    - {role: Loader, station: turret, loads: Gunner}
+    - {role: Hull gunner, station: hull, arc: front, weapon: {item: Lascannon, mode: Braced/mounted}, twin: true}
+```
+
+`station` is where the crewman sits (driver, turret, hull, left, right, pintle); `arc` is the gun's field of fire (turret, front, left, right, pintle); `loads` names the station whose gun a loader feeds; `twin` makes a linked pair.
+
 Melee weapons use `reach`, `parry`, `block`, `st` instead of the ranged keys. `skill` gets a standard default family for: Beam Weapons, Guns, Gunner, Liquid Projector, Throwing, Artillery, Broadsword, Shortsword, Knife, Axe/Mace, Two-Handed Axe/Mace, Two-Handed Sword, Spear, Polearm, Staff, Force Sword, Flail, Brawling, Shield. For anything else give `defaults: ["DX-4", "Karate", "Brawling-2"]`.
 
 Hit locations: skull, eye, face, neck, torso, vitals, groin, arm, hand, leg, foot, tail, wing, fin, brain, all.

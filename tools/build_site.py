@@ -180,6 +180,8 @@ def eq_entry(e):
            "weapons": [weapon(w) for w in e.get("weapons", [])], "feat": features(e.get("features"))}
     if "max_uses" in e:
         out["uses"] = e["max_uses"]
+    if (e.get("third_party") or {}).get("w40k_vehicle"):
+        out["vehicle"] = e["third_party"]["w40k_vehicle"]
     mods = [{"name": m["name"], "cost": m.get("cost", ""), "notes": m.get("local_notes", "")}
             for m in e.get("modifiers", [])]
     if mods:

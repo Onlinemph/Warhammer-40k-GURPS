@@ -181,6 +181,22 @@ Wargame armour values give only relative order. Map them to DR when a weapon nee
 
 Anti-tank weapons must beat the DR they are known to beat in the fiction.
 
+### Vehicles
+
+Vehicles take the Basic Set's stat block (B462-463). The rest of the line is built the same way for every vehicle:
+
+| Stat | Rule |
+|---|---|
+| ST/HP | 4 x cube root of the curb weight in lb (the Basic Set APC: 12.5 tons, HP 111) |
+| DR | The AV table above, by facing; top and underside take the rear value unless the lore says otherwise |
+| SM | Longest dimension on the Size and Speed/Range Table (B550), +1 for an elongated box (B550) |
+| Move | Lore road speed in km/h / 3.3 = Top Speed in yd/s; Acceleration from the APC's 1, more for light hulls |
+| Hnd/SR | The APC's -3/5 for battle tanks; one better for light hulls; 0/3 for trucks and walkers |
+| HT | 11-12, f for promethium or multi-fuel; ramshackle Ork builds lower |
+| Locations | B554 codes from the vehicle's shape (tracks, main or independent turret, pintle, open cab, wheels, legs) |
+
+A Leman Russ (63 tonnes) comes out at HP 200, a Rhino (32) 160, a Land Raider (70) 210, a Chimera (38) 170. A lascannon through any facing does about 170 injury, so two hits wreck a tank: the lore's "one good shot kills a tank" with the armour divisor carrying the AV, and HP standing in for the wargame's hull points.
+
 ## Characters and species
 
 ### Human baseline

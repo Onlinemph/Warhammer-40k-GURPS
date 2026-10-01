@@ -283,7 +283,7 @@ def common(out, item):
 
 EQ_KEYS = {"name", "tl", "lc", "cost", "weight", "qty", "tags", "ref", "notes", "lore", "design", "weapons",
            "dr", "attributes", "skill_bonuses", "reactions", "conditional", "raw_features", "children",
-           "uses", "modifiers", "equipped", "weak_points", "weak_dr"}
+           "uses", "modifiers", "equipped", "weak_points", "weak_dr", "vehicle"}
 
 
 def build_equipment(item, path, trail):
@@ -305,6 +305,19 @@ def build_equipment(item, path, trail):
             # the DR a gap faces at a location, where it isn't simply half (a found Weak Point, or a chink, B400)
             line += " Gap DR: " + ", ".join(f"{k} {v}" for k, v in item["weak_dr"].items()) + "."
         out["local_notes"] = line + ("\n\n" + out["local_notes"] if out.get("local_notes") else "")
+    if item.get("vehicle"):
+        # a vehicle's Basic Set stat line (B462-463) heads its notes; the whole block rides along for the simulator
+        v = item["vehicle"]
+        dr = v["dr"]
+        fr = ", ".join(f"{k} {dr[k]}" for k in ("front", "side", "rear", "top", "under") if k in dr)
+        tur = f"; turret {v['turret']['front']}/{v['turret']['side']}/{v['turret']['rear']}" if v.get("turret") else ""
+        side = round((dr.get("side", 0) + dr.get("rear", 0)) / 2)
+        line = (f"ST/HP {v['st_hp']}; Hnd/SR {v['hnd']:+d}/{v['sr']}; HT {v['ht']}{v.get('ht_code', '')}; "
+                f"Move {v['move'][0]}/{v['move'][1]}; LWt. {v['lwt']}; Load {v['load']}; SM {v['sm']:+d}; "
+                f"Occ. {v['occ']}; DR {dr['front']}/{side} ({fr}{tur}); Locations {v['locations']}. "
+                f"Control: {v['control']}.")
+        out["local_notes"] = line + ("\n\n" + out["local_notes"] if out.get("local_notes") else "")
+        out["third_party"] = {"w40k_vehicle": v}
     if "tl" in item:
         out["tech_level"] = str(item["tl"])
     if "lc" in item:

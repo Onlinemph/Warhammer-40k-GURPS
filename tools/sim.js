@@ -138,7 +138,7 @@ const SIM = (() => {
   }
 
   // ------------------------------------------------------------ data index
-  let EQ = null, TEMPLATES = null, SIMW = {}, POWERS = {}, AI = [], LOADOUTS = {}, SQUADS = {};
+  let EQ = null, TEMPLATES = null, SIMW = {}, POWERS = {}, AI = [], LOADOUTS = {}, SQUADS = {}, VEHICLES = new Map();
   function index(data) {
     EQ = new Map(); TEMPLATES = new Map(); SIMW = data.simWeapons || {}; POWERS = data.powers || {}; AI = (data.ai && data.ai.profiles) || []; LOADOUTS = data.loadouts || {}; SQUADS = data.squads || {};
     const walk = (e, src) => { if (!EQ.has(e.name)) EQ.set(e.name, { e, src }); (e.children || []).forEach(c => walk(c, src)); };
@@ -146,6 +146,7 @@ const SIM = (() => {
       if (lib.kind === "equipment") lib.items.forEach(e => walk(e, lib));
       if (lib.kind === "template" && !lib.template.addon) TEMPLATES.set(lib.title, { t: lib.template, lib });
     }
+    VEHICLES = new Map([...EQ.values()].filter(x => x.e.vehicle).map(x => [x.e.name, x.e]));
     return { EQ, TEMPLATES };
   }
   // a lore squad (data/sim/squads.yaml) as unit specs: each member is its template's default loadout with the
@@ -514,7 +515,72 @@ const SIM = (() => {
     };
     return u;
   }
+  // ---------------------------------------------------------------- vehicles
+  // A vehicle (B462-470) fights as one model: its hull takes the hits (DR by facing, the Vehicle Hit Location
+  // Table, B554), its crew sit at stations and each works its own gun on the vehicle's turn, the driver moves it.
+  // The crew are real bodies of the vehicle's crew template, hit only when damage gets inside (Occupant Hit Table,
+  // B555). Vehicle data: the `vehicle` block of a Vehicle item (data/imperium/vehicles.yaml).
+  const VLOCS = new Set(["body", "turret", "track", "leg", "wheel", "mount", "open", "vitals", "area"]);
+  function vehicleLocs(code) {
+    // "2CT": two caterpillar tracks and a main turret; t independent turret, X exposed weapon mount, nW wheels,
+    // nL legs, O open cabin, G/g windows (B462, B554)
+    const L = { C: 0, T: false, t: false, X: 0, W: 0, L: 0, O: false };
+    for (const [, n, c] of String(code || "").matchAll(/(\d*)([A-Za-z])/g)) {
+      const k = Number(n || 1);
+      if (c === "C") L.C = k; else if (c === "T") L.T = true; else if (c === "t") L.t = true; else if (c === "X") L.X = k;
+      else if (c === "W") L.W = k; else if (c === "L") L.L = k; else if (c === "O") L.O = true;
+    }
+    return L;
+  }
+  function buildVehicle(spec, side) {
+    const e = VEHICLES.get(spec.vehicle);
+    if (!e) throw new Error("Unknown vehicle: " + spec.vehicle);
+    const V = e.vehicle, lo = LOADOUTS[V.crew_template] || {}, skills = V.skills || {};
+    // each station's crewman: the crew template in its usual armour, trained to the vehicle's levels, with the
+    // station's gun. Mounted guns carry no ST or bracing penalty (B467); linked guns fire together (as one weapon
+    // at twice the rate)
+    const stations = (V.crew || []).map((c, i) => {
+      const cu = buildUnit({ template: V.crew_template, armour: lo.armour, skills, ranged: c.weapon, label: c.role }, side);
+      let w = c.weapon ? cu.ranged : null;
+      if (w) {
+        w.level += w.stPenProne || 0; w.stPen = w.stPenProne = w.stStand = 0; w.mounted = true; w.needsSetup = false; w.bulk = 0;
+        if (c.twin) { w.rof = (w.rof || 1) * 2; w.text += " (linked pair)"; if (w.shots.mag !== Infinity) w.shots = { ...w.shots, mag: w.shots.mag * 2 }; }
+        w.station = i;
+      }
+      return { i, role: c.role, station: c.station || "hull", arc: c.arc || "front", loads: c.loads || null, stab: !!c.stabilised, w, cu };
+    });
+    const base = buildUnit({ template: V.crew_template, armour: lo.armour, skills, label: spec.label || spec.vehicle }, side);
+    const ctl = skillLevel(base.stats, V.control, [V.control, "DX-5", "IQ-5"]);
+    // the operator who also fires (a walker's chin gun): the lower of Gunner and the control skill (B467)
+    for (const s of stations) if (s.w && s.station === "driver") s.w.level = Math.min(s.w.level, ctl);
+    const HP = V.st_hp, dr = V.dr, est = dr.side ?? dr.front;
+    const arm = { dr: {}, gap: {}, wp: 0, striking: 0, lifting: 0, move: 0, hp: 0, flexible: false };
+    for (const l of [...LOCS, ...VLOCS]) arm.dr[l] = est;   // what a planner expects to face; the hit uses the real facing
+    const thrCr = parseDamage(`${Math.max(1, Math.round(HP * 5 / 100))}d cr`);   // ramming at 5 yd/s (B430)
+    const main = stations.find(s => s.w);
+    return Object.assign(base, {
+      name: spec.label || spec.vehicle, template: spec.vehicle, count: Math.max(1, spec.count | 0),
+      veh: { name: spec.vehicle, dr, turret: V.turret || null, locs: vehicleLocs(V.locations), accel: V.move[0], top: V.move[1], hnd: V.hnd, sr: V.sr, ctl, est, ht: V.ht, code: V.ht_code || "", stations },
+      HP, HT: V.ht, st: HP, sm: V.sm || 0, move: V.move[1], movePacked: V.move[1], fp: 99, liftST: 10 * HP, bl: HP * HP * 20,
+      dodge: Math.max(0, Math.floor(ctl / 2) + V.hnd), parry: null, block: 0, db: 0, cs: null, shield: null, knife: null, knifeParry: null,
+      melee: { id: ++WID, name: "Ram", usage: "Ram", text: fmtDice(thrCr) + " (collision)", dmg: thrCr, follow: null, level: ctl, parry: null, unbalanced: false, reach: "1", reachMax: 1, malf: 0, weight: HP * HP, natural: true, huge: true },
+      thrCr, ranged: main ? main.w : null, ranged2: null, heavy: null, hooks: null, grenades: [], powers: [], team: null, crew: null,
+      arm, nat: {}, flags: { machine: 1, unliving: 1, hpt: 1, noblood: 1, noMorale: 1, unfazeable: 1, vehicle: 1 },
+      _br: ctl, bothReady: true, body: vehicleLocs(V.locations).L ? "walker" : "vehicle", grapple: 0, elite: false, burns: false, enc: 0, mags: 9,
+      squad: spec.squad || null, squadName: spec.squadName || null, role: null, leader: false, vox: false, commissar: false,
+      stance: spec.stance || "shoot", ambush: !!spec.ambush,
+    });
+  }
+  function describeVehicle(u) {
+    const V = u.veh, d = V.dr;
+    return { hp: u.HP, ht: u.HT, dodge: u.dodge, parry: null, move: u.move, drTorso: d.front, drEye: 0, wp: 0, dmgRed: 0,
+      vehicle: { dr: d, turret: V.turret, locs: V.locs, accel: V.accel, top: V.top, hnd: V.hnd, sr: V.sr, sm: u.sm, ctl: V.ctl,
+        stations: V.stations.map(s => ({ role: s.role, weapon: s.w ? `${s.w.name} (${s.w.text})` : "", skill: s.w ? s.w.level : null, arc: s.arc })) },
+      ranged: u.ranged && { name: u.ranged.name, usage: u.ranged.usage, dmg: u.ranged.text, follow: u.ranged.followText, skill: u.ranged.level, acc: u.ranged.acc, rof: u.ranged.rof, range: u.ranged.range },
+      melee: { name: "Ram", usage: "Ram", dmg: u.melee.text, skill: u.melee.level }, shield: null, db: 0, carried: null };
+  }
   function describe(u) {
+    if (u.veh) return describeVehicle(u);
     const tor = drAt(u.arm.dr, "torso") + drAt(u.nat, "torso"), eye = drAt(u.arm.dr, "eye") + natDRat(u, "eye");
     return {
       hp: u.HP, ht: u.HT, dodge: u.dodge, dmgRed: u.flags.dmgRed > 1 ? u.flags.dmgRed : 0, parry: u.parry, move: u.move, drTorso: tor, drEye: eye, wp: u.arm.wp,
@@ -865,7 +931,7 @@ const SIM = (() => {
     let fxb = [];
     const FX = e => { if (fx) fxb.push(e); };
     const L = s => { if (log && log.length < 5000) log.push(s); };
-    const units = unitSpecs.map(s => buildUnit(s.spec, s.side));
+    const units = unitSpecs.map(s => s.spec.vehicle ? buildVehicle(s.spec, s.side) : buildUnit(s.spec, s.side));
     const models = [];
     const occ = new Map();
     const place = (m, h) => { if (m.h) occ.delete(key(m.h.q, m.h.r)); m.prevH = m.h; m.h = h; if (h) { occ.set(key(h.q, h.r), m); if (frames && m.trail) m.trail.push([h.q, h.r]); } };
@@ -1090,10 +1156,11 @@ const SIM = (() => {
     // free, two yards a point more (a jump down), and anything higher isn't risked. A big model (9 feet and up)
     // manages half as much again; fliers ignore it. cc: 0 man-sized, 1 big, 2 flier
     // Clinging (B43): up or down a wall at half Move, any height: 2 movement points a yard (cc 3)
-    const climbCls = m => m.u.body === "flying" ? 2 : m.u.flags.clinging ? 3 : heightOf(m.u) >= 9 ? 1 : 0;
+    const climbCls = m => m.u.veh ? 4 : m.u.body === "flying" ? 2 : m.u.flags.clinging ? 3 : heightOf(m.u) >= 9 ? 1 : 0;
     function climb(i, j, cc = 0) {
       if (!EL || cc === 2 || i == null || j == null) return 0;
       const dz = EL[j] - EL[i], s = cc === 1 ? 1.5 : 1;
+      if (cc === 4) return Math.abs(dz) <= 0.5 ? 0 : Infinity;   // a vehicle: gentle slopes only, no stairs or floors
       if (cc === 3) return Math.abs(dz) <= 0.5 ? 0 : Math.round(2 * Math.abs(dz)) - 1;
       if (dz > 0) return dz <= 0.5 * s ? 0 : dz <= 1 * s + 0.01 ? 1 : dz <= 1.5 * s ? 3 : Infinity;
       return -dz <= 1 * s + 0.01 ? 0 : -dz <= 2 * s + 0.01 ? 1 : Infinity;
@@ -1166,6 +1233,9 @@ const SIM = (() => {
           if (nbs.length) { if (terr && h) { spawnAt[u.side]--; } h = nbs[0]; u.besideGun = true; }
         }
         place(m, h);
+        if (u.veh) Object.assign(m, { vel: 0, immobile: false, propHalf: 0, turretFacing: m.facing, turretJam: false, trackInj: {}, wheelsLost: 0,
+          stn: u.veh.stations.map(s => ({ s, man: { cu: s.cu, hp: s.cu.HP, state: "ok", stunned: false }, ammo: s.w ? s.w.shots.mag : 0, mags: u.mags,
+            reloading: 0, aimTurns: 0, aimT: null, follow: null, jam: 0, jamSkill: 0, gunBroken: false, out: false, busy: -1 })) });
         m.ix = models.length; m.trail = []; u.models.push(m); models.push(m);
       }
       if (!u.besideGun) row0[u.side] += 2 * perRank + (sameSquad(u, units[ui + 1]) ? 0 : 4);
@@ -1557,7 +1627,7 @@ const SIM = (() => {
       if (t.injTurn !== turn) { t.injTurn = turn; t.injSum = 0; }
       t.injSum += inj;
       if (t.u.flags.berserk && !t.berserk && t.injSum > t.u.HP / 4 && roll3() > t.u.flags.berserk - skillPen(t)) goBerserk(t, "wounded");
-      if (frac) return fracInjure(att, t, inj, loc, type);
+      if (frac && !t.u.veh) return fracInjure(att, t, inj, loc, type);
       const HP = t.u.HP, before = t.hp, f = t.u.flags;
       if (/^(cut|imp|pi)/.test(type)) t.bleeds = true;   // bleeding wounds (B420)
       const nb = f.nobrain || f.homogenous || f.diffuse, nv = f.novitals || f.homogenous || f.diffuse;
@@ -1588,7 +1658,7 @@ const SIM = (() => {
       // only to major wounds, and not to those without a brain or vitals (B420); High Pain Threshold +3
       const major = inj > HP / 2 || crippled || cMajor;
       const headV = (loc === "skull" || loc === "eye" || loc === "face") ? !nb || loc === "face" : loc === "vitals" ? !nv : false;
-      if (!t.berserk && (major || (headV && t.shock > shock0))) {   // immune to stun (B124)
+      if (!t.berserk && !t.u.veh && (major || (headV && t.shock > shock0))) {   // immune to stun (B124); a vehicle's major wounds are its locations' (B554)
         const mod = (f.hpt ? 3 : 0) + (major && headV ? (loc === "skull" || loc === "eye" ? -10 : -5) : 0);
         const r = check(t.u.HT + mod);
         if (!r.ok && (r.margin + (f.hts || 0) <= -5 || r.fumble)) { incapacitate(t, "is knocked out"); return; }   // Hard to Subdue (B59) helps only against the knockout
@@ -1606,8 +1676,8 @@ const SIM = (() => {
           // death check (B419): failure by 1-2 is a mortal wound (out of the fight, dying), worse is death; a success
           // that needed Hard to Kill leaves it collapsed, apparently dead (B58)
           const r = check(t.u.HT + (f.htk || 0) + (t.berserk ? 4 : 0));   // a berserker rolls at +4 (B124)
-          if (!r.ok && r.margin >= -2) { if (f.reanimation) kill(att, t, "mortally wounded"); else incapacitate(t, "is mortally wounded"); return; }
-          if (!r.ok) { kill(att, t, "killed"); return; }
+          if (!r.ok && r.margin >= -2) { if (f.reanimation) kill(att, t, "mortally wounded"); else incapacitate(t, t.u.veh ? "is knocked out, burning" : "is mortally wounded"); return; }
+          if (!r.ok) { kill(att, t, t.u.veh ? "wrecked" : "killed"); return; }
           if (f.htk && r.roll > t.u.HT) { incapacitate(t, "collapses, apparently dead (Hard to Kill)"); return; }
         }
       }
@@ -1656,7 +1726,133 @@ const SIM = (() => {
       8: "knocked off balance", 14: "the victim drops its weapon", 15: "maximum damage", 16: "double damage", 17: "DR halved", 18: "triple damage" };
     // ---- damage to a model at a location. Returns injury.
     let hitFrom = null;   // where a hit comes from when it isn't the attacker's hex (a blast's fragments), for cover
+    // ---- hits on a vehicle (B554-555): the facing's DR, the Vehicle Hit Location Table, location effects, and the
+    // crew inside struck by what gets through (Occupant Hit Table)
+    const VNAME = { body: "hull", turret: "turret", track: "track", leg: "leg", wheel: "wheel", mount: "weapon mount", open: "open cab", vitals: "vital area", area: "hull (blast)" };
+    const OCC_N = [[1, [10, 9, 8, 7, 6, 5, 4, 3, 3, 3, 3]], [2, [12, 10, 9, 8, 7, 6, 5, 4, 3, 3, 3]], [5, [14, 12, 10, 9, 8, 7, 6, 5, 4, 3, 3]],
+      [10, [16, 14, 12, 10, 9, 8, 7, 6, 5, 4, 3]], [20, [17, 16, 14, 12, 10, 9, 8, 7, 6, 5, 4]], [50, [17, 17, 16, 14, 12, 10, 9, 8, 7, 6, 5]], [100, [17, 17, 17, 16, 14, 12, 10, 9, 8, 7, 6]]];
+    const occNumber = (n, sm) => (OCC_N.find(([k]) => n <= k) || OCC_N[OCC_N.length - 1])[1][Math.max(0, Math.min(10, sm - 1))];
+    const crewOK = c => !!c && c.state === "ok";
+    function vehLoc(t) {
+      const L0 = t.u.veh.locs, r = roll3();
+      if (r <= 4) return L0.X ? "mount" : "body";
+      if (r === 5) return L0.t ? "turret" : "body";
+      if (r <= 7 || r === 15 || r === 16) return L0.C ? "track" : L0.L ? "leg" : "body";
+      if (r === 8 || r === 13 || r === 14) return L0.T ? "turret" : "body";
+      if (r === 12) return L0.O ? "open" : "body";
+      if (r >= 17) return L0.W ? "wheel" : "body";
+      return "body";
+    }
+    // wounding on a machine (B380, B554): Unliving, except the vital area (engine, fuel): x3 piercing and impaling,
+    // x2 a tight beam
+    const vehMult = (type, loc, ex) => type === "tox" ? 0 : loc === "vitals" && (/^pi/.test(type) || type === "imp") ? 3 : loc === "vitals" && type === "burn" && !ex ? 2 : UNLIVING[type] ?? BASE[type] ?? 1;
+    function vehFacingDR(t, loc, from) {
+      const V = t.u.veh;
+      if (loc === "area") return V.dr.top ?? V.dr.rear;
+      if (loc === "mount") return 20;   // the gun and its shield, not the hull
+      if (!from || !t.h || (from.q === t.h.q && from.r === t.h.r)) return V.dr.front;
+      if (loc === "turret" && V.turret) return V.turret[arcOf(t.h, t.turretFacing ?? t.facing, from)];
+      return V.dr[arcOf(t.h, t.facing, from)];
+    }
+    function crewHit(att, t, x, dm, raw0) {
+      const c = x.man, cu = c.cu, loc = hitLocation(), raw = raw0 ?? rollDamage(dm);
+      const dr = drAt(cu.arm.dr, loc === "vitals" ? "torso" : loc) + natDRat(cu, loc);
+      const pen = raw - (dm.div === Infinity ? 0 : Math.floor(dr / (dm.div || 1)));
+      if (pen <= 0) { L(`  ${t.id}'s ${x.s.role.toLowerCase()} is struck (${raw} to the ${loc}) but the armour holds`); return; }
+      const inj = Math.max(1, Math.floor(pen * woundMult(dm.type, loc, cu.flags, dm.ex)));
+      c.hp -= inj; if (att) att.dmgDealt += inj;
+      if (c.hp <= -cu.HP && !check(cu.HT).ok) c.state = "dead";
+      else if (c.hp <= 0 && !check(cu.HT - Math.floor(-c.hp / cu.HP)).ok) c.state = "out";
+      else if (inj > cu.HP / 2 && !check(cu.HT).ok) c.stunned = true;
+      L(`  ${t.id}'s ${x.s.role.toLowerCase()} takes ${inj} injury to the ${loc}${c.state === "dead" ? " and is killed" : c.state === "out" ? " and is out of the fight" : c.stunned ? " and is stunned" : ""}`);
+      if (c.state !== "ok") { if (att && c.state === "dead") att.kills++; crewCheck(t); }
+    }
+    function occupantHit(att, t, pen, where) {
+      const live = t.stn.filter(x => crewOK(x.man));
+      if (!live.length || roll3() > occNumber(live.length, t.u.sm)) return;
+      const here = live.filter(x => (where === "turret") === (x.s.station === "turret")), pool = here.length ? here : live;
+      let dice = Math.floor(pen / 5);
+      L(`  spall and fragments fly inside`);
+      // more than 4d is shared out in 4d lots (B555)
+      // (round the location's crew in turn while dice are left: a big penetration shreds everyone in it)
+      for (let i = Math.floor(R() * pool.length); dice > 0 && t.state === "ok"; i++) {
+        const live2 = pool.filter(x => crewOK(x.man));
+        if (!live2.length) break;
+        const k = Math.min(4, dice); dice -= k; crewHit(att, t, live2[i % live2.length], parseDamage(`${k}d cut`));
+      }
+    }
+    function crewCheck(t) { if (t.state === "ok" && !t.stn.some(x => crewOK(x.man))) incapacitate(t, "has no crew left alive to fight it"); }
+    function vehHit(att, w, t, loc, ranged, halfD, dmgOverride, rawOverride, crit) {
+      const V = t.u.veh, L0 = V.locs, HP = t.u.HP;
+      if (!VLOCS.has(loc)) loc = vehLoc(t);   // the body was the target, or a random hit (B554)
+      const dmg = dmgOverride || w.dmg;
+      let raw = rawOverride != null ? rawOverride : rollDamage(dmg), halfDR = false, major = false;
+      if (crit) {
+        L(`  critical hit: ${CRIT[crit] || "normal damage"}`);
+        if (crit === 3 || crit === 18) raw *= 3; else if (crit === 5 || crit === 16) raw *= 2;
+        else if (crit === 6 || crit === 15) raw = Math.floor((dmg.n * 6 + dmg.add) * dmg.mult); else if (crit === 4 || crit === 17) halfDR = true;
+        if (crit === 7 || crit === 13 || crit === 14) major = true;
+      }
+      if (halfD) raw = Math.floor(raw / 2);
+      const fraw = w.follow ? rollDamage(w.follow) : 0;
+      // an open cab: the occupant is struck instead, unprotected by the vehicle (B554)
+      if (loc === "open") {
+        const live = t.stn.filter(x => crewOK(x.man));
+        if (live.length) { L(`  ${raw} dmg into the open cab`); if (t.h) FX(["h", t.ix, 0, "open", t.h.q, t.h.r]); crewHit(att, t, live[Math.floor(R() * live.length)], dmg, raw); return 0; }
+        loc = "body";
+      }
+      const armDR = vehFacingDR(t, ["vitals", "track", "leg", "wheel"].includes(loc) ? "body" : loc, hitFrom || (att && att.h));
+      const div = dmg.div, eff = dr => dr <= 0 ? 0 : div === Infinity ? 0 : Math.floor(dr / div);
+      let DR = eff(armDR); if (halfDR) DR = Math.ceil(DR / 2);
+      const pen = raw - DR, drTxt = `DR ${armDR}${div !== 1 ? "/" + (div === Infinity ? "∞" : div) : ""}`;
+      if (pen <= 0) {
+        if (t.h) FX(["h", t.ix, 0, loc, t.h.q, t.h.r]);
+        L(`  ${raw} dmg to the ${VNAME[loc]} fails to penetrate ${drTxt}`);
+        return 0;
+      }
+      let inj = vehMult(dmg.type, loc, dmg.ex) ? Math.max(1, Math.floor(pen * vehMult(dmg.type, loc, dmg.ex))) : 0;
+      // an explosive follow-up that gets inside goes off within the hull: triple damage, no DR (B414)
+      let finj = w.follow && fraw > 0 && vehMult(w.follow.type, "body", w.follow.ex) ? Math.max(1, Math.floor(fraw * (w.follow.ex ? 3 : 1) * vehMult(w.follow.type, "body", w.follow.ex))) : 0;
+      let note = "";
+      if (loc === "track" || loc === "leg") {
+        // over HP/2 cripples a track (ground Move 0) or a walker's leg (it falls); the excess is lost
+        const sk = (hitFrom || (att && att.h)) && t.h ? sideOf(t.h, t.facing, hitFrom || att.h) : (R() < 0.5 ? "L" : "R");
+        const lim = Math.floor(HP / 2) + 1, took = t.trackInj[sk] || 0;
+        inj = Math.min(inj + finj, Math.max(0, lim - took)); finj = 0; t.trackInj[sk] = took + inj;
+        if (took + inj > HP / 2 && took <= HP / 2) { t.immobile = true; note = loc === "leg" ? ": a leg gives way and the walker crashes down" : ": a track is blown off, immobilising it"; }
+      } else if (loc === "wheel") {
+        const n = Math.max(1, L0.W), lim = Math.floor(HP / (2 * n)) + 1;
+        inj = Math.min(inj + finj, lim); finj = 0;
+        if (inj >= lim) { t.wheelsLost++; note = ": a wheel is wrecked"; if (t.wheelsLost >= Math.ceil(n / 2)) { t.immobile = true; note += ", immobilising it"; } }
+      } else if (loc === "mount") {
+        // over HP/5 cripples it; like a limb it takes no more than that over all its hits (B420, B554)
+        const lim = Math.floor(HP / 5) + 1, took = t.mountInj || 0;
+        inj = Math.min(inj + finj, Math.max(0, lim - took)); finj = 0; t.mountInj = took + inj;
+        const x = t.stn.find(y => y.s.arc === "pintle" && !y.out);
+        if (took + inj >= lim && took < lim && x) { x.out = true; note = `: the ${x.s.w ? x.s.w.name : "mount"} is shot away`; }
+      } else if (loc === "turret" && L0.t && !L0.T) {
+        // an independent turret: over HP/3 wrecks it and what it carries; the excess is lost
+        const lim = Math.floor(HP / 3) + 1;
+        inj = Math.min(inj + finj, lim); finj = 0;
+        if (inj >= lim) { for (const y of t.stn) if (y.s.station === "turret") y.out = true; note = ": the turret is wrecked"; }
+      }
+      const tot = inj + finj;
+      L(`  ${raw} dmg to the ${VNAME[loc]} (${drTxt}): ${tot} injury${finj ? ` (${finj} from the burst inside)` : ""}${note}; ${t.id} at ${t.hp - tot}/${HP} HP`);
+      if (t.h) FX(["h", t.ix, tot, loc, t.h.q, t.h.r]);
+      // a major wound to the body: HT or the power or propulsion is damaged, halving Move; to a main turret: HT or
+      // its main gun is knocked out or it jams (B554)
+      const maj = tot > HP / 2 || major;
+      if (maj && (loc === "body" || loc === "vitals") && !check(t.u.HT).ok) { t.propHalf++; L(`  the engine is hit: Move halved`); if (t.propHalf >= 3) t.immobile = true; }
+      if (maj && loc === "turret" && L0.T && !check(t.u.HT).ok) {
+        const g = t.stn.find(y => y.s.station === "turret" && y.s.w && !y.out);
+        if (g && R() < 0.5) { g.out = true; L(`  the ${g.s.w.name} is knocked out`); } else { t.turretJam = true; L(`  the turret jams`); }
+      }
+      if ((loc === "body" || loc === "turret" || loc === "vitals") && pen >= 5) occupantHit(att, t, pen, loc);
+      if (t.state === "ok") injure(att, t, tot, "body", dmg.type);
+      return tot;
+    }
     function applyHit(att, w, t, loc, ranged, halfD, dmgOverride, rawOverride, crit) {
+      if (t.u.veh) return vehHit(att, w, t, loc, ranged, halfD, dmgOverride, rawOverride, crit);
       const area = loc === "area";
       if (area) loc = "torso";
       const chink = loc.endsWith("#c");
@@ -1950,6 +2146,7 @@ const SIM = (() => {
       const d = dmgOverride || w.dmg;
       const k = w.id + "|" + tu.idx + "|" + loc + (chink ? "#c" : "") + "|" + (dmgOverride ? dmgOverride.key || "r" : "");
       if (EXP.has(k)) return EXP.get(k);
+      if (tu.veh) { const v = vehExp(d, w.follow, loc === "area" ? (tu.veh.dr.top ?? tu.veh.dr.rear) : tu.veh.est, loc === "vitals" ? "vitals" : "body"); EXP.set(k, v); return v; }
       const aDR = loc === "area" ? areaDR(tu) : null;
       if (aDR) loc = "torso";
       const armDR = aDR ? aDR.arm : chink ? gapDR(tu, loc) : drAt(tu.arm.dr, loc === "vitals" ? (tu.arm.dr.vitals != null ? "vitals" : "torso") : loc);
@@ -1977,7 +2174,16 @@ const SIM = (() => {
       return v;
     }
     const RANDOM_LOCS = [["skull", 4], ["face", 5], ["eye", 1], ["leg", 25 + 36], ["arm", 21 + 25], ["torso", 52], ["groin", 27], ["hand", 10], ["foot", 6], ["neck", 4]];
+    // expected injury to a vehicle from damage d against DR dr (the planner's view: no location caps)
+    function vehExp(d, fol, dr, loc) {
+      const effDR = d.div === Infinity ? 0 : Math.floor(dr / d.div), vm = vehMult(d.type, loc, d.ex);
+      const avgF = fol ? (fol.n * 3.5 + fol.add) * fol.mult * (fol.ex ? 3 : 1) * vehMult(fol.type, "body", fol.ex) : 0;
+      let tot = 0;
+      for (let i = 0; i < 20; i++) { const pen = rollDamage(d) - effDR; if (pen > 0) tot += pen * vm + avgF; }
+      return tot / 20;
+    }
     function expInjRandom(w, tu, dmgOverride) {
+      if (tu.veh) return expInj(w, tu, "body", dmgOverride);
       let s = 0;
       for (const [loc, n] of RANDOM_LOCS) s += n * expInj(w, tu, loc, dmgOverride);
       return s / 216;
@@ -1987,7 +2193,9 @@ const SIM = (() => {
       // a regenerating shield that's up soaks the blow before armour: a called shot is wasted on it, so aim at the
       // body (or not at all) until it's down, and count only what the shield won't absorb
       const sh = t.u.shield, shUp = !!(sh && t.sp > 0 && (!melee || !sh.ranged_only) && !w.malediction && (!sh.arc || shieldCovers(t, m)));
-      const locs = w.cone ? ["area"] : shUp ? [aimsShots(m) ? "torso" : "random"] : aimsShots(m) || (melee && t.pinned) ? [...Object.keys(AIM), ...Object.keys(AIM).filter(l => l !== "eye" && drAt(t.u.arm.dr, l === "vitals" ? "torso" : l) > 0).map(l => l + "#c")] : ["random"];
+      const pointy = /^pi/.test(w.dmg.type) || w.dmg.type === "imp" || (w.dmg.type === "burn" && !w.dmg.ex && !w.cone);
+      // a vehicle: the hull, or (a called shot) its vital area at -3 plus its SM (B554)
+      const locs = w.cone ? ["area"] : t.u.veh ? (aimsShots(m) && pointy ? ["random", "vitals"] : ["random"]) : shUp ? [aimsShots(m) ? "torso" : "random"] : aimsShots(m) || (melee && t.pinned) ? [...Object.keys(AIM), ...Object.keys(AIM).filter(l => l !== "eye" && drAt(t.u.arm.dr, l === "vitals" ? "torso" : l) > 0).map(l => l + "#c")] : ["random"];
       const def0 = melee ? bestDefence(t, m, true, w) : w.malediction ? (w.fp && t.u.flags.blank ? 99 : w.resist === "HT" ? t.u.HT : t.u.will) - 2 : rangedDefence(t, m);
       let best = { loc: "torso", da: 0, score: 0, lvl };
       for (const loc of locs) {
@@ -2054,7 +2262,7 @@ const SIM = (() => {
     }
     // retreat (B377): melee only, once per turn, not while held, stunned, kneeling or after a Move and Attack; the bonus
     // then holds against every attack by the same foe until the defender's next turn
-    const canRetreat = (t, att) => t.retreatFrom === att || (!t.retreated && !t.stunned && !t.stunRecovering && !t.mna && !t.grips.length && !(t.kneel && !t.prone) && !!retreatHex(t, att));
+    const canRetreat = (t, att) => !t.u.veh && (t.retreatFrom === att || (!t.retreated && !t.stunned && !t.stunRecovering && !t.mna && !t.grips.length && !(t.kneel && !t.prone) && !!retreatHex(t, att)));
     // shields cover the front and the shield (left) side (B287)
     const shieldCovers = (t, att) => { const a = arcTo(t, att); return a === "front" || (a === "side" && sideOf(t.h, t.facing, att.h) === "L"); };
     const shieldDB = t => t.u.cs && t.shState === "ok" && !t.blockLost ? t.u.cs.db : 0;
@@ -2063,6 +2271,7 @@ const SIM = (() => {
     // With Damage to Shields in play (B484) a shield's DB counts against every attack from its arcs (B287)
     function defOpts(t, att, kind, aw) {
       if (t.state !== "ok" || t.aoa || t.pinned) return null;
+      if (t.u.veh && (t.immobile || !vehDriver(t))) return null;   // evasive driving needs a driver and a vehicle that moves (B469)
       const arc = arcTo(t, att);
       if (arc === "rear") return null;
       // a slam by something three or more SM bigger (Pyramid 3/77 p. 9): diving aside is the only defence, and no
@@ -2688,6 +2897,8 @@ const SIM = (() => {
     function critMiss(m, w, ranged) {
       const unarmed = w.natural || w.name === "Punch" || w.name === "Slam" || w.usage === "power";
       const say = x => L(`  critical miss: ${m.id} ${x}`);
+      // a vehicle's mounted gun can't be dropped or turned in the hand: a critical miss is a stoppage (B407)
+      if (m.u.veh) { say(`jams the ${w.name}`); m.jam = 3; m.jamSkill = (m.u.stats.iq || 10) - 5 + 2; return; }
       let row = roll3();
       if (unarmed) {
         if (row === 3 || row === 18) { say("knocks itself senseless"); incapacitate(m, "is out of the fight"); return; }
@@ -2946,6 +3157,7 @@ const SIM = (() => {
         const rw = f.u.ranged;
         if (rw) v = Math.max(v, expInjRandom(rw, U) * P3[cl(rw.level - 6)] * Math.min(3, rw.rof || 1));
         for (const p of f.u.powers) if (!p.melee && p.dmg) v = Math.max(v, expInjRandom(p, U) * P3[cl(p.level - 6)]);
+        if (f.u.veh) v = f.u.veh.stations.reduce((a, s) => a + (s.w ? expInjRandom(s.w, U) * P3[cl(s.w.level - 6)] * Math.min(3, s.w.rof || 1) : 0), 0);
         best = Math.max(best, Math.min(3, v / Math.max(1, U.HP)));
       }
       TV.set(k, best);
@@ -3077,7 +3289,126 @@ const SIM = (() => {
       const n = stepToward(m, goal, runMove(m), 1);
       if (n) { L(`${m.id} searches ahead`); if (n >= moveOf(m) - 1) m.runK = m.runPrev + 1; }
     }
+    // ---- a vehicle's second (B467-469): the crew close up on empty stations, the driver moves (or overruns), then
+    // every gunner works his own weapon at his own target, in his own arc
+    const vehDriver = m => { const x = m.stn && m.stn.find(y => y.s.station === "driver"); return x && crewOK(x.man) && x.busy !== turn && !x.man.stunned ? x : null; };
+    function crewShuffle(m) {
+      const need = x => x.s.station === "driver" || (x.s.w && !x.out);
+      for (let i = 0; i < m.stn.length; i++) {
+        const x = m.stn[i];
+        if (crewOK(x.man) || !need(x)) continue;
+        // the lowest-priority crewman free to move takes the empty seat; it costs him the second (B467)
+        for (let j = m.stn.length - 1; j > i; j--) {
+          const y = m.stn[j];
+          if (!crewOK(y.man) || y.busy === turn || (need(y) && y.s.station === "driver")) continue;
+          x.man = y.man; y.man = null; x.busy = turn; x.aimTurns = 0;
+          L(`${m.id}'s ${y.s.role.toLowerCase()} takes over as ${x.s.role.toLowerCase()}`);
+          break;
+        }
+      }
+    }
+    // which way a station's gun can fire: a turret or pintle all round (a jammed turret only to the hull's front),
+    // a hull gun to the front, a sponson to the front and its own side
+    function arcOK(m, x, h) {
+      const a = x.s.arc;
+      if (a === "pintle" || (a === "turret" && !m.turretJam)) return true;
+      const arc = arcOf(m.h, m.facing, h);
+      if (a === "front" || a === "turret") return arc === "front";
+      return arc === "front" || (arc === "side" && sideOf(m.h, m.facing, h) === (a === "left" ? "L" : "R"));
+    }
+    // firing from a moving ground vehicle across country (B548): stabilised turret -1, turret or hull mount -2, an
+    // external open mount -3
+    const movePen = (m, x) => !m.moved ? 0 : x.s.stab ? 1 : x.s.arc === "pintle" ? 3 : 2;
+    const vehShotLvl = (m, x, w, t) => wl(m, w) + (m.moved ? 0 : 1) + rangePenalty(rngD(m.h, t.h, Math.max(1, hexDist(m.h, t.h))) + spdOf(t.steps || 0)) + t.u.sm - darkPen(m, t) - movePen(m, x);
+    function vehicleAct(m) {
+      const u = m.u, V = u.veh;
+      m.aoa = m.aod = m.mna = false; m.steps = 0; m.moved = false; m.movedFar = false; m.waiting = null; m.waitOpen = null; clearZone(m);
+      if (m.doNothing) { m.doNothing = false; return; }
+      if (m.surprised) { m.surprised = false; L(`${m.id} is caught by surprise`); return; }
+      if (m.skipNext) { m.skipNext = false; m.skipWhy = null; return; }
+      crewShuffle(m);
+      const pool = known(m).filter(f => f.h && f.state === "ok").sort((a, b) => hexDist(m.h, a.h) - hexDist(m.h, b.h));
+      const drv = vehDriver(m);
+      if (!pool.length) { m.vel = 0; if (AWARE && drv && !m.immobile) search(m); return; }
+      // ---- the driver
+      const half = 2 ** m.propHalf * (m.wheelsLost ? 2 : 1);
+      const top = Math.max(1, Math.floor(V.top / half)), acc = Math.max(1, Math.floor(V.accel / half));
+      const steps = Math.min(top, m.vel + acc);
+      let drove = 0;
+      if (drv && !m.immobile) {
+        // a good shot from here (an aimed shot from some gun worth a twentieth of what a foe has left) holds it
+        // still; otherwise it drives in
+        const shots = m.stn.some(x => x.s.w && !x.out && !x.gunBroken && crewOK(x.man) && (x.ammo > 0 || x.mags > 0 || x.reloading > 0 || x.s.w.shots.mag === Infinity) && pool.some(f => hexDist(m.h, f.h) <= x.s.w.range.max && arcOK(m, x, f.h) && los(m.h, f.h)
+          && planAttack(m, x.s.w, f, vehShotLvl(m, x, x.s.w, f) + (x.s.w.acc >= 2 && !x.s.w.cone ? x.s.w.acc : 0), false, null, { aim: x.s.w.acc, braced: true }).score >= 0.05 * remOf(f)));
+        // foes that could close and hurt it in hand-to-hand (power fists, melta bombs on the rear armour)
+        const rearDR = V.dr.rear;
+        const melee = pool.filter(f => f.u.melee && !f.u.veh && vehExp(f.u.melee.dmg, f.u.melee.follow, rearDR, "body") >= 0.03 * u.HP && hexDist(f.h, m.h) <= moveOf(f) + f.u.melee.reachMax + 1);
+        const adj = pool.filter(f => hexDist(f.h, m.h) === 1 && canTrample(m, f) && !f.u.veh);
+        if (adj.length && !melee.some(f => hexDist(f.h, m.h) === 1 && !canTrample(m, f))) {
+          // run them down (an overrun, B404): the driver's attack this second
+          const t = adj.sort((a, b) => threatOf(b) - threatOf(a))[0];
+          trample(m, t); m.vel = 0;
+        } else if (melee.length) {
+          // back away from anyone who could get a melta bomb or a power fist onto it, guns still firing
+          let best = null, bs = -Infinity;
+          for (const [dq, dr] of DIRS) {
+            const g = { q: m.h.q + dq * steps, r: m.h.r + dr * steps };
+            const sc = Math.min(...melee.map(f => hexDist(g, f.h))) + (terr && idx(key(g.q, g.r)) == null ? -99 : 0);
+            if (sc > bs) { bs = sc; best = g; }
+          }
+          if (best) { drove = stepToward(m, best, steps, 0); if (drove) L(`${m.id} reverses away from ${melee[0].id}`); }
+        } else if (!shots) {
+          drove = stepToward(m, pool[0].h, steps, 1);
+          if (drove) L(`${m.id} drives forward (${drove} yd)`);
+        }
+        m.vel = drove;
+        // the front armour to the worst gun that can hurt it (a tracked hull pivots in place)
+        const at = pool.filter(f => (f.u.ranged && expInjRandom(f.u.ranged, u) > 0) || (f.u.veh && f.u.veh.stations.some(s => s.w && expInjRandom(s.w, u) > 0)))
+          .sort((a, b) => threatOf(b) / Math.max(1, hexDist(b.h, m.h)) - threatOf(a) / Math.max(1, hexDist(a.h, m.h)))[0] || pool[0];
+        if (at && at.h && m.h) m.facing = faceToward(m.h, at.h);
+      } else m.vel = 0;
+      // ---- the gunners
+      for (const x of m.stn) {
+        const w = x.s.w;
+        if (!w || x.out || !crewOK(x.man) || x.busy === turn || m.state !== "ok") continue;
+        if (x.man.stunned) { x.man.stunned = false; continue; }
+        if (x.gunBroken) continue;
+        if (x.jam > 0) { if (--x.jam === 0) { if (check(x.jamSkill).ok) L(`${m.id}'s ${x.s.role.toLowerCase()} clears the ${w.name}`); else x.jam = 3; } continue; }
+        if (w.shots.mag !== Infinity && x.ammo <= 0 && !x.reloading) {
+          if (x.mags <= 0) continue;
+          const ld = m.stn.find(y => y.s.loads === x.s.role && crewOK(y.man) && y.busy !== turn);
+          x.reloading = Math.max(1, ld ? Math.ceil(w.shots.reload / 2) : w.shots.reload);
+        }
+        if (x.reloading > 0) { if (--x.reloading === 0) { x.ammo = w.shots.mag; x.mags--; } continue; }
+        if (m.moved && !x.s.stab) x.aimTurns = 0;
+        let best = null;
+        for (const f of pool) {
+          if (f.state !== "ok" || !f.h) continue;
+          const d = hexDist(m.h, f.h);
+          if (d > w.range.max || (w.minRange && d < w.minRange) || !arcOK(m, x, f.h) || !los(m.h, f.h) || duckedFrom(f, m.h)) continue;
+          // no shell into a melee with our own side in it
+          if ((w.dmg.ex || w.blast) && models.some(y => y.u.side === u.side && y !== m && y.state === "ok" && y.h && !y.u.veh && hexDist(y.h, f.h) <= 3)) continue;
+          const lvl = vehShotLvl(m, x, w, f), aimed = x.aimT === f && x.aimTurns > 0;
+          const now = kv(m, f, planAttack(m, w, f, lvl + (aimed ? w.acc : 0), false, null, { aim: aimed ? w.acc : 0, braced: !m.moved }).score);
+          const later = !aimed && !m.moved && w.acc >= 2 && !w.cone ? GAMMA * kv(m, f, planAttack(m, w, f, lvl + w.acc, false, null, { aim: w.acc, braced: true }).score) : 0;
+          const v = Math.max(now, later);
+          if (v > 0 && (!best || v > best.v)) best = { f, v, aimed, aim: later > now };
+        }
+        if (!best) { x.aimTurns = 0; x.aimT = null; continue; }
+        if (x.s.arc === "turret" && !m.turretJam) m.turretFacing = faceToward(m.h, best.f.h);
+        if (best.aim) { x.aimT = best.f; x.aimTurns = 1; L(`${m.id}'s ${x.s.role.toLowerCase()} lays the ${w.name.split(",")[0]} on ${best.f.id}`); continue; }
+        if (best.aimed) x.aimTurns++;
+        const save = { id: m.id, ammo: m.ammo, aimTurns: m.aimTurns, follow: m.follow, jam: m.jam, gunBroken: m.gunBroken };
+        m.id = `${save.id} (${x.s.role.toLowerCase()})`; m.ammo = x.ammo; m.aimTurns = best.aimed ? x.aimTurns - 1 : 0; m.follow = x.follow; m.jam = 0; m.gunBroken = false;
+        fireAt(m, w, best.f, { aim: best.aimed, pen: movePen(m, x) });
+        x.ammo = m.ammo; x.follow = m.follow; x.aimTurns = 0; x.aimT = null;
+        if (m.jam) { x.jam = m.jam; x.jamSkill = m.jamSkill; }
+        if (m.gunBroken) x.gunBroken = true;
+        Object.assign(m, save);
+      }
+    }
     function act(m) {
+      if (m.u.veh) return vehicleAct(m);
       const u = m.u, A = u.ai;
       m.aoa = false; m.aod = false; m.mna = false; m.offBalance = false; m.readied = false; m.steps = 0; m.moved = false; m.movedFar = false;
       m.runPrev = m.runK || 0; m.runK = 0;   // a sprint carries on only through consecutive straight Moves
@@ -4103,7 +4434,7 @@ const SIM = (() => {
     // worth of grabbing t (B370): a pinned foe is out of the fight while friends hack at it; more hands, better odds
     function grabValue(m, t, helpers) {
       const u = m.u;
-      if (m.armsLost >= 1 || t.pinned || hangsOn(m, t)) return 0;
+      if (m.armsLost >= 1 || t.pinned || hangsOn(m, t) || t.u.veh) return 0;
       const hit = P3[cl(u.grapple - skillPen(m) + smGrab(m, t))];
       const def = bestDefence(t, m, true);
       const pGrab = hit * (1 - (def == null ? 0 : P3[cl(def)]));
@@ -4244,13 +4575,13 @@ const SIM = (() => {
           });
         }
         // grappling (B370): grab a foe the weapon can't hurt; a pinned foe is out of the fight while friends hack at it
-        if (m.armsLost < 1 && !t.pinned && gripsOn(t).length < 4) {
+        if (m.armsLost < 1 && !t.pinned && gripsOn(t).length < 4 && !t.u.veh) {
           const helpers = models.filter(a => a !== m && a.u.side === u.side && a.state === "ok" && a.h && hexDist(a.h, t.h) <= 1).length;
           add(Wm * grabValue(m, t, helpers) - rNow, `grab@${t.id}`, () => { face(); grab(m, t); });
         }
         // grab the gun (B370): a hand on a long gun's barrel pushes the muzzle aside; worth what the gun would do to us
         // over what the foe could do once it lets go and draws a blade
-        if (m.armsLost < 1 && !m.grips.length && !holdingGun(m) && longGun(t) && gunReady(t) && !gunGrip(t) && !t.pinned && t.reload === 0
+        if (m.armsLost < 1 && !m.grips.length && !holdingGun(m) && !t.u.veh && longGun(t) && gunReady(t) && !gunGrip(t) && !t.pinned && t.reload === 0
           && (m.inHand !== "both" || !u.melee || u.melee.natural || u.melee.oneHanded !== false)) {
           const g = t.u.ranged, hit = P3[cl(u.grapple - skillPen(m) + smGrab(m, t))], def = bestDefence(t, m, true);
           const pGrab = hit * (1 - (def == null ? 0 : P3[cl(def)]));
@@ -4416,6 +4747,7 @@ const SIM = (() => {
     const zones = [];
     // the firing line, settled for everyone at the start of the second so the rear rank sees the front rank down
     function firingLine(m) {
+      if (m.u.veh) return;
       if (m.prone) { m.kneelVol = false; return; }
       const pool = foes(m).filter(f => f.h).sort((a, b) => hexDist(m.h, a.h) - hexDist(m.h, b.h));
       if (!pool.length) return;
@@ -4698,7 +5030,7 @@ const SIM = (() => {
         m.committed = false; m.defAtk = false; m.aoa = false; m.aod = false; m.mna = false; m.offBalance = false;   // "until its next turn", whatever it does with it
         if (!frac && m.hp <= 0) {
           const k = Math.floor(-m.hp / m.u.HP);
-          if (!check(m.u.HT - k + (m.berserk ? 4 : 0) + (m.u.flags.hts || 0)).ok) { FX(["d", m.h.q, m.h.r, m.u.side, 0]); m.state = "out"; place(m, null); L(`${m.id} collapses unconscious`); continue; }
+          if (!check(m.u.HT - k + (m.berserk ? 4 : 0) + (m.u.flags.hts || 0)).ok) { FX(["d", m.h.q, m.h.r, m.u.side, 0]); m.state = "out"; place(m, null); L(`${m.id} ${m.u.veh ? "breaks down" : "collapses unconscious"}`); continue; }
         }
         if (m.onFire) { burn(m); if (m.state !== "ok") continue; }
         // at 0 FP or less, a Will roll before each maneuver; failure collapses it for the fight (B426)
@@ -4844,8 +5176,8 @@ const SIM = (() => {
     return res;
   }
 
-  return { index, buildUnit, describe, runBattle, monteCarlo, parseDamage, seed, woundMult, fmtDice, px, facilityMap, ruinsMap, fromOffset, rangePenalty, DIRS, squadSpecs,
-    get squads() { return SQUADS; },
+  return { index, buildUnit, buildVehicle, describe, runBattle, monteCarlo, parseDamage, seed, woundMult, fmtDice, px, facilityMap, ruinsMap, fromOffset, rangePenalty, DIRS, squadSpecs,
+    get squads() { return SQUADS; }, get vehicles() { return VEHICLES; },
     get templates() { return TEMPLATES; }, get equipment() { return EQ; }, traitWeapons };
 })();
 if (typeof module !== "undefined") module.exports = SIM;
@@ -4904,6 +5236,11 @@ if (typeof document !== "undefined") (() => {
     ["Squads: Commissar's squad vs Ork Boyz", [["squad:Astra Militarum Infantry Squad with Commissar"]], [["squad:Ork Boyz Mob"]], 80],
     ["Squads: Tactical vs Chaos", [["squad:Astartes Tactical Squad"]], [["squad:Chaos Space Marine Squad"]], 40],
     ["Squads: 3 Guard squads vs a Tactical squad", [["squad:Astra Militarum Infantry Squad"], ["squad:Astra Militarum Infantry Squad"], ["squad:Astra Militarum Infantry Squad"]], [["squad:Astartes Tactical Squad"]], 100],
+    ["Vehicles: Leman Russ vs a Tactical squad", [["veh:Leman Russ Battle Tank", 1]], [["squad:Astartes Tactical Squad"]], 150],
+    ["Vehicles: Lascannon teams vs a Leman Russ", [["squad:Heavy Weapons Squad (Lascannons)"]], [["veh:Leman Russ Battle Tank", 1]], 150],
+    ["Vehicles: Predator vs Leman Russ", [["veh:Predator Destructor", 1]], [["veh:Leman Russ Battle Tank", 1]], 300],
+    ["Vehicles: Chimera and a Guard squad vs Ork Boyz", [["veh:Chimera", 1], ["squad:Astra Militarum Infantry Squad"]], [["squad:Ork Boyz Mob"]], 100],
+    ["Ruins: Leman Russ and Guard vs 2 Ork mobs", [["veh:Leman Russ Battle Tank", 1], ["squad:Astra Militarum Infantry Squad"]], [["squad:Ork Boyz Mob"], ["squad:Ork Boyz Mob"]], 60, "ruins"],
   ];
 
   const trW = template => {
@@ -4924,7 +5261,16 @@ if (typeof document !== "undefined") (() => {
     const cur = u.armour[i] || "";
     return `<select data-a="${i}"><option value="">${i ? "No second item" : "No armour"}</option>${armourOpts.map(n => `<option${n === cur ? " selected" : ""}>${esc(n)}</option>`).join("")}</select>`;
   }
+  function vehProfile(u) {
+    try {
+      const d = SIM.describe(SIM.buildVehicle({ ...u, count: 1 }, 0)), v = d.vehicle, dr = v.dr;
+      return `<div class="prof"><span><b>HP</b>${d.hp} · HT ${d.ht}</span><span><b>DR</b>${dr.front} front · ${dr.side} side · ${dr.rear} rear${v.turret ? ` · turret ${v.turret.front}` : ""}</span>
+        <span><b>Dodge</b>${d.dodge}</span><span><b>Move</b>${v.accel}/${v.top}</span><span><b>SM</b>+${v.sm}</span><span><b>Hnd/SR</b>${v.hnd >= 0 ? "+" : ""}${v.hnd}/${v.sr}</span></div>
+        <div class="prof">${v.stations.map(s => `<span><b>${esc(s.role)}</b>${s.weapon ? `${esc(s.weapon)}, skill ${s.skill}, ${esc(s.arc)}` : s.role === "Driver" ? `control ${v.ctl}` : "crew"}</span>`).join("")}</div>`;
+    } catch (e) { return `<div class="prof err">${esc(e.message)}</div>`; }
+  }
   function profile(u) {
+    if (u.vehicle) return vehProfile(u);
     try {
       const d = SIM.describe(SIM.buildUnit({ ...u, count: 1 }, 0));
       const r = d.ranged, m = d.melee;
@@ -4940,6 +5286,10 @@ if (typeof document !== "undefined") (() => {
   // one pip per model (up to 30), so a mob looks like a mob
   const pips = n => `<span class="pips" aria-hidden="true">${"<i></i>".repeat(Math.min(n, 30))}${n > 30 ? `<em>+${n - 30}</em>` : ""}</span>`;
   function unitCard(u, si, ui) {
+    if (u.vehicle) return `<div class="sunit" data-s="${si}" data-u="${ui}">
+      <div class="shead"><input type="number" min="1" max="20" value="${u.count}" data-f="count" aria-label="Vehicles"><b>${esc(u.vehicle)}<small>vehicle</small></b>
+        <button class="x" data-del aria-label="Remove vehicle">×</button></div>
+      ${vehProfile(u)}</div>`;
     const p = ptsOf(u.template);
     return `<div class="sunit" data-s="${si}" data-u="${ui}">
       <div class="shead"><input type="number" min="1" max="200" value="${u.count}" data-f="count" aria-label="Models"><b>${esc(u.role || u.template)}${u.role || p ? `<small>${u.role ? esc(u.template) + (p ? " · " : "") : ""}${p ? `${p.toLocaleString("en-US")} pts each` : ""}</small>` : ""}</b>
@@ -4967,12 +5317,15 @@ if (typeof document !== "undefined") (() => {
     const n = new Set(S.sides.flat().filter(x => x.squad && x.squadName && x.squadName.startsWith(short)).map(x => x.squad)).size + 1;
     return SIM.squadSpecs(name, `${name}#${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`, n).map(sp => ({ ...newUnit(sp.template, sp.count), ...sp, armour: sp.armour || [] }));
   }
-  const expand = (list, si) => list.flatMap(([t, n]) => t.startsWith("squad:") ? addSquad(si, t.slice(6)) : [newUnit(t, n)]);
+  const newVehicle = (name, n) => ({ vehicle: name, template: name, count: n || 1, stance: "shoot", armour: [] });
+  const addOf = (si, v, n) => v.startsWith("squad:") ? addSquad(si, v.slice(6)) : v.startsWith("veh:") ? [newVehicle(v.slice(4), n)] : [newUnit(v, n)];
+  const expand = (list, si) => list.flatMap(([t, n]) => addOf(si, t, n));
   function tmplOptions() {
     const groups = {};
     for (const l of TEMPL) (groups[l.section.replace(/\/Templates$/, "").replace(/\//g, " › ")] ||= []).push(l.title);
-    const sq = Object.keys(SIM.squads || {});
-    return `<option value="">Add a unit…</option>` + (sq.length ? `<optgroup label="Squads (lore organisation)">${sq.map(n => `<option value="squad:${esc(n)}">${esc(n)}</option>`).join("")}</optgroup>` : "") + Object.entries(groups).map(([g, ts]) => `<optgroup label="${esc(g)}">${ts.map(t => `<option>${esc(t)}</option>`).join("")}</optgroup>`).join("");
+    const sq = Object.keys(SIM.squads || {}), vs = [...(SIM.vehicles || new Map()).keys()];
+    return `<option value="">Add a unit…</option>` + (sq.length ? `<optgroup label="Squads (lore organisation)">${sq.map(n => `<option value="squad:${esc(n)}">${esc(n)}</option>`).join("")}</optgroup>` : "")
+      + (vs.length ? `<optgroup label="Vehicles">${vs.map(n => `<option value="veh:${esc(n)}">${esc(n)}</option>`).join("")}</optgroup>` : "") + Object.entries(groups).map(([g, ts]) => `<optgroup label="${esc(g)}">${ts.map(t => `<option>${esc(t)}</option>`).join("")}</optgroup>`).join("");
   }
 
   let last = null;
@@ -5275,13 +5628,23 @@ if (typeof document !== "undefined") (() => {
     const part = (g2, m, sx, sy, sz, x, y, z) => { const p = new THREE.Mesh(g2, m); p.scale.set(sx, sy, sz); p.position.set(x, y, z); p.castShadow = true; return p; };
     const pick = [];
     const figs = ros.map((r, i) => {
-      const k = HFT3[String(Math.max(-4, Math.min(6, r.sm || 0)))] / 6, body = r.body || "upright", side = r.side || 0;
+      const body = r.body || "upright", veh = body === "vehicle" || body === "walker", k = veh ? 1 : HFT3[String(Math.max(-4, Math.min(6, r.sm || 0)))] / 6, side = r.side || 0;
       const tone = (FACTION3.find(([re]) => re.test(r.faction || "")) || [0, 0x6b6f76])[1];
       const mBody = mat(tone), mTrim = mat(SIDE[side], { metalness: .3 }), mDark = mat(0x1d1e22), mEye = mat(0x111111, { emissive: /Necron/.test(r.faction || "") ? 0x39ff6a : /Tyranid/.test(r.faction || "") ? 0xffb030 : 0x000000 });
       const g = new THREE.Group(), fig = new THREE.Group();
       g.add(part(geo.base, mTrim, 1, 1, 1, 0, .04, 0));
       const bulk = ARMOURED.test(r.faction || "") ? 1.18 : /Ork/.test(r.faction || "") ? 1.12 : 1;
-      if (body === "horizontal") {
+      if (body === "vehicle") {
+        // a tracked hull with its turret and gun (drawn small enough not to bury its neighbours: the engine holds it
+        // to one hex)
+        fig.add(part(geo.box, mBody, 2.3, .62, 1.3, 0, .58, 0), part(geo.box, mDark, 2.4, .5, .32, 0, .3, .62), part(geo.box, mDark, 2.4, .5, .32, 0, .3, -.62));
+        const gun = part(geo.cyl, mDark, .07, 1.25, .07, .9, 1.12, 0); gun.rotation.z = Math.PI / 2;
+        fig.add(part(geo.box, mBody, .95, .42, .85, -.15, 1.1, 0), gun, part(geo.box, mTrim, 2.32, .06, 1.32, 0, .9, 0));
+      } else if (body === "walker") {
+        const gun = part(geo.cyl, mDark, .05, .7, .05, .65, 1.45, 0); gun.rotation.z = Math.PI / 2;
+        fig.add(part(geo.cyl, mDark, .1, 1.3, .1, 0, .65, .25), part(geo.cyl, mDark, .1, 1.3, .1, 0, .65, -.25));
+        fig.add(part(geo.box, mBody, .9, .6, .8, .05, 1.6, 0), part(geo.box, mTrim, .92, .06, .82, .05, 1.92, 0), gun);
+      } else if (body === "horizontal") {
         fig.add(part(geo.sph, mBody, .62, .34, .32, 0, .7, 0), part(geo.sph, mBody, .22, .2, .2, .62, .82, 0), part(geo.sph, mEye, .05, .05, .05, .8, .86, .08), part(geo.sph, mEye, .05, .05, .05, .8, .86, -.08));
         for (const [lx, lz] of [[.3, .2], [.3, -.2], [-.3, .2], [-.3, -.2]]) fig.add(part(geo.cyl, mBody, .06, .55, .06, lx, .3, lz));
         fig.add(part(geo.box, mTrim, .5, .06, .3, -.05, .98, 0));
@@ -5308,7 +5671,7 @@ if (typeof document !== "undefined") (() => {
       const hp = new THREE.Mesh(geo.bar, keep(new THREE.MeshBasicMaterial({ color: 0x5fbf6a, depthTest: false })));
       const sp = new THREE.Mesh(geo.bar, keep(new THREE.MeshBasicMaterial({ color: 0x58b6e8, depthTest: false })));
       [back, hp, sp].forEach((m, j) => { m.renderOrder = 10 + j; bars.add(m); });
-      bars.position.y = (body === "horizontal" ? 1.25 : body === "legless" ? 1.35 : body === "flying" ? 2.6 : 1.95) * k + .2;
+      bars.position.y = (body === "vehicle" ? 1.5 : body === "walker" ? 2.2 : body === "horizontal" ? 1.25 : body === "legless" ? 1.35 : body === "flying" ? 2.6 : 1.95) * k + .2;
       g.add(bars); scene.add(g);
       return { g, fig, sel, bars, hp, sp, k, body, side };
     });
@@ -5913,7 +6276,7 @@ if (typeof document !== "undefined") (() => {
     const hs = main.querySelector("[data-h]"); hs.onchange = () => { S.health = hs.value; save(); render(); };
     main.querySelectorAll("[data-add]").forEach(el => el.onchange = () => {
       if (!el.value) return; const si = +el.dataset.add;
-      S.sides[si].push(...(el.value.startsWith("squad:") ? addSquad(si, el.value.slice(6)) : [newUnit(el.value, 5)])); save(); render();
+      S.sides[si].push(...addOf(si, el.value, el.value.startsWith("veh:") ? 1 : 5)); save(); render();
     });
     main.querySelectorAll("[data-preset]").forEach(el => el.onclick = () => {
       const p = PRESETS[+el.dataset.preset];
@@ -5936,6 +6299,7 @@ if (typeof document !== "undefined") (() => {
       if (amb) amb.onchange = () => { u.ambush = amb.checked; save(); };
       const cs = card.querySelector("[data-cs]");
       if (cs) cs.onchange = () => { u.carried = cs.value || null; upd(); };
+      if (u.vehicle) return;   // a vehicle's card has no loadout
       const sh = card.querySelector("[data-sh]");
       sh.onchange = () => { u.shield = sh.checked ? (LO[u.template] && LO[u.template].shield ? { ...LO[u.template].shield } : { sp: 40, delay: 2, recharge: 10, ranged_only: true }) : null; upd(); };
       card.querySelectorAll("[data-shf]").forEach(el => el.onchange = () => { u.shield[el.dataset.shf] = Number(el.value) || 0; upd(); });
