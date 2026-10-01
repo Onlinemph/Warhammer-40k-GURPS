@@ -377,6 +377,13 @@ items:
           enhancement (+50%, -15 in all). In Battle Rage the bearer keeps the +2 to
           hit and the other Battle Rage effects while berserk, as on B124. Adds
           only the difference, -5.
+      - name: Extra Attack (Butcher's Nails)
+        points: 0
+        per_level: 25
+        levels: 1
+        ref: B53
+        tags: [Advantage, Physical]
+        notes: "One more blow a turn, the nails' frenzy: a Berzerker hacks twice where a Marine strikes once."
       - name: Hard to Subdue
         points: 0
         per_level: 2
@@ -404,9 +411,12 @@ items:
       upgrade to the Blood God's own Mark, not a substitute for it.
     design: >
       Berserk with Battle Rage (+50%) is -10 x 1.5 = -15; the Mark pays -10,
-      so the nails add -5. Hard to Subdue 3 (B59, 2/level) 6. Callous (B125)
-      -5. Bloodlust and High Pain Threshold are left to the Mark. Net -5 + 6 - 5
-      = -4 points. Callous overlaps the Heretic Astartes lens; take one.
+      so the nails add -5. Extra Attack 1 (B53) 25, the frenzy the fiction gives
+      Berzerkers (user direction: without it five Berzerkers won 9 fights in 40 against
+      five Marines, losing on damage output, not on defence; with it they win 47 in 60).
+      Hard to Subdue 3 (B59, 2/level) 6. Callous (B125) -5. Bloodlust and High Pain
+      Threshold are left to the Mark. Net -5 + 25 + 6 - 5 = 21 points. Callous overlaps
+      the Heretic Astartes lens; take one.
 
   - name: Nurgle's Gift (Plague Marine)
     container: meta_trait
@@ -595,12 +605,12 @@ items:
         tags: [Disadvantage, Mental]
         notes: Self-control 12. Snarls, lashes out and refuses to back down.
       - name: Possessed Claws and Tentacles
-        points: 28
+        points: 38
         ref: B88
         tags: [Advantage, Physical]
         weapons:
           - usage: Standard
-            damage: sw+2d(2) cut
+            damage: sw+2d(3) cut
             reach: "C,1"
             parry: 0
             skill: Brawling
@@ -609,10 +619,13 @@ items:
           sw is the bearer's own swing at ST 40. Uses the Possessed Extra Attack for its
           second strike.
         design: >
-          Cutting Striker (B88, 7 points) with Armor Divisor (2) (+50%) = 11 for
-          the sw+0(2) baseline, plus Innate Attack (Cut) at 2 dice (7/die = 14) with
-          Armor Divisor (2) and Melee Attack, Reach C (-30%): net +20%, 14 x 1.2 =
-          16.8, rounded to 17. 11 + 17 = 28. The same build as the Tyranid Scything Talons.
+          Cutting Striker (B88, 7 points) with Armor Divisor (3) (+100%) = 14 for
+          the sw+0(3) baseline, plus Innate Attack (Cut) at 2 dice (7/die = 14) with
+          Armor Divisor (3) and Melee Attack, Reach C (-30%): net +70%, 14 x 1.7 =
+          23.8, rounded to 24. 14 + 24 = 38, the same build as the Genestealer's Rending
+          Claws. Raised from (2) by user direction: daemonic claws tear ceramite, and at (2)
+          most blows bounced off a Mark VII breastplate (170 of 346 hits in one test), so
+          five Possessed won 7 fights in 40 against five Marines; at (3) they win 55 in 60.
     notes: >
       Apply to an Astartes with Personal Advancement (the Legionary line). No
       guns: a Possessed fights with its warp-grown limbs. The framework's
@@ -627,8 +640,8 @@ items:
       sent against the enemy and not otherwise directed.
     design: >
       50 (Attribute Modifiers) + 75 (DR 15, 5/level) + 10 (Fearlessness 5) + 25
-      (Extra Attack 1) - 10 (Bad Temper, B124) + 28 (Possessed Claws and
-      Tentacles) = 178 points. Unfazeable is left out as too much: the Possessed
+      (Extra Attack 1) - 10 (Bad Temper, B124) + 38 (Possessed Claws and
+      Tentacles) = 188 points. Unfazeable is left out as too much: the Possessed
       is not mindless. Fearlessness 5 (B55) per the framework.
 
   - name: Cultist's Devotion

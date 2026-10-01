@@ -515,7 +515,7 @@ Same **Astartes** racial meta-trait as a loyalist (data/imperium/astartes/gene-s
 | Chaos Lord | 32 | 18 | 13 | 16 | 38 | Leadership and Tactics high; ~1,200 points. |
 | Chaos Sorcerer | 30 | 17 | 14 | 15 | 34 | Psyker Talent 3, Warp Empowerment at the Alpha level (20); Will 16; ~1,250 points. |
 | Possessed | 40 | 16 | 8 | 16 | 44 | A daemon wearing a Marine: warp-flesh DR 15 over the armour's, claws and tentacles (Extra Attack 1), Fearlessness 5, no guns. ~1,000 points. |
-| Khorne Berzerker | 30 | 17 | 10 | 15 | 34 | Legionary + Mark of Khorne + Butcher's Nails; chainaxe skill 22. |
+| Khorne Berzerker | 30 | 17 | 10 | 15 | 34 | Legionary + Mark of Khorne + Butcher's Nails (Battle Rage, Extra Attack 1); chainaxe skill 22. |
 | Plague Marine | 30 | 16 | 10 | 16 | 34 | Legionary + Mark of Nurgle + Nurgle's Gift (Injury Tolerance ÷2, fused rotting flesh DR 10, −2 Move). |
 | Rubric Marine | 30 | 14 | 6 | 15 | 34 | Not alive: a sealed suit of Mk IV filled with the dust of its soul. Machine-like (No Blood, No Brain, No Vitals, Unliving, Doesn't Breathe/Eat/Sleep, Unfazeable), Slave Mentality toward its Sorcerer, Move 8. Inferno boltgun. |
 | Noise Marine | 30 | 17 | 11 | 15 | 34 | Legionary + Mark of Slaanesh; sonic weapons. |
@@ -548,7 +548,7 @@ Shared weapons keep their anchors: boltgun, bolt pistol, chainsword, chainaxe, p
 | Blastmaster | 6d×2(3) cr, RoF 2, range 120/360; a single-frequency setting 6d×3(5) cr, RoF 1 |
 | Plague knife | Combat knife plus a 2d tox follow-up (Nurgle's Rot) on a penetrating hit |
 | Blight grenade | Frag grenade (3d cr ex [4d cut]) plus a 1d tox follow-up per fragment |
-| Possessed claws and tentacles | Natural weapons at ST 40: sw+2d(2) cut, reach 1 |
+| Possessed claws and tentacles | Natural weapons at ST 40: sw+2d(3) cut, reach C,1 (daemonic claws tear ceramite) |
 
 ### Daemons (wave 2)
 
