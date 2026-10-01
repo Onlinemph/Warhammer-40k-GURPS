@@ -182,3 +182,36 @@ Ork Weirdboy:
   note: '''Eadbanger 10 levels (Innate Attack crushing, Malediction 2, Armor Divisor (10)); a Quick Contest against the target''s Will. Skill is the template''s Innate Attack (Projectile) at DX+2 = 13 (DX 11, 4 points). Perils Will 8 + Psyker Talent 2; +2 inside a WAAAGH! (WAAAGH! Gestalt). A catastrophic failure is the head exploding (template notes).'
 Cryptek:
 - {name: Channelled Discharge, kind: ranged, damage: 6d(3) burn, acc: 3, range: 10/100, rof: 1, skill: 15, fp: 0, concentrate: 0, note: 'Plasmancy discipline: Innate Attack burning 6 levels + Armor Divisor (3). Skill is the template''s Innate Attack (Beam) at DX+3 = 15 (DX 12, 8 points). No Warp Sorcery or Perils in the trait (Necrons are invisible to the warp), so 0 FP and no Perils.'}
+Chaos Sorcerer:
+- name: Smite
+  kind: ranged
+  damage: 12d(10) burn
+  acc: 3
+  range: 10/100
+  rof: 1
+  skill: 19
+  fp: 1
+  concentrate: 0
+  perils:
+    will: 19
+    minor: {fp: 1}
+    moderate: {damage: 1d, fizzle: true}
+    major: {damage: 2d, stun: true, fizzle: true}
+    catastrophic: {margin: 10, natural: 18}
+  note: Smite 12 levels (Innate Attack burning, Armor Divisor (10)), warp lightning through plate. Skill Innate Attack (Beam) DX+2 = 19. Perils Will 16 + Psyker Talent 3.
+- name: Fire Bolt
+  kind: ranged
+  damage: 12d burn
+  acc: 3
+  range: 10/100
+  rof: 1
+  skill: 19
+  fp: 1
+  concentrate: 0
+  perils:
+    will: 19
+    minor: {fp: 1}
+    moderate: {damage: 1d, fizzle: true}
+    major: {damage: 2d, stun: true, fizzle: true}
+    catastrophic: {margin: 10, natural: 18}
+  note: Fire Bolt 12 levels (Innate Attack burning). Skill Innate Attack (Beam) DX+2 = 19. Perils Will 16 + Talent 3.

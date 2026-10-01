@@ -1,0 +1,225 @@
+kind: template
+output: Chaos/Templates/Plague Marine.gct
+notes: >-
+  A Plague Marine: a Death Guard or Nurgle-sworn Legionary whose body has rotted and swollen under the
+  Plague God. Built as the Chaos Space Marine with Mark of Nurgle and Nurgle's Gift in place of Mark of
+  Chaos Undivided, DX 16 (a point of DX lost to the bloat, offsetting the Long War Veteran's +1 and leaving
+  his Per bonus) and HT 16 (+1), IQ 10 (-1). Injury Tolerance (Damage Reduction) divisor 2, fused rotting
+  flesh DR 10 over the Plague-Fused Mark IV plate, Basic Move -2 (Move 10 for an Astartes with Move 12).
+  Weapon skills are the Legionary's points, so one level lower for the lower DX: Guns (Rifle) 21. About
+  917 points before gear. Equipment: Plague-Fused plate, boltgun, plague knife, blight grenades, bolt
+  pistol.
+traits:
+- include: imperium/astartes/gene-seed.yaml#Astartes
+  children:
+  - include: imperium/astartes/gene-seed.yaml#Attribute Modifiers
+  - include: imperium/astartes/gene-seed.yaml#Enhanced Move (Ground)
+  - include: imperium/astartes/gene-seed.yaml#Extended Lifespan
+  - include: imperium/astartes/gene-seed.yaml#Secondary Heart
+  - include: imperium/astartes/gene-seed.yaml#Ossmodula
+  - include: imperium/astartes/gene-seed.yaml#Biscopea
+  - include: imperium/astartes/gene-seed.yaml#Haemastamen
+  - include: imperium/astartes/gene-seed.yaml#Larraman's Organ
+  - include: imperium/astartes/gene-seed.yaml#Catalepsean Node
+  - include: imperium/astartes/gene-seed.yaml#Preomnor
+  - include: imperium/astartes/gene-seed.yaml#Omophagea
+  - include: imperium/astartes/gene-seed.yaml#Multi-lung
+  - include: imperium/astartes/gene-seed.yaml#Occulobe
+  - include: imperium/astartes/gene-seed.yaml#Lyman's Ear
+  - include: imperium/astartes/gene-seed.yaml#Sus-an Membrane
+  - include: imperium/astartes/gene-seed.yaml#Melanchromic Organ
+  - include: imperium/astartes/gene-seed.yaml#Oolitic Kidney
+  - include: imperium/astartes/gene-seed.yaml#Neuroglottis
+  - include: imperium/astartes/gene-seed.yaml#Mucranoid
+  - include: imperium/astartes/gene-seed.yaml#Betcher's Gland
+  - include: imperium/astartes/gene-seed.yaml#Progenoid Glands
+  - include: imperium/astartes/gene-seed.yaml#Black Carapace
+  - name: Hypno-Indoctrination (Broken Oaths)
+    container: meta_trait
+    tags:
+    - Advantage
+    - Mental
+    - Chaos
+    - Heretic Astartes
+    children:
+    - name: Combat Reflexes
+      points: 15
+      ref: B43
+    - name: Fearlessness
+      per_level: 2
+      levels: 4
+      ref: B55
+    - name: High Pain Threshold
+      points: 10
+      ref: B59
+    - name: Single-Minded
+      points: 5
+      ref: B85
+      notes: Relentless focus, now turned to the warband's ends.
+    lore: >-
+      The psycho-conditioning of the Astartes survives the Fall: a traitor still does not break under
+      fire, still fights past the point where a baseline soldier would rout. What goes is the oath. Black
+      Library's Horus Heresy and Chaos fiction show Legionaries who kept every reflex and every drilled
+      habit and threw away Emperor, Chapter and Codex.
+    design: >-
+      The Astartes package's own Hypno-Indoctrination / Psycho-Conditioning (data/imperium/astartes/gene-seed.yaml)
+      with its three oath disadvantages removed, as the Heretic Astartes lens directs: Combat Reflexes
+      15 + Fearlessness 4 (2/level) 8 + High Pain Threshold 10 + Single-Minded 5 = +38 in place of the
+      package's net -2 (Duty -20, Sense of Duty -10, Code of Honor -10 left out). Everything else in the
+      Astartes entry is included unchanged.
+- include: imperium/astartes/battle-brother.yaml#Personal Advancement
+- include: chaos/traits.yaml#Heretic Astartes
+- include: chaos/traits.yaml#Long War Veteran
+- name: DX
+  points: -20
+  tags:
+  - Attribute
+  lore: Bloated and rotting, a Plague Marine is a little clumsier than a Legionary should be.
+  design: DX 16 (-1 from the Legionary's 17), 20 pts/level (B15).
+- name: IQ
+  points: -20
+  tags:
+  - Attribute
+  lore: Nurgle's gift is disease and patience, not cleverness.
+  design: IQ 10 (-1), 20 pts/level (B15).
+- name: HT
+  points: 10
+  tags:
+  - Attribute
+  lore: Disgustingly resilient even before the Mark's Injury Tolerance.
+  design: HT 16 (+1 over the Legionary 15), 10 pts/level (B14).
+- include: chaos/traits.yaml#Mark of Nurgle
+- include: chaos/traits.yaml#Nurgle's Gift (Plague Marine)
+skills:
+- name: Guns
+  spec: Rifle
+  diff: DX/E
+  points: 16
+  notes: Boltgun.
+- name: Guns
+  spec: Pistol
+  diff: DX/E
+  points: 1
+  notes: Bolt pistol.
+- name: Broadsword
+  diff: DX/A
+  points: 16
+  notes: Chainsword.
+- name: Brawling
+  diff: DX/E
+  points: 4
+- name: Wrestling
+  diff: DX/A
+  points: 4
+- name: Knife
+  diff: DX/E
+  points: 2
+  notes: Combat knife.
+- name: Axe/Mace
+  diff: DX/A
+  points: 4
+  notes: Chainaxe.
+- name: Fast-Draw
+  spec: Ammo
+  diff: DX/E
+  points: 2
+- name: Throwing
+  diff: DX/A
+  points: 2
+  notes: Frag and krak grenades.
+- name: Tactics
+  diff: IQ/H
+  points: 28
+- name: Strategy
+  diff: IQ/H
+  points: 8
+- name: Soldier
+  diff: IQ/A
+  points: 12
+- name: Leadership
+  diff: IQ/A
+  points: 12
+  notes: Leading a warband's fireteam.
+- name: Theology
+  spec: Chaos
+  diff: IQ/H
+  points: 20
+- name: Hidden Lore
+  spec: Daemons
+  diff: IQ/A
+  points: 8
+- name: Hidden Lore
+  spec: Xenos
+  diff: IQ/A
+  points: 8
+- name: Armoury
+  spec: Body Armor
+  diff: IQ/A
+  points: 2
+  notes: Patching traitor plate in the field.
+- name: Armoury
+  spec: Small Arms
+  diff: IQ/A
+  points: 2
+  notes: Bolt weapons.
+- name: Mechanic
+  spec: Bolt Weapons
+  diff: IQ/A
+  points: 2
+- name: First Aid
+  diff: IQ/E
+  points: 2
+- name: Navigation
+  spec: Land
+  diff: IQ/A
+  points: 2
+- name: Gesture
+  diff: IQ/E
+  points: 1
+  notes: Warband battle-sign.
+- name: Savoir-Faire
+  spec: Military
+  diff: IQ/E
+  points: 1
+- name: Camouflage
+  diff: IQ/E
+  points: 2
+- name: Intimidation
+  diff: Will/A
+  points: 12
+- name: Survival
+  spec: Any
+  diff: Per/A
+  points: 8
+- name: Observation
+  diff: Per/A
+  points: 12
+- name: Tracking
+  diff: Per/A
+  points: 2
+- name: Running
+  diff: HT/A
+  points: 2
+- name: Hiking
+  diff: HT/A
+  points: 2
+- name: Survival
+  spec: Swamp
+  diff: Per/A
+  points: 4
+  notes: Nurgle's gardens.
+- name: Armoury
+  spec: Biological
+  diff: IQ/A
+  points: 1
+- name: Hidden Lore
+  spec: Plagues
+  diff: IQ/A
+  points: 2
+equipment:
+- include: chaos/wargear/armour.yaml#Power Armour, Plague-Fused
+- include: imperium/weapons/bolt.yaml#Boltgun, Godwyn Pattern
+- include: imperium/weapons/bolt.yaml#Bolt Pistol, Godwyn-De'az Pattern
+- include: chaos/wargear/weapons.yaml#Plague Knife
+- include: chaos/wargear/weapons.yaml#Blight Grenade
+- include: imperium/weapons/grenades.yaml#Frag Grenade

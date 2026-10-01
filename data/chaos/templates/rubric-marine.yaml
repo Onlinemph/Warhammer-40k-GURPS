@@ -1,0 +1,103 @@
+kind: template
+output: Chaos/Templates/Rubric Marine.gct
+notes: >-
+  A Rubric Marine: a Thousand Sons Legionary turned to dust by Ahriman's Rubric and sealed in his own
+  Mark IV armour, driven by the will of his Aspiring Sorcerer. Built on the raw Astartes package (no Personal
+  Advancement, no Heretic Astartes lens: a Rubric has no mind to turn traitor, and no Long War Veteran
+  lens) with the Rubric of Ahriman applied: DX 14, IQ 6, Basic Move 8, no blood, brain or vitals, no breath,
+  food or sleep, Unfazeable and Slave Mentality (its Sorcerer). HT 15 per the framework is a +1 HT adjustment
+  from the Astartes 14. The Mark of Tzeentch is deliberately omitted: its Psyker (Talent) +1 is worthless
+  at IQ 6, the Rubric already is a Tzeentchian artifact and the Mark's Paranoia and Compulsive Lying cannot
+  apply to a mind that obeys, so the template would only have a warding field that the Rubric's armour
+  already stands in for. Weapon skills are low (Guns (Rifle) 17): the Rubric fights by training burned
+  in before the ritual. About 576 points before gear. Equipment: Mark IV (Rubric) plate and the Inferno
+  boltgun.
+traits:
+- include: imperium/astartes/gene-seed.yaml#Astartes
+  children:
+  - include: imperium/astartes/gene-seed.yaml#Attribute Modifiers
+  - include: imperium/astartes/gene-seed.yaml#Enhanced Move (Ground)
+  - include: imperium/astartes/gene-seed.yaml#Extended Lifespan
+  - include: imperium/astartes/gene-seed.yaml#Secondary Heart
+  - include: imperium/astartes/gene-seed.yaml#Ossmodula
+  - include: imperium/astartes/gene-seed.yaml#Biscopea
+  - include: imperium/astartes/gene-seed.yaml#Haemastamen
+  - include: imperium/astartes/gene-seed.yaml#Larraman's Organ
+  - include: imperium/astartes/gene-seed.yaml#Catalepsean Node
+  - include: imperium/astartes/gene-seed.yaml#Preomnor
+  - include: imperium/astartes/gene-seed.yaml#Omophagea
+  - include: imperium/astartes/gene-seed.yaml#Multi-lung
+  - include: imperium/astartes/gene-seed.yaml#Occulobe
+  - include: imperium/astartes/gene-seed.yaml#Lyman's Ear
+  - include: imperium/astartes/gene-seed.yaml#Sus-an Membrane
+  - include: imperium/astartes/gene-seed.yaml#Melanchromic Organ
+  - include: imperium/astartes/gene-seed.yaml#Oolitic Kidney
+  - include: imperium/astartes/gene-seed.yaml#Neuroglottis
+  - include: imperium/astartes/gene-seed.yaml#Mucranoid
+  - include: imperium/astartes/gene-seed.yaml#Betcher's Gland
+  - include: imperium/astartes/gene-seed.yaml#Progenoid Glands
+  - include: imperium/astartes/gene-seed.yaml#Black Carapace
+  - name: Hypno-Indoctrination (Broken Oaths)
+    container: meta_trait
+    tags:
+    - Advantage
+    - Mental
+    - Chaos
+    - Heretic Astartes
+    children:
+    - name: Combat Reflexes
+      points: 15
+      ref: B43
+    - name: Fearlessness
+      per_level: 2
+      levels: 4
+      ref: B55
+    - name: High Pain Threshold
+      points: 10
+      ref: B59
+    - name: Single-Minded
+      points: 5
+      ref: B85
+      notes: Relentless focus, now turned to the warband's ends.
+    lore: >-
+      The psycho-conditioning of the Astartes survives the Fall: a traitor still does not break under
+      fire, still fights past the point where a baseline soldier would rout. What goes is the oath. Black
+      Library's Horus Heresy and Chaos fiction show Legionaries who kept every reflex and every drilled
+      habit and threw away Emperor, Chapter and Codex.
+    design: >-
+      The Astartes package's own Hypno-Indoctrination / Psycho-Conditioning (data/imperium/astartes/gene-seed.yaml)
+      with its three oath disadvantages removed, as the Heretic Astartes lens directs: Combat Reflexes
+      15 + Fearlessness 4 (2/level) 8 + High Pain Threshold 10 + Single-Minded 5 = +38 in place of the
+      package's net -2 (Duty -20, Sense of Duty -10, Code of Honor -10 left out). Everything else in the
+      Astartes entry is included unchanged.
+- name: HT
+  points: 10
+  tags:
+  - Attribute
+  lore: The dust has no health to fail, but the framework sets HT 15 for the suit.
+  design: HT 15 (+1 over the Astartes 14), 10 pts/level (B14).
+- include: chaos/traits.yaml#Rubric of Ahriman (Rubric Marine)
+skills:
+- name: Guns
+  spec: Rifle
+  diff: DX/E
+  points: 8
+  notes: Inferno boltgun.
+- name: Guns
+  spec: Pistol
+  diff: DX/E
+  points: 1
+- name: Brawling
+  diff: DX/E
+  points: 2
+- name: Knife
+  diff: DX/E
+  points: 1
+  notes: Dagger.
+- name: Throwing
+  diff: DX/A
+  points: 1
+equipment:
+- include: chaos/wargear/armour.yaml#Power Armour, Mark IV (Rubric)
+- include: chaos/wargear/weapons.yaml#Inferno Boltgun
+- include: imperium/weapons/melee.yaml#Combat Knife, Astartes Pattern

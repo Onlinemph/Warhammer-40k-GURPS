@@ -1,0 +1,818 @@
+{
+	"version": 5,
+	"id": "BAmMWvNdX-qQ7nSmZ",
+	"notes": "A Guardsman who turned: a regiment lost to the whispers of a Dark God, a platoon that mutinied, a deserter who took the Mark. He keeps the Astra Militarum Guardsman's body and training (ST 11, DX 12, IQ 10, HT 12, drilled in a lasgun and a trench), so the build is the Guardsman's with the Imperial Duty, Sense of Duty and Intolerance (Xenos) dropped, Theology (Imperial Creed) swapped for Theology (Chaos) and Mark of Chaos Undivided in place of the Guardsman's piety. About 116 points without gear. A single god's Mark can be swapped in for Undivided. Equipment is in the wargear files: lasgun or autogun, flak jacket, Munitorum knife, grenades.",
+	"traits": [
+		{
+			"id": "tI4iNtLzZP_Tmu3An",
+			"name": "ST",
+			"local_notes": "Lore: A fit adult.\n\nDesign: ST 11 (+1), 10 pts/level (B15).",
+			"tags": [
+				"Attribute"
+			],
+			"base_points": 10,
+			"features": [
+				{
+					"type": "attribute_bonus",
+					"attribute": "st",
+					"amount": 1
+				}
+			]
+		},
+		{
+			"id": "tKfPc6eTlKUmBiEED",
+			"name": "DX",
+			"local_notes": "Lore: Guard drill hammers weapon-handling.\n\nDesign: DX 12 (+2), 20 pts/level (B15).",
+			"tags": [
+				"Attribute"
+			],
+			"base_points": 40,
+			"features": [
+				{
+					"type": "attribute_bonus",
+					"attribute": "dx",
+					"amount": 2
+				}
+			]
+		},
+		{
+			"id": "tSJItayB5bSUXpvwg",
+			"name": "IQ",
+			"local_notes": "Lore: Average.\n\nDesign: IQ 10, baseline.",
+			"tags": [
+				"Attribute"
+			],
+			"base_points": 0
+		},
+		{
+			"id": "tirngLuDjc7E8PwWg",
+			"name": "HT",
+			"local_notes": "Lore: Campaign life selects for endurance.\n\nDesign: HT 12 (+2), 10 pts/level (B14).",
+			"tags": [
+				"Attribute"
+			],
+			"base_points": 20,
+			"features": [
+				{
+					"type": "attribute_bonus",
+					"attribute": "ht",
+					"amount": 2
+				}
+			]
+		},
+		{
+			"id": "tEHsLPIFeTW5rO2G8",
+			"name": "Fit",
+			"reference": "B55",
+			"local_notes": "Lore: Route marches and drill, kept up in the warband.\n\nDesign: Basic Set Fit (B55), 5 points.",
+			"tags": [
+				"Advantage",
+				"Physical"
+			],
+			"base_points": 5
+		},
+		{
+			"id": "tF57nFPIVC2eAsgsE",
+			"name": "Combat Reflexes",
+			"reference": "B43",
+			"local_notes": "Lore: The survivors of a regiment's first campaign have it; a traitor regiment has had plenty of campaigns.\n\nDesign: Basic Set Combat Reflexes (B43), 15 points.",
+			"tags": [
+				"Advantage",
+				"Mental"
+			],
+			"base_points": 15
+		},
+		{
+			"id": "TjUNjQLUnbQl6CQiw",
+			"name": "Mark of Chaos Undivided",
+			"local_notes": "Lore: Chaos Undivided honours all four gods together and none above the others. Codex: Chaos Space Marines background gives the Black Legion and many renegade warbands this path. A weaker patronage than a single god's Mark, it is sturdy, hard-willed and utterly committed.\n\nDesign: Framework Marks table. Fearlessness 2 (B55, 2/level) 4; Hard to Kill 1 (B58) 2; Fanaticism (B136) -15. 4 + 2 - 15 = -9 points.",
+			"tags": [
+				"Advantage",
+				"Disadvantage",
+				"Mental",
+				"Chaos",
+				"Chaos Undivided",
+				"Mark of Chaos"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "tcPBLVrmBKY7RYJ8o",
+					"name": "Fearlessness",
+					"reference": "B55",
+					"local_notes": "+2 to Fright Checks.",
+					"tags": [
+						"Advantage",
+						"Mental"
+					],
+					"points_per_level": 2,
+					"can_level": true,
+					"levels": 2,
+					"base_points": 0
+				},
+				{
+					"id": "tPIxH_JkYohUeRzok",
+					"name": "Hard to Kill",
+					"reference": "B58",
+					"local_notes": "+1 to HT rolls made solely to avoid death.",
+					"tags": [
+						"Advantage",
+						"Physical"
+					],
+					"points_per_level": 2,
+					"can_level": true,
+					"levels": 1,
+					"base_points": 0
+				},
+				{
+					"id": "tRqgN1D2mlFEUrdnr",
+					"name": "Fanaticism (Chaos)",
+					"reference": "B136",
+					"local_notes": "Devoted to the Ruinous Powers as a whole; will take any risk for Chaos. Do not combine with Cultist's Devotion.",
+					"tags": [
+						"Disadvantage",
+						"Mental"
+					],
+					"base_points": -15
+				}
+			]
+		},
+		{
+			"id": "tHHsymZZsajSfm5JU",
+			"name": "Callous",
+			"reference": "B125",
+			"local_notes": "Lore: Whatever pity the regiment had went with the Emperor.\n\nDesign: Callous (B125), -5.",
+			"tags": [
+				"Disadvantage",
+				"Mental"
+			],
+			"base_points": -5,
+			"cr": 12
+		},
+		{
+			"id": "tbSKREiUK4eeTjO-n",
+			"name": "Social Stigma (Traitor)",
+			"reference": "B155",
+			"local_notes": "Lore: Any Imperial soldier or citizen who knows what he is shoots first.\n\nDesign: Social Stigma (B155), -5, Imperial space only; a lesser version of the Heretic Astartes lens, without the Enemy (The Imperium) of a Legionary.",
+			"tags": [
+				"Disadvantage",
+				"Social"
+			],
+			"base_points": -5
+		}
+	],
+	"skills": [
+		{
+			"id": "swRwfc85F8Hcm8DmL",
+			"name": "Beam Weapons",
+			"local_notes": "Lore: The lasgun is the Guard's universal issue weapon. Per framework.md's weapon-skill table, las weapons use Beam Weapons, not Guns.\n\nDesign: DX+3 (15) for 8 points on an Easy skill (B170).",
+			"tags": [
+				"Imperium",
+				"Astra Militarum"
+			],
+			"specialization": "Rifle",
+			"difficulty": "dx/e",
+			"points": 8
+		},
+		{
+			"id": "soRo8EqR0tV1XZE8-",
+			"name": "Beam Weapons",
+			"local_notes": "Lore: Laspistol familiarity, mostly for NCOs and specialists but issued as a secondary skill broadly.\n\nDesign: DX+1 (13) for 2 points, Easy.",
+			"tags": [
+				"Imperium",
+				"Astra Militarum"
+			],
+			"specialization": "Pistol",
+			"difficulty": "dx/e",
+			"points": 2
+		},
+		{
+			"id": "sj5D5AJ_hNY5vfle2",
+			"name": "Guns",
+			"local_notes": "Lore: Launcher-fed frag and krak grenades only. Hand-thrown grenades use Throwing (below).\n\nDesign: DX+0 (12) for 1 point, Easy.",
+			"tags": [
+				"Imperium",
+				"Astra Militarum"
+			],
+			"specialization": "Grenade Launcher",
+			"difficulty": "dx/e",
+			"points": 1
+		},
+		{
+			"id": "sT9jRotbVF7Yli7jL",
+			"name": "Throwing",
+			"reference": "B226",
+			"local_notes": "Lore: Hand-thrown frag and krak grenades, which use Throwing rather than Guns (Grenade Launcher).\n\nDesign: DX+0 (12) for 2 points, Average (B226).",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "dx/a",
+			"points": 2
+		},
+		{
+			"id": "sFInZH3Bi5MEW6vB7",
+			"name": "Brawling",
+			"local_notes": "Lore: Bayonet and rifle-butt fighting when las-cells run dry.\n\nDesign: DX+1 (13) for 2 points, Easy.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "dx/e",
+			"points": 2
+		},
+		{
+			"id": "s6UBSutNkCIxRqJEs",
+			"name": "Forced Entry",
+			"local_notes": "Lore: Breaching doors and barricades under fire.\n\nDesign: DX+0 (12) for 1 point, Easy.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "dx/e",
+			"points": 1
+		},
+		{
+			"id": "s_n4GiWFbcuQEbMbS",
+			"name": "Stealth",
+			"local_notes": "Lore: Basic fieldcraft; not a scout's level of skill, but enough to not be the reason a patrol gets spotted.\n\nDesign: DX+0 (12) for 2 points, Average.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "dx/a",
+			"points": 2
+		},
+		{
+			"id": "s9JeggA1WDu9hILRs",
+			"name": "Camouflage",
+			"local_notes": "Lore: Digging in and breaking up a silhouette, drilled into every trooper.\n\nDesign: IQ+0 (10) for 1 point, Easy.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "iq/e",
+			"points": 1
+		},
+		{
+			"id": "sgy2sB8lTNou_fXe7",
+			"name": "Survival",
+			"local_notes": "Lore: Field survival in whatever terrain the character's home world or postings favor; pick a specialization.\n\nDesign: Per+0 (10) for 2 points, Average.",
+			"tags": [
+				"Imperium"
+			],
+			"specialization": "(choose home terrain)",
+			"difficulty": "per/a",
+			"points": 2
+		},
+		{
+			"id": "smd8feXN2w1DEUhB8",
+			"name": "First Aid",
+			"local_notes": "Lore: Basic combat first aid; the Munitorum's medicae corps handles the rest.\n\nDesign: IQ+0 (10) for 1 point, Easy.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "iq/e",
+			"points": 1
+		},
+		{
+			"id": "smkzHLpnrLS3y_v_c",
+			"name": "Soldier",
+			"local_notes": "Lore: General military knowledge — procedure, rank structure, logistics.\n\nDesign: IQ+1 (11) for 4 points, Average.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "iq/a",
+			"points": 4
+		},
+		{
+			"id": "ssqQbdV9DQ5XPsQnX",
+			"name": "Tactics",
+			"local_notes": "Lore: Squad- and platoon-level small-unit tactics, enough to follow and sometimes improve on orders.\n\nDesign: IQ+0 (10) for 4 points, Hard.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "iq/h",
+			"points": 4
+		},
+		{
+			"id": "sbE0r9iQQOFlj5Xbw",
+			"name": "Navigation",
+			"local_notes": "Lore: Basic land navigation without vehicle or void instruments.\n\nDesign: IQ-1 (9) for 1 point, Average.",
+			"tags": [
+				"Imperium"
+			],
+			"specialization": "Land",
+			"difficulty": "iq/a",
+			"points": 1
+		},
+		{
+			"id": "sNaaaDqwpvgGvQawc",
+			"name": "Area Knowledge",
+			"local_notes": "Lore: Knowledge of the character's own home world or hive.\n\nDesign: IQ+0 (10) for 1 point, Easy.",
+			"tags": [
+				"Imperium"
+			],
+			"specialization": "(home world)",
+			"difficulty": "iq/e",
+			"points": 1
+		},
+		{
+			"id": "sg6GCL6ZYiN33ys7h",
+			"name": "Current Affairs",
+			"local_notes": "Lore: What passes for Imperium-wide news; see Imperium/Skills/Imperial Skills.skl.\n\nDesign: IQ+0 (10) for 1 point, Easy.",
+			"tags": [
+				"Imperium"
+			],
+			"specialization": "Imperium",
+			"difficulty": "iq/e",
+			"points": 1
+		},
+		{
+			"id": "s0xOikBj2DwT49BCM",
+			"name": "Savoir-Faire",
+			"local_notes": "Lore: Basic military etiquette and chain-of-command manners.\n\nDesign: IQ+0 (10) for 1 point, Easy.",
+			"tags": [
+				"Imperium"
+			],
+			"specialization": "Military",
+			"difficulty": "iq/e",
+			"points": 1
+		},
+		{
+			"id": "sDnmXiHTry36eb82R",
+			"name": "Heraldry",
+			"local_notes": "Lore: Recognising Guard regimental colours and honorifics; see Imperium/Skills/Imperial Skills.skl.\n\nDesign: IQ-1 (9) for 1 point, Average.",
+			"tags": [
+				"Imperium",
+				"Astra Militarum"
+			],
+			"specialization": "Regimental",
+			"difficulty": "iq/a",
+			"points": 1
+		},
+		{
+			"id": "s_N9WXdEbvZNEU-ie",
+			"name": "Intimidation",
+			"local_notes": "Lore: Standard soldier's bluster and menace.\n\nDesign: Will+0 (10) for 2 points, Average.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "will/a",
+			"points": 2
+		},
+		{
+			"id": "sHt7sOczS-mNU1SLx",
+			"name": "Gambling",
+			"local_notes": "Lore: Dice and cards are near-universal Guard barracks pastimes.\n\nDesign: IQ-1 (9) for 1 point, Average.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "iq/a",
+			"points": 1
+		},
+		{
+			"id": "stgDM13qDGpP8CI0M",
+			"name": "Theology",
+			"local_notes": "Lore: A traitor's catechism: the names of the Dark Gods, the rites of the cult that turned the regiment.\n\nDesign: IQ-1 (9) for 2 points, Hard (B170).",
+			"tags": [
+				"Chaos"
+			],
+			"specialization": "Chaos",
+			"difficulty": "iq/h",
+			"points": 2
+		},
+		{
+			"id": "stfuAm5U5WTBLpqyw",
+			"name": "Jumping",
+			"local_notes": "Lore: Basic obstacle-course fitness.\n\nDesign: DX+0 (12) for 1 point, Easy.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "dx/e",
+			"points": 1
+		},
+		{
+			"id": "st-yT8Q8PUgKFU0Jc",
+			"name": "Climbing",
+			"local_notes": "Lore: Basic obstacle-course and urban-assault fitness.\n\nDesign: DX-1 (11) for 1 point, Average.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "dx/a",
+			"points": 1
+		},
+		{
+			"id": "sVH-PvbmiGuG9Xamx",
+			"name": "Running",
+			"local_notes": "Lore: Route-march conditioning.\n\nDesign: HT-1 (11) for 1 point, Average.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "ht/a",
+			"points": 1
+		},
+		{
+			"id": "sGf8h9iwYhZluWYqU",
+			"name": "Hiking",
+			"local_notes": "Lore: Route-march conditioning.\n\nDesign: HT-1 (11) for 1 point, Average.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "ht/a",
+			"points": 1
+		},
+		{
+			"id": "s1IEP67x9F0_o-tzq",
+			"name": "Hidden Lore",
+			"specialization": "Daemons",
+			"difficulty": "iq/a",
+			"points": 1
+		}
+	],
+	"equipment": [
+		{
+			"id": "ekxeRTl01eLU-HR8W",
+			"description": "Lasgun, Kantrael Pattern",
+			"local_notes": "Lore: The most widely issued lasgun in the Astra Militarum, standard Departmento Munitorum pattern and the rifle carried by the Cadian shock troops in codex background and countless Black Library novels.    design: >- Damage is the fixed lasgun anchor, 7d(2) burn. Beams have no drop, so the lasgun's 400/1200 range is as long as the hellgun's and the long-las's is twice that; the autogun's longer max range (2000) is ballistic carry. Range/RoF/shots are not anchored and are built to match the lasgun's lore signature: a 60-shot accumulator that recharges off almost any power source, and a fire selector giving single, burst and full-auto settings (abstracted here as RoF 10 for full-auto; treat single fire as RoF 1 at the GM's discretion). Required lasgun-vs-armour check (framework.md, exact dice distribution): 7d(2) averages 24.5 and penetrates flak (DR 30, effective 15) on 97.8% of hits, matching \"punches flak\"; against carapace (DR 70, effective 35) it penetrates 0.6% of hits, matching \"almost never carapace\" (the user's own figure, kept as given). Against Astartes power armour (DR 100, effective 50) it penetrates 0% of hits, matching \"useless against power armour.\" The Hot-shot pack usage reuses the hellgun anchor (8d(3) burn) exactly, since a hot-shot pack is explicitly the same overcharge trick as a hellgun's power cell, just dropped into an ordinary lasgun for one shot. The Overcharge usage is a milder, non-hellgun field expedient stepped up from the lasgun anchor: +1 die (8d burn, average 28), no armour divisor, limited shots — it still clears flak (30.5% of hits) but fails against mesh (3.9%) and carapace (0% of hits), because the whole point of the divisor is what an overcharge pack doesn't add. Handling: min ST corrected to 9 for all three usages (standard, hot-shot pack, overcharge shot - it's the same physical rifle, so they share one ST figure), matching framework.md's own worked example of √(10×8)≈9 for an 8 lb rifle almost exactly. The previous ST 6 on this and every other lasgun pattern in this file understated the handling of a shoulder rifle by three whole points against the framework's explicit guidance - it has been corrected here and on every pattern below. RoF 10 (full-auto) and RoF 1 (single fire, hot- shot and overcharge, since neither the hot-shot pack nor the overcharge cell is rated for autofire) reflect the lasgun's actual fire-selector modes rather than a single blanket value; Bulk -4. Rcl 1 (user direction): a laser has no kick. It was Rcl 2 while bursts were one roll with a hit per point of margin; with automatic fire now rolled per round at a further -Recoil each (the simulator's house rule), Rcl 1 already puts the tenth round of a burst at -9 as the rifle wanders.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium",
+				"Astra Militarum"
+			],
+			"tech_level": "10",
+			"legality_class": "3",
+			"base_value": "500",
+			"base_weight": "8 lb",
+			"weapons": [
+				{
+					"id": "WJ2c4IJX0NI7kWeRp",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "7d",
+						"armor_divisor": 2
+					},
+					"accuracy": "6",
+					"range": "400/1200",
+					"rate_of_fire": "10",
+					"shots": "60(3)",
+					"bulk": "-4",
+					"recoil": "1",
+					"strength": "9",
+					"usage": "Standard",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "WR58ez876jUaxyq2J",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "8d",
+						"armor_divisor": 3
+					},
+					"accuracy": "6",
+					"range": "400/1200",
+					"rate_of_fire": "1",
+					"shots": "1(3)",
+					"bulk": "-4",
+					"recoil": "1",
+					"strength": "9",
+					"usage": "Hot-shot pack",
+					"usage_notes": "Fired with a Hot-Shot Power Pack loaded in place of the standard charge pack. The cell is spent after this one shot, and firing a second hot-shot round without replacing the pack risks cooking off or fusing the lasing chamber (GM's call).",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "WUcQASuFjyYNT0XGL",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "8d"
+					},
+					"accuracy": "6",
+					"range": "400/1200",
+					"rate_of_fire": "1",
+					"shots": "10(3)",
+					"bulk": "-4",
+					"recoil": "1",
+					"strength": "9",
+					"usage": "Overcharge shot",
+					"usage_notes": "Fired from an Overcharge Power Pack: one extra die of damage over the standard shot, but no armour divisor, and the deliberately overloaded cell only lasts for 10 such shots and increases the odds of a jam or a scorched barrel on any given shot (GM's call).",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1,
+			"equipped": true
+		},
+		{
+			"id": "e22Ik1tqkv0cotBJ6",
+			"description": "Flak Jacket",
+			"local_notes": "Weak Points 7: when a hit on this armour fails to penetrate, roll 3d; on 7 or less it found a gap and DR is halved against it.\n\nSleeved version of the flak vest; partial arm coverage from the short armoured sleeves.\n\nLore: A sleeved variant of the vest, common where regiments expect close-quarters or urban combat and want some forearm protection against shrapnel and blades. Seen in Imperial Guard art and background across multiple Codex Astra Militarum editions.\n\nDesign: Torso DR 30 (flak anchor). Arms 23, a few points below torso per the framework's limb convention, keeping the 3:4 limb-to-torso ratio.",
+			"tags": [
+				"Body Armor",
+				"Imperium",
+				"Astra Militarum"
+			],
+			"tech_level": "10",
+			"legality_class": "3",
+			"base_value": "250",
+			"base_weight": "10 lb",
+			"features": [
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"torso",
+						"vitals",
+						"groin"
+					],
+					"amount": 30
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"arm"
+					],
+					"amount": 23
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"skull",
+						"face",
+						"eye",
+						"neck",
+						"hand",
+						"leg",
+						"foot"
+					],
+					"amount": 0
+				}
+			],
+			"quantity": 1,
+			"equipped": true
+		},
+		{
+			"id": "eSyk25F21IAwTe-LJ",
+			"description": "Combat Knife, Munitorum Pattern",
+			"local_notes": "Standard sidearm/tool for every Guardsman; also the unmounted profile for the bayonet below.\n\nLore: Every Imperial Guard regiment issues a plain steel fighting knife alongside the lasgun, seen constantly in the background as a last-resort weapon and general tool; Black Library fiction (Gaunt's Ghosts and others) treats it as unremarkable field kit rather than a named piece of wargear.\n\nDesign: Built from Basic Set knife-family design logic, not anchored by framework.md (no dedicated anchor exists below the chainsword): a short single-edged blade gives thr-1 imp / sw-2 cut, reach C,1, min ST 6. TL2 reflects that a simple knife is primitive-tech regardless of the TL10 industry that stamps it out by the million; LC4 matches \"cheap civilian stubbers, knives\" in the framework's legality table. Handling: parry corrected to -1, the Basic Set Knife entry's actual figure (a short blade with no guard and little reach gives a worse parry than a proper sword, not the parry 0 a previous pass copied from the sword-family weapons on this page). Weight (1 lb) and min ST (6) are unchanged - a plain steel blade this size needs almost no strength to wield.",
+			"tags": [
+				"Melee Weapon",
+				"Imperium",
+				"Astra Militarum"
+			],
+			"tech_level": "2",
+			"legality_class": "4",
+			"base_value": "40",
+			"base_weight": "1 lb",
+			"weapons": [
+				{
+					"id": "wu1F0agygQCYl1FKs",
+					"sv": 1,
+					"damage": {
+						"type": "imp",
+						"st": "thr",
+						"base": "-1"
+					},
+					"reach": "C,1",
+					"parry": "-1",
+					"strength": "6",
+					"usage": "Thrust",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Knife"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Force Sword"
+							},
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Main-Gauche"
+							},
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Shortsword"
+							},
+							"modifier": -3
+						}
+					]
+				},
+				{
+					"id": "wQaxVn8ECPq6eWsYn",
+					"sv": 1,
+					"damage": {
+						"type": "cut",
+						"st": "sw",
+						"base": "-2"
+					},
+					"reach": "C,1",
+					"parry": "-1",
+					"strength": "6",
+					"usage": "Swing",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Knife"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Force Sword"
+							},
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Main-Gauche"
+							},
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Shortsword"
+							},
+							"modifier": -3
+						}
+					]
+				}
+			],
+			"quantity": 1,
+			"equipped": true
+		},
+		{
+			"id": "epndDKOBR01YF9eru",
+			"description": "Frag Grenade",
+			"local_notes": "Lore: The standard fragmentation grenade of the Departmento Munitorum, a fist-sized charge issued to virtually every Guardsman; a background constant across Black Library Guard fiction from Gaunt's Ghosts to the Ciaphas Cain novels.\n\nDesign: No framework.md anchor covers grenades, so this is built independently using GURPS's own explosive-damage convention — a concussion \"cr ex\" figure plus a bracketed fragmentation die, exactly the pattern data-format.md's own schema example uses. Concussion is set to a modest 3d cr ex (enough to injure at the centre, nowhere near a demolition charge) with a 4d cut fragmentation cloud (user direction, down from 6d: at 6d the fragments reached 30 yards and shredded massed infantry under B414) as the real threat to exposed infantry within a few yards. 4d cut (avg 14, no armour divisor) never penetrates flak (DR 30) or carapace (DR 70); only the Weak Points roll lets a fragment through flak. It is lethal to unarmoured troops in the open and useless against armour or fortifications.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium",
+				"Astra Militarum"
+			],
+			"tech_level": "8",
+			"legality_class": "2",
+			"base_value": "20",
+			"base_weight": "1 lb",
+			"weapons": [
+				{
+					"id": "WZO_frZf0hZ3xmi4-",
+					"sv": 1,
+					"damage": {
+						"type": "cr ex",
+						"base": "3d",
+						"fragmentation": "4d",
+						"fragmentation_type": "cut"
+					},
+					"usage": "Thrown",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Throwing"
+							}
+						}
+					]
+				}
+			],
+			"quantity": 1,
+			"equipped": true
+		}
+	]
+}

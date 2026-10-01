@@ -1,0 +1,108 @@
+kind: template
+output: Chaos/Templates/Possessed.gct
+notes: >-
+  A Possessed: a Chaos Space Marine into whom a daemon has been drawn, the body twisted by its host. Built
+  as the loyalist Astartes Battle-Brother's physiology (the Astartes package and Personal Advancement,
+  but not Long War Veteran: DX 16, not 17), the Heretic Astartes lens and Daemonic Possession (ST 40,
+  HT 16, IQ 8, DR 15 warp-flesh, Extra Attack 1, Fearlessness 5, Bad Temper, claws and tentacles at sw+2d(2)
+  cut). HP 44, as the framework says. Will is 11 (IQ 8 plus the package's Will +3), not set separately.
+  No guns: a Possessed is thrown at the enemy, not directed. About 882 points before gear. Equipment is
+  the Mark IV heretic plate; the warp-flesh DR adds on top. There is no Mark of Chaos; the daemon is its
+  own patron.
+traits:
+- include: imperium/astartes/gene-seed.yaml#Astartes
+  children:
+  - include: imperium/astartes/gene-seed.yaml#Attribute Modifiers
+  - include: imperium/astartes/gene-seed.yaml#Enhanced Move (Ground)
+  - include: imperium/astartes/gene-seed.yaml#Extended Lifespan
+  - include: imperium/astartes/gene-seed.yaml#Secondary Heart
+  - include: imperium/astartes/gene-seed.yaml#Ossmodula
+  - include: imperium/astartes/gene-seed.yaml#Biscopea
+  - include: imperium/astartes/gene-seed.yaml#Haemastamen
+  - include: imperium/astartes/gene-seed.yaml#Larraman's Organ
+  - include: imperium/astartes/gene-seed.yaml#Catalepsean Node
+  - include: imperium/astartes/gene-seed.yaml#Preomnor
+  - include: imperium/astartes/gene-seed.yaml#Omophagea
+  - include: imperium/astartes/gene-seed.yaml#Multi-lung
+  - include: imperium/astartes/gene-seed.yaml#Occulobe
+  - include: imperium/astartes/gene-seed.yaml#Lyman's Ear
+  - include: imperium/astartes/gene-seed.yaml#Sus-an Membrane
+  - include: imperium/astartes/gene-seed.yaml#Melanchromic Organ
+  - include: imperium/astartes/gene-seed.yaml#Oolitic Kidney
+  - include: imperium/astartes/gene-seed.yaml#Neuroglottis
+  - include: imperium/astartes/gene-seed.yaml#Mucranoid
+  - include: imperium/astartes/gene-seed.yaml#Betcher's Gland
+  - include: imperium/astartes/gene-seed.yaml#Progenoid Glands
+  - include: imperium/astartes/gene-seed.yaml#Black Carapace
+  - name: Hypno-Indoctrination (Broken Oaths)
+    container: meta_trait
+    tags:
+    - Advantage
+    - Mental
+    - Chaos
+    - Heretic Astartes
+    children:
+    - name: Combat Reflexes
+      points: 15
+      ref: B43
+    - name: Fearlessness
+      per_level: 2
+      levels: 4
+      ref: B55
+    - name: High Pain Threshold
+      points: 10
+      ref: B59
+    - name: Single-Minded
+      points: 5
+      ref: B85
+      notes: Relentless focus, now turned to the warband's ends.
+    lore: >-
+      The psycho-conditioning of the Astartes survives the Fall: a traitor still does not break under
+      fire, still fights past the point where a baseline soldier would rout. What goes is the oath. Black
+      Library's Horus Heresy and Chaos fiction show Legionaries who kept every reflex and every drilled
+      habit and threw away Emperor, Chapter and Codex.
+    design: >-
+      The Astartes package's own Hypno-Indoctrination / Psycho-Conditioning (data/imperium/astartes/gene-seed.yaml)
+      with its three oath disadvantages removed, as the Heretic Astartes lens directs: Combat Reflexes
+      15 + Fearlessness 4 (2/level) 8 + High Pain Threshold 10 + Single-Minded 5 = +38 in place of the
+      package's net -2 (Duty -20, Sense of Duty -10, Code of Honor -10 left out). Everything else in the
+      Astartes entry is included unchanged.
+- include: imperium/astartes/battle-brother.yaml#Personal Advancement
+- include: chaos/traits.yaml#Heretic Astartes
+- include: chaos/traits.yaml#Daemonic Possession (Possessed)
+skills:
+- name: Brawling
+  diff: DX/E
+  points: 24
+  notes: Claws and tentacles.
+- name: Wrestling
+  diff: DX/A
+  points: 12
+- name: Intimidation
+  diff: Will/A
+  points: 16
+- name: Stealth
+  diff: DX/A
+  points: 1
+- name: Climbing
+  diff: DX/A
+  points: 2
+- name: Observation
+  diff: Per/A
+  points: 4
+- name: Hidden Lore
+  spec: Daemons
+  diff: IQ/A
+  points: 4
+- name: Survival
+  spec: Any
+  diff: Per/A
+  points: 4
+- name: Running
+  diff: HT/A
+  points: 2
+- name: Jumping
+  diff: DX/E
+  points: 2
+equipment:
+- include: chaos/wargear/armour.yaml#Power Armour, Mark IV (Heretic)

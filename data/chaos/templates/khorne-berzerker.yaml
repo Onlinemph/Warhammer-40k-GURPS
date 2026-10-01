@@ -1,0 +1,222 @@
+kind: template
+output: Chaos/Templates/Khorne Berzerker.gct
+notes: >-
+  A Khorne Berzerker: a World Eater or any warrior sworn to the Blood God, whose berserk rage has been
+  cut into him with the Butcher's Nails. Built as the Chaos Space Marine with Mark of Khorne in place
+  of Mark of Chaos Undivided, Butcher's Nails (Callous taken once: the Heretic Astartes lens already carries
+  it, so the nails' own Callous is shown disabled) and IQ 10 (the rage has eaten a point of his mind).
+  Chainaxe skill 22 (Axe/Mace, 16 points, DX+5 at DX 17); Guns (Rifle) is 20 (8 points, DX+3), since a
+  Berzerker prefers the axe. About 784 points before gear. The Mark's High Pain Threshold is left disabled
+  because the Astartes package already has it. Equipment: Mark IV heretic plate, chainaxe, bolt pistol,
+  grenades.
+traits:
+- include: imperium/astartes/gene-seed.yaml#Astartes
+  children:
+  - include: imperium/astartes/gene-seed.yaml#Attribute Modifiers
+  - include: imperium/astartes/gene-seed.yaml#Enhanced Move (Ground)
+  - include: imperium/astartes/gene-seed.yaml#Extended Lifespan
+  - include: imperium/astartes/gene-seed.yaml#Secondary Heart
+  - include: imperium/astartes/gene-seed.yaml#Ossmodula
+  - include: imperium/astartes/gene-seed.yaml#Biscopea
+  - include: imperium/astartes/gene-seed.yaml#Haemastamen
+  - include: imperium/astartes/gene-seed.yaml#Larraman's Organ
+  - include: imperium/astartes/gene-seed.yaml#Catalepsean Node
+  - include: imperium/astartes/gene-seed.yaml#Preomnor
+  - include: imperium/astartes/gene-seed.yaml#Omophagea
+  - include: imperium/astartes/gene-seed.yaml#Multi-lung
+  - include: imperium/astartes/gene-seed.yaml#Occulobe
+  - include: imperium/astartes/gene-seed.yaml#Lyman's Ear
+  - include: imperium/astartes/gene-seed.yaml#Sus-an Membrane
+  - include: imperium/astartes/gene-seed.yaml#Melanchromic Organ
+  - include: imperium/astartes/gene-seed.yaml#Oolitic Kidney
+  - include: imperium/astartes/gene-seed.yaml#Neuroglottis
+  - include: imperium/astartes/gene-seed.yaml#Mucranoid
+  - include: imperium/astartes/gene-seed.yaml#Betcher's Gland
+  - include: imperium/astartes/gene-seed.yaml#Progenoid Glands
+  - include: imperium/astartes/gene-seed.yaml#Black Carapace
+  - name: Hypno-Indoctrination (Broken Oaths)
+    container: meta_trait
+    tags:
+    - Advantage
+    - Mental
+    - Chaos
+    - Heretic Astartes
+    children:
+    - name: Combat Reflexes
+      points: 15
+      ref: B43
+    - name: Fearlessness
+      per_level: 2
+      levels: 4
+      ref: B55
+    - name: High Pain Threshold
+      points: 10
+      ref: B59
+    - name: Single-Minded
+      points: 5
+      ref: B85
+      notes: Relentless focus, now turned to the warband's ends.
+    lore: >-
+      The psycho-conditioning of the Astartes survives the Fall: a traitor still does not break under
+      fire, still fights past the point where a baseline soldier would rout. What goes is the oath. Black
+      Library's Horus Heresy and Chaos fiction show Legionaries who kept every reflex and every drilled
+      habit and threw away Emperor, Chapter and Codex.
+    design: >-
+      The Astartes package's own Hypno-Indoctrination / Psycho-Conditioning (data/imperium/astartes/gene-seed.yaml)
+      with its three oath disadvantages removed, as the Heretic Astartes lens directs: Combat Reflexes
+      15 + Fearlessness 4 (2/level) 8 + High Pain Threshold 10 + Single-Minded 5 = +38 in place of the
+      package's net -2 (Duty -20, Sense of Duty -10, Code of Honor -10 left out). Everything else in the
+      Astartes entry is included unchanged.
+- include: imperium/astartes/battle-brother.yaml#Personal Advancement
+- include: chaos/traits.yaml#Heretic Astartes
+- include: chaos/traits.yaml#Long War Veteran
+- name: IQ
+  points: -20
+  tags:
+  - Attribute
+  lore: >-
+    The rage has eaten away at his mind: Khorne's champions are cunning in a fight and in nothing else.
+  design: IQ 10 (-1 from the Legionary's 11), 20 pts/level (B15).
+- include: chaos/traits.yaml#Mark of Khorne
+- include: chaos/traits.yaml#Butcher's Nails
+  children:
+  - include: chaos/traits.yaml#Berserk (Battle Rage upgrade)
+  - include: chaos/traits.yaml#Hard to Subdue
+  - name: Callous
+    points: -5
+    cr: 12
+    ref: B125
+    disabled: true
+    tags:
+    - Disadvantage
+    - Mental
+    notes: 'Disabled: the Heretic Astartes lens already carries Callous; take one.'
+skills:
+- name: Guns
+  spec: Rifle
+  diff: DX/E
+  points: 8
+  notes: Boltgun.
+- name: Guns
+  spec: Pistol
+  diff: DX/E
+  points: 2
+  notes: Bolt pistol.
+- name: Broadsword
+  diff: DX/A
+  points: 8
+  notes: Chainsword, secondary.
+- name: Brawling
+  diff: DX/E
+  points: 4
+- name: Wrestling
+  diff: DX/A
+  points: 4
+- name: Knife
+  diff: DX/E
+  points: 2
+  notes: Combat knife.
+- name: Axe/Mace
+  diff: DX/A
+  points: 16
+  notes: Chainaxe.
+- name: Fast-Draw
+  spec: Ammo
+  diff: DX/E
+  points: 2
+- name: Throwing
+  diff: DX/A
+  points: 2
+  notes: Frag and krak grenades.
+- name: Free Fall
+  diff: DX/A
+  points: 1
+- name: Climbing
+  diff: DX/A
+  points: 2
+- name: Stealth
+  diff: DX/A
+  points: 2
+- name: Tactics
+  diff: IQ/H
+  points: 8
+- name: Strategy
+  diff: IQ/H
+  points: 1
+- name: Soldier
+  diff: IQ/A
+  points: 4
+- name: Leadership
+  diff: IQ/A
+  points: 4
+  notes: Leading a warband's fireteam.
+- name: Theology
+  spec: Chaos
+  diff: IQ/H
+  points: 20
+- name: Hidden Lore
+  spec: Daemons
+  diff: IQ/A
+  points: 8
+- name: Hidden Lore
+  spec: Xenos
+  diff: IQ/A
+  points: 8
+- name: Armoury
+  spec: Body Armor
+  diff: IQ/A
+  points: 2
+  notes: Patching traitor plate in the field.
+- name: Armoury
+  spec: Small Arms
+  diff: IQ/A
+  points: 2
+  notes: Bolt weapons.
+- name: Mechanic
+  spec: Bolt Weapons
+  diff: IQ/A
+  points: 2
+- name: First Aid
+  diff: IQ/E
+  points: 2
+- name: Navigation
+  spec: Land
+  diff: IQ/A
+  points: 2
+- name: Gesture
+  diff: IQ/E
+  points: 1
+  notes: Warband battle-sign.
+- name: Savoir-Faire
+  spec: Military
+  diff: IQ/E
+  points: 1
+- name: Camouflage
+  diff: IQ/E
+  points: 2
+- name: Intimidation
+  diff: Will/A
+  points: 12
+- name: Survival
+  spec: Any
+  diff: Per/A
+  points: 8
+- name: Observation
+  diff: Per/A
+  points: 12
+- name: Tracking
+  diff: Per/A
+  points: 2
+- name: Running
+  diff: HT/A
+  points: 2
+- name: Hiking
+  diff: HT/A
+  points: 2
+equipment:
+- include: chaos/wargear/armour.yaml#Power Armour, Mark IV (Heretic)
+- include: imperium/weapons/melee.yaml#Chainaxe
+- include: imperium/weapons/bolt.yaml#Bolt Pistol, Godwyn-De'az Pattern
+- include: imperium/weapons/melee.yaml#Combat Knife, Astartes Pattern
+- include: imperium/weapons/grenades.yaml#Frag Grenade
+- include: imperium/weapons/grenades.yaml#Krak Grenade

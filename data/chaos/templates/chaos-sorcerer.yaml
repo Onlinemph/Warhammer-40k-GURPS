@@ -1,0 +1,221 @@
+kind: template
+output: Chaos/Templates/Chaos Sorcerer.gct
+notes: >-
+  A Chaos Sorcerer: a Legionary who has traded some of his body's training for mastery of the warp, most
+  famously the Thousand Sons and the sorcerers of every Legion and warband. Built as the Chaos Space Marine
+  with IQ 14 and Will 16 (the framework figures: IQ +3 over the Legionary and Will 17 from the package,
+  so Will is reduced by one), Psyker (Talent) 3 counting the Mark of Tzeentch's +1, Warp Empowerment 20
+  (the Alpha level, power cap 210, as the Librarian) and the Mark of Tzeentch in place of Mark of Chaos
+  Undivided. About 1289 points before gear. Powers: Smite 12d(10) burn (162) and Fire Bolt 12d burn (42),
+  each within the Empowerment cap of 210; Warp Empowerment 20 leaves room to add Assail, Haemorrhage or
+  Witch-sight from the same file. A GM may swap the powers for other disciplines in Imperium/Traits/Psykers
+  and the Warp.adq. Equipment: Mark IV heretic plate, force staff, bolt pistol. The Mark's Paranoia and
+  Compulsive Lying are in the template.
+traits:
+- include: imperium/astartes/gene-seed.yaml#Astartes
+  children:
+  - include: imperium/astartes/gene-seed.yaml#Attribute Modifiers
+  - include: imperium/astartes/gene-seed.yaml#Enhanced Move (Ground)
+  - include: imperium/astartes/gene-seed.yaml#Extended Lifespan
+  - include: imperium/astartes/gene-seed.yaml#Secondary Heart
+  - include: imperium/astartes/gene-seed.yaml#Ossmodula
+  - include: imperium/astartes/gene-seed.yaml#Biscopea
+  - include: imperium/astartes/gene-seed.yaml#Haemastamen
+  - include: imperium/astartes/gene-seed.yaml#Larraman's Organ
+  - include: imperium/astartes/gene-seed.yaml#Catalepsean Node
+  - include: imperium/astartes/gene-seed.yaml#Preomnor
+  - include: imperium/astartes/gene-seed.yaml#Omophagea
+  - include: imperium/astartes/gene-seed.yaml#Multi-lung
+  - include: imperium/astartes/gene-seed.yaml#Occulobe
+  - include: imperium/astartes/gene-seed.yaml#Lyman's Ear
+  - include: imperium/astartes/gene-seed.yaml#Sus-an Membrane
+  - include: imperium/astartes/gene-seed.yaml#Melanchromic Organ
+  - include: imperium/astartes/gene-seed.yaml#Oolitic Kidney
+  - include: imperium/astartes/gene-seed.yaml#Neuroglottis
+  - include: imperium/astartes/gene-seed.yaml#Mucranoid
+  - include: imperium/astartes/gene-seed.yaml#Betcher's Gland
+  - include: imperium/astartes/gene-seed.yaml#Progenoid Glands
+  - include: imperium/astartes/gene-seed.yaml#Black Carapace
+  - name: Hypno-Indoctrination (Broken Oaths)
+    container: meta_trait
+    tags:
+    - Advantage
+    - Mental
+    - Chaos
+    - Heretic Astartes
+    children:
+    - name: Combat Reflexes
+      points: 15
+      ref: B43
+    - name: Fearlessness
+      per_level: 2
+      levels: 4
+      ref: B55
+    - name: High Pain Threshold
+      points: 10
+      ref: B59
+    - name: Single-Minded
+      points: 5
+      ref: B85
+      notes: Relentless focus, now turned to the warband's ends.
+    lore: >-
+      The psycho-conditioning of the Astartes survives the Fall: a traitor still does not break under
+      fire, still fights past the point where a baseline soldier would rout. What goes is the oath. Black
+      Library's Horus Heresy and Chaos fiction show Legionaries who kept every reflex and every drilled
+      habit and threw away Emperor, Chapter and Codex.
+    design: >-
+      The Astartes package's own Hypno-Indoctrination / Psycho-Conditioning (data/imperium/astartes/gene-seed.yaml)
+      with its three oath disadvantages removed, as the Heretic Astartes lens directs: Combat Reflexes
+      15 + Fearlessness 4 (2/level) 8 + High Pain Threshold 10 + Single-Minded 5 = +38 in place of the
+      package's net -2 (Duty -20, Sense of Duty -10, Code of Honor -10 left out). Everything else in the
+      Astartes entry is included unchanged.
+- include: imperium/astartes/battle-brother.yaml#Personal Advancement
+- include: chaos/traits.yaml#Heretic Astartes
+- include: chaos/traits.yaml#Long War Veteran
+- name: IQ
+  points: 60
+  tags:
+  - Attribute
+  lore: A sorcerer's mind is his weapon.
+  design: IQ 14 (+3 over the Legionary's 11), 20 pts/level (B15).
+- name: Will
+  points: -5
+  tags:
+  - Attribute
+  lore: >-
+    The framework sets Will 16 against the 17 that IQ 14 would give: the warp has scoured something out.
+  design: Will -1 (B16, 5/level), -5 points, for Will 16.
+- include: chaos/traits.yaml#Mark of Tzeentch
+- include: imperium/psykers/warp.yaml#Unusual Background (Latent Psychic Potential)
+- include: imperium/psykers/warp.yaml#Psyker
+  levels: 2
+- include: imperium/psykers/warp.yaml#Warp Empowerment
+  levels: 20
+- include: imperium/psykers/warp.yaml#Smite
+- include: imperium/psykers/warp.yaml#Fire Bolt
+skills:
+- name: Guns
+  spec: Rifle
+  diff: DX/E
+  points: 8
+  notes: Boltgun.
+- name: Guns
+  spec: Pistol
+  diff: DX/E
+  points: 2
+  notes: Bolt pistol.
+- name: Broadsword
+  diff: DX/A
+  points: 8
+  notes: Force staff.
+- name: Innate Attack
+  spec: Beam
+  diff: DX/E
+  points: 4
+  notes: Smite and Fire Bolt. DX+2 (19), Easy, as the Sanctioned Psyker's.
+- name: Brawling
+  diff: DX/E
+  points: 1
+- name: Knife
+  diff: DX/E
+  points: 2
+  notes: Combat knife.
+- name: Throwing
+  diff: DX/A
+  points: 1
+  notes: Frag and krak grenades.
+- name: Stealth
+  diff: DX/A
+  points: 1
+- name: Tactics
+  diff: IQ/H
+  points: 16
+- name: Soldier
+  diff: IQ/A
+  points: 4
+- name: Leadership
+  diff: IQ/A
+  points: 8
+  notes: Leading a warband's fireteam.
+- name: Theology
+  spec: Chaos
+  diff: IQ/H
+  points: 20
+- name: Hidden Lore
+  spec: Daemons
+  diff: IQ/A
+  points: 12
+- name: Hidden Lore
+  spec: Xenos
+  diff: IQ/A
+  points: 2
+- name: Armoury
+  spec: Body Armor
+  diff: IQ/A
+  points: 2
+  notes: Patching traitor plate in the field.
+- name: Armoury
+  spec: Small Arms
+  diff: IQ/A
+  points: 2
+  notes: Bolt weapons.
+- name: Mechanic
+  spec: Bolt Weapons
+  diff: IQ/A
+  points: 2
+- name: First Aid
+  diff: IQ/E
+  points: 2
+- name: Navigation
+  spec: Land
+  diff: IQ/A
+  points: 2
+- name: Gesture
+  diff: IQ/E
+  points: 1
+  notes: Warband battle-sign.
+- name: Savoir-Faire
+  spec: Military
+  diff: IQ/E
+  points: 1
+- name: Camouflage
+  diff: IQ/E
+  points: 2
+- name: Intimidation
+  diff: Will/A
+  points: 4
+- name: Survival
+  spec: Any
+  diff: Per/A
+  points: 2
+- name: Observation
+  diff: Per/A
+  points: 8
+- name: Running
+  diff: HT/A
+  points: 2
+- name: Hiking
+  diff: HT/A
+  points: 2
+- include: imperium/common/skills.yaml#Psyniscience
+  points: 4
+- name: Meditation
+  diff: Will/H
+  points: 4
+  tags:
+  - Imperial
+  - Psyker
+- name: Hidden Lore
+  spec: the Warp
+  diff: IQ/A
+  points: 4
+- name: Hidden Lore
+  spec: Heresy
+  diff: IQ/A
+  points: 4
+equipment:
+- include: chaos/wargear/armour.yaml#Power Armour, Mark IV (Heretic)
+- include: imperium/psykers/psychic-gear.yaml#Force Staff, Astartes Pattern
+- include: imperium/weapons/bolt.yaml#Bolt Pistol, Godwyn-De'az Pattern
+- include: imperium/weapons/melee.yaml#Combat Knife, Astartes Pattern
+- include: imperium/weapons/grenades.yaml#Frag Grenade

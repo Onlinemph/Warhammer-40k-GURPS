@@ -1,0 +1,274 @@
+kind: template
+output: Chaos/Templates/Traitor Guardsman.gct
+notes: >-
+  A Guardsman who turned: a regiment lost to the whispers of a Dark God, a platoon that mutinied, a deserter
+  who took the Mark. He keeps the Astra Militarum Guardsman's body and training (ST 11, DX 12, IQ 10,
+  HT 12, drilled in a lasgun and a trench), so the build is the Guardsman's with the Imperial Duty, Sense
+  of Duty and Intolerance (Xenos) dropped, Theology (Imperial Creed) swapped for Theology (Chaos) and
+  Mark of Chaos Undivided in place of the Guardsman's piety. About 116 points without gear. A single god's
+  Mark can be swapped in for Undivided. Equipment is in the wargear files: lasgun or autogun, flak jacket,
+  Munitorum knife, grenades.
+traits:
+- name: ST
+  points: 10
+  tags:
+  - Attribute
+  lore: A fit adult.
+  design: ST 11 (+1), 10 pts/level (B15).
+- name: DX
+  points: 40
+  tags:
+  - Attribute
+  lore: Guard drill hammers weapon-handling.
+  design: DX 12 (+2), 20 pts/level (B15).
+- name: IQ
+  points: 0
+  tags:
+  - Attribute
+  lore: Average.
+  design: IQ 10, baseline.
+- name: HT
+  points: 20
+  tags:
+  - Attribute
+  lore: Campaign life selects for endurance.
+  design: HT 12 (+2), 10 pts/level (B14).
+- name: Fit
+  points: 5
+  ref: B55
+  tags:
+  - Advantage
+  - Physical
+  lore: Route marches and drill, kept up in the warband.
+  design: Basic Set Fit (B55), 5 points.
+- name: Combat Reflexes
+  points: 15
+  ref: B43
+  tags:
+  - Advantage
+  - Mental
+  lore: >-
+    The survivors of a regiment's first campaign have it; a traitor regiment has had plenty of campaigns.
+  design: Basic Set Combat Reflexes (B43), 15 points.
+- include: chaos/traits.yaml#Mark of Chaos Undivided
+- name: Callous
+  points: -5
+  ref: B125
+  cr: 12
+  tags:
+  - Disadvantage
+  - Mental
+  lore: Whatever pity the regiment had went with the Emperor.
+  design: Callous (B125), -5.
+- name: Social Stigma (Traitor)
+  points: -5
+  ref: B155
+  tags:
+  - Disadvantage
+  - Social
+  lore: Any Imperial soldier or citizen who knows what he is shoots first.
+  design: >-
+    Social Stigma (B155), -5, Imperial space only; a lesser version of the Heretic Astartes lens, without
+    the Enemy (The Imperium) of a Legionary.
+skills:
+- name: Beam Weapons
+  spec: Rifle
+  diff: DX/E
+  points: 8
+  tags:
+  - Imperium
+  - Astra Militarum
+  lore: >
+    The lasgun is the Guard's universal issue weapon. Per framework.md's weapon-skill table, las weapons
+    use Beam Weapons, not Guns.
+  design: DX+3 (15) for 8 points on an Easy skill (B170).
+- name: Beam Weapons
+  spec: Pistol
+  diff: DX/E
+  points: 2
+  tags:
+  - Imperium
+  - Astra Militarum
+  lore: >-
+    Laspistol familiarity, mostly for NCOs and specialists but issued as a secondary skill broadly.
+  design: DX+1 (13) for 2 points, Easy.
+- name: Guns
+  spec: Grenade Launcher
+  diff: DX/E
+  points: 1
+  tags:
+  - Imperium
+  - Astra Militarum
+  lore: Launcher-fed frag and krak grenades only. Hand-thrown grenades use Throwing (below).
+  design: DX+0 (12) for 1 point, Easy.
+- name: Throwing
+  diff: DX/A
+  points: 2
+  tags:
+  - Imperium
+  ref: B226
+  lore: >-
+    Hand-thrown frag and krak grenades, which use Throwing rather than Guns (Grenade Launcher).
+  design: DX+0 (12) for 2 points, Average (B226).
+- name: Brawling
+  diff: DX/E
+  points: 2
+  tags:
+  - Imperium
+  lore: Bayonet and rifle-butt fighting when las-cells run dry.
+  design: DX+1 (13) for 2 points, Easy.
+- name: Forced Entry
+  diff: DX/E
+  points: 1
+  tags:
+  - Imperium
+  lore: Breaching doors and barricades under fire.
+  design: DX+0 (12) for 1 point, Easy.
+- name: Stealth
+  diff: DX/A
+  points: 2
+  tags:
+  - Imperium
+  lore: >-
+    Basic fieldcraft; not a scout's level of skill, but enough to not be the reason a patrol gets spotted.
+  design: DX+0 (12) for 2 points, Average.
+- name: Camouflage
+  diff: IQ/E
+  points: 1
+  tags:
+  - Imperium
+  lore: Digging in and breaking up a silhouette, drilled into every trooper.
+  design: IQ+0 (10) for 1 point, Easy.
+- name: Survival
+  spec: (choose home terrain)
+  diff: Per/A
+  points: 2
+  tags:
+  - Imperium
+  lore: >-
+    Field survival in whatever terrain the character's home world or postings favor; pick a specialization.
+  design: Per+0 (10) for 2 points, Average.
+- name: First Aid
+  diff: IQ/E
+  points: 1
+  tags:
+  - Imperium
+  lore: Basic combat first aid; the Munitorum's medicae corps handles the rest.
+  design: IQ+0 (10) for 1 point, Easy.
+- name: Soldier
+  diff: IQ/A
+  points: 4
+  tags:
+  - Imperium
+  lore: General military knowledge — procedure, rank structure, logistics.
+  design: IQ+1 (11) for 4 points, Average.
+- name: Tactics
+  diff: IQ/H
+  points: 4
+  tags:
+  - Imperium
+  lore: >-
+    Squad- and platoon-level small-unit tactics, enough to follow and sometimes improve on orders.
+  design: IQ+0 (10) for 4 points, Hard.
+- name: Navigation
+  spec: Land
+  diff: IQ/A
+  points: 1
+  tags:
+  - Imperium
+  lore: Basic land navigation without vehicle or void instruments.
+  design: IQ-1 (9) for 1 point, Average.
+- name: Area Knowledge
+  spec: (home world)
+  diff: IQ/E
+  points: 1
+  tags:
+  - Imperium
+  lore: Knowledge of the character's own home world or hive.
+  design: IQ+0 (10) for 1 point, Easy.
+- name: Current Affairs
+  spec: Imperium
+  diff: IQ/E
+  points: 1
+  tags:
+  - Imperium
+  lore: What passes for Imperium-wide news; see Imperium/Skills/Imperial Skills.skl.
+  design: IQ+0 (10) for 1 point, Easy.
+- name: Savoir-Faire
+  spec: Military
+  diff: IQ/E
+  points: 1
+  tags:
+  - Imperium
+  lore: Basic military etiquette and chain-of-command manners.
+  design: IQ+0 (10) for 1 point, Easy.
+- name: Heraldry
+  spec: Regimental
+  diff: IQ/A
+  points: 1
+  tags:
+  - Imperium
+  - Astra Militarum
+  lore: >-
+    Recognising Guard regimental colours and honorifics; see Imperium/Skills/Imperial Skills.skl.
+  design: IQ-1 (9) for 1 point, Average.
+- name: Intimidation
+  diff: Will/A
+  points: 2
+  tags:
+  - Imperium
+  lore: Standard soldier's bluster and menace.
+  design: Will+0 (10) for 2 points, Average.
+- name: Gambling
+  diff: IQ/A
+  points: 1
+  tags:
+  - Imperium
+  lore: Dice and cards are near-universal Guard barracks pastimes.
+  design: IQ-1 (9) for 1 point, Average.
+- name: Theology
+  spec: Chaos
+  diff: IQ/H
+  points: 2
+  tags:
+  - Chaos
+  lore: >-
+    A traitor's catechism: the names of the Dark Gods, the rites of the cult that turned the regiment.
+  design: IQ-1 (9) for 2 points, Hard (B170).
+- name: Jumping
+  diff: DX/E
+  points: 1
+  tags:
+  - Imperium
+  lore: Basic obstacle-course fitness.
+  design: DX+0 (12) for 1 point, Easy.
+- name: Climbing
+  diff: DX/A
+  points: 1
+  tags:
+  - Imperium
+  lore: Basic obstacle-course and urban-assault fitness.
+  design: DX-1 (11) for 1 point, Average.
+- name: Running
+  diff: HT/A
+  points: 1
+  tags:
+  - Imperium
+  lore: Route-march conditioning.
+  design: HT-1 (11) for 1 point, Average.
+- name: Hiking
+  diff: HT/A
+  points: 1
+  tags:
+  - Imperium
+  lore: Route-march conditioning.
+  design: HT-1 (11) for 1 point, Average.
+- name: Hidden Lore
+  spec: Daemons
+  diff: IQ/A
+  points: 1
+equipment:
+- include: imperium/weapons/las.yaml#Lasgun, Kantrael Pattern
+- include: imperium/armour/armour.yaml#Flak Jacket
+- include: imperium/weapons/melee.yaml#Combat Knife, Munitorum Pattern
+- include: imperium/weapons/grenades.yaml#Frag Grenade

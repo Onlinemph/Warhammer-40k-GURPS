@@ -1,0 +1,313 @@
+kind: template
+output: Chaos/Templates/Chaos Lord.gct
+notes: >-
+  A Chaos Lord: the leader of a Traitor warband, a Legionary who has outlived and outfought his peers
+  for ten thousand years or a few centuries and holds his followers by strength and will. Built as the
+  Chaos Space Marine with ST 32, DX 18, IQ 13, HT 16 and HP 38 (the framework figures), Leadership and
+  Tactics raised well above a line Legionary's, and the Mark of Chaos Undivided; the Lord may swap it
+  for a single god's Mark. About 1181 points before gear. Equipment: Mark IV heretic plate (Tartaros Terminator
+  plate shown unequipped as the alternative), power sword, power fist, bolt pistol, combi-weapon.
+traits:
+- include: imperium/astartes/gene-seed.yaml#Astartes
+  children:
+  - include: imperium/astartes/gene-seed.yaml#Attribute Modifiers
+  - include: imperium/astartes/gene-seed.yaml#Enhanced Move (Ground)
+  - include: imperium/astartes/gene-seed.yaml#Extended Lifespan
+  - include: imperium/astartes/gene-seed.yaml#Secondary Heart
+  - include: imperium/astartes/gene-seed.yaml#Ossmodula
+  - include: imperium/astartes/gene-seed.yaml#Biscopea
+  - include: imperium/astartes/gene-seed.yaml#Haemastamen
+  - include: imperium/astartes/gene-seed.yaml#Larraman's Organ
+  - include: imperium/astartes/gene-seed.yaml#Catalepsean Node
+  - include: imperium/astartes/gene-seed.yaml#Preomnor
+  - include: imperium/astartes/gene-seed.yaml#Omophagea
+  - include: imperium/astartes/gene-seed.yaml#Multi-lung
+  - include: imperium/astartes/gene-seed.yaml#Occulobe
+  - include: imperium/astartes/gene-seed.yaml#Lyman's Ear
+  - include: imperium/astartes/gene-seed.yaml#Sus-an Membrane
+  - include: imperium/astartes/gene-seed.yaml#Melanchromic Organ
+  - include: imperium/astartes/gene-seed.yaml#Oolitic Kidney
+  - include: imperium/astartes/gene-seed.yaml#Neuroglottis
+  - include: imperium/astartes/gene-seed.yaml#Mucranoid
+  - include: imperium/astartes/gene-seed.yaml#Betcher's Gland
+  - include: imperium/astartes/gene-seed.yaml#Progenoid Glands
+  - include: imperium/astartes/gene-seed.yaml#Black Carapace
+  - name: Hypno-Indoctrination (Broken Oaths)
+    container: meta_trait
+    tags:
+    - Advantage
+    - Mental
+    - Chaos
+    - Heretic Astartes
+    children:
+    - name: Combat Reflexes
+      points: 15
+      ref: B43
+    - name: Fearlessness
+      per_level: 2
+      levels: 4
+      ref: B55
+    - name: High Pain Threshold
+      points: 10
+      ref: B59
+    - name: Single-Minded
+      points: 5
+      ref: B85
+      notes: Relentless focus, now turned to the warband's ends.
+    lore: >-
+      The psycho-conditioning of the Astartes survives the Fall: a traitor still does not break under
+      fire, still fights past the point where a baseline soldier would rout. What goes is the oath. Black
+      Library's Horus Heresy and Chaos fiction show Legionaries who kept every reflex and every drilled
+      habit and threw away Emperor, Chapter and Codex.
+    design: >-
+      The Astartes package's own Hypno-Indoctrination / Psycho-Conditioning (data/imperium/astartes/gene-seed.yaml)
+      with its three oath disadvantages removed, as the Heretic Astartes lens directs: Combat Reflexes
+      15 + Fearlessness 4 (2/level) 8 + High Pain Threshold 10 + Single-Minded 5 = +38 in place of the
+      package's net -2 (Duty -20, Sense of Duty -10, Code of Honor -10 left out). Everything else in the
+      Astartes entry is included unchanged.
+- include: imperium/astartes/battle-brother.yaml#Personal Advancement
+- include: chaos/traits.yaml#Heretic Astartes
+- include: chaos/traits.yaml#Long War Veteran
+- name: ST
+  points: 20
+  tags:
+  - Attribute
+  lore: >-
+    A Chaos Lord is stronger than any of his warband; Codex background describes champions bigger and
+    more brutal than their followers.
+  design: ST 32 (+2 from the Astartes 30), 10 pts/level (B14).
+- name: DX
+  points: 20
+  tags:
+  - Attribute
+  lore: Even sharper than a Legionary.
+  design: DX 18 (+1 over the Legionary 17), 20 pts/level (B15).
+- name: IQ
+  points: 40
+  tags:
+  - Attribute
+  lore: Lords command by cunning as much as by fear.
+  design: IQ 13 (+2 over the 11 of a Legionary), 20 pts/level (B15). Will follows, to 16.
+- name: HT
+  points: 10
+  tags:
+  - Attribute
+  lore: Centuries of war and boons from the gods.
+  design: HT 16 (+1), 10 pts/level (B14).
+- name: HP
+  points: 4
+  tags:
+  - Attribute
+  lore: 'Beyond ST alone: ST 32 gives 32+4 = 36, the framework figure is 38.'
+  design: Extra Hit Points +2 (B16, 2/level) = 4 points for HP 38.
+- name: Reputation (Warlord)
+  points: 10
+  ref: B27
+  tags:
+  - Advantage
+  - Social
+  - Chaos
+  reactions:
+  - situation: from Chaos followers who know the warband's name
+    amount: 4
+  lore: A Chaos Lord's name is known to the warbands and cults around him.
+  design: >-
+    Reputation (B27), +4 among a large class of people (Chaos followers, x1/2): 10 points, on top of the
+    Traitor Legion Reputation.
+- name: Rank 8 (Chaos Lord)
+  points: 40
+  ref: B29
+  tags:
+  - Advantage
+  - Social
+  - Chaos
+  lore: A Lord is the unquestioned master of his warband, its Legionaries, cultists and slaves.
+  design: Rank (B29), 5 points/level, 8 levels = 40 points (Status comes with it).
+- name: Charisma
+  per_level: 5
+  levels: 4
+  ref: B41
+  tags:
+  - Advantage
+  - Mental
+  - Social
+  lore: Chaos Lords command through fear, favour and the weight of their legend.
+  design: Charisma 4 (B41, 5/level) = 20 points.
+- name: Born War-Leader
+  per_level: 5
+  levels: 4
+  ref: B31
+  tags:
+  - Advantage
+  - Mental
+  lore: >-
+    The best of the Traitor Legions' captains turn a rabble of cultists and Legionaries into a single
+    fist.
+  design: Born War-Leader 4 (B31, 5/level) = 20 points.
+- name: Weapon Master (Swords)
+  points: 20
+  ref: B99
+  tags:
+  - Advantage
+  - Mental
+  lore: A Lord who has fought for centuries has a master's command of the blade.
+  design: Weapon Master (B99), one weapon group, 20 points.
+- name: Luck
+  points: 15
+  ref: B66
+  tags:
+  - Advantage
+  - Mental
+  - Chaos
+  lore: The favour of the gods of Chaos keeps a Lord alive when he should have died.
+  design: Luck (B66), 15 points.
+- name: Extra Attack (Lord's Fury)
+  per_level: 25
+  levels: 1
+  ref: B53
+  tags:
+  - Advantage
+  - Physical
+  lore: >-
+    A Chaos Lord's skill with sword and fist, honoured with gifts of the Ruinous Powers, lets him strike
+    twice for another's once.
+  design: Extra Attack 1 (B53, 25/level) = 25 points.
+- include: chaos/traits.yaml#Mark of Chaos Undivided
+skills:
+- name: Guns
+  spec: Rifle
+  diff: DX/E
+  points: 20
+  notes: Boltgun.
+- name: Guns
+  spec: Pistol
+  diff: DX/E
+  points: 4
+  notes: Bolt pistol.
+- name: Broadsword
+  diff: DX/A
+  points: 24
+  notes: Chainsword.
+- name: Brawling
+  diff: DX/E
+  points: 12
+  notes: Power fist.
+- name: Wrestling
+  diff: DX/A
+  points: 4
+- name: Knife
+  diff: DX/E
+  points: 2
+  notes: Combat knife.
+- name: Axe/Mace
+  diff: DX/A
+  points: 4
+  notes: Chainaxe.
+- name: Fast-Draw
+  spec: Ammo
+  diff: DX/E
+  points: 2
+- name: Throwing
+  diff: DX/A
+  points: 2
+  notes: Frag and krak grenades.
+- name: Free Fall
+  diff: DX/A
+  points: 1
+- name: Climbing
+  diff: DX/A
+  points: 2
+- name: Stealth
+  diff: DX/A
+  points: 2
+- name: Tactics
+  diff: IQ/H
+  points: 40
+- name: Strategy
+  diff: IQ/H
+  points: 28
+- name: Soldier
+  diff: IQ/A
+  points: 16
+- name: Leadership
+  diff: IQ/A
+  points: 32
+  notes: Commanding a warband.
+- name: Theology
+  spec: Chaos
+  diff: IQ/H
+  points: 20
+- name: Hidden Lore
+  spec: Daemons
+  diff: IQ/A
+  points: 8
+- name: Hidden Lore
+  spec: Xenos
+  diff: IQ/A
+  points: 8
+- name: Armoury
+  spec: Body Armor
+  diff: IQ/A
+  points: 2
+  notes: Patching traitor plate in the field.
+- name: Armoury
+  spec: Small Arms
+  diff: IQ/A
+  points: 2
+  notes: Bolt weapons.
+- name: Mechanic
+  spec: Bolt Weapons
+  diff: IQ/A
+  points: 2
+- name: First Aid
+  diff: IQ/E
+  points: 2
+- name: Navigation
+  spec: Land
+  diff: IQ/A
+  points: 2
+- name: Gesture
+  diff: IQ/E
+  points: 1
+  notes: Warband battle-sign.
+- name: Savoir-Faire
+  spec: Military
+  diff: IQ/E
+  points: 1
+- name: Camouflage
+  diff: IQ/E
+  points: 2
+- name: Intimidation
+  diff: Will/A
+  points: 16
+- name: Survival
+  spec: Any
+  diff: Per/A
+  points: 8
+- name: Observation
+  diff: Per/A
+  points: 12
+- name: Tracking
+  diff: Per/A
+  points: 2
+- name: Running
+  diff: HT/A
+  points: 2
+- name: Hiking
+  diff: HT/A
+  points: 2
+- name: Savoir-Faire
+  spec: Chaos Court
+  diff: IQ/E
+  points: 1
+equipment:
+- include: chaos/wargear/armour.yaml#Power Armour, Mark IV (Heretic)
+- include: chaos/wargear/armour.yaml#Tactical Dreadnought Armour, Tartaros Pattern (Heretic)
+  equipped: false
+- include: imperium/weapons/melee.yaml#Power Sword, Astartes Pattern
+- include: imperium/weapons/melee.yaml#Power Fist
+- include: imperium/weapons/bolt.yaml#Bolt Pistol, Godwyn-De'az Pattern
+- include: imperium/weapons/bolt.yaml#Combi-Weapon, Bolter/Plasma
+  equipped: false
+- include: imperium/weapons/grenades.yaml#Frag Grenade
+- include: imperium/weapons/grenades.yaml#Krak Grenade

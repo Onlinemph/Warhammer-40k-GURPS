@@ -1,0 +1,149 @@
+kind: template
+output: Chaos/Templates/Chaos Cultist.gct
+notes: >-
+  An ordinary human drawn into the service of the Ruinous Powers: a hive-gang tough, a fanatic from a
+  rotting agri-world, a cult congregant given a gun and a promise. Untrained and unaugmented, at about
+  42 points (physiology, traits and skills, no gear) he sits at the bottom of the framework's ladder,
+  below the 100-175 trained-soldier tier; the framework's figure is roughly 40-80 and the build lands
+  at the low end of it, since Cultist's Devotion's -20 and a slow mind (IQ 9, -20) eat most of what the
+  faith's small gifts (High Pain Threshold, Fearlessness, Single-Minded) and a poor spread of skills buy.
+  Equipment is in the wargear files, not here: autogun or autopistol, a crude blade, a flak vest or rags.
+  Raise skills and add a single god's Mark (Chaos Traits) for a cult champion.
+traits:
+- name: ST
+  points: 0
+  tags:
+  - Attribute
+  lore: An ordinary adult human, malnourished more often than not.
+  design: ST 10, the human baseline (B14).
+- name: DX
+  points: 0
+  tags:
+  - Attribute
+  lore: No training beyond a few shots at the range or a few brawls in the cult's cellars.
+  design: DX 10, baseline.
+- name: IQ
+  points: -20
+  tags:
+  - Attribute
+  lore: Cultists are taken from the desperate and the credulous, and the cult does the thinking.
+  design: IQ 9, Decreased IQ -1 (B16, 20/level) = -20 points.
+- name: HT
+  points: 0
+  tags:
+  - Attribute
+  lore: Ordinary health.
+  design: HT 10, baseline.
+- name: Fit
+  points: 5
+  ref: B55
+  tags:
+  - Advantage
+  - Physical
+  lore: Years of hard labour and cult-cellar brawling keep a cultist wiry.
+  design: Basic Set Fit (B55), 5 points.
+- name: Single-Minded
+  points: 5
+  ref: B85
+  tags:
+  - Advantage
+  - Mental
+  - Chaos
+  lore: >-
+    A fanatic's one-track zeal; the Black Library cultist fights through terror and pain towards the altar.
+  design: Single-Minded (B85), 5 points.
+- name: Fearlessness
+  per_level: 2
+  levels: 2
+  ref: B55
+  tags:
+  - Advantage
+  - Mental
+  - Chaos
+  lore: Drugs and doctrine have burned out most of a cultist's fear.
+  design: Fearlessness 2 (B55, 2/level), 4 points.
+- name: High Pain Threshold
+  points: 10
+  ref: B59
+  tags:
+  - Advantage
+  - Physical
+  - Chaos
+  lore: >-
+    Cult fanatics are shown in Black Library's Inquisition fiction enduring wounds and drugs that would
+    put a sane man down, driven by faith and stimulants.
+  design: High Pain Threshold (B59), 10 points.
+- include: chaos/traits.yaml#Cultist's Devotion
+skills:
+- name: Guns
+  spec: Rifle
+  diff: DX/E
+  points: 8
+  notes: Autogun.
+- name: Guns
+  spec: Pistol
+  diff: DX/E
+  points: 2
+  notes: Autopistol.
+- name: Brawling
+  diff: DX/E
+  points: 8
+- name: Knife
+  diff: DX/E
+  points: 4
+  notes: Crude blade.
+- name: Stealth
+  diff: DX/A
+  points: 2
+- name: Throwing
+  diff: DX/A
+  points: 2
+- name: Intimidation
+  diff: Will/A
+  points: 4
+- name: Streetwise
+  diff: IQ/A
+  points: 4
+- name: Theology
+  spec: Chaos
+  diff: IQ/H
+  points: 8
+  notes: Whatever the preacher taught.
+- name: Hidden Lore
+  spec: Daemons
+  diff: IQ/A
+  points: 2
+- name: Survival
+  spec: Urban
+  diff: Per/A
+  points: 2
+- name: Area Knowledge
+  spec: Home Hive or World
+  diff: IQ/E
+  points: 2
+- name: Climbing
+  diff: DX/A
+  points: 2
+- name: Running
+  diff: HT/A
+  points: 2
+- name: Forced Entry
+  diff: DX/E
+  points: 2
+- name: Carousing
+  diff: HT/E
+  points: 1
+- name: Scrounging
+  diff: Per/E
+  points: 2
+- name: Gesture
+  diff: IQ/E
+  points: 1
+  notes: Cult sign.
+equipment:
+- include: imperium/weapons/stub.yaml#Autogun
+- include: imperium/weapons/stub.yaml#Autopistol
+  equipped: false
+- include: imperium/weapons/melee.yaml#Combat Knife, Munitorum Pattern
+  name: Crude Blade
+- include: imperium/armour/armour.yaml#Flak Vest

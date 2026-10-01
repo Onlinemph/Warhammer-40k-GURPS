@@ -544,7 +544,7 @@ Shared weapons keep their anchors: boltgun, bolt pistol, chainsword, chainaxe, p
 |---|---|
 | Inferno boltgun (Rubric) | Boltgun with warpflame bolts: 6d×2(3) pi++ with a 2d burn follow-up, one divisor step past the boltgun |
 | Warpflamer | Flamer anchor, burning follow-up 2d per turn while ablaze |
-| Sonic blaster | 6d(5) cr, RoF 3, range 50/150: sound that shakes the wearer inside the armour (Mk VII penetrated on 55% of hits, Terminator never) |
+| Sonic blaster | 5d(5) cr, RoF 3, Rcl 2, range 50/150: sound that shakes the wearer inside the armour (Mk VII torso penetrated on 22% of hits, its neck seal on 90%, Terminator never) |
 | Blastmaster | 6d×2(3) cr, RoF 2, range 120/360; a single-frequency setting 6d×3(5) cr, RoF 1 |
 | Plague knife | Combat knife plus a 2d tox follow-up (Nurgle's Rot) on a penetrating hit |
 | Blight grenade | Frag grenade (3d cr ex [4d cut]) plus a 1d tox follow-up per fragment |

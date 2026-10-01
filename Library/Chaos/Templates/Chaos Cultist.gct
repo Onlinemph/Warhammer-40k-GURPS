@@ -1,0 +1,925 @@
+{
+	"version": 5,
+	"id": "BoNkVIsiQ7CAQjqw5",
+	"notes": "An ordinary human drawn into the service of the Ruinous Powers: a hive-gang tough, a fanatic from a rotting agri-world, a cult congregant given a gun and a promise. Untrained and unaugmented, at about 42 points (physiology, traits and skills, no gear) he sits at the bottom of the framework's ladder, below the 100-175 trained-soldier tier; the framework's figure is roughly 40-80 and the build lands at the low end of it, since Cultist's Devotion's -20 and a slow mind (IQ 9, -20) eat most of what the faith's small gifts (High Pain Threshold, Fearlessness, Single-Minded) and a poor spread of skills buy. Equipment is in the wargear files, not here: autogun or autopistol, a crude blade, a flak vest or rags. Raise skills and add a single god's Mark (Chaos Traits) for a cult champion.",
+	"traits": [
+		{
+			"id": "tOxdGCJfxW-siAPNv",
+			"name": "ST",
+			"local_notes": "Lore: An ordinary adult human, malnourished more often than not.\n\nDesign: ST 10, the human baseline (B14).",
+			"tags": [
+				"Attribute"
+			],
+			"base_points": 0
+		},
+		{
+			"id": "tjF_0hiK6Ypkn9wLU",
+			"name": "DX",
+			"local_notes": "Lore: No training beyond a few shots at the range or a few brawls in the cult's cellars.\n\nDesign: DX 10, baseline.",
+			"tags": [
+				"Attribute"
+			],
+			"base_points": 0
+		},
+		{
+			"id": "taV45Jq0JUWKodS-F",
+			"name": "IQ",
+			"local_notes": "Lore: Cultists are taken from the desperate and the credulous, and the cult does the thinking.\n\nDesign: IQ 9, Decreased IQ -1 (B16, 20/level) = -20 points.",
+			"tags": [
+				"Attribute"
+			],
+			"base_points": -20,
+			"features": [
+				{
+					"type": "attribute_bonus",
+					"attribute": "iq",
+					"amount": -1
+				}
+			]
+		},
+		{
+			"id": "tKwfwltPGTBGzYC8Y",
+			"name": "HT",
+			"local_notes": "Lore: Ordinary health.\n\nDesign: HT 10, baseline.",
+			"tags": [
+				"Attribute"
+			],
+			"base_points": 0
+		},
+		{
+			"id": "t255sBFEquLbQmIBT",
+			"name": "Fit",
+			"reference": "B55",
+			"local_notes": "Lore: Years of hard labour and cult-cellar brawling keep a cultist wiry.\n\nDesign: Basic Set Fit (B55), 5 points.",
+			"tags": [
+				"Advantage",
+				"Physical"
+			],
+			"base_points": 5
+		},
+		{
+			"id": "tycGtRvBkBIPJK1ud",
+			"name": "Single-Minded",
+			"reference": "B85",
+			"local_notes": "Lore: A fanatic's one-track zeal; the Black Library cultist fights through terror and pain towards the altar.\n\nDesign: Single-Minded (B85), 5 points.",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Chaos"
+			],
+			"base_points": 5
+		},
+		{
+			"id": "tT65fQ2dl_g5sRuYy",
+			"name": "Fearlessness",
+			"reference": "B55",
+			"local_notes": "Lore: Drugs and doctrine have burned out most of a cultist's fear.\n\nDesign: Fearlessness 2 (B55, 2/level), 4 points.",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Chaos"
+			],
+			"points_per_level": 2,
+			"can_level": true,
+			"levels": 2
+		},
+		{
+			"id": "tWr4ElrVKCrXhlQDS",
+			"name": "High Pain Threshold",
+			"reference": "B59",
+			"local_notes": "Lore: Cult fanatics are shown in Black Library's Inquisition fiction enduring wounds and drugs that would put a sane man down, driven by faith and stimulants.\n\nDesign: High Pain Threshold (B59), 10 points.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Chaos"
+			],
+			"base_points": 10
+		},
+		{
+			"id": "TIu-ptbxc1Fx4vmeB",
+			"name": "Cultist's Devotion",
+			"local_notes": "Lore: Chaos cults draw ordinary men and women into the service of the Ruinous Powers. Black Library's Inquisition fiction and Codex background treat the typical cultist as a fanatic indifferent to anyone outside the cult, and the same cultist as the first to die for a Dark God.\n\nDesign: Fanaticism (B136) -15 and Callous (B125) -5, self-control 12 = -20 points. A cultist who follows a single god's Mark also takes that Mark's own disadvantages; Undivided cultists take this in place of Mark of Chaos Undivided.",
+			"tags": [
+				"Disadvantage",
+				"Mental",
+				"Chaos",
+				"Chaos Cultist"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "tKZdn9LAH99-eevfs",
+					"name": "Fanaticism (Chaos)",
+					"reference": "B136",
+					"local_notes": "Devoted to the Ruinous Powers; takes risks for the cult and cannot be reasoned out of it.",
+					"tags": [
+						"Disadvantage",
+						"Mental"
+					],
+					"base_points": -15
+				},
+				{
+					"id": "tisi1aEMRXhWAqX-q",
+					"name": "Callous",
+					"reference": "B125",
+					"local_notes": "Indifferent to the suffering of anyone outside the cult.",
+					"tags": [
+						"Disadvantage",
+						"Mental"
+					],
+					"base_points": -5,
+					"cr": 12
+				}
+			]
+		}
+	],
+	"skills": [
+		{
+			"id": "s8r3ms1d5KTtU41IW",
+			"name": "Guns",
+			"local_notes": "Autogun.",
+			"specialization": "Rifle",
+			"difficulty": "dx/e",
+			"points": 8
+		},
+		{
+			"id": "sxXxhmdBm9inAr6Bf",
+			"name": "Guns",
+			"local_notes": "Autopistol.",
+			"specialization": "Pistol",
+			"difficulty": "dx/e",
+			"points": 2
+		},
+		{
+			"id": "sSe9jBx7s_U4LoSWc",
+			"name": "Brawling",
+			"difficulty": "dx/e",
+			"points": 8
+		},
+		{
+			"id": "s7txugTnLk_LnkyGC",
+			"name": "Knife",
+			"local_notes": "Crude blade.",
+			"difficulty": "dx/e",
+			"points": 4
+		},
+		{
+			"id": "sXk01kggTA5o0dby8",
+			"name": "Stealth",
+			"difficulty": "dx/a",
+			"points": 2
+		},
+		{
+			"id": "sqEJbZB996R6zdXld",
+			"name": "Throwing",
+			"difficulty": "dx/a",
+			"points": 2
+		},
+		{
+			"id": "sYLDN0a_MK-ezizWA",
+			"name": "Intimidation",
+			"difficulty": "will/a",
+			"points": 4
+		},
+		{
+			"id": "sJlgPWZ3aXzZq-hjl",
+			"name": "Streetwise",
+			"difficulty": "iq/a",
+			"points": 4
+		},
+		{
+			"id": "snk9rFdFpdvZ4WekI",
+			"name": "Theology",
+			"local_notes": "Whatever the preacher taught.",
+			"specialization": "Chaos",
+			"difficulty": "iq/h",
+			"points": 8
+		},
+		{
+			"id": "s9PhLcxaH4yM5xXkx",
+			"name": "Hidden Lore",
+			"specialization": "Daemons",
+			"difficulty": "iq/a",
+			"points": 2
+		},
+		{
+			"id": "sQzMd-PcbAei-PAaj",
+			"name": "Survival",
+			"specialization": "Urban",
+			"difficulty": "per/a",
+			"points": 2
+		},
+		{
+			"id": "srlitu_EDSVYNrddO",
+			"name": "Area Knowledge",
+			"specialization": "Home Hive or World",
+			"difficulty": "iq/e",
+			"points": 2
+		},
+		{
+			"id": "sAWNyNmpBilkKqTiu",
+			"name": "Climbing",
+			"difficulty": "dx/a",
+			"points": 2
+		},
+		{
+			"id": "sngrYmJvA3ZHOyp5J",
+			"name": "Running",
+			"difficulty": "ht/a",
+			"points": 2
+		},
+		{
+			"id": "sUewgqHXRFUVJjW76",
+			"name": "Forced Entry",
+			"difficulty": "dx/e",
+			"points": 2
+		},
+		{
+			"id": "sGQ1g3KYXYgXXxCWo",
+			"name": "Carousing",
+			"difficulty": "ht/e",
+			"points": 1
+		},
+		{
+			"id": "sd0zf3apr9Q7mbaju",
+			"name": "Scrounging",
+			"difficulty": "per/e",
+			"points": 2
+		},
+		{
+			"id": "sf6cp6JxWCo4G6hKj",
+			"name": "Gesture",
+			"local_notes": "Cult sign.",
+			"difficulty": "iq/e",
+			"points": 1
+		}
+	],
+	"equipment": [
+		{
+			"id": "e-vqinEFV8UKk5g_-",
+			"description": "Autogun",
+			"local_notes": "Lore: The standard-issue solid-slug battle rifle of regiments and militias that lack a lasgun allocation — a recoil-operated intermediate-calibre rifle that recurs across Astra Militarum background material as the \"poor cousin\" of the lasgun, more common on low-priority garrison and PDF postings.\n\nDesign: Fixed autogun anchor, 7d pi, holding lasgun parity (per framework.md: \"Lasgun parity against flesh... stopped by carapace\"). Average roll 24.5 gets through flak (DR 30) on 9.4% of hits and mesh (DR 36) on 0.3%, notably worse than the lasgun's own 97.8%/90.6% because the autogun has no armour divisor and a solid slug has no focusing trick to help it through DR the way a lasgun's beam does; against carapace (DR 70) it penetrates 0% of hits, confirming \"stopped by carapace\" even more emphatically than before. This is an honest consequence of a family with no divisor, not a departure from the lasgun-parity design goal, which is measured against flesh (HP), not DR. Range 500/2000 fits an intermediate-calibre rifle. RoF 10, 30(3) follow selective-fire rifle conventions. The Dum-Dum usage applies the same expanding-round logic as the autopistol's Manstopper. Handling: min ST corrected to 9 (√(10×8)≈8.9), matching the same formula correction applied to the 8 lb lasgun patterns in this project's las.yaml. Bulk -4 and Rcl 2 are unchanged.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium",
+				"Astra Militarum"
+			],
+			"tech_level": "7",
+			"legality_class": "3",
+			"base_value": "150",
+			"base_weight": "8 lb",
+			"weapons": [
+				{
+					"id": "WvtgeegT9FWL-1XXn",
+					"sv": 1,
+					"damage": {
+						"type": "pi",
+						"base": "7d"
+					},
+					"accuracy": "4",
+					"range": "500/2000",
+					"rate_of_fire": "10",
+					"shots": "30(3)",
+					"bulk": "-4",
+					"recoil": "2",
+					"strength": "9",
+					"usage": "Standard ball",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "Wa2J50gPkKJGOb5Tb",
+					"sv": 1,
+					"damage": {
+						"type": "pi+",
+						"base": "7d",
+						"armor_divisor": 0.5
+					},
+					"accuracy": "4",
+					"range": "500/2000",
+					"rate_of_fire": "10",
+					"shots": "30(3)",
+					"bulk": "-4",
+					"recoil": "2",
+					"strength": "9",
+					"usage": "Dum-Dum rounds",
+					"usage_notes": "Expanding rounds: bigger wound channel against flesh, much worse against armour.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1,
+			"equipped": true
+		},
+		{
+			"id": "eOmkIGeyAP66g7hrL",
+			"description": "Autopistol",
+			"local_notes": "Lore: A cheap, mass-produced sidearm found across a billion hive worlds: gang muscle, PDF conscripts and Guard officers who don't rate a laspistol all carry one. Consistently portrayed in Guard and Arbites fiction as the low-status \"poor man's laspistol.\"\n\nDesign: No framework anchor covers stub weapons directly, but they must stay proportional to the autogun anchor (7d pi) they're built alongside. The autopistol is the cheapest, lightest pistol-calibre round in the file: 3d+1 pi (avg 11.5), about 47% of the autogun's average of 24.5, full pi wounding for a modern jacketed round. It sits below the stub automatic (3d+2) and the stub revolver (4d), the ordering FFG-line background gives for relative calibration. Against flak (DR 30) it penetrates 0% of hits, so it is relevant only against unarmoured targets; a GM wanting it to matter against flak would need to depart from this pistol-family scaling, which this entry does not do on its own authority. The Manstopper usage keeps the pi+/divisor (0.5) shape with +1 damage over the ball round (3d+2(0.5) pi+, avg 12.5): it never penetrates flak or better (0% of hits, effective DR doubled by the divisor) but hits unarmoured flesh harder, the standard GURPS way to model an expanding round: more damage to flesh, worse against any DR. Handling: weight (2 lb) and min ST (7) follow GURPS's pistol-weight convention (roughly ST 7 for a service-calibre autoloader this size) rather than the shoulder-arm sqrt formula, which this project reserves for rifles and heavier weapons. Bulk -2 and Rcl 2 are ordinary pistol figures.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium"
+			],
+			"tech_level": "7",
+			"legality_class": "4",
+			"base_value": "80",
+			"base_weight": "2 lb",
+			"weapons": [
+				{
+					"id": "WGx8We_hbIUXfx_-A",
+					"sv": 1,
+					"damage": {
+						"type": "pi",
+						"base": "3d+1"
+					},
+					"accuracy": "2",
+					"range": "80/180",
+					"rate_of_fire": "3",
+					"shots": "16+1(3)",
+					"bulk": "-2",
+					"recoil": "2",
+					"strength": "7",
+					"usage": "Standard (ball)",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "WjC35wOpG36MyyxeW",
+					"sv": 1,
+					"damage": {
+						"type": "pi+",
+						"base": "3d+2",
+						"armor_divisor": 0.5
+					},
+					"accuracy": "2",
+					"range": "80/180",
+					"rate_of_fire": "3",
+					"shots": "16+1(3)",
+					"bulk": "-2",
+					"recoil": "2",
+					"strength": "7",
+					"usage": "Manstopper rounds",
+					"usage_notes": "Soft-nosed rounds that flatten on impact for a bigger wound channel but poor penetration.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1,
+			"equipped": false
+		},
+		{
+			"id": "eYauCXohSMzu3XByb",
+			"description": "Crude Blade",
+			"local_notes": "Standard sidearm/tool for every Guardsman; also the unmounted profile for the bayonet below.\n\nLore: Every Imperial Guard regiment issues a plain steel fighting knife alongside the lasgun, seen constantly in the background as a last-resort weapon and general tool; Black Library fiction (Gaunt's Ghosts and others) treats it as unremarkable field kit rather than a named piece of wargear.\n\nDesign: Built from Basic Set knife-family design logic, not anchored by framework.md (no dedicated anchor exists below the chainsword): a short single-edged blade gives thr-1 imp / sw-2 cut, reach C,1, min ST 6. TL2 reflects that a simple knife is primitive-tech regardless of the TL10 industry that stamps it out by the million; LC4 matches \"cheap civilian stubbers, knives\" in the framework's legality table. Handling: parry corrected to -1, the Basic Set Knife entry's actual figure (a short blade with no guard and little reach gives a worse parry than a proper sword, not the parry 0 a previous pass copied from the sword-family weapons on this page). Weight (1 lb) and min ST (6) are unchanged - a plain steel blade this size needs almost no strength to wield.",
+			"tags": [
+				"Melee Weapon",
+				"Imperium",
+				"Astra Militarum"
+			],
+			"tech_level": "2",
+			"legality_class": "4",
+			"base_value": "40",
+			"base_weight": "1 lb",
+			"weapons": [
+				{
+					"id": "wENNFgODpNrtCO8eo",
+					"sv": 1,
+					"damage": {
+						"type": "imp",
+						"st": "thr",
+						"base": "-1"
+					},
+					"reach": "C,1",
+					"parry": "-1",
+					"strength": "6",
+					"usage": "Thrust",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Knife"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Force Sword"
+							},
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Main-Gauche"
+							},
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Shortsword"
+							},
+							"modifier": -3
+						}
+					]
+				},
+				{
+					"id": "w9GdoApJ_GYJFlT-W",
+					"sv": 1,
+					"damage": {
+						"type": "cut",
+						"st": "sw",
+						"base": "-2"
+					},
+					"reach": "C,1",
+					"parry": "-1",
+					"strength": "6",
+					"usage": "Swing",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Knife"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Force Sword"
+							},
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Main-Gauche"
+							},
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Shortsword"
+							},
+							"modifier": -3
+						}
+					]
+				}
+			],
+			"quantity": 1,
+			"equipped": true
+		},
+		{
+			"id": "eRMt8aXgohdVqW8SB",
+			"description": "Flak Vest",
+			"local_notes": "Weak Points 7: when a hit on this armour fails to penetrate, roll 3d; on 7 or less it found a gap and DR is halved against it.\n\nCovers torso only. Worn over fatigues; does not interfere with Stealth the way rigid plate does.\n\nLore: The standard-issue ballistic vest of the Astra Militarum: overlapping plasteel or ceramic plates sewn into a fabric carrier. Depicted throughout Guard-focused Black Library fiction (e.g. the Gaunt's Ghosts and Ciaphas Cain series) as adequate against shrapnel and stubber fire but routinely shrugged past by las-weapons at range and always by bolt weapons.\n\nDesign: Torso DR 30, the framework's flak anchor (raised from 12 at the user's direction to make Guard armour tougher). Exact odds per hit: lasgun 7d(2) 98%, laspistol 4d(2) 34%, autogun 7d 9%, autopistol 0%. Flak now stops most solid-slug fire, matching the original lore line that flak stops stub rounds, while las still gets through. No coverage elsewhere: a vest stops at the shoulders and waist. Cost and weight are estimates scaled below mesh and well below carapace.",
+			"tags": [
+				"Body Armor",
+				"Imperium",
+				"Astra Militarum"
+			],
+			"tech_level": "10",
+			"legality_class": "3",
+			"base_value": "200",
+			"base_weight": "8 lb",
+			"features": [
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"torso",
+						"vitals",
+						"groin"
+					],
+					"amount": 30
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"skull",
+						"face",
+						"eye",
+						"neck",
+						"arm",
+						"hand",
+						"leg",
+						"foot"
+					],
+					"amount": 0
+				}
+			],
+			"quantity": 1,
+			"equipped": true
+		}
+	]
+}

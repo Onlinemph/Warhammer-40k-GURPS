@@ -1,0 +1,2338 @@
+{
+	"version": 5,
+	"id": "BVrNROP8et_OVG0l6",
+	"notes": "A Chaos Lord: the leader of a Traitor warband, a Legionary who has outlived and outfought his peers for ten thousand years or a few centuries and holds his followers by strength and will. Built as the Chaos Space Marine with ST 32, DX 18, IQ 13, HT 16 and HP 38 (the framework figures), Leadership and Tactics raised well above a line Legionary's, and the Mark of Chaos Undivided; the Lord may swap it for a single god's Mark. About 1181 points before gear. Equipment: Mark IV heretic plate (Tartaros Terminator plate shown unequipped as the alternative), power sword, power fist, bolt pistol, combi-weapon.",
+	"traits": [
+		{
+			"id": "TzmtklqBH633vbW2U",
+			"name": "Astartes",
+			"local_notes": "Lore: The Adeptus Astartes: a superhuman created by grafting nineteen engineered organs onto a chosen human recruit and finishing the process with years of training and psycho-indoctrination. This trait is the baseline shared by every Chapter's gene-seed; Chapter lenses below add or remove pieces where the fiction says a specific lineage differs.\n\nDesign: 407 (Attribute Modifiers) + 152 (nineteen organs: 4+14+1+6+5+8+5+1 +11+14+9+9+11+7+21+20+4+1+1) + (-2) (Hypno-Indoctrination) + 10 (Enhanced Move 1/2) + 6 (Extended Lifespan 3) = 573 points. This is the physiology alone, before any skills; see the Battle-Brother, Scout, and Primaris templates for full characters built on top of it.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Imperium",
+				"Adeptus Astartes"
+			],
+			"container_type": "ancestry",
+			"children": [
+				{
+					"id": "ti6RDdGkJlO7dXiTc",
+					"name": "Attribute Modifiers",
+					"local_notes": "Design: Increased ST +20 (B14, 10/level, 200) for ST 30 (user's figure), which also raises base HP to 30. Raised from ST 18 when weapon damage was rescaled: at ST 30 a Marine lifts nine times what a baseline human can (Basic Lift 180 lb), matching fiction of Astartes tearing open hatches and lifting men one-handed, and a single bolt that gets through the armour (avg ~40 with its follow-up) leaves him fighting rather than dead. Increased HT +4 (B15, 10/level, 40) for HT 14. Increased Basic Speed +1.00 (B17, 5 points per 0.25, 20) for \"faster reflexes than baseline humans\" without inflating every DX-based skill the way a straight DX buy would. Increased Will +2 (B16, 5/level, 10) for the iron discipline the fiction shows even before the Hypno-Indoctrination package below. Extra Hit Points +4 (B16, 2/level, 8) for HP 34: Astartes survive wounds that would kill several men, beyond what ST alone gives. Extra Fatigue Points +3 (B16, 3/level, 9) for FP 17, matching fiction of Marines fighting for days without rest. Increased DX +5 (B15, 20/level, 100) at the user's direction: Astartes are faster and more precise than any baseline human, so a Battle-Brother reaches DX 16 with his own training. Basic Move +4 (B17, 5/level, 20) at the user's direction: a Marine sprints at around 45 km/h in full plate. 200+100+40+20+20+10+8+9 = 407. Height runs 2.1-2.4 m per the framework; SM stays 0 unarmoured.",
+					"tags": [
+						"Physical"
+					],
+					"base_points": 407,
+					"features": [
+						{
+							"type": "attribute_bonus",
+							"attribute": "st",
+							"amount": 20
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "dx",
+							"amount": 5
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "ht",
+							"amount": 4
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "basic_speed",
+							"amount": 1
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "basic_move",
+							"amount": 4
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "will",
+							"amount": 2
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "hp",
+							"amount": 4
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "fp",
+							"amount": 3
+						}
+					]
+				},
+				{
+					"id": "tkWLvODXOK887KOJV",
+					"name": "Enhanced Move (Ground)",
+					"reference": "B52",
+					"local_notes": "Top sprinting speed x1.5 (Move 12 sprints at 18 yd/s, about 60 km/h). Combat Move unchanged.\n\nLore: Astartes cover open ground at a pace no human can match, even in full plate: the fiction repeatedly shows Marines running down fleeing enemies and closing on gun lines faster than they can be tracked.\n\nDesign: Enhanced Move (Ground) 1/2 (B52, 20/level, half level 10) at the user's direction that Marines run very fast; stacks with the package's Basic Move +4. Half a level, not a full one, keeps the Custodes (a full level) clearly faster.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Adeptus Astartes"
+					],
+					"points_per_level": 20,
+					"can_level": true,
+					"levels": 0.5
+				},
+				{
+					"id": "tJaBEdBfp0QgVqnGU",
+					"name": "Extended Lifespan",
+					"reference": "B53",
+					"local_notes": "Ages far more slowly; centuries of service are routine. A GM may remove it for a Chapter or campaign that treats Marines as short-lived.",
+					"points_per_level": 2,
+					"can_level": true,
+					"levels": 3
+				},
+				{
+					"id": "tGXotgAfy7eRVROZY",
+					"name": "Secondary Heart",
+					"reference": "B58",
+					"local_notes": "+2 to HT rolls made solely to avoid death (Hard to Kill 2).\n\nLore: A backup heart grown alongside the original, wired into the same circulatory system so the body keeps pumping blood even if the primary heart is destroyed or stops. Widely depicted in Black Library fiction as one reason Astartes shrug off wounds that would drop a normal man dead of shock or blood loss.\n\nDesign: Modelled as Hard to Kill 2 (B58): +2 to HT rolls to avoid death only, not a general toughness bonus, since the second heart is a redundancy against cardiac failure specifically. 2 x 2 = 4 points.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Imperium",
+						"Adeptus Astartes"
+					],
+					"base_points": 4
+				},
+				{
+					"id": "tUUkzUuQ4OSRMDER1",
+					"name": "Ossmodula",
+					"reference": "B46",
+					"local_notes": "DR 3 on torso and vitals only (fused, armoured ribcage). Stacks with worn armour.\n\nLore: Triggers a second, controlled growth spurt: the skeleton is re-knitted around a denser mineral lattice, ribs fuse into an armoured cage, and the whole frame roughly doubles in mass over the following implantation. The fused ribcage is one of the most consistently described Astartes traits: a solid plate of bone over the chest that turns blades and slugs that would reach a normal man's heart.\n\nDesign: The ST/HT/HP payoff of the growth process is bought once in the Astartes Attribute Modifiers, not here. What the organ adds on its own is the fused ribcage: Damage Resistance 3 (B46, 5/level, 15) with the Partial (torso and vitals) limitation, -10%, = 13.5, rounded up to 14. An earlier draft priced this as a 1-point perk with no mechanical effect, which left the most-cited Astartes toughness feature out of play.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Imperium",
+						"Adeptus Astartes"
+					],
+					"base_points": 14,
+					"features": [
+						{
+							"type": "dr_bonus",
+							"locations": [
+								"torso",
+								"vitals"
+							],
+							"amount": 3
+						}
+					]
+				},
+				{
+					"id": "ttmZlIAd5s82GXmXT",
+					"name": "Biscopea",
+					"local_notes": "Lore: Works alongside the Ossmodula to pack the newly-grown frame with dense, fast-twitch muscle, giving Astartes their characteristic bulk.\n\nDesign: Same reasoning as Ossmodula: the muscle mass is paid for once as part of the racial ST bonus, so this is a 1-point Perk marking the organ's presence rather than a second helping of ST.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Imperium",
+						"Adeptus Astartes",
+						"Perk"
+					],
+					"base_points": 1
+				},
+				{
+					"id": "TDIZ6XKUeKSv8j0hN",
+					"name": "Haemastamen",
+					"local_notes": "Lore: Regulates the chemistry of Astartes blood and produces the genetically-tagged compounds an Apothecary tests for to confirm a Marine's gene-seed lineage and general biochemical stability. Its output is also the substrate Larraman's Organ acts on, and the same tuned blood chemistry is why Astartes so seldom fall to ordinary disease.\n\nDesign: 1-point Perk (B21) for the lineage-marker function, plus Resistant (B81) to Disease: Occasional hazard 10, +8 tier x1/2 = 5 points. A bonus rather than Immunity, because the fiction has Marines fall to warp-spawned and engineered plagues. 6 points total.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Imperium",
+						"Adeptus Astartes"
+					],
+					"container_type": "meta_trait",
+					"children": [
+						{
+							"id": "tmtiVFiVS8fm9K0Mc",
+							"name": "Haemastamen (Gene-Seed Markers)",
+							"local_notes": "Plot-hook marker; an Apothecary can confirm lineage and biochemical stability from the blood.",
+							"tags": [
+								"Perk"
+							],
+							"base_points": 1
+						},
+						{
+							"id": "tE6IO4TPoCjeCLi9G",
+							"name": "Resistant to Disease",
+							"reference": "B81",
+							"local_notes": "+8 to HT rolls to resist disease (Occasional hazard, +8 tier).",
+							"base_points": 5,
+							"round_down": true
+						}
+					]
+				},
+				{
+					"id": "tftaavQ44goZyph1R",
+					"name": "Larraman's Organ",
+					"reference": "B79",
+					"local_notes": "Wounds scab and scar over within seconds rather than minutes; treat as Rapid Healing for recovery rolls (B424), and the GM should waive ongoing blood-loss effects from an untreated wound after the first turn.\n\nLore: Floods the bloodstream with \"Larraman's cells\" that clot almost instantly on exposure to air, so an open wound scabs over in seconds. This is the single most commonly cited reason Astartes soldier on through injuries that would leave a Guardsman bleeding out; it is described across Black Library fiction from minor cuts up to serious battlefield trauma.\n\nDesign: Reflavoured Rapid Healing (B79, 5 points): the RAW effect (+5 to effective HT for recovery rolls) undersells \"seals in seconds,\" so the design also folds in automatic stabilization against ongoing blood loss for the first turn after a wound, at no extra point cost — it's the same underlying \"clots fast\" phenomenon at two timescales.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Imperium",
+						"Adeptus Astartes"
+					],
+					"base_points": 5
+				},
+				{
+					"id": "tLjRdns2Myy3lfEs9",
+					"name": "Catalepsean Node",
+					"reference": "B65",
+					"local_notes": "Needs about 4 hours of sleep. On campaign the GM may let a Marine skip sleep entirely for days or weeks with no fatigue penalty (the hemispheres rest in turn); this is the fictional \"no sleep for weeks\" and is not bought as Doesn't Sleep.\n\nLore: A brainstem structure that lets the two cerebral hemispheres rest in alternation, so an Astartes only needs a few hours of true sleep where a human needs eight, and can go without any for days at a stretch on campaign. Distinct from the Sus-an Membrane, which is a full metabolic shutdown rather than efficient rest.\n\nDesign: Less Sleep 4 (B65, 2 points/level, the maximum of 4 levels): reduces sleep need from 8 hours to 4. 4 x 2 = 8 points. Doesn't Sleep (B50, 20 points) would overshoot: a Marine does eventually rest, and the weeks-awake feat is a campaign-length allowance, not a standing trait.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Imperium",
+						"Adeptus Astartes"
+					],
+					"base_points": 8
+				},
+				{
+					"id": "ti6b_i5IugE6xqcOR",
+					"name": "Preomnor",
+					"reference": "B81",
+					"local_notes": "+8 to HT rolls to resist ingested poison and spoiled food. Not Immunity: weaponised or exotic toxins can still poison a Marine.\n\nLore: A supplementary \"pre-stomach\" that chemically breaks down and neutralizes toxins and spoiled matter in food before it reaches the true stomach, letting Astartes eat things — rotten rations, raw feral-world game, toxic fungus — that would sicken or kill an unaugmented human.\n\nDesign: Resistant (B81), Occasional: Ingested Poison, +8 to resist — base 10, x1/2 for the +8 tier = 5 points. Taken as a bonus rather than Immunity because the fiction has Marines poisoned by potent or engineered agents. Deliberately narrower than Oolitic Kidney below: this organ only ever sees toxins that arrive through the gut.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Imperium",
+						"Adeptus Astartes"
+					],
+					"base_points": 5
+				},
+				{
+					"id": "tH_Gx6UkHfEEiS7KA",
+					"name": "Omophagea",
+					"local_notes": "Lore: Lets an Astartes extract genetic and biochemical information by consuming a portion of a creature's flesh or blood, surfacing it as hazy instinctive knowledge — described in the fiction as ritual consumption of a slain xenos to \"know\" something of it, rather than a controllable database query.\n\nDesign: No reliable, repeatable mechanical payoff to hang a point cost on — the fiction treats it as evocative, not a reliable Analyze/Detect power. Kept as a 1-point Perk (B21); a GM can hand out a one-off Hidden Lore or skill bonus after an appropriate scene at their discretion, with no fixed rule for it here.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Imperium",
+						"Adeptus Astartes",
+						"Perk"
+					],
+					"base_points": 1
+				},
+				{
+					"id": "TomwBJycuJhQ_CGak",
+					"name": "Multi-lung",
+					"local_notes": "Lore: A supplementary lung that scrubs smoke, gas, and thin or tainted atmospheres, and banks extra oxygen for holding the breath through vacuum exposure, drowning, or a gas attack.\n\nDesign: Filter Lungs (B55, 5 points) for the \"breathe filthy air safely\" half; Breath-Holding 3 (B41, 2/level, 6 points) for the \"hold it a long time\" half. Container sums to 11 points.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Imperium",
+						"Adeptus Astartes"
+					],
+					"container_type": "meta_trait",
+					"children": [
+						{
+							"id": "tnBMJabZR0r8DDUgG",
+							"name": "Filter Lungs",
+							"reference": "B55",
+							"base_points": 5
+						},
+						{
+							"id": "txu6WNUXO9-KYOIjE",
+							"name": "Breath-Holding",
+							"reference": "B41",
+							"points_per_level": 2,
+							"can_level": true,
+							"levels": 3
+						}
+					]
+				},
+				{
+					"id": "TyaLiBYVj5mGfDsRT",
+					"name": "Occulobe",
+					"local_notes": "Lore: Rewires the optic nerve and visual cortex for much sharper acuity and low-light performance, and hardens the eye against flash and glare — Astartes are consistently shown spotting targets and reading terrain at ranges no unaugmented eye could manage, and shrugging off blinding light that would stagger a human.\n\nDesign: Acute Vision 2 (B35, 2/level, 4 points) for the raw acuity; Night Vision 5 (B71, 1/level, 5 points) for the low-light performance; Protected Sense (Vision) (B78, 5 points) so flash/glare can't blind the organ outright. 14 points total.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Imperium",
+						"Adeptus Astartes"
+					],
+					"container_type": "meta_trait",
+					"children": [
+						{
+							"id": "tBR5RMgpFx4XgvNFG",
+							"name": "Acute Vision",
+							"reference": "B35",
+							"points_per_level": 2,
+							"can_level": true,
+							"levels": 2
+						},
+						{
+							"id": "tkcsiXyoCSJiakR2B",
+							"name": "Night Vision",
+							"reference": "B71",
+							"points_per_level": 1,
+							"can_level": true,
+							"levels": 5
+						},
+						{
+							"id": "tGpxXZrHlzic1vaF4",
+							"name": "Protected Sense (Vision)",
+							"reference": "B78",
+							"base_points": 5
+						}
+					]
+				},
+				{
+					"id": "TFum-al7jMwEXSqVE",
+					"name": "Lyman's Ear",
+					"local_notes": "Lore: Reinforces the inner ear against the constant concussion of bolter fire and explosions while sharpening hearing and balance, so an Astartes can still track sound and stay upright through the kind of noise that would deafen and disorient an unaugmented soldier.\n\nDesign: Acute Hearing 2 (B35, 2/level, 4 points) plus Protected Sense (Hearing) (B78, 5 points) against deafening/concussive noise. 9 points total.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Imperium",
+						"Adeptus Astartes"
+					],
+					"container_type": "meta_trait",
+					"children": [
+						{
+							"id": "tFSf_guqvY4ygMgAK",
+							"name": "Acute Hearing",
+							"reference": "B35",
+							"points_per_level": 2,
+							"can_level": true,
+							"levels": 2
+						},
+						{
+							"id": "t3OmNPB4SLddIb5ry",
+							"name": "Protected Sense (Hearing)",
+							"reference": "B78",
+							"base_points": 5
+						}
+					]
+				},
+				{
+					"id": "tLEFF3aOBYm-MqVZ3",
+					"name": "Sus-an Membrane",
+					"local_notes": "Lore: Lets an Astartes drop, on command, into a deep hibernation that slows metabolism to near nothing — used for long void crossings in a survival capsule, or to ride out wounds that would otherwise be fatal by shutting down everything but core function. Depicted as something that takes real time to enter and leave, not an instant reflex.\n\nDesign: Custom build shown for transparency rather than a straight RAW pull: Doesn't Eat or Drink (B50, 10) + Doesn't Breathe (B49, 20) = 30 points of effect, but only while deliberately entering the trance, which takes about a minute either way — an Accessibility-style limitation worth roughly -70% (comparable to \"Trance Only\" in scope and severity). 30 x 0.3 = 9 points.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Imperium",
+						"Adeptus Astartes"
+					],
+					"base_points": 9
+				},
+				{
+					"id": "td82mOouyfcpNnRCw",
+					"name": "Melanchromic Organ",
+					"reference": "B79",
+					"local_notes": "Radiation Tolerance (PF 5) plus a 1-point Perk for voluntary pigment control.\n\nLore: Controls skin pigmentation and shields the body against radiation and hard UV, letting Astartes operate on irradiated battlefields and hostile worlds. Its baseline output varies by Chapter gene-seed — most notably the Salamanders, whose Melanchromic Organ runs permanently at full output (see the Chapter lens below).\n\nDesign: Radiation Tolerance (B79), PF 5 (10 points) for the shielding effect, plus a 1-point Perk for voluntary control over pigmentation (camouflage/recognition flavor, no fixed numeric benefit). 11 points.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Imperium",
+						"Adeptus Astartes"
+					],
+					"base_points": 11
+				},
+				{
+					"id": "tszP4ACLpMdXNXH80",
+					"name": "Oolitic Kidney",
+					"reference": "B81",
+					"local_notes": "+8 to HT rolls to resist poison from any route. Not Immunity: exotic and weaponised agents (assassin toxins, Life-Eater, plague vectors) can still kill a Marine.\n\nLore: A backup kidney that aggressively filters toxins circulating in the blood — venoms, industrial poisons, battlefield chemical agents — rather than the ones Preomnor already caught at the gut.\n\nDesign: Resistant (B81), Common: Poison, +8 to resist — base 15, x1/2 for the +8 tier = 7.5, rounded down (Resistant rounds down) to 7 points. Priced above Preomnor because it covers poison from any route of entry, not just food. A bonus rather than Immunity because the fiction repeatedly has Marines poisoned by potent agents.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Imperium",
+						"Adeptus Astartes"
+					],
+					"base_points": 7
+				},
+				{
+					"id": "TkPKZ1HXucTAz51z5",
+					"name": "Neuroglottis",
+					"local_notes": "Lore: Pushes taste and smell to a level that lets an Astartes identify an individual, a poison, or a chemical trace by scent alone, and track a quarry across terrain a hound couldn't follow.\n\nDesign: Discriminatory Smell (B49, 15 points, identify/track individuals and substances by scent) plus Acute Taste & Smell 3 (B35, 2/level, 6 points) for raw sensitivity. 21 points total.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Imperium",
+						"Adeptus Astartes"
+					],
+					"container_type": "meta_trait",
+					"children": [
+						{
+							"id": "tkjMp1lTnaG2C2nob",
+							"name": "Discriminatory Smell",
+							"reference": "B49",
+							"base_points": 15
+						},
+						{
+							"id": "t6_8Njdubzz2xW0dp",
+							"name": "Acute Taste & Smell",
+							"reference": "B35",
+							"points_per_level": 2,
+							"can_level": true,
+							"levels": 3
+						}
+					]
+				},
+				{
+					"id": "TxsxCmYUeCgaqeXQ3",
+					"name": "Mucranoid",
+					"local_notes": "Lore: Secretes a waxy, oily film that can be triggered to seal pores and orifices against vacuum, toxic atmosphere, and radiation, and that also insulates against extreme heat and cold.\n\nDesign: Sealed (B82, 15 points) covers vacuum/toxin/radiation sealing; Temperature Tolerance 5 (B93, 1/level, 5 points) covers the thermal insulation. 20 points total.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Imperium",
+						"Adeptus Astartes"
+					],
+					"container_type": "meta_trait",
+					"children": [
+						{
+							"id": "tey2X9KQRmiXmaD7N",
+							"name": "Sealed",
+							"reference": "B82",
+							"base_points": 15
+						},
+						{
+							"id": "tflGbxk15bVBj7eHQ",
+							"name": "Temperature Tolerance",
+							"reference": "B93",
+							"points_per_level": 1,
+							"can_level": true,
+							"levels": 5
+						}
+					]
+				},
+				{
+					"id": "TJXrDEBaPh0gIJBbW",
+					"name": "Betcher's Gland",
+					"local_notes": "Lore: Produces a corrosive, mildly toxic saliva. Fiction plays this as a minor, opportunistic weapon and a way to shrug off ingested poisons and diseased food in the mouth — not a primary attack for a Marine who has a bolter.\n\nDesign: Innate Attack (Corrosion) at a token 1d, range 1/3 yards (B61, roughly 3 points after the range restriction) for the spit, rolled against Innate Attack (Projectile) since spitting is a ranged act; 1-point Perk for the minor oral antitoxin effect (overlaps in concept with Preomnor, so kept nominal). 4 points total.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Imperium",
+						"Adeptus Astartes"
+					],
+					"container_type": "meta_trait",
+					"children": [
+						{
+							"id": "tGMene8c2IzQui-na",
+							"name": "Corrosive Spit",
+							"base_points": 3,
+							"weapons": [
+								{
+									"id": "WZxaJknex2M0PYIUT",
+									"sv": 1,
+									"damage": {
+										"type": "cor",
+										"base": "1d"
+									},
+									"accuracy": "1",
+									"range": "1/3",
+									"rate_of_fire": "1",
+									"usage": "Spit",
+									"defaults": [
+										{
+											"type": "skill",
+											"name": {
+												"compare": "is",
+												"qualifier": "Innate Attack"
+											},
+											"specialization": {
+												"compare": "is",
+												"qualifier": "Projectile"
+											}
+										},
+										{
+											"type": "dx",
+											"modifier": -4
+										}
+									]
+								}
+							]
+						},
+						{
+							"id": "ttgwwxf3iHfbdzn7y",
+							"name": "Oral Poison Filter",
+							"base_points": 1
+						}
+					]
+				},
+				{
+					"id": "tJo2ETEp8xPXdFSOD",
+					"name": "Progenoid Glands",
+					"local_notes": "Lore: Two glands that mature over years into a bank of \"zygotes\" — genetic material an Apothecary harvests from the fallen to seed new recruits. Central to how a Chapter perpetuates and safeguards its gene-seed line, but they confer no combat benefit on the Marine who carries them; their value is entirely to the Chapter after death.\n\nDesign: 1-point Perk (B21): a narrative/plot-hook organ (its condition can matter for Apothecary rolls or a Chapter's gene-seed politics) with no combat mechanic of its own.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Imperium",
+						"Adeptus Astartes",
+						"Perk"
+					],
+					"base_points": 1
+				},
+				{
+					"id": "t9vqMuLTVzVIIMGlg",
+					"name": "Black Carapace",
+					"local_notes": "Lore: A synthetic interface grafted under the skin across the torso and spine and wired into the nervous system, grown last, only after a Scout has proven himself and is elevated to full Battle-Brother. It lets a suit of power armour read a Marine's nervous impulses directly, so the armour moves as an extension of the body rather than a piloted shell.\n\nDesign: The mechanical payoff (full reflexes, no bulk/encumbrance penalty, no clumsy manual controls) is a property of Astartes power armour equipment and belongs on that equipment's entry, not duplicated here, since a Marine without a suit to plug into gets nothing from it in play. Kept as a 1-point Perk marking that the interface exists and is a hard prerequisite for wearing power armour as intended.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Imperium",
+						"Adeptus Astartes",
+						"Perk"
+					],
+					"base_points": 1
+				},
+				{
+					"id": "TbTlFQhtgkQxmJGJ3",
+					"name": "Hypno-Indoctrination (Broken Oaths)",
+					"local_notes": "Lore: The psycho-conditioning of the Astartes survives the Fall: a traitor still does not break under fire, still fights past the point where a baseline soldier would rout. What goes is the oath. Black Library's Horus Heresy and Chaos fiction show Legionaries who kept every reflex and every drilled habit and threw away Emperor, Chapter and Codex.\n\nDesign: The Astartes package's own Hypno-Indoctrination / Psycho-Conditioning (data/imperium/astartes/gene-seed.yaml) with its three oath disadvantages removed, as the Heretic Astartes lens directs: Combat Reflexes 15 + Fearlessness 4 (2/level) 8 + High Pain Threshold 10 + Single-Minded 5 = +38 in place of the package's net -2 (Duty -20, Sense of Duty -10, Code of Honor -10 left out). Everything else in the Astartes entry is included unchanged.",
+					"tags": [
+						"Advantage",
+						"Mental",
+						"Chaos",
+						"Heretic Astartes"
+					],
+					"container_type": "meta_trait",
+					"children": [
+						{
+							"id": "t4bjrRLZc1kj6U9jZ",
+							"name": "Combat Reflexes",
+							"reference": "B43",
+							"base_points": 15
+						},
+						{
+							"id": "trVq3cvMyCcSjtzc4",
+							"name": "Fearlessness",
+							"reference": "B55",
+							"points_per_level": 2,
+							"can_level": true,
+							"levels": 4
+						},
+						{
+							"id": "tnQTxT5rr7vnZn6e8",
+							"name": "High Pain Threshold",
+							"reference": "B59",
+							"base_points": 10
+						},
+						{
+							"id": "tgyPu3c3kQhbZdIPb",
+							"name": "Single-Minded",
+							"reference": "B85",
+							"local_notes": "Relentless focus, now turned to the warband's ends.",
+							"base_points": 5
+						}
+					]
+				}
+			]
+		},
+		{
+			"id": "t2FBiEcjjlZcj1qW5",
+			"name": "Personal Advancement",
+			"local_notes": "Lore: No two Battle-Brothers are physiologically identical even off the same gene-seed template, and what decades of live combat does to a body and mind that heal and learn far faster than baseline is depicted throughout Black Library fiction as making veterans noticeably sharper and tougher than newly-raised Battle-Brothers.\n\nDesign: DX+1 (20) + IQ+1 (20) + HT+1 (10) + Will+1 (5) + Per+1 (5) = 60 points of personal growth bought on top of the racial baseline.",
+			"tags": [
+				"Physical",
+				"Mental"
+			],
+			"base_points": 60,
+			"features": [
+				{
+					"type": "attribute_bonus",
+					"attribute": "dx",
+					"amount": 1
+				},
+				{
+					"type": "attribute_bonus",
+					"attribute": "iq",
+					"amount": 1
+				},
+				{
+					"type": "attribute_bonus",
+					"attribute": "ht",
+					"amount": 1
+				},
+				{
+					"type": "attribute_bonus",
+					"attribute": "will",
+					"amount": 1
+				},
+				{
+					"type": "attribute_bonus",
+					"attribute": "per",
+					"amount": 1
+				}
+			]
+		},
+		{
+			"id": "TLY4SNNYCD2iWfmQE",
+			"name": "Heretic Astartes",
+			"local_notes": "Apply on top of the Astartes racial meta-trait. Leave out the loyalist Rank, Reputation (Angel of Death) and the Duty and Code of Honor of the Hypno-Indoctrination package if the bearer has broken with his Chapter's oaths (the GM decides how much of the old conditioning survives). Skills are not part of this lens: the template drops Theology (Imperial Creed) and takes Hidden Lore (Daemons) and Theology (Chaos) in its place.\n\nLore: The Traitor Legions and the renegade Chapters are the same warriors the Imperium builds, turned. Codex: Chaos Space Marines background and the Horus Heresy fiction describe them as Astartes who kept their bodies, their wargear and their skill, and threw away the Emperor. The Imperium calls them traitors and hunts them wherever they surface; among the cults and warbands of the Ruinous Powers, the name of a Legion still carries weight.\n\nDesign: Enemy (B135): an utterly formidable group (a whole government) is -40; it appears on 9 or less (x1), since the Imperium can't be everywhere and a warband spends much of its life outside Imperial space. A GM running a campaign inside the Imperium can raise it to 12 or less (x2, -80). Social Stigma (Excommunicated, B155) -5. Callous (B125) -5. Reputation (B27) +4 among a large class of people (Chaos followers, x1/2): 4 x 5 x 1/2 = 10. Net -40 -5 -5 +10 = -40 points.",
+			"tags": [
+				"Advantage",
+				"Disadvantage",
+				"Physical",
+				"Mental",
+				"Chaos",
+				"Heretic Astartes",
+				"Chapter Variant"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "tHNKAKAptGvp5I8DK",
+					"name": "Enemy (The Imperium)",
+					"reference": "B135",
+					"local_notes": "Utterly formidable group (-40), appears on a 9 or less (x1): the Inquisition, the Astra Militarum, the loyalist Chapters and every planetary governor are hunted-on-sight enemies in Imperial space. Does not apply on a Chaos-held world or deep in the Eye of Terror.",
+					"tags": [
+						"Disadvantage",
+						"Social"
+					],
+					"base_points": -40
+				},
+				{
+					"id": "tSty9e5UUQidltA1x",
+					"name": "Social Stigma (Excommunicated)",
+					"reference": "B155",
+					"local_notes": "-3 reaction from any faithful Imperial subject who knows what he is. Applies in Imperial space only.",
+					"tags": [
+						"Disadvantage",
+						"Social"
+					],
+					"base_points": -5
+				},
+				{
+					"id": "tZV6b603JTpyQBVG_",
+					"name": "Callous",
+					"reference": "B125",
+					"local_notes": "Indifferent to suffering; -3 to reaction from the empathic. Matches the Callous used elsewhere in the project.",
+					"tags": [
+						"Disadvantage",
+						"Mental"
+					],
+					"base_points": -5,
+					"cr": 12
+				},
+				{
+					"id": "t3EQjrdOgMtPJUwuO",
+					"name": "Reputation (Traitor Legion)",
+					"reference": "B27",
+					"local_notes": "Rename for the bearer's Legion or warband (Black Legion, Night Lords, Word Bearers, Iron Warriors, Alpha Legion and so on). Replaces the loyalist \"Reputation (Angel of Death)\", which a Heretic Astartes does not take.",
+					"tags": [
+						"Advantage",
+						"Social"
+					],
+					"base_points": 10,
+					"features": [
+						{
+							"type": "reaction_bonus",
+							"situation": "from Chaos cultists",
+							"amount": 4
+						}
+					]
+				}
+			]
+		},
+		{
+			"id": "TSdTWA66BMQ3glg5c",
+			"name": "Long War Veteran",
+			"local_notes": "Combat Reflexes is not added: the Astartes package already carries it (Combat Reflexes 15 inside Hypno-Indoctrination / Psycho-Conditioning in data/imperium/astartes/gene-seed.yaml), so a second copy would be paid for nothing. The extra weapon skill (two levels above a loyalist Battle-Brother's) belongs in the template as more skill points. This lens holds attributes only; skill increases are templates' work. A renegade from a recently fallen Chapter skips it.\n\nLore: Many Legionaries fought in the Horus Heresy and have waged the Long War ever since. Codex: Chaos Space Marines background and Black Library's Horus Heresy and Chaos fiction treat them as warriors with ten thousand years of fighting behind them: faster, sharper and harder to surprise than a Battle-Brother of a few decades' service.\n\nDesign: Increased DX +1 (B15, 20/level, 20) and Increased Per +1 (B16, 5/level, 5) = 25 points. Combat Reflexes omitted because the Astartes package has it. Raises a Battle-Brother's DX 16 to 17 and Per by one, as the framework's Legionary line asks.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Mental",
+				"Chaos",
+				"Heretic Astartes",
+				"Chapter Variant"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "tQJQyfOUWFOI9n9GK",
+					"name": "Long War Veteran (Attribute Modifiers)",
+					"local_notes": "DX +1 (20) and Per +1 (5).",
+					"tags": [
+						"Physical",
+						"Mental"
+					],
+					"base_points": 25,
+					"features": [
+						{
+							"type": "attribute_bonus",
+							"attribute": "dx",
+							"amount": 1
+						},
+						{
+							"type": "attribute_bonus",
+							"attribute": "per",
+							"amount": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"id": "tbOh6KQhFi70JUjs3",
+			"name": "ST",
+			"local_notes": "Lore: A Chaos Lord is stronger than any of his warband; Codex background describes champions bigger and more brutal than their followers.\n\nDesign: ST 32 (+2 from the Astartes 30), 10 pts/level (B14).",
+			"tags": [
+				"Attribute"
+			],
+			"base_points": 20,
+			"features": [
+				{
+					"type": "attribute_bonus",
+					"attribute": "st",
+					"amount": 2
+				}
+			]
+		},
+		{
+			"id": "tmeCReAXrIVbNnT1k",
+			"name": "DX",
+			"local_notes": "Lore: Even sharper than a Legionary.\n\nDesign: DX 18 (+1 over the Legionary 17), 20 pts/level (B15).",
+			"tags": [
+				"Attribute"
+			],
+			"base_points": 20,
+			"features": [
+				{
+					"type": "attribute_bonus",
+					"attribute": "dx",
+					"amount": 1
+				}
+			]
+		},
+		{
+			"id": "tJ6VxTJrW2cNf_Nq9",
+			"name": "IQ",
+			"local_notes": "Lore: Lords command by cunning as much as by fear.\n\nDesign: IQ 13 (+2 over the 11 of a Legionary), 20 pts/level (B15). Will follows, to 16.",
+			"tags": [
+				"Attribute"
+			],
+			"base_points": 40,
+			"features": [
+				{
+					"type": "attribute_bonus",
+					"attribute": "iq",
+					"amount": 2
+				}
+			]
+		},
+		{
+			"id": "tmmxBACDlIYo13mzs",
+			"name": "HT",
+			"local_notes": "Lore: Centuries of war and boons from the gods.\n\nDesign: HT 16 (+1), 10 pts/level (B14).",
+			"tags": [
+				"Attribute"
+			],
+			"base_points": 10,
+			"features": [
+				{
+					"type": "attribute_bonus",
+					"attribute": "ht",
+					"amount": 1
+				}
+			]
+		},
+		{
+			"id": "tsgN-iQE9x54fv8Lh",
+			"name": "HP",
+			"local_notes": "Lore: Beyond ST alone: ST 32 gives 32+4 = 36, the framework figure is 38.\n\nDesign: Extra Hit Points +2 (B16, 2/level) = 4 points for HP 38.",
+			"tags": [
+				"Attribute"
+			],
+			"base_points": 4,
+			"features": [
+				{
+					"type": "attribute_bonus",
+					"attribute": "hp",
+					"amount": 2
+				}
+			]
+		},
+		{
+			"id": "tjFhIY7F4uXcWxwQu",
+			"name": "Reputation (Warlord)",
+			"reference": "B27",
+			"local_notes": "Lore: A Chaos Lord's name is known to the warbands and cults around him.\n\nDesign: Reputation (B27), +4 among a large class of people (Chaos followers, x1/2): 10 points, on top of the Traitor Legion Reputation.",
+			"tags": [
+				"Advantage",
+				"Social",
+				"Chaos"
+			],
+			"base_points": 10,
+			"features": [
+				{
+					"type": "reaction_bonus",
+					"situation": "from Chaos followers who know the warband's name",
+					"amount": 4
+				}
+			]
+		},
+		{
+			"id": "tX1OxFOVz5NCe7BB0",
+			"name": "Rank 8 (Chaos Lord)",
+			"reference": "B29",
+			"local_notes": "Lore: A Lord is the unquestioned master of his warband, its Legionaries, cultists and slaves.\n\nDesign: Rank (B29), 5 points/level, 8 levels = 40 points (Status comes with it).",
+			"tags": [
+				"Advantage",
+				"Social",
+				"Chaos"
+			],
+			"base_points": 40
+		},
+		{
+			"id": "tQjqsJa7NVxFXPQKC",
+			"name": "Charisma",
+			"reference": "B41",
+			"local_notes": "Lore: Chaos Lords command through fear, favour and the weight of their legend.\n\nDesign: Charisma 4 (B41, 5/level) = 20 points.",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Social"
+			],
+			"points_per_level": 5,
+			"can_level": true,
+			"levels": 4
+		},
+		{
+			"id": "tsuKqjA3WRVZJ5Q17",
+			"name": "Born War-Leader",
+			"reference": "B31",
+			"local_notes": "Lore: The best of the Traitor Legions' captains turn a rabble of cultists and Legionaries into a single fist.\n\nDesign: Born War-Leader 4 (B31, 5/level) = 20 points.",
+			"tags": [
+				"Advantage",
+				"Mental"
+			],
+			"points_per_level": 5,
+			"can_level": true,
+			"levels": 4
+		},
+		{
+			"id": "tUpSBUmQEULYBqP1H",
+			"name": "Weapon Master (Swords)",
+			"reference": "B99",
+			"local_notes": "Lore: A Lord who has fought for centuries has a master's command of the blade.\n\nDesign: Weapon Master (B99), one weapon group, 20 points.",
+			"tags": [
+				"Advantage",
+				"Mental"
+			],
+			"base_points": 20
+		},
+		{
+			"id": "tXDSoCMLvVDAvz68u",
+			"name": "Luck",
+			"reference": "B66",
+			"local_notes": "Lore: The favour of the gods of Chaos keeps a Lord alive when he should have died.\n\nDesign: Luck (B66), 15 points.",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Chaos"
+			],
+			"base_points": 15
+		},
+		{
+			"id": "t0gJVukzSoySXoRKL",
+			"name": "Extra Attack (Lord's Fury)",
+			"reference": "B53",
+			"local_notes": "Lore: A Chaos Lord's skill with sword and fist, honoured with gifts of the Ruinous Powers, lets him strike twice for another's once.\n\nDesign: Extra Attack 1 (B53, 25/level) = 25 points.",
+			"tags": [
+				"Advantage",
+				"Physical"
+			],
+			"points_per_level": 25,
+			"can_level": true,
+			"levels": 1
+		},
+		{
+			"id": "TSZjSqAyD7pj5IxAz",
+			"name": "Mark of Chaos Undivided",
+			"local_notes": "Lore: Chaos Undivided honours all four gods together and none above the others. Codex: Chaos Space Marines background gives the Black Legion and many renegade warbands this path. A weaker patronage than a single god's Mark, it is sturdy, hard-willed and utterly committed.\n\nDesign: Framework Marks table. Fearlessness 2 (B55, 2/level) 4; Hard to Kill 1 (B58) 2; Fanaticism (B136) -15. 4 + 2 - 15 = -9 points.",
+			"tags": [
+				"Advantage",
+				"Disadvantage",
+				"Mental",
+				"Chaos",
+				"Chaos Undivided",
+				"Mark of Chaos"
+			],
+			"container_type": "meta_trait",
+			"children": [
+				{
+					"id": "tkWWc5YD5D7lSVIE3",
+					"name": "Fearlessness",
+					"reference": "B55",
+					"local_notes": "+2 to Fright Checks.",
+					"tags": [
+						"Advantage",
+						"Mental"
+					],
+					"points_per_level": 2,
+					"can_level": true,
+					"levels": 2,
+					"base_points": 0
+				},
+				{
+					"id": "tHIN2rYOA6_z2flZY",
+					"name": "Hard to Kill",
+					"reference": "B58",
+					"local_notes": "+1 to HT rolls made solely to avoid death.",
+					"tags": [
+						"Advantage",
+						"Physical"
+					],
+					"points_per_level": 2,
+					"can_level": true,
+					"levels": 1,
+					"base_points": 0
+				},
+				{
+					"id": "tlxNZnHBcnK_Lty4N",
+					"name": "Fanaticism (Chaos)",
+					"reference": "B136",
+					"local_notes": "Devoted to the Ruinous Powers as a whole; will take any risk for Chaos. Do not combine with Cultist's Devotion.",
+					"tags": [
+						"Disadvantage",
+						"Mental"
+					],
+					"base_points": -15
+				}
+			]
+		}
+	],
+	"skills": [
+		{
+			"id": "s2WG2kf16Op5NZ8RL",
+			"name": "Guns",
+			"local_notes": "Boltgun.",
+			"specialization": "Rifle",
+			"difficulty": "dx/e",
+			"points": 20
+		},
+		{
+			"id": "s5I1VwreKEm55j3ep",
+			"name": "Guns",
+			"local_notes": "Bolt pistol.",
+			"specialization": "Pistol",
+			"difficulty": "dx/e",
+			"points": 4
+		},
+		{
+			"id": "s2P7uVUWiQ2ONjFJJ",
+			"name": "Broadsword",
+			"local_notes": "Chainsword.",
+			"difficulty": "dx/a",
+			"points": 24
+		},
+		{
+			"id": "saSeMX6hAeprEiMTn",
+			"name": "Brawling",
+			"local_notes": "Power fist.",
+			"difficulty": "dx/e",
+			"points": 12
+		},
+		{
+			"id": "s2Pyo3t6Io9mSn8xt",
+			"name": "Wrestling",
+			"difficulty": "dx/a",
+			"points": 4
+		},
+		{
+			"id": "sRks3tsyuGbGCvxoG",
+			"name": "Knife",
+			"local_notes": "Combat knife.",
+			"difficulty": "dx/e",
+			"points": 2
+		},
+		{
+			"id": "sLIIR8zLv4qBy4dBl",
+			"name": "Axe/Mace",
+			"local_notes": "Chainaxe.",
+			"difficulty": "dx/a",
+			"points": 4
+		},
+		{
+			"id": "s0LCf6tILelROzPEt",
+			"name": "Fast-Draw",
+			"specialization": "Ammo",
+			"difficulty": "dx/e",
+			"points": 2
+		},
+		{
+			"id": "sQEN9EYZz2sh2R94s",
+			"name": "Throwing",
+			"local_notes": "Frag and krak grenades.",
+			"difficulty": "dx/a",
+			"points": 2
+		},
+		{
+			"id": "sIE4msHtgmyrrQGYU",
+			"name": "Free Fall",
+			"difficulty": "dx/a",
+			"points": 1
+		},
+		{
+			"id": "se8e-RahkA-G_XBdN",
+			"name": "Climbing",
+			"difficulty": "dx/a",
+			"points": 2
+		},
+		{
+			"id": "s0qVxVYxhjmaJV_EH",
+			"name": "Stealth",
+			"difficulty": "dx/a",
+			"points": 2
+		},
+		{
+			"id": "sYAtde4SPIHKdwQMv",
+			"name": "Tactics",
+			"difficulty": "iq/h",
+			"points": 40
+		},
+		{
+			"id": "s3UtidW1VjCm0rVYl",
+			"name": "Strategy",
+			"difficulty": "iq/h",
+			"points": 28
+		},
+		{
+			"id": "sUWK1q4o7BfZnCsRr",
+			"name": "Soldier",
+			"difficulty": "iq/a",
+			"points": 16
+		},
+		{
+			"id": "s84CXdm5cXYB_DhHn",
+			"name": "Leadership",
+			"local_notes": "Commanding a warband.",
+			"difficulty": "iq/a",
+			"points": 32
+		},
+		{
+			"id": "sfyGbVflQodSLG1us",
+			"name": "Theology",
+			"specialization": "Chaos",
+			"difficulty": "iq/h",
+			"points": 20
+		},
+		{
+			"id": "sQFJaIiAN9ckOHVpl",
+			"name": "Hidden Lore",
+			"specialization": "Daemons",
+			"difficulty": "iq/a",
+			"points": 8
+		},
+		{
+			"id": "s_ioJDf7kcmM6xr_d",
+			"name": "Hidden Lore",
+			"specialization": "Xenos",
+			"difficulty": "iq/a",
+			"points": 8
+		},
+		{
+			"id": "sCfg-RKg20QnD63Fa",
+			"name": "Armoury",
+			"local_notes": "Patching traitor plate in the field.",
+			"specialization": "Body Armor",
+			"difficulty": "iq/a",
+			"points": 2
+		},
+		{
+			"id": "sHx8PiHsg5l9GGHNP",
+			"name": "Armoury",
+			"local_notes": "Bolt weapons.",
+			"specialization": "Small Arms",
+			"difficulty": "iq/a",
+			"points": 2
+		},
+		{
+			"id": "s622Ia89eSp6tgaLY",
+			"name": "Mechanic",
+			"specialization": "Bolt Weapons",
+			"difficulty": "iq/a",
+			"points": 2
+		},
+		{
+			"id": "sOAafJB0ngsyAi_nh",
+			"name": "First Aid",
+			"difficulty": "iq/e",
+			"points": 2
+		},
+		{
+			"id": "shoO2avFMYPsLk-RU",
+			"name": "Navigation",
+			"specialization": "Land",
+			"difficulty": "iq/a",
+			"points": 2
+		},
+		{
+			"id": "sNGWtGjR-f6txBqMh",
+			"name": "Gesture",
+			"local_notes": "Warband battle-sign.",
+			"difficulty": "iq/e",
+			"points": 1
+		},
+		{
+			"id": "skIyz_EjrlQz3UStX",
+			"name": "Savoir-Faire",
+			"specialization": "Military",
+			"difficulty": "iq/e",
+			"points": 1
+		},
+		{
+			"id": "s0MmES-JXyP7u7dxj",
+			"name": "Camouflage",
+			"difficulty": "iq/e",
+			"points": 2
+		},
+		{
+			"id": "sGR5ewB7KdXUEeOIn",
+			"name": "Intimidation",
+			"difficulty": "will/a",
+			"points": 16
+		},
+		{
+			"id": "sA475Mbxt4_232h0_",
+			"name": "Survival",
+			"specialization": "Any",
+			"difficulty": "per/a",
+			"points": 8
+		},
+		{
+			"id": "sYGZjd_hzt6tmyC1S",
+			"name": "Observation",
+			"difficulty": "per/a",
+			"points": 12
+		},
+		{
+			"id": "spTDa5abrO0uQnov7",
+			"name": "Tracking",
+			"difficulty": "per/a",
+			"points": 2
+		},
+		{
+			"id": "sAd12YrSJDF6Hki-Z",
+			"name": "Running",
+			"difficulty": "ht/a",
+			"points": 2
+		},
+		{
+			"id": "ssJ3MdTIVNFeRRiaE",
+			"name": "Hiking",
+			"difficulty": "ht/a",
+			"points": 2
+		},
+		{
+			"id": "sg9Axw27SfC3Czrao",
+			"name": "Savoir-Faire",
+			"specialization": "Chaos Court",
+			"difficulty": "iq/e",
+			"points": 1
+		}
+	],
+	"equipment": [
+		{
+			"id": "ewqD40MaZSMN9Kyhe",
+			"description": "Power Armour, Mark IV (Heretic)",
+			"local_notes": "Weak Points 6: when a hit on this armour fails to penetrate, roll 3d; on 6 or less it found a gap and DR is halved against it.\n\nInterlocking plate sections reduce the usual bulky-armour penalty by 1 relative to other Marks at the GM's discretion (still requires the black carapace interface). Worn seals and joints: Weak Points 6.\n\nLore: Mark IV Maximus plate is the commonest armour of the Traitor Legions in Black Library fiction: it was the mainline suit at the end of the Heresy and nothing has replaced it for the Legions that fled into the Eye of Terror. Suits are repaired, never rebuilt, and often carry a god's mark in brass, bone or paint.\n\nDesign: DR, servo ST, weight and cost match the loyalist Mark IV (Maximus Pattern) entry, included unchanged. Weak Points 5 to 6, per the framework's Chaos armour rule (ten thousand years without a forge-temple). This is the reference traitor suit: Rubric and Plague-Fused plate below are variants of it.",
+			"tags": [
+				"Body Armor",
+				"Chaos",
+				"Heretic Astartes"
+			],
+			"tech_level": "11",
+			"legality_class": "0",
+			"base_value": "38000",
+			"base_weight": "135 lb",
+			"features": [
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"torso",
+						"vitals",
+						"groin"
+					],
+					"amount": 95
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"arm"
+					],
+					"amount": 83
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"leg"
+					],
+					"amount": 83
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"neck"
+					],
+					"amount": 58
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"skull"
+					],
+					"amount": 95
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"face"
+					],
+					"amount": 70
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"eye"
+					],
+					"amount": 71
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"hand"
+					],
+					"amount": 58
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"foot"
+					],
+					"amount": 70
+				},
+				{
+					"type": "attribute_bonus",
+					"attribute": "lifting_st",
+					"amount": 8
+				},
+				{
+					"type": "attribute_bonus",
+					"attribute": "striking_st",
+					"amount": 4
+				}
+			],
+			"quantity": 1,
+			"equipped": true
+		},
+		{
+			"id": "eW9O8WgD9PTtEAtGE",
+			"description": "Tactical Dreadnought Armour, Tartaros Pattern (Heretic)",
+			"local_notes": "Weak Points 4: when a hit on this armour fails to penetrate, roll 3d; on 4 or less it found a gap and DR is halved against it.\n\nEffective SM +1 while worn. Basic Move -1, and DX-based fine work at an extra -1. Requires the black carapace interface. Worn seals and joints: Weak Points 4.\n\nLore: Tartaros was built for boarding actions in the Heresy, and the Traitor Legions kept every suit they had. Chaos Terminators are the elite of a warband; their plate is old, stained and often fused with sigils, spikes and trophies.\n\nDesign: DR (torso 190, arms and legs 165, neck 128, face 140, eye 142, hand 115, foot 140), servo ST (lifting 18, striking 9), SM +1, Basic Move -1, weight 250 lb and cost are those of the loyalist Tartaros entry, included unchanged. Weak Points 3 to 4 (framework.md, Chaos: Terminator 3 to 4).",
+			"tags": [
+				"Body Armor",
+				"Chaos",
+				"Heretic Astartes"
+			],
+			"tech_level": "11",
+			"legality_class": "0",
+			"base_value": "100000",
+			"base_weight": "250 lb",
+			"features": [
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"torso",
+						"vitals",
+						"groin"
+					],
+					"amount": 190
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"arm"
+					],
+					"amount": 165
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"leg"
+					],
+					"amount": 165
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"neck"
+					],
+					"amount": 128
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"skull"
+					],
+					"amount": 190
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"face"
+					],
+					"amount": 140
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"eye"
+					],
+					"amount": 142
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"hand"
+					],
+					"amount": 115
+				},
+				{
+					"type": "dr_bonus",
+					"locations": [
+						"foot"
+					],
+					"amount": 140
+				},
+				{
+					"type": "attribute_bonus",
+					"attribute": "lifting_st",
+					"amount": 18
+				},
+				{
+					"type": "attribute_bonus",
+					"attribute": "striking_st",
+					"amount": 9
+				},
+				{
+					"type": "attribute_bonus",
+					"attribute": "sm",
+					"amount": 1
+				},
+				{
+					"type": "attribute_bonus",
+					"attribute": "basic_move",
+					"amount": -1
+				}
+			],
+			"quantity": 1,
+			"equipped": false
+		},
+		{
+			"id": "e-cIEqjA_-ANjI0uV",
+			"description": "Power Sword, Astartes Pattern",
+			"local_notes": "Field toggle and depleted-cell rules as the human-scale power sword.\n\nLore: Chapter armouries maintain power swords scaled to a Marine's own grip and reach for veteran sergeants and officers who favour a blade over a chainsword; visually similar to a human duelling sword but unmistakably oversized in a Space Marine's gauntlet, in the same way Astartes chainswords and combat knives read as full-size weapons in a human's hands.\n\nDesign: Exactly the Power Sword anchor's damage formula, unchanged (sw+3d+1(10) cut field on / sw+1 cut field off) - per the framework's rule that \"sw\" resolves from the wielder's own ST, an Astartes swinging this blade already rolls far more dice than a human swinging the human-scale version (Marine sw=5d+2, field-on 8d+3, average 31, vs. a Guardsman's sw=1d+1, field-on 4d+2) without the weapon's own formula changing at all; it penetrates Astartes plate always and Terminator plate (eff. DR 20) 98.6% of the time, exactly the same relationship the Astartes Chainsword has to the human Chainsword. Handling: what does change, per the framework's instruction that human- and Astartes-scale versions of the same weapon type need different weight and min ST, is the housing: a heavier blade, hilt and power cell built for a gauntleted hand runs 9 lb (vs. the human pattern's 4 lb - roughly the same +5 lb jump the Astartes combat knife takes over the human one) and needs min ST 16 (vs. ST 10), putting it firmly out of an unaugmented human's reach the way the Astartes chainsword's ST 15 does. Parry stays 0 (Broadsword, unguarded by any axe/mace correction).",
+			"tags": [
+				"Melee Weapon",
+				"Imperium",
+				"Adeptus Astartes"
+			],
+			"tech_level": "11",
+			"legality_class": "1",
+			"base_value": "6500",
+			"base_weight": "9 lb",
+			"weapons": [
+				{
+					"id": "wo0uoEGRHdNhtARJi",
+					"sv": 1,
+					"damage": {
+						"type": "cut",
+						"st": "sw",
+						"base": "3d+1",
+						"armor_divisor": 10
+					},
+					"reach": "1",
+					"parry": "0",
+					"strength": "16",
+					"usage": "Field on",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Broadsword"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Force Sword"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Rapier"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Saber"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Shortsword"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Two-Handed Sword"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "wi47pNz-rVQ3UXaiA",
+					"sv": 1,
+					"damage": {
+						"type": "imp",
+						"st": "thr",
+						"base": "3d+2",
+						"armor_divisor": 10
+					},
+					"reach": "1",
+					"parry": "0",
+					"strength": "16",
+					"usage": "Thrust, field on",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Broadsword"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Force Sword"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Rapier"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Saber"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Shortsword"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Two-Handed Sword"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "w-xCZaqfxNRt1Y_DD",
+					"sv": 1,
+					"damage": {
+						"type": "cut",
+						"st": "sw",
+						"base": "1"
+					},
+					"reach": "1",
+					"parry": "0",
+					"strength": "16",
+					"usage": "Field off (as plain blade)",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Broadsword"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Force Sword"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Rapier"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Saber"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Shortsword"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Two-Handed Sword"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "woYZL3RnL1K9ILWPA",
+					"sv": 1,
+					"damage": {
+						"type": "imp",
+						"st": "thr",
+						"base": "2"
+					},
+					"reach": "1",
+					"parry": "0",
+					"strength": "16",
+					"usage": "Thrust, field off (as plain blade)",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Broadsword"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Force Sword"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Rapier"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Saber"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Shortsword"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Two-Handed Sword"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1,
+			"equipped": true
+		},
+		{
+			"id": "e40RHOheuSNsAhDCE",
+			"description": "Power Fist",
+			"local_notes": "Cannot be used to Feint, and the -2 parry reflects how slow and clumsy the servo-driven gauntlet is to reposition defensively; a GM may rule it takes a Ready maneuver to recover after a solid punch against a very hard surface (a wall, a vehicle hull). It is not a precision weapon: no combination of skill or luck lets it target a called shot at a meaningful bonus (GM's call).\n\nLore: One of the signature Astartes and Terminator melee weapons: a reinforced gauntlet with an internal power field and myo-fibre actuators, consistently shown punching clean through Astartes power armour, vehicle hulls and monstrous xenos alike - the framework's Tactical Dreadnought (DR 200) armour table entry explicitly lists the power fist as one of the few things that still kills a Terminator.\n\nDesign: Fixed anchor (Rescale, framework.md): thr+8d(10) cr. It is built from first principles rather than borrowed from a catalogue \"power glove\": because the internal actuators (not the wielder's own swing) generate most of the force, its bonus is a large flat die addition to the wielder's own thrust (thr+8d) rather than a multiplier on that thrust (a \"thr x3\"-style multiplier was considered and rejected, since it would make the weapon nearly unusable in a human's hands and absurdly swingy in an Astartes', whereas a flat die bonus keeps it dangerous regardless of wielder and matches the fiction that the fist itself, not the arm behind it, is doing the killing). Armor Divisor (10) is the shared disruption-field divisor (framework.md, power-field rule). At Astartes ST 30, thr+8d (thr 3d, so 11d, average 38.5) against Terminator plate (DR 200, eff. DR 20) penetrates every time (99.8% even against Cataphractii, DR 220) and against Astartes power armour (DR 100, eff. 10) always, matching \"power fist ... kills Terminators in Astartes hands\" cleanly. With the field off the gauntlet is a servo-driven fist at thr+2 cr, the mundane baseline, with the same reach C and parry -2. Handling: reach C, parry -2 and the no-Feint/no-called-shot notes encode the framework's \"power fist ... unwieldy (hard to parry, slow)\" instruction without needing a bespoke game mechanic beyond existing GURPS defense penalties; being an unarmed-style Brawling punch rather than a bladed weapon, the axe/mace \"U\" convention doesn't apply. Weight (40 lb) and min ST (15) are unchanged - already an Astartes-only figure.",
+			"tags": [
+				"Melee Weapon",
+				"Imperium",
+				"Adeptus Astartes"
+			],
+			"tech_level": "11",
+			"legality_class": "1",
+			"base_value": "8000",
+			"base_weight": "40 lb",
+			"weapons": [
+				{
+					"id": "w4LJMpnyE4d1idtuA",
+					"sv": 1,
+					"damage": {
+						"type": "cr",
+						"st": "thr",
+						"base": "8d",
+						"armor_divisor": 10
+					},
+					"reach": "C",
+					"parry": "-2",
+					"strength": "15",
+					"usage": "Punch, field on",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": 0
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Brawling"
+							}
+						}
+					]
+				},
+				{
+					"id": "wQRwFqAeDShPtPMSG",
+					"sv": 1,
+					"damage": {
+						"type": "cr",
+						"st": "thr",
+						"base": "2"
+					},
+					"reach": "C",
+					"parry": "-2",
+					"strength": "15",
+					"usage": "Punch, field off",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": 0
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Brawling"
+							}
+						}
+					]
+				}
+			],
+			"quantity": 1,
+			"equipped": true
+		},
+		{
+			"id": "eRMhNuJDfa14Ljtf_",
+			"description": "Bolt Pistol, Godwyn-De'az Pattern",
+			"local_notes": "Lore: The human-portable bolt pistol, most commonly the Godwyn-De'az pattern firing a lighter mass-reactive round than the Astartes-scale weapons, is issued to Inquisitorial acolytes, commissars, veteran officers and other elite humans rather than to rank-and-file Guardsmen, who are more usually equipped with an autopistol or laspistol if they carry a sidearm at all. Dark Heresy and Rogue Trader both depict it as a prized weapon whose recoil is punishing for an unaugmented shooter (this project rates it LC1).\n\nDesign: A human-scale bolt weapon, not a scaled-down Astartes one: it fires a smaller-calibre .60-ish round with a lighter mass-reactive charge sized for a hand a Guardsman or acolyte can actually close around, so it drops the Astartes-scale pi++ wounding multiplier to pi and shrinks the frag follow-up from the boltgun anchor's 2d cr ex down to 1d-1 cr ex - a genuinely smaller warhead, not the same shell in a shorter barrel. Dice and armour divisor stay one die down from the Godwyn boltgun anchor (5dx2(2), divisor (2) unchanged) since the rocket motor still ignites clear of the muzzle and does the real accelerating; only the wounding mechanism and burst yield shrink. Exact dice distribution: 5dx2(2) averages 35 and penetrates carapace (DR 70, effective DR 35) on 50.0% of hits, Sororitas power armour (DR 85, effective DR 42.5) on 15.2%, and Astartes power armour (DR 100, effective DR 50) on just 1.6% - a coin-flip against carapace, a real but unreliable threat to Sororitas plate, and essentially no threat to a Space Marine, exactly the gap a smaller human-portable round should leave against the Astartes-scale anchor. Special ammunition (Kraken, Hellfire, etc.) is not repeated here; see the Boltgun, Godwyn Pattern entry for the loads, which a GM may allow in this pistol's lighter round with the same pi and follow-up reductions. Handling: 5 lb loaded, in line with Dark Heresy/Rogue Trader's roughly 2.5 kg figure for a human-portable bolt pistol. Min ST 10† (√(10×5)≈7, bumped up three for the punishing recoil of a mass-reactive round fired from a pistol frame - unusually high for a service pistol, compare a normal GURPS pistol's ST 8-9) reflects the \"hard for unaugmented humans to handle\" property the fiction keeps returning to; the † lets it be fired two-handed at the listed ST, one-handed by anyone under ST 10 at the standard penalty for shooting under minimum ST. RoF 3 is the standard semi-automatic rate every boltgun in this file uses (per framework.md, a bolt weapon is not a true rapid-fire autoloader). Shots 8(3): an 8-round box magazine, short compared with a rifle's, and a quick 3-second reload. Bulk -2 and Rcl 3 are ordinary pistol figures, the latter elevated slightly above a stub pistol's for the bolt's initial kick.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium",
+				"Inquisition",
+				"Astra Militarum"
+			],
+			"tech_level": "10",
+			"legality_class": "1",
+			"base_value": "500",
+			"base_weight": "5 lb",
+			"weapons": [
+				{
+					"id": "WU0obyUkkf5cB3XRn",
+					"sv": 1,
+					"damage": {
+						"type": "pi",
+						"base": "5dx2",
+						"armor_divisor": 2
+					},
+					"accuracy": "2",
+					"range": "120/400",
+					"rate_of_fire": "3",
+					"shots": "8(3)",
+					"bulk": "-2",
+					"recoil": "3",
+					"strength": "10†",
+					"usage": "Standard bolt",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "WTlHrZ1objXhNPi3c",
+					"sv": 1,
+					"damage": {
+						"type": "cr ex",
+						"base": "1d-1"
+					},
+					"accuracy": "2",
+					"range": "120/400",
+					"rate_of_fire": "3",
+					"shots": "8(3)",
+					"bulk": "-2",
+					"recoil": "3",
+					"strength": "10†",
+					"usage": "Follow-up (if bolt penetrates)",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1,
+			"equipped": true
+		},
+		{
+			"id": "e0bwtV9yiMd9ECK90",
+			"description": "Combi-Weapon, Bolter/Plasma",
+			"local_notes": "Lore: Combi-weapons fuse a standard boltgun with a single-shot auxiliary barrel of a rarer special weapon, common Astartes wargear (especially for Chaplains, Sergeants and Deathwatch Space Marines) when a squad needs one extra answer to armour or a specific threat without giving up bolter fire entirely.\n\nDesign: The bolter barrel is the Godwyn anchor (6dx2(2) pi++, follow-up 2d cr ex) with a reduced magazine (20 vs 24) to make room for the auxiliary mechanism; the plasma barrel reuses the plasma gun's standard-mode damage line unchanged (6dx4(3) burn ex, see Plasma Weapons) since it is the same cartridge in a smaller reservoir, just good for one shot per reload. Handling: both barrels share one stock, so both usage lines carry the same handling figures. A full Astartes boltgun receiver plus a slaved plasma barrel and reservoir pushes total loaded weight to 42 lb - above the plain Godwyn-pattern boltgun's 38 lb, but well under carrying a separate boltgun and plasma pistol - and min ST to 19 (√(10×42)≈20.5, rounded to match the dominant bolter action). Bulk -5 matches a legacy Astartes boltgun's figure. RoF is per-mechanism, not copy-pasted: the bolter barrel keeps the standard semi/burst RoF 3, while the plasma barrel is RoF 1 (a single-shot auxiliary reservoir cannot cycle for a second pulse until reloaded) per framework.md's plasma-weapons rule.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium",
+				"Adeptus Astartes"
+			],
+			"tech_level": "10",
+			"legality_class": "1",
+			"base_value": "2600",
+			"base_weight": "42 lb",
+			"weapons": [
+				{
+					"id": "WAQRi8MygcP-pN_X6",
+					"sv": 1,
+					"damage": {
+						"type": "pi++",
+						"base": "6dx2",
+						"armor_divisor": 2
+					},
+					"accuracy": "4",
+					"range": "200/1000",
+					"rate_of_fire": "3",
+					"shots": "20(3)",
+					"bulk": "-5",
+					"recoil": "3",
+					"strength": "19",
+					"usage": "Bolter barrel",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "W2X0voAxTWLQZzim-",
+					"sv": 1,
+					"damage": {
+						"type": "cr ex",
+						"base": "2d"
+					},
+					"accuracy": "4",
+					"range": "200/1000",
+					"rate_of_fire": "3",
+					"shots": "20(3)",
+					"bulk": "-5",
+					"recoil": "3",
+					"strength": "19",
+					"usage": "Bolter barrel, follow-up (if bolt penetrates)",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "WbQxTFO1RH3LNvrj2",
+					"sv": 1,
+					"damage": {
+						"type": "burn ex",
+						"base": "6dx4",
+						"armor_divisor": 3
+					},
+					"accuracy": "3",
+					"range": "150/450",
+					"rate_of_fire": "1",
+					"shots": "1(20)",
+					"bulk": "-5",
+					"recoil": "2",
+					"strength": "19",
+					"usage": "Plasma barrel (single shot)",
+					"usage_notes": "One shot before the auxiliary barrel's charge must be replaced; there is no room in the slaved barrel for an overcharge coil, so this barrel has no supercharged mode.\n",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Beam Weapons"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1,
+			"equipped": false
+		},
+		{
+			"id": "e_Xxm36KknJMc1CLL",
+			"description": "Frag Grenade",
+			"local_notes": "Lore: The standard fragmentation grenade of the Departmento Munitorum, a fist-sized charge issued to virtually every Guardsman; a background constant across Black Library Guard fiction from Gaunt's Ghosts to the Ciaphas Cain novels.\n\nDesign: No framework.md anchor covers grenades, so this is built independently using GURPS's own explosive-damage convention — a concussion \"cr ex\" figure plus a bracketed fragmentation die, exactly the pattern data-format.md's own schema example uses. Concussion is set to a modest 3d cr ex (enough to injure at the centre, nowhere near a demolition charge) with a 4d cut fragmentation cloud (user direction, down from 6d: at 6d the fragments reached 30 yards and shredded massed infantry under B414) as the real threat to exposed infantry within a few yards. 4d cut (avg 14, no armour divisor) never penetrates flak (DR 30) or carapace (DR 70); only the Weak Points roll lets a fragment through flak. It is lethal to unarmoured troops in the open and useless against armour or fortifications.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium",
+				"Astra Militarum"
+			],
+			"tech_level": "8",
+			"legality_class": "2",
+			"base_value": "20",
+			"base_weight": "1 lb",
+			"weapons": [
+				{
+					"id": "WCuugeUXKYIowJ_QL",
+					"sv": 1,
+					"damage": {
+						"type": "cr ex",
+						"base": "3d",
+						"fragmentation": "4d",
+						"fragmentation_type": "cut"
+					},
+					"usage": "Thrown",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Throwing"
+							}
+						}
+					]
+				}
+			],
+			"quantity": 1,
+			"equipped": true
+		},
+		{
+			"id": "eZrXpiVFfuB3EfSoq",
+			"description": "Krak Grenade",
+			"local_notes": "Lore: The Imperium's standard anti-armour and anti-fortification grenade, issued alongside frag grenades to Guard and Astartes forces alike; codex and Black Library background repeatedly show it wrecking light vehicles and bunker firing points, and occasionally cracking heavier targets at real cost and risk.\n\nDesign: Modelled as a hand-thrown shaped charge using the same \"cr ex plus armour divisor\" logic GURPS uses for anti-tank warheads, kept well below the meltagun anchor (8dx6(10) burn to ½D) in both multiplier and divisor: a grenade-sized shaped charge carries an order of magnitude less fuel and a much less focused liner than a dedicated melta weapon's thermal lance, so it keeps the mundane armour divisor of (2) rather than melta's (10). Required vehicle-armour check against framework.md's AV-to-DR table, by exact dice distribution (6dx4, average 84, divisor 2): AV10 (DR 100, effective 50) penetrates 98.0% of hits, AV11 (DR 150, effective 75) 72.1% — both comfortably \"reliable.\" AV12 (DR 200, effective 100) drops to 14.5% — \"sometimes,\" as required. AV13 (DR 275, effective 137.5) rounds to a negligible 0.015% (only the maximum possible roll of 6d, 36, times 4 = 144, just clears it), and AV14 (DR 350, effective 175) is a flat 0% — the maximum possible roll (144) can never reach 175 at all — so a krak grenade cannot crack a Leman Russ or Land Raider's frontal armour. This matches the lore's use of krak grenades as light-vehicle and infantry-support ordnance rather than a dedicated tank-killer — that job belongs to the meltagun and melta bomb.",
+			"tags": [
+				"Missile Weapon",
+				"Imperium",
+				"Astra Militarum",
+				"Adeptus Astartes"
+			],
+			"tech_level": "8",
+			"legality_class": "2",
+			"base_value": "60",
+			"base_weight": "1.5 lb",
+			"weapons": [
+				{
+					"id": "WxGgEPGsr40FHUsO6",
+					"sv": 1,
+					"damage": {
+						"type": "cr ex",
+						"base": "6dx4",
+						"armor_divisor": 2
+					},
+					"usage": "Thrown, shaped charge",
+					"usage_notes": "Contact-fused shaped charge with a very small blast radius (roughly 1 yard) — built for a single hard target, not an area effect.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Throwing"
+							}
+						}
+					]
+				}
+			],
+			"quantity": 1,
+			"equipped": true
+		}
+	]
+}
