@@ -13,8 +13,8 @@ Astra Militarum Infantry Squad:
     - {role: Sergeant, template: Astra Militarum Sergeant, count: 1, leader: true, ranged: {item: "Laspistol, Common Pattern", mode: "Standard"}, melee: {item: "Chainsword", mode: "Swing"}}
     - {role: Vox-caster, template: Astra Militarum Guardsman, count: 1, vox: true}
     - {role: Flamer, template: Astra Militarum Guardsman, count: 1, ranged: {item: "Flamer", mode: "Cone attack (5 yards)"}, stance: advance, skills: {"Liquid Projector (Flamethrower)": 13}}
-    - {role: Heavy Bolter, template: Astra Militarum Guardsman, count: 1, ranged: {item: "Heavy Bolter", mode: "Standard bolt"}, stance: shoot, grenades: [], skills: {"Gunner (Machine Gun)": 13}}
-    - {role: Loader, template: Astra Militarum Guardsman, count: 1, stance: shoot}
+    - {role: Heavy Bolter, template: Astra Militarum Guardsman, count: 1, team: 1, crew: gunner, ranged: {item: "Heavy Bolter", mode: "Standard bolt"}, stance: shoot, grenades: [], skills: {"Gunner (Machine Gun)": 13}}
+    - {role: Loader, template: Astra Militarum Guardsman, count: 1, team: 1, crew: loader, stance: shoot}
     - {role: Guardsman, template: Astra Militarum Guardsman, count: 5}
 Astra Militarum Infantry Squad with Commissar:
   short: Commissar's Squad
@@ -24,8 +24,8 @@ Astra Militarum Infantry Squad with Commissar:
     - {role: Sergeant, template: Astra Militarum Sergeant, count: 1, leader: true, ranged: {item: "Laspistol, Common Pattern", mode: "Standard"}, melee: {item: "Chainsword", mode: "Swing"}}
     - {role: Vox-caster, template: Astra Militarum Guardsman, count: 1, vox: true}
     - {role: Flamer, template: Astra Militarum Guardsman, count: 1, ranged: {item: "Flamer", mode: "Cone attack (5 yards)"}, stance: advance, skills: {"Liquid Projector (Flamethrower)": 13}}
-    - {role: Heavy Bolter, template: Astra Militarum Guardsman, count: 1, ranged: {item: "Heavy Bolter", mode: "Standard bolt"}, stance: shoot, grenades: [], skills: {"Gunner (Machine Gun)": 13}}
-    - {role: Loader, template: Astra Militarum Guardsman, count: 1, stance: shoot}
+    - {role: Heavy Bolter, template: Astra Militarum Guardsman, count: 1, team: 1, crew: gunner, ranged: {item: "Heavy Bolter", mode: "Standard bolt"}, stance: shoot, grenades: [], skills: {"Gunner (Machine Gun)": 13}}
+    - {role: Loader, template: Astra Militarum Guardsman, count: 1, team: 1, crew: loader, stance: shoot}
     - {role: Guardsman, template: Astra Militarum Guardsman, count: 5}
 Astartes Tactical Squad:
   short: Tactical Squad
@@ -65,3 +65,132 @@ Fire Warrior Strike Team:
     - {role: Shas'ui, template: "Fire Warrior Veteran (Shas'ui)", count: 1, leader: true}
     - {role: Fire Warrior, template: "Fire Warrior (Shas'la)", count: 9}
     - {role: Gun Drone, template: Gun Drone, count: 2}
+
+# ---- Astra Militarum: the infantry squad with each special and heavy weapon (Codex: Astra Militarum: a squad
+# may take one special weapon and one heavy weapon team), heavy weapons squads (three two-man teams) and special
+# weapons squads (six Guardsmen, three with special weapons)
+Astra Militarum Infantry Squad (Plasma Gun, Lascannon):
+  short: Guard Squad
+  note: "Ten troopers: sergeant with laspistol and chainsword, vox-caster, a plasma gun, a lascannon team (gunner and loader) and five lasguns (Codex: Astra Militarum)."
+  members:
+    - {role: Sergeant, template: Astra Militarum Sergeant, count: 1, leader: true, ranged: {item: "Laspistol, Common Pattern", mode: "Standard"}, melee: {item: "Chainsword", mode: "Swing"}}
+    - {role: Vox-caster, template: Astra Militarum Guardsman, count: 1, vox: true}
+    - {role: Plasma Gun, template: Astra Militarum Guardsman, count: 1, ranged: {item: "Plasma Gun", mode: "Standard"}}
+    - {role: Lascannon 1, template: Astra Militarum Guardsman, count: 1, team: 1, crew: gunner, ranged: {item: "Lascannon", mode: "Braced/mounted"}, stance: shoot, grenades: [], mags: 3, skills: {"Gunner (Beams)": 13}}
+    - {role: Loader 1, template: Astra Militarum Guardsman, count: 1, team: 1, crew: loader, stance: shoot}
+    - {role: Guardsman, template: Astra Militarum Guardsman, count: 5}
+Astra Militarum Infantry Squad (Meltagun, Autocannon):
+  short: Guard Squad
+  note: "Ten troopers: sergeant with laspistol and chainsword, vox-caster, a meltagun, a autocannon team (gunner and loader) and five lasguns (Codex: Astra Militarum)."
+  members:
+    - {role: Sergeant, template: Astra Militarum Sergeant, count: 1, leader: true, ranged: {item: "Laspistol, Common Pattern", mode: "Standard"}, melee: {item: "Chainsword", mode: "Swing"}}
+    - {role: Vox-caster, template: Astra Militarum Guardsman, count: 1, vox: true}
+    - {role: Meltagun, template: Astra Militarum Guardsman, count: 1, ranged: {item: "Meltagun", mode: "Short range (up to ½D)"}, stance: advance}
+    - {role: Autocannon 1, template: Astra Militarum Guardsman, count: 1, team: 1, crew: gunner, ranged: {item: "Autocannon", mode: "Braced/mounted"}, stance: shoot, grenades: [], skills: {"Gunner (Cannon)": 13}}
+    - {role: Loader 1, template: Astra Militarum Guardsman, count: 1, team: 1, crew: loader, stance: shoot}
+    - {role: Guardsman, template: Astra Militarum Guardsman, count: 5}
+Astra Militarum Infantry Squad (Grenade Launcher, Missile Launcher):
+  short: Guard Squad
+  note: "Ten troopers: sergeant with laspistol and chainsword, vox-caster, a grenade launcher, a missile launcher team (gunner and loader) and five lasguns (Codex: Astra Militarum)."
+  members:
+    - {role: Sergeant, template: Astra Militarum Sergeant, count: 1, leader: true, ranged: {item: "Laspistol, Common Pattern", mode: "Standard"}, melee: {item: "Chainsword", mode: "Swing"}}
+    - {role: Vox-caster, template: Astra Militarum Guardsman, count: 1, vox: true}
+    - {role: Grenade Launcher, template: Astra Militarum Guardsman, count: 1, ranged: {item: "Grenade Launcher", mode: "Frag round"}, skills: {"Guns (Grenade Launcher)": 13}}
+    - {role: Missile Launcher 1, template: Astra Militarum Guardsman, count: 1, team: 1, crew: gunner, ranged: {item: "Missile Launcher", mode: "Krak missile"}, stance: shoot, grenades: [], mags: 6, skills: {"Gunner (Rockets)": 13}}
+    - {role: Loader 1, template: Astra Militarum Guardsman, count: 1, team: 1, crew: loader, stance: shoot}
+    - {role: Guardsman, template: Astra Militarum Guardsman, count: 5}
+Astra Militarum Infantry Squad (Sniper Rifle, Mortar):
+  short: Guard Squad
+  note: "Ten troopers: sergeant with laspistol and chainsword, vox-caster, a sniper rifle, a mortar team (gunner and loader) and five lasguns (Codex: Astra Militarum)."
+  members:
+    - {role: Sergeant, template: Astra Militarum Sergeant, count: 1, leader: true, ranged: {item: "Laspistol, Common Pattern", mode: "Standard"}, melee: {item: "Chainsword", mode: "Swing"}}
+    - {role: Vox-caster, template: Astra Militarum Guardsman, count: 1, vox: true}
+    - {role: Sniper Rifle, template: Astra Militarum Guardsman, count: 1, ranged: {item: "Long-Las", mode: "Standard"}}
+    - {role: Mortar 1, template: Astra Militarum Guardsman, count: 1, team: 1, crew: gunner, ranged: {item: "Mortar", mode: "Indirect fire, HE bomb"}, stance: shoot, grenades: [], mags: 12, skills: {"Artillery (Cannon)": 12}}
+    - {role: Loader 1, template: Astra Militarum Guardsman, count: 1, team: 1, crew: loader, stance: shoot}
+    - {role: Guardsman, template: Astra Militarum Guardsman, count: 5}
+Heavy Weapons Squad (Heavy Bolters):
+  short: Heavy Weapons
+  note: "Three heavy bolter teams, gunner and loader each, dug in to give the platoon fire support; the senior gunner leads (Codex: Astra Militarum)."
+  members:
+    - {role: Heavy Bolter 1, template: Astra Militarum Guardsman, count: 1, team: 1, crew: gunner, leader: true, ranged: {item: "Heavy Bolter", mode: "Standard bolt"}, stance: shoot, grenades: [], skills: {"Gunner (Machine Gun)": 13}}
+    - {role: Loader 1, template: Astra Militarum Guardsman, count: 1, team: 1, crew: loader, stance: shoot}
+    - {role: Heavy Bolter 2, template: Astra Militarum Guardsman, count: 1, team: 2, crew: gunner, ranged: {item: "Heavy Bolter", mode: "Standard bolt"}, stance: shoot, grenades: [], skills: {"Gunner (Machine Gun)": 13}}
+    - {role: Loader 2, template: Astra Militarum Guardsman, count: 1, team: 2, crew: loader, stance: shoot}
+    - {role: Heavy Bolter 3, template: Astra Militarum Guardsman, count: 1, team: 3, crew: gunner, ranged: {item: "Heavy Bolter", mode: "Standard bolt"}, stance: shoot, grenades: [], skills: {"Gunner (Machine Gun)": 13}}
+    - {role: Loader 3, template: Astra Militarum Guardsman, count: 1, team: 3, crew: loader, stance: shoot}
+Heavy Weapons Squad (Lascannons):
+  short: Heavy Weapons
+  note: "Three lascannon teams, gunner and loader each, dug in to give the platoon fire support; the senior gunner leads (Codex: Astra Militarum)."
+  members:
+    - {role: Lascannon 1, template: Astra Militarum Guardsman, count: 1, team: 1, crew: gunner, leader: true, ranged: {item: "Lascannon", mode: "Braced/mounted"}, stance: shoot, grenades: [], mags: 3, skills: {"Gunner (Beams)": 13}}
+    - {role: Loader 1, template: Astra Militarum Guardsman, count: 1, team: 1, crew: loader, stance: shoot}
+    - {role: Lascannon 2, template: Astra Militarum Guardsman, count: 1, team: 2, crew: gunner, ranged: {item: "Lascannon", mode: "Braced/mounted"}, stance: shoot, grenades: [], mags: 3, skills: {"Gunner (Beams)": 13}}
+    - {role: Loader 2, template: Astra Militarum Guardsman, count: 1, team: 2, crew: loader, stance: shoot}
+    - {role: Lascannon 3, template: Astra Militarum Guardsman, count: 1, team: 3, crew: gunner, ranged: {item: "Lascannon", mode: "Braced/mounted"}, stance: shoot, grenades: [], mags: 3, skills: {"Gunner (Beams)": 13}}
+    - {role: Loader 3, template: Astra Militarum Guardsman, count: 1, team: 3, crew: loader, stance: shoot}
+Heavy Weapons Squad (Autocannons):
+  short: Heavy Weapons
+  note: "Three autocannon teams, gunner and loader each, dug in to give the platoon fire support; the senior gunner leads (Codex: Astra Militarum)."
+  members:
+    - {role: Autocannon 1, template: Astra Militarum Guardsman, count: 1, team: 1, crew: gunner, leader: true, ranged: {item: "Autocannon", mode: "Braced/mounted"}, stance: shoot, grenades: [], skills: {"Gunner (Cannon)": 13}}
+    - {role: Loader 1, template: Astra Militarum Guardsman, count: 1, team: 1, crew: loader, stance: shoot}
+    - {role: Autocannon 2, template: Astra Militarum Guardsman, count: 1, team: 2, crew: gunner, ranged: {item: "Autocannon", mode: "Braced/mounted"}, stance: shoot, grenades: [], skills: {"Gunner (Cannon)": 13}}
+    - {role: Loader 2, template: Astra Militarum Guardsman, count: 1, team: 2, crew: loader, stance: shoot}
+    - {role: Autocannon 3, template: Astra Militarum Guardsman, count: 1, team: 3, crew: gunner, ranged: {item: "Autocannon", mode: "Braced/mounted"}, stance: shoot, grenades: [], skills: {"Gunner (Cannon)": 13}}
+    - {role: Loader 3, template: Astra Militarum Guardsman, count: 1, team: 3, crew: loader, stance: shoot}
+Heavy Weapons Squad (Missile Launchers):
+  short: Heavy Weapons
+  note: "Three missile launcher teams, gunner and loader each, dug in to give the platoon fire support; the senior gunner leads (Codex: Astra Militarum)."
+  members:
+    - {role: Missile Launcher 1, template: Astra Militarum Guardsman, count: 1, team: 1, crew: gunner, leader: true, ranged: {item: "Missile Launcher", mode: "Krak missile"}, stance: shoot, grenades: [], mags: 6, skills: {"Gunner (Rockets)": 13}}
+    - {role: Loader 1, template: Astra Militarum Guardsman, count: 1, team: 1, crew: loader, stance: shoot}
+    - {role: Missile Launcher 2, template: Astra Militarum Guardsman, count: 1, team: 2, crew: gunner, ranged: {item: "Missile Launcher", mode: "Krak missile"}, stance: shoot, grenades: [], mags: 6, skills: {"Gunner (Rockets)": 13}}
+    - {role: Loader 2, template: Astra Militarum Guardsman, count: 1, team: 2, crew: loader, stance: shoot}
+    - {role: Missile Launcher 3, template: Astra Militarum Guardsman, count: 1, team: 3, crew: gunner, ranged: {item: "Missile Launcher", mode: "Krak missile"}, stance: shoot, grenades: [], mags: 6, skills: {"Gunner (Rockets)": 13}}
+    - {role: Loader 3, template: Astra Militarum Guardsman, count: 1, team: 3, crew: loader, stance: shoot}
+Heavy Weapons Squad (Mortars):
+  short: Heavy Weapons
+  note: "Three mortar teams, gunner and loader each, dug in to give the platoon fire support; the senior gunner leads (Codex: Astra Militarum)."
+  members:
+    - {role: Mortar 1, template: Astra Militarum Guardsman, count: 1, team: 1, crew: gunner, leader: true, ranged: {item: "Mortar", mode: "Indirect fire, HE bomb"}, stance: shoot, grenades: [], mags: 12, skills: {"Artillery (Cannon)": 12}}
+    - {role: Loader 1, template: Astra Militarum Guardsman, count: 1, team: 1, crew: loader, stance: shoot}
+    - {role: Mortar 2, template: Astra Militarum Guardsman, count: 1, team: 2, crew: gunner, ranged: {item: "Mortar", mode: "Indirect fire, HE bomb"}, stance: shoot, grenades: [], mags: 12, skills: {"Artillery (Cannon)": 12}}
+    - {role: Loader 2, template: Astra Militarum Guardsman, count: 1, team: 2, crew: loader, stance: shoot}
+    - {role: Mortar 3, template: Astra Militarum Guardsman, count: 1, team: 3, crew: gunner, ranged: {item: "Mortar", mode: "Indirect fire, HE bomb"}, stance: shoot, grenades: [], mags: 12, skills: {"Artillery (Cannon)": 12}}
+    - {role: Loader 3, template: Astra Militarum Guardsman, count: 1, team: 3, crew: loader, stance: shoot}
+Special Weapons Squad (Plasma Guns):
+  short: Special Weapons
+  note: "Six Guardsmen, three carrying plasma guns, the senior trooper leading (Codex: Astra Militarum)."
+  members:
+    - {role: Senior Trooper, template: Astra Militarum Guardsman, count: 1, leader: true}
+    - {role: Plasma Gun, template: Astra Militarum Guardsman, count: 3, ranged: {item: "Plasma Gun", mode: "Standard"}}
+    - {role: Guardsman, template: Astra Militarum Guardsman, count: 2}
+Special Weapons Squad (Meltaguns):
+  short: Special Weapons
+  note: "Six Guardsmen, three carrying meltaguns, the senior trooper leading (Codex: Astra Militarum)."
+  members:
+    - {role: Senior Trooper, template: Astra Militarum Guardsman, count: 1, leader: true}
+    - {role: Meltagun, template: Astra Militarum Guardsman, count: 3, ranged: {item: "Meltagun", mode: "Short range (up to ½D)"}, stance: advance}
+    - {role: Guardsman, template: Astra Militarum Guardsman, count: 2}
+Special Weapons Squad (Grenade Launchers):
+  short: Special Weapons
+  note: "Six Guardsmen, three carrying grenade launchers, the senior trooper leading (Codex: Astra Militarum)."
+  members:
+    - {role: Senior Trooper, template: Astra Militarum Guardsman, count: 1, leader: true}
+    - {role: Grenade Launcher, template: Astra Militarum Guardsman, count: 3, ranged: {item: "Grenade Launcher", mode: "Frag round"}, skills: {"Guns (Grenade Launcher)": 13}}
+    - {role: Guardsman, template: Astra Militarum Guardsman, count: 2}
+Special Weapons Squad (Flamers):
+  short: Special Weapons
+  note: "Six Guardsmen, three carrying flamers, the senior trooper leading (Codex: Astra Militarum)."
+  members:
+    - {role: Senior Trooper, template: Astra Militarum Guardsman, count: 1, leader: true}
+    - {role: Flamer, template: Astra Militarum Guardsman, count: 3, ranged: {item: "Flamer", mode: "Cone attack (5 yards)"}, stance: advance, skills: {"Liquid Projector (Flamethrower)": 13}}
+    - {role: Guardsman, template: Astra Militarum Guardsman, count: 2}
+Special Weapons Squad (Sniper Rifles):
+  short: Special Weapons
+  note: "Six Guardsmen, three carrying sniper rifles, the senior trooper leading (Codex: Astra Militarum)."
+  members:
+    - {role: Senior Trooper, template: Astra Militarum Guardsman, count: 1, leader: true}
+    - {role: Sniper Rifle, template: Astra Militarum Guardsman, count: 3, ranged: {item: "Long-Las", mode: "Standard"}}
+    - {role: Guardsman, template: Astra Militarum Guardsman, count: 2}

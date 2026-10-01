@@ -150,7 +150,13 @@ const SIM = (() => {
       const lo = LOADOUTS[mb.template] || {}, spec = { template: mb.template, count: mb.count || 1 };
       for (const k of SQUAD_KEYS) { const v = k in mb ? mb[k] : lo[k]; if (v !== undefined) spec[k] = JSON.parse(JSON.stringify(v)); }
       if (!spec.stance) spec.stance = "advance";
-      return Object.assign(spec, { label: `${short} ${mb.role}`, role: mb.role, squad: tag || name, squadName: short, leader: !!mb.leader, vox: !!mb.vox, commissar: !!mb.commissar });
+      return Object.assign(spec, { label: `${short} ${mb.role}`, role: mb.role, squad: tag || name, squadName: short, leader: !!mb.leader, vox: !!mb.vox, commissar: !!mb.commissar,
+        ...(mb.team ? { team: String(mb.team), crew: mb.crew || "gunner" } : {}) });
+    }).map((spec, i, all) => {
+      // a team's loader carries the means to take over the gun: its weapon line and the gunner's skill with it
+      if (spec.crew !== "loader") return spec;
+      const g = all.find(x => x.team === spec.team && x.crew === "gunner");
+      return g ? { ...spec, heavy: g.ranged ? { ...g.ranged } : undefined, skills: { ...(g.skills || {}), ...(spec.skills || {}) } } : spec;
     });
   }
   function findTraitWeapon(traits, name) {
@@ -310,7 +316,7 @@ const SIM = (() => {
       const w = { id: ++WID, name: label, usage: line.usage, text: line.damage, dmg, follow: fdmg, followText: fl ? fl.damage : "", level,
         rend, rendBy, rendText: rl ? rl.damage : "", malf: facts.malf || 0,
         overheat: facts.overheat ? parseDamage(/[a-z]\s*$/.test(facts.overheat) ? facts.overheat : facts.overheat + " burn") : null,
-        cone, blast: facts.blast || 0, warpflame: !!facts.warpflame, chink: ((SIMW[label] || {})._item || {}).chink || 0, natural: !!sel.trait, dST };
+        cone, blast: facts.blast || 0, warpflame: !!facts.warpflame, indirect: !!facts.indirect, minRange: facts.minRange || 0, chink: ((SIMW[label] || {})._item || {}).chink || 0, natural: !!sel.trait, dST };
       // an Agoniser's agony follow-up (B428): HT-N or Severe Pain (-4, -2 with High Pain Threshold); a critical
       // failure also stuns
       if (fl && !fdmg && /agony/i.test(fl.usage || "")) w.agony = -Number((/HT-(\d+)/.exec(fl.notes || "") || [0, 3])[1]);
@@ -385,6 +391,11 @@ const SIM = (() => {
       melee = { id: ++WID, name: "Punch", usage: "Punch", text: "thr cr", dmg: pd, follow: null, level: lvl, parry: 0, unbalanced: false, reach: "C", reachMax: 1, malf: 0, weight: st.st * st.st / 100 };
     }
     const ranged = mkWeapon(spec.ranged, false);
+    // a crew-served heavy weapon (squad `team`): one on a tripod or bipod, or a mortar on its baseplate, is fired from
+    // its mount once set up (no ST penalty, braced, its weight off the gunner); a shoulder-fired one isn't set up
+    const teamGun = w => { if (!w) return w; w.team = true; w.needsSetup = w.mounted || w.bipod || w.indirect; if (w.needsSetup) { w.level += w.stPenProne || 0; w.stPen = w.stPenProne = w.stStand = 0; w.mounted = true; } return w; };
+    if (spec.team) teamGun(ranged);
+    const heavy = spec.heavy ? teamGun(mkWeapon(spec.heavy, false)) : null;
     // a combat knife carried besides the main blade (loadout `knife`): reach C, so it works in close combat unpenalised
     const knife = spec.knife ? mkWeapon(spec.knife, true) : null;
     // a second ranged weapon that needs no hands (a Carnifex's bio-plasma): its own magazine, no reload in a fight
@@ -411,7 +422,11 @@ const SIM = (() => {
       + (spec.melee && spec.melee.item && (!spec.ranged || spec.melee.item !== spec.ranged.item) ? lbOf(spec.melee.item) : 0)
       + (spec.grenades || []).reduce((a, g) => a + lbOf(g.item) * (g.count || 1), 0) + lbOf(spec.carried);
     const BL = liftST * liftST / 5;
-    const enc = load <= BL ? 0 : load <= 2 * BL ? 1 : load <= 3 * BL ? 2 : load <= 6 * BL ? 3 : 4;
+    const encOf = l => l <= BL ? 0 : l <= 2 * BL ? 1 : l <= 3 * BL ? 2 : l <= 6 * BL ? 3 : 4;
+    const enc = encOf(load);
+    // a packed-up team weapon on the move: the gunner carries half of it and its tripod (20 lb; the autocannon's and
+    // a mortar's own weight includes the mount), the loader the rest
+    const packLb = ranged && ranged.team && ranged.needsSetup && spec.ranged ? (lbOf(spec.ranged.item) + (/Lascannon|Heavy Bolter|Multi-Melta|Plasma Cannon/.test(spec.ranged.item) ? 20 : 0)) / 2 : 0;
     // two weapons at once (B417): -4 each, the off hand -4 more unless Ambidexterity; Dual-Weapon Attack buys the -4 off
     const dwa = (st.skills || []).find(s => /^Dual-Weapon Attack/.test(s.name) && s.level != null);
     const dualPen = dwa && melee ? Math.max(0, melee.level - dwa.level) : 4;
@@ -453,6 +468,7 @@ const SIM = (() => {
       // squads: units sharing a squad tag deploy together and take morale together; the leader can give orders
       // (Leadership, B204), a vox-caster carries the orders to the whole squad, a Commissar keeps it in the fight
       squad: spec.squad || null, squadName: spec.squadName || null, role: spec.role || null, leader: !!spec.leader, vox: !!spec.vox,
+      team: spec.team || null, crew: spec.crew || null, heavy, movePacked: Math.max(1, Math.floor((st.move + arm.move) * [1, 0.8, 0.6, 0.4, 0.2][encOf(load + packLb)])),
       commissar: !!spec.commissar || /Commissar/.test(spec.template),
       ranged2,
       body: spec.body || (LOADOUTS[spec.template] || {}).body || "upright",   // posture for height in melee (Pyramid 3/77 p. 4)
@@ -1119,13 +1135,21 @@ const SIM = (() => {
           reanim: 0, dmgDealt: 0, kills: 0, armsLost: 0, legsLost: 0, grips: [], holding: null, pinned: false,
           waiting: null, zone: null, grenadesLeft: u.grenades.map(g => g.count), grenadeReady: null,
           inHand: u.bothReady ? "both" : u.stance === "charge" ? "melee" : "gun",
+          setUp: !!(u.ranged && u.ranged.needsSetup), setupT: 0, setupTo: null, idle: 0,
           wounds: {}, pain: 0, painSev: 0, halfMove: false, halfDodge: false, gawd: 0, crippled: {} };
         let h = terr ? nextSpawn(u.side) : fromOffset(col, row);
         if (!terr) while (occ.has(key(h.q, h.r))) h = fromOffset(h.q + (u.side ? 1 : -1), row);
+        // a loader deploys beside its gun, on the side away from the enemy where there's room
+        const gun = u.crew === "loader" && models.find(x => x.u.side === u.side && x.u.squad === u.squad && x.u.team === u.team && x.u.crew === "gunner" && x.h);
+        if (gun) {
+          const back = u.side === 0 ? -1 : 1, nbs = DIRS.map(([dq, dr]) => ({ q: gun.h.q + dq, r: gun.h.r + dr })).filter(n => !taken(key(n.q, n.r)) && (!terr || walkable(key(n.q, n.r))));
+          nbs.sort((a, b) => back * (b.q - a.q));
+          if (nbs.length) { if (terr && h) { spawnAt[u.side]--; } h = nbs[0]; u.besideGun = true; }
+        }
         place(m, h);
         m.ix = models.length; m.trail = []; u.models.push(m); models.push(m);
       }
-      row0[u.side] += 2 * perRank + (sameSquad(u, units[ui + 1]) ? 0 : 4);
+      if (!u.besideGun) row0[u.side] += 2 * perRank + (sameSquad(u, units[ui + 1]) ? 0 : 4);
     });
     // squads: one morale group per squad (a lone unit is its own group)
     const groups = [], gmap = new Map();
@@ -1412,7 +1436,8 @@ const SIM = (() => {
       if (L > 0) return Math.min(Math.floor(base * Math.pow(2, L)), base * (k + 1));
       return k >= 1 ? Math.max(base + 1, Math.floor(base * 1.2)) : base;
     }
-    const moveOf = m => m.legsLost ? 1 : m.halfMove || weak(m) || tired(m) ? Math.max(1, Math.ceil(m.u.move / 2)) : m.u.move;
+    const baseMove = m => m.u.ranged && m.u.ranged.needsSetup && !m.setUp ? m.u.movePacked : m.u.move;
+    const moveOf = m => m.legsLost ? 1 : m.halfMove || weak(m) || tired(m) ? Math.max(1, Math.ceil(baseMove(m) / 2)) : baseMove(m);
 
     // ---- Revised Fractional Health (the user's house rule; after panoptesv.com's wound rules).
     const SEVN = ["", "Scratch", "Minor", "Moderate", "Major", "Critical", "Massive", "Gawdawful", "Destruction"];
@@ -2061,11 +2086,12 @@ const SIM = (() => {
       t.shieldStruck = false; t.fever = false;
       if (t.state !== "ok" || t.aoa || t.pinned) return null;
       // an active defence spoils any Aim and follow-up aim (B364, TS p. 14): an aiming model lets a shot come when
-      // dodging is a long shot or the shot can barely hurt it, and keeps its aim
+      // dodging is a long shot or the shot can barely hurt it, and keeps its aim; the more its aim is worth (the
+      // Accuracy of the gun it's aiming: a lascannon's 14 against a boltgun's 2), the longer the odds it accepts
       if ((t.aimTurns || t.follow) && melee !== true && melee !== "pb" && melee !== "thrown") {
         const dd = rangedDefence(t, att), rw = aw || (att && att.u.ranged);
-        const harm = rw ? expInjRandom(rw, t.u) : 0;
-        if (dd == null || P3[cl(dd)] < 0.3 || harm < 0.15 * remOf(t)) return null;
+        const harm = rw ? expInjRandom(rw, t.u) : 0, acc = t.u.ranged && t.aimTurns ? t.u.ranged.acc || 0 : 0;
+        if (dd == null || P3[cl(dd)] < Math.min(0.75, 0.3 + 0.03 * Math.max(0, acc - 2)) || harm < 0.15 * remOf(t)) return null;
       }
       if (t.aimTurns || t.follow) { t.aimTurns = 0; t.follow = null; }
       if (t.grips.length) t.retreated = true;   // held: no retreat
@@ -2422,6 +2448,7 @@ const SIM = (() => {
     function bracedFor(m, w, t, moved, aimed) {
       if (moved || !m.h || !t || !t.h || w.usage === "power" || w.thrown || w.cone) return false;
       if (/mount|braced|bipod|tripod/i.test(w.usage || "")) return true;
+      if (w.team && w.needsSetup && m.setUp) return true;
       if (m.prone) return true;
       if (m.kneel && shieldDB(m)) return true;
       if (aimed && w.pistol && !m.u.cs && (m.inHand !== "both" || !m.u.melee || m.u.melee.natural || m.u.melee.name === "Punch")) return true;
@@ -2843,11 +2870,19 @@ const SIM = (() => {
       }
       L(`${m.id} draws its ${m.u.knife.name.split(",")[0]}`);
     }
+    // ---- heavy weapon teams: a gunner and a loader (squad `team`, `crew`)
+    const teamMates = m => m.u.team ? models.filter(x => x !== m && x.u.side === m.u.side && x.u.squad === m.u.squad && x.u.team === m.u.team) : [];
+    const crewNear = m => m.h && teamMates(m).some(x => x.state === "ok" && x.h && !x.stunned && hexDist(x.h, m.h) <= 1);
+    // a loader beside the gun feeds it: reloading takes half the time (house rule, after the crews of TS and B)
+    const reloadTime = (m, w) => Math.max(1, m.u.crew === "gunner" && crewNear(m) ? Math.ceil(w.shots.reload / 2) : w.shots.reload);
+    // setting a tripod weapon or mortar up, or packing it to move: 3 seconds with the loader beside it, 6 alone
+    // (house rule; the item notes' "about a minute" is an unhurried setup)
+    const setupTime = m => crewNear(m) ? 3 : 6;
     function weaponsFor(m, melee) {
       const out = [];
       const oneHand = m.armsLost || holdingGun(m);
       if (melee) { if (m.knifeOut && m.u.knife && m.armsLost < 2) out.push(m.u.knife); else if (m.armsLost < 2 && bladeReady(m) && (!oneHand || m.u.melee.oneHanded !== false)) out.push(m.u.melee); }
-      else if (m.u.ranged && !m.gunBroken && !m.jam && m.armsLost < 2 && gunReady(m) && (!oneHand || m.u.ranged.oneHanded) && !gunGrip(m) && !m.gunSpent) out.push(m.u.ranged);
+      else if (m.u.ranged && !m.gunBroken && !m.jam && m.armsLost < 2 && gunReady(m) && (!oneHand || m.u.ranged.oneHanded) && !gunGrip(m) && !m.gunSpent && (!m.u.ranged.needsSetup || m.setUp)) out.push(m.u.ranged);
       if (!melee && m.u.ranged2 && (m.extraLeft ?? m.u.ranged2.limit) > 0) out.push(m.u.ranged2);
       for (const p of m.u.powers) if (!!p.melee === melee && m.fp - p.fp >= 0) out.push(p);
       return out;
@@ -3181,6 +3216,7 @@ const SIM = (() => {
         const bonus = 0.3 * Math.max(0.02, Math.abs(top0.v));
         for (const o of opts) if ((m.role === "bound" ? moveL : fireL).test(o.label)) o.v += bonus;
       }
+      if (u.team) crewOptions(m, pool, opts, add, rNow, adj);
       // keeping its head down (TS p. 21): only what doesn't expose it: reload, ready, defend, a door, or stay down
       if (m.headsDown && !adj.length) {
         const safe = opts.filter(o => /^(reload|reloading|tac-reload|ready-|re-ready-|draw-early|orders|aod|concentrate|close-door|door)/.test(o.label));
@@ -3389,6 +3425,76 @@ const SIM = (() => {
       const k = coverAt(t.h, fh, t);
       return DUCK.has(k) && covPenAt(t.h, fh, t) > 0;
     }
+    // ---- the heavy weapon team's choices, laid over the ordinary ones
+    const MOVES = /^(advance|move-closer|cover@|high-ground|close@|charge|aoa-charge|heroic|advance-fire|spread@|peel|reload-cover|step-|popup@|search|rejoin)/;
+    const targetsFor = (m, w, h = m.h) => known(m).filter(f => f.h && f.state === "ok" && hexDist(h, f.h) <= w.range.max && hexDist(h, f.h) >= (w.minRange || 0) && (w.indirect ? spotted(m, f) : los(h, f.h)));
+    function crewOptions(m, pool, opts, add, rNow, adj) {
+      const u = m.u, top = () => opts.reduce((a, b) => b.v > a.v ? b : a, { v: 0 }), force = (label, run) => { const t0 = top(); add(t0.v + 0.5 * Math.max(0.05, Math.abs(t0.v)), label, run); };
+      const w = u.ranged;
+      // setting up or packing up takes several seconds of Ready; once begun it's carried through
+      if (m.setupT > 0) {
+        opts.length = 0;
+        add(0, "setting-up", () => {
+          if (--m.setupT <= 0) { m.setUp = m.setupTo === "up"; L(`${m.id} ${m.setUp ? "has the " + w.name + " set up" : "has the " + w.name + " packed to move"}`); }
+          else L(`${m.id} keeps ${m.setupTo === "up" ? "setting up" : "packing up"} the ${w.name}`);
+        });
+        return;
+      }
+      if (u.crew === "gunner" && w && w.needsSetup && !adj.length) {
+        const have = targetsFor(m, w).length > 0;
+        m.idle = have ? 0 : (m.idle || 0) + 1;
+        if (m.setUp) {
+          // dug in: it fires from here; after ten quiet seconds with nothing in range it packs up to find a new spot
+          for (let i = opts.length - 1; i >= 0; i--) if (MOVES.test(opts[i].label)) opts.splice(i, 1);
+          if (m.idle >= 10) force("pack-up", () => { m.setupTo = "down"; m.setupT = setupTime(m) - 1; L(`${m.id} starts packing up the ${w.name} to move`); });
+        } else if (have) {
+          // something to shoot: set the gun up here
+          force("set-up", () => { m.setupTo = "up"; m.setupT = setupTime(m) - 1; L(`${m.id} starts setting up the ${w.name}`); });
+        }
+      }
+      if (u.crew === "loader") {
+        const g = teamMates(m).find(x => x.u.crew === "gunner");
+        if (g && g.state === "ok" && g.h) {
+          // with the gun: stay beside it, go where it goes
+          if (hexDist(m.h, g.h) > 1) force(`rejoin@${g.id}`, () => { stepToward(m, g.h, moveOf(m), 1); L(`${m.id} keeps up with ${g.id}`); });
+          else if (g.setUp || g.setupT > 0) for (let i = opts.length - 1; i >= 0; i--) if (MOVES.test(opts[i].label)) opts.splice(i, 1);
+        } else if (g && u.heavy && !m.tookOver && (g.lastH || g.h) && hexDist(m.h, g.lastH || g.h) <= 2 && !adj.length) {
+          // the gunner is down: the loader takes the gun (two seconds to get behind it)
+          force("take-over", () => {
+            m.takeT = (m.takeT || 0) + 1;
+            if (m.takeT < 2) { L(`${m.id} drags ${g.id} off the ${u.heavy.name}`); return; }
+            m.tookOver = true; u.ranged = u.heavy; u.crew = "gunner";
+            m.ammo = g.ammo > 0 ? g.ammo : 0; m.mags = Math.max(0, g.mags ?? 0); m.reload = 0; m.jam = 0; m.gunBroken = !!g.gunBroken; m.inHand = "gun";
+            m.setUp = !!(u.ranged.needsSetup && g.setUp); m.idle = 0;
+            L(`${m.id} takes over the ${u.heavy.name}`);
+          });
+        }
+      }
+    }
+    // indirect fire (mortars): at a foe someone on its side can see (the shooter, or a spotter) within range and outside
+    // the minimum. Attacking a hex is +4 (B414); without its own line of sight -2 (house rule: the spotter's
+    // corrections); no defence (anyone there may dive for cover); a miss lands its margin in yards off, at most half
+    // the distance, as a thrown grenade's does
+    const spotted = (m, f) => !AWARE || models.some(x => x.u.side === m.u.side && x.state === "ok" && x.h && !x.stunned && los(x.h, f.h) && hexDist(x.h, f.h) <= 120);
+    function indirectOptions(m, w, add, rNow, Wr) {
+      for (const t of targetsFor(m, w).slice(0, 6)) {
+        const d = hexDist(m.h, t.h), own = los(m.h, t.h);
+        const lvl = wl(m, w) - skillPen(m) + rangePenalty(d) + 4 + (own ? 0 : -2) + Math.min(2, w.acc || 0);
+        const crowd = models.filter(x => x !== t && x.state === "ok" && x.h && x.u.side !== m.u.side && hexDist(x.h, t.h) <= 2).length;
+        const E = P3[cl(lvl)] * expInjRandom(w, t.u) * (1 + 0.5 * crowd);
+        add(Wr * kv(m, t, E) - rNow, `indirect@${t.id}`, () => lobShell(m, w, t, lvl, own));
+      }
+    }
+    function lobShell(m, w, t, lvl, own) {
+      if (!t.h) return;
+      reveal(m, w); m.attacked = true; m.aimTurns = 0;
+      if (w.shots.mag !== Infinity) m.ammo--;
+      const r = lvl < 3 ? { ok: false, margin: lvl - 10 } : check(lvl), raw = rollDamage(w.dmg);
+      const d = hexDist(m.h, t.h), off = r.ok ? 0 : Math.max(1, Math.min(Math.ceil(d / 2), -r.margin)), at = off ? scatter(t.h, off) : t.h;
+      L(`${m.id} fires the ${w.name} at ${t.id}'s position (${d} yd${own ? "" : ", called in by a spotter"}, skill ${lvl})${off ? `: ${off} yd off` : ": on target"}`);
+      FX(["s", m.h.q, m.h.r, at.q, at.r, m.u.side, r.ok ? 1 : 0, m.ix, t.ix, lvl, r.ok ? 1 : 0, 0]);
+      explosion(m, w, at, raw);
+    }
     // ---- options at range: shoot (each weapon and target), aim, Move and Attack, suppression, grenades, Wait, reload
     function rangedOptions(m, pool, add, rNow, Wr) {
       const u = m.u;
@@ -3443,7 +3549,7 @@ const SIM = (() => {
       // reloads (TS p. 20): top up a part-used magazine while nobody can see us; when empty under fire, step out of
       // sight first if there's somewhere within a move
       if (u.ranged && !m.gunBroken && m.reload === 0 && m.mags > 0 && u.ranged.shots.mag !== Infinity && m.ammo < u.ranged.shots.mag && u.ranged.shots.reload > 0 && u.ranged.shots.reload <= 3) {
-        const w = u.ranged, turns = Math.max(1, w.shots.reload);
+        const w = u.ranged, turns = reloadTime(m, w);
         if (!cands.length && m.ammo > 0 && m.ammo < w.shots.mag * 0.6)
           add(Math.pow(GAMMA, turns) * 0.5 * shotValueFrom(m, m.h, pool) - rNow + 0.002 * (1 - m.ammo / w.shots.mag), "tac-reload", () => { m.reload = turns; L(`${m.id} tops up its magazine`); });
         if (terr && cands.length && m.ammo <= 0) {
@@ -3459,10 +3565,11 @@ const SIM = (() => {
         }
         if (isGun && m.ammo <= 0) {
           if (m.mags <= 0) continue;   // out of magazines: the gun is done
-          const turns = Math.max(1, w.shots.reload);
-          add(Math.pow(GAMMA, turns) * shotValueFrom(m, m.h, pool) - rNow, "reload", () => { m.reload = turns; if (w.shots.reload > 3) m.reload = 0; L(`${m.id} reloads`); });
+          const turns = reloadTime(m, w);
+          add(Math.pow(GAMMA, turns) * shotValueFrom(m, m.h, pool) - rNow, "reload", () => { m.reload = turns; if (w.natural && w.shots.reload > 3) m.reload = 0; L(`${m.id} ${crewNear(m) ? "and its loader reload" : "reloads"}`); });
           continue;
         }
+        if (w.indirect) { indirectOptions(m, w, add, rNow, Wr); continue; }
         if (w.concentrate && m.conc < w.concentrate) {
           add(Math.pow(GAMMA, w.concentrate - m.conc) * shotValueFrom(m, m.h, pool) - rNow, "concentrate", () => { m.conc++; L(`${m.id} concentrates on ${w.name}`); });
           continue;
@@ -4548,7 +4655,7 @@ const SIM = (() => {
       // regrowing bio-weapon ammunition
       for (const m of models) {
         const w = m.u.ranged;
-        if (!w || m.state !== "ok" || w.shots.reload <= 3 || m.ammo > 0) continue;
+        if (!w || !w.natural || m.state !== "ok" || w.shots.reload <= 3 || m.ammo > 0) continue;
         if (m.reload <= 0) m.reload = w.shots.reload;
         if (--m.reload <= 0) { m.reload = 0; m.ammo = w.shots.mag; }   // grown, not carried: no magazines used
       }
@@ -4706,6 +4813,9 @@ if (typeof document !== "undefined") (() => {
     ["Facility: 20 Guardsmen vs 20 Ork Boyz", [["Astra Militarum Guardsman", 20]], [["Ork Boy", 20]], 60, "facility"],
     ["Ruins: 10 Genestealers vs a Tactical squad", [["Genestealer", 10]], [["squad:Astartes Tactical Squad"]], 60, "ruins"],
     ["Ruins: 2 Guard squads vs Ork Boyz", [["squad:Astra Militarum Infantry Squad"], ["squad:Astra Militarum Infantry Squad"]], [["squad:Ork Boyz Mob"]], 60, "ruins"],
+    ["Lascannon teams vs a Carnifex", [["squad:Heavy Weapons Squad (Lascannons)"]], [["Carnifex", 1]], 150],
+    ["Mortars and a Guard squad vs 30 Hormagaunts", [["squad:Heavy Weapons Squad (Mortars)"], ["squad:Astra Militarum Infantry Squad"]], [["Hormagaunt", 30]], 150],
+    ["Meltaguns and a Guard squad vs a Carnifex", [["squad:Special Weapons Squad (Meltaguns)"], ["squad:Astra Militarum Infantry Squad"]], [["Carnifex", 1]], 60],
     ["Squads: Commissar's squad vs Ork Boyz", [["squad:Astra Militarum Infantry Squad with Commissar"]], [["squad:Ork Boyz Mob"]], 80],
     ["Squads: Tactical vs Chaos", [["squad:Astartes Tactical Squad"]], [["squad:Chaos Space Marine Squad"]], 40],
     ["Squads: 3 Guard squads vs a Tactical squad", [["squad:Astra Militarum Infantry Squad"], ["squad:Astra Militarum Infantry Squad"], ["squad:Astra Militarum Infantry Squad"]], [["squad:Astartes Tactical Squad"]], 100],
