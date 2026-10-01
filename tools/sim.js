@@ -1861,8 +1861,10 @@ const SIM = (() => {
       if (terr) for (const [dq, dr] of [[0, 0], ...DIRS]) { const i = idx(key(at.q + dq, at.r + dr)); if (i != null && structOf(i)) damageStructure(i, Math.floor(raw / 3), w.dmg, false); }
       const lv = w.explosion || 1;
       const zone = 2 * (w.dmg.n || 1) * lv;   // the blast zone for Fright Checks: 2 yards per die (TS p. 34)
-      // collateral reaches 2 yards per die of damage (B414); Explosion level L (B107) widens it: distance counts as yards / L
-      const reach = 2 * (w.dmg.n || 1) * (w.dmg.mult || 1) * lv;
+      // collateral reaches 2 yards per die of damage (B414), counting the dice before any multiplier (a 6d×4 plasma bolt
+      // reaches 12 yards, not 48: the multiplier is the energy in the hit, not the size of the burst); Explosion level
+      // L (B107) widens it: distance counts as yards / L
+      const reach = 2 * (w.dmg.n || 1) * lv;
       hitFrom = at;
       for (const x of models) {
         if (x.state !== "ok" || !x.h || !los(at, x.h)) continue;
@@ -3704,7 +3706,7 @@ const SIM = (() => {
         // takes it, or advances firing, rather than walking up to arm's length for one; and a gunman stops 3 yards off
         if (cands.length) {
           const t = cands[0], d = hexDist(m.h, t.h), stop = Math.max(u.stance === "charge" ? 2 : 3, keep(t));
-          if (d > stop + 1 && (rangePenalty(d) <= -3 || w.fp)) {
+          if (d > stop + 1 && (rangePenalty(d) <= -5 || w.fp)) {
             const h2 = stepHex(m.h, t.h, Math.min(moveOf(m), d - stop));
             add(GAMMA * shotValueFrom(m, h2, pool) - risk(m, h2, "") - 0.001, `move-closer@${t.id}`, () => {
               stepToward(m, t.h, moveOf(m), stop); if (m.state !== "ok" || !m.h) return; if (t.h) faceTo(m, t.h); L(`${m.id} closes in on ${t.id}`);
@@ -3758,7 +3760,9 @@ const SIM = (() => {
       // grenades (B410): a Ready to grab one, a second to arm it, then throw
       if (u.grenades.length && !m.grips.length && m.armsLost < 1) {
         const g = bestGrenade(m, pool);
-        if (g) {
+        // a grenade that can't really hurt anyone (frags on power armour: a point or so of blunt trauma a fragment) isn't
+        // worth the seconds to ready it: it has to promise at least 5% of the target's remaining HP
+        if (g && g.v >= kv(m, g.c, Math.max(0.5, 0.05 * remOf(g.c)))) {
           const gv = Wr * g.v, left = 2 - grenadeStage(m, g.i);
           if (!left) add(gv - rNow, "throw", () => throwGrenade(m, g));
           else add(Math.pow(GAMMA, left) * gv - rNow, "ready-grenade", () => readyGrenade(m, g.i));
