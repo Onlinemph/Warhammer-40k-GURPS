@@ -469,7 +469,7 @@ The Tyranids are a galaxy-devouring swarm of bio-engineered organisms directed b
 |---|---|---|---|---|---|---|---|---|
 | Termagant | −1 | 9 | 11 | 4 | 11 | 9 | 25 | Gun-beast; swarm |
 | Hormagaunt | −1 | 12 | 13 | 4 | 11 | 12 | 25 | Leaping killer; swarm |
-| Genestealer | 0 | 26 | 17 | 6 | 13 | 28 | 50 | Fastest killer in the swarm; rending claws |
+| Genestealer | 0 | 26 | 17 | 6 | 13 | 34 | 50 | Fastest killer in the swarm; rending claws; Lightning Reflexes (Combat Reflexes, Enhanced Dodge 2), Damage Reduction ÷2 |
 | Ravener | +1 | 32 | 14 | 5 | 14 | 36 | 60 | Burrower |
 | Tyranid Warrior | +1 | 34 | 13 | 8 | 14 | 40 | 60 | Synapse creature, officer of the swarm |
 | Lictor | +1 | 36 | 15 | 8 | 13 | 40 | 60 | Chameleonic stalker |
@@ -477,7 +477,7 @@ The Tyranids are a galaxy-devouring swarm of bio-engineered organisms directed b
 | Hive Tyrant | +2 | 100 | 13 | 12 | 16 | 130 | 150 | Synapse lord, psyker |
 | Carnifex | +2 | 120 | 10 | 4 | 16 | 150 | 150 | Living battering ram |
 
-Tyranid traits: Hive Mind link and **synapse** (within range of a synapse creature, Tyranids fight with total discipline and no fear; outside it they revert to instinct: feeding or fleeing, a disadvantage built honestly), **Shadow in the Warp** (the Hive Mind's presence smothers nearby psykers: a penalty to psychic power and a Fright Check risk, built as an aura; carried by synapse creatures (Warrior, Zoanthrope, Hive Tyrant) and, as a house choice, the Ravener and Lictor, but not the Carnifex), no fear or pain within synapse, **Injury Tolerance (Damage Reduction)** (GURPS Powers p. 53, 25 points per level, level = divisor) on the large synapse-beasts and monsters (Warrior, Ravener and Lictor ÷2; Carnifex and Hive Tyrant ÷3; not gaunts, Genestealers or the Zoanthrope), immunity to disease and toxins, adapted biology (regeneration on larger forms), no language or society. Tyranid psychic powers use the Sorcery model with the Hive Mind as the source; they suffer Perils like other psykers but with Hive Mind flavour.
+Tyranid traits: Hive Mind link and **synapse** (within range of a synapse creature, Tyranids fight with total discipline and no fear; outside it they revert to instinct: feeding or fleeing, a disadvantage built honestly), **Shadow in the Warp** (the Hive Mind's presence smothers nearby psykers: a penalty to psychic power and a Fright Check risk, built as an aura; carried by synapse creatures (Warrior, Zoanthrope, Hive Tyrant) and, as a house choice, the Ravener and Lictor, but not the Carnifex), no fear or pain within synapse, **Injury Tolerance (Damage Reduction)** (GURPS Powers p. 53, 25 points per level, level = divisor) on the large synapse-beasts and monsters (Warrior, Ravener, Lictor and Genestealer ÷2; Carnifex and Hive Tyrant ÷3; not gaunts or the Zoanthrope), immunity to disease and toxins, adapted biology (regeneration on larger forms), no language or society. Tyranid psychic powers use the Sorcery model with the Hive Mind as the source; they suffer Perils like other psykers but with Hive Mind flavour.
 
 Weapon-symbiote anchors:
 
