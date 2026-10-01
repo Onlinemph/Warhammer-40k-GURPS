@@ -3088,6 +3088,7 @@ const SIM = (() => {
       && (!m.u.ranged || m.u.stance === "charge" || m.u.ai.melee > m.u.ai.ranged) && (seenAt[1 - m.u.side].get(m) ?? -99) < turn - 1;
     const grenadeThreat = m => known(m).some(f => f.h && f.state === "ok" && f.u.grenades.length && f.grenadesLeft.some(n => n > 0) && hexDist(f.h, m.h) <= Math.max(...f.u.grenades.map(g => g.range.max)) + moveOf(m));
     function stepToward(m, goal, steps, stopAt = 1) {
+      if (m.prone) steps = Math.min(steps, 1);   // crawling (B551)
       let moved = 0;
       const spread = grenadeThreat(m), stalk = stalker(m);
       // a stalker near its prey moves at half Move (no -5 to Stealth) and keeps to steps the foe can't see, then the dark
@@ -3205,6 +3206,7 @@ const SIM = (() => {
       return fallback ? route(fallback.hk, fallback.h) : null;
     }
     function followPath(m, path, steps) {
+      if (m.prone) steps = Math.min(steps, 1);   // lying down it can only crawl, a yard a second (B551)
       let moved = 0;
       // still more than a move out and under grenade threat: head for the same end but fan out on the way
       if (path.length > steps + 1 && (grenadeThreat(m) || stalker(m))) return stepToward(m, path[path.length - 1], steps, 0);
@@ -4278,6 +4280,12 @@ const SIM = (() => {
         for (const o of opts) if ((m.role === "bound" ? moveL : fireL).test(o.label)) o.v += bonus;
       }
       if (u.team) crewOptions(m, pool, opts, add, rNow, adj);
+      // disarmed (a crippled arm, a dropped or broken gun) and with fists that can't hurt the foe: stay down out of
+      // the line of fire rather than walk at the enemy
+      if (!adj.length && !opts.some(o => /^(fire |aim@|hold@|reload|tac-reload|ready-|re-ready-|throw|grenade|cast|suppress|wait@|watch@)/.test(o.label))
+        && (!u.melee || !pool[0] || expInjRandom(u.melee, pool[0].u) < 1)) {
+        add(-0.5 * risk(m, here, "duck"), "lie-low", () => { if (!m.prone) { m.prone = true; L(`${m.id} goes to ground, with nothing left to fight with`); } else L(`${m.id} keeps its head down`); });
+      }
       // keeping its head down (TS p. 21): only what doesn't expose it: reload, ready, defend, a door, or stay down
       if (m.headsDown && !adj.length) {
         const safe = opts.filter(o => /^(reload|reloading|tac-reload|ready-|re-ready-|draw-early|orders|aod|concentrate|close-door|door)/.test(o.label));
