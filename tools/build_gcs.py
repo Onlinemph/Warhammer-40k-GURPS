@@ -283,7 +283,7 @@ def common(out, item):
 
 EQ_KEYS = {"name", "tl", "lc", "cost", "weight", "qty", "tags", "ref", "notes", "lore", "design", "weapons",
            "dr", "attributes", "skill_bonuses", "reactions", "conditional", "raw_features", "children",
-           "uses", "modifiers", "equipped", "weak_points"}
+           "uses", "modifiers", "equipped", "weak_points", "weak_dr"}
 
 
 def build_equipment(item, path, trail):
@@ -301,6 +301,9 @@ def build_equipment(item, path, trail):
             err(ctx, f"weak_points {wp} outside 3-9")
         line = (f"Weak Points {wp}: when a hit on this armour fails to penetrate, roll 3d; "
                 f"on {wp} or less it found a gap and DR is halved against it.")
+        if item.get("weak_dr"):
+            # the DR a gap faces at a location, where it isn't simply half (a found Weak Point, or a chink, B400)
+            line += " Gap DR: " + ", ".join(f"{k} {v}" for k, v in item["weak_dr"].items()) + "."
         out["local_notes"] = line + ("\n\n" + out["local_notes"] if out.get("local_notes") else "")
     if "tl" in item:
         out["tech_level"] = str(item["tl"])

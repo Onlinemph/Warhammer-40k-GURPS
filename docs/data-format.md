@@ -148,4 +148,4 @@ Astra Militarum Guardsman:
   note: One line on what this kit is and any choice made.
 ```
 
-The simulator reads DR, Weak Points, servo ST and Basic Move changes from the armour items, and follow-up damage from the weapon line after the chosen one. `node tools/sim_test.js` runs a few reference fights against the built site.
+The simulator reads DR, Weak Points (and `weak_dr`: per-location DR a found Weak Point or a chink faces, written into the item notes as "Gap DR: arm 35, leg 35."), servo ST and Basic Move changes from the armour items, and follow-up damage from the weapon line after the chosen one. `node tools/sim_test.js` runs a few reference fights against the built site.

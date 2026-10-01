@@ -230,7 +230,7 @@ The Astra Militarum squads in `data/sim/squads.yaml` carry their Codex weapons: 
 ## Data the engine reads
 
 - Templates (`Library/**/*.gct` via the site data): attributes, skills, traits and combat flags.
-- Equipment: weapon lines (damage, Acc, range, RoF, shots, ST, Bulk, Rcl, reach, parry, skill and defaults), DR by location, Weak Points, servo ST, Basic Move and HP bonuses, `block` attributes (shields).
+- Equipment: weapon lines (damage, Acc, range, RoF, shots, ST, Bulk, Rcl, reach, parry, skill and defaults), DR by location, Weak Points and any `weak_dr` (the DR a gap faces at a location, instead of half: the arm and leg joints of power and Terminator armour), servo ST, Basic Move and HP bonuses, `block` attributes (shields).
 - `data/sim/loadouts.yaml`: default kit per template; `skills` sets a skill level the kit needs (a Gun Drone's Beam Weapons).
 - `data/sim/squads.yaml`: lore squads, each member a template, role, count, `leader`/`vox`/`commissar` and loadout fields.
 - `ranged2` in a loadout: a second ranged weapon that needs no hands (a Carnifex's bio-plasma), with its own magazine and no reload in a fight.

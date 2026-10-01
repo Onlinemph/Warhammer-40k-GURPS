@@ -193,7 +193,7 @@ const SIM = (() => {
   // and the ST and Move features a suit carries (servo ST lives on a child item).
   const LOCS = ["skull", "eye", "face", "neck", "torso", "vitals", "groin", "arm", "hand", "leg", "foot"];
   function armourProfile(names) {
-    const dr = {}; let wp = 0, wpTorso = -1, striking = 0, lifting = 0, move = 0, hp = 0, flexible = false;
+    const dr = {}, gap = {}; let wp = 0, wpTorso = -1, striking = 0, lifting = 0, move = 0, hp = 0, flexible = false;
     for (const nm of names || []) {
       const hit = EQ.get(nm);
       if (!hit) continue;
@@ -208,6 +208,9 @@ const SIM = (() => {
         }
         const w = /^Weak Points (\d+):/.exec(e.notes || "");
         if (w && torso >= wpTorso) { wp = Number(w[1]); wpTorso = torso; }
+        // the DR a gap faces at a location, where the item sets it (a found Weak Point or a chink): "Gap DR: arm 35, leg 35."
+        const gm = /Gap DR: ([^.]*)\./.exec(e.notes || "");
+        if (gm) for (const part of gm[1].split(",")) { const [loc, v] = part.trim().split(/\s+/); if (loc && v) gap[loc] = Number(v); }
         if (/Flexible armou?r/i.test(e.notes || "") && torso > 0) flexible = true;   // blunt trauma (B379)
         for (const o of (e.feat && e.feat.other) || []) {
           let m;
@@ -219,7 +222,13 @@ const SIM = (() => {
         }
       }
     }
-    return { dr, wp, striking, lifting, move, hp, flexible };
+    return { dr, wp, gap, striking, lifting, move, hp, flexible };
+  }
+  // the DR a gap in the armour faces (a found Weak Point, or a chink, B400): half the location's DR, unless the item
+  // sets it (an arm or leg plate's joints, by user direction)
+  function gapDR(u, loc) {
+    const l = loc === "vitals" && u.arm.dr.vitals == null ? "torso" : loc;
+    return u.arm.gap && u.arm.gap[l] != null ? u.arm.gap[l] + (u.arm.dr.all || 0) : Math.floor(drAt(u.arm.dr, l) / 2);
   }
   function drAt(dr, loc) {
     const all = dr.all || 0;
@@ -1698,7 +1707,7 @@ const SIM = (() => {
       const coverDR = cv ? coverDRof(cv) : 0;
       if (cv && cv.i >= 0 && coverDR > 0) wearCover(cv.i, Math.min(raw, coverDR));
       const aDR = area ? areaDR(t.u) : null;
-      const armDR = (area ? aDR.arm : Math.floor(drAt(t.u.arm.dr, loc === "vitals" ? (t.u.arm.dr.vitals != null ? "vitals" : "torso") : loc) / (chink ? 2 : 1))) + coverDR;
+      const armDR = (area ? aDR.arm : chink ? gapDR(t.u, loc) : drAt(t.u.arm.dr, loc === "vitals" ? (t.u.arm.dr.vitals != null ? "vitals" : "torso") : loc)) + coverDR;
       if (chink) L(`  strikes a chink in the armour`);
       const natDR = area ? aDR.nat : natDRat(t.u, loc);
       const div = dmg.div;
@@ -1707,7 +1716,7 @@ const SIM = (() => {
       if (noDR) DR = 0; else if (halfDR) DR = Math.ceil(DR / 2);
       let pen = raw - DR;
       if (pen <= 0 && !chink && armDR > 0 && t.u.arm.wp && roll3() <= t.u.arm.wp) {
-        DR = eff(Math.floor(armDR / 2) + natDR); pen = raw - DR;
+        DR = eff((area ? Math.floor(armDR / 2) : gapDR(t.u, loc) + coverDR) + natDR); pen = raw - DR;
         if (pen > 0) L(`  finds a weak point`);
       }
       // knockback (B378) from crushing and cutting blows
@@ -1943,7 +1952,7 @@ const SIM = (() => {
       if (EXP.has(k)) return EXP.get(k);
       const aDR = loc === "area" ? areaDR(tu) : null;
       if (aDR) loc = "torso";
-      const armDR = aDR ? aDR.arm : Math.floor(drAt(tu.arm.dr, loc === "vitals" ? (tu.arm.dr.vitals != null ? "vitals" : "torso") : loc) / (chink ? 2 : 1));
+      const armDR = aDR ? aDR.arm : chink ? gapDR(tu, loc) : drAt(tu.arm.dr, loc === "vitals" ? (tu.arm.dr.vitals != null ? "vitals" : "torso") : loc);
       const natDR = aDR ? aDR.nat : natDRat(tu, loc);
       const effDR = d.div === Infinity ? 0 : Math.floor((armDR + natDR) / d.div);
       const red = tu.flags.dmgRed > 1 ? tu.flags.dmgRed : 1;
@@ -1952,7 +1961,7 @@ const SIM = (() => {
       let tot = 0;
       // Weak Points: a hit that fails to penetrate finds a gap on 3d <= rating and faces half the armour's DR
       const wpP = !chink && armDR > 0 && tu.arm.wp ? P3[Math.min(18, tu.arm.wp)] : 0;
-      const halfDR = d.div === Infinity ? 0 : Math.floor((Math.floor(armDR / 2) + natDR) / d.div);
+      const halfDR = d.div === Infinity ? 0 : Math.floor(((aDR ? Math.floor(armDR / 2) : gapDR(tu, loc)) + natDR) / d.div);
       const injOf = pen => Math.min(cap, ((d.type === "tox" && tu.flags.poison === "immune" ? 0 : pen * woundMult(d.type, loc, tu.flags, d.ex)) + avgF) / red);
       for (let i = 0; i < 20; i++) {
         const raw = rollDamage(d), pen = raw - effDR;
