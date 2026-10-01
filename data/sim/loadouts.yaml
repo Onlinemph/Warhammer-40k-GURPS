@@ -3,6 +3,7 @@
 # grenades: [{item, mode, count}] thrown grenades carried (lore-standard issue; most templates omit them from their equipment).
 # ranged2: {item|trait, mode} a second ranged weapon that needs no hands (a bio-weapon in the maw); its own shots, no reload.
 # mags: spare magazines for the main gun besides the loaded one (default 4); none left and the gun is empty for good.
+# knife: {item, mode} a combat knife carried besides the main melee weapon, drawn for close combat (reach C, no long-weapon penalty).
 # body: upright (default), horizontal, legless or flying: posture for height in melee (Pyramid 3/77 p. 4-5, B402-403).
 
 # ------------------------------------------------------------------ Imperium
@@ -56,6 +57,7 @@ Astartes Battle-Brother:
   armour: ["Power Armour, Mark VII (Aquila Pattern)"]
   ranged: {item: "Boltgun, Godwyn Pattern", mode: "Standard bolt"}
   melee: {item: "Chainsword, Astartes Pattern", mode: "Swing"}
+  knife: {item: "Combat Knife, Astartes Pattern", mode: "Thrust"}
   stance: advance
   grenades: [{item: "Frag Grenade", mode: "Thrown", count: 2}, {item: "Krak Grenade", mode: "Thrown, shaped charge", count: 1}]
   note: "Tactical Marine: Mk VII Aquila plate, boltgun, chainsword (per template notes)."
@@ -509,6 +511,7 @@ Chaos Space Marine:
   armour: ["Power Armour, Mark IV (Heretic)"]
   ranged: {item: "Boltgun, Godwyn Pattern", mode: "Standard bolt"}
   melee: {item: "Chainsword, Astartes Pattern", mode: "Swing"}
+  knife: {item: "Combat Knife, Astartes Pattern", mode: "Thrust"}
   stance: advance
   grenades: [{item: "Frag Grenade", mode: "Thrown", count: 2}, {item: "Krak Grenade", mode: "Thrown, shaped charge", count: 1}]
   note: "Legionary: heretic Mk IV plate, boltgun, chainsword."
@@ -516,6 +519,7 @@ Chaos Lord:
   armour: ["Power Armour, Mark IV (Heretic)"]
   ranged: {item: "Bolt Pistol, Godwyn-De'az Pattern", mode: "Standard bolt"}
   melee: {item: "Power Sword, Astartes Pattern", mode: "Field on"}
+  knife: {item: "Combat Knife, Astartes Pattern", mode: "Thrust"}
   stance: advance
   grenades: [{item: "Frag Grenade", mode: "Thrown", count: 2}, {item: "Krak Grenade", mode: "Thrown, shaped charge", count: 1}]
   note: "Power sword and bolt pistol in heretic plate; the power fist and Tartaros suit are alternatives."
@@ -523,6 +527,7 @@ Chaos Sorcerer:
   armour: ["Power Armour, Mark IV (Heretic)"]
   ranged: {item: "Bolt Pistol, Godwyn-De'az Pattern", mode: "Standard bolt"}
   melee: {item: "Force Staff, Astartes Pattern", mode: "Field on, swing"}
+  knife: {item: "Combat Knife, Astartes Pattern", mode: "Thrust"}
   shield: {item: "Warding Field (Tzeentch)", sp: 20, delay: 3, recharge: 10, ranged_only: false}
   stance: advance
   grenades: [{item: "Frag Grenade", mode: "Thrown", count: 2}]
@@ -536,6 +541,7 @@ Khorne Berzerker:
   armour: ["Power Armour, Mark IV (Heretic)"]
   ranged: {item: "Bolt Pistol, Godwyn-De'az Pattern", mode: "Standard bolt"}
   melee: {item: "Chainaxe", mode: "Swing"}
+  knife: {item: "Combat Knife, Astartes Pattern", mode: "Thrust"}
   stance: charge
   grenades: [{item: "Frag Grenade", mode: "Thrown", count: 2}, {item: "Krak Grenade", mode: "Thrown, shaped charge", count: 1}]
   note: "Chainaxe and bolt pistol."
@@ -557,6 +563,7 @@ Noise Marine:
   armour: ["Power Armour, Mark IV (Heretic)"]
   ranged: {item: "Sonic Blaster", mode: "Standard"}
   melee: {item: "Chainsword, Astartes Pattern", mode: "Swing"}
+  knife: {item: "Combat Knife, Astartes Pattern", mode: "Thrust"}
   stance: advance
   grenades: [{item: "Frag Grenade", mode: "Thrown", count: 1}]
   note: "Sonic blaster and chainsword; the blastmaster is the heavy alternative."

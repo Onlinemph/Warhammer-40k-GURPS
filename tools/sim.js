@@ -369,6 +369,8 @@ const SIM = (() => {
       melee = { id: ++WID, name: "Punch", usage: "Punch", text: "thr cr", dmg: pd, follow: null, level: lvl, parry: 0, unbalanced: false, reach: "C", reachMax: 1, malf: 0, weight: st.st * st.st / 100 };
     }
     const ranged = mkWeapon(spec.ranged, false);
+    // a combat knife carried besides the main blade (loadout `knife`): reach C, so it works in close combat unpenalised
+    const knife = spec.knife ? mkWeapon(spec.knife, true) : null;
     // a second ranged weapon that needs no hands (a Carnifex's bio-plasma): its own magazine, no reload in a fight
     const ranged2 = mkWeapon(spec.ranged2, false);
     if (ranged2) { ranged2.extra = true; ranged2.limit = ranged2.shots.mag === Infinity ? Infinity : ranged2.shots.mag; ranged2.shots = { mag: Infinity, reload: 0 }; }
@@ -438,6 +440,7 @@ const SIM = (() => {
       // Fast-Draw, +1 with Combat Reflexes (B43); Fast-Draw (Grenade) on its own
       // Fast-Draw is specialised (B194): a blade needs Knife, Sword, Two-Handed Sword or Force Sword, a gun Pistol or Long Arm
       fdBlade: Math.max(-Infinity, ...(st.skills || []).filter(s => /^Fast-Draw \((Knife|Sword|Two-Handed Sword|Force Sword)/.test(s.name) && s.level != null).map(s => s.level)) + (flags.cr ? 1 : 0),
+      fdKnife: Math.max(-Infinity, ...(st.skills || []).filter(s => /^Fast-Draw \(Knife/.test(s.name) && s.level != null).map(s => s.level)) + (flags.cr ? 1 : 0),
       fdGun: Math.max(-Infinity, ...(st.skills || []).filter(s => /^Fast-Draw \((Pistol|Long Arm)/.test(s.name) && s.level != null).map(s => s.level)) + (flags.cr ? 1 : 0),
       fdGrenade: Math.max(-Infinity, ...(st.skills || []).filter(s => /^Fast-Draw \(Grenade/.test(s.name) && s.level != null).map(s => s.level)) + (flags.cr ? 1 : 0), st: st.st, dx: st.dx, formation: spec.formation || "line",
       // elites call shots: a best combat skill (weapon or power) of 17+, two past a trained line soldier's 15,
@@ -448,7 +451,7 @@ const SIM = (() => {
       ai: aiProfile(spec.template),
       stance: spec.stance || "shoot", ambush: !!spec.ambush, stats: st, flags, speed: st.speed, move: Math.max(1, Math.floor((st.move + arm.move) * [1, 0.8, 0.6, 0.4, 0.2][enc])),
       dodge: st.dodge - enc, enc, HP: st.hp + arm.hp, HT: st.ht, will: st.will, sm: st.sm || 0,
-      arm, nat, ranged, melee, parry: parryOf(melee), cs, judo: (st.skills || []).some(s => /^(Judo|Karate|Boxing)/.test(s.name) && s.level != null), bl: Math.round(liftST * liftST / 5),
+      arm, nat, ranged, melee, parry: parryOf(melee), knife, knifeParry: knife ? parryOf(knife) : null, cs, judo: (st.skills || []).some(s => /^(Judo|Karate|Boxing)/.test(s.name) && s.level != null), bl: Math.round(liftST * liftST / 5),
       shield: spec.shield && spec.shield.sp ? { ...spec.shield } : cs && cs.field ? { item: cs.name + " field", ...cs.field, ranged_only: false, arc: "shield" } : pshield,
       // clothing that can catch fire (B433-434): cloth, flak, robes and hides; sealed plate, carapace, chitin and
       // machine bodies are Nonflammable or Highly Resistant; the unarmoured burn unless bare chitin or machine
@@ -1743,7 +1746,7 @@ const SIM = (() => {
         const w = t.u.melee, bare = w.name === "Punch", master = !!t.u.flags.master;
         const step = w.fencing && master ? 1 : w.fencing || master ? 2 : 4;   // B376
         // held: the reach penalty of close combat lowers the parry too (half, as Parry is half skill, MA117)
-        let v = t.u.parry + (rt ? (w.fencing || (bare && t.u.judo) ? 3 : 1) - slip : 0) - step * t.parries - Math.ceil(closePen(t, w) / 2) + aod("parry") + dA - (beat && beat.how === "parry" ? beat.n : 0);
+        let v = (t.knifeOut && t.u.knife ? t.u.knifeParry : t.u.parry) + (rt ? (w.fencing || (bare && t.u.judo) ? 3 : 1) - slip : 0) - step * t.parries - Math.ceil(closePen(t, t.knifeOut && t.u.knife ? t.u.knife : t.u.melee) / 2) + aod("parry") + dA - (beat && beat.how === "parry" ? beat.n : 0);
         // bare hands against a weapon: -3 unless it's a thrust or the defender knows Judo or Karate (B377)
         if (bare && aw && !aw.natural && aw.name !== "Punch" && !/^imp|^pi/.test((aw.dmg || {}).type || "") && !t.u.judo) v -= 3;
         // a gun held close in (TS p. 25): -2 to parry a handgun, -1 a long arm
@@ -2438,6 +2441,7 @@ const SIM = (() => {
         const rending = w.rend && (r.crit || r.margin >= w.rendBy);
         L(`${m.id} strikes ${t.id}${loc !== "torso" ? " in the " + locName(loc) : ""} with ${w.name}${w.alt || /^thrust/i.test(w.usage || "") ? (/thrust/i.test(w.usage || "") ? " (thrust)" : /tip slash/i.test(w.usage || "") ? " (tip slash)" : " (swing)") : ""}${rending ? " (rending hit)" : ""}`);
         let raw = rollDamage(rending ? w.rend : w.dmg);
+        if (inClose(m) && longPen(w) && /^\s*sw/.test(w.text || "")) raw = Math.max(0, raw - w.reachMax);   // MA117: a cramped swing
         // All-Out Attack (Strong, B365) and Mighty Blows (extra effort, 1 FP, B357; with Attack only, MA131): each +2 or +1/die
         if (opts.strong) raw += Math.max(2, w.dmg.n);
         if (opts.committed === "str") raw += Math.max(1, Math.floor(w.dmg.n / 2));   // Committed Attack (Strong), MA99
@@ -2476,7 +2480,11 @@ const SIM = (() => {
     // Size Modifiers in Melee Combat (Pyramid 3/77 p. 7): the smaller fighter gets the SM difference as a bonus (at most
     // +4), the larger takes it as a penalty
     const smMelee = (m, t) => { const d = t.u.sm - m.u.sm; return d > 0 ? Math.min(4, d) : d; };
-    const closePen = (m, w) => !m.grips.length ? 0 : 4 + (w && !/C/.test(w.reach || "") && w.reachMax >= 1 ? 4 * w.reachMax : 0);
+    // close combat (B391, MA117): a model holding or held by a foe is in its hex; a weapon without reach C is at -4 per
+    // yard of its longest reach for all purposes (parry at half that) and swings for -1 per yard; being held is -4 more (B370)
+    const inClose = m => !!(m.grips.length || (m.holding && m.holding.state === "ok"));
+    const longPen = w => w && !/C/.test(w.reach || "") && w.reachMax >= 1 ? 4 * w.reachMax : 0;
+    const closePen = (m, w) => (m.grips.length ? 4 : 0) + (inClose(m) ? longPen(w) : 0);
     // a parried weapon three or more times the parrying weapon's weight may break it (B376): 2 in 6, +1 per multiple past 3
     const attackWeight = (att, aw) => Math.max(aw.weight || 0, att && att.u && !aw.huge && aw !== UNARMED ? att.u.st * att.u.st / 100 : 0);
     function parryBreak(t, aw, att) {
@@ -2514,6 +2522,7 @@ const SIM = (() => {
       const w = hand === "melee" ? m.u.melee : m.u.ranged;
       // a model that holds both when it can picks both back up; a long gun it can hold in one hand (B270, 1.5x its ST)
       // stays in the other hand when it draws the blade
+      m.knifeOut = false;
       const keep = hand === "melee" && m.u.ranged && m.u.ranged.semiOne && gunReady(m) && !m.gunBroken && !m.armsLost;
       m.inHand = m.u.bothReady || keep ? "both" : hand;
       m.gunOneHand = keep; if (hand === "gun") { m.gunOneHand = false; m.gunSpent = false; }
@@ -2525,10 +2534,20 @@ const SIM = (() => {
       }
       L(`${m.id} readies the ${w.name}${keep ? `, keeping the ${m.u.ranged.name.split(",")[0]} in its other hand` : ""}`);
     }
+    // the combat knife (B194 Fast-Draw (Knife)): free on a roll, and the model strikes at once; otherwise a Ready
+    function drawKnife(m, t) {
+      m.knifeOut = true; m.lastSwitch = turn;
+      if (m.u.fdKnife > -Infinity && !m.fastDrew && check(m.u.fdKnife - skillPen(m)).ok) {
+        L(`${m.id} fast-draws its ${m.u.knife.name.split(",")[0]}`);
+        if (t && t.state === "ok" && t.h && m.h && hexDist(m.h, t.h) <= 1) { faceTo(m, t.h); strike(m, m.u.knife, t, {}); }
+        return;
+      }
+      L(`${m.id} draws its ${m.u.knife.name.split(",")[0]}`);
+    }
     function weaponsFor(m, melee) {
       const out = [];
       const oneHand = m.armsLost || holdingGun(m);
-      if (melee) { if (m.armsLost < 2 && bladeReady(m) && (!oneHand || m.u.melee.oneHanded !== false)) out.push(m.u.melee); }
+      if (melee) { if (m.knifeOut && m.u.knife && m.armsLost < 2) out.push(m.u.knife); else if (m.armsLost < 2 && bladeReady(m) && (!oneHand || m.u.melee.oneHanded !== false)) out.push(m.u.melee); }
       else if (m.u.ranged && !m.gunBroken && !m.jam && m.armsLost < 2 && gunReady(m) && (!oneHand || m.u.ranged.oneHanded) && !gunGrip(m) && !m.gunSpent) out.push(m.u.ranged);
       if (!melee && m.u.ranged2 && (m.extraLeft ?? m.u.ranged2.limit) > 0) out.push(m.u.ranged2);
       for (const p of m.u.powers) if (!!p.melee === melee && m.fp - p.fp >= 0) out.push(p);
@@ -2729,7 +2748,13 @@ const SIM = (() => {
         const t = m.holding;
         if (t.state === "ok" && t.h && hexDist(m.h, t.h) <= 1) {
           if (!t.pinned) { wrestle(m, t); return; }
-          if (t.grips.filter(g => g !== m).length >= 2) release(m); else return;
+          if (t.grips.filter(g => g !== m).length >= 2) release(m);
+          else {
+            // pin and stab (house rule): one hand keeps the pin (it then counts one-handed, B371) while the other drives
+            // a combat knife into a chink the helpless foe can't defend
+            if (u.knife && m.armsLost < 1) { if (!m.knifeOut) drawKnife(m, t); else { faceTo(m, t.h); strike(m, u.knife, t, {}); } }
+            return;
+          }
         } else release(m);
       }
       const opts = [];
@@ -2776,6 +2801,21 @@ const SIM = (() => {
           if (adj.length) meleeOptions(m, adj, push, rNow, Wm, Wr, []); else rangedOptions(m, pool, push, rNow, Wr);
           m.inHand = save; m.gunSpent = sp; m.gunOneHand = oh;
           if (tmp.length) add(GAMMA * Math.max(...tmp) - 0.001, `ready-gun`, () => switchTo(m, "gun"));
+        }
+      }
+      // close combat (MA117): a long blade is at -4 a yard of reach there, the knife (reach C) isn't; draw it, and put it
+      // away again for the main blade once out of the clinch
+      if (u.knife && u.knife !== u.melee && m.armsLost < 2) {
+        const tmp = [], push = v => { if (Number.isFinite(v)) tmp.push(v); };
+        if (!m.knifeOut && inClose(m) && adj.length) {
+          m.knifeOut = true; meleeOptions(m, adj, push, rNow, Wm, Wr, weaponsFor(m, true)); m.knifeOut = false;
+          const pFD = u.fdKnife > -Infinity ? P3[cl(u.fdKnife - skillPen(m))] : 0;
+          if (tmp.length) add((pFD + (1 - pFD) * GAMMA) * Math.max(...tmp) - 0.001, "draw-knife", () => drawKnife(m, adj[0]));
+        } else if (m.knifeOut && !inClose(m)) {
+          m.knifeOut = false;
+          if (adj.length) meleeOptions(m, adj, push, rNow, Wm, Wr, weaponsFor(m, true)); else approachOptions(m, pool, push, Wm);
+          m.knifeOut = true;
+          if (tmp.length) add(GAMMA * Math.max(...tmp) - 0.001, "ready-blade", () => { m.knifeOut = false; m.lastSwitch = turn; L(`${m.id} sheathes its knife and takes up the ${u.melee.name.split(",")[0]}`); });
         }
       }
       // a gun fired one-handed beside the blade (B270) is unready until a Ready brings it back on target
@@ -3873,7 +3913,7 @@ const SIM = (() => {
     // the grappler whose hold counts, and what the hold is worth in a break-free contest (B371): +5 with two hands,
     // pinned +10 (+5 with one); -4 if it's stunned
     const leadGrip = t => gripsOn(t).filter(x => !hangsOn(x, t)).sort((x, y) => y.u.liftST - x.u.liftST)[0] || gripsOn(t)[0];
-    const twoHands = g => g.armsLost < 1 && (g.inHand === "none" || g.inHand === "gun" || !g.u.melee || g.u.melee.natural || g.u.melee.name === "Punch");
+    const twoHands = g => g.armsLost < 1 && !g.knifeOut && (g.inHand === "none" || g.inHand === "gun" || !g.u.melee || g.u.melee.natural || g.u.melee.name === "Punch");
     const holdBonus = (t, g) => !g ? 0 : (t.pinned ? (twoHands(g) ? 10 : 5) : (twoHands(g) ? 5 : 0)) - (g.stunned ? 4 : 0) + 2 * (g.u.flags.extraArms || 0);   // +2 per extra arm (MA115)
     const armsOf = x => 2 + (x.u.flags.extraArms || 0) - (x.armsLost || 0);
     // Parrying an unarmed attack with a weapon (B376): the attacker's reaching arm takes the weapon's damage
@@ -4168,7 +4208,7 @@ if (typeof document !== "undefined") (() => {
     const lo = LO[template] || {};
     return { template, count: count || 5, stance: lo.stance || "advance", armour: [...(lo.armour || [])],
       ranged: lo.ranged ? { ...lo.ranged } : null, melee: lo.melee ? { ...lo.melee } : null,
-      ranged2: lo.ranged2 ? { ...lo.ranged2 } : null, shield: lo.shield ? { ...lo.shield } : null, carried: lo.carried || null, grenades: (lo.grenades || []).map(g => ({ ...g })), body: lo.body, mags: lo.mags };
+      ranged2: lo.ranged2 ? { ...lo.ranged2 } : null, shield: lo.shield ? { ...lo.shield } : null, carried: lo.carried || null, grenades: (lo.grenades || []).map(g => ({ ...g })), body: lo.body, mags: lo.mags, knife: lo.knife ? { ...lo.knife } : null };
   }
   const PRESETS = [
     ["20 Guardsmen vs 5 Space Marines", [["Astra Militarum Guardsman", 20]], [["Astartes Battle-Brother", 5]], 150],
