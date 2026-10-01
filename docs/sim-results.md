@@ -416,6 +416,67 @@ Lore squads from `data/sim/squads.yaml` (docs/simulator.md, "Squads and command"
 | 2 × Chaos Cultist Mob vs Astra Militarum Infantry Squad @60yd | A 0% B 100% timeout 0% mutual 0% | 12s | A 0.0/20 up, 0.9 dead | B 9.6/10 up, 0.1 dead |
 | Chaos Space Marine Squad vs 2 × Astra Militarum Infantry Squad @80yd | A 100% B 0% timeout 0% mutual 0% | 6s | A 10.0/10 up, 0.0 dead | B 0.0/20 up, 0.7 dead |
 
+## Ruins battlefield
+
+The generated ruined city block (docs/simulator.md, "Ruins battlefield"): streets with rubble, one- to three-storey shells with upper floors reached by stairs, walls broken to parapets, stumps, rubble and gaps. Each side deploys at its own end. 100 battles each, elites aim, morale on, layout 1. Genestealers and the Lictor have Clinging.
+
+### Standard GURPS HP
+
+| Fight | Result | Length | Side A | Side B |
+|---|---|---|---|---|
+| 5 Astartes Battle-Brother vs 10 Genestealer | A 46% B 49% timeout 5% mutual 0% | 82s | A 1.5/5 up, 0.3 dead | B 2.3/10 up, 0.5 dead |
+| 5 Astartes Battle-Brother vs 20 Ork Boy | A 100% B 0% timeout 0% mutual 0% | 15s | A 5.0/5 up, 0.0 dead | B 0.0/20 up, 1.9 dead |
+| 20 Astra Militarum Guardsman vs 20 Ork Boy | A 100% B 0% timeout 0% mutual 0% | 17s | A 17.3/20 up, 0.3 dead | B 0.0/20 up, 1.8 dead |
+| 20 Astra Militarum Guardsman vs 5 Genestealer | A 10% B 90% timeout 0% mutual 0% | 19s | A 1.0/20 up, 3.6 dead | B 3.4/5 up, 0.0 dead |
+| 5 Astartes Battle-Brother vs 20 Astra Militarum Guardsman | A 100% B 0% timeout 0% mutual 0% | 16s | A 5.0/5 up, 0.0 dead | B 0.0/20 up, 5.2 dead |
+| 10 Fire Warrior (Shas'la) vs 5 Astartes Battle-Brother | A 0% B 100% timeout 0% mutual 0% | 13s | A 0.0/10 up, 3.2 dead | B 4.8/5 up, 0.0 dead |
+| 10 Necron Warrior vs 5 Astartes Battle-Brother | A 0% B 100% timeout 0% mutual 0% | 16s | A 0.0/10 up, 4.0 dead | B 5.0/5 up, 0.0 dead |
+| 3 Custodian Guardian vs 10 Astartes Battle-Brother | A 87% B 13% timeout 0% mutual 0% | 27s | A 1.8/3 up, 0.4 dead | B 0.6/10 up, 3.2 dead |
+| 10 Kabalite Warrior vs 10 Fire Warrior (Shas'la) | A 11% B 89% timeout 0% mutual 0% | 25s | A 0.3/10 up, 2.2 dead | B 5.8/10 up, 0.1 dead |
+| 5 Aspect Warrior vs 10 Ork Boy | A 80% B 19% timeout 1% mutual 0% | 26s | A 3.1/5 up, 0.1 dead | B 0.8/10 up, 0.0 dead |
+| 1 Lictor vs 5 Astra Militarum Guardsman | A 93% B 7% timeout 0% mutual 0% | 15s | A 0.9/1 up, 0.0 dead | B 0.2/5 up, 0.9 dead |
+| 20 Hormagaunt vs 10 Astra Militarum Guardsman | A 0% B 100% timeout 0% mutual 0% | 26s | A 0.0/20 up, 3.3 dead | B 9.6/10 up, 0.0 dead |
+| 5 Genestealer vs 5 Astartes Battle-Brother | A 6% B 93% timeout 1% mutual 0% | 25s | A 0.2/5 up, 0.3 dead | B 3.7/5 up, 0.1 dead |
+| 5 Chaos Space Marine vs 5 Astartes Battle-Brother | A 88% B 12% timeout 0% mutual 0% | 24s | A 3.0/5 up, 0.5 dead | B 0.2/5 up, 1.8 dead |
+| 5 Khorne Berzerker vs 20 Astra Militarum Guardsman | A 100% B 0% timeout 0% mutual 0% | 10s | A 5.0/5 up, 0.0 dead | B 0.0/20 up, 4.2 dead |
+
+### Revised Fractional Health
+
+| Fight | Result | Length | Side A | Side B |
+|---|---|---|---|---|
+| 5 Astartes Battle-Brother vs 10 Genestealer | A 85% B 12% timeout 3% mutual 0% | 58s | A 3.3/5 up, 0.3 dead | B 0.7/10 up, 0.5 dead |
+| 5 Astartes Battle-Brother vs 20 Ork Boy | A 100% B 0% timeout 0% mutual 0% | 16s | A 5.0/5 up, 0.0 dead | B 0.0/20 up, 0.8 dead |
+| 20 Astra Militarum Guardsman vs 20 Ork Boy | A 88% B 12% timeout 0% mutual 0% | 22s | A 13.8/20 up, 0.6 dead | B 1.1/20 up, 0.4 dead |
+| 20 Astra Militarum Guardsman vs 5 Genestealer | A 0% B 100% timeout 0% mutual 0% | 10s | A 0.0/20 up, 0.9 dead | B 5.0/5 up, 0.0 dead |
+| 5 Astartes Battle-Brother vs 20 Astra Militarum Guardsman | A 100% B 0% timeout 0% mutual 0% | 15s | A 5.0/5 up, 0.0 dead | B 0.0/20 up, 2.6 dead |
+| 10 Fire Warrior (Shas'la) vs 5 Astartes Battle-Brother | A 0% B 100% timeout 0% mutual 0% | 13s | A 0.0/10 up, 0.4 dead | B 4.8/5 up, 0.1 dead |
+| 10 Necron Warrior vs 5 Astartes Battle-Brother | A 0% B 100% timeout 0% mutual 0% | 13s | A 0.0/10 up, 0.0 dead | B 5.0/5 up, 0.0 dead |
+| 3 Custodian Guardian vs 10 Astartes Battle-Brother | A 97% B 3% timeout 0% mutual 0% | 24s | A 2.6/3 up, 0.3 dead | B 0.1/10 up, 2.0 dead |
+| 10 Kabalite Warrior vs 10 Fire Warrior (Shas'la) | A 15% B 84% timeout 1% mutual 0% | 36s | A 0.7/10 up, 1.2 dead | B 5.5/10 up, 0.2 dead |
+| 5 Aspect Warrior vs 10 Ork Boy | A 46% B 52% timeout 2% mutual 0% | 41s | A 1.6/5 up, 0.0 dead | B 3.7/10 up, 0.6 dead |
+| 1 Lictor vs 5 Astra Militarum Guardsman | A 99% B 1% timeout 0% mutual 0% | 15s | A 1.0/1 up, 0.0 dead | B 0.0/5 up, 1.9 dead |
+| 20 Hormagaunt vs 10 Astra Militarum Guardsman | A 0% B 100% timeout 0% mutual 0% | 26s | A 0.0/20 up, 0.3 dead | B 9.7/10 up, 0.1 dead |
+| 5 Genestealer vs 5 Astartes Battle-Brother | A 0% B 99% timeout 1% mutual 0% | 24s | A 0.0/5 up, 0.2 dead | B 4.7/5 up, 0.1 dead |
+| 5 Chaos Space Marine vs 5 Astartes Battle-Brother | A 91% B 7% timeout 2% mutual 0% | 47s | A 3.6/5 up, 0.4 dead | B 0.3/5 up, 2.3 dead |
+| 5 Khorne Berzerker vs 20 Astra Militarum Guardsman | A 100% B 0% timeout 0% mutual 0% | 10s | A 5.0/5 up, 0.0 dead | B 0.0/20 up, 3.4 dead |
+
+## Ridges
+
+Open ground with a ridge (docs/simulator.md, "Elevation"): side A holds a plateau from 3 yards in front of its line, sloping to the plain over twice its height. 50 battles each, standard HP, elites aim, morale on.
+
+| Fight | Result | Length | Side A | Side B |
+|---|---|---|---|---|
+| 10 Astra Militarum Guardsman vs 10 Astra Militarum Guardsman @100yd, flat | A 48% B 52% timeout 0% mutual 0% | 33s | A 2.2/10 up, 0.6 dead | B 2.5/10 up, 0.4 dead |
+| 10 Astra Militarum Guardsman vs 10 Astra Militarum Guardsman @100yd, ridge 4 yd held by A | A 98% B 2% timeout 0% mutual 0% | 23s | A 6.9/10 up, 0.2 dead | B 0.1/10 up, 1.2 dead |
+| 10 Astra Militarum Guardsman vs 10 Astra Militarum Guardsman @100yd, ridge 8 yd held by A | A 98% B 2% timeout 0% mutual 0% | 22s | A 7.1/10 up, 0.1 dead | B 0.1/10 up, 1.3 dead |
+| 10 Astra Militarum Guardsman vs 10 Astra Militarum Guardsman @100yd, ridge 20 yd held by A | A 98% B 2% timeout 0% mutual 0% | 22s | A 7.2/10 up, 0.1 dead | B 0.1/10 up, 1.2 dead |
+| 20 Astra Militarum Guardsman vs 20 Ork Boy @60yd, flat | A 100% B 0% timeout 0% mutual 0% | 15s | A 17.1/20 up, 0.2 dead | B 0.0/20 up, 1.4 dead |
+| 20 Astra Militarum Guardsman vs 20 Ork Boy @60yd, ridge 8 yd held by A | A 98% B 2% timeout 0% mutual 0% | 16s | A 17.6/20 up, 0.4 dead | B 0.1/20 up, 2.3 dead |
+| 5 Astartes Battle-Brother vs 5 Chaos Space Marine @60yd, flat | A 6% B 94% timeout 0% mutual 0% | 25s | A 0.1/5 up, 1.8 dead | B 3.3/5 up, 0.5 dead |
+| 5 Astartes Battle-Brother vs 5 Chaos Space Marine @60yd, ridge 10 yd held by A | A 10% B 82% timeout 8% mutual 0% | 124s | A 0.4/5 up, 1.6 dead | B 3.0/5 up, 0.3 dead |
+| 10 Fire Warrior (Shas'la) vs 5 Astartes Battle-Brother @100yd, flat | A 0% B 100% timeout 0% mutual 0% | 13s | A 0.0/10 up, 3.5 dead | B 4.7/5 up, 0.0 dead |
+| 10 Fire Warrior (Shas'la) vs 5 Astartes Battle-Brother @100yd, ridge 10 yd held by A | A 6% B 94% timeout 0% mutual 0% | 14s | A 0.3/10 up, 3.4 dead | B 4.4/5 up, 0.0 dead |
+
 ## Facility battlefield
 
 The generated facility (docs/simulator.md, "Facility battlefield"): each side deploys in its staging bay at opposite ends, about 55 yards apart by the hallways, with walls blocking sight and movement, doors that open and shut, breachable walls, and crates, barricades, corners and door frames giving cover. 100 battles each, elites aim, morale on. Layout 1 unless noted.
@@ -424,41 +485,41 @@ The generated facility (docs/simulator.md, "Facility battlefield"): each side de
 
 | Fight | Result | Length | Side A | Side B |
 |---|---|---|---|---|
-| 5 Astartes Battle-Brother vs 10 Genestealer | A 54% B 46% timeout 0% mutual 0% | 10s | A 1.7/5 up, 0.4 dead | B 2.6/10 up, 0.4 dead |
-| 5 Astartes Battle-Brother vs 20 Ork Boy | A 100% B 0% timeout 0% mutual 0% | 14s | A 5.0/5 up, 0.0 dead | B 0.0/20 up, 2.0 dead |
-| 20 Astra Militarum Guardsman vs 20 Ork Boy | A 100% B 0% timeout 0% mutual 0% | 18s | A 18.8/20 up, 0.1 dead | B 0.0/20 up, 1.2 dead |
-| 20 Astra Militarum Guardsman vs 5 Genestealer | A 2% B 98% timeout 0% mutual 0% | 14s | A 0.2/20 up, 4.5 dead | B 4.0/5 up, 0.0 dead |
-| 5 Astartes Battle-Brother vs 20 Astra Militarum Guardsman | A 100% B 0% timeout 0% mutual 0% | 15s | A 5.0/5 up, 0.0 dead | B 0.0/20 up, 6.3 dead |
-| 10 Fire Warrior (Shas'la) vs 5 Astartes Battle-Brother | A 0% B 100% timeout 0% mutual 0% | 13s | A 0.0/10 up, 3.2 dead | B 4.9/5 up, 0.0 dead |
-| 10 Necron Warrior vs 5 Astartes Battle-Brother | A 0% B 100% timeout 0% mutual 0% | 17s | A 0.0/10 up, 4.0 dead | B 5.0/5 up, 0.0 dead |
-| 3 Custodian Guardian vs 10 Astartes Battle-Brother | A 65% B 35% timeout 0% mutual 0% | 21s | A 1.4/3 up, 0.9 dead | B 1.6/10 up, 3.7 dead |
-| 10 Kabalite Warrior vs 10 Fire Warrior (Shas'la) | A 19% B 81% timeout 0% mutual 0% | 19s | A 1.0/10 up, 1.5 dead | B 4.3/10 up, 0.3 dead |
-| 5 Aspect Warrior vs 10 Ork Boy | A 88% B 12% timeout 0% mutual 0% | 13s | A 3.4/5 up, 0.1 dead | B 0.5/10 up, 0.0 dead |
-| 1 Lictor vs 5 Astra Militarum Guardsman | A 95% B 4% timeout 1% mutual 0% | 35s | A 1.0/1 up, 0.0 dead | B 0.2/5 up, 0.8 dead |
-| 20 Hormagaunt vs 10 Astra Militarum Guardsman | A 0% B 100% timeout 0% mutual 0% | 16s | A 0.0/20 up, 2.5 dead | B 9.9/10 up, 0.0 dead |
-| 5 Genestealer vs 5 Astartes Battle-Brother | A 5% B 95% timeout 0% mutual 0% | 7s | A 0.2/5 up, 0.3 dead | B 3.8/5 up, 0.1 dead |
-| 5 Chaos Space Marine vs 5 Astartes Battle-Brother | A 78% B 20% timeout 2% mutual 0% | 45s | A 2.7/5 up, 0.7 dead | B 0.4/5 up, 1.8 dead |
-| 5 Khorne Berzerker vs 20 Astra Militarum Guardsman | A 100% B 0% timeout 0% mutual 0% | 9s | A 5.0/5 up, 0.0 dead | B 0.0/20 up, 4.9 dead |
+| 5 Astartes Battle-Brother vs 10 Genestealer | A 62% B 38% timeout 0% mutual 0% | 17s | A 1.9/5 up, 0.3 dead | B 1.7/10 up, 0.5 dead |
+| 5 Astartes Battle-Brother vs 20 Ork Boy | A 100% B 0% timeout 0% mutual 0% | 14s | A 5.0/5 up, 0.0 dead | B 0.0/20 up, 2.1 dead |
+| 20 Astra Militarum Guardsman vs 20 Ork Boy | A 100% B 0% timeout 0% mutual 0% | 18s | A 18.6/20 up, 0.1 dead | B 0.0/20 up, 1.4 dead |
+| 20 Astra Militarum Guardsman vs 5 Genestealer | A 8% B 92% timeout 0% mutual 0% | 26s | A 0.8/20 up, 4.1 dead | B 3.2/5 up, 0.0 dead |
+| 5 Astartes Battle-Brother vs 20 Astra Militarum Guardsman | A 100% B 0% timeout 0% mutual 0% | 19s | A 5.0/5 up, 0.0 dead | B 0.0/20 up, 6.7 dead |
+| 10 Fire Warrior (Shas'la) vs 5 Astartes Battle-Brother | A 0% B 100% timeout 0% mutual 0% | 13s | A 0.0/10 up, 3.3 dead | B 4.9/5 up, 0.0 dead |
+| 10 Necron Warrior vs 5 Astartes Battle-Brother | A 0% B 100% timeout 0% mutual 0% | 22s | A 0.0/10 up, 3.9 dead | B 5.0/5 up, 0.0 dead |
+| 3 Custodian Guardian vs 10 Astartes Battle-Brother | A 85% B 15% timeout 0% mutual 0% | 27s | A 1.8/3 up, 0.5 dead | B 0.8/10 up, 3.6 dead |
+| 10 Kabalite Warrior vs 10 Fire Warrior (Shas'la) | A 29% B 71% timeout 0% mutual 0% | 23s | A 1.4/10 up, 1.2 dead | B 3.9/10 up, 0.3 dead |
+| 5 Aspect Warrior vs 10 Ork Boy | A 88% B 12% timeout 0% mutual 0% | 13s | A 3.5/5 up, 0.1 dead | B 0.4/10 up, 0.0 dead |
+| 1 Lictor vs 5 Astra Militarum Guardsman | A 86% B 13% timeout 1% mutual 0% | 37s | A 0.9/1 up, 0.0 dead | B 0.3/5 up, 0.8 dead |
+| 20 Hormagaunt vs 10 Astra Militarum Guardsman | A 0% B 100% timeout 0% mutual 0% | 20s | A 0.0/20 up, 2.3 dead | B 10.0/10 up, 0.0 dead |
+| 5 Genestealer vs 5 Astartes Battle-Brother | A 1% B 99% timeout 0% mutual 0% | 9s | A 0.0/5 up, 0.3 dead | B 4.0/5 up, 0.1 dead |
+| 5 Chaos Space Marine vs 5 Astartes Battle-Brother | A 87% B 13% timeout 0% mutual 0% | 23s | A 2.6/5 up, 0.7 dead | B 0.3/5 up, 1.8 dead |
+| 5 Khorne Berzerker vs 20 Astra Militarum Guardsman | A 100% B 0% timeout 0% mutual 0% | 15s | A 5.0/5 up, 0.0 dead | B 0.0/20 up, 4.9 dead |
 
 ### Revised Fractional Health, layout 1
 
 | Fight | Result | Length | Side A | Side B |
 |---|---|---|---|---|
-| 5 Astartes Battle-Brother vs 10 Genestealer | A 86% B 14% timeout 0% mutual 0% | 11s | A 3.5/5 up, 0.2 dead | B 0.8/10 up, 0.3 dead |
-| 5 Astartes Battle-Brother vs 20 Ork Boy | A 100% B 0% timeout 0% mutual 0% | 14s | A 5.0/5 up, 0.0 dead | B 0.0/20 up, 0.6 dead |
-| 20 Astra Militarum Guardsman vs 20 Ork Boy | A 98% B 2% timeout 0% mutual 0% | 21s | A 17.8/20 up, 0.4 dead | B 0.2/20 up, 0.4 dead |
-| 20 Astra Militarum Guardsman vs 5 Genestealer | A 0% B 100% timeout 0% mutual 0% | 11s | A 0.0/20 up, 0.8 dead | B 4.9/5 up, 0.0 dead |
-| 5 Astartes Battle-Brother vs 20 Astra Militarum Guardsman | A 100% B 0% timeout 0% mutual 0% | 14s | A 5.0/5 up, 0.0 dead | B 0.0/20 up, 1.4 dead |
+| 5 Astartes Battle-Brother vs 10 Genestealer | A 88% B 12% timeout 0% mutual 0% | 18s | A 3.8/5 up, 0.2 dead | B 0.7/10 up, 0.4 dead |
+| 5 Astartes Battle-Brother vs 20 Ork Boy | A 100% B 0% timeout 0% mutual 0% | 16s | A 5.0/5 up, 0.0 dead | B 0.0/20 up, 0.5 dead |
+| 20 Astra Militarum Guardsman vs 20 Ork Boy | A 99% B 1% timeout 0% mutual 0% | 22s | A 18.0/20 up, 0.4 dead | B 0.1/20 up, 0.4 dead |
+| 20 Astra Militarum Guardsman vs 5 Genestealer | A 0% B 96% timeout 4% mutual 0% | 65s | A 0.2/20 up, 0.7 dead | B 4.8/5 up, 0.0 dead |
+| 5 Astartes Battle-Brother vs 20 Astra Militarum Guardsman | A 100% B 0% timeout 0% mutual 0% | 18s | A 5.0/5 up, 0.0 dead | B 0.0/20 up, 1.9 dead |
 | 10 Fire Warrior (Shas'la) vs 5 Astartes Battle-Brother | A 0% B 100% timeout 0% mutual 0% | 13s | A 0.0/10 up, 0.4 dead | B 5.0/5 up, 0.0 dead |
-| 10 Necron Warrior vs 5 Astartes Battle-Brother | A 0% B 100% timeout 0% mutual 0% | 14s | A 0.0/10 up, 0.0 dead | B 5.0/5 up, 0.0 dead |
-| 3 Custodian Guardian vs 10 Astartes Battle-Brother | A 94% B 6% timeout 0% mutual 0% | 18s | A 2.5/3 up, 0.3 dead | B 0.3/10 up, 1.9 dead |
-| 10 Kabalite Warrior vs 10 Fire Warrior (Shas'la) | A 46% B 54% timeout 0% mutual 0% | 19s | A 2.8/10 up, 1.8 dead | B 3.2/10 up, 0.4 dead |
-| 5 Aspect Warrior vs 10 Ork Boy | A 60% B 40% timeout 0% mutual 0% | 15s | A 2.5/5 up, 0.0 dead | B 2.8/10 up, 0.8 dead |
-| 1 Lictor vs 5 Astra Militarum Guardsman | A 98% B 1% timeout 1% mutual 0% | 39s | A 1.0/1 up, 0.0 dead | B 0.1/5 up, 1.9 dead |
-| 20 Hormagaunt vs 10 Astra Militarum Guardsman | A 0% B 100% timeout 0% mutual 0% | 18s | A 0.0/20 up, 0.2 dead | B 9.9/10 up, 0.0 dead |
-| 5 Genestealer vs 5 Astartes Battle-Brother | A 0% B 100% timeout 0% mutual 0% | 6s | A 0.0/5 up, 0.1 dead | B 4.7/5 up, 0.1 dead |
-| 5 Chaos Space Marine vs 5 Astartes Battle-Brother | A 88% B 9% timeout 3% mutual 0% | 53s | A 3.6/5 up, 0.5 dead | B 0.4/5 up, 2.4 dead |
-| 5 Khorne Berzerker vs 20 Astra Militarum Guardsman | A 100% B 0% timeout 0% mutual 0% | 9s | A 5.0/5 up, 0.0 dead | B 0.0/20 up, 3.3 dead |
+| 10 Necron Warrior vs 5 Astartes Battle-Brother | A 0% B 100% timeout 0% mutual 0% | 19s | A 0.0/10 up, 0.1 dead | B 5.0/5 up, 0.0 dead |
+| 3 Custodian Guardian vs 10 Astartes Battle-Brother | A 95% B 5% timeout 0% mutual 0% | 22s | A 2.5/3 up, 0.3 dead | B 0.2/10 up, 1.6 dead |
+| 10 Kabalite Warrior vs 10 Fire Warrior (Shas'la) | A 45% B 55% timeout 0% mutual 0% | 22s | A 2.5/10 up, 1.8 dead | B 3.2/10 up, 0.5 dead |
+| 5 Aspect Warrior vs 10 Ork Boy | A 63% B 37% timeout 0% mutual 0% | 15s | A 2.6/5 up, 0.0 dead | B 2.6/10 up, 0.7 dead |
+| 1 Lictor vs 5 Astra Militarum Guardsman | A 91% B 4% timeout 5% mutual 0% | 75s | A 1.0/1 up, 0.0 dead | B 0.3/5 up, 1.9 dead |
+| 20 Hormagaunt vs 10 Astra Militarum Guardsman | A 0% B 100% timeout 0% mutual 0% | 20s | A 0.0/20 up, 0.2 dead | B 10.0/10 up, 0.0 dead |
+| 5 Genestealer vs 5 Astartes Battle-Brother | A 0% B 100% timeout 0% mutual 0% | 10s | A 0.0/5 up, 0.2 dead | B 4.6/5 up, 0.1 dead |
+| 5 Chaos Space Marine vs 5 Astartes Battle-Brother | A 78% B 14% timeout 8% mutual 0% | 118s | A 3.2/5 up, 0.6 dead | B 0.7/5 up, 2.2 dead |
+| 5 Khorne Berzerker vs 20 Astra Militarum Guardsman | A 100% B 0% timeout 0% mutual 0% | 14s | A 5.0/5 up, 0.0 dead | B 0.0/20 up, 3.5 dead |
 
 ### Standard GURPS HP, layout 2
 
