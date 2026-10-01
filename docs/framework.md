@@ -473,7 +473,7 @@ The Tyranids are a galaxy-devouring swarm of bio-engineered organisms directed b
 | Lictor | +1 | 36 | 15 | 8 | 13 | 40 | 60 | Chameleonic stalker |
 | Zoanthrope | +1 | 8 | 10 | 10 | 12 | 20 | 40 + psychic shield | Psychic artillery |
 | Hive Tyrant | +2 | 55 | 13 | 12 | 16 | 70 | 120 | Synapse lord, psyker |
-| Carnifex | +2 | 120 | 10 | 4 | 16 | 120 | 150 | Living battering ram |
+| Carnifex | +2 | 120 | 10 | 4 | 16 | 150 | 150 | Living battering ram |
 
 Tyranid traits: Hive Mind link and **synapse** (within range of a synapse creature, Tyranids fight with total discipline and no fear; outside it they revert to instinct: feeding or fleeing, a disadvantage built honestly), **Shadow in the Warp** (the Hive Mind's presence smothers nearby psykers: a penalty to psychic power and a Fright Check risk, built as an aura; carried by synapse creatures (Warrior, Zoanthrope, Hive Tyrant) and, as a house choice, the Ravener and Lictor, but not the Carnifex), no fear or pain within synapse, **Injury Tolerance (Damage Reduction)** (GURPS Powers p. 53, 25 points per level, level = divisor) on the large synapse-beasts and monsters (Warrior, Ravener and Lictor ÷2; Carnifex and Hive Tyrant ÷3; not gaunts, Genestealers or the Zoanthrope), immunity to disease and toxins, adapted biology (regeneration on larger forms), no language or society. Tyranid psychic powers use the Sorcery model with the Hive Mind as the source; they suffer Perils like other psykers but with Hive Mind flavour.
 

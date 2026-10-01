@@ -2,9 +2,9 @@ kind: template
 output: Xenos/Tyranids/Templates/Carnifex.gct
 notes: >
   NPC creature stat block, not a player-facing race. Point math: Tyranid
-  Biology 20 + Body Lens: Carnifex 1710 (incl. Injury Tolerance 3) + Monstrous Crushing Claws 79 +
-  Venom Cannon 225 + skills 16 = 2050 points. Stats:
-  SM +2, ST 120 (user direction: flips tanks with little struggle), DX 10, IQ 4, HT 16, HP 120, Will 4, Per 4, Basic Move 9, natural chitin
+  Biology 20 + Body Lens: Carnifex 1783 (incl. Injury Tolerance 3, Unfazeable, High Pain Threshold) + Monstrous Crushing Claws 79 +
+  Heavy Venom Cannon 300 + Bio-plasma 300 + skills 16 = 2498 points. Stats:
+  SM +2, ST 120 (user direction: flips tanks with little struggle), DX 10, IQ 4, HT 16, HP 150 (user direction: tougher), Will 4, Per 4, Basic Move 9, natural chitin
   torso DR 150 (Weak Points 3, eye DR 75), Regeneration (Fast) —
   framework.md's Carnifex anchor line exactly. It carries no Shadow in the
   Warp or synapse role: it is a mindless siege beast.
@@ -15,15 +15,16 @@ notes: >
   soak up and deal out damage nothing else on the battlefield can match.
   The point total is for GM reference only, not party balance.
 
-  Weapon-symbiotes: carries Monstrous Crushing Claws and a Venom
-  Cannon — a classic Carnifex loadout of one melee and one heavy ranged
-  symbiote, both built as natural-attack traits in
-  data/xenos/tyranids/bio-weapons.yaml.
+  Weapon-symbiotes: carries Monstrous Crushing Claws, a Heavy Venom
+  Cannon and Bio-plasma spat from the maw (user direction: the powerful
+  ranged weapons a Carnifex can carry), all built as natural-attack
+  traits in data/xenos/tyranids/bio-weapons.yaml.
 traits:
   - include: "xenos/tyranids/traits.yaml#Tyranid Biology"
   - include: "xenos/tyranids/traits.yaml#Body Lens: Carnifex"
   - include: "xenos/tyranids/bio-weapons.yaml#Monstrous Crushing Claws"
-  - include: "xenos/tyranids/bio-weapons.yaml#Venom Cannon"
+  - include: "xenos/tyranids/bio-weapons.yaml#Heavy Venom Cannon"
+  - include: "xenos/tyranids/bio-weapons.yaml#Bio-plasma"
 skills:
   - name: Brawling
     diff: DX/E

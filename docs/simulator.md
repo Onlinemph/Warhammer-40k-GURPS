@@ -193,6 +193,7 @@ Psykers use the attack and defence powers listed for their template in `data/sim
 - Templates (`Library/**/*.gct` via the site data): attributes, skills, traits and combat flags.
 - Equipment: weapon lines (damage, Acc, range, RoF, shots, ST, Bulk, Rcl, reach, parry, skill and defaults), DR by location, Weak Points, servo ST, Basic Move and HP bonuses, `block` attributes (shields).
 - `data/sim/loadouts.yaml`: default kit per template.
+- `ranged2` in a loadout: a second ranged weapon that needs no hands (a Carnifex's bio-plasma), with its own magazine and no reload in a fight.
 - `data/sim/weapons.yaml`: per weapon line, facts the stat line doesn't carry: `malf`, `overheat` (damage to the firer on a critical failure), `blast` (radius in yards for non-`ex` area weapons), `cone` (yards), `db` (shield Defense Bonus).
 - `data/sim/powers.yaml`: psychic powers per template.
 

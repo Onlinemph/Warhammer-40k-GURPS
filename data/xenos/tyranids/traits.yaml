@@ -1205,8 +1205,8 @@ items:
     tags: [Advantage, Physical, Xenos, Tyranids]
     children:
       - name: "Attribute Modifiers (Carnifex)"
-        points: 835
-        attributes: {sm: 2, st: 110, iq: -6, ht: 6, basic_move: 3}
+        points: 883
+        attributes: {sm: 2, st: 110, iq: -6, ht: 6, hp: 30, basic_move: 3}
         tags: [Physical]
         design: >
           Framework target: SM +2, ST 120, DX 10, IQ 4, HT 16, HP 120.
@@ -1217,10 +1217,11 @@ items:
           a Carnifex is not precise, it is simply unstoppable. Decreased
           IQ -6 (B16, 20/level, -120) for IQ 4, as debased as a
           Termagant's -- pure directed muscle. Increased HT +6 (60) for
-          HT 16. HP 120, the ST-120 base (the earlier +10 extra HP
-          dropped when ST doubled). Increased Basic Move +3 (B17,
-          5/level, 15): Basic Speed 6.5 gives Move 6, so +3 lands Basic
-          Move at 9. 880-120+60+15 = 835.
+          HT 16. HP 150 (user direction: tougher): the ST-120 base plus
+          Extra Hit Points +30 (B16, 2/level, with the SM +2 discount:
+          60 x 0.8 = 48), at the top of Pyramid 3/77's "HP within 30% of
+          ST". Increased Basic Move +3 (B17, 5/level, 15): Basic Speed 6.5
+          gives Move 6, so +3 lands Basic Move at 9. 880-120+60+48+15 = 883.
       - name: "Chitin (Carnifex)"
         <<: *chitin
         levels: 150
@@ -1232,6 +1233,20 @@ items:
           penetrate, roll 3d; 3 or less halves DR (75). Eye clusters run
           at DR 75 rather than 150.
       - *carnifex_regen
+      - name: Unfazeable
+        points: 15
+        ref: B95
+        tags: [Advantage, Mental, Xenos, Tyranids]
+        notes: No Fright Checks; nothing frightens a mindless siege beast.
+        lore: A Carnifex does not know fear; it knows the next wall, the next tank, the next squad.
+        design: Basic Set Unfazeable (B95), 15 points (user direction, tougher).
+      - name: High Pain Threshold
+        points: 10
+        ref: B59
+        tags: [Advantage, Physical, Xenos, Tyranids]
+        notes: No shock penalties; +3 to HT rolls to avoid knockdown and stunning.
+        lore: The swarm's "no pain" made flesh; a Carnifex keeps coming through wounds that would drop a tank crew.
+        design: Basic Set High Pain Threshold (B59), 10 points (user direction, tougher).
       - name: "Injury Tolerance (Damage Reduction)"
         points: 0
         per_level: 25
@@ -1257,8 +1272,8 @@ items:
       or a defensive line. Consistent Codex background across editions
       and Black Library's Hive Fleet fiction alike.
     design: >
-      835 (Attribute Modifiers) + 750 (Chitin DR 150) + 50 (Regeneration,
-      Fast) + 75 (Injury Tolerance 3) = 1710 points, added to Tyranid Biology's 20 for 1730 points of physiology alone before skills and
+      883 (Attribute Modifiers) + 750 (Chitin DR 150) + 50 (Regeneration,
+      Fast) + 15 (Unfazeable) + 10 (High Pain Threshold) + 75 (Injury Tolerance 3) = 1783 points, added to Tyranid Biology's 20 for 1803 points of physiology alone before skills and
       weapon-symbiotes -- squarely in framework.md's Heroes and Legends
       tier (1,000-3,000), matching a Hive Tyrant's own physiology cost
       almost exactly despite the very different build (raw ST and DR

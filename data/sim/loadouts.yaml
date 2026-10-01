@@ -1,6 +1,7 @@
 # Default battle loadouts for the combat simulator (one entry per character template; Add-Ons skipped).
 # Keys are the Library/**/*.gct file stems. Item / trait names and modes resolve against data/**.
 # grenades: [{item, mode, count}] thrown grenades carried (lore-standard issue; most templates omit them from their equipment).
+# ranged2: {item|trait, mode} a second ranged weapon that needs no hands (a bio-weapon in the maw); its own shots, no reload.
 # body: upright (default), horizontal, legless or flying: posture for height in melee (Pyramid 3/77 p. 4-5, B402-403).
 
 # ------------------------------------------------------------------ Imperium
@@ -473,10 +474,11 @@ Tyranid Warrior (Bonesword and Lash Whip):
 Carnifex:
   body: horizontal
   armour: []
-  ranged: {trait: "Venom Cannon", mode: "Standard"}
+  ranged: {trait: "Heavy Venom Cannon", mode: "Standard"}
+  ranged2: {trait: "Bio-plasma", mode: "Standard"}
   melee: {trait: "Monstrous Crushing Claws", mode: "Standard"}
   stance: advance
-  note: "Venom cannon and monstrous crushing claws."
+  note: "Heavy venom cannon, bio-plasma and monstrous crushing claws."
 Hive Tyrant:
   armour: []
   ranged: {trait: "Venom Cannon", mode: "Standard"}

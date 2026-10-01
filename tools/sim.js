@@ -365,6 +365,9 @@ const SIM = (() => {
       melee = { id: ++WID, name: "Punch", usage: "Punch", text: "thr cr", dmg: pd, follow: null, level: lvl, parry: 0, unbalanced: false, reach: "C", reachMax: 1, malf: 0, weight: st.st * st.st / 100 };
     }
     const ranged = mkWeapon(spec.ranged, false);
+    // a second ranged weapon that needs no hands (a Carnifex's bio-plasma): its own magazine, no reload in a fight
+    const ranged2 = mkWeapon(spec.ranged2, false);
+    if (ranged2) { ranged2.extra = true; ranged2.limit = ranged2.shots.mag === Infinity ? Infinity : ranged2.shots.mag; ranged2.shots = { mag: Infinity, reload: 0 }; }
     // thrown grenades (B410): Throwing skill, range from ST and weight (B355), one per Ready + Attack
     const THROW = [[0.05, 3.5], [0.1, 2.5], [0.15, 2], [0.2, 1.5], [0.25, 1.2], [0.3, 1.1], [0.4, 1], [0.5, 0.8], [0.75, 0.7], [1, 0.6], [1.5, 0.4], [2, 0.3]];
     const grenades = (spec.grenades || []).map(g => {
@@ -423,6 +426,7 @@ const SIM = (() => {
       bothReady: cs ? !ranged || !melee || !!melee.natural || !!ranged.natural || (spec.melee && spec.ranged && spec.melee.item === spec.ranged.item) : !ranged || !melee || melee.name === "Punch" || !!melee.natural || !!ranged.natural || (spec.melee && spec.ranged && spec.melee.item && spec.melee.item === spec.ranged.item)
         || /fixed to|mounted|underslung/i.test(melee.usage || "") || (!!ranged.oneHanded && !!melee.oneHanded),
       liftST,   // Lifting ST counts in grappling (B65)
+      ranged2,
       body: spec.body || (LOADOUTS[spec.template] || {}).body || "upright",   // posture for height in melee (Pyramid 3/77 p. 4)
       hooks,
       // Fast-Draw, +1 with Combat Reflexes (B43); Fast-Draw (Grenade) on its own
@@ -2114,6 +2118,7 @@ const SIM = (() => {
       if (d > w.range.max) return;
       const shots = w.shots.mag === Infinity ? w.rof : Math.min(w.rof, m.ammo);
       if (w.shots.mag !== Infinity) m.ammo -= shots;
+      if (w.extra) m.extraLeft = (m.extraLeft ?? w.limit) - shots;
       m.attacked = true;
       if (w.fp) spendFP(m, w.fp);
       if (w.perils && perils(m, w)) return;
@@ -2486,6 +2491,7 @@ const SIM = (() => {
       const out = [];
       if (melee) { if (m.armsLost < 2 && bladeReady(m) && (!m.armsLost || m.u.melee.oneHanded !== false)) out.push(m.u.melee); }
       else if (m.u.ranged && !m.gunBroken && !m.jam && m.armsLost < 2 && gunReady(m) && (!m.armsLost || m.u.ranged.oneHanded)) out.push(m.u.ranged);
+      if (!melee && m.u.ranged2 && (m.extraLeft ?? m.u.ranged2.limit) > 0) out.push(m.u.ranged2);
       for (const p of m.u.powers) if (!!p.melee === melee && m.fp - p.fp >= 0) out.push(p);
       return out;
     }
@@ -4067,7 +4073,7 @@ if (typeof document !== "undefined") (() => {
     const lo = LO[template] || {};
     return { template, count: count || 5, stance: lo.stance || "advance", armour: [...(lo.armour || [])],
       ranged: lo.ranged ? { ...lo.ranged } : null, melee: lo.melee ? { ...lo.melee } : null,
-      shield: lo.shield ? { ...lo.shield } : null, carried: lo.carried || null, grenades: (lo.grenades || []).map(g => ({ ...g })), body: lo.body };
+      ranged2: lo.ranged2 ? { ...lo.ranged2 } : null, shield: lo.shield ? { ...lo.shield } : null, carried: lo.carried || null, grenades: (lo.grenades || []).map(g => ({ ...g })), body: lo.body };
   }
   const PRESETS = [
     ["20 Guardsmen vs 5 Space Marines", [["Astra Militarum Guardsman", 20]], [["Astartes Battle-Brother", 5]], 150],
