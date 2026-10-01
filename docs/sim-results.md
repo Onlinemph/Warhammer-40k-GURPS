@@ -378,6 +378,44 @@ The user's wound rules: no HP pool; five boxes per level per location; a hit mar
 | 10 Traitor Guardsman vs 10 Astra Militarum Guardsman @30yd | A 99% B 1% timeout 0% mutual 0% | 11s | A 8.4/10 up, 0.9 dead | B 0.1/10 up, 3.4 dead |
 | 5 Chaos Space Marine vs 20 Ork Boy @20yd | A 100% B 0% timeout 0% mutual 0% | 11s | A 5.0/5 up, 0.0 dead | B 0.0/20 up, 2.0 dead |
 
+## Squads
+
+Lore squads from `data/sim/squads.yaml` (docs/simulator.md, "Squads and command"): a Guard infantry squad is a sergeant, vox-caster, flamer, heavy bolter and loader and five lasguns; a Tactical squad a sergeant, flamer, krak missile launcher and seven boltguns; a Chaos squad an Aspiring Champion with power sword, plasma gun, heavy bolter and seven boltguns; Cultists a champion, flamer and eight autoguns; Boyz a Nob, big shoota, rokkit and eighteen sluggas and choppas; a Strike Team a Shas'ui, nine pulse rifles and two Gun Drones. Open ground, 50 battles each, elites aim, morale on. Side counts total the squads.
+
+### Standard GURPS HP
+
+| Fight | Result | Length | Side A | Side B |
+|---|---|---|---|---|
+| Astra Militarum Infantry Squad vs Chaos Cultist Mob @60yd | A 100% B 0% timeout 0% mutual 0% | 14s | A 9.6/10 up, 0.0 dead | B 0.0/10 up, 1.9 dead |
+| Astra Militarum Infantry Squad with Commissar vs Chaos Cultist Mob @60yd | A 100% B 0% timeout 0% mutual 0% | 13s | A 10.8/11 up, 0.0 dead | B 0.0/10 up, 2.1 dead |
+| Astra Militarum Infantry Squad vs Ork Boyz Mob @80yd | A 26% B 74% timeout 0% mutual 0% | 22s | A 1.4/10 up, 1.0 dead | B 6.7/21 up, 0.1 dead |
+| Astra Militarum Infantry Squad with Commissar vs Ork Boyz Mob @80yd | A 48% B 52% timeout 0% mutual 0% | 32s | A 2.5/11 up, 1.1 dead | B 3.9/21 up, 0.2 dead |
+| 2 × Astra Militarum Infantry Squad vs Ork Boyz Mob @80yd | A 100% B 0% timeout 0% mutual 0% | 25s | A 16.1/20 up, 0.2 dead | B 0.0/21 up, 0.7 dead |
+| 3 × Astra Militarum Infantry Squad vs Astartes Tactical Squad @100yd | A 0% B 100% timeout 0% mutual 0% | 19s | A 0.0/30 up, 12.1 dead | B 10.0/10 up, 0.0 dead |
+| Astartes Tactical Squad vs Chaos Space Marine Squad @40yd | A 2% B 98% timeout 0% mutual 0% | 21s | A 0.1/10 up, 5.4 dead | B 6.8/10 up, 0.9 dead |
+| Ork Boyz Mob vs Astartes Tactical Squad @60yd | A 0% B 100% timeout 0% mutual 0% | 11s | A 0.0/21 up, 3.3 dead | B 10.0/10 up, 0.0 dead |
+| Fire Warrior Strike Team vs Astartes Tactical Squad @100yd | A 0% B 100% timeout 0% mutual 0% | 9s | A 0.0/12 up, 3.6 dead | B 9.9/10 up, 0.0 dead |
+| Fire Warrior Strike Team vs Ork Boyz Mob @100yd | A 100% B 0% timeout 0% mutual 0% | 19s | A 11.3/12 up, 0.0 dead | B 0.0/21 up, 3.0 dead |
+| 2 × Chaos Cultist Mob vs Astra Militarum Infantry Squad @60yd | A 0% B 100% timeout 0% mutual 0% | 28s | A 0.0/20 up, 3.0 dead | B 9.1/10 up, 0.0 dead |
+| Chaos Space Marine Squad vs 2 × Astra Militarum Infantry Squad @80yd | A 100% B 0% timeout 0% mutual 0% | 6s | A 10.0/10 up, 0.0 dead | B 0.0/20 up, 10.9 dead |
+
+### Revised Fractional Health
+
+| Fight | Result | Length | Side A | Side B |
+|---|---|---|---|---|
+| Astra Militarum Infantry Squad vs Chaos Cultist Mob @60yd | A 100% B 0% timeout 0% mutual 0% | 7s | A 9.9/10 up, 0.0 dead | B 0.0/10 up, 0.5 dead |
+| Astra Militarum Infantry Squad with Commissar vs Chaos Cultist Mob @60yd | A 100% B 0% timeout 0% mutual 0% | 7s | A 10.8/11 up, 0.0 dead | B 0.0/10 up, 0.6 dead |
+| Astra Militarum Infantry Squad vs Ork Boyz Mob @80yd | A 4% B 96% timeout 0% mutual 0% | 16s | A 0.3/10 up, 0.9 dead | B 16.1/21 up, 0.1 dead |
+| Astra Militarum Infantry Squad with Commissar vs Ork Boyz Mob @80yd | A 12% B 88% timeout 0% mutual 0% | 19s | A 1.1/11 up, 1.1 dead | B 13.2/21 up, 0.1 dead |
+| 2 × Astra Militarum Infantry Squad vs Ork Boyz Mob @80yd | A 80% B 20% timeout 0% mutual 0% | 30s | A 11.7/20 up, 0.7 dead | B 1.9/21 up, 0.4 dead |
+| 3 × Astra Militarum Infantry Squad vs Astartes Tactical Squad @100yd | A 0% B 100% timeout 0% mutual 0% | 19s | A 0.0/30 up, 1.9 dead | B 10.0/10 up, 0.0 dead |
+| Astartes Tactical Squad vs Chaos Space Marine Squad @40yd | A 0% B 96% timeout 4% mutual 0% | 86s | A 0.2/10 up, 4.3 dead | B 8.1/10 up, 0.6 dead |
+| Ork Boyz Mob vs Astartes Tactical Squad @60yd | A 0% B 100% timeout 0% mutual 0% | 11s | A 0.0/21 up, 0.6 dead | B 10.0/10 up, 0.0 dead |
+| Fire Warrior Strike Team vs Astartes Tactical Squad @100yd | A 0% B 100% timeout 0% mutual 0% | 7s | A 0.0/12 up, 1.2 dead | B 10.0/10 up, 0.0 dead |
+| Fire Warrior Strike Team vs Ork Boyz Mob @100yd | A 100% B 0% timeout 0% mutual 0% | 20s | A 11.8/12 up, 0.0 dead | B 0.0/21 up, 1.3 dead |
+| 2 × Chaos Cultist Mob vs Astra Militarum Infantry Squad @60yd | A 0% B 100% timeout 0% mutual 0% | 12s | A 0.0/20 up, 0.9 dead | B 9.6/10 up, 0.1 dead |
+| Chaos Space Marine Squad vs 2 × Astra Militarum Infantry Squad @80yd | A 100% B 0% timeout 0% mutual 0% | 6s | A 10.0/10 up, 0.0 dead | B 0.0/20 up, 0.7 dead |
+
 ## Facility battlefield
 
 The generated facility (docs/simulator.md, "Facility battlefield"): each side deploys in its staging bay at opposite ends, about 55 yards apart by the hallways, with walls blocking sight and movement, doors that open and shut, breachable walls, and crates, barricades, corners and door frames giving cover. 100 battles each, elites aim, morale on. Layout 1 unless noted.
