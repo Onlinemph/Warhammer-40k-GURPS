@@ -327,6 +327,10 @@ const SIM = (() => {
         w.stPenProne = w.bipod ? Math.max(0, Math.ceil(2 * w.minST / 3) - liftST) : w.stPen;
         w.level -= w.stPenProne; w.stStand = w.stPen - w.stPenProne;   // the rest only when not fired prone
         w.oneHanded = w.bulk >= -2 && oneHand(line.strength);
+        // a long gun is a two-handed weapon (B270 †): with 1.5x its ST it can be held and fired in one hand, but is
+        // unready after each shot; with 2x, freely. The sim uses this for a gun kept in one hand beside a drawn blade
+        w.semiOne = !w.oneHanded && !w.mounted && w.minST > 0 && liftST >= Math.ceil(1.5 * w.minST);
+        w.spentAfter = w.semiOne && liftST < 2 * w.minST;
         w.pistol = /Pistol/.test(line.skill || "");
       }
       return w;
@@ -432,7 +436,9 @@ const SIM = (() => {
       body: spec.body || (LOADOUTS[spec.template] || {}).body || "upright",   // posture for height in melee (Pyramid 3/77 p. 4)
       hooks,
       // Fast-Draw, +1 with Combat Reflexes (B43); Fast-Draw (Grenade) on its own
-      fastDraw: Math.max(-Infinity, ...(st.skills || []).filter(s => /^Fast-Draw/.test(s.name) && !/Ammo|Grenade/.test(s.name) && s.level != null).map(s => s.level)) + (flags.cr ? 1 : 0),
+      // Fast-Draw is specialised (B194): a blade needs Knife, Sword, Two-Handed Sword or Force Sword, a gun Pistol or Long Arm
+      fdBlade: Math.max(-Infinity, ...(st.skills || []).filter(s => /^Fast-Draw \((Knife|Sword|Two-Handed Sword|Force Sword)/.test(s.name) && s.level != null).map(s => s.level)) + (flags.cr ? 1 : 0),
+      fdGun: Math.max(-Infinity, ...(st.skills || []).filter(s => /^Fast-Draw \((Pistol|Long Arm)/.test(s.name) && s.level != null).map(s => s.level)) + (flags.cr ? 1 : 0),
       fdGrenade: Math.max(-Infinity, ...(st.skills || []).filter(s => /^Fast-Draw \(Grenade/.test(s.name) && s.level != null).map(s => s.level)) + (flags.cr ? 1 : 0), st: st.st, dx: st.dx, formation: spec.formation || "line",
       // elites call shots: a best combat skill (weapon or power) of 17+, two past a trained line soldier's 15,
       // and a mind that picks its shots (IQ 8+). Points were a poor proxy: an Ork Boy's ST 28 costs 300+.
@@ -2121,6 +2127,7 @@ const SIM = (() => {
       reveal(m, w);
       const d = Math.max(1, hexDist(m.h, target.h));
       if (d > w.range.max) return;
+      if (w === m.u.ranged && m.gunOneHand && w.spentAfter) m.gunSpent = true;   // fired one-handed: unready (B270)
       const shots = w.shots.mag === Infinity ? w.rof : Math.min(w.rof, m.ammo);
       if (w.shots.mag !== Infinity) m.ammo -= shots;
       if (w.extra) m.extraLeft = (m.extraLeft ?? w.limit) - shots;
@@ -2500,20 +2507,24 @@ const SIM = (() => {
     function switchTo(m, hand) {
       m.lastSwitch = turn;
       const w = hand === "melee" ? m.u.melee : m.u.ranged;
-      // a model that holds both when it can picks both back up
-      m.inHand = m.u.bothReady ? "both" : hand;
-      if (m.u.fastDraw > -Infinity && !m.fastDrew && check(m.u.fastDraw - skillPen(m)).ok) {
-        L(`${m.id} fast-draws the ${w.name}`);
+      // a model that holds both when it can picks both back up; a long gun it can hold in one hand (B270, 1.5x its ST)
+      // stays in the other hand when it draws the blade
+      const keep = hand === "melee" && m.u.ranged && m.u.ranged.semiOne && gunReady(m) && !m.gunBroken && !m.armsLost;
+      m.inHand = m.u.bothReady || keep ? "both" : hand;
+      m.gunOneHand = keep; if (hand === "gun") { m.gunOneHand = false; m.gunSpent = false; }
+      const fd = hand === "melee" ? m.u.fdBlade : m.u.fdGun;
+      if (fd > -Infinity && !m.fastDrew && check(fd - skillPen(m)).ok) {
+        L(`${m.id} fast-draws the ${w.name}${keep ? `, keeping the ${m.u.ranged.name.split(",")[0]} in its other hand` : ""}`);
         m.fastDrew = true; act(m); m.fastDrew = false;
         return;
       }
-      L(`${m.id} readies the ${w.name}`);
+      L(`${m.id} readies the ${w.name}${keep ? `, keeping the ${m.u.ranged.name.split(",")[0]} in its other hand` : ""}`);
     }
     function weaponsFor(m, melee) {
       const out = [];
       const oneHand = m.armsLost || holdingGun(m);
       if (melee) { if (m.armsLost < 2 && bladeReady(m) && (!oneHand || m.u.melee.oneHanded !== false)) out.push(m.u.melee); }
-      else if (m.u.ranged && !m.gunBroken && !m.jam && m.armsLost < 2 && gunReady(m) && (!oneHand || m.u.ranged.oneHanded) && !gunGrip(m)) out.push(m.u.ranged);
+      else if (m.u.ranged && !m.gunBroken && !m.jam && m.armsLost < 2 && gunReady(m) && (!oneHand || m.u.ranged.oneHanded) && !gunGrip(m) && !m.gunSpent) out.push(m.u.ranged);
       if (!melee && m.u.ranged2 && (m.extraLeft ?? m.u.ranged2.limit) > 0) out.push(m.u.ranged2);
       for (const p of m.u.powers) if (!!p.melee === melee && m.fp - p.fp >= 0) out.push(p);
       return out;
@@ -2740,16 +2751,35 @@ const SIM = (() => {
       if ((!u.bothReady || m.inHand !== "both") && !m.grips.length && turn - (m.lastSwitch ?? -99) >= 4) {
         const tmp = [], save = m.inHand, push = v => { if (Number.isFinite(v)) tmp.push(v); };
         if (!bladeReady(m) && u.melee && m.armsLost < 2 && !m.meleeBroken) {
-          m.inHand = "melee";
+          const keep = u.ranged && u.ranged.semiOne && gunReady(m) && !m.gunBroken && !m.armsLost;
+          m.inHand = keep ? "both" : "melee"; m.gunOneHand = keep;
           if (adj.length) meleeOptions(m, adj, push, rNow, Wm, Wr, weaponsFor(m, true)); else approachOptions(m, pool, push, Wm);
-          m.inHand = save;
-          if (tmp.length) add(GAMMA * Math.max(...tmp) - 0.001, `ready-blade`, () => switchTo(m, "melee"));
-        } else if (!gunReady(m) && u.ranged && !m.gunBroken) {
-          m.inHand = "gun";
+          // draw before contact: a foe that can reach us next turn and means to (a charger, a zealot, one with its
+          // blade out) is better met blade in hand than with a Ready spent once it's here
+          let early = -Infinity;
+          if (!adj.length) {
+            const t = pool.find(f => f.h && f.state === "ok" && hexDist(f.h, m.h) <= moveOf(f) + (f.u.melee ? f.u.melee.reachMax : 1)
+              && (f.u.stance === "charge" || (f.u.ai.zeal || 0) > 0 || (bladeReady(f) && !gunReady(f))));
+            if (t) { const e = []; meleeOptions(m, [t], v => { if (Number.isFinite(v)) e.push(v); }, rNow, Wm, Wr, weaponsFor(m, true)); if (e.length) early = GAMMA * 0.7 * Math.max(...e); }
+          }
+          m.inHand = save; m.gunOneHand = false;
+          const best = Math.max(tmp.length ? Math.max(...tmp) : -Infinity, early / GAMMA);
+          if (Number.isFinite(best)) add(GAMMA * best - 0.001, early / GAMMA >= (tmp.length ? Math.max(...tmp) : -Infinity) ? `draw-early` : `ready-blade`, () => switchTo(m, "melee"));
+        } else if ((!gunReady(m) || m.gunOneHand) && u.ranged && !m.gunBroken) {
+          const sp = m.gunSpent, oh = m.gunOneHand;
+          m.inHand = "gun"; m.gunSpent = false; m.gunOneHand = false;
           if (adj.length) meleeOptions(m, adj, push, rNow, Wm, Wr, []); else rangedOptions(m, pool, push, rNow, Wr);
-          m.inHand = save;
+          m.inHand = save; m.gunSpent = sp; m.gunOneHand = oh;
           if (tmp.length) add(GAMMA * Math.max(...tmp) - 0.001, `ready-gun`, () => switchTo(m, "gun"));
         }
+      }
+      // a gun fired one-handed beside the blade (B270) is unready until a Ready brings it back on target
+      if (m.gunSpent && m.inHand === "both") {
+        const tmp = [], push = v => { if (Number.isFinite(v)) tmp.push(v); };
+        m.gunSpent = false;
+        if (adj.length) meleeOptions(m, adj, push, rNow, Wm, Wr, []); else rangedOptions(m, pool, push, rNow, Wr);
+        m.gunSpent = true;
+        if (tmp.length) add(GAMMA * Math.max(...tmp) - 0.001, `re-ready-gun`, () => { m.gunSpent = false; L(`${m.id} brings its ${u.ranged.name.split(",")[0]} back to bear`); });
       }
       if (terr && !m.grips.length) { doorOptions(m, pool, add, rNow); if (!adj.length) breachOptions(m, pool, add, rNow, Wm); }
       // a foe holds our gun aside: wrench it free, worth what a free gun would do (else ready the blade, above)
@@ -2786,7 +2816,7 @@ const SIM = (() => {
       }
       // keeping its head down (TS p. 21): only what doesn't expose it: reload, ready, defend, a door, or stay down
       if (m.headsDown && !adj.length) {
-        const safe = opts.filter(o => /^(reload|reloading|tac-reload|ready-|aod|concentrate|close-door|door)/.test(o.label));
+        const safe = opts.filter(o => /^(reload|reloading|tac-reload|ready-|re-ready-|draw-early|aod|concentrate|close-door|door)/.test(o.label));
         opts.length = 0; opts.push(...safe);
         add(-rNow * 0.5, "heads-down", () => L(`${m.id} keeps its head down`));
       }
@@ -3394,7 +3424,7 @@ const SIM = (() => {
     // ---- options in hand-to-hand
     function meleeOptions(m, adj, add, rNow, Wm, Wr, mw) {
       const u = m.u;
-      const gun = m.grips.length || gunGrip(m) || (holdingGun(m) && !(u.ranged && u.ranged.oneHanded)) ? null : (u.ranged && !m.gunBroken && !m.jam && m.armsLost < 2 ? u.ranged : null);
+      const gun = m.grips.length || gunGrip(m) || !gunReady(m) || m.gunSpent || (holdingGun(m) && !(u.ranged && u.ranged.oneHanded)) ? null : (u.ranged && !m.gunBroken && !m.jam && m.armsLost < 2 ? u.ranged : null);
       const threat = threatTo(m);
       for (const t of adj) {
         const face = () => { faceTo(m, t.h); };
