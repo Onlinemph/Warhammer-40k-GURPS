@@ -66,12 +66,14 @@ GURPS real-world baseline for scale: a modern soft vest with ceramic plate is ro
 | Flak (vest/jacket) | 30 | User's figure. Stops shrapnel, pistol rounds and most solid slugs (autogun 9%). Lasgun hits get through (98%); bolts always do. Flak helmet DR 25. |
 | Mesh | 36, flexible | Hive-noble and assassin wear. Flexible: blunt trauma applies. |
 | Carapace | 70 | User's figure. Rigid plate, near-immune to las (lasgun 0.6%, long-las 6%); a hellgun (82%) or bolter (79%) goes through. |
-| Adepta Sororitas power armour | 85 | Raised with carapace so power armour stays above it; lighter than Astartes plate. A bolter penetrates 45%. |
-| Astartes power armour (Mk VII baseline) | 100 | Ignores las and stub fire. A bolter penetrates about one shot in seven. Limbs a little lower. Eye lenses DR 75 (three-quarters of the helmet). Marks vary ±10–15 around this. |
-| Mk X Gravis | 130 | Between power armour and Terminator plate. |
-| Tactical Dreadnought (Terminator) | 200 | Ignores bolters. Plasma, lascannon, power fist and thunder hammer still kill. |
+| Adepta Sororitas power armour | 76 | Stays above carapace; lighter than Astartes plate. Torso and skull ×0.9, limbs and neck ×0.8 of the old 85 (user direction, see below). |
+| Astartes power armour (Mk VII baseline) | 90 torso, 70 arms and legs, 50 neck | Ignores las and stub fire on the torso (a lasgun still finds the neck 41% of the time). A bolter penetrates the torso about one shot in three (36%), a limb four in five, the neck nearly always; a heavy bolter the torso two in three. Face and eye lenses 68, hands 50, feet 60. Marks vary ±10–15 around this. |
+| Mk X Gravis | 117 | Between power armour and Terminator plate. |
+| Tactical Dreadnought (Terminator) | 180 | Ignores bolters on the torso. Plasma, lascannon, power fist and thunder hammer still kill. |
 
 Limbs are usually a few DR below torso. Specify every location explicitly.
+
+**Interactive plate** (user direction). Every suit of power armour (Astartes Marks II-X, Heretic, Grey Knight Aegis, Sororitas, Custodian Auramite) and Tactical Dreadnought armour has torso, vitals, groin, skull, face and eye DR at 0.9 of its earlier figure and arms, legs, hands, feet and neck at 0.8, so where a shot lands matters: a bolter that skids off a breastplate goes through a pauldron or a gorget. Flak, mesh and carapace are unchanged.
 
 Additional armour set in the audit: Mk II (torso 92, Weak Points 6), Tartaros Terminator (torso 190, Weak Points 3), Gravis eye lens 98, Phobos eye lens 66. The displacer field is not a Shield Point field: it teleports the wearer instead.
 
