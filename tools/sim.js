@@ -1658,7 +1658,12 @@ const SIM = (() => {
         if (hmod === null) continue;   // out of reach across the height difference (B402-403)
         if (t.limbFull && t.limbFull[loc.replace("#c", "")]) continue;   // both already crippled: nothing more to take there
         const e = (loc === "area" ? expInj(w, t.u, "area", dmgOverride) : loc === "random" ? expInjRandom(w, t.u, dmgOverride) : expInj(w, t.u, loc, dmgOverride)) * (fo.fx ? fo.fx.keep(loc.replace("#c", "")) : 1);
-        if (e <= 0) continue;
+        // a rending weapon (success by N+ or a critical) does its rending damage on a good enough roll: count it, or
+        // the planner sees only the ordinary line and goes hunting for chinks it can't reach the margin on
+        const rendL = melee && w.rend && !dmgOverride ? (loc === "random" ? expInjRandom(w, t.u, w.rend) : expInj(w, t.u, loc, w.rend)) : 0;
+        if (e <= 0 && rendL <= 0) continue;
+        // expected injury per attack at effective skill x: the share of hits good enough to rend does the rending damage
+        const perHit = x => { if (!rendL) return e * P3[cl(Math.min(18, x))]; const all = P3[cl(Math.min(18, x))], r = Math.min(all, Math.max(P3[cl(x - w.rendBy)], 4 / 216)); return e * (all - r) + rendL * r; };
         // Deceptive Shot (house rule): a shooter may trade 2 skill for each -1 to the target's Dodge, as Deceptive
         // Attack (B369) does in melee; not for area attacks or Malediction
         const maxDa = fo.noDa ? 0 : melee || !(w.malediction || w.cone || w.dmg.ex || w.blast) ? 6 : 0;
@@ -1667,7 +1672,7 @@ const SIM = (() => {
           if (eff < 3 || (da > 0 && eff < 10)) break;
           const pDef = def0 == null ? 0 : P3[Math.max(0, Math.min(18, def0 - da))];
           const hits = melee ? P3[Math.min(18, eff)] : burstHits(eff, w.cone ? 1 : (w.rof || 1), w, fo.aim || 0, !!fo.braced);
-          let score = (1 - pDef) * e * hits;
+          let score = (1 - pDef) * (melee ? perHit(eff) : e * hits);
           if (melee && NEAR_TORSO.has(loc)) score += (1 - pDef) * (P3[Math.min(18, eff + 1)] - P3[Math.min(18, eff)]) * expInj(w, t.u, "torso", dmgOverride);
           if (shUp) {
             // the share of this attack's raw damage the shield absorbs is lost; stripping it is worth a quarter
@@ -1680,7 +1685,7 @@ const SIM = (() => {
         // Telegraphic Attack (MA113): +4 to hit, +2 to the foe's defences; not with Deceptive Attack
         if (melee && !fo.noTele && lvl + pen + hmod + 4 >= 3) {
           const eff = lvl + pen + hmod + 4, pDef = def0 == null ? 0 : P3[cl(def0 + 2)];
-          let score = (1 - pDef) * e * P3[Math.min(18, eff)];
+          let score = (1 - pDef) * perHit(eff);
           if (shUp) { const dm = dmgOverride || w.dmg, raw = Math.max(1, (dm.n * 3.5 + dm.add) * (dm.mult || 1)); const soak = Math.min(1, t.sp / raw); score *= (1 - soak) + soak * 0.25; }
           if (score > best.score) best = { loc, da: 0, score, lvl: eff, tele: true };
         }
