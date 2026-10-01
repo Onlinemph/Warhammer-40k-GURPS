@@ -199,3 +199,4 @@ Anchor and rule changes to `framework.md`, with the reason for each.
   - The Aim survival check skipped stunned foes, so Guardsmen aimed at Hormagaunts that were about to recover and charge. A stunned foe now counts for half.
   - Bug: regrowing bio-weapon ammunition used up spare magazines (so a Termagant's fleshborer died after four regrowths). It no longer counts magazines.
   - The log now records each second of a reload, a closing move, a stalker creeping forward and a charge that can't get through, so no turn reads as "did nothing".
+- **Sonic blaster back to 6d(5) cr** (Acc 4 and Rcl 2 kept). At 5d(5) Noise Marines landed twice as many penetrating hits as loyalist Marines but a third of the injury per hit (10.6 against 32.6), so they almost never caused a major wound, and won 8 fights in 60. At 6d(5) they win 48 in 60, just under boltgun Legionaries (92%), a bolter-class gun as the lore has it.
