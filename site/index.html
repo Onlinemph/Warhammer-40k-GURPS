@@ -4276,7 +4276,9 @@ const SIM = (() => {
             const Eaim = planAttack(m, w, t, base + (brA ? 1 : 0) + nextB - ownCoverPen(m, t.h, brA), false, null, { aim: nextB, braced: brA, fx }).score * sustainOf(w) * spread;
             // any active defence before next turn spoils the aim (B364): then it's an unaimed shot a turn late
             const keepP = aimKeep(m), Eun = keepP < 1 ? planAttack(m, w, t, base + bB - own, false, null, { aim: 0, braced: br, fx }).score * sustainOf(w) * spread : 0;
-            add(GAMMA * Wr * kv(m, t, keepP * Eaim + (1 - keepP) * Eun) - GAMMA * ffCost - rNow, `aim@${t.id}`, () => {
+            // and the aimer has to live to take the shot: under heavy fire a second spent aiming may be its last
+            const live = 1 - Math.min(0.95, incoming(m, m.h, "") / remOf(m));
+            add(GAMMA * live * Wr * kv(m, t, keepP * Eaim + (1 - keepP) * Eun) - GAMMA * ffCost - rNow, `aim@${t.id}`, () => {
               if (m.aimTarget !== t) m.aimTurns = 0;
               m.aimTarget = t; m.aimTurns++; faceTo(m, t.h); L(`${m.id} aims at ${t.id}`);
             });
