@@ -3029,7 +3029,7 @@ const SIM = (() => {
       return false;
     }
     function fireAt(m, w, target, opts) {
-      if (m.state !== "ok" || !m.h || !target.h || !los(m.h, target.h)) return;   // the attacker fell, the target left, or a wall is in the way
+      if (m.state !== "ok" || !m.h || !target.h || !los(m.h, target.h) || duckedFrom(target, m.h)) return;   // the attacker fell, the target left or ducked, or a wall is in the way
       reveal(m, w);
       const d = Math.max(1, hexDist(m.h, target.h));
       if (d > w.range.max) return;
@@ -3072,7 +3072,7 @@ const SIM = (() => {
         + target.u.sm - skillPen(m) + firstB - (opts.pen || 0) - darkPen(m, target)
         // All-Out Attack (Determined): +1, or +4 for a gun fired at a foe within reach (TS p. 25)
         + (opts.moved ? Math.min(-2, w.bulk) : 0) + (opts.aoa || sighted ? (opts.pointBlank ? 4 : 1) : 0)
-        - (opts.pointBlank ? 0 : ownCoverPen(m, target.h, braced && firstB > 0));
+        - (opts.pointBlank || opts.popup ? 0 : ownCoverPen(m, target.h, braced && firstB > 0));
       m.aimTurns = 0;
       m.follow = firstB > 0 && !w.cone && !w.malediction ? { t: target, w, acc: braced && (w.rof || 1) === 1 ? w.acc : Math.floor(w.acc / 2) } : null;
       if (w.cone) { coneFire(m, w, target, base, d); return; }
@@ -3520,7 +3520,7 @@ const SIM = (() => {
           best = expInjRandom(mw, m.u) * P3[cl(lvl)] * (1 - (def == null ? 0 : P3[cl(def)])) * (1 + (f.u.flags.extraAttack || 0));
         }
         const rw = f.u.ranged;
-        if (rw && !f.gunBroken && d <= rw.range.max && los(f.h, h)) {
+        if (rw && !f.gunBroken && d <= rw.range.max && los(f.h, h) && !(mode === "duck" && DUCK.has(coverAt(h, f.h, m)) && covPenAt(h, f.h, m) > 0)) {
           const lvl = rw.level - skillPen(f) + rangePenalty(rngD(f.h, h, Math.max(1, d)) + spdOf(h === m.h ? m.steps || 0 : hexDist(m.h, h))) + m.u.sm - (m.prone && elevAt(f.h) - elevAt(h) < 1 ? 2 : 0) + Math.min(2, rw.acc || 0) - covPenAt(h, f.h, m) - (f.h ? ownCoverPen(f, h, false) : 0);
           const def = mode === "aoa" ? null : m.u.dodge + (mode === "aod" ? 2 : 0) + m.u.db - (m.prone ? 3 : 0);
           best = Math.max(best, expInjRandom(rw, m.u) * burstHits(lvl, rw.rof || 1, rw) * (1 - (def == null ? 0 : P3[cl(def)])) * (covered(m, f) ? 1 - pinOf(f) : 1));
@@ -3610,7 +3610,7 @@ const SIM = (() => {
       m.aoa = false; m.aod = false; m.mna = false; m.offBalance = false; m.readied = false; m.steps = 0; m.moved = false; m.movedFar = false;
       m.runPrev = m.runK || 0; m.runK = 0;   // a sprint carries on only through consecutive straight Moves
       if (m.feint && m.feint.turn !== turn - 1) m.feint = null;   // a feint lapses if not used the next turn (B365)
-      clearZone(m); m.waiting = null; m.watch = false;
+      clearZone(m); m.waiting = null; m.watch = false; m.ducked = false;
       if (m.doNothing) { m.doNothing = false; L(`${m.id} reels from the blow (Do Nothing)`); return; }
       if (m.surprised) { m.surprised = false; L(`${m.id} is caught by surprise`); return; }
       if (m.skipNext) { m.skipNext = false; L(`${m.id} already acted this second (it saw the foe first)`); return; }
@@ -3901,12 +3901,101 @@ const SIM = (() => {
       }
       keepC.set(m, p); return p;
     }
+    // ---- pop-up attacks (B390): an Attack in which the shooter comes out of cover, fires and goes back into it in one
+    // turn, at -2 (it couldn't see the target when its turn began; none for Gunslinger) and with no Aim. Firearms and
+    // thrown weapons only. Two kinds: round a corner (a step to a hex that sees a known foe, the shot, the step back),
+    // and up out of a trench (rising over the cover in front, firing, ducking down again). Only a foe holding a Wait on
+    // that spot can shoot it while it's out; ducked behind its cover till its next turn, a foe the cover screens from
+    // can't target it at all
+    const DUCK = new Set(["crate", "barricade", "parapet", "crest", "light", "heavy"]);
+    const popPen = m => m.u.flags.gunslinger ? 0 : 2;
+    const popW = w => w.range && !w.malediction && !w.fp && !w.cone && w.usage !== "power";
+    // fire from foes holding a Wait (watch) on hex n: what stepping or rising into their sights costs m
+    function waitRisk(m, n) {
+      let inc = 0;
+      for (const f of models) {
+        if (f.u.side === m.u.side || f.state !== "ok" || !f.h || !f.watch || f.waiting !== f.u.ranged || f.stunned) continue;
+        const rw = f.u.ranged, d = hexDist(f.h, n);
+        if (d > rw.range.max || !los(f.h, n)) continue;
+        const lvl = rw.level - skillPen(f) + rangePenalty(rngD(f.h, n, Math.max(1, d))) + m.u.sm;
+        inc += expInjRandom(rw, m.u) * burstHits(lvl, rw.rof || 1, rw) * (1 - P3[cl(m.u.dodge + m.u.db)]);
+      }
+      return m.u.ai.caution * Math.min(1, inc / remOf(m)) * threatOf(m) * HORIZON;
+    }
+    // watchers fire as m comes into view (its rising out of cover; a step is handled by afterStep)
+    function popWaits(m) {
+      for (const f of models) {
+        if (m.state !== "ok" || m.stunned) return;
+        if (!f.waiting || !f.watch || f.state !== "ok" || !f.h || f.u.side === m.u.side || f.stunned) continue;
+        if (!los(f.h, m.h) || hexDist(f.h, m.h) > f.waiting.range.max) continue;
+        const w = f.waiting; f.waiting = null; f.watch = false;
+        if (w === f.u.ranged && gunGrip(f)) continue;
+        L(`${f.id} was waiting for ${m.id} to show itself (Wait)`);
+        fireAt(f, w, m, { pointBlank: hexDist(f.h, m.h) <= 1 });
+      }
+    }
+    function popUpOptions(m, pool, cands, ws, add, rNow, Wr) {
+      const u = m.u;
+      if (m.grips.length) return;
+      const usable = ws.filter(w => popW(w) && (w !== u.ranged || (m.ammo > 0 && m.reload <= 0 && !m.jam && !m.gunBroken && gunReady(m))));
+      if (!usable.length) return;
+      const shotAt = (from, t, w) => {
+        const d = Math.max(1, hexDist(from, t.h));
+        if (d > w.range.max) return 0;
+        const lvl = wl(m, w) - skillPen(m) + rangePenalty(rngD(from, t.h, d) + spdOf(t.steps || 0)) + t.u.sm - popPen(m) - darkPen(m, t) - linePen(m, between(from, t.h, u.side).filter(x => x !== t && x !== m));
+        return planAttack(m, w, t, lvl, false, null, { fx: shotFx(t, from, false) }).score * sustainOf(w);
+      };
+      // up out of a trench: a foe in sight that m's cover screens it from
+      for (const t of cands.slice(0, 4)) {
+        const k = coverAt(m.h, t.h, m);
+        if (!DUCK.has(k) || !covPenAt(m.h, t.h, m)) continue;
+        for (const w of usable) {
+          const E = shotAt(m.h, t, w);
+          if (E <= 0) continue;
+          add(Wr * kv(m, t, E) - risk(m, m.h, "duck") - waitRisk(m, m.h), `popup-trench@${t.id}`, () => {
+            L(`${m.id} rises out of cover to fire at ${t.id} (pop-up attack)`);
+            popWaits(m); if (m.state !== "ok" || m.stunned || !t.h) return;
+            m.aimTurns = 0; m.follow = null; faceTo(m, t.h);
+            fireAt(m, w, t, { pen: popPen(m), popup: true });
+            if (m.state === "ok" && m.h) { m.ducked = true; L(`  ${m.id} ducks back down`); }
+          });
+        }
+      }
+      // round a corner: nobody in sight from here, a known foe in sight from the next hex
+      if (!terr || cands.length || m.u.stance === "charge") return;
+      const ci = idx(key(m.h.q, m.h.r));
+      for (const [dq, dr] of DIRS) {
+        const n = { q: m.h.q + dq, r: m.h.r + dr }, nk = key(n.q, n.r);
+        if (taken(nk) || !walkable(nk) || (EL && climb(ci, idx(nk), climbCls(m)) > 0)) continue;
+        let best = null;
+        for (const t of pool.slice(0, 6)) {
+          if (!t.h || !los(n, t.h) || duckedFrom(t, n)) continue;
+          for (const w of usable) { const E = shotAt(n, t, w); if (E > 0 && (!best || E * kv(m, t, 1) > best.v)) best = { t, w, E, v: E * kv(m, t, 1) }; }
+        }
+        if (!best) continue;
+        const { t, w, E } = best;
+        add(Wr * kv(m, t, E) - rNow - waitRisk(m, n), `popup@${t.id}`, () => {
+          const h0 = m.h;
+          L(`${m.id} steps out of cover to fire at ${t.id} (pop-up attack)`);
+          m.popping = true; place(m, n); afterStep(m); m.popping = false;
+          if (m.state === "ok" && m.h && !m.stunned && t.h && t.state === "ok") { m.aimTurns = 0; m.follow = null; faceTo(m, t.h); fireAt(m, w, t, { pen: popPen(m) }); }
+          if (m.state === "ok" && m.h && !m.grips.length && !taken(key(h0.q, h0.r))) { place(m, h0); L(`  ${m.id} steps back into cover`); }
+        });
+      }
+    }
+    // a model ducked behind its cover after a pop-up: no foe the cover screens it from can draw a bead on it
+    function duckedFrom(t, fh) {
+      if (!t.ducked || !t.h || !fh) return false;
+      const k = coverAt(t.h, fh, t);
+      return DUCK.has(k) && covPenAt(t.h, fh, t) > 0;
+    }
     // ---- options at range: shoot (each weapon and target), aim, Move and Attack, suppression, grenades, Wait, reload
     function rangedOptions(m, pool, add, rNow, Wr) {
       const u = m.u;
-      const cands = pool.filter(t => los(m.h, t.h)).slice(0, 6);
+      const cands = pool.filter(t => los(m.h, t.h) && !duckedFrom(t, m.h)).slice(0, 6);
       if (cands.length) m.watchN = 0;
       const ws = weaponsFor(m, false).filter(w => !(w === u.ranged && w.natural && m.ammo <= 0 && w.shots.reload > 3));
+      if (ws.length && !m.headsDown) popUpOptions(m, pool, cands, ws, add, rNow, Wr);
       if (terr && ws.length) {
         // nobody in sight: work toward the nearest foe on foot
         const t = pool[0];
@@ -4773,7 +4862,7 @@ const SIM = (() => {
       // slicing the pie (TS p. 23-24): a careful mover in a facility stops at the step that first shows it a foe, so
       // it meets it at the corner with the corner as light cover for both; if neither was waiting, a Quick Contest of
       // Per (+1 for Combat Reflexes) says who acts first, and a foe that wins shoots now and loses its next turn
-      if (AWARE && terr && m.prevH && !((m.u.ai.zeal || 0) > 0) && m.u.stance !== "charge") {
+      if (AWARE && terr && m.prevH && !m.popping && !((m.u.ai.zeal || 0) > 0) && m.u.stance !== "charge") {
         const newly = models.filter(x => x.state === "ok" && x.h && x.u.side !== m.u.side && !x.u.routed && hexDist(x.h, m.h) <= 10 && los(m.h, x.h) && !los(m.prevH, x.h));
         if (newly.length) {
           for (const x of newly) {
