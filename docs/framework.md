@@ -220,6 +220,8 @@ Before this ladder the xenos were drafted against the old Astartes ST (18–24) 
 | Heroes and legends | 1,000–3,000 | Chapter Master, Custodian, Living Saint, Lord Inquisitor |
 | Beyond play | 5,000+ | Primarchs, Greater Daemons, C'tan shards. Built for GM reference only. |
 
+Chaos sits on the same tiers: cultists and traitor Guardsmen as trained soldiers or below, Heretic Astartes as Astartes (Long War veterans at the top of it), Chaos Lords and Sorcerers as heroes.
+
 Equipment is not included in these totals.
 
 ### Astartes physiology
@@ -492,6 +494,65 @@ Weapon-symbiote anchors:
 | Bonesword | Psychically charged bone blade: sw+3d(10) cut (power-field class) |
 | Monstrous scything talons | sw+4d(3) cut |
 | Monstrous crushing claws | thr+6d(5) cr |
+
+## Chaos
+
+The Ruinous Powers' mortal and daemonic servants: the Traitor Legions and renegade Chapters (Heretic Astartes), the cults and traitor regiments that follow them, and the daemons of the four gods. User decisions (wave 1): mortal Chaos first, daemons in wave 2; a Heretic Astartes has the same body as a loyalist, but many are Long War veterans; Marks of Chaos are meta-trait lenses with matching disadvantages; daemons are warp-bound and banished at 0 HP.
+
+### Heretic Astartes
+
+Same **Astartes** racial meta-trait as a loyalist (data/imperium/astartes/gene-seed.yaml): ST 30, HP 34, DX 16 from the package, Move 12. What differs:
+
+- **Heretic Astartes** lens: the Imperium's Enemy (hunted on sight), Social Stigma (Excommunicate/Traitor) in Imperial space, Callous, and Theology (Imperial Creed) swapped for Hidden Lore (Daemons) and Theology (Chaos). No Imperial Rank or "Angel of Death" Reputation; a Legion Reputation in its place.
+- **Long War Veteran** lens (the Legionary default): many traitors fought in the Horus Heresy and have had ten thousand years of war since. +1 DX, +1 Per, Combat Reflexes if the package lacks it, and weapon skills two levels above a loyalist Battle-Brother's (Guns (Rifle) 22 against 20). A renegade from a recently fallen Chapter skips this lens.
+- **Mutations** are optional lenses (extra limbs, claws, horns, warp-flesh) priced as Basic Set advantages and disadvantages.
+
+| Unit | ST | DX | IQ | HT | HP | Notes |
+|---|---|---|---|---|---|---|
+| Chaos Cultist | 10 | 10 | 9 | 10 | 10 | Untrained fanatic: ~40-80 points. Autogun or autopistol and a crude blade, rags or a flak vest. |
+| Traitor Guardsman | 11 | 12 | 10 | 12 | 11 | A Guardsman who turned: the Guardsman's training, Imperial gear, a Mark of Chaos optional. |
+| Chaos Space Marine (Legionary) | 30 | 17 | 11 | 15 | 34 | Long War Veteran; ~900 points. |
+| Chaos Lord | 32 | 18 | 13 | 16 | 38 | Leadership and Tactics high; ~1,200 points. |
+| Chaos Sorcerer | 30 | 17 | 14 | 15 | 34 | Psyker Talent 3, Warp Empowerment at the Alpha level (20); Will 16; ~1,250 points. |
+| Possessed | 40 | 16 | 8 | 16 | 44 | A daemon wearing a Marine: warp-flesh DR 15 over the armour's, claws and tentacles (Extra Attack 1), Fearlessness 5, no guns. ~1,000 points. |
+| Khorne Berzerker | 30 | 17 | 10 | 15 | 34 | Legionary + Mark of Khorne + Butcher's Nails; chainaxe skill 22. |
+| Plague Marine | 30 | 16 | 10 | 16 | 34 | Legionary + Mark of Nurgle + Nurgle's Gift (Injury Tolerance ÷2, fused rotting flesh DR 10, −2 Move). |
+| Rubric Marine | 30 | 14 | 6 | 15 | 34 | Not alive: a sealed suit of Mk IV filled with the dust of its soul. Machine-like (No Blood, No Brain, No Vitals, Unliving, Doesn't Breathe/Eat/Sleep, Unfazeable), Slave Mentality toward its Sorcerer, Move 8. Inferno boltgun. |
+| Noise Marine | 30 | 17 | 11 | 15 | 34 | Legionary + Mark of Slaanesh; sonic weapons. |
+
+### Marks of Chaos
+
+Each Mark is a meta-trait lens of Basic Set advantages and the disadvantages its god demands; a model carries at most one.
+
+| Mark | Advantages | Disadvantages |
+|---|---|---|
+| Khorne | High Pain Threshold, Fearlessness 2, +3 to resist psychic powers (Khorne despises sorcery) | Berserk (12), Bloodlust (12) |
+| Nurgle | Injury Tolerance (Damage Reduction) ÷2 ("disgustingly resilient"), Immunity to disease, Resistant to poison (+8), Hard to Kill 2 | Hideous Appearance, Odious Personal Habit (rot and flies) |
+| Tzeentch | Psyker (Talent) +1; a warding field (Shield Points 20, as the personal force-field rules) | Paranoia, Compulsive Lying |
+| Slaanesh | Combat Reflexes, Enhanced Move 1/2, Acute senses | Compulsive Behavior (excess, 12), Sadism |
+| Undivided | Fearlessness 2, Hard to Kill 1 | Fanaticism (Chaos) |
+
+### Armour
+
+Traitor plate keeps the loyalist DR of its mark (Mk II-VII, Tartaros and Cataphractii Terminator) but has gone ten thousand years without a forge-temple: **Weak Points +1** over the loyalist figure (Mk IV 5 → 6, Terminator 3 → 4). Plague Marine plate is fused to the flesh (the Nurgle's Gift DR adds on top). Rubric plate is Mk IV with the seals soldered shut by the Rubric (Weak Points as loyalist; nothing inside to wound through a gap).
+
+### Weapons
+
+Shared weapons keep their anchors: boltgun, bolt pistol, chainsword, chainaxe, power weapons, plasma, melta, flamer, autogun, lasgun, frag and krak grenades. New anchors:
+
+| Weapon | Anchor |
+|---|---|
+| Inferno boltgun (Rubric) | Boltgun with warpflame bolts: 6d×2(3) pi++ with a 2d burn follow-up, one divisor step past the boltgun |
+| Warpflamer | Flamer anchor, burning follow-up 2d per turn while ablaze |
+| Sonic blaster | 5d(3) cr, RoF 3, range 50/150: sound that shakes the wearer inside the armour |
+| Blastmaster | 6d×2(3) cr, RoF 2, range 120/360; a single-frequency setting 6d×3(5) cr, RoF 1 |
+| Plague knife | Combat knife plus a 2d tox follow-up (Nurgle's Rot) on a penetrating hit |
+| Blight grenade | Frag grenade (3d cr ex [4d cut]) plus a 1d tox follow-up per fragment |
+| Possessed claws and tentacles | Natural weapons at ST 40: sw+2d(2) cut, reach 1 |
+
+### Daemons (wave 2)
+
+Daemons share a **Daemonic** meta-trait: no blood, no vitals, no need to breathe, eat or sleep; immune to fear, disease and poison. At 0 HP or below a daemon is banished to the warp: no death checks, no unconsciousness. Psychic, force, blessed and null weapons ignore its warp-stuff toughness (Injury Tolerance and natural DR). Daemonic instability: when their side has lost more than it has killed, each daemon rolls Will at the end of its turn, losing HP on a failure. Greater Daemons are beyond play.
 
 ## Psykers and the warp
 
