@@ -1,0 +1,629 @@
+kind: traits
+output: Chaos/Traits/Chaos Traits.adq
+items:
+  # Mortal Chaos lenses, the five Marks, the unit-specific gifts and the
+  # cultist's faith. Numbers follow framework.md's "Chaos" section. Lore
+  # sources are the Codex: Chaos Space Marines and Codex: Chaos Daemons
+  # background across editions and Black Library's Horus Heresy and Chaos
+  # fiction in general; no single novel is cited, since none is relied on
+  # for a number.
+  #
+  # A Heretic Astartes carries the normal Astartes racial meta-trait from
+  # data/imperium/astartes/gene-seed.yaml. These lenses sit on top of it.
+  # Where a Mark lists an advantage the Astartes package already gives
+  # (High Pain Threshold, Combat Reflexes), that child is shipped disabled
+  # so an Astartes does not pay twice; a mortal bearer without the package
+  # enables it.
+
+  # ------------------------------------------------------------ lenses
+
+  - name: Heretic Astartes
+    container: meta_trait
+    tags: [Advantage, Disadvantage, Physical, Mental, Chaos, Heretic Astartes, Chapter Variant]
+    children:
+      - name: Enemy (The Imperium)
+        points: -40
+        ref: B135
+        tags: [Disadvantage, Social]
+        notes: >
+          Utterly formidable group (-40), appears on a 9 or less (x1): the Inquisition,
+          the Astra Militarum, the loyalist Chapters and every planetary
+          governor are hunted-on-sight enemies in Imperial space. Does not
+          apply on a Chaos-held world or deep in the Eye of Terror.
+      - name: Social Stigma (Excommunicated)
+        points: -5
+        ref: B155
+        tags: [Disadvantage, Social]
+        notes: >
+          -3 reaction from any faithful Imperial subject who knows what he is.
+          Applies in Imperial space only.
+      - name: Callous
+        points: -5
+        ref: B125
+        cr: 12
+        tags: [Disadvantage, Mental]
+        notes: Indifferent to suffering; -3 to reaction from the empathic. Matches the Callous used elsewhere in the project.
+      - name: Reputation (Traitor Legion)
+        points: 10
+        ref: B27
+        tags: [Advantage, Social]
+        reactions:
+          - {situation: from Chaos cultists, renegades and warbands that know the Legion, amount: 4}
+        notes: >
+          Rename for the bearer's Legion or warband (Black Legion, Night
+          Lords, Word Bearers, Iron Warriors, Alpha Legion and so on). Replaces the
+          loyalist "Reputation (Angel of Death)", which a Heretic Astartes does not take.
+    notes: >
+      Apply on top of the Astartes racial meta-trait. Leave out the loyalist
+      Rank, Reputation (Angel of Death) and the Duty and Code of Honor of the
+      Hypno-Indoctrination package if the bearer has broken with his Chapter's
+      oaths (the GM decides how much of the old conditioning survives). Skills
+      are not part of this lens: the template drops Theology (Imperial Creed)
+      and takes Hidden Lore (Daemons) and Theology (Chaos) in its place.
+    lore: >
+      The Traitor Legions and the renegade Chapters are the same warriors the
+      Imperium builds, turned. Codex: Chaos Space Marines background and the
+      Horus Heresy fiction describe them as Astartes who kept their bodies,
+      their wargear and their skill, and threw away the Emperor. The Imperium
+      calls them traitors and hunts them wherever they surface; among the
+      cults and warbands of the Ruinous Powers, the name of a Legion still
+      carries weight.
+    design: >
+      Enemy (B135): an utterly formidable group (a whole government) is -40;
+      it appears on 9 or less (x1), since the Imperium can't be everywhere and
+      a warband spends much of its life outside Imperial space. A GM running a
+      campaign inside the Imperium can raise it to 12 or less (x2, -80).
+      Social Stigma (Excommunicated, B155) -5. Callous (B125) -5. Reputation
+      (B27) +4 among a large class of people (Chaos followers, x1/2): 4 x 5 x
+      1/2 = 10. Net -40 -5 -5 +10 = -40 points.
+
+  - name: Long War Veteran
+    container: meta_trait
+    tags: [Advantage, Physical, Mental, Chaos, Heretic Astartes, Chapter Variant]
+    children:
+      - name: Long War Veteran (Attribute Modifiers)
+        points: 25
+        attributes: {dx: 1, per: 1}
+        tags: [Physical, Mental]
+        notes: DX +1 (20) and Per +1 (5).
+    notes: >
+      Combat Reflexes is not added: the Astartes package already carries it
+      (Combat Reflexes 15 inside Hypno-Indoctrination / Psycho-Conditioning in
+      data/imperium/astartes/gene-seed.yaml), so a second copy would be
+      paid for nothing. The extra weapon skill (two levels above a loyalist
+      Battle-Brother's) belongs in the template as more skill points. This
+      lens holds attributes only; skill increases are templates' work. A
+      renegade from a recently fallen Chapter skips it.
+    lore: >
+      Many Legionaries fought in the Horus Heresy and have waged the Long
+      War ever since. Codex: Chaos Space Marines background and Black Library's
+      Horus Heresy and Chaos fiction treat them as warriors with ten thousand
+      years of fighting behind them: faster, sharper and harder to surprise
+      than a Battle-Brother of a few decades' service.
+    design: >
+      Increased DX +1 (B15, 20/level, 20) and Increased Per +1 (B16, 5/level,
+      5) = 25 points. Combat Reflexes omitted because the Astartes package
+      has it. Raises a Battle-Brother's DX 16 to 17 and Per by one, as the
+      framework's Legionary line asks.
+
+  # -------------------------------------------------------------- Marks
+
+  - name: Mark of Khorne
+    container: meta_trait
+    tags: [Advantage, Disadvantage, Physical, Mental, Chaos, Khorne, Mark of Chaos]
+    children:
+      - name: High Pain Threshold
+        points: 10
+        ref: B59
+        disabled: true
+        tags: [Advantage, Physical]
+        notes: >
+          Disabled by default: the Astartes Hypno-Indoctrination package
+          already gives High Pain Threshold, and it does not stack. Enable
+          for a mortal bearer who is not an Astartes (+10).
+      - name: Fearlessness
+        points: 0
+        per_level: 2
+        levels: 2
+        ref: B55
+        tags: [Advantage, Mental]
+        notes: "+2 to Fright Checks. Stacks with the Astartes package's Fearlessness 4."
+      - name: Resistant to Psychic Powers (Mark of Khorne)
+        points: 3
+        ref: B81
+        tags: [Advantage, Mental]
+        notes: "+3 to resist psychic powers and sorcery aimed at the bearer (Khorne despises sorcery)."
+      - name: Berserk
+        points: -10
+        cr: 12
+        ref: B124
+        tags: [Disadvantage, Mental]
+        notes: Self-control 12. Goes berserk when wounded or when enemies are close.
+      - name: Bloodlust
+        points: -10
+        cr: 12
+        ref: B125
+        tags: [Disadvantage, Mental]
+        notes: Self-control 12. Will not take prisoners or leave a fight while an enemy lives.
+    lore: >
+      Khorne, the Blood God, wants blood and skulls, and does not much care
+      whose. Codex: Chaos Space Marines background gives his Mark to
+      warriors of the World Eaters, the Khorne Berzerkers and to any
+      warband that offers him slaughter. The Mark makes a warrior hard to
+      hurt, deaf to fear and hostile to sorcery, and makes him unable to stop.
+    design: >
+      Framework Marks table. High Pain Threshold (B59) 10 (disabled by
+      default, see its notes); Fearlessness 2 (B55, 2/level) 4; Resistant to
+      psychic powers +3 (B81), Occasional hazard 10 x1/3 = 3 (rounded; the
+      x1/3 for a +3 bonus is from the author's memory of B81, not a checked
+      page); Berserk (B124) -10; Bloodlust (B125) -10. Total with the
+      children enabled by default: 4 + 3 - 10 - 10 = -13; enabling High Pain
+      Threshold makes it -3.
+
+  - name: Mark of Nurgle
+    container: meta_trait
+    tags: [Advantage, Disadvantage, Physical, Chaos, Nurgle, Mark of Chaos]
+    children:
+      - name: Injury Tolerance (Damage Reduction)
+        points: 0
+        per_level: 25
+        levels: 2
+        ref: P53
+        tags: [Advantage, Physical]
+        notes: >
+          Divisor 2 (level = divisor): after DR and wounding multipliers,
+          all injury is divided by 2 (round down, minimum 1 if anything
+          penetrated). Nurgle's Gift adds natural DR, not another level, so a
+          Plague Marine's total divisor stays 2.
+      - name: Immunity to Disease
+        points: 10
+        ref: B81
+        tags: [Advantage, Physical]
+        notes: Immune to disease, including most warp-spawned plagues. Not to Nurgle's own Rot when wielded as a weapon effect, if the GM wants it dangerous.
+      - name: Resistant to Poison
+        points: 5
+        ref: B81
+        tags: [Advantage, Physical]
+        notes: "+8 to HT rolls to resist poison."
+      - name: Hard to Kill
+        points: 0
+        per_level: 2
+        levels: 2
+        ref: B58
+        tags: [Advantage, Physical]
+        notes: "+2 to HT rolls made solely to avoid death."
+      - name: Hideous Appearance
+        points: -16
+        ref: B21
+        tags: [Disadvantage, Physical, Social]
+        notes: Bloated, weeping and rotted; -4 reaction from anyone not sworn to Nurgle.
+      - name: Odious Personal Habit (Rot and Flies)
+        points: 0
+        per_level: -5
+        levels: 2
+        ref: B22
+        tags: [Disadvantage, Physical, Social]
+        notes: A cloud of flies and the smell of decay. Stealth is not an option; -2 reaction from those who smell it.
+    lore: >
+      Nurgle, the Plague God, gives his chosen a gift that looks like a curse:
+      disease that does not kill, flesh that rots without failing, and a
+      cheerful stubbornness against pain. Codex: Chaos Space Marines
+      background describes Death Guard and Plague Marines as slow, bloated
+      and almost impossible to put down, trailing flies and stench. Wounds
+      that would drop a living warrior leave them shambling on.
+    design: >
+      Framework Marks table. Injury Tolerance (Damage Reduction) (Powers p.53,
+      25/level, level = divisor) divisor 2 = 50; Immunity to disease (B81) 10;
+      Resistant to poison +8 (B81), Occasional hazard 10 x1/2 = 5 (the same
+      figure the Astartes Preomnor uses); Hard to Kill 2 (B58) 4; Hideous
+      Appearance (B21) -16; Odious Personal Habit (B22) -5 x 2 levels = -10
+      (a smell and a swarm of flies together are a moderate-to-serious habit).
+      50 + 10 + 5 + 4 - 16 - 10 = 43 points.
+
+  - name: Mark of Tzeentch
+    container: meta_trait
+    tags: [Advantage, Disadvantage, Mental, Chaos, Tzeentch, Mark of Chaos]
+    children:
+      - include: "imperium/psykers/warp.yaml#Psyker"
+        levels: 1
+      - name: Warding Field (Tzeentch)
+        points: 10
+        tags: [Advantage, Physical]
+        notes: >
+          Shield Points 20, as the project's personal force-field rules
+          (framework.md, "Personal force fields"): damage from an attack the field
+          covers comes off SP first and armour divisors do not apply to SP. If an attack
+          does more than the SP left, the field drops to 0 and the excess carries on to
+          worn armour at the attack's full divisor; a bolt's follow-up detonates on the
+          field and also comes off SP. Covers all attacks. Recharge: after 3 seconds with
+          no damage it regains 10 SP per second; a field knocked to 0 waits double
+          that delay. Track current SP with a counter.
+      - name: Paranoia
+        points: -10
+        ref: B148
+        tags: [Disadvantage, Mental]
+        notes: Sees plots in everything; the schemes of Tzeentch are everywhere.
+      - name: Compulsive Lying
+        points: -15
+        cr: 12
+        ref: B128
+        tags: [Disadvantage, Mental]
+        notes: Self-control 12. Lies when the truth would serve as well.
+    lore: >
+      Tzeentch, the Changer of Ways, gives his servants sorcery, schemes and a
+      shimmering ward against harm. Codex: Chaos Space Marines background
+      makes the Thousand Sons and every Tzeentchian warband psychic by
+      habit and conspiratorial by nature; the god's plans fold into one
+      another until nobody, the servant included, can say what is true.
+    design: >
+      Framework Marks table. Psyker (Talent) +1 (10/level) via the project's
+      existing Psyker trait. Warding field Shield Points 20 priced at 0.5
+      point per SP, the rate the project's Zoanthrope warp field uses (200 SP
+      for 100 points): 10 points. Paranoia (B148) -10; Compulsive Lying (B128)
+      -15, self-control 12. 10 + 10 - 10 - 15 = -5 points.
+
+  - name: Mark of Slaanesh
+    container: meta_trait
+    tags: [Advantage, Disadvantage, Physical, Mental, Chaos, Slaanesh, Mark of Chaos]
+    children:
+      - name: Combat Reflexes
+        points: 15
+        ref: B43
+        disabled: true
+        tags: [Advantage, Mental]
+        notes: >
+          Disabled by default: the Astartes Hypno-Indoctrination package already
+          gives Combat Reflexes. Enable for a mortal bearer who is not an Astartes (+15).
+      - name: Enhanced Move (Ground)
+        points: 0
+        per_level: 20
+        levels: 0.5
+        ref: B52
+        tags: [Advantage, Physical]
+        notes: Top sprinting speed x1.5 for half a level. Stacks with the Astartes package's half level, for one full level.
+      - name: Acute Hearing
+        points: 0
+        per_level: 2
+        levels: 2
+        ref: B35
+        tags: [Advantage, Physical]
+        notes: "+2 to Hearing rolls."
+      - name: Acute Touch
+        points: 0
+        per_level: 2
+        levels: 2
+        ref: B35
+        tags: [Advantage, Physical]
+        notes: "+2 to Touch rolls."
+      - name: Acute Taste and Smell
+        points: 0
+        per_level: 2
+        levels: 2
+        ref: B35
+        tags: [Advantage, Physical]
+        notes: "+2 to Taste/Smell rolls."
+      - name: Compulsive Behavior (Excess)
+        points: -10
+        cr: 12
+        ref: B128
+        tags: [Disadvantage, Mental]
+        notes: Self-control 12. Cannot refuse a new sensation, indulgence or extreme.
+      - name: Sadism
+        points: -15
+        cr: 12
+        ref: B152
+        tags: [Disadvantage, Mental]
+        notes: Self-control 12. Takes pleasure in causing pain, and finds reasons to.
+    lore: >
+      Slaanesh, the Prince of Pleasure, drives her followers toward ever
+      stronger sensation. Codex: Chaos Space Marines background
+      describes the Emperor's Children and the Noise Marines as warriors
+      whose senses have been sharpened until a bolter's roar is music and a
+      wound is an experience. They are fast, perceptive and unable to stop
+      chasing the next feeling.
+    design: >
+      Framework Marks table. Combat Reflexes (B43) 15, disabled by default
+      for the reason in its notes; Enhanced Move (Ground) 1/2 (B52) 10; acute
+      senses taken as Hearing, Touch and Taste/Smell at +2 each (B35, 2/level)
+      = 12; Compulsive Behavior (B128) -10; Sadism (B152) -15. Total with the
+      defaults: 10 + 12 - 10 - 15 = -3; enabling Combat Reflexes makes it 12.
+      Acute Vision is left out: the Astartes Occulobe already covers it.
+
+  - name: Mark of Chaos Undivided
+    container: meta_trait
+    tags: [Advantage, Disadvantage, Mental, Chaos, Chaos Undivided, Mark of Chaos]
+    children:
+      - name: Fearlessness
+        points: 0
+        per_level: 2
+        levels: 2
+        ref: B55
+        tags: [Advantage, Mental]
+        notes: "+2 to Fright Checks."
+      - name: Hard to Kill
+        points: 0
+        per_level: 2
+        levels: 1
+        ref: B58
+        tags: [Advantage, Physical]
+        notes: "+1 to HT rolls made solely to avoid death."
+      - name: Fanaticism (Chaos)
+        points: -15
+        ref: B136
+        tags: [Disadvantage, Mental]
+        notes: Devoted to the Ruinous Powers as a whole; will take any risk for Chaos. Do not combine with Cultist's Devotion.
+    lore: >
+      Chaos Undivided honours all four gods together and none above the others.
+      Codex: Chaos Space Marines background gives the Black Legion and many
+      renegade warbands this path. A weaker patronage than a single god's
+      Mark, it is sturdy, hard-willed and utterly committed.
+    design: >
+      Framework Marks table. Fearlessness 2 (B55, 2/level) 4; Hard to Kill 1
+      (B58) 2; Fanaticism (B136) -15. 4 + 2 - 15 = -9 points.
+
+  # ----------------------------------------------------- unit-specific gifts
+
+  - name: Butcher's Nails
+    container: meta_trait
+    tags: [Advantage, Disadvantage, Physical, Mental, Chaos, Khorne, Khorne Berzerker, Implant]
+    children:
+      - name: Berserk (Battle Rage upgrade)
+        points: -5
+        cr: 12
+        ref: B124
+        tags: [Disadvantage, Mental]
+        notes: >
+          Takes the Mark's Berserk 12 (-10) up to Berserk 12 with the Battle Rage
+          enhancement (+50%, -15 in all). In Battle Rage the bearer keeps the +2 to
+          hit and the other Battle Rage effects while berserk, as on B124. Adds
+          only the difference, -5.
+      - name: Hard to Subdue
+        points: 0
+        per_level: 2
+        levels: 3
+        ref: B59
+        tags: [Advantage, Physical]
+        notes: "+3 to HT rolls to stay conscious. Fights on at 0 HP or stunned when a normal man would fall."
+      - name: Callous
+        points: -5
+        ref: B125
+        cr: 12
+        tags: [Disadvantage, Mental]
+        notes: The nails take pity along with pain.
+    notes: >
+      Requires the Mark of Khorne. The Mark already gives High Pain Threshold,
+      Berserk 12 and Bloodlust 12, so those are not repeated here; this lens
+      is the Battle Rage upgrade and the nails' other effects. A Heretic Astartes
+      who already took Callous from that lens skips this Callous.
+    lore: >
+      Khorne Berzerkers have nails and cables driven into their brains by
+      psycho-surgery, scarring the tissues that handle pain and restraint.
+      Codex: Chaos Space Marines background and Black Library's World Eaters
+      fiction describe warriors who carry on with wounds that would end
+      anyone else, and cannot do anything but kill. The nails are a surgical
+      upgrade to the Blood God's own Mark, not a substitute for it.
+    design: >
+      Berserk with Battle Rage (+50%) is -10 x 1.5 = -15; the Mark pays -10,
+      so the nails add -5. Hard to Subdue 3 (B59, 2/level) 6. Callous (B125)
+      -5. Bloodlust and High Pain Threshold are left to the Mark. Net -5 + 6 - 5
+      = -4 points. Callous overlaps the Heretic Astartes lens; take one.
+
+  - name: Nurgle's Gift (Plague Marine)
+    container: meta_trait
+    tags: [Advantage, Disadvantage, Physical, Chaos, Nurgle, Plague Marine]
+    children:
+      - name: Damage Resistance (Fused Rotting Flesh)
+        points: 0
+        per_level: 5
+        levels: 10
+        dr: {all: 10}
+        ref: B46
+        tags: [Advantage, Physical]
+        notes: DR 10, all locations. Stacks with worn armour. The plate is fused to the flesh, so it is not removed.
+      - name: Reduced Basic Move (Nurgle's Gift)
+        points: 0
+        per_level: -5
+        levels: 2
+        attributes: {basic_move: -2}
+        ref: B17
+        tags: [Disadvantage, Physical]
+        notes: Basic Move -2 (Move 12 to 10 for an Astartes with Move 12).
+    notes: >
+      Requires the Mark of Nurgle. The Mark already gives Injury Tolerance
+      (Damage Reduction) 2; the Gift does not add a level, so a Plague Marine's
+      divisor stays 2, as the framework says. Plague Marine DX 16 and HT 16 are
+      adjusted in the template, not here.
+    lore: >
+      Plague Marines are Death Guard and their followers whose bodies have
+      rotted and swollen under Nurgle's care. Codex: Chaos Space Marines
+      background shows armour grown into flesh and bloated, sagging bodies that
+      shrug off bolts. They move slowly and keep on moving.
+    design: >
+      Damage Resistance 10 (B46, 5/level) = 50. Reduced Basic Move -2 (B17,
+      -5/level) = -10. Injury Tolerance is not stacked: the Mark's divisor 2
+      already makes up the framework total. 50 - 10 = 40 points.
+
+  - name: Rubric of Ahriman (Rubric Marine)
+    container: meta_trait
+    tags: [Advantage, Disadvantage, Physical, Mental, Chaos, Tzeentch, Rubric Marine]
+    children:
+      - name: Attribute Modifiers (Rubric Marine)
+        points: -120
+        attributes: {dx: -1, iq: -4, basic_move: -4}
+        tags: [Physical, Mental]
+        design: >
+          Decreased DX -1 (B15, 20/level, -20) from the Astartes package's 15 for DX 14;
+          Decreased IQ -4 (B16, 20/level, -80) for IQ 6; Reduced Basic Move -4
+          (B17, 5/level, -20) for Move 8 down from the Astartes 12. -20 - 80 - 20 = -120.
+      - name: Machine Body (Rubric Shell)
+        container: meta_trait
+        tags: [Advantage, Physical]
+        children:
+          - name: Injury Tolerance (Unliving, No Blood, No Brain, No Vitals)
+            ref: B60
+            tags: [Advantage, Physical]
+            modifiers:
+              - {name: Unliving, cost: "20", ref: B61}
+              - {name: No Blood, cost: "5", ref: B61}
+              - {name: No Brain, cost: "5", ref: B61}
+              - {name: No Vitals, cost: "5", ref: B61}
+            notes: >
+              Unliving wound multipliers (imp and pi++ x1, pi+ x1/2, pi x1/3, pi- x1/5);
+              does not bleed; hits to the vitals or groin count as hits to the torso;
+              a hit to the skull or eye gets no extra effect.
+          - name: Doesn't Breathe
+            points: 20
+            ref: B49
+            tags: [Advantage, Physical]
+          - name: Doesn't Eat or Drink
+            points: 10
+            ref: B50
+            tags: [Advantage, Physical]
+          - name: Doesn't Sleep
+            points: 20
+            ref: B50
+            tags: [Advantage, Physical]
+        notes: >
+          Named "Machine Body (Rubric Shell)" so the combat simulator gives a Rubric
+          no FP to spend, as for a Machine: a Rubric has no fatigue.
+        design: 35 (Injury Tolerance) + 20 + 10 + 20 = 85 points.
+      - name: Rubric Mind
+        container: meta_trait
+        tags: [Advantage, Disadvantage, Mental]
+        children:
+          - name: Unfazeable
+            points: 15
+            ref: B95
+            tags: [Advantage, Mental]
+          - name: Slave Mentality (Its Sorcerer)
+            points: -40
+            ref: B154
+            tags: [Disadvantage, Mental]
+            notes: No self-control roll. Obeys its Aspiring Sorcerer and cannot act against the Sorcerer's orders. The Sorcerer is whoever speaks the Rubric's will at the time.
+        design: 15 - 40 = -25 points.
+    notes: >
+      Apply to a raw Astartes (the package without Personal Advancement). It
+      replaces the living organs: the bearer is a sealed suit of Mk IV
+      filled with the dust of its soul. The Astartes organ traits are not
+      removed in the data (the schema cannot delete another entry's
+      children); the GM ignores blood, breath, hunger, sleep and disease.
+      The Rubric's Mk IV plate is part of its equipment. HT 15 for the
+      framework table is a template adjustment.
+    lore: >
+      The Rubric of Ahriman, cast by Ahriman of the Thousand Sons at the
+      Council of Nikaea's end, turned the Legion's mutating warriors to dust
+      inside their own armour; the dust still walks, driven by the Sorcerers'
+      will. Codex: Chaos Space Marines background and the Horus Heresy
+      fiction on the Thousand Sons describe empty suits with ash-soul
+      cores obeying without thought, indifferent to wounds that would
+      kill a living body.
+    design: >
+      Attribute Modifiers -120 + Machine Body (Rubric Shell) 85 + Rubric
+      Mind -25 = -60 points. Unliving is used with No Brain as well as No
+      Blood and No Vitals, matching the framework's list (No Blood, No
+      Brain, No Vitals, Unliving). Doesn't Breathe (B49) 20; Doesn't Eat or
+      Drink (B50) 10; Doesn't Sleep (B50) 20; Unfazeable (B95) 15; Slave
+      Mentality (B154) -40.
+
+  - name: Daemonic Possession (Possessed)
+    container: meta_trait
+    tags: [Advantage, Disadvantage, Physical, Mental, Chaos, Possessed]
+    children:
+      - name: Attribute Modifiers (Possessed)
+        points: 50
+        attributes: {st: 10, ht: 1, iq: -3}
+        tags: [Physical, Mental]
+        design: >
+          Increased ST +10 (B14, 10/level, 100), SM stays 0, for ST 40 on top of the
+          Astartes package's 30; HT +1 (B15, 10); IQ -3 (B16, 20/level, -60).
+          100 + 10 - 60 = 50. HP follow ST (40 + the package's 4 = 44).
+      - name: Damage Resistance (Warp-Flesh)
+        points: 0
+        per_level: 5
+        levels: 15
+        dr: {all: 15}
+        ref: B46
+        tags: [Advantage, Physical]
+        notes: DR 15, all locations. Stacks with worn armour.
+      - name: Fearlessness
+        points: 0
+        per_level: 2
+        levels: 5
+        ref: B55
+        tags: [Advantage, Mental]
+        notes: "+5 to Fright Checks."
+      - name: Extra Attack (Possessed)
+        points: 0
+        per_level: 25
+        levels: 1
+        ref: B53
+        tags: [Advantage, Physical]
+        notes: "One extra attack per turn: the claws and tentacles strike twice."
+      - name: Bad Temper
+        points: -10
+        cr: 12
+        ref: B124
+        tags: [Disadvantage, Mental]
+        notes: Self-control 12. Snarls, lashes out and refuses to back down.
+      - name: Possessed Claws and Tentacles
+        points: 28
+        ref: B88
+        tags: [Advantage, Physical]
+        weapons:
+          - usage: Standard
+            damage: sw+2d(2) cut
+            reach: "1"
+            parry: 0
+            skill: Brawling
+            notes: Natural weapons. Armour does not stop the claws bursting from it.
+        notes: >
+          sw is the bearer's own swing at ST 40. Uses the Possessed Extra Attack for its
+          second strike.
+        design: >
+          Cutting Striker (B88, 7 points) with Armor Divisor (2) (+50%) = 11 for
+          the sw+0(2) baseline, plus Innate Attack (Cut) at 2 dice (7/die = 14) with
+          Armor Divisor (2) and Melee Attack, Reach C (-30%): net +20%, 14 x 1.2 =
+          16.8, rounded to 17. 11 + 17 = 28. The same build as the Tyranid Scything Talons.
+    notes: >
+      Apply to an Astartes with Personal Advancement (the Legionary line). No
+      guns: a Possessed fights with its warp-grown limbs. The framework's
+      ST 40, DX 16, IQ 8 and HT 16 assume the Battle-Brother's Personal
+      Advancement.
+    lore: >
+      A Possessed is a Chaos Space Marine into whom a daemon has been
+      drawn. Codex: Chaos Space Marines background shows the body twisting
+      and splitting, new limbs growing, the mind pushed aside by something
+      hungrier. The result is a warrior far stronger and tougher than before,
+      capable of taking bolts that would down a Marine, and fit only to be
+      sent against the enemy and not otherwise directed.
+    design: >
+      50 (Attribute Modifiers) + 75 (DR 15, 5/level) + 10 (Fearlessness 5) + 25
+      (Extra Attack 1) - 10 (Bad Temper, B124) + 28 (Possessed Claws and
+      Tentacles) = 178 points. Unfazeable is left out as too much: the Possessed
+      is not mindless. Fearlessness 5 (B55) per the framework.
+
+  - name: Cultist's Devotion
+    container: meta_trait
+    tags: [Disadvantage, Mental, Chaos, Chaos Cultist]
+    children:
+      - name: Fanaticism (Chaos)
+        points: -15
+        ref: B136
+        tags: [Disadvantage, Mental]
+        notes: Devoted to the Ruinous Powers; takes risks for the cult and cannot be reasoned out of it.
+      - name: Callous
+        points: -5
+        cr: 12
+        ref: B125
+        tags: [Disadvantage, Mental]
+        notes: Indifferent to the suffering of anyone outside the cult.
+    lore: >
+      Chaos cults draw ordinary men and women into the service of the Ruinous
+      Powers. Black Library's Inquisition fiction and Codex background treat
+      the typical cultist as a fanatic indifferent to anyone outside the
+      cult, and the same cultist as the first to die for a Dark God.
+    design: >
+      Fanaticism (B136) -15 and Callous (B125) -5, self-control 12 = -20
+      points. A cultist who follows a single god's Mark also takes that Mark's
+      own disadvantages; Undivided cultists take this in place of Mark of Chaos
+      Undivided.

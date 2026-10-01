@@ -503,7 +503,7 @@ The Ruinous Powers' mortal and daemonic servants: the Traitor Legions and renega
 
 Same **Astartes** racial meta-trait as a loyalist (data/imperium/astartes/gene-seed.yaml): ST 30, HP 34, DX 16 from the package, Move 12. What differs:
 
-- **Heretic Astartes** lens: the Imperium's Enemy (hunted on sight), Social Stigma (Excommunicate/Traitor) in Imperial space, Callous, and Theology (Imperial Creed) swapped for Hidden Lore (Daemons) and Theology (Chaos). No Imperial Rank or "Angel of Death" Reputation; a Legion Reputation in its place.
+- **Heretic Astartes** lens: the Imperium's Enemy (hunted on sight), Social Stigma (Excommunicated) in Imperial space, Callous, and Theology (Imperial Creed) swapped for Hidden Lore (Daemons) and Theology (Chaos). No Imperial Rank or "Angel of Death" Reputation; a Legion Reputation in its place.
 - **Long War Veteran** lens (the Legionary default): many traitors fought in the Horus Heresy and have had ten thousand years of war since. +1 DX, +1 Per, Combat Reflexes if the package lacks it, and weapon skills two levels above a loyalist Battle-Brother's (Guns (Rifle) 22 against 20). A renegade from a recently fallen Chapter skips this lens.
 - **Mutations** are optional lenses (extra limbs, claws, horns, warp-flesh) priced as Basic Set advantages and disadvantages.
 
