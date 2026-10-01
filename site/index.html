@@ -2861,7 +2861,10 @@ const SIM = (() => {
         const hmod = melee ? heightLoc(m, t, w, loc) : 0;
         if (hmod === null) continue;   // out of reach across the height difference (B402-403)
         if (t.limbFull && t.limbFull[loc.replace("#c", "")]) continue;   // both already crippled: nothing more to take there
-        const e = (loc === "area" ? expInj(w, t.u, "area", dmgOverride) : loc === "random" ? expInjRandom(w, t.u, dmgOverride) : expInj(w, t.u, loc, dmgOverride)) * (fo.fx ? fo.fx.keep(loc.replace("#c", "")) : 1);
+        // a vehicle: the DR of the facing this attacker sees, and a gun's damage halved at or beyond 1/2D (B378)
+        const from = fo.from || m.h, vd = t.u.veh && from && t.h ? (dmgOverride || w.dmg) : null, vHalf = vd && !melee && w.range && hexDist(from, t.h) >= w.range.half;
+        const e = (vd ? vehExp(vHalf ? { ...vd, mult: vd.mult / 2 } : vd, vHalf ? null : w.follow, vehFacingDR(t, loc === "area" ? "area" : "body", from), loc === "vitals" ? "vitals" : "body")
+          : loc === "area" ? expInj(w, t.u, "area", dmgOverride) : loc === "random" ? expInjRandom(w, t.u, dmgOverride) : expInj(w, t.u, loc, dmgOverride)) * (fo.fx ? fo.fx.keep(loc.replace("#c", "")) : 1);
         // a rending weapon (success by N+ or a critical) does its rending damage on a good enough roll: count it, or
         // the planner sees only the ordinary line and goes hunting for chinks it can't reach the margin on
         const rendL = melee && w.rend && !dmgOverride ? (loc === "random" ? expInjRandom(w, t.u, w.rend) : expInj(w, t.u, loc, w.rend)) : 0;
@@ -3923,7 +3926,7 @@ const SIM = (() => {
         if (!t.h || !los(h, t.h)) continue;
         const d = Math.max(1, hexDist(h, t.h));
         if (d > w.range.max) continue;
-        const E = planAttack(m, w, t, wl(m, w) - skillPen(m) + rangePenalty(rngD(h, t.h, d) + spdOf(t.steps || 0)) + t.u.sm - darkPen(m, t) - COVER_OWN[coverAt(h, t.h, null)] - linePen(m, between(h, t.h, m.u.side).filter(x => x !== t && x !== m)), false, null, { fx: shotFx(t, h, false) }).score * sustainOf(w);
+        const E = planAttack(m, w, t, wl(m, w) - skillPen(m) + rangePenalty(rngD(h, t.h, d) + spdOf(t.steps || 0)) + t.u.sm - darkPen(m, t) - COVER_OWN[coverAt(h, t.h, null)] - linePen(m, between(h, t.h, m.u.side).filter(x => x !== t && x !== m)), false, null, { fx: shotFx(t, h, false), from: h }).score * sustainOf(w);
         best = Math.max(best, kv(m, t, E));
       }
       return best * stanceW(m, "ranged") * m.u.ai.aggression;
@@ -4716,14 +4719,21 @@ const SIM = (() => {
             });
           }
         }
-        const keep = t => cohesion(m, t);
+        // a weapon that only bites inside 1/2D (a meltagun at a tank's glacis) goes in on its own, squad or not
+        const closeOnly = t => {
+          if (!w.range || !w.range.half || !w.dmg || hexDist(m.h, t.h) < w.range.half) return false;
+          const half = { ...w.dmg, mult: w.dmg.mult / 2, key: (w.dmg.key || "") + "h" };
+          if (t.u.veh) { const dr = vehFacingDR(t, "body", m.h); return vehExp(w.dmg, w.follow, dr, "body") > 2 * vehExp(half, null, dr, "body") + 0.5; }
+          return expInjRandom(w, t.u) > 2 * expInjRandom(w, t.u, half) + 0.5;
+        };
+        const keep = t => closeOnly(t) ? 0 : cohesion(m, t);
         // Move and Attack (B365): step up the range and fire at -2 (or Bulk), no Aim; the new position counts next turn
         if (u.stance !== "shoot" && cands.length && !(w.fp)) {
           const t = cands[0], d = hexDist(m.h, t.h), hold = Math.max(2, keep(t));
           if (d > hold + 1) {
             const mv = Math.min(moveOf(m), d - hold), nd = d - mv;
-            const E = planAttack(m, w, t, wl(m, w) - skillPen(m) + rangePenalty(nd + spdOf(t.steps || 0)) + t.u.sm + Math.min(-2, w.bulk || 0), false).score * sustainOf(w);
             const h2 = stepHex(m.h, t.h, mv);
+            const E = planAttack(m, w, t, wl(m, w) - skillPen(m) + rangePenalty(nd + spdOf(t.steps || 0)) + t.u.sm + Math.min(-2, w.bulk || 0), false, null, { from: h2 }).score * sustainOf(w);
             const cont = GAMMA * (shotValueFrom(m, h2, pool) - shotValueFrom(m, m.h, pool));
             add(Wr * kv(m, t, E) + cont - risk(m, h2, ""), `advance-fire@${t.id}`, () => {
               stepToward(m, t.h, mv, hold); if (m.state !== "ok" || !m.h || m.stunned || !t.h || m.readied) return;
@@ -4738,7 +4748,13 @@ const SIM = (() => {
           const t = cands[0], d = hexDist(m.h, t.h), stop = Math.max(u.stance === "charge" ? 2 : 3, keep(t));
           if (d > stop + 1 && (rangePenalty(d) <= -5 || w.fp)) {
             const h2 = stepHex(m.h, t.h, Math.min(moveOf(m), d - stop));
-            add(GAMMA * shotValueFrom(m, h2, pool) - risk(m, h2, "") - 0.001, `move-closer@${t.id}`, () => {
+            // a short-ranged gun looks further ahead: the shot from inside 1/2D, however many moves away
+            let sv = GAMMA * shotValueFrom(m, h2, pool);
+            if (w.range && w.range.half > stop && d > w.range.half) {
+              const k = Math.ceil((d - w.range.half + 1) / Math.max(1, moveOf(m)));
+              if (k > 1) sv = Math.max(sv, Math.pow(GAMMA, k) * shotValueFrom(m, stepHex(m.h, t.h, d - w.range.half + 1), pool));
+            }
+            add(sv - risk(m, h2, "") - 0.001, `move-closer@${t.id}`, () => {
               stepToward(m, t.h, moveOf(m), stop); if (m.state !== "ok" || !m.h) return; if (t.h) faceTo(m, t.h); L(`${m.id} closes in on ${t.id}`);
             });
           }
