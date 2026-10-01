@@ -177,8 +177,8 @@ Wargame armour values give only relative order. Map them to DR when a weapon nee
 | 11 | 185 | Rhino front/sides |
 | 12 | 250 | Chimera front |
 | 13 | 340 | Leman Russ sides |
-| 14 | 440 | Land Raider |
-| 14, Leman Russ front | 1350 | Glacis and turret face (user direction): a lascannon gets through 13% of the time, melta at short range 87% |
+| 14 | 440 | Other AV14 hulls |
+| 14, Leman Russ front, Land Raider all round | 1350 | Glacis and turret face (user direction): a lascannon gets through 13% of the time, melta at short range 87% |
 
 Anti-tank weapons must beat the DR they are known to beat in the fiction.
 
