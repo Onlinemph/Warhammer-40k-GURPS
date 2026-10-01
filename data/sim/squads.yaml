@@ -69,6 +69,16 @@ Fire Warrior Strike Team:
 # ---- Astra Militarum: the infantry squad with each special and heavy weapon (Codex: Astra Militarum: a squad
 # may take one special weapon and one heavy weapon team), heavy weapons squads (three two-man teams) and special
 # weapons squads (six Guardsmen, three with special weapons)
+Astra Militarum Infantry Squad (2 Plasma Guns, Heavy Bolter):
+  short: Guard Squad
+  note: "Ten troopers with two plasma guns: sergeant, vox-caster, two plasma gunners, a heavy bolter team and four lasguns. The Codex allows an infantry squad one special weapon; two is a field upgrade, as a regiment does for a squad sent after heavy infantry (Veteran and Command squads carry several by right)."
+  members:
+    - {role: Sergeant, template: Astra Militarum Sergeant, count: 1, leader: true, ranged: {item: "Laspistol, Common Pattern", mode: "Standard"}, melee: {item: "Chainsword", mode: "Swing"}}
+    - {role: Vox-caster, template: Astra Militarum Guardsman, count: 1, vox: true}
+    - {role: Plasma Gun, template: Astra Militarum Guardsman, count: 2, ranged: {item: "Plasma Gun", mode: "Standard"}}
+    - {role: Heavy Bolter 1, template: Astra Militarum Guardsman, count: 1, team: 1, crew: gunner, ranged: {item: "Heavy Bolter", mode: "Standard bolt"}, stance: shoot, grenades: [], skills: {"Gunner (Machine Gun)": 13}}
+    - {role: Loader 1, template: Astra Militarum Guardsman, count: 1, team: 1, crew: loader, stance: shoot}
+    - {role: Guardsman, template: Astra Militarum Guardsman, count: 4}
 Astra Militarum Infantry Squad (Plasma Gun, Lascannon):
   short: Guard Squad
   note: "Ten troopers: sergeant with laspistol and chainsword, vox-caster, a plasma gun, a lascannon team (gunner and loader) and five lasguns (Codex: Astra Militarum)."

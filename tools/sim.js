@@ -3641,9 +3641,20 @@ const SIM = (() => {
           const vNow = (Wr * kv(m, t, Enow) - fpCost - ffCost) * (forGun ? ((w.rof || 1) >= 3 ? 1.6 : 1.25) : 1);
           // a big gun (a hit all but kills) against a foe who dodges most shots: don't waste it; keep the aim and hold
           // for an opening (stunned, down, exhausted, committed to an attack), fired the moment it comes (a Wait, B366)
+          // Holding is a trade: the shot now (at the foe's full defence) against the chance an opening comes in the next
+          // few seconds (more likely the more friendly bursts can reach the foe: each forces a dodge, -1 the next,
+          // MA122), at a defence of 9 or less, discounted for the seconds and for the gunner surviving them
           const dd0 = rangedDefence(t, m), pD = dd0 == null ? 0 : P3[cl(dd0)];
-          const holdIt = !w.malediction && !w.cone && (w.rof || 1) <= 2 && pD >= 0.5 && (m.holdN || 0) < 8
+          let holdIt = !w.malediction && !w.cone && (w.rof || 1) <= 2 && pD >= 0.5 && (m.holdN || 0) < 8
             && expInjRandom(w, t.u) >= 0.5 * remOf(t) && (terr ? walk(m.h, t.h) : d) > moveOf(t) + 3;
+          if (holdIt) {
+            const bursts = models.filter(x => x !== m && x.u.side === u.side && x.state === "ok" && x.h && !x.stunned && x.u.ranged && (x.u.ranged.rof || 1) >= 3 && los(x.h, t.h) && hexDist(x.h, t.h) <= x.u.ranged.range.max).length;
+            const pOpen = Math.min(0.6, 0.08 * bursts), live = 1 - Math.min(0.9, incoming(m, m.h, "") / remOf(m));
+            const Eopen = Enow / Math.max(0.05, 1 - pD) * (1 - 0.375);
+            let vHold = 0;
+            for (let k = 1; k <= 3; k++) vHold += Math.pow(GAMMA * live, k) * pOpen * Math.pow(1 - pOpen, k - 1) * Eopen;
+            holdIt = vHold > 1.1 * Enow;
+          }
           if (holdIt) {
             add(Math.max(vNow, 0) * 1.2 + 0.001 - rNow, `hold@${t.id}`, () => {
               if (m.aimTarget !== t) m.aimTurns = 0;
