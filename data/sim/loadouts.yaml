@@ -1,6 +1,7 @@
 # Default battle loadouts for the combat simulator (one entry per character template; Add-Ons skipped).
 # Keys are the Library/**/*.gct file stems. Item / trait names and modes resolve against data/**.
 # grenades: [{item, mode, count}] thrown grenades carried (lore-standard issue; most templates omit them from their equipment).
+# body: upright (default), horizontal, legless or flying: posture for height in melee (Pyramid 3/77 p. 4-5, B402-403).
 
 # ------------------------------------------------------------------ Imperium
 Astra Militarum Guardsman:
@@ -404,6 +405,7 @@ Ethereal (Aun):
   stance: charge
   note: "Honour blade only; rarely armed, not a fighter."
 Gun Drone:
+  body: flying
   armour: []
   ranged: {item: "Pulse Carbine", mode: "Standard"}
   stance: shoot
@@ -421,6 +423,7 @@ Kroot Shaper:
   stance: advance
   note: "Armed like a Carnivore (per template notes)."
 Vespid Stingwing:
+  body: flying
   armour: []
   ranged: {item: "Neutron Blaster", mode: "Standard"}
   stance: shoot
@@ -428,11 +431,13 @@ Vespid Stingwing:
 
 # ------------------------------------------------------------------ Tyranids
 Termagant:
+  body: horizontal
   armour: []
   ranged: {trait: "Fleshborer", mode: "Standard"}
   stance: shoot
   note: "Fleshborer symbiote."
 Hormagaunt:
+  body: horizontal
   armour: []
   melee: {trait: "Scything Talons (Hormagaunt)", mode: "Standard"}
   stance: charge
@@ -448,6 +453,7 @@ Lictor:
   stance: charge
   note: "Rending claws; flesh hooks are a snare, not modelled."
 Ravener:
+  body: legless
   armour: []
   melee: {trait: "Scything Talons", mode: "Standard"}
   stance: charge
@@ -465,6 +471,7 @@ Tyranid Warrior (Bonesword and Lash Whip):
   stance: advance
   note: "Devourer and bonesword; lash whip entangle not modelled."
 Carnifex:
+  body: horizontal
   armour: []
   ranged: {trait: "Venom Cannon", mode: "Standard"}
   melee: {trait: "Monstrous Crushing Claws", mode: "Standard"}
@@ -477,6 +484,7 @@ Hive Tyrant:
   stance: advance
   note: "Venom cannon and monstrous scything talons."
 Zoanthrope:
+  body: flying
   armour: []
   stance: shoot
   note: "No weapon line; fights with Warp Blast and the Warp Field from data/sim/powers.yaml."

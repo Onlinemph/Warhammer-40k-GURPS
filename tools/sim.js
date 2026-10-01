@@ -128,9 +128,9 @@ const SIM = (() => {
   }
 
   // ------------------------------------------------------------ data index
-  let EQ = null, TEMPLATES = null, SIMW = {}, POWERS = {}, AI = [];
+  let EQ = null, TEMPLATES = null, SIMW = {}, POWERS = {}, AI = [], LOADOUTS = {};
   function index(data) {
-    EQ = new Map(); TEMPLATES = new Map(); SIMW = data.simWeapons || {}; POWERS = data.powers || {}; AI = (data.ai && data.ai.profiles) || [];
+    EQ = new Map(); TEMPLATES = new Map(); SIMW = data.simWeapons || {}; POWERS = data.powers || {}; AI = (data.ai && data.ai.profiles) || []; LOADOUTS = data.loadouts || {};
     const walk = (e, src) => { if (!EQ.has(e.name)) EQ.set(e.name, { e, src }); (e.children || []).forEach(c => walk(c, src)); };
     for (const lib of data.libraries) {
       if (lib.kind === "equipment") lib.items.forEach(e => walk(e, lib));
@@ -423,6 +423,7 @@ const SIM = (() => {
       bothReady: cs ? !ranged || !melee || !!melee.natural || !!ranged.natural || (spec.melee && spec.ranged && spec.melee.item === spec.ranged.item) : !ranged || !melee || melee.name === "Punch" || !!melee.natural || !!ranged.natural || (spec.melee && spec.ranged && spec.melee.item && spec.melee.item === spec.ranged.item)
         || /fixed to|mounted|underslung/i.test(melee.usage || "") || (!!ranged.oneHanded && !!melee.oneHanded),
       liftST,   // Lifting ST counts in grappling (B65)
+      body: spec.body || (LOADOUTS[spec.template] || {}).body || "upright",   // posture for height in melee (Pyramid 3/77 p. 4)
       hooks,
       // Fast-Draw, +1 with Combat Reflexes (B43); Fast-Draw (Grenade) on its own
       fastDraw: Math.max(-Infinity, ...(st.skills || []).filter(s => /^Fast-Draw/.test(s.name) && !/Ammo|Grenade/.test(s.name) && s.level != null).map(s => s.level)) + (flags.cr ? 1 : 0),
@@ -742,6 +743,43 @@ const SIM = (() => {
       return { kind: m && cover[m.u.side] !== "none" && !m.moved ? cover[m.u.side] : "none", i: -1 };
     }
     const coverAt = (h, f, m) => coverOf(h, f, m).kind;
+    // ---- height (B402-403, Pyramid 3/77 p. 4-5): effective SM is full SM upright, one less horizontal, two less
+    // legless; effective height is the Size Modifier Table's longest dimension. Fliers ignore height
+    const HFT = { "-4": 1.5, "-3": 2, "-2": 3, "-1": 4.5, "0": 6, "1": 9, "2": 15, "3": 21, "4": 30, "5": 45, "6": 60 };
+    const heightOf = u => HFT[Math.max(-4, Math.min(6, (u.sm || 0) - (u.body === "horizontal" ? 1 : u.body === "legless" ? 2 : 0)))];
+    // vertical difference in feet for att striking t with weapon w (positive: att is higher), less 3 feet for each
+    // yard of the attacker's reach past the first (B403)
+    function vdiff(att, t, w) {
+      if (!att || !t || !att.u || att.u.body === "flying" || t.u.body === "flying") return 0;
+      const raw = heightOf(att.u) - heightOf(t.u), mit = 3 * Math.max(0, ((w && w.reachMax) || 1) - 1);
+      return Math.sign(raw) * Math.max(0, Math.abs(raw) - mit);
+    }
+    const HEADL = new Set(["skull", "face", "eye", "neck"]), LEGL = new Set(["leg", "foot"]);
+    // the hit-location modifier for a melee blow across a height difference, or null if the location is out of reach:
+    // the higher fighter -2 at the legs and feet and +1 at the head and neck (up to 5 feet), can't reach the legs from
+    // 4 feet, and from 6 feet reaches only the head, neck, arms and torso (Pyramid: a bigger fighter isn't limited to
+    // the head); the lower fighter +2 at the legs, -2 at the head, can't reach the head from 5 feet and only the legs
+    // and feet from 6
+    function heightLoc(att, t, w, loc) {
+      const D = vdiff(att, t, w), a = Math.abs(D);
+      if (a <= 1 || loc === "random") return 0;
+      const l = loc.replace("#c", "");
+      if (D > 0) {
+        if (a >= 6) return HEADL.has(l) || l === "arm" || l === "hand" || l === "torso" || l === "vitals" ? 0 : null;
+        if (a >= 4 && LEGL.has(l)) return null;
+        return LEGL.has(l) ? -2 : HEADL.has(l) ? 1 : 0;
+      }
+      if (a >= 6) return LEGL.has(l) ? 0 : null;
+      if (a >= 5 && HEADL.has(l) && l !== "neck") return null;
+      return LEGL.has(l) ? 2 : HEADL.has(l) ? -2 : 0;
+    }
+    // where a random blow lands when part of the target is out of reach
+    function reachLoc(att, t, w, loc) {
+      if (heightLoc(att, t, w, loc) !== null) return loc;
+      return vdiff(att, t, w) > 0 ? "torso" : R() < 0.8 ? "leg" : "foot";
+    }
+    // the defence modifier: the lower fighter -1 at 3 feet, -2 at 4, -3 at 5 or more; the higher fighter as much better
+    const heightDef = (t, att, w) => { const D = vdiff(att, t, w), a = Math.abs(D), k = a >= 5 ? 3 : a >= 4 ? 2 : a >= 3 ? 1 : 0; return D > 0 ? -k : k; };
     const darkAt = h => { if (LIGHT === "lit" || !h) return 0; if (LIGHT === "dark") return -7; const i = idx(key(h.q, h.r)); return i == null || !terr.light ? 0 : terr.light[i]; };
     // what darkness at t's hex costs viewer v to see or strike it: less Night Vision, nothing with Dark Vision, nor with
     // Infravision against a warm body (B47, B60, B71, B394)
@@ -1601,6 +1639,8 @@ const SIM = (() => {
         const pen = (fo.fx ? fo.fx.pen(loc.replace("#c", "")) : 0) + (loc === "random" || loc === "area" ? 0 : loc.endsWith("#c") ? Math.min(AIM[loc.slice(0, -2)], CHINK(loc.slice(0, -2))) : loc === "eye" && drAt(t.u.arm.dr, "eye") > 0 ? -10 : AIM[loc]);   // an eye behind a helmet lens or visor is -10 (B399-400)
         const pointed = /^pi/.test(w.dmg.type) || w.dmg.type === "imp" || (w.dmg.type === "burn" && !w.dmg.ex && !w.cone);
         if ((loc === "eye" || loc === "vitals" || loc.endsWith("#c")) && !pointed) continue;   // B398, B400
+        const hmod = melee ? heightLoc(m, t, w, loc) : 0;
+        if (hmod === null) continue;   // out of reach across the height difference (B402-403)
         if (t.limbFull && t.limbFull[loc.replace("#c", "")]) continue;   // both already crippled: nothing more to take there
         const e = (loc === "area" ? expInj(w, t.u, "area", dmgOverride) : loc === "random" ? expInjRandom(w, t.u, dmgOverride) : expInj(w, t.u, loc, dmgOverride)) * (fo.fx ? fo.fx.keep(loc.replace("#c", "")) : 1);
         if (e <= 0) continue;
@@ -1608,7 +1648,7 @@ const SIM = (() => {
         // Attack (B369) does in melee; not for area attacks or Malediction
         const maxDa = fo.noDa ? 0 : melee || !(w.malediction || w.cone || w.dmg.ex || w.blast) ? 6 : 0;
         for (let da = 0; da <= maxDa; da++) {
-          const eff = lvl + pen - 2 * da;
+          const eff = lvl + pen + hmod - 2 * da;
           if (eff < 3 || (da > 0 && eff < 10)) break;
           const pDef = def0 == null ? 0 : P3[Math.max(0, Math.min(18, def0 - da))];
           const hits = melee ? P3[Math.min(18, eff)] : burstHits(eff, w.cone ? 1 : (w.rof || 1), w, fo.aim || 0, !!fo.braced);
@@ -1623,8 +1663,8 @@ const SIM = (() => {
           if (score > best.score) best = { loc, da, score, lvl: eff };
         }
         // Telegraphic Attack (MA113): +4 to hit, +2 to the foe's defences; not with Deceptive Attack
-        if (melee && !fo.noTele && lvl + pen + 4 >= 3) {
-          const eff = lvl + pen + 4, pDef = def0 == null ? 0 : P3[cl(def0 + 2)];
+        if (melee && !fo.noTele && lvl + pen + hmod + 4 >= 3) {
+          const eff = lvl + pen + hmod + 4, pDef = def0 == null ? 0 : P3[cl(def0 + 2)];
           let score = (1 - pDef) * e * P3[Math.min(18, eff)];
           if (shUp) { const dm = dmgOverride || w.dmg, raw = Math.max(1, (dm.n * 3.5 + dm.add) * (dm.mult || 1)); const soak = Math.min(1, t.sp / raw); score *= (1 - soak) + soak * 0.25; }
           if (score > best.score) best = { loc, da: 0, score, lvl: eff, tele: true };
@@ -1666,7 +1706,7 @@ const SIM = (() => {
       // shield helps
       const huge = !!(aw && aw.huge);
       const db = !huge && att && att.h && t.h && shieldCovers(t, att) ? shieldDB(t) : 0;
-      const mod = (arc === "side" ? -2 : 0) - (t.stunned || t.stunRecovering ? 4 : 0) - (t.prone ? 3 : 0) - (t.kneel && !t.prone ? 2 : 0) - (t.offBalance ? 2 : 0) + db - (att && att.h ? darkPen(t, att) : 0);
+      const mod = (arc === "side" ? -2 : 0) - (t.stunned || t.stunRecovering ? 4 : 0) - (t.prone ? 3 : 0) - (t.kneel && !t.prone ? 2 : 0) - (t.offBalance ? 2 : 0) + db - (att && att.h ? darkPen(t, att) : 0) + (kind === "melee" && att && att.u ? heightDef(t, att, aw) : 0);
       const aod = how => t.aod && t.aodDef === how ? 2 : 0;
       const rt = kind === "melee" && canRetreat(t, att);
       const slip = rt && t.retreatFrom !== att && (retreatHex(t, att) || {}).side ? 1 : 0;
@@ -2346,7 +2386,7 @@ const SIM = (() => {
           - (m.prone ? 4 : 0) - (m.kneel && !m.prone ? 2 : 0) - closePen(m, w) - (opts.pen || 0) + smMelee(m, t) - darkPen(m, t);
         if (opts.charge && !opts.heroic) lvl = Math.min(lvl, 9);
         const plan = planAttack(m, w, t, lvl, true, null, { noDa: !trained(m, w) });
-        let loc = plan.loc === "random" ? hitLocation() : plan.loc;
+        let loc = plan.loc === "random" ? reachLoc(m, t, w, hitLocation()) : plan.loc;
         if (plan.lvl < 3) { m.attacked = true; L(`${m.id} can't hope to hit ${t.id} (skill ${plan.lvl})`); continue; }   // B344
         // Telegraphic Attack (MA113): +4 to hit but +2 to every defence, and the crit range of the unmodified skill
         const tele = !!plan.tele, r = check(plan.lvl);
@@ -4027,7 +4067,7 @@ if (typeof document !== "undefined") (() => {
     const lo = LO[template] || {};
     return { template, count: count || 5, stance: lo.stance || "advance", armour: [...(lo.armour || [])],
       ranged: lo.ranged ? { ...lo.ranged } : null, melee: lo.melee ? { ...lo.melee } : null,
-      shield: lo.shield ? { ...lo.shield } : null, carried: lo.carried || null };
+      shield: lo.shield ? { ...lo.shield } : null, carried: lo.carried || null, grenades: (lo.grenades || []).map(g => ({ ...g })), body: lo.body };
   }
   const PRESETS = [
     ["20 Guardsmen vs 5 Space Marines", [["Astra Militarum Guardsman", 20]], [["Astartes Battle-Brother", 5]], 150],
