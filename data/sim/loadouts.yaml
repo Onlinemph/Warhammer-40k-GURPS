@@ -2,6 +2,7 @@
 # Keys are the Library/**/*.gct file stems. Item / trait names and modes resolve against data/**.
 # grenades: [{item, mode, count}] thrown grenades carried (lore-standard issue; most templates omit them from their equipment).
 # ranged2: {item|trait, mode} a second ranged weapon that needs no hands (a bio-weapon in the maw); its own shots, no reload.
+# skills: {name: level} a skill level the template lacks under that name (a weapon fired with a differently named skill).
 # mags: spare magazines for the main gun besides the loaded one (default 4); none left and the gun is empty for good.
 # knife: {item, mode} a combat knife carried besides the main melee weapon, drawn for close combat (reach C, no long-weapon penalty).
 # body: upright (default), horizontal, legless or flying: posture for height in melee (Pyramid 3/77 p. 4-5, B402-403).
@@ -14,6 +15,13 @@ Astra Militarum Guardsman:
   stance: shoot
   grenades: [{item: "Frag Grenade", mode: "Thrown", count: 2}]
   note: "Cadian-style line trooper: flak suit and helmet, Kantrael lasgun with bayonet fixed."
+Astra Militarum Sergeant:
+  armour: ["Flak Armour, Full Suit (Cadian Pattern)", "Flak Helmet, Cadian Pattern"]
+  ranged: {item: "Laspistol, Common Pattern", mode: "Standard"}
+  melee: {item: "Chainsword", mode: "Swing"}
+  stance: advance
+  grenades: [{item: "Frag Grenade", mode: "Thrown", count: 2}]
+  note: "Infantry squad sergeant: the troopers' flak suit and helmet, laspistol and chainsword."
 Militarum Tempestus Scion:
   armour: ["Carapace Armour, Tempestus Pattern"]
   ranged: {item: "Hellgun", mode: "Standard"}
@@ -412,8 +420,9 @@ Gun Drone:
   body: flying
   armour: []
   ranged: {item: "Pulse Carbine", mode: "Standard"}
+  skills: {"Beam Weapons (Rifle)": 13}
   stance: shoot
-  note: "One pulse carbine of the twin mount; chassis DR from traits."
+  note: "One pulse carbine of the twin mount; chassis DR from traits. The carbine line names Beam Weapons (Rifle); the drone fires its built-in mount with Gunner (Beams) 13, so that level stands in (before this the drone shot at default, skill 5)."
 Kroot Carnivore:
   armour: ["Kroot Hide and Scavenged Plate"]
   ranged: {item: "Kroot Rifle", mode: "Standard"}
@@ -497,9 +506,15 @@ Zoanthrope:
 Chaos Cultist:
   armour: ["Flak Vest"]
   ranged: {item: "Autogun", mode: "Standard ball"}
-  melee: {item: "Crude Blade", mode: "Thrust"}
+  melee: {item: "Combat Knife, Munitorum Pattern", mode: "Thrust"}
   stance: advance
-  note: "Cult rabble: autogun, crude blade, a scavenged flak vest."
+  note: "Cult rabble: autogun, crude blade (the template's renamed Munitorum knife), a scavenged flak vest."
+Chaos Cultist Champion:
+  armour: ["Flak Vest"]
+  ranged: {item: "Autopistol", mode: "Standard (ball)"}
+  melee: {item: "Chainsword", mode: "Swing"}
+  stance: advance
+  note: "Cult champion: autopistol, a looted chainsword, a scavenged flak vest."
 Traitor Guardsman:
   armour: ["Flak Jacket"]
   ranged: {item: "Lasgun, Kantrael Pattern", mode: "Standard"}

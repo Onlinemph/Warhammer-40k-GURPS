@@ -1,0 +1,480 @@
+kind: template
+output: Imperium/Templates/Astra Militarum Sergeant.gct
+notes: >
+  Veteran Astra Militarum NCO who leads a ten-man infantry squad: a
+  Guardsman who survived enough campaigns to be handed the stripes.
+  Built from the Guardsman template with the same lore basis (Codex:
+  Astra Militarum background on squad sergeants, and Gaunt's Ghosts and
+  Cain-novel NCOs). Point math (see each entry's `design` field):
+  ST 11 (+10), DX 12 (+40), IQ 10 (+0), HT 13 (+30) = 80; advantages
+  +30 (Fit 5, Combat Reflexes 15, Military Rank 2 levels 10);
+  disadvantages -33 (same as the Guardsman); skills +71.
+  Total 148 points: a veteran NCO inside framework.md's "Trained soldier
+  (100-175)" tier, above the 100-point line trooper. Over the Guardsman:
+  HT +1, Military Rank 2 (sergeant), Leadership 12 pts (IQ+3 = 13),
+  Tactics 12 pts (IQ+2 = 12), chainsword Broadsword 4 pts (DX+1 = 13),
+  laspistol Beam Weapons (Pistol) 4 pts (DX+2 = 14), Intimidation 4 pts
+  (Will+1 = 11). The chainsword uses Broadsword, per the weapon-skill
+  table. Wargear (lasgun or laspistol, chainsword, flak armour) is in the
+  wargear files, not here.
+  The Guardsman's options carry over unchanged: Fanaticism (The
+  God-Emperor), the world-of-origin lenses and the regimental lenses are
+  all disabled by default; enable one regimental lens and optionally one
+  world lens, and buy the matching skill (a lens perk raises a skill only
+  if the character owns it; see the Guardsman notes for the list).
+  Shared traits are pulled in with `include` from
+  Imperium/Traits/Imperial Traits.adq per docs/data-format.md.
+traits:
+  - name: ST
+    points: 10
+    tags: [Attribute]
+    lore: A Guardsman is an ordinary, healthy adult human — no augmetic or gene-therapy enhancement.
+    design: ST 11 (+1 from the human baseline of 10), 10 pts/level (B15).
+  - name: DX
+    points: 40
+    tags: [Attribute]
+    lore: >
+      Basic training drills reflexes and weapon-handling hard; Imperial
+      Guard doctrine (per Only War's calibration and countless Gaunt's
+      Ghosts firefights) assumes competent, not exceptional, marksmanship
+      from line infantry.
+    design: DX 12 (+2 from baseline), 20 pts/level (B15). Same as the Guardsman.
+  - name: IQ
+    points: 0
+    tags: [Attribute]
+    lore: Average intelligence; the Munitorum trains doctrine and obedience, not independent thought.
+    design: IQ 10 (baseline), 20 pts/level (B15).
+  - name: HT
+    points: 30
+    tags: [Attribute]
+    lore: Years of campaigning kill off the weak; a veteran sergeant is hardier than the average trooper.
+    design: HT 13 (+3 from baseline), 10 pts/level (B14).
+  - name: Fit
+    points: 5
+    ref: B55
+    tags: [Advantage, Physical, Imperium]
+    lore: Route marches and drill leave most Guardsmen in decent physical condition.
+    design: Basic Set Fit (B55), 5 points.
+  - name: Combat Reflexes
+    points: 15
+    ref: B43
+    tags: [Advantage, Mental, Imperium]
+    lore: >
+      Drilled reactions under fire: Guard doctrine relies on soldiers who
+      don't freeze at their first firefight, since most won't survive a
+      second chance to learn.
+    design: Basic Set Combat Reflexes (B43), 15 points.
+  - include: "imperium/common/imperial-traits.yaml#Military Rank"
+    name: Military Rank (Sergeant)
+    levels: 2
+    lore: A squad sergeant holds the lowest NCO rank above the troopers, commanding a ten-man squad - Codex Astra Militarum background.
+    design: Basic Set Rank (B29), 5/level, 2 levels (10 points).
+  - include: "imperium/common/imperial-traits.yaml#Fanaticism (The God-Emperor)"
+    disabled: true
+    lore: >
+      Optional, not baseline. Zealot regiments (Krieg's atonement culture,
+      the Mordian Iron Guard) and individual fanatics have it; the typical
+      Guardsman is pious but pragmatic. Enabling it adds -15 points.
+  - include: "imperium/common/imperial-traits.yaml#Duty (Astra Militarum)"
+  - include: "imperium/common/imperial-traits.yaml#Sense of Duty (Squadmates)"
+  - include: "imperium/common/imperial-traits.yaml#Intolerance (Xenos)"
+  - name: Fatalistic About the Front
+    points: -1
+    tags: [Quirk, Imperium]
+    lore: "\"You're already dead, trooper, you just haven't stopped moving yet\" — Guard humour about their own life expectancy."
+    design: Quirk (B9), roleplaying flag only.
+  - name: Prayers, Charms and Aquila Tokens
+    points: -1
+    tags: [Quirk, Imperium]
+    lore: A trooper's private superstitions, luck-rituals and whispered prayers before a drop; observant piety, not zealotry.
+    design: Quirk (B9), roleplaying flag only. Stands in for the baseline piety that Fanaticism no longer carries.
+  - name: Griped About the Munitorum
+    points: -1
+    tags: [Quirk, Imperium]
+    lore: Universal soldier's grumbling about rations, kit, and paperwork — never about the Emperor.
+    design: Quirk (B9), roleplaying flag only.
+  # ------------------------------------------------ world-of-origin lenses (flavor only, disabled by default)
+  - include: "imperium/common/imperial-traits.yaml#Hive World Origin"
+    disabled: true
+  - include: "imperium/common/imperial-traits.yaml#Death World Origin"
+    disabled: true
+  - include: "imperium/common/imperial-traits.yaml#Feral World Origin"
+    disabled: true
+  - include: "imperium/common/imperial-traits.yaml#Forge World Origin"
+    disabled: true
+  - include: "imperium/common/imperial-traits.yaml#Agri World Origin"
+    disabled: true
+  - include: "imperium/common/imperial-traits.yaml#Shrine World Origin"
+    disabled: true
+  - include: "imperium/common/imperial-traits.yaml#Void-Born Origin"
+    disabled: true
+  # ------------------------------------------------ regimental lenses (flavor only, disabled by default)
+  - name: "Regiment: Cadian"
+    container: group
+    disabled: true
+    tags: [Imperium, Astra Militarum]
+    lore: >
+      Cadia's entire culture was built around producing disciplined line
+      infantry; "Cadian Shock Troops" are the Guard's iconic drilled
+      regulars in Black Library fiction and codex background alike. Cadia
+      fell in the 13th Black Crusade (999.M41), so surviving Cadian
+      regiments are regiments without a homeworld who carry its memory.
+    design: Net 0 points, per-regiment flavor lens (see this file's `notes`).
+    children:
+      - name: Cadian Drill
+        points: 1
+        tags: [Perk, Imperium]
+        design: Perk (B9), +1 to Soldier.
+        lore: Cadian training is famous for relentless, standardised drill.
+        skill_bonuses: {Soldier: 1}
+      - name: Cadian Pride
+        points: -1
+        tags: [Quirk, Imperium]
+        design: Quirk (B9), roleplaying flag only.
+        lore: A Cadian will not yield ground and will not admit that Cadia is gone; "Cadia stands" is both a boast and a refusal.
+  - name: "Regiment: Catachan"
+    container: group
+    disabled: true
+    tags: [Imperium, Astra Militarum]
+    lore: >
+      Catachan "Jungle Fighters" are raised on one of the galaxy's most
+      lethal death worlds; codex background and Catachan-focused Imperial
+      Armour and Black Library material play them as jungle-warfare
+      specialists who look down on parade-ground soldiering.
+    design: Net 0 points, per-regiment flavor lens (see this file's `notes`).
+    children:
+      - name: Catachan Jungle Craft
+        points: 1
+        tags: [Perk, Imperium]
+        design: Perk (B9), +1 to Survival (Jungle).
+        lore: A Catachan childhood is basic jungle-survival training.
+        skill_bonuses: {"Survival (Jungle)": 1}
+      - name: Contempt for Parade Ground Discipline
+        points: -1
+        tags: [Quirk, Imperium]
+        design: Quirk (B9), roleplaying flag only.
+        lore: Catachans are famously unimpressed by regiments that soldier by the book instead of by results.
+  - name: "Regiment: Death Korps of Krieg"
+    container: group
+    disabled: true
+    tags: [Imperium, Astra Militarum]
+    lore: >
+      Krieg regiments are raised from a world still atoning, in its own
+      telling, for a civil war against the Imperium; codex background and
+      Forge World's Krieg material depict them as gas-masked, fatalistic
+      siege specialists who expect to die and are, if anything, eager to.
+    design: Net 0 points, per-regiment flavor lens (see this file's `notes`).
+    children:
+      - name: Siege Discipline
+        points: 1
+        tags: [Perk, Imperium]
+        design: Perk (B9), +1 to Demolition.
+        lore: Krieg doctrine is built around trench warfare, sapping, and siege engineering.
+        skill_bonuses: {Demolition: 1}
+      - name: Death Is Not to Be Feared
+        points: -1
+        tags: [Quirk, Imperium]
+        design: Quirk (B9), roleplaying flag only.
+        lore: Krieg troopers are written as expecting, even welcoming, death in the Emperor's service.
+  - name: "Regiment: Valhallan"
+    container: group
+    disabled: true
+    tags: [Imperium, Astra Militarum]
+    lore: >
+      Valhallan regiments (Ice Warriors) come from a frozen world and are
+      played in codex background as tenacious, grimly cheerful cold-climate
+      infantry, at their best in the snow and less happy elsewhere.
+    design: Net 0 points, per-regiment flavor lens (see this file's `notes`).
+    children:
+      - name: Cold-Worlder
+        points: 1
+        tags: [Perk, Imperium]
+        design: Perk (B9), +1 to Survival (Arctic).
+        lore: Valhalla's climate makes cold-weather survival second nature.
+        skill_bonuses: {"Survival (Arctic)": 1}
+      - name: Resents Warm Postings
+        points: -1
+        tags: [Quirk, Imperium]
+        design: Quirk (B9), roleplaying flag only.
+        lore: The flip side of a cold-worlder's training is discomfort and short temper in heat and humidity; Valhallans are written as glad to see a frozen front and sour about a warm one.
+  - name: "Regiment: Tallarn"
+    container: group
+    disabled: true
+    tags: [Imperium, Astra Militarum]
+    lore: >
+      Tallarn regiments come from a desert world and are depicted (codex
+      background, Forge World's Tallarn Desert Raiders material) as
+      mobile, mounted/motorised raiders skilled at desert warfare.
+    design: Net 0 points, per-regiment flavor lens (see this file's `notes`).
+    children:
+      - name: Desert-Born
+        points: 1
+        tags: [Perk, Imperium]
+        design: Perk (B9), +1 to Survival (Desert).
+        lore: A Tallarn upbringing is a desert-survival apprenticeship.
+        skill_bonuses: {"Survival (Desert)": 1}
+      - name: Distrust of the Green and Wet
+        points: -1
+        tags: [Quirk, Imperium]
+        design: Quirk (B9), roleplaying flag only.
+        lore: A desert-worlder's unease with jungle and swamp terrain, played for flavor in Tallarn background material.
+  - name: "Regiment: Mordian"
+    container: group
+    disabled: true
+    tags: [Imperium, Astra Militarum]
+    lore: >
+      Mordian Iron Guard are the Guard's parade-ground archetype: rigid
+      drill, immaculate uniforms, standing and firing in the open rather
+      than taking cover — codex background plays this as almost suicidal
+      discipline.
+    design: Net 0 points, per-regiment flavor lens (see this file's `notes`).
+    children:
+      - name: Iron Discipline
+        points: 1
+        tags: [Perk, Imperium]
+        design: Perk (B9), +1 to Savoir-Faire (Military).
+        lore: Mordian regimental culture is built entirely around drill and protocol.
+        skill_bonuses: {"Savoir-Faire (Military)": 1}
+      - name: Parade-Ground Rigidity
+        points: -1
+        tags: [Quirk, Imperium]
+        design: Quirk (B9), roleplaying flag only.
+        lore: Mordians are written as reluctant to break formation even when cover is obviously the smarter move.
+  - name: "Regiment: Vostroyan"
+    container: group
+    disabled: true
+    tags: [Imperium, Astra Militarum]
+    lore: >
+      Vostroyan Firstborn regiments carry ornate heirloom lasguns, long-
+      barrelled and family-maintained (ordinary lasgun damage, not a
+      sniper's long-las), and a feudal honor culture; codex background
+      emphasizes family lineages of service and elaborate uniforms.
+      Vostroya is a forge world, so the Forge World Origin lens pairs well.
+    design: Net 0 points, per-regiment flavor lens (see this file's `notes`).
+    children:
+      - name: Firstborn Heraldry
+        points: 1
+        tags: [Perk, Imperium]
+        design: Perk (B9), +1 to Heraldry (Regimental).
+        lore: Vostroyan units track lineage and campaign honors obsessively.
+        skill_bonuses: {"Heraldry (Regimental)": 1}
+      - name: Family Honor
+        points: -1
+        tags: [Quirk, Imperium]
+        design: Quirk (B9), roleplaying flag only.
+        lore: A Vostroyan Firstborn's service is tied to a specific family lineage's standing.
+  - name: "Regiment: Armageddon Steel Legion"
+    container: group
+    disabled: true
+    tags: [Imperium, Astra Militarum]
+    lore: >
+      Steel Legion regiments come from a hive/industrial world that has
+      fought three Ork Waaaghs! in its recorded history (the Armageddon
+      campaigns are one of the most-covered Black Library war narratives);
+      played as gas-masked, tank-supported mechanized infantry.
+    design: Net 0 points, per-regiment flavor lens (see this file's `notes`).
+    children:
+      - name: Armor Crew Cross-Training
+        points: 1
+        tags: [Perk, Imperium]
+        design: Perk (B9), +1 to Driving (Tracked).
+        lore: Steel Legion infantry are closely integrated with the world's armor regiments.
+        skill_bonuses: {"Driving (Tracked)": 1}
+      - name: Grudge Against Orks
+        points: -1
+        tags: [Quirk, Imperium]
+        design: Quirk (B9), roleplaying flag only.
+        lore: Three Ork invasions of Armageddon have left the world's regiments with a very specific hatred.
+  - name: "Regiment: Tanith (First-and-Only)"
+    container: group
+    disabled: true
+    tags: [Imperium, Astra Militarum]
+    lore: >
+      The Tanith First-and-Only, the "Ghosts" of Dan Abnett's Gaunt's
+      Ghosts series, are light infantry raised for stealth and woodcraft
+      whose home world was destroyed the day they were raised — they are
+      the single most detailed Guard regiment in Black Library fiction.
+    design: Net 0 points, per-regiment flavor lens (see this file's `notes`).
+    children:
+      - name: Tanith Woodcraft
+        points: 1
+        tags: [Perk, Imperium]
+        design: Perk (B9), +1 to Stealth.
+        lore: Tanith light infantry doctrine is built on scouting and silent movement.
+        skill_bonuses: {Stealth: 1}
+      - name: Homesick for an Ash Cloud
+        points: -1
+        tags: [Quirk, Imperium]
+        design: Quirk (B9), roleplaying flag only.
+        lore: Tanith is a dead world; the Ghosts are famously a regiment with no home to return to.
+skills:
+  - name: Beam Weapons
+    spec: Rifle
+    diff: DX/E
+    points: 8
+    tags: [Imperium, Astra Militarum]
+    lore: >
+      The lasgun is the Guard's universal issue weapon. Per framework.md's
+      weapon-skill table, las weapons use Beam Weapons, not Guns.
+    design: DX+3 (15) for 8 points on an Easy skill (B170).
+  - name: Beam Weapons
+    spec: Pistol
+    diff: DX/E
+    points: 4
+    tags: [Imperium, Astra Militarum]
+    lore: The laspistol is the sergeant's sidearm of choice, kept for close quarters.
+    design: DX+2 (14) for 4 points, Easy.
+  - name: Guns
+    spec: Grenade Launcher
+    diff: DX/E
+    points: 1
+    tags: [Imperium, Astra Militarum]
+    lore: Launcher-fed frag and krak grenades only. Hand-thrown grenades use Throwing (below).
+    design: DX+0 (12) for 1 point, Easy.
+  - name: Throwing
+    diff: DX/A
+    points: 2
+    tags: [Imperium]
+    ref: B226
+    lore: Hand-thrown frag and krak grenades, which use Throwing rather than Guns (Grenade Launcher).
+    design: DX+0 (12) for 2 points, Average (B226).
+  - name: Broadsword
+    diff: DX/A
+    points: 4
+    tags: [Imperium, Astra Militarum]
+    lore: The chainsword is the NCO's mark of office and a close-assault weapon; per the weapon-skill table it uses Broadsword.
+    design: DX+1 (13) for 4 points, Average (B208).
+  - name: Brawling
+    diff: DX/E
+    points: 2
+    tags: [Imperium]
+    lore: Bayonet and rifle-butt fighting when las-cells run dry.
+    design: DX+1 (13) for 2 points, Easy.
+  - name: Forced Entry
+    diff: DX/E
+    points: 1
+    tags: [Imperium]
+    lore: Breaching doors and barricades under fire.
+    design: DX+0 (12) for 1 point, Easy.
+  - name: Stealth
+    diff: DX/A
+    points: 2
+    tags: [Imperium]
+    lore: Basic fieldcraft; not a scout's level of skill, but enough to not be the reason a patrol gets spotted.
+    design: DX+0 (12) for 2 points, Average.
+  - name: Camouflage
+    diff: IQ/E
+    points: 1
+    tags: [Imperium]
+    lore: Digging in and breaking up a silhouette, drilled into every trooper.
+    design: IQ+0 (10) for 1 point, Easy.
+  - name: Survival
+    spec: (choose home terrain)
+    diff: Per/A
+    points: 2
+    tags: [Imperium]
+    lore: Field survival in whatever terrain the character's home world or postings favor; pick a specialization.
+    design: Per+0 (10) for 2 points, Average.
+  - name: First Aid
+    diff: IQ/E
+    points: 1
+    tags: [Imperium]
+    lore: Basic combat first aid; the Munitorum's medicae corps handles the rest.
+    design: IQ+0 (10) for 1 point, Easy.
+  - name: Soldier
+    diff: IQ/A
+    points: 4
+    tags: [Imperium]
+    lore: General military knowledge — procedure, rank structure, logistics.
+    design: IQ+1 (11) for 4 points, Average.
+  - name: Tactics
+    diff: IQ/H
+    points: 12
+    tags: [Imperium]
+    lore: Squad- and platoon-level small-unit tactics; a veteran sergeant reads a fight and positions his squad accordingly.
+    design: IQ+2 (12) for 12 points, Hard.
+  - name: Leadership
+    diff: IQ/A
+    points: 12
+    ref: B204
+    tags: [Imperium, Astra Militarum]
+    lore: Keeping a ten-man squad advancing under fire is the sergeant's whole job - Codex Astra Militarum background.
+    design: IQ+3 (13) for 12 points, Average (B204).
+  - name: Navigation
+    spec: Land
+    diff: IQ/A
+    points: 1
+    tags: [Imperium]
+    lore: Basic land navigation without vehicle or void instruments.
+    design: IQ-1 (9) for 1 point, Average.
+  - name: Area Knowledge
+    spec: (home world)
+    diff: IQ/E
+    points: 1
+    tags: [Imperium]
+    lore: Knowledge of the character's own home world or hive.
+    design: IQ+0 (10) for 1 point, Easy.
+  - name: Current Affairs
+    spec: Imperium
+    diff: IQ/E
+    points: 1
+    tags: [Imperium]
+    lore: What passes for Imperium-wide news; see Imperium/Skills/Imperial Skills.skl.
+    design: IQ+0 (10) for 1 point, Easy.
+  - name: Savoir-Faire
+    spec: Military
+    diff: IQ/E
+    points: 1
+    tags: [Imperium]
+    lore: Basic military etiquette and chain-of-command manners.
+    design: IQ+0 (10) for 1 point, Easy.
+  - name: Heraldry
+    spec: Regimental
+    diff: IQ/A
+    points: 1
+    tags: [Imperium, Astra Militarum]
+    lore: Recognising Guard regimental colours and honorifics; see Imperium/Skills/Imperial Skills.skl.
+    design: IQ-1 (9) for 1 point, Average.
+  - name: Intimidation
+    diff: Will/A
+    points: 4
+    tags: [Imperium]
+    lore: A sergeant's bellow and glare keep frightened troopers in the line.
+    design: Will+1 (11) for 4 points, Average.
+  - name: Gambling
+    diff: IQ/A
+    points: 1
+    tags: [Imperium]
+    lore: Dice and cards are near-universal Guard barracks pastimes.
+    design: IQ-1 (9) for 1 point, Average.
+  - name: Theology
+    spec: Imperial Creed
+    diff: IQ/H
+    points: 1
+    tags: [Imperium]
+    lore: The basic catechisms every Guardsman is drilled in.
+    design: IQ-2 (8) for 1 point, Hard.
+  - name: Jumping
+    diff: DX/E
+    points: 1
+    tags: [Imperium]
+    lore: Basic obstacle-course fitness.
+    design: DX+0 (12) for 1 point, Easy.
+  - name: Climbing
+    diff: DX/A
+    points: 1
+    tags: [Imperium]
+    lore: Basic obstacle-course and urban-assault fitness.
+    design: DX-1 (11) for 1 point, Average.
+  - name: Running
+    diff: HT/A
+    points: 1
+    tags: [Imperium]
+    lore: Route-march conditioning.
+    design: HT-1 (12) for 1 point, Average.
+  - name: Hiking
+    diff: HT/A
+    points: 1
+    tags: [Imperium]
+    lore: Route-march conditioning.
+    design: HT-1 (12) for 1 point, Average.

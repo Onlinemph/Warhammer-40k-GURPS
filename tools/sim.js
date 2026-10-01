@@ -128,15 +128,30 @@ const SIM = (() => {
   }
 
   // ------------------------------------------------------------ data index
-  let EQ = null, TEMPLATES = null, SIMW = {}, POWERS = {}, AI = [], LOADOUTS = {};
+  let EQ = null, TEMPLATES = null, SIMW = {}, POWERS = {}, AI = [], LOADOUTS = {}, SQUADS = {};
   function index(data) {
-    EQ = new Map(); TEMPLATES = new Map(); SIMW = data.simWeapons || {}; POWERS = data.powers || {}; AI = (data.ai && data.ai.profiles) || []; LOADOUTS = data.loadouts || {};
+    EQ = new Map(); TEMPLATES = new Map(); SIMW = data.simWeapons || {}; POWERS = data.powers || {}; AI = (data.ai && data.ai.profiles) || []; LOADOUTS = data.loadouts || {}; SQUADS = data.squads || {};
     const walk = (e, src) => { if (!EQ.has(e.name)) EQ.set(e.name, { e, src }); (e.children || []).forEach(c => walk(c, src)); };
     for (const lib of data.libraries) {
       if (lib.kind === "equipment") lib.items.forEach(e => walk(e, lib));
       if (lib.kind === "template" && !lib.template.addon) TEMPLATES.set(lib.title, { t: lib.template, lib });
     }
     return { EQ, TEMPLATES };
+  }
+  // a lore squad (data/sim/squads.yaml) as unit specs: each member is its template's default loadout with the
+  // member's own fields laid over it, tagged with the squad so the engine deploys and rallies them together.
+  // tag tells two squads of the same kind apart; n numbers their names ("Guard Squad 2 Sergeant")
+  const SQUAD_KEYS = ["armour", "ranged", "ranged2", "melee", "grenades", "knife", "stance", "shield", "carried", "mags", "body", "skills"];
+  function squadSpecs(name, tag, n) {
+    const sq = SQUADS[name];
+    if (!sq) throw new Error("Unknown squad: " + name);
+    const short = (sq.short || name) + (n > 1 ? " " + n : "");
+    return sq.members.map(mb => {
+      const lo = LOADOUTS[mb.template] || {}, spec = { template: mb.template, count: mb.count || 1 };
+      for (const k of SQUAD_KEYS) { const v = k in mb ? mb[k] : lo[k]; if (v !== undefined) spec[k] = JSON.parse(JSON.stringify(v)); }
+      if (!spec.stance) spec.stance = "advance";
+      return Object.assign(spec, { label: `${short} ${mb.role}`, role: mb.role, squad: tag || name, squadName: short, leader: !!mb.leader, vox: !!mb.vox, commissar: !!mb.commissar });
+    });
   }
   function findTraitWeapon(traits, name) {
     for (const t of traits || []) {
@@ -254,7 +269,8 @@ const SIM = (() => {
   function buildUnit(spec, side) {
     const T = TEMPLATES.get(spec.template);
     if (!T) throw new Error("Unknown template: " + spec.template);
-    const st = T.t.stats, flags = st.flags || {};
+    // a squad's specialist trains on its weapon: spec.skills {"Gunner (Rockets)": 20} sets those skill levels
+    const st = spec.skills ? { ...T.t.stats, skills: [...(T.t.stats.skills || []).filter(x => !(x.name in spec.skills)), ...Object.entries(spec.skills).map(([name, level]) => ({ name, level }))] } : T.t.stats, flags = st.flags || {};
     const arm = armourProfile(spec.armour);
     const nat = {};
     for (const [k, v] of Object.entries(st.dr || {})) nat[k] = v;
@@ -434,6 +450,10 @@ const SIM = (() => {
       bothReady: cs ? !ranged || !melee || !!melee.natural || !!ranged.natural || (spec.melee && spec.ranged && spec.melee.item === spec.ranged.item) : !ranged || !melee || melee.name === "Punch" || !!melee.natural || !!ranged.natural || (spec.melee && spec.ranged && spec.melee.item && spec.melee.item === spec.ranged.item)
         || /fixed to|mounted|underslung/i.test(melee.usage || "") || (!!ranged.oneHanded && !!melee.oneHanded),
       liftST,   // Lifting ST counts in grappling (B65)
+      // squads: units sharing a squad tag deploy together and take morale together; the leader can give orders
+      // (Leadership, B204), a vox-caster carries the orders to the whole squad, a Commissar keeps it in the fight
+      squad: spec.squad || null, squadName: spec.squadName || null, role: spec.role || null, leader: !!spec.leader, vox: !!spec.vox,
+      commissar: !!spec.commissar || /Commissar/.test(spec.template),
       ranged2,
       body: spec.body || (LOADOUTS[spec.template] || {}).body || "upright",   // posture for height in melee (Pyramid 3/77 p. 4)
       hooks,
@@ -887,7 +907,8 @@ const SIM = (() => {
     // deployment: each side's units side by side in lines facing the enemy, models 2 yards apart,
     // ranks of ten with deeper ranks behind; each side's frontage is centred on the same axis
     const width = [0, 0];
-    units.forEach(u => { width[u.side] += 2 * Math.min(u.count, 10) + 4; });
+    const sameSquad = (a, b) => a && b && a.squad && a.squad === b.squad && a.side === b.side;
+    units.forEach((u, ui) => { width[u.side] += 2 * Math.min(u.count, 10) + (sameSquad(u, units[ui + 1]) ? 0 : 4); });
     const row0 = [-Math.floor((width[0] - 4) / 2), -Math.floor((width[1] - 4) / 2)];
     units.forEach((u, ui) => {
       u.idx = ui; u.models = []; u.routed = false; u.checked50 = false; u.checked25 = false;
@@ -910,8 +931,17 @@ const SIM = (() => {
         place(m, h);
         m.ix = models.length; m.trail = []; u.models.push(m); models.push(m);
       }
-      row0[u.side] += 2 * perRank + 4;
+      row0[u.side] += 2 * perRank + (sameSquad(u, units[ui + 1]) ? 0 : 4);
     });
+    // squads: one morale group per squad (a lone unit is its own group)
+    const groups = [], gmap = new Map();
+    for (const u of units) {
+      const k = u.squad ? u.side + "|" + u.squad : "u" + u.idx;
+      let g = gmap.get(k);
+      if (!g) { g = { name: u.squad ? (u.squadName || u.squad) : u.name, units: [], models: [], count: 0, checked50: false, checked25: false, led: null, hadLeader: false, steeled: 0, executed: 0 }; gmap.set(k, g); groups.push(g); }
+      g.units.push(u); g.models.push(...u.models); g.count += u.count; u.group = g;
+    }
+    for (const g of groups) g.hadLeader = g.units.some(u => u.leader);
 
     const active = m => m.state === "ok";
     const unitActive = u => !u.routed && u.models.some(active);
@@ -1070,15 +1100,59 @@ const SIM = (() => {
       const covered = e.shotAt && e.shotAt.h && m.h && inCover(m, e.shotAt.h);
       if (e.supp || e.near || e.blast || e.wounded || e.allyDown) {
         const why = e.blast ? "a blast" : e.allyDown ? "a comrade falls" : e.wounded ? "wounded" : e.supp ? "suppression fire" : "a near miss";
-        const r = fright(m.u, e.vol && !covered ? -rapidBonus(e.vol) : 0, Infinity);
-        if (!r.ok) { frightTable(m, -r.margin, why); if (m.stunned || m.state !== "ok" || m.u.routed) return true; }
+        const r = fright(m.u, (e.vol && !covered ? -rapidBonus(e.vol) : 0) + ledBonus(m), Infinity);
+        if (!r.ok) { frightTable(m, -r.margin, why); if (m.state === "routed" || (m.stunned && m.stunT > 1)) commissar(m.u.group, [m]); if (m.stunned || m.state !== "ok" || m.u.routed) return true; }
       }
       if (e.horror != null) {
-        const r = fright(m.u, -e.horror, Infinity);
+        const r = fright(m.u, -e.horror + ledBonus(m), Infinity);
         if (!r.ok) { frightTable(m, -r.margin, `${e.horrorWhy}, -${e.horror}`); if (m.stunned || m.state !== "ok" || m.u.routed) return true; }
       }
       if (covered && !m.u.flags.cr && !check(m.u.will - 2).ok) m.headsDown = true;
       return false;
+    }
+    // Leadership (B204): a leader who spends its turn giving orders gives everyone in its squad who can hear it +1
+    // (+2 on a critical) to combat Fright Checks and to self-control rolls against Berserk or Cowardice, until its
+    // next turn; within 20 yards, or the whole squad when a vox-caster is with it
+    function ledBonus(m) {
+      const g = m.u.group, o = g && g.led, st = (g && g.steeled) || 0;
+      if (!o || o.until < turn || o.by.state !== "ok" || !o.by.h || !m.h) return st;
+      return st + (g.models.some(x => x.u.vox && active(x)) || hexDist(m.h, o.by.h) <= 20 ? o.bonus : 0);
+    }
+    // squad cohesion: a squad member doesn't run more than 4 yards ahead of its nearest squad-mate toward the foe;
+    // a flamer closes with the squad, not alone across open ground (chargers rush as they please)
+    function cohesion(m, t) {
+      const u = m.u;
+      if (!u.group || u.stance === "charge" || !t.h) return 0;
+      const ds = u.group.models.filter(x => x !== m && x.state === "ok" && x.h && !x.stunned).map(x => hexDist(x.h, t.h));
+      return ds.length ? Math.min(...ds) - 4 : 0;
+    }
+    function giveOrders(m) {
+      const g = m.u.group, l = skillOf(m.u, /^Leadership/), r = check(l - skillPen(m));
+      m.attacked = false; m.aimTurns = 0;
+      if (g.models.some(x => x !== m && x.u.leader && x.state === "ok" && g.led && g.led.by === x && g.led.until >= turn)) return;   // one leader per group
+      if (r.ok) { g.led = { by: m, bonus: r.crit ? 2 : 1, until: turn + 1 }; L(`${m.id} bellows orders (Leadership: +${r.crit ? 2 : 1} to the squad's Fright Checks)`); }
+      else L(`${m.id} shouts orders, but nobody's listening (Leadership failed)`);
+    }
+    // a Commissar keeps a squad in the fight (house rule: summary execution as an Intimidation display, B202). When
+    // members break or freeze, a Commissar of the squad within 20 yards and in sight shoots the worst of them, then wins a Quick
+    // Contest of Intimidation (+3 for the display, +1 if Callous) against the squad's best Will: the frozen snap out of
+    // it, and the squad fights on at +2 to its Fright Checks for the rest of the battle
+    function commissar(g, failed) {
+      const c = g.models.find(x => x.u.commissar && active(x) && x.h && !x.stunned);
+      if (!c || !failed.length || turn - (g.execAt ?? -99) < 20) return;   // one example lasts a while
+      // the first to run, else the first frozen with fear: a Commissar doesn't wait for the rot to spread
+      const v = failed.find(x => x !== c && x.state === "routed") || failed.find(x => x !== c && x.state === "ok" && x.stunned);
+      if (!v) return;
+      if (v.h && (hexDist(c.h, v.h) > 20 || !los(c.h, v.h))) return;
+      L(`${c.id} executes ${v.id} for cowardice`);
+      v.state = "dead"; if (v.h) { FX(["d", v.h.q, v.h.r, v.u.side, 1]); place(v, null); }
+      g.executed++; g.execAt = turn;
+      const it = skillOf(c.u, /^Intimidation/), w = Math.max(...g.models.filter(x => active(x) && x !== c).map(x => x.u.will), 0);
+      if (contest(Math.max(it, c.u.will) + 3 + (c.u.flags.callous ? 1 : 0), w)) {
+        g.steeled = 2;
+        for (const x of g.models) if (x !== c && active(x) && x.stunned && x.stunRec !== "ht") { x.stunned = false; x.stunT = 0; }
+        L(`  ${g.name} steels itself under the Commissar's eye`);
+      } else L(`  ${g.name} is too shaken to care`);
     }
     function frightTable(m, by, why) {
       const r = roll3() + by, u = m.u;
@@ -2838,6 +2912,21 @@ const SIM = (() => {
         m.gunSpent = true;
         if (tmp.length) add(GAMMA * Math.max(...tmp) - 0.001, `re-ready-gun`, () => { m.gunSpent = false; L(`${m.id} brings its ${u.ranged.name.split(",")[0]} back to bear`); });
       }
+      // a squad leader may spend the turn giving orders (Leadership, B204): worth the Fright Checks it's likely to
+      // save among squad-mates in hearing, those already shaken by fire most of all
+      if (u.leader && morale && u.group && !m.grips.length) {
+        const g = u.group, lv = skillOf(u, /^Leadership/);
+        if (lv > -Infinity && !(g.led && g.led.until > turn)) {
+          const vox = g.models.some(x => x.u.vox && active(x)), hot = g.models.some(x => x.ev && Object.keys(x.ev).length);
+          let v = 0;
+          for (const x of g.models) {
+            if (x === m || !active(x) || !x.h || x.u.flags.unfazeable || x.u.flags.noMorale || (!vox && hexDist(x.h, m.h) > 20)) continue;
+            const l0 = frightLevel(x.u, (g.steeled || 0), Infinity), pc = x.ev && Object.keys(x.ev).length ? 0.8 : hot ? 0.3 : 0.05;
+            v += pc * (P3[cl(l0 + 1)] - P3[cl(l0)]) * threatOf(x) * 2.5;
+          }
+          add(P3[cl(lv - skillPen(m))] * v - rNow, "orders", () => giveOrders(m));
+        }
+      }
       if (terr && !m.grips.length) { doorOptions(m, pool, add, rNow); if (!adj.length) breachOptions(m, pool, add, rNow, Wm); }
       // a foe holds our gun aside: wrench it free, worth what a free gun would do (else ready the blade, above)
       if (gunGrip(m)) {
@@ -2878,7 +2967,7 @@ const SIM = (() => {
       }
       // keeping its head down (TS p. 21): only what doesn't expose it: reload, ready, defend, a door, or stay down
       if (m.headsDown && !adj.length) {
-        const safe = opts.filter(o => /^(reload|reloading|tac-reload|ready-|re-ready-|draw-early|aod|concentrate|close-door|door)/.test(o.label));
+        const safe = opts.filter(o => /^(reload|reloading|tac-reload|ready-|re-ready-|draw-early|orders|aod|concentrate|close-door|door)/.test(o.label));
         opts.length = 0; opts.push(...safe);
         add(-rNow * 0.5, "heads-down", () => L(`${m.id} keeps its head down`));
       }
@@ -2893,7 +2982,7 @@ const SIM = (() => {
         pick = close[Math.floor(R() * close.length)];
       }
       // Battle Rage (B124): berserk on entering combat unless it makes its self-control roll
-      if (u.flags.battleRage && !m.rageRolled) { m.rageRolled = true; if (roll3() > u.flags.berserk) goBerserk(m, "battle rage"); }
+      if (u.flags.battleRage && !m.rageRolled) { m.rageRolled = true; if (roll3() > u.flags.berserk + ledBonus(m)) goBerserk(m, "battle rage"); }
       pick = mentalPick(m, opts, pick, adj);
       if (globalThis.SIM_DEBUG) globalThis.SIM_DEBUG(m, opts.slice().sort((a, b) => b.v - a.v).slice(0, globalThis.SIM_DEBUG_ALL ? 40 : 6).map(o => `${o.label}=${o.v.toFixed(3)}`).join("  "));
       pick.run();
@@ -2964,7 +3053,7 @@ const SIM = (() => {
       if (m.berserk) { const b = (adj.length ? bestOf(opts, /^(aoa|step-aoa)/) : bestOf(opts, /^(aoa-charge|charge|heroic|close@|advance|move-closer|step-)/)) || bestOf(opts, /^(aoa-fire|fire |point-blank)/); if (b) return b; }
       // Cowardice (B129): before closing with the enemy, a self-control roll (-5 if hurt badly enough to die); being
       // in melee already is greater danger, so it fights back
-      if (f.coward && !adj.length && DANGER.test(pick.label) && roll3() > f.coward - (m.hp < m.u.HP / 3 ? 5 : 0)) {
+      if (f.coward && !adj.length && DANGER.test(pick.label) && roll3() > f.coward + ledBonus(m) - (m.hp < m.u.HP / 3 ? 5 : 0)) {
         const s = opts.filter(o => !DANGER.test(o.label)).reduce((a, b) => !a || b.v > a.v ? b : a, null);
         if (s) { L(`${m.id} hangs back (Cowardice)`); return s; }
       }
@@ -3111,16 +3200,17 @@ const SIM = (() => {
             });
           }
         }
+        const keep = t => cohesion(m, t);
         // Move and Attack (B365): step up the range and fire at -2 (or Bulk), no Aim; the new position counts next turn
         if (u.stance !== "shoot" && cands.length && !(w.fp)) {
-          const t = cands[0], d = hexDist(m.h, t.h);
-          if (d > 3) {
-            const mv = moveOf(m), nd = Math.max(2, d - mv);
+          const t = cands[0], d = hexDist(m.h, t.h), hold = Math.max(2, keep(t));
+          if (d > hold + 1) {
+            const mv = Math.min(moveOf(m), d - hold), nd = d - mv;
             const E = planAttack(m, w, t, wl(m, w) - skillPen(m) + rangePenalty(nd + spdOf(t.steps || 0)) + t.u.sm + Math.min(-2, w.bulk || 0), false).score * sustainOf(w);
-            const h2 = stepHex(m.h, t.h, Math.min(mv, d - 2));
+            const h2 = stepHex(m.h, t.h, mv);
             const cont = GAMMA * (shotValueFrom(m, h2, pool) - shotValueFrom(m, m.h, pool));
             add(Wr * kv(m, t, E) + cont - risk(m, h2, ""), `advance-fire@${t.id}`, () => {
-              stepToward(m, t.h, mv, 2); if (m.state !== "ok" || !m.h || m.stunned || !t.h || m.readied) return;
+              stepToward(m, t.h, mv, hold); if (m.state !== "ok" || !m.h || m.stunned || !t.h || m.readied) return;
               faceTo(m, t.h); m.mna = true; fireAt(m, w, t, { moved: true });
             });
           }
@@ -3129,7 +3219,7 @@ const SIM = (() => {
         // only when the shot from here is poor (-3 or worse for range, 7 yards and more): a soldier with a fair shot
         // takes it, or advances firing, rather than walking up to arm's length for one; and a gunman stops 3 yards off
         if (cands.length) {
-          const t = cands[0], d = hexDist(m.h, t.h), stop = u.stance === "charge" ? 2 : 3;
+          const t = cands[0], d = hexDist(m.h, t.h), stop = Math.max(u.stance === "charge" ? 2 : 3, keep(t));
           if (d > stop + 1 && (rangePenalty(d) <= -3 || w.fp)) {
             const h2 = stepHex(m.h, t.h, Math.min(moveOf(m), d - stop));
             add(GAMMA * shotValueFrom(m, h2, pool) - risk(m, h2, "") - 0.001, `move-closer@${t.id}`, () => {
@@ -3480,7 +3570,7 @@ const SIM = (() => {
         // and zealots run in on faith: they half-ignore the fire on the way and believe the fight is worth having
         const z = u.ai.zeal || 0, rm = Math.max(mv, runMove(m) + (u.flags.enhMove ? mv : 0)), turns = (Math.ceil((len - mv) / Math.max(1, rm)) + 1) * (1 - z);
         const v = Math.pow(GAMMA, turns) * Wm * Math.max(worth, z * 0.1 * threatOf(tgt) * HORIZON) - risk(m, arrive, "") * (1 - z / 2);
-        add(v, `close@${tgt.id}`, () => { const n = go(runMove(m)); if (n >= mv - 1) m.runK = m.runPrev + 1; if (stopped()) return; if (tgt.h) faceTo(m, tgt.h); L(n ? `${m.id} moves in on ${tgt.id}` : `${m.id} can't find a way to ${tgt.id}`); });
+        if (cohesion(m, tgt) <= len - rm) add(v, `close@${tgt.id}`, () => { const n = go(runMove(m)); if (n >= mv - 1) m.runK = m.runPrev + 1; if (stopped()) return; if (tgt.h) faceTo(m, tgt.h); L(n ? `${m.id} moves in on ${tgt.id}` : `${m.id} can't find a way to ${tgt.id}`); });
       }
     }
 
@@ -4153,18 +4243,28 @@ const SIM = (() => {
           L(`${m.id} reanimates`);
         } else if (r.fumble || --m.reanim <= 0) { m.state = "phased"; L(`${m.id} phases out`); }
       }
-      // morale
-      if (morale) for (const u of units) {
-        if (u.routed || u.flags.unfazeable || u.flags.noMorale) continue;
-        const alive = u.models.filter(active).length;
-        const frac2 = alive / u.count;
-        let need = false;
-        if (frac2 <= 0.5 && !u.checked50) { u.checked50 = true; need = true; }
-        if (frac2 <= 0.25 && !u.checked25) { u.checked25 = true; need = true; }
+      // morale, squad by squad: Fright Checks at half and at a quarter strength, and when the squad's leader falls
+      if (morale) for (const g of groups) {
+        if (g.units.every(u => u.routed || u.flags.unfazeable || u.flags.noMorale)) continue;
+        const alive = g.models.filter(active).length;
+        const frac2 = alive / g.count;
+        let need = false, why = "casualties";
+        if (frac2 <= 0.5 && !g.checked50) { g.checked50 = true; need = true; }
+        if (frac2 <= 0.25 && !g.checked25) { g.checked25 = true; need = true; }
+        // the leader down (a Mass Combat rule, p. 30, brought to the squad): the next in command rolls Leadership to
+        // avert panic; failing, or with no one to take over, the squad makes its Fright Checks
+        if (g.hadLeader && !g.models.some(x => x.u.leader && active(x)) && alive > 0) {
+          g.hadLeader = false;
+          const next = g.models.filter(x => active(x) && !x.u.leader).map(x => ({ x, l: skillOf(x.u, /^Leadership/) })).sort((a, b) => b.l - a.l)[0];
+          if (next && next.l > -Infinity && check(next.l - skillPen(next.x)).ok) L(`${next.x.id} takes command of ${g.name} (Leadership)`);
+          else { need = true; why = "leader down"; L(`${g.name} loses its leader`); }
+        }
         if (need && alive > 0) {
-          L(`${u.name} takes heavy losses: Fright Checks`);
-          for (const m of u.models) { if (m.state !== "ok" || m.berserk) continue; const fc = fright(u, 0, Infinity); if (!fc.ok) frightTable(m, -fc.margin, "casualties"); }
-          if (!u.models.some(active)) { u.routed = true; L(`${u.name} breaks and flees`); }
+          L(`${g.name} ${why === "leader down" ? "wavers" : "takes heavy losses"}: Fright Checks`);
+          const failed = [];
+          for (const m of g.models) { if (m.state !== "ok" || m.berserk || m.u.flags.unfazeable || m.u.flags.noMorale) continue; const fc = fright(m.u, ledBonus(m), Infinity); if (!fc.ok) { frightTable(m, -fc.margin, why); failed.push(m); } }
+          commissar(g, failed);
+          if (!g.models.some(active)) { for (const u of g.units) u.routed = true; L(`${g.name} breaks and flees`); }
         }
       }
       for (const m of models) if (m.h) m.lastH = m.h;
@@ -4214,7 +4314,8 @@ const SIM = (() => {
     return res;
   }
 
-  return { index, buildUnit, describe, runBattle, monteCarlo, parseDamage, seed, woundMult, fmtDice, px, facilityMap, fromOffset, rangePenalty, DIRS,
+  return { index, buildUnit, describe, runBattle, monteCarlo, parseDamage, seed, woundMult, fmtDice, px, facilityMap, fromOffset, rangePenalty, DIRS, squadSpecs,
+    get squads() { return SQUADS; },
     get templates() { return TEMPLATES; }, get equipment() { return EQ; }, traitWeapons };
 })();
 if (typeof module !== "undefined") module.exports = SIM;
@@ -4253,7 +4354,7 @@ if (typeof document !== "undefined") (() => {
     const lo = LO[template] || {};
     return { template, count: count || 5, stance: lo.stance || "advance", armour: [...(lo.armour || [])],
       ranged: lo.ranged ? { ...lo.ranged } : null, melee: lo.melee ? { ...lo.melee } : null,
-      ranged2: lo.ranged2 ? { ...lo.ranged2 } : null, shield: lo.shield ? { ...lo.shield } : null, carried: lo.carried || null, grenades: (lo.grenades || []).map(g => ({ ...g })), body: lo.body, mags: lo.mags, knife: lo.knife ? { ...lo.knife } : null };
+      ranged2: lo.ranged2 ? { ...lo.ranged2 } : null, shield: lo.shield ? { ...lo.shield } : null, carried: lo.carried || null, grenades: (lo.grenades || []).map(g => ({ ...g })), body: lo.body, mags: lo.mags, knife: lo.knife ? { ...lo.knife } : null, skills: lo.skills ? { ...lo.skills } : undefined };
   }
   const PRESETS = [
     ["20 Guardsmen vs 5 Space Marines", [["Astra Militarum Guardsman", 20]], [["Astartes Battle-Brother", 5]], 150],
@@ -4264,6 +4365,9 @@ if (typeof document !== "undefined") (() => {
     ["Genestealers vs Marines", [["Genestealer", 5]], [["Astartes Battle-Brother", 5]], 40],
     ["Facility: 5 Marines vs 10 Genestealers", [["Astartes Battle-Brother", 5]], [["Genestealer", 10]], 60, "facility"],
     ["Facility: 20 Guardsmen vs 20 Ork Boyz", [["Astra Militarum Guardsman", 20]], [["Ork Boy", 20]], 60, "facility"],
+    ["Squads: Commissar's squad vs Ork Boyz", [["squad:Astra Militarum Infantry Squad with Commissar"]], [["squad:Ork Boyz Mob"]], 80],
+    ["Squads: Tactical vs Chaos", [["squad:Astartes Tactical Squad"]], [["squad:Chaos Space Marine Squad"]], 40],
+    ["Squads: 3 Guard squads vs a Tactical squad", [["squad:Astra Militarum Infantry Squad"], ["squad:Astra Militarum Infantry Squad"], ["squad:Astra Militarum Infantry Squad"]], [["squad:Astartes Tactical Squad"]], 100],
   ];
 
   const trW = template => {
@@ -4302,7 +4406,7 @@ if (typeof document !== "undefined") (() => {
   function unitCard(u, si, ui) {
     const p = ptsOf(u.template);
     return `<div class="sunit" data-s="${si}" data-u="${ui}">
-      <div class="shead"><input type="number" min="1" max="200" value="${u.count}" data-f="count" aria-label="Models"><b>${esc(u.template)}${p ? `<small>${p.toLocaleString("en-US")} pts each</small>` : ""}</b>
+      <div class="shead"><input type="number" min="1" max="200" value="${u.count}" data-f="count" aria-label="Models"><b>${esc(u.role || u.template)}${u.role || p ? `<small>${u.role ? esc(u.template) + (p ? " · " : "") : ""}${p ? `${p.toLocaleString("en-US")} pts each` : ""}</small>` : ""}</b>
         <select data-f="stance" aria-label="Stance">${["shoot", "advance", "charge"].map(s => `<option${s === u.stance ? " selected" : ""}>${s}</option>`).join("")}</select>
         <button class="x" data-del aria-label="Remove unit">×</button></div>
       ${pips(u.count)}
@@ -4316,16 +4420,29 @@ if (typeof document !== "undefined") (() => {
           ${u.shield ? `SP <input type="number" data-shf="sp" value="${u.shield.sp}"> delay <input type="number" data-shf="delay" value="${u.shield.delay}"> recharge/s <input type="number" data-shf="recharge" value="${u.shield.recharge}">` : ""}</label>
       </div>${LO[u.template] && LO[u.template].note ? `<p class="lonote">${esc(LO[u.template].note)}</p>` : ""}</details></div>`;
   }
+  // a squad's members stay separate cards (each with its own loadout) under one heading for the squad
+  function squadHead(u, si) {
+    const ms = S.sides[si].filter(x => x.squad === u.squad), n = ms.reduce((a, x) => a + x.count, 0), pts = ms.reduce((a, x) => a + x.count * ptsOf(x.template), 0);
+    return `<div class="squad-h"><b>${esc(u.squadName || u.squad)}</b><small>${n} models${pts ? ` · ${pts.toLocaleString("en-US")} pts` : ""}</small><button class="x" data-delsq="${si}" data-sq="${esc(u.squad)}" aria-label="Remove squad">×</button></div>`;
+  }
+  // squads added from the picker get a tag unique on the page; n numbers a second squad of the same kind
+  function addSquad(si, name) {
+    const SQ = SIM.squads[name], short = (SQ && SQ.short) || name;
+    const n = new Set(S.sides.flat().filter(x => x.squad && x.squadName && x.squadName.startsWith(short)).map(x => x.squad)).size + 1;
+    return SIM.squadSpecs(name, `${name}#${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`, n).map(sp => ({ ...newUnit(sp.template, sp.count), ...sp, armour: sp.armour || [] }));
+  }
+  const expand = (list, si) => list.flatMap(([t, n]) => t.startsWith("squad:") ? addSquad(si, t.slice(6)) : [newUnit(t, n)]);
   function tmplOptions() {
     const groups = {};
     for (const l of TEMPL) (groups[l.section.replace(/\/Templates$/, "").replace(/\//g, " › ")] ||= []).push(l.title);
-    return `<option value="">Add a unit…</option>` + Object.entries(groups).map(([g, ts]) => `<optgroup label="${esc(g)}">${ts.map(t => `<option>${esc(t)}</option>`).join("")}</optgroup>`).join("");
+    const sq = Object.keys(SIM.squads || {});
+    return `<option value="">Add a unit…</option>` + (sq.length ? `<optgroup label="Squads (lore organisation)">${sq.map(n => `<option value="squad:${esc(n)}">${esc(n)}</option>`).join("")}</optgroup>` : "") + Object.entries(groups).map(([g, ts]) => `<optgroup label="${esc(g)}">${ts.map(t => `<option>${esc(t)}</option>`).join("")}</optgroup>`).join("");
   }
 
   let last = null;
   function render() {
     const sidePts = si => S.sides[si].reduce((a, u) => a + u.count * ptsOf(u.template), 0);
-    const side = si => `<section class="sside"><h2>Side ${"AB"[si]}${sidePts(si) ? `<small>${sidePts(si).toLocaleString("en-US")} pts</small>` : ""}</h2>${S.sides[si].map((u, ui) => unitCard(u, si, ui)).join("") || `<p class="empty">No units yet.</p>`}
+    const side = si => `<section class="sside"><h2>Side ${"AB"[si]}${sidePts(si) ? `<small>${sidePts(si).toLocaleString("en-US")} pts</small>` : ""}</h2>${S.sides[si].map((u, ui) => (u.squad && (ui === 0 || S.sides[si][ui - 1].squad !== u.squad) ? squadHead(u, si) : "") + unitCard(u, si, ui)).join("") || `<p class="empty">No units yet.</p>`}
       <select class="addu" data-add="${si}" aria-label="Add a unit to side ${"AB"[si]}">${tmplOptions()}</select></section>`;
     $("#main").innerHTML = `<header class="libhead"><div class="eyebrow">Tools</div><h1>Combat Simulator</h1>
       <p>Pit units against each other using their templates and default loadouts. Every run plays a full GURPS fight second by second; the result is the spread over many runs.</p></header>
@@ -5212,12 +5329,14 @@ if (typeof document !== "undefined") (() => {
     main.querySelectorAll("[data-o]").forEach(el => el.onchange = () => { S[el.dataset.o] = el.value; save(); if (el.dataset.o === "battlefield") render(); });
     const hs = main.querySelector("[data-h]"); hs.onchange = () => { S.health = hs.value; save(); render(); };
     main.querySelectorAll("[data-add]").forEach(el => el.onchange = () => {
-      if (!el.value) return; S.sides[+el.dataset.add].push(newUnit(el.value, 5)); save(); render();
+      if (!el.value) return; const si = +el.dataset.add;
+      S.sides[si].push(...(el.value.startsWith("squad:") ? addSquad(si, el.value.slice(6)) : [newUnit(el.value, 5)])); save(); render();
     });
     main.querySelectorAll("[data-preset]").forEach(el => el.onclick = () => {
       const p = PRESETS[+el.dataset.preset];
-      S.sides = [p[1].map(([t, n]) => newUnit(t, n)), p[2].map(([t, n]) => newUnit(t, n))]; S.distance = p[3]; S.battlefield = p[4] || "open"; last = null; save(); render();
+      S.sides = [[], []]; S.sides[0] = expand(p[1], 0); S.sides[1] = expand(p[2], 1); S.distance = p[3]; S.battlefield = p[4] || "open"; last = null; save(); render();
     });
+    main.querySelectorAll("[data-delsq]").forEach(el => el.onclick = () => { const si = +el.dataset.delsq; S.sides[si] = S.sides[si].filter(x => x.squad !== el.dataset.sq); save(); render(); });
     main.querySelectorAll(".sunit").forEach(card => {
       const u = S.sides[+card.dataset.s][+card.dataset.u];
       const upd = () => { save(); render(); };

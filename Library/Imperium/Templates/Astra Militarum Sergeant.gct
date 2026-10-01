@@ -1,0 +1,1179 @@
+{
+	"version": 5,
+	"id": "BgXym8IF_IN6omrXr",
+	"notes": "Veteran Astra Militarum NCO who leads a ten-man infantry squad: a Guardsman who survived enough campaigns to be handed the stripes. Built from the Guardsman template with the same lore basis (Codex: Astra Militarum background on squad sergeants, and Gaunt's Ghosts and Cain-novel NCOs). Point math (see each entry's `design` field): ST 11 (+10), DX 12 (+40), IQ 10 (+0), HT 13 (+30) = 80; advantages +30 (Fit 5, Combat Reflexes 15, Military Rank 2 levels 10); disadvantages -33 (same as the Guardsman); skills +71. Total 148 points: a veteran NCO inside framework.md's \"Trained soldier (100-175)\" tier, above the 100-point line trooper. Over the Guardsman: HT +1, Military Rank 2 (sergeant), Leadership 12 pts (IQ+3 = 13), Tactics 12 pts (IQ+2 = 12), chainsword Broadsword 4 pts (DX+1 = 13), laspistol Beam Weapons (Pistol) 4 pts (DX+2 = 14), Intimidation 4 pts (Will+1 = 11). The chainsword uses Broadsword, per the weapon-skill table. Wargear (lasgun or laspistol, chainsword, flak armour) is in the wargear files, not here. The Guardsman's options carry over unchanged: Fanaticism (The God-Emperor), the world-of-origin lenses and the regimental lenses are all disabled by default; enable one regimental lens and optionally one world lens, and buy the matching skill (a lens perk raises a skill only if the character owns it; see the Guardsman notes for the list). Shared traits are pulled in with `include` from Imperium/Traits/Imperial Traits.adq per docs/data-format.md.\n",
+	"traits": [
+		{
+			"id": "t1e46t6knkU4RSlID",
+			"name": "ST",
+			"local_notes": "Lore: A Guardsman is an ordinary, healthy adult human — no augmetic or gene-therapy enhancement.\n\nDesign: ST 11 (+1 from the human baseline of 10), 10 pts/level (B15).",
+			"tags": [
+				"Attribute"
+			],
+			"base_points": 10,
+			"features": [
+				{
+					"type": "attribute_bonus",
+					"attribute": "st",
+					"amount": 1
+				}
+			]
+		},
+		{
+			"id": "tndEcTwhiqDIOGkb9",
+			"name": "DX",
+			"local_notes": "Lore: Basic training drills reflexes and weapon-handling hard; Imperial Guard doctrine (per Only War's calibration and countless Gaunt's Ghosts firefights) assumes competent, not exceptional, marksmanship from line infantry.\n\nDesign: DX 12 (+2 from baseline), 20 pts/level (B15). Same as the Guardsman.",
+			"tags": [
+				"Attribute"
+			],
+			"base_points": 40,
+			"features": [
+				{
+					"type": "attribute_bonus",
+					"attribute": "dx",
+					"amount": 2
+				}
+			]
+		},
+		{
+			"id": "tEapL_c68Qq3TVgJF",
+			"name": "IQ",
+			"local_notes": "Lore: Average intelligence; the Munitorum trains doctrine and obedience, not independent thought.\n\nDesign: IQ 10 (baseline), 20 pts/level (B15).",
+			"tags": [
+				"Attribute"
+			],
+			"base_points": 0
+		},
+		{
+			"id": "tHSlXn3vy9WuBREjz",
+			"name": "HT",
+			"local_notes": "Lore: Years of campaigning kill off the weak; a veteran sergeant is hardier than the average trooper.\n\nDesign: HT 13 (+3 from baseline), 10 pts/level (B14).",
+			"tags": [
+				"Attribute"
+			],
+			"base_points": 30,
+			"features": [
+				{
+					"type": "attribute_bonus",
+					"attribute": "ht",
+					"amount": 3
+				}
+			]
+		},
+		{
+			"id": "tQlq3he2ZrQx9vXjG",
+			"name": "Fit",
+			"reference": "B55",
+			"local_notes": "Lore: Route marches and drill leave most Guardsmen in decent physical condition.\n\nDesign: Basic Set Fit (B55), 5 points.",
+			"tags": [
+				"Advantage",
+				"Physical",
+				"Imperium"
+			],
+			"base_points": 5
+		},
+		{
+			"id": "tmUQZAPFVlpUh934J",
+			"name": "Combat Reflexes",
+			"reference": "B43",
+			"local_notes": "Lore: Drilled reactions under fire: Guard doctrine relies on soldiers who don't freeze at their first firefight, since most won't survive a second chance to learn.\n\nDesign: Basic Set Combat Reflexes (B43), 15 points.",
+			"tags": [
+				"Advantage",
+				"Mental",
+				"Imperium"
+			],
+			"base_points": 15
+		},
+		{
+			"id": "thptPkkarIWPCP35C",
+			"name": "Military Rank (Sergeant)",
+			"reference": "B29",
+			"local_notes": "Lore: A squad sergeant holds the lowest NCO rank above the troopers, commanding a ten-man squad - Codex Astra Militarum background.\n\nDesign: Basic Set Rank (B29), 5/level, 2 levels (10 points).",
+			"tags": [
+				"Advantage",
+				"Social",
+				"Imperium",
+				"Astra Militarum"
+			],
+			"points_per_level": 5,
+			"can_level": true,
+			"levels": 2
+		},
+		{
+			"id": "tXXHPalpJ4UCB-pBF",
+			"name": "Fanaticism (The God-Emperor)",
+			"reference": "B136",
+			"local_notes": "Lore: Optional, not baseline. Zealot regiments (Krieg's atonement culture, the Mordian Iron Guard) and individual fanatics have it; the typical Guardsman is pious but pragmatic. Enabling it adds -15 points.\n\nDesign: Basic Set Fanaticism (B136), flat -15, taken for \"the Emperor/the Imperial Creed\" as the group/ideal. Not leveled in Basic Set. The Guardsman template carries it disabled: enable it for zealot regiments or characters, and conscript, penal and feral troops leave it off.",
+			"tags": [
+				"Disadvantage",
+				"Mental",
+				"Imperium"
+			],
+			"base_points": -15,
+			"disabled": true
+		},
+		{
+			"id": "tyfglWYd8_sdqkVJV",
+			"name": "Duty (Astra Militarum)",
+			"reference": "B133",
+			"local_notes": "Lore: Guardsmen do not resign; the Munitorum owns their service until death, discharge, or reassignment. Extremely hazardous, almost always active — front-line Guard regiments are shown fighting until they are no longer regiments.\n\nDesign: Basic Set Duty (B133): almost-always-on-duty, hazardous, involuntary military service, at the top of the disadvantage's standard cost range.",
+			"tags": [
+				"Disadvantage",
+				"Social",
+				"Imperium",
+				"Astra Militarum"
+			],
+			"base_points": -15
+		},
+		{
+			"id": "t7n0NNZgrDgXNzi64",
+			"name": "Sense of Duty (Squadmates)",
+			"reference": "B153",
+			"local_notes": "Lore: Small combat units live and die by cohesion; abandoning a wounded comrade is the one thing that reliably gets a soldier shunned by their own side, per how Guard squads and Sororitas/Militarum Tempestus kill-teams are consistently written in Black Library fiction.\n\nDesign: Basic Set Sense of Duty (B153), small-group scope, -5.",
+			"tags": [
+				"Disadvantage",
+				"Mental",
+				"Imperium"
+			],
+			"base_points": -5
+		},
+		{
+			"id": "ttUOV3fAEMQkGj6uz",
+			"name": "Intolerance (Xenos)",
+			"reference": "B140",
+			"local_notes": "Lore: \"The alien is the enemy\" as baseline Imperial doctrine — not personal bigotry but state religion. Universal across Black Library fiction; only a minority of xenos-sympathetic characters (some Rogue Traders, Ordo Xenos radicals) lack it.\n\nDesign: Basic Set Intolerance (B140). Costed at -10, the \"very broad category\" end of the range the book allows, since \"all non-human sapient species\" is about as broad a target as Intolerance can name.",
+			"tags": [
+				"Disadvantage",
+				"Mental",
+				"Imperium"
+			],
+			"base_points": -10
+		},
+		{
+			"id": "t4RcONCBj2vSr3-P3",
+			"name": "Fatalistic About the Front",
+			"local_notes": "Lore: \"You're already dead, trooper, you just haven't stopped moving yet\" — Guard humour about their own life expectancy.\n\nDesign: Quirk (B9), roleplaying flag only.",
+			"tags": [
+				"Quirk",
+				"Imperium"
+			],
+			"base_points": -1
+		},
+		{
+			"id": "t89aHD5wEP9ZclmI7",
+			"name": "Prayers, Charms and Aquila Tokens",
+			"local_notes": "Lore: A trooper's private superstitions, luck-rituals and whispered prayers before a drop; observant piety, not zealotry.\n\nDesign: Quirk (B9), roleplaying flag only. Stands in for the baseline piety that Fanaticism no longer carries.",
+			"tags": [
+				"Quirk",
+				"Imperium"
+			],
+			"base_points": -1
+		},
+		{
+			"id": "tRErybcsBk8lVVFP_",
+			"name": "Griped About the Munitorum",
+			"local_notes": "Lore: Universal soldier's grumbling about rations, kit, and paperwork — never about the Emperor.\n\nDesign: Quirk (B9), roleplaying flag only.",
+			"tags": [
+				"Quirk",
+				"Imperium"
+			],
+			"base_points": -1
+		},
+		{
+			"id": "TWxKk94TF1uk4TtnV",
+			"name": "Hive World Origin",
+			"local_notes": "Lore: Born and raised inside a hive's vertical city-machine: gang territories, recycled air, and a horizon that is always a wall. Calibrated against Only War's Hive World home-world package (bonus to Fellowship/streetwise-type skills, poor grasp of open terrain) and against Necromunda's depiction throughout Black Library.\n\nDesign: A small optional container (net 0 points) rather than a full racial template: two Basic Set perks/quirks bought as a set, per framework.md's instruction to keep origin lenses lore-flavoured rather than mechanically heavy. Disabled by default in templates; the GM/player enables the one that fits.",
+			"tags": [
+				"Imperium"
+			],
+			"children": [
+				{
+					"id": "t74l7BSB-K7gMEprU",
+					"name": "Hive-Bred",
+					"local_notes": "Lore: A lifetime spent reading crowds, gangs, and hab-block politics.\n\nDesign: Perk (B9), +1 to Streetwise.",
+					"tags": [
+						"Perk",
+						"Imperium"
+					],
+					"base_points": 1,
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "Streetwise"
+							},
+							"amount": 1
+						}
+					]
+				},
+				{
+					"id": "tyVl1C9hcNh8ZmzM9",
+					"name": "Never Seen an Open Sky",
+					"local_notes": "Lore: Hivers are famously unsettled by true horizons and weather.\n\nDesign: Quirk (B9), roleplaying flag only, no mechanical effect.",
+					"tags": [
+						"Quirk",
+						"Imperium"
+					],
+					"base_points": -1
+				}
+			],
+			"disabled": true
+		},
+		{
+			"id": "T7n-9CRP2zWystTaP",
+			"name": "Death World Origin",
+			"local_notes": "Lore: Raised on a world that actively tries to kill its population — the Catachan/Krieg-adjacent archetype. Only War's Death World package (bonus to combat/survival skills, penalty to Fellowship from a lifetime of mistrust) is the calibration source.\n\nDesign: Net 0 points, two Basic Set perks/quirks. Disabled by default; GM/player enables it.",
+			"tags": [
+				"Imperium"
+			],
+			"children": [
+				{
+					"id": "t9cElEOww2WQM9mnQ",
+					"name": "Death World Instincts",
+					"local_notes": "Lore: A childhood spent not being eaten teaches attentiveness other worlds don't.\n\nDesign: Perk (B9), +1 to Survival.",
+					"tags": [
+						"Perk",
+						"Imperium"
+					],
+					"base_points": 1,
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "Survival"
+							},
+							"amount": 1
+						}
+					]
+				},
+				{
+					"id": "tBHlPEAQUWWcux4Uz",
+					"name": "Contempt for Soft Living",
+					"local_notes": "Lore: Hive worlds and their comforts look like weakness from a death world's perspective.\n\nDesign: Quirk (B9), roleplaying flag only.",
+					"tags": [
+						"Quirk",
+						"Imperium"
+					],
+					"base_points": -1
+				}
+			],
+			"disabled": true
+		},
+		{
+			"id": "T-BPr3w9kW_h2s20I",
+			"name": "Feral World Origin",
+			"local_notes": "Lore: A pre-industrial or tribal Imperial world (the kind that furnishes the Imperium with superstitious but ferocious Guard regiments and occasional Space Marine recruits, as with Fenris or Chogoris in Astartes lore). Only War's Feral World package (combat/melee bonus, Tech-Use penalty) is the calibration source.\n\nDesign: Net 0 points, two Basic Set perks/quirks. Disabled by default; GM/player enables it.",
+			"tags": [
+				"Imperium"
+			],
+			"children": [
+				{
+					"id": "tO1VEfTCp6k1LEBRq",
+					"name": "Warrior's Upbringing",
+					"local_notes": "Lore: Trained from childhood to fight with whatever the tribe carries.\n\nDesign: Perk (B9), +1 to Spear (or the tribe's usual melee weapon skill; swap the key to match).",
+					"tags": [
+						"Perk",
+						"Imperium"
+					],
+					"base_points": 1,
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "Spear"
+							},
+							"amount": 1
+						}
+					]
+				},
+				{
+					"id": "tUE6mpJKYHmfJqLKu",
+					"name": "Machine-Spirits Are Sorcery",
+					"local_notes": "Lore: Reflexive unease around advanced technology, treated as witchcraft by tribal custom.\n\nDesign: Quirk (B9), roleplaying flag only.",
+					"tags": [
+						"Quirk",
+						"Imperium"
+					],
+					"base_points": -1
+				}
+			],
+			"disabled": true
+		},
+		{
+			"id": "TQ19Bek_DZSKPTVEw",
+			"name": "Forge World Origin",
+			"local_notes": "Lore: Raised in a Mechanicus-dominated manufactorum world, among servitors and the liturgies of the Cult Mechanicus from birth, whether or not the character ever takes vows to the Priesthood.\n\nDesign: Net 0 points, two Basic Set perks/quirks. Disabled by default; GM/player enables it.",
+			"tags": [
+				"Imperium",
+				"Adepta Mechanicus"
+			],
+			"children": [
+				{
+					"id": "tDE1aIruws-xfUOu8",
+					"name": "Forge-Born",
+					"local_notes": "Lore: Grew up around machines and the rites that keep them running.\n\nDesign: Perk (B9), +1 to Mechanic (any).",
+					"tags": [
+						"Perk",
+						"Imperium"
+					],
+					"base_points": 1,
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "Mechanic"
+							},
+							"amount": 1
+						}
+					]
+				},
+				{
+					"id": "tqcpu94rSrDjsRuxM",
+					"name": "Uneasy Far From the Machine-God's Halls",
+					"local_notes": "Lore: Forge-world natives find purely organic, unindustrialised places subtly wrong.\n\nDesign: Quirk (B9), roleplaying flag only.",
+					"tags": [
+						"Quirk",
+						"Imperium"
+					],
+					"base_points": -1
+				}
+			],
+			"disabled": true
+		},
+		{
+			"id": "Te8NdoC1mg1_55F2h",
+			"name": "Agri World Origin",
+			"local_notes": "Lore: Raised on one of the vast farming worlds that feed the hives — wide horizons, hard physical labour, and a much smaller population than a hive world's.\n\nDesign: Net 0 points, two Basic Set perks/quirks. Disabled by default; GM/player enables it.",
+			"tags": [
+				"Imperium"
+			],
+			"children": [
+				{
+					"id": "tmZZ4Ptd5_oXNtFnC",
+					"name": "Agri-Born",
+					"local_notes": "Lore: A working knowledge of land, weather, and beasts of burden.\n\nDesign: Perk (B9), +1 to Survival (Plains) or the local terrain equivalent.",
+					"tags": [
+						"Perk",
+						"Imperium"
+					],
+					"base_points": 1,
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "Survival"
+							},
+							"amount": 1,
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Plains"
+							}
+						}
+					]
+				},
+				{
+					"id": "tjzaFB5eUNheOFUaN",
+					"name": "City Naif",
+					"local_notes": "Lore: Hive-city customs and crowds are alien and overwhelming at first.\n\nDesign: Quirk (B9), roleplaying flag only.",
+					"tags": [
+						"Quirk",
+						"Imperium"
+					],
+					"base_points": -1
+				}
+			],
+			"disabled": true
+		},
+		{
+			"id": "T38mjd4DaPsz8WCLm",
+			"name": "Shrine World Origin",
+			"local_notes": "Lore: Raised on a world that exists to host a major Imperial shrine or relic — a childhood steeped in pilgrimage traffic and daily liturgy.\n\nDesign: Net 0 points, two Basic Set perks/quirks. Disabled by default; GM/player enables it.",
+			"tags": [
+				"Imperium",
+				"Ecclesiarchy"
+			],
+			"children": [
+				{
+					"id": "toigQfGDC94Hxmaop",
+					"name": "Shrine-Born",
+					"local_notes": "Lore: Liturgy absorbed since infancy from the endless pilgrim traffic.\n\nDesign: Perk (B9), +1 to Theology (Imperial Creed).",
+					"tags": [
+						"Perk",
+						"Imperium"
+					],
+					"base_points": 1,
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "Theology"
+							},
+							"amount": 1,
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Imperial Creed"
+							}
+						}
+					]
+				},
+				{
+					"id": "toE6LY_YlLciSNAsc",
+					"name": "Scandalised by Impiety",
+					"local_notes": "Lore: Open blasphemy or casual disregard for ritual visibly unsettles a shrine-world native.\n\nDesign: Quirk (B9), roleplaying flag only.",
+					"tags": [
+						"Quirk",
+						"Imperium"
+					],
+					"base_points": -1
+				}
+			],
+			"disabled": true
+		},
+		{
+			"id": "T9apWZam8lU6078-t",
+			"name": "Void-Born Origin",
+			"local_notes": "Lore: Born aboard a voidship, space station, or Rogue Trader vessel and never planetside until adulthood, if ever — a background Rogue Trader-line fiction and Only War's Void Born package both use, with the same trade-off: comfortable in zero-g and cramped spaces, unsettled by open planetary horizons.\n\nDesign: Net 0 points, two Basic Set perks/quirks. Disabled by default; GM/player enables it.",
+			"tags": [
+				"Imperium"
+			],
+			"children": [
+				{
+					"id": "tnmQ7JMVRnoIH199A",
+					"name": "Void-Born",
+					"local_notes": "Lore: A lifetime in zero-g and vacuum-rated corridors.\n\nDesign: Perk (B9), +1 to Free Fall.",
+					"tags": [
+						"Perk",
+						"Imperium"
+					],
+					"base_points": 1,
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "Free Fall"
+							},
+							"amount": 1
+						}
+					]
+				},
+				{
+					"id": "tDK8XccWHLVfwrsKt",
+					"name": "Planetsick",
+					"local_notes": "Lore: Open sky and true gravity wells feel wrong after a life spent in the void.\n\nDesign: Quirk (B9), roleplaying flag only.",
+					"tags": [
+						"Quirk",
+						"Imperium"
+					],
+					"base_points": -1
+				}
+			],
+			"disabled": true
+		},
+		{
+			"id": "TXJIfJvLagbOWIDQY",
+			"name": "Regiment: Cadian",
+			"local_notes": "Lore: Cadia's entire culture was built around producing disciplined line infantry; \"Cadian Shock Troops\" are the Guard's iconic drilled regulars in Black Library fiction and codex background alike. Cadia fell in the 13th Black Crusade (999.M41), so surviving Cadian regiments are regiments without a homeworld who carry its memory.\n\nDesign: Net 0 points, per-regiment flavor lens (see this file's `notes`).",
+			"tags": [
+				"Imperium",
+				"Astra Militarum"
+			],
+			"children": [
+				{
+					"id": "tWa3Mn6hQWi_pv03a",
+					"name": "Cadian Drill",
+					"local_notes": "Lore: Cadian training is famous for relentless, standardised drill.\n\nDesign: Perk (B9), +1 to Soldier.",
+					"tags": [
+						"Perk",
+						"Imperium"
+					],
+					"base_points": 1,
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "Soldier"
+							},
+							"amount": 1
+						}
+					]
+				},
+				{
+					"id": "tw-3QwisNuEo91Vrd",
+					"name": "Cadian Pride",
+					"local_notes": "Lore: A Cadian will not yield ground and will not admit that Cadia is gone; \"Cadia stands\" is both a boast and a refusal.\n\nDesign: Quirk (B9), roleplaying flag only.",
+					"tags": [
+						"Quirk",
+						"Imperium"
+					],
+					"base_points": -1
+				}
+			],
+			"disabled": true
+		},
+		{
+			"id": "TXjVZYpRN9GRrhywK",
+			"name": "Regiment: Catachan",
+			"local_notes": "Lore: Catachan \"Jungle Fighters\" are raised on one of the galaxy's most lethal death worlds; codex background and Catachan-focused Imperial Armour and Black Library material play them as jungle-warfare specialists who look down on parade-ground soldiering.\n\nDesign: Net 0 points, per-regiment flavor lens (see this file's `notes`).",
+			"tags": [
+				"Imperium",
+				"Astra Militarum"
+			],
+			"children": [
+				{
+					"id": "t1L6WkJtlDJ20WTbs",
+					"name": "Catachan Jungle Craft",
+					"local_notes": "Lore: A Catachan childhood is basic jungle-survival training.\n\nDesign: Perk (B9), +1 to Survival (Jungle).",
+					"tags": [
+						"Perk",
+						"Imperium"
+					],
+					"base_points": 1,
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "Survival"
+							},
+							"amount": 1,
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Jungle"
+							}
+						}
+					]
+				},
+				{
+					"id": "t0nqkJcJyDjvhM3ct",
+					"name": "Contempt for Parade Ground Discipline",
+					"local_notes": "Lore: Catachans are famously unimpressed by regiments that soldier by the book instead of by results.\n\nDesign: Quirk (B9), roleplaying flag only.",
+					"tags": [
+						"Quirk",
+						"Imperium"
+					],
+					"base_points": -1
+				}
+			],
+			"disabled": true
+		},
+		{
+			"id": "TQB3GdcTCGW2UyqaB",
+			"name": "Regiment: Death Korps of Krieg",
+			"local_notes": "Lore: Krieg regiments are raised from a world still atoning, in its own telling, for a civil war against the Imperium; codex background and Forge World's Krieg material depict them as gas-masked, fatalistic siege specialists who expect to die and are, if anything, eager to.\n\nDesign: Net 0 points, per-regiment flavor lens (see this file's `notes`).",
+			"tags": [
+				"Imperium",
+				"Astra Militarum"
+			],
+			"children": [
+				{
+					"id": "tghxZ8W0EkHP2o6TQ",
+					"name": "Siege Discipline",
+					"local_notes": "Lore: Krieg doctrine is built around trench warfare, sapping, and siege engineering.\n\nDesign: Perk (B9), +1 to Demolition.",
+					"tags": [
+						"Perk",
+						"Imperium"
+					],
+					"base_points": 1,
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "Demolition"
+							},
+							"amount": 1
+						}
+					]
+				},
+				{
+					"id": "td64Yw3QZmuIDQ9Wa",
+					"name": "Death Is Not to Be Feared",
+					"local_notes": "Lore: Krieg troopers are written as expecting, even welcoming, death in the Emperor's service.\n\nDesign: Quirk (B9), roleplaying flag only.",
+					"tags": [
+						"Quirk",
+						"Imperium"
+					],
+					"base_points": -1
+				}
+			],
+			"disabled": true
+		},
+		{
+			"id": "TsqcUB31onZxwGVC-",
+			"name": "Regiment: Valhallan",
+			"local_notes": "Lore: Valhallan regiments (Ice Warriors) come from a frozen world and are played in codex background as tenacious, grimly cheerful cold-climate infantry, at their best in the snow and less happy elsewhere.\n\nDesign: Net 0 points, per-regiment flavor lens (see this file's `notes`).",
+			"tags": [
+				"Imperium",
+				"Astra Militarum"
+			],
+			"children": [
+				{
+					"id": "ttA833XqNyfs3M0_B",
+					"name": "Cold-Worlder",
+					"local_notes": "Lore: Valhalla's climate makes cold-weather survival second nature.\n\nDesign: Perk (B9), +1 to Survival (Arctic).",
+					"tags": [
+						"Perk",
+						"Imperium"
+					],
+					"base_points": 1,
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "Survival"
+							},
+							"amount": 1,
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Arctic"
+							}
+						}
+					]
+				},
+				{
+					"id": "tMvxKBaNufjTkHFs8",
+					"name": "Resents Warm Postings",
+					"local_notes": "Lore: The flip side of a cold-worlder's training is discomfort and short temper in heat and humidity; Valhallans are written as glad to see a frozen front and sour about a warm one.\n\nDesign: Quirk (B9), roleplaying flag only.",
+					"tags": [
+						"Quirk",
+						"Imperium"
+					],
+					"base_points": -1
+				}
+			],
+			"disabled": true
+		},
+		{
+			"id": "TYVriLs1sCkFgfNq0",
+			"name": "Regiment: Tallarn",
+			"local_notes": "Lore: Tallarn regiments come from a desert world and are depicted (codex background, Forge World's Tallarn Desert Raiders material) as mobile, mounted/motorised raiders skilled at desert warfare.\n\nDesign: Net 0 points, per-regiment flavor lens (see this file's `notes`).",
+			"tags": [
+				"Imperium",
+				"Astra Militarum"
+			],
+			"children": [
+				{
+					"id": "tR5C0eVVptLJn5i1t",
+					"name": "Desert-Born",
+					"local_notes": "Lore: A Tallarn upbringing is a desert-survival apprenticeship.\n\nDesign: Perk (B9), +1 to Survival (Desert).",
+					"tags": [
+						"Perk",
+						"Imperium"
+					],
+					"base_points": 1,
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "Survival"
+							},
+							"amount": 1,
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Desert"
+							}
+						}
+					]
+				},
+				{
+					"id": "tIKvyK6BqmcyaZI6I",
+					"name": "Distrust of the Green and Wet",
+					"local_notes": "Lore: A desert-worlder's unease with jungle and swamp terrain, played for flavor in Tallarn background material.\n\nDesign: Quirk (B9), roleplaying flag only.",
+					"tags": [
+						"Quirk",
+						"Imperium"
+					],
+					"base_points": -1
+				}
+			],
+			"disabled": true
+		},
+		{
+			"id": "TlwVHYojswOWCKKbz",
+			"name": "Regiment: Mordian",
+			"local_notes": "Lore: Mordian Iron Guard are the Guard's parade-ground archetype: rigid drill, immaculate uniforms, standing and firing in the open rather than taking cover — codex background plays this as almost suicidal discipline.\n\nDesign: Net 0 points, per-regiment flavor lens (see this file's `notes`).",
+			"tags": [
+				"Imperium",
+				"Astra Militarum"
+			],
+			"children": [
+				{
+					"id": "t60JVH82xJLyl7qe8",
+					"name": "Iron Discipline",
+					"local_notes": "Lore: Mordian regimental culture is built entirely around drill and protocol.\n\nDesign: Perk (B9), +1 to Savoir-Faire (Military).",
+					"tags": [
+						"Perk",
+						"Imperium"
+					],
+					"base_points": 1,
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "Savoir-Faire"
+							},
+							"amount": 1,
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Military"
+							}
+						}
+					]
+				},
+				{
+					"id": "tPGPrYrlqjZ_Ni4Xt",
+					"name": "Parade-Ground Rigidity",
+					"local_notes": "Lore: Mordians are written as reluctant to break formation even when cover is obviously the smarter move.\n\nDesign: Quirk (B9), roleplaying flag only.",
+					"tags": [
+						"Quirk",
+						"Imperium"
+					],
+					"base_points": -1
+				}
+			],
+			"disabled": true
+		},
+		{
+			"id": "TZbIi_XvBDn3chjPD",
+			"name": "Regiment: Vostroyan",
+			"local_notes": "Lore: Vostroyan Firstborn regiments carry ornate heirloom lasguns, long- barrelled and family-maintained (ordinary lasgun damage, not a sniper's long-las), and a feudal honor culture; codex background emphasizes family lineages of service and elaborate uniforms. Vostroya is a forge world, so the Forge World Origin lens pairs well.\n\nDesign: Net 0 points, per-regiment flavor lens (see this file's `notes`).",
+			"tags": [
+				"Imperium",
+				"Astra Militarum"
+			],
+			"children": [
+				{
+					"id": "tmfwIHC2jYwJIQK0w",
+					"name": "Firstborn Heraldry",
+					"local_notes": "Lore: Vostroyan units track lineage and campaign honors obsessively.\n\nDesign: Perk (B9), +1 to Heraldry (Regimental).",
+					"tags": [
+						"Perk",
+						"Imperium"
+					],
+					"base_points": 1,
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "Heraldry"
+							},
+							"amount": 1,
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Regimental"
+							}
+						}
+					]
+				},
+				{
+					"id": "tuUFB9P6sv4cvQGMI",
+					"name": "Family Honor",
+					"local_notes": "Lore: A Vostroyan Firstborn's service is tied to a specific family lineage's standing.\n\nDesign: Quirk (B9), roleplaying flag only.",
+					"tags": [
+						"Quirk",
+						"Imperium"
+					],
+					"base_points": -1
+				}
+			],
+			"disabled": true
+		},
+		{
+			"id": "Tiy2kZcEVJOOH9u5v",
+			"name": "Regiment: Armageddon Steel Legion",
+			"local_notes": "Lore: Steel Legion regiments come from a hive/industrial world that has fought three Ork Waaaghs! in its recorded history (the Armageddon campaigns are one of the most-covered Black Library war narratives); played as gas-masked, tank-supported mechanized infantry.\n\nDesign: Net 0 points, per-regiment flavor lens (see this file's `notes`).",
+			"tags": [
+				"Imperium",
+				"Astra Militarum"
+			],
+			"children": [
+				{
+					"id": "tYhNvP8slfg-wHq0C",
+					"name": "Armor Crew Cross-Training",
+					"local_notes": "Lore: Steel Legion infantry are closely integrated with the world's armor regiments.\n\nDesign: Perk (B9), +1 to Driving (Tracked).",
+					"tags": [
+						"Perk",
+						"Imperium"
+					],
+					"base_points": 1,
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "Driving"
+							},
+							"amount": 1,
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Tracked"
+							}
+						}
+					]
+				},
+				{
+					"id": "tm04mi1DcQg4iOmIe",
+					"name": "Grudge Against Orks",
+					"local_notes": "Lore: Three Ork invasions of Armageddon have left the world's regiments with a very specific hatred.\n\nDesign: Quirk (B9), roleplaying flag only.",
+					"tags": [
+						"Quirk",
+						"Imperium"
+					],
+					"base_points": -1
+				}
+			],
+			"disabled": true
+		},
+		{
+			"id": "T0ZaOJ1dUqNij9GMN",
+			"name": "Regiment: Tanith (First-and-Only)",
+			"local_notes": "Lore: The Tanith First-and-Only, the \"Ghosts\" of Dan Abnett's Gaunt's Ghosts series, are light infantry raised for stealth and woodcraft whose home world was destroyed the day they were raised — they are the single most detailed Guard regiment in Black Library fiction.\n\nDesign: Net 0 points, per-regiment flavor lens (see this file's `notes`).",
+			"tags": [
+				"Imperium",
+				"Astra Militarum"
+			],
+			"children": [
+				{
+					"id": "tBEgYlZ_K2CgZgVhy",
+					"name": "Tanith Woodcraft",
+					"local_notes": "Lore: Tanith light infantry doctrine is built on scouting and silent movement.\n\nDesign: Perk (B9), +1 to Stealth.",
+					"tags": [
+						"Perk",
+						"Imperium"
+					],
+					"base_points": 1,
+					"features": [
+						{
+							"type": "skill_bonus",
+							"selection_type": "skills_with_name",
+							"name": {
+								"compare": "is",
+								"qualifier": "Stealth"
+							},
+							"amount": 1
+						}
+					]
+				},
+				{
+					"id": "tPMWF0q14VgBVIhyt",
+					"name": "Homesick for an Ash Cloud",
+					"local_notes": "Lore: Tanith is a dead world; the Ghosts are famously a regiment with no home to return to.\n\nDesign: Quirk (B9), roleplaying flag only.",
+					"tags": [
+						"Quirk",
+						"Imperium"
+					],
+					"base_points": -1
+				}
+			],
+			"disabled": true
+		}
+	],
+	"skills": [
+		{
+			"id": "s_vsFHwhBTNaop6ME",
+			"name": "Beam Weapons",
+			"local_notes": "Lore: The lasgun is the Guard's universal issue weapon. Per framework.md's weapon-skill table, las weapons use Beam Weapons, not Guns.\n\nDesign: DX+3 (15) for 8 points on an Easy skill (B170).",
+			"tags": [
+				"Imperium",
+				"Astra Militarum"
+			],
+			"specialization": "Rifle",
+			"difficulty": "dx/e",
+			"points": 8
+		},
+		{
+			"id": "sk9ob0KujlOcs0TIX",
+			"name": "Beam Weapons",
+			"local_notes": "Lore: The laspistol is the sergeant's sidearm of choice, kept for close quarters.\n\nDesign: DX+2 (14) for 4 points, Easy.",
+			"tags": [
+				"Imperium",
+				"Astra Militarum"
+			],
+			"specialization": "Pistol",
+			"difficulty": "dx/e",
+			"points": 4
+		},
+		{
+			"id": "sfP2kDqyaR6Qa0_J9",
+			"name": "Guns",
+			"local_notes": "Lore: Launcher-fed frag and krak grenades only. Hand-thrown grenades use Throwing (below).\n\nDesign: DX+0 (12) for 1 point, Easy.",
+			"tags": [
+				"Imperium",
+				"Astra Militarum"
+			],
+			"specialization": "Grenade Launcher",
+			"difficulty": "dx/e",
+			"points": 1
+		},
+		{
+			"id": "sRCESyJP3ie5WB5sO",
+			"name": "Throwing",
+			"reference": "B226",
+			"local_notes": "Lore: Hand-thrown frag and krak grenades, which use Throwing rather than Guns (Grenade Launcher).\n\nDesign: DX+0 (12) for 2 points, Average (B226).",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "dx/a",
+			"points": 2
+		},
+		{
+			"id": "sskdxtlbGfPYz1oO-",
+			"name": "Broadsword",
+			"local_notes": "Lore: The chainsword is the NCO's mark of office and a close-assault weapon; per the weapon-skill table it uses Broadsword.\n\nDesign: DX+1 (13) for 4 points, Average (B208).",
+			"tags": [
+				"Imperium",
+				"Astra Militarum"
+			],
+			"difficulty": "dx/a",
+			"points": 4
+		},
+		{
+			"id": "sFStiALGDiCKyLdRA",
+			"name": "Brawling",
+			"local_notes": "Lore: Bayonet and rifle-butt fighting when las-cells run dry.\n\nDesign: DX+1 (13) for 2 points, Easy.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "dx/e",
+			"points": 2
+		},
+		{
+			"id": "sbPKEcQiw7uZt8B7J",
+			"name": "Forced Entry",
+			"local_notes": "Lore: Breaching doors and barricades under fire.\n\nDesign: DX+0 (12) for 1 point, Easy.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "dx/e",
+			"points": 1
+		},
+		{
+			"id": "sEW7Tc5iZQKkYUmVT",
+			"name": "Stealth",
+			"local_notes": "Lore: Basic fieldcraft; not a scout's level of skill, but enough to not be the reason a patrol gets spotted.\n\nDesign: DX+0 (12) for 2 points, Average.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "dx/a",
+			"points": 2
+		},
+		{
+			"id": "sw73GEvuFGpJniDEm",
+			"name": "Camouflage",
+			"local_notes": "Lore: Digging in and breaking up a silhouette, drilled into every trooper.\n\nDesign: IQ+0 (10) for 1 point, Easy.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "iq/e",
+			"points": 1
+		},
+		{
+			"id": "s_Aqzlnjd3Cm96etN",
+			"name": "Survival",
+			"local_notes": "Lore: Field survival in whatever terrain the character's home world or postings favor; pick a specialization.\n\nDesign: Per+0 (10) for 2 points, Average.",
+			"tags": [
+				"Imperium"
+			],
+			"specialization": "(choose home terrain)",
+			"difficulty": "per/a",
+			"points": 2
+		},
+		{
+			"id": "sX0Gzj2G0J2Ez06Yr",
+			"name": "First Aid",
+			"local_notes": "Lore: Basic combat first aid; the Munitorum's medicae corps handles the rest.\n\nDesign: IQ+0 (10) for 1 point, Easy.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "iq/e",
+			"points": 1
+		},
+		{
+			"id": "sC8WHXxdqEAJu9x66",
+			"name": "Soldier",
+			"local_notes": "Lore: General military knowledge — procedure, rank structure, logistics.\n\nDesign: IQ+1 (11) for 4 points, Average.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "iq/a",
+			"points": 4
+		},
+		{
+			"id": "s6n9XTavXmh3j3QFE",
+			"name": "Tactics",
+			"local_notes": "Lore: Squad- and platoon-level small-unit tactics; a veteran sergeant reads a fight and positions his squad accordingly.\n\nDesign: IQ+2 (12) for 12 points, Hard.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "iq/h",
+			"points": 12
+		},
+		{
+			"id": "skEEQMrzotyQz2nU8",
+			"name": "Leadership",
+			"reference": "B204",
+			"local_notes": "Lore: Keeping a ten-man squad advancing under fire is the sergeant's whole job - Codex Astra Militarum background.\n\nDesign: IQ+3 (13) for 12 points, Average (B204).",
+			"tags": [
+				"Imperium",
+				"Astra Militarum"
+			],
+			"difficulty": "iq/a",
+			"points": 12
+		},
+		{
+			"id": "seXjkxeQX6BFOM7u4",
+			"name": "Navigation",
+			"local_notes": "Lore: Basic land navigation without vehicle or void instruments.\n\nDesign: IQ-1 (9) for 1 point, Average.",
+			"tags": [
+				"Imperium"
+			],
+			"specialization": "Land",
+			"difficulty": "iq/a",
+			"points": 1
+		},
+		{
+			"id": "sGi_z9V8IYmknLAdH",
+			"name": "Area Knowledge",
+			"local_notes": "Lore: Knowledge of the character's own home world or hive.\n\nDesign: IQ+0 (10) for 1 point, Easy.",
+			"tags": [
+				"Imperium"
+			],
+			"specialization": "(home world)",
+			"difficulty": "iq/e",
+			"points": 1
+		},
+		{
+			"id": "siyrqJ66C2TEOFLkm",
+			"name": "Current Affairs",
+			"local_notes": "Lore: What passes for Imperium-wide news; see Imperium/Skills/Imperial Skills.skl.\n\nDesign: IQ+0 (10) for 1 point, Easy.",
+			"tags": [
+				"Imperium"
+			],
+			"specialization": "Imperium",
+			"difficulty": "iq/e",
+			"points": 1
+		},
+		{
+			"id": "sl7MOskm-IKthbcuQ",
+			"name": "Savoir-Faire",
+			"local_notes": "Lore: Basic military etiquette and chain-of-command manners.\n\nDesign: IQ+0 (10) for 1 point, Easy.",
+			"tags": [
+				"Imperium"
+			],
+			"specialization": "Military",
+			"difficulty": "iq/e",
+			"points": 1
+		},
+		{
+			"id": "sF2OVDylQY2c_WPeg",
+			"name": "Heraldry",
+			"local_notes": "Lore: Recognising Guard regimental colours and honorifics; see Imperium/Skills/Imperial Skills.skl.\n\nDesign: IQ-1 (9) for 1 point, Average.",
+			"tags": [
+				"Imperium",
+				"Astra Militarum"
+			],
+			"specialization": "Regimental",
+			"difficulty": "iq/a",
+			"points": 1
+		},
+		{
+			"id": "sev73i7Dr3qH6ttuN",
+			"name": "Intimidation",
+			"local_notes": "Lore: A sergeant's bellow and glare keep frightened troopers in the line.\n\nDesign: Will+1 (11) for 4 points, Average.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "will/a",
+			"points": 4
+		},
+		{
+			"id": "sqxxW5CghXwTvEHmC",
+			"name": "Gambling",
+			"local_notes": "Lore: Dice and cards are near-universal Guard barracks pastimes.\n\nDesign: IQ-1 (9) for 1 point, Average.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "iq/a",
+			"points": 1
+		},
+		{
+			"id": "smLKmrD0zwkVKQcFf",
+			"name": "Theology",
+			"local_notes": "Lore: The basic catechisms every Guardsman is drilled in.\n\nDesign: IQ-2 (8) for 1 point, Hard.",
+			"tags": [
+				"Imperium"
+			],
+			"specialization": "Imperial Creed",
+			"difficulty": "iq/h",
+			"points": 1
+		},
+		{
+			"id": "sY5eXsRpTy-tN2MwY",
+			"name": "Jumping",
+			"local_notes": "Lore: Basic obstacle-course fitness.\n\nDesign: DX+0 (12) for 1 point, Easy.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "dx/e",
+			"points": 1
+		},
+		{
+			"id": "sVYC7JBLKg4j4Wl9u",
+			"name": "Climbing",
+			"local_notes": "Lore: Basic obstacle-course and urban-assault fitness.\n\nDesign: DX-1 (11) for 1 point, Average.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "dx/a",
+			"points": 1
+		},
+		{
+			"id": "s9-OQ4Ye4E1AcnY_A",
+			"name": "Running",
+			"local_notes": "Lore: Route-march conditioning.\n\nDesign: HT-1 (12) for 1 point, Average.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "ht/a",
+			"points": 1
+		},
+		{
+			"id": "scmY2Ajxd2w-dL08g",
+			"name": "Hiking",
+			"local_notes": "Lore: Route-march conditioning.\n\nDesign: HT-1 (12) for 1 point, Average.",
+			"tags": [
+				"Imperium"
+			],
+			"difficulty": "ht/a",
+			"points": 1
+		}
+	],
+	"equipment": []
+}

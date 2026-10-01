@@ -1,0 +1,67 @@
+# Lore squads for the combat simulator: each is a set of member units that deploy side by side, take their
+# casualty Fright Checks together and follow one leader (Leadership, B204). A member names a template and a
+# count, and may override that template's default loadout (data/sim/loadouts.yaml) field by field: armour,
+# ranged, melee, grenades, knife, stance. Flags: leader (gives orders), vox (carries the leader's orders to the
+# whole squad), commissar (summary execution, a house rule; set for any Commissar template). skills: levels a
+# specialist has trained his weapon's skill to, where the template only defaults it (a heavy-weapon gunner at
+# his line skill, e.g. a Battle-Brother's Gunner (Rockets) at his Guns (Rifle) 20).
+#   short: the name the squad's members are logged under ("Guard Squad Sergeant #1").
+Astra Militarum Infantry Squad:
+  short: Guard Squad
+  note: "Ten Cadian-pattern troopers: sergeant with laspistol and chainsword, vox-caster, a flamer, a heavy bolter team (gunner and loader) and five lasguns (Codex: Astra Militarum)."
+  members:
+    - {role: Sergeant, template: Astra Militarum Sergeant, count: 1, leader: true, ranged: {item: "Laspistol, Common Pattern", mode: "Standard"}, melee: {item: "Chainsword", mode: "Swing"}}
+    - {role: Vox-caster, template: Astra Militarum Guardsman, count: 1, vox: true}
+    - {role: Flamer, template: Astra Militarum Guardsman, count: 1, ranged: {item: "Flamer", mode: "Cone attack (5 yards)"}, stance: advance, skills: {"Liquid Projector (Flamethrower)": 13}}
+    - {role: Heavy Bolter, template: Astra Militarum Guardsman, count: 1, ranged: {item: "Heavy Bolter", mode: "Standard bolt"}, stance: shoot, grenades: [], skills: {"Gunner (Machine Gun)": 13}}
+    - {role: Loader, template: Astra Militarum Guardsman, count: 1, stance: shoot}
+    - {role: Guardsman, template: Astra Militarum Guardsman, count: 5}
+Astra Militarum Infantry Squad with Commissar:
+  short: Commissar's Squad
+  note: "The infantry squad with a Commissar attached: he executes the first man to run and keeps the rest in the fight (a house rule built on Intimidation, B202)."
+  members:
+    - {role: Commissar, template: Commissar, count: 1, commissar: true}
+    - {role: Sergeant, template: Astra Militarum Sergeant, count: 1, leader: true, ranged: {item: "Laspistol, Common Pattern", mode: "Standard"}, melee: {item: "Chainsword", mode: "Swing"}}
+    - {role: Vox-caster, template: Astra Militarum Guardsman, count: 1, vox: true}
+    - {role: Flamer, template: Astra Militarum Guardsman, count: 1, ranged: {item: "Flamer", mode: "Cone attack (5 yards)"}, stance: advance, skills: {"Liquid Projector (Flamethrower)": 13}}
+    - {role: Heavy Bolter, template: Astra Militarum Guardsman, count: 1, ranged: {item: "Heavy Bolter", mode: "Standard bolt"}, stance: shoot, grenades: [], skills: {"Gunner (Machine Gun)": 13}}
+    - {role: Loader, template: Astra Militarum Guardsman, count: 1, stance: shoot}
+    - {role: Guardsman, template: Astra Militarum Guardsman, count: 5}
+Astartes Tactical Squad:
+  short: Tactical Squad
+  note: "Ten Battle-Brothers: sergeant with bolt pistol and chainsword, a flamer, a missile launcher (krak) and seven boltguns (Codex: Space Marines)."
+  members:
+    - {role: Sergeant, template: Astartes Battle-Brother, count: 1, leader: true, ranged: {item: "Bolt Pistol, Godwyn-De'az Pattern", mode: "Standard bolt"}, melee: {item: "Chainsword, Astartes Pattern", mode: "Swing"}}
+    - {role: Flamer, template: Astartes Battle-Brother, count: 1, ranged: {item: "Flamer", mode: "Cone attack (5 yards)"}, skills: {"Liquid Projector (Flamethrower)": 20}}
+    - {role: Missile Launcher, template: Astartes Battle-Brother, count: 1, ranged: {item: "Missile Launcher", mode: "Krak missile"}, stance: shoot, skills: {"Gunner (Rockets)": 20}}
+    - {role: Battle-Brother, template: Astartes Battle-Brother, count: 7}
+Chaos Space Marine Squad:
+  short: Chaos Squad
+  note: "Ten Legionaries: an Aspiring Champion with power sword and bolt pistol, a plasma gun, a heavy bolter and seven boltguns (Codex: Chaos Space Marines)."
+  members:
+    - {role: Aspiring Champion, template: Chaos Space Marine, count: 1, leader: true, ranged: {item: "Bolt Pistol, Godwyn-De'az Pattern", mode: "Standard bolt"}, melee: {item: "Power Sword, Astartes Pattern", mode: "Field on"}}
+    - {role: Plasma Gun, template: Chaos Space Marine, count: 1, ranged: {item: "Plasma Gun", mode: "Standard"}, skills: {"Beam Weapons (Rifle)": 22}}
+    - {role: Heavy Bolter, template: Chaos Space Marine, count: 1, ranged: {item: "Heavy Bolter", mode: "Standard bolt"}, stance: shoot, skills: {"Gunner (Machine Gun)": 22}}
+    - {role: Legionary, template: Chaos Space Marine, count: 7}
+Chaos Cultist Mob:
+  short: Cultists
+  note: "A Cultist Champion leading nine cultists, one with a flamer (Codex: Chaos Space Marines)."
+  members:
+    - {role: Champion, template: Chaos Cultist Champion, count: 1, leader: true, ranged: {item: "Autopistol", mode: "Standard (ball)"}, melee: {item: "Chainsword", mode: "Swing"}}
+    - {role: Flamer, template: Chaos Cultist, count: 1, ranged: {item: "Flamer", mode: "Cone attack (5 yards)"}, skills: {"Liquid Projector (Flamethrower)": 10}}
+    - {role: Cultist, template: Chaos Cultist, count: 8}
+Ork Boyz Mob:
+  short: Boyz
+  note: "A Nob leading twenty Boyz, with a big shoota and a rokkit launcha among them (Codex: Orks)."
+  members:
+    - {role: Nob, template: Ork Nob, count: 1, leader: true, melee: {item: "Big Choppa", mode: "Swing, two-handed"}}
+    - {role: Big Shoota, template: Ork Boy, count: 1, ranged: {item: "Big Shoota", mode: "Dakka (full auto)"}, stance: shoot, skills: {"Guns (Light Machine Gun)": 11}}
+    - {role: Rokkit, template: Ork Boy, count: 1, ranged: {item: "Rokkit Launcha", mode: "Standard"}, stance: shoot, skills: {"Gunner (Rockets)": 11}}
+    - {role: Boy, template: Ork Boy, count: 18}
+Fire Warrior Strike Team:
+  short: Strike Team
+  note: "A Shas'ui leading nine Fire Warriors, with two gun drones (Codex: T'au Empire)."
+  members:
+    - {role: Shas'ui, template: "Fire Warrior Veteran (Shas'ui)", count: 1, leader: true}
+    - {role: Fire Warrior, template: "Fire Warrior (Shas'la)", count: 9}
+    - {role: Gun Drone, template: Gun Drone, count: 2}
