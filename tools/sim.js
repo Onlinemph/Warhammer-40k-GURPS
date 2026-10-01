@@ -418,6 +418,8 @@ const SIM = (() => {
     }
     const u = {
       side, name: spec.label || spec.template, template: spec.template, count: Math.max(1, spec.count | 0),
+      // spare magazines carried for the main gun (loadout `mags`, default 4); when they're gone the gun is empty for good
+      mags: spec.mags ?? 4,
       db, powers, grenades, dualPen, offPen, fp: st.fp || st.ht, thrCr: parseDamage("thr cr", dmgST.thr, dmgST.sw),
       block: Math.floor(skillLevel(st, "Shield", ["Shield", "DX-4"]) / 2) + 3 + (flags.cr ? 1 : 0) + (flags.enhBlock || 0),
       // weapons in hand (B382): gun and blade are both ready when both are one-handed, when they're one weapon
@@ -887,7 +889,7 @@ const SIM = (() => {
         const row = row0[u.side] + 2 * file;
         const m = { u, id: `${u.name} #${i + 1}`, hp: u.HP, fp: u.fp, state: "ok", shock: 0, stunned: false, init: R(),
           facing: u.side === 0 ? 0 : 3, prone: false, moved: false, aimTurns: 0, aimTarget: null, lastTarget: null,
-          ammo: u.ranged ? u.ranged.shots.mag : 0, reload: 0, jam: 0, gunBroken: false, conc: 0,
+          ammo: u.ranged ? u.ranged.shots.mag : 0, mags: u.mags, reload: 0, jam: 0, gunBroken: false, conc: 0,
           sp: u.shield ? u.shield.sp : 0, spHit: -99, spCollapsed: false, shHP: u.cs && u.cs.hp != null ? u.cs.hp : 0, shState: "ok",
           parries: 0, retreated: false, blocked: false, attacked: false, aoa: false, aod: false, feint: null,
           reanim: 0, dmgDealt: 0, kills: 0, armsLost: 0, legsLost: 0, grips: [], holding: null, pinned: false,
@@ -2476,6 +2478,23 @@ const SIM = (() => {
 
     // ---- choose and carry out a maneuver
     const gunReady = m => m.inHand === "gun" || m.inHand === "both";
+    // a fresh magazine from the belt (the part-used one is put away, its rounds not counted again)
+    function refill(m, w) {
+      if (m.mags <= 0) return;
+      m.mags--; m.ammo = w.shots.mag;
+      if (!m.mags) L(`  ${m.id} loads its last magazine`);
+    }
+    // a foe's hand on the gun (B370: a weapon can be grappled): the muzzle is held aside and the gun can't be fired
+    // until its owner wrenches it free (a Quick Contest of ST) or lets it go for another weapon
+    function gunGrip(t) {
+      const g = t.gunGrip;
+      if (!g) return null;
+      if (g.state === "ok" && g.h && t.h && t.state === "ok" && g.gunHold === t && hexDist(g.h, t.h) <= 1 && gunReady(t)) return g;
+      if (g.gunHold === t) g.gunHold = null;
+      t.gunGrip = null; return null;
+    }
+    const holdingGun = m => m.gunHold && gunGrip(m.gunHold) === m ? m.gunHold : null;
+    const longGun = t => t.u.ranged && !t.u.ranged.natural && !t.u.ranged.thrown && (t.u.ranged.bulk || 0) <= -3 && !t.gunBroken;
     const bladeReady = m => (m.inHand === "melee" || m.inHand === "both") && !m.meleeBroken;
     // Ready (B382): swap gun and blade; with Fast-Draw a successful roll makes it free and the model acts at once
     function switchTo(m, hand) {
@@ -2492,8 +2511,9 @@ const SIM = (() => {
     }
     function weaponsFor(m, melee) {
       const out = [];
-      if (melee) { if (m.armsLost < 2 && bladeReady(m) && (!m.armsLost || m.u.melee.oneHanded !== false)) out.push(m.u.melee); }
-      else if (m.u.ranged && !m.gunBroken && !m.jam && m.armsLost < 2 && gunReady(m) && (!m.armsLost || m.u.ranged.oneHanded)) out.push(m.u.ranged);
+      const oneHand = m.armsLost || holdingGun(m);
+      if (melee) { if (m.armsLost < 2 && bladeReady(m) && (!oneHand || m.u.melee.oneHanded !== false)) out.push(m.u.melee); }
+      else if (m.u.ranged && !m.gunBroken && !m.jam && m.armsLost < 2 && gunReady(m) && (!oneHand || m.u.ranged.oneHanded) && !gunGrip(m)) out.push(m.u.ranged);
       if (!melee && m.u.ranged2 && (m.extraLeft ?? m.u.ranged2.limit) > 0) out.push(m.u.ranged2);
       for (const p of m.u.powers) if (!!p.melee === melee && m.fp - p.fp >= 0) out.push(p);
       return out;
@@ -2732,6 +2752,12 @@ const SIM = (() => {
         }
       }
       if (terr && !m.grips.length) { doorOptions(m, pool, add, rNow); if (!adj.length) breachOptions(m, pool, add, rNow, Wm); }
+      // a foe holds our gun aside: wrench it free, worth what a free gun would do (else ready the blade, above)
+      if (gunGrip(m)) {
+        const g = gunGrip(m), gw = u.ranged, pWin = Math.max(0.02, Math.min(0.98, 0.5 + 0.08 * (u.liftST + 2 - g.u.liftST)));
+        const E = planAttack(m, gw, g, gw.level + Math.min(0, gw.bulk || 0) - skillPen(m), false).score * sustainOf(gw);
+        add(GAMMA * pWin * Wr * kv(m, g, E) - rNow, "wrench-gun", () => wrenchGun(m));
+      }
       // held (not pinned): struggle free, worth more on the ground where the hold becomes a pin
       if (gripsOn(m).length) {
         const lead = leadGrip(m), a = u.liftST - skillPen(m), d = gripST(m) + holdBonus(m, lead);
@@ -2777,7 +2803,7 @@ const SIM = (() => {
       // Battle Rage (B124): berserk on entering combat unless it makes its self-control roll
       if (u.flags.battleRage && !m.rageRolled) { m.rageRolled = true; if (roll3() > u.flags.berserk) goBerserk(m, "battle rage"); }
       pick = mentalPick(m, opts, pick, adj);
-      if (globalThis.SIM_DEBUG) globalThis.SIM_DEBUG(m, opts.slice().sort((a, b) => b.v - a.v).slice(0, 6).map(o => `${o.label}=${o.v.toFixed(3)}`).join("  "));
+      if (globalThis.SIM_DEBUG) globalThis.SIM_DEBUG(m, opts.slice().sort((a, b) => b.v - a.v).slice(0, globalThis.SIM_DEBUG_ALL ? 40 : 6).map(o => `${o.label}=${o.v.toFixed(3)}`).join("  "));
       pick.run();
     }
 
@@ -2907,7 +2933,7 @@ const SIM = (() => {
       }
       // reloads (TS p. 20): top up a part-used magazine while nobody can see us; when empty under fire, step out of
       // sight first if there's somewhere within a move
-      if (u.ranged && !m.gunBroken && m.reload === 0 && u.ranged.shots.mag !== Infinity && m.ammo < u.ranged.shots.mag && u.ranged.shots.reload > 0 && u.ranged.shots.reload <= 3) {
+      if (u.ranged && !m.gunBroken && m.reload === 0 && m.mags > 0 && u.ranged.shots.mag !== Infinity && m.ammo < u.ranged.shots.mag && u.ranged.shots.reload > 0 && u.ranged.shots.reload <= 3) {
         const w = u.ranged, turns = Math.max(1, w.shots.reload);
         if (!cands.length && m.ammo > 0 && m.ammo < w.shots.mag * 0.6)
           add(Math.pow(GAMMA, turns) * 0.5 * shotValueFrom(m, m.h, pool) - rNow + 0.002 * (1 - m.ammo / w.shots.mag), "tac-reload", () => { m.reload = turns; L(`${m.id} tops up its magazine`); });
@@ -2919,10 +2945,11 @@ const SIM = (() => {
       for (const w of ws) {
         const isGun = w === u.ranged;
         if (isGun && m.reload > 0) {
-          add(GAMMA * shotValueFrom(m, m.h, pool) - rNow, "reloading", () => { if (--m.reload <= 0) { m.reload = 0; m.ammo = w.shots.mag; } });
+          add(GAMMA * shotValueFrom(m, m.h, pool) - rNow, "reloading", () => { if (--m.reload <= 0) { m.reload = 0; refill(m, w); } });
           continue;
         }
         if (isGun && m.ammo <= 0) {
+          if (m.mags <= 0) continue;   // out of magazines: the gun is done
           const turns = Math.max(1, w.shots.reload);
           add(Math.pow(GAMMA, turns) * shotValueFrom(m, m.h, pool) - rNow, "reload", () => { m.reload = turns; if (w.shots.reload > 3) m.reload = 0; L(`${m.id} reloads`); });
           continue;
@@ -3367,7 +3394,7 @@ const SIM = (() => {
     // ---- options in hand-to-hand
     function meleeOptions(m, adj, add, rNow, Wm, Wr, mw) {
       const u = m.u;
-      const gun = m.grips.length ? null : (u.ranged && !m.gunBroken && !m.jam && m.armsLost < 2 ? u.ranged : null);
+      const gun = m.grips.length || gunGrip(m) || (holdingGun(m) && !(u.ranged && u.ranged.oneHanded)) ? null : (u.ranged && !m.gunBroken && !m.jam && m.armsLost < 2 ? u.ranged : null);
       const threat = threatTo(m);
       for (const t of adj) {
         const face = () => { faceTo(m, t.h); };
@@ -3472,18 +3499,30 @@ const SIM = (() => {
             });
           }
         }
-        if (gun && gun.shots.mag !== Infinity && m.ammo < gun.shots.mag && gun.shots.reload <= 3) {
+        if (gun && gun.shots.mag !== Infinity && m.ammo < gun.shots.mag && gun.shots.reload <= 3 && (m.mags > 0 || m.reload > 0)) {
           const turns = Math.max(1, gun.shots.reload - Math.max(0, m.reload > 0 ? gun.shots.reload - m.reload : 0));
           const Eg = planAttack(m, gun, t, gun.level + Math.min(0, gun.bulk || 0) - skillPen(m), false).score;
           add(Math.pow(GAMMA, turns) * Wr * kv(m, t, Eg) - rNow, `reload-cc`, () => {
             if (m.reload === 0) m.reload = gun.shots.reload;
-            if (--m.reload <= 0) { m.reload = 0; m.ammo = gun.shots.mag; } L(`${m.id} reloads in close combat`);
+            if (--m.reload <= 0) { m.reload = 0; refill(m, gun); } L(`${m.id} reloads in close combat`);
           });
         }
         // grappling (B370): grab a foe the weapon can't hurt; a pinned foe is out of the fight while friends hack at it
         if (m.armsLost < 1 && !t.pinned && gripsOn(t).length < 4) {
           const helpers = models.filter(a => a !== m && a.u.side === u.side && a.state === "ok" && a.h && hexDist(a.h, t.h) <= 1).length;
           add(Wm * grabValue(m, t, helpers) - rNow, `grab@${t.id}`, () => { face(); grab(m, t); });
+        }
+        // grab the gun (B370): a hand on a long gun's barrel pushes the muzzle aside; worth what the gun would do to us
+        // over what the foe could do once it lets go and draws a blade
+        if (m.armsLost < 1 && !m.grips.length && !holdingGun(m) && longGun(t) && gunReady(t) && !gunGrip(t) && !t.pinned && t.reload === 0
+          && (m.inHand !== "both" || !u.melee || u.melee.natural || u.melee.oneHanded !== false)) {
+          const g = t.u.ranged, hit = P3[cl(u.grapple - skillPen(m) + smGrab(m, t))], def = bestDefence(t, m, true);
+          const pGrab = hit * (1 - (def == null ? 0 : P3[cl(def)]));
+          const Eg = planAttack(t, g, m, g.level + Math.min(0, g.bulk || 0) - skillPen(t) + 4, false).score * sustainOf(g);
+          const Em = t.u.melee ? GAMMA * planAttack(t, t.u.melee, m, t.u.melee.level - skillPen(t), true).score : 0;
+          // the share of the foe's threat that is its gun, denied for the two or so turns it takes to wrench it free
+          const share = Eg > 0 ? Math.max(0, Eg - Em) / Eg : 0;
+          add(pGrab * share * threatOf(t) * 2 - rNow, `grab-gun@${t.id}`, () => { face(); grabGun(m, t); });
         }
         // Shove (B372): put a foe on the ground for friends who can hurt it
         if (!t.prone && m.armsLost < 2) {
@@ -3669,6 +3708,7 @@ const SIM = (() => {
         if (f.watch) { if (!los(f.h, m.h) || hexDist(f.h, m.h) > f.waiting.range.max) continue; }
         else if (hexDist(f.h, m.h) > (f.waiting === f.u.melee ? f.u.melee.reachMax : m.u.melee.reachMax + 1)) continue;
         const w = f.waiting; f.waiting = null; f.watch = false;
+        if (w === f.u.ranged && gunGrip(f)) continue;
         L(`${f.id} was waiting for ${m.id} (Wait)`);
         if (w === f.u.melee) { if (hexDist(f.h, m.h) <= w.reachMax) strike(f, w, m, { stopYd: m.steps || 0 }); }
         else fireAt(f, w, m, { pointBlank: hexDist(f.h, m.h) <= 1 });
@@ -3816,8 +3856,25 @@ const SIM = (() => {
       const r = check(lvl);
       if (!r.ok) { L(`${m.id} grabs at ${t.id} (skill ${lvl}): misses`); return; }
       if (!r.crit) { const def = defend(t, m, true, 0, 0, UNARMED); if (def) { L(`${m.id} grabs at ${t.id}: ${def.how === "parry" ? "parried" : def.how === "block" ? "blocked" : "dodged"}`); if (def.how === "parry") cutsArm(t, m); return; } }
-      release(m); m.holding = t; t.grips.push(m);
+      release(m); if (m.gunHold) { m.gunHold.gunGrip = null; m.gunHold = null; } m.holding = t; t.grips.push(m);
       L(`${m.id} grabs ${t.id} (${t.grips.length} holding on)`);
+    }
+    function grabGun(m, t) {
+      const lvl = m.u.grapple - skillPen(m) - (m.prone ? 4 : 0) + smGrab(m, t);
+      m.attacked = true;
+      if (lvl < 3) return;
+      const r = check(lvl), gn = t.u.ranged.name.split(",")[0];
+      if (!r.ok) { L(`${m.id} grabs at ${t.id}'s ${gn} (skill ${lvl}): misses`); return; }
+      if (!r.crit) { const def = defend(t, m, true, 0, 0, UNARMED); if (def) { L(`${m.id} grabs at ${t.id}'s ${gn}: ${def.how === "parry" ? "parried" : def.how === "block" ? "blocked" : "dodged"}`); return; } }
+      release(m); m.gunHold = t; t.gunGrip = m;
+      L(`${m.id} seizes ${t.id}'s ${gn} and forces the muzzle aside`);
+    }
+    // wrench the gun free: a Quick Contest of ST, the owner's two hands against one (+2)
+    function wrenchGun(m) {
+      const g = gunGrip(m);
+      if (!g) return;
+      if (contest(m.u.liftST - skillPen(m) + 2, g.u.liftST - skillPen(g) + 2 * (g.u.flags.extraArms || 0))) { g.gunHold = null; m.gunGrip = null; L(`${m.id} wrenches its ${m.u.ranged.name.split(",")[0]} free of ${g.id}`); }
+      else L(`${m.id} struggles for its ${m.u.ranged.name.split(",")[0]} with ${g.id}`);
     }
     function wrestle(m, t) {
       if (hangsOn(m, t)) { L(`${m.id} hangs on to ${t.id} but can do nothing more with it`); return; }
@@ -3948,7 +4005,7 @@ const SIM = (() => {
         const w = m.u.ranged;
         if (!w || m.state !== "ok" || w.shots.reload <= 3 || m.ammo > 0) continue;
         if (m.reload <= 0) m.reload = w.shots.reload;
-        if (--m.reload <= 0) { m.reload = 0; m.ammo = w.shots.mag; }
+        if (--m.reload <= 0) { m.reload = 0; refill(m, w); }
       }
       // bleeding (B420), once a minute in standard mode: HT at -1 per 5 HP lost; a failure costs 1 HP (3 on a critical
       // failure); a critical success or three successes in a row stop it; No Blood and Diffuse don't bleed, and nor do
@@ -4076,7 +4133,7 @@ if (typeof document !== "undefined") (() => {
     const lo = LO[template] || {};
     return { template, count: count || 5, stance: lo.stance || "advance", armour: [...(lo.armour || [])],
       ranged: lo.ranged ? { ...lo.ranged } : null, melee: lo.melee ? { ...lo.melee } : null,
-      ranged2: lo.ranged2 ? { ...lo.ranged2 } : null, shield: lo.shield ? { ...lo.shield } : null, carried: lo.carried || null, grenades: (lo.grenades || []).map(g => ({ ...g })), body: lo.body };
+      ranged2: lo.ranged2 ? { ...lo.ranged2 } : null, shield: lo.shield ? { ...lo.shield } : null, carried: lo.carried || null, grenades: (lo.grenades || []).map(g => ({ ...g })), body: lo.body, mags: lo.mags };
   }
   const PRESETS = [
     ["20 Guardsmen vs 5 Space Marines", [["Astra Militarum Guardsman", 20]], [["Astartes Battle-Brother", 5]], 150],
