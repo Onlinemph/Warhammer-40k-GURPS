@@ -294,7 +294,7 @@ const SIM = (() => {
       const w = { id: ++WID, name: label, usage: line.usage, text: line.damage, dmg, follow: fdmg, followText: fl ? fl.damage : "", level,
         rend, rendBy, rendText: rl ? rl.damage : "", malf: facts.malf || 0,
         overheat: facts.overheat ? parseDamage(/[a-z]\s*$/.test(facts.overheat) ? facts.overheat : facts.overheat + " burn") : null,
-        cone, blast: facts.blast || 0, natural: !!sel.trait, dST };
+        cone, blast: facts.blast || 0, warpflame: !!facts.warpflame, natural: !!sel.trait, dST };
       // an Agoniser's agony follow-up (B428): HT-N or Severe Pain (-4, -2 with High Pain Threshold); a critical
       // failure also stuns
       if (fl && !fdmg && /agony/i.test(fl.usage || "")) w.agony = -Number((/HT-(\d+)/.exec(fl.notes || "") || [0, 3])[1]);
@@ -1361,7 +1361,7 @@ const SIM = (() => {
         raw -= t.sp; t.sp = 0; t.spCollapsed = true; L(`  shield collapses`);   // what gets through still carries its follow-up
       }
       // a flame or burning blast of 3+ basic damage sets clothing alight, 10+ all of it (B433-434); tight beams don't
-      if (dmg.type === "burn" && (dmg.ex || w.cone) && raw >= 3 && t.u.burns && t.state === "ok") ignite(att, t, raw >= 10 ? 2 : 1, w.ablaze);
+      if (dmg.type === "burn" && (dmg.ex || w.cone) && raw >= 3 && (t.u.burns || w.warpflame) && t.state === "ok") ignite(att, t, raw >= 10 ? 2 : 1, w.ablaze, w.warpflame);
       let cv = null;
       if (ranged && t.h && !area) {
         const c = coverOf(t.h, hitFrom || (att && att.h), t), hd = hideOf(c.kind, loc, t);
@@ -1450,16 +1450,19 @@ const SIM = (() => {
     // Catching fire (B434): part of the clothing burns for 1d-4 a second, all of it for 1d-1, as large-area injury
     const FIRE = [null, parseDamage("1d-4 burn"), parseDamage("1d-1 burn")];
     // a weapon's own "per turn while ablaze" damage (promethium clinging) replaces the clothing's
-    function ignite(att, t, lv, ablaze) {
-      if ((t.onFire || 0) >= lv && !(ablaze && !t.fireDmg)) return;
+    // warpflame burns by the warp's will, not on fuel: it catches on sealed plate and bare carapace alike, and its
+    // burning reaches the flesh inside whatever the armour
+    function ignite(att, t, lv, ablaze, warp) {
+      if ((t.onFire || 0) >= lv && !(ablaze && !t.fireDmg) && !(warp && !t.fireWarp)) return;
       const a = areaDR(t.u), dm = ablaze || FIRE[lv];
-      if (a.arm + a.nat >= Math.floor((dm.n * 6 + dm.add) * dm.mult)) return;   // flames that can't get through its gear are no bother
-      t.onFire = Math.max(t.onFire || 0, lv); t.fireBy = att; t.fireWork = 0; if (ablaze) t.fireDmg = ablaze;
-      L(`  ${t.id}'s ${lv === 2 ? "clothes go up in flames" : "clothing catches fire"}`);
+      if (!warp && a.arm + a.nat >= Math.floor((dm.n * 6 + dm.add) * dm.mult)) return;   // flames that can't get through its gear are no bother
+      t.onFire = Math.max(t.onFire || 0, lv); t.fireBy = att; t.fireWork = 0; if (ablaze) t.fireDmg = ablaze; if (warp) t.fireWarp = true;
+      L(warp ? `  ${t.id} is wreathed in warpflame` : `  ${t.id}'s ${lv === 2 ? "clothes go up in flames" : "clothing catches fire"}`);
     }
     function burn(m) {
       const dm = m.fireDmg || FIRE[m.onFire];
       L(`${m.id} is on fire`);
+      if (m.fireWarp) { const inj = rollDamage(dm); L(`  warpflame sears through for ${inj}`); injure(m.fireBy || m, m, inj, "torso", "burn"); return; }
       applyHit(m.fireBy || m, { dmg: dm, follow: null }, m, "area", false, false, dm, rollDamage(dm));
     }
     // putting it out (B434): a Ready and a DX roll; with all its clothes alight it must roll on the ground, three
@@ -1470,7 +1473,7 @@ const SIM = (() => {
         if (m.fireWork < 3) { L(`${m.id} rolls on the ground to smother the flames`); return; }
         m.fireWork = 0;
       }
-      if (check(m.u.dx - skillPen(m)).ok) { m.onFire = 0; m.fireDmg = null; L(`${m.id} beats out the flames`); }
+      if (check(m.u.dx - skillPen(m)).ok) { m.onFire = 0; m.fireDmg = null; m.fireWarp = false; L(`${m.id} beats out the flames`); }
       else L(`${m.id} fails to put out the flames`);
     }
     // Damage to Shields (B484): a defence that only succeeded thanks to the shield's DB means the attack struck the
