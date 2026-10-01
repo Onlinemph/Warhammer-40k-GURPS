@@ -5,9 +5,10 @@ output: Imperium/Vehicles/Imperial Vehicles.eqp
 # combat simulator reads; build_gcs.py writes the same numbers into the item's notes as a stat line.
 #
 # How the numbers are built (docs/framework.md "Vehicles"):
-#   HP = 4 x cube root of the curb weight in lb (the Basic Set tables follow it: the APC's 12.5 tons gives 111);
+#   HP = 4 x cube root of the curb weight in lb (the Basic Set tables follow it: the APC's 12.5 tons gives 111),
+#   doubled for an armoured fighting vehicle's tracked hull (user direction: 40k armour is built to soak hits);
 #   ST = HP for a powered vehicle (B462).
-#   DR by facing from the framework's AV table: AV10 100, AV11 150, AV12 200, AV13 275, AV14 350. Top and
+#   DR by facing from the framework's AV table: AV10 125, AV11 185, AV12 250, AV13 340, AV14 440. Top and
 #   underside take the rear value.
 #   SM from the longest dimension (B550), +1 for an elongated box (B550 note), as the APC's +4.
 #   Move from lore road speed (km/h / 3.3 = yd/s); Acceleration from the Basic Set's APC (1) scaled by power.
@@ -26,7 +27,7 @@ items:
     weight: 76000
     tags: [Vehicle, Imperium, Astra Militarum]
     vehicle:
-      st_hp: 170
+      st_hp: 340
       hnd: -2
       sr: 5
       ht: 11
@@ -36,8 +37,8 @@ items:
       load: 1.5
       sm: 5
       occ: "3+12S"
-      dr: {front: 200, side: 100, rear: 100, top: 100, under: 100}
-      turret: {front: 200, side: 100, rear: 100}
+      dr: {front: 250, side: 125, rear: 125, top: 125, under: 125}
+      turret: {front: 250, side: 125, rear: 125}
       locations: 2Ct
       control: Driving (Tracked)
       crew_template: Astra Militarum Guardsman
@@ -57,7 +58,7 @@ items:
       three and a full infantry squad of twelve (Imperial Armour Volume One).
       Front armour AV12, sides and rear AV10.
     design: >
-      HP 4 x cube root of 76,000 lb = 170. Front DR 200 (AV12), the rest 100
+      HP 2 x 4 x cube root of 76,000 lb = 340. Front DR 250 (AV12), the rest 125
       (AV10). 6.9 m (7.5 yd) gives SM +4, +1 for the box hull: +5. Move 2/21
       (70 km/h). Hnd/SR -2/5: a lighter, quicker hull than the Basic Set APC's
       -3/5.
@@ -69,7 +70,7 @@ items:
     weight: 126000
     tags: [Vehicle, Imperium, Astra Militarum]
     vehicle:
-      st_hp: 200
+      st_hp: 400
       hnd: -3
       sr: 5
       ht: 12
@@ -79,8 +80,8 @@ items:
       load: 0.6
       sm: 5
       occ: "6S"
-      dr: {front: 350, side: 275, rear: 100, top: 100, under: 100}
-      turret: {front: 350, side: 275, rear: 200}
+      dr: {front: 440, side: 340, rear: 125, top: 125, under: 125}
+      turret: {front: 440, side: 340, rear: 250}
       locations: 2CT
       control: Driving (Tracked)
       crew_template: Astra Militarum Guardsman
@@ -103,8 +104,8 @@ items:
       plus two sponson gunners (Imperial Armour Volume One). Front AV14, sides
       AV13, rear AV10; the battle cannon is a large-blast, Strength 8 gun.
     design: >
-      HP 4 x cube root of 126,000 lb = 200. Front DR 350 (AV14), sides 275
-      (AV13), rear, top and underside 100 (AV10); the turret is as thick at the
+      HP 2 x 4 x cube root of 126,000 lb = 400. Front DR 440 (AV14), sides 340
+      (AV13), rear, top and underside 125 (AV10); the turret is as thick at the
       front and sides and a little better than the hull at the back. 7.08 m
       (7.7 yd) gives SM +4, +1 for the box: +5. Move 1/11 (35 km/h): as
       sluggish off the mark as the Basic Set's APC. HT 12: the Leman Russ is
@@ -117,7 +118,7 @@ items:
     weight: 64000
     tags: [Vehicle, Imperium, Adeptus Astartes]
     vehicle:
-      st_hp: 160
+      st_hp: 320
       hnd: -2
       sr: 5
       ht: 12
@@ -127,7 +128,7 @@ items:
       load: 1.2
       sm: 5
       occ: "2+10S"
-      dr: {front: 150, side: 150, rear: 100, top: 100, under: 100}
+      dr: {front: 185, side: 185, rear: 125, top: 125, under: 125}
       locations: 2CX
       control: Driving (Tracked)
       crew_template: Astartes Battle-Brother
@@ -143,7 +144,7 @@ items:
       chassis: 32 tonnes, 6.6 m long, 70 km/h on a road, a crew of two and ten
       Marines (Imperial Armour Volume Two). AV11 front and sides, AV10 rear.
     design: >
-      HP 4 x cube root of 64,000 lb = 160. DR 150 front and sides (AV11), 100
+      HP 2 x 4 x cube root of 64,000 lb = 320. DR 185 front and sides (AV11), 125
       rear (AV10). 6.6 m (7.2 yd) gives SM +4, +1 for the box: +5. Crewed by
       Battle-Brothers: Driving 15.
 
@@ -154,7 +155,7 @@ items:
     weight: 90000
     tags: [Vehicle, Imperium, Adeptus Astartes]
     vehicle:
-      st_hp: 180
+      st_hp: 360
       hnd: -2
       sr: 5
       ht: 12
@@ -164,8 +165,8 @@ items:
       load: 0.4
       sm: 5
       occ: "4S"
-      dr: {front: 275, side: 150, rear: 100, top: 100, under: 100}
-      turret: {front: 275, side: 150, rear: 150}
+      dr: {front: 340, side: 185, rear: 125, top: 125, under: 125}
+      turret: {front: 340, side: 185, rear: 185}
       locations: 2CT
       control: Driving (Tracked)
       crew_template: Astartes Battle-Brother
@@ -183,8 +184,8 @@ items:
       bigger engine: 45 tonnes, a crew of four (Imperial Armour Volume Two).
       AV13 front, AV11 sides, AV10 rear.
     design: >
-      HP 4 x cube root of 90,000 lb = 180. Front DR 275 (AV13), sides 150
-      (AV11), rear 100 (AV10). The Rhino's SM +5; Move 2/18, a little slower
+      HP 2 x 4 x cube root of 90,000 lb = 360. Front DR 340 (AV13), sides 185
+      (AV11), rear 125 (AV10). The Rhino's SM +5; Move 2/18, a little slower
       for the weight.
 
   - name: Land Raider
@@ -194,7 +195,7 @@ items:
     weight: 140000
     tags: [Vehicle, Imperium, Adeptus Astartes]
     vehicle:
-      st_hp: 210
+      st_hp: 420
       hnd: -3
       sr: 5
       ht: 13
@@ -203,7 +204,7 @@ items:
       load: 1.6
       sm: 6
       occ: "4+10S"
-      dr: {front: 350, side: 350, rear: 350, top: 200, under: 200}
+      dr: {front: 440, side: 440, rear: 440, top: 250, under: 250}
       locations: 2C
       control: Driving (Tracked)
       crew_template: Astartes Battle-Brother
@@ -224,8 +225,8 @@ items:
       armour AV14 all round (Imperial Armour Volume Two). Its machine spirit is
       said to fight on with the crew dead.
     design: >
-      HP 4 x cube root of 140,000 lb = 210. DR 350 all round (AV14); the roof
-      and belly take 200. 10.3 m (11.3 yd) gives SM +5, +1 for the box: +6.
+      HP 2 x 4 x cube root of 140,000 lb = 420. DR 440 all round (AV14); the roof
+      and belly take 250. 10.3 m (11.3 yd) gives SM +5, +1 for the box: +6.
       Locations 2C: the sponsons sit in the hull, so no turret. HT 13 for the
       oldest, best-kept hull the Imperium has.
 
@@ -246,7 +247,7 @@ items:
       load: 0.2
       sm: 3
       occ: "1"
-      dr: {front: 100, side: 100, rear: 100, top: 100, under: 100}
+      dr: {front: 125, side: 125, rear: 125, top: 125, under: 125}
       locations: 2LO
       control: Driving (Mecha)
       crew_template: Astra Militarum Guardsman
@@ -262,7 +263,7 @@ items:
       single pilot in an open cab, AV10 all round and open-topped (Imperial
       Armour Volume One).
     design: >
-      HP 4 x cube root of 14,000 lb = 96. DR 100 (AV10) all round. 4.7 m (5.1
+      HP 4 x cube root of 14,000 lb = 96 (a light walker, not doubled). DR 125 (AV10) all round. 4.7 m (5.1
       yd) tall gives SM +3, an upright figure with no box bonus. Move 3/10:
       quick off the mark, slow at the top. Its pilot both drives and shoots
       (the operator's fixed mount, B467: the lower of Gunner and Driving).

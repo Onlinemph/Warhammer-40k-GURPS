@@ -173,11 +173,11 @@ Wargame armour values give only relative order. Map them to DR when a weapon nee
 
 | AV | DR | Typical |
 |---|---|---|
-| 10 | 100 | Rear armour, Sentinel, Chimera sides |
-| 11 | 150 | Rhino front/sides |
-| 12 | 200 | Chimera front |
-| 13 | 275 | Leman Russ sides |
-| 14 | 350 | Leman Russ front, Land Raider |
+| 10 | 125 | Rear armour, Sentinel, Chimera sides |
+| 11 | 185 | Rhino front/sides |
+| 12 | 250 | Chimera front |
+| 13 | 340 | Leman Russ sides |
+| 14 | 440 | Leman Russ front, Land Raider |
 
 Anti-tank weapons must beat the DR they are known to beat in the fiction.
 
@@ -187,7 +187,7 @@ Vehicles take the Basic Set's stat block (B462-463). The rest of the line is bui
 
 | Stat | Rule |
 |---|---|
-| ST/HP | 4 x cube root of the curb weight in lb (the Basic Set APC: 12.5 tons, HP 111) |
+| ST/HP | 4 x cube root of the curb weight in lb (the Basic Set APC: 12.5 tons, HP 111); doubled for a tracked armoured hull (tanks and APCs, user direction), not for walkers and soft-skinned trucks |
 | DR | The AV table above, by facing; top and underside take the rear value unless the lore says otherwise |
 | SM | Longest dimension on the Size and Speed/Range Table (B550), +1 for an elongated box (B550) |
 | Move | Lore road speed in km/h / 3.3 = Top Speed in yd/s; Acceleration from the APC's 1, more for light hulls |
@@ -195,7 +195,7 @@ Vehicles take the Basic Set's stat block (B462-463). The rest of the line is bui
 | HT | 11-12, f for promethium or multi-fuel; ramshackle Ork builds lower |
 | Locations | B554 codes from the vehicle's shape (tracks, main or independent turret, pintle, open cab, wheels, legs) |
 
-A Leman Russ (63 tonnes) comes out at HP 200, a Rhino (32) 160, a Land Raider (70) 210, a Chimera (38) 170. A lascannon through any facing does about 170 injury, so two hits wreck a tank: the lore's "one good shot kills a tank" with the armour divisor carrying the AV, and HP standing in for the wargame's hull points.
+A Leman Russ (63 tonnes) comes out at HP 400, a Rhino (32) 320, a Land Raider (70) 420, a Chimera (38) 340. A lascannon through the hull does about 165 injury, so it takes three body hits, or two in the vital area (B554: x2 for a tight beam), to wreck a tank. Krak missiles get through AV12 nearly always, AV13 about 70% of the time and AV14 one hit in five; an autocannon AV10 nearly always and AV11 about half the time; a heavy bolter AV10 one round in twenty.
 
 ## Characters and species
 
