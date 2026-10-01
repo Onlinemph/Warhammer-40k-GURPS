@@ -840,7 +840,7 @@ const SIM = (() => {
     const frac = opt.health === "fractional", boxes = opt.boxes || 5;
     const SIGHTED = !!opt.sightedShots;
     const TDODGE = !!opt.tacticalDodge;
-    const LIMDODGE = !!opt.limitedDodges;   // Martial Arts option (MA122): -1 per dodge after the first each turn
+    const LIMDODGE = opt.limitedDodges !== false;   // Limiting Multiple Dodges (MA122), a base rule here (user direction): -1 per dodge after the first each turn
     const CINEMATIC = !!opt.cinematicEffort;   // Martial Arts option (MA131-132): Heroic Charge and other extra effort   // Tactical Shooting option (p. 17): Dodge firearms only from the one gunman you watch   // Tactical Shooting option: an aimed shot is All-Out Attack (Determined)
     // hit locations: "elite" (default: elites aim, everyone else hits random locations), "aimed" (everyone, RAW), "random"
     const locMode = opt.locations || "elite";
@@ -2103,6 +2103,18 @@ const SIM = (() => {
         const harm = rw ? expInjRandom(rw, t.u) : 0, acc = t.u.ranged && t.aimTurns ? t.u.ranged.acc || 0 : 0;
         if (dd == null || P3[cl(dd)] < Math.min(0.75, 0.3 + 0.03 * Math.max(0, acc - 2)) || harm < 0.15 * remOf(t)) return null;
       }
+      // choosing when to dodge: every dodge costs the next one this turn -1 (MA122), so an attack that can't really
+      // hurt is let through to keep the dodge for one that can; so is one the dodge has almost no chance against.
+      // Parries and blocks are spent the same way in melee only against a blow that matters
+      {
+        const rw = aw || (att && (melee === true ? att.u.melee : att.u.ranged));
+        const harm = rw && rw.dmg ? expInjRandom(rw, t.u) : Infinity;
+        if (harm < Math.max(0.5, 0.06 * remOf(t))) return null;
+        if (melee !== true && melee !== "pb" && LIMDODGE && (t.dodges || 0) > 0) {
+          const dd = rangedDefence(t, att);
+          if (dd != null && P3[cl(dd)] < 0.1 && harm < 0.5 * remOf(t)) return null;
+        }
+      }
       if (t.aimTurns || t.follow) { t.aimTurns = 0; t.follow = null; }
       if (t.grips.length) t.retreated = true;   // held: no retreat
       // a shield at 0 HP or less may give out whenever it's used (HT roll, B483)
@@ -2401,7 +2413,7 @@ const SIM = (() => {
       const d = Math.max(1, hexDist(m.h, c.h));
       const lvl = Math.min(9, wl(m, w) - skillPen(m) + rangePenalty(rngD(m.h, c.h, d)) + c.u.sm + shotFx(c, m.h, false).pen("random") - darkPen(m, c));
       if (lvl < 3 || !check(lvl).ok) return false;
-      if (defend(c, m, false, 0, 0) != null) { L(`  a stray round goes past ${c.id}, who ducks`); return true; }
+      if (defend(c, m, false, 0, 0, w) != null) { L(`  a stray round goes past ${c.id}, who ducks`); return true; }
       L(`  a stray round hits ${c.id}${c.u.side === m.u.side ? " (friendly fire)" : ""}`);
       applyHit(m, w, c, hitLocOn(c), true, raw == null && d >= w.range.half, null, raw);
       return true;
@@ -2573,7 +2585,7 @@ const SIM = (() => {
             if (t.shieldStruck && def.how !== "parry") for (let k = 0; k < dg; k++) shieldHit(m, w, t, loc0 || "random", true);
           }
         } else {
-          const def = defend(t, m, false, plan.da, 0);
+          const def = defend(t, m, false, plan.da, 0, w);
           if (def != null) {
             const dg = Math.min(open, 1 + def); hits -= dg; L(`  ${t.id} dodges ${dg}`);
             // the rounds the shield's DB turned aside struck it: all of them if the dodge needed the DB, else DB of them
@@ -2600,7 +2612,7 @@ const SIM = (() => {
       }
       wild();
       if (w.blast && !w.dmg.ex && tH) for (const x of models) if (x !== t && x.state === "ok" && x.h && hexDist(x.h, tH) <= w.blast) {
-        if (defend(x, m, false, 0, 0) == null) applyHit(m, w, x, "area", true, halfD);
+        if (defend(x, m, false, 0, 0, w) == null) applyHit(m, w, x, "area", true, halfD);
       }
     }
     // Cones (B413): one attack roll at the aim point; everyone in the wedge (a yard wide at the muzzle, widening
@@ -2630,7 +2642,7 @@ const SIM = (() => {
       L(`${m.id} ${w.usage === "power" ? "casts " + w.name + " at" : "fires at"} ${target.id} (${d} yd, skill ${lvl}): the ${w.name} catches ${caught.map(x => x.id).join(", ")}`);
       for (const x of caught) {
         if (x.state !== "ok") continue;
-        if (!r.crit && defend(x, m, false, 0, 0) != null) { L(`  ${x.id} dives clear`); continue; }
+        if (!r.crit && defend(x, m, false, 0, 0, w) != null) { L(`  ${x.id} dives clear`); continue; }
         applyHit(m, w, x, "area", true, hexDist(m.h, x.h) >= w.range.half);
       }
     }
@@ -4456,7 +4468,7 @@ const SIM = (() => {
       const r = check(lvl);
       if (!r.ok) { L(`  suppression fire misses ${x.id}`); return; }
       let hits = Math.min(z.shots, 1 + Math.floor(Math.max(0, r.margin) / Math.max(1, w.rcl)));
-      if (!r.crit) { const def = defend(x, m, false, 0, 0); if (def != null) { const dg = Math.min(hits, 1 + def); hits -= dg; L(`  ${x.id} dodges ${dg}`); } }
+      if (!r.crit) { const def = defend(x, m, false, 0, 0, w); if (def != null) { const dg = Math.min(hits, 1 + def); hits -= dg; L(`  ${x.id} dodges ${dg}`); } }
       for (let k = 0; k < hits && x.state === "ok"; k++) { L(`  suppression fire hits ${x.id}`); applyHit(m, w, x, hitLocOn(x), true, d >= w.range.half); }
     }
     function clearZone(m) { if (m.zone) { zones.splice(zones.indexOf(m.zone), 1); m.zone = null; } }
@@ -4953,7 +4965,7 @@ if (typeof document !== "undefined") (() => {
           <label for="s-loc">Hit locations <select id="s-loc" data-o="locations"><option value="elite"${!S.locations || S.locations === "elite" ? " selected" : ""}>Elites aim</option><option value="aimed"${S.locations === "aimed" ? " selected" : ""}>Everyone aims (RAW)</option><option value="random"${S.locations === "random" ? " selected" : ""}>Random</option></select></label>
           <label for="s-hp">Wounds <select id="s-hp" data-h><option value="standard"${S.health !== "fractional" ? " selected" : ""}>Standard HP</option><option value="fractional"${S.health === "fractional" ? " selected" : ""}>Fractional Health</option></select></label>
           <label class="chk" for="s-sight"><input id="s-sight" type="checkbox" data-g="sightedShots"${S.sightedShots ? " checked" : ""}> Aimed shots are All-Out Attacks (Tactical Shooting)</label>
-          <label class="chk" for="s-ldodge"><input id="s-ldodge" type="checkbox" data-g="limitedDodges"${S.limitedDodges ? " checked" : ""}> -1 per extra dodge in a turn (Martial Arts)</label>
+          <label class="chk" for="s-ldodge"><input id="s-ldodge" type="checkbox" data-g="limitedDodges"${S.limitedDodges !== false ? " checked" : ""}> -1 per extra dodge in a turn (Martial Arts; on by default)</label>
           <label class="chk" for="s-cine"><input id="s-cine" type="checkbox" data-g="cinematicEffort"${S.cinematicEffort ? " checked" : ""}> Cinematic extra effort: Heroic Charge (Martial Arts)</label>
           <label class="chk" for="s-tdodge"><input id="s-tdodge" type="checkbox" data-g="tacticalDodge"${S.tacticalDodge ? " checked" : ""}> Dodge gunfire from one shooter only (Tactical Shooting)</label>
           ${S.health === "fractional" ? `<label for="s-box">Boxes per level <input id="s-box" type="number" min="1" max="9" value="${S.boxes || 5}" data-g="boxes"></label>` : ""}
@@ -5909,7 +5921,7 @@ if (typeof document !== "undefined") (() => {
         try { last = SIM.monteCarlo(specs, { runs: S.runs, distance: S.distance, maxTurns: S.maxTurns, morale: S.morale, health: S.health, boxes: S.boxes || 5,
           locations: S.locations || "elite", cover: [S.coverA || "none", S.coverB || "none"], battlefield: S.battlefield || "open", mapSeed: S.mapSeed || 1,
           ridge: !MAPPED() && S.ridge ? { side: +S.ridge, height: S.ridgeH || 8 } : null,
-          awareness: MAPPED() ? S.awareness || "limited" : undefined, lighting: S.lighting || "mixed", sightedShots: !!S.sightedShots, tacticalDodge: !!S.tacticalDodge, limitedDodges: !!S.limitedDodges, cinematicEffort: !!S.cinematicEffort }); $("#simout").innerHTML = results(last); setupReplay(); }
+          awareness: MAPPED() ? S.awareness || "limited" : undefined, lighting: S.lighting || "mixed", sightedShots: !!S.sightedShots, tacticalDodge: !!S.tacticalDodge, limitedDodges: S.limitedDodges !== false, cinematicEffort: !!S.cinematicEffort }); $("#simout").innerHTML = results(last); setupReplay(); }
         catch (e) { $("#simout").innerHTML = `<p class="empty">Could not run: ${esc(e.message)}</p>`; }
       }, 20);
     };
