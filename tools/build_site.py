@@ -343,8 +343,10 @@ def combat_flags(t, flags):
     elif n.startswith("Injury Tolerance (Damage Reduction"):
         flags["dmgRed"] = flags.get("dmgRed", 0) + lv   # divisor; lens upgrades add a level each
     elif n.startswith("Injury Tolerance"):
+        # the kinds are in the name ("Injury Tolerance (Unliving)") or its enabled modifiers (Unliving, No Vitals...)
+        txt = low + " " + " ".join(m.get("name", "").lower() for m in t.get("modifiers", []) if not m.get("disabled"))
         for k in ("unliving", "homogenous", "diffuse", "no brain", "no vitals", "no blood"):
-            if k in low:
+            if k in txt:
                 flags[k.replace(" ", "")] = 1
     elif n.startswith("Regeneration"):
         # HP per second (B80); the tier is in the name or the notes ("Regeneration (Very Fast)")

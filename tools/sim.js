@@ -1552,7 +1552,9 @@ const SIM = (() => {
     function severity(inj, HP) { let s = 0; for (let l = 1; l <= 8; l++) if (inj >= thr(HP, l)) s = l; return s; }
     function boxesFor(inj, HP, lvl) { let n = 0; for (let c = 1; c <= 4; c++) if (inj >= thr(HP, lvl, c)) n = c; return Math.max(1, n); }
     // a model cut down by wounds (at 0 HP or below) is as horrible to see as one killed outright
-    function incapacitate(t, why) { if (t.state === "ok") { sawFall(t); if (frac ? t.lastHitBy : t.hp <= 0) { horror(t.lastHitBy, t); downed(t.lastHitBy); } if (t.h) FX(["d", t.h.q, t.h.r, t.u.side, 0]); t.state = "out"; place(t, null); L(`  ${t.id} ${why}`); } }
+    // Reanimation Protocols: a Necron put down any way short of destruction (unconscious, mortally wounded, a ruined
+    // limb's worth of injury) drops inert and rolls to rise again, as when it's killed (see kill)
+    function incapacitate(t, why) { if (t.state === "ok") { sawFall(t); if (frac ? t.lastHitBy : t.hp <= 0) { horror(t.lastHitBy, t); downed(t.lastHitBy); } if (t.h) FX(["d", t.h.q, t.h.r, t.u.side, 0]); const re = t.u.flags.reanimation && !t.u.veh; t.state = re ? "down" : "out"; if (re) t.reanim = 3; place(t, null); L(`  ${t.id} ${why}${re ? "; reanimation protocols engage" : ""}`); } }
     // crippling (B421): an arm or hand drops what it holds and can't hold anything; the weapon goes to the other
     // hand (off-hand -4), two-handed weapons can't be used, and a crippled shield arm loses the shield. A leg drops
     // the model, which can fight lying down and crawl
@@ -5162,7 +5164,7 @@ const SIM = (() => {
         m.committed = false; m.defAtk = false; m.aoa = false; m.aod = false; m.mna = false; m.offBalance = false;   // "until its next turn", whatever it does with it
         if (!frac && m.hp <= 0) {
           const k = Math.floor(-m.hp / m.u.HP);
-          if (!check(m.u.HT - k + (m.berserk ? 4 : 0) + (m.u.flags.hts || 0)).ok) { FX(["d", m.h.q, m.h.r, m.u.side, 0]); m.state = "out"; place(m, null); L(`${m.id} ${m.u.veh ? "breaks down" : "collapses unconscious"}`); continue; }
+          if (!check(m.u.HT - k + (m.berserk ? 4 : 0) + (m.u.flags.hts || 0)).ok) { incapacitate(m, m.u.veh ? "breaks down" : "collapses unconscious"); continue; }
         }
         if (m.onFire) { burn(m); if (m.state !== "ok") continue; }
         // at 0 FP or less, a Will roll before each maneuver; failure collapses it for the fight (B426)
@@ -5226,6 +5228,9 @@ const SIM = (() => {
           const spot = m.lastH || null;
           m.state = "ok"; m.hp = Math.max(1, Math.floor(m.u.HP / 2)); m.stunned = false; m.wounds = {}; m.pain = 0; m.painSev = 0;
           m.halfMove = m.halfDodge = false; m.gawd = 0; m.armsLost = 0; m.legsLost = 0; m.crippled = {}; m.prone = true;
+          // the body reknits whole: limbs, the gun back in a working hand, plate unpitted
+          m.weaponArmLost = false; m.limbInj = {}; m.limbFull = {}; m.corr = {}; m.shock = 0; m.shockInj = 0; m.painAff = 0; m.bleeds = false;
+          if (m.inHand === "none") m.inHand = m.u.bothReady ? "both" : "gun";
           const home = m.u.models.find(x => x.h && x !== m);
           let h = spot || (home && home.h);
           if (h) { for (let i = 0; i < 8 && taken(key(h.q, h.r)); i++) h = { q: h.q + DIRS[i % 6][0], r: h.r + DIRS[i % 6][1] }; }
