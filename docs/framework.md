@@ -213,7 +213,7 @@ Before this ladder the xenos were drafted against the old Astartes ST (18–24) 
 | Tier | Typical total | Examples |
 |---|---|---|
 | Ordinary citizen | 0–50 | Hive worker, scribe |
-| Trained soldier | 100–175 | Guardsman, PDF trooper, Arbitrator |
+| Trained soldier | 100–175 | Guardsman, Guard sergeant, PDF trooper, Arbitrator |
 | Elite human | 200–350 | Stormtrooper, veteran Commissar, Battle Sister, Inquisitorial acolyte |
 | Senior agents | 350–600 | Field Inquisitor, veteran Interrogator, Canoness, Lord Commissar |
 | Astartes | 550–850 | Battle-Brother, veteran, Primaris adds more |
@@ -510,6 +510,7 @@ Same **Astartes** racial meta-trait as a loyalist (data/imperium/astartes/gene-s
 | Unit | ST | DX | IQ | HT | HP | Notes |
 |---|---|---|---|---|---|---|
 | Chaos Cultist | 10 | 10 | 9 | 10 | 10 | Untrained fanatic: ~40-80 points. Autogun or autopistol and a crude blade, rags or a flak vest. |
+| Chaos Cultist Champion | 11 | 11 | 9 | 11 | 11 | Leads a mob: Leadership 11, Intimidation 12, chainsword; ~96 points. |
 | Traitor Guardsman | 11 | 12 | 10 | 12 | 11 | A Guardsman who turned: the Guardsman's training, Imperial gear, a Mark of Chaos optional. |
 | Chaos Space Marine (Legionary) | 30 | 17 | 11 | 15 | 34 | Long War Veteran; ~900 points. |
 | Chaos Lord | 32 | 18 | 13 | 16 | 38 | Leadership and Tactics high; ~1,200 points. |
