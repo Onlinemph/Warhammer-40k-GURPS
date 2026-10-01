@@ -709,9 +709,12 @@ const SIM = (() => {
   // (the first is 0) is at -k x Rcl; only true laser weapons with Rcl 1 (marked "1L" in the data: lascannon,
   // multi-laser, lasblaster, scatter laser) take a flat -1 on every round after the first instead (user direction). Braced, Rcl is halved (rounding up) for
   // the progression and every round gets +1 (the caller adds it); Aim helps only the first round.
+  // A gun fired from a tripod, baseplate or vehicle mount (data ST "M", or a heavy weapon team's gun once set up) takes
+  // the mount's flat -1 a round instead (user direction): the mount soaks the recoil a brace only halves
   function rclPen(w, k, braced) {
     if (!k) return 0;
     const r = (w && w.rcl) || 1;
+    if (w && w.mounted && r > 1) return k;
     if (r === 1 && w && w.rclFlat) return 1;
     return k * (braced ? Math.max(1, Math.ceil(r / 2)) : r);
   }
@@ -3172,7 +3175,7 @@ const SIM = (() => {
       }
       let hits = got;
       FX(["s", m.h.q, m.h.r, t.h.q, t.h.r, m.u.side, got ? 1 : 0, m.ix, t.ix, lvl, got, nb]);
-      L(`${m.id} ${w.usage === "power" ? "casts " + w.name + " at" : "fires " + (n > 1 ? n + " at" : "at")} ${t.id} (${d} yd${loc0 && loc0 !== "torso" ? ", aiming at the " + locName(loc0) : ""}${thru}, skill ${lvl}${braced ? ", braced" : ""}${nb > 1 ? (w.rcl === 1 && w.rclFlat ? ", then -1" : `, then -${braced ? Math.max(1, Math.ceil(w.rcl / 2)) : w.rcl} a round`) + (firstB ? ` unaimed` : "") : ""}): ${hits} hit${hits > 1 ? "s" : ""}`);
+      L(`${m.id} ${w.usage === "power" ? "casts " + w.name + " at" : "fires " + (n > 1 ? n + " at" : "at")} ${t.id} (${d} yd${loc0 && loc0 !== "torso" ? ", aiming at the " + locName(loc0) : ""}${thru}, skill ${lvl}${braced ? ", braced" : ""}${nb > 1 ? (w.rcl === 1 && w.rclFlat ? ", then -1" : `, then -${w.mounted && w.rcl > 1 ? 1 : braced ? Math.max(1, Math.ceil(w.rcl / 2)) : w.rcl} a round${w.mounted && w.rcl > 1 ? " on the mount" : ""}`) + (firstB ? ` unaimed` : "") : ""}): ${hits} hit${hits > 1 ? "s" : ""}`);
       let dodged = 0, dMargin = 0;
       if (hits > crits && !w.malediction) {
         const open = hits - crits;   // critical rounds can't be defended
@@ -5067,7 +5070,7 @@ const SIM = (() => {
       const lvl = Math.min(6 + rb, eff + rb + x.u.sm + shotFx(x, m.h, false).pen("random"));
       const r = check(lvl);
       if (!r.ok) { L(`  suppression fire misses ${x.id}`); return; }
-      let hits = Math.min(z.shots, 1 + Math.floor(Math.max(0, r.margin) / Math.max(1, w.rcl)));
+      let hits = Math.min(z.shots, 1 + Math.floor(Math.max(0, r.margin) / (w.mounted ? 1 : Math.max(1, w.rcl))));   // a mounted gun: Rcl 1
       if (!r.crit) { const def = defend(x, m, false, 0, 0, w); if (def != null) { const dg = Math.min(hits, 1 + def); hits -= dg; L(`  ${x.id} dodges ${dg}`); } }
       for (let k = 0; k < hits && x.state === "ok"; k++) { L(`  suppression fire hits ${x.id}`); applyHit(m, w, x, hitLocOn(x), true, d >= w.range.half); }
     }
