@@ -143,7 +143,8 @@ The melee layer follows GURPS Martial Arts (MA) where it adds to or clarifies th
 - **Retreat** (MA123-124): a step straight back gets the full +3/+1; a step to the side is a Sideslip at one less.
 - **Held models** (MA117, B391): −4 for being grappled and −4 more per yard of the weapon's reach (reach C weapons and fists only the −4), the Parry half that.
 - **Tip Slash** (MA113): a weapon that thrusts to impale may swing its tip for cutting at its impaling damage −2.
-- **Grappling** (MA114): a foe on All-Out Attack loses takedown and pin contests outright; a Committed attacker is −2 in them.
+- **Grappling** (MA114): a foe on All-Out Attack loses takedown and pin contests outright; a Committed attacker is −2 in them. Extra arms (MA115; the Mechanicus servo-arm and manipulator mechadendrite, not weak or weapon-mount arms) give +2 each to grab, to hold a victim against breaking free and to break free, and more arms than the foe gives +3 to pin it or resist its pin. A trained grappler (Wrestling, Judo or Sumo above DX) about to lose a takedown can Sprawl (MA119): it goes down willingly, the contest runs at +3 for it, and a grappler that loses or ties goes down too and loses its hold.
+- **Flesh Hooks** (Lictor, Ravener; bio-weapons.yaml): a reach-2 hook strike (Brawling, thr imp). A hit gives an immediate grapple at no extra attack and no defence (the hooks already hold) that drags the victim beside the bearer; the Lictor's Extra Attack then goes into it with the claws.
 - **Stop thrust** (B366): a thrust from a melee Wait adds +1 damage per two full yards the charger ran.
 - **Acrobatic Stand** (MA98): Acrobatics at −6 (and encumbrance) to spring up.
 - **Mighty Blows and Feverish Defense** (MA131): Mighty Blows goes with a plain Attack only, not All-Out Attack, and Feverish Defense isn't open to a model on Committed or All-Out Attack.

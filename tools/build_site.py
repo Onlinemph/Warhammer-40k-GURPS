@@ -298,6 +298,8 @@ def combat_flags(t, flags):
         flags["impulsive"] = t.get("cr") or 12                   # B139
     elif n.startswith("Bloodlust") or n.startswith("Red Thirst"):
         flags["bloodlust"] = t.get("cr") or 12                   # B125
+    elif n.startswith("Servo-Arm") or n.startswith("Mechadendrite, Manipulator") or (n.startswith("Extra Arm") and "weak" not in low):
+        flags["extraArms"] = flags.get("extraArms", 0) + lv   # MA115: +2 per arm past two in grappling
     elif n.startswith("Acute Vision"):
         flags["acuteVision"] = flags.get("acuteVision", 0) + lv
     elif n.startswith("Night Vision"):

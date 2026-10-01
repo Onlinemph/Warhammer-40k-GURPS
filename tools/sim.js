@@ -340,6 +340,8 @@ const SIM = (() => {
       return w;
     };
     let melee = weaponMaster(mkWeapon(spec.melee, true));
+    // Flesh Hooks (Lictor, Ravener): a reach-2 hook strike that snags the target for a free grapple (bio-weapons.yaml)
+    const hooks = findTraitWeapon(T.t.traits, "Flesh Hooks") ? mkWeapon({ trait: "Flesh Hooks", mode: "Standard" }, true) : null;
     // the same blade's other way of hitting (a sword's thrust beside its swing, B271): same field setting,
     // chosen blow by blow
     if (melee && spec.melee && spec.melee.item) {
@@ -419,6 +421,7 @@ const SIM = (() => {
       bothReady: cs ? !ranged || !melee || !!melee.natural || !!ranged.natural || (spec.melee && spec.ranged && spec.melee.item === spec.ranged.item) : !ranged || !melee || melee.name === "Punch" || !!melee.natural || !!ranged.natural || (spec.melee && spec.ranged && spec.melee.item && spec.melee.item === spec.ranged.item)
         || /fixed to|mounted|underslung/i.test(melee.usage || "") || (!!ranged.oneHanded && !!melee.oneHanded),
       liftST,   // Lifting ST counts in grappling (B65)
+      hooks,
       // Fast-Draw, +1 with Combat Reflexes (B43); Fast-Draw (Grenade) on its own
       fastDraw: Math.max(-Infinity, ...(st.skills || []).filter(s => /^Fast-Draw/.test(s.name) && !/Ammo|Grenade/.test(s.name) && s.level != null).map(s => s.level)) + (flags.cr ? 1 : 0),
       fdGrenade: Math.max(-Infinity, ...(st.skills || []).filter(s => /^Fast-Draw \(Grenade/.test(s.name) && s.level != null).map(s => s.level)) + (flags.cr ? 1 : 0), st: st.st, dx: st.dx, formation: spec.formation || "line",
@@ -1247,7 +1250,8 @@ const SIM = (() => {
       const gore = !frac && t.hp <= -2 * t.u.HP, hidden = !!(att && att.hiddenStrike === turn);
       for (const x of models) {
         if (x === t || x.state !== "ok" || !x.h || x.u.side !== t.u.side || hexDist(x.h, t.h) > 20 || !los(x.h, t.h) || darkPen(x, t) >= 5) continue;
-        const pen = 1 + (x.horror || 0) + (close ? 2 : 0) + (gore ? 2 : 0) + (hidden ? 3 : 0);
+        // a bigger killer is more frightening: relative SM counts against the smaller (Pyramid 3/77 p. 8)
+        const pen = 1 + (x.horror || 0) + (close ? 2 : 0) + (gore ? 2 : 0) + (hidden ? 3 : 0) + (att && att.u ? Math.max(0, att.u.sm - x.u.sm) : 0);
         const e = ev(x); e.horror = Math.max(e.horror ?? -1, pen); e.horrorWhy = close ? "a comrade torn apart" : "a comrade killed";
         x.horror = (x.horror || 0) + 1;
       }
@@ -1390,7 +1394,7 @@ const SIM = (() => {
       // agony (B428): HT (+3 with High Pain Threshold) at the weapon's penalty, or Severe Pain for the rest of the
       // fight (-4, -2 with High Pain Threshold); a critical failure stuns too. Machines feel nothing
       if (w.agony != null && inj > 0 && t.state === "ok" && !t.u.flags.machine) {
-        const r = check(t.u.HT + w.agony + (t.u.flags.hpt ? 3 : 0));
+        const r = check(t.u.HT + w.agony + (t.u.flags.hpt ? 3 : 0) + Math.max(0, t.u.sm));   // SM adds to resisting afflictions (Pyramid 3/77 p. 8)
         if (!r.ok) {
           t.painAff = Math.max(t.painAff || 0, t.u.flags.hpt ? 2 : 4);
           L(`  ${t.id} is wracked with agony (-${t.painAff})`);
@@ -2307,7 +2311,7 @@ const SIM = (() => {
       w = bestMode(m, w, t);
       // attacks this turn: 1, +1 for All-Out Attack (Double), +1 for Rapid Strike (both together make three, MA97),
       // + Extra Attack; Rapid Strike's penalty falls on the two blows it makes (-6, or -3 for a master)
-      const n = 1 + (opts.double ? 1 : 0) + (opts.rapid ? 1 : 0) + (m.u.flags.extraAttack || 0);
+      const n = opts.blows ?? 1 + (opts.double ? 1 : 0) + (opts.rapid ? 1 : 0) + (m.u.flags.extraAttack || 0);
       if (opts.charge) m.mna = true;   // Move and Attack: no retreat until its next turn (B365)
       if (opts.committed) m.committed = true;   // Committed Attack (MA99): defences -2, no retreat, no parry with this weapon
       if (opts.defensive) m.defAtk = true;      // Defensive Attack (MA100): +1 to a parry or block, even after an unbalanced swing
@@ -2376,6 +2380,7 @@ const SIM = (() => {
         if (opts.mighty) { raw += Math.max(2, w.dmg.n); L(`  ${m.id} puts everything into it (Mighty Blows)`); }
         // a stop thrust on a Wait (B366): +1 damage per two full yards the charger ran onto it
         if (opts.stopYd && (w.dmg.type === "imp" || /thrust/i.test(w.usage || ""))) raw += Math.floor(opts.stopYd / 2);
+        m.landed = t;
         applyHit(m, w, t, loc, false, false, rending ? w.rend : null, Math.max(0, raw), r.crit ? roll3() : 0);
       }
       m.feint = null; m.evaluate = null; m.riposte = null;
@@ -2651,6 +2656,7 @@ const SIM = (() => {
       // evasive movement toward the gunman that worries it most (Tactical Dodging option)
       if (TDODGE) m.evading = pool.filter(f => f.u.ranged && f.h && los(f.h, m.h)).sort((a, b) => threatOf(b) / Math.max(1, hexDist(b.h, m.h)) - threatOf(a) / Math.max(1, hexDist(a.h, m.h)))[0] || null;
       const Wm = stanceW(m, "melee") * A.aggression, Wr = stanceW(m, "ranged") * A.aggression;
+      if (u.hooks) hookOptions(m, pool, add, rNow, Wm);
       if (adj.length) meleeOptions(m, adj, add, rNow, Wm, Wr, mw);
       else {
         rangedOptions(m, pool, add, rNow, Wr);
@@ -2722,6 +2728,37 @@ const SIM = (() => {
       pick.run();
     }
 
+    // ---- Flesh Hooks: strike with the hooks; on a hit, a free grapple (no defence: the hooks already hold) that drags the
+    // victim beside the bearer; an Extra Attack then goes into it with the claws
+    function hookStrike(m, f) {
+      const u = m.u;
+      faceTo(m, f.h); m.landed = null;
+      L(`${m.id} lashes its flesh hooks at ${f.id}`);
+      strike(m, u.hooks, f, { blows: 1 });
+      if (m.landed !== f || f.state !== "ok" || !f.h || m.state !== "ok" || !m.h) return;
+      const g = check(u.grapple - skillPen(m) + smGrab(m, f) + 2 * (u.flags.extraArms || 0));
+      if (!g.ok) { L(`  the hooks tear free of ${f.id}`); return; }
+      release(m); m.holding = f; f.grips.push(m);
+      if (hexDist(m.h, f.h) > 1) {
+        const h = DIRS.map(([dq, dr]) => ({ q: m.h.q + dq, r: m.h.r + dr })).filter(h => !taken(key(h.q, h.r)) && (!terr || walkable(key(h.q, h.r)))).sort((a, b) => hexDist(a, f.h) - hexDist(b, f.h))[0];
+        if (h) place(f, h);
+      }
+      L(`  the hooks drag ${f.id} in`);
+      if ((u.flags.extraAttack || 0) > 0 && f.state === "ok" && f.h && hexDist(m.h, f.h) <= u.melee.reachMax) strike(m, u.melee, f, { blows: u.flags.extraAttack });
+    }
+    function hookOptions(m, pool, add, rNow, Wm) {
+      const u = m.u, w = u.hooks;
+      if (!w || m.grips.length || m.holding || m.armsLost >= 1) return;
+      for (const f of pool) {
+        if (!f.h || hexDist(m.h, f.h) > w.reachMax || !los(m.h, f.h) || f.grips.includes(m)) continue;
+        const lvl = wl(m, w) - skillPen(m) + smMelee(m, f) - darkPen(m, f), def = bestDefence(f, m, true, w);
+        const pHit = P3[cl(lvl)] * (1 - (def == null ? 0 : P3[cl(def)])), pGrab = P3[cl(u.grapple - skillPen(m) + smGrab(m, f))];
+        const eC = expInjRandom(u.melee, f.u);
+        // what the hook does, the claws that follow it, and the held victim's lost defences next turn
+        const E = pHit * (expInjRandom(w, f.u) + pGrab * ((u.flags.extraAttack || 0) * eC + 0.5 * eC));
+        add(Wm * kv(m, f, E) - rNow, `hook@${f.id}`, () => hookStrike(m, f));
+      }
+    }
     // ---- mental disadvantages steer the choice (B120 self-control rolls)
     const AGGR = /^(aoa|charge|strike|step-|rapid|flurry|mighty|dual|heroic|ca-|da-strike|beat|feint|ruse|grab|shove|fire |point-blank|advance|close@|move-closer|throw|suppress)/;
     const CAUTIOUS = /^(aod|peel|reload-cover|cover@|wait|watch|spread)/;
@@ -3687,7 +3724,8 @@ const SIM = (() => {
     // pinned +10 (+5 with one); -4 if it's stunned
     const leadGrip = t => gripsOn(t).filter(x => !hangsOn(x, t)).sort((x, y) => y.u.liftST - x.u.liftST)[0] || gripsOn(t)[0];
     const twoHands = g => g.armsLost < 1 && (g.inHand === "none" || g.inHand === "gun" || !g.u.melee || g.u.melee.natural || g.u.melee.name === "Punch");
-    const holdBonus = (t, g) => !g ? 0 : (t.pinned ? (twoHands(g) ? 10 : 5) : (twoHands(g) ? 5 : 0)) - (g.stunned ? 4 : 0);
+    const holdBonus = (t, g) => !g ? 0 : (t.pinned ? (twoHands(g) ? 10 : 5) : (twoHands(g) ? 5 : 0)) - (g.stunned ? 4 : 0) + 2 * (g.u.flags.extraArms || 0);   // +2 per extra arm (MA115)
+    const armsOf = x => 2 + (x.u.flags.extraArms || 0) - (x.armsLost || 0);
     // Parrying an unarmed attack with a weapon (B376): the attacker's reaching arm takes the weapon's damage
     function cutsArm(t, att) {
       const w = t.u.melee;
@@ -3697,7 +3735,7 @@ const SIM = (() => {
       applyHit(t, w, att, "arm", false, false, null, rollDamage(w.dmg));
     }
     function grab(m, t) {
-      const lvl = m.u.grapple - skillPen(m) - (m.prone ? 4 : 0) - (m.grips.length ? 4 : 0) + smGrab(m, t);
+      const lvl = m.u.grapple - skillPen(m) - (m.prone ? 4 : 0) - (m.grips.length ? 4 : 0) + smGrab(m, t) + 2 * (m.u.flags.extraArms || 0);   // +2 per extra arm (MA115)
       m.attacked = true;
       if (lvl < 3) return;   // B344
       const r = check(lvl);
@@ -3715,13 +3753,24 @@ const SIM = (() => {
         const a = Math.max(gripST(t), m.u.dx, m.u.grapple) - skillPen(m), d = Math.max(t.u.liftST, t.u.dx - 4, t.u.grapple - 4) - skillPen(t) - (t.committed ? 2 : 0);
         // a foe on All-Out Attack is truly defenceless: it loses the contest outright (MA114); a grappler that loses
         // the contest suffers the takedown itself (B370): it goes down and loses its hold
+        // Sprawling (MA119): a trained grappler who expects to lose falls willingly; the contest runs at +3 for it, and a
+        // grappler that loses or ties goes down too and loses its hold
+        if (!t.aoa && t.u.grapple > t.u.dx && a - d >= 2 && t.state === "ok") {
+          t.prone = true;
+          const c2 = contest3(a, d + 3);
+          if (c2 <= 0) { L(`${t.id} sprawls as ${m.id} drags it down, and takes ${m.id} with it`); release(m); m.prone = true; }
+          else L(`${t.id} sprawls as ${m.id} drags it down`);
+          return;
+        }
         const c = t.aoa ? 1 : contest3(a, d);
         if (c > 0) { t.prone = true; L(`${m.id}${t.grips.length > 1 ? ` and ${t.grips.length - 1} more` : ""} drag ${t.id} to the ground`); }
         else if (c < 0) { L(`${m.id} tries to drag ${t.id} down (${Math.round(a)} vs ${d}) and is thrown down itself`); release(m); m.prone = true; }
         else L(`${m.id} tries to drag ${t.id} down (${Math.round(a)} vs ${d}): it keeps its feet`);
       } else if (!t.pinned) {
         // Pin: Quick Contest of ST against a foe on the ground
-        if (t.aoa || contest(gripST(t) - skillPen(m) + (dSM < 0 ? -3 * dSM : 0), t.u.liftST - skillPen(t) - (t.committed ? 2 : 0) + (dSM > 0 ? 3 * dSM : 0))) { t.pinned = true; L(`${m.id} pins ${t.id} (${t.grips.length} holding it down)`); }
+        // more arms than the foe: +3 to pin it or resist its pin (MA115)
+        const arms = armsOf(m) > armsOf(t) ? 3 : armsOf(t) > armsOf(m) ? -3 : 0;
+        if (t.aoa || contest(gripST(t) - skillPen(m) + (dSM < 0 ? -3 * dSM : 0) + arms, t.u.liftST - skillPen(t) - (t.committed ? 2 : 0) + (dSM > 0 ? 3 * dSM : 0))) { t.pinned = true; L(`${m.id} pins ${t.id} (${t.grips.length} holding it down)`); }
         else L(`${m.id} tries to pin ${t.id}: it struggles free of the hold`);
       }
     }
@@ -3730,7 +3779,7 @@ const SIM = (() => {
       const g = gripsOn(m);
       if (!g.length) return false;
       // a Quick Contest of ST (B371); pinned, one attempt every 10 seconds
-      const lead = leadGrip(m), a = m.u.liftST - skillPen(m), d = gripST(m) + holdBonus(m, lead);
+      const lead = leadGrip(m), a = m.u.liftST - skillPen(m) + 2 * (m.u.flags.extraArms || 0), d = gripST(m) + holdBonus(m, lead);
       if (m.pinned) m.nextBreak = turn + 10;
       if (contest(a, d)) {
         const strongest = lead;
