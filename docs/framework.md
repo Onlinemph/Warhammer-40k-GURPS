@@ -133,7 +133,7 @@ Vehicle void shields will use the same rules at larger scale.
 | Meltagun | 8d×6(10) burn to ½D; beyond ½D 4d×6(3) | Kills AV14 (eff. DR 35) at short range; past ½D still wrecks AV12 (76%), almost never beats AV14 (5%). |
 | Lascannon | 8d×8(5) burn | Kills tanks (AV14 eff. DR 70) and Terminators. |
 | Krak missile | 6d×6(3) cr ex (shaped charge) | Reliable vs AV12–13 (90%); about two in three vs AV14. |
-| Chainsword | sw+2d(2) cut | Tears flesh and flak; bites carapace; skids off power armour. |
+| Chainsword | sw+2d(3) cut | Tears flesh and flak; in a Marine's hands bites carapace and power-armour joints, but rarely gets through a power-armoured torso. Every chain weapon and the Astartes combat knife have monomolecular edges: armour divisor (3) (user direction). |
 | Power sword | sw+3d+1(10) cut | The disruption field shears power armour whoever holds it. |
 | Power fist | thr+8d(10) cr | Kills Terminators in Astartes hands. |
 | Thunder hammer | sw+6d(10) cr | The Terminator-killer; knockback. |

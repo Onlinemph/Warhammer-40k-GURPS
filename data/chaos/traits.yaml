@@ -501,6 +501,35 @@ items:
             tags: [Disadvantage, Mental]
             notes: No self-control roll. Obeys its Aspiring Sorcerer and cannot act against the Sorcerer's orders. The Sorcerer is whoever speaks the Rubric's will at the time.
         design: 15 - 40 = -25 points.
+      - name: All Is Dust
+        container: meta_trait
+        tags: [Advantage, Physical, Tzeentch]
+        children:
+          - name: Warding Field (Rubric)
+            points: 10
+            tags: [Advantage, Physical]
+            notes: >
+              Shield Points 20, as the project's personal force-field rules (framework.md,
+              "Personal force fields"): damage comes off SP first and armour divisors do not
+              apply to SP; excess carries on to the armour at the attack's full divisor. Covers
+              all attacks. Recharge: after 3 seconds with no damage it regains 10 SP per second; a
+              field knocked to 0 waits double that delay.
+          - name: Hard to Subdue
+            points: 0
+            per_level: 2
+            levels: 5
+            ref: B59
+            tags: [Advantage, Physical]
+            notes: "+5 to HT rolls to stay conscious. There is no body in the suit to faint: a Rubric goes down when the armour is broken open, not when it is hurt."
+        lore: >
+          "All is dust." The Rubric's sorcery binds each warrior's soul into its armour, and the
+          sorcery wards it: a Rubric Marine shrugs off fire that would drop a living Astartes and
+          keeps walking until the suit itself is torn apart. The tabletop gives them an
+          invulnerable save and makes small arms less effective against them.
+        design: >
+          Warding field at 0.5 point per SP, as the Mark of Tzeentch's (20 SP, 10 points), standing
+          for the tabletop's invulnerable save; Hard to Subdue 5 (B59, 2/level) 10 for "All is
+          Dust". 10 + 10 = 20 points.
     notes: >
       Apply to a raw Astartes (the package without Personal Advancement). It
       replaces the living organs: the bearer is a sealed suit of Mk IV
@@ -519,7 +548,7 @@ items:
       kill a living body.
     design: >
       Attribute Modifiers -120 + Machine Body (Rubric Shell) 85 + Rubric
-      Mind -25 = -60 points. Unliving is used with No Brain as well as No
+      Mind -25 + All Is Dust 20 = -40 points. Unliving is used with No Brain as well as No
       Blood and No Vitals, matching the framework's list (No Blood, No
       Brain, No Vitals, Unliving). Doesn't Breathe (B49) 20; Doesn't Eat or
       Drink (B50) 10; Doesn't Sleep (B50) 20; Unfazeable (B95) 15; Slave

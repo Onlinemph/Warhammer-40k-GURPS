@@ -629,7 +629,7 @@
 		{
 			"id": "TFN9Pi641L5X36cei",
 			"name": "Rubric of Ahriman (Rubric Marine)",
-			"local_notes": "Apply to a raw Astartes (the package without Personal Advancement). It replaces the living organs: the bearer is a sealed suit of Mk IV filled with the dust of its soul. The Astartes organ traits are not removed in the data (the schema cannot delete another entry's children); the GM ignores blood, breath, hunger, sleep and disease. The Rubric's Mk IV plate is part of its equipment. HT 15 for the framework table is a template adjustment.\n\nLore: The Rubric of Ahriman, cast by Ahriman of the Thousand Sons at the Council of Nikaea's end, turned the Legion's mutating warriors to dust inside their own armour; the dust still walks, driven by the Sorcerers' will. Codex: Chaos Space Marines background and the Horus Heresy fiction on the Thousand Sons describe empty suits with ash-soul cores obeying without thought, indifferent to wounds that would kill a living body.\n\nDesign: Attribute Modifiers -120 + Machine Body (Rubric Shell) 85 + Rubric Mind -25 = -60 points. Unliving is used with No Brain as well as No Blood and No Vitals, matching the framework's list (No Blood, No Brain, No Vitals, Unliving). Doesn't Breathe (B49) 20; Doesn't Eat or Drink (B50) 10; Doesn't Sleep (B50) 20; Unfazeable (B95) 15; Slave Mentality (B154) -40.",
+			"local_notes": "Apply to a raw Astartes (the package without Personal Advancement). It replaces the living organs: the bearer is a sealed suit of Mk IV filled with the dust of its soul. The Astartes organ traits are not removed in the data (the schema cannot delete another entry's children); the GM ignores blood, breath, hunger, sleep and disease. The Rubric's Mk IV plate is part of its equipment. HT 15 for the framework table is a template adjustment.\n\nLore: The Rubric of Ahriman, cast by Ahriman of the Thousand Sons at the Council of Nikaea's end, turned the Legion's mutating warriors to dust inside their own armour; the dust still walks, driven by the Sorcerers' will. Codex: Chaos Space Marines background and the Horus Heresy fiction on the Thousand Sons describe empty suits with ash-soul cores obeying without thought, indifferent to wounds that would kill a living body.\n\nDesign: Attribute Modifiers -120 + Machine Body (Rubric Shell) 85 + Rubric Mind -25 + All Is Dust 20 = -40 points. Unliving is used with No Brain as well as No Blood and No Vitals, matching the framework's list (No Blood, No Brain, No Vitals, Unliving). Doesn't Breathe (B49) 20; Doesn't Eat or Drink (B50) 10; Doesn't Sleep (B50) 20; Unfazeable (B95) 15; Slave Mentality (B154) -40.",
 			"tags": [
 				"Advantage",
 				"Disadvantage",
@@ -777,6 +777,43 @@
 								"Mental"
 							],
 							"base_points": -40
+						}
+					]
+				},
+				{
+					"id": "Tp3trWwb2lFs1KsxH",
+					"name": "All Is Dust",
+					"local_notes": "Lore: \"All is dust.\" The Rubric's sorcery binds each warrior's soul into its armour, and the sorcery wards it: a Rubric Marine shrugs off fire that would drop a living Astartes and keeps walking until the suit itself is torn apart. The tabletop gives them an invulnerable save and makes small arms less effective against them.\n\nDesign: Warding field at 0.5 point per SP, as the Mark of Tzeentch's (20 SP, 10 points), standing for the tabletop's invulnerable save; Hard to Subdue 5 (B59, 2/level) 10 for \"All is Dust\". 10 + 10 = 20 points.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Tzeentch"
+					],
+					"container_type": "meta_trait",
+					"children": [
+						{
+							"id": "tRnjiI0azdTS-xV1W",
+							"name": "Warding Field (Rubric)",
+							"local_notes": "Shield Points 20, as the project's personal force-field rules (framework.md, \"Personal force fields\"): damage comes off SP first and armour divisors do not apply to SP; excess carries on to the armour at the attack's full divisor. Covers all attacks. Recharge: after 3 seconds with no damage it regains 10 SP per second; a field knocked to 0 waits double that delay.",
+							"tags": [
+								"Advantage",
+								"Physical"
+							],
+							"base_points": 10
+						},
+						{
+							"id": "tJwYZqQnXmrfWxp7r",
+							"name": "Hard to Subdue",
+							"reference": "B59",
+							"local_notes": "+5 to HT rolls to stay conscious. There is no body in the suit to faint: a Rubric goes down when the armour is broken open, not when it is hurt.",
+							"tags": [
+								"Advantage",
+								"Physical"
+							],
+							"points_per_level": 2,
+							"can_level": true,
+							"levels": 5,
+							"base_points": 0
 						}
 					]
 				}

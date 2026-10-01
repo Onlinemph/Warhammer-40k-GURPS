@@ -1254,7 +1254,7 @@ const SIM = (() => {
       if (!t.berserk && (major || (headV && t.shock > shock0))) {   // immune to stun (B124)
         const mod = (f.hpt ? 3 : 0) + (major && headV ? (loc === "skull" || loc === "eye" ? -10 : -5) : 0);
         const r = check(t.u.HT + mod);
-        if (!r.ok && (r.margin <= -5 || r.fumble)) { incapacitate(t, "is knocked out"); return; }
+        if (!r.ok && (r.margin + (f.hts || 0) <= -5 || r.fumble)) { incapacitate(t, "is knocked out"); return; }   // Hard to Subdue (B59) helps only against the knockout
         if (!r.ok) {
           t.stunned = true; t.prone = true;
           // a knocked-down model drops what it holds (B420)
@@ -3905,7 +3905,7 @@ const SIM = (() => {
         m.committed = false; m.defAtk = false; m.aoa = false; m.aod = false; m.mna = false; m.offBalance = false;   // "until its next turn", whatever it does with it
         if (!frac && m.hp <= 0) {
           const k = Math.floor(-m.hp / m.u.HP);
-          if (!check(m.u.HT - k + (m.berserk ? 4 : 0)).ok) { FX(["d", m.h.q, m.h.r, m.u.side, 0]); m.state = "out"; place(m, null); L(`${m.id} collapses unconscious`); continue; }
+          if (!check(m.u.HT - k + (m.berserk ? 4 : 0) + (m.u.flags.hts || 0)).ok) { FX(["d", m.h.q, m.h.r, m.u.side, 0]); m.state = "out"; place(m, null); L(`${m.id} collapses unconscious`); continue; }
         }
         if (m.onFire) { burn(m); if (m.state !== "ok") continue; }
         // at 0 FP or less, a Will roll before each maneuver; failure collapses it for the fight (B426)

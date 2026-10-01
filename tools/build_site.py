@@ -314,6 +314,8 @@ def combat_flags(t, flags):
         flags["pbal"] = 1           # +4 to keep one's feet against knockback (B74, B378)
     elif n.startswith("Enhanced Move (Ground)"):
         flags["enhMove"] = flags.get("enhMove", 0) + float(lv)   # B52: top speed x2 per level, reached by accelerating
+    elif n.startswith("Hard to Subdue"):
+        flags["hts"] = flags.get("hts", 0) + lv     # B59: + to HT rolls to stay conscious
     elif n.startswith("Hard to Kill"):
         flags["htk"] = flags.get("htk", 0) + lv
     elif n.startswith("Enhanced Parry"):

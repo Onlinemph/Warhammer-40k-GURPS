@@ -1,7 +1,7 @@
 {
 	"version": 5,
 	"id": "BMnKY3m2BcvsTInDd",
-	"notes": "A Rubric Marine: a Thousand Sons Legionary turned to dust by Ahriman's Rubric and sealed in his own Mark IV armour, driven by the will of his Aspiring Sorcerer. Built on the raw Astartes package (no Personal Advancement, no Heretic Astartes lens: a Rubric has no mind to turn traitor, and no Long War Veteran lens) with the Rubric of Ahriman applied: DX 14, IQ 6, Basic Move 8, no blood, brain or vitals, no breath, food or sleep, Unfazeable and Slave Mentality (its Sorcerer). HT 15 per the framework is a +1 HT adjustment from the Astartes 14. The Mark of Tzeentch is deliberately omitted: its Psyker (Talent) +1 is worthless at IQ 6, the Rubric already is a Tzeentchian artifact and the Mark's Paranoia and Compulsive Lying cannot apply to a mind that obeys, so the template would only have a warding field that the Rubric's armour already stands in for. Weapon skills are low (Guns (Rifle) 17): the Rubric fights by training burned in before the ritual. About 576 points before gear. Equipment: Mark IV (Rubric) plate and the Inferno boltgun.",
+	"notes": "A Rubric Marine: a Thousand Sons Legionary turned to dust by Ahriman's Rubric and sealed in his own Mark IV armour, driven by the will of his Aspiring Sorcerer. Built on the raw Astartes package (no Personal Advancement, no Heretic Astartes lens: a Rubric has no mind to turn traitor, and no Long War Veteran lens) with the Rubric of Ahriman applied: DX 14, IQ 6, Basic Move 8, no blood, brain or vitals, no breath, food or sleep, Unfazeable and Slave Mentality (its Sorcerer). HT 15 per the framework is a +1 HT adjustment from the Astartes 14. The Mark of Tzeentch is deliberately omitted: its Psyker (Talent) +1 is worthless at IQ 6, the Rubric already is a Tzeentchian artifact and the Mark's Paranoia and Compulsive Lying cannot apply to a mind that obeys; the Rubric's own warding field comes from the Rubric of Ahriman's \"All Is Dust\" instead. Weapon skills are low (Guns (Rifle) 17): the Rubric fights by training burned in before the ritual. About 596 points before gear. Equipment: Mark IV (Rubric) plate and the Inferno boltgun.",
 	"traits": [
 		{
 			"id": "T7JijQ4RsakvV4qtJ",
@@ -550,7 +550,7 @@
 		{
 			"id": "TED6LBLKZ56DMPcyI",
 			"name": "Rubric of Ahriman (Rubric Marine)",
-			"local_notes": "Apply to a raw Astartes (the package without Personal Advancement). It replaces the living organs: the bearer is a sealed suit of Mk IV filled with the dust of its soul. The Astartes organ traits are not removed in the data (the schema cannot delete another entry's children); the GM ignores blood, breath, hunger, sleep and disease. The Rubric's Mk IV plate is part of its equipment. HT 15 for the framework table is a template adjustment.\n\nLore: The Rubric of Ahriman, cast by Ahriman of the Thousand Sons at the Council of Nikaea's end, turned the Legion's mutating warriors to dust inside their own armour; the dust still walks, driven by the Sorcerers' will. Codex: Chaos Space Marines background and the Horus Heresy fiction on the Thousand Sons describe empty suits with ash-soul cores obeying without thought, indifferent to wounds that would kill a living body.\n\nDesign: Attribute Modifiers -120 + Machine Body (Rubric Shell) 85 + Rubric Mind -25 = -60 points. Unliving is used with No Brain as well as No Blood and No Vitals, matching the framework's list (No Blood, No Brain, No Vitals, Unliving). Doesn't Breathe (B49) 20; Doesn't Eat or Drink (B50) 10; Doesn't Sleep (B50) 20; Unfazeable (B95) 15; Slave Mentality (B154) -40.",
+			"local_notes": "Apply to a raw Astartes (the package without Personal Advancement). It replaces the living organs: the bearer is a sealed suit of Mk IV filled with the dust of its soul. The Astartes organ traits are not removed in the data (the schema cannot delete another entry's children); the GM ignores blood, breath, hunger, sleep and disease. The Rubric's Mk IV plate is part of its equipment. HT 15 for the framework table is a template adjustment.\n\nLore: The Rubric of Ahriman, cast by Ahriman of the Thousand Sons at the Council of Nikaea's end, turned the Legion's mutating warriors to dust inside their own armour; the dust still walks, driven by the Sorcerers' will. Codex: Chaos Space Marines background and the Horus Heresy fiction on the Thousand Sons describe empty suits with ash-soul cores obeying without thought, indifferent to wounds that would kill a living body.\n\nDesign: Attribute Modifiers -120 + Machine Body (Rubric Shell) 85 + Rubric Mind -25 + All Is Dust 20 = -40 points. Unliving is used with No Brain as well as No Blood and No Vitals, matching the framework's list (No Blood, No Brain, No Vitals, Unliving). Doesn't Breathe (B49) 20; Doesn't Eat or Drink (B50) 10; Doesn't Sleep (B50) 20; Unfazeable (B95) 15; Slave Mentality (B154) -40.",
 			"tags": [
 				"Advantage",
 				"Disadvantage",
@@ -698,6 +698,43 @@
 								"Mental"
 							],
 							"base_points": -40
+						}
+					]
+				},
+				{
+					"id": "TDDR2D5LYrzYafNJN",
+					"name": "All Is Dust",
+					"local_notes": "Lore: \"All is dust.\" The Rubric's sorcery binds each warrior's soul into its armour, and the sorcery wards it: a Rubric Marine shrugs off fire that would drop a living Astartes and keeps walking until the suit itself is torn apart. The tabletop gives them an invulnerable save and makes small arms less effective against them.\n\nDesign: Warding field at 0.5 point per SP, as the Mark of Tzeentch's (20 SP, 10 points), standing for the tabletop's invulnerable save; Hard to Subdue 5 (B59, 2/level) 10 for \"All is Dust\". 10 + 10 = 20 points.",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Tzeentch"
+					],
+					"container_type": "meta_trait",
+					"children": [
+						{
+							"id": "tjCeiuAOEej_44X6Q",
+							"name": "Warding Field (Rubric)",
+							"local_notes": "Shield Points 20, as the project's personal force-field rules (framework.md, \"Personal force fields\"): damage comes off SP first and armour divisors do not apply to SP; excess carries on to the armour at the attack's full divisor. Covers all attacks. Recharge: after 3 seconds with no damage it regains 10 SP per second; a field knocked to 0 waits double that delay.",
+							"tags": [
+								"Advantage",
+								"Physical"
+							],
+							"base_points": 10
+						},
+						{
+							"id": "t6loBOg2SpS7IeXld",
+							"name": "Hard to Subdue",
+							"reference": "B59",
+							"local_notes": "+5 to HT rolls to stay conscious. There is no body in the suit to faint: a Rubric goes down when the armour is broken open, not when it is hurt.",
+							"tags": [
+								"Advantage",
+								"Physical"
+							],
+							"points_per_level": 2,
+							"can_level": true,
+							"levels": 5,
+							"base_points": 0
 						}
 					]
 				}
@@ -1093,7 +1130,7 @@
 		{
 			"id": "eL5HKD6Mc_IY9VkM3",
 			"description": "Combat Knife, Astartes Pattern",
-			"local_notes": "Sized for a gauntleted Astartes hand; scaled to a human's shortsword rather than a human's knife.\n\nLore: Space Marines carry a sidearm blade proportioned to their size and strength - visually a long fighting knife on a Marine's belt reads as a shortsword in a human's hand; consistently shown as a backup when a chainsword or bolt pistol isn't drawn, in Black Library Space Marine fiction from the Horus Heresy series onward.\n\nDesign: Not a bigger version of the human combat knife's stat block (that would just be the same knife with a higher min ST, understating how much blade an Astartes-scale grip actually carries) - instead it is built on the human Shortsword profile (thr+1 imp/sw+1 cut) scaled up in weight and min ST for an Astartes fist, per the framework's rule that Astartes- and human-scale versions of the same weapon type need different stats, not just a relabelling. LC1 (Astartes-issue gear) rather than the LC4 civilian knife bracket. Handling: already built on the Shortsword profile, whose Basic Set parry is 0 (a proper hilt and cross-guard, unlike the plain-bladed Munitorum knife above), so no parry change is needed here - only the plain Knife-skill weapons on this page needed the -1 correction. Weight (4 lb) and min ST (11) are unchanged, already scaled up from the human knife's 1 lb/ST 6 for an Astartes-proportioned grip.",
+			"local_notes": "Sized for a gauntleted Astartes hand; scaled to a human's shortsword rather than a human's knife.\n\nLore: Space Marines carry a sidearm blade proportioned to their size and strength - visually a long fighting knife on a Marine's belt reads as a shortsword in a human's hand; consistently shown as a backup when a chainsword or bolt pistol isn't drawn, in Black Library Space Marine fiction from the Horus Heresy series onward.\n\nDesign: Not a bigger version of the human combat knife's stat block (that would just be the same knife with a higher min ST, understating how much blade an Astartes-scale grip actually carries) - instead it is built on the human Shortsword profile (thr+1 imp/sw+1 cut) scaled up in weight and min ST for an Astartes fist, per the framework's rule that Astartes- and human-scale versions of the same weapon type need different stats, not just a relabelling. LC1 (Astartes-issue gear) rather than the LC4 civilian knife bracket. Handling: already built on the Shortsword profile, whose Basic Set parry is 0 (a proper hilt and cross-guard, unlike the plain-bladed Munitorum knife above), so no parry change is needed here - only the plain Knife-skill weapons on this page needed the -1 correction. Weight (4 lb) and min ST (11) are unchanged, already scaled up from the human knife's 1 lb/ST 6 for an Astartes-proportioned grip. Monoedge rule (user direction): the Astartes knife's monomolecular edge takes armour divisor (3). At ST 30 a thrust or swing (5d+3) now gets through a Mark VII neck seal on 40% of hits and carapace on 22%, and still can't open a power-armoured torso.",
 			"tags": [
 				"Melee Weapon",
 				"Imperium",
@@ -1110,7 +1147,8 @@
 					"damage": {
 						"type": "imp",
 						"st": "thr",
-						"base": "1"
+						"base": "1",
+						"armor_divisor": 3
 					},
 					"reach": "C,1",
 					"parry": "0",
@@ -1192,7 +1230,8 @@
 					"damage": {
 						"type": "cut",
 						"st": "sw",
-						"base": "1"
+						"base": "1",
+						"armor_divisor": 3
 					},
 					"reach": "C,1",
 					"parry": "0",
