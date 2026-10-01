@@ -1708,7 +1708,7 @@
 		{
 			"id": "TLEbl7Ul11OOqSYyZ",
 			"name": "Body Lens: Hive Tyrant",
-			"local_notes": "Lore: The Hive Tyrant: the Hive Mind's synapse lord and its own psyker, the biggest single command bioform normally seen on the ground and the anchor of a swarm's local tactical will. Consistent Codex background across editions; Black Library's Hive Fleet fiction routinely treats a confirmed Hive Tyrant kill as a campaign-level victory.\n\nDesign: 565 (Attribute Modifiers) + 600 (Chitin DR 120) + 25 (Regeneration) + 30 (Synapse Creature) + 30 (Shadow in the Warp) + 75 (Injury Tolerance 3) = 1325 points (Wings disabled by default, +30 more if enabled), added to Tyranid Biology's 20 for 1345 points of physiology alone before skills, psychic powers (data/xenos/tyranids/psychic.yaml) and weapon- symbiotes -- squarely in framework.md's Heroes and Legends tier (1,000-3,000), appropriate for the swarm's synapse lord. See the Hive Tyrant template. NPC creature stat block only; this total is for GM reference, not party balance.",
+			"local_notes": "Lore: The Hive Tyrant: the Hive Mind's synapse lord and its own psyker, the biggest single command bioform normally seen on the ground and the anchor of a swarm's local tactical will. Consistent Codex background across editions; Black Library's Hive Fleet fiction routinely treats a confirmed Hive Tyrant kill as a campaign-level victory.\n\nDesign: 943 (Attribute Modifiers) + 750 (Chitin DR 150) + 25 (Regeneration) + 10 (High Pain Threshold) + 30 (Synapse Creature) + 30 (Shadow in the Warp) + 75 (Injury Tolerance 3) = 1863 points (Wings disabled by default, +30 more if enabled), added to Tyranid Biology's 20 for 1345 points of physiology alone before skills, psychic powers (data/xenos/tyranids/psychic.yaml) and weapon- symbiotes -- squarely in framework.md's Heroes and Legends tier (1,000-3,000), appropriate for the swarm's synapse lord. See the Hive Tyrant template. NPC creature stat block only; this total is for GM reference, not party balance.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -1720,11 +1720,11 @@
 				{
 					"id": "ts_9RhEHmqX1sX1v5",
 					"name": "Attribute Modifiers (Hive Tyrant)",
-					"local_notes": "Design: Framework target: SM +2, ST 55, DX 13, IQ 12, HT 16, HP 70. Increased ST +45 (B14, 10/level, 450) for ST 55, with the SM +2 discount (-10% per point of positive SM, per B18, the same rate this project's Ork Warboss and Custodes entries use, here two steps): 450 x 0.8 = 360. Increased DX +3 (60) for DX 13. Increased IQ +2 (B16, 20/level, 40) for IQ 12 -- a genuine synapse lord and psyker, sharper than any lesser bioform. Increased HT +6 (B15, 10/level, 60) for HT 16. Extra Hit Points +15 (B16, 2/level, 30) on top of the ST-55 base of 55, for HP 70. Increased Basic Move +3 (B17, 5/level, 15): Basic Speed 7.25 gives Move 7, so +3 lands Basic Move at 10. 360+60+40+60+30+15 = 565.",
+					"local_notes": "Design: Framework target: SM +2, ST 100, DX 13, IQ 12, HT 16, HP 130 (user direction: tougher; it was ST 55, HP 70). Increased ST +90 (B14, 10/level, 900) for ST 100, with the SM +2 discount (-10% per point of positive SM, per B18, the same rate this project's Ork Warboss and Custodes entries use, here two steps): 900 x 0.8 = 720. Increased DX +3 (60) for DX 13. Increased IQ +2 (B16, 20/level, 40) for IQ 12 -- a genuine synapse lord and psyker, sharper than any lesser bioform. Increased HT +6 (B15, 10/level, 60) for HT 16. Extra Hit Points +30 (B16, 2/level, with the SM discount: 60 x 0.8 = 48) on top of the ST-100 base, for HP 130, inside Pyramid 3/77's \"within 30% of ST\". Increased Basic Move +3 (B17, 5/level, 15): Basic Speed 7.25 gives Move 7, so +3 lands Basic Move at 10. 720+60+40+60+48+15 = 943.",
 					"tags": [
 						"Physical"
 					],
-					"base_points": 565,
+					"base_points": 943,
 					"features": [
 						{
 							"type": "attribute_bonus",
@@ -1734,7 +1734,7 @@
 						{
 							"type": "attribute_bonus",
 							"attribute": "st",
-							"amount": 45
+							"amount": 90
 						},
 						{
 							"type": "attribute_bonus",
@@ -1754,7 +1754,7 @@
 						{
 							"type": "attribute_bonus",
 							"attribute": "hp",
-							"amount": 15
+							"amount": 30
 						},
 						{
 							"type": "attribute_bonus",
@@ -1767,7 +1767,7 @@
 					"id": "tWT0XOoespqg15lkt",
 					"name": "Chitin (Hive Tyrant)",
 					"reference": "B46",
-					"local_notes": "DR 120, all locations -- the anchor's own top figure short of a Carnifex's. Weak Points 4 (a synapse lord's plating is thicker and better-grown than a rank-and-file predator's): on a hit that fails to penetrate, roll 3d; 4 or less halves DR (60). Eye clusters run at DR 60 rather than 120.\n\nLore: A Tyranid's exoskeleton is grown, not worn: dense bio-ceramic chitin fused directly to the flesh beneath it, thickest on the largest bioforms and thin enough on a Termagant to be more like a swarm-trooper's flak jacket than real armour plate. Universal across Codex background and every piece of Black Library Tyranid fiction.\n\nDesign: Damage Resistance (B46, 5/level, all locations): natural DR bought directly on the body, per framework.md's explicit instruction that chitin is a character trait, not equipment. Each body-type lens overrides `levels`/`dr` to its own figure from framework.md's Tyranid anchor table; see that lens's own copy of this trait for its point cost.",
+					"local_notes": "DR 150, all locations (user direction: tougher; was 120), level with the Carnifex. Weak Points 4 (a synapse lord's plating is thicker and better-grown than a rank-and-file predator's): on a hit that fails to penetrate, roll 3d; 4 or less halves DR (75).\n\nLore: A Tyranid's exoskeleton is grown, not worn: dense bio-ceramic chitin fused directly to the flesh beneath it, thickest on the largest bioforms and thin enough on a Termagant to be more like a swarm-trooper's flak jacket than real armour plate. Universal across Codex background and every piece of Black Library Tyranid fiction.\n\nDesign: Damage Resistance (B46, 5/level, all locations): natural DR bought directly on the body, per framework.md's explicit instruction that chitin is a character trait, not equipment. Each body-type lens overrides `levels`/`dr` to its own figure from framework.md's Tyranid anchor table; see that lens's own copy of this trait for its point cost.",
 					"tags": [
 						"Advantage",
 						"Physical",
@@ -1776,14 +1776,14 @@
 					],
 					"points_per_level": 5,
 					"can_level": true,
-					"levels": 120,
+					"levels": 150,
 					"features": [
 						{
 							"type": "dr_bonus",
 							"locations": [
 								"all"
 							],
-							"amount": 120
+							"amount": 150
 						}
 					]
 				},
@@ -1799,6 +1799,19 @@
 						"Tyranids"
 					],
 					"base_points": 25
+				},
+				{
+					"id": "tqA1IEwVbKG80voEJ",
+					"name": "High Pain Threshold",
+					"reference": "B59",
+					"local_notes": "No shock penalties; +3 to HT rolls to avoid knockdown and stunning.\n\nLore: The synapse lord is the swarm's \"no pain\"; it feels its wounds no more than its brood does.\n\nDesign: Basic Set High Pain Threshold (B59), 10 points (user direction, tougher).",
+					"tags": [
+						"Advantage",
+						"Physical",
+						"Xenos",
+						"Tyranids"
+					],
+					"base_points": 10
 				},
 				{
 					"id": "t6ZgEZGm1E3GiNded",

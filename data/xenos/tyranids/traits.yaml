@@ -1134,33 +1134,41 @@ items:
     tags: [Advantage, Physical, Xenos, Tyranids]
     children:
       - name: "Attribute Modifiers (Hive Tyrant)"
-        points: 565
-        attributes: {sm: 2, st: 45, dx: 3, iq: 2, ht: 6, hp: 15, basic_move: 3}
+        points: 943
+        attributes: {sm: 2, st: 90, dx: 3, iq: 2, ht: 6, hp: 30, basic_move: 3}
         tags: [Physical]
         design: >
-          Framework target: SM +2, ST 55, DX 13, IQ 12, HT 16, HP 70.
-          Increased ST +45 (B14, 10/level, 450) for ST 55, with the SM +2
-          discount (-10% per point of positive SM, per B18, the same rate
-          this project's Ork Warboss and Custodes entries use, here two
-          steps): 450 x 0.8 = 360. Increased DX +3 (60) for DX 13.
+          Framework target: SM +2, ST 100, DX 13, IQ 12, HT 16, HP 130
+          (user direction: tougher; it was ST 55, HP 70). Increased ST +90
+          (B14, 10/level, 900) for ST 100, with the SM +2 discount (-10%
+          per point of positive SM, per B18, the same rate this project's
+          Ork Warboss and Custodes entries use, here two steps): 900 x 0.8
+          = 720. Increased DX +3 (60) for DX 13.
           Increased IQ +2 (B16, 20/level, 40) for IQ 12 -- a genuine
           synapse lord and psyker, sharper than any lesser bioform.
           Increased HT +6 (B15, 10/level, 60) for HT 16. Extra Hit Points
-          +15 (B16, 2/level, 30) on top of the ST-55 base of 55, for HP
-          70. Increased Basic Move +3 (B17, 5/level, 15): Basic Speed 7.25
-          gives Move 7, so +3 lands Basic Move at 10. 360+60+40+60+30+15 =
-          565.
+          +30 (B16, 2/level, with the SM discount: 60 x 0.8 = 48) on top of
+          the ST-100 base, for HP 130, inside Pyramid 3/77's "within 30%
+          of ST". Increased Basic Move +3 (B17, 5/level, 15): Basic Speed
+          7.25 gives Move 7, so +3 lands Basic Move at 10.
+          720+60+40+60+48+15 = 943.
       - name: "Chitin (Hive Tyrant)"
         <<: *chitin
-        levels: 120
-        dr: {all: 120}
+        levels: 150
+        dr: {all: 150}
         notes: >
-          DR 120, all locations -- the anchor's own top figure short of a
-          Carnifex's. Weak Points 4 (a synapse lord's plating is thicker
+          DR 150, all locations (user direction: tougher; was 120), level
+          with the Carnifex. Weak Points 4 (a synapse lord's plating is thicker
           and better-grown than a rank-and-file predator's): on a hit
-          that fails to penetrate, roll 3d; 4 or less halves DR (60). Eye
-          clusters run at DR 60 rather than 120.
+          that fails to penetrate, roll 3d; 4 or less halves DR (75).
       - *hive_tyrant_regen
+      - name: High Pain Threshold
+        points: 10
+        ref: B59
+        tags: [Advantage, Physical, Xenos, Tyranids]
+        notes: No shock penalties; +3 to HT rolls to avoid knockdown and stunning.
+        lore: The synapse lord is the swarm's "no pain"; it feels its wounds no more than its brood does.
+        design: Basic Set High Pain Threshold (B59), 10 points (user direction, tougher).
       - *hive_tyrant_wings
       - *synapse_creature_tyrant
       - *shadow_in_the_warp_tyrant
@@ -1190,8 +1198,8 @@ items:
       routinely treats a confirmed Hive Tyrant kill as a campaign-level
       victory.
     design: >
-      565 (Attribute Modifiers) + 600 (Chitin DR 120) + 25 (Regeneration)
-      + 30 (Synapse Creature) + 30 (Shadow in the Warp) + 75 (Injury Tolerance 3) = 1325 points
+      943 (Attribute Modifiers) + 750 (Chitin DR 150) + 25 (Regeneration)
+      + 10 (High Pain Threshold) + 30 (Synapse Creature) + 30 (Shadow in the Warp) + 75 (Injury Tolerance 3) = 1863 points
       (Wings disabled by default, +30 more if enabled), added to Tyranid
       Biology's 20 for 1345 points of physiology alone before skills,
       psychic powers (data/xenos/tyranids/psychic.yaml) and weapon-
