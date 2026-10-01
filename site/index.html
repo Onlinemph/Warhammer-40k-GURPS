@@ -4131,7 +4131,11 @@ const SIM = (() => {
       // kneeling to standing is the step of a maneuver (B364): it rises and acts, but can't also move
       let rose = false;
       if (m.kneel && !m.prone && !m.kneelVol) { m.kneel = false; rose = true; L(`${m.id} stands up`); }
-      if (m.prone && !m.legsLost && !gripsOn(m).length && (adj.length || u.stance !== "shoot" || !shooter)) {
+      // lying down costs -3 to every defence (B551): a model gets up unless lying there keeps it out of the line of
+      // fire (behind a crate, a parapet or a crest, so the foes' fire mostly can't reach it) or it has gone to ground
+      // with nothing left to fight with
+      const downSafe = () => { if (m.lyingLow) return true; const rDown = risk(m, m.h, ""); m.prone = false; const rUp = risk(m, m.h, ""); m.prone = true; return rDown < 0.5 * rUp; };
+      if (m.prone && !m.legsLost && !gripsOn(m).length && (adj.length || !downSafe())) {
         // lying to standing is two Change Postures, through kneeling (-2 to attack and defend); a successful
         // Acrobatics roll makes it one (B551)
         m.prone = false;
@@ -4305,6 +4309,7 @@ const SIM = (() => {
       // Battle Rage (B124): berserk on entering combat unless it makes its self-control roll
       if (u.flags.battleRage && !m.rageRolled) { m.rageRolled = true; if (roll3() > u.flags.berserk + ledBonus(m)) goBerserk(m, "battle rage"); }
       pick = mentalPick(m, opts, pick, adj);
+      m.lyingLow = pick.label === "lie-low";
       if (globalThis.SIM_DEBUG) globalThis.SIM_DEBUG(m, opts.slice().sort((a, b) => b.v - a.v).slice(0, globalThis.SIM_DEBUG_ALL ? 40 : 6).map(o => `${o.label}=${o.v.toFixed(3)}`).join("  "));
       pick.run();
     }
