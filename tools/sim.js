@@ -306,7 +306,9 @@ const SIM = (() => {
         w.parry = /no/i.test(p) ? null : num(p, 0);
         w.unbalanced = /U/.test(p);
         w.reach = String(line.reach ?? "1");
-        w.reachMax = Math.max(1, ...(w.reach.match(/\d+/g) || ["1"]).map(Number));
+        // Size Modifier and Reach (B402): a big fighter's limbs and weapons reach further (SM +1 only turns C into 1)
+        const smR = [0, 0, 1, 2, 3, 5, 7, 10][Math.max(0, Math.min(7, st.sm || 0))];
+        w.reachMax = Math.max(1, ...(w.reach.match(/\d+/g) || ["1"]).map(Number)) + smR;
         w.oneHanded = oneHand(line.strength);
         w.fencing = /^(Rapier|Saber|Smallsword|Main-Gauche)/.test(line.skill || "");   // B208: +3 retreating parry, -2 per extra parry
         // weight for parrying (B376): the item's, or for a limb, claw or fist 1/20 of Basic Lift, ST x ST / 100
@@ -1782,7 +1784,8 @@ const SIM = (() => {
     // ---- movement: greedy steps through free hexes toward a goal hex
     // Moving through friends (B368): a model may pass through an ally's hex for +1 movement point but not stop there.
     // A hop over a friend or an obstacle lands on the free hex beyond it.
-    const friendAt = (m, k) => { const x = occ.get(k); return x && x !== m && x.u.side === m.u.side ? x : null; };
+    // a friend, or a foe 3+ SM smaller that a big model simply steps over for a movement point (Pyramid 3/77 p. 6)
+    const friendAt = (m, k) => { const x = occ.get(k); return x && x !== m && (x.u.side === m.u.side || (x.state === "ok" && m.u.sm - x.u.sm >= 3)) ? x : null; };
     function hopTo(m, over, target, cost, ctx) {
       if (cost >= 6) {
         // too big to hop: the whole turn and a DX roll to clamber over (B352)
@@ -2657,6 +2660,7 @@ const SIM = (() => {
       if (TDODGE) m.evading = pool.filter(f => f.u.ranged && f.h && los(f.h, m.h)).sort((a, b) => threatOf(b) / Math.max(1, hexDist(b.h, m.h)) - threatOf(a) / Math.max(1, hexDist(a.h, m.h)))[0] || null;
       const Wm = stanceW(m, "melee") * A.aggression, Wr = stanceW(m, "ranged") * A.aggression;
       if (u.hooks) hookOptions(m, pool, add, rNow, Wm);
+      if (u.sm >= 1 && adj.length && !m.grips.length) trampleOptions(m, adj, add, rNow, Wm);
       if (adj.length) meleeOptions(m, adj, add, rNow, Wm, Wr, mw);
       else {
         rangedOptions(m, pool, add, rNow, Wr);
@@ -2728,6 +2732,28 @@ const SIM = (() => {
       pick.run();
     }
 
+    // ---- Trampling (B404): a model 2+ SM bigger (1+ against a prone foe) tramples: DX or Brawling (with the relative
+    // SM penalty for the bigger striker, Pyramid 3/77 p. 7), dodge only, thrust crushing on its own ST; 3+ SM bigger is
+    // large-area injury
+    const canTrample = (m, t) => m.u.sm - t.u.sm >= 2 || (m.u.sm - t.u.sm >= 1 && t.prone && !m.prone);
+    const brawlOf = u => u._br ?? (u._br = Math.max(u.dx, skillOf(u, /^Brawling/)));
+    function trample(m, t) {
+      m.attacked = true; faceTo(m, t.h); reveal(m);
+      const lvl = brawlOf(m.u) - skillPen(m) + smMelee(m, t) - darkPen(m, t), r = check(lvl);
+      if (!r.ok) { L(`${m.id} tries to trample ${t.id} (skill ${lvl}): misses`); return; }
+      if (!r.crit && defend(t, m, true, 0, 0, { ...UNARMED, weight: m.u.st * m.u.st / 10, huge: true })) { L(`${m.id} tries to trample ${t.id}: dodged`); return; }
+      L(`${m.id} tramples ${t.id}`);
+      m.landed = t;
+      applyHit(m, { dmg: m.u.thrCr, follow: null }, t, m.u.sm - t.u.sm >= 3 ? "area" : hitLocOn(t), false, false, m.u.thrCr);
+    }
+    function trampleOptions(m, adj, add, rNow, Wm) {
+      for (const t of adj) {
+        if (!t.h || hexDist(m.h, t.h) > 1 || !canTrample(m, t)) continue;
+        const lvl = brawlOf(m.u) - skillPen(m) + smMelee(m, t), dd = dodgeOf(t) - (t.prone ? 3 : 0);
+        const E = P3[cl(lvl)] * (1 - P3[cl(dd)]) * expInj({ id: "trample" + m.u.idx, dmg: m.u.thrCr, follow: null }, t.u, m.u.sm - t.u.sm >= 3 ? "area" : "torso");
+        add(Wm * kv(m, t, E) - rNow, `trample@${t.id}`, () => trample(m, t));
+      }
+    }
     // ---- Flesh Hooks: strike with the hooks; on a hit, a free grapple (no defence: the hooks already hold) that drags the
     // victim beside the bearer; an Extra Attack then goes into it with the claws
     function hookStrike(m, f) {

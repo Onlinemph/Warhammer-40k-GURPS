@@ -123,7 +123,11 @@ Success rolls follow B343-348: 3 and 4 always succeed, 17 and 18 always fail, an
 - **Grappling** (B370, p. 9-10): +1 per SM of difference to grab, either way, at most +4. A smaller grappler can only take down or pin a larger foe if it grabs a part where that bonus plus the grappling penalty comes to 0 or less, so it goes for the neck (−3); against a foe more than 3 SM bigger it can only hang on. Anyone the foe out-muscles more than twice over is only extra encumbrance (B370) and is shrugged off. In the pin contest the larger fighter gets +3 per SM of difference.
 - **Parrying big attacks** (p. 8): a claw, fist or bite counts as weighing ST x ST / 100 lb, a slam or shove ST x ST / 10 lb (Quadratic Natural Attacks), and an armed blow as the heavier of its weapon and the wielder's fist (Weapon Power), against the parrier's Basic Lift and for breaking the parrying weapon.
 - **Huge slams** (p. 9): against a slam or shove by something 3 or more SM bigger, the only defence is diving aside, and shields don't help.
-- **Not modelled**: multi-hex figures, reach from size, height effects on hit locations, trampling, evading and climbing big foes, and the special attacks table.
+- **Reach from size** (B402): SM +1 turns reach C into 1; SM +2 adds +1 yard to the upper end of every melee reach (a Carnifex's claws reach 2), +3 adds 2, +4 adds 3, +5 adds 5.
+- **Trampling** (B404): a model 2+ SM bigger than its foe, or 1+ bigger against a foe lying down, may trample it: DX or Brawling with the bigger striker's relative-SM penalty, dodge (or dive) only, thrust crushing on its own ST; 3+ SM bigger makes it large-area injury.
+- **Stepping over** (Pyramid 3/77 p. 6, B368): a model 3+ SM bigger than a foe walks over it for a movement point, as it would past a friend, without a roll.
+- **Fear and afflictions** (p. 8): a horror check for a comrade killed by something bigger takes the size difference as a further penalty; SM adds to HT to resist afflictions.
+- **Not modelled**: multi-hex figures (B392; every model fills one hex), height and hit locations (B402-403 and p. 4-5 need each template's posture, upright or horizontal, which the data doesn't record), evading and climbing big foes, line of sight blocked by big bodies, Huge Melee Attacks (7+ SM apart, nobody in the roster), and incidental collisions.
 
 ## Martial Arts options
 
