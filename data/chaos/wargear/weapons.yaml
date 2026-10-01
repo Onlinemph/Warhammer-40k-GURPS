@@ -1,0 +1,243 @@
+kind: equipment
+output: Chaos/Equipment/Chaos Weapons.eqp
+items:
+
+  - name: Inferno Boltgun
+    tl: 10
+    lc: 0
+    cost: 3000
+    weight: 38
+    tags: [Missile Weapon, Chaos, Tzeentch, Thousand Sons]
+    weapons:
+      - usage: Standard bolt
+        damage: 6dx2(3) pi++
+        acc: 4
+        range: 200/1000
+        rof: 3
+        shots: 24(3)
+        st: 19
+        bulk: -5
+        rcl: 3
+        skill: Guns (Rifle)
+      - usage: Follow-up (warpflame)
+        damage: 2d burn
+        acc: 4
+        range: 200/1000
+        rof: 3
+        shots: 24(3)
+        st: 19
+        bulk: -5
+        rcl: 3
+        skill: Guns (Rifle)
+    notes: >-
+      The warpflame follow-up applies only when the bolt penetrates DR, as for the Godwyn
+      boltgun's explosive follow-up (B414).
+    lore: >-
+      The inferno boltgun fires bolts charged with warpflame, and is the usual weapon of the
+      Rubric Marines of the Thousand Sons. The fiction describes bolts that burn with a
+      sorcerous fire as well as exploding (Black Library Thousand Sons fiction; Codex: Thousand
+      Sons). Few outside the Legion have the sorcery to make the ammunition.
+    design: >-
+      Handling is the Godwyn boltgun's, copied as the task and framework direct: Acc 4, range
+      200/1000, RoF 3, 24(3) shots, ST 19, Bulk -5, Rcl 3, Guns (Rifle), 38 lb. Damage follows
+      the Chaos anchor in framework.md: 6dx2 pi++ as the boltgun, one divisor step further, (3)
+      against (2), and a 2d burn follow-up in place of 2d cr ex. The follow-up is a second line
+      whose usage contains "follow-up" and sits right after the main line, the pattern the
+      simulator links. By exact dice, against an Astartes Mark VII (DR 100, effective DR 33)
+      the main bolt penetrates 85.5% of the time, against the Mark IV (DR 95) 90.4%, against
+      carapace 99%, and against Tartaros Terminator plate (DR 190) 0.5%. The standard boltgun
+      manages 14.5% against Mark VII, so the divisor step makes it a weapon that kills
+      Astartes, which suits a weapon built to kill sealed armour. Cost is $3,000 against the
+      boltgun's $1,200 because the ammunition is sorcerous. LC 0: Imperial law bans it outright.
+
+  - name: Warpflamer
+    tl: 8
+    lc: 0
+    cost: 1500
+    weight: 14
+    tags: [Missile Weapon, Chaos, Tzeentch]
+    weapons:
+      - usage: Cone attack (5 yards)
+        damage: 4d burn
+        range: 5
+        shots: 4(5)
+        st: 9
+        bulk: -3
+        skill: Liquid Projector (Flamethrower)
+        notes: >-
+          No Acc bonus applies and no aiming roll is needed against a target inside the cone, as
+          for the Flamer and the Basic Set Flamethrower (B281). Treat cover bonuses as halved
+          (round down) against the cone.
+      - usage: Follow-up (per turn while ablaze)
+        damage: 2d burn
+        range: 5
+        shots: 4(5)
+        st: 9
+        bulk: -3
+        skill: Liquid Projector (Flamethrower)
+        notes: >-
+          A target who fails an HT roll on being hit catches fire and takes this every turn until
+          extinguished (B433); DR does not stop it. Warpflame burns as long as it likes, so the
+          GM may let it catch in a sealed suit's seams, but by default it follows the Flamer: it
+          does not apply to a hermetically sealed suit whose seal has not been breached.
+    lore: >-
+      Tzeentch's sorcerers and the Thousand Sons use flamers that spit warpflame, a fire of
+      changing colours that burns by the will of the warp, not by fuel. The Codex entries for
+      Chaos Space Marines and Thousand Sons give it as a flamer with a deadlier flame.
+    design: >-
+      The Flamer's profile, copied: 4d burn cone, 5 yards, 4(5) shots, ST 9, Bulk -3, Liquid
+      Projector (Flamethrower), 14 lb. Per the Chaos anchor in framework.md the ablaze follow-up
+      is 2d burn per turn, up from the Flamer's 1d, because warpflame does not burn out. The
+      usage text "per turn while ablaze" is the one the simulator reads as ongoing fire. TL 8
+      matches the Flamer; the cost is $1,500 against $550 for the sorcery involved. LC 0.
+
+  - name: Sonic Blaster
+    tl: 10
+    lc: 0
+    cost: 2500
+    weight: 24
+    tags: [Missile Weapon, Chaos, Slaanesh, Noise Marine]
+    weapons:
+      - usage: Standard
+        damage: 6d(5) cr
+        acc: 5
+        range: 50/150
+        rof: 3
+        shots: 30(3)
+        st: 16†
+        bulk: -5
+        rcl: 1
+        skill: Guns (Rifle)
+        notes: >-
+          The sound shakes the wearer inside the armour. By default nothing extra applies, but the
+          GM may add the blunt trauma rule (B379) to a hit that fails to penetrate.
+    lore: >-
+      Noise Marines of the Emperor's Children carry sonic blasters, rifle-sized weapons that
+      project a beam of destructive sound which shakes a target's body apart inside its armour
+      (Codex: Chaos Space Marines, Emperor's Children and Noise Marine fiction). Their
+      sound-obsessed users prize the shriek of a fired shot as much as its effect.
+    design: >-
+      Damage and rate follow the Chaos anchor: 6d(5) cr, RoF 3, range 50/150 (raised from 5d(3),
+      which could never get through Mark VII plate: sonic weapons in the fiction shake a Marine
+      apart inside his armour). Handling follows
+      framework.md's Weapon handling stats. Weight 24 lb: an Astartes-scale rifle, lighter than
+      the 38 lb Godwyn boltgun because it carries no heavy bolt and propellant. Minimum ST is
+      the square root of 10 times 24, about 15.5, which rounds to 16, with the † for
+      two-handed use. Acc 5: a rifle value (4 to 5) with a point for a weapon with no
+      projectile to drop. Rcl 1: it throws no mass, so it has the recoil of a beam weapon, not a
+      bolter's 3. Bulk -5, an Astartes-pattern rifle. Shots 30(3) from an energy cell. Skill is
+      Guns (Rifle), as the task requires: sound is not a beam in the framework's Skills table,
+      and the weapon is a shoulder rifle. By exact dice, 6d(5) beats Mark VII plate (effective
+      DR 20) on 55% of hits and carapace (DR 14) on 94%, and never Terminator plate (DR 40).
+
+  - name: Blastmaster
+    tl: 10
+    lc: 0
+    cost: 6000
+    weight: 80
+    tags: [Missile Weapon, Chaos, Slaanesh, Noise Marine]
+    weapons:
+      - usage: Varied frequency
+        damage: 6dx2(3) cr
+        acc: 5
+        range: 120/360
+        rof: 2
+        shots: 20(4)
+        st: 14B
+        bulk: -7
+        rcl: 2
+        skill: Gunner (Cannon)
+        notes: Tuned to many frequencies at once. Fires at RoF 2.
+      - usage: Single frequency
+        damage: 6dx3(5) cr
+        acc: 5
+        range: 120/360
+        rof: 1
+        shots: 20(4)
+        st: 14B
+        bulk: -7
+        rcl: 2
+        skill: Gunner (Cannon)
+        notes: >-
+          One frequency, tuned to the target's armour, fired once per turn. More damage and a
+          larger armour divisor than the varied setting.
+    lore: >-
+      The blastmaster is the Noise Marines' heavy sonic weapon: a big emitter on the shoulder or
+      a brace, with a setting for sweeping many frequencies and another that picks one to shatter
+      a single target (Codex: Chaos Space Marines; Noise Marine fiction).
+    design: >-
+      Damage and rate from the Chaos anchor: varied frequency 6dx2(3) cr, RoF 2, range 120/360;
+      single frequency 6dx3(5) cr, RoF 1. Both lines share handling. Heavy weapon, so it is
+      braced: weight 80 lb, near the Heavy Bolter's 85 lb, and ST 14B with a bipod, as the Heavy
+      Bolter. Bulk -7, in the framework's heavy/support band of -6 to -8. Skill is Gunner
+      (Cannon) rather than Gunner (Machine Gun) or Guns (Light Machine Gun): RoF 2 or 1 is
+      single-emitter fire like the Autocannon's, not the Heavy Bolter's automatic stream, and
+      the framework puts braced and mounted heavies under Gunner. Rcl 2, below the Heavy
+      Bolter's 4: a beam of sound has no projectile momentum. Acc 5 and shots 20(4). By exact
+      dice, varied frequency penetrates Mark VII (effective DR 33) 85.5% of the time and
+      Tartaros 0.5%; single frequency penetrates Mark VII always and Tartaros 98%, so the
+      single setting kills Terminators, like a lascannon at lower power.
+
+  - name: Plague Knife
+    tl: 2
+    lc: 0
+    cost: 600
+    weight: 4
+    tags: [Melee Weapon, Chaos, Nurgle, Death Guard]
+    weapons:
+      - usage: Thrust
+        damage: thr+1 imp
+        reach: C,1
+        parry: 0
+        st: 11
+        skill: Shortsword
+      - usage: Swing
+        damage: sw+1 cut
+        reach: C,1
+        parry: 0
+        st: 11
+        skill: Shortsword
+      - usage: Follow-up (Nurgle's Rot)
+        damage: 2d tox
+        reach: C,1
+        parry: 0
+        st: 11
+        skill: Shortsword
+        notes: >-
+          Applies only if the blade penetrates DR. Toxic damage ignores armour once it is in the
+          wound.
+    notes: Sized for a gauntleted Astartes hand, like the Astartes combat knife.
+    lore: >-
+      Death Guard Plague Marines carry blades that are crusted with filth and rot, poisoned with
+      the diseases of Nurgle. A scratch from one carries a plague (Codex: Death Guard and Black
+      Library Death Guard fiction).
+    design: >-
+      The thrust and swing lines are the Astartes combat knife's, copied: thr+1 imp and sw+1 cut,
+      reach C,1, parry 0, ST 11, Shortsword, 4 lb. The follow-up is the Chaos anchor, a 2d tox
+      line whose usage contains "follow-up" so the simulator applies it after a penetrating hit.
+      Cost $600 over the combat knife's $200 for the poison. TL 2 as the knife: the blade is
+      ordinary, the corruption is not.
+
+  - name: Blight Grenade
+    tl: 8
+    lc: 0
+    cost: 60
+    weight: 1
+    tags: [Missile Weapon, Chaos, Nurgle, Death Guard]
+    weapons:
+      - usage: Thrown
+        damage: 3d cr ex [4d cut]
+        skill: Throwing
+      - usage: Follow-up (per fragment)
+        damage: 1d tox
+        skill: Throwing
+        notes: Each fragment that penetrates DR carries the poison.
+    lore: >-
+      Death Guard Plague Marines throw blight grenades, whose casings hold a filth that rots
+      flesh and corrodes metal. They are the plague-god's answer to the frag grenade (Codex:
+      Death Guard).
+    design: >-
+      The Frag Grenade's line, copied: 3d cr ex [4d cut], Throwing, 1 lb. Chaos anchor in
+      framework.md adds a 1d tox follow-up per fragment, so the burst injures the same way and a
+      fragment that gets through DR also poisons. Cost $60 against the Frag Grenade's $20. TL 8,
+      LC 0.

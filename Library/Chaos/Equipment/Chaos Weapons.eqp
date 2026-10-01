@@ -1,0 +1,923 @@
+{
+	"version": 5,
+	"rows": [
+		{
+			"id": "eAzQKd_YNDPnneGjS",
+			"description": "Inferno Boltgun",
+			"local_notes": "The warpflame follow-up applies only when the bolt penetrates DR, as for the Godwyn boltgun's explosive follow-up (B414).\n\nLore: The inferno boltgun fires bolts charged with warpflame, and is the usual weapon of the Rubric Marines of the Thousand Sons. The fiction describes bolts that burn with a sorcerous fire as well as exploding (Black Library Thousand Sons fiction; Codex: Thousand Sons). Few outside the Legion have the sorcery to make the ammunition.\n\nDesign: Handling is the Godwyn boltgun's, copied as the task and framework direct: Acc 4, range 200/1000, RoF 3, 24(3) shots, ST 19, Bulk -5, Rcl 3, Guns (Rifle), 38 lb. Damage follows the Chaos anchor in framework.md: 6dx2 pi++ as the boltgun, one divisor step further, (3) against (2), and a 2d burn follow-up in place of 2d cr ex. The follow-up is a second line whose usage contains \"follow-up\" and sits right after the main line, the pattern the simulator links. By exact dice, against an Astartes Mark VII (DR 100, effective DR 33) the main bolt penetrates 85.5% of the time, against the Mark IV (DR 95) 90.4%, against carapace 99%, and against Tartaros Terminator plate (DR 190) 0.5%. The standard boltgun manages 14.5% against Mark VII, so the divisor step makes it a weapon that kills Astartes, which suits a weapon built to kill sealed armour. Cost is $3,000 against the boltgun's $1,200 because the ammunition is sorcerous. LC 0: Imperial law bans it outright.",
+			"tags": [
+				"Missile Weapon",
+				"Chaos",
+				"Tzeentch",
+				"Thousand Sons"
+			],
+			"tech_level": "10",
+			"legality_class": "0",
+			"base_value": "3000",
+			"base_weight": "38 lb",
+			"weapons": [
+				{
+					"id": "WABSJuyTa2sImqrhw",
+					"sv": 1,
+					"damage": {
+						"type": "pi++",
+						"base": "6dx2",
+						"armor_divisor": 3
+					},
+					"accuracy": "4",
+					"range": "200/1000",
+					"rate_of_fire": "3",
+					"shots": "24(3)",
+					"bulk": "-5",
+					"recoil": "3",
+					"strength": "19",
+					"usage": "Standard bolt",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "WZf5CiKmNAZPZbZC2",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "2d"
+					},
+					"accuracy": "4",
+					"range": "200/1000",
+					"rate_of_fire": "3",
+					"shots": "24(3)",
+					"bulk": "-5",
+					"recoil": "3",
+					"strength": "19",
+					"usage": "Follow-up (warpflame)",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "ebhvvW8RBzkgkBwav",
+			"description": "Warpflamer",
+			"local_notes": "Lore: Tzeentch's sorcerers and the Thousand Sons use flamers that spit warpflame, a fire of changing colours that burns by the will of the warp, not by fuel. The Codex entries for Chaos Space Marines and Thousand Sons give it as a flamer with a deadlier flame.\n\nDesign: The Flamer's profile, copied: 4d burn cone, 5 yards, 4(5) shots, ST 9, Bulk -3, Liquid Projector (Flamethrower), 14 lb. Per the Chaos anchor in framework.md the ablaze follow-up is 2d burn per turn, up from the Flamer's 1d, because warpflame does not burn out. The usage text \"per turn while ablaze\" is the one the simulator reads as ongoing fire. TL 8 matches the Flamer; the cost is $1,500 against $550 for the sorcery involved. LC 0.",
+			"tags": [
+				"Missile Weapon",
+				"Chaos",
+				"Tzeentch"
+			],
+			"tech_level": "8",
+			"legality_class": "0",
+			"base_value": "1500",
+			"base_weight": "14 lb",
+			"weapons": [
+				{
+					"id": "WY_xsIfy_QW7dF_Bm",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "4d"
+					},
+					"range": "5",
+					"shots": "4(5)",
+					"bulk": "-3",
+					"strength": "9",
+					"usage": "Cone attack (5 yards)",
+					"usage_notes": "No Acc bonus applies and no aiming roll is needed against a target inside the cone, as for the Flamer and the Basic Set Flamethrower (B281). Treat cover bonuses as halved (round down) against the cone.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Liquid Projector"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Flamethrower"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Liquid Projector"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "W4uMui6mueP4lFZGJ",
+					"sv": 1,
+					"damage": {
+						"type": "burn",
+						"base": "2d"
+					},
+					"range": "5",
+					"shots": "4(5)",
+					"bulk": "-3",
+					"strength": "9",
+					"usage": "Follow-up (per turn while ablaze)",
+					"usage_notes": "A target who fails an HT roll on being hit catches fire and takes this every turn until extinguished (B433); DR does not stop it. Warpflame burns as long as it likes, so the GM may let it catch in a sealed suit's seams, but by default it follows the Flamer: it does not apply to a hermetically sealed suit whose seal has not been breached.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Liquid Projector"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Flamethrower"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Liquid Projector"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "efOU7W3jP-ZSUqxQt",
+			"description": "Sonic Blaster",
+			"local_notes": "Lore: Noise Marines of the Emperor's Children carry sonic blasters, rifle-sized weapons that project a beam of destructive sound which shakes a target's body apart inside its armour (Codex: Chaos Space Marines, Emperor's Children and Noise Marine fiction). Their sound-obsessed users prize the shriek of a fired shot as much as its effect.\n\nDesign: Damage and rate follow the Chaos anchor: 6d(5) cr, RoF 3, range 50/150 (raised from 5d(3), which could never get through Mark VII plate: sonic weapons in the fiction shake a Marine apart inside his armour). Handling follows framework.md's Weapon handling stats. Weight 24 lb: an Astartes-scale rifle, lighter than the 38 lb Godwyn boltgun because it carries no heavy bolt and propellant. Minimum ST is the square root of 10 times 24, about 15.5, which rounds to 16, with the † for two-handed use. Acc 5: a rifle value (4 to 5) with a point for a weapon with no projectile to drop. Rcl 1: it throws no mass, so it has the recoil of a beam weapon, not a bolter's 3. Bulk -5, an Astartes-pattern rifle. Shots 30(3) from an energy cell. Skill is Guns (Rifle), as the task requires: sound is not a beam in the framework's Skills table, and the weapon is a shoulder rifle. By exact dice, 6d(5) beats Mark VII plate (effective DR 20) on 55% of hits and carapace (DR 14) on 94%, and never Terminator plate (DR 40).",
+			"tags": [
+				"Missile Weapon",
+				"Chaos",
+				"Slaanesh",
+				"Noise Marine"
+			],
+			"tech_level": "10",
+			"legality_class": "0",
+			"base_value": "2500",
+			"base_weight": "24 lb",
+			"weapons": [
+				{
+					"id": "WTMvCMuy9TBNnkvXh",
+					"sv": 1,
+					"damage": {
+						"type": "cr",
+						"base": "6d",
+						"armor_divisor": 5
+					},
+					"accuracy": "5",
+					"range": "50/150",
+					"rate_of_fire": "3",
+					"shots": "30(3)",
+					"bulk": "-5",
+					"recoil": "1",
+					"strength": "16†",
+					"usage": "Standard",
+					"usage_notes": "The sound shakes the wearer inside the armour. By default nothing extra applies, but the GM may add the blunt trauma rule (B379) to a hit that fails to penetrate.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Rifle"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Pistol"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Shotgun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Machine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Submachine Gun"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Grenade Launcher"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Gyroc"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Guns"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Light Anti-Armor Weapon"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "ewB_P4B4REWQyvAbp",
+			"description": "Blastmaster",
+			"local_notes": "Lore: The blastmaster is the Noise Marines' heavy sonic weapon: a big emitter on the shoulder or a brace, with a setting for sweeping many frequencies and another that picks one to shatter a single target (Codex: Chaos Space Marines; Noise Marine fiction).\n\nDesign: Damage and rate from the Chaos anchor: varied frequency 6dx2(3) cr, RoF 2, range 120/360; single frequency 6dx3(5) cr, RoF 1. Both lines share handling. Heavy weapon, so it is braced: weight 80 lb, near the Heavy Bolter's 85 lb, and ST 14B with a bipod, as the Heavy Bolter. Bulk -7, in the framework's heavy/support band of -6 to -8. Skill is Gunner (Cannon) rather than Gunner (Machine Gun) or Guns (Light Machine Gun): RoF 2 or 1 is single-emitter fire like the Autocannon's, not the Heavy Bolter's automatic stream, and the framework puts braced and mounted heavies under Gunner. Rcl 2, below the Heavy Bolter's 4: a beam of sound has no projectile momentum. Acc 5 and shots 20(4). By exact dice, varied frequency penetrates Mark VII (effective DR 33) 85.5% of the time and Tartaros 0.5%; single frequency penetrates Mark VII always and Tartaros 98%, so the single setting kills Terminators, like a lascannon at lower power.",
+			"tags": [
+				"Missile Weapon",
+				"Chaos",
+				"Slaanesh",
+				"Noise Marine"
+			],
+			"tech_level": "10",
+			"legality_class": "0",
+			"base_value": "6000",
+			"base_weight": "80 lb",
+			"weapons": [
+				{
+					"id": "WQKs2ZG76IyIt-S63",
+					"sv": 1,
+					"damage": {
+						"type": "cr",
+						"base": "6dx2",
+						"armor_divisor": 3
+					},
+					"accuracy": "5",
+					"range": "120/360",
+					"rate_of_fire": "2",
+					"shots": "20(4)",
+					"bulk": "-7",
+					"recoil": "2",
+					"strength": "14B",
+					"usage": "Varied frequency",
+					"usage_notes": "Tuned to many frequencies at once. Fires at RoF 2.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Gunner"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Cannon"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Gunner"
+							},
+							"modifier": -4
+						}
+					]
+				},
+				{
+					"id": "WLHDBYJCSVxtFIdrW",
+					"sv": 1,
+					"damage": {
+						"type": "cr",
+						"base": "6dx3",
+						"armor_divisor": 5
+					},
+					"accuracy": "5",
+					"range": "120/360",
+					"rate_of_fire": "1",
+					"shots": "20(4)",
+					"bulk": "-7",
+					"recoil": "2",
+					"strength": "14B",
+					"usage": "Single frequency",
+					"usage_notes": "One frequency, tuned to the target's armour, fired once per turn. More damage and a larger armour divisor than the varied setting.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Gunner"
+							},
+							"specialization": {
+								"compare": "is",
+								"qualifier": "Cannon"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Gunner"
+							},
+							"modifier": -4
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "eA4m2L1KU8qemcmKs",
+			"description": "Plague Knife",
+			"local_notes": "Sized for a gauntleted Astartes hand, like the Astartes combat knife.\n\nLore: Death Guard Plague Marines carry blades that are crusted with filth and rot, poisoned with the diseases of Nurgle. A scratch from one carries a plague (Codex: Death Guard and Black Library Death Guard fiction).\n\nDesign: The thrust and swing lines are the Astartes combat knife's, copied: thr+1 imp and sw+1 cut, reach C,1, parry 0, ST 11, Shortsword, 4 lb. The follow-up is the Chaos anchor, a 2d tox line whose usage contains \"follow-up\" so the simulator applies it after a penetrating hit. Cost $600 over the combat knife's $200 for the poison. TL 2 as the knife: the blade is ordinary, the corruption is not.",
+			"tags": [
+				"Melee Weapon",
+				"Chaos",
+				"Nurgle",
+				"Death Guard"
+			],
+			"tech_level": "2",
+			"legality_class": "0",
+			"base_value": "600",
+			"base_weight": "4 lb",
+			"weapons": [
+				{
+					"id": "wmQoirUgxJUNo0bp6",
+					"sv": 1,
+					"damage": {
+						"type": "imp",
+						"st": "thr",
+						"base": "1"
+					},
+					"reach": "C,1",
+					"parry": "0",
+					"strength": "11",
+					"usage": "Thrust",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Shortsword"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Broadsword"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Force Sword"
+							},
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Jitte/Sai"
+							},
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Knife"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Saber"
+							},
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Smallsword"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Tonfa"
+							},
+							"modifier": -3
+						}
+					]
+				},
+				{
+					"id": "wltBpccrg2vCmRl2Z",
+					"sv": 1,
+					"damage": {
+						"type": "cut",
+						"st": "sw",
+						"base": "1"
+					},
+					"reach": "C,1",
+					"parry": "0",
+					"strength": "11",
+					"usage": "Swing",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Shortsword"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Broadsword"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Force Sword"
+							},
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Jitte/Sai"
+							},
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Knife"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Saber"
+							},
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Smallsword"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Tonfa"
+							},
+							"modifier": -3
+						}
+					]
+				},
+				{
+					"id": "wejjM4FYFIxop6tWy",
+					"sv": 1,
+					"damage": {
+						"type": "tox",
+						"base": "2d"
+					},
+					"reach": "C,1",
+					"parry": "0",
+					"strength": "11",
+					"usage": "Follow-up (Nurgle's Rot)",
+					"usage_notes": "Applies only if the blade penetrates DR. Toxic damage ignores armour once it is in the wound.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -5
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Shortsword"
+							}
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Broadsword"
+							},
+							"modifier": -2
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Force Sword"
+							},
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Jitte/Sai"
+							},
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Knife"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Saber"
+							},
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Smallsword"
+							},
+							"modifier": -4
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Tonfa"
+							},
+							"modifier": -3
+						}
+					]
+				}
+			],
+			"quantity": 1
+		},
+		{
+			"id": "e71Ffy2eRYlwkFBKc",
+			"description": "Blight Grenade",
+			"local_notes": "Lore: Death Guard Plague Marines throw blight grenades, whose casings hold a filth that rots flesh and corrodes metal. They are the plague-god's answer to the frag grenade (Codex: Death Guard).\n\nDesign: The Frag Grenade's line, copied: 3d cr ex [4d cut], Throwing, 1 lb. Chaos anchor in framework.md adds a 1d tox follow-up per fragment, so the burst injures the same way and a fragment that gets through DR also poisons. Cost $60 against the Frag Grenade's $20. TL 8, LC 0.",
+			"tags": [
+				"Missile Weapon",
+				"Chaos",
+				"Nurgle",
+				"Death Guard"
+			],
+			"tech_level": "8",
+			"legality_class": "0",
+			"base_value": "60",
+			"base_weight": "1 lb",
+			"weapons": [
+				{
+					"id": "WISXc2Ib8X6afu1si",
+					"sv": 1,
+					"damage": {
+						"type": "cr ex",
+						"base": "3d",
+						"fragmentation": "4d",
+						"fragmentation_type": "cut"
+					},
+					"usage": "Thrown",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Throwing"
+							}
+						}
+					]
+				},
+				{
+					"id": "W1eSZQ22uz2er9bdY",
+					"sv": 1,
+					"damage": {
+						"type": "tox",
+						"base": "1d"
+					},
+					"usage": "Follow-up (per fragment)",
+					"usage_notes": "Each fragment that penetrates DR carries the poison.",
+					"defaults": [
+						{
+							"type": "dx",
+							"modifier": -3
+						},
+						{
+							"type": "skill",
+							"name": {
+								"compare": "is",
+								"qualifier": "Throwing"
+							}
+						}
+					]
+				}
+			],
+			"quantity": 1
+		}
+	]
+}
