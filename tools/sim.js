@@ -121,6 +121,13 @@ const SIM = (() => {
     for (let k = 0; k < n; k++) { const l = eff - (k ? aim : 0) - rclPen(w, k, braced); if (l < 3) break; h += P3[Math.min(18, l)]; }
     return h;
   }
+  // expected critical rounds (B347: 3-4, 5 at skill 15, 6 at 16+): these can't be defended against
+  const critP = l => l < 3 ? 0 : (l >= 16 ? 16 : l >= 15 ? 10 : 4) / 216;
+  function burstCrits(eff, n, w, aim = 0, braced = false) {
+    let c = 0;
+    for (let k = 0; k < n; k++) { const l = eff - (k ? aim : 0) - rclPen(w, k, braced); if (l < 3) break; c += critP(l); }
+    return c;
+  }
   function rapidBonus(shots) {
     if (shots < 5) return 0; if (shots <= 8) return 1; if (shots <= 12) return 2; if (shots <= 16) return 3;
     if (shots <= 24) return 4; if (shots <= 49) return 5; if (shots <= 99) return 6;
@@ -1991,7 +1998,10 @@ const SIM = (() => {
           if (eff < 3 || (da > 0 && eff < 10)) break;
           const pDef = def0 == null ? 0 : P3[Math.max(0, Math.min(18, def0 - da))];
           const hits = melee ? P3[Math.min(18, eff)] : burstHits(eff, w.cone ? 1 : (w.rof || 1), w, fo.aim || 0, !!fo.braced);
-          let score = (1 - pDef) * (melee ? perHit(eff) : e * hits);
+          // a critical hit can't be defended (B381): against a foe who dodges nearly everything, a burst's few
+          // critical rounds are most of what gets through (fishing for crits)
+          const crits = melee ? critP(eff) : w.cone || w.malediction ? 0 : burstCrits(eff, w.rof || 1, w, fo.aim || 0, !!fo.braced);
+          let score = (1 - pDef) * (melee ? perHit(eff) : e * hits) + pDef * (melee ? (perHit(eff) / Math.max(1e-9, P3[Math.min(18, eff)])) * crits : e * crits);
           if (melee && NEAR_TORSO.has(loc)) score += (1 - pDef) * (P3[Math.min(18, eff + 1)] - P3[Math.min(18, eff)]) * expInj(w, t.u, "torso", dmgOverride);
           if (shUp) {
             // the share of this attack's raw damage the shield absorbs is lost; stripping it is worth a quarter
@@ -2461,6 +2471,7 @@ const SIM = (() => {
       const d = Math.max(1, hexDist(m.h, target.h));
       if (d > w.range.max) return;
       if (w === m.u.ranged && m.gunOneHand && w.spentAfter) m.gunSpent = true;   // fired one-handed: unready (B270)
+      m.holdN = 0;
       const shots = w.shots.mag === Infinity ? w.rof : Math.min(w.rof, m.ammo);
       if (w.shots.mag !== Infinity) m.ammo -= shots;
       if (w.extra) m.extraLeft = (m.extraLeft ?? w.limit) - shots;
@@ -3045,10 +3056,10 @@ const SIM = (() => {
       m.aoa = false; m.aod = false; m.mna = false; m.offBalance = false; m.readied = false; m.steps = 0; m.moved = false; m.movedFar = false;
       m.runPrev = m.runK || 0; m.runK = 0;   // a sprint carries on only through consecutive straight Moves
       if (m.feint && m.feint.turn !== turn - 1) m.feint = null;   // a feint lapses if not used the next turn (B365)
-      clearZone(m); m.waiting = null; m.watch = false; m.ducked = false;
+      clearZone(m); m.waiting = null; m.watch = false; m.ducked = false; m.waitOpen = null;
       if (m.doNothing) { m.doNothing = false; L(`${m.id} reels from the blow (Do Nothing)`); return; }
       if (m.surprised) { m.surprised = false; L(`${m.id} is caught by surprise`); return; }
-      if (m.skipNext) { m.skipNext = false; L(`${m.id} already acted this second (it saw the foe first)`); return; }
+      if (m.skipNext) { m.skipNext = false; L(`${m.id} already acted this second (${m.skipWhy || "it saw the foe first"})`); m.skipWhy = null; return; }
       if (m.blockLost) { m.blockLost = false; L(`${m.id} recovers its shield (Ready)`); return; }
       // working on a jammed or misfired gun: Readies, then a roll that clears it or starts another attempt
       if (m.jam > 0 && !engaged(m) && u.ranged) {
@@ -3495,6 +3506,22 @@ const SIM = (() => {
       FX(["s", m.h.q, m.h.r, at.q, at.r, m.u.side, r.ok ? 1 : 0, m.ix, t.ix, lvl, r.ok ? 1 : 0, 0]);
       explosion(m, w, at, raw);
     }
+    // a foe that can hardly defend against a shot just now: stunned, down, exhausted, All-Out Attacking, held
+    const openFor = (t, m) => { if (t.state !== "ok" || !t.h) return false; const dd = rangedDefence(t, m); return dd == null || P3[cl(dd)] <= 0.375; };
+    // a gun holding for an opening fires the moment its foe shows one (the Wait's trigger, B366), spending its next turn
+    function seizeOpenings() {
+      for (const x of models) {
+        const o = x.waitOpen;
+        if (!o || x.state !== "ok" || !x.h || x.stunned) continue;
+        const t = o.t;
+        if (t.state !== "ok" || !t.h) { x.waitOpen = null; continue; }
+        if (!openFor(t, x) || !los(x.h, t.h) || duckedFrom(t, x.h) || !weaponsFor(x, false).includes(o.w) || (o.w === x.u.ranged && x.ammo <= 0)) continue;
+        x.waitOpen = null;
+        L(`${x.id} sees ${t.id} falter and fires (Wait)`);
+        fireAt(x, o.w, t, { aim: x.aimTarget === t && x.aimTurns > 0 });
+        x.skipNext = true; x.skipWhy = "it fired on its Wait";
+      }
+    }
     // ---- options at range: shoot (each weapon and target), aim, Move and Attack, suppression, grenades, Wait, reload
     function rangedOptions(m, pool, add, rNow, Wr) {
       const u = m.u;
@@ -3593,7 +3620,23 @@ const SIM = (() => {
           const br = bracedFor(m, w, t, m.moved, aimB + fA > 0), bB = br ? 1 : 0;
           const own = w.malediction ? 0 : ownCoverPen(m, t.h, br && aimB + fA > 0);
           const Enow = planAttack(m, w, t, base + bB + aimB + fA - own, false, null, { aim: aimB + fA, braced: br, fx }).score * sustainOf(w) * spread;
-          const vNow = Wr * kv(m, t, Enow) - fpCost - ffCost;
+          // a friendly heavy gun is holding for an opening on this foe: rattling it (a crit, a knock-down, a stun, its
+          // fatigue spent on feverish dodges) is worth more than the shot alone, most of all from a burst
+          const forGun = models.some(x => x !== m && x.u.side === u.side && x.waitOpen && x.waitOpen.t === t && x.state === "ok");
+          const vNow = (Wr * kv(m, t, Enow) - fpCost - ffCost) * (forGun ? ((w.rof || 1) >= 3 ? 1.6 : 1.25) : 1);
+          // a big gun (a hit all but kills) against a foe who dodges most shots: don't waste it; keep the aim and hold
+          // for an opening (stunned, down, exhausted, committed to an attack), fired the moment it comes (a Wait, B366)
+          const dd0 = rangedDefence(t, m), pD = dd0 == null ? 0 : P3[cl(dd0)];
+          const holdIt = !w.malediction && !w.cone && (w.rof || 1) <= 2 && pD >= 0.5 && (m.holdN || 0) < 8
+            && expInjRandom(w, t.u) >= 0.5 * remOf(t) && (terr ? walk(m.h, t.h) : d) > moveOf(t) + 3;
+          if (holdIt) {
+            add(Math.max(vNow, 0) * 1.2 + 0.001 - rNow, `hold@${t.id}`, () => {
+              if (m.aimTarget !== t) m.aimTurns = 0;
+              m.aimTarget = t; m.aimTurns = Math.min(3, m.aimTurns + 1); faceTo(m, t.h); m.waitOpen = { t, w }; m.holdN = (m.holdN || 0) + 1;
+              L(`${m.id} holds its aim on ${t.id}, waiting for an opening (Wait)`);
+            });
+            continue;
+          }
           add(vNow - rNow, `fire ${w.name}@${t.id}`, () => { m.aimTarget = t; faceTo(m, t.h); fireAt(m, w, t, { aim: aimed }); });
           // All-Out Attack (Determined, +1 ranged): only worth it when little can hit back
           if (threatNow < 1) {
@@ -4636,6 +4679,7 @@ const SIM = (() => {
         }
         act(m);
         m.shock = 0; m.shockInj = 0; m.shockCap = 0;
+        seizeOpenings();
       }
       // Regeneration (B80): HP back each second; under Fractional Health the healing clears the least severe
       // wound box once enough has built up to cover that level's threshold
