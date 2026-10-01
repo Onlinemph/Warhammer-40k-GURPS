@@ -2957,6 +2957,27 @@ const SIM = (() => {
       if (f.impulsive && (/^(wait|watch|cover@)/.test(pick.label) || (/^aim@/.test(pick.label) && m.aimTurns >= 1)) && roll3() > f.impulsive) { const a = bestOf(opts, AGGR); if (a) { L(`${m.id} can't wait (Impulsiveness)`); return a; } }
       return pick;
     }
+    // the chance an Aim lasts to the model's next turn: an active defence spoils it (B364). A foe in reach, or one that
+    // will charge into reach, almost surely forces one; a gunman in range does if it picks this model and hits.
+    // Worked out once per model per turn
+    const keepC = new Map(); let keepTurn = -1;
+    function aimKeep(m) {
+      if (keepTurn !== turn) { keepC.clear(); keepTurn = turn; }
+      if (keepC.has(m)) return keepC.get(m);
+      let p = 1;
+      for (const f of models) {
+        if (f.u.side === m.u.side || f.state !== "ok" || !f.h || !m.h || f.stunned || f.pinned) continue;
+        const d = hexDist(f.h, m.h), reach = f.u.melee ? f.u.melee.reachMax : 1;
+        if (d <= reach) { p *= 0.3; continue; }
+        const closer = f.u.melee && (f.u.stance === "charge" || (f.u.ai.zeal || 0) > 0 || bladeReady(f)) && d <= moveOf(f) + reach;
+        if (closer) { p *= 0.5; continue; }
+        if (f.u.ranged && d <= f.u.ranged.range.max && los(f.h, m.h)) {
+          const mine = models.filter(x => x.u.side === m.u.side && x.state === "ok" && x.h && hexDist(f.h, x.h) <= f.u.ranged.range.max).length;
+          p *= 1 - 0.5 / Math.max(1, mine);
+        }
+      }
+      keepC.set(m, p); return p;
+    }
     // ---- options at range: shoot (each weapon and target), aim, Move and Attack, suppression, grenades, Wait, reload
     function rangedOptions(m, pool, add, rNow, Wr) {
       const u = m.u;
@@ -3064,7 +3085,9 @@ const SIM = (() => {
             const nextB = Math.min(2 * w.acc, (aimed ? aimB : 0) + (aimed ? 1 : w.acc));
             const brA = bracedFor(m, w, t, false, true);
             const Eaim = planAttack(m, w, t, base + (brA ? 1 : 0) + nextB - ownCoverPen(m, t.h, brA), false, null, { aim: nextB, braced: brA, fx }).score * sustainOf(w) * spread;
-            add(GAMMA * Wr * kv(m, t, Eaim) - GAMMA * ffCost - rNow, `aim@${t.id}`, () => {
+            // any active defence before next turn spoils the aim (B364): then it's an unaimed shot a turn late
+            const keepP = aimKeep(m), Eun = keepP < 1 ? planAttack(m, w, t, base + bB - own, false, null, { aim: 0, braced: br, fx }).score * sustainOf(w) * spread : 0;
+            add(GAMMA * Wr * kv(m, t, keepP * Eaim + (1 - keepP) * Eun) - GAMMA * ffCost - rNow, `aim@${t.id}`, () => {
               if (m.aimTarget !== t) m.aimTurns = 0;
               m.aimTarget = t; m.aimTurns++; faceTo(m, t.h); L(`${m.id} aims at ${t.id}`);
             });
