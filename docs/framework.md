@@ -466,12 +466,12 @@ Necron traits: Machine body (no need to breathe, eat or sleep; immune to disease
 
 | Necron gear | Anchor |
 |---|---|
-| Gauss flayer | Molecular disassembly beam: 6d(4) burn, strips flak and carapace (79%), hurts power armour about as often as a bolter (15%) |
-| Gauss blaster | 7d(4) burn, RoF 3 |
+| Gauss flayer | Molecular disassembly beam: 7d(5) cor, super corrosive (user direction: 1 DR eaten per 2 points of basic damage, penetrating or not); strips flak and carapace, gets through power armour 81% of the time and eats it away for the next shot |
+| Gauss blaster | 8d(5) cor, RoF 3, super corrosive |
 | Tesla carbine | 6d(2) burn with arcs that jump to nearby targets on a hit (like volkite chains) |
 | Synaptic disintegrator | Sniper, 8d(4) burn, very high Acc |
-| Gauss cannon | 6d×2(3) burn |
-| Heavy gauss cannon | Anti-armour: 6d×4(5) burn |
+| Gauss cannon | 6d×2(5) cor, super corrosive |
+| Heavy gauss cannon | Anti-armour: 6d×5(5) cor, super corrosive |
 | Particle beamer / caster | Particle weapons: burn ex, scale from plasma |
 | Warscythe | Two-handed power-field blade: sw+4d(10) cut |
 | Hyperphase sword | Phase blade: sw+3d(10) cut |

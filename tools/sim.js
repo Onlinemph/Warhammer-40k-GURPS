@@ -336,7 +336,7 @@ const SIM = (() => {
       const w = { id: ++WID, name: label, usage: line.usage, text: line.damage, dmg, follow: fdmg, followText: fl ? fl.damage : "", level,
         rend, rendBy, rendText: rl ? rl.damage : "", malf: facts.malf || 0,
         overheat: facts.overheat ? parseDamage(/[a-z]\s*$/.test(facts.overheat) ? facts.overheat : facts.overheat + " burn") : null,
-        cone, blast: facts.blast || 0, warpflame: !!facts.warpflame, indirect: !!facts.indirect, minRange: facts.minRange || 0, chink: ((SIMW[label] || {})._item || {}).chink || 0, natural: !!sel.trait, dST };
+        cone, blast: facts.blast || 0, corrode: facts.corrode || (dmg.type === "cor" ? 5 : 0), warpflame: !!facts.warpflame, indirect: !!facts.indirect, minRange: facts.minRange || 0, chink: ((SIMW[label] || {})._item || {}).chink || 0, natural: !!sel.trait, dST };
       // an Agoniser's agony follow-up (B428): HT-N or Severe Pain (-4, -2 with High Pain Threshold); a critical
       // failure also stuns
       if (fl && !fdmg && /agony/i.test(fl.usage || "")) w.agony = -Number((/HT-(\d+)/.exec(fl.notes || "") || [0, 3])[1]);
@@ -1381,7 +1381,9 @@ const SIM = (() => {
 
     // skill penalty from shock (standard), or the larger of shock and pain plus wound effects (fractional)
     // (burning clothes are -2 DX, or -3 when all of them are alight, B434)
-    const skillPen = m => (frac ? Math.max(m.shock, m.pain) + m.gawd : Math.min(m.shockCap || 4, m.shock)) + (m.onFire ? m.onFire + 1 : 0) + (m.painAff || 0);
+    // one crippled leg or foot: lame (Lame, Crippled Legs, B141): it can stand and hobble, at -3 to attacks and Dodge
+    const lame = m => m.legsLost === 1 ? 3 : 0;
+    const skillPen = m => (frac ? Math.max(m.shock, m.pain) + m.gawd : Math.min(m.shockCap || 4, m.shock)) + (m.onFire ? m.onFire + 1 : 0) + (m.painAff || 0) + lame(m);
     // below 1/3 HP (standard HP, B419), or halved by a Fractional Health wound or a crippled leg: half Move and
     // Dodge, rounding up
     const weak = m => !frac && m.hp < m.u.HP / 3 && !m.berserk;   // a berserker's wounds don't slow it (B124)
@@ -1520,7 +1522,7 @@ const SIM = (() => {
       if (m.state === "ok" && m.fp <= -m.u.fp) incapacitate(m, "collapses, utterly spent");
     }
     const tired = m => !m.u.flags.machine && m.fp < m.u.fp / 3;   // below 1/3 FP (B426): Move, Dodge and ST halved
-    const dodgeOf = t => (t.halfDodge || weak(t) || tired(t) ? Math.ceil(t.u.dodge / 2) : t.u.dodge);
+    const dodgeOf = t => (t.halfDodge || weak(t) || tired(t) ? Math.ceil(t.u.dodge / 2) : t.u.dodge) - lame(t);
     // facing (B386-387): a mover faces the way it walks; after a move that used more than half its Move it may turn
     // only one hex-side at the end, so a model that runs past a foe can end with its side or back to it
     function faceTo(m, h) {
@@ -1540,7 +1542,7 @@ const SIM = (() => {
       return k >= 1 ? Math.max(base + 1, Math.floor(base * 1.2)) : base;
     }
     const baseMove = m => m.u.ranged && m.u.ranged.needsSetup && !m.setUp ? m.u.movePacked : m.u.move;
-    const moveOf = m => m.legsLost ? 1 : m.halfMove || weak(m) || tired(m) ? Math.max(1, Math.ceil(baseMove(m) / 2)) : baseMove(m);
+    const moveOf = m => m.legsLost >= 2 ? 1 : m.legsLost === 1 ? Math.max(1, (m.halfMove || weak(m) || tired(m) ? Math.ceil(baseMove(m) / 2) : baseMove(m)) - 3) : m.halfMove || weak(m) || tired(m) ? Math.max(1, Math.ceil(baseMove(m) / 2)) : baseMove(m);
 
     // ---- Revised Fractional Health (the user's house rule; after panoptesv.com's wound rules).
     const SEVN = ["", "Scratch", "Minor", "Moderate", "Major", "Critical", "Massive", "Gawdawful", "Destruction"];
@@ -1563,8 +1565,8 @@ const SIM = (() => {
         if (drop) t.inHand = "none";
         L(`  ${t.id}'s ${loc} is crippled${weaponArm ? (drop ? ": it drops its weapon" : "") : ": its shield hangs useless"}`);
       } else {
-        t.legsLost++; t.prone = true; if (frac) t.halfDodge = true;
-        L(`  ${t.id}'s ${loc} is crippled: falls and can only crawl`);
+        t.legsLost++; t.prone = true; if (frac && t.legsLost >= 2) t.halfDodge = true;
+        L(`  ${t.id}'s ${loc} is crippled: ${t.legsLost >= 2 ? "falls and can only crawl" : "falls; lame, it can get up and hobble (Move -3, -3 to attacks and Dodge)"}`);
       }
     }
     function fracInjure(att, t, inj, loc, type) {
@@ -1760,13 +1762,18 @@ const SIM = (() => {
     // wounding on a machine (B380, B554): Unliving, except the vital area (engine, fuel): x3 piercing and impaling,
     // x2 a tight beam
     const vehMult = (type, loc, ex) => type === "tox" ? 0 : loc === "vitals" && (/^pi/.test(type) || type === "imp") ? 3 : loc === "vitals" && type === "burn" && !ex ? 2 : UNLIVING[type] ?? BASE[type] ?? 1;
+    // which plate a hit lands on: hull or turret, and the facing (top for blasts)
+    function vehFace(t, loc, from) {
+      if (loc === "area") return "top";
+      if (loc === "mount") return "mount";
+      if (!from || !t.h || (from.q === t.h.q && from.r === t.h.r)) return loc === "turret" && t.u.veh.turret ? "turret front" : "front";
+      if (loc === "turret" && t.u.veh.turret) return "turret " + arcOf(t.h, t.turretFacing ?? t.facing, from);
+      return arcOf(t.h, t.facing, from);
+    }
     function vehFacingDR(t, loc, from) {
-      const V = t.u.veh;
-      if (loc === "area") return V.dr.top ?? V.dr.rear;
-      if (loc === "mount") return 20;   // the gun and its shield, not the hull
-      if (!from || !t.h || (from.q === t.h.q && from.r === t.h.r)) return V.dr.front;
-      if (loc === "turret" && V.turret) return V.turret[arcOf(t.h, t.turretFacing ?? t.facing, from)];
-      return V.dr[arcOf(t.h, t.facing, from)];
+      const V = t.u.veh, f = vehFace(t, loc, from);
+      const base = f === "mount" ? 20 : f === "top" ? V.dr.top ?? V.dr.rear : f.startsWith("turret ") ? V.turret[f.slice(7)] : V.dr[f];
+      return Math.max(0, base - ((t.corr && t.corr[f]) || 0));   // less what corrosion has eaten from that plate
     }
     function crewHit(att, t, x, dm, raw0) {
       const c = x.man, cu = c.cu, loc = hitLocation(), raw = raw0 ?? rollDamage(dm);
@@ -1857,7 +1864,8 @@ const SIM = (() => {
         }
         loc = "body";
       }
-      const armDR = vehFacingDR(t, ["vitals", "track", "legs", "wheel"].includes(loc) ? "body" : loc, hitFrom || (att && att.h));
+      const pl = ["vitals", "track", "legs", "wheel"].includes(loc) ? "body" : loc, armDR = vehFacingDR(t, pl, hitFrom || (att && att.h));
+      if (w.corrode && raw >= w.corrode && armDR > 0) { const f = vehFace(t, pl, hitFrom || (att && att.h)), k = Math.min(armDR, Math.floor(raw / w.corrode)); (t.corr ||= {})[f] = ((t.corr && t.corr[f]) || 0) + k; L(`  the ${f} plate is eaten away (DR -${k}, ${armDR - k} left there)`); }
       const div = dmg.div, eff = dr => dr <= 0 ? 0 : div === Infinity ? 0 : Math.floor(dr / div);
       let DR = eff(armDR); if (halfDR) DR = Math.ceil(DR / 2);
       const pen = raw - DR, drTxt = `DR ${armDR}${div !== 1 ? "/" + (div === Infinity ? "∞" : div) : ""}`;
@@ -1959,9 +1967,13 @@ const SIM = (() => {
       const coverDR = cv ? coverDRof(cv) : 0;
       if (cv && cv.i >= 0 && coverDR > 0) wearCover(cv.i, Math.min(raw, coverDR));
       const aDR = area ? areaDR(t.u) : null;
-      const armDR = (area ? aDR.arm : chink ? gapDR(t.u, loc) : drAt(t.u.arm.dr, loc === "vitals" ? (t.u.arm.dr.vitals != null ? "vitals" : "torso") : loc)) + coverDR;
+      let armDR = (area ? aDR.arm : chink ? gapDR(t.u, loc) : drAt(t.u.arm.dr, loc === "vitals" ? (t.u.arm.dr.vitals != null ? "vitals" : "torso") : loc)) + coverDR;
       if (chink) L(`  strikes a chink in the armour`);
-      const natDR = area ? aDR.nat : natDRat(t.u, loc);
+      let natDR = area ? aDR.nat : natDRat(t.u, loc);
+      // armour eaten away by corrosion at this location (B61): off the armour first, then the hide
+      const cLoc = area || loc === "vitals" ? "torso" : loc, eaten = (t.corr && t.corr[cLoc]) || 0;
+      if (eaten) { const a = Math.min(eaten, Math.max(0, armDR - coverDR)); armDR -= a; natDR = Math.max(0, natDR - (eaten - a)); }
+      if (w.corrode && raw >= w.corrode && armDR - coverDR + natDR > 0) { const k = Math.min(Math.floor(raw / w.corrode), armDR - coverDR + natDR); (t.corr ||= {})[cLoc] = eaten + k; L(`  the ${cLoc}'s armour is eaten away (DR -${k}, ${armDR - coverDR + natDR - k} left there)`); }
       const div = dmg.div;
       const eff = dr => dr <= 0 ? 0 : div === Infinity ? 0 : Math.floor(dr / div);   // round down, minimum 0 (B378)
       let DR = eff(armDR + natDR);
@@ -2263,7 +2275,8 @@ const SIM = (() => {
         if (t.limbFull && t.limbFull[loc.replace("#c", "")]) continue;   // both already crippled: nothing more to take there
         // a vehicle: the DR of the facing this attacker sees, and a gun's damage halved at or beyond 1/2D (B378)
         const from = fo.from || m.h, vd = t.u.veh && from && t.h ? (dmgOverride || w.dmg) : null, vHalf = vd && !melee && w.range && hexDist(from, t.h) >= w.range.half;
-        const e = (vd ? vehExp(vHalf ? { ...vd, mult: vd.mult / 2 } : vd, vHalf ? null : w.follow, vehFacingDR(t, loc === "area" ? "area" : "body", from), loc === "vitals" ? "vitals" : "body")
+        const eatN = vd && w.corrode ? 5 * Math.floor((vd.n * 3.5 + vd.add) * vd.mult / w.corrode) : 0;   // five more hits' worth of corrosion
+        const e = (vd ? vehExp(vHalf ? { ...vd, mult: vd.mult / 2 } : vd, vHalf ? null : w.follow, Math.max(0, vehFacingDR(t, loc === "area" ? "area" : "body", from) - eatN), loc === "vitals" ? "vitals" : "body")
           : loc === "area" ? expInj(w, t.u, "area", dmgOverride) : loc === "random" ? expInjRandom(w, t.u, dmgOverride) : expInj(w, t.u, loc, dmgOverride)) * (fo.fx ? fo.fx.keep(loc.replace("#c", "")) : 1);
         // a rending weapon (success by N+ or a critical) does its rending damage on a good enough roll: count it, or
         // the planner sees only the ordinary line and goes hunting for chinks it can't reach the margin on
@@ -3535,7 +3548,7 @@ const SIM = (() => {
       // fire (behind a crate, a parapet or a crest, so the foes' fire mostly can't reach it) or it has gone to ground
       // with nothing left to fight with
       const downSafe = () => { if (m.lyingLow) return true; const rDown = risk(m, m.h, ""); m.prone = false; const rUp = risk(m, m.h, ""); m.prone = true; return rDown < 0.5 * rUp; };
-      if (m.prone && !m.legsLost && !gripsOn(m).length && (adj.length || !downSafe())) {
+      if (m.prone && m.legsLost < 2 && !gripsOn(m).length && (adj.length || !downSafe())) {
         // lying to standing is two Change Postures, through kneeling (-2 to attack and defend); a successful
         // Acrobatics roll makes it one (B551)
         m.prone = false;

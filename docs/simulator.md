@@ -227,6 +227,10 @@ The Astra Militarum squads in `data/sim/squads.yaml` carry their Codex weapons: 
 - **Holding for an opening** (B366 Wait). A big gun (one or two shots, a hit all but kills) facing a foe who'd dodge half its shots or more, and who isn't about to reach it, weighs the shot now against waiting: the chance an opening comes in the next three seconds (8% for every friendly burst weapon that can reach the foe, at most 60%) at a defence of 9 or less, discounted for the seconds and for the gunner surviving them. If waiting is worth more it keeps its Aim and holds, for at most 8 seconds. The moment that foe can hardly defend (stunned, down, exhausted, All-Out Attacking, held: a ranged defence of 9 or less) the gun fires on its Wait, using its next turn. Squad-mates favour a foe a friendly gun is holding on, bursts most of all, to knock it down, stun it or run it out of fatigue with feverish dodges.
 - **Keeping an Aim under fire.** An active defence spoils an Aim (B364), so an aiming model may let a shot come instead. The odds it accepts grow with the Accuracy of the gun it's aiming: a Guardsman behind a lascannon (Acc 14) holds his aim against a bolter rather than dodge at 37%.
 
+## Corrosion
+
+A corrosive hit (damage type cor) eats armour (B61): 1 DR per 5 points of basic damage from the location or vehicle facing it strikes, whether or not it penetrates, until that plate is gone; natural DR goes once the armour over it has. A weapon line's `corrode` in `data/sim/weapons.yaml` sets the rate; gauss weapons are super corrosive at 1 DR per 2 points.
+
 ## Vehicles
 
 A vehicle (B462-470) is one model on the map: its hull takes the hits, its crew sit at stations inside, and on its turn the driver moves it and every gunner works his own gun. The stat blocks are Vehicle items in `data/imperium/vehicles.yaml` and `data/xenos/orks/wargear/vehicles.yaml`, built as docs/framework.md "Vehicles" describes: Chimera, Leman Russ Battle Tank, Rhino, Predator Destructor, Land Raider, Scout Sentinel and Ork Trukk. The unit picker lists them under Vehicles.
