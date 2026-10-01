@@ -961,7 +961,7 @@ const SIM = (() => {
     const skillPen = m => (frac ? Math.max(m.shock, m.pain) + m.gawd : Math.min(m.shockCap || 4, m.shock)) + (m.onFire ? m.onFire + 1 : 0) + (m.painAff || 0);
     // below 1/3 HP (standard HP, B419), or halved by a Fractional Health wound or a crippled leg: half Move and
     // Dodge, rounding up
-    const weak = m => !frac && m.hp < m.u.HP / 3;
+    const weak = m => !frac && m.hp < m.u.HP / 3 && !m.berserk;   // a berserker's wounds don't slow it (B124)
     // Shadow in the Warp (Tyranid traits): a psyker within the radius of an enemy bioform carrying it is at -3 to
     // psychic skill and to the Will roll against Perils of the Warp
     const psyker = u => u.powers.some(p => p.fp);
@@ -971,7 +971,8 @@ const SIM = (() => {
     // Fright Check (B360): Will plus Fearlessness, never better than 13
     // capped at 13 (B360) only for Shadow in the Warp; morale and the Fright Checks under fire aren't capped (user
     // direction: superhuman nerve should tell), so only a 17 or 18 breaks a Marine
-    const frightLevel = (u, mod = 0, cap = 13) => Math.min(cap, u.will + (u.flags.fearless || 0) + (u.flags.cr ? 2 : 0) + 5 + mod);
+    // Cowardice (B129) is a penalty to Fright Checks in physical danger: -4 at self-control 6, -3 at 9, -2 at 12, -1 at 15
+    const frightLevel = (u, mod = 0, cap = 13) => Math.min(cap, u.will + (u.flags.fearless || 0) + (u.flags.cr ? 2 : 0) + 5 + mod - (u.flags.coward ? Math.ceil((18 - u.flags.coward) / 3) : 0));
     const fright = (u, mod = 0, cap = 13) => check(frightLevel(u, mod, cap));
     // a failed Fright Check rolls 3d + the margin of failure on the Fright Check Table (B360-361)
     // what happened to a model since its last turn, for keeping its head down and Fright Checks under fire (TS p. 21, 34)
@@ -1007,7 +1008,7 @@ const SIM = (() => {
     }
     function underFire(m) {
       const e = m.ev; m.ev = null; m.headsDown = false;
-      if (!e || !morale || m.u.flags.unfazeable || m.u.flags.noMorale) return false;
+      if (!e || !morale || m.u.flags.unfazeable || m.u.flags.noMorale || m.berserk) return false;
       const covered = e.shotAt && e.shotAt.h && m.h && inCover(m, e.shotAt.h);
       if (e.supp || e.near || e.blast || e.wounded || e.allyDown) {
         const why = e.blast ? "a blast" : e.allyDown ? "a comrade falls" : e.wounded ? "wounded" : e.supp ? "suppression fire" : "a near miss";
@@ -1081,7 +1082,7 @@ const SIM = (() => {
     function severity(inj, HP) { let s = 0; for (let l = 1; l <= 8; l++) if (inj >= thr(HP, l)) s = l; return s; }
     function boxesFor(inj, HP, lvl) { let n = 0; for (let c = 1; c <= 4; c++) if (inj >= thr(HP, lvl, c)) n = c; return Math.max(1, n); }
     // a model cut down by wounds (at 0 HP or below) is as horrible to see as one killed outright
-    function incapacitate(t, why) { if (t.state === "ok") { sawFall(t); if (frac ? t.lastHitBy : t.hp <= 0) horror(t.lastHitBy, t); if (t.h) FX(["d", t.h.q, t.h.r, t.u.side, 0]); t.state = "out"; place(t, null); L(`  ${t.id} ${why}`); } }
+    function incapacitate(t, why) { if (t.state === "ok") { sawFall(t); if (frac ? t.lastHitBy : t.hp <= 0) { horror(t.lastHitBy, t); downed(t.lastHitBy); } if (t.h) FX(["d", t.h.q, t.h.r, t.u.side, 0]); t.state = "out"; place(t, null); L(`  ${t.id} ${why}`); } }
     // crippling (B421): an arm or hand drops what it holds and can't hold anything; the weapon goes to the other
     // hand (off-hand -4), two-handed weapons can't be used, and a crippled shield arm loses the shield. A leg drops
     // the model, which can fight lying down and crawl
@@ -1167,6 +1168,11 @@ const SIM = (() => {
       if (inj <= 0 || t.state !== "ok") return;
       ev(t).wounded = true;
       if ((t.aimTurns || t.follow) && !check(t.u.will).ok) { t.aimTurns = 0; t.follow = null; L(`  ${t.id} loses its aim`); }
+      // Berserk (B124): more than HP/4 of injury in one second calls for a self-control roll (less shock); failure
+      // sends the model berserk
+      if (t.injTurn !== turn) { t.injTurn = turn; t.injSum = 0; }
+      t.injSum += inj;
+      if (t.u.flags.berserk && !t.berserk && t.injSum > t.u.HP / 4 && roll3() > t.u.flags.berserk - skillPen(t)) goBerserk(t, "wounded");
       if (frac) return fracInjure(att, t, inj, loc, type);
       const HP = t.u.HP, before = t.hp, f = t.u.flags;
       if (/^(cut|imp|pi)/.test(type)) t.bleeds = true;   // bleeding wounds (B420)
@@ -1178,7 +1184,7 @@ const SIM = (() => {
       const cShock = t.critShock, cMajor = t.critMajor;
       t.critShock = t.critMajor = false;
       const shock0 = t.shock;
-      if (!f.hpt) {
+      if (!f.hpt && !t.berserk) {   // a berserker ignores shock (B124)
         t.shockInj = (t.shockInj || 0) + inj * (cShock ? 2 : 1);
         if (cShock) t.shockCap = 8;
         t.shock = Math.min(t.shockCap || 4, HP >= 20 ? Math.floor(t.shockInj / Math.floor(HP / 10)) : t.shockInj);
@@ -1198,7 +1204,7 @@ const SIM = (() => {
       // only to major wounds, and not to those without a brain or vitals (B420); High Pain Threshold +3
       const major = inj > HP / 2 || crippled || cMajor;
       const headV = (loc === "skull" || loc === "eye" || loc === "face") ? !nb || loc === "face" : loc === "vitals" ? !nv : false;
-      if (major || (headV && t.shock > shock0)) {
+      if (!t.berserk && (major || (headV && t.shock > shock0))) {   // immune to stun (B124)
         const mod = (f.hpt ? 3 : 0) + (major && headV ? (loc === "skull" || loc === "eye" ? -10 : -5) : 0);
         const r = check(t.u.HT + mod);
         if (!r.ok && (r.margin <= -5 || r.fumble)) { incapacitate(t, "is knocked out"); return; }
@@ -1215,7 +1221,7 @@ const SIM = (() => {
         if (before > -k * HP && t.hp <= -k * HP && t.state === "ok") {
           // death check (B419): failure by 1-2 is a mortal wound (out of the fight, dying), worse is death; a success
           // that needed Hard to Kill leaves it collapsed, apparently dead (B58)
-          const r = check(t.u.HT + (f.htk || 0));
+          const r = check(t.u.HT + (f.htk || 0) + (t.berserk ? 4 : 0));   // a berserker rolls at +4 (B124)
           if (!r.ok && r.margin >= -2) { if (f.reanimation) kill(att, t, "mortally wounded"); else incapacitate(t, "is mortally wounded"); return; }
           if (!r.ok) { kill(att, t, "killed"); return; }
           if (f.htk && r.roll > t.u.HT) { incapacitate(t, "collapses, apparently dead (Hard to Kill)"); return; }
@@ -1225,6 +1231,16 @@ const SIM = (() => {
     // Horror (user direction): every comrade who sees a model cut down (in sight, within 20 yards, not blind in the
     // dark) makes a Fright Check at -1, -1 more for each one it has already seen this fight, -2 if it was up close in
     // melee, -2 if it was grisly (the body taken past -2 x HP), -3 if the killer struck out of hiding
+    // Berserk (B124): all-out attack on the nearest foe, immune to stun and shock, +4 to stay conscious and alive;
+    // each foe it downs gives a self-control roll to snap out, after which its wounds tell at once (an HT roll to stay
+    // conscious below 0 HP)
+    function goBerserk(m, why) { if (m.berserk || m.state !== "ok") return; m.berserk = true; m.stunned = false; m.shock = 0; L(`  ${m.id} goes berserk (${why})`); }
+    function downed(att) {
+      if (!att || !att.berserk || att.state !== "ok") return;
+      if (roll3() > att.u.flags.berserk) return;
+      att.berserk = false; L(`  ${att.id} snaps out of its berserk rage`);
+      if (!frac && att.hp <= 0 && !check(att.u.HT - Math.floor(-att.hp / att.u.HP)).ok) incapacitate(att, "collapses as its wounds tell");
+    }
     function horror(att, t) {
       if (!t.h || !morale) return;
       const close = !!(att && att.h && att !== t && hexDist(att.h, t.h) <= 1);
@@ -1238,7 +1254,7 @@ const SIM = (() => {
     }
     function kill(att, t, how) {
       if (t.state !== "ok") return;
-      sawFall(t); horror(att, t);
+      sawFall(t); horror(att, t); downed(att);
       if (t.h) FX(["d", t.h.q, t.h.r, t.u.side, 1]);
       place(t, null);
       if (t.u.flags.reanimation && how !== "destroyed" && t.hp > -5 * t.u.HP) {
@@ -2459,7 +2475,8 @@ const SIM = (() => {
     function kv(m, t, E) {
       if (!(E > 0) || !t) return 0;
       const rem = remOf(t), share = Math.min(1, E / rem);
-      const prey = m && m.u.ai.prey > 1 && t.hp < t.u.HP ? m.u.ai.prey : 1;
+      // Bloodlust (B125): it goes for the killing blow, so a wounded foe is worth more to it
+      const prey = m && t.hp < t.u.HP ? Math.max(m.u.ai.prey > 1 ? m.u.ai.prey : 1, m.u.flags.bloodlust ? 1.5 : 1) : 1;
       return share * threatOf(t) * prey * HORIZON;   // a foe taken out stops hurting us for the rest of the fight
     }
     // expected injury to m next turn standing on hex h: "aoa" (no defence), "aod" (+2) or normal
@@ -2698,10 +2715,35 @@ const SIM = (() => {
         const close = opts.filter(o => o.v >= top.v - span);
         pick = close[Math.floor(R() * close.length)];
       }
+      // Battle Rage (B124): berserk on entering combat unless it makes its self-control roll
+      if (u.flags.battleRage && !m.rageRolled) { m.rageRolled = true; if (roll3() > u.flags.berserk) goBerserk(m, "battle rage"); }
+      pick = mentalPick(m, opts, pick, adj);
       if (globalThis.SIM_DEBUG) globalThis.SIM_DEBUG(m, opts.slice().sort((a, b) => b.v - a.v).slice(0, 6).map(o => `${o.label}=${o.v.toFixed(3)}`).join("  "));
       pick.run();
     }
 
+    // ---- mental disadvantages steer the choice (B120 self-control rolls)
+    const AGGR = /^(aoa|charge|strike|step-|rapid|flurry|mighty|dual|heroic|ca-|da-strike|beat|feint|ruse|grab|shove|fire |point-blank|advance|close@|move-closer|throw|suppress)/;
+    const CAUTIOUS = /^(aod|peel|reload-cover|cover@|wait|watch|spread)/;
+    const DANGER = /^(charge|aoa-charge|heroic|advance|close@|move-closer|step-|grab)/;
+    const bestOf = (opts, re, not) => opts.filter(o => re.test(o.label) && !(not && not.test(o.label))).reduce((a, b) => !a || b.v > a.v ? b : a, null);
+    function mentalPick(m, opts, pick, adj) {
+      const f = m.u.flags;
+      // berserk: All-Out Attack anything in reach; else close on the nearest foe (Move and Attack, a charge or a
+      // slam if it can); else blaze away with its gun, never aiming
+      if (m.berserk) { const b = (adj.length ? bestOf(opts, /^(aoa|step-aoa)/) : bestOf(opts, /^(aoa-charge|charge|heroic|close@|advance|move-closer|step-)/)) || bestOf(opts, /^(aoa-fire|fire |point-blank)/); if (b) return b; }
+      // Cowardice (B129): before closing with the enemy, a self-control roll (-5 if hurt badly enough to die); being
+      // in melee already is greater danger, so it fights back
+      if (f.coward && !adj.length && DANGER.test(pick.label) && roll3() > f.coward - (m.hp < m.u.HP / 3 ? 5 : 0)) {
+        const s = opts.filter(o => !DANGER.test(o.label)).reduce((a, b) => !a || b.v > a.v ? b : a, null);
+        if (s) { L(`${m.id} hangs back (Cowardice)`); return s; }
+      }
+      // Overconfidence (B148): caution needs a self-control roll; failing, it takes the best bold option
+      if (f.overconf && CAUTIOUS.test(pick.label) && roll3() > f.overconf) { const a = bestOf(opts, AGGR); if (a) { L(`${m.id} scorns caution (Overconfidence)`); return a; } }
+      // Impulsiveness (B139): waiting, holding in cover or aiming a second time needs a self-control roll
+      if (f.impulsive && (/^(wait|watch|cover@)/.test(pick.label) || (/^aim@/.test(pick.label) && m.aimTurns >= 1)) && roll3() > f.impulsive) { const a = bestOf(opts, AGGR); if (a) { L(`${m.id} can't wait (Impulsiveness)`); return a; } }
+      return pick;
+    }
     // ---- options at range: shoot (each weapon and target), aim, Move and Attack, suppression, grenades, Wait, reload
     function rangedOptions(m, pool, add, rNow, Wr) {
       const u = m.u;
@@ -3739,7 +3781,7 @@ const SIM = (() => {
         m.committed = false; m.defAtk = false; m.aoa = false; m.aod = false; m.mna = false; m.offBalance = false;   // "until its next turn", whatever it does with it
         if (!frac && m.hp <= 0) {
           const k = Math.floor(-m.hp / m.u.HP);
-          if (!check(m.u.HT - k).ok) { FX(["d", m.h.q, m.h.r, m.u.side, 0]); m.state = "out"; place(m, null); L(`${m.id} collapses unconscious`); continue; }
+          if (!check(m.u.HT - k + (m.berserk ? 4 : 0)).ok) { FX(["d", m.h.q, m.h.r, m.u.side, 0]); m.state = "out"; place(m, null); L(`${m.id} collapses unconscious`); continue; }
         }
         if (m.onFire) { burn(m); if (m.state !== "ok") continue; }
         // at 0 FP or less, a Will roll before each maneuver; failure collapses it for the fight (B426)
@@ -3820,7 +3862,7 @@ const SIM = (() => {
         if (frac2 <= 0.25 && !u.checked25) { u.checked25 = true; need = true; }
         if (need && alive > 0) {
           L(`${u.name} takes heavy losses: Fright Checks`);
-          for (const m of u.models) { if (m.state !== "ok") continue; const fc = fright(u, 0, Infinity); if (!fc.ok) frightTable(m, -fc.margin, "casualties"); }
+          for (const m of u.models) { if (m.state !== "ok" || m.berserk) continue; const fc = fright(u, 0, Infinity); if (!fc.ok) frightTable(m, -fc.margin, "casualties"); }
           if (!u.models.some(active)) { u.routed = true; L(`${u.name} breaks and flees`); }
         }
       }

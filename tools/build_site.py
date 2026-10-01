@@ -273,6 +273,10 @@ def combat_flags(t, flags):
     """Traits the combat simulator (tools/sim.js) needs, read from active trait names."""
     n = t.get("name", "")
     lv = t.get("levels") or 1
+    # the Machine meta-traits are containers: flag them before skipping containers (a Slave Mentality mind still
+    # makes Fright Checks, review #108; Machines have no FP, B16, B263)
+    if n.startswith("Necrodermis Machine-Body") or n.startswith("Machine Body") or n.startswith("Machine Mind") or n == "Machine":
+        flags["machine"] = 1
     if t.get("children") is not None:
         return
     low = n.lower()
@@ -282,6 +286,18 @@ def combat_flags(t, flags):
         flags["cr"] = 1
     elif n.startswith("Chameleonic Hide"):
         flags["chameleon"] = flags.get("chameleon", 0) + lv   # its notes: -1/level to spot it still, half moving
+    elif n.startswith("Berserk"):
+        flags["berserk"] = t.get("cr") or 12                     # B124; Battle Rage goes berserk on entering combat
+        if "battle rage" in low or (t.get("base_points", t.get("points")) or 0) <= -15 and (t.get("cr") or 12) == 12:   # -15 at CR 12 is the Battle Rage price
+            flags["battleRage"] = 1
+    elif n.startswith("Cowardice"):
+        flags["coward"] = t.get("cr") or 12                      # B129
+    elif n.startswith("Overconfidence"):
+        flags["overconf"] = t.get("cr") or 12                    # B148
+    elif n.startswith("Impulsiveness"):
+        flags["impulsive"] = t.get("cr") or 12                   # B139
+    elif n.startswith("Bloodlust") or n.startswith("Red Thirst"):
+        flags["bloodlust"] = t.get("cr") or 12                   # B125
     elif n.startswith("Acute Vision"):
         flags["acuteVision"] = flags.get("acuteVision", 0) + lv
     elif n.startswith("Night Vision"):
@@ -339,8 +355,6 @@ def combat_flags(t, flags):
         flags["noMorale"] = 1       # soulless machines: Necrons do not break
     elif n.startswith("Synapse Discipline"):
         flags["fearless"] = flags.get("fearless", 0) + 5   # Fearlessness 5 while linked; the sim assumes synapse is near
-    elif "slave mentality" in low or "machine mind" in low:
-        flags["noMorale"] = 1
     if n.startswith("Necrodermis Machine-Body") or n.startswith("Machine Body") or n.startswith("Machine Mind") or n == "Machine":
         flags["machine"] = 1        # Machines have no FP to spend on extra effort (B16, B263; user direction for Necrons)
     if ("metabolic hazards" in low or "toxins" in low or "poison" in low) and (

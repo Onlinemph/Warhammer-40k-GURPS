@@ -737,6 +737,7 @@ Totals: 94 findings, 4 big, 29 medium, 61 small.
 - Batch E: #25 (zone and swath left as they were), #26, #27 ("beside the target" only when it's in a close combat, B392), #28, #29, #30 (not for a model struck directly by an `ex` shot), #31, #34, #57, #58, #59, #60, #61, #91 (at a foe's feet and round corners), #92, #113 (clothing only; not standing in fire or wooden shields) done. #80's per-turn burning is covered by #113.
 - Batch F: #18, #19 (1.5x-2x counted as two-handed), #32, #62, #64, #87, #88, #93/#112 (the Agoniser only; no loadout carries the other affliction lines), #94 done.
 - Batch G: #15, #16, #65, #84, #85 (no free-hands bonus), #86 done; #17 as far as Martial Arts' close-combat table allows (no Feint while held; long weapons stay usable at MA's penalty instead of RAW's ban).
+- Batch H: #103 (Skorpekh Berserk read as Battle Rage, which its −15 price matches), #104, #105, #106, #107 (as target choice; downed models leave the board), #108 (Slave Mentality no longer exempts from morale), #109 (the Gun Drone now flagged as a Machine), #111 done; #110 keeps Regeneration (user).
 
 ## Status of the earlier from-memory review
 
