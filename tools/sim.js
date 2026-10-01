@@ -3562,8 +3562,8 @@ const SIM = (() => {
       const Wm = stanceW(m, "melee") * A.aggression, Wr = stanceW(m, "ranged") * A.aggression;
       if (u.hooks) hookOptions(m, pool, add, rNow, Wm);
       if (u.sm >= 1 && adj.length && !m.grips.length) trampleOptions(m, adj, add, rNow, Wm);
-      if (adj.length) meleeOptions(m, adj, add, rNow, Wm, Wr, mw);
       if (bladeReady(m) && !m.grips.length && m.u.melee.reachMax <= 2) flankOptions(m, pool, add, Wm);
+      if (adj.length) meleeOptions(m, adj, add, rNow, Wm, Wr, mw);
       else {
         rangedOptions(m, pool, add, rNow, Wr);
         if (bladeReady(m)) approachOptions(m, pool, add, Wm);
