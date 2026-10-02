@@ -375,6 +375,7 @@ def main(argv):
             line = make(force)
             if line:
                 print(line)
+    shutil.copyfile(HERE / "gallery.html", OUT / "gallery.html")   # a viewer for the pack, beside it
     (OUT / "index.js").write_text("window.DOW_INDEX = " + json.dumps({"units": done}, separators=(",", ":")) + ";\n")
     print(f"site/models/index.js: {len(done)} of {len(units)} units")
 

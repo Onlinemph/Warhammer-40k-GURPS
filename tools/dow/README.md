@@ -44,6 +44,10 @@ Not covered, so still drawn from shapes: any vehicle not in the list.
 
 Known gaps: the Terminator entry has not been seen in the page, because no simulator loadout wears Terminator armour yet.
 
+## Looking at the pack
+
+`build_pack.py` puts a viewer beside the pack: open `site/models/gallery.html` (from disk, or through whatever serves `site/`). It lists every model, with a button per look and per animation and colour pickers for the paint; every voice, with a button per line; every sound the replay uses; and the scenery objects. It is the quick way to check a unit after changing its entry, without setting up a battle that fields it.
+
 ## Battlefields
 
 `build_pack.py` also writes `site/models/scenery.js` from Dawn of War II's environment archives, and the 3D replay dresses its battlefields with it:
