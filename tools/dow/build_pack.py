@@ -35,7 +35,7 @@ HERE = Path(__file__).resolve().parent
 OUT = ROOT / "site" / "models"
 MIME = {".jpg": "image/jpeg", ".png": "image/png"}
 # what the page needs to know about a unit; the rest of an entry is for the exporter
-PAGE_KEYS = ("id", "match", "not", "veh", "turret", "clips_from", "h", "yaw", "paint", "tint", "tall", "size")
+PAGE_KEYS = ("id", "match", "not", "veh", "turret", "clips_from", "h", "yaw", "paint", "tint", "tall", "size", "kits")
 # the page's name for a clip -> the game's names for it, first one the model has (a unit's own "clips" override these)
 CLIPS = {"idle": ["idle_1", "idle", "idle_2"], "run": ["run_1", "run", "move_run_1", "walk_1", "walk", "move"],
          "fire": ["fire", "fire_1", "idle_firing", "idle_firing_1", "idle_fire", "fire_idle", "aim_idle"], "melee": ["melee_1", "melee", "attack_1", "melee_2"],
@@ -318,7 +318,7 @@ def data_url(path):
 
 def export(unit, blender, work):
     cfg = {"whm": unit["whm"], "mod_folder": mod_folder(unit["game"]), "looks": unit.get("looks"), "add": unit.get("add", []),
-           "drop": unit.get("drop", []), "base": unit.get("base", []), "prefix": unit.get("prefix", ""), "borrows": bool(unit.get("clips_from")),
+           "drop": unit.get("drop", []), "base": unit.get("base", []), "prefix": unit.get("prefix", ""), "borrows": bool(unit.get("clips_from")), "sets": unit.get("sets"),
            "clips": ({**CLIPS, **unit.get("clips", {})} if unit.get("own", True) else unit.get("clips", {})), "tex": unit.get("tex", 512)}
     (work / "unit.json").write_text(json.dumps(cfg))
     run = subprocess.run([blender, "--background", "--python", str(HERE / "bl_export.py"), "--", str(work / "unit.json"), str(work)],
@@ -329,8 +329,8 @@ def export(unit, blender, work):
         raise RuntimeError(f"Blender did not export {unit['id']}:\n{tail}")
     meta = json.loads((work / "meta.json").read_text())
     tex = {name: {k: (data_url(work / v) if isinstance(v, str) else v) for k, v in t.items()} for name, t in meta["materials"].items()}
-    keep = {k: meta[k] for k in ("meshes", "looks", "bounds", "head", "mesh_material", "clips", "fps")}
-    notes.append("clips " + " ".join(f"{k}<-{v['from']}" for k, v in meta["clips"].items()))
+    keep = {k: meta[k] for k in ("meshes", "looks", "bounds", "head", "mesh_material", "clips", "alias", "fps")}
+    notes.append("clips " + " ".join(f"{k}<-{v['from']}" for k, v in meta["clips"].items()) + "".join(f" {a}=@{b}" for a, b in meta["alias"].items()))
     lacks = [k for k in ("idle", "run", "fire", "melee", "die") if k not in meta["clips"]]
     if lacks and not unit.get("clips_from") and not unit.get("veh"):
         notes.append("LACKS " + ",".join(lacks))

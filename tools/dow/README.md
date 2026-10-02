@@ -42,7 +42,7 @@ On Windows, run it with a Python installed from python.org or a virtual environm
 
 Not covered, so still drawn from shapes: any vehicle not in the list.
 
-Known gaps: Soulstorm units keep one animation set whatever they carry, so a heavy bolter is held like a bolter. The Terminator entry has not been seen in the page, because no simulator loadout wears Terminator armour yet.
+Known gaps: the Terminator entry has not been seen in the page, because no simulator loadout wears Terminator armour yet.
 
 ## Battlefields
 
@@ -139,6 +139,8 @@ blender --background --python tools/dow/bl_probe.py -- "<Soulstorm>/DXP2" out ar
 | `h` | Height in yards for a figure of Size Modifier 0 (vehicles: overall height) |
 | `looks`, `base`, `drop` | Meshes per weapon; `base` is added to every look, `drop` removed from every look |
 | `clips`, `prefix`, `clips_from`, `own` | Animations, as above; `own: false` takes every clip from `clips_from` |
+| `sets` | A look's own animations, where a weapon is carried or fired differently: the prefix its animations share (`"hbolt": "marine_heavy_bolter"` finds `marine_heavy_bolter_idle_1`, `..._run_1` and so on), or `{"prefix": ..., "fire": "<animation>"}` to name some outright. Clips a set lacks fall back to the unit's plain ones; a unit that takes its clips from another gets that unit's sets too |
+| `kits` | Weapon names that pick a look the weapon's kind alone wouldn't: `{"Heavy Bolter": "hbolt"}` (a regular expression on the ranged weapon's name, to a look) |
 | `veh`, `turret` | A vehicle, and the bone its turret turns on |
 | `tint`, `paint` | A colour multiplied over the textures; fixed paint colours instead of the faction's |
 | `size` | `bounds` sizes the model from its outline instead of its head bone |

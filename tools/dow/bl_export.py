@@ -11,6 +11,9 @@ unit.json (one entry of tools/dow/units.json, plus "mod_folder"):
                                                                       #   or a list of mesh names
      "add": [...], "drop": [...],                                     # meshes to add to / take out of every look
      "clips": {"idle": ["idle_1", "idle"], "run": "run_1", ...},      # name in the page -> the game's animation (first found)
+     "sets": {"flame": "marine_flamer",                               # a look whose weapon is carried and fired differently:
+              "shell": {"prefix": "marine_missile_launcher",          #   the prefix its animations share ("marine_flamer_idle_1"),
+                        "fire": "marine_missile_launcher_fire_and_reload"}},   # and/or the animation for a clip by name
      "tex": 512}                                                      # longest texture side to keep
 
 Out dir gets model.glb, <material>.base.png|jpg, <material>.m1.jpg, <material>.m2.jpg and meta.json.
@@ -185,8 +188,16 @@ def guess(kind):
     return found[0] if found else None
 
 
+def set_action(prefix, kind):
+    """The animation of this kind in a weapon's family: <prefix>_idle_1, <prefix>_run..."""
+    pre = prefix.lower().rstrip("_") + "_"
+    core = KIND[kind][len("(^|_)"):-1]
+    found = [a for a in ACTS if a.startswith(pre) and re.fullmatch(core, a[len(pre):])]
+    return min(found, key=lambda a: (len(a), a)) if found else None
+
+
 # ---- 3. animations: only the chosen ones, renamed for the page ------------------------------------------------
-clips = {}
+clips, alias = {}, {}
 if rig:
     wanted = {}
     for name, srcs in cfg.get("clips", {}).items():
@@ -201,6 +212,30 @@ if rig:
         act = ACTS[src.lower()]
         wanted[name] = act.copy()
         clips[name] = {"from": src, "frames": int(act.frame_range[1] - act.frame_range[0])}
+    # a look with animations of its own (a heavy bolter is carried at the hip, a launcher on the shoulder): its clips
+    # are exported as "idle@<look>" and the page prefers them for a figure showing that look. Looks that name the
+    # same animations share one copy.
+    same = {}
+    for look, spec in (cfg.get("sets") or {}).items():
+        if look not in looks:
+            print("MISSING look for set", look)
+            continue
+        spec = {"prefix": spec} if isinstance(spec, str) else spec
+        sig = json.dumps(spec, sort_keys=True)
+        if sig in same:
+            alias[look] = same[sig]
+            continue
+        same[sig] = look
+        for kind in KIND:
+            src = spec.get(kind) or (set_action(spec["prefix"], kind) if spec.get("prefix") else None)
+            if not src:
+                continue
+            if src.lower() not in ACTS:
+                print("MISSING action", src)
+                continue
+            act = ACTS[src.lower()]
+            wanted[kind + "@" + look] = act.copy()
+            clips[kind + "@" + look] = {"from": src, "frames": int(act.frame_range[1] - act.frame_range[0])}
     for act in list(bpy.data.actions):
         if act not in wanted.values():
             bpy.data.actions.remove(act)
@@ -232,7 +267,7 @@ bpy.ops.export_scene.gltf(
 # how high the head sits: sizes a figure better than its outline does (a raised banner or halberd is taller than the trooper)
 head = next((b for b in (rig.data.bones if rig else []) if b.name.lower() == "bip01 head"), None)
 head_z = round((rig.matrix_world @ head.head_local).z, 4) if head else None
-meta = {"whm": cfg["whm"], "meshes": [names[o] for o in keep], "looks": looks, "head": head_z, "materials": materials, "clips": clips,
+meta = {"whm": cfg["whm"], "meshes": [names[o] for o in keep], "looks": looks, "head": head_z, "materials": materials, "clips": clips, "alias": alias,
         "fps": scene.render.fps, "lo": [round(x, 4) for x in lo], "hi": [round(x, 4) for x in hi],
         "bounds": bounds,
         "mesh_material": {names[o]: (o.material_slots[0].material.name if o.material_slots and o.material_slots[0].material else None) for o in keep}}

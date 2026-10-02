@@ -807,6 +807,22 @@
     "plasma": "vis_plasma_chainsword",
     "plasma+power": "vis_plasma_sword",
     "plasma+fist": "vis_plasma_fist"
+   },
+   "kits": {
+    "Plasma": "plasma"
+   },
+   "sets": {
+    "bolt+fist": "power_fist",
+    "plasma+fist": {
+     "prefix": "power_fist",
+     "fire": "sergeant_plasma_pistol_fire"
+    },
+    "plasma": {
+     "fire": "sergeant_plasma_pistol_fire"
+    },
+    "plasma+power": {
+     "fire": "sergeant_plasma_pistol_fire"
+    }
    }
   },
   {
@@ -833,6 +849,24 @@
     "shell": [
      "terminator_assult_cannon"
     ]
+   },
+   "kits": {
+    "Assault Cannon": "slug"
+   },
+   "sets": {
+    "flame": {
+     "fire": "heavy_flamer_fire_1",
+     "run": "heavy_flamer_run_fire",
+     "die": "heavy_flamer_die_1"
+    },
+    "slug": {
+     "run": "assault_cannon_run_fire",
+     "die": "assault_cannon_die_1"
+    },
+    "shell": {
+     "run": "assault_cannon_run_fire",
+     "die": "assault_cannon_die_1"
+    }
    }
   },
   {
@@ -849,6 +883,18 @@
     "flame": "scout_flamer_vis",
     "las": "scout_sniper_rifle_vis",
     "blade": "scout_knife_vis"
+   },
+   "kits": {
+    "Plasma": "plasma",
+    "Sniper|Long-Las": "las"
+   },
+   "sets": {
+    "flame": {
+     "fire": "scout_flamer_fire"
+    },
+    "las": {
+     "fire": "scout_sniper_rifle_fire"
+    }
    }
   },
   {
@@ -864,8 +910,32 @@
     "melta": "vis_flamer",
     "shell": "vis_missile_launcher",
     "lascannon": "vis_missile_launcher",
+    "hbolt": "vis_heavy_bolter",
     "blade": "vis_knife",
     "chain": "vis_knife"
+   },
+   "kits": {
+    "Heavy Bolter|Autocannon|Multi-Melta": "hbolt",
+    "Plasma": "plasma"
+   },
+   "sets": {
+    "hbolt": "marine_heavy_bolter",
+    "flame": {
+     "prefix": "marine_flamer",
+     "run": "marine_flamer_run_fire"
+    },
+    "melta": {
+     "prefix": "marine_flamer",
+     "run": "marine_flamer_run_fire"
+    },
+    "shell": {
+     "prefix": "marine_missile_launcher",
+     "fire": "marine_missile_launcher_fire_and_reload"
+    },
+    "lascannon": {
+     "prefix": "marine_missile_launcher",
+     "fire": "marine_missile_launcher_fire_and_reload"
+    }
    },
    "clips": {
     "throw": "marine_grenade_fire"
@@ -947,6 +1017,12 @@
     "shell": [
      "vis_grenade_launcher"
     ]
+   },
+   "kits": {
+    "Plasma": "plasma"
+   },
+   "sets": {
+    "shell": "grenade_launcher"
    }
   },
   {
@@ -967,6 +1043,11 @@
      "vis_laspistol",
      "vis_powerclaw"
     ]
+   },
+   "sets": {
+    "bolt+fist": {
+     "melee": "powerfist_melee_attack_1"
+    }
    }
   },
   {
@@ -996,6 +1077,17 @@
     "shell": [
      "vis_grenade_launcher"
     ]
+   },
+   "kits": {
+    "Plasma": "plasma"
+   },
+   "sets": {
+    "flame": {
+     "fire": "flamer_idle_firing"
+    },
+    "shell": {
+     "fire": "grenade_launcher_idle_firing"
+    }
    }
   },
   {
@@ -1553,7 +1645,25 @@
    "looks": {
     "default": "vis_slugga_choppa_axe",
     "flame": "vis_burna",
-    "shell": "vis_rokkit_launcha"
+    "shell": "vis_rokkit_launcha",
+    "bigshoota": "vis_big_shoota"
+   },
+   "kits": {
+    "Big Shoota": "bigshoota"
+   },
+   "sets": {
+    "bigshoota": {
+     "prefix": "boyz_big_shoota",
+     "hit": "boyz_big_shoota_damage"
+    },
+    "flame": {
+     "prefix": "boyz_burna",
+     "hit": "boyz_burna_damage"
+    },
+    "shell": {
+     "idle": "boyz_rokkit_launcha_fire_idle_1",
+     "fire": "boyz_rokkit_launcha_fire_and_reload"
+    }
    }
   },
   {
@@ -1584,6 +1694,17 @@
    "clips": {
     "run": "move_1",
     "fire": "plasma_rifle_idle_firing"
+   },
+   "sets": {
+    "pulse": {
+     "fire": "burst_cannon_idle_firing"
+    },
+    "flame": {
+     "fire": "flamer_idle_firing"
+    },
+    "melta": {
+     "fire": "fusion_blaster_idle_firing"
+    }
    }
   },
   {
@@ -1611,6 +1732,17 @@
    },
    "clips": {
     "fire": "burstcanon_idle_firing_a"
+   },
+   "sets": {
+    "flame": {
+     "fire": "flamer_idle_firing"
+    },
+    "melta": {
+     "fire": "fusionblaster_idle_firing"
+    },
+    "shell": {
+     "fire": "missles_idle_firing"
+    }
    }
   },
   {
@@ -1827,8 +1959,13 @@
     "plasma": "vis_plasma",
     "flame": "vis_flamer",
     "shell": "vis_missile_launcher",
+    "hbolt": "vis_heavy_bolter",
     "blade": "vis_knife",
     "chain": "vis_knife"
+   },
+   "kits": {
+    "Heavy Bolter|Autocannon": "hbolt",
+    "Plasma": "plasma"
    }
   },
   {
@@ -1841,6 +1978,13 @@
     "default": "vis_laspistol_sword",
     "plasma": "vis_plasma_gun",
     "shell": "vis_grenade_launcher"
+   },
+   "kits": {
+    "Plasma": "plasma"
+   },
+   "sets": {
+    "plasma": "2hand",
+    "shell": "2hand"
    }
   },
   {

@@ -6897,6 +6897,7 @@ if (typeof document !== "undefined") (() => {
     function borrowClips(asset, from) {
       const have = new Map(); asset.scene.traverse(o => have.set(o.name.toLowerCase(), o.name));   // bone names differ in case between the game's older and newer models
       const own = new Set(asset.clips.map(c => c.name));
+      asset.meta.alias = { ...(from.meta.alias || {}), ...(asset.meta.alias || {}) };
       for (const c of from.clips) if (!own.has(c.name)) asset.clips.push(new THREE.AnimationClip(c.name, c.duration, c.tracks.map(t => { const [node, prop] = t.name.split("."), mine = have.get(node.toLowerCase()); if (!mine) return null; const t2 = t.clone(); t2.name = mine + "." + prop; return t2; }).filter(Boolean)));
     }
     // a copy of a rigged model with its own skeleton (Object3D.clone alone leaves the copy bound to the first one's bones)
@@ -6909,8 +6910,11 @@ if (typeof document !== "undefined") (() => {
     }
     async function attachModel(F, r, u, asset) {
       const S = scheme(r), paint = paintOf(u, S), root = cloneRig(asset.scene), k = F.k;
-      // which meshes show: the look for this ranged and melee weapon, else for either, else the default
-      const L = asset.meta.looks, gun = r.rk === "lob" ? "shell" : r.rk || "", key = [gun + "+" + (r.mk || ""), gun, gun ? null : r.mk].find(k => k && L[k]) || "default", look = L[key] || asset.meta.meshes, show = new Set(look);
+      // which meshes show: the look for this ranged and melee weapon, else for either, else the default. A weapon the
+      // unit lists by name (its "kits": a heavy bolter is a bolt weapon, but a different thing to carry) comes first.
+      const L = asset.meta.looks, rk = r.rk === "lob" ? "shell" : r.rk || "", named = Object.entries(u.kits || {}).find(([rx]) => new RegExp(rx, "i").test((r.kit || "").split("|")[0]));
+      const key = [named && named[1], rk].flatMap(gun => gun ? [gun + "+" + (r.mk || ""), gun] : []).concat(rk ? [] : [r.mk]).find(k => k && L[k]) || "default", look = L[key] || asset.meta.meshes, show = new Set(look);
+      const set = (asset.meta.alias || {})[key] || key;   // looks that move alike share one set of clips
       // which of the game's meshes a drawn mesh belongs to: the exporter prefixes mesh names (so none collides with a bone's),
       // and one with several materials arrives as a group of pieces
       const partOf = o => { for (let q = o; q && q !== root.parent; q = q.parent) { const n = (q.userData.name || q.name).replace(/^M_/, ""); if (asset.meta.bounds[n]) return n; } return o.name; };
@@ -6931,7 +6935,7 @@ if (typeof document !== "undefined") (() => {
       for (const o of meshes) if (o.visible) pick.push(o);
       const mixer = new THREE.AnimationMixer(root), acts = {}, w = {};
       // a look can have clips of its own ("idle@flame": a flamer is held and fired differently); those win over the plain ones
-      for (const clip of asset.clips) { const [name, only] = clip.name.split("@"); if (only ? only !== key : asset.clips.some(c => c.name === name + "@" + key)) continue; const a = mixer.clipAction(clip); a.play(); a.setEffectiveWeight(0); acts[name] = a; w[name] = 0; }
+      for (const clip of asset.clips) { const [name, only] = clip.name.split("@"); if (only ? only !== set : asset.clips.some(c => c.name === name + "@" + set)) continue; const a = mixer.clipAction(clip); a.play(); a.setEffectiveWeight(0); acts[name] = a; w[name] = 0; }
       F.model = { root, mixer, acts, w, u };
       F.top = h * k * 1.06; F.bars.position.y = F.top + .25;
       if (F.veh) {
