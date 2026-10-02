@@ -73,7 +73,7 @@
       reveal(m, w);
       const shots = w.shots.mag === Infinity ? w.rof : Math.min(w.rof, m.ammo);
       if (w.shots.mag !== Infinity) m.ammo -= shots;
-      m.attacked = true;
+      m.attacked = true; m.aoa = true;
       const hexes = new Set([key(center.q, center.r), ...DIRS.map(([a, b]) => key(center.q + a, center.r + b))]);
       const z = { owner: m, side: m.u.side, w, hexes, shots, hit: new Set() };
       zones.push(z); m.zone = z;

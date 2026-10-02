@@ -253,6 +253,7 @@
       const d = hexDist(m.h, t.h), off = r.ok ? 0 : Math.max(1, Math.min(Math.ceil(d / 2), -r.margin)), at = off ? scatter(t.h, off) : t.h;
       L(`${m.id} fires the ${w.name} at ${t.id}'s position (${d} yd${own ? "" : ", called in by a spotter"}, skill ${lvl})${off ? `: ${off} yd off` : ": on target"}`);
       FX(["s", m.h.q, m.h.r, at.q, at.r, m.u.side, r.ok ? 1 : 0, m.ix, t.ix, lvl, r.ok ? 1 : 0, 0, "lob"]);
+      landOn(m, w, at, raw);
       explosion(m, w, at, raw);
     }
     // a foe that can hardly defend against a shot just now: stunned, down, exhausted, All-Out Attacking, held

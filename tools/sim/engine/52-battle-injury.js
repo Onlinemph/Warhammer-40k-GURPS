@@ -118,8 +118,10 @@
         t.shock = Math.min(t.shockCap || 4, HP >= 20 ? Math.floor(t.shockInj / Math.floor(HP / 10)) : t.shockInj);
       }
       // crippling (B420-421): injury over HP/2 to a limb, HP/3 to an extremity
+      // (with injury kept per limb, applyHit says whether this hit took that limb over; else one blow has to)
       const lim = loc === "arm" || loc === "leg" ? HP / 2 : loc === "hand" || loc === "foot" ? HP / 3 : Infinity;
-      const crippled = inj > lim;
+      const crippled = t.cripNow != null ? t.cripNow : inj > lim;
+      t.cripNow = null;
       if (crippled) cripple(t, loc);
       else if (cShock && lim !== Infinity) {
         // critical row 8 to a limb: a "funny-bone" hit, crippled only for the moment (B556): the hand lets go, the leg folds
@@ -211,10 +213,11 @@
       const L0 = t.u.veh.locs, r = roll3();
       if (r <= 4) return L0.X ? "mount" : "body";
       if (r === 5) return L0.t ? "turret" : "body";
-      if (r <= 7 || r === 15 || r === 16) return L0.C ? "track" : L0.L ? "legs" : "body";
-      if (r === 8 || r === 13 || r === 14) return L0.T ? "turret" : "body";
-      if (r === 12) return L0.O ? "open" : "body";
-      if (r >= 17) return L0.W ? "wheel" : "body";
+      if (r <= 7 || r === 13 || r === 14) return L0.C ? "track" : L0.L ? "legs" : "body";
+      if (r === 8 || r === 12) return L0.T ? "turret" : "body";
+      if (r === 11) return L0.O ? "open" : "body";
+      if (r === 15 || r === 16) return L0.W ? "wheel" : "body";
+      if (r >= 17) return "vitals";
       return "body";
     }
     // wounding on a machine (B380, B554): Unliving, except the vital area (engine, fuel): x3 piercing and impaling,
@@ -493,6 +496,7 @@
       if (side && finj) t.limbInj[side] += finj;
       L(`  ${raw} dmg to ${area ? "the body (large area)" : loc} (DR ${armDR + natDR}${div !== 1 ? "/" + (div === Infinity ? "∞" : div) : ""}): ${inj} injury${finj ? ` + ${finj} ${w.follow.ex ? "from the internal explosion" : "follow-up"}` : ""}${frac ? "" : `; ${t.id} at ${t.hp - inj - finj}/${t.u.HP} HP`}`);
       if (t.h) FX(["h", t.ix, inj + finj, loc, t.h.q, t.h.r]);
+      t.cripNow = side ? took < lim0 && t.limbInj[side] >= lim0 : null;
       injure(att, t, inj + finj, loc, dmg.type);
       // agony (B428): HT (+3 with High Pain Threshold) at the weapon's penalty, or Severe Pain for the rest of the
       // fight (-4, -2 with High Pain Threshold); a critical failure stuns too. Machines feel nothing

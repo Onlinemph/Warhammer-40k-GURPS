@@ -2111,6 +2111,7 @@ const SIM = (() => {
       } else L(`  ${g.name} is too shaken to care`);
     }
     function frightTable(m, by, why) {
+      by = Math.max(1, by);   // a check with no cap can fail on a 17 with a margin below 1
       const r = roll3() + by, u = m.u;
       const stun = (sec, how, txt) => { m.stunned = true; m.stunT = sec; m.stunRec = how; L(`  ${m.id} ${txt || "freezes"} (${why}, Fright Check Table ${r})`); };
       if (r <= 5) stun(1, "auto");
@@ -2120,7 +2121,7 @@ const SIM = (() => {
       else if (r === 11) stun(d6() + d6(), "willmod");
       else if (r === 12) stun(d6(), "willmod", "retches, helpless");
       else if (r === 13) L(`  ${m.id} shakes it off with a new quirk (${why}, Fright Check Table 13)`);
-      else if (r <= 15) { spendFP(m, d6()); stun(r === 14 ? d6() : d6() + d6(), "willmod", "loses fatigue and freezes"); }
+      else if (r <= 15) { spendFP(m, d6()); stun(d6(), "willmod", "loses fatigue and freezes"); }
       else if (r === 16) stun(d6(), "willmod");
       else if (r <= 20 || r >= 22) { incapacitate(m, `faints or collapses (${why}, Fright Check Table ${r})`); }
       else { m.state = "routed"; place(m, null); L(`  ${m.id} panics and runs (${why}, Fright Check Table 21)`); }
@@ -2130,7 +2131,7 @@ const SIM = (() => {
     function recoverStun(m) {
       if (m.stunT > 0) { m.stunT--; if (m.stunT > 0) return false; if (m.stunRec === "auto") return true; }
       const u = m.u, how = m.stunRec || "ht";
-      const lvl = how === "will" ? u.will : how === "willmod" ? frightLevel(u, 0, Infinity) : how === "iq" ? (u.stats.iq || 10) + (u.flags.cr ? 6 : 0) : u.HT + (u.flags.hpt && !frac ? 3 : 0);
+      const lvl = how === "will" ? u.will : how === "willmod" ? frightLevel(u, 0, Infinity) : how === "iq" ? (u.stats.iq || 10) + (u.flags.cr ? 6 : 0) : u.HT;
       return check(lvl).ok;
     }
     function spendFP(m, n) {
@@ -2283,8 +2284,10 @@ const SIM = (() => {
         t.shock = Math.min(t.shockCap || 4, HP >= 20 ? Math.floor(t.shockInj / Math.floor(HP / 10)) : t.shockInj);
       }
       // crippling (B420-421): injury over HP/2 to a limb, HP/3 to an extremity
+      // (with injury kept per limb, applyHit says whether this hit took that limb over; else one blow has to)
       const lim = loc === "arm" || loc === "leg" ? HP / 2 : loc === "hand" || loc === "foot" ? HP / 3 : Infinity;
-      const crippled = inj > lim;
+      const crippled = t.cripNow != null ? t.cripNow : inj > lim;
+      t.cripNow = null;
       if (crippled) cripple(t, loc);
       else if (cShock && lim !== Infinity) {
         // critical row 8 to a limb: a "funny-bone" hit, crippled only for the moment (B556): the hand lets go, the leg folds
@@ -2376,10 +2379,11 @@ const SIM = (() => {
       const L0 = t.u.veh.locs, r = roll3();
       if (r <= 4) return L0.X ? "mount" : "body";
       if (r === 5) return L0.t ? "turret" : "body";
-      if (r <= 7 || r === 15 || r === 16) return L0.C ? "track" : L0.L ? "legs" : "body";
-      if (r === 8 || r === 13 || r === 14) return L0.T ? "turret" : "body";
-      if (r === 12) return L0.O ? "open" : "body";
-      if (r >= 17) return L0.W ? "wheel" : "body";
+      if (r <= 7 || r === 13 || r === 14) return L0.C ? "track" : L0.L ? "legs" : "body";
+      if (r === 8 || r === 12) return L0.T ? "turret" : "body";
+      if (r === 11) return L0.O ? "open" : "body";
+      if (r === 15 || r === 16) return L0.W ? "wheel" : "body";
+      if (r >= 17) return "vitals";
       return "body";
     }
     // wounding on a machine (B380, B554): Unliving, except the vital area (engine, fuel): x3 piercing and impaling,
@@ -2658,6 +2662,7 @@ const SIM = (() => {
       if (side && finj) t.limbInj[side] += finj;
       L(`  ${raw} dmg to ${area ? "the body (large area)" : loc} (DR ${armDR + natDR}${div !== 1 ? "/" + (div === Infinity ? "∞" : div) : ""}): ${inj} injury${finj ? ` + ${finj} ${w.follow.ex ? "from the internal explosion" : "follow-up"}` : ""}${frac ? "" : `; ${t.id} at ${t.hp - inj - finj}/${t.u.HP} HP`}`);
       if (t.h) FX(["h", t.ix, inj + finj, loc, t.h.q, t.h.r]);
+      t.cripNow = side ? took < lim0 && t.limbInj[side] >= lim0 : null;
       injure(att, t, inj + finj, loc, dmg.type);
       // agony (B428): HT (+3 with High Pain Threshold) at the weapon's penalty, or Severe Pain for the rest of the
       // fight (-4, -2 with High Pain Threshold); a critical failure stuns too. Machines feel nothing
@@ -2875,6 +2880,20 @@ const SIM = (() => {
       for (let i = 0; i < 20; i++) { const pen = rollDamage(d) - effDR; if (pen > 0) tot += pen * vm + avgF; }
       return tot / 20;
     }
+    // Can this weapon never get through that foe's armour, even on its best roll? The planner's expected injury comes
+    // from a few sample rolls, so a shot that penetrates only now and then can read as nothing; this is the test
+    // for "never". Anything with an effect beyond its own penetration (a cone, a blast, a follow-up, a curse, a
+    // crushing blow, flexible armour that passes blunt trauma) is not hopeless.
+    function hopeless(w, t, from) {
+      const d = w.dmg;
+      if (!d || w.malediction || w.cone || d.div === Infinity) return false;
+      const top = (d.n * 6 + (d.add || 0)) * (d.mult || 1);
+      if (t.u.veh) return top <= Math.floor(vehFacingDR(t, "body", from) / d.div);   // a follow-up needs the round to get in first
+      if (w.follow || d.ex || t.u.arm.flexible || /^cr/.test(d.type)) return false;
+      let low = Infinity;
+      for (const [loc] of RANDOM_LOCS) low = Math.min(low, Math.floor((drAt(t.u.arm.dr, loc) + natDRat(t.u, loc)) / d.div));
+      return top <= low;
+    }
     function expInjRandom(w, tu, dmgOverride) {
       if (tu.veh) return expInj(w, tu, "body", dmgOverride);
       let s = 0;
@@ -2891,6 +2910,7 @@ const SIM = (() => {
       const locs = w.cone ? ["area"] : t.u.veh ? (aimsShots(m) && pointy ? ["random", "vitals"] : ["random"]) : shUp ? [aimsShots(m) ? "torso" : "random"] : aimsShots(m) || (melee && t.pinned) ? [...Object.keys(AIM), ...Object.keys(AIM).filter(l => l !== "eye" && drAt(t.u.arm.dr, l === "vitals" ? "torso" : l) > 0).map(l => l + "#c")] : ["random"];
       const def0 = melee ? bestDefence(t, m, true, w) : w.malediction ? (w.fp && t.u.flags.blank ? 99 : w.resist === "HT" ? t.u.HT : t.u.will) - 2 : rangedDefence(t, m);
       let best = { loc: "torso", da: 0, score: 0, lvl };
+      const cap = fo.cap ?? Infinity;   // a Move and Attack's roll can't pass 9 whatever is added to it (B365)
       for (const loc of locs) {
         const pen = (fo.fx ? fo.fx.pen(loc.replace("#c", "")) : 0) + (loc === "random" || loc === "area" ? 0 : loc.endsWith("#c") ? Math.min(0, Math.min(AIM[loc.slice(0, -2)], CHINK(loc.slice(0, -2))) + (w.chink || 0)) : loc === "eye" && drAt(t.u.arm.dr, "eye") > 0 ? -10 : AIM[loc]);   // an eye behind a helmet lens or visor is -10 (B399-400)
         const pointed = /^pi/.test(w.dmg.type) || w.dmg.type === "imp" || (w.dmg.type === "burn" && !w.dmg.ex && !w.cone);
@@ -2913,7 +2933,7 @@ const SIM = (() => {
         // Attack (B369) does in melee; not for area attacks or Malediction
         const maxDa = fo.noDa ? 0 : melee || !(w.malediction || w.cone || w.dmg.ex || w.blast) ? 6 : 0;
         for (let da = 0; da <= maxDa; da++) {
-          const eff = lvl + pen + hmod - 2 * da;
+          const eff = Math.min(cap, lvl + pen + hmod - 2 * da);
           if (eff < 3 || (da > 0 && eff < 10)) break;
           const pDef = def0 == null ? 0 : P3[Math.max(0, Math.min(18, def0 - da))];
           const hits = melee ? P3[Math.min(18, eff)] : burstHits(eff, w.cone ? 1 : (w.rof || 1), w, fo.aim || 0, !!fo.braced);
@@ -2932,7 +2952,7 @@ const SIM = (() => {
         }
         // Telegraphic Attack (MA113): +4 to hit, +2 to the foe's defences; not with Deceptive Attack
         if (melee && !fo.noTele && lvl + pen + hmod + 4 >= 3) {
-          const eff = lvl + pen + hmod + 4, pDef = def0 == null ? 0 : P3[cl(def0 + 2)];
+          const eff = Math.min(cap, lvl + pen + hmod + 4), pDef = def0 == null ? 0 : P3[cl(def0 + 2)];
           let score = (1 - pDef) * perHit(eff);
           if (shUp) { const dm = dmgOverride || w.dmg, raw = Math.max(1, (dm.n * 3.5 + dm.add) * (dm.mult || 1)); const soak = Math.min(1, t.sp / raw); score *= (1 - soak) + soak * 0.25; }
           if (score > best.score) best = { loc, da: 0, score, lvl: eff, tele: true };
@@ -2963,7 +2983,7 @@ const SIM = (() => {
     // shields cover the front and the shield (left) side (B287)
     const shieldCovers = (t, att) => { const a = arcTo(t, att); return a === "front" || (a === "side" && sideOf(t.h, t.facing, att.h) === "L"); };
     const shieldDB = t => t.u.cs && t.shState === "ok" && !t.blockLost ? t.u.cs.db : 0;
-    const canParry = t => t.u.parry != null && bladeReady(t) && !(t.u.melee.unbalanced && t.attacked && !t.defAtk) && t.armsLost < 2 && (!t.armsLost || t.u.melee.oneHanded !== false) && !t.mna;
+    const canParry = t => t.u.parry != null && bladeReady(t) && !(t.u.melee.unbalanced && t.struckWith === t.u.melee && !t.defAtk) && t.armsLost < 2 && (!t.armsLost || t.u.melee.oneHanded !== false) && !t.mna;
     // the defences open to t against att: kind is melee, ranged, pb (a gun fired at point-blank) or thrown.
     // With Damage to Shields in play (B484) a shield's DB counts against every attack from its arcs (B287)
     function defOpts(t, att, kind, aw) {
@@ -3376,7 +3396,7 @@ const SIM = (() => {
       if (!tH || w.cone || w.dmg.ex || !pointedW(w)) return;
       const l = loc.replace("#c", ""), f = t.u.flags;
       const dr = drAt(t.u.arm.dr, l === "vitals" ? "torso" : l) + natDRat(t.u, l);
-      const cov = (w.dmg.div === Infinity ? 0 : Math.floor(2 * dr / (w.dmg.div || 1))) + Math.floor(t.u.HP * (f.homogenous ? 0.25 : f.unliving ? 0.5 : 1));
+      const cov = w.dmg.div === Infinity ? 0 : Math.floor((2 * dr + Math.floor(t.u.HP * (f.homogenous ? 0.25 : f.unliving ? 0.5 : 1))) / (w.dmg.div || 1));
       if (basic <= cov) return;
       const x = beyond(m, w, tH);
       if (!x) return;
@@ -3486,7 +3506,7 @@ const SIM = (() => {
       // missed round may strike someone on the line, beside the target or beyond it (B389, B392)
       const wild = () => {
         for (const mg of misses) {
-          if (w.dmg.ex) { const at = t.h || t.lastH; if (at) explosion(m, w, scatter(at, Math.max(1, Math.min(Math.ceil(d / 2), -mg))), rollDamage(w.dmg)); }
+          if (w.dmg.ex) { const at = t.h || t.lastH; if (at) { const to = scatter(at, Math.max(1, Math.min(Math.ceil(d / 2), -mg))), raw = rollDamage(w.dmg); landOn(m, w, to, raw); explosion(m, w, to, raw); } }
           else if (t.h) stray(m, w, t, inter);
         }
       };
@@ -3533,7 +3553,7 @@ const SIM = (() => {
       // a dodged round flies on: an explosive lands the dodge's margin of success in yards away (B414), a bullet
       // may hit someone behind (B389)
       for (let k = 0; k < dodged; k++) {
-        if (w.dmg.ex) { const at = tH || t.lastH; if (at) explosion(m, w, scatter(at, Math.max(1, dMargin)), rollDamage(w.dmg)); }
+        if (w.dmg.ex) { const at = tH || t.lastH; if (at) { const to = scatter(at, Math.max(1, dMargin)), raw = rollDamage(w.dmg); landOn(m, w, to, raw); explosion(m, w, to, raw); } }
         else if (tH) { const b = beyond(m, w, tH); if (b) strayAt(m, w, b); }
       }
       wild();
@@ -3686,8 +3706,7 @@ const SIM = (() => {
         if (dfe) t.feintDef = null;
         let lvl = -dfe + wl(m, w) - skillPen(m) - (opts.charge && !opts.heroic ? 4 : 0) + (opts.determined ? 4 : 0) + (opts.committed === "det" ? 2 : 0) - rapidPen + ev
           - (m.prone ? 4 : 0) - (m.kneel && !m.prone ? 2 : 0) - closePen(m, w) - (opts.pen || 0) + smMelee(m, t) - darkPen(m, t);
-        if (opts.charge && !opts.heroic) lvl = Math.min(lvl, 9);
-        const plan = planAttack(m, w, t, lvl, true, null, { noDa: !trained(m, w) });
+        const plan = planAttack(m, w, t, lvl, true, null, { noDa: !trained(m, w), cap: opts.charge && !opts.heroic ? 9 : undefined });
         let loc = plan.loc === "random" ? reachLoc(m, t, w, hitLocation()) : plan.loc;
         if (plan.lvl < 3) { m.attacked = true; L(`${m.id} can't hope to hit ${t.id} (skill ${plan.lvl})`); continue; }   // B344
         // Telegraphic Attack (MA113): +4 to hit but +2 to every defence, and the crit range of the unmodified skill
@@ -3696,7 +3715,7 @@ const SIM = (() => {
         // critical failure while using it costs 1 HP to the arm, DR no help
         if ((opts.mighty || opts.flurry) && !m.u.flags.machine) { spendFP(m, 1); if (r.fumble && m.state === "ok") { L(`  ${m.id} wrenches its arm`); injure(m, m, 1, "arm", "cr"); } }
         if (tele && r.crit && r.roll > (plan.lvl - 4 >= 16 ? 6 : plan.lvl - 4 >= 15 ? 5 : 4)) r.crit = false;
-        m.attacked = true;
+        m.attacked = true; m.struckWith = w;
         if (w.fp) spendFP(m, w.fp);
         if (w.perils && perils(m, w)) continue;
         if (m.h && t.h) FX(["m", m.h.q, m.h.r, t.h.q, t.h.r, m.u.side, r.ok ? 1 : 0, m.ix, t.ix, plan.lvl, r.roll]);
@@ -4617,6 +4636,7 @@ const SIM = (() => {
       const d = hexDist(m.h, t.h), off = r.ok ? 0 : Math.max(1, Math.min(Math.ceil(d / 2), -r.margin)), at = off ? scatter(t.h, off) : t.h;
       L(`${m.id} fires the ${w.name} at ${t.id}'s position (${d} yd${own ? "" : ", called in by a spotter"}, skill ${lvl})${off ? `: ${off} yd off` : ": on target"}`);
       FX(["s", m.h.q, m.h.r, at.q, at.r, m.u.side, r.ok ? 1 : 0, m.ix, t.ix, lvl, r.ok ? 1 : 0, 0, "lob"]);
+      landOn(m, w, at, raw);
       explosion(m, w, at, raw);
     }
     // a foe that can hardly defend against a shot just now: stunned, down, exhausted, All-Out Attacking, held
@@ -4735,9 +4755,9 @@ const SIM = (() => {
           const br = bracedFor(m, w, t, m.moved, aimB + fA > 0), bB = br ? 1 : 0;
           const own = w.malediction ? 0 : ownCoverPen(m, t.h, br && aimB + fA > 0);
           const Enow = planAttack(m, w, t, base + bB + aimB + fA - own, false, null, { aim: aimB + fA, braced: br, fx }).score * sustainOf(w) * spread;
-          // a shot that can't hurt this foe at all (a boltgun against a battle tank's armour) isn't an option: left in at
-          // a value of nothing, it still beat every other choice, since each of those carries some risk
-          if (!w.malediction && !(Enow > 0)) continue;
+          // a shot that can never hurt this foe (a boltgun against a battle tank's armour) isn't an option: left in at a
+          // value of nothing, it still beat every other choice, since each of those carries some risk
+          if (hopeless(w, t, m.h)) continue;
           // a friendly heavy gun is holding for an opening on this foe: rattling it (a crit, a knock-down, a stun, its
           // fatigue spent on feverish dodges) is worth more than the shot alone, most of all from a burst
           const forGun = models.some(x => x !== m && x.u.side === u.side && x.waitOpen && x.waitOpen.t === t && x.state === "ok");
@@ -4803,7 +4823,7 @@ const SIM = (() => {
             const h2 = stepHex(m.h, t.h, mv);
             const E = planAttack(m, w, t, wl(m, w) - skillPen(m) + rangePenalty(nd + spdOf(t.steps || 0)) + t.u.sm + Math.min(-2, w.bulk || 0), false, null, { from: h2 }).score * sustainOf(w);
             const cont = GAMMA * (shotValueFrom(m, h2, pool) - shotValueFrom(m, m.h, pool));
-            if (E > 0) add(Wr * kv(m, t, E) + cont - risk(m, h2, ""), `advance-fire@${t.id}`, () => {
+            if (!hopeless(w, t, h2)) add(Wr * kv(m, t, E) + cont - risk(m, h2, ""), `advance-fire@${t.id}`, () => {
               stepToward(m, t.h, mv, hold); if (m.state !== "ok" || !m.h || m.stunned || !t.h || m.readied) return;
               faceTo(m, t.h); m.mna = true; fireAt(m, w, t, { moved: true });
             });
@@ -4845,7 +4865,7 @@ const SIM = (() => {
               - u.ai.caution * pals.reduce((a, x) => a + Math.min(1, Ez(x) / remOf(x)) * threatOf(x) * HORIZON, 0);
             if (!bestZ || v > bestZ.v) bestZ = { c, v };
           }
-          if (bestZ && bestZ.v > 0) add(Wr * bestZ.v - rNow, "suppress", () => { faceTo(m, bestZ.c.h); suppress(m, w, bestZ.c.h); });
+          if (bestZ && bestZ.v > 0) add(Wr * bestZ.v - risk(m, m.h, "aoa"), "suppress", () => { faceTo(m, bestZ.c.h); suppress(m, w, bestZ.c.h); });
         }
         // Wait (B366): hold fire for a charger heading for me; shoot it as it closes, maybe before it strikes
         if (isGun && !engaged(m)) {
@@ -5167,8 +5187,8 @@ const SIM = (() => {
       }
       if (len <= mv) {
         // arrives this turn: Move and Attack (-4, max 9) or a Slam if the weapon can't get through
-        const lvl = Math.min(9, w.level - skillPen(m) - 4 + smMelee(m, tgt));
-        const Ema = planAttack(m, w, tgt, lvl, true).score;
+        const lvl = w.level - skillPen(m) - 4 + smMelee(m, tgt);
+        const Ema = planAttack(m, w, tgt, lvl, true, null, { cap: 9 }).score;
         const slamOK = len >= 2 && hard && !tgt.prone && !tgt.pinned && u.HP >= 0.8 * tgt.u.HP;
         // a Slam's worth: knocking the foe down sets up the pin (valued as a share of the foe taken out)
         const slamV = slamOK ? 0.25 * threatOf(tgt) * P3[cl(Math.max(u.dx, u.grapple) - skillPen(m))] * HORIZON : 0;
@@ -5452,7 +5472,7 @@ const SIM = (() => {
     // prone, and into a hex out of its sight (behind a crate, a wall or a corner) when there is one
     function dive(x, at) {
       if (x.state !== "ok" || x.pinned || x.aoa || x.grips.length) return false;
-      const r = check(dodgeOf(x) - (x.stunned ? 4 : 0) - (x.prone ? 3 : 0));
+      const r = check(dodgeOf(x) + 3 - (x.stunned ? 4 : 0) - (x.prone ? 3 : 0));
       if (!r.ok) return false;
       if (at && x.h) {
         let best = null, bs = -1;
@@ -5587,7 +5607,7 @@ const SIM = (() => {
       reveal(m, w);
       const shots = w.shots.mag === Infinity ? w.rof : Math.min(w.rof, m.ammo);
       if (w.shots.mag !== Infinity) m.ammo -= shots;
-      m.attacked = true;
+      m.attacked = true; m.aoa = true;
       const hexes = new Set([key(center.q, center.r), ...DIRS.map(([a, b]) => key(center.q + a, center.r + b))]);
       const z = { owner: m, side: m.u.side, w, hexes, shots, hit: new Set() };
       zones.push(z); m.zone = z;
@@ -5678,11 +5698,10 @@ const SIM = (() => {
       return g.length ? g[0] + g.slice(1).reduce((a, x) => a + x / 5, 0) : 0;
     }
     function contest(a, b) { return contest3(a, b) > 0; }
-    // Quick Contest (B348): 1 a win, -1 a loss, 0 a tie (both fail, or equal margins)
+    // Quick Contest (B348): 1 a win, -1 a loss, 0 a tie (equal margins); if both fail, the one who failed by less wins
     function contest3(a, b) {
       const ra = check(a), rb = check(b);
       if (ra.ok !== rb.ok) return ra.ok ? 1 : -1;
-      if (!ra.ok) return 0;
       return Math.sign(ra.margin - rb.margin);
     }
     // the grappler whose hold counts, and what the hold is worth in a break-free contest (B371): +5 with two hands,
@@ -5810,7 +5829,7 @@ const SIM = (() => {
         if (m.state !== "ok" || m.u.routed || !m.h) continue;
         if (!sideActive(0) || !sideActive(1)) break;
         // per-turn defence limits last from one of the model's turns to the next (B363, B375-377)
-        m.parries = 0; m.dodges = 0; m.retreated = false; m.retreatFrom = null; m.blocked = false; m.attacked = false; m.stunRecovering = false;
+        m.parries = 0; m.dodges = 0; m.retreated = false; m.retreatFrom = null; m.blocked = false; m.attacked = false; m.struckWith = null; m.stunRecovering = false;
         m.committed = false; m.defAtk = false; m.aoa = false; m.aod = false; m.mna = false; m.offBalance = false;   // "until its next turn", whatever it does with it
         if (!frac && m.hp <= 0) {
           const k = Math.floor(-m.hp / m.u.HP);
