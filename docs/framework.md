@@ -121,6 +121,8 @@ Vehicle void shields will use the same rules at larger scale.
 
 ### Weapon anchors
 
+The percentages here and in the armour table are checked by `tools/sim/test/rules.test.js` against the data.
+
 | Weapon | Damage | What it has to do |
 |---|---|---|
 | Laspistol | 4d(2) burn | Kills an unarmoured man in 1–2 hits. |
@@ -128,13 +130,13 @@ Vehicle void shields will use the same rules at larger scale.
 | Lasgun | 7d(2) burn | User's figure. Punches flak (98%); almost never carapace (0.6%). Useless against power armour. |
 | Long-las | 8d(2) burn | Sniper. |
 | Hellgun / hot-shot | 8d(3) burn | Built to beat carapace (eff. DR 23): 82%. |
-| Boltgun (Godwyn/standard) | 6d×2(2) pi++, follow-up 2d cr ex | Turns an unarmoured man to paste; always penetrates carapace. Against Astartes power armour (eff. DR 50) penetrates about one shot in seven (14%): a Marine takes several bolts to kill another Marine. Explosive follow-ups that penetrate burst inside for triple damage (B414), so bolt cores are 2d. |
+| Boltgun (Godwyn/standard) | 6d×2(2) pi++, follow-up 2d cr ex | Turns an unarmoured man to paste; penetrates carapace 79%. Against Astartes power armour (eff. DR 50) penetrates about one shot in seven (14%): a Marine takes several bolts to kill another Marine. Explosive follow-ups that penetrate burst inside for triple damage (B414), so bolt cores are 2d. |
 | Human-scale boltgun / bolt pistol | 6d×2(2) pi, follow-up 1d cr ex / 5d×2(2) pi, follow-up 1d-1 cr ex | Sororitas, Inquisition and Commissar pattern: smaller bolts with a lighter mass-reactive charge (user direction). |
-| Heavy bolter | 7d×2(2) pi++, follow-up 2d+2 cr ex | Chews light vehicles (AV10, eff. DR 50) about 40% of the time. |
+| Heavy bolter | 7d×2(2) pi++, follow-up 2d+2 cr ex | A Mk VII torso 41%. Against AV10 (DR 125, eff. 62) only 6% since the vehicle armour rise: it no longer chews light vehicles. |
 | Plasma gun | 6d×4(3) burn ex | Kills Marines through power armour (eff. DR 33); penetrates Terminators (eff. DR 67) more often than not. Overheat risk. |
-| Meltagun | 8d×6(10) burn to ½D; beyond ½D 4d×6(3) | Kills AV14 (eff. DR 35) at short range; past ½D still wrecks AV12 (76%), almost never beats AV14 (5%). |
-| Lascannon | 8d×8(5) burn | Kills tanks (AV14 eff. DR 70) and Terminators. |
-| Krak missile | 6d×6(3) cr ex (shaped charge) | Reliable vs AV12–13 (90%); about two in three vs AV14. |
+| Meltagun | 8d×6(10) burn to ½D; beyond ½D 4d×6(3) | Kills AV14 (eff. DR 44) at short range, and a Leman Russ glacis 87%; past ½D gets through AV12 56% and never AV14. |
+| Lascannon | 8d×8(5) burn | Kills AV14 (eff. DR 88) and Terminators; a Leman Russ glacis only 13%. |
+| Krak missile | 6d×6(3) cr ex (shaped charge) | Reliable vs AV12 (96%), most of the time vs AV13 (72%), one in five vs AV14 (21%). |
 | Chainsword | sw+2d(3) cut | Tears flesh and flak; in a Marine's hands bites carapace and power-armour joints, but rarely gets through a power-armoured torso. Every chain weapon and the Astartes combat knife have monomolecular edges: armour divisor (3) (user direction). |
 | Power sword | sw+3d+1(10) cut | The disruption field shears power armour whoever holds it. |
 | Power fist | thr+8d(10) cr | Kills Terminators in Astartes hands. |

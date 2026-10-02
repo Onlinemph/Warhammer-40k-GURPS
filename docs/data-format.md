@@ -164,7 +164,7 @@ The path is relative to `data/`; the part after `#` is the entry's `name`. Templ
 
 ## Simulator loadouts (`data/sim/loadouts.yaml`)
 
-The combat simulator on the site (`tools/sim.js`) gives each template a default battle loadout. Keys are template titles exactly as the `.gct` file stems; add-ons are skipped.
+The combat simulator on the site (`tools/sim`) gives each template a default battle loadout. Keys are template titles exactly as the `.gct` file stems; add-ons are skipped.
 
 ```yaml
 Astra Militarum Guardsman:
@@ -177,4 +177,4 @@ Astra Militarum Guardsman:
   note: One line on what this kit is and any choice made.
 ```
 
-The simulator reads DR, Weak Points (and `weak_dr`: per-location DR a found Weak Point or a chink faces, written into the item notes as "Gap DR: arm 35, leg 35."), servo ST and Basic Move changes from the armour items, and follow-up damage from the weapon line after the chosen one. `node tools/sim_test.js` runs a few reference fights against the built site.
+The simulator reads DR, Weak Points (and `weak_dr`: per-location DR a found Weak Point or a chink faces, written into the item notes as "Gap DR: arm 35, leg 35."), servo ST and Basic Move changes from the armour items, and follow-up damage from the weapon line after the chosen one. `node tools/sim/test/smoke.js` runs a few reference fights against the built site, and `node --test tools/sim/test/rules.test.js` checks the rules and the anchors.

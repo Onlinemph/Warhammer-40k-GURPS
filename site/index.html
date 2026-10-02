@@ -604,19 +604,6 @@ function markNav(id){
 }
 function fmtPtsPlain(p){ return p+" pts"; }
 
-// Combat simulator. Inlined into site/index.html by tools/build_site.py; the engine
-// (SIM) also runs under node for testing: `node tools/sim_test.js`.
-//
-// GURPS 4e combat on a hex map (1 yard per hex), second by second. docs/simulator.md is
-// the rule list with Basic Set pages: facing and arcs, maneuvers chosen by an AI
-// (Attack, Aim, Move and Attack, All-Out Attack and Defense, Feint, Rapid Strike, Ready,
-// Change Posture, Concentrate), called shots, range and rapid fire, malfunctions,
-// explosions, fragmentation and cones, Dodge, Parry, Block with retreat and shield DB,
-// Dodge and Drop, cover and posture, armour divisors, Weak Points, regenerating shields,
-// wounding and Injury Tolerance, follow-ups, crippling, knockback, bleeding, shock, stun,
-// consciousness and death, Reanimation Protocols, morale, psychic powers and Perils,
-// and the user's Revised Fractional Health as an alternative wound system.
-
 const SIM = (() => {
   // ------------------------------------------------------------------ dice
   let R = Math.random;
@@ -633,9 +620,9 @@ const SIM = (() => {
     out[3] = out[4] = Math.max(out[4], 4 / 216); return out; })();
   const roll3 = () => d6() + d6() + d6();
   const pick = a => a[Math.floor(R() * a.length)];
-  // success roll: {ok, margin, crit}
-  function check(level) {
-    const r = roll3();
+  // success roll: {ok, margin, crit}; judge says what a given 3d6 roll means at a given level (B347-348)
+  function check(level) { return judge(roll3(), level); }
+  function judge(r, level) {
     const critS = r <= 4 || (r === 5 && level >= 15) || (r === 6 && level >= 16);
     const critF = r === 18 || (r === 17 && level <= 15) || r - level >= 10;
     return { ok: critS || (!critF && r <= Math.min(level, 16)), margin: level - r, crit: critS, fumble: critF, roll: r, level };
@@ -655,7 +642,7 @@ const SIM = (() => {
     const ignores = /ignores DR/i.test(s);
     s = s.replace(/\(ignores DR\)/i, " ");
     let type = null, ex = false;
-    const tm = /\s(pi\+\+|pi\+|pi-|pi|cut|imp|cr|burn|tox|cor|fat|aff|spec)\b(\s+ex)?/.exec(" " + s);
+    const tm = /\s(pi\+\+|pi\+|pi-|pi|cut|imp|cr|burn|tox|cor|fat|aff|spec)(?![\w+-])(\s+ex)?/.exec(" " + s);   // not \b: "pi++" ends in a non-word character
     if (tm) { type = tm[1]; ex = !!tm[2]; s = (" " + s).slice(0, tm.index).trim(); }
     if (!type || type === "spec" || type === "aff" || type === "fat") return null;
     let div = 1;
@@ -1259,10 +1246,11 @@ const SIM = (() => {
     const all = Math.ceil((tot("torso") + lo) / 2), nat = Math.min(natDRat(u, "torso"), all);
     return { arm: all - nat, nat };
   }
-  function hitLocation() {
-    const r = roll3();
+  // Hit Location Table (B552) for a 3d roll r; a face hit is the eye on a 1 in 6 (eye, the die for it)
+  function hitLocation() { const r = roll3(); return locFor(r, r === 5 ? d6() : 0); }
+  function locFor(r, eye) {
     if (r <= 4) return "skull";
-    if (r === 5) return d6() === 1 ? "eye" : "face";
+    if (r === 5) return eye === 1 ? "eye" : "face";
     if (r <= 7 || r === 13 || r === 14) return "leg";
     if (r === 8 || r === 12) return "arm";
     if (r <= 10) return "torso";
@@ -1584,6 +1572,8 @@ const SIM = (() => {
     const wallAt = k => !!terr && !walkable(k);
     const taken = k => occ.has(k) || wallAt(k);
     const NK = (q, r) => (q + 2048) * 4096 + (r + 2048);
+// Part of runBattle, one function body split into files by section (tools/sim/engine/50-69): the locals
+// and helpers declared in earlier parts are in scope here. tools/sim/README.md has the layout.
     // ---- elevation, in yards above the ground: a facility's gantries and docks, or on open ground a ridge held by one
     // side ({ side, height }): a plateau from 3 yards in front of that side's line back, sloping down to the plain
     // over twice its height (at least 6 yards)
@@ -2173,6 +2163,8 @@ const SIM = (() => {
     const baseMove = m => m.u.ranged && m.u.ranged.needsSetup && !m.setUp ? m.u.movePacked : m.u.move;
     const moveOf = m => m.legsLost >= 2 ? 1 : m.legsLost === 1 ? Math.max(1, (m.halfMove || weak(m) || tired(m) ? Math.ceil(baseMove(m) / 2) : baseMove(m)) - 3) : m.halfMove || weak(m) || tired(m) ? Math.max(1, Math.ceil(baseMove(m) / 2)) : baseMove(m);
 
+// Part of runBattle, one function body split into files by section (tools/sim/engine/50-69): the locals
+// and helpers declared in earlier parts are in scope here. tools/sim/README.md has the layout.
     // ---- Revised Fractional Health (the user's house rule; after panoptesv.com's wound rules).
     const SEVN = ["", "Scratch", "Minor", "Moderate", "Major", "Critical", "Massive", "Gawdawful", "Destruction"];
     const FRAC = [0, 1 / 16, 1 / 8, 1 / 4, 1 / 2, 1, 2, 4, 8];
@@ -2827,6 +2819,8 @@ const SIM = (() => {
       if (dmg >= 1) applyHit(m, { dmg: nd, follow: null }, x, "area", true, false, nd, dmg);
     }
 
+// Part of runBattle, one function body split into files by section (tools/sim/engine/50-69): the locals
+// and helpers declared in earlier parts are in scope here. tools/sim/README.md has the layout.
     // ---- expected injury of weapon w against unit tu at a location (cached per battle)
     const EXP = new Map();
     // blunt trauma (B379, extended by user direction): flexible armour that stops a hit passes 1 HP per full 5 points
@@ -3109,6 +3103,8 @@ const SIM = (() => {
     }
     const engaged = m => m.h && foes(m).some(f => f.h && hexDist(f.h, m.h) <= Math.max(f.u.melee.reachMax, m.u.melee.reachMax));
 
+// Part of runBattle, one function body split into files by section (tools/sim/engine/50-69): the locals
+// and helpers declared in earlier parts are in scope here. tools/sim/README.md has the layout.
     // ---- movement: greedy steps through free hexes toward a goal hex
     // Moving through friends (B368): a model may pass through an ally's hex for +1 movement point but not stop there.
     // A hop over a friend or an obstacle lands on the free hex beyond it.
@@ -3272,6 +3268,8 @@ const SIM = (() => {
       return best;
     }
 
+// Part of runBattle, one function body split into files by section (tools/sim/engine/50-69): the locals
+// and helpers declared in earlier parts are in scope here. tools/sim/README.md has the layout.
     // ---- attacks
     function jamCheck(m, w, r) {
       const rf = r.roll === 18 || (r.roll === 17 && r.level <= 15);
@@ -3775,6 +3773,8 @@ const SIM = (() => {
       if (d6() <= odds) { t.meleeBroken = true; t.inHand = t.inHand === "both" ? (t.u.ranged ? "gun" : "none") : "none"; L(`  ${t.id}'s ${pw.name} breaks under the blow`); }
     }
 
+// Part of runBattle, one function body split into files by section (tools/sim/engine/50-69): the locals
+// and helpers declared in earlier parts are in scope here. tools/sim/README.md has the layout.
     // ---- choose and carry out a maneuver
     const gunReady = m => m.inHand === "gun" || m.inHand === "both";
     // a fresh magazine from the belt (the part-used one is put away, its rounds not counted again)
@@ -3840,6 +3840,8 @@ const SIM = (() => {
       for (const p of m.u.powers) if (!!p.melee === melee && m.fp - p.fp >= 0) out.push(p);
       return out;
     }
+// Part of runBattle, one function body split into files by section (tools/sim/engine/50-69): the locals
+// and helpers declared in earlier parts are in scope here. tools/sim/README.md has the layout.
     // ================= decision layer: one value scale for every choice =================
     // value of an option = aggression x SUM(share of a foe knocked out x that foe's threat)
     //                    - caution x P(I'm knocked out next turn) x my own worth over the next few turns
@@ -3995,6 +3997,8 @@ const SIM = (() => {
       const n = stepToward(m, goal, runMove(m), 1);
       if (n) { L(`${m.id} searches ahead`); if (n >= moveOf(m) - 1) m.runK = m.runPrev + 1; }
     }
+// Part of runBattle, one function body split into files by section (tools/sim/engine/50-69): the locals
+// and helpers declared in earlier parts are in scope here. tools/sim/README.md has the layout.
     // ---- a vehicle's second (B467-469): the crew close up on empty stations, the driver moves (or overruns), then
     // every gunner works his own weapon at his own target, in his own arc
     const vehDriver = m => { const x = m.stn && m.stn.find(y => y.s.station === "driver"); return x && crewOK(x.man) && x.busy !== turn && !x.man.stunned ? x : null; };
@@ -4358,6 +4362,8 @@ const SIM = (() => {
       pick.run();
     }
 
+// Part of runBattle, one function body split into files by section (tools/sim/engine/50-69): the locals
+// and helpers declared in earlier parts are in scope here. tools/sim/README.md has the layout.
     // ---- Trampling (B404): a model 2+ SM bigger (1+ against a prone foe) tramples: DX or Brawling (with the relative
     // SM penalty for the bigger striker, Pyramid 3/77 p. 7), dodge only, thrust crushing on its own ST; 3+ SM bigger is
     // large-area injury
@@ -4629,6 +4635,8 @@ const SIM = (() => {
         x.skipNext = true; x.skipWhy = "it fired on its Wait";
       }
     }
+// Part of runBattle, one function body split into files by section (tools/sim/engine/50-69): the locals
+// and helpers declared in earlier parts are in scope here. tools/sim/README.md has the layout.
     // ---- options at range: shoot (each weapon and target), aim, Move and Attack, suppression, grenades, Wait, reload
     function rangedOptions(m, pool, add, rNow, Wr) {
       const u = m.u;
@@ -5119,6 +5127,8 @@ const SIM = (() => {
         });
       }
     }
+// Part of runBattle, one function body split into files by section (tools/sim/engine/50-69): the locals
+// and helpers declared in earlier parts are in scope here. tools/sim/README.md has the layout.
     // ---- options to close for hand-to-hand: charge (Move and Attack, All-Out Attack, Slam) or just advance
     function approachOptions(m, pool, add, Wm) {
       const u = m.u;
@@ -5499,6 +5509,8 @@ const SIM = (() => {
       }
     }
 
+// Part of runBattle, one function body split into files by section (tools/sim/engine/50-69): the locals
+// and helpers declared in earlier parts are in scope here. tools/sim/README.md has the layout.
     // ---- Feverish Defense (extra effort, B357): 1 FP for +2 to an active defence against a blow worth fearing
     function feverish(t, att, melee, v) {
       if (!att || t.u.flags.machine || t.committed || t.aoa || v < 5 || v > 15 || t.fp <= Math.max(3, Math.floor(t.u.fp / 3))) return 0;
@@ -5635,6 +5647,8 @@ const SIM = (() => {
       knockback(m, t, 2 * rollDamage(thr));
     }
 
+// Part of runBattle, one function body split into files by section (tools/sim/engine/50-69): the locals
+// and helpers declared in earlier parts are in scope here. tools/sim/README.md has the layout.
     // ---- grappling (B370-371): grab, take down, pin; a pinned model is helpless until it breaks free
     function gripsOn(t) {
       t.grips = t.grips.filter(g => g.state === "ok" && g.holding === t && g.h && t.h && hexDist(g.h, t.h) <= 1);
@@ -5753,6 +5767,8 @@ const SIM = (() => {
       } else L(`${m.id} strains against ${g.length} grappler${g.length > 1 ? "s" : ""} (ST ${Math.round(a)} vs ${Math.round(d)})`);
       return true;
     }
+// Part of runBattle, one function body split into files by section (tools/sim/engine/50-69): the locals
+// and helpers declared in earlier parts are in scope here. tools/sim/README.md has the layout.
     // damage bonus for All-Out Attack (Strong) and Mighty Blows, for planning
     const boosted = (w, k) => ({ ...w.dmg, add: w.dmg.add + k * Math.max(2, w.dmg.n), key: "b" + k });
 
@@ -5947,13 +5963,15 @@ const SIM = (() => {
 
   return { index, buildUnit, buildVehicle, describe, runBattle, monteCarlo, parseDamage, seed, woundMult, fmtDice, px, facilityMap, ruinsMap, fromOffset, rangePenalty, DIRS, squadSpecs,
     get squads() { return SQUADS; }, get vehicles() { return VEHICLES; },
-    get templates() { return TEMPLATES; }, get equipment() { return EQ; }, traitWeapons };
+    get templates() { return TEMPLATES; }, get equipment() { return EQ; }, traitWeapons,
+    // the pure rule helpers, for test/rules.test.js
+    rules: { P3, judge, critP, rangePenalty, rapidBonus, rclPen, burstHits, locFor, woundMult, drAt, armourProfile, stDamage, parseRange, parseRoF,
+      parseShots, hexDist, lineHexes, arcOf, vehicleLocs, rollDamage } };
 })();
 if (typeof module !== "undefined") module.exports = SIM;
 
-// ------------------------------------------------------------------- page
-// The simulator view in site/index.html. Uses DATA, $, esc and showLib from the page.
 if (typeof document !== "undefined") (() => {
+// The simulator view in site/index.html. Uses DATA, $, esc and showLib from the page.
   SIM.index(DATA);
   const LO = DATA.loadouts || {};
   const flatEq = e => [e, ...(e.children || []).flatMap(flatEq)];
@@ -6472,6 +6490,8 @@ if (typeof document !== "undefined") (() => {
       scene.add(ls); gridLines.push(ls);
     }
 
+// Part of makeView3D, one function body split into files by section (tools/sim/page/30-37): the locals and
+// helpers declared in earlier parts are in scope here. tools/sim/README.md has the layout.
     // ================= shared shapes for the miniatures
     const G = {
       box: keep(new THREE.BoxGeometry(1, 1, 1)), cyl: keep(new THREE.CylinderGeometry(1, 1, 1, big ? 6 : 10)), cylT: keep(new THREE.CylinderGeometry(.7, 1, 1, big ? 6 : 10)),
@@ -6804,6 +6824,8 @@ if (typeof document !== "undefined") (() => {
       return F;
     });
 
+// Part of makeView3D, one function body split into files by section (tools/sim/page/30-37): the locals and
+// helpers declared in earlier parts are in scope here. tools/sim/README.md has the layout.
     // ================= effects: two particle systems (glowing and smoky), beams, light flashes, decals
     function particles(max, tex, blending) {
       const geo = keep(new THREE.BufferGeometry());
@@ -6885,6 +6907,8 @@ if (typeof document !== "undefined") (() => {
       for (const F of figs) { const d = deathOf(F.i, t); if (!d) continue; const living = !/Necron/.test(ros[F.i].faction || "") && !F.veh; const m = new THREE.Mesh(decalGeo, living ? poolMat.blood : poolMat.oil), s = F.veh ? 2.4 : .9 * Math.max(1, F.k); m.rotation.x = -Math.PI / 2; m.rotation.z = F.i; m.scale.set(s, s * .8, 1); const [x, y] = d.at; m.position.set(x - .2, zXY(x, y) + .025, y); decals.add(m); }
     };
 
+// Part of makeView3D, one function body split into files by section (tools/sim/page/30-37): the locals and
+// helpers declared in earlier parts are in scope here. tools/sim/README.md has the layout.
     // ================= the timeline: when each model went down and came back, from the frames and casualty events
     const downs = ros.map(() => []);   // per model: [{ t: frame it vanished, at: [x, y], dead, back: frame it reappeared or null }]
     {
@@ -6901,7 +6925,6 @@ if (typeof document !== "undefined") (() => {
     }
     const deathOf = (i, t) => downs[i].find(d => d.fell && d.t <= t && (d.back == null || d.back > t)) || null;
 
-    // ================= what happens this second, scheduled across it (p from 0 to 1)
     // ================= the action camera: a second split into a move beat, then one beat per attacker in the order
     // they acted, the camera cutting to each; TS is how many seconds of normal replay time this second now takes
     const MOVE = 1.2, plans = new Map();
@@ -7113,6 +7136,8 @@ if (typeof document !== "undefined") (() => {
     const clearLines = () => { for (const l of lineObjs) { scene.remove(l); l.geometry.dispose(); l.material.dispose(); } lineObjs = []; };
     const dashed = (pts2, color, opacity) => { const g2 = new THREE.BufferGeometry().setFromPoints(pts2), l = new THREE.Line(g2, new THREE.LineDashedMaterial({ color, dashSize: .25, gapSize: .2, transparent: true, opacity })); l.computeLineDistances(); scene.add(l); lineObjs.push(l); };
 
+// Part of makeView3D, one function body split into files by section (tools/sim/page/30-37): the locals and
+// helpers declared in earlier parts are in scope here. tools/sim/README.md has the layout.
     // ================= camera: orbit around a target, optionally following the selected model
     const orb = { tx: cx, ty: 0, tz: cy, r: span * .8, th: -Math.PI / 2 + .35, ph: .95 };
     const tp = (fr[0] || []).filter(Boolean).map(x => P(x[0], x[1]));
@@ -7153,6 +7178,8 @@ if (typeof document !== "undefined") (() => {
     }
     function render() { if (!W) return; if (composer) composer.render(); else renderer.render(scene, camera); }
 
+// Part of makeView3D, one function body split into files by section (tools/sim/page/30-37): the locals and
+// helpers declared in earlier parts are in scope here. tools/sim/README.md has the layout.
     // ================= posing the miniatures
     const facingAng = d => [0, -60, -120, 180, 120, 60][d] * Math.PI / 180;
     const ease = x => x <= 0 ? 0 : x >= 1 ? 1 : x * x * (3 - 2 * x);
@@ -7315,6 +7342,8 @@ if (typeof document !== "undefined") (() => {
       if (st.trails && t > 0) f.forEach((x, i) => { if (!x || !x[6] || !x[6].length || !prev[i]) return; dashed([P(prev[i][0], prev[i][1]), ...x[6].map(([q, r]) => P(q, r))].map(([a, b]) => W3(a, b, zXY(a, b) + .08)), x[2] ? 0xd6a73c : 0xc23a30, .55); });
       for (const l of gridLines) l.visible = !!st.grid;
     }
+// Part of makeView3D, one function body split into files by section (tools/sim/page/30-37): the locals and
+// helpers declared in earlier parts are in scope here. tools/sim/README.md has the layout.
     // ================= the action camera: a wide shot of whoever moved, then over the shoulder of each attacker in turn
     const camLook = new THREE.Vector3(orb.tx, orb.ty, orb.tz), camWant = new THREE.Vector3(), lookWant = new THREE.Vector3();
     const UP = new THREE.Vector3(0, 1, 0);
@@ -7444,6 +7473,8 @@ if (typeof document !== "undefined") (() => {
     if (window.SIM3D_DEBUG) window.SIM3D_DEBUG = { glow, smoke, beams, shots, sched: () => sched, figs, planOf, fx, camera, camLook, camWant, lookWant };
     const active = on => { if (on && !running) { running = true; lastFrameT = performance.now(); raf2 = requestAnimationFrame(tick); } else if (!on && running) { running = false; cancelAnimationFrame(raf2); } };
 
+// Part of makeView3D, one function body split into files by section (tools/sim/page/30-37): the locals and
+// helpers declared in earlier parts are in scope here. tools/sim/README.md has the layout.
     // ================= input
     const el = renderer.domElement, ptr = new Map(); let drag = null, pin = null;
     const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();

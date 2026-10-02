@@ -1,6 +1,6 @@
 # Combat simulator: rules and data
 
-The simulator (`tools/sim.js`, the Combat Simulator page on the site) plays GURPS 4e combat second by second on a hex map and repeats the battle many times. This page is the contract between the engine and the data: what the engine models, which Basic Set rule it follows, and what data it reads.
+The simulator (`tools/sim`, laid out in `tools/sim/README.md`; the Combat Simulator page on the site) plays GURPS 4e combat second by second on a hex map and repeats the battle many times. This page is the contract between the engine and the data: what the engine models, which Basic Set rule it follows, and what data it reads.
 
 ## Map and movement
 

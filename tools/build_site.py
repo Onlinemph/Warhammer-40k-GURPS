@@ -16,7 +16,15 @@ ROOT = Path(__file__).resolve().parent.parent
 LIB = ROOT / "Library"
 OUT = ROOT / "site" / "index.html"
 TEMPLATE = ROOT / "tools" / "site_template.html"
-SIM = ROOT / "tools" / "sim.js"
+SIM = ROOT / "tools" / "sim"
+
+
+def sim_code():
+    """The simulator, put together from tools/sim/engine and tools/sim/page as tools/sim/assemble.js does."""
+    def parts(sub):
+        return "".join(f.read_text() for f in sorted((SIM / sub).glob("*.js")))
+    return ("const SIM = (() => {\n" + parts("engine") + "})();\nif (typeof module !== \"undefined\") module.exports = SIM;\n"
+            + "\nif (typeof document !== \"undefined\") (() => {\n" + parts("page") + "})();\n")
 
 KIND = {".eqp": "equipment", ".adq": "traits", ".skl": "skills", ".gct": "template"}
 
@@ -272,7 +280,7 @@ def skill_level(pts, diff):
 
 
 def combat_flags(t, flags):
-    """Traits the combat simulator (tools/sim.js) needs, read from active trait names."""
+    """Traits the combat simulator (tools/sim) needs, read from active trait names."""
     n = t.get("name", "")
     lv = t.get("levels") or 1
     # the Machine meta-traits are containers: flag them before skipping containers (a Slave Mentality mind still
@@ -478,7 +486,7 @@ def main():
     data = json.dumps({"libraries": libs, "loadouts": sim_data("loadouts.yaml"), "simWeapons": sim_data("weapons.yaml"),
                        "powers": sim_data("powers.yaml"), "ai": sim_data("ai.yaml"), "squads": sim_data("squads.yaml")}, ensure_ascii=False, separators=(",", ":"))
     html = TEMPLATE.read_text().replace("/*__DATA__*/null", data.replace("</", "<\\/"))
-    html = html.replace("/*__SIM__*/", SIM.read_text() + "\n" + (ROOT / "tools" / "vendor" / "three-post.js").read_text())
+    html = html.replace("/*__SIM__*/", sim_code() + "\n" + (ROOT / "tools" / "vendor" / "three-post.js").read_text())
     OUT.parent.mkdir(exist_ok=True)
     OUT.write_text(html)
     print(f"{OUT.relative_to(ROOT)}: {len(libs)} libraries, {len(html) // 1024} KB")

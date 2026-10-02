@@ -1,7 +1,8 @@
-// Smoke test for tools/sim.js against the built site data: `node tools/sim_test.js`.
+// Reference fights against the built site data, printing win rates: `node tools/sim/test/smoke.js [name] [log]`.
+// Nothing here passes or fails; test/rules.test.js holds the assertions.
 const fs = require("fs"), path = require("path");
-const SIM = require("./sim.js");
-const html = fs.readFileSync(path.join(__dirname, "..", "site", "index.html"), "utf8");
+const SIM = require("../load.js");
+const html = fs.readFileSync(path.join(__dirname, "..", "..", "..", "site", "index.html"), "utf8");
 const start = html.indexOf("const DATA = ") + 13, end = html.indexOf(";\nconst LIBS");
 const DATA = JSON.parse(html.slice(start, end));
 SIM.index(DATA);
