@@ -67,7 +67,7 @@ GURPS real-world baseline for scale: a modern soft vest with ceramic plate is ro
 | Mesh | 36, flexible | Hive-noble and assassin wear. Flexible: blunt trauma applies. |
 | Carapace | 70 | User's figure. Rigid plate, near-immune to las (lasgun 0.6%, long-las 6%); a hellgun (82%) or bolter (79%) goes through. |
 | Adepta Sororitas power armour | 85 | Raised with carapace so power armour stays above it; lighter than Astartes plate. A bolter penetrates the torso 45%. Limbs and neck lower (see below). |
-| Astartes power armour (Mk VII baseline) | 100 torso, 88 arms and legs (gap DR 35), 50 neck | Ignores las and stub fire on the torso (a lasgun still finds the neck 41% of the time). A bolter penetrates the torso about one shot in seven (14%), a limb about one in three (36%), the neck nearly always; a heavy bolter the torso 41%. A Weak Point found in an arm or leg, or a chink shot there, faces DR 35, not half of 88. Skull 100, face and eye lenses 75, hands 50, feet 60. Marks vary ±10–15 around this. |
+| Astartes power armour (Mk VII baseline) | 100 torso, 88 arms and legs (gap DR 35), 50 neck | Ignores las and stub fire on the torso (a lasgun still finds the neck 41% of the time). A bolter penetrates the torso about one shot in seven (14%), a limb about one in three (36%), the neck nearly always; a heavy bolter the torso 82%. A Weak Point found in an arm or leg, or a chink shot there, faces DR 35, not half of 88. Skull 100, face and eye lenses 75, hands 50, feet 60. Marks vary ±10–15 around this. |
 | Mk X Gravis | 130 | Between power armour and Terminator plate. |
 | Tactical Dreadnought (Terminator) | 200 | Ignores bolters on the torso. Plasma, lascannon, power fist and thunder hammer still kill. |
 
@@ -132,7 +132,7 @@ The percentages here and in the armour table are checked by `tools/sim/test/rule
 | Hellgun / hot-shot | 8d(3) burn | Built to beat carapace (eff. DR 23): 82%. |
 | Boltgun (Godwyn/standard) | 6d×2(2) pi++, follow-up 2d cr ex | Turns an unarmoured man to paste; penetrates carapace 79%. Against Astartes power armour (eff. DR 50) penetrates about one shot in seven (14%): a Marine takes several bolts to kill another Marine. Explosive follow-ups that penetrate burst inside for triple damage (B414), so bolt cores are 2d. |
 | Human-scale boltgun / bolt pistol | 6d×2(2) pi, follow-up 1d cr ex / 5d×2(2) pi, follow-up 1d-1 cr ex | Sororitas, Inquisition and Commissar pattern: smaller bolts with a lighter mass-reactive charge (user direction). |
-| Heavy bolter | 7d×2(2) pi++, follow-up 2d+2 cr ex | A Mk VII torso 41%. Against AV10 (DR 125, eff. 62) only 6% since the vehicle armour rise: it no longer chews light vehicles. |
+| Heavy bolter | (8d+2)×2(2) pi++, follow-up 2d+2 cr ex | Chews light vehicles: AV10 (DR 125, eff. 62) 38%, AV11 effectively never. A Mk VII torso 82% (raised with it from 41%: power armour didn't rise with the vehicles), Gravis 31%, Terminators never. |
 | Plasma gun | 6d×4(3) burn ex | Kills Marines through power armour (eff. DR 33); penetrates Terminators (eff. DR 67) more often than not. Overheat risk. |
 | Meltagun | 8d×6(10) burn to ½D; beyond ½D 4d×6(3) | Kills AV14 (eff. DR 44) at short range, and a Leman Russ glacis 87%; past ½D gets through AV12 56% and never AV14. |
 | Lascannon | 8d×8(5) burn | Kills AV14 (eff. DR 88) and Terminators; a Leman Russ glacis only 13%. |

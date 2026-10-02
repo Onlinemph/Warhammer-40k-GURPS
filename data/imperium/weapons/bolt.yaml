@@ -672,7 +672,7 @@ items:
     tags: [Missile Weapon, Imperium, Astra Militarum, Adeptus Astartes]
     weapons:
       - usage: Standard bolt
-        damage: 7dx2(2) pi++
+        damage: 8d+2x2(2) pi++
         acc: 5
         range: 400/2000
         rof: 8
@@ -696,16 +696,19 @@ items:
       oversized bolt round; consistently shown chewing through infantry and light vehicles alike
       while remaining useless against a main battle tank's frontal armour.
     design: >
-      This is the project's second fixed anchor: 7dx2(2) pi++, follow-up 2d+2 cr ex (exact dice
-      distribution computed with a Python script, not just averages). Checked against the vehicle
-      armour table: AV10 (DR 100, e.g. a Sentinel or a Chimera's side) has effective DR 50 against
-      the armour divisor (2); 7dx2 averages 49 and penetrates 41% of hits, "chewing" light vehicles
-      about 40% of the time as required. AV11 (DR 150, Rhino front/sides, effective DR 75) drops to
-      0.1%, and AV12-14 (DR 200-350) are effectively 0%, so it does not reliably hurt medium- or
-      heavy-armoured vehicles - both outcomes match the assignment's check. Against a suit of
-      Astartes power armour (DR 100, effective DR 50) it penetrates the same 41% of hits, and it
-      essentially never beats a Terminator (DR 200, effective DR 100) - a support weapon that
-      threatens infantry and armour alike but not the heaviest plate.
+      This is the project's second fixed anchor: (8d+2)x2(2) pi++, follow-up 2d+2 cr ex (exact dice
+      distribution, not just averages; tools/sim/test/rules.test.js checks the figures). Checked
+      against the vehicle armour table: AV10 (DR 125, e.g. a Sentinel, a Trukk or a Leman Russ's
+      rear) has effective DR 62 against the armour divisor (2); (8d+2)x2 averages 60 and penetrates
+      38% of hits, "chewing" light vehicles about 40% of the time as required. AV11 (DR 185, Rhino
+      front and sides) is effectively 0% and AV12 and up 0%, so it does not hurt medium or heavy
+      armour. Against Astartes power armour (DR 100, effective DR 50) it penetrates 82% of hits on
+      the torso and 94% on a limb, against Gravis 31%, and it never beats a Terminator (DR 200) -
+      a support weapon that threatens infantry and light armour alike but not the heaviest plate.
+      It was 7dx2(2) until the vehicle armour rise put AV10 at DR 125 and left it penetrating 6%
+      (user direction: it should hurt light vehicles again). Power armour stayed at DR 100, so the
+      same buff raised it from 41% against a Marine's torso; (8d+2)x2 rather than 9dx2 keeps it
+      below the volkite blaster (85.5%), which the framework puts between it and plasma.
       Handling: an oversized cartridge and a tripod-grade receiver put this at 85 lb loaded, close
       to Deathwatch's own figure for the weapon (roughly 40 kg with its mount). Min ST 14B: the "B"
       (bipod/tripod) marks that the mount, not the gunner's back, bears most of that weight, so the
