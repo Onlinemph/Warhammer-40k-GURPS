@@ -11,12 +11,12 @@
       try { if (!window.DOW_SCENERY) await loadScript(PACK + "scenery.js"); } catch (e) { return; }
       const shared = window.DOW_SCENERY; if (!shared || gone) return;
       const redraw = () => { if (!running) render(); };
-      // an outdoor battlefield takes one of the pack's themes (city, desert, jungle...): the ruins are always the
-      // city, open ground gets the same one every time this battle is watched
+      // an outdoor battlefield takes one of the pack's themes (city, desert, jungle...): a map takes the one it asks
+      // for (the ruins are the city), open ground gets the same one every time this battle is watched
       let S = shared;
       const themes = shared.themes || [];
       if (!indoor && themes.length) {
-        const pickBy = ros.reduce((a, r, i) => a + (r.template || "").length * (i + 3), fr.length * 7 + ros.length), theme = T ? (themes.includes("urban") ? "urban" : themes[0]) : themes[pickBy % themes.length];
+        const pickBy = ros.reduce((a, r, i) => a + (r.template || "").length * (i + 3), fr.length * 7 + ros.length), theme = T ? (themes.includes(T.theme) ? T.theme : themes.includes("urban") ? "urban" : themes[0]) : themes[pickBy % themes.length];
         try { if (!(window.DOW_THEME || {})[theme]) await loadScript(PACK + "scenery_" + theme + ".js"); } catch (e) { return; }
         if (gone) return;
         const th = window.DOW_THEME[theme]; S = { tex: { ...shared.tex, ...th.tex }, props: { ...shared.props, ...th.props } }; decor.theme = theme;

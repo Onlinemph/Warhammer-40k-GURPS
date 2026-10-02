@@ -32,7 +32,10 @@
       ranged: lo.ranged ? { ...lo.ranged } : null, melee: lo.melee ? { ...lo.melee } : null,
       ranged2: lo.ranged2 ? { ...lo.ranged2 } : null, shield: lo.shield ? { ...lo.shield } : null, carried: lo.carried || null, grenades: (lo.grenades || []).map(g => ({ ...g })), body: lo.body, mags: lo.mags, knife: lo.knife ? { ...lo.knife } : null, skills: lo.skills ? { ...lo.skills } : undefined };
   }
-  const MAPPED = () => S.battlefield === "facility" || S.battlefield === "ruins";
+  const GROUNDS = [["open", "Open ground"], ["facility", "Facility"], ["ruins", "Ruins"], ["hulk", "Space hulk"], ["outpost", "Outpost"], ["trenches", "Trench lines"], ["streets", "City streets"], ["river", "River crossing"]];
+  const DEPLOYS = { facility: "Each side deploys in its staging bay", ruins: "Each side deploys at its end of the ruined block", hulk: "Each side deploys in its boarding bay, at either end of a maze of corridors a yard wide",
+    outpost: "Each side deploys at its edge of the open ground around the outpost", trenches: "Each side deploys behind its own trench lines, with no-man's-land between", streets: "Each side deploys at its end of the streets", river: "Each side deploys on its own bank" };
+  const MAPPED = () => !!DEPLOYS[S.battlefield];
   const PRESETS = [
     ["20 Guardsmen vs 5 Space Marines", [["Astra Militarum Guardsman", 20]], [["Astartes Battle-Brother", 5]], 150],
     ["10 Ork Boyz charge 5 Marines", [["Ork Boy", 10]], [["Astartes Battle-Brother", 5]], 40],
@@ -44,6 +47,11 @@
     ["Facility: 20 Guardsmen vs 20 Ork Boyz", [["Astra Militarum Guardsman", 20]], [["Ork Boy", 20]], 60, "facility"],
     ["Ruins: 10 Genestealers vs a Tactical squad", [["Genestealer", 10]], [["squad:Astartes Tactical Squad"]], 60, "ruins"],
     ["Ruins: 2 Guard squads vs Ork Boyz", [["squad:Astra Militarum Infantry Squad"], ["squad:Astra Militarum Infantry Squad"]], [["squad:Ork Boyz Mob"]], 60, "ruins"],
+    ["Space hulk: Terminators' work, 5 Marines vs 12 Genestealers", [["Astartes Battle-Brother", 5]], [["Genestealer", 12]], 60, "hulk"],
+    ["Trench lines: 2 Guard squads vs 30 Ork Boyz", [["squad:Astra Militarum Infantry Squad"], ["squad:Astra Militarum Infantry Squad"]], [["Ork Boy", 30]], 60, "trenches"],
+    ["Outpost: Tactical squad vs Chaos Marines", [["squad:Astartes Tactical Squad"]], [["squad:Chaos Space Marine Squad"]], 60, "outpost"],
+    ["City streets: Fire Warriors vs Necron Warriors", [["Fire Warrior (Shas'la)", 10]], [["Necron Warrior", 10]], 60, "streets"],
+    ["River crossing: Guard squad holds against 20 Hormagaunts", [["squad:Astra Militarum Infantry Squad"]], [["Hormagaunt", 20]], 60, "river"],
     ["Lascannon teams vs a Carnifex", [["squad:Heavy Weapons Squad (Lascannons)"]], [["Carnifex", 1]], 150],
     ["Mortars and a Guard squad vs 30 Hormagaunts", [["squad:Heavy Weapons Squad (Mortars)"], ["squad:Astra Militarum Infantry Squad"]], [["Hormagaunt", 30]], 150],
     ["Meltaguns and a Guard squad vs a Carnifex", [["squad:Special Weapons Squad (Meltaguns)"], ["squad:Astra Militarum Infantry Squad"]], [["Carnifex", 1]], 60],
@@ -176,7 +184,7 @@
           ${S.health === "fractional" ? `<label for="s-box">Boxes per level <input id="s-box" type="number" min="1" max="9" value="${S.boxes || 5}" data-g="boxes"></label>` : ""}
         </fieldset>
         <fieldset><legend>Battlefield</legend>
-          <label for="s-bf">Ground <select id="s-bf" data-o="battlefield"><option value="open"${!S.battlefield || S.battlefield === "open" ? " selected" : ""}>Open ground</option><option value="facility"${S.battlefield === "facility" ? " selected" : ""}>Facility</option><option value="ruins"${S.battlefield === "ruins" ? " selected" : ""}>Ruins</option></select></label>
+          <label for="s-bf">Ground <select id="s-bf" data-o="battlefield">${GROUNDS.map(([v, name]) => `<option value="${v}"${(S.battlefield || "open") === v ? " selected" : ""}>${name}</option>`).join("")}</select></label>
           ${MAPPED() ? `<label for="s-aw">Knowledge <select id="s-aw" data-o="awareness"><option value="limited"${S.awareness !== "omniscient" ? " selected" : ""}>Only what they've seen</option><option value="omniscient"${S.awareness === "omniscient" ? " selected" : ""}>Everyone sees everything</option></select></label>
           <label for="s-lt">Lighting <select id="s-lt" data-o="lighting"><option value="mixed"${!S.lighting || S.lighting === "mixed" ? " selected" : ""}>Mixed (dim and dark rooms)</option><option value="lit"${S.lighting === "lit" ? " selected" : ""}>All lit</option><option value="dark"${S.lighting === "dark" ? " selected" : ""}>Dark (−7)</option></select></label>` : ""}
           ${!MAPPED() ? `<label for="s-rg">Ridge <select id="s-rg" data-o="ridge"><option value=""${!S.ridge ? " selected" : ""}>none (flat)</option><option value="0"${S.ridge === "0" ? " selected" : ""}>held by side A</option><option value="1"${S.ridge === "1" ? " selected" : ""}>held by side B</option></select></label>
@@ -185,7 +193,7 @@
           <label for="s-ca">Cover, side A <select id="s-ca" data-o="coverA"><option${(S.coverA || "none") === "none" ? " selected" : ""}>none</option><option${S.coverA === "light" ? " selected" : ""}>light</option><option${S.coverA === "heavy" ? " selected" : ""}>heavy</option></select></label>
           <label for="s-cb">Cover, side B <select id="s-cb" data-o="coverB"><option${(S.coverB || "none") === "none" ? " selected" : ""}>none</option><option${S.coverB === "light" ? " selected" : ""}>light</option><option${S.coverB === "heavy" ? " selected" : ""}>heavy</option></select></label>
         </fieldset>
-        <div class="go"><button class="run" id="simrun" type="button">Run simulation</button><p>${S.battlefield === "facility" ? "Each side deploys in its staging bay; starting distance is ignored." : S.battlefield === "ruins" ? "Each side deploys at its end of the ruined block; starting distance is ignored." : "Sides deploy in lines facing each other at the starting distance."}</p></div>
+        <div class="go"><button class="run" id="simrun" type="button">Run simulation</button><p>${MAPPED() ? DEPLOYS[S.battlefield] + "; starting distance is ignored." : "Sides deploy in lines facing each other at the starting distance."}</p></div>
       </form>
       <div class="sgrid">${side(0)}${side(1)}</div>
       <div id="simout">${last ? results(last) : ""}</div>
