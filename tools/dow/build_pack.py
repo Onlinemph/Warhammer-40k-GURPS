@@ -35,7 +35,7 @@ HERE = Path(__file__).resolve().parent
 OUT = ROOT / "site" / "models"
 MIME = {".jpg": "image/jpeg", ".png": "image/png"}
 # what the page needs to know about a unit; the rest of an entry is for the exporter
-PAGE_KEYS = ("id", "match", "not", "veh", "turret", "clips_from", "h", "yaw", "paint", "tint", "tall", "size", "kits")
+PAGE_KEYS = ("id", "match", "not", "veh", "turret", "clips_from", "h", "yaw", "paint", "tint", "tall", "size", "kits", "stride")
 # the page's name for a clip -> the game's names for it, first one the model has (a unit's own "clips" override these)
 CLIPS = {"idle": ["idle_1", "idle", "idle_2"], "run": ["run_1", "run", "move_run_1", "walk_1", "walk", "move"],
          "fire": ["fire", "fire_1", "idle_firing", "idle_firing_1", "idle_fire", "fire_idle", "aim_idle"], "melee": ["melee_1", "melee", "attack_1", "melee_2"],

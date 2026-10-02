@@ -6941,6 +6941,7 @@ if (typeof document !== "undefined") (() => {
       if (F.veh) {
         // the built vehicle's moving parts are gone; the turret is the model's own bone, turned about the hull's up axis
         Object.assign(F, { tracks: [], wheels: [], barrels: [], legs: [], walker: 0, exhaust: null, turret: null });
+        if (L.wreck && key !== "wreck") { const on = meshes.filter(o => /^wreck(\.|$)/.test(partOf(o))); if (on.length) F.model.wreck = { on, off: meshes.filter(o => o.visible && !on.includes(o)) }; }
         // tracks: the game runs a strip of texture round each one. Slide it as the tank covers ground: the links on
         // the top run move forward and those underneath move back, so measure how fast the strip's v climbs toward
         // the front (+z) along each run. Each tank gets its own copy of the material, since tanks of a kind share theirs.
@@ -6948,19 +6949,20 @@ if (typeof document !== "undefined") (() => {
         const size = root.getWorldScale(new THREE.Vector3()).x, median = a => a.sort((x, y) => x - y)[a.length >> 1];
         for (const o of meshes) {
           const P = o.geometry.attributes.position, U = o.geometry.attributes.uv, I = o.geometry.index;
-          if (!o.visible || !/track/i.test(o.userData.mat) || !o.material.map || !P || !U || !I) continue;
+          if (!o.visible || !/track|tread/i.test(o.userData.mat) || !o.material.map || !P || !U || !I) continue;
           o.geometry.computeBoundingBox();
-          const y0 = o.geometry.boundingBox.min.y, band = (o.geometry.boundingBox.max.y - y0) * .3, over = [], under = [];
+          const y0 = o.geometry.boundingBox.min.y, band = (o.geometry.boundingBox.max.y - y0) * .3, over = [[], []], under = [[], []];   // per texture axis: the strip may run along u or v
           for (let t = 0; t < I.count; t += 3) for (let e = 0; e < 3; e++) {
             const i = I.getX(t + e), j = I.getX(t + (e + 1) % 3), dz = P.getZ(j) - P.getZ(i), dy = P.getY(j) - P.getY(i), run = Math.hypot(dy, dz);
             if (run < .05 || Math.abs(dz) < .7 * run || Math.abs(P.getX(j) - P.getX(i)) > .3 * run) continue;   // only edges along the run
-            const y = (P.getY(i) + P.getY(j)) / 2 - y0, slope = (U.getY(j) - U.getY(i)) / dz;
-            if (y > 2.33 * band) over.push(slope); else if (y < band) under.push(slope);
+            const y = (P.getY(i) + P.getY(j)) / 2 - y0, to = y > 2.33 * band ? over : y < band ? under : null;
+            if (to) { to[0].push((U.getX(j) - U.getX(i)) / dz); to[1].push((U.getY(j) - U.getY(i)) / dz); }
           }
-          if (!over.length && !under.length) continue;
-          const rate = over.length && under.length ? (median(over) - median(under)) / 2 : over.length ? median(over) : -median(under);
+          if (!over[0].length && !under[0].length) continue;
+          const rates = [0, 1].map(a => over[a].length && under[a].length ? (median(over[a]) - median(under[a])) / 2 : over[a].length ? median(over[a]) : -median(under[a]));
+          const axis = Math.abs(rates[0]) > Math.abs(rates[1]) ? "x" : "y", rate = rates[axis === "x" ? 0 : 1];
           const mat = keep(o.material.clone()), map = keep(o.material.map.clone()); map.needsUpdate = true; mat.map = map; o.material = mat;
-          (F.model.tracks ||= []).push({ map, rate: rate / size });
+          (F.model.tracks ||= []).push({ map, axis, rate: rate / size });
         }
         const bone = u.turret && root.getObjectByName(u.turret);
         if (bone) {
@@ -7016,11 +7018,24 @@ if (typeof document !== "undefined") (() => {
     }
 
     // a vehicle model: its idle and moving clips if it has any (a walker's stride follows the ground covered)
-    function poseVehicleModel(F) {
+    // A destroyed vehicle becomes its wreck if the game has one (a look called "wreck"), else plays its death clip.
+    function poseVehicleModel(F, dead) {
       const m = F.model, A = m.acts; let any = false;
+      const gone = !!dead && dead.f >= .45;
+      if (m.wreck && gone !== m.wrecked) {
+        m.wrecked = gone;
+        for (const o of m.wreck.on) o.visible = gone;
+        for (const o of m.wreck.off) o.visible = !gone;
+        if (gone && lastSt.playing && dead.f < 1) blastFx(F.g.position.clone().add(new THREE.Vector3(0, F.top * .4, 0)), 3);
+      }
+      if (dead && A.die && !m.wreck) {
+        for (const n in A) A[n].setEffectiveWeight(n === "die" ? 1 : 0);
+        A.die.time = ease(dead.f) * A.die.getClip().duration * .999; m.mixer.update(0); return;
+      }
       for (const n in A) {
-        const wgt = n === "run" ? F.walk : n === "idle" ? (A.run ? 1 - F.walk : 1) : 0; A[n].setEffectiveWeight(wgt); if (!wgt) continue;
-        const d = A[n].getClip().duration; A[n].time = n === "run" ? ((F.phase * .5 / (2 * Math.PI)) % 1 + 1) % 1 * d : (clock + F.i) % d; any = true;
+        // "run", "run2"...: what turns as it drives (a walker's stride, each side's wheels), once every `stride` yards
+        const run = n.startsWith("run"), walker = run && !m.u.stride, wgt = run ? (walker ? F.walk : 1) : n === "idle" ? (A.run && !m.u.stride ? 1 - F.walk : 1) : 0; A[n].setEffectiveWeight(wgt); if (!wgt) continue;
+        const d = A[n].getClip().duration; A[n].time = run ? ((F.phase / (m.u.stride || 4 * Math.PI)) % 1 + 1) % 1 * d : (clock + F.i) % d; any = true;
       }
       if (any) m.mixer.update(0);
     }
@@ -7727,7 +7742,7 @@ if (typeof document !== "undefined") (() => {
       for (const h of hits) { const d = (p - h.p) * TS; if (d >= 0) flinch = Math.max(flinch, Math.exp(-d * 9)); }
       if (reload) aimT = 0;
       F.aim += (aimT - F.aim) * Math.min(1, dt * 10 + (o.reduce ? 1 : 0));
-      if (F.veh) return poseVehicle(F, x, ev, p, moved, dt, recoil);
+      if (F.veh) return poseVehicle(F, x, ev, p, moved, dt, recoil, dead);
       if (F.model) return poseModel(F, bitsv, p, ev, dt, dead);
       const fig = F.fig, k = F.k;
       fig.position.set(0, 0, 0); fig.rotation.set(0, 0, 0);
@@ -7794,10 +7809,10 @@ if (typeof document !== "undefined") (() => {
         if (R2) R2.sh.rotation.z = .5 + 1.8 * ease(f); if (L2) L2.sh.rotation.z = .3 + 2.2 * ease(f);
       }
     }
-    function poseVehicle(F, x, ev, p, moved, dt, recoil) {
-      if (F.model) poseVehicleModel(F);
+    function poseVehicle(F, x, ev, p, moved, dt, recoil, dead) {
+      if (F.model) poseVehicleModel(F, dead);
       for (const tm of F.tracks) tm.map.offset.x -= moved * .45;
-      if (F.model && F.model.tracks) for (const tk of F.model.tracks) tk.map.offset.y -= moved * tk.rate;
+      if (F.model && F.model.tracks) for (const tk of F.model.tracks) tk.map.offset[tk.axis] -= moved * tk.rate;
       for (const w of F.wheels) w.rotation.z -= moved * 3;
       F.fig.position.y = F.walk > .1 && !F.walker ? Math.sin(clock * 22) * .01 : 0;
       if (F.walker) { for (const L of F.legs) { L.p.rotation.z = .5 + Math.sin(F.phase * 1.6 + (L.s > 0 ? 0 : Math.PI)) * .4 * F.walk; L.kn.rotation.z = -1.0 - Math.max(0, Math.sin(F.phase * 1.6 + (L.s > 0 ? 0 : Math.PI))) * .5 * F.walk; } F.hips.position.y = F.hipY + Math.abs(Math.sin(F.phase * 1.6)) * .05 * F.walk; }

@@ -126,6 +126,8 @@ That game keeps a unit in pieces: a skeleton, body and weapon models skinned to 
 
 `python tools/dow/dow2.py <archive.sga> [text]` lists an archive's files. Some weapon models in the archives are leftovers with no skinning or with textures that are gone; the `_common` and `_rare` ones are the ones the game uses.
 
+Vehicles work the same way: the hull, tracks and wheels are in the vehicle's own file, turrets and sponsons are parts, and the entry has `veh`, the `turret` bone and `stride`. The Predator, the Rhino (the Predator's hull with its side doors and no turret) and the Trukk come from Dawn of War II; this install of the game has no Leman Russ, Chimera, Sentinel or Land Raider, so those stay Soulstorm's. A look called `wreck` holds the game's wreck model: a destroyed vehicle turns into it, with a blast. A vehicle without one plays its `die` clip instead.
+
 ## Adding or changing a unit
 
 `bl_probe.py` writes down what a model holds (meshes, visibility animations, animation names, bones) as JSON:
@@ -146,7 +148,7 @@ blender --background --python tools/dow/bl_probe.py -- "<Soulstorm>/DXP2" out ar
 | `clips`, `prefix`, `clips_from`, `own` | Animations, as above; `own: false` takes every clip from `clips_from` |
 | `sets` | A look's own animations, where a weapon is carried or fired differently: the prefix its animations share (`"hbolt": "marine_heavy_bolter"` finds `marine_heavy_bolter_idle_1`, `..._run_1` and so on), or `{"prefix": ..., "fire": "<animation>"}` to name some outright. Clips a set lacks fall back to the unit's plain ones; a unit that takes its clips from another gets that unit's sets too |
 | `kits` | Weapon names that pick a look the weapon's kind alone wouldn't: `{"Heavy Bolter": "hbolt"}` (a regular expression on the ranged weapon's name, to a look) |
-| `veh`, `turret` | A vehicle, and the bone its turret turns on |
+| `veh`, `turret`, `stride` | A vehicle, the bone its turret turns on, and (for wheels and track wheels driven by a `run` clip) how many yards one turn of the clip covers. Clips named `run`, `run2`... all follow the ground covered |
 | `tint`, `paint` | A colour multiplied over the textures; fixed paint colours instead of the faction's |
 | `size` | `bounds` sizes the model from its outline instead of its head bone |
 | `proxy` | A note that this is a stand-in |
