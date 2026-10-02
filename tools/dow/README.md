@@ -50,22 +50,20 @@ Known gaps: the Terminator entry has not been seen in the page, because no simul
 
 ## Battlefields
 
-`build_pack.py` also writes `site/models/scenery.js` from Dawn of War II's environment archives, and the 3D replay dresses its battlefields with it:
+`build_pack.py` also writes the battlefield scenery from Dawn of War II's environment archives (`site/models/scenery.js` and one `scenery_<theme>.js` per theme), and the 3D replay dresses its battlefields with it:
 
-- the ground, the facility's deck plates, wall panels and gratings take the game's terrain textures;
-- the cover crates on the facility and ruins maps become sandbags, barrels and ammunition cases, in the same hexes and about the same size;
-- open ground gets the game's rocks, concrete rubble and twisted metal underfoot, with tank traps, containers and barricades around the edge;
-- outdoor maps get a skyline of the game's city buildings around the field, and its storm sky. A building standing between the camera and what it looks at is hidden until the camera moves on.
+- an outdoor battlefield takes a theme: a ruined city, a desert town, or overgrown temple ruins among dead trees. Each has its own ground, small debris underfoot, larger pieces around the edge (tank traps and containers, boulders and low walls, fallen trees and toppled columns), a skyline of the game's buildings, and a sky. Open ground gets the same theme each time a battle is watched; the ruins map is always the city;
+- the ruins' walls take the game's concrete, laid on by position so it runs unbroken from hex to hex;
+- the facility's deck plates, wall panels and gratings take the game's textures;
+- the cover crates on the facility and ruins maps become sandbags, barrels and ammunition cases, in the same hexes and about the same size.
 
-None of this changes the fight. Whatever is big enough to hide behind stands at least six yards from anywhere a figure goes, and the cover the simulator models keeps its place.
+A building standing between the camera and what it looks at is hidden until the camera moves on. None of this changes the fight: whatever is big enough to hide behind stands at least six yards from anywhere a figure goes, and the cover the simulator models keeps its place.
 
 ```sh
 python tools/dow/build_pack.py scenery    # only the scenery
 ```
 
-`scenery.json` lists the textures and world objects and what each is used for. To see what else the game has, list an archive: `python tools/dow/dow2.py "<Dawn of War 2>/GameAssets/Archives/gameartenvironment.sga" world_objects`.
-
-The ruins keep the page's own painted masonry: the game's wall textures tried so far read worse on hex columns.
+`scenery.json` lists the textures and world objects, by theme, and what each is used for. To see what else the game has, list an archive: `python tools/dow/dow2.py "<Dawn of War 2>/GameAssets/Archives/gameartenvironment.sga" world_objects`.
 
 ## Sound
 

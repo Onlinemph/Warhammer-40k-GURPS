@@ -219,12 +219,13 @@ const TABS = {
   units: { file: "index.js", items: () => (INDEX = window.DOW_INDEX.units).map(u => [u.id, u.veh ? "vehicle" : ""]), open: id => showUnit(id) },
   voices: { file: "voices.js", items: () => window.DOW_VOICES.voices.map(v => [v, ""]), open: showVoice },
   sounds: { file: "sounds.js", items: () => Object.keys(window.DOW_SOUNDS).map(k => [k, String(window.DOW_SOUNDS[k].length)]), open: showSounds },
-  scenery: { file: "scenery.js", items: () => Object.entries(window.DOW_SCENERY.props).map(([n, p]) => [n, p.role]), open: showProp },
+  scenery: { file: "scenery.js", after: () => Promise.all((window.DOW_SCENERY.themes || []).map(t => loadScript("scenery_" + t + ".js").then(() => { for (const [n, p] of Object.entries(window.DOW_THEME[t].props)) window.DOW_SCENERY.props[n] = { ...p, theme: t }; }))),
+    items: () => Object.entries(window.DOW_SCENERY.props).map(([n, p]) => [n, (p.theme ? p.theme + " " : "") + p.role]), open: showProp },
 };
 async function openTab(name) {
   document.querySelectorAll("header button").forEach(b => b.classList.toggle("on", b.dataset.tab === name));
   const T = TABS[name]; list.replaceChildren(el("p", { textContent: "loading…", style: "padding:0 12px" }));
-  try { if (!T.loaded) { await loadScript(T.file); T.loaded = true; } } catch (e) { list.replaceChildren(el("p", { textContent: `No ${T.file} here: build it with tools/dow/build_pack.py.`, style: "padding:0 12px" })); return; }
+  try { if (!T.loaded) { await loadScript(T.file); if (T.after) await T.after(); T.loaded = true; } } catch (e) { list.replaceChildren(el("p", { textContent: `No ${T.file} here: build it with tools/dow/build_pack.py.`, style: "padding:0 12px" })); return; }
   const items = T.items(), find = el("input", { placeholder: `filter ${items.length}`, type: "search" }), rows = el("div");
   const fill = () => rows.replaceChildren(...items.filter(([n]) => n.includes(find.value.trim().toLowerCase())).map(([n, tag]) => { const a = el("a", {}, n + " ", el("small", { textContent: tag })); a.onclick = () => { rows.querySelectorAll("a").forEach(x => x.classList.remove("on")); a.classList.add("on"); Promise.resolve(T.open(n)).catch(e => { note.textContent = String(e.message || e); }); }; a.dataset.name = n; return a; }));
   find.oninput = fill; fill(); list.replaceChildren(find, rows);

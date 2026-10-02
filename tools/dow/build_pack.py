@@ -275,41 +275,61 @@ def build_scenery(force):
     found = sorted((root / "GameAssets" / "Archives").glob("*environment*.sga"), key=lambda p: ("delta" not in p.name.lower(), p.name.lower()))
     arc = dow2.Archives(found)
     doc = json.loads(spec)
-    tex, props, missing = {}, {}, []
-    for name, path in doc["textures"].items():
-        path, gain = (path["path"], path.get("gain", 1)) if isinstance(path, dict) else (path, 1)
-        if arc.has(path + "_dif.dds"):
-            image = Image.open(io.BytesIO(arc.read(path + "_dif.dds"))).convert("RGB")
-            tex[name] = jpeg_url(image.point(lambda v: min(255, round(v * gain))) if gain != 1 else image, 512)
-        else:
-            missing.append(name)
+    missing = []
     models = {}
     for p in arc.files:
         if p.endswith(".model"):
             models.setdefault(p.rsplit("/", 1)[-1][:-6], p)
-    for name, p in doc["props"].items():
-        built = name in models and dow2.build_static(arc, models[name])
-        if not built:
-            missing.append(name)
-            continue
-        glb, meta, images = built
-        cut = {m: i.mode == "RGBA" and i.getchannel("A").getextrema()[0] < 128 and p["role"] != "sky" for m, i in images.items()}
-        side = 1024 if p["role"] == "sky" else 512 if p["role"] == "building" else 256
-        maps = {}
-        for m, i in images.items():
-            if cut[m]:   # leaves and railings are cut out of their texture: keep the alpha
-                i = i.copy()
-                i.thumbnail((side, side))
-                out = io.BytesIO()
-                i.save(out, "PNG", optimize=True)
-                maps[m] = "data:image/png;base64," + base64.b64encode(out.getvalue()).decode()
+
+    def textures(want):
+        tex = {}
+        for name, path in want.items():
+            path, gain = (path["path"], path.get("gain", 1)) if isinstance(path, dict) else (path, 1)
+            if arc.has(path + "_dif.dds"):
+                image = Image.open(io.BytesIO(arc.read(path + "_dif.dds"))).convert("RGB")
+                tex[name] = jpeg_url(image.point(lambda v: min(255, round(v * gain))) if gain != 1 else image, 512)
             else:
-                maps[m] = jpeg_url(i, side)
-        props[name] = {**p, **meta, "glb": base64.b64encode(glb).decode(), "tex": maps, "cut": [m for m in cut if cut[m]]}
-    js = "window.DOW_SCENERY = " + json.dumps({"tex": tex, "props": props}, separators=(",", ":")) + ";\n"
+                missing.append(name)
+        return tex
+
+    def objects(want):
+        props = {}
+        for name, p in want.items():
+            built = name in models and dow2.build_static(arc, models[name])
+            if not built:
+                missing.append(name)
+                continue
+            glb, meta, images = built
+            cut = {m: i.mode == "RGBA" and i.getchannel("A").getextrema()[0] < 128 and p["role"] != "sky" for m, i in images.items()}
+            side = 1024 if p["role"] == "sky" else 512 if p["role"] == "building" else 256
+            maps = {}
+            for m, i in images.items():
+                if cut[m]:   # leaves and railings are cut out of their texture: keep the alpha
+                    i = i.copy()
+                    i.thumbnail((side, side))
+                    out = io.BytesIO()
+                    i.save(out, "PNG", optimize=True)
+                    maps[m] = "data:image/png;base64," + base64.b64encode(out.getvalue()).decode()
+                else:
+                    maps[m] = jpeg_url(i, side)
+            p = dict(p)
+            if "size" in p:   # yards across -> yards per unit of the model
+                p["scale"] = round(p.pop("size") / max(meta["hi"][0] - meta["lo"][0], meta["hi"][2] - meta["lo"][2], 1e-3), 4)
+            props[name] = {**p, **meta, "glb": base64.b64encode(glb).decode(), "tex": maps, "cut": [m for m in cut if cut[m]]}
+        return props
+
+    for stale in OUT.glob("scenery_*.js"):
+        stale.unlink()
+    sizes = []
+    for theme, t in doc["themes"].items():
+        js = f"(window.DOW_THEME = window.DOW_THEME || {{}})[{json.dumps(theme)}] = " + json.dumps({"tex": textures(t.get("textures", {})), "props": objects(t["props"])}, separators=(",", ":")) + ";\n"
+        (OUT / f"scenery_{theme}.js").write_text(js)
+        sizes.append(f"{theme} {len(js) // 1024} KB")
+    shared = {"tex": textures(doc["textures"]), "props": objects(doc["props"]), "themes": list(doc["themes"])}
+    js = "window.DOW_SCENERY = " + json.dumps(shared, separators=(",", ":")) + ";\n"
     dest.write_text(js)
     tag.write_text(want)
-    return f"scenery: {len(tex)} textures, {len(props)} objects, {len(js) // 1024} KB" + (f"  (not found: {', '.join(missing)})" if missing else "")
+    return f"scenery: shared {len(js) // 1024} KB, {', '.join(sizes)}" + (f"  (not found: {', '.join(missing)})" if missing else "")
 
 
 def data_url(path):

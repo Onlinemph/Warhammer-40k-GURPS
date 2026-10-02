@@ -553,7 +553,10 @@ def build_static(arc, path):
         if not where or "uv" not in mesh:
             continue
         if mat not in textures:
-            textures[mat] = Image.open(io.BytesIO(arc.read(where)))
+            try:
+                textures[mat] = Image.open(io.BytesIO(arc.read(where)))
+            except NotImplementedError:   # a texture format Pillow can't read (a few are floating point): leave that mesh out
+                continue
             glb.doc["materials"].append({"name": mat})
         pos = mesh["pos"] * [-1, 1, 1]
         nrm = mesh.get("nrm", np.zeros_like(pos)) * [-1, 1, 1]
