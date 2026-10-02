@@ -1,6 +1,6 @@
 # Dawn of War models for the simulator's 3D view
 
-The 3D replay draws every figure from simple shapes. If you own Dawn of War: Soulstorm and Dawn of War II, these tools convert their unit models into a local pack the page picks up instead: the games' meshes, repainted in each faction's colours, moving with the games' own animations. Soulstorm supplies everything but the Tyranids, which come from Dawn of War II.
+The 3D replay draws every figure from simple shapes. If you own Dawn of War: Soulstorm and Dawn of War II, these tools convert their unit models into a local pack the page picks up instead: the games' meshes, repainted in each faction's colours, moving with the games' own animations. Dawn of War II has the better models, so its units are used where it has them (Space Marines, Chaos, Aeldari, Orks, Guardsmen and all Tyranids); Soulstorm supplies the rest, and stands in for all but the Tyranids if you only own that game.
 
 **The pack is yours alone.** The models and textures belong to Relic and Games Workshop. `site/models/` is in `.gitignore`; don't commit it, publish it or share the built folder. The repository ships only the converter and the list of which model stands for which unit, and the site works the same without the pack.
 
@@ -8,9 +8,9 @@ The 3D replay draws every figure from simple shapes. If you own Dawn of War: Sou
 
 You need:
 
-- Dawn of War: Soulstorm installed, for everything but the Tyranids. A Steam install is found by itself; otherwise set `DOW_SOULSTORM` to the install folder.
+- Dawn of War: Soulstorm installed, for the factions and vehicles Dawn of War II lacks. A Steam install is found by itself; otherwise set `DOW_SOULSTORM` to the install folder.
 - Blender 4.4 or newer with the [blender_dow](https://github.com/amorgun/blender_dow) extension enabled, for the Soulstorm units. Blender is found on `PATH`; otherwise set `BLENDER` to `blender.exe`.
-- Dawn of War II installed, for the Tyranids (`DOW_DOW2` if it isn't found). These need no Blender: `dow2.py` reads the game's files itself.
+- Dawn of War II installed (`DOW_DOW2` if it isn't found). Its units need no Blender: `dow2.py` reads the game's files itself.
 - Python 3.10 or newer with Pillow and numpy.
 
 ```sh
@@ -25,7 +25,7 @@ On Windows, run it with a Python installed from python.org or a virtual environm
 
 ## What is covered
 
-`units.json` lists 80 units: 63 infantry and 7 vehicles from Soulstorm, and 10 Tyranids from Dawn of War II (Termagant, Hormagaunt, Genestealer, Lictor, Ravener, two Warriors, Carnifex, Hive Tyrant, Zoanthrope). Most are the unit itself. The game has no model for some, so these use the nearest stand-in (marked `proxy` in the file):
+`units.json` lists 106 units: 36 from Dawn of War II (Space Marines with sergeants, Scouts and Terminators; Guardsmen; Chaos Marines, Plague Marines, Berzerkers, lords, sorcerers and cultists; Aeldari Guardians, Rangers, Banshees, Warlocks and Farseers; Ork Boyz, Kommandos, Nobz, a Warboss and a Weirdboy; ten Tyranids) and 70 from Soulstorm (63 infantry and 7 vehicles). Where both games have a unit, the Dawn of War II entry comes first in the file and wins; the Soulstorm one is used when that game's files aren't there. Most are the unit itself. The game has no model for some, so these use the nearest stand-in (marked `proxy` in the file):
 
 | Simulator unit | Stand-in |
 |---|---|
@@ -42,7 +42,7 @@ On Windows, run it with a Python installed from python.org or a virtual environm
 
 Not covered, so still drawn from shapes: any vehicle not in the list.
 
-Known gaps: the Mandrake only has its idle animation (its others import upside down), tracks don't roll, and units keep one animation set whatever they carry, so a heavy bolter is held like a bolter.
+Known gaps: the Mandrake only has its idle animation (its others import upside down), tracks don't roll, and Soulstorm units keep one animation set whatever they carry, so a heavy bolter is held like a bolter. The Terminator entry has not been seen in the page, because no simulator loadout wears Terminator armour yet.
 
 ## How it works
 
@@ -65,10 +65,12 @@ That game keeps a unit in pieces: a skeleton, body and weapon models skinned to 
 |---|---|
 | `game` | `dow2` |
 | `skeleton` | The unit's own `.model`, which holds only bones |
-| `parts` | Name to `.model` path for the body and each weapon; `looks` may list part names per weapon |
+| `parts` | Name to `.model` path for the body, head, backpack and each weapon. A body stored in the skeleton's own file is picked up by itself. `{"model": path, "remap": {bone: bone}}` moves a part to another bone |
+| `looks` | Which parts show for which weapon, as for Soulstorm units |
+| `sets` | A look's own animation folder, where a weapon is held differently (a missile launcher, a power fist) |
 | `anims` | The folder of `.hkx` files for the weapon set these parts go with |
-| `clips` | Page name to file name without `.hkx`, where the usual names don't fit |
-| `tem` | Which channels of the team-colour texture are the primary, secondary, trim and weapon colours (default `rbga`: carapace, flesh, details, the rest) |
+| `clips` | Page name to file name without `.hkx`, where the usual names don't fit; `other_folder/name` takes it from another of the unit's folders, `null` leaves it out |
+| `tem` | What the team-colour texture's red, green, blue and alpha channels colour, one letter each: `p`rimary, `s`econdary, `t`rim, `w`eapons or `-`. It differs by race (default `ptsw`: carapace, details, flesh, the rest) |
 
 `python tools/dow/dow2.py <archive.sga> [text]` lists an archive's files. Some weapon models in the archives are leftovers with no skinning or with textures that are gone; the `_common` and `_rare` ones are the ones the game uses.
 

@@ -76,7 +76,7 @@
     async function attachModel(F, r, u, asset) {
       const S = scheme(r), paint = paintOf(u, S), root = cloneRig(asset.scene), k = F.k;
       // which meshes show: the look for this ranged and melee weapon, else for either, else the default
-      const L = asset.meta.looks, gun = r.rk === "lob" ? "shell" : r.rk || "", look = L[gun + "+" + (r.mk || "")] || L[gun] || (!gun && L[r.mk]) || L.default || asset.meta.meshes, show = new Set(look);
+      const L = asset.meta.looks, gun = r.rk === "lob" ? "shell" : r.rk || "", key = [gun + "+" + (r.mk || ""), gun, gun ? null : r.mk].find(k => k && L[k]) || "default", look = L[key] || asset.meta.meshes, show = new Set(look);
       // which of the game's meshes a drawn mesh belongs to: the exporter prefixes mesh names (so none collides with a bone's),
       // and one with several materials arrives as a group of pieces
       const partOf = o => { for (let q = o; q && q !== root.parent; q = q.parent) { const n = (q.userData.name || q.name).replace(/^M_/, ""); if (asset.meta.bounds[n]) return n; } return o.name; };
@@ -95,7 +95,8 @@
       for (let j = pick.length - 1; j >= 0; j--) if (pick[j].userData.i === F.i) pick.splice(j, 1);
       for (const o of meshes) if (o.visible) pick.push(o);
       const mixer = new THREE.AnimationMixer(root), acts = {}, w = {};
-      for (const clip of asset.clips) { const a = mixer.clipAction(clip); a.play(); a.setEffectiveWeight(0); acts[clip.name] = a; w[clip.name] = 0; }
+      // a look can have clips of its own ("idle@flame": a flamer is held and fired differently); those win over the plain ones
+      for (const clip of asset.clips) { const [name, only] = clip.name.split("@"); if (only ? only !== key : asset.clips.some(c => c.name === name + "@" + key)) continue; const a = mixer.clipAction(clip); a.play(); a.setEffectiveWeight(0); acts[name] = a; w[name] = 0; }
       F.model = { root, mixer, acts, w, u };
       F.top = h * k * 1.06; F.bars.position.y = F.top + .25;
       if (F.veh) {

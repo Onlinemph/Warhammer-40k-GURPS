@@ -78,10 +78,12 @@ def mod_folder(game):
 
 
 # Dawn of War II names its animations differently, and by file
-CLIPS2 = {"idle": ["fb_idle_stand_01", "idle_stand_01", "fb_idle_01", "idle"], "run": ["fb_run", "run", "fb_run_01", "moving"],
-          "fire": ["fb_fire_stand", "fire_stand", "fb_fire_stand_01"], "melee": ["fb_melee_attack_01", "melee_attack_01", "fb_melee_01", "fb_melee_attack01"],
-          "die": ["fb_die_normal_f", "die_normal_f", "fb_death_01", "fb_die_01", "fb_death_die", "fb_die_f", "fb_die", "fb_death_f01"],
-          "kneel": ["fb_idle_crouch_01", "idle_crouch_01"]}
+CLIPS2 = {"idle": ["fb_idle_stand_01", "idle_stand_01", "fb_stand_idle_01", "fb_idle_01", "fb_melee_idle_01", "idle"],
+          "run": ["fb_run", "run", "fb_run_01", "fb_run_f", "fb_run01", "moving"],
+          "fire": ["fb_fire_stand", "fire_stand", "fb_fire_stand_01", "fb_range_attack_01", "fb_range_attack", "fb_range_fire"],
+          "melee": ["fb_melee_attack_01", "melee_attack_01", "fb_melee_01", "fb_melee_attack01"],
+          "die": ["fb_die_normal_f", "die_normal_f", "fb_death_01", "fb_die_01", "fb_death_die", "fb_die_f", "fb_die", "fb_death_f01", "fb_death", "fb_die_normal_01"],
+          "kneel": ["fb_idle_crouch_01", "idle_crouch_01"], "throw": ["fb_grenade", "fb_grenade_throw_01"]}
 _dow2 = []
 
 
@@ -108,13 +110,16 @@ def export_dow2(unit):
         if "diffuseTex" not in images:
             continue
         entry = {}
-        for kind, image in dow2.paint_layers(images, unit.get("tem", "rbga")).items():
+        for kind, image in dow2.paint_layers(images, unit.get("tem", "ptsw")).items():
             image.thumbnail((unit.get("tex", 512),) * 2)
             out = io.BytesIO()
             image.save(out, "JPEG", quality=90)
             entry[kind] = "data:image/jpeg;base64," + base64.b64encode(out.getvalue()).decode()
         tex[name] = entry
     notes = ["clips " + " ".join(f"{k}<-{v['from']}" for k, v in meta["clips"].items())]
+    lacks = [k for k in ("idle", "run", "die") if k not in meta["clips"]]
+    if lacks:
+        notes.append("LACKS " + ",".join(lacks))
     js = f'(window.DOW_MODELS = window.DOW_MODELS || {{}})[{json.dumps(unit["id"])}] = ' + json.dumps({"glb": base64.b64encode(glb).decode(), "tex": tex, "meta": meta}, separators=(",", ":")) + ";\n"
     return js, notes
 

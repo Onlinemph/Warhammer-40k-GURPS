@@ -36,6 +36,7 @@ The game's space is left-handed with y up; glTF's is right-handed, so everything
 import io
 import json
 import struct
+import threading
 import zlib
 from pathlib import Path
 
@@ -49,6 +50,7 @@ class Archives:
 
     def __init__(self, paths):
         self.files = {}
+        self.lock = threading.Lock()
         for path in paths:
             fh = open(path, "rb")
             head = fh.read(196)
@@ -71,8 +73,9 @@ class Archives:
 
     def read(self, path):
         fh, off, csize, size = self.files[path.replace("\\", "/").lower()]
-        fh.seek(off)
-        data = fh.read(csize)
+        with self.lock:   # the pack builder reads from several threads
+            fh.seek(off)
+            data = fh.read(csize)
         return zlib.decompress(data) if csize != size else data
 
     def has(self, path):
@@ -383,31 +386,39 @@ class Glb:
 def build(arc, unit):
     """One unit -> (glb bytes, meta, {material: {texture kind: PIL image}}).
 
-    unit: {"skeleton": path, "parts": {name: model path}, "anims": folder, "clips": {page name: file stem}}
+    unit: {"skeleton": path,
+           "parts": {name: model path, or {"model": path, "remap": {bone: bone}}},
+           "anims": folder, "clips": {page name: file stem or list of them},
+           "sets": {look: folder}, "looks": {look: [part names]}}
+
+    A part is skinned by bone name. A weapon brings a few bones of its own (the hand bone it hangs from, a reload
+    lever, chain teeth): the ones the unit lacks are added under the bone of the same name as their parent, and
+    every mesh is bound with the rest pose of the file it came from, so a gun modelled at the origin still ends
+    up in the hand. "remap" moves a part to another bone (a right-hand pistol into the left hand).
+    "sets" gives a look an animation folder of its own; its clips are named "idle@<look>" and the page prefers them.
     """
     from PIL import Image
 
-    bones = read_skeleton(arc.read(unit["skeleton"]))
-    index = {name.lower(): i for i, (name, _, _) in enumerate(bones)}
-    world = []
-    for name, parent, local in bones:
-        world.append(world[parent] @ local if parent >= 0 else local)
+    bones = [list(b) for b in read_skeleton(arc.read(unit["skeleton"]))]
+    index = {b[0].lower(): i for i, b in enumerate(bones)}
 
+    materials, textures, bounds, mesh_material, names, meshes = {}, {}, {}, {}, [], []
     glb = Glb()
-    nodes = glb.doc["nodes"]
-    for name, parent, local in bones:
-        m = MIRROR @ local @ MIRROR
-        nodes.append({"name": name, "translation": m[:3, 3].tolist(), "rotation": quat_of(m[:3, :3]).tolist()})
-    for i, (_, parent, _) in enumerate(bones):
-        if parent >= 0:
-            nodes[parent].setdefault("children", []).append(i)
-    inverse = np.array([np.linalg.inv(MIRROR @ w @ MIRROR).T for w in world], dtype="<f4")   # glTF matrices are column-major
-    glb.doc["skins"].append({"joints": list(range(len(bones))), "inverseBindMatrices": glb.accessor(inverse, "MAT4", 5126)})
-    roots = [i for i, (_, parent, _) in enumerate(bones) if parent < 0]
-
-    materials, textures, bounds, mesh_material, names = {}, {}, {}, {}, []
-    for part, path in unit["parts"].items():
-        buf = arc.read(path)
+    # some units' own files carry the body as well as the skeleton: that goes into every look
+    for part, spec in [("base", unit["skeleton"]), *unit["parts"].items()]:
+        spec = {"model": spec} if isinstance(spec, str) else spec
+        buf = arc.read(spec["model"])
+        remap = {k.lower(): v.lower() for k, v in spec.get("remap", {}).items()}
+        own = read_skeleton(buf)
+        own_world = []
+        for name, parent, local in own:
+            own_world.append(own_world[parent] @ local if parent >= 0 else local)
+            key = remap.get(name.lower(), name.lower())
+            if key not in index:   # a bone only this part has: hang it where the part has it
+                up = own[parent][0].lower() if parent >= 0 else None
+                index[key] = len(bones)
+                bones.append([name, index.get(remap.get(up, up), 0) if up else -1, local])
+        rest = {name.lower(): w for (name, _, _), w in zip(own, own_world)}
         mats = read_materials(buf)
         for k, mesh in enumerate(read_meshes(buf)):
             mat = mesh["material"].split(".")[-1]
@@ -417,73 +428,101 @@ def build(arc, unit):
                 tex = mats.get(mesh["material"]) or next((v for n, v in mats.items() if n.endswith(mat)), {})
                 textures[mat] = {var: Image.open(io.BytesIO(arc.read(arc.locate(p + ".dds")))) for var, p in tex.items()
                                  if var in ("diffuseTex", "teamTex", "emissiveTex") and arc.locate(p + ".dds")}
-            pos = mesh["pos"] * [-1, 1, 1]
-            nrm = mesh.get("nrm", np.zeros_like(pos)) * [-1, 1, 1]
-            tris = mesh["tris"]
-            # front faces: the winding whose geometric normals agree with the stored ones
-            geo = np.cross(pos[tris[:, 1]] - pos[tris[:, 0]], pos[tris[:, 2]] - pos[tris[:, 0]])
-            if (geo * nrm[tris[:, 0]]).sum() < 0:
-                tris = tris[:, [0, 2, 1]]
-            nrm /= np.maximum(np.linalg.norm(nrm, axis=1, keepdims=True), 1e-9)
-            lookup = np.array([index.get(b.lower(), 0) for b in mesh["bones"]] or [0])
-            joints = lookup[np.minimum(mesh.get("joints", np.zeros((len(pos), 4), np.int32)), len(lookup) - 1)]
-            weights = mesh.get("weights", np.tile([1.0, 0, 0, 0], (len(pos), 1))).copy()
-            weights[weights.sum(axis=1) == 0, 0] = 1
-            weights /= weights.sum(axis=1, keepdims=True)
-            joints[weights == 0] = 0
-            prim = {"attributes": {"POSITION": glb.accessor(pos.astype("<f4"), "VEC3", 5126, 34962, True),
-                                   "NORMAL": glb.accessor(nrm.astype("<f4"), "VEC3", 5126, 34962),
-                                   "TEXCOORD_0": glb.accessor(mesh["uv"].astype("<f4"), "VEC2", 5126, 34962),
-                                   "JOINTS_0": glb.accessor(joints.astype("<u2"), "VEC4", 5123, 34962),
-                                   "WEIGHTS_0": glb.accessor(weights.astype("<f4"), "VEC4", 5126, 34962)},
-                    "indices": glb.accessor(tris.astype("<u2").reshape(-1), "SCALAR", 5123, 34963), "material": materials[mat]}
-            name = part if k == 0 else f"{part}.{k}"
-            glb.doc["meshes"].append({"name": name, "primitives": [prim]})
-            nodes.append({"name": "M_" + name, "mesh": len(glb.doc["meshes"]) - 1, "skin": 0})
-            roots.append(len(nodes) - 1)
-            names.append(name)
-            bounds[name] = [round(float(pos[:, 1].min()), 4), round(float(pos[:, 1].max()), 4)]
-            mesh_material[name] = mat
+            meshes.append((part if k == 0 else f"{part}.{k}", mat, mesh, remap, rest))
+
+    world = []
+    for name, parent, local in bones:
+        world.append(world[parent] @ local if parent >= 0 else local)
+    nodes = glb.doc["nodes"]
+    for name, parent, local in bones:
+        m = MIRROR @ local @ MIRROR
+        nodes.append({"name": name, "translation": m[:3, 3].tolist(), "rotation": quat_of(m[:3, :3]).tolist()})
+    for i, (_, parent, _) in enumerate(bones):
+        if parent >= 0:
+            nodes[parent].setdefault("children", []).append(i)
+    roots = [i for i, (_, parent, _) in enumerate(bones) if parent < 0]
+
+    for name, mat, mesh, remap, rest in meshes:
+        used = mesh["bones"] or [bones[0][0]]
+        joints_of = [index.get(remap.get(b.lower(), b.lower()), 0) for b in used]
+        bind = [rest.get(b.lower(), world[j]) for b, j in zip(used, joints_of)]
+        inverse = np.array([np.linalg.inv(MIRROR @ m @ MIRROR).T for m in bind], dtype="<f4")   # glTF matrices are column-major
+        glb.doc["skins"].append({"joints": joints_of, "inverseBindMatrices": glb.accessor(inverse, "MAT4", 5126)})
+        pos = mesh["pos"] * [-1, 1, 1]
+        nrm = mesh.get("nrm", np.zeros_like(pos)) * [-1, 1, 1]
+        tris = mesh["tris"]
+        # front faces: the winding whose geometric normals agree with the stored ones
+        geo = np.cross(pos[tris[:, 1]] - pos[tris[:, 0]], pos[tris[:, 2]] - pos[tris[:, 0]])
+        if (geo * nrm[tris[:, 0]]).sum() < 0:
+            tris = tris[:, [0, 2, 1]]
+        nrm /= np.maximum(np.linalg.norm(nrm, axis=1, keepdims=True), 1e-9)
+        joints = np.minimum(mesh.get("joints", np.zeros((len(pos), 4), np.int32)), len(used) - 1)
+        weights = mesh.get("weights", np.tile([1.0, 0, 0, 0], (len(pos), 1))).copy()
+        weights[weights.sum(axis=1) == 0, 0] = 1
+        weights /= weights.sum(axis=1, keepdims=True)
+        joints[weights == 0] = 0
+        prim = {"attributes": {"POSITION": glb.accessor(pos.astype("<f4"), "VEC3", 5126, 34962, True),
+                               "NORMAL": glb.accessor(nrm.astype("<f4"), "VEC3", 5126, 34962),
+                               "TEXCOORD_0": glb.accessor(mesh["uv"].astype("<f4"), "VEC2", 5126, 34962),
+                               "JOINTS_0": glb.accessor(joints.astype("<u2"), "VEC4", 5123, 34962),
+                               "WEIGHTS_0": glb.accessor(weights.astype("<f4"), "VEC4", 5126, 34962)},
+                "indices": glb.accessor(tris.astype("<u2").reshape(-1), "SCALAR", 5123, 34963), "material": materials[mat]}
+        glb.doc["meshes"].append({"name": name, "primitives": [prim]})
+        nodes.append({"name": "M_" + name, "mesh": len(glb.doc["meshes"]) - 1, "skin": len(glb.doc["skins"]) - 1})
+        roots.append(len(nodes) - 1)
+        names.append(name)
+        # how high it reaches in the rest pose of the whole unit (a weapon is modelled at the origin)
+        move = np.array([world[j] @ np.linalg.inv(m) for j, m in zip(joints_of, bind)])
+        high = np.einsum("vkij,vk,vj->vi", move[joints], weights, np.c_[mesh["pos"], np.ones(len(pos))])[:, 1]
+        bounds[name] = [round(float(high.min()), 4), round(float(high.max()), 4)]
+        mesh_material[name] = mat
     nodes.append({"name": "Armature", "children": roots})
     glb.doc["scenes"][0]["nodes"] = [len(nodes) - 1]
 
     clips = {}
-    for clip, stems in unit.get("clips", {}).items():
-        stem = next((s for s in ([stems] if isinstance(stems, str) else stems) if arc.has(f"{unit['anims']}/{s}.hkx")), None)
-        if not stem:
-            continue
-        anim = read_animation(arc.read(f"{unit['anims']}/{stem}.hkx"))
-        n = len(anim["pos"])
-        times = glb.accessor(np.linspace(0, max(anim["duration"], 1e-3), n).astype("<f4"), "SCALAR", 5126, minmax=True)
-        samplers, channels = [], []
-        for t, bone in enumerate(anim["bones"]):
-            node = index.get(bone.lower())
-            if node is None:
+    for look, folder in [(None, unit["anims"]), *unit.get("sets", {}).items()]:
+        for clip, stems in unit.get("clips", {}).items():
+            if not stems:
                 continue
-            rot = anim["rot"][:, t] * [1, -1, -1, 1]
-            for k in range(1, n):   # keep neighbouring keys on the same side of the sphere, so they blend the short way
-                if (rot[k] * rot[k - 1]).sum() < 0:
-                    rot[k] = -rot[k]
-            for path, arr, kind in (("translation", anim["pos"][:, t] * [-1, 1, 1], "VEC3"), ("rotation", rot, "VEC4")):
-                samplers.append({"input": times, "output": glb.accessor(arr.astype("<f4"), kind, 5126), "interpolation": "LINEAR"})
-                channels.append({"sampler": len(samplers) - 1, "target": {"node": node, "path": path}})
-        glb.doc["animations"].append({"name": clip, "samplers": samplers, "channels": channels})
-        clips[clip] = {"from": stem, "frames": n}
+            # a name with a slash is in another of the unit's animation folders
+            at = lambda s: f"{folder.rsplit('/', 1)[0]}/{s}.hkx" if "/" in s else f"{folder}/{s}.hkx"
+            stem = next((s for s in ([stems] if isinstance(stems, str) else stems) if arc.has(at(s))), None)
+            if not stem:
+                continue
+            anim = read_animation(arc.read(at(stem)))
+            n = len(anim["pos"])
+            times = glb.accessor(np.linspace(0, max(anim["duration"], 1e-3), n).astype("<f4"), "SCALAR", 5126, minmax=True)
+            samplers, channels = [], []
+            for t, bone in enumerate(anim["bones"]):
+                node = index.get(bone.lower())
+                if node is None:
+                    continue
+                rot = anim["rot"][:, t] * [1, -1, -1, 1]
+                for k in range(1, n):   # keep neighbouring keys on the same side of the sphere, so they blend the short way
+                    if (rot[k] * rot[k - 1]).sum() < 0:
+                        rot[k] = -rot[k]
+                for path, arr, kind in (("translation", anim["pos"][:, t] * [-1, 1, 1], "VEC3"), ("rotation", rot, "VEC4")):
+                    samplers.append({"input": times, "output": glb.accessor(arr.astype("<f4"), kind, 5126), "interpolation": "LINEAR"})
+                    channels.append({"sampler": len(samplers) - 1, "target": {"node": node, "path": path}})
+            name = clip if look is None else f"{clip}@{look}"
+            glb.doc["animations"].append({"name": name, "samplers": samplers, "channels": channels})
+            clips[name] = {"from": stem, "frames": n}
 
     head = index.get("bip01 head")
-    meta = {"meshes": names, "looks": {k: [n for n in names if n.split(".")[0] in v] for k, v in unit.get("looks", {"default": list(unit["parts"])}).items()},
-            "bounds": bounds, "head": round(float(world[head][1, 3]), 4) if head is not None else None,
+    looks = {k: [n for n in names if n.split(".")[0] in ("base", *v)] for k, v in unit.get("looks", {"default": list(unit["parts"])}).items()}
+    meta = {"meshes": names, "looks": looks, "bounds": bounds, "head": round(float(world[head][1, 3]), 4) if head is not None else None,
             "mesh_material": mesh_material, "clips": clips, "fps": 30}
     return glb.bytes(), meta, textures
 
 
-def paint_layers(tex, order="rbga", gain=1.0):
+def paint_layers(tex, slots="pstw"):
     """A material's textures as the page's paint layers: base, m1 (primary, secondary, trim), m2 (weapons, eyes, dirt).
 
     This game colours a unit where its team texture says so, over a grey diffuse texture: each of the team
-    texture's channels is one colour's mask. The page overlays a colour on a grey mask and adds the base texture
-    times "dirt", so a mask here is the team channel times the diffuse's brightness, and dirt is what no channel
-    covers. `order` says which channels are the page's primary, secondary, trim and weapons colours.
+    texture's four channels is one colour's mask. The page overlays a colour on a grey mask and adds the base
+    texture times "dirt", so a mask here is the team channel times the diffuse's brightness, and dirt is what no
+    channel covers. What a channel means differs from unit to unit, so `slots` says, for red, green, blue and
+    alpha in turn, which of the page's colours it takes: p(rimary), s(econdary), t(rim), w(eapons) or - for none.
     """
     from PIL import Image
 
@@ -491,12 +530,15 @@ def paint_layers(tex, order="rbga", gain=1.0):
     out = {"base": dif.convert("RGB")}
     if "teamTex" in tex:
         team = np.asarray(tex["teamTex"].convert("RGBA").resize(dif.size), dtype=np.float64) / 255
-        luma = np.clip(np.asarray(dif.convert("L"), dtype=np.float64) / 255 * gain, 0, 1)
-        ch = {c: team[:, :, i] for i, c in enumerate("rgba")}
-        layer = [ch[c] * luma if c in ch else np.zeros_like(luma) for c in order.ljust(4, "-")]
-        dirt = 1 - np.clip(sum(ch[c] for c in order if c in ch), 0, 1)
+        luma = np.asarray(dif.convert("L"), dtype=np.float64) / 255
+        layer = {c: np.zeros_like(luma) for c in "pstw"}
+        for i, slot in enumerate(slots.ljust(4, "-")[:4]):
+            if slot in layer:
+                layer[slot] = np.maximum(layer[slot], team[:, :, i])
+        dirt = 1 - np.clip(sum(layer.values()), 0, 1)
         as_image = lambda *planes: Image.fromarray((np.dstack(planes) * 255 + .5).astype(np.uint8))
-        out["m1"], out["m2"] = as_image(layer[0], layer[1], layer[2]), as_image(layer[3], np.zeros_like(luma), dirt)
+        out["m1"] = as_image(layer["p"] * luma, layer["s"] * luma, layer["t"] * luma)
+        out["m2"] = as_image(layer["w"] * luma, np.zeros_like(luma), dirt)
     if "emissiveTex" in tex and np.asarray(tex["emissiveTex"].convert("L")).max() > 24:
         out["glow"] = tex["emissiveTex"].convert("RGB")
     return out
