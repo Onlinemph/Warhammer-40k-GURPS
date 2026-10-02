@@ -74,9 +74,17 @@
       // when an attack goes off: spread through the first .4 of a normal second, or a little into its attacker's beat
       const lagOf = () => Math.min(.35, n++ * .03) + .05;
       const imp = (tg, at) => { if (tg >= 0) lastImpact.set(tg, at); };
+      // a shooter that moves this second fires as it reaches the hex it fired from, not from part-way there
+      const firedAt = e => {
+        const cur = fr[t] && fr[t][e[7]], prev = fr[t - 1] && fr[t - 1][e[7]], tr = cur && cur[6];
+        if (!prev || !tr || !tr.length || (prev[0] === e[1] && prev[1] === e[2])) return 0;
+        let L = 0, at = -1, a = P(prev[0], prev[1]);
+        for (const [q, r] of tr) { const b = P(q, r); L += Math.hypot(b[0] - a[0], b[1] - a[1]); a = b; if (at < 0 && q === e[1] && r === e[2]) at = L; }
+        return at > 0 ? Math.min(.72, .7 * at / L + .02) : 0;
+      };
       for (const e of es) {
         if (e[0] === "s") {
-          const lag = lagOf(e), kind = e[12] || "slug", K = KIND[kind] || KIND.slug;
+          const lag = Math.max(lagOf(e), firedAt(e)), kind = e[12] || "slug", K = KIND[kind] || KIND.slug;
           const travel = K.beam || K.flame ? .05 : K.dur || .15;
           (evFor[e[7]].fire ||= []).push({ p: lag, kind, tgt: e[8], hits: e[10] || 0, nb: e[11] || 1 });
           imp(e[8], lag + travel * u);
@@ -142,17 +150,43 @@
       for (const e of es) if ((e[0] === "h" || e[0] === "f") && !hP.has(e)) { const ip = .5 / TS; hP.set(e, ip); if (e[0] === "h") { deathP.set(e[1], ip); const F = figs[e[1]]; sched.push({ p: ip, run: () => { if (F) impactFx(F, e[2] > 0); } }); } }
     }
     const chestOf = F => F.g.position.clone().add(new THREE.Vector3(0, (F.veh ? .9 : F.top * .62), 0));
-    const muzzleOf = (F, toward) => {
-      const at = F.g.position.clone(), h = F.veh ? (F.turret && F.turret !== F.hull ? .9 : .7) : F.top * (F.arch === "beast" ? .45 : .62);
+    // where a shot starts or ends: on the figure while it stands in the hex the shot was fired from (or at). A
+    // figure drawn part-way through its move isn't there, and a line drawn to it could cross a wall the shot never
+    // did, so the shot keeps to its hex
+    const standAt = (F, q, r) => { const [x, y] = P(q, r); return F && F.g.visible && Math.hypot(F.g.position.x - x, F.g.position.z - y) < .5 ? F.g.position.clone() : W3(x, y, zOf(q, r)); };
+    const muzzleOf = (F, toward, at = F.g.position.clone()) => {
+      const h = F.veh ? (F.turret && F.turret !== F.hull ? .9 : .7) : F.top * (F.arch === "beast" ? .45 : .62);
       const d = toward.clone().sub(at); d.y = 0; d.normalize();
       return at.add(new THREE.Vector3(0, h, 0)).add(d.multiplyScalar(F.veh ? 1.2 : .45 * Math.max(1, F.k)));
     };
+    // a shot that misses flies on past its target, until a standing wall, a shut door or the ground stops it or it
+    // has gone some way further
+    const hexAt = (x, y) => { const q = x / 1.5, r = y / SQ3 - q / 2; let rx = Math.round(q), ry = Math.round(-q - r), rz = Math.round(r); const dx = Math.abs(rx - q), dy = Math.abs(ry + q + r), dz = Math.abs(rz - r); if (dx > dy && dx > dz) rx = -ry - rz; else if (dy <= dz) rz = -rx - ry; return rx + "," + rz; };
+    let strayT = -1; const brokenNow = new Set(), shutNow = new Set(), wallTopOf = new Map();
+    function flyOn(from, near) {
+      const d = near.clone().sub(from), len = d.length(), p = near.clone(); if (len < .01) return { to: p, stopped: false };
+      d.multiplyScalar(1 / len);
+      if (T && strayT !== schedT) {
+        strayT = schedT; brokenNow.clear(); shutNow.clear();
+        for (const k of T.shut || []) shutNow.add(k);
+        for (const [tt, k, what] of T.events || []) if (tt <= schedT) { if (what === "broken") { brokenNow.add(k); shutNow.delete(k); } else if (what === "closed") shutNow.add(k); else shutNow.delete(k); }
+        if (!wallTopOf.size) wallList.forEach((k, i) => wallTopOf.set(k, wallH[i]));
+      }
+      const reach = len + 25 + rnd() * 35;
+      for (let s = Math.max(0, len - 1.5); s < reach; s += .3) {
+        p.copy(d).multiplyScalar(s).add(from);
+        if (p.y < zXY(p.x, p.z) + .05) return { to: p, stopped: true };
+        if (!T) continue;
+        const k = hexAt(p.x, p.z);
+        if (floorSet.has(k) ? shutNow.has(k) && p.y < 2.3 : !brokenNow.has(k) && (indoor || p.y < (wallTopOf.get(k) ?? -1))) return { to: p, stopped: true };
+      }
+      return { to: p, stopped: false };
+    }
     function fireFx(e, kind, K) {
       const A = figs[e[7]]; if (!A) return;
       const tF = e[8] >= 0 ? figs[e[8]] : null;
-      const [bx, by] = P(e[3], e[4]);
-      const tgt = tF && tF.g.visible ? chestOf(tF) : W3(bx, by, zOf(e[3], e[4]) + .8);
-      const from = muzzleOf(A, tgt), hit = !!e[6];
+      const tgt = standAt(tF, e[3], e[4]); tgt.y += tF ? (tF.veh ? .9 : tF.top * .62) : .8;
+      const from = muzzleOf(A, tgt, standAt(A, e[1], e[2])), hit = !!e[6];
       const shots = K.beam || K.flame ? 1 : Math.min(3, K.pulses || 1, Math.max(1, e[11] || 1));
       for (let j = 0; j < shots; j++) setTimeout(() => playSound("fire." + kind, A, A.veh ? 1.3 : 1), j * 70 * speedK());
       const miss = () => tgt.clone().add(new THREE.Vector3((rnd() - .5) * 2.5, (rnd() - .2) * 1.2, (rnd() - .5) * 2.5));
@@ -170,19 +204,23 @@
         return;
       }
       for (let j = 0; j < pulses; j++) {
-        const to = hit && j < Math.max(1, e[10] || 1) ? tgt.clone().add(new THREE.Vector3((rnd() - .5) * .2, (rnd() - .5) * .3, (rnd() - .5) * .2)) : miss();
+        const lands = hit && j < Math.max(1, e[10] || 1), near = lands ? tgt.clone().add(new THREE.Vector3((rnd() - .5) * .2, (rnd() - .5) * .3, (rnd() - .5) * .2)) : miss();
+        const stray = lands || K.arc ? null : flyOn(from, near), to = stray ? stray.to : near, struck = !stray || stray.stopped;
         const delay = j * .06;
         if (K.beam) {
           setTimeout(() => {
             beam(from, to, K.c, K.beam, K.life, K.crackle ? .08 : 0);
+            if (!struck) return;
+            if (stray) burst(glow, to, 5, { speed: 2.5, life: .2, s0: .12, s1: .02, c: C(0xffe0a0), grav: 6 });
             if (K.flare) { burst(glow, to, 14, { speed: 2.4, life: .3, s0: .5, s1: .05, c: C(0xffc0b0) }); flash(to, K.c, 3, .2, 8); }
             if (K.heat) burst(glow, to, 10, { speed: 1, life: .35, s0: .6, s1: .1, c: C(0xffe0c0) });
             if (K.crackle) burst(glow, to, 8, { speed: 1.5, life: .35, s0: .18, s1: .02, c: C(0x7aff9a), spread: .3 });
           }, delay * 1000 * speedK());
         } else {
           const K2 = K;
-          setTimeout(() => projectile(from.clone(), to, { dur: (K2.dur || .15) * (1 + from.distanceTo(to) / 60), arc: K2.arc ? Math.min(8, from.distanceTo(to) * .35 * K2.arc) : 0, c: K2.c, size: K2.proj, trail: !K2.smoke, smokeTrail: !!K2.smoke,
-            onHit: K2.pop ? at => burst(glow, at, 6, { speed: 1.5, life: .2, s0: .35, s1: .05, c: C(0xffc070) }) : null }), delay * 1000 * speedK());
+          const far = from.distanceTo(near), dur = (K2.dur || .15) * (1 + far / 60) * (stray ? from.distanceTo(to) / Math.max(1, far) : 1);   // a stray keeps the speed it had to the target
+          setTimeout(() => projectile(from.clone(), to, { dur, arc: K2.arc ? Math.min(8, from.distanceTo(to) * .35 * K2.arc) : 0, c: K2.c, size: K2.proj, trail: !K2.smoke, smokeTrail: !!K2.smoke,
+            onHit: !struck ? null : K2.pop ? at => burst(glow, at, 6, { speed: 1.5, life: .2, s0: .35, s1: .05, c: C(0xffc070) }) : stray ? at => burst(glow, at, 5, { speed: 2.5, life: .2, s0: .12, s1: .02, c: C(0xffe0a0), grav: 6 }) : null }), delay * 1000 * speedK());
         }
       }
     }
