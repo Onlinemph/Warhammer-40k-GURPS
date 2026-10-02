@@ -25,7 +25,7 @@ On Windows, run it with a Python installed from python.org or a virtual environm
 
 ## What is covered
 
-`units.json` lists 106 units: 36 from Dawn of War II (Space Marines with sergeants, Scouts and Terminators; Guardsmen; Chaos Marines, Plague Marines, Berzerkers, lords, sorcerers and cultists; Aeldari Guardians, Rangers, Banshees, Warlocks and Farseers; Ork Boyz, Kommandos, Nobz, a Warboss and a Weirdboy; ten Tyranids) and 70 from Soulstorm (63 infantry and 7 vehicles). Where both games have a unit, the Dawn of War II entry comes first in the file and wins; the Soulstorm one is used when that game's files aren't there. Most are the unit itself. The game has no model for some, so these use the nearest stand-in (marked `proxy` in the file):
+`units.json` lists 109 units: 39 from Dawn of War II (the Predator, Rhino and Trukk; Space Marines with sergeants, Scouts and Terminators; Guardsmen; Chaos Marines, Plague Marines, Berzerkers, lords, sorcerers and cultists; Aeldari Guardians, Rangers, Banshees, Warlocks and Farseers; Ork Boyz, Kommandos, Nobz, a Warboss and a Weirdboy; ten Tyranids) and 70 from Soulstorm (63 infantry and 7 vehicles). Where both games have a unit, the Dawn of War II entry comes first in the file and wins; the Soulstorm one is used when that game's files aren't there. Most are the unit itself. The game has no model for some, so these use the nearest stand-in (marked `proxy` in the file):
 
 | Simulator unit | Stand-in |
 |---|---|
@@ -106,6 +106,8 @@ python tools/dow/build_pack.py voices     # only the voices
 **Looks.** A model holds every weapon option as a separate mesh. Each unit's `looks` say which meshes show for which weapon the figure carries, keyed by the simulator's weapon kinds (`bolt`, `plasma`, `flame`, `bolt+power` for a ranged and melee pair, `default` otherwise). A look is the name of one of the game's own visibility animations (`vis_bolter`), a list of them, or a list of mesh names; `*` means the meshes the game shows by default.
 
 **Animations.** The page uses up to eight clips: `idle`, `run`, `fire`, `melee`, `die`, `hit`, `kneel` and `throw`. The game names them differently from unit to unit, so the exporter tries the usual names, then the plainest name of the right kind. `clips` in a unit overrides that, `prefix` prefers names starting with it, and `clips_from` borrows another unit's clips where the game itself shares a skeleton (a Chaos Marine moves as a Space Marine).
+
+`python -m unittest tools/dow/test_formats.py` checks the readers against small files made up in the test (an archive, a sound bank, a `.fda` sound, the glTF writer), so it runs without the games.
 
 ## Dawn of War II units
 
