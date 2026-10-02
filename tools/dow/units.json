@@ -48,6 +48,9 @@
    },
    "tem": "pptt",
    "h": 2.05,
+   "kits": {
+    "Assault Cannon": "slug"
+   },
    "clips": {
     "idle": "fb_idle_stand_01",
     "run": "fb_run_01"
@@ -171,6 +174,9 @@
    },
    "tem": "pptt",
    "h": 1.8,
+   "kits": {
+    "Plasma": "plasma"
+   },
    "not": "Scout|Terminator|Tactical Dreadnought|Cataphractii"
   },
   {
@@ -188,7 +194,8 @@
     "melta": "art/race_marine/troops_wargear/weapons_ranged/meltagun_common/meltagun_common.model",
     "missile": "art/race_marine/troops_wargear/weapons_ranged/missile_launcher_common/missile_launcher_common.model",
     "lascannon": "art/race_marine/troops_wargear/weapons_ranged/lascannon_common/lascannon_common.model",
-    "knife": "art/race_marine/troops_wargear/weapons_melee/knife_common/knife_common.model"
+    "knife": "art/race_marine/troops_wargear/weapons_melee/knife_common/knife_common.model",
+    "hbolter": "art/race_marine/troops_wargear/weapons_ranged/heavy_bolter_common/heavy_bolter_common.model"
    },
    "anims": "art/race_marine/troops/space_marine/animations/range_burst",
    "looks": {
@@ -228,6 +235,12 @@
      "backpack",
      "lascannon"
     ],
+    "hbolt": [
+     "body",
+     "head",
+     "backpack",
+     "hbolter"
+    ],
     "blade": [
      "body",
      "head",
@@ -243,10 +256,15 @@
    },
    "sets": {
     "shell": "art/race_marine/troops/space_marine/animations/range_missile_launcher",
-    "lascannon": "art/race_marine/troops/space_marine/animations/range_lascannon"
+    "lascannon": "art/race_marine/troops/space_marine/animations/range_lascannon",
+    "hbolt": "art/race_marine/troops/space_marine/animations/range_heavy_automatic"
    },
    "tem": "pptt",
    "h": 1.8,
+   "kits": {
+    "Heavy Bolter|Autocannon": "hbolt",
+    "Plasma": "plasma"
+   },
    "not": "Scout|Terminator|Tactical Dreadnought|Cataphractii"
   },
   {
@@ -467,7 +485,10 @@
     "bolt+fist": "art/race_chaos/troops/chaos_marine/animations/melee_powerfist_range_pistol"
    },
    "tem": "pt-t",
-   "h": 1.82
+   "h": 1.82,
+   "kits": {
+    "Plasma": "plasma"
+   }
   },
   {
    "id": "csm2",
@@ -483,7 +504,9 @@
     "missile": "art/race_chaos/troops_wargear/weapons_ranged/chaos_missile_launcher_common/chaos_missile_launcher_common.model",
     "lascannon": "art/race_chaos/troops_wargear/weapons_ranged/chaos_lascannon_common/chaos_lascannon_common.model",
     "flamer": "art/race_chaos/troops_wargear/weapons_ranged/combi_flamer_common/combiflamer_common.model",
-    "knife": "art/race_chaos/troops_wargear/weapons_melee/chainsword_common/chainsword_common.model"
+    "knife": "art/race_chaos/troops_wargear/weapons_melee/chainsword_common/chainsword_common.model",
+    "hbolter": "art/race_chaos/troops_wargear/weapons_ranged/chaos_heavy_bolter_common/chaos_heavy_bolter_common.model",
+    "autocannon": "art/race_chaos/troops_wargear/weapons_ranged/chaos_autocannon_common/chaos_autocannon_common.model"
    },
    "anims": "art/race_chaos/troops/chaos_marine/animations/range_burst",
    "looks": {
@@ -516,14 +539,33 @@
      "head",
      "backpack",
      "flamer"
+    ],
+    "hbolt": [
+     "body",
+     "head",
+     "backpack",
+     "hbolter"
+    ],
+    "autocannon": [
+     "body",
+     "head",
+     "backpack",
+     "autocannon"
     ]
    },
    "sets": {
     "shell": "art/race_chaos/troops/chaos_marine/animations/range_missile_launcher",
-    "lascannon": "art/race_chaos/troops/chaos_marine/animations/range_heavy_energy"
+    "lascannon": "art/race_chaos/troops/chaos_marine/animations/range_heavy_energy",
+    "hbolt": "art/race_chaos/troops/chaos_marine/animations/range_heavy_automatic",
+    "autocannon": "art/race_chaos/troops/chaos_marine/animations/range_heavy_automatic"
    },
    "tem": "pt-t",
-   "h": 1.8
+   "h": 1.8,
+   "kits": {
+    "Heavy Bolter": "hbolt",
+    "Autocannon": "autocannon",
+    "Plasma": "plasma"
+   }
   },
   {
    "id": "cultist2_champion",
@@ -759,7 +801,8 @@
     "gun": "art/race_ork/troops_wargear/weapons_ranged/slugga_common/slugga_common.model",
     "choppa": "art/race_ork/troops_wargear/weapons_melee/choppa_common/choppa_common.model",
     "burna": "art/race_ork/troops_wargear/weapons_ranged/burna_common/burna_common.model",
-    "rokkit": "art/race_ork/troops_wargear/weapons_ranged/rokkit_launcha_common/rokkit_launcha_common.model"
+    "rokkit": "art/race_ork/troops_wargear/weapons_ranged/rokkit_launcha_common/rokkit_launcha_common.model",
+    "bigshoota": "art/race_ork/troops_wargear/weapons_ranged/big_shoota_common/big_shoota_common.model"
    },
    "anims": "art/race_ork/troops/boy/animations/melee_blade_range_pistol",
    "looks": {
@@ -778,16 +821,28 @@
      "body",
      "head",
      "rokkit"
+    ],
+    "bigshoota": [
+     "body",
+     "head",
+     "bigshoota"
     ]
    },
    "sets": {
     "flame": "art/race_ork/troops/boy/animations/range_flamer",
-    "shell": "art/race_ork/troops/boy/animations/range_missile_launcher"
+    "shell": "art/race_ork/troops/boy/animations/range_missile_launcher",
+    "bigshoota": "art/race_ork/troops/boy/animations/range_heavy_automatic"
    },
    "tem": "--ps",
    "h": 1.8,
+   "kits": {
+    "Big Shoota": "bigshoota"
+   },
    "clips": {
-    "run": "fb_run_f",
+    "run": [
+     "fb_run_f",
+     "fb_run"
+    ],
     "fire": "fb_fire_stand_01"
    }
   },

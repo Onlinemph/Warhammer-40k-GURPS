@@ -114,7 +114,8 @@ That game keeps a unit in pieces: a skeleton, body and weapon models skinned to 
 | `skeleton` | The unit's own `.model`, which holds only bones |
 | `parts` | Name to `.model` path for the body, head, backpack and each weapon. A body stored in the skeleton's own file is picked up by itself. `{"model": path, "remap": {bone: bone}}` moves a part to another bone |
 | `looks` | Which parts show for which weapon, as for Soulstorm units |
-| `sets` | A look's own animation folder, where a weapon is held differently (a missile launcher, a power fist) |
+| `sets` | A look's own animation folder, where a weapon is held differently (a missile launcher, a heavy bolter, a power fist) |
+| `kits` | Weapon names that pick a look the weapon's kind alone wouldn't, as for Soulstorm units: `{"Heavy Bolter": "hbolt"}` |
 | `anims` | The folder of `.hkx` files for the weapon set these parts go with |
 | `clips` | Page name to file name without `.hkx`, where the usual names don't fit; `other_folder/name` takes it from another of the unit's folders, `null` leaves it out |
 | `tem` | What the team-colour texture's red, green, blue and alpha channels colour, one letter each: `p`rimary, `s`econdary, `t`rim, `w`eapons or `-`. It differs by race (default `ptsw`: carapace, details, flesh, the rest) |
