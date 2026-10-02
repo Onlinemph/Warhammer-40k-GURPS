@@ -44,6 +44,25 @@ Not covered, so still drawn from shapes: any vehicle not in the list.
 
 Known gaps: the Mandrake only has its idle animation (its others import upside down), tracks don't roll, and Soulstorm units keep one animation set whatever they carry, so a heavy bolter is held like a bolter. The Terminator entry has not been seen in the page, because no simulator loadout wears Terminator armour yet.
 
+## Battlefields
+
+`build_pack.py` also writes `site/models/scenery.js` from Dawn of War II's environment archives, and the 3D replay dresses its battlefields with it:
+
+- the ground, the facility's deck plates, wall panels and gratings take the game's terrain textures;
+- the cover crates on the facility and ruins maps become sandbags, barrels and ammunition cases, in the same hexes and about the same size;
+- open ground gets the game's rocks, concrete rubble and twisted metal underfoot, with tank traps, containers and barricades around the edge;
+- outdoor maps get a skyline of the game's city buildings around the field, and its storm sky. A building standing between the camera and what it looks at is hidden until the camera moves on.
+
+None of this changes the fight. Whatever is big enough to hide behind stands at least six yards from anywhere a figure goes, and the cover the simulator models keeps its place.
+
+```sh
+python tools/dow/build_pack.py scenery    # only the scenery
+```
+
+`scenery.json` lists the textures and world objects and what each is used for. To see what else the game has, list an archive: `python tools/dow/dow2.py "<Dawn of War 2>/GameAssets/Archives/gameartenvironment.sga" world_objects`.
+
+The ruins keep the page's own painted masonry: the game's wall textures tried so far read worse on hex columns.
+
 ## Sound
 
 `build_pack.py` also writes `site/models/sounds.js` from Dawn of War II's sound archives: weapon fire for each of the simulator's weapon kinds, impacts on flesh, armour and shields, ricochets, explosions, melee swings and hits, and bodies falling. `sounds.json` says which of the game's sounds goes with which replay event. In the 3D view the **Sound** button switches them on; they play while the replay runs, louder near the camera and panned to their side of the screen. Like the models, the sound pack is the game's own audio and stays on your machine.

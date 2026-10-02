@@ -81,6 +81,7 @@
     const bx0 = Math.min(...pts.map(p => p[0])) - 6, bx1 = Math.max(...pts.map(p => p[0])) + 6, by0 = Math.min(...pts.map(p => p[1])) - 6, by1 = Math.max(...pts.map(p => p[1])) + 6;
     const cx = (bx0 + bx1) / 2, cy = (by0 + by1) / 2, span = Math.max(bx1 - bx0, by1 - by0);
     const indoor = T && T.kind !== "ruins";
+    let skyDome = null;
     const horizon = indoor ? 0x15171b : 0x8a7d6c;
     scene.fog = new THREE.Fog(lin(horizon), Math.max(60, span * .9), Math.max(200, span * 2.6));
     if (indoor) scene.background = lin(0x101216);
@@ -90,7 +91,7 @@
         uniforms: { top: { value: lin(0x2e3846) }, hor: { value: lin(horizon) }, bot: { value: lin(0x3a3228) } },
         vertexShader: "varying vec3 vP; void main(){ vP = position; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }",
         fragmentShader: "uniform vec3 top; uniform vec3 hor; uniform vec3 bot; varying vec3 vP; void main(){ float h = normalize(vP).y; vec3 c = h > 0.0 ? mix(hor, top, pow(min(1.0, h * 1.6), 0.7)) : mix(hor, bot, min(1.0, -h * 4.0)); gl_FragColor = vec4(c, 1.0); }" })));
-      sky.position.set(cx, 0, cy); scene.add(sky);
+      sky.position.set(cx, 0, cy); scene.add(sky); skyDome = sky;
     }
     scene.add(new THREE.HemisphereLight(lin(indoor ? 0xaab4c4 : 0xc8d4e6), lin(0x4a3f30), indoor ? 1.1 : 1.0));
     const sun = new THREE.DirectionalLight(lin(indoor ? 0xf2f0ea : 0xffdcb0), indoor ? 2.2 : 3.0);
@@ -101,6 +102,7 @@
     const fill = new THREE.DirectionalLight(lin(0x8fa8d0), .6); fill.position.set(cx + span, span * .4, cy + span * .6); scene.add(fill);
 
     // ================= the battlefield
+    const decor = { crates: [] };   // the built pieces a local scenery pack replaces (31-view3d-scenery.js)
     const hexGeo = (h, k = 1) => {
       const sh = new THREE.Shape();
       for (let i = 0; i < 6; i++) { const x = Math.cos(i * Math.PI / 3) * k, y = Math.sin(i * Math.PI / 3) * k; i ? sh.lineTo(x, y) : sh.moveTo(x, y); }
@@ -161,8 +163,9 @@
       const cGeo = keep(new THREE.BoxGeometry(1.15, 1, 1.15));
       for (const [kind, mt] of [["light", M(0xffffff, { map: TEX.wood, r: .8 })], ["heavy", M(0xffffff, { map: TEX.metal, r: .55, m: .45 })]]) {
         const list = crates.filter(([, v]) => v === kind);
-        inst(cGeo, mt, list, (im2, [k], i) => { const [q, r] = keyHex(k), [x, y] = P(q, r), h = kind === "heavy" ? 1.1 : .85; m4.compose(W3(x, y, zOf(q, r) + h / 2), new THREE.Quaternion().setFromAxisAngle(yAx, hash(q, r) * .6), new THREE.Vector3(1, h, 1)); im2.setMatrixAt(i, m4); });
+        decor.crates.push(inst(cGeo, mt, list, (im2, [k], i) => { const [q, r] = keyHex(k), [x, y] = P(q, r), h = kind === "heavy" ? 1.1 : .85; m4.compose(W3(x, y, zOf(q, r) + h / 2), new THREE.Quaternion().setFromAxisAngle(yAx, hash(q, r) * .6), new THREE.Vector3(1, h, 1)); im2.setMatrixAt(i, m4); }));
       }
+      decor.crateList = crates;
       doorList = [...(T.doors || [])];
       doorMesh = inst(hexGeo(2.3, .9), M(0xffffff, { m: .45, r: .45 }), doorList, (im, k, i) => { const [q, r] = keyHex(k), [x, y] = P(q, r); m4.makeTranslation(x, 0, y); im.setMatrixAt(i, m4); im.setColorAt(i, col.set(0x9aa1a8)); });
       const rMat = M(0x4a4e55, { r: .9 });
@@ -184,7 +187,7 @@
       const R1 = rng(17), rocks = [];
       for (let i = 0; i < Math.min(400, span * 3); i++) rocks.push([cx + (R1() - .5) * span * 1.6, cy + (R1() - .5) * span * 1.6, .25 + R1() * R1() * 1.4]);
       const e3 = new THREE.Euler(), rq = new THREE.Quaternion();
-      inst(chunkGeo, M(0x6f675a, { r: .95 }), rocks, (im, [x, y, s], i) => { e3.set(R1() * 3, R1() * 3, R1() * 3); rq.setFromEuler(e3); m4.compose(new THREE.Vector3(x, zXY(x, y) + s * .05, y), rq, new THREE.Vector3(s, s * .55, s)); im.setMatrixAt(i, m4); im.setColorAt(i, col.setScalar(.7 + R1() * .4)); });
+      decor.rocks = inst(chunkGeo, M(0x6f675a, { r: .95 }), rocks, (im, [x, y, s], i) => { e3.set(R1() * 3, R1() * 3, R1() * 3); rq.setFromEuler(e3); m4.compose(new THREE.Vector3(x, zXY(x, y) + s * .05, y), rq, new THREE.Vector3(s, s * .55, s)); im.setMatrixAt(i, m4); im.setColorAt(i, col.setScalar(.7 + R1() * .4)); });
       const cr = [];
       for (let i = 0; i < Math.max(6, span / 6); i++) cr.push([cx + (R1() - .5) * span * 1.4, cy + (R1() - .5) * span * 1.4, 1.5 + R1() * 3]);
       const cMat = keep(new THREE.MeshStandardMaterial({ map: TEX.scorch, transparent: true, depthWrite: false, roughness: 1, polygonOffset: true, polygonOffsetFactor: -1 }));

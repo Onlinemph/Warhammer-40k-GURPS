@@ -17,7 +17,7 @@ The code is split into numbered parts that are joined in file-name order. `engin
 | `engine/90-api.js` | `monteCarlo` and what `SIM` exports, including `SIM.rules` for the tests |
 | `page/10-picker-and-results.js` | The unit picker and the results charts |
 | `page/20-tabletop-map.js` | Shared map palette and hex helpers for the replays |
-| `page/30-37-view3d-*.js` | `makeView3D`, the three.js replay, split by section: scene, figures, models and sound from a local Dawn of War pack (optional, see `tools/dow/README.md`), effects, timeline and action camera plan, camera, posing, action camera, input |
+| `page/30-37-view3d-*.js` | `makeView3D`, the three.js replay, split by section: scene, figures, models, battlefield scenery and sound from a local Dawn of War pack (optional, see `tools/dow/README.md`), effects, timeline and action camera plan, camera, posing, action camera, input |
 | `page/40-table.js` | The 2D replay |
 | `page/90-wire.js` | Wiring the page together |
 

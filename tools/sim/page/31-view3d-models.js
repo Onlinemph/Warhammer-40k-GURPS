@@ -9,6 +9,8 @@
     const PACK = "models/", GLTF_URL = "https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js";
     let gone = false; keep({ dispose() { gone = true; } });
     const loadScript = src => new Promise((ok, no) => { const s = document.createElement("script"); s.src = src; s.async = true; s.onload = () => ok(); s.onerror = () => { s.remove(); no(new Error("could not load " + src)); }; document.head.appendChild(s); });
+    let gltfLoading = null;   // the loader comes down once, whoever asks first (the models or the scenery)
+    const gltfReady = () => THREE.GLTFLoader ? Promise.resolve() : gltfLoading || (gltfLoading = loadScript(GLTF_URL));
     const loadImage = src => new Promise((ok, no) => { const im = new Image(); im.onload = () => ok(im); im.onerror = () => no(new Error("a model texture did not decode")); im.src = src; });
     const pixelsOf = (im, w, h) => { const c = document.createElement("canvas"); c.width = w; c.height = h; const g = c.getContext("2d"); g.drawImage(im, 0, 0, w, h); return [c, g, g.getImageData(0, 0, w, h)]; };
     const rgb01 = c => { if (typeof c === "string") c = parseInt(c.replace("#", ""), 16); return [(c >> 16 & 255) / 255, (c >> 8 & 255) / 255, (c & 255) / 255]; };
@@ -172,7 +174,7 @@
       const rules = idx.units.map(u => ({ ...u, re: new RegExp(u.match), nre: u.not ? new RegExp(u.not) : null }));
       const jobs = figs.map(F => { const r = ros[F.i], s = `${r.faction || ""} ${r.template || ""} ${r.veh || ""} | ${r.kit || ""}`; return rules.find(u => !!u.veh === !!F.veh && u.re.test(s) && !(u.nre && u.nre.test(s))) || null; });
       if (!jobs.some(Boolean)) return;
-      if (!THREE.GLTFLoader) await loadScript(GLTF_URL);
+      await gltfReady();
       // each model once, with the clips it borrows (and those its lender borrows in turn)
       const loading = new Map(), byId = new Map(rules.map(u => [u.id, u])), assets = new Map();
       const assetOf = id => { if (!loading.has(id)) loading.set(id, (async () => { const u = byId.get(id), a = await loadAsset(id); if (u && u.clips_from) borrowClips(a, await assetOf(u.clips_from)); return a; })()); return loading.get(id); };

@@ -38,5 +38,5 @@
       const s = H * renderer.getPixelRatio() / (2 * Math.tan(camera.fov * Math.PI / 360)); glow.mat.uniforms.scale.value = s; smoke.mat.uniforms.scale.value = s;
       place(); render();
     }
-    function render() { if (!W) return; if (composer) composer.render(); else renderer.render(scene, camera); }
+    function render() { if (!W) return; if (decor.frame) decor.frame(); if (composer) composer.render(); else renderer.render(scene, camera); }
 

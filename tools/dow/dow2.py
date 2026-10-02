@@ -535,6 +535,47 @@ def build(arc, unit):
     return glb.bytes(), meta, textures
 
 
+def build_static(arc, path):
+    """A world object (a rock, a crate, a building) -> (glb bytes, meta, {material: PIL image}).
+
+    No skeleton and no animation: the meshes as modelled, mirrored like the units, one per material, with each
+    material's diffuse texture. A model with no textured mesh gives None.
+    """
+    from PIL import Image
+
+    buf = arc.read(path)
+    mats = read_materials(buf)
+    glb, textures, lo, hi = Glb(), {}, np.full(3, np.inf), np.full(3, -np.inf)
+    for mesh in read_meshes(buf):
+        mat = mesh["material"].split(".")[-1]
+        tex = mats.get(mesh["material"]) or next((v for n, v in mats.items() if n.endswith(mat)), {})
+        where = arc.locate(tex.get("diffuseTex", "") + ".dds")
+        if not where or "uv" not in mesh:
+            continue
+        if mat not in textures:
+            textures[mat] = Image.open(io.BytesIO(arc.read(where)))
+            glb.doc["materials"].append({"name": mat})
+        pos = mesh["pos"] * [-1, 1, 1]
+        nrm = mesh.get("nrm", np.zeros_like(pos)) * [-1, 1, 1]
+        tris = mesh["tris"]
+        geo = np.cross(pos[tris[:, 1]] - pos[tris[:, 0]], pos[tris[:, 2]] - pos[tris[:, 0]])
+        if (geo * nrm[tris[:, 0]]).sum() < 0:
+            tris = tris[:, [0, 2, 1]]
+        nrm /= np.maximum(np.linalg.norm(nrm, axis=1, keepdims=True), 1e-9)
+        prim = {"attributes": {"POSITION": glb.accessor(pos.astype("<f4"), "VEC3", 5126, 34962, True),
+                               "NORMAL": glb.accessor(nrm.astype("<f4"), "VEC3", 5126, 34962),
+                               "TEXCOORD_0": glb.accessor(mesh["uv"].astype("<f4"), "VEC2", 5126, 34962)},
+                "indices": glb.accessor(tris.astype("<u2").reshape(-1), "SCALAR", 5123, 34963),
+                "material": list(textures).index(mat)}
+        glb.doc["meshes"].append({"name": mat, "primitives": [prim]})
+        glb.doc["nodes"].append({"name": mat, "mesh": len(glb.doc["meshes"]) - 1})
+        lo, hi = np.minimum(lo, pos.min(axis=0)), np.maximum(hi, pos.max(axis=0))
+    if not textures:
+        return None
+    glb.doc["scenes"][0]["nodes"] = list(range(len(glb.doc["nodes"])))
+    return glb.bytes(), {"lo": [round(float(v), 3) for v in lo], "hi": [round(float(v), 3) for v in hi]}, textures
+
+
 def paint_layers(tex, slots="pstw"):
     """A material's textures as the page's paint layers: base, m1 (primary, secondary, trim), m2 (weapons, eyes, dirt).
 
