@@ -474,7 +474,7 @@ const SIM = (() => {
         malediction: Number(p.malediction) || 0, resist: p.resist || "Will", reachMax: 1, parry: null, malf: 0, cone: Number(p.cone) || 0, blast: Number(p.blast) || 0, explosion: Number(p.explosion) || 1 });
     }
     const u = {
-      side, name: spec.label || spec.template, template: spec.template, count: Math.max(1, spec.count | 0),
+      side, name: spec.label || spec.template, template: spec.template, count: Math.max(1, spec.count | 0), armourNames: spec.armour || [],
       // spare magazines carried for the main gun (loadout `mags`, default 4); when they're gone the gun is empty for good
       mags: spec.mags ?? 4,
       db, powers, grenades, dualPen, offPen, fp: st.fp || st.ht, thrCr: parseDamage("thr cr", dmgST.thr, dmgST.sw),
@@ -580,6 +580,29 @@ const SIM = (() => {
       ranged: u.ranged && { name: u.ranged.name, usage: u.ranged.usage, dmg: u.ranged.text, follow: u.ranged.followText, skill: u.ranged.level, acc: u.ranged.acc, rof: u.ranged.rof, range: u.ranged.range },
       melee: { name: "Ram", usage: "Ram", dmg: u.melee.text, skill: u.melee.level }, shield: null, db: 0, carried: null };
   }
+  // what a weapon looks like when it fires, for the 3D replay: beam colours, tracers, shells, flame
+  function wkind(w) {
+    if (!w) return "";
+    const n = (w.name || "") + " " + (w.usage || ""), d = w.dmg || {};
+    if (w.thrown) return "grenade";
+    if (w.cone) return /warp|soulfire|psy/i.test(n) ? "warpflame" : "flame";
+    if (/gauss|tesla|particle|death ray|transdimensional/i.test(n)) return "gauss";
+    if (w.natural) return "bio";
+    if (/lascannon|las-?talon|twin lascannon/i.test(n)) return "lascannon";
+    if (/las|hot-shot|hellgun|long-las/i.test(n)) return "las";
+    if (/plasma|ion|burst cannon|fusion/i.test(n)) return /fusion/i.test(n) ? "melta" : "plasma";
+    if (/melta|inferno/i.test(n)) return "melta";
+    if (/pulse|rail/i.test(n)) return "pulse";
+    if (/shuriken|scatter laser|bright lance|star cannon/i.test(n)) return /lance|laser|star/i.test(n) ? "lascannon" : "shuriken";
+    if (/splinter|dark lance|blaster/i.test(n)) return /lance|blaster/i.test(n) ? "dark" : "splinter";
+    if (/bolt|storm|combi/i.test(n)) return "bolt";
+    if (/battle cannon|mortar|missile|rokkit|krak|frag|launcher|demolisher|vanquisher/i.test(n) || d.ex) return "shell";
+    if (/flesh|venom|devourer|spinefist|deathspitter|barbed|bio|fleshborer|acid|spore/i.test(n) || w.natural) return "bio";
+    if (/assault cannon|autocannon|heavy stubber|big shoota|shoota|slugga|dakka|auto|stub|sniper|needle/i.test(n)) return "slug";
+    if (d.type === "burn") return "las";
+    return "slug";
+  }
+  const mkind = w => !w || /^(Punch|Kick|Ram)$/.test(w.name) ? "fist" : /fist|klaw|claw|talon/i.test(w.name) && !w.natural ? "fist" : w.natural ? "claw" : /chain/i.test(w.name) ? "chain" : /hammer|maul|mace/i.test(w.name) ? "hammer" : /axe|choppa/i.test(w.name) ? "axe" : /spear|halberd|glaive|staff|stave/i.test(w.name) ? "spear" : /power|force|relic|blade|sword|knife|scythe|warscythe|sword/i.test(w.name) ? (/power|force/i.test(w.name) ? "power" : "blade") : "blade";
   function describe(u) {
     if (u.veh) return describeVehicle(u);
     const tor = drAt(u.arm.dr, "torso") + drAt(u.nat, "torso"), eye = drAt(u.arm.dr, "eye") + natDRat(u, "eye");
@@ -2865,12 +2888,12 @@ const SIM = (() => {
       };
       if (!got) {
         L(`${m.id} fires ${n > 1 ? n + " " : ""}at ${t.id} (${d} yd${loc0 && loc0 !== "torso" ? ", aiming at the " + locName(loc0) : ""}${thru}, skill ${lvl}): misses`);
-        FX(["s", m.h.q, m.h.r, t.h.q, t.h.r, m.u.side, 0, m.ix, t.ix, lvl, 0, nb]);
+        FX(["s", m.h.q, m.h.r, t.h.q, t.h.r, m.u.side, 0, m.ix, t.ix, lvl, 0, nb, wkind(w)]);
         wild();
         return;
       }
       let hits = got;
-      FX(["s", m.h.q, m.h.r, t.h.q, t.h.r, m.u.side, got ? 1 : 0, m.ix, t.ix, lvl, got, nb]);
+      FX(["s", m.h.q, m.h.r, t.h.q, t.h.r, m.u.side, got ? 1 : 0, m.ix, t.ix, lvl, got, nb, wkind(w)]);
       L(`${m.id} ${w.usage === "power" ? "casts " + w.name + " at" : "fires " + (n > 1 ? n + " at" : "at")} ${t.id} (${d} yd${loc0 && loc0 !== "torso" ? ", aiming at the " + locName(loc0) : ""}${thru}, skill ${lvl}${braced ? ", braced" : ""}${nb > 1 ? (w.rcl === 1 && w.rclFlat ? ", then -1" : `, then -${w.mounted && w.rcl > 1 ? 1 : braced ? Math.max(1, Math.ceil(w.rcl / 2)) : w.rcl} a round${w.mounted && w.rcl > 1 ? " on the mount" : ""}`) + (firstB ? ` unaimed` : "") : ""}): ${hits} hit${hits > 1 ? "s" : ""}`);
       let dodged = 0, dMargin = 0;
       if (hits > crits && !w.malediction) {
@@ -2935,7 +2958,7 @@ const SIM = (() => {
       if (lvl < 3) { L(`${m.id} can't hope to hit ${target.id} (skill ${lvl})`); return; }
       const r = check(lvl);
       if (jamCheck(m, w, r) === true) return;
-      FX(["s", m.h.q, m.h.r, target.h.q, target.h.r, m.u.side, r.ok ? 1 : 0, m.ix, target.ix, lvl, r.ok ? 1 : 0, 1]);
+      FX(["s", m.h.q, m.h.r, target.h.q, target.h.r, m.u.side, r.ok ? 1 : 0, m.ix, target.ix, lvl, r.ok ? 1 : 0, 1, wkind(w)]);
       for (const x of caught) { const e = ev(x); e.shotAt = m; e.vol = Math.max(e.vol || 0, 1); e.near = true; }
       if (!r.ok) { L(`${m.id} ${w.usage === "power" ? "casts " + w.name + " at" : "fires at"} ${target.id} (${d} yd, skill ${lvl}): the ${w.name} goes wide`); return; }
       L(`${m.id} ${w.usage === "power" ? "casts " + w.name + " at" : "fires at"} ${target.id} (${d} yd, skill ${lvl}): the ${w.name} catches ${caught.map(x => x.id).join(", ")}`);
@@ -3981,7 +4004,7 @@ const SIM = (() => {
       const r = lvl < 3 ? { ok: false, margin: lvl - 10 } : check(lvl), raw = rollDamage(w.dmg);
       const d = hexDist(m.h, t.h), off = r.ok ? 0 : Math.max(1, Math.min(Math.ceil(d / 2), -r.margin)), at = off ? scatter(t.h, off) : t.h;
       L(`${m.id} fires the ${w.name} at ${t.id}'s position (${d} yd${own ? "" : ", called in by a spotter"}, skill ${lvl})${off ? `: ${off} yd off` : ": on target"}`);
-      FX(["s", m.h.q, m.h.r, at.q, at.r, m.u.side, r.ok ? 1 : 0, m.ix, t.ix, lvl, r.ok ? 1 : 0, 0]);
+      FX(["s", m.h.q, m.h.r, at.q, at.r, m.u.side, r.ok ? 1 : 0, m.ix, t.ix, lvl, r.ok ? 1 : 0, 0, "lob"]);
       explosion(m, w, at, raw);
     }
     // a foe that can hardly defend against a shot just now: stunned, down, exhausted, All-Out Attacking, held
@@ -4838,11 +4861,13 @@ const SIM = (() => {
         const at = off ? scatter(g.hex, off) : g.hex;
         const how = g.feet ? `at ${c.id}'s feet` : terr && terr.doorI[idx(key(g.hex.q, g.hex.r))] ? `through the doorway at ${c.id}` : `round the corner at ${c.id}`;
         L(`${m.id} lobs a ${w.name} ${how} (skill ${g.lvl})${off ? `: ${off} yd off` : ""}`);
+        if (m.h) FX(["s", m.h.q, m.h.r, at.q, at.r, m.u.side, 1, m.ix, c ? c.ix : -1, g.lvl, 1, 1, "grenade"]);
         landOn(m, w, at, raw);
         explosion(m, w, at, raw);
         return;
       }
       faceTo(m, c.h);
+      if (m.h && c.h) FX(["s", m.h.q, m.h.r, c.h.q, c.h.r, m.u.side, 1, m.ix, c.ix, g.lvl, 1, 1, "grenade"]);
       const r = g.lvl < 3 ? { ok: false, margin: g.lvl - 10, crit: false, fumble: false } : check(g.lvl);   // no roll below 3 (B344): a wild throw
       const raw = rollDamage(w.dmg);
       if (r.ok) {
@@ -5134,11 +5159,11 @@ const SIM = (() => {
     };
     // condition bits for the replay: 1 stunned, 2 prone, 4 kneeling, 8 held, 16 holding, 32 All-Out Defense,
     // 64 All-Out Attack, 128 aiming, 256 pinned, 512 waiting
-    const bits = m => (m.stunned ? 1 : 0) | (m.prone ? 2 : 0) | (m.kneel ? 4 : 0) | (m.grips.length ? 8 : 0) | (m.holding ? 16 : 0) | (m.aod ? 32 : 0) | (m.aoa ? 64 : 0) | (m.aimTurns > 0 ? 128 : 0) | (m.pinned ? 256 : 0) | (m.waiting ? 512 : 0);
+    const bits = m => (m.stunned ? 1 : 0) | (m.prone ? 2 : 0) | (m.kneel ? 4 : 0) | (m.grips.length ? 8 : 0) | (m.holding ? 16 : 0) | (m.aod ? 32 : 0) | (m.aoa ? 64 : 0) | (m.aimTurns > 0 ? 128 : 0) | (m.pinned ? 256 : 0) | (m.waiting ? 512 : 0) | (m.reload > 0 || (m.stn && m.stn.some(x => x.reloading > 0)) ? 1024 : 0);
     const snap = () => models.map(m => {
       const path = m.trail; m.trail = [];
       return m.h ? [m.h.q, m.h.r, m.u.side, m.state === "ok" ? (m.stunned ? 2 : m.prone ? 3 : 1) : 0, m.facing, Math.round(vit(m) * 100) / 100, path,
-        bits(m), m.u.shield ? Math.round(100 * Math.max(0, m.sp) / m.u.shield.sp) / 100 : -1, m.aimTarget && m.aimTurns > 0 ? m.aimTarget.ix : -1] : null;
+        bits(m), m.u.shield ? Math.round(100 * Math.max(0, m.sp) / m.u.shield.sp) / 100 : -1, m.aimTarget && m.aimTurns > 0 ? m.aimTarget.ix : -1, m.u.veh ? m.turretFacing ?? m.facing : null] : null;
     });
     let turn = 0;
     for (turn = 1; turn <= maxTurns; turn++) {
@@ -5276,7 +5301,7 @@ const SIM = (() => {
       winner, timeout, turns: turn - 1, log, frames, fx, terrain: frames && terr ? { floor: [...terr.floor], crates: [...terr.crates], doors: [...terr.doors], shut: [...startShut], events: tev, light: [...terr.floor].map(k => { const [q, r] = k.split(",").map(Number); return [k, darkAt({ q, r })]; }).filter(x => x[1]),
         elev: EL ? terr.hx.map((h, i) => [key(h.q, h.r), EL[i]]).filter(x => x[1]) : [], kind: terr.kind || "facility",
         wallTop: WT ? terr.hx.map((h, i) => [key(h.q, h.r), WT[i]]).filter((x, i) => terr.wallI[i] && x[1] < 99) : null } : null,
-      ridge: frames && RIDGE ? { ...RIDGE } : null, roster: models.map(m => { const u = m.u; return { id: m.id, side: u.side, unit: u.idx, template: u.template, faction: u.ai.name, speed: u.speed, move: u.move, hp: u.HP, st: u.st, dx: u.dx, dodge: u.dodge, parry: u.parry, dr: drAt(u.arm.dr, "torso") + drAt(u.nat, "torso"), sp: u.shield ? u.shield.sp : 0, sm: u.sm || 0, body: u.body || "upright",
+      ridge: frames && RIDGE ? { ...RIDGE } : null, roster: models.map(m => { const u = m.u; return { id: m.id, side: u.side, unit: u.idx, template: u.template, faction: u.ai.name, speed: u.speed, move: u.move, hp: u.HP, st: u.st, dx: u.dx, dodge: u.dodge, parry: u.parry, dr: drAt(u.arm.dr, "torso") + drAt(u.nat, "torso"), sp: u.shield ? u.shield.sp : 0, sm: u.sm || 0, body: u.body || "upright", rk: wkind(u.ranged), mk: u.veh ? "" : mkind(u.melee), kit: [((u.ranged && u.ranged.name) || ""), ((u.melee && u.melee.name) || ""), ...(u.armourNames || [])].join("|"), veh: u.veh ? u.veh.name : "", vlocs: u.veh ? u.veh.locs : null,
         ranged: u.ranged ? `${u.ranged.name} (${u.ranged.text}${u.ranged.followText ? " + " + u.ranged.followText : ""})` : "", melee: `${u.melee.name} (${u.melee.text})`, kills: m.kills, fate: m.state }; }),
       units: units.map(u => ({
         name: u.name, side: u.side, count: u.count, routed: u.routed,
@@ -5545,6 +5570,7 @@ if (typeof document !== "undefined") (() => {
           <div class="vtt-tools" role="toolbar" aria-label="Map tools">
             <button type="button" data-tool="3d" aria-pressed="false" title="Show the battle in 3D (loads three.js)">3D</button>
             <button type="button" data-tool="walls" aria-pressed="false" title="Lower the walls to see into the rooms" hidden>Low walls</button>
+            <button type="button" data-tool="follow" aria-pressed="false" title="Keep the camera on the selected model" hidden>Follow</button>
             <button type="button" data-tool="fit" title="Fit the battle to the view">Fit</button>
             <button type="button" data-tool="grid" aria-pressed="true" title="Show the hex grid">Grid</button>
             <button type="button" data-tool="trails" aria-pressed="true" title="Show each model's path this second">Paths</button>
@@ -5636,9 +5662,13 @@ if (typeof document !== "undefined") (() => {
   const BADGES = [[1, "S", "#e3b341"], [2, "P", "#b9b4a8"], [4, "K", "#b9b4a8"], [8, "G", "#e0564b"], [16, "H", "#e0564b"], [32, "D", "#58b6e8"], [64, "A", "#e0564b"], [512, "W", "#b9b4a8"], [256, "N", "#e0564b"]];
 
   // ================= the 3D view: the same replay drawn with three.js, loaded on demand from cdnjs =================
-  // Presentation only: the engine stays a flat hex map, one yard per hex. Height comes from each model's Size
-  // Modifier and body posture; walls and doors are extruded; darkness shades the floor. Drag to orbit, right-drag
-  // or Shift-drag (two fingers) to pan, wheel or pinch to zoom, click a figure for its sheet.
+  // Presentation only: the engine stays a flat hex map, one yard per hex. Every model is a painted miniature on a
+  // round base (the side's colour on the rim), built from simple shapes by faction (Marines, Guard, Orks, Necrons,
+  // Tyranids, T'au, Aeldari...) and jointed so it can walk, aim, recoil, swing, dodge, flinch, kneel, go prone and
+  // fall; vehicles have tracks that roll, turrets that turn and guns that recoil. Shots are drawn by weapon (las and
+  // gauss beams, bolt and plasma rounds, flame, shells), with particles, light flashes, bloom and scorch marks.
+  // Textures are painted on canvases at load; no image or model files. Drag to orbit, right-drag or Shift-drag (two
+  // fingers) to pan, wheel or pinch to zoom, click a figure for its sheet, Follow keeps the camera on it.
   const THREE_URL = "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js";
   let threeLoading = null;
   const loadThree = () => window.THREE ? Promise.resolve(window.THREE) : (threeLoading = threeLoading || new Promise((ok, no) => {
@@ -5656,298 +5686,981 @@ if (typeof document !== "undefined") (() => {
   // height by Size Modifier in feet (as the engine's height rules), SM 0 = 6 ft
   const HFT3 = { "-4": 1.5, "-3": 2, "-2": 3, "-1": 4.5, "0": 6, "1": 9, "2": 15, "3": 21, "4": 30, "5": 45, "6": 60 };
   function makeView3D(THREE, o) {
-    const { host, fr, fx, T, ros, P, posAt, fallen } = o;
+    const { host, fr, fx, T, ros, P, posAt } = o;
     // ground height (yards; a 3D unit is about a yard upward) under a hex, or under a world point
     const zOf = o.zOf || (() => 0);
     const zXY = (x, y) => { const q = x / 1.5, r = y / SQ3 - q / 2; let rx = Math.round(q), ry = Math.round(-q - r), rz = Math.round(r); const dx = Math.abs(rx - q), dy = Math.abs(ry + q + r), dz = Math.abs(rz - r); if (dx > dy && dx > dz) rx = -ry - rz; else if (dy <= dz) rz = -rx - ry; return zOf(rx, rz); };
     let renderer;
-    try { renderer = new THREE.WebGLRenderer({ antialias: true }); } catch (e) { throw new Error("this browser can't draw WebGL"); }
+    try { renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" }); } catch (e) { throw new Error("this browser can't draw WebGL"); }
     renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
     renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     host.appendChild(renderer.domElement);
     renderer.domElement.style.display = "block"; renderer.domElement.style.touchAction = "none";
+    const big = ros.length > 120;   // a big battle: fewer shadows and parts, so it still runs smoothly
     const scene = new THREE.Scene();
-    const bgc = T ? 0x14161a : 0x2a2822;
-    scene.background = new THREE.Color(bgc); scene.fog = new THREE.Fog(bgc, 70, 190);
-    const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 600);
+    const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 900);
     const disposables = [];
     const keep = x => { disposables.push(x); return x; };
-    const mat = (c, extra = {}) => keep(new THREE.MeshStandardMaterial({ color: c, roughness: .8, metalness: .1, ...extra }));
-    // world: 2D (x, y) -> 3D (x, height, y)
+    const rng = seed => () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
     const W3 = (x, y, h = 0) => new THREE.Vector3(x, h, y);
-    // ---- bounds and lights
+
+    // ================= procedural textures (painted with a 2D canvas, no image files)
+    const canvasTex = (w, h, draw, srgb = true) => {
+      const c = document.createElement("canvas"); c.width = w; c.height = h; const g = c.getContext("2d"); draw(g, w, h);
+      const tex = keep(new THREE.CanvasTexture(c)); if (srgb) tex.encoding = THREE.sRGBEncoding;
+      tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy()); return tex;
+    };
+    const speckle = (g, w, h, R, n, cols, rmin, rmax, a = 1) => { for (let i = 0; i < n; i++) { g.globalAlpha = a * (.4 + R() * .6); g.fillStyle = cols[Math.floor(R() * cols.length)]; const r = rmin + R() * (rmax - rmin); g.beginPath(); g.ellipse(R() * w, R() * h, r, r * (.6 + R() * .4), R() * 3, 0, 7); g.fill(); } g.globalAlpha = 1; };
+    const TEX = {
+      dirt: canvasTex(512, 512, (g, w, h) => { const R = rng(11); g.fillStyle = "#5b5040"; g.fillRect(0, 0, w, h); speckle(g, w, h, R, 900, ["#4c4234", "#685a47", "#55493a", "#3f372c", "#71634e"], 6, 28, .35); speckle(g, w, h, R, 1600, ["#7d6e58", "#2f2a22", "#8b7c63"], 1, 3.5, .8); g.strokeStyle = "rgba(30,25,20,.35)"; for (let i = 0; i < 18; i++) { g.lineWidth = 1 + R() * 1.5; g.beginPath(); let x = R() * w, y = R() * h; g.moveTo(x, y); for (let k = 0; k < 6; k++) { x += (R() - .5) * 40; y += (R() - .5) * 40; g.lineTo(x, y); } g.stroke(); } }),
+      sand: canvasTex(256, 256, (g, w, h) => { const R = rng(5); g.fillStyle = "#a8936c"; g.fillRect(0, 0, w, h); speckle(g, w, h, R, 1400, ["#c4ae84", "#8c7854", "#d8c49a", "#6f5f44"], .8, 2.4, .9); for (let i = 0; i < 9; i++) { const x = R() * w, y = R() * h; g.strokeStyle = R() < .5 ? "#7d8a3a" : "#a6a24a"; g.lineWidth = 1.4; for (let k = 0; k < 9; k++) { g.beginPath(); g.moveTo(x, y); g.lineTo(x + (R() - .5) * 14, y + (R() - .5) * 14); g.stroke(); } } }),
+      stone: canvasTex(512, 512, (g, w, h) => { const R = rng(7); g.fillStyle = "#5f594f"; g.fillRect(0, 0, w, h); for (let y = 0; y < h; y += 42) { let x = -R() * 60; while (x < w) { const bw = 60 + R() * 70, t = Math.floor(120 + R() * 40); g.fillStyle = `rgb(${t + 10},${t + 4},${t - 8})`; g.fillRect(x + 3, y + 3, bw - 6, 36); speckle(g, w, h, R, 0, [], 0, 0); g.fillStyle = "rgba(0,0,0,.12)"; g.fillRect(x + 3, y + 30, bw - 6, 9); x += bw; } } speckle(g, w, h, R, 2200, ["#3e3a33", "#a59d8e", "#2f2b26"], .8, 2.5, .55); const gr = g.createLinearGradient(0, 0, 0, h); gr.addColorStop(0, "rgba(0,0,0,0)"); gr.addColorStop(1, "rgba(20,16,10,.35)"); g.fillStyle = gr; g.fillRect(0, 0, w, h); }),
+      plate: canvasTex(256, 256, (g, w, h) => { const R = rng(3); g.fillStyle = "#575c63"; g.fillRect(0, 0, w, h); for (const [x, y] of [[0, 0], [128, 0], [0, 128], [128, 128]]) { const t = 82 + Math.floor(R() * 16); g.fillStyle = `rgb(${t},${t + 4},${t + 10})`; g.fillRect(x + 3, y + 3, 122, 122); g.fillStyle = "#2c2f34"; for (const [a, b] of [[10, 10], [118, 10], [10, 118], [118, 118]]) { g.beginPath(); g.arc(x + a, y + b, 3, 0, 7); g.fill(); } } speckle(g, w, h, R, 500, ["#3a3d42", "#7d838b", "#6b5a44"], 1, 6, .35); g.strokeStyle = "rgba(255,255,255,.08)"; for (let i = 0; i < 20; i++) { g.beginPath(); const x = R() * w, y = R() * h; g.moveTo(x, y); g.lineTo(x + (R() - .5) * 60, y + (R() - .5) * 8); g.stroke(); } }),
+      grate: canvasTex(128, 128, (g, w, h) => { g.fillStyle = "#1f2226"; g.fillRect(0, 0, w, h); g.fillStyle = "#4b5057"; for (let i = 0; i < w; i += 16) { g.fillRect(i, 0, 5, h); g.fillRect(0, i, w, 5); } }),
+      panel: canvasTex(256, 256, (g, w, h) => { const R = rng(9); g.fillStyle = "#30353c"; g.fillRect(0, 0, w, h); for (let x = 0; x < w; x += 64) { const t = 44 + Math.floor(R() * 12); g.fillStyle = `rgb(${t},${t + 4},${t + 10})`; g.fillRect(x + 2, 4, 60, h * .78); } g.fillStyle = "#14161a"; g.fillRect(0, h * .82, w, h * .18); for (let x = -64; x < w + 64; x += 32) { g.fillStyle = "#d4a52a"; g.beginPath(); g.moveTo(x, h); g.lineTo(x + 16, h * .82); g.lineTo(x + 32, h * .82); g.lineTo(x + 16, h); g.closePath(); g.fill(); } speckle(g, w, h, R, 300, ["#1b1d21", "#5a4632"], 1, 5, .35); }),
+      wood: canvasTex(128, 128, (g, w, h) => { const R = rng(4); g.fillStyle = "#7a5a35"; g.fillRect(0, 0, w, h); for (let y = 0; y < h; y += 21) { g.fillStyle = `rgba(0,0,0,${.08 + R() * .1})`; g.fillRect(0, y, w, 2); } g.strokeStyle = "#4e3a22"; g.lineWidth = 10; g.strokeRect(5, 5, w - 10, h - 10); g.beginPath(); g.moveTo(8, 8); g.lineTo(w - 8, h - 8); g.stroke(); speckle(g, w, h, R, 200, ["#5a4024", "#93714a"], 1, 3, .5); }),
+      metal: canvasTex(128, 128, (g, w, h) => { const R = rng(6); g.fillStyle = "#7d7e78"; g.fillRect(0, 0, w, h); g.fillStyle = "#5d5e59"; for (let x = 8; x < w; x += 24) g.fillRect(x, 0, 6, h); speckle(g, w, h, R, 120, ["#8a5a32", "#6b4426", "#9a9a92"], 2, 9, .45); }),
+      track: canvasTex(64, 64, (g, w, h) => { g.fillStyle = "#1b1b1d"; g.fillRect(0, 0, w, h); g.fillStyle = "#3b3b3f"; for (let x = 0; x < w; x += 16) g.fillRect(x, 0, 8, h); g.fillStyle = "#57575c"; for (let x = 2; x < w; x += 16) g.fillRect(x, h * .4, 4, h * .2); }),
+      glow: canvasTex(64, 64, (g, w, h) => { const gr = g.createRadialGradient(32, 32, 0, 32, 32, 32); gr.addColorStop(0, "rgba(255,255,255,1)"); gr.addColorStop(.25, "rgba(255,255,255,.8)"); gr.addColorStop(1, "rgba(255,255,255,0)"); g.fillStyle = gr; g.fillRect(0, 0, w, h); }, false),
+      smoke: canvasTex(64, 64, (g, w, h) => { const R = rng(8); for (let i = 0; i < 14; i++) { const x = 18 + R() * 28, y = 18 + R() * 28, r = 8 + R() * 14, gr = g.createRadialGradient(x, y, 0, x, y, r); gr.addColorStop(0, "rgba(255,255,255,.55)"); gr.addColorStop(1, "rgba(255,255,255,0)"); g.fillStyle = gr; g.fillRect(0, 0, w, h); } }, false),
+      scorch: canvasTex(128, 128, (g, w, h) => { const R = rng(2); const gr = g.createRadialGradient(64, 64, 4, 64, 64, 62); gr.addColorStop(0, "rgba(10,8,6,.9)"); gr.addColorStop(.55, "rgba(20,16,12,.6)"); gr.addColorStop(1, "rgba(20,16,12,0)"); g.fillStyle = gr; g.fillRect(0, 0, w, h); speckle(g, w, h, R, 80, ["#0b0a08"], 1, 4, .6); }),
+      pool: canvasTex(64, 64, (g, w, h) => { const gr = g.createRadialGradient(32, 32, 2, 32, 32, 30); gr.addColorStop(0, "rgba(255,255,255,.95)"); gr.addColorStop(.7, "rgba(255,255,255,.8)"); gr.addColorStop(1, "rgba(255,255,255,0)"); g.fillStyle = gr; g.beginPath(); g.ellipse(32, 32, 30, 22, .4, 0, 7); g.fill(); }, false),
+    };
+    TEX.track.encoding = THREE.sRGBEncoding;
+
+    // ================= materials: painted plastic, metallic paints a little shiny
+    const MC = new Map();
+    // paint colours are sRGB; the renderer works in linear light and encodes once at the end
+    const lin = c => new THREE.Color(c).convertSRGBToLinear();
+    const M = (c, o2 = {}) => { const k = c + "|" + Object.entries(o2).map(([a, b]) => a + ":" + (b && b.isTexture ? b.uuid : b)).join(","); let m = MC.get(k); if (!m) { m = keep(new THREE.MeshStandardMaterial({ color: lin(c), roughness: o2.r ?? .62, metalness: o2.m ?? .05, emissive: lin(o2.e ?? 0x000000), emissiveIntensity: o2.ei ?? 1, map: o2.map || null, transparent: !!o2.tr, opacity: o2.op ?? 1, side: o2.ds ? THREE.DoubleSide : THREE.FrontSide })); MC.set(k, m); } return m; };
+    const METAL = c => M(c, { r: .38, m: .65 });
+    const GLOW = c => M(c, { e: c, ei: 2.2, r: .4 });
+
+    // ================= bounds, sky, light
     const pts = [];
     fr.forEach(f => f.forEach(x => { if (x) pts.push(P(x[0], x[1])); }));
     if (T) for (const k of T.floor) { const [q, r] = k.split(",").map(Number); pts.push(P(q, r)); }
     const bx0 = Math.min(...pts.map(p => p[0])) - 6, bx1 = Math.max(...pts.map(p => p[0])) + 6, by0 = Math.min(...pts.map(p => p[1])) - 6, by1 = Math.max(...pts.map(p => p[1])) + 6;
     const cx = (bx0 + bx1) / 2, cy = (by0 + by1) / 2, span = Math.max(bx1 - bx0, by1 - by0);
-    scene.add(new THREE.HemisphereLight(0xd6dde8, 0x3a352c, T ? .5 : .75));
-    const sun = new THREE.DirectionalLight(0xfff1dc, T ? .55 : .95);
-    sun.position.set(cx - span * .4, span * .9, cy - span * .3); sun.target.position.set(cx, 0, cy);
-    sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048);
+    const indoor = T && T.kind !== "ruins";
+    const horizon = indoor ? 0x15171b : 0x8a7d6c;
+    scene.fog = new THREE.Fog(lin(horizon), Math.max(60, span * .9), Math.max(200, span * 2.6));
+    if (indoor) scene.background = lin(0x101216);
+    else {
+      // a war-torn sky: dust-brown at the horizon, smoky blue-grey above
+      const sky = new THREE.Mesh(keep(new THREE.SphereGeometry(600, 32, 16)), keep(new THREE.ShaderMaterial({ side: THREE.BackSide, depthWrite: false, fog: false,
+        uniforms: { top: { value: lin(0x2e3846) }, hor: { value: lin(horizon) }, bot: { value: lin(0x3a3228) } },
+        vertexShader: "varying vec3 vP; void main(){ vP = position; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }",
+        fragmentShader: "uniform vec3 top; uniform vec3 hor; uniform vec3 bot; varying vec3 vP; void main(){ float h = normalize(vP).y; vec3 c = h > 0.0 ? mix(hor, top, pow(min(1.0, h * 1.6), 0.7)) : mix(hor, bot, min(1.0, -h * 4.0)); gl_FragColor = vec4(c, 1.0); }" })));
+      sky.position.set(cx, 0, cy); scene.add(sky);
+    }
+    scene.add(new THREE.HemisphereLight(lin(indoor ? 0xaab4c4 : 0xc8d4e6), lin(0x4a3f30), indoor ? 1.1 : 1.0));
+    const sun = new THREE.DirectionalLight(lin(indoor ? 0xf2f0ea : 0xffdcb0), indoor ? 2.2 : 3.0);
+    sun.position.set(cx - span * .45, span * .9, cy - span * .35); sun.target.position.set(cx, 0, cy);
+    sun.castShadow = true; sun.shadow.mapSize.set(big ? 2048 : 4096, big ? 2048 : 4096); sun.shadow.bias = -0.0008; sun.shadow.normalBias = .06;
     Object.assign(sun.shadow.camera, { left: -span * .75, right: span * .75, top: span * .75, bottom: -span * .75, near: 1, far: span * 3 });
     scene.add(sun, sun.target);
-    // ---- hex prisms (flat-topped, corner 0 on +x, as the 2D map)
+    const fill = new THREE.DirectionalLight(lin(0x8fa8d0), .6); fill.position.set(cx + span, span * .4, cy + span * .6); scene.add(fill);
+
+    // ================= the battlefield
     const hexGeo = (h, k = 1) => {
       const sh = new THREE.Shape();
       for (let i = 0; i < 6; i++) { const x = Math.cos(i * Math.PI / 3) * k, y = Math.sin(i * Math.PI / 3) * k; i ? sh.lineTo(x, y) : sh.moveTo(x, y); }
       const g = new THREE.ExtrudeGeometry(sh, { depth: h, bevelEnabled: false }); g.rotateX(-Math.PI / 2); return keep(g);
     };
-    const m4 = new THREE.Matrix4(), col = new THREE.Color();
-    const inst = (geo, material, list, place) => {
+    const m4 = new THREE.Matrix4(), col = new THREE.Color(), q0 = new THREE.Quaternion(), yAx = new THREE.Vector3(0, 1, 0);
+    const inst = (geo, material, list, place, shadow = true) => {
       const im = new THREE.InstancedMesh(geo, material, Math.max(1, list.length));
       im.count = list.length; list.forEach((it, i) => place(im, it, i)); im.instanceMatrix.needsUpdate = true;
       if (im.instanceColor) im.instanceColor.needsUpdate = true;
-      im.receiveShadow = true; scene.add(im); return im;
+      im.receiveShadow = true; im.castShadow = shadow && !big; scene.add(im); return im;
     };
     const keyHex = k => k.split(",").map(Number);
     const dark = new Map(T && T.light ? T.light : []);
     const shade = v => v == null ? 1 : v <= -7 ? .42 : v <= -3 ? .62 : .82;
+    const chunkGeo = keep(new THREE.DodecahedronGeometry(.22, 0));
     let walls = null, wallList = [], wallH = [], doorMesh = null, doorList = [], rubble = [];
     const gridLines = [];
     const floorSet = T ? new Set(T.floor) : null;
+    const R0 = rng(31);
     if (T) {
-      const floor = [...T.floor];
-      inst(hexGeo(.15, .985), mat(0xffffff), floor, (im, k, i) => {
+      const floor = [...T.floor], ruins = T.kind === "ruins";
+      const fTex = ruins ? TEX.dirt : TEX.plate;
+      inst(hexGeo(.15, .995), M(0xffffff, { map: fTex, r: ruins ? .95 : .7, m: ruins ? 0 : .25 }), floor, (im, k, i) => {
         const [q, r] = keyHex(k), [x, y] = P(q, r);
         m4.makeTranslation(x, zOf(q, r) - .15, y); im.setMatrixAt(i, m4);
-        const h = hash(q, r), base = new THREE.Color(T.kind === "ruins" ? (h < .5 ? 0x67625a : 0x5f5a52) : h < .5 ? 0x5d6167 : 0x54585e).multiplyScalar(shade(dark.get(k)));
-        im.setColorAt(i, base);
-      });
-      // walls: every hex beside the floor that isn't floor
-      // the raised deck's sides: a solid column under each gantry, stair and dock hex
+        const h = hash(q, r);
+        im.setColorAt(i, col.setScalar((.85 + .15 * h) * shade(dark.get(k))));
+      }, false);
+      // raised decks and upper floors: solid under each high hex
       const up = floor.filter(k => zOf(...keyHex(k)) > 0);
-      if (up.length) inst(hexGeo(1, .985), mat(0x6c7178, { roughness: .7, metalness: .3 }), up, (im, k, i) => { const [q, r] = keyHex(k), [x, y] = P(q, r); m4.compose(W3(x, y, -.15), new THREE.Quaternion(), new THREE.Vector3(1, zOf(q, r), 1)); im.setMatrixAt(i, m4); }).castShadow = true;
+      if (up.length) inst(hexGeo(1, .995), ruins ? M(0x8d867a, { map: TEX.stone, r: .9 }) : M(0x6c7178, { r: .6, m: .4 }), up, (im, k, i) => { const [q, r] = keyHex(k), [x, y] = P(q, r); m4.compose(W3(x, y, -.15), q0, new THREE.Vector3(1, zOf(q, r), 1)); im.setMatrixAt(i, m4); });
       const ws = new Set();
       for (const k of floor) { const [q, r] = keyHex(k); for (const [dq, dr] of DIRN) { const k2 = (q + dq) + "," + (r + dr); if (!floorSet.has(k2)) ws.add(k2); } }
       wallList = [...ws];
-      // each wall's height: a facility's walls clear its highest deck; a ruin's stand as tall as they're left
       const wTop = new Map(T.wallTop || []), wFull = 2.4 + Math.max(0, ...floor.map(k => zOf(...keyHex(k))));
       wallH = wallList.map(k => wTop.get(k) || wFull);
-      walls = inst(hexGeo(1), mat(T.kind === "ruins" ? 0x9a9184 : 0x2c3037, { roughness: .9 }), wallList, (im, k, i) => { const [q, r] = keyHex(k), [x, y] = P(q, r); m4.compose(W3(x, y, 0), new THREE.Quaternion(), new THREE.Vector3(1, wallH[i], 1)); im.setMatrixAt(i, m4); });
-      walls.castShadow = true;
+      walls = inst(hexGeo(1), ruins ? M(0xb0a898, { map: TEX.stone, r: .92 }) : M(0x9aa2ad, { map: TEX.panel, r: .55, m: .35 }), wallList, (im, k, i) => { const [q, r] = keyHex(k), [x, y] = P(q, r); m4.compose(W3(x, y, 0), q0, new THREE.Vector3(1, wallH[i], 1)); im.setMatrixAt(i, m4); });
+      if (ruins) {
+        // broken tops: rubble chunks along the jagged edge, rebar sticking out, and spill at the foot of the walls
+        const tops = [], spill = [], bars = [];
+        wallList.forEach((k, i) => {
+          const [q, r] = keyHex(k), [x, y] = P(q, r), h = wallH[i];
+          if (h < wFull - .05) { for (let j = 0; j < 3; j++) tops.push([x + (R0() - .5) * 1.3, h + R0() * .2, y + (R0() - .5) * 1.3, .9 + R0() * 1.3]); if (R0() < .5) bars.push([x + (R0() - .5) * .8, h, y + (R0() - .5) * .8]); }
+          for (const [dq, dr] of DIRN) { const k2 = (q + dq) + "," + (r + dr); if (floorSet.has(k2) && R0() < .35) { const [x2, y2] = P(q + dq, r + dr); for (let j = 0; j < 3; j++) spill.push([x2 + (x - x2) * .45 + (R0() - .5) * .7, zOf(q + dq, r + dr) + .05, y2 + (y - y2) * .45 + (R0() - .5) * .7, .6 + R0() * 1.1]); } }
+        });
+        const rotQ = new THREE.Quaternion(), e3 = new THREE.Euler();
+        inst(chunkGeo, M(0x8d867a, { map: TEX.stone, r: .95 }), [...tops, ...spill], (im, [x, h, y, s], i) => { e3.set(R0() * 3, R0() * 3, R0() * 3); rotQ.setFromEuler(e3); m4.compose(new THREE.Vector3(x, h, y), rotQ, new THREE.Vector3(s, s * .7, s)); im.setMatrixAt(i, m4); im.setColorAt(i, col.setScalar(.75 + R0() * .35)); });
+        const barGeo = keep(new THREE.CylinderGeometry(.025, .025, 1, 5));
+        inst(barGeo, M(0x5a3a22, { r: .7, m: .5 }), bars.flatMap(b => [0, 1, 2].map(j => [b[0] + j * .12, b[1], b[2] + j * .05])), (im, [x, h, y], i) => { e3.set((R0() - .5) * .8, 0, (R0() - .5) * .8); rotQ.setFromEuler(e3); m4.compose(new THREE.Vector3(x, h + .3, y), rotQ, new THREE.Vector3(1, .5 + R0() * .6, 1)); im.setMatrixAt(i, m4); });
+      } else {
+        // facility: grated walkways on the decks, light strips along the wall tops
+        if (up.length) inst(hexGeo(.02, .8), M(0xffffff, { map: TEX.grate, r: .6, m: .5 }), up, (im, k, i) => { const [q, r] = keyHex(k), [x, y] = P(q, r); m4.makeTranslation(x, zOf(q, r) + .005, y); im.setMatrixAt(i, m4); }, false);
+        const strips = wallList.filter((k, i) => hash(...keyHex(k)) < .18);
+        inst(keep(new THREE.BoxGeometry(.6, .06, .6)), GLOW(0xcfe6ff), strips, (im, k, i) => { const [q, r] = keyHex(k), [x, y] = P(q, r); m4.makeTranslation(x, wFull + .03, y); im.setMatrixAt(i, m4); }, false);
+      }
       const crates = [...(T.crates || [])];
       const cGeo = keep(new THREE.BoxGeometry(1.15, 1, 1.15));
-      for (const [kind, c] of [["light", 0x7a5a35], ["heavy", 0x8a8a84]]) {
+      for (const [kind, mt] of [["light", M(0xffffff, { map: TEX.wood, r: .8 })], ["heavy", M(0xffffff, { map: TEX.metal, r: .55, m: .45 })]]) {
         const list = crates.filter(([, v]) => v === kind);
-        const im = inst(cGeo, mat(c), list, (im2, [k], i) => { const [q, r] = keyHex(k), [x, y] = P(q, r), h = kind === "heavy" ? 1.1 : .85; m4.compose(W3(x, y, zOf(q, r) + h / 2), new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), hash(q, r) * .6), new THREE.Vector3(1, h, 1)); im2.setMatrixAt(i, m4); });
-        im.castShadow = true;
+        inst(cGeo, mt, list, (im2, [k], i) => { const [q, r] = keyHex(k), [x, y] = P(q, r), h = kind === "heavy" ? 1.1 : .85; m4.compose(W3(x, y, zOf(q, r) + h / 2), new THREE.Quaternion().setFromAxisAngle(yAx, hash(q, r) * .6), new THREE.Vector3(1, h, 1)); im2.setMatrixAt(i, m4); });
       }
       doorList = [...(T.doors || [])];
-      doorMesh = inst(hexGeo(2.3, .9), mat(0xffffff, { metalness: .4 }), doorList, (im, k, i) => { const [q, r] = keyHex(k), [x, y] = P(q, r); m4.makeTranslation(x, 0, y); im.setMatrixAt(i, m4); im.setColorAt(i, col.set(0x9aa1a8)); });
-      doorMesh.castShadow = true;
-      const rGeo = keep(new THREE.DodecahedronGeometry(.22)), rMat = mat(0x4a4e55);
+      doorMesh = inst(hexGeo(2.3, .9), M(0xffffff, { m: .45, r: .45 }), doorList, (im, k, i) => { const [q, r] = keyHex(k), [x, y] = P(q, r); m4.makeTranslation(x, 0, y); im.setMatrixAt(i, m4); im.setColorAt(i, col.set(0x9aa1a8)); });
+      const rMat = M(0x4a4e55, { r: .9 });
       for (const [tt, k, what] of T.events || []) if (what === "broken") {
         const [q, r] = keyHex(k), [x, y] = P(q, r), g = new THREE.Group();
-        for (let i = 0; i < 7; i++) { const m = new THREE.Mesh(rGeo, rMat); m.position.set(x + (hash(q + i, r) - .5) * 1.2, .12, y + (hash(q, r + i) - .5) * 1.2); m.scale.setScalar(.6 + hash(i, q)); m.castShadow = true; g.add(m); }
+        for (let i = 0; i < 9; i++) { const m = new THREE.Mesh(chunkGeo, rMat); m.position.set(x + (hash(q + i, r) - .5) * 1.3, .1, y + (hash(q, r + i) - .5) * 1.3); m.scale.setScalar(.6 + hash(i, q) * 1.2); m.rotation.set(i, i * 2, 0); m.castShadow = true; g.add(m); }
         g.visible = false; scene.add(g); rubble.push({ t: tt, k, g });
       }
     } else {
-      // open ground: churned earth, the hexes faintly shaded
-      const ground = new THREE.Mesh(keep(new THREE.PlaneGeometry(span * 4, span * 4)), mat(0x5a5344, { roughness: 1 }));
+      // open ground: churned earth, craters, rocks and debris
+      const gt = TEX.dirt; gt.repeat.set(span / 9, span / 9);
+      const ground = new THREE.Mesh(keep(new THREE.PlaneGeometry(span * 6, span * 6)), M(0xffffff, { map: gt, r: 1 }));
+      gt.repeat.set(span * 6 / 12, span * 6 / 12);
       ground.rotation.x = -Math.PI / 2; ground.position.set(cx, -.02, cy); ground.receiveShadow = true; scene.add(ground);
       const tiles = [];
       for (let q = Math.floor(bx0 / 1.5) - 1; q <= Math.ceil(bx1 / 1.5) + 1; q++) for (let r = Math.floor(by0 / SQ3 - q / 2) - 1; r <= Math.ceil(by1 / SQ3 - q / 2) + 1; r++) tiles.push([q, r]);
       const hill = tiles.filter(([q, r]) => zOf(q, r) > 0);
-      if (hill.length) inst(hexGeo(1, .995), mat(0xffffff, { roughness: 1 }), hill, (im, [q, r], i) => { const [x, y] = P(q, r); m4.compose(W3(x, y, -.02), new THREE.Quaternion(), new THREE.Vector3(1, zOf(q, r), 1)); im.setMatrixAt(i, m4); im.setColorAt(i, new THREE.Color(0x6a6050).multiplyScalar(.85 + .3 * hash(q, r))); });
-      inst(hexGeo(.02, .985), mat(0xffffff, { roughness: 1 }), tiles, (im, [q, r], i) => { const [x, y] = P(q, r); m4.makeTranslation(x, zOf(q, r) - .01, y); im.setMatrixAt(i, m4); im.setColorAt(i, new THREE.Color(0x5a5344).multiplyScalar(.9 + hash(q, r) * .16)); });
+      if (hill.length) inst(hexGeo(1, .995), M(0xffffff, { map: TEX.dirt, r: 1 }), hill, (im, [q, r], i) => { const [x, y] = P(q, r); m4.compose(W3(x, y, -.02), q0, new THREE.Vector3(1, zOf(q, r), 1)); im.setMatrixAt(i, m4); im.setColorAt(i, col.setScalar(.8 + .3 * hash(q, r))); });
+      const R1 = rng(17), rocks = [];
+      for (let i = 0; i < Math.min(400, span * 3); i++) rocks.push([cx + (R1() - .5) * span * 1.6, cy + (R1() - .5) * span * 1.6, .25 + R1() * R1() * 1.4]);
+      const e3 = new THREE.Euler(), rq = new THREE.Quaternion();
+      inst(chunkGeo, M(0x6f675a, { r: .95 }), rocks, (im, [x, y, s], i) => { e3.set(R1() * 3, R1() * 3, R1() * 3); rq.setFromEuler(e3); m4.compose(new THREE.Vector3(x, zXY(x, y) + s * .05, y), rq, new THREE.Vector3(s, s * .55, s)); im.setMatrixAt(i, m4); im.setColorAt(i, col.setScalar(.7 + R1() * .4)); });
+      const cr = [];
+      for (let i = 0; i < Math.max(6, span / 6); i++) cr.push([cx + (R1() - .5) * span * 1.4, cy + (R1() - .5) * span * 1.4, 1.5 + R1() * 3]);
+      const cMat = keep(new THREE.MeshStandardMaterial({ map: TEX.scorch, transparent: true, depthWrite: false, roughness: 1, polygonOffset: true, polygonOffsetFactor: -1 }));
+      for (const [x, y, s] of cr) { const m = new THREE.Mesh(keep(new THREE.PlaneGeometry(s * 2, s * 2)), cMat); m.rotation.x = -Math.PI / 2; m.position.set(x, zXY(x, y) + .02, y); m.receiveShadow = true; scene.add(m); }
     }
     // hex grid lines on the floor
     {
       const pos = [];
       for (let q = Math.floor(bx0 / 1.5) - 1; q <= Math.ceil(bx1 / 1.5) + 1; q++) for (let r = Math.floor(by0 / SQ3 - q / 2) - 1; r <= Math.ceil(by1 / SQ3 - q / 2) + 1; r++) {
         if (floorSet && !floorSet.has(q + "," + r)) continue;
-        const [x, y] = P(q, r);
-        const z = zOf(q, r) + .012;
+        const [x, y] = P(q, r), z = zOf(q, r) + .015;
         for (let i = 0; i < 3; i++) { const a = i * Math.PI / 3, b = (i + 1) * Math.PI / 3; pos.push(x + Math.cos(a), z, y + Math.sin(a), x + Math.cos(b), z, y + Math.sin(b)); }
       }
       const g = keep(new THREE.BufferGeometry()); g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
-      const ls = new THREE.LineSegments(g, keep(new THREE.LineBasicMaterial({ color: T ? 0xffffff : 0x000000, transparent: true, opacity: T ? .07 : .2 })));
+      const ls = new THREE.LineSegments(g, keep(new THREE.LineBasicMaterial({ color: 0x000000, transparent: true, opacity: .22 })));
       scene.add(ls); gridLines.push(ls);
     }
-    // ---- figures
-    const SIDE = [0xc23a30, 0xd6a73c];
-    const geo = {
-      base: keep(new THREE.CylinderGeometry(.46, .5, .08, 24)), ring: keep(new THREE.TorusGeometry(.62, .05, 6, 32)),
-      cyl: keep(new THREE.CylinderGeometry(1, 1, 1, 12)), sph: keep(new THREE.SphereGeometry(1, 16, 12)), box: keep(new THREE.BoxGeometry(1, 1, 1)),
-      bar: keep(new THREE.PlaneGeometry(1, 1)),
+
+    // ================= shared shapes for the miniatures
+    const G = {
+      box: keep(new THREE.BoxGeometry(1, 1, 1)), cyl: keep(new THREE.CylinderGeometry(1, 1, 1, big ? 6 : 10)), cylT: keep(new THREE.CylinderGeometry(.7, 1, 1, big ? 6 : 10)),
+      sph: keep(new THREE.SphereGeometry(1, big ? 8 : 14, big ? 6 : 10)), cone: keep(new THREE.ConeGeometry(1, 1, big ? 6 : 10)), hemi: keep(new THREE.SphereGeometry(1, 14, 8, 0, Math.PI * 2, 0, Math.PI / 2)),
+      tor: keep(new THREE.TorusGeometry(1, .25, 6, 16)), base: keep(new THREE.CylinderGeometry(.47, .5, .09, 28)), baseTop: keep(new THREE.CircleGeometry(.44, 28)),
+      ring: keep(new THREE.TorusGeometry(.62, .05, 6, 32)), bar: keep(new THREE.PlaneGeometry(1, 1)), unitCyl: keep(new THREE.CylinderGeometry(1, 1, 1, 8, 1, true)),
     };
-    const part = (g2, m, sx, sy, sz, x, y, z) => { const p = new THREE.Mesh(g2, m); p.scale.set(sx, sy, sz); p.position.set(x, y, z); p.castShadow = true; return p; };
-    const pick = [];
-    const figs = ros.map((r, i) => {
-      const body = r.body || "upright", veh = body === "vehicle" || body === "walker", k = veh ? 1 : HFT3[String(Math.max(-4, Math.min(6, r.sm || 0)))] / 6, side = r.side || 0;
-      const tone = (FACTION3.find(([re]) => re.test(r.faction || "")) || [0, 0x6b6f76])[1];
-      const mBody = mat(tone), mTrim = mat(SIDE[side], { metalness: .3 }), mDark = mat(0x1d1e22), mEye = mat(0x111111, { emissive: /Necron/.test(r.faction || "") ? 0x39ff6a : /Tyranid/.test(r.faction || "") ? 0xffb030 : 0x000000 });
-      const g = new THREE.Group(), fig = new THREE.Group();
-      g.add(part(geo.base, mTrim, 1, 1, 1, 0, .04, 0));
-      const bulk = ARMOURED.test(r.faction || "") ? 1.18 : /Ork/.test(r.faction || "") ? 1.12 : 1;
-      if (body === "vehicle") {
-        // a tracked hull with its turret and gun (drawn small enough not to bury its neighbours: the engine holds it
-        // to one hex)
-        fig.add(part(geo.box, mBody, 2.3, .62, 1.3, 0, .58, 0), part(geo.box, mDark, 2.4, .5, .32, 0, .3, .62), part(geo.box, mDark, 2.4, .5, .32, 0, .3, -.62));
-        const gun = part(geo.cyl, mDark, .07, 1.25, .07, .9, 1.12, 0); gun.rotation.z = Math.PI / 2;
-        fig.add(part(geo.box, mBody, .95, .42, .85, -.15, 1.1, 0), gun, part(geo.box, mTrim, 2.32, .06, 1.32, 0, .9, 0));
-      } else if (body === "walker") {
-        const gun = part(geo.cyl, mDark, .05, .7, .05, .65, 1.45, 0); gun.rotation.z = Math.PI / 2;
-        fig.add(part(geo.cyl, mDark, .1, 1.3, .1, 0, .65, .25), part(geo.cyl, mDark, .1, 1.3, .1, 0, .65, -.25));
-        fig.add(part(geo.box, mBody, .9, .6, .8, .05, 1.6, 0), part(geo.box, mTrim, .92, .06, .82, .05, 1.92, 0), gun);
-      } else if (body === "horizontal") {
-        fig.add(part(geo.sph, mBody, .62, .34, .32, 0, .7, 0), part(geo.sph, mBody, .22, .2, .2, .62, .82, 0), part(geo.sph, mEye, .05, .05, .05, .8, .86, .08), part(geo.sph, mEye, .05, .05, .05, .8, .86, -.08));
-        for (const [lx, lz] of [[.3, .2], [.3, -.2], [-.3, .2], [-.3, -.2]]) fig.add(part(geo.cyl, mBody, .06, .55, .06, lx, .3, lz));
-        fig.add(part(geo.box, mTrim, .5, .06, .3, -.05, .98, 0));
-      } else if (body === "legless") {
-        [[.36, -.45, .3], [.3, -.1, .42], [.26, .25, .62], [.22, .55, .9]].forEach(([s, x, y]) => fig.add(part(geo.sph, mBody, s, s, s, x, y, 0)));
-        fig.add(part(geo.sph, mEye, .05, .05, .05, .72, .98, .1), part(geo.sph, mEye, .05, .05, .05, .72, .98, -.1), part(geo.box, mTrim, .3, .06, .3, -.1, .78, 0));
-      } else {
-        const lift = body === "flying" ? .7 : 0;
-        fig.add(part(geo.cyl, mDark, .11 * bulk, .7, .11 * bulk, 0, .35 + lift, .12), part(geo.cyl, mDark, .11 * bulk, .7, .11 * bulk, 0, .35 + lift, -.12));
-        fig.add(part(geo.cyl, mBody, .26 * bulk, .72, .2 * bulk, 0, 1.06 + lift, 0));
-        fig.add(part(geo.sph, mBody, .17, .19, .17, .02, 1.6 + lift, 0), part(geo.sph, mEye, .045, .045, .045, .16, 1.63 + lift, .06), part(geo.sph, mEye, .045, .045, .045, .16, 1.63 + lift, -.06));
-        if (bulk > 1.1) fig.add(part(geo.sph, mTrim, .17, .14, .17, 0, 1.38 + lift, .3), part(geo.sph, mTrim, .17, .14, .17, 0, 1.38 + lift, -.3));
-        else fig.add(part(geo.box, mTrim, .3, .08, .44, 0, 1.36 + lift, 0));
-        // a gun or blade held forward
-        fig.add(part(geo.box, mDark, .55, .09, .09, .32, 1.05 + lift, -.18));
-        if (body === "flying") { const wm = mat(tone, { transparent: true, opacity: .55, side: THREE.DoubleSide }); fig.add(part(geo.box, wm, .5, .02, .7, -.15, 1.25 + lift, .5), part(geo.box, wm, .5, .02, .7, -.15, 1.25 + lift, -.5)); }
+    G.unitCyl.translate(0, .5, 0);
+    const mesh = (g, m, sx, sy, sz, x = 0, y = 0, z = 0, shadow = true) => { const p = new THREE.Mesh(g, m); p.scale.set(sx, sy, sz); p.position.set(x, y, z); p.castShadow = shadow && !big; return p; };
+    const grp = (x = 0, y = 0, z = 0) => { const g = new THREE.Group(); g.position.set(x, y, z); return g; };
+
+    // faction paint schemes: main, second (trim), skin, metal, eye glow
+    const SCHEME = [
+      [/Custodes/, [0xc9a347, 0x8a1c1c, 0xd9a982, 0xd4b45a, 0x66ccff]], [/Sororitas/, [0x24242a, 0x8a1a1a, 0xe2c3a8, 0x9a9a9a, 0x000000]],
+      [/Mechanicus/, [0x8e2a22, 0x2d2d33, 0xd9a982, 0xb0a070, 0x7dff9a]], [/Khorne/, [0x8a1c1c, 0x2a2a2e, 0xd9a982, 0xa07a3a, 0xff5a3a]],
+      [/Rubric|Thousand/, [0x1f6f78, 0xc9a347, 0xd9a982, 0xc9a347, 0x7affff]], [/Heretic|Chaos Space|Traitor Astartes/, [0x24242a, 0x9a7a3a, 0xd9a982, 0x9a7a3a, 0xff3a2a]],
+      [/Traitor|Cultist/, [0x5a4632, 0x7a2a22, 0xcf9f7c, 0x77736a, 0xff6a3a]], [/Deathwatch/, [0x1a1a1e, 0xa9a9b0, 0xd9a982, 0xa9a9b0, 0x3aff6a]],
+      [/Grey Knight/, [0x9aa0a8, 0x6a2a8a, 0xd9a982, 0xb0b6be, 0x7ab8ff]], [/Astartes/, [0x1f3f8f, 0xc9a24a, 0xd9a982, 0xa9a9b0, 0xff3a2a]],
+      [/Guard|Militarum|Tempestus/, [0x6a6a48, 0x3e4a2c, 0xd9a982, 0x77736a, 0x000000]], [/Inquisition|Psyker/, [0x2e2a2e, 0x8a1a1a, 0xd9a982, 0x9a9a9a, 0x66ccff]],
+      [/Ork/, [0x5a4632, 0x8a6a22, 0x4f7a2e, 0x77736a, 0xff3a1a]], [/Tyranid/, [0x5a2c6e, 0xb8a684, 0xb8a684, 0x5a2c6e, 0xffb030]],
+      [/Necron/, [0x6e7378, 0x23272b, 0x6e7378, 0x8a9096, 0x39ff6a]], [/Drukhari/, [0x2a2236, 0x5a8a7a, 0xe8e0e8, 0x9aa0a6, 0xff3a8a]],
+      [/Aeldari/, [0x2c6e6a, 0xe8d8b0, 0xe8d8c8, 0xd8c9a8, 0x7affea]], [/T'au/, [0xc9b98c, 0x3a3d42, 0x6a8aa8, 0x8a8f96, 0x7ad8ff]],
+      [/Kroot|Vespid/, [0x7a6a4a, 0x3a5a3a, 0x9a8a5a, 0x77736a, 0xffd03a]],
+    ];
+    const scheme = r => (SCHEME.find(([re]) => re.test(r.faction || "") || re.test(r.template || "")) || [0, [0x6b6f76, 0x3a3d42, 0xd9a982, 0x8a8f96, 0x000000]])[1];
+    // what kind of miniature each model is
+    function archOf(r) {
+      const f = (r.faction || "") + " " + (r.template || ""), kit = r.kit || "";
+      if (r.body === "vehicle" || r.body === "walker") return "vehicle";
+      if (/Tyranid/.test(f)) return r.body === "horizontal" ? (/Carnifex/.test(f) ? "carnifex" : "beast") : r.body === "legless" ? "serpent" : /Zoanthrope/.test(f) ? "floater" : "nid";
+      if (/Necron/.test(f)) return /Destroyer/.test(f) ? "necronBig" : "necron";
+      if (/Ork/.test(f)) return /Meganob|Mega Armour/.test(f + kit) ? "orkMega" : "ork";
+      if (/Custodes|Custodian|Shield-Captain/.test(f)) return "custodes";
+      if (/Terminator|Cataphractii|Tactical Dreadnought|Mega Armour/.test(kit)) return "terminator";
+      if (/Astartes|Heretic|Khorne|Rubric|Chaos Space|Deathwatch|Grey Knight|Power Armour/i.test(f + kit) && !/Sororitas|Sister/.test(f)) return /Scout/.test(f) ? "human" : "marine";
+      if (/Sororitas|Battle Sister/.test(f)) return "sister";
+      if (/Mechanicus|Skitarii|Servitor|Enginseer|Magos|Electro|Sicarian/.test(f)) return "mech";
+      if (/T'au|Fire Warrior/.test(f)) return /Drone/.test(f) ? "drone" : "tau";
+      if (/Kroot/.test(f)) return "kroot";
+      if (/Aeldari|Drukhari|Eldar/.test(f)) return "eldar";
+      if (/Cultist|Traitor/.test(f)) return "cultist";
+      if (r.body === "flying") return "flyer";
+      return "human";
+    }
+    // proportions: leg length, torso height, shoulder half-width, hip half-width, head size, bulk, hunch, head style, extras
+    const BUILD = {
+      human: { leg: .8, torso: .62, sh: .2, hw: .09, head: .13, bulk: 1, hunch: 0, helm: "flak", pack: "roll" },
+      cultist: { leg: .8, torso: .6, sh: .19, hw: .09, head: .13, bulk: .95, hunch: .1, helm: "hood", robe: 1 },
+      sister: { leg: .8, torso: .64, sh: .23, hw: .1, head: .13, bulk: 1.1, hunch: 0, helm: "bare", robe: .6, pack: "box" },
+      marine: { leg: .82, torso: .7, sh: .3, hw: .12, head: .15, bulk: 1.45, hunch: 0, helm: "marine", pauldron: 1, pack: "marine" },
+      terminator: { leg: .7, torso: .78, sh: .4, hw: .15, head: .14, bulk: 1.9, hunch: .05, helm: "sunk", pauldron: 1.5, pack: "marine" },
+      custodes: { leg: .95, torso: .76, sh: .3, hw: .12, head: .15, bulk: 1.4, hunch: 0, helm: "custodes", pauldron: .9, robe: .5 },
+      mech: { leg: .78, torso: .64, sh: .21, hw: .09, head: .13, bulk: 1, hunch: .15, helm: "hood", robe: 1, eyes: 1 },
+      ork: { leg: .64, torso: .66, sh: .3, hw: .13, head: .19, bulk: 1.5, hunch: .35, helm: "ork", arms: 1.25 },
+      orkMega: { leg: .64, torso: .74, sh: .4, hw: .15, head: .19, bulk: 2, hunch: .3, helm: "ork", pauldron: 1.4, arms: 1.25 },
+      necron: { leg: .86, torso: .66, sh: .21, hw: .09, head: .13, bulk: .8, hunch: .05, helm: "skull", skel: 1 },
+      necronBig: { leg: .9, torso: .8, sh: .28, hw: .12, head: .14, bulk: 1.1, hunch: .25, helm: "skull", skel: 1 },
+      tau: { leg: .82, torso: .62, sh: .22, hw: .1, head: .13, bulk: 1.1, hunch: 0, helm: "tau", pack: "box" },
+      kroot: { leg: .9, torso: .66, sh: .2, hw: .09, head: .14, bulk: .9, hunch: .3, helm: "kroot" },
+      eldar: { leg: .88, torso: .62, sh: .19, hw: .08, head: .13, bulk: .95, hunch: 0, helm: "eldar" },
+      nid: { leg: .82, torso: .66, sh: .24, hw: .1, head: .16, bulk: 1.2, hunch: .45, helm: "nid", extraArms: 1, tail: 1 },
+      flyer: { leg: .8, torso: .6, sh: .2, hw: .09, head: .13, bulk: 1, hunch: .1, helm: "bare", wings: 1 },
+      floater: { leg: .0, torso: .5, sh: .16, hw: .08, head: .32, bulk: .8, hunch: 0, helm: "brain", float: 1 },
+      drone: { drone: 1 },
+    };
+
+    // ---- weapons, built along +x from the grip
+    function gunMesh(kind, S) {
+      const g = grp(), d = M(0x1d1e22, { r: .5, m: .5 }), mtl = METAL(S[3]);
+      const add = (...a) => { g.add(mesh(...a)); };
+      switch (kind) {
+        case "las": add(G.box, M(0x3a3226), .62, .07, .06, .22, 0, 0); add(G.box, M(0x6a4a2a), .22, .09, .06, -.12, -.02, 0); add(G.box, d, .08, .1, .05, .1, -.07, 0); add(G.cyl, d, .025, .2, .025, .6, .02, 0); g.children[3].rotation.z = Math.PI / 2; break;
+        case "bolt": add(G.box, d, .5, .13, .09, .16, 0, 0); add(G.box, d, .08, .16, .07, .12, -.12, 0); add(G.box, mtl, .12, .05, .1, .3, .08, 0); add(G.cyl, d, .035, .14, .035, .46, .02, 0); g.children[3].rotation.z = Math.PI / 2; break;
+        case "slug": add(G.box, M(0x4a3a2a), .55, .11, .07, .18, 0, 0); add(G.cyl, d, .07, .06, .07, .1, -.09, 0); add(G.cyl, d, .03, .3, .03, .55, .02, 0); g.children[2].rotation.z = Math.PI / 2; break;
+        case "plasma": add(G.box, d, .5, .12, .09, .16, 0, 0); for (let i = 0; i < 3; i++) add(G.tor, GLOW(0x5ab8ff), .06, .06, .06, .18 + i * .1, .02, 0); g.children.slice(1).forEach(c => c.rotation.y = Math.PI / 2); add(G.cyl, d, .04, .16, .04, .48, .02, 0); g.children[4].rotation.z = Math.PI / 2; break;
+        case "gauss": add(G.box, METAL(0x6a6e72), .62, .06, .06, .2, 0, 0); add(G.cyl, GLOW(0x39ff6a), .028, .52, .028, .24, .07, 0); g.children[1].rotation.z = Math.PI / 2; add(G.box, METAL(0x6a6e72), .1, .14, .05, .48, .05, 0); add(G.box, d, .1, .13, .05, .02, -.06, 0); break;
+        case "flame": add(G.box, d, .45, .1, .08, .14, 0, 0); add(G.cyl, M(0x8a2a1a, { m: .4, r: .4 }), .06, .26, .06, .12, -.11, 0); g.children[1].rotation.z = Math.PI / 2; add(G.cone, d, .06, .14, .06, .43, .01, 0); g.children[2].rotation.z = -Math.PI / 2; break;
+        case "melta": add(G.box, d, .44, .12, .09, .14, 0, 0); add(G.cyl, METAL(0x9a9a92), .07, .22, .07, .44, .02, 0); g.children[1].rotation.z = Math.PI / 2; add(G.tor, METAL(0x9a9a92), .07, .07, .07, .5, .02, 0); g.children[2].rotation.y = Math.PI / 2; break;
+        case "pulse": add(G.box, M(S[1]), .75, .08, .07, .26, 0, 0); add(G.box, M(S[0]), .3, .11, .08, .06, .02, 0); add(G.cyl, GLOW(0x7ad8ff), .02, .04, .02, .64, .02, 0); break;
+        case "shuriken": add(G.box, M(S[1]), .48, .08, .06, .16, 0, 0); add(G.cyl, M(S[0]), .09, .03, .09, .12, .07, 0); break;
+        case "splinter": add(G.box, M(0x2a2236), .7, .05, .05, .24, 0, 0); add(G.cone, GLOW(0x8aff6a), .025, .14, .025, .62, 0, 0); g.children[1].rotation.z = -Math.PI / 2; break;
+        case "dark": add(G.box, M(0x2a2236), .8, .07, .07, .28, 0, 0); add(G.cyl, GLOW(0xb36aff), .02, .5, .02, .3, .06, 0); g.children[1].rotation.z = Math.PI / 2; break;
+        case "lascannon": add(G.cyl, d, .06, .9, .06, .3, .04, 0); g.children[0].rotation.z = Math.PI / 2; add(G.box, M(0x5a5a40), .3, .16, .14, -.05, 0, 0); add(G.cyl, GLOW(0xff3020), .03, .03, .03, .76, .04, 0); break;
+        case "shell": add(G.cyl, M(0x4a5030, { r: .5 }), .07, .8, .07, .2, .04, 0); g.children[0].rotation.z = Math.PI / 2; add(G.box, d, .14, .14, .1, .05, -.07, 0); break;
+        case "bio": add(G.sph, M(S[0]), .14, .1, .1, .18, 0, 0); add(G.sph, M(S[1]), .07, .07, .07, .32, .02, 0); add(G.cyl, GLOW(0xa8ff4a), .03, .06, .03, .38, .02, 0); g.children[2].rotation.z = Math.PI / 2; break;
+        default: break;
       }
-      fig.scale.setScalar(k); g.add(fig);
-      fig.traverse(m => { if (m.isMesh) { m.userData.i = i; pick.push(m); } });
-      const sel = new THREE.Mesh(geo.ring, keep(new THREE.MeshBasicMaterial({ color: 0xffffff }))); sel.rotation.x = Math.PI / 2; sel.position.y = .06; sel.scale.setScalar(Math.max(1, k * .8)); sel.visible = false; g.add(sel);
+      return g;
+    }
+    // melee weapons, blade along -y from the hand (hanging down at rest)
+    function bladeMesh(kind, S) {
+      const g = grp(), d = M(0x1d1e22, { r: .5, m: .5 });
+      const add = (...a) => g.add(mesh(...a));
+      switch (kind) {
+        case "chain": add(G.box, d, .03, .06, .05, 0, -.03, 0); add(G.box, M(S[1], { m: .5, r: .4 }), .05, .5, .09, 0, -.32, 0); add(G.box, METAL(0x9a9a92), .02, .5, .11, 0, -.32, 0); break;
+        case "power": add(G.box, d, .03, .1, .04, 0, -.05, 0); add(G.box, GLOW(0x6ab8ff), .02, .55, .07, 0, -.38, 0); break;
+        case "axe": add(G.cyl, M(0x4a3a2a), .022, .55, .022, 0, -.27, 0); add(G.box, METAL(0x8a8a82), .03, .2, .2, 0, -.48, .07); break;
+        case "hammer": add(G.cyl, d, .025, .6, .025, 0, -.3, 0); add(G.box, METAL(S[3]), .16, .12, .26, 0, -.6, 0); break;
+        case "spear": add(G.cyl, METAL(S[3]), .022, 1.4, .022, 0, -.2, 0); add(G.cone, METAL(0xd8d8d0), .045, .26, .045, 0, -1.0, 0); g.children[1].rotation.z = Math.PI; break;
+        case "fist": add(G.box, METAL(S[0]), .16, .16, .16, 0, -.06, 0); add(G.box, GLOW(0x6ab8ff), .17, .03, .17, 0, -.02, 0); break;
+        case "claw": for (const s of [-1, 0, 1]) { add(G.cone, M(0xd8c9a8), .025, .26, .025, 0, -.15, s * .04); } break;
+        case "blade": add(G.box, METAL(0xb0b0a8), .02, .38, .06, 0, -.24, 0); add(G.box, d, .02, .03, .12, 0, -.04, 0); break;
+        default: break;
+      }
+      return g;
+    }
+
+    // ---- a humanoid miniature: hips, two jointed legs, torso, head, two jointed arms, gun and blade
+    function humanoid(r, B, S) {
+      const fig = grp(), F = { legs: [], arms: [] };
+      const main = M(S[0], B.pauldron ? { r: .42, m: .25 } : {}), second = METAL(S[1]), skin = M(S[2], { r: .7 }), dark = M(0x26262a, { r: .55, m: .2 }), eye = GLOW(S[4] || 0xff3a2a);
+      const limb = B.skel ? METAL(S[0]) : main, lw = (B.skel ? .035 : .065) * B.bulk, legW = (B.skel ? .04 : .075) * Math.sqrt(B.bulk);
+      const hips = grp(0, B.float ? .7 : B.leg, 0); fig.add(hips); F.hips = hips; F.hipY = hips.position.y;
+      if (!B.float) for (const s of [1, -1]) {
+        const p = grp(0, 0, s * B.hw * (B.bulk > 1.3 ? 1.3 : 1)); hips.add(p);
+        p.add(mesh(G.cyl, B.skel ? limb : dark, legW, B.leg * .5, legW, 0, -B.leg * .25, 0));
+        const kn = grp(0, -B.leg * .5, 0); p.add(kn);
+        kn.add(mesh(G.cyl, B.skel ? limb : dark, legW * .9, B.leg * .5, legW * .9, 0, -B.leg * .25, 0));
+        if (B.skel) kn.add(mesh(G.sph, limb, legW * 1.3, legW * 1.3, legW * 1.3, 0, 0, 0));
+        kn.add(mesh(G.box, B.pauldron ? main : M(0x1f1f22), .22 * Math.sqrt(B.bulk), .08, .12 * Math.sqrt(B.bulk), .05, -B.leg * .5 + .04, 0));
+        if (B.pauldron) p.add(mesh(G.box, main, legW * 2.6, B.leg * .3, legW * 2.4, .02, -B.leg * .2, 0));
+        F.legs.push({ p, kn, s });
+      }
+      if (B.robe) hips.add(mesh(G.cylT, M(B.robe < 1 ? S[1] : S[0], { r: .85 }), .14 * B.bulk + .03, B.leg * B.robe * .95, .18 * B.bulk, 0, -B.leg * B.robe * .45, 0));
+      const torso = grp(); hips.add(torso); F.torso = torso; torso.rotation.z = -B.hunch;
+      torso.add(mesh(G.box, B.pauldron ? main : dark, .18 * B.bulk, .14, B.hw * 2.4 * B.bulk, 0, .06, 0));   // pelvis / belt
+      if (B.skel) {
+        torso.add(mesh(G.cyl, limb, .03, B.torso, .03, -.04, B.torso * .5, 0));
+        for (let i = 0; i < 3; i++) torso.add(mesh(G.tor, limb, .1 * B.bulk, .1, .14 * B.bulk, .02, B.torso * (.4 + i * .17), 0));
+        torso.children.slice(-3).forEach(c => c.rotation.x = Math.PI / 2);
+        torso.add(mesh(G.box, M(S[1]), .14, .16, .26 * B.bulk, 0, B.torso * .82, 0));
+      } else {
+        torso.add(mesh(G.sph, B.pauldron ? main : M(S[0]), .17 * B.bulk, B.torso * .55, B.sh * .95, 0, B.torso * .55, 0));
+        if (!B.pauldron) torso.add(mesh(G.box, M(S[1], { r: .7 }), .2 * B.bulk, B.torso * .45, B.sh * 1.25, .03, B.torso * .55, 0));   // flak vest / tabard
+        else torso.add(mesh(G.box, second, .05, .08, .12, .16 * B.bulk, B.torso * .72, 0));   // chest aquila
+      }
+      const head = grp(0, B.torso * (B.helm === "sunk" ? .9 : 1.02), 0); torso.add(head); F.head = head;
+      const H = B.head;
+      switch (B.helm) {
+        case "marine": head.add(mesh(G.sph, main, H, H * 1.05, H * .95, 0, H * .7, 0)); head.add(mesh(G.box, dark, H * .5, H * .45, H * .6, H * .75, H * .4, 0)); for (const s of [1, -1]) head.add(mesh(G.sph, eye, H * .18, H * .14, H * .18, H * .85, H * .85, s * H * .38)); break;
+        case "sunk": head.add(mesh(G.sph, main, H, H * .9, H * .95, .05, H * .4, 0)); for (const s of [1, -1]) head.add(mesh(G.sph, eye, H * .18, H * .14, H * .18, .05 + H * .85, H * .5, s * H * .38)); break;
+        case "custodes": head.add(mesh(G.sph, main, H, H * 1.1, H * .9, 0, H * .75, 0)); head.add(mesh(G.box, M(S[1]), H * 1.6, H * .5, .03, -H * .1, H * 1.9, 0)); head.add(mesh(G.box, dark, .02, H * .5, H * .7, H * .85, H * .75, 0)); break;
+        case "flak": head.add(mesh(G.sph, skin, H, H * 1.1, H, 0, H * .8, 0)); head.add(mesh(G.hemi, M(S[0], { r: .55 }), H * 1.18, H * .95, H * 1.18, 0, H * 1.05, 0)); head.add(mesh(G.cyl, M(S[0]), H * 1.3, .02, H * 1.3, 0, H * 1.05, 0)); head.add(mesh(G.box, dark, H * .3, H * .22, H * 1.1, H * .85, H * .95, 0)); break;
+        case "bare": head.add(mesh(G.sph, skin, H, H * 1.1, H, 0, H * .8, 0)); head.add(mesh(G.hemi, M(0xe8e8e0, { r: .9 }), H * 1.08, H * .9, H * 1.08, -.01, H * 1.0, 0)); break;
+        case "hood": head.add(mesh(G.sph, M(0x0b0b0c), H * .9, H, H * .9, .02, H * .8, 0)); head.add(mesh(G.cone, M(S[0], { r: .85 }), H * 1.35, H * 2.4, H * 1.35, -.02, H * 1.2, 0)); if (B.eyes) for (const s of [1, -1]) head.add(mesh(G.sph, eye, H * .12, H * .12, H * .12, H * .8, H * .8, s * H * .3)); break;
+        case "skull": head.add(mesh(G.sph, METAL(S[0]), H * .95, H * 1.15, H * .85, 0, H * .85, 0)); head.add(mesh(G.box, METAL(S[0]), H * .7, H * .35, H * .9, H * .35, H * .25, 0)); for (const s of [1, -1]) head.add(mesh(G.sph, eye, H * .2, H * .16, H * .2, H * .8, H * .95, s * H * .35)); head.add(mesh(G.box, M(S[1]), H * 1.2, H * .6, .025, -.02, H * 1.3, 0)); break;
+        case "ork": head.add(mesh(G.sph, skin, H * 1.1, H, H, .03, H * .6, 0)); head.add(mesh(G.box, skin, H * .9, H * .5, H * 1.4, H * .45, H * .15, 0)); for (const s of [1, -1]) { head.add(mesh(G.cone, M(0xe8e0c8), H * .12, H * .4, H * .12, H * .9, H * .45, s * H * .5)); head.add(mesh(G.sph, eye, H * .14, H * .12, H * .14, H * .85, H * .8, s * H * .35)); } break;
+        case "tau": head.add(mesh(G.box, M(S[0]), H * 1.6, H * 1.3, H * 1.4, .03, H * .8, 0)); head.children[0].rotation.z = -.25; head.add(mesh(G.cyl, GLOW(S[4]), H * .22, .05, H * .22, H * .8, H * .95, 0)); head.children[1].rotation.z = Math.PI / 2; break;
+        case "eldar": head.add(mesh(G.sph, M(S[0]), H, H * 1.25, H * .9, 0, H * .85, 0)); head.add(mesh(G.box, M(S[1]), H * 1.8, H * .35, .03, -H * .3, H * 1.9, 0)); for (const s of [1, -1]) head.add(mesh(G.sph, GLOW(S[4]), H * .22, H * .2, H * .2, H * .8, H * .95, s * H * .35)); break;
+        case "kroot": head.add(mesh(G.sph, skin, H, H * 1.1, H * .9, 0, H * .8, 0)); head.add(mesh(G.cone, M(0x3a3a2a), H * .35, H * 1.2, H * .35, H * 1.1, H * .7, 0)); head.children[1].rotation.z = -Math.PI / 2; for (let i = 0; i < 4; i++) head.add(mesh(G.cone, M(S[1]), H * .12, H * 1.3, H * .12, -H * .5, H * 1.2, (i - 1.5) * H * .3)); break;
+        case "nid": head.add(mesh(G.sph, M(S[1]), H * 1.3, H * .9, H * .8, H * .3, H * .6, 0)); head.add(mesh(G.sph, M(S[0]), H * 1.1, H * .6, H * .85, -.04, H * 1.0, 0)); for (const s of [1, -1]) head.add(mesh(G.sph, eye, H * .14, H * .12, H * .14, H * 1.1, H * .7, s * H * .35)); break;
+        case "brain": head.add(mesh(G.sph, M(S[1], { r: .5 }), H, H * .85, H, 0, H * .5, 0)); for (const s of [1, -1]) head.add(mesh(G.sph, eye, H * .1, H * .1, H * .1, H * .9, H * .2, s * H * .3)); break;
+        default: head.add(mesh(G.sph, skin, H, H * 1.1, H, 0, H * .8, 0));
+      }
+      if (B.pack === "marine") { torso.add(mesh(G.box, main, .16 * B.bulk, B.torso * .5, B.sh * 1.1, -.17 * B.bulk, B.torso * .62, 0)); for (const s of [1, -1]) torso.add(mesh(G.cyl, dark, .045, .16, .045, -.26 * B.bulk, B.torso * .95, s * B.sh * .35)); }
+      else if (B.pack === "roll") torso.add(mesh(G.cyl, M(0x4a4a34), .06, B.sh * 1.6, .06, -.17, B.torso * .8, 0)), torso.children[torso.children.length - 1].rotation.x = Math.PI / 2;
+      else if (B.pack === "box") torso.add(mesh(G.box, M(S[1]), .1, B.torso * .4, B.sh, -.17, B.torso * .6, 0));
+      if (B.tail) torso.add(mesh(G.cone, M(S[1]), .07, .7, .07, -.3, .1, 0)), torso.children[torso.children.length - 1].rotation.z = 1.9;
+      if (B.wings) for (const s of [1, -1]) { const w = mesh(G.box, M(S[1], { tr: true, op: .75, ds: true }), .5, .02, .7, -.2, B.torso * .9, s * .4); w.rotation.x = s * .5; torso.add(w); F.wings = (F.wings || []).concat(w); }
+      // arms: a shoulder joint swinging forward (rotation.z), an elbow, a hand
+      const armSets = B.extraArms ? [[1, B.torso * .88], [-1, B.torso * .88], [1, B.torso * .62], [-1, B.torso * .62]] : [[1, B.torso * .88], [-1, B.torso * .88]];
+      const al = .3 * (B.arms || 1);
+      for (const [s, y] of armSets) {
+        const sh = grp(0, y, s * B.sh); torso.add(sh);
+        sh.add(mesh(G.cyl, limb, lw, al, lw, 0, -al / 2, 0));
+        const el = grp(0, -al, 0); sh.add(el);
+        el.add(mesh(G.cyl, limb, lw * .9, al * .9, lw * .9, 0, -al * .45, 0));
+        el.add(mesh(G.sph, B.helm === "ork" || B.helm === "nid" ? skin : B.skel ? limb : B.pauldron ? main : dark, lw * 1.25, lw * 1.25, lw * 1.25, 0, -al * .92, 0));
+        const hand = grp(0, -al * .92, 0); el.add(hand);
+        if (B.pauldron && y > B.torso * .7) sh.add(mesh(G.sph, main, .16 * B.pauldron, .12 * B.pauldron, .15 * B.pauldron, -.01, .02, s * .05));
+        if (B.pauldron && y > B.torso * .7) sh.add(mesh(G.tor, second, .14 * B.pauldron, .14 * B.pauldron, .03, 0, .0, s * .05)), sh.children[sh.children.length - 1].rotation.x = Math.PI / 2;
+        F.arms.push({ sh, el, hand, s });
+      }
+      // the gun in the right hand (horizontal when the arm is raised level), the blade in the left
+      const rk = r.rk || "", mk = r.mk || "";
+      const nid = /^(nid|beast|carnifex|serpent)$/.test(B.kind);
+      if (rk && rk !== "grenade" && !(nid && rk === "bio")) {
+        const gun = gunMesh(rk === "lob" ? "shell" : rk, S); const R2 = F.arms[0];
+        gun.rotation.z = -Math.PI / 2 + .15; gun.scale.setScalar(B.pauldron ? 1.15 : 1); R2.hand.add(gun); F.gun = gun; F.gunKind = rk;
+      }
+      if (mk && mk !== "fist" || (mk === "fist" && B.pauldron)) {
+        const bl = bladeMesh(nid ? "claw" : mk, S); const L2 = F.arms[1] || F.arms[0];
+        bl.scale.setScalar(B.pauldron ? 1.2 : 1); L2.hand.add(bl); F.blade = bl;
+      }
+      if (nid) for (const a of F.arms) { const b2 = bladeMesh("claw", S); b2.scale.setScalar(1.6); a.hand.add(b2); }
+      F.fig = fig; F.B = B;
+      return F;
+    }
+    // ---- a four-legged Tyranid beast (gaunts, the Carnifex) and a serpent
+    function beast(r, B, S, heavy) {
+      const fig = grp(), F = { legs: [], arms: [], quad: 1 }, main = M(S[0], { r: .45 }), flesh = M(S[1], { r: .7 }), eye = GLOW(S[4]);
+      const body = grp(0, heavy ? .75 : .6, 0); fig.add(body); F.hips = body; F.hipY = body.position.y; F.torso = body;
+      body.add(mesh(G.sph, flesh, heavy ? .62 : .5, heavy ? .4 : .26, heavy ? .4 : .24, 0, 0, 0));
+      for (let i = 0; i < (heavy ? 4 : 3); i++) body.add(mesh(G.sph, main, heavy ? .3 : .2, .12, heavy ? .4 : .26, (heavy ? .35 : .25) - i * (heavy ? .25 : .2), heavy ? .3 : .17, 0));
+      const head = grp(heavy ? .65 : .52, heavy ? .1 : .12, 0); body.add(head); F.head = head;
+      head.add(mesh(G.sph, main, heavy ? .3 : .17, heavy ? .2 : .13, heavy ? .24 : .13, 0, 0, 0));
+      for (const s of [1, -1]) head.add(mesh(G.sph, eye, .035, .03, .035, heavy ? .22 : .13, .04, s * (heavy ? .12 : .07)));
+      body.add(mesh(G.cone, flesh, heavy ? .12 : .08, heavy ? 1.0 : .7, heavy ? .12 : .08, heavy ? -.9 : -.6, -.05, 0)); body.children[body.children.length - 1].rotation.z = Math.PI / 2 + .2;
+      for (const [x, s] of [[heavy ? .3 : .22, 1], [heavy ? .3 : .22, -1], [heavy ? -.32 : -.25, 1], [heavy ? -.32 : -.25, -1]]) {
+        const p = grp(x, -.05, s * (heavy ? .32 : .18)); body.add(p);
+        const L = heavy ? .45 : .35;
+        p.add(mesh(G.cyl, flesh, heavy ? .09 : .05, L, heavy ? .09 : .05, 0, -L / 2, 0)); p.rotation.x = s * .25;
+        const kn = grp(0, -L, 0); p.add(kn); kn.add(mesh(G.cyl, main, heavy ? .07 : .04, L, heavy ? .07 : .04, 0, -L / 2, 0));
+        F.legs.push({ p, kn, s, x });
+      }
+      for (const s of [1, -1]) {
+        const sh = grp(heavy ? .5 : .4, heavy ? .15 : .1, s * (heavy ? .3 : .16)); body.add(sh);
+        const al = heavy ? .4 : .28;
+        sh.add(mesh(G.cyl, flesh, heavy ? .1 : .05, al, heavy ? .1 : .05, 0, -al / 2, 0));
+        const el = grp(0, -al, 0); sh.add(el);
+        if (heavy) { el.add(mesh(G.box, main, .22, .3, .16, .05, -.12, 0)); el.add(mesh(G.cone, M(0xe8dcc0), .06, .3, .06, .12, -.3, 0)); }
+        else { el.add(mesh(G.cone, M(0xe8dcc0), .04, .5, .04, 0, -.25, 0)); el.children[0].rotation.z = Math.PI; }
+        sh.rotation.z = 1.2; el.rotation.z = -1.8;
+        F.arms.push({ sh, el, hand: el, s });
+      }
+      if (heavy) { body.add(mesh(G.cyl, M(S[0]), .12, .6, .12, .1, .45, .18)); body.children[body.children.length - 1].rotation.z = Math.PI / 2 - .2; }
+      F.fig = fig; F.B = B;
+      return F;
+    }
+    function serpent(r, B, S) {
+      const fig = grp(), F = { legs: [], arms: [], segs: [] }, main = M(S[0], { r: .45 }), flesh = M(S[1], { r: .7 });
+      for (let i = 0; i < 6; i++) { const s = .26 - i * .03, m = mesh(G.sph, i % 2 ? flesh : main, s, s * .8, s, -i * .32, s * .8, 0); fig.add(m); F.segs.push(m); }
+      const torso = grp(.1, .5, 0); fig.add(torso); F.torso = torso; F.hips = torso; F.hipY = .5;
+      torso.add(mesh(G.sph, main, .2, .3, .2, 0, .25, 0));
+      const head = grp(.05, .6, 0); torso.add(head); F.head = head; head.add(mesh(G.sph, main, .16, .12, .14, .05, 0, 0));
+      for (const s of [1, -1]) { const sh = grp(0, .4, s * .18); torso.add(sh); const el = grp(0, -.25, 0); sh.add(mesh(G.cyl, flesh, .04, .25, .04, 0, -.12, 0)); sh.add(el); el.add(mesh(G.cone, M(0xe8dcc0), .04, .5, .04, 0, -.25, 0)); el.children[0].rotation.z = Math.PI; F.arms.push({ sh, el, hand: el, s }); }
+      F.fig = fig; F.B = B;
+      return F;
+    }
+    function drone(r, S) {
+      const fig = grp(), F = { legs: [], arms: [], hover: 1 };
+      const disc = grp(0, 1.1, 0); fig.add(disc); F.hips = disc; F.hipY = 1.1; F.torso = disc;
+      disc.add(mesh(G.cyl, M(S[0], { r: .45 }), .32, .08, .32)); disc.add(mesh(G.sph, M(S[1]), .14, .1, .14, 0, .07, 0)); disc.add(mesh(G.cyl, GLOW(S[4]), .05, .02, .05, .2, .03, 0)); disc.children[2].rotation.z = Math.PI / 2;
+      const gun = gunMesh("pulse", S); gun.position.set(.05, -.08, 0); disc.add(gun); F.gun = gun; F.gunKind = "pulse";
+      F.fig = fig; F.B = { kind: "drone" };
+      return F;
+    }
+
+    // ---- vehicles: hull, tracks or wheels or legs, turret, guns, sponsons
+    function vehicle(r, S) {
+      const F = { veh: 1, legs: [], arms: [], tracks: [], wheels: [], barrels: [] }, fig = grp(); F.fig = fig;
+      const name = r.veh || r.template || "", main = M(S[0], { r: .55, m: .25 }), trim = METAL(S[1]), dark = M(0x232326, { r: .6, m: .3 });
+      const trackMat = M(0xffffff, { map: TEX.track.clone(), r: .7, m: .3 }); keep(trackMat.map); trackMat.map.needsUpdate = true; trackMat.map.repeat.set(4, 1);
+      F.tracks = [trackMat];
+      const track = (x, z, len, h, w) => { const t = mesh(G.box, trackMat, len, h, w, x, h / 2, z); fig.add(t); return t; };
+      const hull = grp(); fig.add(hull); F.hull = hull;
+      const turret = grp(); F.turret = turret;
+      const barrel = (parent, x, y, z, len, rad, glow) => { const b = grp(x, y, z); const m = mesh(G.cyl, dark, rad, len, rad, len / 2, 0, 0); m.rotation.z = Math.PI / 2; b.add(m); if (glow) b.add(mesh(G.sph, GLOW(glow), rad * 1.1, rad * 1.1, rad * 1.1, len, 0, 0)); parent.add(b); F.barrels.push(b); return b; };
+      if (r.body === "walker" || /Sentinel/.test(name)) {
+        // a chicken-legged walker: cab on two reverse-jointed legs
+        const cab = grp(0, 1.55, 0); fig.add(cab); F.hips = cab; F.hipY = 1.55; F.torso = cab;
+        cab.add(mesh(G.box, main, .7, .5, .6, 0, .1, 0)); cab.add(mesh(G.box, trim, .72, .05, .62, 0, .37, 0)); cab.add(mesh(G.box, dark, .2, .2, .5, -.3, .05, 0));
+        cab.add(mesh(G.sph, M(S[2]), .09, .1, .09, .05, .42, 0));   // the pilot's head in the open cab
+        const g2 = gunMesh(r.rk || "las", S); g2.position.set(.38, -.12, 0); g2.scale.setScalar(1.3); cab.add(g2); F.gun = g2; F.gunKind = r.rk;
+        for (const s of [1, -1]) { const p = grp(0, -.1, s * .22); cab.add(p); p.add(mesh(G.cyl, dark, .06, .7, .06, 0, -.35, 0)); p.rotation.z = .5; const kn = grp(0, -.7, 0); p.add(kn); kn.add(mesh(G.cyl, main, .05, .8, .05, 0, -.4, 0)); kn.rotation.z = -1.0; kn.add(mesh(G.box, dark, .3, .06, .16, .05, -.8, 0)); F.legs.push({ p, kn, s, walker: 1 }); }
+        F.walker = 1; return F;
+      }
+      if (/Trukk/.test(name)) {
+        hull.add(mesh(G.box, M(0x8a1a12, { r: .7, m: .3 }), 1.0, .45, .9, .55, .65, 0));   // red cab, it goes faster
+        hull.add(mesh(G.box, METAL(0x6a5a4a), 1.4, .12, 1.0, -.45, .5, 0));
+        for (const [x, z, a] of [[-.2, .48, .1], [-.7, -.48, -.12], [-1.05, .2, .05]]) { const p = mesh(G.box, METAL(0x7a6a52), .5, .35, .05, x, .72, z); p.rotation.y = a; hull.add(p); }
+        hull.add(mesh(G.box, dark, .1, .6, .1, .95, .9, .3));
+        for (const [x, z] of [[.6, .5], [.6, -.5], [-.7, .5], [-.7, -.5]]) { const w = grp(x, .3, z); const m = mesh(G.cyl, dark, .3, .18, .3); m.rotation.x = Math.PI / 2; w.add(m); fig.add(w); F.wheels.push(w); }
+        const pin = grp(-.2, .9, 0); hull.add(pin); const g2 = gunMesh("slug", S); g2.scale.setScalar(1.6); pin.add(g2); F.turret = pin; F.gunKind = "slug";
+        return F;
+      }
+      const lr = /Land Raider/.test(name), rus = /Leman Russ/.test(name), pred = /Predator/.test(name), rhino = /Rhino/.test(name), chim = /Chimera/.test(name);
+      const L = lr ? 2.9 : rus ? 2.5 : 2.3, Wd = lr ? 1.6 : 1.35, th = lr ? .95 : .55;
+      // sloped hull: an extruded side profile
+      const prof = new THREE.Shape(); const hh = rus ? .55 : lr ? .55 : .8, nose = rus ? .55 : .45;
+      prof.moveTo(-L / 2, .2); prof.lineTo(L / 2 - nose * .4, .2); prof.lineTo(L / 2, .45); prof.lineTo(L / 2 - nose, .2 + hh); prof.lineTo(-L / 2 + .1, .2 + hh); prof.lineTo(-L / 2, .2 + hh - .1); prof.closePath();
+      const hg = keep(new THREE.ExtrudeGeometry(prof, { depth: Wd * (lr ? .6 : .8), bevelEnabled: true, bevelSize: .03, bevelThickness: .03, bevelSegments: 1 })); hg.translate(0, 0, -Wd * (lr ? .6 : .8) / 2);
+      const hm = new THREE.Mesh(hg, main); hm.castShadow = true; hm.receiveShadow = true; hull.add(hm);
+      if (lr) {
+        // rhomboid track units, taller than the hull
+        for (const s of [1, -1]) { const tp = new THREE.Shape(); tp.moveTo(-L / 2, .25); tp.lineTo(-L / 2 + .4, 0); tp.lineTo(L / 2 - .3, 0); tp.lineTo(L / 2 + .25, .7); tp.lineTo(L / 2 - .1, 1.15); tp.lineTo(-L / 2 + .2, 1.15); tp.closePath(); const tg = keep(new THREE.ExtrudeGeometry(tp, { depth: .38, bevelEnabled: false })); tg.translate(0, 0, -.19); const tm = new THREE.Mesh(tg, main); tm.position.z = s * (Wd / 2 - .05); tm.castShadow = true; hull.add(tm); const sp = mesh(G.box, main, .6, .35, .3, .2, .6, s * (Wd / 2 + .3)); hull.add(sp); barrel(hull, .4, .62, s * (Wd / 2 + .3) + s * .06, .7, .05, 0xff3020); barrel(hull, .4, .62, s * (Wd / 2 + .3) - s * .06, .7, .05, 0xff3020); }
+        hull.add(mesh(G.box, trim, .3, .06, Wd * .6, .9, .76, 0)); barrel(hull, 1.2, .55, .07, .35, .04); barrel(hull, 1.2, .55, -.07, .35, .04);
+        fig.add(mesh(G.box, trackMat, L * .95, .22, .14, 0, .11, Wd / 2 + .1)); fig.add(mesh(G.box, trackMat, L * .95, .22, .14, 0, .11, -Wd / 2 - .1));
+      } else {
+        for (const s of [1, -1]) track(0, s * (Wd / 2 - .02), L * (rus ? 1.06 : .98), th, .32);
+        hull.add(mesh(G.box, trim, L * .6, .05, .06, -.1, .2 + hh + .01, Wd * .4));
+        hull.add(mesh(G.box, trim, L * .6, .05, .06, -.1, .2 + hh + .01, -Wd * .4));
+        hull.add(mesh(G.cyl, dark, .06, .35, .06, -L / 2 + .25, .2 + hh + .15, Wd * .3));   // exhaust stack
+        F.exhaust = new THREE.Vector3(-L / 2 + .25, .2 + hh + .35, Wd * .3);
+      }
+      if (rus || pred || chim) {
+        // the turret, turning on its own
+        turret.position.set(rus ? -.15 : chim ? .05 : -.1, .2 + hh, 0); hull.add(turret);
+        turret.add(mesh(G.cyl, main, rus ? .5 : .38, .32, rus ? .5 : .38, 0, .16, 0)); turret.add(mesh(G.box, main, rus ? .9 : .65, .28, rus ? .75 : .55, .05, .2, 0));
+        turret.add(mesh(G.cyl, trim, .12, .08, .12, -.15, .38, .15));
+        if (rus) barrel(turret, .4, .2, 0, 1.4, .08);
+        else if (pred) { barrel(turret, .3, .2, .08, .9, .05); barrel(turret, .3, .2, -.08, .9, .05); }
+        else { barrel(turret, .3, .22, .06, .7, .03, 0xff3020); barrel(turret, .3, .22, -.06, .7, .03, 0xff3020); }
+        F.turret = turret;
+      }
+      if (rus || pred) for (const s of [1, -1]) { const sp = mesh(G.box, main, .45, .3, .25, .15, .55, s * (Wd / 2 + .12)); hull.add(sp); barrel(hull, .37, .58, s * (Wd / 2 + .15), .4, .04); }
+      if (rus) barrel(hull, L / 2 - .2, .55, 0, .5, .06, 0xff3020);
+      if (chim) barrel(hull, L / 2 - .25, .45, .2, .3, .04);
+      if (rhino) { hull.add(mesh(G.cyl, dark, .2, .1, .2, -.2, .2 + hh + .05, 0)); const pin = grp(-.2, .2 + hh + .12, 0); hull.add(pin); const g2 = gunMesh("bolt", S); g2.scale.setScalar(1.4); pin.add(g2); F.turret = pin; }
+      return F;
+    }
+
+    // ---- every figure on its round base, the side's colour on the rim
+    const SIDE = [0xc23a30, 0xd6a73c];
+    const pick = [];
+    const sandMat = M(0xffffff, { map: TEX.sand, r: 1 });
+    const figs = ros.map((r, i) => {
+      const S = scheme(r), arch = archOf(r), side = r.side || 0;
+      const veh = arch === "vehicle";
+      const k = veh ? 1 : HFT3[String(Math.max(-4, Math.min(6, r.sm || 0)))] / 6;
+      const g = new THREE.Group();
+      const bs = veh ? 1 : Math.max(1, Math.min(2.4, k * (arch === "terminator" || arch === "orkMega" ? 1.25 : arch === "marine" || arch === "custodes" ? 1.1 : 1)));
+      if (!veh) { g.add(mesh(G.base, M(0x18181a, { r: .5 }), bs, 1, bs, 0, .045, 0)); const top = mesh(G.baseTop, sandMat, bs, bs, bs, 0, .1, 0, false); top.rotation.x = -Math.PI / 2; top.receiveShadow = true; g.add(top); g.add(mesh(G.tor, M(SIDE[side], { r: .4, m: .3 }), .48 * bs, .48 * bs, .1, 0, .07, 0, false)); g.children[2].rotation.x = Math.PI / 2; }
+      const B = BUILD[arch] ? { ...BUILD[arch], kind: arch } : { kind: arch };
+      const F = veh ? vehicle(r, S) : arch === "beast" ? beast(r, B, S, false) : arch === "carnifex" ? beast(r, B, S, true) : arch === "serpent" ? serpent(r, B, S) : arch === "drone" ? drone(r, S) : humanoid(r, B, S);
+      if (veh) { const sideRing = mesh(G.tor, M(SIDE[side], { r: .4, m: .3 }), 1.25, 1.25, .1, 0, .04, 0, false); sideRing.rotation.x = Math.PI / 2; g.add(sideRing); }
+      F.fig.scale.setScalar(k); g.add(F.fig);
+      F.fig.traverse(m => { if (m.isMesh) { m.userData.i = i; pick.push(m); } });
+      const sel = new THREE.Mesh(G.ring, keep(new THREE.MeshBasicMaterial({ color: 0xffffff }))); sel.rotation.x = Math.PI / 2; sel.position.y = .1; sel.scale.setScalar(veh ? 2.2 : Math.max(1, bs * .9)); sel.visible = false; g.add(sel);
       // health and shield bars, turned to the camera
       const bars = new THREE.Group();
-      const back = new THREE.Mesh(geo.bar, keep(new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: .6, depthTest: false }))); back.scale.set(1.32, .2, 1);
-      const hp = new THREE.Mesh(geo.bar, keep(new THREE.MeshBasicMaterial({ color: 0x5fbf6a, depthTest: false })));
-      const sp = new THREE.Mesh(geo.bar, keep(new THREE.MeshBasicMaterial({ color: 0x58b6e8, depthTest: false })));
+      const back = new THREE.Mesh(G.bar, keep(new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: .6, depthTest: false }))); back.scale.set(1.32, .2, 1);
+      const hp = new THREE.Mesh(G.bar, keep(new THREE.MeshBasicMaterial({ color: 0x5fbf6a, depthTest: false })));
+      const sp = new THREE.Mesh(G.bar, keep(new THREE.MeshBasicMaterial({ color: 0x58b6e8, depthTest: false })));
       [back, hp, sp].forEach((m, j) => { m.renderOrder = 10 + j; bars.add(m); });
-      bars.position.y = (body === "vehicle" ? 1.5 : body === "walker" ? 2.2 : body === "horizontal" ? 1.25 : body === "legless" ? 1.35 : body === "flying" ? 2.6 : 1.95) * k + .2;
+      const top = veh ? (F.walker ? 2.4 : 1.7) : arch === "beast" ? 1.15 : arch === "carnifex" ? 1.6 : arch === "serpent" ? 1.4 : arch === "drone" ? 1.5 : 2.05;
+      bars.position.y = top * k + .25; F.top = top * k;
       g.add(bars); scene.add(g);
-      return { g, fig, sel, bars, hp, sp, k, body, side };
+      Object.assign(F, { g, sel, bars, hp, sp, k, body: r.body || "upright", side, arch, i, veh, phase: hash(i, 7) * 6, walk: 0, aim: 0, last: null, turretAng: null, yaw: null });
+      return F;
     });
-    // the fallen: a figure on its side, darkened, where it went down
-    const fallenObj = fallen.map(f => {
-      const g = new THREE.Group(), m = mat(f.dead ? 0x2a1b1b : 0x2b2d31), t = mat(SIDE[f.side]);
-      g.add(part(geo.cyl, m, .24, .9, .2, 0, .22, 0), part(geo.sph, m, .16, .16, .16, .58, .2, 0), part(geo.base, t, .9, .6, .9, 0, .03, 0));
-      g.children[0].rotation.z = Math.PI / 2;
-      const [x, y] = P(f.q, f.r); g.position.set(x, zOf(f.q, f.r), y); g.rotation.y = hash(f.q, f.r) * 6.28; g.visible = false; scene.add(g);
-      return { f, g };
-    });
-    // ---- this second's action
+
+    // ================= effects: two particle systems (glowing and smoky), beams, light flashes, decals
+    function particles(max, tex, blending) {
+      const geo = keep(new THREE.BufferGeometry());
+      const pos = new Float32Array(max * 3), colr = new Float32Array(max * 3), size = new Float32Array(max), alpha = new Float32Array(max);
+      geo.setAttribute("position", new THREE.BufferAttribute(pos, 3)); geo.setAttribute("color", new THREE.BufferAttribute(colr, 3));
+      geo.setAttribute("size", new THREE.BufferAttribute(size, 1)); geo.setAttribute("alpha", new THREE.BufferAttribute(alpha, 1));
+      const mat = keep(new THREE.ShaderMaterial({ uniforms: { map: { value: tex }, scale: { value: 400 }, hdr: { value: blending === THREE.AdditiveBlending ? 3.0 : 1.0 } }, transparent: true, depthWrite: false, blending,
+        vertexShader: "attribute float size; attribute float alpha; attribute vec3 color; varying vec4 vC; uniform float scale; void main(){ vC = vec4(color, alpha); vec4 mv = modelViewMatrix * vec4(position, 1.0); gl_PointSize = size * scale / -mv.z; gl_Position = projectionMatrix * mv; }",
+        fragmentShader: "uniform sampler2D map; uniform float hdr; varying vec4 vC; void main(){ vec4 t = texture2D(map, gl_PointCoord); gl_FragColor = vec4(vC.rgb * t.rgb * hdr, vC.a * t.a); }" }));
+      const pts2 = new THREE.Points(geo, mat); pts2.frustumCulled = false; scene.add(pts2);
+      const list = [];
+      return {
+        mat, list,
+        add(p) { if (list.length >= max) list.shift(); list.push(p); },
+        step(dt) {
+          let n = 0;
+          for (let j = list.length - 1; j >= 0; j--) { const p = list[j]; p.age += dt; if (p.age >= p.life) { list.splice(j, 1); continue; } }
+          for (const p of list) {
+            if (p.age < 0) { pos[n * 3] = p.x; pos[n * 3 + 1] = p.y; pos[n * 3 + 2] = p.z; size[n] = 0; alpha[n] = 0; n++; continue; }   // not started yet
+            const f = p.age / p.life, dr = Math.pow(p.drag ?? .9, dt * 10);
+            p.vx *= dr; p.vy = p.vy * dr - (p.grav || 0) * dt; p.vz *= dr; p.x += p.vx * dt; p.y += p.vy * dt; p.z += p.vz * dt;
+            if (p.floor != null && p.y < p.floor) { p.y = p.floor; p.vy *= -.3; p.vx *= .5; p.vz *= .5; }
+            pos[n * 3] = p.x; pos[n * 3 + 1] = p.y; pos[n * 3 + 2] = p.z;
+            const c = p.c1 && f > .3 ? p.c1 : p.c; colr[n * 3] = c[0]; colr[n * 3 + 1] = c[1]; colr[n * 3 + 2] = c[2];
+            size[n] = p.s0 + (p.s1 - p.s0) * f; alpha[n] = p.a * (p.fadeIn ? Math.min(1, f * 5) : 1) * (1 - Math.pow(f, p.fade || 1.5));
+            n++;
+          }
+          geo.setDrawRange(0, n);
+          for (const a of ["position", "color", "size", "alpha"]) geo.attributes[a].needsUpdate = true;
+        },
+        clear() { list.length = 0; },
+      };
+    }
+    const glow = particles(big ? 2500 : 4000, TEX.glow, THREE.AdditiveBlending), smoke = particles(big ? 1500 : 2500, TEX.smoke, THREE.NormalBlending);
+    const C = hex => { const c = lin(hex); return [c.r, c.g, c.b]; };
+    const rnd = Math.random;
+    const burst = (sys, at, n, o2) => { for (let j = 0; j < n; j++) { const a = rnd() * 6.283, e = (rnd() - .3) * (o2.up ?? 1), sp = o2.speed * (.4 + rnd() * .6); sys.add({ x: at.x + (rnd() - .5) * (o2.spread || 0), y: at.y + (rnd() - .5) * (o2.spread || 0) * .5, z: at.z + (rnd() - .5) * (o2.spread || 0), vx: Math.cos(a) * sp, vy: e * sp + (o2.lift || 0), vz: Math.sin(a) * sp, age: 0, life: o2.life * (.6 + rnd() * .6), s0: o2.s0, s1: o2.s1, c: o2.c, c1: o2.c1, a: o2.a ?? 1, drag: o2.drag, grav: o2.grav, fade: o2.fade, floor: o2.floor, fadeIn: o2.fadeIn }); } };
+    // beams: an additive cylinder from a to b with a soft outer glow, fading fast
+    const beams = [];
+    const beamMat = c => new THREE.MeshBasicMaterial({ color: lin(c).multiplyScalar(4), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending });
+    function beam(a, b, color, r, life, jitter = 0) {
+      const d = b.clone().sub(a), len = d.length(); if (len < .01) return;
+      const qn = new THREE.Quaternion().setFromUnitVectors(yAx, d.clone().normalize());
+      const core = new THREE.Mesh(G.unitCyl, beamMat(0xffffff)), halo = new THREE.Mesh(G.unitCyl, beamMat(color));
+      for (const [m, rr] of [[core, r * .45], [halo, r * 2.2]]) { m.position.copy(a); m.quaternion.copy(qn); m.scale.set(rr, len, rr); scene.add(m); }
+      beams.push({ core, halo, age: 0, life, jitter, a, qn, r });
+    }
+    const flashes = [];
+    for (let j = 0; j < 4; j++) { const l = new THREE.PointLight(0xffa040, 0, 12, 2); scene.add(l); flashes.push({ l, age: 9, life: 1, i0: 0 }); }
+    const flash = (at, color, i0, life, range = 12) => { const f = flashes.reduce((a, b) => b.age / b.life > a.age / a.life ? b : a); f.l.position.copy(at); f.l.color.set(color); f.l.distance = range; f.age = 0; f.life = life; f.i0 = i0; };
+    // projectiles: a glowing head and a short trail, flying from a to b (arcing for lobbed shots)
+    const shots = [];
+    const projectile = (a, b, o2) => shots.push({ a, b, age: 0, dur: o2.dur, arc: o2.arc || 0, c: o2.c, size: o2.size, trail: o2.trail, smokeTrail: o2.smokeTrail, onHit: o2.onHit, done: false });
+
+    // per weapon kind: colour and how the shot looks
+    const KIND = {
+      las: { c: 0xff3a24, beam: .045, life: .16, pulses: 3 }, lascannon: { c: 0xff2a3a, beam: .09, life: .28, pulses: 1, flare: 1 },
+      gauss: { c: 0x39ff6a, beam: .05, life: .24, pulses: 2, crackle: 1 }, dark: { c: 0xb36aff, beam: .06, life: .25, pulses: 1 },
+      plasma: { c: 0x6ac8ff, proj: .5, dur: .2, trail: 1 }, pulse: { c: 0x8ad8ff, proj: .28, dur: .14, pulses: 3 },
+      bolt: { c: 0xffb04a, proj: .32, dur: .2, pulses: 3, pop: 1 }, slug: { c: 0xffe08a, proj: .2, dur: .16, pulses: 5 },
+      shuriken: { c: 0x8affea, proj: .16, dur: .16, pulses: 4 }, splinter: { c: 0xa8ff6a, proj: .12, dur: .14, pulses: 3 },
+      melta: { c: 0xffb070, beam: .07, life: .3, pulses: 1, heat: 1 }, flame: { c: 0xff8a2a, flame: 1 }, warpflame: { c: 0x7affff, flame: 1 },
+      shell: { c: 0xffd08a, proj: .35, dur: .32, smoke: 1 }, lob: { c: 0xffd08a, proj: .3, dur: .7, arc: 1, smoke: 1 }, grenade: { c: 0xffd08a, proj: .16, dur: .55, arc: .5 },
+      bio: { c: 0xb0ff4a, proj: .3, dur: .22, pulses: 2 },
+    };
+    // decals that stay: scorch where blasts went off, pools where models fell
+    const decals = new THREE.Group(); scene.add(decals);
+    const scorchMat = keep(new THREE.MeshStandardMaterial({ map: TEX.scorch, transparent: true, depthWrite: false, roughness: 1, polygonOffset: true, polygonOffsetFactor: -2 }));
+    const poolMat = { blood: keep(new THREE.MeshStandardMaterial({ color: 0x4a0a08, alphaMap: TEX.pool, transparent: true, depthWrite: false, roughness: .3, polygonOffset: true, polygonOffsetFactor: -3 })),
+      oil: keep(new THREE.MeshStandardMaterial({ color: 0x0c0c0c, alphaMap: TEX.pool, transparent: true, depthWrite: false, roughness: .25, polygonOffset: true, polygonOffsetFactor: -3 })) };
+    const decalGeo = keep(new THREE.PlaneGeometry(1, 1));
+    const blasts = [];
+    fx.forEach((es, k) => es.forEach(e => { if (e[0] === "b") blasts.push({ t: k + 1, q: e[1], r: e[2], R: e[3] }); }));
+    let decalT = -1;
+    const buildDecals = t => {
+      if (decalT === t) return; decalT = t;
+      while (decals.children.length) decals.remove(decals.children[0]);
+      for (const b of blasts) if (b.t <= t) { const [x, y] = P(b.q, b.r), m = new THREE.Mesh(decalGeo, scorchMat), s = 1.2 + b.R * 1.1; m.rotation.x = -Math.PI / 2; m.rotation.z = hash(b.q, b.r) * 6; m.scale.set(s, s, 1); m.position.set(x, zOf(b.q, b.r) + .02, y); m.receiveShadow = true; decals.add(m); }
+      for (const F of figs) { const d = deathOf(F.i, t); if (!d) continue; const living = !/Necron/.test(ros[F.i].faction || "") && !F.veh; const m = new THREE.Mesh(decalGeo, living ? poolMat.blood : poolMat.oil), s = F.veh ? 2.4 : .9 * Math.max(1, F.k); m.rotation.x = -Math.PI / 2; m.rotation.z = F.i; m.scale.set(s, s * .8, 1); const [x, y] = d.at; m.position.set(x - .2, zXY(x, y) + .025, y); decals.add(m); }
+    };
+
+    // ================= the timeline: when each model went down and came back, from the frames and casualty events
+    const downs = ros.map(() => []);   // per model: [{ t: frame it vanished, at: [x, y], dead, back: frame it reappeared or null }]
+    {
+      const dEv = [];
+      fx.forEach((es, k) => es.forEach(e => { if (e[0] === "d") dEv.push({ t: k + 1, q: e[1], r: e[2], dead: !!e[4] }); }));
+      for (let i = 0; i < ros.length; i++) {
+        let cur = null;
+        for (let t = 1; t < fr.length; t++) {
+          const a = fr[t - 1] && fr[t - 1][i], b = fr[t] && fr[t][i];
+          if (a && !b) { const ev = dEv.find(d => d.t === t && d.q === a[0] && d.r === a[1]); cur = { t, at: P(a[0], a[1]), q: a[0], r: a[1], dead: ev ? ev.dead : null, fell: !!ev, back: null, facing: a[4] }; downs[i].push(cur); }
+          else if (!a && b && cur) { cur.back = t; cur = null; }
+        }
+      }
+    }
+    const deathOf = (i, t) => downs[i].find(d => d.fell && d.t <= t && (d.back == null || d.back > t)) || null;
+
+    // ================= what happens this second, scheduled across it (p from 0 to 1)
+    let schedT = -1, sched = [], prevP = 0;
+    const evFor = figs.map(() => ({}));
+    function buildSchedule(t) {
+      schedT = t; sched = []; prevP = 0;
+      for (const e of evFor) for (const k in e) delete e[k];
+      if (t <= 0) return;
+      const es = fx[t - 1] || [], lastImpact = new Map();
+      let n = 0;
+      for (const e of es) {
+        if (e[0] === "s") {
+          const lag = Math.min(.35, n++ * .03) + .05, kind = e[12] || "slug", K = KIND[kind] || KIND.slug;
+          const travel = K.beam || K.flame ? .05 : K.dur || .15, imp = lag + travel;
+          (evFor[e[7]].fire ||= []).push({ p: lag, kind, tgt: e[8], hits: e[10] || 0, nb: e[11] || 1 });
+          if (e[8] >= 0) lastImpact.set(e[8], imp);
+          sched.push({ p: lag, run: () => fireFx(e, kind, K) });
+        } else if (e[0] === "m") {
+          const lag = Math.min(.35, n++ * .03) + .05;
+          (evFor[e[7]].swing ||= []).push({ p: lag, tgt: e[8] });
+          if (e[8] >= 0) lastImpact.set(e[8], lag + .22);
+          if (e[6]) sched.push({ p: lag + .22, run: () => { const F = figs[e[8]]; if (F) burst(glow, chestOf(F), 10, { speed: 3, life: .25, s0: .12, s1: .02, c: C(0xffe0a0), grav: 6 }); } });
+        } else if (e[0] === "v") {
+          const pi = lastImpact.get(e[1]) ?? .3; (evFor[e[1]].dodge ||= []).push({ p: pi - .08, how: e[2] });
+        } else if (e[0] === "h") {
+          const pi = lastImpact.get(e[1]) ?? .35; const F = figs[e[1]];
+          if (e[2] > 0) (evFor[e[1]].hit ||= []).push({ p: pi });
+          sched.push({ p: pi, run: () => { if (F) impactFx(F, e[2] > 0); } });
+        } else if (e[0] === "f") {
+          const pi = lastImpact.get(e[1]) ?? .35; sched.push({ p: pi, run: () => { const F = figs[e[1]]; if (F) shieldFx(F); } });
+        } else if (e[0] === "b") {
+          const [x, y] = P(e[1], e[2]); let pb = .4;
+          for (const [ti, pi] of lastImpact) { const F = figs[ti]; if (F && F.g.position.distanceTo(W3(x, y, F.g.position.y)) < 1.6) pb = pi; }
+          sched.push({ p: pb, run: () => blastFx(W3(x, y, zOf(e[1], e[2])), e[3]) });
+        }
+      }
+      sched.sort((a, b) => a.p - b.p);
+    }
+    const chestOf = F => F.g.position.clone().add(new THREE.Vector3(0, (F.veh ? .9 : F.top * .62), 0));
+    const muzzleOf = (F, toward) => {
+      const at = F.g.position.clone(), h = F.veh ? (F.turret && F.turret !== F.hull ? .9 : .7) : F.top * (F.arch === "beast" ? .45 : .62);
+      const d = toward.clone().sub(at); d.y = 0; d.normalize();
+      return at.add(new THREE.Vector3(0, h, 0)).add(d.multiplyScalar(F.veh ? 1.2 : .45 * Math.max(1, F.k)));
+    };
+    function fireFx(e, kind, K) {
+      const A = figs[e[7]]; if (!A) return;
+      const tF = e[8] >= 0 ? figs[e[8]] : null;
+      const [bx, by] = P(e[3], e[4]);
+      const tgt = tF && tF.g.visible ? chestOf(tF) : W3(bx, by, zOf(e[3], e[4]) + .8);
+      const from = muzzleOf(A, tgt), hit = !!e[6];
+      const miss = () => tgt.clone().add(new THREE.Vector3((rnd() - .5) * 2.5, (rnd() - .2) * 1.2, (rnd() - .5) * 2.5));
+      if (o.reduce) return;
+      // muzzle flash
+      burst(glow, from, 3, { speed: .6, life: .08, s0: K.beam ? .5 : .7, s1: .1, c: C(K.c), fade: 1 });
+      if (!K.beam && !K.flame) burst(smoke, from, 2, { speed: .3, life: .8, s0: .25, s1: .7, c: C(0x9a948a), a: .35, lift: .4 });
+      flash(from, K.c, K.beam ? 1.5 : 2.2, .09, 6);
+      const pulses = Math.min(K.pulses || 1, Math.max(1, e[11] || 1));
+      if (K.flame) {
+        // a cone of fire licking out to the target
+        const d = tgt.clone().sub(from), len = d.length(); d.normalize();
+        for (let j = 0; j < 46; j++) { const s = 4 + rnd() * 6; glow.add({ x: from.x, y: from.y, z: from.z, vx: d.x * s * len / 5 + (rnd() - .5) * 1.4, vy: d.y * s * len / 5 + (rnd() - .2) * 1.2, vz: d.z * s * len / 5 + (rnd() - .5) * 1.4, age: -j * .006, life: .45 + rnd() * .2, s0: .25, s1: 1.1, c: C(kind === "warpflame" ? 0x9affff : 0xffe08a), c1: C(K.c), a: .9, drag: .82 }); }
+        burst(smoke, tgt, 8, { speed: .6, life: 1.6, s0: .4, s1: 1.4, c: C(0x2a2622), a: .45, lift: .8 });
+        return;
+      }
+      for (let j = 0; j < pulses; j++) {
+        const to = hit && j < Math.max(1, e[10] || 1) ? tgt.clone().add(new THREE.Vector3((rnd() - .5) * .2, (rnd() - .5) * .3, (rnd() - .5) * .2)) : miss();
+        const delay = j * .06;
+        if (K.beam) {
+          setTimeout(() => {
+            beam(from, to, K.c, K.beam, K.life, K.crackle ? .08 : 0);
+            if (K.flare) { burst(glow, to, 14, { speed: 2.4, life: .3, s0: .5, s1: .05, c: C(0xffc0b0) }); flash(to, K.c, 3, .2, 8); }
+            if (K.heat) burst(glow, to, 10, { speed: 1, life: .35, s0: .6, s1: .1, c: C(0xffe0c0) });
+            if (K.crackle) burst(glow, to, 8, { speed: 1.5, life: .35, s0: .18, s1: .02, c: C(0x7aff9a), spread: .3 });
+          }, delay * 1000 * speedK());
+        } else {
+          const K2 = K;
+          setTimeout(() => projectile(from.clone(), to, { dur: (K2.dur || .15) * (1 + from.distanceTo(to) / 60), arc: K2.arc ? Math.min(8, from.distanceTo(to) * .35 * K2.arc) : 0, c: K2.c, size: K2.proj, trail: !K2.smoke, smokeTrail: !!K2.smoke,
+            onHit: K2.pop ? at => burst(glow, at, 6, { speed: 1.5, life: .2, s0: .35, s1: .05, c: C(0xffc070) }) : null }), delay * 1000 * speedK());
+        }
+      }
+    }
+    let speedMs = 1000;
+    const speedK = () => Math.max(.25, Math.min(2, speedMs / 1000));
+    function impactFx(F, pen) {
+      if (o.reduce) return;
+      const at = chestOf(F).add(new THREE.Vector3((rnd() - .5) * .3, (rnd() - .5) * .3, (rnd() - .5) * .3));
+      const metal = F.veh || /Necron/.test(ros[F.i].faction || "");
+      if (!pen) burst(glow, at, 9, { speed: 4, life: .3, s0: .1, s1: .02, c: C(0xfff0c0), grav: 9, floor: F.g.position.y + .02, drag: .95 });
+      else if (metal) { burst(glow, at, 14, { speed: 4.5, life: .45, s0: .14, s1: .02, c: C(0xffd070), grav: 9, floor: F.g.position.y + .02, drag: .95 }); burst(smoke, at, 3, { speed: .4, life: 1.2, s0: .3, s1: .9, c: C(0x2a2826), a: .5, lift: .6 }); }
+      else { burst(smoke, at, 8, { speed: 1.6, life: .45, s0: .12, s1: .28, c: C(0x7a0e0a), a: .9, grav: 7, drag: .9 }); burst(glow, at, 4, { speed: 2, life: .15, s0: .2, s1: .05, c: C(0xffb090) }); }
+    }
+    function shieldFx(F) { const at = chestOf(F); burst(glow, at, 18, { speed: 1.4, life: .35, s0: .25, s1: .05, c: C(0x58b6e8), spread: .8 }); flash(at, 0x58b6e8, 1.6, .15, 5); }
+    function blastFx(at, R) {
+      if (o.reduce) return;
+      const s = 1 + Math.max(0, R - 1) * .3;   // the blast's radius on the 2D map, toned down for the eye
+      flash(at.clone().add(new THREE.Vector3(0, 1.2, 0)), 0xffa040, 5 * s, .35, 8 + s * 4);
+      burst(glow, at.clone().add(new THREE.Vector3(0, .4, 0)), 22 + s * 6, { speed: 2.2 * s, life: .5, s0: .7 * s, s1: .15, c: C(0xfff0b0), c1: C(0xff7a20), up: 1.6, drag: .8, fade: 1.2 });
+      burst(glow, at.clone().add(new THREE.Vector3(0, .2, 0)), 18, { speed: 5 * Math.sqrt(s), life: .8, s0: .08, s1: .02, c: C(0xffc070), grav: 9, up: 2, floor: at.y + .02, drag: .97 });
+      burst(smoke, at.clone().add(new THREE.Vector3(0, .5, 0)), 8 + s * 4, { speed: .7 * s, life: 3, s0: .5 * s, s1: 1.5 * s, c: C(0x2b2723), a: .45, up: 1.2, lift: .8, drag: .9, fadeIn: 1 });
+      burst(smoke, at, 8, { speed: 2.2 * s, life: 1.1, s0: .3, s1: .9, c: C(0x6a5a46), a: .35, up: .2, drag: .85 });   // dust skirt
+    }
+
+    // ================= text: floating injury numbers, as on the 2D map
     let fxT = -1, fxObjs = [];
     const textSprite = (txt, color) => {
       const c = document.createElement("canvas"); c.width = 256; c.height = 96; const x = c.getContext("2d");
       x.font = "bold 64px ui-monospace,monospace"; x.textAlign = "center"; x.textBaseline = "middle"; x.lineWidth = 12; x.strokeStyle = "rgba(0,0,0,.8)"; x.strokeText(txt, 128, 48); x.fillStyle = color; x.fillText(txt, 128, 48);
       const tex = new THREE.CanvasTexture(c), s = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, depthTest: false, transparent: true }));
-      s.scale.set(1.6, .6, 1); s.renderOrder = 20; return s;
+      s.scale.set(1.4, .52, 1); s.renderOrder = 20; return s;
     };
-    const clearFx = () => { for (const o2 of fxObjs) { scene.remove(o2.obj); o2.obj.traverse(m => { if (m.geometry && !Object.values(geo).includes(m.geometry)) m.geometry.dispose(); if (m.material) { if (m.material.map) m.material.map.dispose(); m.material.dispose(); } }); } fxObjs = []; };
-    const heightAt = (i, h = 1.2) => (figs[i] ? figs[i].k : 1) * h;
-    function buildFx(t) {
-      clearFx(); fxT = t;
+    const clearText = () => { for (const o2 of fxObjs) { scene.remove(o2.obj); o2.obj.material.map.dispose(); o2.obj.material.dispose(); } fxObjs = []; };
+    function buildText(t) {
+      clearText(); fxT = t;
       if (t <= 0) return;
-      const es = fx[t - 1] || [], seen = new Map();
-      es.forEach((e, n) => {
-        if (e[0] === "s") {
-          const [ax, ay] = P(e[1], e[2]), [bx, by] = P(e[3], e[4]);
-          const a = W3(ax, ay, zOf(e[1], e[2]) + heightAt(e[7], 1.15)), b = W3(bx, by, zOf(e[3], e[4]) + heightAt(e[8], 1));
-          const g2 = new THREE.BufferGeometry().setFromPoints([a, a.clone()]);
-          const hit = !!e[6], m = hit ? new THREE.LineBasicMaterial({ color: e[5] ? 0xf1d38a : 0xffa08c, transparent: true }) : new THREE.LineDashedMaterial({ color: 0xffffff, dashSize: .3, gapSize: .25, transparent: true, opacity: .45 });
-          const line = new THREE.Line(g2, m), bolt = new THREE.Mesh(geo.sph, new THREE.MeshBasicMaterial({ color: 0xfff3c4 })); bolt.scale.setScalar(.1);
-          const obj = new THREE.Group(); obj.add(line, bolt); scene.add(obj);
-          fxObjs.push({ obj, lag: Math.min(.3, n * .012), run(q2, p) { const c = a.clone().lerp(b, q2); g2.attributes.position.setXYZ(1, c.x, c.y, c.z); g2.attributes.position.needsUpdate = true; if (!hit) line.computeLineDistances(); bolt.position.copy(c); bolt.visible = q2 < 1 || hit; if (q2 >= 1 && hit) bolt.scale.setScalar(p >= 1 ? .18 : .26); m.opacity = p >= 1 ? .45 : hit ? 1 : .45; } });
-        } else if (e[0] === "m") {
-          const [ax, ay] = P(e[1], e[2]), [bx, by] = P(e[3], e[4]), ang = Math.atan2(by - ay, bx - ax);
-          const arc = new THREE.Mesh(new THREE.TorusGeometry(.75, e[6] ? .06 : .03, 6, 24, 2.2), new THREE.MeshBasicMaterial({ color: e[5] ? 0xf1d38a : 0xf08a7e, transparent: true }));
-          arc.position.set(bx - Math.cos(ang) * .3, zOf(e[3], e[4]) + heightAt(e[8], 1.1), by - Math.sin(ang) * .3); arc.rotation.set(Math.PI / 2, 0, ang - 1.1); scene.add(arc);
-          fxObjs.push({ obj: arc, lag: Math.min(.3, n * .012), run(q2, p) { arc.scale.setScalar(.4 + .6 * q2); arc.material.opacity = (e[6] ? 1 : .5) * (p >= 1 ? .35 : 1); } });
-        } else if (e[0] === "b") {
-          const [x, y] = P(e[1], e[2]), R = e[3] * 1.4;
-          const ball = new THREE.Mesh(geo.sph, new THREE.MeshBasicMaterial({ color: 0xffa040, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending }));
-          const z0 = zOf(e[1], e[2]), light = new THREE.PointLight(0xffa040, 0, R * 4); light.position.set(x, z0 + 1.5, y);
-          const obj = new THREE.Group(); ball.position.set(x, z0 + .3, y); obj.add(ball, light); scene.add(obj);
-          fxObjs.push({ obj, lag: 0, run(q2, p) { const s = R * Math.min(1, .25 + p); ball.scale.set(s, s * .6, s); ball.material.opacity = p >= 1 ? .18 : .75 * (1 - p * .6); light.intensity = p >= 1 ? 0 : 3 * (1 - p); } });
-        } else if (e[0] === "h" || e[0] === "v" || e[0] === "f") {
-          const q0 = e[0] === "h" ? e[4] : e[3], r0 = e[0] === "h" ? e[5] : e[4];
-          if (q0 == null) return;
-          const key2 = q0 + "," + r0, nn = seen.get(key2) || 0; seen.set(key2, nn + 1);
-          const txt = e[0] === "h" ? (e[2] > 0 ? "−" + e[2] : "no pen") : e[0] === "f" ? "shield" : String(e[2]);
-          const colr = e[0] === "h" ? (e[2] > 0 ? "#ffd2c8" : "#c9c6bd") : e[0] === "f" ? "#a8dcf6" : "#f4f1e8";
-          const s = textSprite(txt, colr), [x, y] = P(q0, r0), base = zOf(q0, r0) + heightAt(e[1], 2.1) + nn * .55;
-          if (e[0] === "h" && e[2] > 0) s.scale.multiplyScalar(1.25);
-          scene.add(s);
-          fxObjs.push({ obj: s, lag: 0, run(q2, p) { const show = p >= .35 || o.reduce; s.visible = show; s.position.set(x + .5, base + (o.reduce ? .6 : .3 + Math.min(1, Math.max(0, (p - .35) / .65)) * 1.1), y); s.material.opacity = p >= 1 ? .85 : Math.min(1, (1.15 - p) * 2 + .3); } });
-        }
-      });
+      const seen = new Map();
+      for (const e of fx[t - 1] || []) if (e[0] === "h" || e[0] === "f") {
+        const q0 = e[0] === "h" ? e[4] : e[3], r0 = e[0] === "h" ? e[5] : e[4];
+        if (q0 == null) continue;
+        const key2 = q0 + "," + r0, nn = seen.get(key2) || 0; seen.set(key2, nn + 1);
+        const txt = e[0] === "h" ? (e[2] > 0 ? "−" + e[2] : "no pen") : "shield", colr = e[0] === "h" ? (e[2] > 0 ? "#ffd2c8" : "#c9c6bd") : "#a8dcf6";
+        const s = textSprite(txt, colr), [x, y] = P(q0, r0), F = figs[e[1]], base = zOf(q0, r0) + (F ? F.top + .7 : 2.2) + nn * .5;
+        if (e[0] === "h" && e[2] > 0) s.scale.multiplyScalar(1.2);
+        scene.add(s);
+        fxObjs.push({ obj: s, run(p) { const show = p >= .45 || o.reduce; s.visible = show; s.position.set(x + .5, base + (o.reduce ? .5 : .2 + Math.min(1, Math.max(0, (p - .45) / .55)) * 1.0), y); s.material.opacity = p >= 1 ? .8 : Math.min(1, (1.15 - p) * 2 + .3); } });
+      }
     }
     // aim lines and paths, rebuilt every frame (few of them)
     let lineObjs = [];
     const clearLines = () => { for (const l of lineObjs) { scene.remove(l); l.geometry.dispose(); l.material.dispose(); } lineObjs = []; };
     const dashed = (pts2, color, opacity) => { const g2 = new THREE.BufferGeometry().setFromPoints(pts2), l = new THREE.Line(g2, new THREE.LineDashedMaterial({ color, dashSize: .25, gapSize: .2, transparent: true, opacity })); l.computeLineDistances(); scene.add(l); lineObjs.push(l); };
-    // ---- camera: orbit around a target
+
+    // ================= camera: orbit around a target, optionally following the selected model
     const orb = { tx: cx, ty: 0, tz: cy, r: span * .8, th: -Math.PI / 2 + .35, ph: .95 };
-    // the opening view frames the two sides as they deploy; Fit shows the whole map
     const tp = (fr[0] || []).filter(Boolean).map(x => P(x[0], x[1]));
-    const act = tp.length ? [Math.min(...tp.map(p => p[0])), Math.max(...tp.map(p => p[0])), Math.min(...tp.map(p => p[1])), Math.max(...tp.map(p => p[1]))] : [bx0, bx1, by0, by1];
+    const actB = tp.length ? [Math.min(...tp.map(p => p[0])), Math.max(...tp.map(p => p[0])), Math.min(...tp.map(p => p[1])), Math.max(...tp.map(p => p[1]))] : [bx0, bx1, by0, by1];
     const place = () => {
-      orb.ph = Math.max(.12, Math.min(1.45, orb.ph)); orb.r = Math.max(4, Math.min(span * 3, orb.r));
+      orb.ph = Math.max(.12, Math.min(1.45, orb.ph)); orb.r = Math.max(2.5, Math.min(span * 3, orb.r));
       camera.position.set(orb.tx + orb.r * Math.sin(orb.ph) * Math.cos(orb.th), orb.ty + orb.r * Math.cos(orb.ph), orb.tz + orb.r * Math.sin(orb.ph) * Math.sin(orb.th));
       camera.lookAt(orb.tx, orb.ty, orb.tz);
     };
     const fit = (whole) => {
-      const [ax0, ax1, ay0, ay1] = whole ? [bx0, bx1, by0, by1] : act;
+      const [ax0, ax1, ay0, ay1] = whole ? [bx0, bx1, by0, by1] : actB;
       orb.tx = (ax0 + ax1) / 2; orb.tz = (ay0 + ay1) / 2; orb.ty = 0;
       orb.r = Math.max(9, Math.max(ax1 - ax0, (ay1 - ay0) * camera.aspect) * (whole ? 1.1 : .85) + (whole ? 6 : 4)); orb.th = Math.PI / 2 + .3; orb.ph = .85; place();
     };
-    let W = 0, H = 0, last = { t: 0, p: 1, st: {} };
-    function resize(w, h) { W = w; H = h; renderer.setSize(w, h, false); renderer.domElement.style.width = w + "px"; renderer.domElement.style.height = h + "px"; camera.aspect = w / h; camera.updateProjectionMatrix(); place(); render(); }
-    // ---- one frame
+
+    // ================= rendering: bloom when the vendored post-processing loaded, ACES tone mapping either way
+    let W = 0, H = 0, composer = null, bloom = null;
+    try {
+      if (typeof installThreePost === "function") installThreePost();
+      if (THREE.EffectComposer && THREE.UnrealBloomPass) {
+        const rt = new THREE.WebGLRenderTarget(16, 16, { type: THREE.HalfFloatType });
+        composer = new THREE.EffectComposer(renderer, rt);
+        composer.addPass(new THREE.RenderPass(scene, camera));
+        bloom = new THREE.UnrealBloomPass(new THREE.Vector2(256, 256), big ? .6 : .8, .4, .97);   // only what glows (beams, flashes, eye lenses) blooms composer.addPass(bloom);
+        // the final pass: ACES filmic tone mapping, sRGB, and a light vignette
+        composer.addPass(new THREE.ShaderPass({ uniforms: { tDiffuse: { value: null }, exposure: { value: indoor ? 1.1 : 1.0 } },
+          vertexShader: "varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }",
+          fragmentShader: "uniform sampler2D tDiffuse; uniform float exposure; varying vec2 vUv; vec3 aces(vec3 x){ return clamp((x * (2.51 * x + 0.03)) / (x * (2.43 * x + 0.59) + 0.14), 0.0, 1.0); } void main(){ vec3 c = texture2D(tDiffuse, vUv).rgb * exposure; c = aces(c); c = pow(c, vec3(1.0 / 2.2)); float v = smoothstep(0.95, 0.35, length(vUv - 0.5)); gl_FragColor = vec4(c * mix(0.78, 1.0, v), 1.0); }" }));
+        renderer.toneMapping = THREE.NoToneMapping; renderer.outputEncoding = THREE.LinearEncoding;
+      }
+    } catch (e) { composer = null; }
+    if (!composer) { renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = indoor ? 1.1 : 1.0; renderer.outputEncoding = THREE.sRGBEncoding; }
+    function resize(w, h) {
+      W = w; H = h; renderer.setSize(w, h, false); renderer.domElement.style.width = w + "px"; renderer.domElement.style.height = h + "px"; camera.aspect = w / h; camera.updateProjectionMatrix();
+      if (composer) { composer.setPixelRatio(renderer.getPixelRatio()); composer.setSize(w, h); }
+      const s = H * renderer.getPixelRatio() / (2 * Math.tan(camera.fov * Math.PI / 360)); glow.mat.uniforms.scale.value = s; smoke.mat.uniforms.scale.value = s;
+      place(); render();
+    }
+    function render() { if (!W) return; if (composer) composer.render(); else renderer.render(scene, camera); }
+
+    // ================= posing the miniatures
     const facingAng = d => [0, -60, -120, 180, 120, 60][d] * Math.PI / 180;
+    const ease = x => x <= 0 ? 0 : x >= 1 ? 1 : x * x * (3 - 2 * x);
+    const bump = (x, w) => x < 0 || x > w ? 0 : Math.sin(Math.PI * x / w);
+    let last = { t: 0, p: 1, st: {} }, clock = 0;
+    function pose(F, x, bitsv, p, ev, at, dt, dead) {
+      const B = F.B || {};
+      // walking: the stride follows the ground actually covered
+      const prevAt = F.last; F.last = at ? [at[0], at[1]] : null;
+      const moved = prevAt && at ? Math.hypot(at[0] - prevAt[0], at[1] - prevAt[1]) : 0;
+      const speed = dt > 0 ? moved / dt : 0;
+      F.walk += ((speed > .3 ? Math.min(1, speed / 3) : 0) - F.walk) * Math.min(1, dt * 8);
+      F.phase += moved * (F.veh ? 1 : 4.2 / Math.max(.6, F.k));
+      const prone = bitsv & 2, kneel = bitsv & 4, stun = bitsv & 1, aimB = bitsv & 128, reload = bitsv & 1024;
+      // this second's actions
+      const fires = ev.fire || [], swings = ev.swing || [], dodges = ev.dodge || [], hits = ev.hit || [];
+      let aimT = aimB ? 1 : 0, recoil = 0, swing = -1, dodge = 0, flinch = 0, throwing = -1;
+      for (const f of fires) { if (p >= f.p - .3 && p <= f.p + .55) aimT = 1; if (p >= f.p) recoil = Math.max(recoil, Math.exp(-(p - f.p) * 22)); if (f.kind === "grenade" && p >= f.p - .25 && p <= f.p + .2) throwing = (p - f.p + .25) / .45; }
+      for (const s of swings) if (p >= s.p - .2 && p <= s.p + .3) swing = (p - s.p + .2) / .5;
+      for (const d of dodges) dodge = Math.max(dodge, bump(p - d.p + .05, .3));
+      for (const h of hits) if (p >= h.p) flinch = Math.max(flinch, Math.exp(-(p - h.p) * 9));
+      if (reload) aimT = 0;
+      F.aim += (aimT - F.aim) * Math.min(1, dt * 10 + (o.reduce ? 1 : 0));
+      if (F.veh) return poseVehicle(F, x, ev, p, moved, dt, recoil);
+      const fig = F.fig, k = F.k;
+      fig.position.set(0, 0, 0); fig.rotation.set(0, 0, 0);
+      const breathe = Math.sin(clock * 1.7 + F.i) * .012;
+      // legs and arms by default: stance, idle sway, walk cycle
+      const w = F.walk, ph = F.phase;
+      if (F.hips) F.hips.position.y = F.hipY * (1 - .04 * w) + Math.abs(Math.sin(ph)) * .03 * w;
+      for (const L of F.legs) {
+        const sgn = (L.s > 0 ? 1 : -1) * (L.x != null && L.x < 0 ? -1 : 1);
+        if (L.walker) { L.p.rotation.z = .5 + Math.sin(ph * .7 + (L.s > 0 ? 0 : Math.PI)) * .35 * w; L.kn.rotation.z = -1.0 - Math.max(0, Math.sin(ph * .7 + (L.s > 0 ? 0 : Math.PI))) * .4 * w; continue; }
+        L.p.rotation.z = Math.sin(ph + (sgn > 0 ? 0 : Math.PI)) * .6 * w;
+        L.kn.rotation.z = -Math.max(0, Math.sin(ph + (sgn > 0 ? 0 : Math.PI) - .9)) * .9 * w;
+      }
+      if (F.torso && !F.quad) F.torso.rotation.set(0, 0, -(B.hunch || 0) - .12 * w);
+      if (F.torso) F.torso.scale.y = 1 + breathe;
+      if (F.segs) F.segs.forEach((sg, j) => { sg.position.z = Math.sin(ph * 1.4 - j * .9) * .12 * (w + .2); });
+      if (F.hover) F.hips.position.y = F.hipY + Math.sin(clock * 2 + F.i) * .06;
+      if (F.wings) F.wings.forEach((wg, j) => { wg.rotation.x = (j ? -1 : 1) * (.5 + Math.sin(clock * 9) * .35); });
+      const arms = F.arms, R2 = arms[0], L2 = arms[1];
+      const gunLevel = F.aim;
+      for (const a of arms) { a.sh.rotation.set(0, 0, 0); a.el.rotation.set(0, 0, 0); }
+      if (!F.quad && R2) {
+        // the gun arm: hanging at low ready, up and level when aiming, kicking back on a shot
+        const swingArm = -Math.sin(ph + Math.PI) * .45 * w * (1 - gunLevel);
+        R2.sh.rotation.z = .55 + gunLevel * .95 + swingArm - recoil * .25; R2.el.rotation.z = .35 * (1 - gunLevel) + recoil * .15;
+        R2.sh.rotation.x = -.15 * gunLevel;
+        if (L2) { L2.sh.rotation.z = .45 + gunLevel * .9 - swingArm; L2.el.rotation.z = .55 * gunLevel; L2.sh.rotation.x = .45 * gunLevel; }
+        if (reload && L2) { R2.sh.rotation.z = .7; L2.sh.rotation.z = .9 + Math.sin(clock * 9) * .25; L2.el.rotation.z = 1.2; }
+        if (F.gun) F.gun.position.x = -recoil * .08;
+        if (throwing >= 0) { const s = throwing; R2.sh.rotation.z = s < .5 ? 1 + s * 3.4 : 2.7 - (s - .5) * 5; R2.el.rotation.z = -.4; }
+        if (swing >= 0) {
+          // an overhead blow with the blade arm, the body leaning into it
+          const A2 = F.blade && L2 ? L2 : R2, s = swing;
+          A2.sh.rotation.z = s < .4 ? .5 + ease(s / .4) * 2.4 : 2.9 - ease((s - .4) / .35) * 2.6;
+          A2.el.rotation.z = s < .4 ? .2 : .1;
+          if (F.torso) F.torso.rotation.z -= bump(s - .3, .6) * .35;
+          if (A2 === L2 && R2) R2.sh.rotation.z = .5;
+        }
+        if (F.arms.length > 2) for (const a of F.arms.slice(2)) { a.sh.rotation.z = .9 + Math.sin(clock * 3 + a.s) * .15 + (swing >= 0 ? bump(swing, 1) * 1.2 : 0); a.el.rotation.z = -1.2; }
+      } else if (F.quad) {
+        for (const a of arms) { a.sh.rotation.z = 1.2 + (swing >= 0 ? bump(swing, 1) * (a.s > 0 ? 1.2 : .9) : 0) + Math.sin(clock * 2.3 + a.s) * .06; a.el.rotation.z = -1.8 + (swing >= 0 ? bump(swing - .2, .6) * 1.2 : 0); }
+        if (F.torso) F.torso.rotation.z = -(swing >= 0 ? bump(swing - .2, .6) * .2 : 0);
+      }
+      if (F.head) F.head.rotation.set(0, 0, stun ? -.35 : -.05 * gunLevel);
+      // flinch back from a wound, sway aside from a dodge
+      if (F.torso) { F.torso.rotation.z += flinch * .45; F.torso.rotation.x = dodge * (F.i % 2 ? .5 : -.5); }
+      fig.position.z = dodge * (F.i % 2 ? -.3 : .3) * k;
+      // posture: kneeling on one knee, lying on the belly, reeling when stunned
+      if (kneel && !prone && F.legs.length === 2) {
+        F.hips.position.y = F.hipY * .55; const [a, b] = F.legs;
+        a.p.rotation.z = 1.35; a.kn.rotation.z = -1.5; b.p.rotation.z = -.35; b.kn.rotation.z = -1.45;
+      }
+      if (prone && !F.quad && !F.segs) {
+        fig.rotation.z = -Math.PI / 2 + .04; fig.position.y = .14 * k; fig.position.x = -.85 * k;
+        if (R2) { R2.sh.rotation.z = 2.6 + gunLevel * .25; R2.el.rotation.z = .2; } if (L2) { L2.sh.rotation.z = 2.5; L2.el.rotation.z = .4; }
+        for (const L of F.legs) { L.p.rotation.z = Math.sin(ph) * .2 * w; L.kn.rotation.z = -.2; }
+      } else if (prone) fig.scale.y = .6;
+      if (stun && !prone) { fig.rotation.x = Math.sin(clock * 5 + F.i) * .12; fig.rotation.z = .12; }
+      // going down: toppling backward over the fall; then lying where it fell
+      if (dead) {
+        const f = dead.f; fig.rotation.z = ease(f) * (Math.PI / 2 - .05); fig.position.y = .1 * k * ease(f); fig.position.x = .55 * k * ease(f) * (F.quad ? 0 : 1);
+        if (F.quad || F.segs) { fig.rotation.z = 0; fig.rotation.x = ease(f) * Math.PI / 2 * .9; fig.position.y = -.1 * k * ease(f); }
+        for (const L of F.legs) { L.p.rotation.z = .3 * ease(f); L.kn.rotation.z = -.4 * ease(f); }
+        if (R2) R2.sh.rotation.z = .5 + 1.8 * ease(f); if (L2) L2.sh.rotation.z = .3 + 2.2 * ease(f);
+      }
+    }
+    function poseVehicle(F, x, ev, p, moved, dt, recoil) {
+      for (const tm of F.tracks) tm.map.offset.x -= moved * .45;
+      for (const w of F.wheels) w.rotation.z -= moved * 3;
+      F.fig.position.y = F.walk > .1 && !F.walker ? Math.sin(clock * 22) * .01 : 0;
+      if (F.walker) { for (const L of F.legs) { L.p.rotation.z = .5 + Math.sin(F.phase * 1.6 + (L.s > 0 ? 0 : Math.PI)) * .4 * F.walk; L.kn.rotation.z = -1.0 - Math.max(0, Math.sin(F.phase * 1.6 + (L.s > 0 ? 0 : Math.PI))) * .5 * F.walk; } F.hips.position.y = F.hipY + Math.abs(Math.sin(F.phase * 1.6)) * .05 * F.walk; }
+      // the turret swings to its own facing (the gunner's last target), the guns recoil when they fire
+      if (F.turret && x && x[10] != null) {
+        const want = -facingAng(x[10]) - F.g.rotation.y;
+        let cur = F.turret.rotation.y, d = ((want - cur) % (2 * Math.PI) + 3 * Math.PI) % (2 * Math.PI) - Math.PI;
+        F.turret.rotation.y = cur + d * Math.min(1, dt * 4 + (o.reduce ? 1 : 0));
+      }
+      for (const b of F.barrels) b.position.x = (b.userData.x0 ?? (b.userData.x0 = b.position.x)) - recoil * .18;
+      if (F.exhaust && !o.reduce && rnd() < (F.walk > .2 ? .6 : .15)) { const at = F.exhaust.clone().applyMatrix4(F.fig.matrixWorld); smoke.add({ x: at.x, y: at.y, z: at.z, vx: (rnd() - .5) * .2, vy: .6 + rnd() * .3, vz: (rnd() - .5) * .2, age: 0, life: 2.4, s0: .2, s1: .9, c: C(0x2a2826), a: .35, drag: .95, fadeIn: 1 }); }
+    }
+
+    // ================= one frame
+    let lastFrameT = performance.now(), lastSt = {};
     function update(t, p, st) {
-      last = { t, p, st };
-      if (fxT !== t) buildFx(t);
+      last = { t, p, st }; lastSt = st;
+      speedMs = +(document.getElementById("rspeed") || { value: 1000 }).value || 1000;
+      if (schedT !== t) { if (t < schedT) { glow.clear(); smoke.clear(); } buildSchedule(t); }
+      if (fxT !== t) buildText(t);
+      buildDecals(t);
+      // effects whose moment has come this second
+      if (p < prevP) prevP = 0;
+      for (const s of sched) if (s.p > prevP && s.p <= p) s.run();
+      prevP = p;
       const f = fr[t] || [], prev = t > 0 ? fr[t - 1] || [] : [];
+      const now = performance.now(), dt = Math.min(.1, (now - lastFrameT) / 1000);
       figs.forEach((F, i) => {
-        const x = f[i], at = posAt(i, t, p);
-        const gone = !x && !(prev[i] && p < .6);
-        F.g.visible = !!at && !gone;
-        if (!F.g.visible) return;
-        const cur = x || prev[i], bitsv = cur[7] || 0;
-        F.g.position.set(at[0], zXY(at[0], at[1]), at[1]); F.g.rotation.y = -facingAng(cur[4] || 0);
-        const prone = bitsv & 2, kneel = bitsv & 4, stun = bitsv & 1;
-        F.fig.rotation.set(0, 0, 0); F.fig.position.set(0, 0, 0); F.fig.scale.setScalar(F.k);
-        if (prone && F.body === "upright") { F.fig.rotation.z = Math.PI / 2; F.fig.position.set(-.3 * F.k, .3 * F.k, 0); }
-        else if (prone) F.fig.scale.set(F.k, F.k * .5, F.k);
-        else if (kneel) F.fig.scale.set(F.k, F.k * .72, F.k);
-        if (stun) F.fig.rotation.x = .3;
-        if (!x) { F.fig.traverse(m => { if (m.isMesh) { m.material.transparent = true; m.material.opacity = 1 - p / .6; } }); }
-        else F.fig.traverse(m => { if (m.isMesh && m.material.transparent && m.material.opacity < 1 && !m.material.side) { m.material.opacity = 1; m.material.transparent = false; } });
-        F.sel.visible = i === st.sel || i === st.hover; F.sel.material.color.set(i === st.sel ? 0xffffff : 0x9aa0a8);
+        const x = f[i];
+        let at = posAt(i, t, p), dead = null;
+        const d = downs[i].find(dd => dd.t <= t && (dd.back == null || dd.back > t));
+        if (!x && d) {
+          if (!d.fell) { F.g.visible = false; return; }   // fled, boarded a transport or phased out: gone from the table
+          at = d.at; dead = { f: d.t === t ? (o.reduce ? 1 : Math.max(0, Math.min(1, (p - .35) / .4))) : 1 };
+        }
+        const back = downs[i].find(dd => dd.back === t);
+        if (x && back && back.fell && !o.reduce && p < .7) { at = back.at; dead = { f: 1 - Math.max(0, (p - .1) / .6) }; if (p > .1 && p < .14 && /Necron/.test(ros[i].faction || "")) burst(glow, F.g.position.clone().add(new THREE.Vector3(0, .5, 0)), 20, { speed: 1, life: .8, s0: .4, s1: .05, c: C(0x39ff6a), spread: .8, lift: 1 }); }
+        F.g.visible = !!at;
+        if (!at) return;
+        const cur = x || prev[i] || (d && fr[d.t - 1] && fr[d.t - 1][i]) || [0, 0, F.side, 0, 0, 1, null, 0, -1, -1];
+        F.g.position.set(at[0], zXY(at[0], at[1]), at[1]);
+        const yaw = -facingAng(cur[4] || 0);
+        if (F.yaw == null) F.yaw = yaw;
+        let dy = ((yaw - F.yaw) % (2 * Math.PI) + 3 * Math.PI) % (2 * Math.PI) - Math.PI; F.yaw += dy * Math.min(1, dt * 9 + (o.reduce || p >= 1 && !st.playing ? 1 : 0));
+        F.g.rotation.y = F.yaw;
+        pose(F, x, cur[7] || 0, p, evFor[i], at, dt, dead);
+        F.sel.visible = !dead && (i === st.sel || i === st.hover); F.sel.material.color.set(i === st.sel ? 0xffffff : 0x9aa0a8);
+        F.bars.visible = !dead;
         const hpv = cur[5] == null ? 1 : Math.max(0, cur[5]);
         F.hp.scale.set(1.24 * hpv, .13, 1); F.hp.position.x = -.62 + .62 * hpv; F.hp.material.color.set(hpv > .6 ? 0x5fbf6a : hpv > .3 ? 0xe3b341 : 0xe0564b);
         F.sp.visible = cur[8] >= 0; if (cur[8] >= 0) { F.sp.scale.set(1.24 * cur[8], .07, 1); F.sp.position.set(-.62 + .62 * cur[8], .14, 0); }
-        F.bars.quaternion.copy(F.g.quaternion).invert().multiply(camera.quaternion);   // face the camera whatever way the figure faces
+        F.bars.quaternion.copy(F.g.quaternion).invert().multiply(camera.quaternion);
+        if (dead && dead.f >= 1 && F.veh && !o.reduce && rnd() < .5) { const sp2 = F.g.position.clone().add(new THREE.Vector3((rnd() - .5) * .6, 1, (rnd() - .5) * .6)); smoke.add({ x: sp2.x, y: sp2.y, z: sp2.z, vx: (rnd() - .5) * .3, vy: 1.2, vz: (rnd() - .5) * .3, age: 0, life: 4, s0: .5, s1: 2.2, c: C(0x1c1a18), a: .55, drag: .97, fadeIn: 1 }); if (rnd() < .3) glow.add({ x: sp2.x, y: sp2.y - .5, z: sp2.z, vx: 0, vy: .8, vz: 0, age: 0, life: .5, s0: .6, s1: .1, c: C(0xff7a20), a: .8 }); }
       });
-      for (const { f: fl, g } of fallenObj) g.visible = fl.t < t || (fl.t === t && p >= .6);
       for (const r of rubble) r.g.visible = r.t <= t;
       if (T) {
         const state = new Map(doorList.map(k => [k, (T.shut || []).includes(k) ? "shut" : "open"]));
         const broken = new Set();
         for (const [tt, k, what] of T.events || []) if (tt <= t) { if (what === "broken") broken.add(k); if (state.has(k)) state.set(k, what === "broken" ? "rubble" : what === "closed" ? "shut" : "open"); }
-        doorList.forEach((k, i) => { const [q, r] = keyHex(k), [x, y] = P(q, r), s2 = state.get(k); m4.compose(W3(x, y, 0), new THREE.Quaternion(), new THREE.Vector3(1, s2 === "shut" ? 1 : .02, 1)); doorMesh.setMatrixAt(i, m4); doorMesh.setColorAt(i, col.set(s2 === "shut" ? 0x9aa1a8 : 0xd4a52a)); });
+        doorList.forEach((k, i) => { const [q, r] = keyHex(k), [x, y] = P(q, r), s2 = state.get(k); m4.compose(W3(x, y, 0), q0, new THREE.Vector3(1, s2 === "shut" ? 1 : .02, 1)); doorMesh.setMatrixAt(i, m4); doorMesh.setColorAt(i, col.set(s2 === "shut" ? 0x9aa1a8 : 0xd4a52a)); });
         doorMesh.instanceMatrix.needsUpdate = true; if (doorMesh.instanceColor) doorMesh.instanceColor.needsUpdate = true;
-        wallList.forEach((k, i) => { const [q, r] = keyHex(k), [x, y] = P(q, r); m4.compose(W3(x, y, 0), new THREE.Quaternion(), new THREE.Vector3(1, broken.has(k) ? .001 : wallH[i] * (st.lowWalls ? .25 : 1), 1)); walls.setMatrixAt(i, m4); });
+        wallList.forEach((k, i) => { const [q, r] = keyHex(k), [x, y] = P(q, r); m4.compose(W3(x, y, 0), q0, new THREE.Vector3(1, broken.has(k) ? .001 : wallH[i] * (st.lowWalls ? .25 : 1), 1)); walls.setMatrixAt(i, m4); });
         walls.instanceMatrix.needsUpdate = true;
       }
-      for (const o2 of fxObjs) o2.run(o.reduce ? 1 : Math.max(0, Math.min(1, (p - o2.lag) / .45)), p);
+      for (const o2 of fxObjs) o2.run(p);
       clearLines();
-      f.forEach((x, i) => { if (!x || x[9] == null || x[9] < 0 || !f[x[9]]) return; const a = posAt(i, t, p), c = posAt(x[9], t, p); if (a && c) dashed([W3(a[0], a[1], zXY(a[0], a[1]) + heightAt(i, 1.2)), W3(c[0], c[1], zXY(c[0], c[1]) + heightAt(x[9], 1.1))], x[2] ? 0xf1d38a : 0xf08a7e, .55); });
-      if (st.trails && t > 0) f.forEach((x, i) => { if (!x || !x[6] || !x[6].length || !prev[i]) return; dashed([P(prev[i][0], prev[i][1]), ...x[6].map(([q, r]) => P(q, r))].map(([a, b]) => W3(a, b, zXY(a, b) + .06)), x[2] ? 0xd6a73c : 0xc23a30, .6); });
+      f.forEach((x, i) => { if (!x || x[9] == null || x[9] < 0 || !f[x[9]]) return; const a = posAt(i, t, p), c = posAt(x[9], t, p); if (a && c) dashed([W3(a[0], a[1], zXY(a[0], a[1]) + figs[i].top * .6), W3(c[0], c[1], zXY(c[0], c[1]) + figs[x[9]].top * .55)], x[2] ? 0xf1d38a : 0xf08a7e, .45); });
+      if (st.trails && t > 0) f.forEach((x, i) => { if (!x || !x[6] || !x[6].length || !prev[i]) return; dashed([P(prev[i][0], prev[i][1]), ...x[6].map(([q, r]) => P(q, r))].map(([a, b]) => W3(a, b, zXY(a, b) + .08)), x[2] ? 0xd6a73c : 0xc23a30, .55); });
       for (const l of gridLines) l.visible = !!st.grid;
-      render();
     }
-    function render() { if (W) renderer.render(scene, camera); }
-    // ---- input
+    // the animation clock: idle breathing, particles, beams, flashes and the follow camera run on their own
+    let running = false, raf2 = 0;
+    function tick(now) {
+      if (!running) return;
+      const dt = Math.min(.1, (now - lastFrameT) / 1000); lastFrameT = now; clock += dt;
+      update(last.t, last.p, lastSt);
+      glow.step(dt); smoke.step(dt);
+      for (let j = shots.length - 1; j >= 0; j--) {
+        const s = shots[j]; s.age += dt; const f = Math.min(1, s.age / s.dur);
+        const at = s.a.clone().lerp(s.b, f); at.y += Math.sin(Math.PI * f) * s.arc;
+        glow.add({ x: at.x, y: at.y, z: at.z, vx: 0, vy: 0, vz: 0, age: 0, life: .05, s0: s.size, s1: s.size * .8, c: C(s.c), a: 1 });
+        if (s.trail) glow.add({ x: at.x, y: at.y, z: at.z, vx: 0, vy: 0, vz: 0, age: 0, life: .12, s0: s.size * .55, s1: .02, c: C(s.c), a: .6 });
+        if (s.smokeTrail) smoke.add({ x: at.x, y: at.y, z: at.z, vx: (rnd() - .5) * .2, vy: .1, vz: (rnd() - .5) * .2, age: 0, life: 1.2, s0: .2, s1: .7, c: C(0x8a8478), a: .4, fadeIn: 1 });
+        if (f >= 1) { if (s.onHit) s.onHit(at); shots.splice(j, 1); }
+      }
+      for (let j = beams.length - 1; j >= 0; j--) {
+        const b = beams[j]; b.age += dt; const f = b.age / b.life;
+        if (f >= 1) { scene.remove(b.core); scene.remove(b.halo); b.core.material.dispose(); b.halo.material.dispose(); beams.splice(j, 1); continue; }
+        const a2 = 1 - f; b.core.material.opacity = a2; b.halo.material.opacity = a2 * .35;
+        const jit = b.jitter ? (rnd() - .5) * b.jitter : 0; b.halo.scale.x = b.halo.scale.z = b.r * (2.2 + jit * 10);
+      }
+      for (const fl of flashes) { fl.age += dt; fl.l.intensity = fl.age < fl.life ? fl.i0 * (1 - fl.age / fl.life) : 0; }
+      if (lastSt.follow && lastSt.sel >= 0 && figs[lastSt.sel] && figs[lastSt.sel].g.visible) {
+        const P2 = figs[lastSt.sel].g.position, kk = Math.min(1, dt * 3);
+        orb.tx += (P2.x - orb.tx) * kk; orb.tz += (P2.z - orb.tz) * kk; orb.ty += (P2.y - orb.ty) * kk; place();
+      }
+      render();
+      raf2 = requestAnimationFrame(tick);
+    }
+    if (window.SIM3D_DEBUG) window.SIM3D_DEBUG = { glow, smoke, beams, shots, sched: () => sched, figs };
+    const active = on => { if (on && !running) { running = true; lastFrameT = performance.now(); raf2 = requestAnimationFrame(tick); } else if (!on && running) { running = false; cancelAnimationFrame(raf2); } };
+
+    // ================= input
     const el = renderer.domElement, ptr = new Map(); let drag = null, pin = null;
     const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
-    const hit = (sx, sy) => { ndc.set(sx / W * 2 - 1, -sy / H * 2 + 1); ray.setFromCamera(ndc, camera); const h = ray.intersectObjects(pick.filter(m => m.parent && m.parent.parent && m.parent.parent.visible), false)[0]; return h ? h.object.userData.i : -1; };
+    const hit = (sx, sy) => { ndc.set(sx / W * 2 - 1, -sy / H * 2 + 1); ray.setFromCamera(ndc, camera); const h = ray.intersectObjects(pick.filter(m => { let p2 = m; while (p2.parent && p2.parent !== scene) p2 = p2.parent; return p2.visible; }), false)[0]; return h ? h.object.userData.i : -1; };
     const loc = e => { const r = el.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
     el.addEventListener("contextmenu", e => e.preventDefault());
     el.addEventListener("pointerdown", e => { el.setPointerCapture(e.pointerId); ptr.set(e.pointerId, loc(e)); const [sx, sy] = loc(e); drag = { sx, sy, pan: e.button === 2 || e.shiftKey, moved: false }; if (ptr.size === 2) { const [a, b] = [...ptr.values()]; pin = { d: Math.hypot(a[0] - b[0], a[1] - b[1]), r: orb.r, mx: (a[0] + b[0]) / 2, my: (a[1] + b[1]) / 2 }; } });
@@ -5957,13 +6670,13 @@ if (typeof document !== "undefined") (() => {
       const [px0, py0] = ptr.get(e.pointerId); ptr.set(e.pointerId, [sx, sy]);
       if (pin && ptr.size === 2) {
         const [a, b] = [...ptr.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]), mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2;
-        orb.r = pin.r * pin.d / Math.max(1, d); panBy(mx - pin.mx, my - pin.my); pin.mx = mx; pin.my = my; place(); render(); return;
+        orb.r = pin.r * pin.d / Math.max(1, d); panBy(mx - pin.mx, my - pin.my); pin.mx = mx; pin.my = my; place(); return;
       }
       if (!drag) return;
       const dx = sx - px0, dy = sy - py0;
       if (Math.abs(sx - drag.sx) + Math.abs(sy - drag.sy) > 4) drag.moved = true;
       if (drag.pan) panBy(dx, dy); else { orb.th += dx * .008; orb.ph -= dy * .008; }
-      place(); update(last.t, last.p, last.st);
+      place(); if (!running) { update(last.t, last.p, last.st); render(); }
     });
     // the ground under the pointer follows it: right is (sin, -cos), forward (away from the camera) is (-cos, -sin)
     const panBy = (dx, dy) => { const s = orb.r * .0016, c = Math.cos(orb.th), n = Math.sin(orb.th); orb.tx += (-c * dy - n * dx) * s; orb.tz += (-n * dy + c * dx) * s; };
@@ -5975,11 +6688,12 @@ if (typeof document !== "undefined") (() => {
     el.addEventListener("wheel", e => {
       e.preventDefault(); const f = Math.exp(e.deltaY * .0012), g2 = groundAt(...loc(e));
       if (g2 && f < 1) { orb.tx += (g2[0] - orb.tx) * (1 - f); orb.tz += (g2[1] - orb.tz) * (1 - f); }
-      orb.r *= f; place(); update(last.t, last.p, last.st);
+      orb.r *= f; place(); if (!running) { update(last.t, last.p, last.st); render(); }
     }, { passive: false });
     return {
-      update, resize, fit(whole) { fit(whole); update(last.t, last.p, last.st); },
-      dispose() { clearFx(); clearLines(); for (const d of disposables) d.dispose && d.dispose(); renderer.dispose(); el.remove(); },
+      update(t, p, st) { update(t, p, st); if (!running) render(); }, resize, active,
+      fit(whole) { fit(whole); update(last.t, last.p, last.st); render(); },
+      dispose() { active(false); clearText(); clearLines(); for (const b of beams) { scene.remove(b.core); scene.remove(b.halo); } for (const d of disposables) d.dispose && d.dispose(); if (composer) composer.renderTarget1 && composer.renderTarget1.dispose(); renderer.dispose(); el.remove(); },
     };
   }
 
@@ -6350,7 +7064,8 @@ if (typeof document !== "undefined") (() => {
     };
     const set3d = on => {
       st.view3d = on; toolBtn("3d").setAttribute("aria-pressed", on);
-      toolBtn("walls").hidden = !on || !T; toolBtn("measure").hidden = on;
+      toolBtn("walls").hidden = !on || !T; toolBtn("measure").hidden = on; toolBtn("follow").hidden = !on;
+      if (v3) v3.active(on);
       if (on) { st.measure = false; st.meas = null; toolBtn("measure").setAttribute("aria-pressed", "false"); }
       host3.hidden = !on; cv.style.visibility = on ? "hidden" : "";
       draw();
@@ -6371,6 +7086,7 @@ if (typeof document !== "undefined") (() => {
       }).finally(() => { const b3 = toolBtn("3d"); b3.textContent = "3D"; b3.disabled = false; });
     };
     toolBtn("walls").onclick = e => { st.lowWalls = !st.lowWalls; e.currentTarget.setAttribute("aria-pressed", st.lowWalls); draw(); };
+    toolBtn("follow").onclick = e => { st.follow = !st.follow; e.currentTarget.setAttribute("aria-pressed", st.follow); draw(); };
     toolBtn("grid").onclick = e => { st.grid = !st.grid; e.currentTarget.setAttribute("aria-pressed", st.grid); draw(); };
     toolBtn("trails").onclick = e => { st.trails = !st.trails; e.currentTarget.setAttribute("aria-pressed", st.trails); draw(); };
     toolBtn("measure").onclick = e => { st.measure = !st.measure; e.currentTarget.setAttribute("aria-pressed", st.measure); if (!st.measure) st.meas = null; cv.classList.toggle("measuring", st.measure); draw(); };

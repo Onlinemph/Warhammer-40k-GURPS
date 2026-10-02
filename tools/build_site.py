@@ -478,7 +478,7 @@ def main():
     data = json.dumps({"libraries": libs, "loadouts": sim_data("loadouts.yaml"), "simWeapons": sim_data("weapons.yaml"),
                        "powers": sim_data("powers.yaml"), "ai": sim_data("ai.yaml"), "squads": sim_data("squads.yaml")}, ensure_ascii=False, separators=(",", ":"))
     html = TEMPLATE.read_text().replace("/*__DATA__*/null", data.replace("</", "<\\/"))
-    html = html.replace("/*__SIM__*/", SIM.read_text())
+    html = html.replace("/*__SIM__*/", SIM.read_text() + "\n" + (ROOT / "tools" / "vendor" / "three-post.js").read_text())
     OUT.parent.mkdir(exist_ok=True)
     OUT.write_text(html)
     print(f"{OUT.relative_to(ROOT)}: {len(libs)} libraries, {len(html) // 1024} KB")
