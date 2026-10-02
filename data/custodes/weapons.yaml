@@ -210,13 +210,13 @@ items:
       - usage: Field on
         damage: sw+4d+4(10) cut
         reach: 1
-        parry: -1
+        parry: "0U"
         st: 22†
         skill: Two-Handed Axe/Mace
       - usage: Field off (as plain axe)
         damage: sw+4 cut
         reach: 1
-        parry: -1
+        parry: "0U"
         st: 22†
         skill: Two-Handed Axe/Mace
     notes: Field toggle is a free action, as any Custodes power weapon.
@@ -607,10 +607,10 @@ items:
     cost: 18000
     weight: 25
     tags: [Melee Weapon, Imperium, Adeptus Custodes]
-    attributes: {block: 3}
+    attributes: {block: 3, dodge: 3, parry: 3}
     weapons:
       - usage: Shield bash
-        damage: sw+2 cr
+        damage: thr+2 cr
         reach: C,1
         parry: 0
         st: 16
@@ -630,9 +630,7 @@ items:
       Custodes scale and materials; min ST: sqrt(10x25)=15.8, rounded to
       16 - trivial for a Custodian at ST 40, matching the ease with which
       they're shown carrying one one-handed alongside a blade. Basic Set
-      Large Shield stats (DB 3, +3 Block) as the Astartes Storm Shield's
-      own physical component; bash damage sw+2 cr, one step above that
-      Storm Shield's sw+1 cr for the heavier Custodes-grade plate.
+      Large Shield stats (DB 3: +3 to Block, Dodge and Parry, B374) as the Astartes Storm Shield's own physical component; bash damage thr+2 cr, one step above that Storm Shield's thr+1 cr for the heavier Custodes-grade plate (a shield bash is a thrust, B273).
 
   - name: Storm Shield, Custodes Pattern (Field Component)
     tl: 12
@@ -684,7 +682,7 @@ items:
         range: 150/500
         rof: 1
         shots: 6(3)
-        st: 20
+        st: 20†
         bulk: -6
         rcl: 2
         skill: Guns (Grenade Launcher)
@@ -695,7 +693,7 @@ items:
         range: 150/500
         rof: 1
         shots: 6(3)
-        st: 20
+        st: 20†
         bulk: -6
         rcl: 2
         skill: Guns (Grenade Launcher)
@@ -805,25 +803,25 @@ items:
         damage: sw+3d+3(10) cut
         reach: "1,2"
         parry: -1
-        st: 12
+        st: 12†
         skill: Two-Handed Sword
       - usage: "Thrust, field on"
         damage: thr+3d+3(10) imp
         reach: "1,2"
         parry: -1
-        st: 12
+        st: 12†
         skill: Two-Handed Sword
       - usage: Field off (as plain blade)
         damage: sw+3 cut
         reach: "1,2"
         parry: -1
-        st: 12
+        st: 12†
         skill: Two-Handed Sword
       - usage: "Thrust, field off (as plain blade)"
         damage: thr+3 imp
         reach: "1,2"
         parry: -1
-        st: 12
+        st: 12†
         skill: Two-Handed Sword
     notes: An ordinary (human-scale) disruption-field weapon; field toggle is a free action.
     lore: >
@@ -924,7 +922,7 @@ items:
         range: 5
         rof: 1
         shots: 4(5)
-        st: 9
+        st: 9†
         bulk: -3
         skill: Liquid Projector (Flamethrower)
         notes: >
@@ -937,7 +935,7 @@ items:
         range: 5
         rof: 1
         shots: 4(5)
-        st: 9
+        st: 9†
         bulk: -3
         skill: Liquid Projector (Flamethrower)
         notes: Ignores DR; see Imperium/Weapons/Flame Weapons.eqp for the sealed-armour exemption.

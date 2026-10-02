@@ -926,7 +926,7 @@ items:
         levels: 1
         tags: [Advantage, Mental, Xenos, Aeldari, Psyker]
         modifiers:
-          - {name: Advantage Delivered (Guided, approx. +2 to hit, 25 pts), cost: "+25%"}
+          - {name: Advantage Delivered (Guided, approx. +2 to hit, 25 pts), cost: "+250%"}
           - "Malediction 1, +100%"
           - "Warp Sorcery, -20%"
           - "Perils of the Warp (Aeldari Runes), -5%"
@@ -940,14 +940,12 @@ items:
           Advantage or a Disadvantage Delivered), Malediction (+100%, used
           here for its "affects anyone you can see, no attack roll" reach
           rather than its resistance clause, since the target volunteers),
-          Warp Sorcery (-20%), Perils (Aeldari Runes, -5%). Net +100%. Full
-          modified cost: 10 x 2.0 = 20 points/level; needs Aeldari Warp
-          Empowerment level 1 (cap 20), symmetric with Doom.
+          Warp Sorcery (-20%), Perils (Aeldari Runes, -5%). Granting an advantage costs +10% per point it is worth (B36), ten times the rate for inflicting a disadvantage, so the 25 points are +250% and the net is +325%. Full modified cost: 10 x 4.25 = 42.5, rounded up to 43 points; needs Aeldari Warp Empowerment level 4 (cap 50). Doom's mirror in effect, at twice its price.
       - name: Fortune
         points: 10
         tags: [Advantage, Mental, Xenos, Aeldari, Psyker]
         modifiers:
-          - {name: Advantage Delivered (Fortune's Ward, 15 pts), cost: "+15%"}
+          - {name: Advantage Delivered (Fortune's Ward, 15 pts), cost: "+150%"}
           - "Area Effect, +50%"
           - "Warp Sorcery, -20%"
           - "Perils of the Warp (Aeldari Runes, Severe), -10%"
@@ -961,9 +959,7 @@ items:
           Affliction (10) delivering a +15 point Luck-tier advantage to
           willing recipients, Area Effect (+50%, B102, 2-yard radius),
           Warp Sorcery (-20%), Perils (Aeldari Runes, Severe, -10%, the same
-          tier this project's own ritual/squad-scale workings use). Net
-          +35%. Full modified cost: 10 x 1.35 = 13.5, rounded to 14 points;
-          needs Aeldari Warp Empowerment level 1 (cap 20).
+          tier this project's own ritual/squad-scale workings use). The advantage is +10% per point (B36), +150%. Net +170%. Full modified cost: 10 x 2.7 = 27 points; needs Aeldari Warp Empowerment level 2 (cap 30).
       - name: Executioner
         per_level: 5
         levels: 10
@@ -1020,7 +1016,7 @@ items:
         levels: 1
         tags: [Advantage, Mental, Xenos, Aeldari, Psyker]
         modifiers:
-          - {name: Based on Will (rather than the default HT), cost: "+25%"}
+          - {name: Based on Will (rather than the default HT), cost: "+20%"}
           - "Malediction 1, +100%"
           - "Warp Sorcery, -20%"
           - "Perils of the Warp (Aeldari Runes), -5%"
@@ -1030,11 +1026,7 @@ items:
           target to dodge or block.
         design: >
           Affliction (10/level) delivering mental/FP damage, Based on Will
-          (+25%, B39, the attack is a battle of wills rather than a straight
-          HT roll — this project's Aeldari-specific enhancement value, not a
-          cited RAW figure), Malediction (+100%), Warp Sorcery (-20%),
-          Perils (Aeldari Runes, -5%). Net +100%. Full modified cost: 10 x
-          2.0 = 20 points/level; needs Aeldari Warp Empowerment level 1 (cap
+          (+20%, B102, the attack is a battle of wills rather than a straight HT roll), Malediction (+100%), Warp Sorcery (-20%), Perils (Aeldari Runes, -5%). Net +95%. Full modified cost: 10 x 1.95 = 19.5, rounded up to 20 points; needs Aeldari Warp Empowerment level 1 (cap
           20), the discipline's other cap-tight signature rune alongside Doom.
       - name: Farsight
         points: 25
@@ -1086,16 +1078,13 @@ items:
             points: 10
             tags: [Advantage, Mental, Xenos, Aeldari, Psyker]
             modifiers:
-              - {name: Advantage Delivered (Concealed, +10 pts), cost: "+10%"}
+              - {name: Advantage Delivered (Concealed, +10 pts), cost: "+100%"}
               - "Warp Sorcery, -20%"
               - "Perils of the Warp (Aeldari Runes), -5%"
             lore: A shimmer of bent light and muffled sound over a willing ally, easing a squad's approach unseen.
             design: >
               Affliction (10) delivering a +10 point Stealth-boosting
-              advantage, Warp Sorcery (-20%), Perils (Aeldari Runes, -5%).
-              Net -15%. Full modified cost: 10 x 0.85 = 8.5, rounded up to 9
-              points (discounted to a fifth as the cheaper alternative
-              ability, so the container costs 19 + 2 = 21); needs Aeldari Warp Empowerment level 1 (cap 20) at
+              advantage (+10% per point, B36: +100%), Warp Sorcery (-20%), Perils (Aeldari Runes, -5%). Net +75%. Full modified cost: 10 x 1.75 = 17.5, rounded up to 18 points (discounted to a fifth as the cheaper alternative ability, so the container costs 19 + 4 = 23); needs Aeldari Warp Empowerment level 1 (cap 20) at
               its full-price rate.
           - name: Reveal
             points: 10
@@ -1125,15 +1114,12 @@ items:
             points: 10
             tags: [Advantage, Mental, Xenos, Aeldari, Psyker]
             modifiers:
-              - {name: Advantage Delivered (Warded, +10 pts DR), cost: "+10%"}
+              - {name: Advantage Delivered (Warded, +10 pts DR), cost: "+100%"}
               - "Warp Sorcery, -20%"
               - "Perils of the Warp (Aeldari Runes), -5%"
             lore: A brief, hardening ward of psychic force over a willing ally, thickening their guard for a few crucial seconds.
             design: >
-              Affliction (10) delivering a +10 point DR-boosting advantage,
-              Warp Sorcery (-20%), Perils (Aeldari Runes, -5%). Net -15%.
-              Full modified cost: 8.5, rounded up to 9 points (discounted to a
-              fifth as the cheaper alternative ability, so the container costs 19 + 2 = 21); needs Aeldari Warp
+              Affliction (10) delivering a +10 point DR-boosting advantage (+10% per point, B36: +100%), Warp Sorcery (-20%), Perils (Aeldari Runes, -5%). Net +75%. Full modified cost: 17.5, rounded up to 18 points (discounted to a fifth as the cheaper alternative ability, so the container costs 19 + 4 = 23); needs Aeldari Warp
               Empowerment level 1 (cap 20) at its full-price rate.
           - name: Jinx
             points: 10
@@ -1163,15 +1149,13 @@ items:
             points: 10
             tags: [Advantage, Physical, Xenos, Aeldari, Psyker]
             modifiers:
-              - {name: Advantage Delivered (Enhanced, +10 pts ST/DX), cost: "+10%"}
+              - {name: Advantage Delivered (Enhanced, +10 pts ST/DX), cost: "+100%"}
               - "Warp Sorcery, -20%"
               - "Perils of the Warp (Aeldari Runes), -5%"
             lore: A surge of psychically-lent strength or speed into a willing ally's limbs.
             design: >
               Affliction (10) delivering a +10 point ST/DX-boosting
-              advantage, Warp Sorcery (-20%), Perils (Aeldari Runes, -5%).
-              Net -15%. Full modified cost: 8.5, rounded up to 9 points
-              (discounted to a fifth as the cheaper alternative ability, so the container costs 19 + 2 = 21);
+              advantage (+10% per point, B36: +100%), Warp Sorcery (-20%), Perils (Aeldari Runes, -5%). Net +75%. Full modified cost: 17.5, rounded up to 18 points (discounted to a fifth as the cheaper alternative ability, so the container costs 19 + 4 = 23);
               needs Aeldari Warp Empowerment level 1 (cap 20) at its
               full-price rate.
           - name: Drain
@@ -1223,15 +1207,13 @@ items:
             points: 10
             tags: [Advantage, Mental, Xenos, Aeldari, Psyker]
             modifiers:
-              - {name: Advantage Delivered (Emboldened, Fearlessness 2, 4 pts), cost: "+5%"}
+              - {name: Advantage Delivered (Emboldened, Fearlessness 2, 4 pts), cost: "+40%"}
               - "Warp Sorcery, -20%"
               - "Perils of the Warp (Aeldari Runes), -5%"
             lore: A wash of certainty over a willing ally that drives out fear for a few crucial moments.
             design: >
               Affliction (10) delivering a 4-point Fearlessness 2 advantage
-              (B55, 2/level), Warp Sorcery (-20%), Perils (Aeldari Runes, -5%).
-              Net -20%. Full modified cost: 10 x 0.8 = 8 points (discounted to
-              a fifth as the cheaper alternative ability); needs Aeldari Warp
+              (B55, 2/level; +10% per point, B36: +40%), Warp Sorcery (-20%), Perils (Aeldari Runes, -5%). Net +15%. Full modified cost: 10 x 1.15 = 11.5, rounded up to 12 points (discounted to a fifth as the cheaper alternative ability, so the container costs 62 + 3 = 65); needs Aeldari Warp
               Empowerment level 1 (cap 20) at its full-price rate.
 
   # ------------------------------------------------------------- Aspect lenses

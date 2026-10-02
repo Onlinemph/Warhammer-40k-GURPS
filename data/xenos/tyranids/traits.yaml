@@ -273,7 +273,7 @@ items:
     ref: B35
     tags: [Advantage, Mental, Xenos, Tyranids]
     modifiers:
-      - {name: "Advantage Delivered (grants Synapse Discipline, 10 pts)", cost: "10%"}
+      - {name: "Advantage Delivered (grants Synapse Discipline, 10 pts)", cost: "+100%"}
       - "Area Effect, 16 yards, +200%"
       - "Always On, -40%"
       - "Emanation, -20%"
@@ -291,12 +291,9 @@ items:
       link that keeps a local swarm fighting with purpose instead of
       degenerating into a feeding frenzy the instant a fight turns bad.
     design: >
-      Affliction (B35) base 10; Advantage Delivered (a 10-point granted
-      advantage, valued at +10% per this project's own Advantage/
-      Disadvantage Delivered convention); Area Effect at the 16-yard tier
+      Affliction (B35) base 10; Advantage Delivered (a 10-point granted advantage, at +10% per point it is worth, B36: +100%); Area Effect at the 16-yard tier
       (+200%, B102); Always On (-40%, B113, it cannot be switched off);
-      Emanation (-20%, B111, proximity only, no attack roll). Net:
-      +10+200-40-20 = +150%. 10 x 2.5 = 25 points.
+      Emanation (-20%, B111, proximity only, no attack roll). Net: +100+200-40-20 = +240%. 10 x 3.4 = 34 points.
 
   - &synapse_creature_zoanthrope
     name: "Synapse Creature (Zoanthrope)"
@@ -304,7 +301,7 @@ items:
     ref: B35
     tags: [Advantage, Mental, Xenos, Tyranids]
     modifiers:
-      - {name: "Advantage Delivered (grants Synapse Discipline, 10 pts)", cost: "10%"}
+      - {name: "Advantage Delivered (grants Synapse Discipline, 10 pts)", cost: "+100%"}
       - "Area Effect, 16 yards, +200%"
       - "Always On, -40%"
       - "Emanation, -20%"
@@ -319,7 +316,7 @@ items:
       of why they are escorted rather than left to operate alone.
     design: >
       Identical build and math to the Tyranid Warrior's Synapse Creature
-      trait, above (10 base, net +150%, 25 points) — a Zoanthrope's
+      trait, above (10 base, net +240%, 34 points) — a Zoanthrope's
       field is no wider than a Warrior's despite the psychic amplification
       that discipline goes into Shadow in the Warp instead.
 
@@ -329,7 +326,7 @@ items:
     ref: B35
     tags: [Advantage, Mental, Xenos, Tyranids]
     modifiers:
-      - {name: "Advantage Delivered (grants Synapse Discipline, 10 pts)", cost: "10%"}
+      - {name: "Advantage Delivered (grants Synapse Discipline, 10 pts)", cost: "+100%"}
       - "Area Effect, 32 yards, +250%"
       - "Always On, -40%"
       - "Emanation, -20%"
@@ -344,9 +341,7 @@ items:
       range of any single bioform, able to hold an entire local swarm
       together where a lone Warrior only holds a squad.
     design: >
-      Affliction (B35) base 10; Advantage Delivered (+10%); Area Effect at
-      the 32-yard tier (+250%, B102); Always On (-40%); Emanation (-20%).
-      Net: +10+250-40-20 = +200%. 10 x 3.0 = 30 points.
+      Affliction (B35) base 10; Advantage Delivered (+100%, B36); Area Effect at the 32-yard tier (+250%, B102); Always On (-40%); Emanation (-20%). Net: +100+250-40-20 = +290%. 10 x 3.9 = 39 points.
 
   - &shadow_in_the_warp_ravener
     name: "Shadow in the Warp (Ravener)"
@@ -1062,9 +1057,7 @@ items:
       (chiefly the Deathwatch novels' portrayal of Warriors as the
       dangerous, thinking edge of an otherwise mindless tide).
     design: >
-      303 (Attribute Modifiers) + 300 (Chitin DR 60) + 25 (Synapse
-      Creature) + 25 (Shadow in the Warp) + 50 (Injury Tolerance 2) = 703 points, added to Tyranid
-      Biology's 20 for 723 points of physiology alone before skills and
+      303 (Attribute Modifiers) + 300 (Chitin DR 60) + 34 (Synapse Creature) + 25 (Shadow in the Warp) + 50 (Injury Tolerance 2) = 712 points, added to Tyranid Biology's 20 for 732 points of physiology alone before skills and
       its weapon-symbiotes -- in framework.md's Astartes point tier
       (550-850), matching a Warrior's role as the swarm's single most
       dangerous common bioform. See the Tyranid Warrior template. NPC
@@ -1179,9 +1172,7 @@ items:
       Library's few Zoanthrope-focussed scenes always frame it as
       artillery to be escorted, not a front-line fighter.
     design: >
-      24 (Attribute Modifiers) + 200 (Chitin DR 40) + 100 (Warp Field) + 25
-      (Synapse Creature) + 25 (Shadow in the Warp) = 374 points, added to
-      Tyranid Biology's 20 for 394 points of physiology alone before
+      24 (Attribute Modifiers) + 200 (Chitin DR 40) + 100 (Warp Field) + 34 (Synapse Creature) + 25 (Shadow in the Warp) = 383 points, added to Tyranid Biology's 20 for 403 points of physiology alone before
       skills and Warp Blast (data/xenos/tyranids/psychic.yaml). See the
       Zoanthrope template. NPC creature stat block only.
 
@@ -1255,9 +1246,9 @@ items:
       victory.
     design: >
       943 (Attribute Modifiers) + 750 (Chitin DR 150) + 25 (Regeneration)
-      + 10 (High Pain Threshold) + 30 (Synapse Creature) + 30 (Shadow in the Warp) + 75 (Injury Tolerance 3) = 1863 points
+      + 10 (High Pain Threshold) + 39 (Synapse Creature) + 30 (Shadow in the Warp) + 75 (Injury Tolerance 3) = 1872 points
       (Wings disabled by default, +30 more if enabled), added to Tyranid
-      Biology's 20 for 1345 points of physiology alone before skills,
+      Biology's 20 for 1892 points of physiology alone before skills,
       psychic powers (data/xenos/tyranids/psychic.yaml) and weapon-
       symbiotes -- squarely in framework.md's Heroes and Legends tier
       (1,000-3,000), appropriate for the swarm's synapse lord. See the

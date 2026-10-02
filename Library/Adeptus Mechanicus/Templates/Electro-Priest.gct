@@ -1,7 +1,7 @@
 {
 	"version": 5,
 	"id": "Bq7zsp-EBrvcul5hb",
-	"notes": "An Electro-Priest: a fanatical warrior-priest of the Motive Force who chose this transformation to serve the Cult Mechanicus body and soul (Codex: Adeptus Mechanicus background) -- devoted, doctrinally certain, and dangerous in a fight, not the near-mindless temple slave a Servitor is (Adeptus Mechanicus/Templates/Combat Servitor.gct is that template instead). Baseline below is the Corpuscarii pattern (ranged electrostatic gauntlets); enable the disabled \"Lens: Fulgurite Conversion\" for the melee electroleech-staff pattern instead. Point math: ST 12 (+20), DX 11 (+20), IQ 10 (+0), HT 12 (+20) = 60, plus Will +2 (+10) = 70; advantages +127 (Electoo Inductors 1 + Voltagheist Field 49 + Electrostatic Gauntlets, Corpuscarii Pattern 56 + Respirator Plugs 5 + Potentia Coil 2 + High Pain Threshold 10 + Fearlessness x2 4); disadvantages -40; skills +28. Total 185 points, just above framework.md's \"Trained soldier (100-175)\" tier and just under \"Elite human (200-350)\" -- a devoted zealot-warrior, tougher and better-defended than a Guardsman but not as broadly trained as a Battle Sister or Inquisitorial acolyte. The electro-flail/staff itself (the physical weapon a Fulgurite carries) and any other equipment are not covered here; the attack traits below are the augmetic/bio-electric ability, not a separate weapon purchase.\n",
+	"notes": "An Electro-Priest: a fanatical warrior-priest of the Motive Force who chose this transformation to serve the Cult Mechanicus body and soul (Codex: Adeptus Mechanicus background) -- devoted, doctrinally certain, and dangerous in a fight, not the near-mindless temple slave a Servitor is (Adeptus Mechanicus/Templates/Combat Servitor.gct is that template instead). Baseline below is the Corpuscarii pattern (ranged electrostatic gauntlets); enable the disabled \"Lens: Fulgurite Conversion\" for the melee electroleech-staff pattern instead. Point math: ST 12 (+20), DX 11 (+20), IQ 10 (+0), HT 12 (+20) = 60, plus Will +2 (+10) = 70; advantages +124 (Electoo Inductors 1 + Voltagheist Field 49 + Electrostatic Gauntlets, Corpuscarii Pattern 53 + Respirator Plugs 5 + Potentia Coil 2 + High Pain Threshold 10 + Fearlessness x2 4); disadvantages -40; skills +28. Total 182 points, just above framework.md's \"Trained soldier (100-175)\" tier and just under \"Elite human (200-350)\" -- a devoted zealot-warrior, tougher and better-defended than a Guardsman but not as broadly trained as a Battle Sister or Inquisitorial acolyte. The electro-flail/staff itself (the physical weapon a Fulgurite carries) and any other equipment are not covered here; the attack traits below are the augmetic/bio-electric ability, not a separate weapon purchase.\n",
 	"traits": [
 		{
 			"id": "tXWkazPIWktyEnW3G",
@@ -132,7 +132,7 @@
 			"id": "tDmx5P065SSEodonp",
 			"name": "Electrostatic Gauntlets, Corpuscarii Pattern",
 			"reference": "B61",
-			"local_notes": "Innate Attack (Burning, reflavored electrical), armor divisor (2), ranged. At the default 7 levels: 7d(2) burn, lasgun strength.\n\nLore: Corpuscarii Electro-Priests wear gauntlets that focus their internal charge into a thrown arc of lightning rather than a touch-range jolt — a ranged weapon in its own right, not just a defensive field.\n\nDesign: Innate Attack (Burning) (B61, 5 points/die) with Armor Divisor (2) (B102, +50%): 5 x 1.5 = 7.5, rounded up to 8 points/die. Default 7 levels (56 points) gives 7d(2) burn, the lasgun anchor: the fiction shows Corpuscarii lightning killing armoured men, which a pistol-strength arc (an earlier 3d(2) draft) couldn't do. Exact odds per hit: flak (DR 30, eff. 15) 98%; carapace (eff. 35) 0.6%; Astartes plate never. Still an anti-infantry weapon, not anti-armour.",
+			"local_notes": "Innate Attack (Burning, reflavored electrical), armor divisor (2), ranged. At the default 7 levels: 7d(2) burn, lasgun strength.\n\nLore: Corpuscarii Electro-Priests wear gauntlets that focus their internal charge into a thrown arc of lightning rather than a touch-range jolt — a ranged weapon in its own right, not just a defensive field.\n\nDesign: Innate Attack (Burning) (B61, 5 points/die) with Armor Divisor (2) (B102, +50%): 5 x 1.5 = 7.5 points/die, rounded once on the total. Default 7 levels (52.5, so 53 points) gives 7d(2) burn, the lasgun anchor: the fiction shows Corpuscarii lightning killing armoured men, which a pistol-strength arc (an earlier 3d(2) draft) couldn't do. Exact odds per hit: flak (DR 30, eff. 15) 98%; carapace (eff. 35) 0.6%; Astartes plate never. Still an anti-infantry weapon, not anti-armour.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -140,7 +140,14 @@
 				"Adeptus Mechanicus",
 				"Electro-Priest"
 			],
-			"points_per_level": 8,
+			"modifiers": [
+				{
+					"id": "mwFRpkZbyVhIqXd4g",
+					"name": "Armor Divisor (2)",
+					"cost_adj": "+50%"
+				}
+			],
+			"points_per_level": 5,
 			"can_level": true,
 			"levels": 7,
 			"weapons": [
@@ -286,7 +293,7 @@
 		{
 			"id": "TntUc9oHL2pA7wNgr",
 			"name": "Lens: Fulgurite Conversion",
-			"local_notes": "Lore: Fulgurite Electro-Priests trade the Corpuscarii's ranged electrostatic gauntlets for a melee electroleech staff that drains a target's own vitality to fuel the wielder -- a different weapon pattern built on the same Voltagheist Field and Cult conditioning, not a stronger version of the same thing.\n\nDesign: Disable Electrostatic Gauntlets, Corpuscarii Pattern (-56 points) and enable this lens's Electroleech Staff, Fulgurite Pattern (+52 points) instead: a net -4 points on traits, +4 more on skills once Staff is raised to 12 (the same total as the baseline template). Also move the 8 points this template spends on Innate Attack (Beam) onto the Staff skill instead, raised to 12 (see below) (see this template's skill list), since the Fulgurite pattern's staff is a melee weapon resolved with its own weapon skill, not the Innate Attack skill a ranged gauntlet-bolt needs.",
+			"local_notes": "Lore: Fulgurite Electro-Priests trade the Corpuscarii's ranged electrostatic gauntlets for a melee electroleech staff that drains a target's own vitality to fuel the wielder -- a different weapon pattern built on the same Voltagheist Field and Cult conditioning, not a stronger version of the same thing.\n\nDesign: Disable Electrostatic Gauntlets, Corpuscarii Pattern (-53 points) and enable this lens's Electroleech Staff, Fulgurite Pattern (+50 points) instead: a net -3 points on traits, +4 more on skills once Staff is raised to 12 (one point over the baseline template). Also move the 8 points this template spends on Innate Attack (Beam) onto the Staff skill instead, raised to 12 (see below) (see this template's skill list), since the Fulgurite pattern's staff is a melee weapon resolved with its own weapon skill, not the Innate Attack skill a ranged gauntlet-bolt needs.",
 			"tags": [
 				"Imperium",
 				"Adeptus Mechanicus",
@@ -297,7 +304,7 @@
 					"id": "trqT0y8I307co1dAm",
 					"name": "Electroleech Staff, Fulgurite Pattern",
 					"reference": "B61",
-					"local_notes": "Innate Attack (Fatigue), melee reach 1, Leech (the priest recovers FP equal to the damage inflicted, up to their own maximum). At the default 4 levels: 4d fatigue damage, ignoring DR entirely.\n\nLore: Fulgurite Electro-Priests carry a long voltaic stave that doesn't so much burn a target as drain the electrochemical charge straight out of their nervous system, feeding it back into the wielder — a stagger and a jolt of stolen vitality in the same swing.\n\nDesign: Innate Attack (Fatigue) (B61, 10 points/die; fatigue damage is priced at double a normal physical Innate Attack precisely because it bypasses DR outright, going straight to FP) with the Melee Attack, Reach 1 limitation (B112, -25%, the exact value the Basic Set data gives for a one-hex-reach melee-only restriction) and a Leech enhancement (this project's own construction, since Basic Set itself has no leech/drain-to-heal mechanic; costed at the same +50% published for the equivalent enhancement in GURPS Powers, cited here only for the percentage, not as a Basic Set source) that returns the wielder's own FP equal to the damage inflicted: 10 x (1 - 0.25 + 0.50) = 10 x 1.25 = 12.5, rounded up to 13 points/die. At the default 4 levels (52 points; raised from 2 so a Fulgurite can drop a man in two or three blows, as the fiction shows), this drains 4d FP (ignoring DR, so carapace or even Astartes plate is irrelevant to it) and restores the same amount to the wielder's own FP pool -- a real threat to anything that still has FP to lose, and no threat at all to a construct or Injury Tolerance (Unliving) target with no FP to drain, which is exactly the \"drains energy\" niche this pattern is known for in the fiction rather than a flat damage upgrade over the Corpuscarii pattern.",
+					"local_notes": "Innate Attack (Fatigue), melee reach 1, Leech (the priest recovers FP equal to the damage inflicted, up to their own maximum). At the default 4 levels: 4d fatigue damage, ignoring DR entirely.\n\nLore: Fulgurite Electro-Priests carry a long voltaic stave that doesn't so much burn a target as drain the electrochemical charge straight out of their nervous system, feeding it back into the wielder — a stagger and a jolt of stolen vitality in the same swing.\n\nDesign: Innate Attack (Fatigue) (B61, 10 points/die; fatigue damage is priced at double a normal physical Innate Attack precisely because it bypasses DR outright, going straight to FP) with the Melee Attack, Reach 1 limitation (B112, -25%, the exact value the Basic Set data gives for a one-hex-reach melee-only restriction) and a Leech enhancement (this project's own construction, since Basic Set itself has no leech/drain-to-heal mechanic; costed at the same +50% published for the equivalent enhancement in GURPS Powers, cited here only for the percentage, not as a Basic Set source) that returns the wielder's own FP equal to the damage inflicted: 10 x (1 - 0.25 + 0.50) = 10 x 1.25 = 12.5 points/die, rounded once on the total. At the default 4 levels (50 points; raised from 2 so a Fulgurite can drop a man in two or three blows, as the fiction shows), this drains 4d FP (ignoring DR, so carapace or even Astartes plate is irrelevant to it) and restores the same amount to the wielder's own FP pool -- a real threat to anything that still has FP to lose, and no threat at all to a construct or Injury Tolerance (Unliving) target with no FP to drain, which is exactly the \"drains energy\" niche this pattern is known for in the fiction rather than a flat damage upgrade over the Corpuscarii pattern.",
 					"tags": [
 						"Advantage",
 						"Physical",
@@ -305,7 +312,19 @@
 						"Adeptus Mechanicus",
 						"Electro-Priest"
 					],
-					"points_per_level": 13,
+					"modifiers": [
+						{
+							"id": "muN9ilrAXqnP8ANNt",
+							"name": "Melee Attack, Reach 1",
+							"cost_adj": "-25%"
+						},
+						{
+							"id": "mTwXHrhqYS0Kj13Bb",
+							"name": "Leech",
+							"cost_adj": "+50%"
+						}
+					],
+					"points_per_level": 10,
 					"can_level": true,
 					"levels": 4
 				}

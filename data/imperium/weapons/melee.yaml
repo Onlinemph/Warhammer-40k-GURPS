@@ -54,7 +54,7 @@ items:
     tags: [Melee Weapon, Imperium, Astra Militarum]
     weapons:
       - usage: Fixed to lasgun
-        damage: thr+1 imp
+        damage: thr+3 imp
         reach: "1,2"
         parry: 0
         st: 6
@@ -86,9 +86,8 @@ items:
     design: >
       Same blade and knife-mode profile as the Munitorum combat knife
       above; the mounted profile follows Basic Set convention for a bayonet
-      fixed to a long arm (treated as a short thrusting spear once fixed,
-      reach 1,2, +1 to thrust damage for the leverage of the gun's length
-      behind the point) rather than inventing new mechanics. TL/LC as the
+      fixed to a long arm (a spear held in two hands once fixed: Spear skill,
+      reach 1,2, thrust +3 impaling, HT197 and B273) rather than inventing new mechanics. TL/LC as the
       knife it's built from.
       Handling: unmounted knife-mode parry corrected to -1 to match the
       Munitorum knife it shares a blade with; the mounted (Spear-skill)
@@ -151,14 +150,14 @@ items:
       - usage: Spade edge
         damage: sw+1 cr
         reach: 1
-        parry: "-1U"
+        parry: "0U"
         st: 8
         skill: Axe/Mace
     notes: >
       Doubles as a digging tool; treat as an improvised weapon (already priced and statted as one,
-      no further penalty needed when it's used as intended). The U means the wielder cannot parry
-      again with it until a turn has passed since the last parry (B404) - a heavy, head-forward
-      tool is slow to bring back on guard.
+      no further penalty needed when it's used as intended). The U means it cannot parry in a
+      turn in which it has attacked, nor attack in a turn in which it has parried (B269) - a
+      heavy, head-forward tool is slow to bring back on guard.
     lore: >
       Standard Guard field-engineering kit, folded and slung on webbing;
       depicted in trench-warfare-flavoured Guard fiction being swung in
@@ -170,7 +169,7 @@ items:
       a poor edge and balance, giving sw+1 cr, reach 1, min ST 8. TL5 reflects the folding
       steel tool itself (an industrial product), not the Imperium's overall
       manufacturing TL.
-      Handling: parry corrected to -1U, the Basic Set convention for a
+      Handling: parry corrected to 0U, the Basic Set convention for a
       head-heavy chopping/crushing tool (Axe/Mace family, B271): it is worse
       to parry with than a purpose-built one-handed weapon, and swinging a
       lopsided spade-head leaves it out of position to parry again right
@@ -186,12 +185,12 @@ items:
       - usage: Swing
         damage: sw+2 cr
         reach: 1
-        parry: "-1U"
+        parry: "0U"
         st: 9
         skill: Axe/Mace
     notes: >
       Riot batons, Arbites-issue billy clubs and improvised trench clubs all use this profile. The
-      U means the wielder cannot parry again with it until a turn has passed since the last parry.
+      U means it cannot parry in a turn in which it has attacked (B269).
     lore: >
       The plainest possible melee weapon: a weighted length of wood, plas or
       scavenged pipe, seen everywhere from hive underworld gangs to
@@ -201,7 +200,7 @@ items:
       Straight Basic Set club design (sw+2 cr, reach 1, min ST 9);
       not anchored by framework.md since it sits well below the chainsword
       tier, TL0 because a club needs no technology at all.
-      Handling: parry corrected to -1U, the standard Basic Set figure for a
+      Handling: parry corrected to 0U, the standard Basic Set figure for a
       simple blunt club (Axe/Mace family) rather than the parry 0 a sword or
       knife gets - a plain weighted stick has no guard to block with and is
       slow to recover a swing. Weight and min ST are unchanged.
@@ -308,14 +307,7 @@ items:
       shown butchering unarmoured infantry but failing to trouble power
       armour, matching the framework anchor's own description.
     design: >
-      Fixed anchor (Rescale): sw+2d(2) cut, reach 1, parry 0, min ST 10. The Rescale raised the
-      chainsword from a flat sw+1d cut with no divisor to sw+2d(2). A Guardsman (ST 10-11, sw 1d
-      to 1d+1) rolls about 3d(2), average 10.5-11.5: against carapace (DR 70, eff. 35) that
-      never penetrates, and against a flak vest (DR 30, eff. 15) only about 5-9% of hits, so a
-      Guardsman rarely gets through flak. An Astartes wielder (ST 30, sw 5d+2, so 7d+2(2),
-      average 26.5) usually does: 99% against flak, 2.2% against carapace, and it skids off
-      power armour (eff. DR 50+) outright. That matches the framework's "tears flesh and flak;
-      bites carapace; skids off power armour", with "tears flak" belonging to the Marine. TL10
+      Fixed anchor: sw+2d(3) cut, reach 1, parry 0, min ST 10. The Rescale raised the chainsword from a flat sw+1d cut with no divisor to sw+2d(2), and the monoedge rule (below) made the divisor 3. A Guardsman (ST 10-11, sw 1d to 1d+1) rolls about 3d(3), average 10.5-11.5: against carapace (DR 70, eff. 23) that never penetrates, and against a flak vest (DR 30, eff. 10) 50-63% of hits. An Astartes wielder (ST 30, sw 5d+2, so 7d+2(3), average 26.5) always gets through flak, through carapace on 74% of hits, and through a power-armoured torso (DR 103, eff. 34) on 4%. That matches the framework's "tears flesh and flak; in a Marine's hands bites carapace and power-armour joints, but rarely gets through a power-armoured torso". TL10
       and LC2 per the framework's own worked example ("Standard Imperial manufacture: TL10 ...
       chainsword").
       Handling: Broadsword's Basic Set parry (0) is correct for a bladed, guarded weapon like a
@@ -372,13 +364,13 @@ items:
       - usage: Swing
         damage: sw+2d+2(3) cut
         reach: 1
-        parry: "-1U"
+        parry: "0U"
         st: 16
         skill: Axe/Mace
     notes: >
       Chain-vs-armour and jamming rules as the chainsword; the single heavy blade makes it even
-      more prone to sticking in a solid hit than a chainsword's finer teeth. The U means the
-      wielder cannot parry again with it until a turn has passed since the last parry.
+      more prone to sticking in a solid hit than a chainsword's finer teeth. The U means it cannot parry in a turn in which it has
+      attacked (B269).
     lore: >
       A heavier chain weapon favoured by close-combat specialists and
       several Chapters and warband traditions (most infamously World
@@ -397,8 +389,8 @@ items:
       Min ST 16 sits just above the Astartes chainsword's ST 15 because the axe is a bit heavier
       (15 lb vs. 14 lb). It is an Astartes weapon: an unusually strong or augmented human can
       swing it one-handed only at a stiff penalty for the missing strength.
-      Handling: parry -1U, the Basic Set Axe/Mace figure for a one-handed axe (worse than a
-      sword's parry 0, and unready after a parry the way every axe/mace/maul weapon here reads).
+      Handling: parry 0U, the Basic Set Axe/Mace figure for a one-handed axe (B271): as good as a
+      sword's, but unbalanced, so it cannot parry in a turn in which it has attacked (B269).
       Monoedge rule (user direction): armour divisor (2) to (3). At ST 30 (7d+4(3)) it bites carapace on 86% of hits, a Mark VII neck seal on 94% and a Mark VII torso on 9%.
 
   - name: Eviscerator
@@ -411,12 +403,12 @@ items:
       - usage: Swing, two-handed
         damage: sw+3d(3) cut
         reach: "1,2"
-        parry: "-1U"
-        st: 15
+        parry: "0U"
+        st: 15†
         skill: Two-Handed Sword
     notes: >
-      Always wielded two-handed; the U means the wielder cannot parry again with it until a turn
-      has passed since the last parry - the chain bucks hard enough in a solid hit to need a beat
+      Always wielded two-handed; the U means it cannot parry in a turn in which it has
+      attacked (B269) - the chain bucks hard enough in a solid hit to need a beat
       to bring back on guard, not merely a GM's-discretion "treat as unready" note. Sisters
       Repentia below the listed min ST take the normal reduced-ST
       penalties to skill rather than being unable to lift it - their
@@ -445,8 +437,8 @@ items:
       mass, not raw Astartes strength - this stays a human (if
       enhanced-by-faith) weapon per its Sororitas lore, hence the notes on
       using it below min ST rather than simply barring human use outright.
-      Parry corrected to -1U (Two-Handed Sword's baseline plus the same
-      chain-weapon "must recover" logic used for the chainsword family),
+      Parry 0U (Two-Handed Sword's baseline of 0, B274, made unbalanced by the
+      same chain-weapon "must recover" logic used for the chainsword family),
       replacing the previous GM's-discretion note with an actual mechanical
       flag.
       Monoedge rule (user direction): armour divisor (2) to (3). At ST 30 (8d+2(3)) it gets through a Mark VII torso on 18% of hits.
@@ -517,14 +509,14 @@ items:
       - usage: Swing
         damage: sw+1 cr
         reach: 1
-        parry: "-1U"
+        parry: "0U"
         st: 8
         skill: Axe/Mace
         notes: A hit that does any HP of damage forces the target to roll HT-3 or be stunned (treat as the standard Stun rule, B420) from the charge.
     notes: >
       Draws from a small power cell; good for many dozens of charged strikes before a recharge is
-      needed. The U means the wielder cannot parry again with it until a turn has passed since the
-      last parry.
+      needed. The U means it cannot parry in a turn in which it has
+      attacked (B269).
     lore: >
       The standard Adeptus Arbites and hive-enforcer riot weapon: a
       shock-charged baton meant to subdue rather than kill, ubiquitous in
@@ -544,7 +536,7 @@ items:
       TL10 for the power cell and stun generator; LC2 (enforcer/Arbites-
       issue, not general military) per the framework's "military-issue
       heavy weapons, carapace, hellguns" LC2 bracket.
-      Handling: parry corrected to -1U to match the Axe/Mace family
+      Handling: parry corrected to 0U to match the Axe/Mace family
       convention used consistently on this page (a rigid club-shaped weapon
       is worse to parry with than a sword, and slower to recover). Weight
       (3 lb) and min ST (8) are unchanged.
@@ -563,7 +555,7 @@ items:
         st: 10
         skill: Flail
         notes: A hit that does any HP of damage forces the target to roll HT-3 or be stunned (B420), as the shock maul.
-    notes: A flail can parry, but the U means the wielder cannot parry again with it until a turn has passed since the last parry; other fighters parry a flail attack at -4 (B404). The head's momentum makes it awkward around allies at close range.
+    notes: A flail can parry, but the U means it cannot parry in a turn in which it has attacked (B269); other fighters parry a flail attack at -4 (B405). The head's momentum makes it awkward around allies at close range.
     lore: >
       A heavier, multi-headed shock weapon seen in Ecclesiarchy penitent
       and some Arbites riot-control contexts, its swinging heads and
@@ -592,14 +584,14 @@ items:
         damage: sw+1 cr
         reach: "1,2"
         parry: 2
-        st: 8
+        st: 8†
         skill: Staff
         notes: A hit that does any HP of damage forces the target to roll HT-3 or be stunned (B420), as the shock maul.
       - usage: Thrust
         damage: thr+1 cr
         reach: "1,2"
         parry: 2
-        st: 8
+        st: 8†
         skill: Staff
         notes: As the swing usage above.
     notes: Parry +2 as the Basic Set Quarterstaff.
@@ -629,22 +621,22 @@ items:
       - usage: Suppression setting (field off)
         damage: sw+2 cr
         reach: 1
-        parry: "-1U"
+        parry: "0U"
         st: 10
         skill: Axe/Mace
         notes: A hit that does any HP of damage forces the target to roll HT-3 or be stunned (B420), as the shock maul.
       - usage: Lethal setting (field on)
         damage: sw+3d+2(10) cr
         reach: 1
-        parry: "-1U"
+        parry: "0U"
         st: 10
         skill: Axe/Mace
     notes: >
       Toggling between settings is a free action; Arbitrators are trained
       and expected to keep the weapon on suppression setting for routine
       enforcement and switch to lethal only against a genuine threat. The U
-      means the wielder cannot parry again with it until a turn has passed
-      since the last parry.
+      means it cannot parry in a turn in which it has
+      attacked (B269).
     lore: >
       A dual-mode maul issued to senior Arbites Judges and Marshals: an
       Adeptus Arbites badge of office as much as the shock maul is a
@@ -661,7 +653,7 @@ items:
       every other field-on/field-off pair in this file, keeping the
       Arbites maul consistent with the Chapter- and Sororitas-issue power
       weapons below it despite its different institutional owner.
-      Handling: parry corrected to -1U on both settings, matching the
+      Handling: parry corrected to 0U on both settings, matching the
       Axe/Mace family convention (a maul head, powered or not, is still a
       blunt, head-forward weapon). Weight (5 lb) and min ST (10) are
       unchanged.
@@ -811,18 +803,18 @@ items:
       - usage: Field on
         damage: sw+3d+2(10) cut
         reach: 1
-        parry: "-1U"
+        parry: "0U"
         st: 12
         skill: Axe/Mace
       - usage: Field off (as plain blade)
         damage: sw+2 cut
         reach: 1
-        parry: "-1U"
+        parry: "0U"
         st: 12
         skill: Axe/Mace
     notes: >
-      Field toggle and depleted-cell rules as the power sword. The U means the wielder cannot
-      parry again with it until a turn has passed since the last parry.
+      Field toggle and depleted-cell rules as the power sword. The U means it cannot parry in a turn in which it has
+      attacked (B269).
     lore: >
       A heavier power weapon favoured where a wielder wants more raw
       hitting power than a power sword at the cost of some finesse -
@@ -837,7 +829,7 @@ items:
       same mundane weapon with a field bolted on. This is the human-scale
       power axe; see Power Axe, Astartes Pattern below for the Chapter-
       armoury version.
-      Handling: parry corrected to -1U on both settings, matching every
+      Handling: parry corrected to 0U on both settings, matching every
       other Axe/Mace-family weapon on this page (the previous plain -1 left
       out the "unready after parrying" half of the Basic Set axe penalty).
       Weight (6 lb) and min ST (12) are unchanged.
@@ -852,13 +844,13 @@ items:
       - usage: Field on
         damage: sw+3d+2(10) cut
         reach: 1
-        parry: "-1U"
+        parry: "0U"
         st: 18
         skill: Axe/Mace
       - usage: Field off (as plain blade)
         damage: sw+2 cut
         reach: 1
-        parry: "-1U"
+        parry: "0U"
         st: 18
         skill: Axe/Mace
     notes: Field toggle and depleted-cell rules as the power sword; parry U as the human-scale Power Axe.
@@ -877,7 +869,7 @@ items:
       (vs. ST 12) - a bigger jump than the power sword's human-to-Astartes
       step, matching how the mundane Chainaxe (15 lb/ST 16) already sits
       above the mundane Chainsword (6 lb/ST 10) by a wider margin than a
-      sword needs. Parry stays -1U, the same Axe/Mace-family correction as
+      sword needs. Parry stays 0U, the same Axe/Mace-family correction as
       every other axe on this page.
 
   - name: Power Maul
@@ -890,19 +882,19 @@ items:
       - usage: Field on
         damage: sw+3d+2(10) cr
         reach: 1
-        parry: "-1U"
+        parry: "0U"
         st: 11
         skill: Axe/Mace
       - usage: Field off (as plain blade)
         damage: sw+2 cr
         reach: 1
-        parry: "-1U"
+        parry: "0U"
         st: 11
         skill: Axe/Mace
     notes: >
       Field toggle and depleted-cell rules as the power sword; this is the general-issue pattern
-      the Arbites power maul above is built from. The U means the wielder cannot parry again with
-      it until a turn has passed since the last parry.
+      the Arbites power maul above is built from. The U means it cannot parry in a turn in which it has
+      attacked (B269).
     lore: >
       A power weapon built around a blunt head rather than an edge, issued
       to some Ministorum, Sororitas and Guard-officer wielders who favour
@@ -918,7 +910,7 @@ items:
       flat head - the wound is still blunt trauma amplified by the field,
       matching 40k depictions of power mauls caving in what they hit rather
       than slicing it.
-      Handling: parry corrected to -1U on both settings, the same Axe/Mace
+      Handling: parry corrected to 0U on both settings, the same Axe/Mace
       convention as the Arbites power maul it's built from. Weight (5 lb)
       and min ST (11) are unchanged.
 
@@ -932,18 +924,18 @@ items:
       - usage: Field on
         damage: sw+3d+3(10) cr
         reach: 1
-        parry: "-1U"
+        parry: "0U"
         st: 16
         skill: Axe/Mace
       - usage: Field off (as plain mace)
         damage: sw+3 cr
         reach: 1
-        parry: "-1U"
+        parry: "0U"
         st: 16
         skill: Axe/Mace
     notes: >
-      Field toggle and depleted-cell rules as the power sword. The U means the wielder cannot
-      parry again with it until a turn has passed since the last parry. Chapter Chaplains carry
+      Field toggle and depleted-cell rules as the power sword. The U means it cannot parry in a turn in which it has
+      attacked (B269). Chapter Chaplains carry
       it with a Rosarius (see Force Fields), and its skull-topped head is an icon of their office.
     lore: >
       The Chaplain's staff of office and power weapon: an ornate mace-like crozius with a
@@ -956,7 +948,7 @@ items:
       (sw+3 cr rather than sw+2 cr), as a two-hand-sized Astartes head on a one-hand haft. At
       Astartes ST 30 (sw 5d+2) it is 8d+5(10), average 33, penetrating Astartes plate always and
       Terminator plate (eff. DR 20) 99.6% of the time. Handling: 12 lb and min ST 16 sit between the Astartes
-      Power Sword (9 lb/ST 16) and Power Axe (13 lb/ST 18); parry -1U, the Axe/Mace convention.
+      Power Sword (9 lb/ST 16) and Power Axe (13 lb/ST 18); parry 0U, the Axe/Mace convention.
       TL11 and LC1 as every Astartes power weapon; priced $9,000 for the holy-relic rarity.
 
   - name: Power Lance
@@ -969,26 +961,26 @@ items:
       - usage: Field on, mounted charge
         damage: thr+3d+3(10) imp
         reach: "1,2*,3*"
-        parry: "-1U"
+        parry: "0U"
         st: 11
         skill: Spear
       - usage: Field on, braced (dismounted)
         damage: thr+3d+2(10) imp
         reach: "1,2"
-        parry: "-1U"
+        parry: "0U"
         st: 11
         skill: Spear
       - usage: Field off, mounted charge
         damage: thr+3 imp
         reach: "1,2*,3*"
-        parry: "-1U"
+        parry: "0U"
         st: 11
         skill: Spear
     notes: >
       The full mounted-charge bonus (marked *) requires a mount at a
       gallop per the lance rules a GM is already using for cavalry combat;
       used from the ground it only reaches the braced profile. The U means
-      the wielder cannot parry again with it until a turn has passed since the last parry - Low-
+      it cannot parry in a turn in which it has attacked (B269) - Low-
       Tech treats a couched lance the same way.
     lore: >
       Carried by officers of Rough Rider-type Guard cavalry as an upgrade over the mundane
@@ -1003,13 +995,13 @@ items:
       momentum but keeps the field's own +3d bonus, since the field itself
       doesn't care whether the wielder is moving.
       Handling: re-derived against Low-Tech's real cavalry lance (a light
-      wooden or metal-shod shaft, typically 8-10 lb, ST 11, parry -1U) -
+      wooden or metal-shod shaft, typically 8-10 lb, ST 11, unbalanced) -
       weight trimmed from 15 lb to 12 lb to sit close to that real analogue
       plus a little extra for the power cell and disruption emitter running
       the length of the shaft, with min ST unchanged at 11 (already
-      matching the Low-Tech figure). Parry corrected to -1U on all three
+      matching the Low-Tech figure). Parry corrected to 0U on all three
       usages: Low-Tech already treats a couched or braced lance as
-      unbalanced and slow to recover, which the previous flat -1 omitted.
+      unbalanced and slow to recover; a spear's own parry is 0 (B273).
 
   - name: Power Stave
     tl: 11
@@ -1022,19 +1014,19 @@ items:
         damage: sw+3d+2(10) cr
         reach: "1,2"
         parry: 2
-        st: 10
+        st: 10†
         skill: Staff
       - usage: Field on, thrust
         damage: thr+3d+2(10) cr
         reach: "1,2"
         parry: 2
-        st: 10
+        st: 10†
         skill: Staff
       - usage: Field off
         damage: sw+2 cr
         reach: "1,2"
         parry: 2
-        st: 10
+        st: 10†
         skill: Staff
     notes: >
       This is a mundane-but-powered stave (a two-handed power maul built
@@ -1186,13 +1178,13 @@ items:
         damage: sw+6d(10) cr
         reach: 1
         parry: "0U"
-        st: 21
+        st: 21†
         skill: Two-Handed Axe/Mace
       - usage: Field off (as plain maul)
         damage: sw+3 cr
         reach: 1
         parry: "0U"
-        st: 21
+        st: 21†
         skill: Two-Handed Axe/Mace
     notes: >
       Any hit that penetrates the target's DR also inflicts Knockback
@@ -1201,8 +1193,8 @@ items:
       Terminators and even light vehicles being physically hurled by the
       blow, per the weapon's fiction reputation. The 0U parry is the Basic
       Set figure for a two-handed maul/great axe class weapon (B271): it
-      can still parry, but the wielder cannot parry again with it until a
-      turn has passed since the last parry.
+      can still parry, but it cannot parry in a turn in which it has
+      attacked (B269).
     lore: >
       A massive two-handed maul carrying a huge capacitor coil, issued to
       Astartes Terminator assault squads and veteran sergeants;
@@ -1400,10 +1392,10 @@ items:
     cost: 40
     weight: 15
     tags: [Melee Weapon, Imperium, Astra Militarum, Adeptus Arbites]
-    attributes: {block: 2}
+    attributes: {block: 2, dodge: 2, parry: 2}
     weapons:
       - usage: Shield bash
-        damage: sw-2 cr
+        damage: thr cr
         reach: C,1
         parry: 0
         st: 9
@@ -1417,9 +1409,7 @@ items:
       and some Guard trench-fighting depictions; a mundane defensive tool
       with no energy field, unlike Astartes storm shields.
     design: >
-      Basic Set Medium Shield stats (DB 2, modelled here as a +2 attribute
-      bonus to Block per data-format.md's supported attribute list) plus
-      the standard shield-bash attack (sw-2 cr); not anchored by
+      Basic Set Medium Shield stats (DB 2: a Defense Bonus adds to Dodge and Parry as well as Block against attacks from the front or the shield side, B374, so it is written as +2 to all three) plus the standard shield-bash attack (thr cr, B273); not anchored by
       framework.md, built from first principles as ordinary Low-Tech gear.
       Handling: re-derived against Basic Set's actual Medium Shield entry
       (B287: 15 lb, min ST 9, DB2) - the previous 8 lb/ST 8 figures matched
@@ -1433,10 +1423,10 @@ items:
     cost: 150
     weight: 25
     tags: [Melee Weapon, Imperium, Astra Militarum]
-    attributes: {block: 3}
+    attributes: {block: 3, dodge: 3, parry: 3}
     weapons:
       - usage: Shield bash
-        damage: sw-1 cr
+        damage: thr cr
         reach: C,1
         parry: 0
         st: 11
@@ -1449,7 +1439,7 @@ items:
       bear at close range; background material treats it as a specialist,
       situational item rather than universal-issue.
     design: >
-      Basic Set Large Shield stats (DB 3, +3 Block attribute bonus) with a
+      Basic Set Large Shield stats (DB 3: +3 to Block, Dodge and Parry, B374; bash thr cr, B273) with a
       correspondingly higher min ST and weight than the Combat Shield; not
       anchored, built from Low-Tech shield-scaling logic.
       Handling: re-derived against Basic Set's actual Large Shield entry
@@ -1463,10 +1453,10 @@ items:
     cost: 9000
     weight: 32
     tags: [Melee Weapon, Imperium, Adeptus Astartes]
-    attributes: {block: 3}
+    attributes: {block: 3, dodge: 3, parry: 3}
     weapons:
       - usage: Shield bash
-        damage: sw+1 cr
+        damage: thr+1 cr
         reach: C,1
         parry: 0
         st: 15
@@ -1488,10 +1478,10 @@ items:
       to an active energy field rather than the metal plate alone.
     design: >
       Physical component built as an Astartes-scale large shield (Basic
-      Set Large Shield DB 3, +3 Block) at Astartes weight and min ST, above
+      Set Large Shield DB 3: +3 to Block, Dodge and Parry, B374) at Astartes weight and min ST, above
       the human Boarding Shield's figures the way the
       Astartes chainsword sits above the human one; the bash attack scales
-      up accordingly (sw+1 cr, heavier plate than a boarding shield). The
+      up accordingly (thr+1 cr against the book's thr cr, B273: heavier plate than a boarding shield). The
       force-field component that does the real work in the fiction (per
       the framework's instruction that the force field is the armour
       agent's responsibility, referenced here only in notes) is
