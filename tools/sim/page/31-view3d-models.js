@@ -85,7 +85,8 @@
       const meshes = []; root.traverse(o => { if (o.isMesh) meshes.push(o); });
       for (const o of meshes) {
         o.visible = show.has(partOf(o));
-        o.material = await modelMaterial(u, asset, o.material && o.material.name, paint);
+        o.userData.mat = (o.material && o.material.name) || "";
+        o.material = await modelMaterial(u, asset, o.userData.mat, paint);
         o.castShadow = !big; o.receiveShadow = false; o.frustumCulled = false; o.userData.i = F.i;
       }
       if (gone) return;
@@ -104,6 +105,27 @@
       if (F.veh) {
         // the built vehicle's moving parts are gone; the turret is the model's own bone, turned about the hull's up axis
         Object.assign(F, { tracks: [], wheels: [], barrels: [], legs: [], walker: 0, exhaust: null, turret: null });
+        // tracks: the game runs a strip of texture round each one. Slide it as the tank covers ground: the links on
+        // the top run move forward and those underneath move back, so measure how fast the strip's v climbs toward
+        // the front (+z) along each run. Each tank gets its own copy of the material, since tanks of a kind share theirs.
+        root.updateMatrixWorld(true);
+        const size = root.getWorldScale(new THREE.Vector3()).x, median = a => a.sort((x, y) => x - y)[a.length >> 1];
+        for (const o of meshes) {
+          const P = o.geometry.attributes.position, U = o.geometry.attributes.uv, I = o.geometry.index;
+          if (!o.visible || !/track/i.test(o.userData.mat) || !o.material.map || !P || !U || !I) continue;
+          o.geometry.computeBoundingBox();
+          const y0 = o.geometry.boundingBox.min.y, band = (o.geometry.boundingBox.max.y - y0) * .3, over = [], under = [];
+          for (let t = 0; t < I.count; t += 3) for (let e = 0; e < 3; e++) {
+            const i = I.getX(t + e), j = I.getX(t + (e + 1) % 3), dz = P.getZ(j) - P.getZ(i), dy = P.getY(j) - P.getY(i), run = Math.hypot(dy, dz);
+            if (run < .05 || Math.abs(dz) < .7 * run || Math.abs(P.getX(j) - P.getX(i)) > .3 * run) continue;   // only edges along the run
+            const y = (P.getY(i) + P.getY(j)) / 2 - y0, slope = (U.getY(j) - U.getY(i)) / dz;
+            if (y > 2.33 * band) over.push(slope); else if (y < band) under.push(slope);
+          }
+          if (!over.length && !under.length) continue;
+          const rate = over.length && under.length ? (median(over) - median(under)) / 2 : over.length ? median(over) : -median(under);
+          const mat = keep(o.material.clone()), map = keep(o.material.map.clone()); map.needsUpdate = true; mat.map = map; o.material = mat;
+          (F.model.tracks ||= []).push({ map, rate: rate / size });
+        }
         const bone = u.turret && root.getObjectByName(u.turret);
         if (bone) {
           const rest = bone.quaternion.clone(), up = new THREE.Vector3(), qa = new THREE.Quaternion(), qb = new THREE.Quaternion(), rot = { v: 0 };
