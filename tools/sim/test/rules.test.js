@@ -221,3 +221,20 @@ test("a battle is reproducible from its seed", () => {
   assert.equal(a.winner, b.winner);
   assert.deepEqual(a.log, b.log);
 });
+
+test("design notes quote the current AV table", () => {
+  // "AV13 (DR 340...)" or "AV12-14 (DR 250-440)" anywhere in the data must match docs/framework.md's table
+  const AV = { 10: 125, 11: 185, 12: 250, 13: 340, 14: 440 };
+  const files = [];
+  const walk = d => { for (const f of fs.readdirSync(d, { withFileTypes: true })) { const p = path.join(d, f.name); if (f.isDirectory()) walk(p); else if (p.endsWith(".yaml")) files.push(p); } };
+  walk(path.join(__dirname, "..", "..", "..", "data"));
+  const bad = [];
+  for (const f of files) {
+    const text = fs.readFileSync(f, "utf8").replace(/\s+/g, " ");
+    for (const m of text.matchAll(/AV ?(1[0-4])(?:\s*(?:[-–]|through|to)\s*(?:AV ?)?(1[0-4]))?,? \(DR (\d+)(?:\s*[-–]\s*(\d+))?/g)) {
+      const [, a, b, lo, hi] = m;
+      if (+lo !== AV[a] || (b && hi && +hi !== AV[b])) bad.push(`${path.relative(process.cwd(), f)}: "${m[0]}"`);
+    }
+  }
+  assert.deepEqual(bad, [], "stale AV figures:\n" + bad.join("\n"));
+});
