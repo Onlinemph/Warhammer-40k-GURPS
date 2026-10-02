@@ -42,7 +42,7 @@ On Windows, run it with a Python installed from python.org or a virtual environm
 
 Not covered, so still drawn from shapes: any vehicle not in the list.
 
-Known gaps: the Mandrake only has its idle animation (its others import upside down), and Soulstorm units keep one animation set whatever they carry, so a heavy bolter is held like a bolter. The Terminator entry has not been seen in the page, because no simulator loadout wears Terminator armour yet.
+Known gaps: Soulstorm units keep one animation set whatever they carry, so a heavy bolter is held like a bolter. The Terminator entry has not been seen in the page, because no simulator loadout wears Terminator armour yet.
 
 ## Battlefields
 
