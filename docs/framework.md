@@ -198,7 +198,7 @@ Vehicles take the Basic Set's stat block (B462-463). The rest of the line is bui
 | HT | 11-12, f for promethium or multi-fuel; ramshackle Ork builds lower |
 | Locations | B554 codes from the vehicle's shape (tracks, main or independent turret, pintle, open cab, wheels, legs) |
 
-A Leman Russ (63 tonnes) comes out at HP 400, a Rhino (32) 320, a Land Raider (70) 420, a Chimera (38) 340. A lascannon through the hull does about 165 injury, so it takes three body hits, or two in the vital area (B554: x2 for a tight beam), to wreck a tank. Krak missiles get through AV12 nearly always, AV13 about 70% of the time and AV14 one hit in five; an autocannon AV10 nearly always and AV11 about half the time; a heavy bolter AV10 one round in twenty.
+A Leman Russ (63 tonnes) comes out at HP 400, a Rhino (32) 320, a Land Raider (70) 420, a Chimera (38) 340. A lascannon through the hull does about 165 injury, so it takes three body hits, or two in the vital area (B554: x2 for a tight beam), to wreck a tank. Krak missiles get through AV12 and AV13 nearly always and AV14 94% of the time; an autocannon AV10 nearly always and AV11 about half the time; a heavy bolter AV10 38% of the time. Nothing short of a lascannon (13%) or a melta at short range (87%) gets through the DR 1350 glacis.
 
 ## Characters and species
 

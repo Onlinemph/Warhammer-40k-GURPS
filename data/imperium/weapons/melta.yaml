@@ -31,9 +31,9 @@ items:
         skill: Beam Weapons (Pistol)
         notes: >
           Half damage past ½D (the usual GURPS rule) and the armour divisor falls
-          from (10) to (3) as the fusion beam loses cohesion. Still dangerous to light and
-          medium vehicles (avg 63 vs AV10 DR 100/3 = eff. 33, 95% penetration), tails off hard
-          against a Leman Russ or Land Raider's frontal glacis.
+          from (10) to (3) as the fusion beam loses cohesion. Still dangerous to light
+          vehicles (avg 63 vs AV10 DR 125/3 = eff. 41, 91% penetration), half the time against
+          AV11 and never against AV13 or a Leman Russ or Land Raider's frontal glacis.
     lore: >
       A pistol-format melta weapon carried by Astartes command squads, Inquisitors and Tempestus
       officers wanting a point-blank answer to armour without a full meltagun's bulk; background
@@ -42,8 +42,9 @@ items:
       Scaled down two dice from the meltagun anchor (8dx6(10) burn) to 6dx6(10) burn for a pistol-
       sized fuel cell, on a very short 5/25 range band matching the anchor's "vehicle-killer at
       short range, much less beyond" description. At short range 6dx6 averages 126, which - like
-      the full meltagun - penetrates every vehicle on the AV table and any personal armour outright
-      (effective DR under the (10) divisor never exceeds 35, even against AV14's DR 350). See the
+      the full meltagun - penetrates every AV10-14 row and any personal armour outright (effective
+      DR under the (10) divisor never exceeds 44, even against AV14's DR 440); only the DR 1350
+      glacis of a Leman Russ front or Land Raider (eff. 135) holds, letting it through 36%. See the
       Meltagun entry for the beyond-½D check; the pistol's beyond-½D line is one die lower than the
       meltagun's (3d vs 4d), the same one-die-down relationship.
       Handling: min ST 9 (√(10×6)≈7.7, bumped for the bulky coil and reservoir a fusion weapon
@@ -80,9 +81,10 @@ items:
         skill: Beam Weapons (Rifle)
         notes: >
           Half the dice past ½D (the usual GURPS rule) and the armour divisor falls
-          from (10) to (3) as the fusion beam loses cohesion. Still wrecks light and
-          medium vehicles (avg 84 vs AV12 DR 200/3 = eff. 66, 76% penetration), but rarely
-          beats a Leman Russ or Land Raider's frontal glacis (AV14, 5%).
+          from (10) to (3) as the fusion beam loses cohesion. Still wrecks light vehicles
+          (AV10 99%, AV11 84%) and gets through medium armour about half the time (avg 84 vs
+          AV12 DR 250/3 = eff. 83, 56%), but AV13 only 10% and never AV14 or a Leman Russ or
+          Land Raider's frontal glacis.
     lore: >
       The Imperium's dedicated close-range anti-armour infantry weapon, flash-vaporising the
       target's outer surface with a superheated fusion reaction; fiction across every era treats
@@ -90,18 +92,18 @@ items:
       sharp contrast to a lascannon's much longer reach.
     design: >
       This is the project's fixed melta anchor: 8dx6(10) burn at ½D, "much less beyond" 4dx6(3).
-      Checked against the vehicle armour table with the exact dice distribution: AV14 (DR 350, a
-      Leman Russ or Land Raider's front) has effective DR 35 against the (10) armour divisor; 8dx6
-      averages 168, always penetrating, so it easily beats even the heaviest armour in the
-      framework's table at ½D range, as the assignment requires - the same holds at every lower AV
-      on the table. The sharp drop-off is modelled as a second weapon line rather than a formula:
+      Checked against the vehicle armour table with the exact dice distribution: AV14 (DR 440)
+      has effective DR 44 against the (10) armour divisor; 8dx6 averages 168, always penetrating,
+      and the same holds at every lower AV on the table. The DR 1350 glacis (a Leman Russ front or
+      any face of a Land Raider) is effective DR 135, which it still beats 87% of the time at ½D
+      range. The sharp drop-off is modelled as a second weapon line rather than a formula:
       beyond ½D the round keeps only half its dice (4d instead of 8d, the usual GURPS halving for
       range) but keeps a x6 multiplier and a much weaker (3) armour divisor instead of (10),
       representing the fusion reaction losing coherence and cohesion in open air before it reaches
-      the target. Checked against the AV table: beyond ½D it averages 84 and still wrecks AV12 (DR
-      200, effective DR 66) 76% of the time and AV10-11 (DR 100/150) 94-100% of the time, but drops
-      to 34% against AV13 (DR 275) and just 5% against AV14 (DR 350) - "almost never beats" the
-      heaviest tanks, exactly as the framework specifies. A very short 10/50 range band
+      the target. Checked against the AV table: beyond ½D it averages 84, penetrating AV10 (DR 125,
+      effective DR 41) 99% and AV11 (DR 185) 84% of the time, but only 56% against AV12 (DR 250,
+      effective DR 83), 10% against AV13 (DR 340) and never against AV14 (DR 440) or the DR 1350
+      glacis - it does not beat the heaviest tanks beyond ½D. A very short 10/50 range band
       (versus a boltgun's 200/1000) captures the weapon's role as a close-assault specialist, not a
       rifle.
       Handling: min ST 13 (√(10×17)≈13.04, matching framework.md's sqrt formula almost exactly).
@@ -138,9 +140,9 @@ items:
         skill: Gunner (Beams)
         notes: >
           Half the dice past ½D (the usual GURPS rule) and the armour divisor falls
-          from (10) to (3) as the fusion beam loses cohesion. Unlike the shoulder-fired meltagun,
-          this still wrecks AV13 (avg 105 vs DR 275/3 = eff. 91, 70%) and has a real chance against
-          AV14 (31%), reflecting the bigger reactor's reserve of power.
+          from (10) to (3) as the fusion beam loses cohesion. Still wrecks AV10-12 (avg 105 vs
+          AV12 DR 250/3 = eff. 83, 85%) and gets through AV13 40% of the time (the meltagun: 10%),
+          but AV14 only 3% and never a Leman Russ or Land Raider's glacis.
     lore: >
       A tripod- or vehicle-mounted heavy melta weapon fielded by heavy weapon teams and as a common
       tank sponson/hull weapon; background treats it exactly as a bigger meltagun, killing the
@@ -149,9 +151,9 @@ items:
       Two dice over the meltagun anchor (10dx6(10) vs 8dx6(10) short, 5dx6(3) vs 4dx6(3) beyond),
       matching this project's standard heavy-weapon progression, on a slightly longer 15/75 range
       band appropriate to a crew-served weapon with a bigger reactor. At short range it averages 210
-      and penetrates every vehicle and personal armour on the tables without exception, same as the
-      meltagun; beyond ½D the extra die keeps it meaningfully ahead of the meltagun against the
-      heaviest tanks (31% vs AV14, versus the meltagun's 5%) while still tailing off, matching the
+      and penetrates every AV10-14 row and personal armour outright, and the DR 1350 glacis 99% of
+      the time (the meltagun: 87%); beyond ½D the extra die keeps it ahead of the meltagun against
+      AV12-13 (85% and 40%, versus 56% and 10%) while still tailing off to 3% at AV14, matching the
       fiction's "bigger meltagun" framing rather than a full return to short-range lethality.
       Handling: 55 lb loaded (excluding the 20 lb Heavy Weapon Tripod), ST 14M (mounted, like the other tripod- and vehicle-mounted weapons
       in heavy.yaml: the sqrt(10x55)=23 a shoulder-fired weapon this heavy would need is carried by
