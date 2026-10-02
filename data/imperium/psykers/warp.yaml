@@ -51,23 +51,22 @@ items:
       mapped to Warp Empowerment level and the point cap that gives, worked
       out from this file's actual (Warp Sorcery -20% + Perils of the Warp)
       modified costs. Attack powers are bought at lore levels (Smite and
-      Molten Beam 12 levels at 162 points, Inferno 68, Crush 88, Fire Bolt
-      42, Flame Breath 30, Assail 28), so only a strong psyker can hold one
+      Molten Beam 12 levels at 162 points, Inferno 68, Crush 88, Fire Bolt 42, Flame Breath 33, Assail 28), so only a strong psyker can hold one
       at full strength; a weaker one buys the same power at fewer levels
       (cost is per level: Smite and Molten Beam 13.5, Inferno 8.5, Crush 11,
-      Flame Breath 6, Fire Bolt and Assail 3.5).
+      Flame Breath 6.5, Fire Bolt and Assail 3.5).
 
         Grade      | Empowerment level | Cap (10+10/lvl) | What the cap reaches
-        Iota       | 1                  | 20              | every non-attack power costing 20 or less: Endurance (2), Iron Arm (4), Warp Speed (4), Forewarning (11), Psychic Scream (12), Heroic Feats of Strength (12), Sanctuary (13), Mind Probe (14), Foresight (18), Misfortune (18), Haemorrhage (19), Astrotelepathy (20). Attack powers only at reduced levels: Smite 1 level, Fire Bolt or Assail up to 5 levels, Crush 1 level
+        Iota       | 1                  | 20              | every non-attack power costing 20 or less: Endurance (2), Iron Arm (4), Warp Speed (4), Forewarning (11), Psychic Scream (12), Heroic Feats of Strength (12), Mind Probe (14), Foresight (18), Misfortune (18), Haemorrhage (19), Astrotelepathy (20). Attack powers only at reduced levels: Smite 1 level, Fire Bolt or Assail up to 5 levels, Crush 1 level
         Zeta       | 1                  | 20              | as Iota; low Psyker Talent limits skill use, not what they can know
-        Eta        | 2                  | 30              | adds Mental Interrogation (21), Null Zone (23), Terrify (28), Assail at full (28), Flame Breath at full (30). Smite 2 levels, Fire Bolt 8 levels, Crush 2 levels
-        Theta      | 3                  | 40              | adds Scrier's Gaze (35), Dominate (35), Gate of Infinity (40): the full non-attack roster. Fire Bolt 11 levels, Crush 3 levels, Smite 2 levels
-        Epsilon    | 5                  | 60              | Fire Bolt at full (42) with Flame Breath (30) and Assail (28) at full (a typical Wyrdvane battlefield psyker); Smite, Molten Beam or Crush at 4-5 levels
+        Eta        | 2                  | 30              | adds Mental Interrogation (21), Null Zone (23), Sanctuary (26), Terrify (28), Assail at full (28), Flame Breath at 4 levels (26). Smite 2 levels, Fire Bolt 8 levels, Crush 2 levels
+        Theta      | 3                  | 40              | adds Scrier's Gaze (35), Dominate (35), Gate of Infinity (40): the full non-attack roster, and Flame Breath at full (33). Fire Bolt 11 levels, Crush 3 levels, Smite 2 levels
+        Epsilon    | 5                  | 60              | Fire Bolt at full (42) with Flame Breath (33) and Assail (28) at full (a typical Wyrdvane battlefield psyker); Smite, Molten Beam or Crush at 4-5 levels
         Delta      | 16                 | 170             | Smite and Molten Beam at full 12 levels (162), Inferno at full (68), Crush at full (88): the whole Imperial attack roster (a typical Sanctioned Primaris Psyker)
         Gamma      | 16                 | 170             | as Delta, better skills from a higher Psyker Talent
         Beta       | 18                 | 190             | as Delta with headroom to push one attack to 14 levels (189)
         Alpha      | 20                 | 210             | full roster with headroom for high-level workings, up to 15 levels of Smite or Molten Beam (203) (Astartes Librarians, Black Ship candidates)
-        Alpha-Plus | 25+ (GM only)      | 260+            | 19 levels of Smite (257) and beyond; Vortex of Doom (280 as usually bought) needs level 27, so it stays just out of reach here
+        Alpha-Plus | 25+ (GM only)      | 260+            | 19 levels of Smite (257) and beyond; Vortex of Doom (230 as usually bought) needs level 22, so nothing below this grade reaches it
 
       A character need not buy Warp Empowerment up to their grade's full
       ceiling: templates in this project buy only the level their actually-
@@ -760,14 +759,10 @@ items:
         per_level: 5
         levels: 5
         tags: [Advantage, Mental, Psyker, Imperium]
-        modifiers: ["Cone, +50%", "Warp Sorcery, -20%", "Perils of the Warp, -10%"]
+        modifiers: ["Cone, 1 yard wide, +60%", "Warp Sorcery, -20%", "Perils of the Warp, -10%"]
         lore: A gout of fire breathed out in a cone in front of the caster.
         design: >
-          Innate Attack (Burning, 5/die) with Cone (+50%, B103) plus Warp
-          Sorcery/Perils, net +20%. Full modified cost: 5 x 1.2 = 6
-          points/level. Bought at 5 levels (5d burn cone) for 30 points, a
-          heavy flamer's damage; a lesser psyker may buy fewer levels. Needs
-          Warp Empowerment level 2 (cap 30) at 5 levels.
+          Innate Attack (Burning, 5/die) with Cone (+50% plus +10% per yard of width at its far end, B103: one yard, +60%) plus Warp Sorcery/Perils, net +30%. Full modified cost: 5 x 1.3 = 6.5 points/level. Bought at 5 levels (5d burn cone) for 32.5, rounded up to 33 points, a heavy flamer's damage; a lesser psyker may buy fewer levels. Needs Warp Empowerment level 3 (cap 40) at 5 levels, level 2 (cap 30) at 4.
 
   - name: Telekinesis
     container: group
@@ -989,7 +984,7 @@ items:
         points: 10
         tags: [Advantage, Mental, Psyker, Imperium, Grey Knights]
         modifiers:
-          - {name: Advantage Delivered (+2 vs. Fright Checks, possession, and Warp-based Affliction, 15 pts), cost: "+15%"}
+          - {name: Advantage Delivered (+2 vs. Fright Checks, possession, and Warp-based Affliction, 15 pts), cost: "+150%"}
           - "Area Effect, +50%"
           - "Warp Sorcery, -20%"
           - "Perils of the Warp (Severe), -20%"
@@ -997,9 +992,7 @@ items:
         design: >
           Affliction (10, delivering a +15-point protective advantage to
           willing allies rather than a disadvantage to a foe — Basic B35
-          allows either) with Area Effect (+50%), Warp Sorcery, and Severe
-          Perils, net +25%. Full modified cost: 10 x 1.25 = ~13 points; needs
-          Warp Empowerment level 1 (cap 20).
+          allows either) at +10% per point of the advantage (B36: +150%), with Area Effect (+50%), Warp Sorcery, and Severe Perils, net +160%. Full modified cost: 10 x 2.6 = 26 points; needs Warp Empowerment level 2 (cap 30).
 
   - name: Librarius
     container: group
@@ -1061,7 +1054,7 @@ items:
     max_levels: 30
     tags: [Advantage, Mental, Psyker, Imperium, Great Power]
     modifiers:
-      - "Explosion, +200%"
+      - "Explosion 3, +150%"
       - "Armor Divisor (2), +50%"
       - "Preparation Required, -30%"
       - "Warp Sorcery, -20%"
@@ -1077,14 +1070,7 @@ items:
       Librarian play.
     design: >
       Innate Attack (Crushing, 5/die), 20d starting suggestion, with
-      Explosion at the 16-yard tier (+200%, B106), Armor Divisor (2)
-      (+50%), Preparation Required (-30%, a full turn's channelling),
-      Warp Sorcery, and Severe Perils, net +180%. Full modified cost:
-      5 x 2.8 = 14 points/level, and this Great Power's minimum purchase is
-      20 levels (280 points) — deliberately priced in the framework's
-      "Beyond play" tier. Even Alpha-Plus's GM-only Warp Empowerment ceiling
-      (level 25, cap 260) falls short of 280 (it takes level 27): per the
-      framework, Great Powers may exceed any PC's (or ordinary NPC's) Warp
+      Explosion at its third and highest level (+150%, B104: damage falls off as one over the distance in yards), Armor Divisor (2) (+50%), Preparation Required (-30%, a full turn's channelling), Warp Sorcery, and Severe Perils, net +130%. Full modified cost: 5 x 2.3 = 11.5 points/level, and this Great Power's minimum purchase is 20 levels (230 points) — deliberately priced in the framework's "Beyond play" tier. Only the GM-only Alpha-Plus grade (level 25, cap 260) reaches 230 (it takes level 22): per the framework, Great Powers may exceed any PC's (or ordinary NPC's) Warp
       Empowerment outright. A GM
       allowing a named NPC to cast it at all should treat the cap rule as
       waived for this entry specifically, exactly as Thaumatology: Sorcery's

@@ -55,7 +55,7 @@
   // and the ST and Move features a suit carries (servo ST lives on a child item).
   const LOCS = ["skull", "eye", "face", "neck", "torso", "vitals", "groin", "arm", "hand", "leg", "foot"];
   function armourProfile(names) {
-    const dr = {}, gap = {}; let wp = 0, wpTorso = -1, striking = 0, lifting = 0, move = 0, hp = 0, flexible = false;
+    const dr = {}, gap = {}; let wp = 0, wpTorso = -1, striking = 0, lifting = 0, move = 0, hp = 0, sm = 0, dodge = 0, flexible = false;
     for (const nm of names || []) {
       const hit = EQ.get(nm);
       if (!hit) continue;
@@ -81,10 +81,12 @@
           else if ((m = /^ST ([+-]\d+)/.exec(o))) { striking += Number(m[1]); lifting += Number(m[1]); }
           else if ((m = /^Basic Move ([+-]\d+)/i.exec(o))) move += Number(m[1]);
           else if ((m = /^HP ([+-]\d+)/.exec(o))) hp += Number(m[1]);   // battlesuit structure
+          else if ((m = /^SM ([+-]\d+)/.exec(o))) sm += Number(m[1]);   // a suit that makes its wearer a size bigger
+          else if ((m = /^Dodge ([+-]\d+)/.exec(o))) dodge += Number(m[1]);   // holo-suit, clone field
         }
       }
     }
-    return { dr, wp, gap, striking, lifting, move, hp, flexible };
+    return { dr, wp, gap, striking, lifting, move, hp, sm, dodge, flexible };
   }
   // the DR a gap in the armour faces (a found Weak Point, or a chink, B400): half the location's DR, unless the item
   // sets it (an arm or leg plate's joints, by user direction)
@@ -195,7 +197,7 @@
       const facts = (SIMW[label] || {})[line.usage] || {};
       const cone = facts.cone || Number((/cone[^0-9]*(\d+)\s*(?:yards|yd)/i.exec(line.usage || "") || [])[1] || 0);
       const w = { id: ++WID, name: label, usage: line.usage, text: line.damage, dmg, follow: fdmg, followText: fl ? fl.damage : "", level,
-        rend, rendBy, rendText: rl ? rl.damage : "", malf: facts.malf || 0,
+        rend, rendBy, rendText: rl ? rl.damage : "", malf: facts.malf || 0, skill: line.skill || "",
         overheat: facts.overheat ? parseDamage(/[a-z]\s*$/.test(facts.overheat) ? facts.overheat : facts.overheat + " burn") : null,
         cone, blast: facts.blast || 0, corrode: facts.corrode || (dmg.type === "cor" ? 5 : 0), warpflame: !!facts.warpflame, indirect: !!facts.indirect, minRange: facts.minRange || 0, chink: ((SIMW[label] || {})._item || {}).chink || 0, natural: !!sel.trait, dST };
       // an Agoniser's agony follow-up (B428): HT-N or Severe Pain (-4, -2 with High Pain Threshold); a critical
@@ -210,7 +212,7 @@
         w.unbalanced = /U/.test(p);
         w.reach = String(line.reach ?? "1");
         // Size Modifier and Reach (B402): a big fighter's limbs and weapons reach further (SM +1 only turns C into 1)
-        const smR = [0, 0, 1, 2, 3, 5, 7, 10][Math.max(0, Math.min(7, st.sm || 0))];
+        const smR = [0, 0, 1, 2, 3, 5, 7, 10][Math.max(0, Math.min(7, (st.sm || 0) + arm.sm))];
         w.reachMax = Math.max(1, ...(w.reach.match(/\d+/g) || ["1"]).map(Number)) + smR;
         w.oneHanded = oneHand(line.strength);
         w.fencing = /^(Rapier|Saber|Smallsword|Main-Gauche)/.test(line.skill || "");   // B208: +3 retreating parry, -2 per extra parry
@@ -248,16 +250,27 @@
       w.text += ` (+${per}/die Weapon Master)`;
       return w;
     };
-    let melee = weaponMaster(mkWeapon(spec.melee, true));
+    // Brawling at DX+2 or better adds +1 per die of basic thrust to its attacks: punches, claws, bites, and a fist
+    // with a load in it (B182); below that it adds nothing
+    const brawlLvl = (st.skills || []).some(s => s.name === "Brawling") ? skillLevel(st, "Brawling", ["Brawling"]) : 0;
+    const brawler = w => {
+      if (!w || !w.dmg || w.skill !== "Brawling" || brawlLvl < st.dx + 2 || !/^\s*thr/.test(w.text || "")) return w;
+      const dice = Number((/^(\d+)d/.exec((w.dST || dmgST).thr) || [0, 0])[1]);
+      if (!dice) return w;
+      w.dmg = { ...w.dmg, add: w.dmg.add + dice };
+      w.text += " (+1/die Brawling)";
+      return w;
+    };
+    let melee = brawler(weaponMaster(mkWeapon(spec.melee, true)));
     // Flesh Hooks (Lictor, Ravener): a reach-2 hook strike that snags the target for a free grapple (bio-weapons.yaml)
-    const hooks = findTraitWeapon(T.t.traits, "Flesh Hooks") ? mkWeapon({ trait: "Flesh Hooks", mode: "Standard" }, true) : null;
+    const hooks = findTraitWeapon(T.t.traits, "Flesh Hooks") ? brawler(mkWeapon({ trait: "Flesh Hooks", mode: "Standard" }, true)) : null;
     // the same blade's other way of hitting (a sword's thrust beside its swing, B271): same field setting,
     // chosen blow by blow
     if (melee && spec.melee && spec.melee.item) {
       const h = EQ.get(spec.melee.item);
       const norm = u => String(u || "").toLowerCase().replace(/^(thrust|swing)[,\s]*/, "").replace(/[()]/g, "").trim();
       const alt = h && h.e ? weaponLines(h.e).filter(l => l.melee && l.usage !== melee.usage && !/follow|force strike|thrown/i.test(l.usage || "") && norm(l.usage) === norm(melee.usage)) : [];
-      melee.alt = alt.map(l => weaponMaster(mkWeapon({ item: spec.melee.item, mode: l.usage }, true))).filter(w => w && w.dmg && w.reachMax === melee.reachMax);
+      melee.alt = alt.map(l => brawler(weaponMaster(mkWeapon({ item: spec.melee.item, mode: l.usage }, true)))).filter(w => w && w.dmg && w.reachMax === melee.reachMax);
     }
     // Tip Slash (MA113): a weapon that thrusts to impale can swing its tip across the target for cutting at its
     // impaling damage -2, at the same reach
@@ -267,9 +280,9 @@
     }
     if (!melee) {
       const lvl = skillLevel(st, "Brawling", ["Brawling", "DX", "Karate"]);
-      const hasB = (st.skills || []).some(s => s.name === "Brawling" || s.name === "Karate");
-      const pd = parseDamage("thr" + (hasB ? "" : "-1") + " cr", dmgST.thr, dmgST.sw);
-      melee = { id: ++WID, name: "Punch", usage: "Punch", text: "thr cr", dmg: pd, follow: null, level: lvl, parry: 0, unbalanced: false, reach: "C", reachMax: 1, malf: 0, weight: st.st * st.st / 100 };
+      // a punch is thrust-1 crushing (B271)
+      const pd = parseDamage("thr-1 cr", dmgST.thr, dmgST.sw);
+      melee = brawler({ id: ++WID, name: "Punch", usage: "Punch", text: "thr-1 cr", skill: "Brawling", dmg: pd, follow: null, level: lvl, parry: 0, unbalanced: false, reach: "C", reachMax: 1, malf: 0, weight: st.st * st.st / 100 });
     }
     const ranged = mkWeapon(spec.ranged, false);
     // a crew-served heavy weapon (squad `team`): one on a tripod or bipod, or a mortar on its baseplate, is fired from
@@ -278,7 +291,7 @@
     if (spec.team) teamGun(ranged);
     const heavy = spec.heavy ? teamGun(mkWeapon(spec.heavy, false)) : null;
     // a combat knife carried besides the main blade (loadout `knife`): reach C, so it works in close combat unpenalised
-    const knife = spec.knife ? mkWeapon(spec.knife, true) : null;
+    const knife = spec.knife ? brawler(mkWeapon(spec.knife, true)) : null;
     // a second ranged weapon that needs no hands (a Carnifex's bio-plasma): its own magazine, no reload in a fight
     const ranged2 = mkWeapon(spec.ranged2, false);
     if (ranged2) { ranged2.extra = true; ranged2.limit = ranged2.shots.mag === Infinity ? Infinity : ranged2.shots.mag; ranged2.shots = { mag: Infinity, reload: 0 }; }
@@ -288,15 +301,16 @@
       const w = mkWeapon({ item: g.item, mode: g.mode }, false);
       if (!w) return null;
       const h = EQ.get(g.item), lb = parseFloat((h && h.e && h.e.weight) || 1) || 1;
-      // Throwing at DX+1 adds 1 to ST for distance, DX+2 or better 2 (B356)
-      const tST = liftST + (w.level >= st.dx + 2 ? 2 : w.level >= st.dx + 1 ? 1 : 0);
+      // Throwing at DX+1 adds 1 to ST for distance, DX+2 or better 2 (B356). Lifting ST, the wearer's or a suit's,
+      // doesn't count for throwing (B65)
+      const tST = st.st + (w.level >= st.dx + 2 ? 2 : w.level >= st.dx + 1 ? 1 : 0);
       const dist = Math.max(2, Math.floor(tST * ((THROW.find(([r]) => r >= lb / (tST * tST / 5)) || [0, 0.2])[1])));
       Object.assign(w, { range: { half: dist, max: dist }, acc: 0, rof: 1, rcl: 1, bulk: 0, shots: { mag: Infinity, reload: 0 }, thrown: true, count: g.count || 1, oneHanded: true, minST: 0, stStand: 0 });
       return w;
     }).filter(Boolean);
     // Encumbrance (B17): the loadout's weight against Basic Lift (Lifting ST); powered armour and battlesuits carry
     // themselves, and a mounted gun its mount. None, Light (x2 BL), Medium (x3), Heavy (x6), Extra-Heavy (x10)
-    const POWERED = /Power Armour|Battlesuit|Mega Armour|Auramite|Terminator|Gravis|Cataphractii/i;
+    const POWERED = /Power Armour|Battlesuit|Mega Armour|Auramite|Terminator|Dreadnought|Gravis|Cataphractii/i;
     const lbOf = n => { const h = n && EQ.get(n); return h ? parseFloat(h.e.weight) || 0 : 0; };
     const load = (spec.armour || []).filter(n => !POWERED.test(n)).reduce((a, n) => a + lbOf(n), 0)
       + (spec.ranged && spec.ranged.item && !(ranged && ranged.mounted) ? lbOf(spec.ranged.item) : 0)
@@ -367,7 +381,7 @@
       grapple: Math.max(st.dx, ...(st.skills || []).filter(s => /^(Wrestling|Judo|Sumo Wrestling)\b/.test(s.name) && s.level != null).map(s => s.level)),
       ai: aiProfile(spec.template),
       stance: spec.stance || "shoot", ambush: !!spec.ambush, stats: st, flags, speed: st.speed, move: Math.max(1, Math.floor((st.move + arm.move) * [1, 0.8, 0.6, 0.4, 0.2][enc])),
-      dodge: st.dodge - enc, enc, HP: st.hp + arm.hp, HT: st.ht, will: st.will, sm: st.sm || 0,
+      dodge: st.dodge - enc + arm.dodge, enc, HP: st.hp + arm.hp, HT: st.ht, will: st.will, sm: (st.sm || 0) + arm.sm,
       arm, nat, ranged, melee, parry: parryOf(melee), knife, knifeParry: knife ? parryOf(knife) : null, cs, judo: (st.skills || []).some(s => /^(Judo|Karate|Boxing)/.test(s.name) && s.level != null), bl: Math.round(liftST * liftST / 5),
       shield: spec.shield && spec.shield.sp ? { ...spec.shield } : cs && cs.field ? { item: cs.name + " field", ...cs.field, ranged_only: false, arc: "shield" } : pshield,
       // clothing that can catch fire (B433-434): cloth, flak, robes and hides; sealed plate, carapace, chitin and

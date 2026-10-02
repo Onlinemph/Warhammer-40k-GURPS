@@ -154,7 +154,7 @@ Damage anchors aren't enough on their own: Acc, RoF, Shots, ST, Bulk, Recoil and
 
 **Weight** comes from the lore first (Black Library descriptions, FFG/C7 weights) and is the loaded weight in lb. Astartes-pattern weapons are built for ST 30 hands and are far heavier than human versions: an Astartes Godwyn boltgun is about 35–40 lb loaded (Deathwatch lists 18 kg), a human-scale boltgun roughly half that.
 
-**Minimum ST** follows GURPS practice for shoulder arms, about √(10 × loaded weight in lb), rounded, then adjusted for recoil and balance. That gives about ST 9 for an 8 lb rifle and about ST 19 for a 36 lb Astartes boltgun (a Guardsman can lift it but fires it at a heavy penalty; a Marine at ST 30 exceeds 1.5 × 19 and so can fire it one-handed, as the fiction shows). Use † for two-handed weapons, B for bipod-mounted and M for mounted, per the Basic Set.
+**Minimum ST** follows GURPS practice for shoulder arms, about √(10 × loaded weight in lb), rounded, then adjusted for recoil and balance. That gives about ST 9 for an 8 lb rifle and about ST 19 for a 36 lb Astartes boltgun (a Guardsman can lift it but fires it at a heavy penalty; a Marine at ST 30 exceeds 1.5 × 19 and so can fire it one-handed, as the fiction shows, though it must be readied again after each shot; it takes twice the listed ST, which the suit's servos supply, to do that freely, B270). Use † for two-handed weapons, long arms included, B for bipod-mounted and M for mounted, per the Basic Set. Pistols carry no mark.
 
 **RoF** reflects the actual mechanism:
 - 1: single-shot, bolt/lever/pump action, anything that must recharge, vent or cool between shots (plasma, melta, lascannon, long-las, missile and grenade launchers).
@@ -198,7 +198,7 @@ Vehicles take the Basic Set's stat block (B462-463). The rest of the line is bui
 | HT | 11-12, f for promethium or multi-fuel; ramshackle Ork builds lower |
 | Locations | B554 codes from the vehicle's shape (tracks, main or independent turret, pintle, open cab, wheels, legs) |
 
-A Leman Russ (63 tonnes) comes out at HP 400, a Rhino (32) 320, a Land Raider (70) 420, a Chimera (38) 340. A lascannon through the hull does about 165 injury, so it takes three body hits, or two in the vital area (B554: x2 for a tight beam), to wreck a tank. Krak missiles get through AV12 and AV13 nearly always and AV14 94% of the time; an autocannon AV10 nearly always and AV11 (a Rhino) 81% of the time; a heavy bolter AV10 38% of the time. Nothing short of a lascannon (13%) or a melta at short range (87%) gets through the DR 1350 glacis.
+Curb weight is the loaded weight less the Load (B463). A Leman Russ (63 tons loaded) comes out at HP 400, a Rhino (32) 316, a Land Raider (70) 412, a Chimera (38) 334. A lascannon through the hull does about 165 injury, so it takes three body hits, or two in the vital area (B554: x2 for a tight beam), to wreck a tank. Krak missiles get through AV12 and AV13 nearly always and AV14 94% of the time; an autocannon AV10 nearly always and AV11 (a Rhino) 81% of the time; a heavy bolter AV10 38% of the time. Nothing short of a lascannon (13%) or a melta at short range (87%) gets through the DR 1350 glacis.
 
 ## Characters and species
 

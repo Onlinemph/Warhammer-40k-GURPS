@@ -10,6 +10,7 @@ way GCS does (modifiers summed, -80% floor, rounded up; alternative abilities at
 import json
 import math
 import re
+import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -72,7 +73,7 @@ def trait_cost(t):
             pass
     pct = mod_pct(t)
     v = base * (1 + pct / 100) * mult
-    return math.ceil(v - 1e-9) if v > 0 else math.floor(v + 1e-9)
+    return math.ceil(v - 1e-9)   # fractions round up, a disadvantage's too: -7.5 is -7 (B11)
 
 
 def skill_cost(s):
@@ -407,7 +408,8 @@ def character_stats(d):
                 for loc in f.get("locations", []):
                     dr[loc] = dr.get(loc, 0) + f["amount"]
             elif f["type"] == "skill_bonus":
-                k = f["name"]["qualifier"]
+                # a bonus to one specialisation ("Guns (Rifle)") is kept apart from one to the whole skill
+                k = f["name"]["qualifier"] + (f" ({f['specialization']['qualifier']})" if f.get("specialization") else "")
                 skill_bonus[k] = skill_bonus.get(k, 0) + f["amount"]
     b = lambda k: bonus.get(k, 0)
     st, dx, iq, ht = 10 + b("st"), 10 + b("dx"), 10 + b("iq"), 10 + b("ht")
@@ -431,8 +433,9 @@ def character_stats(d):
             a, _, lv = diff.partition("/")
             rel = skill_level(sk.get("points", 0), lv) if lv in SKILL_BASE else None
             base = attrs.get(a)
-            lvl = None if rel is None or base is None else base + rel + skill_bonus.get(sk["name"], 0)
             nm = sk["name"] + (f" ({sk['specialization']})" if sk.get("specialization") else "")
+            extra = skill_bonus.get(sk["name"], 0) + (skill_bonus.get(nm, 0) if nm != sk["name"] else 0)
+            lvl = None if rel is None or base is None else base + rel + extra
             skills.append({"name": nm, "level": lvl, "points": sk.get("points", 0)})
     walk(d.get("skills", []))
     return {"st": st, "dx": dx, "iq": iq, "ht": ht, "hp": hp, "will": will, "per": per, "fp": fp,
@@ -488,7 +491,15 @@ def main():
     html = TEMPLATE.read_text(encoding="utf-8").replace("/*__DATA__*/null", data.replace("</", "<\\/"))
     html = html.replace("/*__SIM__*/", sim_code() + "\n" + (ROOT / "tools" / "vendor" / "three-post.js").read_text(encoding="utf-8"))
     OUT.parent.mkdir(exist_ok=True)
-    OUT.write_text(html, encoding="utf-8", newline="\n")
+    # on Windows the page can't be opened for a moment while another program reads it: try again
+    for attempt in range(10):
+        try:
+            OUT.write_text(html, encoding="utf-8", newline="\n")
+            break
+        except OSError:
+            if attempt == 9:
+                raise
+            time.sleep(0.3)
     print(f"{OUT.relative_to(ROOT)}: {len(libs)} libraries, {len(html) // 1024} KB")
 
 

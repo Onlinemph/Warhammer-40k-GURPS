@@ -17,7 +17,8 @@ Each report lists the status of the first pass's findings in its area, its new f
 - **The first pass's findings** are nearly all fixed. Still open: Enhanced Parry and Weapon Master by weapon (#56), groin effects (#40), eye blinding (#43), the shield-arm penalty (#44), DR 0 against fractional armour divisors (#35), and a parry against a thrown weapon (part of #78).
 - **The library data is in good shape.** Every template's total equals the sum of its lines, attribute costs are right, derived statistics match the framework's tables for all 96 templates, every framework anchor matches the data, and the thrust and swing tables, skill levels, minimum ST and damage parsing are correct.
 - **Eleven engine errors were fixed** after this review (see below).
-- **The rest is listed here for a decision**, because each either changes point totals in the library, is a judgment about how far to take a rule, or may be a simplification that was meant.
+- **The data findings were fixed** afterwards, at the user's direction (see "The data" below).
+- **The remaining engine findings are listed here for a decision**, because each is a judgment about how far to take a rule, or may be a simplification that was meant.
 
 ## Fixed after this review
 
@@ -58,9 +59,9 @@ In rough order of effect on fights. "Decide" marks the ones that may be intended
 
 One question for you rather than a finding (B): whether models with High Pain Threshold should roll for knockdown on head and vitals hits that are not major wounds. They never do now, because they never take shock. The other reading would let aimed skull and vitals hits stun Marines, Orks and Necrons.
 
-## Open: the data
+## The data
 
-These change what is on the character sheets, so none was changed without you.
+Fixed at the user's direction after the review; `changelog.md` has each change with its page and the template totals it moved. Left as they are, each a choice the data argues for: the lascannon's Acc 14, the heavy bolter's ST 14B, the Galvanic Rifle's Rcl 1, the stub revolver's RoF 1, the Servo-Arm's strength applied to the whole sheet, the Guardsman's missing Spear skill (it would take the template off 100 points), and ‡ on mauls, great axes and polearms (every two-handed weapon got † instead). Vehicles still have no Range figure. The table below is the review's list as it stood.
 
 | Finding | Book | Effect |
 |---|---|---|
@@ -75,7 +76,7 @@ These change what is on the character sheets, so none was changed without you.
 | A fixed bayonet is thrust +1 | HT197, B273 | The books give thrust +3; the Guardsman also has no Spear skill, so he stabs at 7 |
 | Smaller | | † missing on long arms and two-handed melee weapons; heavy bolter ST; the Devourer's Rapid Fire bracket; Cone +50%; several small advantage and skill costs; vehicle HP from loaded weight; shield DB counted for Block only; stale notes on ten templates |
 
-Small derivation bugs in the code (report C, item 17): Lifting ST used for throwing distance (B65 says it does not count); the powered-armour test misses "Tactical Dreadnought Armour", so Terminator plate counts as carried weight; armour SM and Dodge bonuses are not read; Shortsword defaults in `build_gcs.py` off by one for Force Sword and Saber.
+Small derivation bugs in the code (report C, item 17), all fixed since: Lifting ST used for throwing distance (B65 says it does not count); the powered-armour test misses "Tactical Dreadnought Armour", so Terminator plate counts as carried weight; armour SM and Dodge bonuses are not read; Shortsword defaults in `build_gcs.py` off by one for Force Sword and Saber.
 
 ## A balance point the fights showed
 

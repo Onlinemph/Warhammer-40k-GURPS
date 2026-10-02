@@ -200,8 +200,8 @@ test("vehicles (docs/framework.md: AV to DR, HP from weight; B554 locations)", (
   for (const [name, item] of SIM.vehicles) {
     const v = SIM.buildVehicle({ vehicle: name, count: 1 }, 0);
     for (const [face, dr] of Object.entries({ ...v.veh.dr, ...(v.veh.turret || {}) })) assert.ok(AV.has(dr), `${name} ${face} DR ${dr} isn't on the AV table`);
-    // 4 x the cube root of the curb weight, doubled for a tracked armoured hull
-    const lb = parseFloat(item.weight), hp = 4 * Math.cbrt(lb) * (v.veh.locs.C ? 2 : 1);
+    // 4 x the cube root of the curb weight (loaded weight less Load, B463), doubled for a tracked armoured hull
+    const lb = parseFloat(item.weight) - 2000 * ((item.vehicle || {}).load || 0), hp = 4 * Math.cbrt(lb) * (v.veh.locs.C ? 2 : 1);
     assert.ok(Math.abs(v.HP - hp) / hp < 0.02, `${name}: HP ${v.HP}, the formula gives ${hp.toFixed(0)}`);
   }
   const russ = SIM.buildVehicle({ vehicle: "Leman Russ Battle Tank", count: 1 }, 0).veh;
