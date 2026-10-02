@@ -302,6 +302,10 @@ input[type=number],.sunit select,.addu,.sset select{font:inherit;font-size:.84re
 .vtt-tools button:hover{color:#fff}
 .vtt-tip{position:absolute;pointer-events:none;background:#0d0e12f0;border:1px solid #ffffff2e;border-radius:2px;padding:5px 9px;font-size:.78rem;display:grid;gap:1px;color:#e9e5da;white-space:nowrap}
 .vtt-tip[hidden]{display:none}
+.vtt-cap{position:absolute;left:50%;top:48px;transform:translateX(-50%);max-width:calc(100% - 32px);pointer-events:none;background:#0d0e12e8;border:1px solid #ffffff24;border-left:3px solid #f08a7e;border-radius:2px;padding:7px 12px;font-size:.84rem;line-height:1.35;color:#e9e5da;text-align:center;text-wrap:balance}
+.vtt-cap.sb{border-left-color:#f1d38a}.vtt-cap[hidden]{display:none}
+.vtt-cap .who{font-weight:700}.vtt-cap.sa .who{color:#f08a7e}.vtt-cap.sb .who{color:#f1d38a}
+.vtt-cap .res{display:block;font-family:var(--mono);font-size:.74rem;color:#c9c6bd;margin-top:2px}.vtt-cap .res b{color:#ffd2c8}.vtt-cap .res .dn{color:#ff6a5a}
 .vtt-tip span{font-family:var(--mono);font-size:.68rem;color:#a9a5ae}
 .vtt-side{border-left:1px solid var(--rail-rule);background:var(--rail-2);display:flex;flex-direction:column;min-width:0;max-height:640px;min-height:0}
 .vtt-tabs{display:flex;border-bottom:1px solid var(--rail-rule)}
@@ -6170,6 +6174,7 @@ if (typeof document !== "undefined") (() => {
           <div class="vtt-tools" role="toolbar" aria-label="Map tools">
             <button type="button" data-tool="3d" aria-pressed="false" title="Show the battle in 3D (loads three.js)">3D</button>
             <button type="button" data-tool="walls" aria-pressed="false" title="Lower the walls to see into the rooms" hidden>Low walls</button>
+            <button type="button" data-tool="cine" aria-pressed="false" title="Action camera: everyone moves, then the camera cuts to each attack in turn" hidden>Action cam</button>
             <button type="button" data-tool="follow" aria-pressed="false" title="Keep the camera on the selected model" hidden>Follow</button>
             <button type="button" data-tool="fit" title="Fit the battle to the view">Fit</button>
             <button type="button" data-tool="grid" aria-pressed="true" title="Show the hex grid">Grid</button>
@@ -6895,36 +6900,70 @@ if (typeof document !== "undefined") (() => {
     const deathOf = (i, t) => downs[i].find(d => d.fell && d.t <= t && (d.back == null || d.back > t)) || null;
 
     // ================= what happens this second, scheduled across it (p from 0 to 1)
-    let schedT = -1, sched = [], prevP = 0;
-    const evFor = figs.map(() => ({}));
-    function buildSchedule(t) {
-      schedT = t; sched = []; prevP = 0;
+    // ================= the action camera: a second split into a move beat, then one beat per attacker in the order
+    // they acted, the camera cutting to each; TS is how many seconds of normal replay time this second now takes
+    const MOVE = .8, plans = new Map();
+    let TS = 1;
+    function planOf(t) {
+      if (plans.has(t)) return plans.get(t);
+      const beats = [], byA = new Map(); let cur = null;
+      for (const e of t > 0 ? fx[t - 1] || [] : []) {
+        if (e[0] === "s" || e[0] === "m") {
+          let b = byA.get(e[7]);
+          if (!b) { b = { a: e[7], tgt: e[8], at: [e[3], e[4]], melee: e[0] === "m", kind: e[12] || "", shots: 0, hits: 0, inj: 0, locs: new Set(), nopen: 0, dodged: 0, shield: 0, down: 0, fired: 0, imp: 0 }; byA.set(e[7], b); beats.push(b); }
+          b.shots += e[0] === "s" ? (e[11] || 1) : 1; b.hits += e[0] === "s" ? (e[10] || 0) : (e[6] ? 1 : 0); cur = b;
+        } else if (cur) {
+          if (e[0] === "h") { if (e[2] > 0) { cur.inj += e[2]; cur.locs.add(e[3]); } else cur.nopen++; }
+          else if (e[0] === "v") cur.dodged++;
+          else if (e[0] === "f") cur.shield++;
+          else if (e[0] === "d") { const x = (fr[t - 1] || [])[cur.tgt]; if (cur.kind === "grenade" || cur.kind === "lob" || x && x[0] === e[1] && x[1] === e[2]) cur.down++; }
+        }
+      }
+      const BEAT = Math.max(1, Math.min(1.8, 7 / Math.max(1, beats.length)));
+      const tsc = beats.length ? MOVE + beats.length * BEAT + .15 : 1;
+      beats.forEach((b, k) => { b.start = (MOVE + k * BEAT) / tsc; b.len = BEAT / tsc; });
+      const pl = { beats, tsc, byA };
+      plans.set(t, pl); return pl;
+    }
+
+    // ================= what happens this second, scheduled across it (p from 0 to 1)
+    let schedT = -1, schedC = false, sched = [], prevP = 0;
+    const evFor = figs.map(() => ({})), hP = new Map(), deathP = new Map();
+    function buildSchedule(t, cine) {
+      schedT = t; schedC = cine; sched = []; prevP = 0; hP.clear(); deathP.clear(); fxT = -1;
       for (const e of evFor) for (const k in e) delete e[k];
+      const pl = planOf(t);
+      TS = cine ? pl.tsc : 1;
       if (t <= 0) return;
-      const es = fx[t - 1] || [], lastImpact = new Map();
-      let n = 0;
+      const es = fx[t - 1] || [], lastImpact = new Map(), u = 1 / TS;
+      for (const b of pl.beats) { b.fired = 0; b.imp = b.start + .3 * u; b.fireP = b.start + .3 * u; }
+      let n = 0, beat = null;
+      // when an attack goes off: spread through the first .4 of a normal second, or a little into its attacker's beat
+      const lagOf = e => { if (!cine) return Math.min(.35, n++ * .03) + .05; beat = pl.byA.get(e[7]); const l = beat.start + (.3 + Math.min(.4, beat.fired * .12)) * u; if (!beat.fired++) beat.fireP = l; return l; };
+      const imp = (tg, at) => { if (tg >= 0) lastImpact.set(tg, at); if (cine && beat) beat.imp = Math.max(beat.imp, at); };
       for (const e of es) {
         if (e[0] === "s") {
-          const lag = Math.min(.35, n++ * .03) + .05, kind = e[12] || "slug", K = KIND[kind] || KIND.slug;
-          const travel = K.beam || K.flame ? .05 : K.dur || .15, imp = lag + travel;
+          const lag = lagOf(e), kind = e[12] || "slug", K = KIND[kind] || KIND.slug;
+          const travel = K.beam || K.flame ? .05 : K.dur || .15;
           (evFor[e[7]].fire ||= []).push({ p: lag, kind, tgt: e[8], hits: e[10] || 0, nb: e[11] || 1 });
-          if (e[8] >= 0) lastImpact.set(e[8], imp);
+          imp(e[8], lag + travel * u);
           sched.push({ p: lag, run: () => fireFx(e, kind, K) });
         } else if (e[0] === "m") {
-          const lag = Math.min(.35, n++ * .03) + .05;
+          const lag = lagOf(e);
           (evFor[e[7]].swing ||= []).push({ p: lag, tgt: e[8] });
-          if (e[8] >= 0) lastImpact.set(e[8], lag + .22);
-          if (e[6]) sched.push({ p: lag + .22, run: () => { const F = figs[e[8]]; if (F) burst(glow, chestOf(F), 10, { speed: 3, life: .25, s0: .12, s1: .02, c: C(0xffe0a0), grav: 6 }); } });
+          imp(e[8], lag + .22 * u);
+          if (e[6]) sched.push({ p: lag + .22 * u, run: () => { const F = figs[e[8]]; if (F) burst(glow, chestOf(F), 10, { speed: 3, life: .25, s0: .12, s1: .02, c: C(0xffe0a0), grav: 6 }); } });
         } else if (e[0] === "v") {
-          const pi = lastImpact.get(e[1]) ?? .3; (evFor[e[1]].dodge ||= []).push({ p: pi - .08, how: e[2] });
+          const pi = lastImpact.get(e[1]) ?? .3 * u; (evFor[e[1]].dodge ||= []).push({ p: pi - .08 * u, how: e[2] });
         } else if (e[0] === "h") {
-          const pi = lastImpact.get(e[1]) ?? .35; const F = figs[e[1]];
+          const pi = lastImpact.get(e[1]) ?? .35 * u; const F = figs[e[1]];
+          hP.set(e, pi); deathP.set(e[1], pi);
           if (e[2] > 0) (evFor[e[1]].hit ||= []).push({ p: pi });
           sched.push({ p: pi, run: () => { if (F) impactFx(F, e[2] > 0); } });
         } else if (e[0] === "f") {
-          const pi = lastImpact.get(e[1]) ?? .35; sched.push({ p: pi, run: () => { const F = figs[e[1]]; if (F) shieldFx(F); } });
+          const pi = lastImpact.get(e[1]) ?? .35 * u; hP.set(e, pi); sched.push({ p: pi, run: () => { const F = figs[e[1]]; if (F) shieldFx(F); } });
         } else if (e[0] === "b") {
-          const [x, y] = P(e[1], e[2]); let pb = .4;
+          const [x, y] = P(e[1], e[2]); let pb = .4 * u;
           for (const [ti, pi] of lastImpact) { const F = figs[ti]; if (F && F.g.position.distanceTo(W3(x, y, F.g.position.y)) < 1.6) pb = pi; }
           sched.push({ p: pb, run: () => blastFx(W3(x, y, zOf(e[1], e[2])), e[3]) });
         }
@@ -7009,6 +7048,7 @@ if (typeof document !== "undefined") (() => {
       if (t <= 0) return;
       const seen = new Map();
       for (const e of fx[t - 1] || []) if (e[0] === "h" || e[0] === "f") {
+        const pi = hP.get(e) ?? .45;
         const q0 = e[0] === "h" ? e[4] : e[3], r0 = e[0] === "h" ? e[5] : e[4];
         if (q0 == null) continue;
         const key2 = q0 + "," + r0, nn = seen.get(key2) || 0; seen.set(key2, nn + 1);
@@ -7016,7 +7056,7 @@ if (typeof document !== "undefined") (() => {
         const s = textSprite(txt, colr), [x, y] = P(q0, r0), F = figs[e[1]], base = zOf(q0, r0) + (F ? F.top + .7 : 2.2) + nn * .5;
         if (e[0] === "h" && e[2] > 0) s.scale.multiplyScalar(1.2);
         scene.add(s);
-        fxObjs.push({ obj: s, run(p) { const show = p >= .45 || o.reduce; s.visible = show; s.position.set(x + .5, base + (o.reduce ? .5 : .2 + Math.min(1, Math.max(0, (p - .45) / .55)) * 1.0), y); s.material.opacity = p >= 1 ? .8 : Math.min(1, (1.15 - p) * 2 + .3); } });
+        fxObjs.push({ obj: s, run(p) { const show = p >= pi || o.reduce; s.visible = show; s.position.set(x + .5, base + (o.reduce ? .5 : .2 + Math.min(1, Math.max(0, (p - pi) * TS / .55)) * 1.0), y); s.material.opacity = p >= 1 ? .8 : Math.min(1, (1.15 - p) * 2 + .3); } });
       }
     }
     // aim lines and paths, rebuilt every frame (few of them)
@@ -7081,10 +7121,10 @@ if (typeof document !== "undefined") (() => {
       // this second's actions
       const fires = ev.fire || [], swings = ev.swing || [], dodges = ev.dodge || [], hits = ev.hit || [];
       let aimT = aimB ? 1 : 0, recoil = 0, swing = -1, dodge = 0, flinch = 0, throwing = -1;
-      for (const f of fires) { if (p >= f.p - .3 && p <= f.p + .55) aimT = 1; if (p >= f.p) recoil = Math.max(recoil, Math.exp(-(p - f.p) * 22)); if (f.kind === "grenade" && p >= f.p - .25 && p <= f.p + .2) throwing = (p - f.p + .25) / .45; }
-      for (const s of swings) if (p >= s.p - .2 && p <= s.p + .3) swing = (p - s.p + .2) / .5;
-      for (const d of dodges) dodge = Math.max(dodge, bump(p - d.p + .05, .3));
-      for (const h of hits) if (p >= h.p) flinch = Math.max(flinch, Math.exp(-(p - h.p) * 9));
+      for (const f of fires) { const d = (p - f.p) * TS; if (d >= -.3 && d <= .55) aimT = 1; if (d >= 0) recoil = Math.max(recoil, Math.exp(-d * 22)); if (f.kind === "grenade" && d >= -.25 && d <= .2) throwing = (d + .25) / .45; }
+      for (const s of swings) { const d = (p - s.p) * TS; if (d >= -.2 && d <= .3) swing = (d + .2) / .5; }
+      for (const d of dodges) dodge = Math.max(dodge, bump((p - d.p) * TS + .05, .3));
+      for (const h of hits) { const d = (p - h.p) * TS; if (d >= 0) flinch = Math.max(flinch, Math.exp(-d * 9)); }
       if (reload) aimT = 0;
       F.aim += (aimT - F.aim) * Math.min(1, dt * 10 + (o.reduce ? 1 : 0));
       if (F.veh) return poseVehicle(F, x, ev, p, moved, dt, recoil);
@@ -7173,7 +7213,8 @@ if (typeof document !== "undefined") (() => {
     function update(t, p, st) {
       last = { t, p, st }; lastSt = st;
       speedMs = +(document.getElementById("rspeed") || { value: 1000 }).value || 1000;
-      if (schedT !== t) { if (t < schedT) { glow.clear(); smoke.clear(); } buildSchedule(t); }
+      if (schedT !== t || schedC !== !!st.cine) { if (t < schedT) { glow.clear(); smoke.clear(); } buildSchedule(t, !!st.cine); }
+      const pm = TS > 1 ? Math.min(1, p * TS / MOVE) : p;   // with the action camera everyone moves first, then the beats play
       if (fxT !== t) buildText(t);
       buildDecals(t);
       // effects whose moment has come this second
@@ -7184,11 +7225,11 @@ if (typeof document !== "undefined") (() => {
       const now = performance.now(), dt = Math.min(.1, (now - lastFrameT) / 1000);
       figs.forEach((F, i) => {
         const x = f[i];
-        let at = posAt(i, t, p), dead = null;
+        let at = posAt(i, t, pm), dead = null;
         const d = downs[i].find(dd => dd.t <= t && (dd.back == null || dd.back > t));
         if (!x && d) {
           if (!d.fell) { F.g.visible = false; return; }   // fled, boarded a transport or phased out: gone from the table
-          at = d.at; dead = { f: d.t === t ? (o.reduce ? 1 : Math.max(0, Math.min(1, (p - .35) / .4))) : 1 };
+          at = d.at; dead = { f: d.t === t ? (o.reduce ? 1 : Math.max(0, Math.min(1, (p - (deathP.get(i) ?? .35 / TS)) * TS / .4))) : 1 };
         }
         const back = downs[i].find(dd => dd.back === t);
         if (x && back && back.fell && !o.reduce && p < .7) { at = back.at; dead = { f: 1 - Math.max(0, (p - .1) / .6) }; if (p > .1 && p < .14 && /Necron/.test(ros[i].faction || "")) burst(glow, F.g.position.clone().add(new THREE.Vector3(0, .5, 0)), 20, { speed: 1, life: .8, s0: .4, s1: .05, c: C(0x39ff6a), spread: .8, lift: 1 }); }
@@ -7216,14 +7257,94 @@ if (typeof document !== "undefined") (() => {
         for (const [tt, k, what] of T.events || []) if (tt <= t) { if (what === "broken") broken.add(k); if (state.has(k)) state.set(k, what === "broken" ? "rubble" : what === "closed" ? "shut" : "open"); }
         doorList.forEach((k, i) => { const [q, r] = keyHex(k), [x, y] = P(q, r), s2 = state.get(k); m4.compose(W3(x, y, 0), q0, new THREE.Vector3(1, s2 === "shut" ? 1 : .02, 1)); doorMesh.setMatrixAt(i, m4); doorMesh.setColorAt(i, col.set(s2 === "shut" ? 0x9aa1a8 : 0xd4a52a)); });
         doorMesh.instanceMatrix.needsUpdate = true; if (doorMesh.instanceColor) doorMesh.instanceColor.needsUpdate = true;
-        wallList.forEach((k, i) => { const [q, r] = keyHex(k), [x, y] = P(q, r); m4.compose(W3(x, y, 0), q0, new THREE.Vector3(1, broken.has(k) ? .001 : wallH[i] * (st.lowWalls ? .25 : 1), 1)); walls.setMatrixAt(i, m4); });
+        wallList.forEach((k, i) => { const [q, r] = keyHex(k), [x, y] = P(q, r); m4.compose(W3(x, y, 0), q0, new THREE.Vector3(1, broken.has(k) ? .001 : wallH[i] * (st.lowWalls || st.cine ? .25 : 1), 1)); walls.setMatrixAt(i, m4); });
         walls.instanceMatrix.needsUpdate = true;
       }
       for (const o2 of fxObjs) o2.run(p);
       clearLines();
-      f.forEach((x, i) => { if (!x || x[9] == null || x[9] < 0 || !f[x[9]]) return; const a = posAt(i, t, p), c = posAt(x[9], t, p); if (a && c) dashed([W3(a[0], a[1], zXY(a[0], a[1]) + figs[i].top * .6), W3(c[0], c[1], zXY(c[0], c[1]) + figs[x[9]].top * .55)], x[2] ? 0xf1d38a : 0xf08a7e, .45); });
+      f.forEach((x, i) => { if (!x || x[9] == null || x[9] < 0 || !f[x[9]]) return; const a = posAt(i, t, pm), c = posAt(x[9], t, pm); if (a && c) dashed([W3(a[0], a[1], zXY(a[0], a[1]) + figs[i].top * .6), W3(c[0], c[1], zXY(c[0], c[1]) + figs[x[9]].top * .55)], x[2] ? 0xf1d38a : 0xf08a7e, .45); });
       if (st.trails && t > 0) f.forEach((x, i) => { if (!x || !x[6] || !x[6].length || !prev[i]) return; dashed([P(prev[i][0], prev[i][1]), ...x[6].map(([q, r]) => P(q, r))].map(([a, b]) => W3(a, b, zXY(a, b) + .08)), x[2] ? 0xd6a73c : 0xc23a30, .55); });
       for (const l of gridLines) l.visible = !!st.grid;
+    }
+    // ================= the action camera: a wide shot of whoever moved, then over the shoulder of each attacker in turn
+    const camLook = new THREE.Vector3(orb.tx, orb.ty, orb.tz), camWant = new THREE.Vector3(), lookWant = new THREE.Vector3();
+    const UP = new THREE.Vector3(0, 1, 0);
+    const beatAt = (pl, p) => { let b = null; for (const x of pl.beats) if (p >= x.start - .25 / pl.tsc) b = x; return b; };
+    // close in: side on; middling range: over the shoulder with both in frame; long range: over the shoulder, then
+    // a cut to the target as the shot goes in
+    function shotOf(b, p) {
+      const A = figs[b.a]; if (!A || !A.g.visible) return null;
+      const tF = b.tgt >= 0 ? figs[b.tgt] : null;
+      const a = A.g.position.clone(), [qx, qy] = P(b.at[0], b.at[1]);
+      const bp = tF && tF.g.visible ? tF.g.position.clone() : W3(qx, qy, zOf(b.at[0], b.at[1]));
+      const h = A.veh ? 1.6 : Math.max(.8, A.top), ht = tF ? (tF.veh ? 1.6 : Math.max(.8, tF.top)) : 1, dir = bp.clone().sub(a); dir.y = 0;
+      const d = Math.max(.01, dir.length()); dir.divideScalar(d);
+      const mid = a.clone().add(bp).multiplyScalar(.5);
+      // keep to the side of the line the camera is already on, so it doesn't swing across
+      const side = new THREE.Vector3(-dir.z, 0, dir.x); if (side.dot(camera.position.clone().sub(mid)) < 0) side.negate();
+      if (d <= 2.2) {
+        camWant.copy(mid).addScaledVector(side, 3 + h).addScaledVector(UP, 1.6 + h * .6).addScaledVector(dir, -.8);
+        lookWant.copy(mid).addScaledVector(UP, h * .5); return "melee";
+      }
+      if (d > 10 && p >= b.fireP + .12 / TS) {
+        camWant.copy(bp).addScaledVector(dir, -(4 + ht * 1.5)).addScaledVector(side, 1.5 + ht * .4).addScaledVector(UP, 1.8 + ht);
+        lookWant.copy(bp).addScaledVector(UP, ht * .85); return "target";
+      }
+      camWant.copy(a).addScaledVector(dir, -(2.4 + h * 1.2)).addScaledVector(side, 1 + h * .4).addScaledVector(UP, 1.6 + h * 1.1);
+      lookWant.copy(a).addScaledVector(dir, Math.min(d * .6, 7)).addScaledVector(UP, h * .45); return "shoulder";
+    }
+    function wideOf(t) {
+      const f = fr[t] || [], pts2 = [];
+      figs.forEach((F, i) => { if (F.g.visible && f[i] && f[i][6] && f[i][6].length) pts2.push(F.g.position); });
+      if (!pts2.length) return false;
+      const c = new THREE.Vector3(); pts2.forEach(q => c.add(q)); c.divideScalar(pts2.length);
+      let ext = 0; pts2.forEach(q => { ext = Math.max(ext, Math.hypot(q.x - c.x, q.z - c.z)); });
+      const th = Math.atan2(camera.position.z - camLook.z, camera.position.x - camLook.x), r = ext * 1.2 + 8, ph = .9;
+      lookWant.copy(c); camWant.set(c.x + r * Math.sin(ph) * Math.cos(th), c.y + r * Math.cos(ph), c.z + r * Math.sin(ph) * Math.sin(th));
+      return true;
+    }
+    let camKey = "";
+    function cineCam(dt) {
+      const pl = planOf(last.t), b = TS > 1 ? beatAt(pl, last.p) : null;
+      const mode = b ? shotOf(b, last.p) : wideOf(last.t) ? "wide" : pl.beats.length ? shotOf(pl.beats[0], 0) : null;
+      if (!mode) return;
+      // a cut rather than a long flight: to the target as the shot goes in, or to an attack far across the table
+      const key = last.t + ":" + (b ? b.a : -1) + ":" + mode;
+      if (key !== camKey) { camKey = key; if (mode === "target" || camera.position.distanceTo(camWant) > 30) { camera.position.copy(camWant); camLook.copy(lookWant); camera.lookAt(camLook); return; } }
+      // swoop up and over on the way to a new shot, so the camera doesn't fly through the figures in between
+      const far = camera.position.distanceTo(camWant); camWant.y += Math.min(5, far * .35);
+      const k = 1 - Math.exp(-dt * 3.5);
+      camera.position.lerp(camWant, k); camLook.lerp(lookWant, k); camera.lookAt(camLook);
+    }
+    // back to the orbit camera where the action camera left it
+    function syncOrb() {
+      const v = camera.position.clone().sub(camLook); orb.tx = camLook.x; orb.ty = camLook.y; orb.tz = camLook.z;
+      orb.r = v.length(); orb.ph = Math.acos(Math.max(-1, Math.min(1, v.y / orb.r))); orb.th = Math.atan2(v.z, v.x); place();
+    }
+    // what the beat's attacker did, and after the impact what came of it
+    const cap = document.createElement("div"); cap.className = "vtt-cap"; cap.hidden = true; host.appendChild(cap);
+    let capKey = "";
+    function caption() {
+      const pl = planOf(last.t), b = lastSt.cine && TS > 1 ? pl.beats.find(x => last.p >= x.start && last.p < x.start + x.len) || (last.p >= 1 ? pl.beats[pl.beats.length - 1] : null) : null;
+      if (!b) { if (!cap.hidden) cap.hidden = true; capKey = ""; return; }
+      const done = last.p >= b.imp, key = last.t + ":" + b.a + ":" + done;
+      if (key === capKey) return; capKey = key;
+      const A = ros[b.a], Tn = b.tgt >= 0 && ros[b.tgt] ? ros[b.tgt].id : "the ground";
+      const nm = w => w.replace(/ \(.*$/, "").replace(/,.*$/, ""), gun = !A.veh && A.ranged ? nm(A.ranged) : "", blade = A.melee ? nm(A.melee) : "";
+      const verb = b.melee ? `strikes at ${esc(Tn)}${blade ? " with " + esc(blade) : ""}` : b.kind === "grenade" ? `throws a grenade at ${esc(Tn)}` : b.kind === "lob" ? `drops a shell on ${esc(Tn)}`
+        : `fires ${b.shots > 1 ? b.shots + " shots " : ""}at ${esc(Tn)}${gun ? " with " + esc(gun) : ""}`;
+      const res = [];
+      if (done) {
+        if (!b.melee && b.kind !== "grenade" && b.kind !== "lob") res.push(b.hits ? `${b.hits} hit${b.hits > 1 ? "s" : ""}` : "miss");
+        else if (b.melee) res.push(b.hits ? (b.hits > 1 ? `${b.hits} hits` : "hit") : "misses");
+        if (b.dodged) res.push(b.dodged > 1 ? `${b.dodged} dodged` : "dodged");
+        if (b.shield) res.push("shield holds");
+        if (b.inj) res.push(`<b>${b.inj} injury</b> (${esc([...b.locs].join(", "))})`);
+        else if (b.nopen) res.push("armour holds");
+        if (b.down) res.push(`<b class="dn">${b.down > 1 ? b.down + " down" : "down"}</b>`);
+      }
+      cap.hidden = false; cap.className = "vtt-cap s" + (A.side ? "b" : "a");
+      cap.innerHTML = `<span class="who">${esc(A.id)}</span> ${verb}${res.length ? `<span class="res">${res.join(" · ")}</span>` : ""}`;
     }
     // the animation clock: idle breathing, particles, beams, flashes and the follow camera run on their own
     let running = false, raf2 = 0;
@@ -7247,14 +7368,16 @@ if (typeof document !== "undefined") (() => {
         const jit = b.jitter ? (rnd() - .5) * b.jitter : 0; b.halo.scale.x = b.halo.scale.z = b.r * (2.2 + jit * 10);
       }
       for (const fl of flashes) { fl.age += dt; fl.l.intensity = fl.age < fl.life ? fl.i0 * (1 - fl.age / fl.life) : 0; }
-      if (lastSt.follow && lastSt.sel >= 0 && figs[lastSt.sel] && figs[lastSt.sel].g.visible) {
+      if (lastSt.cine) cineCam(dt);
+      else if (lastSt.follow && lastSt.sel >= 0 && figs[lastSt.sel] && figs[lastSt.sel].g.visible) {
         const P2 = figs[lastSt.sel].g.position, kk = Math.min(1, dt * 3);
         orb.tx += (P2.x - orb.tx) * kk; orb.tz += (P2.z - orb.tz) * kk; orb.ty += (P2.y - orb.ty) * kk; place();
       }
+      caption();
       render();
       raf2 = requestAnimationFrame(tick);
     }
-    if (window.SIM3D_DEBUG) window.SIM3D_DEBUG = { glow, smoke, beams, shots, sched: () => sched, figs };
+    if (window.SIM3D_DEBUG) window.SIM3D_DEBUG = { glow, smoke, beams, shots, sched: () => sched, figs, planOf, camera, camLook, camWant, lookWant };
     const active = on => { if (on && !running) { running = true; lastFrameT = performance.now(); raf2 = requestAnimationFrame(tick); } else if (!on && running) { running = false; cancelAnimationFrame(raf2); } };
 
     // ================= input
@@ -7275,6 +7398,7 @@ if (typeof document !== "undefined") (() => {
       if (!drag) return;
       const dx = sx - px0, dy = sy - py0;
       if (Math.abs(sx - drag.sx) + Math.abs(sy - drag.sy) > 4) drag.moved = true;
+      if (lastSt.cine && drag.moved) { o.onCineOff && o.onCineOff(); lastSt.cine = false; syncOrb(); }
       if (drag.pan) panBy(dx, dy); else { orb.th += dx * .008; orb.ph -= dy * .008; }
       place(); if (!running) { update(last.t, last.p, last.st); render(); }
     });
@@ -7286,12 +7410,15 @@ if (typeof document !== "undefined") (() => {
     // zoom toward the ground under the pointer
     const groundAt = (sx, sy) => { ndc.set(sx / W * 2 - 1, -sy / H * 2 + 1); ray.setFromCamera(ndc, camera); const d = ray.ray.direction, o2 = ray.ray.origin; if (d.y > -1e-3) return null; const k2 = -o2.y / d.y; return [o2.x + d.x * k2, o2.z + d.z * k2]; };
     el.addEventListener("wheel", e => {
-      e.preventDefault(); const f = Math.exp(e.deltaY * .0012), g2 = groundAt(...loc(e));
+      e.preventDefault(); if (lastSt.cine) { o.onCineOff && o.onCineOff(); lastSt.cine = false; syncOrb(); }
+      const f = Math.exp(e.deltaY * .0012), g2 = groundAt(...loc(e));
       if (g2 && f < 1) { orb.tx += (g2[0] - orb.tx) * (1 - f); orb.tz += (g2[1] - orb.tz) * (1 - f); }
       orb.r *= f; place(); if (!running) { update(last.t, last.p, last.st); render(); }
     }, { passive: false });
     return {
       update(t, p, st) { update(t, p, st); if (!running) render(); }, resize, active,
+      secLen(t) { return planOf(t).tsc; },
+      cineOff() { syncOrb(); cap.hidden = true; },
       fit(whole) { fit(whole); update(last.t, last.p, last.st); render(); },
       dispose() { active(false); clearText(); clearLines(); for (const b of beams) { scene.remove(b.core); scene.remove(b.halo); } for (const d of disposables) d.dispose && d.dispose(); if (composer) composer.renderTarget1 && composer.renderTarget1.dispose(); renderer.dispose(); el.remove(); },
     };
@@ -7634,7 +7761,8 @@ if (typeof document !== "undefined") (() => {
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(now => {
         const dur = +speed.value;
-        st.p = Math.min(1, (now - t0) / (dur * 0.85));
+        const len = st.view3d && st.cine && v3 ? v3.secLen(st.t) : 1;   // the action camera stretches a busy second
+        st.p = Math.min(1, (now - t0) / (dur * 0.85 * len));
         draw();
         if (st.p < 1) loop();
         else if (st.playing) { if (st.t >= fr.length - 1) stopPlay(); else setTimeout(() => { if (st.playing) setT(st.t + 1, true); }, dur * 0.15); }
@@ -7664,7 +7792,7 @@ if (typeof document !== "undefined") (() => {
     };
     const set3d = on => {
       st.view3d = on; toolBtn("3d").setAttribute("aria-pressed", on);
-      toolBtn("walls").hidden = !on || !T; toolBtn("measure").hidden = on; toolBtn("follow").hidden = !on;
+      toolBtn("walls").hidden = !on || !T; toolBtn("measure").hidden = on; toolBtn("follow").hidden = !on; toolBtn("cine").hidden = !on;
       if (v3) v3.active(on);
       if (on) { st.measure = false; st.meas = null; toolBtn("measure").setAttribute("aria-pressed", "false"); }
       host3.hidden = !on; cv.style.visibility = on ? "hidden" : "";
@@ -7676,7 +7804,8 @@ if (typeof document !== "undefined") (() => {
       loadThree().then(THREE => {
         if (!v3) {
           v3 = makeView3D(THREE, { host: host3, fr, fx, T, ros, P, posAt, fallen, reduce, zOf,
-            onPick: i => { st.sel = i; panels(); draw(); if (i >= 0) showTab("sheet"); }, onHover: tip3 });
+            onPick: i => { st.sel = i; panels(); draw(); if (i >= 0) showTab("sheet"); }, onHover: tip3,
+            onCineOff: () => { st.cine = false; toolBtn("cine").setAttribute("aria-pressed", "false"); } });
           host3.hidden = false; v3.resize(W, H); v3.fit(false);
         }
         set3d(true);
@@ -7687,6 +7816,7 @@ if (typeof document !== "undefined") (() => {
     };
     toolBtn("walls").onclick = e => { st.lowWalls = !st.lowWalls; e.currentTarget.setAttribute("aria-pressed", st.lowWalls); draw(); };
     toolBtn("follow").onclick = e => { st.follow = !st.follow; e.currentTarget.setAttribute("aria-pressed", st.follow); draw(); };
+    toolBtn("cine").onclick = e => { st.cine = !st.cine; e.currentTarget.setAttribute("aria-pressed", st.cine); if (!st.cine && v3) v3.cineOff(); draw(); };
     toolBtn("grid").onclick = e => { st.grid = !st.grid; e.currentTarget.setAttribute("aria-pressed", st.grid); draw(); };
     toolBtn("trails").onclick = e => { st.trails = !st.trails; e.currentTarget.setAttribute("aria-pressed", st.trails); draw(); };
     toolBtn("measure").onclick = e => { st.measure = !st.measure; e.currentTarget.setAttribute("aria-pressed", st.measure); if (!st.measure) st.meas = null; cv.classList.toggle("measuring", st.measure); draw(); };
