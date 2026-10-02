@@ -328,6 +328,26 @@ def read_animation(buf):
     return named(out[:, :, :3], out[:, :, 3:7])
 
 
+# ------------------------------------------------------------------ sound
+
+def read_sound(buf, seconds=2.5):
+    """One sound from an FMOD sound bank (.fsb, version 4, one sample a file): (sample rate, IMA ADPCM bytes).
+
+    48-byte header ("FSB4", sample count, size of the sample headers, size of the data, ...), then an 80-byte
+    header per sample: its name, length in samples at 32, flags at 48, rate at 52, channels at 62. With flag
+    0x400000 the data is IMA ADPCM in 36-byte blocks of 64 samples, which is how it goes into the pack (the page
+    decodes it). None for anything else: stereo, plain samples or MPEG, which the game uses for music and ambience.
+    """
+    if buf[:4] != b"FSB4" or struct.unpack_from("<I", buf, 4)[0] != 1:
+        return None
+    headers, size = struct.unpack_from("<II", buf, 8)
+    flags, rate = struct.unpack_from("<Ii", buf, 48 + 48)
+    if not flags & 0x400000 or struct.unpack_from("<H", buf, 48 + 62)[0] != 1:
+        return None
+    blocks = min(size // 36, int(rate * seconds) // 64)
+    return rate, buf[48 + headers:48 + headers + 36 * blocks]
+
+
 # ------------------------------------------------------------------ glTF
 
 def quat_of(m):

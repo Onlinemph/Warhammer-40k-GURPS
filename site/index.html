@@ -6196,6 +6196,7 @@ if (typeof document !== "undefined") (() => {
             <button type="button" data-tool="walls" aria-pressed="false" title="Lower the walls to see into the rooms" hidden>Low walls</button>
             <button type="button" data-tool="cine" aria-pressed="false" title="Action camera: everyone moves, then the camera cuts to each attack in turn" hidden>Action cam</button>
             <button type="button" data-tool="follow" aria-pressed="false" title="Keep the camera on the selected model" hidden>Follow</button>
+            <button type="button" data-tool="snd" aria-pressed="false" title="Play the weapons' sounds (needs a local sound pack: tools/dow/README.md)" hidden>Sound</button>
             <button type="button" data-tool="fit" title="Fit the battle to the view">Fit</button>
             <button type="button" data-tool="grid" aria-pressed="true" title="Show the hex grid">Grid</button>
             <button type="button" data-tool="trails" aria-pressed="true" title="Show each model's path this second">Paths</button>
@@ -7096,6 +7097,78 @@ if (typeof document !== "undefined") (() => {
 
 // Part of makeView3D, one function body split into files by section (tools/sim/page/30-37): the locals and
 // helpers declared in earlier parts are in scope here. tools/sim/README.md has the layout.
+    // ================= sound (optional, from the same local pack as the models)
+    // tools/dow/build_pack.py also writes site/models/sounds.js: the game's own weapon, impact, explosion and melee
+    // sounds, as it stores them (IMA ADPCM, a quarter the size of plain samples), keyed by what happens in the
+    // replay: "fire.bolt", "hit.armour", "blast", "swing.chain"... A key may end in a race ("fire.slug.ork") for a
+    // sound only that race makes. Nothing plays unless the Sound button is on and the replay is running.
+    const SND = { ctx: null, out: null, lib: null, bufs: new Map(), last: new Map(), live: 0, on: false };
+    const ADPCM_STEP = [7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 19, 21, 23, 25, 28, 31, 34, 37, 41, 45, 50, 55, 60, 66, 73, 80, 88, 97, 107, 118, 130, 143, 157, 173, 190, 209, 230, 253, 279, 307, 337, 371, 408, 449, 494, 544, 598, 658, 724, 796, 876, 963, 1060, 1166, 1282, 1411, 1552, 1707, 1878, 2066, 2272, 2499, 2749, 3024, 3327, 3660, 4026, 4428, 4871, 5358, 5894, 6484, 7132, 7845, 8630, 9493, 10442, 11487, 12635, 13899, 15289, 16818, 18500, 20350, 22385, 24623, 27086, 29794, 32767];
+    const ADPCM_MOVE = [-1, -1, -1, -1, 2, 4, 6, 8];
+    // blocks of 36 bytes: a starting sample and step index, then 64 four-bit steps, low half of each byte first
+    function decodeAdpcm(b64) {
+      const raw = atob(b64), n = Math.floor(raw.length / 36), out = new Float32Array(n * 64);
+      let at = 0;
+      for (let b = 0; b < n * 36; b += 36) {
+        let pred = (raw.charCodeAt(b) | raw.charCodeAt(b + 1) << 8) << 16 >> 16, idx = Math.min(88, raw.charCodeAt(b + 2));
+        for (let k = 4; k < 36; k++) {
+          const byte = raw.charCodeAt(b + k);
+          for (let half = 0; half < 2; half++) {
+            const nib = half ? byte >> 4 : byte & 15, step = ADPCM_STEP[idx];
+            let diff = step >> 3; if (nib & 1) diff += step >> 2; if (nib & 2) diff += step >> 1; if (nib & 4) diff += step;
+            pred = Math.max(-32768, Math.min(32767, nib & 8 ? pred - diff : pred + diff));
+            idx = Math.max(0, Math.min(88, idx + ADPCM_MOVE[nib & 7]));
+            out[at++] = pred / 32768;
+          }
+        }
+      }
+      // even out the recordings (they differ sixfold in loudness), and fade the end: a long one may have been cut
+      let sq = 0; for (let i = 0; i < out.length; i++) sq += out[i] * out[i];
+      const level = Math.max(.4, Math.min(2.5, .22 / Math.max(.01, Math.sqrt(sq / Math.max(1, out.length))))), tail = Math.min(4000, out.length >> 2);
+      for (let i = 0; i < out.length; i++) out[i] *= level * Math.min(1, (out.length - i) / tail);
+      return out;
+    }
+    function soundBuffer(key, i, item) {
+      const id = key + "#" + i;
+      if (!SND.bufs.has(id)) { const pcm = decodeAdpcm(item[1]), buf = SND.ctx.createBuffer(1, Math.max(1, pcm.length), item[0]); buf.getChannelData(0).set(pcm); SND.bufs.set(id, buf); }
+      return SND.bufs.get(id);
+    }
+    const raceOf = F => { const f = ros[F.i].faction || ""; return /Ork/.test(f) ? "ork" : /Tyranid/.test(f) ? "nid" : /Aeldari|Drukhari/.test(f) ? "eld" : /Guard|Cultist/.test(f) ? "ig" : ""; };
+    // where: a figure, or a point; louder near the camera, and from the side of the screen it is on
+    function playSound(key, where, vol = 1) {
+      if (!SND.on || !SND.lib || !lastSt.playing) return;
+      const F = where && where.g ? where : null, pos = F ? F.g.position : where;
+      const full = F && SND.lib[key + "." + raceOf(F)] ? key + "." + raceOf(F) : SND.lib[key] ? key : key.split(".")[0];
+      const list = SND.lib[full]; if (!list || !list.length) return;
+      const now = SND.ctx.currentTime;
+      if (now - (SND.last.get(full) ?? -1) < .045 || SND.live >= 18) return;   // a volley is a few voices, not forty
+      SND.last.set(full, now);
+      const i = Math.floor(rnd() * list.length), src = SND.ctx.createBufferSource(), gain = SND.ctx.createGain();
+      src.buffer = soundBuffer(full, i, list[i]); src.playbackRate.value = .95 + rnd() * .1;
+      gain.gain.value = Math.min(1, vol * 14 / (10 + (pos ? camera.position.distanceTo(pos) : 10)));
+      let end = gain;
+      if (pos && SND.ctx.createStereoPanner) { end = SND.ctx.createStereoPanner(); end.pan.value = Math.max(-1, Math.min(1, pos.clone().project(camera).x)) * .7; gain.connect(end); }
+      src.connect(gain); end.connect(SND.out);
+      SND.live++; src.onended = () => { SND.live--; };
+      src.start();
+    }
+    // true if sound is now as asked; false if there is no sound pack or no audio here
+    async function setSound(on) {
+      if (!on) { SND.on = false; return true; }
+      try { if (!window.DOW_SOUNDS) await loadScript(PACK + "sounds.js"); } catch (e) { return false; }
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!window.DOW_SOUNDS || !AC) return false;
+      SND.lib = window.DOW_SOUNDS;
+      if (!SND.ctx) {
+        SND.ctx = new AC(); SND.out = SND.ctx.createGain(); SND.out.gain.value = .55;
+        const squash = SND.ctx.createDynamicsCompressor(); SND.out.connect(squash); squash.connect(SND.ctx.destination);
+        keep({ dispose() { SND.on = false; SND.ctx.close(); } });
+      }
+      if (SND.ctx.state === "suspended") await SND.ctx.resume();
+      SND.on = true; return true;
+    }
+// Part of makeView3D, one function body split into files by section (tools/sim/page/30-37): the locals and
+// helpers declared in earlier parts are in scope here. tools/sim/README.md has the layout.
     // ================= the timeline: when each model went down and came back, from the frames and casualty events
     const downs = ros.map(() => []);   // per model: [{ t: frame it vanished, at: [x, y], dead, back: frame it reappeared or null }]
     {
@@ -7165,7 +7238,7 @@ if (typeof document !== "undefined") (() => {
       TS = cine ? pl.tsc : 1;
       if (t <= 0) return;
       const es = fx[t - 1] || [], lastImpact = new Map(), u = 1 / TS;
-      if (cine) { cineSchedule(pl, u, es); sched.sort((a, b) => a.p - b.p); return; }
+      if (cine) { cineSchedule(pl, u, es); fallSounds(t); sched.sort((a, b) => a.p - b.p); return; }
       let n = 0;
       // when an attack goes off: spread through the first .4 of a normal second, or a little into its attacker's beat
       const lagOf = () => Math.min(.35, n++ * .03) + .05;
@@ -7181,6 +7254,8 @@ if (typeof document !== "undefined") (() => {
           const lag = lagOf(e);
           (evFor[e[7]].swing ||= []).push({ p: lag, tgt: e[8] });
           imp(e[8], lag + .22 * u);
+          sched.push({ p: lag, run: () => swingSound(e, false) });
+          if (e[6]) sched.push({ p: lag + .22 * u, run: () => swingSound(e, true) });
           if (e[6]) sched.push({ p: lag + .22 * u, run: () => { const F = figs[e[8]]; if (F) burst(glow, chestOf(F), 10, { speed: 3, life: .25, s0: .12, s1: .02, c: C(0xffe0a0), grav: 6 }); } });
         } else if (e[0] === "v") {
           const pi = lastImpact.get(e[1]) ?? .3 * u; (evFor[e[1]].dodge ||= []).push({ p: pi - .08 * u, how: e[2] });
@@ -7197,8 +7272,12 @@ if (typeof document !== "undefined") (() => {
           sched.push({ p: pb, run: () => blastFx(W3(x, y, zOf(e[1], e[2])), e[3]) });
         }
       }
+      fallSounds(t);
       sched.sort((a, b) => a.p - b.p);
     }
+    // a blow's sound: the swing, then what it lands on; a body hitting the ground when a model falls this second
+    const swingSound = (e, landed) => { const A = figs[e[7]], F = figs[e[8]], mk = ros[e[7]].mk || ""; if (landed) { if (F) playSound("melee." + mk, F, .9); } else if (A) playSound("swing." + mk, A, .7); };
+    const fallSounds = t => figs.forEach((F, i) => { if (!F.veh && downs[i].some(d => d.t === t && d.fell)) sched.push({ p: (deathP.get(i) ?? .35 / TS) + .3 / TS, run: () => playSound(F.arch === "marine" || F.arch === "terminator" || F.arch === "custodes" ? "fall.armour" : "fall", F, .8) }); });
     // the action camera's timeline: each beat aims for .6 of a second, then fires its rounds one at a time
     function cineSchedule(pl, u, es) {
       for (const b of pl.beats) {
@@ -7214,6 +7293,8 @@ if (typeof document !== "undefined") (() => {
             sched.push({ p: fp, run: () => fireFx(one, kind, K) });
           } else {
             (evFor[e[7]].swing ||= []).push({ p: fp, tgt: e[8] });
+            sched.push({ p: fp, run: () => swingSound(e, false) });
+            if (r.hit) sched.push({ p: fp + travel * u, run: () => swingSound(e, true) });
             if (r.hit) sched.push({ p: fp + travel * u, run: () => { const F = figs[e[8]]; if (F) burst(glow, chestOf(F), 10, { speed: 3, life: .25, s0: .12, s1: .02, c: C(0xffe0a0), grav: 6 }); } });
           }
           r.ip = fp + travel * u;
@@ -7241,6 +7322,8 @@ if (typeof document !== "undefined") (() => {
       const [bx, by] = P(e[3], e[4]);
       const tgt = tF && tF.g.visible ? chestOf(tF) : W3(bx, by, zOf(e[3], e[4]) + .8);
       const from = muzzleOf(A, tgt), hit = !!e[6];
+      const shots = K.beam || K.flame ? 1 : Math.min(3, K.pulses || 1, Math.max(1, e[11] || 1));
+      for (let j = 0; j < shots; j++) setTimeout(() => playSound("fire." + kind, A, A.veh ? 1.3 : 1), j * 70 * speedK());
       const miss = () => tgt.clone().add(new THREE.Vector3((rnd() - .5) * 2.5, (rnd() - .2) * 1.2, (rnd() - .5) * 2.5));
       if (o.reduce) return;
       // muzzle flash
@@ -7275,6 +7358,7 @@ if (typeof document !== "undefined") (() => {
     let speedMs = 1000;
     const speedK = () => Math.max(.25, Math.min(2, speedMs / 1000));
     function impactFx(F, pen) {
+      playSound(!pen ? "hit.glance" : F.veh || /Necron/.test(ros[F.i].faction || "") || F.arch === "marine" || F.arch === "terminator" ? "hit.armour" : "hit.flesh", F, .8);
       if (o.reduce) return;
       const at = chestOf(F).add(new THREE.Vector3((rnd() - .5) * .3, (rnd() - .5) * .3, (rnd() - .5) * .3));
       const metal = F.veh || /Necron/.test(ros[F.i].faction || "");
@@ -7282,8 +7366,9 @@ if (typeof document !== "undefined") (() => {
       else if (metal) { burst(glow, at, 14, { speed: 4.5, life: .45, s0: .14, s1: .02, c: C(0xffd070), grav: 9, floor: F.g.position.y + .02, drag: .95 }); burst(smoke, at, 3, { speed: .4, life: 1.2, s0: .3, s1: .9, c: C(0x2a2826), a: .5, lift: .6 }); }
       else { burst(smoke, at, 8, { speed: 1.6, life: .45, s0: .12, s1: .28, c: C(0x7a0e0a), a: .9, grav: 7, drag: .9 }); burst(glow, at, 4, { speed: 2, life: .15, s0: .2, s1: .05, c: C(0xffb090) }); }
     }
-    function shieldFx(F) { const at = chestOf(F); burst(glow, at, 18, { speed: 1.4, life: .35, s0: .25, s1: .05, c: C(0x58b6e8), spread: .8 }); flash(at, 0x58b6e8, 1.6, .15, 5); }
+    function shieldFx(F) { playSound("hit.shield", F, .8); const at = chestOf(F); burst(glow, at, 18, { speed: 1.4, life: .35, s0: .25, s1: .05, c: C(0x58b6e8), spread: .8 }); flash(at, 0x58b6e8, 1.6, .15, 5); }
     function blastFx(at, R) {
+      playSound("blast", at, 1.4);
       if (o.reduce) return;
       const s = 1 + Math.max(0, R - 1) * .3;   // the blast's radius on the 2D map, toned down for the eye
       flash(at.clone().add(new THREE.Vector3(0, 1.2, 0)), 0xffa040, 5 * s, .35, 8 + s * 4);
@@ -7702,6 +7787,7 @@ if (typeof document !== "undefined") (() => {
     return {
       update(t, p, st) { update(t, p, st); if (!running) render(); }, resize, active,
       secLen(t) { return planOf(t).tsc; },
+      sound: setSound,
       cineOff() { syncOrb(); cap.hidden = true; },
       fit(whole) { fit(whole); update(last.t, last.p, last.st); render(); },
       dispose() { active(false); clearText(); clearLines(); for (const b of beams) { scene.remove(b.core); scene.remove(b.halo); } for (const d of disposables) d.dispose && d.dispose(); if (composer) composer.renderTarget1 && composer.renderTarget1.dispose(); renderer.dispose(); el.remove(); },
@@ -8076,7 +8162,7 @@ if (typeof document !== "undefined") (() => {
     };
     const set3d = on => {
       st.view3d = on; toolBtn("3d").setAttribute("aria-pressed", on);
-      toolBtn("walls").hidden = !on || !T; toolBtn("measure").hidden = on; toolBtn("follow").hidden = !on; toolBtn("cine").hidden = !on;
+      toolBtn("walls").hidden = !on || !T; toolBtn("measure").hidden = on; toolBtn("follow").hidden = !on; toolBtn("cine").hidden = !on; toolBtn("snd").hidden = !on;
       if (v3) v3.active(on);
       if (on) { st.measure = false; st.meas = null; toolBtn("measure").setAttribute("aria-pressed", "false"); }
       host3.hidden = !on; cv.style.visibility = on ? "hidden" : "";
@@ -8097,6 +8183,10 @@ if (typeof document !== "undefined") (() => {
         const tp2 = document.getElementById("vtt-tip"); tp2.hidden = false; tp2.style.left = "12px"; tp2.style.top = "46px";
         tp2.innerHTML = `<b>3D view unavailable</b><span>${esc(err.message)}</span>`; setTimeout(() => { tp2.hidden = true; }, 4000);
       }).finally(() => { const b3 = toolBtn("3d"); b3.textContent = "3D"; b3.disabled = false; });
+    };
+    toolBtn("snd").onclick = e => {
+      const b = e.currentTarget, on = b.getAttribute("aria-pressed") !== "true";
+      if (v3) v3.sound(on).then(ok => { b.setAttribute("aria-pressed", ok && on); if (!ok) { b.disabled = true; b.title = "No sound pack here: tools/dow/README.md says how to build one"; } });
     };
     toolBtn("walls").onclick = e => { st.lowWalls = !st.lowWalls; e.currentTarget.setAttribute("aria-pressed", st.lowWalls); draw(); };
     toolBtn("follow").onclick = e => { st.follow = !st.follow; e.currentTarget.setAttribute("aria-pressed", st.follow); draw(); };

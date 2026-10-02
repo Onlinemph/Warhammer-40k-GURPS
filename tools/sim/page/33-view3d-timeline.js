@@ -69,7 +69,7 @@
       TS = cine ? pl.tsc : 1;
       if (t <= 0) return;
       const es = fx[t - 1] || [], lastImpact = new Map(), u = 1 / TS;
-      if (cine) { cineSchedule(pl, u, es); sched.sort((a, b) => a.p - b.p); return; }
+      if (cine) { cineSchedule(pl, u, es); fallSounds(t); sched.sort((a, b) => a.p - b.p); return; }
       let n = 0;
       // when an attack goes off: spread through the first .4 of a normal second, or a little into its attacker's beat
       const lagOf = () => Math.min(.35, n++ * .03) + .05;
@@ -85,6 +85,8 @@
           const lag = lagOf(e);
           (evFor[e[7]].swing ||= []).push({ p: lag, tgt: e[8] });
           imp(e[8], lag + .22 * u);
+          sched.push({ p: lag, run: () => swingSound(e, false) });
+          if (e[6]) sched.push({ p: lag + .22 * u, run: () => swingSound(e, true) });
           if (e[6]) sched.push({ p: lag + .22 * u, run: () => { const F = figs[e[8]]; if (F) burst(glow, chestOf(F), 10, { speed: 3, life: .25, s0: .12, s1: .02, c: C(0xffe0a0), grav: 6 }); } });
         } else if (e[0] === "v") {
           const pi = lastImpact.get(e[1]) ?? .3 * u; (evFor[e[1]].dodge ||= []).push({ p: pi - .08 * u, how: e[2] });
@@ -101,8 +103,12 @@
           sched.push({ p: pb, run: () => blastFx(W3(x, y, zOf(e[1], e[2])), e[3]) });
         }
       }
+      fallSounds(t);
       sched.sort((a, b) => a.p - b.p);
     }
+    // a blow's sound: the swing, then what it lands on; a body hitting the ground when a model falls this second
+    const swingSound = (e, landed) => { const A = figs[e[7]], F = figs[e[8]], mk = ros[e[7]].mk || ""; if (landed) { if (F) playSound("melee." + mk, F, .9); } else if (A) playSound("swing." + mk, A, .7); };
+    const fallSounds = t => figs.forEach((F, i) => { if (!F.veh && downs[i].some(d => d.t === t && d.fell)) sched.push({ p: (deathP.get(i) ?? .35 / TS) + .3 / TS, run: () => playSound(F.arch === "marine" || F.arch === "terminator" || F.arch === "custodes" ? "fall.armour" : "fall", F, .8) }); });
     // the action camera's timeline: each beat aims for .6 of a second, then fires its rounds one at a time
     function cineSchedule(pl, u, es) {
       for (const b of pl.beats) {
@@ -118,6 +124,8 @@
             sched.push({ p: fp, run: () => fireFx(one, kind, K) });
           } else {
             (evFor[e[7]].swing ||= []).push({ p: fp, tgt: e[8] });
+            sched.push({ p: fp, run: () => swingSound(e, false) });
+            if (r.hit) sched.push({ p: fp + travel * u, run: () => swingSound(e, true) });
             if (r.hit) sched.push({ p: fp + travel * u, run: () => { const F = figs[e[8]]; if (F) burst(glow, chestOf(F), 10, { speed: 3, life: .25, s0: .12, s1: .02, c: C(0xffe0a0), grav: 6 }); } });
           }
           r.ip = fp + travel * u;
@@ -145,6 +153,8 @@
       const [bx, by] = P(e[3], e[4]);
       const tgt = tF && tF.g.visible ? chestOf(tF) : W3(bx, by, zOf(e[3], e[4]) + .8);
       const from = muzzleOf(A, tgt), hit = !!e[6];
+      const shots = K.beam || K.flame ? 1 : Math.min(3, K.pulses || 1, Math.max(1, e[11] || 1));
+      for (let j = 0; j < shots; j++) setTimeout(() => playSound("fire." + kind, A, A.veh ? 1.3 : 1), j * 70 * speedK());
       const miss = () => tgt.clone().add(new THREE.Vector3((rnd() - .5) * 2.5, (rnd() - .2) * 1.2, (rnd() - .5) * 2.5));
       if (o.reduce) return;
       // muzzle flash
@@ -179,6 +189,7 @@
     let speedMs = 1000;
     const speedK = () => Math.max(.25, Math.min(2, speedMs / 1000));
     function impactFx(F, pen) {
+      playSound(!pen ? "hit.glance" : F.veh || /Necron/.test(ros[F.i].faction || "") || F.arch === "marine" || F.arch === "terminator" ? "hit.armour" : "hit.flesh", F, .8);
       if (o.reduce) return;
       const at = chestOf(F).add(new THREE.Vector3((rnd() - .5) * .3, (rnd() - .5) * .3, (rnd() - .5) * .3));
       const metal = F.veh || /Necron/.test(ros[F.i].faction || "");
@@ -186,8 +197,9 @@
       else if (metal) { burst(glow, at, 14, { speed: 4.5, life: .45, s0: .14, s1: .02, c: C(0xffd070), grav: 9, floor: F.g.position.y + .02, drag: .95 }); burst(smoke, at, 3, { speed: .4, life: 1.2, s0: .3, s1: .9, c: C(0x2a2826), a: .5, lift: .6 }); }
       else { burst(smoke, at, 8, { speed: 1.6, life: .45, s0: .12, s1: .28, c: C(0x7a0e0a), a: .9, grav: 7, drag: .9 }); burst(glow, at, 4, { speed: 2, life: .15, s0: .2, s1: .05, c: C(0xffb090) }); }
     }
-    function shieldFx(F) { const at = chestOf(F); burst(glow, at, 18, { speed: 1.4, life: .35, s0: .25, s1: .05, c: C(0x58b6e8), spread: .8 }); flash(at, 0x58b6e8, 1.6, .15, 5); }
+    function shieldFx(F) { playSound("hit.shield", F, .8); const at = chestOf(F); burst(glow, at, 18, { speed: 1.4, life: .35, s0: .25, s1: .05, c: C(0x58b6e8), spread: .8 }); flash(at, 0x58b6e8, 1.6, .15, 5); }
     function blastFx(at, R) {
+      playSound("blast", at, 1.4);
       if (o.reduce) return;
       const s = 1 + Math.max(0, R - 1) * .3;   // the blast's radius on the 2D map, toned down for the eye
       flash(at.clone().add(new THREE.Vector3(0, 1.2, 0)), 0xffa040, 5 * s, .35, 8 + s * 4);

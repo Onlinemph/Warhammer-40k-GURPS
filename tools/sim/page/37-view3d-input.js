@@ -38,6 +38,7 @@
     return {
       update(t, p, st) { update(t, p, st); if (!running) render(); }, resize, active,
       secLen(t) { return planOf(t).tsc; },
+      sound: setSound,
       cineOff() { syncOrb(); cap.hidden = true; },
       fit(whole) { fit(whole); update(last.t, last.p, last.st); render(); },
       dispose() { active(false); clearText(); clearLines(); for (const b of beams) { scene.remove(b.core); scene.remove(b.halo); } for (const d of disposables) d.dispose && d.dispose(); if (composer) composer.renderTarget1 && composer.renderTarget1.dispose(); renderer.dispose(); el.remove(); },

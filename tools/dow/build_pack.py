@@ -124,6 +124,33 @@ def export_dow2(unit):
     return js, notes
 
 
+def build_sounds(force):
+    """site/models/sounds.js from tools/dow/sounds.json: the game's sounds as it stores them, by replay event."""
+    import re
+    import dow2
+    root = find_game("DOW_DOW2", "Dawn of War 2")
+    spec = (HERE / "sounds.json").read_bytes()
+    dest, tag = OUT / "sounds.js", OUT / "sounds.tag"
+    want = hashlib.sha1(spec + (HERE / "dow2.py").read_bytes()).hexdigest()
+    if not root:
+        return "sounds: Dawn of War II not found, none built"
+    if not force and dest.exists() and tag.exists() and tag.read_text() == want:
+        return None
+    found = sorted((root / "GameAssets" / "Archives").glob("*sound*.sga"), key=lambda p: ("delta" not in p.name.lower(), not p.name[0].isdigit(), p.name.lower()))
+    arc = dow2.Archives([p for p in found if "container" not in p.name.lower()])
+    out, short = {}, []
+    for key, s in json.loads(spec)["sounds"].items():
+        names = [p for p in arc.under(s["dir"], ".fsb") if re.search(s["match"], p.rsplit("/", 1)[-1][:-4])]
+        clips = [c for c in (dow2.read_sound(arc.read(p), s.get("seconds", 2.5)) for p in names) if c][:s.get("max", 4)]
+        if not clips:
+            short.append(key)
+        out[key] = [[rate, base64.b64encode(data).decode()] for rate, data in clips]
+    js = "window.DOW_SOUNDS = " + json.dumps(out, separators=(",", ":")) + ";\n"
+    dest.write_text(js)
+    tag.write_text(want)
+    return f"sounds: {sum(map(len, out.values()))} in {len(out)} events, {len(js) // 1024} KB" + (f"  (none found for {', '.join(short)})" if short else "")
+
+
 def data_url(path):
     return f"data:{MIME[path.suffix]};base64," + base64.b64encode(path.read_bytes()).decode()
 
@@ -155,7 +182,7 @@ def main(argv):
     force = "--force" in argv
     only = [a for a in argv if not a.startswith("--")]
     units = [u for u in json.loads((HERE / "units.json").read_text(encoding="utf-8"))["units"] if "id" in u]
-    unknown = set(only) - {u["id"] for u in units}
+    unknown = set(only) - {u["id"] for u in units} - {"sounds"}
     if unknown:
         raise SystemExit("no such unit: " + ", ".join(sorted(unknown)))
     sys.path.insert(0, str(HERE))
@@ -182,6 +209,10 @@ def main(argv):
             if line:
                 print(line, flush=True)
     done = [{k: u[k] for k in PAGE_KEYS if k in u} for u in units if (OUT / f"{u['id']}.js").exists()]
+    if not only or "sounds" in only:
+        line = build_sounds(force)
+        if line:
+            print(line)
     (OUT / "index.js").write_text("window.DOW_INDEX = " + json.dumps({"units": done}, separators=(",", ":")) + ";\n")
     print(f"site/models/index.js: {len(done)} of {len(units)} units")
 

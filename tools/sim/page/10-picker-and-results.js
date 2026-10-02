@@ -223,6 +223,7 @@
             <button type="button" data-tool="walls" aria-pressed="false" title="Lower the walls to see into the rooms" hidden>Low walls</button>
             <button type="button" data-tool="cine" aria-pressed="false" title="Action camera: everyone moves, then the camera cuts to each attack in turn" hidden>Action cam</button>
             <button type="button" data-tool="follow" aria-pressed="false" title="Keep the camera on the selected model" hidden>Follow</button>
+            <button type="button" data-tool="snd" aria-pressed="false" title="Play the weapons' sounds (needs a local sound pack: tools/dow/README.md)" hidden>Sound</button>
             <button type="button" data-tool="fit" title="Fit the battle to the view">Fit</button>
             <button type="button" data-tool="grid" aria-pressed="true" title="Show the hex grid">Grid</button>
             <button type="button" data-tool="trails" aria-pressed="true" title="Show each model's path this second">Paths</button>

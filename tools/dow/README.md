@@ -44,6 +44,16 @@ Not covered, so still drawn from shapes: any vehicle not in the list.
 
 Known gaps: the Mandrake only has its idle animation (its others import upside down), tracks don't roll, and Soulstorm units keep one animation set whatever they carry, so a heavy bolter is held like a bolter. The Terminator entry has not been seen in the page, because no simulator loadout wears Terminator armour yet.
 
+## Sound
+
+`build_pack.py` also writes `site/models/sounds.js` from Dawn of War II's sound archives: weapon fire for each of the simulator's weapon kinds, impacts on flesh, armour and shields, ricochets, explosions, melee swings and hits, and bodies falling. `sounds.json` says which of the game's sounds goes with which replay event. In the 3D view the **Sound** button switches them on; they play while the replay runs, louder near the camera and panned to their side of the screen. Like the models, the sound pack is the game's own audio and stays on your machine.
+
+```sh
+python tools/dow/build_pack.py sounds     # only the sounds
+```
+
+There are no voices yet, and weapons Dawn of War II doesn't have borrow the nearest sound (gauss and dark lances use the bright lance, pulse rifles the Aeldari pulse cannon, splinter weapons the shuriken pistol).
+
 ## How it works
 
 1. `build_pack.py` reads `units.json` and runs `bl_export.py` in Blender for each unit.
