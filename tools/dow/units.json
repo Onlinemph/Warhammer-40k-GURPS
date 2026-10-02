@@ -2,6 +2,95 @@
  "about": "Which Dawn of War model stands in for which simulator unit. See tools/dow/README.md. 'match' and 'not' are regular expressions tested against '<faction> <template> <vehicle> | <ranged weapon>|<melee weapon>|<armour>'; the first unit that matches is used. 'proxy' marks a stand-in for a unit the game has no model of.",
  "units": [
   {
+   "id": "veh2_predator",
+   "game": "dow2",
+   "match": "Predator",
+   "veh": true,
+   "skeleton": "art/race_marine/vehicles/predator/predator.model",
+   "parts": {
+    "turret": "art/race_marine/vehicles_wargear/predator_turret_autocannon/pred_turret_autocannon.model",
+    "hb_l": "art/race_marine/vehicles_wargear/predator_heavy_bolter_l/predator_heavy_bolter_l.model",
+    "hb_r": "art/race_marine/vehicles_wargear/predator_heavy_bolter_r/predator_heavy_bolter_r.model",
+    "wreck": "art/race_marine/vehicles/wreck_predator/wreck_predator.model"
+   },
+   "anims": "art/race_marine/vehicles/predator/animations/base",
+   "looks": {
+    "default": [
+     "turret",
+     "hb_l",
+     "hb_r"
+    ],
+    "wreck": [
+     "wreck"
+    ]
+   },
+   "clips": {
+    "idle": "chassis_idle",
+    "run": "tread_left_drive",
+    "run2": "tread_right_drive",
+    "die": "death_die"
+   },
+   "tem": "pptt",
+   "h": 2.6,
+   "turret": "bone_turret_main",
+   "stride": 2.6
+  },
+  {
+   "id": "veh2_rhino",
+   "game": "dow2",
+   "match": "Rhino",
+   "veh": true,
+   "skeleton": "art/race_marine/vehicles/predator/predator.model",
+   "parts": {
+    "doors": "art/race_marine/vehicles_wargear/predator_doors/predator_doors.model",
+    "wreck": "art/race_marine/vehicles/wreck_predator/wreck_predator.model"
+   },
+   "anims": "art/race_marine/vehicles/predator/animations/base",
+   "looks": {
+    "default": [
+     "doors"
+    ],
+    "wreck": [
+     "wreck"
+    ]
+   },
+   "clips": {
+    "idle": "chassis_idle",
+    "run": "tread_left_drive",
+    "run2": "tread_right_drive",
+    "die": "death_die"
+   },
+   "tem": "pptt",
+   "h": 2.1,
+   "stride": 2.6
+  },
+  {
+   "id": "veh2_trukk",
+   "game": "dow2",
+   "match": "Trukk",
+   "veh": true,
+   "skeleton": "art/race_ork/vehicles/wartrukk/wartrukk.model",
+   "parts": {
+    "wreck": "art/race_ork/vehicles/wreck_wartrukk/wreck_wartruckk.model"
+   },
+   "anims": "art/race_ork/vehicles/wartrukk/animations/base",
+   "looks": {
+    "default": [],
+    "wreck": [
+     "wreck"
+    ]
+   },
+   "clips": {
+    "idle": "chassis_idle_01",
+    "run": "wheel_drive",
+    "die": "death_die"
+   },
+   "tem": "--ps",
+   "h": 2.6,
+   "turret": "bone_turret_main",
+   "stride": 3.6
+  },
+  {
    "id": "sm2_terminator",
    "game": "dow2",
    "match": "^Astartes .*(Terminator|Tactical Dreadnought|Cataphractii)",

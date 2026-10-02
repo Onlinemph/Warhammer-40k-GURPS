@@ -25,7 +25,7 @@ On Windows, run it with a Python installed from python.org or a virtual environm
 
 ## What is covered
 
-`units.json` lists 106 units: 36 from Dawn of War II (Space Marines with sergeants, Scouts and Terminators; Guardsmen; Chaos Marines, Plague Marines, Berzerkers, lords, sorcerers and cultists; Aeldari Guardians, Rangers, Banshees, Warlocks and Farseers; Ork Boyz, Kommandos, Nobz, a Warboss and a Weirdboy; ten Tyranids) and 70 from Soulstorm (63 infantry and 7 vehicles). Where both games have a unit, the Dawn of War II entry comes first in the file and wins; the Soulstorm one is used when that game's files aren't there. Most are the unit itself. The game has no model for some, so these use the nearest stand-in (marked `proxy` in the file):
+`units.json` lists 109 units: 39 from Dawn of War II (the Predator, Rhino and Trukk; Space Marines with sergeants, Scouts and Terminators; Guardsmen; Chaos Marines, Plague Marines, Berzerkers, lords, sorcerers and cultists; Aeldari Guardians, Rangers, Banshees, Warlocks and Farseers; Ork Boyz, Kommandos, Nobz, a Warboss and a Weirdboy; ten Tyranids) and 70 from Soulstorm (63 infantry and 7 vehicles). Where both games have a unit, the Dawn of War II entry comes first in the file and wins; the Soulstorm one is used when that game's files aren't there. Most are the unit itself. The game has no model for some, so these use the nearest stand-in (marked `proxy` in the file):
 
 | Simulator unit | Stand-in |
 |---|---|
@@ -44,28 +44,30 @@ Not covered, so still drawn from shapes: any vehicle not in the list.
 
 Known gaps: the Terminator entry has not been seen in the page, because no simulator loadout wears Terminator armour yet.
 
+## Looking at the pack
+
+`build_pack.py` puts a viewer beside the pack: open `site/models/gallery.html` (from disk, or through whatever serves `site/`). It lists every model, with a button per look and per animation and colour pickers for the paint; every voice, with a button per line; every sound the replay uses; and the scenery objects. It is the quick way to check a unit after changing its entry, without setting up a battle that fields it.
+
 ## Battlefields
 
-`build_pack.py` also writes `site/models/scenery.js` from Dawn of War II's environment archives, and the 3D replay dresses its battlefields with it:
+`build_pack.py` also writes the battlefield scenery from Dawn of War II's environment archives (`site/models/scenery.js` and one `scenery_<theme>.js` per theme), and the 3D replay dresses its battlefields with it:
 
-- the ground, the facility's deck plates, wall panels and gratings take the game's terrain textures;
-- the cover crates on the facility and ruins maps become sandbags, barrels and ammunition cases, in the same hexes and about the same size;
-- open ground gets the game's rocks, concrete rubble and twisted metal underfoot, with tank traps, containers and barricades around the edge;
-- outdoor maps get a skyline of the game's city buildings around the field, and its storm sky. A building standing between the camera and what it looks at is hidden until the camera moves on.
+- an outdoor battlefield takes a theme: a ruined city, a desert town, or overgrown temple ruins among dead trees. Each has its own ground, small debris underfoot, larger pieces around the edge (tank traps and containers, boulders and low walls, fallen trees and toppled columns), a skyline of the game's buildings, and a sky. Open ground gets the same theme each time a battle is watched; the ruins map is always the city;
+- the ruins' walls take the game's concrete, laid on by position so it runs unbroken from hex to hex;
+- the facility's deck plates, wall panels and gratings take the game's textures;
+- the cover crates on the facility and ruins maps become sandbags, barrels and ammunition cases, in the same hexes and about the same size.
 
-None of this changes the fight. Whatever is big enough to hide behind stands at least six yards from anywhere a figure goes, and the cover the simulator models keeps its place.
+A building standing between the camera and what it looks at is hidden until the camera moves on. None of this changes the fight: whatever is big enough to hide behind stands at least six yards from anywhere a figure goes, and the cover the simulator models keeps its place.
 
 ```sh
 python tools/dow/build_pack.py scenery    # only the scenery
 ```
 
-`scenery.json` lists the textures and world objects and what each is used for. To see what else the game has, list an archive: `python tools/dow/dow2.py "<Dawn of War 2>/GameAssets/Archives/gameartenvironment.sga" world_objects`.
-
-The ruins keep the page's own painted masonry: the game's wall textures tried so far read worse on hex columns.
+`scenery.json` lists the textures and world objects, by theme, and what each is used for. To see what else the game has, list an archive: `python tools/dow/dow2.py "<Dawn of War 2>/GameAssets/Archives/gameartenvironment.sga" world_objects`.
 
 ## Sound
 
-`build_pack.py` also writes `site/models/sounds.js` from Dawn of War II's sound archives: weapon fire for each of the simulator's weapon kinds, impacts on flesh, armour and shields, ricochets, explosions, melee swings and hits, and bodies falling. `sounds.json` says which of the game's sounds goes with which replay event. In the 3D view the **Sound** button switches them on; they play while the replay runs, louder near the camera and panned to their side of the screen. Like the models, the sound pack is the game's own audio and stays on your machine.
+`build_pack.py` also writes `site/models/sounds.js` from Dawn of War II's sound archives: weapon fire for each of the simulator's weapon kinds, impacts on flesh, armour and shields, ricochets, explosions, melee swings and hits, and bodies falling. It also holds three loops: a distant battle under everything, an engine for each vehicle, and its tracks as it drives. `sounds.json` says which of the game's sounds goes with which replay event. In the 3D view the **Sound** button switches them on; they play while the replay runs, louder near the camera and panned to their side of the screen. Like the models, the sound pack is the game's own audio and stays on your machine.
 
 ```sh
 python tools/dow/build_pack.py sounds     # only the sounds
@@ -81,7 +83,8 @@ The same button brings the units' voices: `build_pack.py` writes `site/models/vo
 - Lines don't pile up: two at once at most, a pause between them, and the same figure not again for six seconds. Grunts and screams come freely.
 - From Dawn of War II's English speech archives: Space Marines (three squad voices shared out among the figures, plus Scouts, Terminators, Librarian, Techmarine, Apothecary), Guardsmen, Chaos Marines, Lords, Sorcerers, Plague Marines and cultists, Aeldari Guardians, Rangers, Aspect Warriors, Farseers and Autarchs, and Ork Boyz, Kommandos, Weirdboyz and Warbosses. Tyranids growl and screech in three sizes.
 - From Soulstorm's, for what Dawn of War II lacks: the T'au (Fire Warriors, Shas'ui, Pathfinders, battlesuits, Commander, Ethereal, Earth caste, drones, Kroot, Vespid), Necrons (who say very little), Drukhari, Sisters of Battle, Commissars, Tempestus Scions (as Kasrkin), psykers, Tech-Priests (as the Enginseer), the Inquisitor, Possessed and Berzerkers, Warlocks, and Ork Nobz, Meganobz, Meks, Painboyz and Gretchin. Soulstorm's lines have no "foe felled" or "comrade down", so those units stay quiet then.
-- Custodes, Skitarii, Sisters of Silence, servitors and vehicles stay silent: neither game has a voice for them.
+- Vehicles speak with their Soulstorm crews' voices (Predator, Rhino, Land Raider, Leman Russ, Chimera, Sentinel, Trukk).
+- Custodes, Skitarii, Sisters of Silence and servitors stay silent: neither game has a voice for them.
 
 `voices.json` says which of a unit's lines go with which replay event and which roster entries use which voice. A unit with no grunts of its own borrows them from one that sounds like it.
 
@@ -104,6 +107,8 @@ python tools/dow/build_pack.py voices     # only the voices
 
 **Animations.** The page uses up to eight clips: `idle`, `run`, `fire`, `melee`, `die`, `hit`, `kneel` and `throw`. The game names them differently from unit to unit, so the exporter tries the usual names, then the plainest name of the right kind. `clips` in a unit overrides that, `prefix` prefers names starting with it, and `clips_from` borrows another unit's clips where the game itself shares a skeleton (a Chaos Marine moves as a Space Marine).
 
+`python -m unittest tools/dow/test_formats.py` checks the readers against small files made up in the test (an archive, a sound bank, a `.fda` sound, the glTF writer), so it runs without the games.
+
 ## Dawn of War II units
 
 That game keeps a unit in pieces: a skeleton, body and weapon models skinned to it by bone name, and one Havok animation file per move. `dow2.py` reads all of it directly (its docstring has the file formats, including the delta-compressed Havok animations) and writes the same `.glb` and paint layers as the Blender route. An entry looks like this:
@@ -121,6 +126,8 @@ That game keeps a unit in pieces: a skeleton, body and weapon models skinned to 
 | `tem` | What the team-colour texture's red, green, blue and alpha channels colour, one letter each: `p`rimary, `s`econdary, `t`rim, `w`eapons or `-`. It differs by race (default `ptsw`: carapace, details, flesh, the rest) |
 
 `python tools/dow/dow2.py <archive.sga> [text]` lists an archive's files. Some weapon models in the archives are leftovers with no skinning or with textures that are gone; the `_common` and `_rare` ones are the ones the game uses.
+
+Vehicles work the same way: the hull, tracks and wheels are in the vehicle's own file, turrets and sponsons are parts, and the entry has `veh`, the `turret` bone and `stride`. The Predator, the Rhino (the Predator's hull with its side doors and no turret) and the Trukk come from Dawn of War II; this install of the game has no Leman Russ, Chimera, Sentinel or Land Raider, so those stay Soulstorm's. A look called `wreck` holds the game's wreck model: a destroyed vehicle turns into it, with a blast. A vehicle without one plays its `die` clip instead.
 
 ## Adding or changing a unit
 
@@ -142,7 +149,7 @@ blender --background --python tools/dow/bl_probe.py -- "<Soulstorm>/DXP2" out ar
 | `clips`, `prefix`, `clips_from`, `own` | Animations, as above; `own: false` takes every clip from `clips_from` |
 | `sets` | A look's own animations, where a weapon is carried or fired differently: the prefix its animations share (`"hbolt": "marine_heavy_bolter"` finds `marine_heavy_bolter_idle_1`, `..._run_1` and so on), or `{"prefix": ..., "fire": "<animation>"}` to name some outright. Clips a set lacks fall back to the unit's plain ones; a unit that takes its clips from another gets that unit's sets too |
 | `kits` | Weapon names that pick a look the weapon's kind alone wouldn't: `{"Heavy Bolter": "hbolt"}` (a regular expression on the ranged weapon's name, to a look) |
-| `veh`, `turret` | A vehicle, and the bone its turret turns on |
+| `veh`, `turret`, `stride` | A vehicle, the bone its turret turns on, and (for wheels and track wheels driven by a `run` clip) how many yards one turn of the clip covers. Clips named `run`, `run2`... all follow the ground covered |
 | `tint`, `paint` | A colour multiplied over the textures; fixed paint colours instead of the faction's |
 | `size` | `bounds` sizes the model from its outline instead of its head bone |
 | `proxy` | A note that this is a stand-in |

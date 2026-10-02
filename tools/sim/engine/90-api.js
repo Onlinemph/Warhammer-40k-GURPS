@@ -23,7 +23,7 @@
     return res;
   }
 
-  return { index, buildUnit, buildVehicle, describe, runBattle, monteCarlo, parseDamage, seed, woundMult, fmtDice, px, facilityMap, ruinsMap, fromOffset, rangePenalty, DIRS, squadSpecs,
+  return { index, buildUnit, buildVehicle, describe, runBattle, monteCarlo, parseDamage, seed, woundMult, fmtDice, px, facilityMap, ruinsMap, battlefields: BATTLEFIELDS, fromOffset, rangePenalty, DIRS, squadSpecs,
     get squads() { return SQUADS; }, get vehicles() { return VEHICLES; },
     get templates() { return TEMPLATES; }, get equipment() { return EQ; }, traitWeapons,
     // the pure rule helpers, for test/rules.test.js

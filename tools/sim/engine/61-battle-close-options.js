@@ -35,8 +35,8 @@
       }
       if (len <= mv) {
         // arrives this turn: Move and Attack (-4, max 9) or a Slam if the weapon can't get through
-        const lvl = Math.min(9, w.level - skillPen(m) - 4 + smMelee(m, tgt));
-        const Ema = planAttack(m, w, tgt, lvl, true).score;
+        const lvl = w.level - skillPen(m) - 4 + smMelee(m, tgt);
+        const Ema = planAttack(m, w, tgt, lvl, true, null, { cap: 9 }).score;
         const slamOK = len >= 2 && hard && !tgt.prone && !tgt.pinned && u.HP >= 0.8 * tgt.u.HP;
         // a Slam's worth: knocking the foe down sets up the pin (valued as a share of the foe taken out)
         const slamV = slamOK ? 0.25 * threatOf(tgt) * P3[cl(Math.max(u.dx, u.grapple) - skillPen(m))] * HORIZON : 0;
@@ -320,7 +320,7 @@
     // prone, and into a hex out of its sight (behind a crate, a wall or a corner) when there is one
     function dive(x, at) {
       if (x.state !== "ok" || x.pinned || x.aoa || x.grips.length) return false;
-      const r = check(dodgeOf(x) - (x.stunned ? 4 : 0) - (x.prone ? 3 : 0));
+      const r = check(dodgeOf(x) + 3 - (x.stunned ? 4 : 0) - (x.prone ? 3 : 0));
       if (!r.ok) return false;
       if (at && x.h) {
         let best = null, bs = -1;

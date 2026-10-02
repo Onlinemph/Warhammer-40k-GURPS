@@ -229,6 +229,34 @@ test("a battle is reproducible from its seed", () => {
   assert.deepEqual(a.log, b.log);
 });
 
+test("nobody fires a weapon that cannot hurt its target (user report: boltguns at a Leman Russ)", () => {
+  const lo = DATA.loadouts || {};
+  const squad = (name, side) => SIM.squadSpecs(name, name + side).map(sp => ({ side, spec: { ...(lo[sp.template] || {}), ...sp, armour: sp.armour || (lo[sp.template] || {}).armour || [] } }));
+  SIM.seed(3);
+  const tank = { side: 0, spec: { vehicle: "Leman Russ Battle Tank", template: "Leman Russ Battle Tank", count: 1, stance: "shoot", armour: [] } };
+  const r = SIM.runBattle([tank, ...squad("Astartes Tactical Squad", 1)], { distance: 150, log: true });
+  // nothing in this squad gets through the tank's front, so it should not shoot at it at all
+  const shots = r.log.filter(l => l.startsWith("Tactical Squad") && l.includes(" fires ") && l.includes("at Leman Russ"));
+  assert.equal(shots.length, 0, "shots that could not hurt the tank:\n" + shots.slice(0, 5).join("\n"));
+  assert.ok(r.log.some(l => l.includes("goes to ground, with nothing left to fight with")), "the squad should take cover instead");
+});
+
+test("every battlefield builds, and both sides can reach each other on every layout", () => {
+  for (const [name, build] of Object.entries(SIM.battlefields)) for (let seed = 1; seed <= 6; seed++) {
+    const m = build(seed), at = h => m.ids.get(h.q + "," + h.r);
+    assert.ok(m.floor.size > 250, `${name} ${seed}: only ${m.floor.size} floor hexes`);
+    assert.ok(m.floor.has(m.spawn[0].q + "," + m.spawn[0].r) && m.floor.has(m.spawn[1].q + "," + m.spawn[1].r), `${name} ${seed}: a side deploys inside a wall`);
+    // walk from one deployment zone to the other, round cover and up or down no more than a yard a step
+    const seen = new Set([at(m.spawn[0])]), queue = [at(m.spawn[0])];
+    for (let i = 0; i < queue.length; i++) for (const j of m.nb[queue[i]]) {
+      if (seen.has(j) || m.wallI[j] || m.crateI[j] || Math.abs(m.elev[j] - m.elev[queue[i]]) > 1.01) continue;
+      seen.add(j); queue.push(j);
+    }
+    assert.ok(seen.has(at(m.spawn[1])), `${name} ${seed}: no way from one side to the other`);
+    assert.ok(seen.size > 0.8 * (m.floor.size - m.crates.size), `${name} ${seed}: ${m.floor.size - m.crates.size - seen.size} floor hexes cut off`);
+  }
+});
+
 test("design notes quote the current AV table", () => {
   // "AV13 (DR 340...)" or "AV12-14 (DR 250-440)" anywhere in the data must match docs/framework.md's table
   const AV = { 10: 125, 11: 185, 12: 250, 13: 340, 14: 440 };

@@ -537,6 +537,7 @@
       } else L(`  ${g.name} is too shaken to care`);
     }
     function frightTable(m, by, why) {
+      by = Math.max(1, by);   // a check with no cap can fail on a 17 with a margin below 1
       const r = roll3() + by, u = m.u;
       const stun = (sec, how, txt) => { m.stunned = true; m.stunT = sec; m.stunRec = how; L(`  ${m.id} ${txt || "freezes"} (${why}, Fright Check Table ${r})`); };
       if (r <= 5) stun(1, "auto");
@@ -546,7 +547,7 @@
       else if (r === 11) stun(d6() + d6(), "willmod");
       else if (r === 12) stun(d6(), "willmod", "retches, helpless");
       else if (r === 13) L(`  ${m.id} shakes it off with a new quirk (${why}, Fright Check Table 13)`);
-      else if (r <= 15) { spendFP(m, d6()); stun(r === 14 ? d6() : d6() + d6(), "willmod", "loses fatigue and freezes"); }
+      else if (r <= 15) { spendFP(m, d6()); stun(d6(), "willmod", "loses fatigue and freezes"); }
       else if (r === 16) stun(d6(), "willmod");
       else if (r <= 20 || r >= 22) { incapacitate(m, `faints or collapses (${why}, Fright Check Table ${r})`); }
       else { m.state = "routed"; place(m, null); L(`  ${m.id} panics and runs (${why}, Fright Check Table 21)`); }
@@ -556,7 +557,7 @@
     function recoverStun(m) {
       if (m.stunT > 0) { m.stunT--; if (m.stunT > 0) return false; if (m.stunRec === "auto") return true; }
       const u = m.u, how = m.stunRec || "ht";
-      const lvl = how === "will" ? u.will : how === "willmod" ? frightLevel(u, 0, Infinity) : how === "iq" ? (u.stats.iq || 10) + (u.flags.cr ? 6 : 0) : u.HT + (u.flags.hpt && !frac ? 3 : 0);
+      const lvl = how === "will" ? u.will : how === "willmod" ? frightLevel(u, 0, Infinity) : how === "iq" ? (u.stats.iq || 10) + (u.flags.cr ? 6 : 0) : u.HT;
       return check(lvl).ok;
     }
     function spendFP(m, n) {

@@ -23,7 +23,7 @@
       for (const h of hits) { const d = (p - h.p) * TS; if (d >= 0) flinch = Math.max(flinch, Math.exp(-d * 9)); }
       if (reload) aimT = 0;
       F.aim += (aimT - F.aim) * Math.min(1, dt * 10 + (o.reduce ? 1 : 0));
-      if (F.veh) return poseVehicle(F, x, ev, p, moved, dt, recoil);
+      if (F.veh) return poseVehicle(F, x, ev, p, moved, dt, recoil, dead);
       if (F.model) return poseModel(F, bitsv, p, ev, dt, dead);
       const fig = F.fig, k = F.k;
       fig.position.set(0, 0, 0); fig.rotation.set(0, 0, 0);
@@ -90,10 +90,10 @@
         if (R2) R2.sh.rotation.z = .5 + 1.8 * ease(f); if (L2) L2.sh.rotation.z = .3 + 2.2 * ease(f);
       }
     }
-    function poseVehicle(F, x, ev, p, moved, dt, recoil) {
-      if (F.model) poseVehicleModel(F);
+    function poseVehicle(F, x, ev, p, moved, dt, recoil, dead) {
+      if (F.model) poseVehicleModel(F, dead);
       for (const tm of F.tracks) tm.map.offset.x -= moved * .45;
-      if (F.model && F.model.tracks) for (const tk of F.model.tracks) tk.map.offset.y -= moved * tk.rate;
+      if (F.model && F.model.tracks) for (const tk of F.model.tracks) tk.map.offset[tk.axis] -= moved * tk.rate;
       for (const w of F.wheels) w.rotation.z -= moved * 3;
       F.fig.position.y = F.walk > .1 && !F.walker ? Math.sin(clock * 22) * .01 : 0;
       if (F.walker) { for (const L of F.legs) { L.p.rotation.z = .5 + Math.sin(F.phase * 1.6 + (L.s > 0 ? 0 : Math.PI)) * .4 * F.walk; L.kn.rotation.z = -1.0 - Math.max(0, Math.sin(F.phase * 1.6 + (L.s > 0 ? 0 : Math.PI))) * .5 * F.walk; } F.hips.position.y = F.hipY + Math.abs(Math.sin(F.phase * 1.6)) * .05 * F.walk; }
@@ -111,6 +111,7 @@
     let lastFrameT = performance.now(), lastSt = {};
     function update(t, p, st) {
       last = { t, p, st }; lastSt = st;
+      loopSounds();
       speedMs = +(document.getElementById("rspeed") || { value: 1000 }).value || 1000;
       if (schedT !== t || schedC !== !!st.cine) { if (t < schedT) { glow.clear(); smoke.clear(); } buildSchedule(t, !!st.cine); }
       const pm = TS > 1 ? Math.min(1, p * TS / MOVE) : p;   // with the action camera everyone moves first, then the beats play

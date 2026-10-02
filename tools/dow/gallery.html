@@ -1,0 +1,239 @@
+<!doctype html>
+<!-- A viewer for the local Dawn of War pack: every model with its looks and animations, every voice line, sound and
+     scenery object. tools/dow/build_pack.py copies this file to site/models/gallery.html beside the pack it reads
+     (index.js, <unit>.js, voices.js, voice_<id>.js, sounds.js, scenery.js). Open it from disk or through any web
+     server. It shares no code with the site's page: the painting and the sound decoding below repeat what
+     tools/sim/page/31-view3d-models.js and 32-view3d-sound.js do, so a change there may be wanted here too. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dawn of War pack</title>
+<style>
+  :root { --bg: #16181c; --panel: #1f2228; --line: #343943; --text: #d8dbe0; --dim: #8d94a0; --hot: #e2b24a; }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body { background: var(--bg); color: var(--text); font: 14px/1.4 system-ui, sans-serif; display: grid; grid-template-columns: 260px 1fr 300px; grid-template-rows: auto 1fr; }
+  header { grid-column: 1 / -1; display: flex; gap: 6px; align-items: center; padding: 8px 12px; border-bottom: 1px solid var(--line); background: var(--panel); }
+  header h1 { font-size: 15px; margin: 0 12px 0 0; }
+  button, select, input { font: inherit; color: var(--text); background: #2a2e36; border: 1px solid var(--line); border-radius: 4px; padding: 4px 9px; }
+  button { cursor: pointer; }
+  button:hover { border-color: var(--dim); }
+  button.on { background: var(--hot); color: #1b1b1b; border-color: var(--hot); }
+  #list { overflow: auto; border-right: 1px solid var(--line); background: var(--panel); }
+  #list input { width: calc(100% - 16px); margin: 8px; }
+  #list a { display: block; padding: 4px 12px; color: var(--text); text-decoration: none; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #list a small { color: var(--dim); }
+  #list a:hover { background: #2a2e36; }
+  #list a.on { background: #343943; color: var(--hot); }
+  #stage { position: relative; min-width: 0; min-height: 0; }
+  #stage canvas { display: block; width: 100%; height: 100%; }
+  #note { position: absolute; left: 12px; bottom: 10px; color: var(--dim); pointer-events: none; }
+  #side { overflow: auto; border-left: 1px solid var(--line); background: var(--panel); padding: 10px 12px; }
+  #side h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--dim); margin: 14px 0 6px; }
+  #side h2:first-child { margin-top: 0; }
+  #side .row { display: flex; flex-wrap: wrap; gap: 5px; }
+  #side p { margin: 4px 0; color: var(--dim); overflow-wrap: anywhere; }
+  #side input[type=color] { padding: 0; width: 34px; height: 26px; }
+  @media (max-width: 800px) { body { grid-template-columns: 1fr; grid-template-rows: auto 30vh 45vh auto; } #list, #side { border: 0; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>Dawn of War pack</h1>
+  <button data-tab="units" class="on">Models</button><button data-tab="voices">Voices</button><button data-tab="sounds">Sounds</button><button data-tab="scenery">Scenery</button>
+</header>
+<nav id="list"></nav>
+<main id="stage"><div id="note"></div></main>
+<aside id="side"></aside>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+"use strict";
+const $ = s => document.querySelector(s), list = $("#list"), side = $("#side"), note = $("#note");
+const el = (tag, props = {}, ...kids) => { const e = Object.assign(document.createElement(tag), props); e.append(...kids); return e; };
+const loadScript = src => new Promise((ok, no) => { const s = el("script", { src }); s.onload = ok; s.onerror = () => { s.remove(); no(new Error("could not load " + src)); }; document.head.appendChild(s); });
+const loadImage = src => new Promise((ok, no) => { const im = new Image(); im.onload = () => ok(im); im.onerror = () => no(new Error("an image did not decode")); im.src = src; });
+const bytesOf = b64 => { const bin = atob(b64), buf = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i); return buf; };
+const parseGlb = b64 => new Promise((ok, no) => new THREE.GLTFLoader().parse(bytesOf(b64).buffer, "", ok, no));
+
+// ---- the stage
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.outputEncoding = THREE.sRGBEncoding; renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.setPixelRatio(Math.min(2, devicePixelRatio || 1));
+$("#stage").prepend(renderer.domElement);
+const scene = new THREE.Scene(); scene.background = new THREE.Color(0x23272e);
+const camera = new THREE.PerspectiveCamera(35, 1, .05, 3000);
+const orbit = new THREE.OrbitControls(camera, renderer.domElement);
+scene.add(new THREE.HemisphereLight(0xc8d4e6, 0x4a3f30, 1.0));
+const sun = new THREE.DirectionalLight(0xffe6c4, 2.6); sun.position.set(-3, 6, 4); scene.add(sun);
+const grid = new THREE.GridHelper(20, 20, 0x4a505c, 0x30343c); scene.add(grid);
+let shown = null, mixer = null, clock = new THREE.Clock();
+function frame(center, size) { orbit.target.copy(center); camera.position.set(center.x + size * 1.6, center.y + size * .5, center.z + size * 2.2); camera.near = size / 100; camera.far = size * 200; camera.updateProjectionMatrix(); orbit.update(); }
+function show(obj) { if (shown) scene.remove(shown); shown = obj; if (obj) scene.add(obj); }
+function resize() { const s = $("#stage"); renderer.setSize(s.clientWidth, s.clientHeight, false); camera.aspect = s.clientWidth / Math.max(1, s.clientHeight); camera.updateProjectionMatrix(); }
+addEventListener("resize", resize);
+function draw(dt = clock.getDelta()) { if (mixer) mixer.update(dt); orbit.update(); renderer.render(scene, camera); }
+(function tick() { requestAnimationFrame(tick); draw(); })();
+
+// ---- painting a unit's textures in an army's colours (as the site's page does)
+const SCHEMES = { "Ultramarines": ["#1f3f8f", "#c9a24a", "#ff3a2a"], "Blood Angels": ["#8a1c1c", "#c9a24a", "#3aff6a"], "Dark Angels": ["#1f4a2a", "#b8a684", "#ff3a2a"], "Black Legion": ["#24242a", "#9a7a3a", "#ff3a2a"],
+  "Death Guard": ["#6f7a45", "#8a6a3a", "#c8ff5a"], "Cadian": ["#6a6a48", "#3e4a2c", "#000000"], "Orks": ["#5a4632", "#8a6a22", "#ff3a1a"], "Aeldari": ["#2c6e6a", "#e8d8b0", "#7affea"], "Drukhari": ["#2a2236", "#5a8a7a", "#ff3a8a"],
+  "Tyranids": ["#5a2c6e", "#b8a684", "#ffb030"], "Necrons": ["#6e7378", "#23272b", "#39ff6a"], "T'au": ["#c9b98c", "#3a3d42", "#7ad8ff"], "Sororitas": ["#24242a", "#8a1a1a", "#000000"], "Custodes": ["#c9a347", "#8a1c1c", "#66ccff"], "Mechanicus": ["#8e2a22", "#2d2d33", "#7dff9a"] };
+const guess = id => /^csm|chaos|cultist/.test(id) ? (/plague/.test(id) ? "Death Guard" : "Black Legion") : /^sm|veh_(pred|rhino|land)/.test(id) ? "Ultramarines" : /^ig|inquis|interrog|psyker|veh_(russ|chim|sent)/.test(id) ? "Cadian" : /^ork|trukk/.test(id) ? "Orks"
+  : /^eld/.test(id) ? "Aeldari" : /^de_/.test(id) ? "Drukhari" : /^nid/.test(id) ? "Tyranids" : /^nec/.test(id) ? "Necrons" : /^tau|kroot|vespid/.test(id) ? "T'au" : /^sob|sister/.test(id) ? "Sororitas" : /^custodes/.test(id) ? "Custodes" : /tech|servitor|rust/.test(id) ? "Mechanicus" : "Ultramarines";
+const rgb01 = c => { const n = parseInt(c.replace("#", ""), 16); return [(n >> 16 & 255) / 255, (n >> 8 & 255) / 255, (n & 255) / 255]; };
+const pixelsOf = (im, w, h) => { const c = el("canvas", { width: w, height: h }), g = c.getContext("2d"); g.drawImage(im, 0, 0, w, h); return [c, g, g.getImageData(0, 0, w, h)]; };
+async function paintTexture(t, paint) {
+  const base = await loadImage(t.base), w = base.naturalWidth, h = base.naturalHeight, [cv, g, B] = pixelsOf(base, w, h);
+  if (t.m1) {
+    const [i1, i2] = await Promise.all([loadImage(t.m1), loadImage(t.m2)]), M1 = pixelsOf(i1, w, h)[2].data, M2 = pixelsOf(i2, w, h)[2].data, d = B.data;
+    let eyeArea = 0; for (let i = 1; i < M2.length; i += 4) if (M2[i] > 30) eyeArea++;
+    const cs = [paint.primary, paint.secondary, paint.trim, paint.weapons, eyeArea > M2.length / 4 * .012 ? paint.secondary : paint.eyes].map(rgb01), ms = [0, 0, 0, 0, 0];
+    for (let i = 0; i < d.length; i += 4) {
+      ms[0] = M1[i] / 255; ms[1] = M1[i + 1] / 255; ms[2] = M1[i + 2] / 255; ms[3] = M2[i] / 255; ms[4] = M2[i + 1] / 255;
+      const dirt = M2[i + 2] / 255;
+      for (let ch = 0; ch < 3; ch++) { let v = d[i + ch] / 255 * dirt; for (let L = 0; L < 5; L++) { const m = ms[L]; if (m > .04) { const c = cs[L][ch]; v += m < .5 ? 2 * m * c : 1 - 2 * (1 - m) * (1 - c); } } d[i + ch] = v >= 1 ? 255 : v * 255; }
+    }
+    g.putImageData(B, 0, 0);
+  }
+  const tex = new THREE.CanvasTexture(cv); tex.encoding = THREE.sRGBEncoding; tex.flipY = false; tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.anisotropy = 8; return tex;
+}
+
+// ---- models
+let INDEX = [], current = null;
+const assets = new Map();
+async function assetOf(id) {
+  if (!assets.has(id)) assets.set(id, (async () => {
+    if (!(window.DOW_MODELS || {})[id]) await loadScript(id + ".js");
+    const d = window.DOW_MODELS[id], gltf = await parseGlb(d.glb), u = INDEX.find(x => x.id === id) || { id };
+    const a = { scene: gltf.scene, clips: gltf.animations.slice(), tex: d.tex, meta: d.meta, u, kb: Math.round(d.glb.length * .75 / 1024) };
+    if (u.clips_from) {   // clips the game plays from another unit on the same skeleton
+      const from = await assetOf(u.clips_from), have = new Map(); a.scene.traverse(o => have.set(o.name.toLowerCase(), o.name));
+      const own = new Set(a.clips.map(c => c.name)); a.meta.alias = { ...(from.meta.alias || {}), ...(a.meta.alias || {}) }; a.borrowed = [];
+      for (const c of from.clips) if (!own.has(c.name)) { a.clips.push(new THREE.AnimationClip(c.name, c.duration, c.tracks.map(t => { const [node, prop] = t.name.split("."), mine = have.get(node.toLowerCase()); if (!mine) return null; const t2 = t.clone(); t2.name = mine + "." + prop; return t2; }).filter(Boolean))); a.borrowed.push(c.name); }
+    }
+    return a;
+  })());
+  return assets.get(id);
+}
+async function showUnit(id, state = {}) {
+  note.textContent = "loading " + id + "…";
+  const a = await assetOf(id), u = a.u, L = a.meta.looks || {}, look = state.look && L[state.look] ? state.look : "default";
+  const names = state.scheme || guess(id), S = state.colours || SCHEMES[names];
+  const paint = { primary: S[0], secondary: S[1], trim: S[1], weapons: "#3a3b40", eyes: S[2], ...Object.fromEntries(Object.entries(u.paint || {}).map(([k, v]) => [k, typeof v === "number" ? "#" + v.toString(16).padStart(6, "0") : v])) };
+  current = { id, look, scheme: names, colours: S };
+  // a fresh copy each time: the looks hide meshes and the paint replaces materials
+  const root = THREE.SkeletonUtils ? THREE.SkeletonUtils.clone(a.scene) : cloneRig(a.scene), show_ = new Set(L[look] || a.meta.meshes || []), bounds = a.meta.bounds || {};
+  const partOf = o => { for (let q = o; q && q !== root.parent; q = q.parent) { const n = (q.userData.name || q.name).replace(/^M_/, ""); if (bounds[n]) return n; } return o.name; };
+  const meshes = []; root.traverse(o => { if (o.isMesh) meshes.push(o); });
+  const mats = new Map();
+  for (const o of meshes) {
+    o.visible = !show_.size || show_.has(partOf(o)); o.frustumCulled = false;
+    const name = o.material && o.material.name, t = a.tex[name];
+    if (!mats.has(name)) mats.set(name, t ? paintTexture(t, paint).then(async map => { const m = new THREE.MeshStandardMaterial({ map, roughness: .5, metalness: .25, skinning: !!o.isSkinnedMesh, alphaTest: t.cutout ? .5 : 0, side: t.cutout ? THREE.DoubleSide : THREE.FrontSide, color: u.tint ? new THREE.Color(u.tint).convertSRGBToLinear() : 0xffffff });
+      if (t.glow) { const gl = new THREE.Texture(await loadImage(t.glow)); gl.encoding = THREE.sRGBEncoding; gl.flipY = false; gl.needsUpdate = true; m.emissiveMap = gl; m.emissive = new THREE.Color(0xffffff); m.emissiveIntensity = 1.6; } return m; })
+      : Promise.resolve(new THREE.MeshStandardMaterial({ color: 0x77736a, skinning: !!o.isSkinnedMesh })));
+    const m = await mats.get(name); o.material = o.isSkinnedMesh === !!m.skinning ? m : Object.assign(m.clone(), { skinning: !!o.isSkinnedMesh });
+  }
+  if (current.id !== id || current.look !== look) return;   // another was picked meanwhile
+  show(root); grid.visible = true;
+  const box = new THREE.Box3(); for (const o of meshes) if (o.visible) box.expandByObject(o);
+  const size = box.getSize(new THREE.Vector3()), mid = box.getCenter(new THREE.Vector3());
+  if (!state.keepView) frame(mid, Math.max(size.x, size.y, size.z));
+  mixer = new THREE.AnimationMixer(root);
+  const set = (a.meta.alias || {})[look] || look, acts = {};
+  for (const c of a.clips) acts[c.name] = mixer.clipAction(c);
+  const play = name => { for (const n in acts) acts[n].stop(); if (acts[name]) acts[name].play(); current.clip = name; side.querySelectorAll("[data-clip]").forEach(b => b.classList.toggle("on", b.dataset.clip === name)); };
+  // the panel
+  const plain = a.clips.map(c => c.name).filter(n => !n.includes("@")), mine = a.clips.map(c => c.name).filter(n => n.endsWith("@" + set));
+  const clipBtn = n => el("button", { textContent: n.split("@")[0] + (a.borrowed && a.borrowed.includes(n) ? " *" : ""), onclick: () => play(n) }, "");
+  const btn = n => { const b = clipBtn(n); b.dataset.clip = n; return b; };
+  const pick = (label, k, i) => el("label", {}, label + " ", el("input", { type: "color", value: S[i], oninput: e => { const c = S.slice(); c[i] = e.target.value; clearTimeout(pick.t); pick.t = setTimeout(() => showUnit(id, { look, colours: c, scheme: names, keepView: true, clip: current.clip }), 250); } }));
+  side.replaceChildren(
+    el("h2", { textContent: id }), el("p", { textContent: (a.meta.whm || u.match || "") }), el("p", { textContent: `${a.kb} KB model, ${meshes.length} meshes, ${a.clips.length} clips` + (u.clips_from ? `, clips from ${u.clips_from} marked *` : "") + (u.veh ? ", vehicle" : "") }),
+    el("p", { textContent: "used for: " + (u.match || "") + (u.not ? "  (not: " + u.not + ")" : "") }),
+    el("h2", { textContent: "Look" }), el("div", { className: "row" }, ...Object.keys(L).map(k => el("button", { textContent: k, className: k === look ? "on" : "", onclick: () => showUnit(id, { look: k, scheme: names, colours: S, keepView: true }) }))),
+    ...(Object.keys(u.kits || {}).length ? [el("p", { textContent: "by weapon name: " + Object.entries(u.kits).map(([rx, k]) => rx + " → " + k).join("; ") })] : []),
+    el("h2", { textContent: "Animation" + (mine.length ? " (plain)" : "") }), el("div", { className: "row" }, ...plain.map(btn), el("button", { textContent: "stop", onclick: () => play(null) })),
+    ...(mine.length ? [el("h2", { textContent: "Animation with this look" }), el("div", { className: "row" }, ...mine.map(btn))] : []),
+    el("h2", { textContent: "Colours" }), el("div", { className: "row" }, el("select", { onchange: e => showUnit(id, { look, scheme: e.target.value, keepView: true }) }, ...Object.keys(SCHEMES).map(n => el("option", { textContent: n, selected: n === names })))),
+    el("div", { className: "row", style: "margin-top:6px" }, pick("main", "primary", 0), pick("second", "secondary", 1), pick("eyes", "eyes", 2)));
+  // what the replay would play standing still: the look's own idle if it has one
+  play(state.clip && acts[state.clip] ? state.clip : acts["idle@" + set] ? "idle@" + set : acts.idle ? "idle" : null);
+  note.textContent = "drag to turn, wheel to zoom, right-drag to move";
+}
+// a copy of a rigged model with its own skeleton (Object3D.clone alone leaves the copy bound to the first one's bones)
+function cloneRig(src) {
+  const dst = src.clone(true), a = [], b = [];
+  src.traverse(o => a.push(o)); dst.traverse(o => b.push(o));
+  const twin = new Map(a.map((o, i) => [o, b[i]]));
+  a.forEach((o, i) => { if (!o.isSkinnedMesh) return; const c = b[i]; c.skeleton = new THREE.Skeleton(o.skeleton.bones.map(bn => twin.get(bn)), o.skeleton.boneInverses); c.bind(c.skeleton, o.bindMatrix); });
+  return dst;
+}
+
+// ---- sound: the pack holds IMA ADPCM (as the games store it) or 8-bit mu-law
+const STEP = [7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 19, 21, 23, 25, 28, 31, 34, 37, 41, 45, 50, 55, 60, 66, 73, 80, 88, 97, 107, 118, 130, 143, 157, 173, 190, 209, 230, 253, 279, 307, 337, 371, 408, 449, 494, 544, 598, 658, 724, 796, 876, 963, 1060, 1166, 1282, 1411, 1552, 1707, 1878, 2066, 2272, 2499, 2749, 3024, 3327, 3660, 4026, 4428, 4871, 5358, 5894, 6484, 7132, 7845, 8630, 9493, 10442, 11487, 12635, 13899, 15289, 16818, 18500, 20350, 22385, 24623, 27086, 29794, 32767], MOVE = [-1, -1, -1, -1, 2, 4, 6, 8];
+function pcmOf(item) {
+  const raw = atob(item[1]);
+  if (item[2] === "u") { const out = new Float32Array(raw.length); for (let i = 0; i < raw.length; i++) { const y = raw.charCodeAt(i) / 127.5 - 1; out[i] = Math.sign(y) * (Math.pow(256, Math.abs(y)) - 1) / 255; } return out; }
+  const n = Math.floor(raw.length / 36), out = new Float32Array(n * 64); let at = 0;
+  for (let b = 0; b < n * 36; b += 36) {
+    let pred = (raw.charCodeAt(b) | raw.charCodeAt(b + 1) << 8) << 16 >> 16, idx = Math.min(88, raw.charCodeAt(b + 2));
+    for (let k = 4; k < 36; k++) { const byte = raw.charCodeAt(b + k); for (let half = 0; half < 2; half++) { const nib = half ? byte >> 4 : byte & 15, step = STEP[idx]; let diff = step >> 3; if (nib & 1) diff += step >> 2; if (nib & 2) diff += step >> 1; if (nib & 4) diff += step; pred = Math.max(-32768, Math.min(32767, nib & 8 ? pred - diff : pred + diff)); idx = Math.max(0, Math.min(88, idx + MOVE[nib & 7])); out[at++] = pred / 32768; } }
+  }
+  return out;
+}
+let audio = null, playing = null;
+function playItem(item, button) {
+  audio = audio || new (window.AudioContext || window.webkitAudioContext)(); audio.resume();
+  if (playing) { try { playing.stop(); } catch (e) {} }
+  const pcm = pcmOf(item), buf = audio.createBuffer(1, Math.max(1, pcm.length), item[0]); buf.getChannelData(0).set(pcm);
+  const src = audio.createBufferSource(); src.buffer = buf; src.connect(audio.destination); src.start(); playing = src;
+  if (button) { button.classList.add("on"); src.onended = () => button.classList.remove("on"); }
+  return pcm.length / item[0];
+}
+const lineButtons = (lib, order) => (order || Object.keys(lib)).filter(k => lib[k] && lib[k].length).flatMap(k => [el("h2", { textContent: `${k} (${lib[k].length})` }),
+  el("div", { className: "row" }, ...lib[k].map((item, i) => { const b = el("button", { textContent: String(i + 1) }); b.title = (item[1].length * .75 / (item[2] === "u" ? 1 : .5625) / item[0]).toFixed(1) + " s"; b.onclick = () => playItem(item, b); return b; }))]);
+async function showVoice(id) {
+  if (!(window.DOW_VOICE || {})[id]) await loadScript("voice_" + id + ".js");
+  const lib = window.DOW_VOICE[id], rules = (window.DOW_VOICES.rules || []).filter(r => r.voices.includes(id));
+  const base = ["attack", "charge", "fire", "pain", "death", "down", "kill", "effort"], keys = [...base, ...Object.keys(lib).filter(k => !base.includes(k)).sort()];
+  side.replaceChildren(el("h2", { textContent: "voice " + id }), el("p", { textContent: "spoken by: " + (rules.map(r => r.match + (r.not ? " (not " + r.not + ")" : "")).join("  |  ") || "nobody") }),
+    el("p", { textContent: "attack, charge, fire (under fire), kill and down are lines; pain, effort and death are grunts. A key ending in .s .c .e .o .t .i is said only of Space Marines, Chaos, Eldar, Orks, Tyranids or Guard." }), ...lineButtons(lib, keys));
+}
+function showSounds(key) { const lib = window.DOW_SOUNDS; side.replaceChildren(el("h2", { textContent: key }), el("p", { textContent: "the sounds the replay picks from for this event" }), ...lineButtons({ [key]: lib[key] })); }
+async function showProp(name) {
+  const p = window.DOW_SCENERY.props[name], gltf = await parseGlb(p.glb), root = gltf.scene;
+  const todo = []; root.traverse(o => { if (o.isMesh) todo.push(o); });
+  for (const o of todo) { const map = new THREE.Texture(await loadImage(p.tex[o.material.name])); map.encoding = THREE.sRGBEncoding; map.flipY = false; map.wrapS = map.wrapT = THREE.RepeatWrapping; map.needsUpdate = true; const cut = (p.cut || []).includes(o.material.name);
+    o.material = p.role === "sky" ? new THREE.MeshBasicMaterial({ map, side: THREE.DoubleSide }) : new THREE.MeshStandardMaterial({ map, roughness: .9, alphaTest: cut ? .5 : 0, side: cut ? THREE.DoubleSide : THREE.FrontSide }); }
+  mixer = null; show(root); grid.visible = p.role !== "sky";
+  const size = Math.max(...p.hi.map((v, i) => v - p.lo[i]));
+  frame(new THREE.Vector3((p.lo[0] + p.hi[0]) / 2, p.role === "sky" ? 0 : (p.lo[1] + p.hi[1]) / 2, (p.lo[2] + p.hi[2]) / 2), p.role === "sky" ? size * .2 : size);
+  side.replaceChildren(el("h2", { textContent: name }), el("p", { textContent: "used as: " + p.role + (p.scale ? `, at ${p.scale} yards to the model's unit` : "") }), el("p", { textContent: "size " + p.hi.map((v, i) => (v - p.lo[i]).toFixed(1)).join(" × ") }));
+}
+
+// ---- the lists
+const TABS = {
+  units: { file: "index.js", items: () => (INDEX = window.DOW_INDEX.units).map(u => [u.id, u.veh ? "vehicle" : ""]), open: id => showUnit(id) },
+  voices: { file: "voices.js", items: () => window.DOW_VOICES.voices.map(v => [v, ""]), open: showVoice },
+  sounds: { file: "sounds.js", items: () => Object.keys(window.DOW_SOUNDS).map(k => [k, String(window.DOW_SOUNDS[k].length)]), open: showSounds },
+  scenery: { file: "scenery.js", after: () => Promise.all((window.DOW_SCENERY.themes || []).map(t => loadScript("scenery_" + t + ".js").then(() => { for (const [n, p] of Object.entries(window.DOW_THEME[t].props)) window.DOW_SCENERY.props[n] = { ...p, theme: t }; }))),
+    items: () => Object.entries(window.DOW_SCENERY.props).map(([n, p]) => [n, (p.theme ? p.theme + " " : "") + p.role]), open: showProp },
+};
+async function openTab(name) {
+  document.querySelectorAll("header button").forEach(b => b.classList.toggle("on", b.dataset.tab === name));
+  const T = TABS[name]; list.replaceChildren(el("p", { textContent: "loading…", style: "padding:0 12px" }));
+  try { if (!T.loaded) { await loadScript(T.file); if (T.after) await T.after(); T.loaded = true; } } catch (e) { list.replaceChildren(el("p", { textContent: `No ${T.file} here: build it with tools/dow/build_pack.py.`, style: "padding:0 12px" })); return; }
+  const items = T.items(), find = el("input", { placeholder: `filter ${items.length}`, type: "search" }), rows = el("div");
+  const fill = () => rows.replaceChildren(...items.filter(([n]) => n.includes(find.value.trim().toLowerCase())).map(([n, tag]) => { const a = el("a", {}, n + " ", el("small", { textContent: tag })); a.onclick = () => { rows.querySelectorAll("a").forEach(x => x.classList.remove("on")); a.classList.add("on"); Promise.resolve(T.open(n)).catch(e => { note.textContent = String(e.message || e); }); }; a.dataset.name = n; return a; }));
+  find.oninput = fill; fill(); list.replaceChildren(find, rows);
+}
+document.querySelectorAll("header button").forEach(b => { b.onclick = () => openTab(b.dataset.tab); });
+resize(); frame(new THREE.Vector3(0, 1, 0), 2);
+openTab("units").then(() => { const first = list.querySelector("a"); if (first) first.click(); });
+window.gallery = { showUnit, showVoice, showProp, openTab, playItem, assets, renderer, draw, state: () => current };   // for poking at from the console
+</script>
+</body>
+</html>

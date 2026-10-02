@@ -1,5 +1,5 @@
 {
- "about": "Which Dawn of War II unit voices the 3D replay uses (see tools/sim/page/32-view3d-sound.js). 'events' says which of a unit's lines go with what happens in the replay: for each event a list of regular expressions on the game's file names, the first that finds anything being used (looked up separately for each foe race). The game names a line <speaker race><foe race>_<unit>_<situation>_<four 3-letter details>_...: lines for any foe go under the event, lines for one foe race under event.<letter> (s Space Marines, c Chaos, e Eldar, o Orks, t Tyranids, i Guard). 'voices' are the speakers: 'code' is the unit's 3-letter code in the speech archives, or 'dirs' gives a folder in the sound archives and an expression per event (creatures that only growl); 'borrow' names a voice whose lines fill the events this one has none for. 'rules' say which roster entries speak with which voices, first match wins, tested against '<faction> <template> <vehicle> | <kit>' like the models; several voices are shared out among the figures. 'max' is how many lines to keep per event, 'seconds' the longest line taken. Voices with 'dow1' come from Dawn of War: Soulstorm instead, for what Dawn of War II lacks: a unit's folder under sound/speech in Soulstorm's speech archives, whose sub-folders are matched to events by 'events1' (the first listed folder that has anything).",
+ "about": "Which Dawn of War II unit voices the 3D replay uses (see tools/sim/page/32-view3d-sound.js). 'events' says which of a unit's lines go with what happens in the replay: for each event a list of regular expressions on the game's file names, the first that finds anything being used (looked up separately for each foe race). The game names a line <speaker race><foe race>_<unit>_<situation>_<four 3-letter details>_...: lines for any foe go under the event, lines for one foe race under event.<letter> (s Space Marines, c Chaos, e Eldar, o Orks, t Tyranids, i Guard). 'voices' are the speakers: 'code' is the unit's 3-letter code in the speech archives, or 'dirs' gives a folder in the sound archives and an expression per event (creatures that only growl); 'borrow' names a voice whose lines fill the events this one has none for. 'rules' say which roster entries speak with which voices, first match wins, tested against '<faction> <template> <vehicle> | <kit>' like the models; several voices are shared out among the figures. 'max' is how many lines to keep per event, 'seconds' the longest line taken. Voices with 'dow1' come from Dawn of War: Soulstorm instead, for what Dawn of War II lacks: a unit's folder under sound/speech in Soulstorm's speech archives, whose sub-folders are matched to events by 'events1' (the first listed folder that has anything; a voice may give its own).",
  "max": {"attack": 6, "charge": 5, "fire": 6, "pain": 5, "death": 5, "down": 4, "kill": 5, "effort": 5, "foe": 2},
  "seconds": 4.2,
  "events": {
@@ -42,6 +42,8 @@
   "kom": {"code": "kom", "borrow": "bo3"},
   "wb1": {"code": "wb1", "borrow": "bo3"},
   "wei": {"code": "wei", "borrow": "bo1"},
+  "veh_predator": {"dow1": "races/space_marines/predator", "events1": {"attack": ["attack", "move", "selection"]}}, "veh_rhino": {"dow1": "races/space_marines/rhino", "events1": {"attack": ["attack", "move", "selection"]}}, "veh_landraider": {"dow1": "races/space_marines/land_raider", "events1": {"attack": ["attack", "move", "selection"]}},
+  "veh_russ": {"dow1": "races/guard/leman_russ"}, "veh_chimera": {"dow1": "races/guard/chimera"}, "veh_sentinel": {"dow1": "races/guard/sentinel"}, "veh_trukk": {"dow1": "races/orks/trukk", "events1": {"attack": ["attack", "move", "selection"]}},
   "nid_small": {"dirs": {"charge": ["wav/speech/mp/tyranid/small", "_(0[1-9]|1[0-4])"], "pain": ["wav/speech/mp/tyranid/small", "_(1[5-9]|2[0-8])"], "death": ["wav/speech/mp/tyranid/small", "_(29|3[0-9]|4[0-2])"]}},
   "nid_med": {"dirs": {"charge": ["wav/speech/mp/tyranid/med/select", "."], "pain": ["wav/speech/mp/tyranid/med/damage", "pain|damage|medsize"], "death": ["wav/speech/mp/tyranid/med/die", "."], "attack": ["wav/speech/mp/tyranid/med/hit", "."]}},
   "nid_large": {"dirs": {"charge": ["wav/speech/mp/tyranid/large", "tyscream"], "pain": ["wav/speech/mp/tyranid/large", "tyr_vocal_large"], "death": ["wav/speech/mp/tyranid/large", "ty_big_scream"]}},
@@ -89,6 +91,13 @@
   "eld_warlock": {"dow1": "races/eldar/warlock", "borrow": "em3"}
  },
  "rules": [
+  {"match": "Predator", "voices": ["veh_predator"]},
+  {"match": "Rhino", "voices": ["veh_rhino"]},
+  {"match": "Land Raider", "voices": ["veh_landraider"]},
+  {"match": "Leman Russ", "voices": ["veh_russ"]},
+  {"match": "Chimera", "voices": ["veh_chimera"]},
+  {"match": "Sentinel", "voices": ["veh_sentinel"]},
+  {"match": "Trukk", "voices": ["veh_trukk"]},
   {"match": "Possessed", "voices": ["csm_possessed"]},
   {"match": "Berzerker", "voices": ["csm_berzerker"]},
   {"match": "Commissar", "voices": ["ig_commissar"]},

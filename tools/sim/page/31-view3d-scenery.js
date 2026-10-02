@@ -9,9 +9,29 @@
     // figure enters. Like the models, the file is never committed, and without it the painted battlefield stays.
     (async () => {
       try { if (!window.DOW_SCENERY) await loadScript(PACK + "scenery.js"); } catch (e) { return; }
-      const S = window.DOW_SCENERY; if (!S || gone) return;
+      const shared = window.DOW_SCENERY; if (!shared || gone) return;
       const redraw = () => { if (!running) render(); };
+      // an outdoor battlefield takes one of the pack's themes (city, desert, jungle...): a map takes the one it asks
+      // for (the ruins are the city), open ground gets the same one every time this battle is watched
+      let S = shared;
+      const themes = shared.themes || [];
+      if (!indoor && themes.length) {
+        const pickBy = ros.reduce((a, r, i) => a + (r.template || "").length * (i + 3), fr.length * 7 + ros.length), theme = T ? (themes.includes(T.theme) ? T.theme : themes.includes("urban") ? "urban" : themes[0]) : themes[pickBy % themes.length];
+        try { if (!(window.DOW_THEME || {})[theme]) await loadScript(PACK + "scenery_" + theme + ".js"); } catch (e) { return; }
+        if (gone) return;
+        const th = window.DOW_THEME[theme]; S = { tex: { ...shared.tex, ...th.tex }, props: { ...shared.props, ...th.props } }; decor.theme = theme;
+      }
       for (const n in S.tex) if (TEX[n]) { const im = await loadImage(S.tex[n]); if (gone) return; TEX[n].image = im; TEX[n].needsUpdate = true; }
+      // ruin walls: the game's concrete laid over them by where each point is in the world, so it runs unbroken from
+      // hex to hex instead of repeating on every column
+      if (S.tex.stone && walls && T && T.kind === "ruins") {
+        const mat = walls.material; mat.color.set(0xffffff);
+        mat.onBeforeCompile = sh => {
+          sh.vertexShader = "varying vec3 vWallP; varying vec3 vWallN;\n" + sh.vertexShader.replace("#include <begin_vertex>", "#include <begin_vertex>\n vec4 wallP = vec4(transformed, 1.0);\n #ifdef USE_INSTANCING\n wallP = instanceMatrix * wallP;\n #endif\n vWallP = (modelMatrix * wallP).xyz; vWallN = normal;");
+          sh.fragmentShader = "varying vec3 vWallP; varying vec3 vWallN;\n" + sh.fragmentShader.replace("#include <map_fragment>", "vec3 wallA = abs(vWallN); vec2 wallUv = wallA.y > .5 ? vWallP.xz : (wallA.x > wallA.z ? vWallP.zy : vWallP.xy);\n vec4 texelColor = mapTexelToLinear(texture2D(map, wallUv * .22)); diffuseColor *= texelColor;");
+        };
+        mat.needsUpdate = true;
+      }
       redraw();
       await gltfReady(); if (gone) return;
 

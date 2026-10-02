@@ -54,6 +54,20 @@
       for (let i = 0; i < 20; i++) { const pen = rollDamage(d) - effDR; if (pen > 0) tot += pen * vm + avgF; }
       return tot / 20;
     }
+    // Can this weapon never get through that foe's armour, even on its best roll? The planner's expected injury comes
+    // from a few sample rolls, so a shot that penetrates only now and then can read as nothing; this is the test
+    // for "never". Anything with an effect beyond its own penetration (a cone, a blast, a follow-up, a curse, a
+    // crushing blow, flexible armour that passes blunt trauma) is not hopeless.
+    function hopeless(w, t, from) {
+      const d = w.dmg;
+      if (!d || w.malediction || w.cone || d.div === Infinity) return false;
+      const top = (d.n * 6 + (d.add || 0)) * (d.mult || 1);
+      if (t.u.veh) return top <= Math.floor(vehFacingDR(t, "body", from) / d.div);   // a follow-up needs the round to get in first
+      if (w.follow || d.ex || t.u.arm.flexible || /^cr/.test(d.type)) return false;
+      let low = Infinity;
+      for (const [loc] of RANDOM_LOCS) low = Math.min(low, Math.floor((drAt(t.u.arm.dr, loc) + natDRat(t.u, loc)) / d.div));
+      return top <= low;
+    }
     function expInjRandom(w, tu, dmgOverride) {
       if (tu.veh) return expInj(w, tu, "body", dmgOverride);
       let s = 0;
@@ -70,6 +84,7 @@
       const locs = w.cone ? ["area"] : t.u.veh ? (aimsShots(m) && pointy ? ["random", "vitals"] : ["random"]) : shUp ? [aimsShots(m) ? "torso" : "random"] : aimsShots(m) || (melee && t.pinned) ? [...Object.keys(AIM), ...Object.keys(AIM).filter(l => l !== "eye" && drAt(t.u.arm.dr, l === "vitals" ? "torso" : l) > 0).map(l => l + "#c")] : ["random"];
       const def0 = melee ? bestDefence(t, m, true, w) : w.malediction ? (w.fp && t.u.flags.blank ? 99 : w.resist === "HT" ? t.u.HT : t.u.will) - 2 : rangedDefence(t, m);
       let best = { loc: "torso", da: 0, score: 0, lvl };
+      const cap = fo.cap ?? Infinity;   // a Move and Attack's roll can't pass 9 whatever is added to it (B365)
       for (const loc of locs) {
         const pen = (fo.fx ? fo.fx.pen(loc.replace("#c", "")) : 0) + (loc === "random" || loc === "area" ? 0 : loc.endsWith("#c") ? Math.min(0, Math.min(AIM[loc.slice(0, -2)], CHINK(loc.slice(0, -2))) + (w.chink || 0)) : loc === "eye" && drAt(t.u.arm.dr, "eye") > 0 ? -10 : AIM[loc]);   // an eye behind a helmet lens or visor is -10 (B399-400)
         const pointed = /^pi/.test(w.dmg.type) || w.dmg.type === "imp" || (w.dmg.type === "burn" && !w.dmg.ex && !w.cone);
@@ -92,7 +107,7 @@
         // Attack (B369) does in melee; not for area attacks or Malediction
         const maxDa = fo.noDa ? 0 : melee || !(w.malediction || w.cone || w.dmg.ex || w.blast) ? 6 : 0;
         for (let da = 0; da <= maxDa; da++) {
-          const eff = lvl + pen + hmod - 2 * da;
+          const eff = Math.min(cap, lvl + pen + hmod - 2 * da);
           if (eff < 3 || (da > 0 && eff < 10)) break;
           const pDef = def0 == null ? 0 : P3[Math.max(0, Math.min(18, def0 - da))];
           const hits = melee ? P3[Math.min(18, eff)] : burstHits(eff, w.cone ? 1 : (w.rof || 1), w, fo.aim || 0, !!fo.braced);
@@ -111,7 +126,7 @@
         }
         // Telegraphic Attack (MA113): +4 to hit, +2 to the foe's defences; not with Deceptive Attack
         if (melee && !fo.noTele && lvl + pen + hmod + 4 >= 3) {
-          const eff = lvl + pen + hmod + 4, pDef = def0 == null ? 0 : P3[cl(def0 + 2)];
+          const eff = Math.min(cap, lvl + pen + hmod + 4), pDef = def0 == null ? 0 : P3[cl(def0 + 2)];
           let score = (1 - pDef) * perHit(eff);
           if (shUp) { const dm = dmgOverride || w.dmg, raw = Math.max(1, (dm.n * 3.5 + dm.add) * (dm.mult || 1)); const soak = Math.min(1, t.sp / raw); score *= (1 - soak) + soak * 0.25; }
           if (score > best.score) best = { loc, da: 0, score, lvl: eff, tele: true };
@@ -142,7 +157,7 @@
     // shields cover the front and the shield (left) side (B287)
     const shieldCovers = (t, att) => { const a = arcTo(t, att); return a === "front" || (a === "side" && sideOf(t.h, t.facing, att.h) === "L"); };
     const shieldDB = t => t.u.cs && t.shState === "ok" && !t.blockLost ? t.u.cs.db : 0;
-    const canParry = t => t.u.parry != null && bladeReady(t) && !(t.u.melee.unbalanced && t.attacked && !t.defAtk) && t.armsLost < 2 && (!t.armsLost || t.u.melee.oneHanded !== false) && !t.mna;
+    const canParry = t => t.u.parry != null && bladeReady(t) && !(t.u.melee.unbalanced && t.struckWith === t.u.melee && !t.defAtk) && t.armsLost < 2 && (!t.armsLost || t.u.melee.oneHanded !== false) && !t.mna;
     // the defences open to t against att: kind is melee, ranged, pb (a gun fired at point-blank) or thrown.
     // With Damage to Shields in play (B484) a shield's DB counts against every attack from its arcs (B287)
     function defOpts(t, att, kind, aw) {

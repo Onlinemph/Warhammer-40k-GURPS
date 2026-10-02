@@ -106,7 +106,7 @@
       if (!tH || w.cone || w.dmg.ex || !pointedW(w)) return;
       const l = loc.replace("#c", ""), f = t.u.flags;
       const dr = drAt(t.u.arm.dr, l === "vitals" ? "torso" : l) + natDRat(t.u, l);
-      const cov = (w.dmg.div === Infinity ? 0 : Math.floor(2 * dr / (w.dmg.div || 1))) + Math.floor(t.u.HP * (f.homogenous ? 0.25 : f.unliving ? 0.5 : 1));
+      const cov = w.dmg.div === Infinity ? 0 : Math.floor((2 * dr + Math.floor(t.u.HP * (f.homogenous ? 0.25 : f.unliving ? 0.5 : 1))) / (w.dmg.div || 1));
       if (basic <= cov) return;
       const x = beyond(m, w, tH);
       if (!x) return;
@@ -216,7 +216,7 @@
       // missed round may strike someone on the line, beside the target or beyond it (B389, B392)
       const wild = () => {
         for (const mg of misses) {
-          if (w.dmg.ex) { const at = t.h || t.lastH; if (at) explosion(m, w, scatter(at, Math.max(1, Math.min(Math.ceil(d / 2), -mg))), rollDamage(w.dmg)); }
+          if (w.dmg.ex) { const at = t.h || t.lastH; if (at) { const to = scatter(at, Math.max(1, Math.min(Math.ceil(d / 2), -mg))), raw = rollDamage(w.dmg); landOn(m, w, to, raw); explosion(m, w, to, raw); } }
           else if (t.h) stray(m, w, t, inter);
         }
       };
@@ -263,7 +263,7 @@
       // a dodged round flies on: an explosive lands the dodge's margin of success in yards away (B414), a bullet
       // may hit someone behind (B389)
       for (let k = 0; k < dodged; k++) {
-        if (w.dmg.ex) { const at = tH || t.lastH; if (at) explosion(m, w, scatter(at, Math.max(1, dMargin)), rollDamage(w.dmg)); }
+        if (w.dmg.ex) { const at = tH || t.lastH; if (at) { const to = scatter(at, Math.max(1, dMargin)), raw = rollDamage(w.dmg); landOn(m, w, to, raw); explosion(m, w, to, raw); } }
         else if (tH) { const b = beyond(m, w, tH); if (b) strayAt(m, w, b); }
       }
       wild();
@@ -416,8 +416,7 @@
         if (dfe) t.feintDef = null;
         let lvl = -dfe + wl(m, w) - skillPen(m) - (opts.charge && !opts.heroic ? 4 : 0) + (opts.determined ? 4 : 0) + (opts.committed === "det" ? 2 : 0) - rapidPen + ev
           - (m.prone ? 4 : 0) - (m.kneel && !m.prone ? 2 : 0) - closePen(m, w) - (opts.pen || 0) + smMelee(m, t) - darkPen(m, t);
-        if (opts.charge && !opts.heroic) lvl = Math.min(lvl, 9);
-        const plan = planAttack(m, w, t, lvl, true, null, { noDa: !trained(m, w) });
+        const plan = planAttack(m, w, t, lvl, true, null, { noDa: !trained(m, w), cap: opts.charge && !opts.heroic ? 9 : undefined });
         let loc = plan.loc === "random" ? reachLoc(m, t, w, hitLocation()) : plan.loc;
         if (plan.lvl < 3) { m.attacked = true; L(`${m.id} can't hope to hit ${t.id} (skill ${plan.lvl})`); continue; }   // B344
         // Telegraphic Attack (MA113): +4 to hit but +2 to every defence, and the crit range of the unmodified skill
@@ -426,7 +425,7 @@
         // critical failure while using it costs 1 HP to the arm, DR no help
         if ((opts.mighty || opts.flurry) && !m.u.flags.machine) { spendFP(m, 1); if (r.fumble && m.state === "ok") { L(`  ${m.id} wrenches its arm`); injure(m, m, 1, "arm", "cr"); } }
         if (tele && r.crit && r.roll > (plan.lvl - 4 >= 16 ? 6 : plan.lvl - 4 >= 15 ? 5 : 4)) r.crit = false;
-        m.attacked = true;
+        m.attacked = true; m.struckWith = w;
         if (w.fp) spendFP(m, w.fp);
         if (w.perils && perils(m, w)) continue;
         if (m.h && t.h) FX(["m", m.h.q, m.h.r, t.h.q, t.h.r, m.u.side, r.ok ? 1 : 0, m.ix, t.ix, plan.lvl, r.roll]);

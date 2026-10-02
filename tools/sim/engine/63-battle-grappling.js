@@ -26,11 +26,10 @@
       return g.length ? g[0] + g.slice(1).reduce((a, x) => a + x / 5, 0) : 0;
     }
     function contest(a, b) { return contest3(a, b) > 0; }
-    // Quick Contest (B348): 1 a win, -1 a loss, 0 a tie (both fail, or equal margins)
+    // Quick Contest (B348): 1 a win, -1 a loss, 0 a tie (equal margins); if both fail, the one who failed by less wins
     function contest3(a, b) {
       const ra = check(a), rb = check(b);
       if (ra.ok !== rb.ok) return ra.ok ? 1 : -1;
-      if (!ra.ok) return 0;
       return Math.sign(ra.margin - rb.margin);
     }
     // the grappler whose hold counts, and what the hold is worth in a break-free contest (B371): +5 with two hands,

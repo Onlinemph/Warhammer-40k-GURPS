@@ -137,7 +137,10 @@
       if (up.length) inst(hexGeo(1, .995), ruins ? M(0x8d867a, { map: TEX.stone, r: .9 }) : M(0x6c7178, { r: .6, m: .4 }), up, (im, k, i) => { const [q, r] = keyHex(k), [x, y] = P(q, r); m4.compose(W3(x, y, -.15), q0, new THREE.Vector3(1, zOf(q, r), 1)); im.setMatrixAt(i, m4); });
       const ws = new Set();
       for (const k of floor) { const [q, r] = keyHex(k); for (const [dq, dr] of DIRN) { const k2 = (q + dq) + "," + (r + dr); if (!floorSet.has(k2)) ws.add(k2); } }
-      wallList = [...ws];
+      // water (a river): no wall, a dark sheet a little below the banks
+      const wet = new Set(T.water || []);
+      wallList = [...ws].filter(k => !wet.has(k));
+      if (wet.size) inst(hexGeo(.05, 1), M(0x16323c, { r: .5, m: .1 }), [...wet], (im, k, i) => { const [q, r] = keyHex(k), [x, y] = P(q, r); m4.makeTranslation(x, -.22, y); im.setMatrixAt(i, m4); }, false);
       const wTop = new Map(T.wallTop || []), wFull = 2.4 + Math.max(0, ...floor.map(k => zOf(...keyHex(k))));
       wallH = wallList.map(k => wTop.get(k) || wFull);
       walls = inst(hexGeo(1), ruins ? M(0xb0a898, { map: TEX.stone, r: .92 }) : M(0x9aa2ad, { map: TEX.panel, r: .55, m: .35 }), wallList, (im, k, i) => { const [q, r] = keyHex(k), [x, y] = P(q, r); m4.compose(W3(x, y, 0), q0, new THREE.Vector3(1, wallH[i], 1)); im.setMatrixAt(i, m4); });

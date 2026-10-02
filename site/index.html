@@ -1498,7 +1498,178 @@ const SIM = (() => {
     MAPS.set(mk, map);
     return map;
   }
-  const battleMap = opt => opt.terrain || (opt.battlefield === "facility" ? facilityMap(opt.mapSeed || 1) : opt.battlefield === "ruins" ? ruinsMap(opt.mapSeed || 1) : null);
+  // ------------------------------------------------------------------ more battlefields (user direction)
+  // Five more grounds, built on the two kinds above so the fight needs no new rules: an indoor one is a facility
+  // (walls to the roof), an outdoor one is ruins (walls of any height, sight over whatever stands lower than the eye,
+  // a wall a yard and a bit high a parapet to whoever stands behind it). Each comes from a layout number too.
+  function mapKit(name, seed, W = 64, H = 37) {
+    let st = (Math.max(1, Math.floor(seed)) * 2246822519 + name.length * 40503 + name.charCodeAt(0) * 9176) >>> 0;
+    const rnd = () => { st = (st + 0x6D2B79F5) >>> 0; let t = st; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+    const ri = (a, b) => a + Math.floor(rnd() * (b - a + 1));
+    const floor = new Set(), crates = new Map(), doors = new Set(), zAt = new Map(), top = new Map(), lightAt = new Map(), water = new Set();
+    const K = (c, r) => { const h = fromOffset(c, r); return key(h.q, h.r); };
+    const inside = (c, r) => c > 0 && r > 0 && c < W - 1 && r < H - 1;
+    const each = (c0, r0, c1, r1, f) => { for (let c = Math.min(c0, c1); c <= Math.max(c0, c1); c++) for (let r = Math.min(r0, r1); r <= Math.max(r0, r1); r++) if (inside(c, r)) f(K(c, r), c, r); };
+    const carve = (c0, r0, c1, r1) => each(c0, r0, c1, r1, k => { floor.add(k); top.delete(k); water.delete(k); });
+    const wall = (c0, r0, c1, r1, h = 99) => each(c0, r0, c1, r1, k => { floor.delete(k); crates.delete(k); top.set(k, h); });
+    const spawn = [fromOffset(4, Math.floor(H / 2)), fromOffset(W - 5, Math.floor(H / 2))];
+    // how much floor can be walked to from the first deployment zone (a step of more than a yard up or down is a wall)
+    const reach = () => {
+      const seen = new Set([key(spawn[0].q, spawn[0].r)]), q = [spawn[0]];
+      for (let i = 0; i < q.length; i++) for (const [dq, dr] of DIRS) {
+        const n = { q: q[i].q + dq, r: q[i].r + dr }, nk = key(n.q, n.r);
+        if (!seen.has(nk) && floor.has(nk) && !crates.has(nk) && Math.abs((zAt.get(nk) || 0) - (zAt.get(key(q[i].q, q[i].r)) || 0)) <= 1.01) { seen.add(nk); q.push(n); }
+      }
+      return seen.size;
+    };
+    // cover objects at the given offsets, each kept only if nothing is cut off by it
+    const cover = (spots, heavy = 0.5) => {
+      let want = reach();
+      for (const [c, r] of spots) {
+        const k = K(c, r);
+        if (!inside(c, r) || !floor.has(k) || crates.has(k) || doors.has(k) || spawn.some(sp => hexDist(sp, fromOffset(c, r)) <= 3)) continue;
+        crates.set(k, rnd() < heavy ? "heavy" : "light");
+        const got = reach();
+        if (got < want - 1) crates.delete(k); else want = got;
+      }
+    };
+    const finish = (kind, extra = {}) => {
+      const ids = new Map(), hx = [];
+      for (let c = 1; c < W - 1; c++) for (let r = 1; r < H - 1; r++) { const h = fromOffset(c, r), k = key(h.q, h.r); ids.set(k, hx.length); hx.push(h); }
+      const nb = hx.map(h => DIRS.map(([dq, dr]) => ids.get(key(h.q + dq, h.r + dr))).filter(i => i != null));
+      const ks = hx.map(h => key(h.q, h.r));
+      for (const k of doors) if (!floor.has(k)) doors.delete(k);
+      const wallI = Uint8Array.from(ks, k => floor.has(k) ? 0 : 1), crateI = Uint8Array.from(ks, k => crates.has(k) ? 1 : 0), doorI = Uint8Array.from(ks, k => doors.has(k) ? 1 : 0);
+      const light = Int8Array.from(ks, k => floor.has(k) ? lightAt.get(k) || 0 : 0);
+      const elev = Float32Array.from(ks, k => floor.has(k) ? zAt.get(k) || 0 : 0);
+      const map = { kind, style: name, floor, crates, doors, spawn, W, H, ids, hx, nb, wallI, crateI, doorI, light, elev, water, lineC: new Map(), covC: new Map(), ...extra };
+      if (kind === "ruins") map.wallTop = Float32Array.from(ks, k => floor.has(k) ? 0 : top.get(k) ?? 99);
+      return map;
+    };
+    return { W, H, rnd, ri, floor, crates, doors, zAt, top, lightAt, water, K, each, carve, wall, spawn, cover, finish };
+  }
+  const builtMap = (name, seed, make) => { const mk = name + Math.max(1, Math.floor(seed)); if (!MAPS.has(mk)) MAPS.set(mk, make(mapKit(name, seed))); return MAPS.get(mk); };
+
+  // A space hulk: corridors one yard wide between junctions, a few cramped chambers, bulkhead doors, much of it dark
+  const hulkMap = (seed = 1) => builtMap("hulk", seed, M => {
+    const { W, H, rnd, ri, carve, doors, lightAt, K, each } = M;
+    carve(1, 14, 5, 22); carve(W - 6, 14, W - 2, 22);                                         // the boarding bays
+    const xs = [9, 15, 21, 27, 33, 39, 45, 51, 54], ys = [3, 9, 15, 21, 27, 33];
+    const id = (i, j) => i * ys.length + j, group = xs.flatMap((_, i) => ys.map((_, j) => id(i, j)));
+    const find = a => { while (group[a] !== a) a = group[a] = group[group[a]]; return a; };
+    const edges = [];
+    xs.forEach((_, i) => ys.forEach((_, j) => { if (i + 1 < xs.length) edges.push([i, j, i + 1, j]); if (j + 1 < ys.length) edges.push([i, j, i, j + 1]); }));
+    for (let i = edges.length - 1; i > 0; i--) { const j = ri(0, i); [edges[i], edges[j]] = [edges[j], edges[i]]; }
+    const dig = ([i0, j0, i1, j1]) => {
+      carve(xs[i0], ys[j0], xs[i1], ys[j1]);
+      if (rnd() < 0.22) { const c = Math.round((xs[i0] + xs[i1]) / 2), r = Math.round((ys[j0] + ys[j1]) / 2); doors.add(K(c, r)); }   // a bulkhead across the corridor
+    };
+    // every junction joined to every other by one way round, then some loops so there is a way to flank
+    for (const e of edges) { const a = find(id(e[0], e[1])), b = find(id(e[2], e[3])); if (a !== b) { group[a] = b; dig(e); } else if (rnd() < 0.22) dig(e); }
+    xs.forEach((x, i) => ys.forEach((y, j) => {
+      if (rnd() < 0.3) { carve(x - 1, y - 1, x + 1, y + 1); const dark = rnd() < 0.5 ? -7 : -3; each(x - 1, y - 1, x + 1, y + 1, k => lightAt.set(k, dark)); }
+    }));
+    carve(6, 15, 9, 15); carve(6, 21, 9, 21); carve(W - 10, 15, W - 7, 15); carve(W - 10, 21, W - 7, 21);   // the bays' hatches
+    for (const k of M.floor) if (!lightAt.has(k) && rnd() < 0.55) lightAt.set(k, -3);            // failing lumens
+    M.cover([[3, 16], [3, 20], [W - 4, 16], [W - 4, 20], ...xs.flatMap(x => ys.map(y => [x + ri(-1, 1), y + ri(-1, 1)])).filter(() => rnd() < 0.25)]);
+    return M.finish("facility");
+  });
+
+  // An outpost on open ground: a handful of standing buildings with doorways and firing slits, barricades between
+  // them, and a low hill off to one side
+  const outpostMap = (seed = 1) => builtMap("outpost", seed, M => {
+    const { W, H, rnd, ri, carve, wall, zAt, lightAt, K, each } = M;
+    carve(1, 1, W - 2, H - 2);
+    const hillTop = rnd() < 0.5, hc = ri(22, 42), hr = hillTop ? ri(4, 7) : ri(H - 8, H - 5);
+    each(hc - 9, hr - 6, hc + 9, hr + 6, (k, c, r) => { const z = Math.round(3 - Math.hypot((c - hc) * 0.75, r - hr) / 1.6); if (z > 0) zAt.set(k, Math.min(3, z)); });
+    const made = [];
+    for (let tries = 0; made.length < 6 && tries < 60; tries++) {
+      const w = ri(5, 9), h = ri(4, 6), x0 = ri(12, W - 13 - w), y0 = hillTop ? ri(13, H - 3 - h) : ri(2, H - 14 - h), x1 = x0 + w, y1 = y0 + h;
+      if (made.some(([a, b, c, d]) => x0 <= c + 3 && x1 >= a - 3 && y0 <= d + 3 && y1 >= b - 3)) continue;
+      made.push([x0, y0, x1, y1]);
+      const tall = 5 + 3 * ri(0, 1);
+      wall(x0, y0, x1, y0, tall); wall(x0, y1, x1, y1, tall); wall(x0, y0, x0, y1, tall); wall(x1, y0, x1, y1, tall);
+      each(x0 + 1, y0 + 1, x1 - 1, y1 - 1, k => lightAt.set(k, -2));
+      // two doorways, and slits a man can fire through along the long walls
+      const ways = [[ri(x0 + 1, x1 - 2), y0, 1, 0], [ri(x0 + 1, x1 - 2), y1, 1, 0], [x0, ri(y0 + 1, y1 - 2), 0, 1], [x1, ri(y0 + 1, y1 - 2), 0, 1]];
+      const a = ri(0, 3), b = (a + ri(1, 3)) % 4;
+      for (const i of [a, b]) { const [c, r, dc, dr] = ways[i]; carve(c, r, c + dc, r + dr); }
+      for (let c = x0 + 1; c < x1; c++) for (const r of [y0, y1]) if (!M.floor.has(K(c, r)) && rnd() < 0.28) wall(c, r, c, r, 1.2);
+    }
+    const spots = [];
+    for (let i = 0; i < 46; i++) spots.push([ri(9, W - 10), ri(2, H - 3)]);
+    M.cover(spots.filter(([c, r]) => !zAt.get(K(c, r))), 0.6);
+    return M.finish("ruins", { theme: "desert" });
+  });
+
+  // Trench lines: two belts of breastworks on each side with sally ports and communication trenches, and a
+  // cratered no-man's-land between. Whoever stands behind a parapet fires over it and is covered to the chest.
+  const trenchMap = (seed = 1) => builtMap("trenches", seed, M => {
+    const { W, H, rnd, ri, carve, wall, K } = M;
+    carve(1, 1, W - 2, H - 2);
+    const line = (x, front) => {           // a trench two yards wide at columns x, x+1, parapets either side
+      const gaps = new Set(); for (let r = ri(3, 6); r < H - 3; r += ri(6, 9)) { gaps.add(r); gaps.add(r + 1); }
+      for (let r = 1; r < H - 1; r++) for (const c of [x - 1, x + 2]) if (!gaps.has(r) || c !== front) wall(c, r, c, r, 1.2);
+      const back = front === x - 1 ? x + 2 : x - 1;
+      for (let r = ri(4, 8); r < H - 3; r += ri(7, 10)) carve(back, r, back, r + 1);     // ways in from behind
+      return gaps;
+    };
+    const lines = [[11, 13], [19, 21], [W - 21, W - 22], [W - 13, W - 14]];    // [first column, the side that faces the foe]
+    for (const [x, front] of lines) line(x, front);
+    // communication trenches between a side's two lines, parapets on both flanks
+    for (const [xa, xb] of [[13, 18], [W - 20, W - 15]]) for (let n = 0, r = ri(5, 9); n < 3 && r < H - 5; n++, r += ri(9, 12)) {
+      wall(xa, r - 1, xb, r - 1, 1.2); wall(xa, r + 2, xb, r + 2, 1.2); carve(xa - 1, r, xb + 1, r + 1);
+    }
+    // a strongpoint on each front line: a pillbox with a slit toward the foe and its door into the trench
+    for (const [x, dir] of [[23, 1], [W - 24, -1]]) { const r = ri(8, H - 12); wall(x - 1, r - 1, x + 1, r + 2, 4); carve(x, r, x, r + 1); carve(x - dir, r, x - dir, r); wall(x + dir, r, x + dir, r + 1, 1.2); }
+    const spots = [];
+    for (let i = 0; i < 60; i++) spots.push([ri(25, W - 26), ri(2, H - 3)]);     // shell holes and wreckage in no-man's-land
+    M.cover(spots, 0.45);
+    for (let i = 0; i < 5; i++) { const c = ri(27, W - 28), r = ri(3, H - 5); wall(c, r, c + ri(0, 1), r + ri(0, 2), 2); }   // stumps of walls
+    return M.finish("ruins", { theme: "urban" });
+  });
+
+  // City streets: standing blocks nobody can enter, streets three yards wide between them, the odd alley a yard
+  // wide cut through a block, squares where a block has come down, and barricades across the roads
+  const streetsMap = (seed = 1) => builtMap("streets", seed, M => {
+    const { W, H, rnd, ri, carve, wall } = M;
+    carve(1, 1, W - 2, H - 2);
+    const xb = [[10, 21], [25, 38], [42, 53]], yb = [[2, 10], [14, 22], [26, 34]], spots = [];
+    for (const [x0, x1] of xb) for (const [y0, y1] of yb) {
+      if (rnd() < 0.14) { for (let i = 0; i < 7; i++) spots.push([ri(x0, x1), ri(y0, y1)]); continue; }    // a square full of rubble
+      wall(x0, y0, x1, y1, 3 * ri(2, 4) + 2);
+      if (rnd() < 0.45) { const c = ri(x0 + 3, x1 - 3); carve(c, y0, c, y1); }                               // an alley through
+      if (rnd() < 0.3) { const r = ri(y0 + 2, y1 - 2); carve(x0, r, x1, r); }
+      if (rnd() < 0.35) carve(ri(x0 + 1, x1 - 4), ri(y0 + 1, y1 - 3), ri(x0 + 3, x1 - 1), y1 - 1 + 0 * ri(0, 1));   // a courtyard, reached only by an alley if at all
+    }
+    for (const x of [8, 23, 40, 55]) for (const y of [6, 18, 30]) if (rnd() < 0.6) spots.push([x + ri(-1, 1), y + ri(-2, 2)], [x + ri(-1, 1), y + ri(-2, 2)]);
+    for (const y of [12, 24]) for (const x of [15, 31, 47]) if (rnd() < 0.6) spots.push([x + ri(-3, 3), y + ri(-1, 1)], [x + ri(-3, 3), y + ri(-1, 1)]);
+    M.cover(spots, 0.6);
+    return M.finish("ruins", { theme: "urban" });
+  });
+
+  // A river crossing: water nobody can wade and nothing blocks sight across, two or three bridges and a ford, and
+  // what cover there is at the bridgeheads
+  const riverMap = (seed = 1) => builtMap("river", seed, M => {
+    const { W, H, rnd, ri, carve, wall, water, K, each } = M;
+    carve(1, 1, W - 2, H - 2);
+    const phase = rnd() * 6.28, bend = 2 + rnd() * 2.5, mid = r => Math.round(W / 2 + bend * Math.sin(r / 5.5 + phase));
+    for (let r = 1; r < H - 1; r++) each(mid(r) - 3, r, mid(r) + 2, r, k => { M.floor.delete(k); M.top.set(k, 0.02); water.add(k); });
+    const rows = [ri(4, 8), ri(15, 21), ri(28, 32)], spots = [];
+    rows.forEach((r, i) => {
+      if (i === 1 && rnd() < 0.4) return;                                  // the middle bridge is down as often as not
+      const wide = i === 1 ? 1 : 0;
+      carve(mid(r) - 4, r, mid(r) + 3, r + wide);
+      for (const c of [mid(r) - 6, mid(r) - 5, mid(r) + 4, mid(r) + 5]) spots.push([c, r - 1], [c, r + wide + 1]);
+    });
+    const ford = ri(10, 26); carve(mid(ford) - 4, ford, mid(ford) + 3, ford);
+    for (let i = 0; i < 40; i++) spots.push([ri(9, W - 10), ri(2, H - 3)]);
+    M.cover(spots, 0.55);
+    for (let i = 0; i < 6; i++) { const c = rnd() < 0.5 ? ri(12, 24) : ri(W - 25, W - 13), r = ri(3, H - 6); wall(c, r, c + ri(1, 3), r, rnd() < 0.5 ? 1.2 : 5); }   // field walls on the banks
+    return M.finish("ruins", { theme: "jungle" });
+  });
+  const BATTLEFIELDS = { facility: facilityMap, ruins: ruinsMap, hulk: hulkMap, outpost: outpostMap, trenches: trenchMap, streets: streetsMap, river: riverMap };
+  const battleMap = opt => opt.terrain || (BATTLEFIELDS[opt.battlefield] ? BATTLEFIELDS[opt.battlefield](opt.mapSeed || 1) : null);
 
   // called-shot locations and their penalties (B398-399)
   // Chinks in Armor (B400): an aimed attack at a gap in the armour, -8 on the torso and -10 anywhere else, halves the armour's DR.
@@ -2111,6 +2282,7 @@ const SIM = (() => {
       } else L(`  ${g.name} is too shaken to care`);
     }
     function frightTable(m, by, why) {
+      by = Math.max(1, by);   // a check with no cap can fail on a 17 with a margin below 1
       const r = roll3() + by, u = m.u;
       const stun = (sec, how, txt) => { m.stunned = true; m.stunT = sec; m.stunRec = how; L(`  ${m.id} ${txt || "freezes"} (${why}, Fright Check Table ${r})`); };
       if (r <= 5) stun(1, "auto");
@@ -2120,7 +2292,7 @@ const SIM = (() => {
       else if (r === 11) stun(d6() + d6(), "willmod");
       else if (r === 12) stun(d6(), "willmod", "retches, helpless");
       else if (r === 13) L(`  ${m.id} shakes it off with a new quirk (${why}, Fright Check Table 13)`);
-      else if (r <= 15) { spendFP(m, d6()); stun(r === 14 ? d6() : d6() + d6(), "willmod", "loses fatigue and freezes"); }
+      else if (r <= 15) { spendFP(m, d6()); stun(d6(), "willmod", "loses fatigue and freezes"); }
       else if (r === 16) stun(d6(), "willmod");
       else if (r <= 20 || r >= 22) { incapacitate(m, `faints or collapses (${why}, Fright Check Table ${r})`); }
       else { m.state = "routed"; place(m, null); L(`  ${m.id} panics and runs (${why}, Fright Check Table 21)`); }
@@ -2130,7 +2302,7 @@ const SIM = (() => {
     function recoverStun(m) {
       if (m.stunT > 0) { m.stunT--; if (m.stunT > 0) return false; if (m.stunRec === "auto") return true; }
       const u = m.u, how = m.stunRec || "ht";
-      const lvl = how === "will" ? u.will : how === "willmod" ? frightLevel(u, 0, Infinity) : how === "iq" ? (u.stats.iq || 10) + (u.flags.cr ? 6 : 0) : u.HT + (u.flags.hpt && !frac ? 3 : 0);
+      const lvl = how === "will" ? u.will : how === "willmod" ? frightLevel(u, 0, Infinity) : how === "iq" ? (u.stats.iq || 10) + (u.flags.cr ? 6 : 0) : u.HT;
       return check(lvl).ok;
     }
     function spendFP(m, n) {
@@ -2283,8 +2455,10 @@ const SIM = (() => {
         t.shock = Math.min(t.shockCap || 4, HP >= 20 ? Math.floor(t.shockInj / Math.floor(HP / 10)) : t.shockInj);
       }
       // crippling (B420-421): injury over HP/2 to a limb, HP/3 to an extremity
+      // (with injury kept per limb, applyHit says whether this hit took that limb over; else one blow has to)
       const lim = loc === "arm" || loc === "leg" ? HP / 2 : loc === "hand" || loc === "foot" ? HP / 3 : Infinity;
-      const crippled = inj > lim;
+      const crippled = t.cripNow != null ? t.cripNow : inj > lim;
+      t.cripNow = null;
       if (crippled) cripple(t, loc);
       else if (cShock && lim !== Infinity) {
         // critical row 8 to a limb: a "funny-bone" hit, crippled only for the moment (B556): the hand lets go, the leg folds
@@ -2376,10 +2550,11 @@ const SIM = (() => {
       const L0 = t.u.veh.locs, r = roll3();
       if (r <= 4) return L0.X ? "mount" : "body";
       if (r === 5) return L0.t ? "turret" : "body";
-      if (r <= 7 || r === 15 || r === 16) return L0.C ? "track" : L0.L ? "legs" : "body";
-      if (r === 8 || r === 13 || r === 14) return L0.T ? "turret" : "body";
-      if (r === 12) return L0.O ? "open" : "body";
-      if (r >= 17) return L0.W ? "wheel" : "body";
+      if (r <= 7 || r === 13 || r === 14) return L0.C ? "track" : L0.L ? "legs" : "body";
+      if (r === 8 || r === 12) return L0.T ? "turret" : "body";
+      if (r === 11) return L0.O ? "open" : "body";
+      if (r === 15 || r === 16) return L0.W ? "wheel" : "body";
+      if (r >= 17) return "vitals";
       return "body";
     }
     // wounding on a machine (B380, B554): Unliving, except the vital area (engine, fuel): x3 piercing and impaling,
@@ -2658,6 +2833,7 @@ const SIM = (() => {
       if (side && finj) t.limbInj[side] += finj;
       L(`  ${raw} dmg to ${area ? "the body (large area)" : loc} (DR ${armDR + natDR}${div !== 1 ? "/" + (div === Infinity ? "∞" : div) : ""}): ${inj} injury${finj ? ` + ${finj} ${w.follow.ex ? "from the internal explosion" : "follow-up"}` : ""}${frac ? "" : `; ${t.id} at ${t.hp - inj - finj}/${t.u.HP} HP`}`);
       if (t.h) FX(["h", t.ix, inj + finj, loc, t.h.q, t.h.r]);
+      t.cripNow = side ? took < lim0 && t.limbInj[side] >= lim0 : null;
       injure(att, t, inj + finj, loc, dmg.type);
       // agony (B428): HT (+3 with High Pain Threshold) at the weapon's penalty, or Severe Pain for the rest of the
       // fight (-4, -2 with High Pain Threshold); a critical failure stuns too. Machines feel nothing
@@ -2875,6 +3051,20 @@ const SIM = (() => {
       for (let i = 0; i < 20; i++) { const pen = rollDamage(d) - effDR; if (pen > 0) tot += pen * vm + avgF; }
       return tot / 20;
     }
+    // Can this weapon never get through that foe's armour, even on its best roll? The planner's expected injury comes
+    // from a few sample rolls, so a shot that penetrates only now and then can read as nothing; this is the test
+    // for "never". Anything with an effect beyond its own penetration (a cone, a blast, a follow-up, a curse, a
+    // crushing blow, flexible armour that passes blunt trauma) is not hopeless.
+    function hopeless(w, t, from) {
+      const d = w.dmg;
+      if (!d || w.malediction || w.cone || d.div === Infinity) return false;
+      const top = (d.n * 6 + (d.add || 0)) * (d.mult || 1);
+      if (t.u.veh) return top <= Math.floor(vehFacingDR(t, "body", from) / d.div);   // a follow-up needs the round to get in first
+      if (w.follow || d.ex || t.u.arm.flexible || /^cr/.test(d.type)) return false;
+      let low = Infinity;
+      for (const [loc] of RANDOM_LOCS) low = Math.min(low, Math.floor((drAt(t.u.arm.dr, loc) + natDRat(t.u, loc)) / d.div));
+      return top <= low;
+    }
     function expInjRandom(w, tu, dmgOverride) {
       if (tu.veh) return expInj(w, tu, "body", dmgOverride);
       let s = 0;
@@ -2891,6 +3081,7 @@ const SIM = (() => {
       const locs = w.cone ? ["area"] : t.u.veh ? (aimsShots(m) && pointy ? ["random", "vitals"] : ["random"]) : shUp ? [aimsShots(m) ? "torso" : "random"] : aimsShots(m) || (melee && t.pinned) ? [...Object.keys(AIM), ...Object.keys(AIM).filter(l => l !== "eye" && drAt(t.u.arm.dr, l === "vitals" ? "torso" : l) > 0).map(l => l + "#c")] : ["random"];
       const def0 = melee ? bestDefence(t, m, true, w) : w.malediction ? (w.fp && t.u.flags.blank ? 99 : w.resist === "HT" ? t.u.HT : t.u.will) - 2 : rangedDefence(t, m);
       let best = { loc: "torso", da: 0, score: 0, lvl };
+      const cap = fo.cap ?? Infinity;   // a Move and Attack's roll can't pass 9 whatever is added to it (B365)
       for (const loc of locs) {
         const pen = (fo.fx ? fo.fx.pen(loc.replace("#c", "")) : 0) + (loc === "random" || loc === "area" ? 0 : loc.endsWith("#c") ? Math.min(0, Math.min(AIM[loc.slice(0, -2)], CHINK(loc.slice(0, -2))) + (w.chink || 0)) : loc === "eye" && drAt(t.u.arm.dr, "eye") > 0 ? -10 : AIM[loc]);   // an eye behind a helmet lens or visor is -10 (B399-400)
         const pointed = /^pi/.test(w.dmg.type) || w.dmg.type === "imp" || (w.dmg.type === "burn" && !w.dmg.ex && !w.cone);
@@ -2913,7 +3104,7 @@ const SIM = (() => {
         // Attack (B369) does in melee; not for area attacks or Malediction
         const maxDa = fo.noDa ? 0 : melee || !(w.malediction || w.cone || w.dmg.ex || w.blast) ? 6 : 0;
         for (let da = 0; da <= maxDa; da++) {
-          const eff = lvl + pen + hmod - 2 * da;
+          const eff = Math.min(cap, lvl + pen + hmod - 2 * da);
           if (eff < 3 || (da > 0 && eff < 10)) break;
           const pDef = def0 == null ? 0 : P3[Math.max(0, Math.min(18, def0 - da))];
           const hits = melee ? P3[Math.min(18, eff)] : burstHits(eff, w.cone ? 1 : (w.rof || 1), w, fo.aim || 0, !!fo.braced);
@@ -2932,7 +3123,7 @@ const SIM = (() => {
         }
         // Telegraphic Attack (MA113): +4 to hit, +2 to the foe's defences; not with Deceptive Attack
         if (melee && !fo.noTele && lvl + pen + hmod + 4 >= 3) {
-          const eff = lvl + pen + hmod + 4, pDef = def0 == null ? 0 : P3[cl(def0 + 2)];
+          const eff = Math.min(cap, lvl + pen + hmod + 4), pDef = def0 == null ? 0 : P3[cl(def0 + 2)];
           let score = (1 - pDef) * perHit(eff);
           if (shUp) { const dm = dmgOverride || w.dmg, raw = Math.max(1, (dm.n * 3.5 + dm.add) * (dm.mult || 1)); const soak = Math.min(1, t.sp / raw); score *= (1 - soak) + soak * 0.25; }
           if (score > best.score) best = { loc, da: 0, score, lvl: eff, tele: true };
@@ -2963,7 +3154,7 @@ const SIM = (() => {
     // shields cover the front and the shield (left) side (B287)
     const shieldCovers = (t, att) => { const a = arcTo(t, att); return a === "front" || (a === "side" && sideOf(t.h, t.facing, att.h) === "L"); };
     const shieldDB = t => t.u.cs && t.shState === "ok" && !t.blockLost ? t.u.cs.db : 0;
-    const canParry = t => t.u.parry != null && bladeReady(t) && !(t.u.melee.unbalanced && t.attacked && !t.defAtk) && t.armsLost < 2 && (!t.armsLost || t.u.melee.oneHanded !== false) && !t.mna;
+    const canParry = t => t.u.parry != null && bladeReady(t) && !(t.u.melee.unbalanced && t.struckWith === t.u.melee && !t.defAtk) && t.armsLost < 2 && (!t.armsLost || t.u.melee.oneHanded !== false) && !t.mna;
     // the defences open to t against att: kind is melee, ranged, pb (a gun fired at point-blank) or thrown.
     // With Damage to Shields in play (B484) a shield's DB counts against every attack from its arcs (B287)
     function defOpts(t, att, kind, aw) {
@@ -3376,7 +3567,7 @@ const SIM = (() => {
       if (!tH || w.cone || w.dmg.ex || !pointedW(w)) return;
       const l = loc.replace("#c", ""), f = t.u.flags;
       const dr = drAt(t.u.arm.dr, l === "vitals" ? "torso" : l) + natDRat(t.u, l);
-      const cov = (w.dmg.div === Infinity ? 0 : Math.floor(2 * dr / (w.dmg.div || 1))) + Math.floor(t.u.HP * (f.homogenous ? 0.25 : f.unliving ? 0.5 : 1));
+      const cov = w.dmg.div === Infinity ? 0 : Math.floor((2 * dr + Math.floor(t.u.HP * (f.homogenous ? 0.25 : f.unliving ? 0.5 : 1))) / (w.dmg.div || 1));
       if (basic <= cov) return;
       const x = beyond(m, w, tH);
       if (!x) return;
@@ -3486,7 +3677,7 @@ const SIM = (() => {
       // missed round may strike someone on the line, beside the target or beyond it (B389, B392)
       const wild = () => {
         for (const mg of misses) {
-          if (w.dmg.ex) { const at = t.h || t.lastH; if (at) explosion(m, w, scatter(at, Math.max(1, Math.min(Math.ceil(d / 2), -mg))), rollDamage(w.dmg)); }
+          if (w.dmg.ex) { const at = t.h || t.lastH; if (at) { const to = scatter(at, Math.max(1, Math.min(Math.ceil(d / 2), -mg))), raw = rollDamage(w.dmg); landOn(m, w, to, raw); explosion(m, w, to, raw); } }
           else if (t.h) stray(m, w, t, inter);
         }
       };
@@ -3533,7 +3724,7 @@ const SIM = (() => {
       // a dodged round flies on: an explosive lands the dodge's margin of success in yards away (B414), a bullet
       // may hit someone behind (B389)
       for (let k = 0; k < dodged; k++) {
-        if (w.dmg.ex) { const at = tH || t.lastH; if (at) explosion(m, w, scatter(at, Math.max(1, dMargin)), rollDamage(w.dmg)); }
+        if (w.dmg.ex) { const at = tH || t.lastH; if (at) { const to = scatter(at, Math.max(1, dMargin)), raw = rollDamage(w.dmg); landOn(m, w, to, raw); explosion(m, w, to, raw); } }
         else if (tH) { const b = beyond(m, w, tH); if (b) strayAt(m, w, b); }
       }
       wild();
@@ -3686,8 +3877,7 @@ const SIM = (() => {
         if (dfe) t.feintDef = null;
         let lvl = -dfe + wl(m, w) - skillPen(m) - (opts.charge && !opts.heroic ? 4 : 0) + (opts.determined ? 4 : 0) + (opts.committed === "det" ? 2 : 0) - rapidPen + ev
           - (m.prone ? 4 : 0) - (m.kneel && !m.prone ? 2 : 0) - closePen(m, w) - (opts.pen || 0) + smMelee(m, t) - darkPen(m, t);
-        if (opts.charge && !opts.heroic) lvl = Math.min(lvl, 9);
-        const plan = planAttack(m, w, t, lvl, true, null, { noDa: !trained(m, w) });
+        const plan = planAttack(m, w, t, lvl, true, null, { noDa: !trained(m, w), cap: opts.charge && !opts.heroic ? 9 : undefined });
         let loc = plan.loc === "random" ? reachLoc(m, t, w, hitLocation()) : plan.loc;
         if (plan.lvl < 3) { m.attacked = true; L(`${m.id} can't hope to hit ${t.id} (skill ${plan.lvl})`); continue; }   // B344
         // Telegraphic Attack (MA113): +4 to hit but +2 to every defence, and the crit range of the unmodified skill
@@ -3696,7 +3886,7 @@ const SIM = (() => {
         // critical failure while using it costs 1 HP to the arm, DR no help
         if ((opts.mighty || opts.flurry) && !m.u.flags.machine) { spendFP(m, 1); if (r.fumble && m.state === "ok") { L(`  ${m.id} wrenches its arm`); injure(m, m, 1, "arm", "cr"); } }
         if (tele && r.crit && r.roll > (plan.lvl - 4 >= 16 ? 6 : plan.lvl - 4 >= 15 ? 5 : 4)) r.crit = false;
-        m.attacked = true;
+        m.attacked = true; m.struckWith = w;
         if (w.fp) spendFP(m, w.fp);
         if (w.perils && perils(m, w)) continue;
         if (m.h && t.h) FX(["m", m.h.q, m.h.r, t.h.q, t.h.r, m.u.side, r.ok ? 1 : 0, m.ix, t.ix, plan.lvl, r.roll]);
@@ -4617,6 +4807,7 @@ const SIM = (() => {
       const d = hexDist(m.h, t.h), off = r.ok ? 0 : Math.max(1, Math.min(Math.ceil(d / 2), -r.margin)), at = off ? scatter(t.h, off) : t.h;
       L(`${m.id} fires the ${w.name} at ${t.id}'s position (${d} yd${own ? "" : ", called in by a spotter"}, skill ${lvl})${off ? `: ${off} yd off` : ": on target"}`);
       FX(["s", m.h.q, m.h.r, at.q, at.r, m.u.side, r.ok ? 1 : 0, m.ix, t.ix, lvl, r.ok ? 1 : 0, 0, "lob"]);
+      landOn(m, w, at, raw);
       explosion(m, w, at, raw);
     }
     // a foe that can hardly defend against a shot just now: stunned, down, exhausted, All-Out Attacking, held
@@ -4735,6 +4926,9 @@ const SIM = (() => {
           const br = bracedFor(m, w, t, m.moved, aimB + fA > 0), bB = br ? 1 : 0;
           const own = w.malediction ? 0 : ownCoverPen(m, t.h, br && aimB + fA > 0);
           const Enow = planAttack(m, w, t, base + bB + aimB + fA - own, false, null, { aim: aimB + fA, braced: br, fx }).score * sustainOf(w) * spread;
+          // a shot that can never hurt this foe (a boltgun against a battle tank's armour) isn't an option: left in at a
+          // value of nothing, it still beat every other choice, since each of those carries some risk
+          if (hopeless(w, t, m.h)) continue;
           // a friendly heavy gun is holding for an opening on this foe: rattling it (a crit, a knock-down, a stun, its
           // fatigue spent on feverish dodges) is worth more than the shot alone, most of all from a burst
           const forGun = models.some(x => x !== m && x.u.side === u.side && x.waitOpen && x.waitOpen.t === t && x.state === "ok");
@@ -4800,7 +4994,7 @@ const SIM = (() => {
             const h2 = stepHex(m.h, t.h, mv);
             const E = planAttack(m, w, t, wl(m, w) - skillPen(m) + rangePenalty(nd + spdOf(t.steps || 0)) + t.u.sm + Math.min(-2, w.bulk || 0), false, null, { from: h2 }).score * sustainOf(w);
             const cont = GAMMA * (shotValueFrom(m, h2, pool) - shotValueFrom(m, m.h, pool));
-            add(Wr * kv(m, t, E) + cont - risk(m, h2, ""), `advance-fire@${t.id}`, () => {
+            if (!hopeless(w, t, h2)) add(Wr * kv(m, t, E) + cont - risk(m, h2, ""), `advance-fire@${t.id}`, () => {
               stepToward(m, t.h, mv, hold); if (m.state !== "ok" || !m.h || m.stunned || !t.h || m.readied) return;
               faceTo(m, t.h); m.mna = true; fireAt(m, w, t, { moved: true });
             });
@@ -4837,12 +5031,12 @@ const SIM = (() => {
             // the zone attacks friends in it too (B409): their loss counts against it
             const pals = models.filter(x => x !== m && x.state === "ok" && x.h && x.u.side === u.side && hexDist(x.h, c.h) <= 1);
             // pinning them is worth the harm their fire won't do while our squad moves (TS p. 21)
-            const pinV = inZ.reduce((a, x) => a + pinOf(x) * Math.min(1, threatOf(x)) * 0.25 * HORIZON * (x.u.ranged ? 1 : 0.3), 0);
+            const pinV = inZ.reduce((a, x) => a + (x.u.veh ? 0 : pinOf(x) * Math.min(1, threatOf(x)) * 0.25 * HORIZON * (x.u.ranged ? 1 : 0.3)), 0);   // a tank's crew isn't pinned by rifle fire
             const v = pinV + inZ.reduce((a, x) => a + kv(m, x, Ez(x) * sustainOf(w)), 0)
               - u.ai.caution * pals.reduce((a, x) => a + Math.min(1, Ez(x) / remOf(x)) * threatOf(x) * HORIZON, 0);
             if (!bestZ || v > bestZ.v) bestZ = { c, v };
           }
-          if (bestZ) add(Wr * bestZ.v - rNow, "suppress", () => { faceTo(m, bestZ.c.h); suppress(m, w, bestZ.c.h); });
+          if (bestZ && bestZ.v > 0) add(Wr * bestZ.v - risk(m, m.h, "aoa"), "suppress", () => { faceTo(m, bestZ.c.h); suppress(m, w, bestZ.c.h); });
         }
         // Wait (B366): hold fire for a charger heading for me; shoot it as it closes, maybe before it strikes
         if (isGun && !engaged(m)) {
@@ -5164,8 +5358,8 @@ const SIM = (() => {
       }
       if (len <= mv) {
         // arrives this turn: Move and Attack (-4, max 9) or a Slam if the weapon can't get through
-        const lvl = Math.min(9, w.level - skillPen(m) - 4 + smMelee(m, tgt));
-        const Ema = planAttack(m, w, tgt, lvl, true).score;
+        const lvl = w.level - skillPen(m) - 4 + smMelee(m, tgt);
+        const Ema = planAttack(m, w, tgt, lvl, true, null, { cap: 9 }).score;
         const slamOK = len >= 2 && hard && !tgt.prone && !tgt.pinned && u.HP >= 0.8 * tgt.u.HP;
         // a Slam's worth: knocking the foe down sets up the pin (valued as a share of the foe taken out)
         const slamV = slamOK ? 0.25 * threatOf(tgt) * P3[cl(Math.max(u.dx, u.grapple) - skillPen(m))] * HORIZON : 0;
@@ -5449,7 +5643,7 @@ const SIM = (() => {
     // prone, and into a hex out of its sight (behind a crate, a wall or a corner) when there is one
     function dive(x, at) {
       if (x.state !== "ok" || x.pinned || x.aoa || x.grips.length) return false;
-      const r = check(dodgeOf(x) - (x.stunned ? 4 : 0) - (x.prone ? 3 : 0));
+      const r = check(dodgeOf(x) + 3 - (x.stunned ? 4 : 0) - (x.prone ? 3 : 0));
       if (!r.ok) return false;
       if (at && x.h) {
         let best = null, bs = -1;
@@ -5584,7 +5778,7 @@ const SIM = (() => {
       reveal(m, w);
       const shots = w.shots.mag === Infinity ? w.rof : Math.min(w.rof, m.ammo);
       if (w.shots.mag !== Infinity) m.ammo -= shots;
-      m.attacked = true;
+      m.attacked = true; m.aoa = true;
       const hexes = new Set([key(center.q, center.r), ...DIRS.map(([a, b]) => key(center.q + a, center.r + b))]);
       const z = { owner: m, side: m.u.side, w, hexes, shots, hit: new Set() };
       zones.push(z); m.zone = z;
@@ -5675,11 +5869,10 @@ const SIM = (() => {
       return g.length ? g[0] + g.slice(1).reduce((a, x) => a + x / 5, 0) : 0;
     }
     function contest(a, b) { return contest3(a, b) > 0; }
-    // Quick Contest (B348): 1 a win, -1 a loss, 0 a tie (both fail, or equal margins)
+    // Quick Contest (B348): 1 a win, -1 a loss, 0 a tie (equal margins); if both fail, the one who failed by less wins
     function contest3(a, b) {
       const ra = check(a), rb = check(b);
       if (ra.ok !== rb.ok) return ra.ok ? 1 : -1;
-      if (!ra.ok) return 0;
       return Math.sign(ra.margin - rb.margin);
     }
     // the grappler whose hold counts, and what the hold is worth in a break-free contest (B371): +5 with two hands,
@@ -5807,7 +6000,7 @@ const SIM = (() => {
         if (m.state !== "ok" || m.u.routed || !m.h) continue;
         if (!sideActive(0) || !sideActive(1)) break;
         // per-turn defence limits last from one of the model's turns to the next (B363, B375-377)
-        m.parries = 0; m.dodges = 0; m.retreated = false; m.retreatFrom = null; m.blocked = false; m.attacked = false; m.stunRecovering = false;
+        m.parries = 0; m.dodges = 0; m.retreated = false; m.retreatFrom = null; m.blocked = false; m.attacked = false; m.struckWith = null; m.stunRecovering = false;
         m.committed = false; m.defAtk = false; m.aoa = false; m.aod = false; m.mna = false; m.offBalance = false;   // "until its next turn", whatever it does with it
         if (!frac && m.hp <= 0) {
           const k = Math.floor(-m.hp / m.u.HP);
@@ -5921,7 +6114,7 @@ const SIM = (() => {
       timeout ? `Still fighting when the ${maxTurns}-second limit ran out` : `Both sides destroyed or broken after ${turn - 1} turns`);
     return {
       winner, timeout, turns: turn - 1, log, frames, fx, terrain: frames && terr ? { floor: [...terr.floor], crates: [...terr.crates], doors: [...terr.doors], shut: [...startShut], events: tev, light: [...terr.floor].map(k => { const [q, r] = k.split(",").map(Number); return [k, darkAt({ q, r })]; }).filter(x => x[1]),
-        elev: EL ? terr.hx.map((h, i) => [key(h.q, h.r), EL[i]]).filter(x => x[1]) : [], kind: terr.kind || "facility",
+        elev: EL ? terr.hx.map((h, i) => [key(h.q, h.r), EL[i]]).filter(x => x[1]) : [], kind: terr.kind || "facility", style: terr.style || "", theme: terr.theme || "", water: terr.water ? [...terr.water] : [],
         wallTop: WT ? terr.hx.map((h, i) => [key(h.q, h.r), WT[i]]).filter((x, i) => terr.wallI[i] && x[1] < 99) : null } : null,
       ridge: frames && RIDGE ? { ...RIDGE } : null, roster: models.map(m => { const u = m.u; return { id: m.id, side: u.side, unit: u.idx, template: u.template, faction: u.ai.name, speed: u.speed, move: u.move, hp: u.HP, st: u.st, dx: u.dx, dodge: u.dodge, parry: u.parry, dr: drAt(u.arm.dr, "torso") + drAt(u.nat, "torso"), sp: u.shield ? u.shield.sp : 0, sm: u.sm || 0, body: u.body || "upright", rk: wkind(u.ranged), mk: u.veh ? "" : mkind(u.melee), kit: [((u.ranged && u.ranged.name) || ""), ((u.melee && u.melee.name) || ""), ...(u.armourNames || [])].join("|"), veh: u.veh ? u.veh.name : "", vlocs: u.veh ? u.veh.locs : null,
         ranged: u.ranged ? `${u.ranged.name} (${u.ranged.text}${u.ranged.followText ? " + " + u.ranged.followText : ""})` : "", melee: `${u.melee.name} (${u.melee.text})`, kills: m.kills, fate: m.state }; }),
@@ -5961,7 +6154,7 @@ const SIM = (() => {
     return res;
   }
 
-  return { index, buildUnit, buildVehicle, describe, runBattle, monteCarlo, parseDamage, seed, woundMult, fmtDice, px, facilityMap, ruinsMap, fromOffset, rangePenalty, DIRS, squadSpecs,
+  return { index, buildUnit, buildVehicle, describe, runBattle, monteCarlo, parseDamage, seed, woundMult, fmtDice, px, facilityMap, ruinsMap, battlefields: BATTLEFIELDS, fromOffset, rangePenalty, DIRS, squadSpecs,
     get squads() { return SQUADS; }, get vehicles() { return VEHICLES; },
     get templates() { return TEMPLATES; }, get equipment() { return EQ; }, traitWeapons,
     // the pure rule helpers, for test/rules.test.js
@@ -6005,7 +6198,10 @@ if (typeof document !== "undefined") (() => {
       ranged: lo.ranged ? { ...lo.ranged } : null, melee: lo.melee ? { ...lo.melee } : null,
       ranged2: lo.ranged2 ? { ...lo.ranged2 } : null, shield: lo.shield ? { ...lo.shield } : null, carried: lo.carried || null, grenades: (lo.grenades || []).map(g => ({ ...g })), body: lo.body, mags: lo.mags, knife: lo.knife ? { ...lo.knife } : null, skills: lo.skills ? { ...lo.skills } : undefined };
   }
-  const MAPPED = () => S.battlefield === "facility" || S.battlefield === "ruins";
+  const GROUNDS = [["open", "Open ground"], ["facility", "Facility"], ["ruins", "Ruins"], ["hulk", "Space hulk"], ["outpost", "Outpost"], ["trenches", "Trench lines"], ["streets", "City streets"], ["river", "River crossing"]];
+  const DEPLOYS = { facility: "Each side deploys in its staging bay", ruins: "Each side deploys at its end of the ruined block", hulk: "Each side deploys in its boarding bay, at either end of a maze of corridors a yard wide",
+    outpost: "Each side deploys at its edge of the open ground around the outpost", trenches: "Each side deploys behind its own trench lines, with no-man's-land between", streets: "Each side deploys at its end of the streets", river: "Each side deploys on its own bank" };
+  const MAPPED = () => !!DEPLOYS[S.battlefield];
   const PRESETS = [
     ["20 Guardsmen vs 5 Space Marines", [["Astra Militarum Guardsman", 20]], [["Astartes Battle-Brother", 5]], 150],
     ["10 Ork Boyz charge 5 Marines", [["Ork Boy", 10]], [["Astartes Battle-Brother", 5]], 40],
@@ -6017,6 +6213,11 @@ if (typeof document !== "undefined") (() => {
     ["Facility: 20 Guardsmen vs 20 Ork Boyz", [["Astra Militarum Guardsman", 20]], [["Ork Boy", 20]], 60, "facility"],
     ["Ruins: 10 Genestealers vs a Tactical squad", [["Genestealer", 10]], [["squad:Astartes Tactical Squad"]], 60, "ruins"],
     ["Ruins: 2 Guard squads vs Ork Boyz", [["squad:Astra Militarum Infantry Squad"], ["squad:Astra Militarum Infantry Squad"]], [["squad:Ork Boyz Mob"]], 60, "ruins"],
+    ["Space hulk: Terminators' work, 5 Marines vs 12 Genestealers", [["Astartes Battle-Brother", 5]], [["Genestealer", 12]], 60, "hulk"],
+    ["Trench lines: 2 Guard squads vs 30 Ork Boyz", [["squad:Astra Militarum Infantry Squad"], ["squad:Astra Militarum Infantry Squad"]], [["Ork Boy", 30]], 60, "trenches"],
+    ["Outpost: Tactical squad vs Chaos Marines", [["squad:Astartes Tactical Squad"]], [["squad:Chaos Space Marine Squad"]], 60, "outpost"],
+    ["City streets: Fire Warriors vs Necron Warriors", [["Fire Warrior (Shas'la)", 10]], [["Necron Warrior", 10]], 60, "streets"],
+    ["River crossing: Guard squad holds against 20 Hormagaunts", [["squad:Astra Militarum Infantry Squad"]], [["Hormagaunt", 20]], 60, "river"],
     ["Lascannon teams vs a Carnifex", [["squad:Heavy Weapons Squad (Lascannons)"]], [["Carnifex", 1]], 150],
     ["Mortars and a Guard squad vs 30 Hormagaunts", [["squad:Heavy Weapons Squad (Mortars)"], ["squad:Astra Militarum Infantry Squad"]], [["Hormagaunt", 30]], 150],
     ["Meltaguns and a Guard squad vs a Carnifex", [["squad:Special Weapons Squad (Meltaguns)"], ["squad:Astra Militarum Infantry Squad"]], [["Carnifex", 1]], 60],
@@ -6149,7 +6350,7 @@ if (typeof document !== "undefined") (() => {
           ${S.health === "fractional" ? `<label for="s-box">Boxes per level <input id="s-box" type="number" min="1" max="9" value="${S.boxes || 5}" data-g="boxes"></label>` : ""}
         </fieldset>
         <fieldset><legend>Battlefield</legend>
-          <label for="s-bf">Ground <select id="s-bf" data-o="battlefield"><option value="open"${!S.battlefield || S.battlefield === "open" ? " selected" : ""}>Open ground</option><option value="facility"${S.battlefield === "facility" ? " selected" : ""}>Facility</option><option value="ruins"${S.battlefield === "ruins" ? " selected" : ""}>Ruins</option></select></label>
+          <label for="s-bf">Ground <select id="s-bf" data-o="battlefield">${GROUNDS.map(([v, name]) => `<option value="${v}"${(S.battlefield || "open") === v ? " selected" : ""}>${name}</option>`).join("")}</select></label>
           ${MAPPED() ? `<label for="s-aw">Knowledge <select id="s-aw" data-o="awareness"><option value="limited"${S.awareness !== "omniscient" ? " selected" : ""}>Only what they've seen</option><option value="omniscient"${S.awareness === "omniscient" ? " selected" : ""}>Everyone sees everything</option></select></label>
           <label for="s-lt">Lighting <select id="s-lt" data-o="lighting"><option value="mixed"${!S.lighting || S.lighting === "mixed" ? " selected" : ""}>Mixed (dim and dark rooms)</option><option value="lit"${S.lighting === "lit" ? " selected" : ""}>All lit</option><option value="dark"${S.lighting === "dark" ? " selected" : ""}>Dark (−7)</option></select></label>` : ""}
           ${!MAPPED() ? `<label for="s-rg">Ridge <select id="s-rg" data-o="ridge"><option value=""${!S.ridge ? " selected" : ""}>none (flat)</option><option value="0"${S.ridge === "0" ? " selected" : ""}>held by side A</option><option value="1"${S.ridge === "1" ? " selected" : ""}>held by side B</option></select></label>
@@ -6158,7 +6359,7 @@ if (typeof document !== "undefined") (() => {
           <label for="s-ca">Cover, side A <select id="s-ca" data-o="coverA"><option${(S.coverA || "none") === "none" ? " selected" : ""}>none</option><option${S.coverA === "light" ? " selected" : ""}>light</option><option${S.coverA === "heavy" ? " selected" : ""}>heavy</option></select></label>
           <label for="s-cb">Cover, side B <select id="s-cb" data-o="coverB"><option${(S.coverB || "none") === "none" ? " selected" : ""}>none</option><option${S.coverB === "light" ? " selected" : ""}>light</option><option${S.coverB === "heavy" ? " selected" : ""}>heavy</option></select></label>
         </fieldset>
-        <div class="go"><button class="run" id="simrun" type="button">Run simulation</button><p>${S.battlefield === "facility" ? "Each side deploys in its staging bay; starting distance is ignored." : S.battlefield === "ruins" ? "Each side deploys at its end of the ruined block; starting distance is ignored." : "Sides deploy in lines facing each other at the starting distance."}</p></div>
+        <div class="go"><button class="run" id="simrun" type="button">Run simulation</button><p>${MAPPED() ? DEPLOYS[S.battlefield] + "; starting distance is ignored." : "Sides deploy in lines facing each other at the starting distance."}</p></div>
       </form>
       <div class="sgrid">${side(0)}${side(1)}</div>
       <div id="simout">${last ? results(last) : ""}</div>
@@ -6426,7 +6627,10 @@ if (typeof document !== "undefined") (() => {
       if (up.length) inst(hexGeo(1, .995), ruins ? M(0x8d867a, { map: TEX.stone, r: .9 }) : M(0x6c7178, { r: .6, m: .4 }), up, (im, k, i) => { const [q, r] = keyHex(k), [x, y] = P(q, r); m4.compose(W3(x, y, -.15), q0, new THREE.Vector3(1, zOf(q, r), 1)); im.setMatrixAt(i, m4); });
       const ws = new Set();
       for (const k of floor) { const [q, r] = keyHex(k); for (const [dq, dr] of DIRN) { const k2 = (q + dq) + "," + (r + dr); if (!floorSet.has(k2)) ws.add(k2); } }
-      wallList = [...ws];
+      // water (a river): no wall, a dark sheet a little below the banks
+      const wet = new Set(T.water || []);
+      wallList = [...ws].filter(k => !wet.has(k));
+      if (wet.size) inst(hexGeo(.05, 1), M(0x16323c, { r: .5, m: .1 }), [...wet], (im, k, i) => { const [q, r] = keyHex(k), [x, y] = P(q, r); m4.makeTranslation(x, -.22, y); im.setMatrixAt(i, m4); }, false);
       const wTop = new Map(T.wallTop || []), wFull = 2.4 + Math.max(0, ...floor.map(k => zOf(...keyHex(k))));
       wallH = wallList.map(k => wTop.get(k) || wFull);
       walls = inst(hexGeo(1), ruins ? M(0xb0a898, { map: TEX.stone, r: .92 }) : M(0x9aa2ad, { map: TEX.panel, r: .55, m: .35 }), wallList, (im, k, i) => { const [q, r] = keyHex(k), [x, y] = P(q, r); m4.compose(W3(x, y, 0), q0, new THREE.Vector3(1, wallH[i], 1)); im.setMatrixAt(i, m4); });
@@ -6941,6 +7145,7 @@ if (typeof document !== "undefined") (() => {
       if (F.veh) {
         // the built vehicle's moving parts are gone; the turret is the model's own bone, turned about the hull's up axis
         Object.assign(F, { tracks: [], wheels: [], barrels: [], legs: [], walker: 0, exhaust: null, turret: null });
+        if (L.wreck && key !== "wreck") { const on = meshes.filter(o => /^wreck(\.|$)/.test(partOf(o))); if (on.length) F.model.wreck = { on, off: meshes.filter(o => o.visible && !on.includes(o)) }; }
         // tracks: the game runs a strip of texture round each one. Slide it as the tank covers ground: the links on
         // the top run move forward and those underneath move back, so measure how fast the strip's v climbs toward
         // the front (+z) along each run. Each tank gets its own copy of the material, since tanks of a kind share theirs.
@@ -6948,19 +7153,20 @@ if (typeof document !== "undefined") (() => {
         const size = root.getWorldScale(new THREE.Vector3()).x, median = a => a.sort((x, y) => x - y)[a.length >> 1];
         for (const o of meshes) {
           const P = o.geometry.attributes.position, U = o.geometry.attributes.uv, I = o.geometry.index;
-          if (!o.visible || !/track/i.test(o.userData.mat) || !o.material.map || !P || !U || !I) continue;
+          if (!o.visible || !/track|tread/i.test(o.userData.mat) || !o.material.map || !P || !U || !I) continue;
           o.geometry.computeBoundingBox();
-          const y0 = o.geometry.boundingBox.min.y, band = (o.geometry.boundingBox.max.y - y0) * .3, over = [], under = [];
+          const y0 = o.geometry.boundingBox.min.y, band = (o.geometry.boundingBox.max.y - y0) * .3, over = [[], []], under = [[], []];   // per texture axis: the strip may run along u or v
           for (let t = 0; t < I.count; t += 3) for (let e = 0; e < 3; e++) {
             const i = I.getX(t + e), j = I.getX(t + (e + 1) % 3), dz = P.getZ(j) - P.getZ(i), dy = P.getY(j) - P.getY(i), run = Math.hypot(dy, dz);
             if (run < .05 || Math.abs(dz) < .7 * run || Math.abs(P.getX(j) - P.getX(i)) > .3 * run) continue;   // only edges along the run
-            const y = (P.getY(i) + P.getY(j)) / 2 - y0, slope = (U.getY(j) - U.getY(i)) / dz;
-            if (y > 2.33 * band) over.push(slope); else if (y < band) under.push(slope);
+            const y = (P.getY(i) + P.getY(j)) / 2 - y0, to = y > 2.33 * band ? over : y < band ? under : null;
+            if (to) { to[0].push((U.getX(j) - U.getX(i)) / dz); to[1].push((U.getY(j) - U.getY(i)) / dz); }
           }
-          if (!over.length && !under.length) continue;
-          const rate = over.length && under.length ? (median(over) - median(under)) / 2 : over.length ? median(over) : -median(under);
+          if (!over[0].length && !under[0].length) continue;
+          const rates = [0, 1].map(a => over[a].length && under[a].length ? (median(over[a]) - median(under[a])) / 2 : over[a].length ? median(over[a]) : -median(under[a]));
+          const axis = Math.abs(rates[0]) > Math.abs(rates[1]) ? "x" : "y", rate = rates[axis === "x" ? 0 : 1];
           const mat = keep(o.material.clone()), map = keep(o.material.map.clone()); map.needsUpdate = true; mat.map = map; o.material = mat;
-          (F.model.tracks ||= []).push({ map, rate: rate / size });
+          (F.model.tracks ||= []).push({ map, axis, rate: rate / size });
         }
         const bone = u.turret && root.getObjectByName(u.turret);
         if (bone) {
@@ -7016,11 +7222,24 @@ if (typeof document !== "undefined") (() => {
     }
 
     // a vehicle model: its idle and moving clips if it has any (a walker's stride follows the ground covered)
-    function poseVehicleModel(F) {
+    // A destroyed vehicle becomes its wreck if the game has one (a look called "wreck"), else plays its death clip.
+    function poseVehicleModel(F, dead) {
       const m = F.model, A = m.acts; let any = false;
+      const gone = !!dead && dead.f >= .45;
+      if (m.wreck && gone !== m.wrecked) {
+        m.wrecked = gone;
+        for (const o of m.wreck.on) o.visible = gone;
+        for (const o of m.wreck.off) o.visible = !gone;
+        if (gone && lastSt.playing && dead.f < 1) blastFx(F.g.position.clone().add(new THREE.Vector3(0, F.top * .4, 0)), 3);
+      }
+      if (dead && A.die && !m.wreck) {
+        for (const n in A) A[n].setEffectiveWeight(n === "die" ? 1 : 0);
+        A.die.time = ease(dead.f) * A.die.getClip().duration * .999; m.mixer.update(0); return;
+      }
       for (const n in A) {
-        const wgt = n === "run" ? F.walk : n === "idle" ? (A.run ? 1 - F.walk : 1) : 0; A[n].setEffectiveWeight(wgt); if (!wgt) continue;
-        const d = A[n].getClip().duration; A[n].time = n === "run" ? ((F.phase * .5 / (2 * Math.PI)) % 1 + 1) % 1 * d : (clock + F.i) % d; any = true;
+        // "run", "run2"...: what turns as it drives (a walker's stride, each side's wheels), once every `stride` yards
+        const run = n.startsWith("run"), walker = run && !m.u.stride, wgt = run ? (walker ? F.walk : 1) : n === "idle" ? (A.run && !m.u.stride ? 1 - F.walk : 1) : 0; A[n].setEffectiveWeight(wgt); if (!wgt) continue;
+        const d = A[n].getClip().duration; A[n].time = run ? ((F.phase / (m.u.stride || 4 * Math.PI)) % 1 + 1) % 1 * d : (clock + F.i) % d; any = true;
       }
       if (any) m.mixer.update(0);
     }
@@ -7054,9 +7273,29 @@ if (typeof document !== "undefined") (() => {
     // figure enters. Like the models, the file is never committed, and without it the painted battlefield stays.
     (async () => {
       try { if (!window.DOW_SCENERY) await loadScript(PACK + "scenery.js"); } catch (e) { return; }
-      const S = window.DOW_SCENERY; if (!S || gone) return;
+      const shared = window.DOW_SCENERY; if (!shared || gone) return;
       const redraw = () => { if (!running) render(); };
+      // an outdoor battlefield takes one of the pack's themes (city, desert, jungle...): a map takes the one it asks
+      // for (the ruins are the city), open ground gets the same one every time this battle is watched
+      let S = shared;
+      const themes = shared.themes || [];
+      if (!indoor && themes.length) {
+        const pickBy = ros.reduce((a, r, i) => a + (r.template || "").length * (i + 3), fr.length * 7 + ros.length), theme = T ? (themes.includes(T.theme) ? T.theme : themes.includes("urban") ? "urban" : themes[0]) : themes[pickBy % themes.length];
+        try { if (!(window.DOW_THEME || {})[theme]) await loadScript(PACK + "scenery_" + theme + ".js"); } catch (e) { return; }
+        if (gone) return;
+        const th = window.DOW_THEME[theme]; S = { tex: { ...shared.tex, ...th.tex }, props: { ...shared.props, ...th.props } }; decor.theme = theme;
+      }
       for (const n in S.tex) if (TEX[n]) { const im = await loadImage(S.tex[n]); if (gone) return; TEX[n].image = im; TEX[n].needsUpdate = true; }
+      // ruin walls: the game's concrete laid over them by where each point is in the world, so it runs unbroken from
+      // hex to hex instead of repeating on every column
+      if (S.tex.stone && walls && T && T.kind === "ruins") {
+        const mat = walls.material; mat.color.set(0xffffff);
+        mat.onBeforeCompile = sh => {
+          sh.vertexShader = "varying vec3 vWallP; varying vec3 vWallN;\n" + sh.vertexShader.replace("#include <begin_vertex>", "#include <begin_vertex>\n vec4 wallP = vec4(transformed, 1.0);\n #ifdef USE_INSTANCING\n wallP = instanceMatrix * wallP;\n #endif\n vWallP = (modelMatrix * wallP).xyz; vWallN = normal;");
+          sh.fragmentShader = "varying vec3 vWallP; varying vec3 vWallN;\n" + sh.fragmentShader.replace("#include <map_fragment>", "vec3 wallA = abs(vWallN); vec2 wallUv = wallA.y > .5 ? vWallP.xz : (wallA.x > wallA.z ? vWallP.zy : vWallP.xy);\n vec4 texelColor = mapTexelToLinear(texture2D(map, wallUv * .22)); diffuseColor *= texelColor;");
+        };
+        mat.needsUpdate = true;
+      }
       redraw();
       await gltfReady(); if (gone) return;
 
@@ -7253,7 +7492,7 @@ if (typeof document !== "undefined") (() => {
     const ADPCM_STEP = [7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 19, 21, 23, 25, 28, 31, 34, 37, 41, 45, 50, 55, 60, 66, 73, 80, 88, 97, 107, 118, 130, 143, 157, 173, 190, 209, 230, 253, 279, 307, 337, 371, 408, 449, 494, 544, 598, 658, 724, 796, 876, 963, 1060, 1166, 1282, 1411, 1552, 1707, 1878, 2066, 2272, 2499, 2749, 3024, 3327, 3660, 4026, 4428, 4871, 5358, 5894, 6484, 7132, 7845, 8630, 9493, 10442, 11487, 12635, 13899, 15289, 16818, 18500, 20350, 22385, 24623, 27086, 29794, 32767];
     const ADPCM_MOVE = [-1, -1, -1, -1, 2, 4, 6, 8];
     // blocks of 36 bytes: a starting sample and step index, then 64 four-bit steps, low half of each byte first
-    function decodeAdpcm(b64) {
+    function decodeAdpcm(b64, loop) {
       const raw = atob(b64), n = Math.floor(raw.length / 36), out = new Float32Array(n * 64);
       let at = 0;
       for (let b = 0; b < n * 36; b += 36) {
@@ -7269,7 +7508,7 @@ if (typeof document !== "undefined") (() => {
           }
         }
       }
-      return levelled(out);
+      return levelled(out, loop);
     }
     // 8-bit mu-law, one byte a sample: what the pack holds for sounds that weren't ADPCM in their game
     function decodeUlaw(b64) {
@@ -7277,16 +7516,16 @@ if (typeof document !== "undefined") (() => {
       for (let i = 0; i < raw.length; i++) { const y = raw.charCodeAt(i) / 127.5 - 1; out[i] = Math.sign(y) * (Math.pow(256, Math.abs(y)) - 1) / 255; }
       return levelled(out);
     }
-    function levelled(out) {
+    function levelled(out, loop) {
       // even out the recordings (they differ sixfold in loudness), and fade the end: a long one may have been cut
       let sq = 0, peak = .01; for (let i = 0; i < out.length; i++) { sq += out[i] * out[i]; peak = Math.max(peak, Math.abs(out[i])); }
       const level = Math.min(1.2 / peak, Math.max(.4, Math.min(2.5, .22 / Math.max(.01, Math.sqrt(sq / Math.max(1, out.length)))))), tail = Math.min(4000, out.length >> 2);
-      for (let i = 0; i < out.length; i++) out[i] *= level * Math.min(1, (out.length - i) / tail);
+      for (let i = 0; i < out.length; i++) out[i] *= level * (loop ? 1 : Math.min(1, (out.length - i) / tail));   // a loop runs into its own start: no fade
       return out;
     }
-    function soundBuffer(key, i, item) {
+    function soundBuffer(key, i, item, loop) {
       const id = key + "#" + i;
-      if (!SND.bufs.has(id)) { const pcm = item[2] === "u" ? decodeUlaw(item[1]) : decodeAdpcm(item[1]), buf = SND.ctx.createBuffer(1, Math.max(1, pcm.length), item[0]); buf.getChannelData(0).set(pcm); SND.bufs.set(id, buf); }
+      if (!SND.bufs.has(id)) { const pcm = item[2] === "u" ? decodeUlaw(item[1]) : decodeAdpcm(item[1], loop), buf = SND.ctx.createBuffer(1, Math.max(1, pcm.length), item[0]); buf.getChannelData(0).set(pcm); SND.bufs.set(id, buf); }
       return SND.bufs.get(id);
     }
     const raceOf = F => { const f = ros[F.i].faction || ""; return /Ork/.test(f) ? "ork" : /Tyranid/.test(f) ? "nid" : /Aeldari|Drukhari/.test(f) ? "eld" : /Guard|Cultist/.test(f) ? "ig" : ""; };
@@ -7327,7 +7566,6 @@ if (typeof document !== "undefined") (() => {
       VOX.rules = window.DOW_VOICES.rules.map(r => ({ ...r, re: new RegExp(r.match), nre: r.not ? new RegExp(r.not) : null }));
       const share = new Map();   // a rule with several voices deals them out in turn
       figs.forEach(F => {
-        if (F.veh) return;
         const r = ros[F.i], s = `${r.faction || ""} ${r.template || ""} ${r.veh || ""} | ${r.kit || ""}`, rule = VOX.rules.find(u => u.re.test(s) && !(u.nre && u.nre.test(s)));
         if (!rule) return;
         const n = share.get(rule) || 0; share.set(rule, n + 1); VOX.of.set(F.i, rule.voices[n % rule.voices.length]);
@@ -7348,6 +7586,28 @@ if (typeof document !== "undefined") (() => {
       if (grunt) { VOX.grunts++; emit(soundBuffer("voice:" + id + ":" + key, i, list[i]), F.g.position, 1.3, .97 + rnd() * .06, () => { VOX.grunts--; }); return; }
       VOX.live++; VOX.lastLine = now;
       emit(soundBuffer("voice:" + id + ":" + key, i, list[i]), F.g.position, 1.7, 1, () => { VOX.live--; });
+    }
+    // ---- loops: the distant battle under everything, and for each vehicle its engine and, as it drives, its tracks
+    const LOOPS = { amb: null, veh: new Map() };
+    function startLoop(key, i) {
+      const list = SND.lib[key]; if (!list || !list.length) return null;
+      const src = SND.ctx.createBufferSource(), gain = SND.ctx.createGain();
+      src.buffer = soundBuffer(key, i % list.length, list[i % list.length], true); src.loop = true; gain.gain.value = 0;
+      src.connect(gain); gain.connect(SND.out); src.start(0, rnd() * src.buffer.duration);
+      return gain.gain;
+    }
+    function loopSounds() {
+      if (!SND.ctx || !SND.lib) return;
+      const on = SND.on && lastSt.playing, now = SND.ctx.currentTime, set = (g, v) => { if (g) g.setTargetAtTime(v, now, .25); };
+      if (on && !LOOPS.amb) LOOPS.amb = { g: startLoop("ambience", Math.floor(rnd() * 8)) };
+      if (LOOPS.amb) set(LOOPS.amb.g, on ? .45 : 0);
+      for (const F of figs) {
+        if (!F.veh || F.walker) continue;
+        let L = LOOPS.veh.get(F.i);
+        const alive = on && F.g.visible && !deathOf(F.i, last.t), near = alive ? Math.min(1, 9 / (10 + camera.position.distanceTo(F.g.position))) : 0;
+        if (!L) { if (!alive) continue; LOOPS.veh.set(F.i, L = { engine: startLoop(SND.lib["engine." + raceOf(F)] ? "engine." + raceOf(F) : "engine", F.i), treads: F.model && F.model.tracks ? startLoop("treads", F.i) : null }); }
+        set(L.engine, near * (.45 + .55 * F.walk)); set(L.treads, near * F.walk);
+      }
     }
     // true if sound is now as asked; false if there is no sound pack or no audio here
     async function setSound(on) {
@@ -7727,7 +7987,7 @@ if (typeof document !== "undefined") (() => {
       for (const h of hits) { const d = (p - h.p) * TS; if (d >= 0) flinch = Math.max(flinch, Math.exp(-d * 9)); }
       if (reload) aimT = 0;
       F.aim += (aimT - F.aim) * Math.min(1, dt * 10 + (o.reduce ? 1 : 0));
-      if (F.veh) return poseVehicle(F, x, ev, p, moved, dt, recoil);
+      if (F.veh) return poseVehicle(F, x, ev, p, moved, dt, recoil, dead);
       if (F.model) return poseModel(F, bitsv, p, ev, dt, dead);
       const fig = F.fig, k = F.k;
       fig.position.set(0, 0, 0); fig.rotation.set(0, 0, 0);
@@ -7794,10 +8054,10 @@ if (typeof document !== "undefined") (() => {
         if (R2) R2.sh.rotation.z = .5 + 1.8 * ease(f); if (L2) L2.sh.rotation.z = .3 + 2.2 * ease(f);
       }
     }
-    function poseVehicle(F, x, ev, p, moved, dt, recoil) {
-      if (F.model) poseVehicleModel(F);
+    function poseVehicle(F, x, ev, p, moved, dt, recoil, dead) {
+      if (F.model) poseVehicleModel(F, dead);
       for (const tm of F.tracks) tm.map.offset.x -= moved * .45;
-      if (F.model && F.model.tracks) for (const tk of F.model.tracks) tk.map.offset.y -= moved * tk.rate;
+      if (F.model && F.model.tracks) for (const tk of F.model.tracks) tk.map.offset[tk.axis] -= moved * tk.rate;
       for (const w of F.wheels) w.rotation.z -= moved * 3;
       F.fig.position.y = F.walk > .1 && !F.walker ? Math.sin(clock * 22) * .01 : 0;
       if (F.walker) { for (const L of F.legs) { L.p.rotation.z = .5 + Math.sin(F.phase * 1.6 + (L.s > 0 ? 0 : Math.PI)) * .4 * F.walk; L.kn.rotation.z = -1.0 - Math.max(0, Math.sin(F.phase * 1.6 + (L.s > 0 ? 0 : Math.PI))) * .5 * F.walk; } F.hips.position.y = F.hipY + Math.abs(Math.sin(F.phase * 1.6)) * .05 * F.walk; }
@@ -7815,6 +8075,7 @@ if (typeof document !== "undefined") (() => {
     let lastFrameT = performance.now(), lastSt = {};
     function update(t, p, st) {
       last = { t, p, st }; lastSt = st;
+      loopSounds();
       speedMs = +(document.getElementById("rspeed") || { value: 1000 }).value || 1000;
       if (schedT !== t || schedC !== !!st.cine) { if (t < schedT) { glow.clear(); smoke.clear(); } buildSchedule(t, !!st.cine); }
       const pm = TS > 1 ? Math.min(1, p * TS / MOVE) : p;   // with the action camera everyone moves first, then the beats play

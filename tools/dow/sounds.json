@@ -1,5 +1,5 @@
 {
- "about": "Which Dawn of War II sounds the 3D replay plays for what. Each key is an event in the replay (see tools/sim/page/32-view3d-sound.js); a key ending in a race (ork, nid, eld, ig) is used for that race's figures. 'dir' is a folder in the game's sound archives, 'match' a regular expression on the file name, 'max' how many to take (default 4), 'seconds' where to cut a long one (default 2.5).",
+ "about": "Which Dawn of War II sounds the 3D replay plays for what. Each key is an event in the replay (see tools/sim/page/32-view3d-sound.js); a key ending in a race (ork, nid, eld, ig) is used for that race's figures. 'dir' is a folder in the game's sound archives, 'match' a regular expression on the file name, 'max' how many to take (default 4), 'seconds' where to cut a long one (default 2.5). 'engine', 'treads' and 'ambience' are played as loops: an engine for each vehicle, its tracks as it drives, and the distant battle under everything.",
  "sounds": {
   "fire.bolt": {"dir": "wav/sfx/weapons/space_marine/bolter", "match": "^bolter_single", "max": 6},
   "fire.las": {"dir": "wav/sfx/weapons/ig/lazgun", "match": "fire"},
@@ -35,6 +35,10 @@
   "melee.hammer": {"dir": "wav/sfx/weapons/shared/melee_hammer_hit", "match": ".", "seconds": 1.5},
   "melee.axe": {"dir": "wav/sfx/weapons/shared/melee_axe_hit", "match": ".", "max": 5, "seconds": 1.5},
   "melee.claw": {"dir": "wav/sfx/weapons/shared/melee_flesh_gish", "match": "gish", "max": 6},
+  "engine": {"dir": "wav/sfx/vehicles/sm_x_vehicals_predator", "match": "engine_idle", "max": 1, "seconds": 6},
+  "engine.ork": {"dir": "wav/sfx/vehicles/ork_looted_tank", "match": "eng_idle", "max": 1, "seconds": 6},
+  "treads": {"dir": "wav/sfx/vehicles/tread_loops", "match": ".", "max": 2, "seconds": 5},
+  "ambience": {"dir": "wav/ambiences/ambiences_streamed/distant_battle", "match": "^dist_battle", "max": 4, "seconds": 22},
   "fall": {"dir": "wav/sfx/foley/bodyfalls/base", "match": ".", "max": 6},
   "fall.armour": {"dir": "wav/sfx/foley/bodyfalls/armour", "match": ".", "max": 5}
  }
