@@ -198,7 +198,7 @@ Vehicles take the Basic Set's stat block (B462-463). The rest of the line is bui
 | HT | 11-12, f for promethium or multi-fuel; ramshackle Ork builds lower |
 | Locations | B554 codes from the vehicle's shape (tracks, main or independent turret, pintle, open cab, wheels, legs) |
 
-A Leman Russ (63 tonnes) comes out at HP 400, a Rhino (32) 320, a Land Raider (70) 420, a Chimera (38) 340. A lascannon through the hull does about 165 injury, so it takes three body hits, or two in the vital area (B554: x2 for a tight beam), to wreck a tank. Krak missiles get through AV12 and AV13 nearly always and AV14 94% of the time; an autocannon AV10 nearly always and AV11 about half the time; a heavy bolter AV10 38% of the time. Nothing short of a lascannon (13%) or a melta at short range (87%) gets through the DR 1350 glacis.
+A Leman Russ (63 tonnes) comes out at HP 400, a Rhino (32) 320, a Land Raider (70) 420, a Chimera (38) 340. A lascannon through the hull does about 165 injury, so it takes three body hits, or two in the vital area (B554: x2 for a tight beam), to wreck a tank. Krak missiles get through AV12 and AV13 nearly always and AV14 94% of the time; an autocannon AV10 nearly always and AV11 (a Rhino) 81% of the time; a heavy bolter AV10 38% of the time. Nothing short of a lascannon (13%) or a melta at short range (87%) gets through the DR 1350 glacis.
 
 ## Characters and species
 
@@ -431,7 +431,7 @@ T'au technology is TL11 science without the ^ superscience tag, except drone AI 
 | Ion rifle | 6d×3(3) burn; overcharged 6d×4(3) burn ex (three charges, RoF 1) with a malfunction risk to the firer |
 | Plasma rifle (T'au) | Plasma-gun anchor, lower RoF, no overheating |
 | Fusion blaster | Meltagun anchor |
-| Missile pod | 6d×3(3) cr ex, autocannon class |
+| Missile pod | 7d×3(3) cr ex, autocannon class |
 | Smart missile system | 5d×2(2) cr ex, self-guided: needs no line of sight to the target |
 | Seeker missile | Krak-missile anchor, fired by a markerlight lock |
 | T'au flamer | Imperial flamer parity |

@@ -82,8 +82,8 @@
         }
         m.vel = drove;
         // the front armour to the worst gun that can hurt it (a tracked hull pivots in place)
-        const at = pool.filter(f => (f.u.ranged && expInjRandom(f.u.ranged, u) > 0) || (f.u.veh && f.u.veh.stations.some(s => s.w && expInjRandom(s.w, u) > 0)))
-          .sort((a, b) => threatOf(b) / Math.max(1, hexDist(b.h, m.h)) - threatOf(a) / Math.max(1, hexDist(a.h, m.h)))[0] || pool[0];
+        const at = !m.h ? null : pool.filter(f => f.h && ((f.u.ranged && expInjRandom(f.u.ranged, u) > 0) || (f.u.veh && f.u.veh.stations.some(s => s.w && expInjRandom(s.w, u) > 0))))
+          .sort((a, b) => threatOf(b) / Math.max(1, hexDist(b.h, m.h)) - threatOf(a) / Math.max(1, hexDist(a.h, m.h)))[0] || pool.find(f => f.h);
         if (at && at.h && m.h) m.facing = faceToward(m.h, at.h);
       } else m.vel = 0;
       // ---- the gunners
