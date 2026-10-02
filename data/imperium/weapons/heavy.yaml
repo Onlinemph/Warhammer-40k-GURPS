@@ -187,7 +187,7 @@ items:
         rcl: 1
         skill: Gunner (Rockets)
       - usage: Krak missile
-        damage: 6dx6(3) cr ex
+        damage: 6dx6(5) cr ex
         acc: 10
         range: 100/1800
         rof: 1
@@ -215,16 +215,18 @@ items:
       light structures.
     design: >
       No single framework anchor covers this launcher as a whole, but Krak
-      is itself one of the project's fixed anchors: 6dx6(3) cr, a one-shot,
-      disposable shaped charge. Checked with the exact dice distribution
-      (avg. 126) against the AV table: it beats AV10 (DR 100, eff. DR 33)
-      essentially always and AV11-12 (DR 150/200, eff. DR 50/66) 100%/99%
-      of the time - reliably wrecks Chimeras and Rhinos; against AV13 (DR
-      275, eff. DR 91) it's still 90% - reliable vs AV12-13 as the anchor
-      requires; and against AV14 (DR 350, eff. DR 116) it drops to 64% -
-      "about two in three" - so a Land Raider or Leman Russ's frontal
-      glacis is a real but not certain kill, which is why the fiction has
-      missile teams engage such targets in numbers rather than solo. Frag:
+      is itself one of the project's fixed anchors: 6dx6(5) cr, a one-shot,
+      disposable shaped charge (exact dice distribution, checked by
+      tools/sim/test/rules.test.js; avg. 126). Against the AV table it beats
+      AV10-11 (DR 125/185) always, AV12 (DR 250, eff. 50) 99.9%, AV13 (DR
+      340, eff. 68) 99.0% and AV14 (DR 440, eff. 88) 93.9%: reliable against
+      anything short of the heaviest glacis. A Leman Russ front or a Land
+      Raider (DR 1350, eff. 270) it never beats, where a lascannon gets 13%,
+      which is why the fiction sends lascannons and meltas at those. It was
+      6dx6(3) until the vehicle armour rise left it 21% against AV14 (user
+      direction: reliable against AV14 again). The divisor rather than the
+      dice went up so the blast around the target, which takes no armour
+      divisor (B414), is the same size as before. Frag:
       scaled from the B414 fragmentation rules as a "big frag grenade" per
       the framework's own description - double the concussion dice and
       1.5x the fragmentation dice of a standard hand grenade (3d cr ex

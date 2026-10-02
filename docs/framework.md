@@ -136,7 +136,7 @@ The percentages here and in the armour table are checked by `tools/sim/test/rule
 | Plasma gun | 6d×4(3) burn ex | Kills Marines through power armour (eff. DR 33); penetrates Terminators (eff. DR 67) more often than not. Overheat risk. |
 | Meltagun | 8d×6(10) burn to ½D; beyond ½D 4d×6(3) | Kills AV14 (eff. DR 44) at short range, and a Leman Russ glacis 87%; past ½D gets through AV12 56% and never AV14. |
 | Lascannon | 8d×8(5) burn | Kills AV14 (eff. DR 88) and Terminators; a Leman Russ glacis only 13%. |
-| Krak missile | 6d×6(3) cr ex (shaped charge) | Reliable vs AV12 (96%), most of the time vs AV13 (72%), one in five vs AV14 (21%). |
+| Krak missile | 6d×6(5) cr ex (shaped charge) | Reliable through AV14: AV12 99.9%, AV13 99%, AV14 94%. Never a Leman Russ glacis or Land Raider (DR 1350), where the lascannon gets 13%. The blast around the target takes no divisor (B414), so raising the divisor rather than the dice left it the same size. |
 | Chainsword | sw+2d(3) cut | Tears flesh and flak; in a Marine's hands bites carapace and power-armour joints, but rarely gets through a power-armoured torso. Every chain weapon and the Astartes combat knife have monomolecular edges: armour divisor (3) (user direction). |
 | Power sword | sw+3d+1(10) cut | The disruption field shears power armour whoever holds it. |
 | Power fist | thr+8d(10) cr | Kills Terminators in Astartes hands. |
