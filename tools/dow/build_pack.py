@@ -151,6 +151,107 @@ def build_sounds(force):
     return f"sounds: {sum(map(len, out.values()))} in {len(out)} events, {len(js) // 1024} KB" + (f"  (none found for {', '.join(short)})" if short else "")
 
 
+def build_voices(force):
+    """site/models/voices.js and voice_<id>.js from tools/dow/voices.json: unit speech, by what happens in the replay."""
+    import re
+    import dow2
+    root = find_game("DOW_DOW2", "Dawn of War 2")
+    spec = (HERE / "voices.json").read_bytes()
+    dest, tag = OUT / "voices.js", OUT / "voices.tag"
+    want = hashlib.sha1(spec + (HERE / "dow2.py").read_bytes()).hexdigest()
+    if not root:
+        return "voices: Dawn of War II not found, none built"
+    if not force and dest.exists() and tag.exists() and tag.read_text() == want:
+        return None
+    newest = lambda p: ("delta" not in p.name.lower(), not p.name[0].isdigit(), p.name.lower())
+    plain = lambda found: [p for p in sorted(found, key=newest) if "container" not in p.name.lower()]
+    speech = dow2.Archives(plain((root / "GameAssets" / "Locale" / "English").glob("*.sga")))
+    sounds = dow2.Archives(plain((root / "GameAssets" / "Archives").glob("*sound*.sga")))
+    doc = json.loads(spec)
+    limit, seconds = doc["max"], doc["seconds"]
+    # Soulstorm's speech, for the factions Dawn of War II lacks: decoded here (it is in Relic's own codec) and
+    # stored as 8-bit mu-law at 22050 Hz, which numpy can write quickly and the page reads as easily as ADPCM
+    old_root, old = find_game("DOW_SOULSTORM", "Dawn of War Soulstorm"), []
+    if old_root:
+        import fda
+        import numpy as np
+        import sga
+        old = [sga.Archive(p) for p in sorted(old_root.glob("*/Locale/English/*Sound-Speech.sga"), reverse=True)]
+
+    def old_clips(folders, most):
+        out = []
+        for folder in folders:
+            for arc in old:
+                for p in arc.under("sound/speech/" + folder, ".fda"):
+                    got = fda.decode(arc.read(p))
+                    if not got or not 0.25 <= got[1].shape[1] / got[0] <= seconds:
+                        continue
+                    x = got[1].mean(axis=0)
+                    x = np.clip((x[0:len(x) - 1:2] + x[1::2]) / 2, -1, 1)                  # 44100 -> 22050
+                    y = np.sign(x) * np.log1p(255 * np.abs(x)) / np.log(256)
+                    out.append([got[0] // 2, base64.b64encode(np.round((y + 1) * 127.5).astype("u1").tobytes()).decode(), "u"])
+                    if len(out) == most:
+                        return out
+            if out:
+                break
+        return out
+
+    # the speech files by unit code; of a line's alternate takes (...a, ...b) the first comes first
+    by_code = {}
+    for p in speech.under("wav/speech/mp", ".fsb"):
+        m = re.match(r"\w(\w)_(\w{3})_", p.rsplit("/", 1)[-1])
+        if m:
+            by_code.setdefault(m.group(2), []).append((p.rsplit("/", 1)[-1][:-4], m.group(1), p))
+    for lines in by_code.values():
+        lines.sort(key=lambda x: (x[0][-1], x[0]))
+
+    def clips(arc, paths, most):
+        out = []
+        for p in paths:
+            got = dow2.read_sound(arc.read(p), 99)
+            if got and len(got[1]) / 36 * 64 / got[0] <= seconds:
+                out.append([got[0], base64.b64encode(got[1]).decode()])
+                if len(out) == most:
+                    break
+        return out
+
+    libs = {}
+    for vid, v in doc["voices"].items():
+        lib = libs[vid] = {}
+        if "dow1" in v:
+            for event, folders in doc["events1"].items():
+                lib[event] = old_clips([v["dow1"] + "/" + f for f in folders], limit[event])
+        elif "dirs" in v:
+            for event, (folder, rx) in v["dirs"].items():
+                lib[event] = clips(sounds, [p for p in sounds.under(folder, ".fsb") if re.search(rx, p.rsplit("/", 1)[-1][:-4])], limit[event])
+        else:
+            lines = by_code.get(v["code"], [])
+            for event, chain in doc["events"].items():
+                for foe in "asceoti":
+                    for rx in chain:
+                        some = clips(speech, [p for name, f, p in lines if f == foe and re.search(rx, name)], limit[event if foe == "a" else "foe"])
+                        if some:
+                            lib[event if foe == "a" else event + "." + foe] = some
+                            break
+    report, total = [], 0
+    for vid, v in doc["voices"].items():
+        lib = {k: c for k, c in libs[vid].items() if c}
+        for event in doc["events"]:   # grunts and screams a unit lacks, from one that sounds like it
+            if event not in lib and libs.get(v.get("borrow"), {}).get(event):
+                lib[event] = libs[v["borrow"]][event]
+        js = f"(window.DOW_VOICE = window.DOW_VOICE || {{}})[{json.dumps(vid)}] = " + json.dumps(lib, separators=(",", ":")) + ";\n"
+        (OUT / f"voice_{vid}.js").write_text(js)
+        total += len(js)
+        report.append(f"{vid} " + ("/".join(str(len(lib.get(e, []))) for e in doc["events"]) if lib else "NONE"))
+    made = [vid for vid in doc["voices"]]
+    for stale in OUT.glob("voice_*.js"):
+        if stale.stem[6:] not in made:
+            stale.unlink()
+    dest.write_text("window.DOW_VOICES = " + json.dumps({"rules": doc["rules"], "voices": made}, separators=(",", ":")) + ";\n")
+    tag.write_text(want)
+    return f"voices: {len(made)} voices, {total // 1024} KB  ({'/'.join(doc['events'])}: {', '.join(report)})"
+
+
 def jpeg_url(image, side, quality=88):
     image = image.convert("RGB")
     image.thumbnail((side, side))
@@ -242,7 +343,7 @@ def main(argv):
     force = "--force" in argv
     only = [a for a in argv if not a.startswith("--")]
     units = [u for u in json.loads((HERE / "units.json").read_text(encoding="utf-8"))["units"] if "id" in u]
-    unknown = set(only) - {u["id"] for u in units} - {"sounds", "scenery"}
+    unknown = set(only) - {u["id"] for u in units} - {"sounds", "voices", "scenery"}
     if unknown:
         raise SystemExit("no such unit: " + ", ".join(sorted(unknown)))
     sys.path.insert(0, str(HERE))
@@ -269,7 +370,7 @@ def main(argv):
             if line:
                 print(line, flush=True)
     done = [{k: u[k] for k in PAGE_KEYS if k in u} for u in units if (OUT / f"{u['id']}.js").exists()]
-    for what, make in (("sounds", build_sounds), ("scenery", build_scenery)):
+    for what, make in (("sounds", build_sounds), ("voices", build_voices), ("scenery", build_scenery)):
         if not only or what in only:
             line = make(force)
             if line:

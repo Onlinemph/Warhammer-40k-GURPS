@@ -54,6 +54,27 @@ def read_toc(buf):
     return out
 
 
+class Archive:
+    """An archive kept open: `files` maps each path (lower case, forward slashes) to where it is; read(path)."""
+
+    def __init__(self, path):
+        self.fh = Path(path).open("rb")
+        head = self.fh.read(TOC)
+        self.fh.seek(0)
+        entries = read_toc(self.fh.read(TOC + struct.unpack_from("<I", head, 172)[0]))
+        self.files = {p.replace("\\", "/").lower(): rest for p, *rest in entries}
+
+    def under(self, folder, suffix=""):
+        folder = folder.lower().rstrip("/") + "/"
+        return sorted(p for p in self.files if p.startswith(folder) and p.endswith(suffix))
+
+    def read(self, path):
+        flags, off, csize, size = self.files[path]
+        self.fh.seek(off)
+        data = self.fh.read(csize)
+        return zlib.decompress(data) if csize != size else data
+
+
 def main(argv):
     if len(argv) < 3 or argv[1] not in ("list", "extract"):
         raise SystemExit(__doc__)

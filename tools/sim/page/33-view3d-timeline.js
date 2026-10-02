@@ -69,6 +69,7 @@
       TS = cine ? pl.tsc : 1;
       if (t <= 0) return;
       const es = fx[t - 1] || [], lastImpact = new Map(), u = 1 / TS;
+      hitBy.clear(); for (const e of es) if ((e[0] === "s" || e[0] === "m") && e[6] && e[8] >= 0) hitBy.set(e[8], e[7]);
       if (cine) { cineSchedule(pl, u, es); fallSounds(t); sched.sort((a, b) => a.p - b.p); return; }
       let n = 0;
       // when an attack goes off: spread through the first .4 of a normal second, or a little into its attacker's beat
@@ -115,8 +116,22 @@
       sched.sort((a, b) => a.p - b.p);
     }
     // a blow's sound: the swing, then what it lands on; a body hitting the ground when a model falls this second
-    const swingSound = (e, landed) => { const A = figs[e[7]], F = figs[e[8]], mk = ros[e[7]].mk || ""; if (landed) { if (F) playSound("melee." + mk, F, .9); } else if (A) playSound("swing." + mk, A, .7); };
-    const fallSounds = t => figs.forEach((F, i) => { if (!F.veh && downs[i].some(d => d.t === t && d.fell)) sched.push({ p: (deathP.get(i) ?? .35 / TS) + .3 / TS, run: () => playSound(F.arch === "marine" || F.arch === "terminator" || F.arch === "custodes" ? "fall.armour" : "fall", F, .8) }); });
+    const swingSound = (e, landed) => { const A = figs[e[7]], F = figs[e[8]], mk = ros[e[7]].mk || ""; if (landed) { if (F) playSound("melee." + mk, F, .9); } else if (A) { playSound("swing." + mk, A, .7); if (rnd() < .3) say(A, "charge", F); else say(A, "effort", null, .6); } };
+    // who struck whom this second, so the one who felled a foe can say so
+    const hitBy = new Map();
+    const fallSounds = t => figs.forEach((F, i) => {
+      if (F.veh || !downs[i].some(d => d.t === t && d.fell)) return;
+      const p = deathP.get(i) ?? .35 / TS;
+      sched.push({ p, run: () => say(F, "death", null, .9) });
+      sched.push({ p: p + .3 / TS, run: () => playSound(F.arch === "marine" || F.arch === "terminator" || F.arch === "custodes" ? "fall.armour" : "fall", F, .8) });
+      // then the one who did it, or a comrade who saw it
+      sched.push({ p: Math.min(.98, p + .5 / TS), run: () => {
+        const by = figs[hitBy.get(i)];
+        if (by && rnd() < .5) return say(by, "kill", F, .8);
+        const mate = figs.find(M => M !== F && !M.veh && M.g.visible && ros[M.i].side === ros[i].side && !deathOf(M.i, t) && M.g.position.distanceTo(F.g.position) < 12);
+        if (mate) say(mate, "down", null, .6);
+      } });
+    });
     // the action camera's timeline: each beat aims for .6 of a second, then fires its rounds one at a time
     function cineSchedule(pl, u, es) {
       for (const b of pl.beats) {
@@ -189,6 +204,7 @@
       const from = muzzleOf(A, tgt, standAt(A, e[1], e[2])), hit = !!e[6];
       const shots = K.beam || K.flame ? 1 : Math.min(3, K.pulses || 1, Math.max(1, e[11] || 1));
       for (let j = 0; j < shots; j++) setTimeout(() => playSound("fire." + kind, A, A.veh ? 1.3 : 1), j * 70 * speedK());
+      say(A, "attack", tF, .3); if (tF && !hit) say(tF, "fire", A, .12);
       const miss = () => tgt.clone().add(new THREE.Vector3((rnd() - .5) * 2.5, (rnd() - .2) * 1.2, (rnd() - .5) * 2.5));
       if (o.reduce) return;
       // muzzle flash
@@ -228,6 +244,7 @@
     const speedK = () => Math.max(.25, Math.min(2, speedMs / 1000));
     function impactFx(F, pen) {
       playSound(!pen ? "hit.glance" : F.veh || /Necron/.test(ros[F.i].faction || "") || F.arch === "marine" || F.arch === "terminator" ? "hit.armour" : "hit.flesh", F, .8);
+      if (pen) say(F, "pain", null, .5); else say(F, "fire", null, .15);
       if (o.reduce) return;
       const at = chestOf(F).add(new THREE.Vector3((rnd() - .5) * .3, (rnd() - .5) * .3, (rnd() - .5) * .3));
       const metal = F.veh || /Necron/.test(ros[F.i].faction || "");

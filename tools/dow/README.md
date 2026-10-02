@@ -71,7 +71,25 @@ The ruins keep the page's own painted masonry: the game's wall textures tried so
 python tools/dow/build_pack.py sounds     # only the sounds
 ```
 
-There are no voices yet, and weapons Dawn of War II doesn't have borrow the nearest sound (gauss and dark lances use the bright lance, pulse rifles the Aeldari pulse cannon, splinter weapons the shuriken pistol).
+Weapons Dawn of War II doesn't have borrow the nearest sound (gauss and dark lances use the bright lance, pulse rifles the Aeldari pulse cannon, splinter weapons the shuriken pistol).
+
+### Voices
+
+The same button brings the units' voices: `build_pack.py` writes `site/models/voices.js` and one `voice_<id>.js` per voice, and the replay fetches only the voices in the battle being watched (1 to 2 MB each, about 100 MB for all 73).
+
+- A figure may call out when it opens fire or charges, when it comes under fire, when it fells a foe and when a comrade falls near it; it grunts when wounded or swinging, and cries out as it falls. Where the game has a line about the foe's race, that may be used.
+- Lines don't pile up: two at once at most, a pause between them, and the same figure not again for six seconds. Grunts and screams come freely.
+- From Dawn of War II's English speech archives: Space Marines (three squad voices shared out among the figures, plus Scouts, Terminators, Librarian, Techmarine, Apothecary), Guardsmen, Chaos Marines, Lords, Sorcerers, Plague Marines and cultists, Aeldari Guardians, Rangers, Aspect Warriors, Farseers and Autarchs, and Ork Boyz, Kommandos, Weirdboyz and Warbosses. Tyranids growl and screech in three sizes.
+- From Soulstorm's, for what Dawn of War II lacks: the T'au (Fire Warriors, Shas'ui, Pathfinders, battlesuits, Commander, Ethereal, Earth caste, drones, Kroot, Vespid), Necrons (who say very little), Drukhari, Sisters of Battle, Commissars, Tempestus Scions (as Kasrkin), psykers, Tech-Priests (as the Enginseer), the Inquisitor, Possessed and Berzerkers, Warlocks, and Ork Nobz, Meganobz, Meks, Painboyz and Gretchin. Soulstorm's lines have no "foe felled" or "comrade down", so those units stay quiet then.
+- Custodes, Skitarii, Sisters of Silence, servitors and vehicles stay silent: neither game has a voice for them.
+
+`voices.json` says which of a unit's lines go with which replay event and which roster entries use which voice. A unit with no grunts of its own borrows them from one that sounds like it.
+
+Soulstorm's sounds are in Relic's own codec (`.fda`); `fda.py` decodes it, following the decoder in [vgmstream](https://github.com/vgmstream/vgmstream), and can turn one into a WAV: `python tools/dow/fda.py in.fda out.wav`. `sga.py extract` gets the `.fda` files out of an archive.
+
+```sh
+python tools/dow/build_pack.py voices     # only the voices
+```
 
 ## How it works
 
