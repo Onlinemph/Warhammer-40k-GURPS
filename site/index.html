@@ -302,10 +302,12 @@ input[type=number],.sunit select,.addu,.sset select{font:inherit;font-size:.84re
 .vtt-tools button:hover{color:#fff}
 .vtt-tip{position:absolute;pointer-events:none;background:#0d0e12f0;border:1px solid #ffffff2e;border-radius:2px;padding:5px 9px;font-size:.78rem;display:grid;gap:1px;color:#e9e5da;white-space:nowrap}
 .vtt-tip[hidden]{display:none}
-.vtt-cap{position:absolute;left:50%;top:48px;transform:translateX(-50%);max-width:calc(100% - 32px);pointer-events:none;background:#0d0e12e8;border:1px solid #ffffff24;border-left:3px solid #f08a7e;border-radius:2px;padding:7px 12px;font-size:.84rem;line-height:1.35;color:#e9e5da;text-align:center;text-wrap:balance}
+.vtt-cap{position:absolute;left:50%;top:48px;transform:translateX(-50%);width:min(560px,calc(100% - 32px));pointer-events:none;background:#0d0e12e8;border:1px solid #ffffff24;border-left:3px solid #f08a7e;border-radius:2px;padding:7px 12px;font-size:.84rem;line-height:1.35;color:#e9e5da;text-align:center;text-wrap:balance}
 .vtt-cap.sb{border-left-color:#f1d38a}.vtt-cap[hidden]{display:none}
 .vtt-cap .who{font-weight:700}.vtt-cap.sa .who{color:#f08a7e}.vtt-cap.sb .who{color:#f1d38a}
-.vtt-cap .res{display:block;font-family:var(--mono);font-size:.74rem;color:#c9c6bd;margin-top:2px}.vtt-cap .res b{color:#ffd2c8}.vtt-cap .res .dn{color:#ff6a5a}
+.vtt-cap .shots{list-style:none;margin:5px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:2px 10px;text-align:left;font-family:var(--mono);font-size:.72rem;color:#c9c6bd;max-height:9.5em;overflow:hidden}
+.vtt-cap .shots li{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.vtt-cap .shots .n{color:#8d8a93;margin-right:6px}
+.vtt-cap .shots .miss{color:#8d8a93}.vtt-cap .shots .sub{padding-left:12px}.vtt-cap .shots b{color:#ffd2c8}.vtt-cap .shots .dn{color:#ff6a5a}
 .vtt-tip span{font-family:var(--mono);font-size:.68rem;color:#a9a5ae}
 .vtt-side{border-left:1px solid var(--rail-rule);background:var(--rail-2);display:flex;flex-direction:column;min-width:0;max-height:640px;min-height:0}
 .vtt-tabs{display:flex;border-bottom:1px solid var(--rail-rule)}
@@ -3513,7 +3515,7 @@ const SIM = (() => {
         } else {
           const def = defend(t, m, false, plan.da, 0, w);
           if (def != null) {
-            const dg = Math.min(open, 1 + def); hits -= dg; L(`  ${t.id} dodges ${dg}`);
+            const dg = Math.min(open, 1 + def); hits -= dg; L(`  ${t.id} dodges ${dg}`); if (t.h) for (let k = 0; k < dg; k++) FX(["v", t.ix, "dodge", t.h.q, t.h.r]);
             // the rounds the shield's DB turned aside struck it: all of them if the dodge needed the DB, else DB of them
             const struck = t.shieldStruck ? dg : Math.min(dg, t.defDB || 0);
             for (let k = 0; k < struck && t.state === "ok"; k++) shieldHit(m, w, t, loc0 || "random", true);
@@ -6902,26 +6904,43 @@ if (typeof document !== "undefined") (() => {
     // ================= what happens this second, scheduled across it (p from 0 to 1)
     // ================= the action camera: a second split into a move beat, then one beat per attacker in the order
     // they acted, the camera cutting to each; TS is how many seconds of normal replay time this second now takes
-    const MOVE = .8, plans = new Map();
+    const MOVE = 1.2, plans = new Map();
     let TS = 1;
+    // every round fired (or blow struck) is its own step, with the results that followed it: a dodge, a shield,
+    // a wound or armour holding; misses are spread among the hits
     function planOf(t) {
       if (plans.has(t)) return plans.get(t);
-      const beats = [], byA = new Map(); let cur = null;
+      const beats = [], byA = new Map(); let cur = null, hitR = [], ri = 0;
       for (const e of t > 0 ? fx[t - 1] || [] : []) {
         if (e[0] === "s" || e[0] === "m") {
           let b = byA.get(e[7]);
-          if (!b) { b = { a: e[7], tgt: e[8], at: [e[3], e[4]], melee: e[0] === "m", kind: e[12] || "", shots: 0, hits: 0, inj: 0, locs: new Set(), nopen: 0, dodged: 0, shield: 0, down: 0, fired: 0, imp: 0 }; byA.set(e[7], b); beats.push(b); }
-          b.shots += e[0] === "s" ? (e[11] || 1) : 1; b.hits += e[0] === "s" ? (e[10] || 0) : (e[6] ? 1 : 0); cur = b;
-        } else if (cur) {
-          if (e[0] === "h") { if (e[2] > 0) { cur.inj += e[2]; cur.locs.add(e[3]); } else cur.nopen++; }
-          else if (e[0] === "v") cur.dodged++;
-          else if (e[0] === "f") cur.shield++;
-          else if (e[0] === "d") { const x = (fr[t - 1] || [])[cur.tgt]; if (cur.kind === "grenade" || cur.kind === "lob" || x && x[0] === e[1] && x[1] === e[2]) cur.down++; }
+          if (!b) { b = { a: e[7], tgt: e[8], at: [e[3], e[4]], melee: e[0] === "m", kind: e[12] || "", shots: 0, rounds: [] }; byA.set(e[7], b); beats.push(b); }
+          const blast = e[12] === "grenade" || e[12] === "lob", nb = e[0] === "s" && !blast ? Math.max(1, e[11] || 1) : 1;
+          const nh = e[0] === "s" ? (blast ? 1 : Math.min(nb, e[10] || 0)) : (e[6] ? 1 : 0);
+          const hitAt = new Set(); for (let i = 0; i < nh; i++) hitAt.add(Math.floor((i + .5) * nb / nh));
+          hitR = [];
+          for (let k = 0; k < nb; k++) { const r = { e, hit: hitAt.has(k), res: [], blast }; if (r.hit) hitR.push(r); b.rounds.push(r); }
+          b.shots += nb; ri = 0; cur = b;
+        } else if (cur && (e[0] === "v" || e[0] === "f" || e[0] === "h" || e[0] === "b")) {
+          const r = hitR.length ? hitR[Math.min(ri, hitR.length - 1)] : cur.rounds[cur.rounds.length - 1];
+          if (!r) continue;
+          if (!r.hit) r.hit = true;
+          r.res.push({ e });
+          // a dodge, a shield or a wound settles a round; a blast's results all belong to its one round
+          if (e[0] !== "b" && !r.blast && (e[0] !== "h" || r.res.filter(x => x.e[0] !== "b").length >= 1)) ri++;
+        } else if (cur && e[0] === "d") {
+          for (let j = cur.rounds.length - 1; j >= 0; j--) { const x = cur.rounds[j].res.slice().reverse().find(y => y.e[0] === "h" && y.e[4] === e[1] && y.e[5] === e[2]); if (x) { x.down = true; break; } }
         }
       }
-      const BEAT = Math.max(1, Math.min(1.8, 7 / Math.max(1, beats.length)));
-      const tsc = beats.length ? MOVE + beats.length * BEAT + .15 : 1;
-      beats.forEach((b, k) => { b.start = (MOVE + k * BEAT) / tsc; b.len = BEAT / tsc; });
+      let at = MOVE;
+      for (const b of beats) {
+        const n = b.rounds.length;
+        b.SH = b.melee ? .6 : b.rounds[0] && b.rounds[0].blast ? .6 : Math.max(.18, Math.min(.45, 4 / n));
+        const L = .6 + n * b.SH + 1.1;
+        b.start = at; b.L = L; at += L;
+      }
+      const tsc = beats.length ? at + .2 : 1;
+      for (const b of beats) { b.start /= tsc; b.len = b.L / tsc; }
       const pl = { beats, tsc, byA };
       plans.set(t, pl); return pl;
     }
@@ -6936,11 +6955,11 @@ if (typeof document !== "undefined") (() => {
       TS = cine ? pl.tsc : 1;
       if (t <= 0) return;
       const es = fx[t - 1] || [], lastImpact = new Map(), u = 1 / TS;
-      for (const b of pl.beats) { b.fired = 0; b.imp = b.start + .3 * u; b.fireP = b.start + .3 * u; }
-      let n = 0, beat = null;
+      if (cine) { cineSchedule(pl, u, es); sched.sort((a, b) => a.p - b.p); return; }
+      let n = 0;
       // when an attack goes off: spread through the first .4 of a normal second, or a little into its attacker's beat
-      const lagOf = e => { if (!cine) return Math.min(.35, n++ * .03) + .05; beat = pl.byA.get(e[7]); const l = beat.start + (.3 + Math.min(.4, beat.fired * .12)) * u; if (!beat.fired++) beat.fireP = l; return l; };
-      const imp = (tg, at) => { if (tg >= 0) lastImpact.set(tg, at); if (cine && beat) beat.imp = Math.max(beat.imp, at); };
+      const lagOf = () => Math.min(.35, n++ * .03) + .05;
+      const imp = (tg, at) => { if (tg >= 0) lastImpact.set(tg, at); };
       for (const e of es) {
         if (e[0] === "s") {
           const lag = lagOf(e), kind = e[12] || "slug", K = KIND[kind] || KIND.slug;
@@ -6969,6 +6988,36 @@ if (typeof document !== "undefined") (() => {
         }
       }
       sched.sort((a, b) => a.p - b.p);
+    }
+    // the action camera's timeline: each beat aims for .6 of a second, then fires its rounds one at a time
+    function cineSchedule(pl, u, es) {
+      for (const b of pl.beats) {
+        b.fireP = b.start + .6 * u;
+        b.rounds.forEach((r, j) => {
+          const e = r.e, fp = b.start + (.6 + j * b.SH) * u; r.p = fp;
+          let travel = .22;
+          if (e[0] === "s") {
+            const kind = e[12] || "slug", K = KIND[kind] || KIND.slug, one = e.slice();
+            if (!r.blast) { one[11] = 1; one[10] = r.hit ? 1 : 0; one[6] = r.hit ? 1 : 0; }
+            travel = K.beam || K.flame ? .05 : (K.dur || .15) * 1.4;
+            (evFor[e[7]].fire ||= []).push({ p: fp, kind, tgt: e[8], hits: one[10] || 0, nb: 1 });
+            sched.push({ p: fp, run: () => fireFx(one, kind, K) });
+          } else {
+            (evFor[e[7]].swing ||= []).push({ p: fp, tgt: e[8] });
+            if (r.hit) sched.push({ p: fp + travel * u, run: () => { const F = figs[e[8]]; if (F) burst(glow, chestOf(F), 10, { speed: 3, life: .25, s0: .12, s1: .02, c: C(0xffe0a0), grav: 6 }); } });
+          }
+          r.ip = fp + travel * u;
+          r.res.forEach((x, k) => {
+            const e2 = x.e, ip = r.ip + k * (r.blast ? .15 : .1) * u; x.p = ip;
+            if (e2[0] === "v") (evFor[e2[1]].dodge ||= []).push({ p: ip - .08 * u, how: e2[2] });
+            else if (e2[0] === "h") { const F = figs[e2[1]]; hP.set(e2, ip); deathP.set(e2[1], ip); if (e2[2] > 0) (evFor[e2[1]].hit ||= []).push({ p: ip }); sched.push({ p: ip, run: () => { if (F) impactFx(F, e2[2] > 0); } }); }
+            else if (e2[0] === "f") { hP.set(e2, ip); sched.push({ p: ip, run: () => { const F = figs[e2[1]]; if (F) shieldFx(F); } }); }
+            else if (e2[0] === "b") { const [x2, y2] = P(e2[1], e2[2]); sched.push({ p: ip, run: () => blastFx(W3(x2, y2, zOf(e2[1], e2[2])), e2[3]) }); }
+          });
+        });
+      }
+      // anything outside a beat (a bleeding-out, a blast with no thrower) goes off during the move
+      for (const e of es) if ((e[0] === "h" || e[0] === "f") && !hP.has(e)) { const ip = .5 / TS; hP.set(e, ip); if (e[0] === "h") { deathP.set(e[1], ip); const F = figs[e[1]]; sched.push({ p: ip, run: () => { if (F) impactFx(F, e[2] > 0); } }); } }
     }
     const chestOf = F => F.g.position.clone().add(new THREE.Vector3(0, (F.veh ? .9 : F.top * .62), 0));
     const muzzleOf = (F, toward) => {
@@ -7325,26 +7374,41 @@ if (typeof document !== "undefined") (() => {
     const cap = document.createElement("div"); cap.className = "vtt-cap"; cap.hidden = true; host.appendChild(cap);
     let capKey = "";
     function caption() {
-      const pl = planOf(last.t), b = lastSt.cine && TS > 1 ? pl.beats.find(x => last.p >= x.start && last.p < x.start + x.len) || (last.p >= 1 ? pl.beats[pl.beats.length - 1] : null) : null;
+      const pl = planOf(last.t), p = last.p, b = lastSt.cine && TS > 1 ? pl.beats.find(x => p >= x.start && p < x.start + x.len) || (p >= 1 ? pl.beats[pl.beats.length - 1] : null) : null;
       if (!b) { if (!cap.hidden) cap.hidden = true; capKey = ""; return; }
-      const done = last.p >= b.imp, key = last.t + ":" + b.a + ":" + done;
+      let shown = 0; for (const r of b.rounds) { if (p >= r.ip) shown++; for (const x of r.res) if (p >= x.p) shown++; }
+      const key = last.t + ":" + b.a + ":" + shown;
       if (key === capKey) return; capKey = key;
-      const A = ros[b.a], Tn = b.tgt >= 0 && ros[b.tgt] ? ros[b.tgt].id : "the ground";
+      const A = ros[b.a], who = i => i >= 0 && ros[i] ? ros[i].id : "the ground", Tn = who(b.tgt);
       const nm = w => w.replace(/ \(.*$/, "").replace(/,.*$/, ""), gun = !A.veh && A.ranged ? nm(A.ranged) : "", blade = A.melee ? nm(A.melee) : "";
+      const blast = b.rounds[0] && b.rounds[0].blast;
       const verb = b.melee ? `strikes at ${esc(Tn)}${blade ? " with " + esc(blade) : ""}` : b.kind === "grenade" ? `throws a grenade at ${esc(Tn)}` : b.kind === "lob" ? `drops a shell on ${esc(Tn)}`
         : `fires ${b.shots > 1 ? b.shots + " shots " : ""}at ${esc(Tn)}${gun ? " with " + esc(gun) : ""}`;
-      const res = [];
-      if (done) {
-        if (!b.melee && b.kind !== "grenade" && b.kind !== "lob") res.push(b.hits ? `${b.hits} hit${b.hits > 1 ? "s" : ""}` : "miss");
-        else if (b.melee) res.push(b.hits ? (b.hits > 1 ? `${b.hits} hits` : "hit") : "misses");
-        if (b.dodged) res.push(b.dodged > 1 ? `${b.dodged} dodged` : "dodged");
-        if (b.shield) res.push("shield holds");
-        if (b.inj) res.push(`<b>${b.inj} injury</b> (${esc([...b.locs].join(", "))})`);
-        else if (b.nopen) res.push("armour holds");
-        if (b.down) res.push(`<b class="dn">${b.down > 1 ? b.down + " down" : "down"}</b>`);
-      }
+      const how = { dodge: "dodged", parry: "parried", block: "blocked" };
+      const resTxt = (x, r) => {
+        const e = x.e, other = e[1] !== r.e[8] && e[0] !== "b" ? esc(who(e[1])) + ": " : "";
+        if (e[0] === "v") return other + (how[e[2]] || "dodged");
+        if (e[0] === "f") return other + "shield holds";
+        if (e[0] === "h") return other + (e[2] > 0 ? `<b>${e[2]} injury</b>, ${esc(e[3])}` : `armour holds (${esc(e[3])})`) + (x.down ? ` <b class="dn">down</b>` : "");
+        return "";
+      };
+      const items = [];
+      b.rounds.forEach((r, j) => {
+        if (p < r.ip) return;
+        const lab = b.melee ? `Blow ${j + 1}` : blast ? "Blast" : `Shot ${j + 1}`;
+        const rs = r.res.filter(x => p >= x.p).map(x => resTxt(x, r)).filter(Boolean);
+        // a blast (a grenade, a shell, a plasma or missile burst): what it did to each model, the shrugged-off hits counted
+        if (blast || r.res.some(x => x.e[0] === "b") || r.res.length > 2) {
+          const seen = r.res.filter(x => p >= x.p), held = seen.filter(x => x.e[0] === "h" && x.e[2] <= 0 && !x.down);
+          items.push(`<li class="hit"><span class="n">${lab}</span>${blast ? (r.res.some(x => x.e[0] !== "b") ? "" : "no one caught") : "hit" + (seen.some(x => x.e[0] === "b") ? " · it bursts" : "")}</li>`);
+          seen.filter(x => !held.includes(x)).map(x => resTxt(x, { e: [0, 0, 0, 0, 0, 0, 0, 0, -9] })).filter(Boolean).forEach(t2 => items.push(`<li class="hit sub">${t2}</li>`));
+          if (held.length) items.push(`<li class="miss sub">armour holds on ${held.length === 1 ? esc(who(held[0].e[1])) : held.length + " models"}</li>`);
+          return;
+        }
+        items.push(`<li class="${r.hit ? "hit" : "miss"}"><span class="n">${lab}</span>${r.hit ? "hit" + (rs.length ? " · " + rs.join(" · ") : "") : "miss"}</li>`);
+      });
       cap.hidden = false; cap.className = "vtt-cap s" + (A.side ? "b" : "a");
-      cap.innerHTML = `<span class="who">${esc(A.id)}</span> ${verb}${res.length ? `<span class="res">${res.join(" · ")}</span>` : ""}`;
+      cap.innerHTML = `<span class="who">${esc(A.id)}</span> ${verb}${items.length ? `<ol class="shots">${items.join("")}</ol>` : ""}`;
     }
     // the animation clock: idle breathing, particles, beams, flashes and the follow camera run on their own
     let running = false, raf2 = 0;
@@ -7377,7 +7441,7 @@ if (typeof document !== "undefined") (() => {
       render();
       raf2 = requestAnimationFrame(tick);
     }
-    if (window.SIM3D_DEBUG) window.SIM3D_DEBUG = { glow, smoke, beams, shots, sched: () => sched, figs, planOf, camera, camLook, camWant, lookWant };
+    if (window.SIM3D_DEBUG) window.SIM3D_DEBUG = { glow, smoke, beams, shots, sched: () => sched, figs, planOf, fx, camera, camLook, camWant, lookWant };
     const active = on => { if (on && !running) { running = true; lastFrameT = performance.now(); raf2 = requestAnimationFrame(tick); } else if (!on && running) { running = false; cancelAnimationFrame(raf2); } };
 
     // ================= input
