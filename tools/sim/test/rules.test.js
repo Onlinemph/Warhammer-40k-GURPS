@@ -229,6 +229,18 @@ test("a battle is reproducible from its seed", () => {
   assert.deepEqual(a.log, b.log);
 });
 
+test("nobody fires a weapon that cannot hurt its target (user report: boltguns at a Leman Russ)", () => {
+  const lo = DATA.loadouts || {};
+  const squad = (name, side) => SIM.squadSpecs(name, name + side).map(sp => ({ side, spec: { ...(lo[sp.template] || {}), ...sp, armour: sp.armour || (lo[sp.template] || {}).armour || [] } }));
+  SIM.seed(3);
+  const tank = { side: 0, spec: { vehicle: "Leman Russ Battle Tank", template: "Leman Russ Battle Tank", count: 1, stance: "shoot", armour: [] } };
+  const r = SIM.runBattle([tank, ...squad("Astartes Tactical Squad", 1)], { distance: 150, log: true });
+  // nothing in this squad gets through the tank's front, so it should not shoot at it at all
+  const shots = r.log.filter(l => l.startsWith("Tactical Squad") && l.includes(" fires ") && l.includes("at Leman Russ"));
+  assert.equal(shots.length, 0, "shots that could not hurt the tank:\n" + shots.slice(0, 5).join("\n"));
+  assert.ok(r.log.some(l => l.includes("goes to ground, with nothing left to fight with")), "the squad should take cover instead");
+});
+
 test("design notes quote the current AV table", () => {
   // "AV13 (DR 340...)" or "AV12-14 (DR 250-440)" anywhere in the data must match docs/framework.md's table
   const AV = { 10: 125, 11: 185, 12: 250, 13: 340, 14: 440 };

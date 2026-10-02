@@ -4735,6 +4735,9 @@ const SIM = (() => {
           const br = bracedFor(m, w, t, m.moved, aimB + fA > 0), bB = br ? 1 : 0;
           const own = w.malediction ? 0 : ownCoverPen(m, t.h, br && aimB + fA > 0);
           const Enow = planAttack(m, w, t, base + bB + aimB + fA - own, false, null, { aim: aimB + fA, braced: br, fx }).score * sustainOf(w) * spread;
+          // a shot that can't hurt this foe at all (a boltgun against a battle tank's armour) isn't an option: left in at
+          // a value of nothing, it still beat every other choice, since each of those carries some risk
+          if (!w.malediction && !(Enow > 0)) continue;
           // a friendly heavy gun is holding for an opening on this foe: rattling it (a crit, a knock-down, a stun, its
           // fatigue spent on feverish dodges) is worth more than the shot alone, most of all from a burst
           const forGun = models.some(x => x !== m && x.u.side === u.side && x.waitOpen && x.waitOpen.t === t && x.state === "ok");
@@ -4800,7 +4803,7 @@ const SIM = (() => {
             const h2 = stepHex(m.h, t.h, mv);
             const E = planAttack(m, w, t, wl(m, w) - skillPen(m) + rangePenalty(nd + spdOf(t.steps || 0)) + t.u.sm + Math.min(-2, w.bulk || 0), false, null, { from: h2 }).score * sustainOf(w);
             const cont = GAMMA * (shotValueFrom(m, h2, pool) - shotValueFrom(m, m.h, pool));
-            add(Wr * kv(m, t, E) + cont - risk(m, h2, ""), `advance-fire@${t.id}`, () => {
+            if (E > 0) add(Wr * kv(m, t, E) + cont - risk(m, h2, ""), `advance-fire@${t.id}`, () => {
               stepToward(m, t.h, mv, hold); if (m.state !== "ok" || !m.h || m.stunned || !t.h || m.readied) return;
               faceTo(m, t.h); m.mna = true; fireAt(m, w, t, { moved: true });
             });
@@ -4837,12 +4840,12 @@ const SIM = (() => {
             // the zone attacks friends in it too (B409): their loss counts against it
             const pals = models.filter(x => x !== m && x.state === "ok" && x.h && x.u.side === u.side && hexDist(x.h, c.h) <= 1);
             // pinning them is worth the harm their fire won't do while our squad moves (TS p. 21)
-            const pinV = inZ.reduce((a, x) => a + pinOf(x) * Math.min(1, threatOf(x)) * 0.25 * HORIZON * (x.u.ranged ? 1 : 0.3), 0);
+            const pinV = inZ.reduce((a, x) => a + (x.u.veh ? 0 : pinOf(x) * Math.min(1, threatOf(x)) * 0.25 * HORIZON * (x.u.ranged ? 1 : 0.3)), 0);   // a tank's crew isn't pinned by rifle fire
             const v = pinV + inZ.reduce((a, x) => a + kv(m, x, Ez(x) * sustainOf(w)), 0)
               - u.ai.caution * pals.reduce((a, x) => a + Math.min(1, Ez(x) / remOf(x)) * threatOf(x) * HORIZON, 0);
             if (!bestZ || v > bestZ.v) bestZ = { c, v };
           }
-          if (bestZ) add(Wr * bestZ.v - rNow, "suppress", () => { faceTo(m, bestZ.c.h); suppress(m, w, bestZ.c.h); });
+          if (bestZ && bestZ.v > 0) add(Wr * bestZ.v - rNow, "suppress", () => { faceTo(m, bestZ.c.h); suppress(m, w, bestZ.c.h); });
         }
         // Wait (B366): hold fire for a charger heading for me; shoot it as it closes, maybe before it strikes
         if (isGun && !engaged(m)) {
