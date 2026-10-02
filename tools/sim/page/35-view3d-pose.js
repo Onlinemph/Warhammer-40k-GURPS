@@ -24,6 +24,7 @@
       if (reload) aimT = 0;
       F.aim += (aimT - F.aim) * Math.min(1, dt * 10 + (o.reduce ? 1 : 0));
       if (F.veh) return poseVehicle(F, x, ev, p, moved, dt, recoil);
+      if (F.model) return poseModel(F, bitsv, p, ev, dt, dead);
       const fig = F.fig, k = F.k;
       fig.position.set(0, 0, 0); fig.rotation.set(0, 0, 0);
       const breathe = Math.sin(clock * 1.7 + F.i) * .012;
@@ -90,6 +91,7 @@
       }
     }
     function poseVehicle(F, x, ev, p, moved, dt, recoil) {
+      if (F.model) poseVehicleModel(F);
       for (const tm of F.tracks) tm.map.offset.x -= moved * .45;
       for (const w of F.wheels) w.rotation.z -= moved * 3;
       F.fig.position.y = F.walk > .1 && !F.walker ? Math.sin(clock * 22) * .01 : 0;

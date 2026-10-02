@@ -4,7 +4,8 @@
   // Tyranids, T'au, Aeldari...) and jointed so it can walk, aim, recoil, swing, dodge, flinch, kneel, go prone and
   // fall; vehicles have tracks that roll, turrets that turn and guns that recoil. Shots are drawn by weapon (las and
   // gauss beams, bolt and plasma rounds, flame, shells), with particles, light flashes, bloom and scorch marks.
-  // Textures are painted on canvases at load; no image or model files. Drag to orbit, right-drag or Shift-drag (two
+  // Textures are painted on canvases at load; no image or model files, unless a local pack of game models is there
+  // (31-view3d-models.js). Drag to orbit, right-drag or Shift-drag (two
   // fingers) to pan, wheel or pinch to zoom, click a figure for its sheet, Follow keeps the camera on it.
   const THREE_URL = "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js";
   let threeLoading = null;

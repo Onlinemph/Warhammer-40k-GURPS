@@ -29,3 +29,5 @@ Warhammer 40,000 is © Games Workshop. GURPS is © Steve Jackson Games. This is 
 ## Browsing without GCS
 
 `python3 tools/build_site.py` turns `Library/` into a single searchable page at `site/index.html` (stat blocks, point totals, lore and design notes). Open it in any browser.
+
+The page's combat simulator replays battles in 3D with figures built from simple shapes. If you own Dawn of War: Soulstorm and Dawn of War II, `tools/dow/build_pack.py` converts their unit models into a local pack the replay uses instead; see `tools/dow/README.md`. The pack stays on your machine and is not part of this repository.
