@@ -365,7 +365,7 @@
     };
     const set3d = on => {
       st.view3d = on; toolBtn("3d").setAttribute("aria-pressed", on);
-      toolBtn("walls").hidden = !on || !T; toolBtn("measure").hidden = on; toolBtn("follow").hidden = !on; toolBtn("cine").hidden = !on;
+      toolBtn("walls").hidden = !on || !T; toolBtn("measure").hidden = on; toolBtn("follow").hidden = !on; toolBtn("cine").hidden = !on; toolBtn("snd").hidden = !on;
       if (v3) v3.active(on);
       if (on) { st.measure = false; st.meas = null; toolBtn("measure").setAttribute("aria-pressed", "false"); }
       host3.hidden = !on; cv.style.visibility = on ? "hidden" : "";
@@ -386,6 +386,10 @@
         const tp2 = document.getElementById("vtt-tip"); tp2.hidden = false; tp2.style.left = "12px"; tp2.style.top = "46px";
         tp2.innerHTML = `<b>3D view unavailable</b><span>${esc(err.message)}</span>`; setTimeout(() => { tp2.hidden = true; }, 4000);
       }).finally(() => { const b3 = toolBtn("3d"); b3.textContent = "3D"; b3.disabled = false; });
+    };
+    toolBtn("snd").onclick = e => {
+      const b = e.currentTarget, on = b.getAttribute("aria-pressed") !== "true";
+      if (v3) v3.sound(on).then(ok => { b.setAttribute("aria-pressed", ok && on); if (!ok) { b.disabled = true; b.title = "No sound pack here: tools/dow/README.md says how to build one"; } });
     };
     toolBtn("walls").onclick = e => { st.lowWalls = !st.lowWalls; e.currentTarget.setAttribute("aria-pressed", st.lowWalls); draw(); };
     toolBtn("follow").onclick = e => { st.follow = !st.follow; e.currentTarget.setAttribute("aria-pressed", st.follow); draw(); };

@@ -22,7 +22,7 @@ SIM = ROOT / "tools" / "sim"
 def sim_code():
     """The simulator, put together from tools/sim/engine and tools/sim/page as tools/sim/assemble.js does."""
     def parts(sub):
-        return "".join(f.read_text() for f in sorted((SIM / sub).glob("*.js")))
+        return "".join(f.read_text(encoding="utf-8") for f in sorted((SIM / sub).glob("*.js")))
     return ("const SIM = (() => {\n" + parts("engine") + "})();\nif (typeof module !== \"undefined\") module.exports = SIM;\n"
             + "\nif (typeof document !== \"undefined\") (() => {\n" + parts("page") + "})();\n")
 
@@ -468,7 +468,7 @@ def main():
         rel = p.relative_to(LIB)
         if any(rel.as_posix().startswith(x.rstrip("/") + "/") for x in args.exclude):
             continue
-        d = json.loads(p.read_text())
+        d = json.loads(p.read_text(encoding="utf-8"))
         entry = {"id": rel.with_suffix("").as_posix().lower().replace(" ", "-").replace("/", "--"),
                  "title": p.stem, "section": "/".join(rel.parts[:-1]), "kind": kind, "path": rel.as_posix()}
         if kind == "template":
@@ -482,13 +482,13 @@ def main():
     import yaml
     def sim_data(name):
         f = ROOT / "data" / "sim" / name
-        return (yaml.safe_load(f.read_text()) or {}) if f.exists() else {}
+        return (yaml.safe_load(f.read_text(encoding="utf-8")) or {}) if f.exists() else {}
     data = json.dumps({"libraries": libs, "loadouts": sim_data("loadouts.yaml"), "simWeapons": sim_data("weapons.yaml"),
                        "powers": sim_data("powers.yaml"), "ai": sim_data("ai.yaml"), "squads": sim_data("squads.yaml")}, ensure_ascii=False, separators=(",", ":"))
-    html = TEMPLATE.read_text().replace("/*__DATA__*/null", data.replace("</", "<\\/"))
-    html = html.replace("/*__SIM__*/", sim_code() + "\n" + (ROOT / "tools" / "vendor" / "three-post.js").read_text())
+    html = TEMPLATE.read_text(encoding="utf-8").replace("/*__DATA__*/null", data.replace("</", "<\\/"))
+    html = html.replace("/*__SIM__*/", sim_code() + "\n" + (ROOT / "tools" / "vendor" / "three-post.js").read_text(encoding="utf-8"))
     OUT.parent.mkdir(exist_ok=True)
-    OUT.write_text(html)
+    OUT.write_text(html, encoding="utf-8", newline="\n")
     print(f"{OUT.relative_to(ROOT)}: {len(libs)} libraries, {len(html) // 1024} KB")
 
 

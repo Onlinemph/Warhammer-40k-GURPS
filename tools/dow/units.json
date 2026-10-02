@@ -1,0 +1,2309 @@
+{
+ "about": "Which Dawn of War model stands in for which simulator unit. See tools/dow/README.md. 'match' and 'not' are regular expressions tested against '<faction> <template> <vehicle> | <ranged weapon>|<melee weapon>|<armour>'; the first unit that matches is used. 'proxy' marks a stand-in for a unit the game has no model of.",
+ "units": [
+  {
+   "id": "sm2_terminator",
+   "game": "dow2",
+   "match": "^Astartes .*(Terminator|Tactical Dreadnought|Cataphractii)",
+   "skeleton": "art/race_marine/troops/terminator/terminator.model",
+   "parts": {
+    "body": "art/race_marine/troops_wargear/armour/terminator_armour_common/terminator_armour_common.model",
+    "head": "art/race_marine/troops_wargear/heads/terminator/terminator_head.model",
+    "bolter": "art/race_marine/troops_wargear/weapons_ranged/storm_bolter/storm_bolter.model",
+    "fist": "art/race_marine/troops_wargear/weapons_melee/terminator_powerfist/terminator_powerfist.model",
+    "flamer": "art/race_marine/troops_wargear/weapons_ranged/heavy_flamer_terminator/heavy_flamer_terminator.model",
+    "cannon": "art/race_marine/troops_wargear/weapons_ranged/assault_cannon_terminator/assault_cannon_terminator.model"
+   },
+   "anims": "art/race_marine/troops/terminator/animations/melee_powerfist_range_pistol",
+   "looks": {
+    "default": [
+     "body",
+     "head",
+     "bolter",
+     "fist"
+    ],
+    "flame": [
+     "body",
+     "head",
+     "flamer",
+     "fist"
+    ],
+    "slug": [
+     "body",
+     "head",
+     "cannon",
+     "fist"
+    ],
+    "shell": [
+     "body",
+     "head",
+     "cannon",
+     "fist"
+    ]
+   },
+   "sets": {
+    "flame": "art/race_marine/troops/terminator/animations/range_flamer",
+    "slug": "art/race_marine/troops/terminator/animations/range_heavy_automatic",
+    "shell": "art/race_marine/troops/terminator/animations/range_heavy_automatic"
+   },
+   "tem": "pptt",
+   "h": 2.05,
+   "kits": {
+    "Assault Cannon": "slug"
+   },
+   "clips": {
+    "idle": "fb_idle_stand_01",
+    "run": "fb_run_01"
+   }
+  },
+  {
+   "id": "sm2_scout",
+   "game": "dow2",
+   "match": "^Astartes Astartes Scout",
+   "skeleton": "art/race_marine/troops/scout_1/scout_1.model",
+   "parts": {
+    "body": "art/race_marine/troops_wargear/armour/scout_armour_common/scout_armour_common.model",
+    "head": "art/race_marine/troops_wargear/heads/scout_1/scout_1.model",
+    "bolter": "art/race_marine/troops_wargear/weapons_ranged/bolter_common/bolter_common.model",
+    "sniper": "art/race_marine/troops_wargear/weapons_ranged/sniper_rifle_common/sniper_rifle_common.model",
+    "shotgun": "art/race_marine/troops_wargear/weapons_ranged/shotgun_common/shotgun_common.model",
+    "knife": "art/race_marine/troops_wargear/weapons_melee/knife_common/knife_common.model"
+   },
+   "anims": "art/race_marine/troops/scout_1/animations/range_flamer",
+   "looks": {
+    "default": [
+     "body",
+     "head",
+     "bolter"
+    ],
+    "las": [
+     "body",
+     "head",
+     "sniper"
+    ],
+    "slug": [
+     "body",
+     "head",
+     "shotgun"
+    ],
+    "blade": [
+     "body",
+     "head",
+     "knife"
+    ]
+   },
+   "sets": {
+    "las": "art/race_marine/troops/scout_1/animations/range_sniper_rifle"
+   },
+   "tem": "pptt",
+   "h": 1.7
+  },
+  {
+   "id": "sm2_sergeant",
+   "game": "dow2",
+   "match": "^Astartes .*\\| *(Bolt|Plasma) Pistol",
+   "skeleton": "art/race_marine/troops/space_marine/space_marine.model",
+   "parts": {
+    "body": "art/race_marine/troops_wargear/armour/power_armour_common/power_armour_common.model",
+    "head": "art/race_marine/troops_wargear/heads/tarkus/tarkus_head.model",
+    "backpack": "art/race_marine/troops_wargear/accessories/space_marine_backpack/space_marine_backpack.model",
+    "pistol": "art/race_marine/troops_wargear/weapons_ranged/bolt_pistol_common/bolt_pistol_common.model",
+    "plasma": "art/race_marine/troops_wargear/weapons_ranged/plasma_pistol_common/plasma_pistol_common.model",
+    "chainsword": "art/race_marine/troops_wargear/weapons_melee/chainsword_common/chainsword_common.model",
+    "axe": "art/race_marine/troops_wargear/weapons_melee/power_axe_common/power_axe_common.model",
+    "fist": "art/race_marine/troops_wargear/weapons_melee/power_fist_common/power_fist_common.model"
+   },
+   "anims": "art/race_marine/troops/space_marine/animations/melee_blade_range_pistol",
+   "looks": {
+    "default": [
+     "body",
+     "head",
+     "backpack",
+     "pistol",
+     "chainsword"
+    ],
+    "bolt+power": [
+     "body",
+     "head",
+     "backpack",
+     "pistol",
+     "axe"
+    ],
+    "bolt+axe": [
+     "body",
+     "head",
+     "backpack",
+     "pistol",
+     "axe"
+    ],
+    "bolt+fist": [
+     "body",
+     "head",
+     "backpack",
+     "pistol",
+     "fist"
+    ],
+    "plasma": [
+     "body",
+     "head",
+     "backpack",
+     "plasma",
+     "chainsword"
+    ],
+    "plasma+power": [
+     "body",
+     "head",
+     "backpack",
+     "plasma",
+     "axe"
+    ],
+    "plasma+fist": [
+     "body",
+     "head",
+     "backpack",
+     "plasma",
+     "fist"
+    ]
+   },
+   "sets": {
+    "bolt+power": "art/race_marine/troops/space_marine/animations/melee_axe_range_pistol",
+    "bolt+axe": "art/race_marine/troops/space_marine/animations/melee_axe_range_pistol",
+    "plasma+power": "art/race_marine/troops/space_marine/animations/melee_axe_range_pistol",
+    "bolt+fist": "art/race_marine/troops/space_marine/animations/melee_powerfist_range_pistol",
+    "plasma+fist": "art/race_marine/troops/space_marine/animations/melee_powerfist_range_pistol"
+   },
+   "tem": "pptt",
+   "h": 1.8,
+   "kits": {
+    "Plasma": "plasma"
+   },
+   "not": "Scout|Terminator|Tactical Dreadnought|Cataphractii"
+  },
+  {
+   "id": "sm2_marine",
+   "game": "dow2",
+   "match": "^Astartes ",
+   "skeleton": "art/race_marine/troops/space_marine/space_marine.model",
+   "parts": {
+    "body": "art/race_marine/troops_wargear/armour/power_armour_common/power_armour_common.model",
+    "head": "art/race_marine/troops_wargear/heads/space_marine/space_marine_head.model",
+    "backpack": "art/race_marine/troops_wargear/accessories/space_marine_backpack/space_marine_backpack.model",
+    "bolter": "art/race_marine/troops_wargear/weapons_ranged/bolter_common/bolter_common.model",
+    "plasma": "art/race_marine/troops_wargear/weapons_ranged/plasma_gun_common/plasma_gun_common.model",
+    "flamer": "art/race_marine/troops_wargear/weapons_ranged/flamer_common/flamer_common.model",
+    "melta": "art/race_marine/troops_wargear/weapons_ranged/meltagun_common/meltagun_common.model",
+    "missile": "art/race_marine/troops_wargear/weapons_ranged/missile_launcher_common/missile_launcher_common.model",
+    "lascannon": "art/race_marine/troops_wargear/weapons_ranged/lascannon_common/lascannon_common.model",
+    "knife": "art/race_marine/troops_wargear/weapons_melee/knife_common/knife_common.model",
+    "hbolter": "art/race_marine/troops_wargear/weapons_ranged/heavy_bolter_common/heavy_bolter_common.model"
+   },
+   "anims": "art/race_marine/troops/space_marine/animations/range_burst",
+   "looks": {
+    "default": [
+     "body",
+     "head",
+     "backpack",
+     "bolter"
+    ],
+    "plasma": [
+     "body",
+     "head",
+     "backpack",
+     "plasma"
+    ],
+    "flame": [
+     "body",
+     "head",
+     "backpack",
+     "flamer"
+    ],
+    "melta": [
+     "body",
+     "head",
+     "backpack",
+     "melta"
+    ],
+    "shell": [
+     "body",
+     "head",
+     "backpack",
+     "missile"
+    ],
+    "lascannon": [
+     "body",
+     "head",
+     "backpack",
+     "lascannon"
+    ],
+    "hbolt": [
+     "body",
+     "head",
+     "backpack",
+     "hbolter"
+    ],
+    "blade": [
+     "body",
+     "head",
+     "backpack",
+     "knife"
+    ],
+    "chain": [
+     "body",
+     "head",
+     "backpack",
+     "knife"
+    ]
+   },
+   "sets": {
+    "shell": "art/race_marine/troops/space_marine/animations/range_missile_launcher",
+    "lascannon": "art/race_marine/troops/space_marine/animations/range_lascannon",
+    "hbolt": "art/race_marine/troops/space_marine/animations/range_heavy_automatic"
+   },
+   "tem": "pptt",
+   "h": 1.8,
+   "kits": {
+    "Heavy Bolter|Autocannon": "hbolt",
+    "Plasma": "plasma"
+   },
+   "not": "Scout|Terminator|Tactical Dreadnought|Cataphractii"
+  },
+  {
+   "id": "ig2_scion",
+   "game": "dow2",
+   "match": "Tempestus Scion",
+   "skeleton": "art/race_ig/troops/gaurdsman/guardsman.model",
+   "parts": {
+    "body": "art/race_ig/troops_wargear/armour/ig_armour_epic/ig_armour_epic.model",
+    "head": "art/race_ig/troops_wargear/heads/ig_trooper_epic/ig_trooper_epic.model",
+    "gun": "art/race_ig/troops_wargear/weapons_ranged/hellgun/hellgun.model"
+   },
+   "anims": "art/race_ig/troops/gaurdsman/animations/range_burst",
+   "tem": "pss-",
+   "h": 1.75,
+   "clips": {
+    "die": "fb_die_01"
+   }
+  },
+  {
+   "id": "ig2_sergeant",
+   "game": "dow2",
+   "match": "Astra Militarum Sergeant|Inquisitorial Acolyte",
+   "skeleton": "art/race_ig/troops/gaurdsman/guardsman.model",
+   "parts": {
+    "torso": "art/race_ig/troops_wargear/armour/ig_armour/ig_armour.model",
+    "body": "art/race_ig/troops_wargear/armour/ig_armour_common_b/ig_armour_common_b.model",
+    "head": "art/race_ig/troops_wargear/heads/ig_sergeant_a/ig_sergeant_a.model",
+    "pistol": "art/race_ig/troops_wargear/weapons_ranged/laspistol/laspistol.model",
+    "sword": "art/race_ig/troops_wargear/weapons_melee/ig_chainsword_common/ig_chainsword_common.model"
+   },
+   "anims": "art/race_ig/troops/gaurdsman/animations/melee_blade_range_pistol",
+   "tem": "pss-",
+   "h": 1.72,
+   "clips": {
+    "melee": "fb_melee_01",
+    "die": "fb_die_f"
+   }
+  },
+  {
+   "id": "ig2_guardsman",
+   "game": "dow2",
+   "match": "Guardsman",
+   "skeleton": "art/race_ig/troops/gaurdsman/guardsman.model",
+   "parts": {
+    "torso": "art/race_ig/troops_wargear/armour/ig_armour/ig_armour.model",
+    "body": "art/race_ig/troops_wargear/armour/ig_armour_common_a/ig_armour_common_a.model",
+    "head": "art/race_ig/troops_wargear/heads/ig_trooper_common_a/ig_trooper_common_a.model",
+    "gun": "art/race_ig/troops_wargear/weapons_ranged/lasgun/lasgun.model"
+   },
+   "anims": "art/race_ig/troops/gaurdsman/animations/range_burst",
+   "tem": "pss-",
+   "h": 1.7,
+   "clips": {
+    "die": "fb_die_01"
+   }
+  },
+  {
+   "id": "csm2_plague",
+   "game": "dow2",
+   "match": "Plague Marine",
+   "skeleton": "art/race_chaos/troops/plague_marine/plague_marine.model",
+   "parts": {
+    "body": "art/race_chaos/troops_wargear/armour/plague_marine_common/plague_marine_common.model",
+    "head": "art/race_chaos/troops_wargear/heads/chaos_plague_marine_common/plague_marine_head_common.model",
+    "backpack": "art/race_chaos/troops_wargear/accessories/plague_marine_backpack_common/plague_marine_backpack_common.model",
+    "bolter": "art/race_chaos/troops_wargear/weapons_ranged/blighted_bolter/blighted_bolter.model",
+    "flamer": "art/race_chaos/troops_wargear/weapons_ranged/plague_flamer_common/plague_flamer_common.model",
+    "missile": "art/race_chaos/troops_wargear/weapons_ranged/chaos_missile_launcher_common/chaos_missile_launcher_common.model"
+   },
+   "anims": "art/race_chaos/troops/plague_marine/animations/range_burst",
+   "looks": {
+    "default": [
+     "body",
+     "head",
+     "backpack",
+     "bolter"
+    ],
+    "flame": [
+     "body",
+     "head",
+     "backpack",
+     "flamer"
+    ],
+    "shell": [
+     "body",
+     "head",
+     "backpack",
+     "missile"
+    ]
+   },
+   "sets": {
+    "shell": "art/race_chaos/troops/plague_marine/animations/range_missile_launcher"
+   },
+   "tem": "-t-p",
+   "h": 1.85
+  },
+  {
+   "id": "csm2_lord",
+   "game": "dow2",
+   "match": "Chaos Lord",
+   "skeleton": "art/race_chaos/troops/chaos_lord/chaos_lord.model",
+   "parts": {
+    "body": "art/race_chaos/troops_wargear/armour/chaos_lord_common/chaos_lord_common.model",
+    "sword": "art/race_chaos/troops_wargear/weapons_melee/power_sword_chaos_lord/power_sword_chaos_lord.model",
+    "pistol": "art/race_chaos/troops_wargear/weapons_ranged/bolt_pistol_common/bolt_pistol_common.model",
+    "plasma": "art/race_chaos/troops_wargear/weapons_ranged/plasma_pistol_common/plasma_pistol_common.model"
+   },
+   "anims": "art/race_chaos/troops/chaos_lord/animations/melee_blade_range_pistol",
+   "looks": {
+    "default": [
+     "body",
+     "sword",
+     "pistol"
+    ],
+    "plasma": [
+     "body",
+     "sword",
+     "plasma"
+    ]
+   },
+   "tem": "pt-t",
+   "h": 1.95,
+   "clips": {
+    "die": "melee_twohand_hammer/fb_die_normal"
+   }
+  },
+  {
+   "id": "csm2_sorcerer",
+   "game": "dow2",
+   "match": "Chaos Sorcerer",
+   "skeleton": "art/race_chaos/troops/chaos_sorceror/chaos_sorceror.model",
+   "parts": {
+    "body": "art/race_chaos/troops_wargear/armour/chaos_sorcerer_common/chaos_sorcerer_common.model",
+    "head": "art/race_chaos/troops_wargear/heads/chaos_sorcerer_common/chaos_sorcerer_head_common.model",
+    "backpack": "art/race_chaos/troops_wargear/accessories/chaos_sorcerer_bacpack_common/chaos_sorcerer_backpack_common.model",
+    "staff": "art/race_chaos/troops_wargear/weapons_melee/sorceror_staff_common/sorceror_staff_common.model"
+   },
+   "anims": "art/race_chaos/troops/chaos_sorceror/animations/melee_staff",
+   "tem": "pt-t",
+   "h": 1.9,
+   "clips": {
+    "idle": "fb_stand_idle_01",
+    "fire": "fb_range_fire",
+    "die": "fb_death"
+   }
+  },
+  {
+   "id": "csm2_berzerker",
+   "game": "dow2",
+   "match": "Berzerker",
+   "skeleton": "art/race_chaos/troops/chaos_marine/chaos_marine.model",
+   "parts": {
+    "body": "art/race_chaos/troops_wargear/armour/chaos_marine_common/chaos_marine_common.model",
+    "head": "art/race_chaos/troops_wargear/heads/chaos_marine_common/chaos_marine_common_head.model",
+    "backpack": "art/race_chaos/troops_wargear/accessories/chaos_marine_backpack_common/chaos_marine_backpack_common.model",
+    "pistol": "art/race_chaos/troops_wargear/weapons_ranged/bolt_pistol_common/bolt_pistol_common.model",
+    "axe": "art/race_chaos/troops_wargear/weapons_melee/chain_axe_common/chain_axe_common.model"
+   },
+   "anims": "art/race_chaos/troops/chaos_marine/animations/melee_axe_range_pistol",
+   "tem": "pt-t",
+   "h": 1.85
+  },
+  {
+   "id": "csm2_champion",
+   "game": "dow2",
+   "match": "^(Heretic Astartes|Rubric Marines) .*\\| *(Bolt|Plasma) Pistol",
+   "skeleton": "art/race_chaos/troops/chaos_marine/chaos_marine.model",
+   "parts": {
+    "body": "art/race_chaos/troops_wargear/armour/chaos_aspiring_champion/chaos_aspiring_champion.model",
+    "head": "art/race_chaos/troops_wargear/heads/chaos_aspiring_champion_common/chaos_aspiring_champion_common.model",
+    "backpack": "art/race_chaos/troops_wargear/accessories/chaos_marine_backpack_common/chaos_marine_backpack_common.model",
+    "pistol": "art/race_chaos/troops_wargear/weapons_ranged/bolt_pistol_common/bolt_pistol_common.model",
+    "plasma": "art/race_chaos/troops_wargear/weapons_ranged/plasma_pistol_common/plasma_pistol_common.model",
+    "chainsword": "art/race_chaos/troops_wargear/weapons_melee/chainsword_common/chainsword_common.model",
+    "sword": "art/race_chaos/troops_wargear/weapons_melee/power_sword_common/power_sword_common.model",
+    "fist": "art/race_chaos/troops_wargear/weapons_melee/plague_champion_powerfist/plague_champion_powerfist.model"
+   },
+   "anims": "art/race_chaos/troops/chaos_marine/animations/melee_blade_range_pistol",
+   "looks": {
+    "default": [
+     "body",
+     "head",
+     "backpack",
+     "pistol",
+     "chainsword"
+    ],
+    "bolt+power": [
+     "body",
+     "head",
+     "backpack",
+     "pistol",
+     "sword"
+    ],
+    "bolt+fist": [
+     "body",
+     "head",
+     "backpack",
+     "pistol",
+     "fist"
+    ],
+    "plasma": [
+     "body",
+     "head",
+     "backpack",
+     "plasma",
+     "chainsword"
+    ],
+    "plasma+power": [
+     "body",
+     "head",
+     "backpack",
+     "plasma",
+     "sword"
+    ]
+   },
+   "sets": {
+    "bolt+fist": "art/race_chaos/troops/chaos_marine/animations/melee_powerfist_range_pistol"
+   },
+   "tem": "pt-t",
+   "h": 1.82,
+   "kits": {
+    "Plasma": "plasma"
+   }
+  },
+  {
+   "id": "csm2",
+   "game": "dow2",
+   "match": "^(Heretic Astartes|Rubric Marines) ",
+   "skeleton": "art/race_chaos/troops/chaos_marine/chaos_marine.model",
+   "parts": {
+    "body": "art/race_chaos/troops_wargear/armour/chaos_marine_common/chaos_marine_common.model",
+    "head": "art/race_chaos/troops_wargear/heads/chaos_marine_common/chaos_marine_common_head.model",
+    "backpack": "art/race_chaos/troops_wargear/accessories/chaos_marine_backpack_common/chaos_marine_backpack_common.model",
+    "bolter": "art/race_chaos/troops_wargear/weapons_ranged/bolter_common/bolter_common.model",
+    "plasma": "art/race_chaos/troops_wargear/weapons_ranged/plasma_gun_common/plasma_gun_common.model",
+    "missile": "art/race_chaos/troops_wargear/weapons_ranged/chaos_missile_launcher_common/chaos_missile_launcher_common.model",
+    "lascannon": "art/race_chaos/troops_wargear/weapons_ranged/chaos_lascannon_common/chaos_lascannon_common.model",
+    "flamer": "art/race_chaos/troops_wargear/weapons_ranged/combi_flamer_common/combiflamer_common.model",
+    "knife": "art/race_chaos/troops_wargear/weapons_melee/chainsword_common/chainsword_common.model",
+    "hbolter": "art/race_chaos/troops_wargear/weapons_ranged/chaos_heavy_bolter_common/chaos_heavy_bolter_common.model",
+    "autocannon": "art/race_chaos/troops_wargear/weapons_ranged/chaos_autocannon_common/chaos_autocannon_common.model"
+   },
+   "anims": "art/race_chaos/troops/chaos_marine/animations/range_burst",
+   "looks": {
+    "default": [
+     "body",
+     "head",
+     "backpack",
+     "bolter"
+    ],
+    "plasma": [
+     "body",
+     "head",
+     "backpack",
+     "plasma"
+    ],
+    "shell": [
+     "body",
+     "head",
+     "backpack",
+     "missile"
+    ],
+    "lascannon": [
+     "body",
+     "head",
+     "backpack",
+     "lascannon"
+    ],
+    "flame": [
+     "body",
+     "head",
+     "backpack",
+     "flamer"
+    ],
+    "hbolt": [
+     "body",
+     "head",
+     "backpack",
+     "hbolter"
+    ],
+    "autocannon": [
+     "body",
+     "head",
+     "backpack",
+     "autocannon"
+    ]
+   },
+   "sets": {
+    "shell": "art/race_chaos/troops/chaos_marine/animations/range_missile_launcher",
+    "lascannon": "art/race_chaos/troops/chaos_marine/animations/range_heavy_energy",
+    "hbolt": "art/race_chaos/troops/chaos_marine/animations/range_heavy_automatic",
+    "autocannon": "art/race_chaos/troops/chaos_marine/animations/range_heavy_automatic"
+   },
+   "tem": "pt-t",
+   "h": 1.8,
+   "kits": {
+    "Heavy Bolter": "hbolt",
+    "Autocannon": "autocannon",
+    "Plasma": "plasma"
+   }
+  },
+  {
+   "id": "cultist2_champion",
+   "game": "dow2",
+   "match": "Chaos Cultist Champion",
+   "skeleton": "art/race_chaos/troops/heretic/heretic.model",
+   "parts": {
+    "body": "art/race_chaos/troops_wargear/armour/heretic_common/heretic.model",
+    "pistol": "art/race_chaos/troops_wargear/weapons_ranged/autopistol_heretic_common/autopistol_heretic_common.model",
+    "sword": "art/race_chaos/troops_wargear/weapons_melee/sword_heretic_common/sword_heretic_common.model"
+   },
+   "anims": "art/race_chaos/troops/heretic/animations/melee_blade_range_pistol",
+   "tem": "sp--",
+   "h": 1.72,
+   "clips": {
+    "die": "fb_death_01"
+   }
+  },
+  {
+   "id": "cultist2",
+   "game": "dow2",
+   "match": "Chaos Cultist",
+   "skeleton": "art/race_chaos/troops/heretic/heretic.model",
+   "parts": {
+    "body": "art/race_chaos/troops_wargear/armour/heretic_common/heretic.model",
+    "gun": "art/race_chaos/troops_wargear/weapons_ranged/autogun_heretic_common/autogun_heretic_common.model"
+   },
+   "anims": "art/race_chaos/troops/heretic/animations/range_burst",
+   "tem": "sp--",
+   "h": 1.7,
+   "clips": {
+    "die": "fb_death_01"
+   }
+  },
+  {
+   "id": "eld2_guardian",
+   "game": "dow2",
+   "match": "Aeldari Guardian",
+   "skeleton": "art/race_eldar/troops/guardian/guardian.model",
+   "parts": {
+    "body": "art/race_eldar/troops_wargear/armour/guardian_common/guardian_common.model",
+    "gun": "art/race_eldar/troops_wargear/weapons_ranged/shuriken_catapult_common/shuriken_catapult_common.model"
+   },
+   "anims": "art/race_eldar/troops/guardian/animations/range_burst",
+   "tem": "pst-",
+   "h": 1.8,
+   "clips": {
+    "throw": "grenade"
+   }
+  },
+  {
+   "id": "eld2_ranger",
+   "game": "dow2",
+   "match": "Aeldari Ranger",
+   "skeleton": "art/race_eldar/troops/ranger/ranger.model",
+   "parts": {
+    "body": "art/race_eldar/troops_wargear/armour/ranger_armour_common/ranger_armour_common.model",
+    "head": "art/race_eldar/troops_wargear/heads/ranger_head_common/ranger_head_common.model",
+    "gun": "art/race_eldar/troops_wargear/weapons_ranged/long_rifle_common/long_rifle_common.model"
+   },
+   "anims": "art/race_eldar/troops/ranger/animations/range_burst",
+   "tem": "pst-",
+   "h": 1.8
+  },
+  {
+   "id": "eld2_exarch",
+   "game": "dow2",
+   "match": "^Aeldari Exarch",
+   "skeleton": "art/race_eldar/troops/banshee/banshee.model",
+   "parts": {
+    "body": "art/race_eldar/troops_wargear/armour/banshee_exarch_armour_common/banshee_exarch_armour_common.model",
+    "head": "art/race_eldar/troops_wargear/heads/banshee_exarch_head_common/banshee_exarch_head_common.model",
+    "glaive": "art/race_eldar/troops_wargear/weapons_melee/executioner_common/executioner_common.model"
+   },
+   "anims": "art/race_eldar/troops/banshee/animations/melee_staff",
+   "tem": "pst-",
+   "h": 1.88
+  },
+  {
+   "id": "eld2_banshee",
+   "game": "dow2",
+   "match": "Aspect Warrior",
+   "skeleton": "art/race_eldar/troops/banshee/banshee.model",
+   "parts": {
+    "body": "art/race_eldar/troops_wargear/armour/banshee_armour_common/banshee_armour_common.model",
+    "head": "art/race_eldar/troops_wargear/heads/banshee_head_common/banshee_head_common.model",
+    "pistol": "art/race_eldar/troops_wargear/weapons_ranged/shuriken_pistol/shuriken_pistol.model",
+    "sword": "art/race_eldar/troops_wargear/weapons_melee/powersword_common/powersword_common.model"
+   },
+   "anims": "art/race_eldar/troops/banshee/animations/melee_blade_range_pistol",
+   "tem": "pst-",
+   "h": 1.8,
+   "clips": {
+    "idle": "fb_aim_stand",
+    "run": "fb_run01"
+   }
+  },
+  {
+   "id": "eld2_warlock",
+   "game": "dow2",
+   "match": "Warlock",
+   "skeleton": "art/race_eldar/troops/warlock/warlock.model",
+   "parts": {
+    "body": "art/race_eldar/troops_wargear/armour/warlock_common/warlock.model",
+    "head": "art/race_eldar/troops_wargear/heads/warlock_head_common/warlock_head_common.model",
+    "spear": "art/race_eldar/troops_wargear/weapons_melee/spear_common/spear.model"
+   },
+   "anims": "art/race_eldar/troops/warlock/animations/melee_spear",
+   "tem": "pst-",
+   "h": 1.82,
+   "clips": {
+    "idle": "fb_stand_idle_01",
+    "fire": "fb_range_attack"
+   }
+  },
+  {
+   "id": "eld2_farseer",
+   "game": "dow2",
+   "match": "Farseer",
+   "skeleton": "art/race_eldar/troops/farseer/farseer.model",
+   "parts": {
+    "body": "art/race_eldar/troops_wargear/armour/farseer_armour_common/farseer_armour_common.model",
+    "spear": "art/race_eldar/troops_wargear/weapons_melee/farseer_spear_common/farseer_spear_common.model"
+   },
+   "anims": "art/race_eldar/troops/farseer/animations/melee_spear",
+   "tem": "pst-",
+   "h": 1.85,
+   "clips": {
+    "run": "fb_run_01",
+    "melee": "fb_melee_01",
+    "die": "fb_die_normal_01",
+    "fire": "fb_forceblast"
+   }
+  },
+  {
+   "id": "ork2_warboss",
+   "game": "dow2",
+   "match": "Warboss",
+   "skeleton": "art/race_ork/troops/warboss/warboss.model",
+   "parts": {
+    "body": "art/race_ork/troops_wargear/armour/warboss_armour_common/warboss_armour_common.model",
+    "head": "art/race_ork/troops_wargear/heads/warboss_01/warboss_head_01.model",
+    "gun": "art/race_ork/troops_wargear/weapons_ranged/kustom_shoota_common/kustom_shoota_common.model",
+    "klaw": "art/race_ork/troops_wargear/weapons_melee/power_klaw/power_klaw.model",
+    "pole": "art/race_ork/troops_wargear/accessories/war_boss_pole/war_boss_pole.model"
+   },
+   "anims": "art/race_ork/troops/warboss/animations/melee_powerfist_range_pistol",
+   "tem": "--ps",
+   "h": 2.1,
+   "clips": {
+    "idle": "fb_idle_01",
+    "run": "fb_run_01",
+    "fire": "fb_idle_fire_01",
+    "die": "fb_die_01",
+    "throw": "fb_grenade_throw"
+   }
+  },
+  {
+   "id": "ork2_weirdboy",
+   "game": "dow2",
+   "match": "Weirdboy",
+   "skeleton": "art/race_ork/troops/weirdboy/weirdboy.model",
+   "parts": {
+    "body": "art/race_ork/troops_wargear/armour/weirdboy_amour_common/weirdboy.model",
+    "gear": "art/race_ork/troops_wargear/accessories/weirdboy_gear/weirdboy_gear.model",
+    "staff": "art/race_ork/troops_wargear/weapons_melee/weirdboy_staff/weirdboy_staff.model"
+   },
+   "anims": "art/race_ork/troops/weirdboy/animations/melee_spear",
+   "tem": "--ps",
+   "h": 1.85,
+   "clips": {
+    "fire": "fb_range_attack_01",
+    "die": null
+   }
+  },
+  {
+   "id": "ork2_nob",
+   "game": "dow2",
+   "match": "Ork Nob",
+   "skeleton": "art/race_ork/troops/nob/nob.model",
+   "parts": {
+    "body": "art/race_ork/troops_wargear/armour/slugga_nob_armour_common/slugga_nob_armour_common.model",
+    "head": "art/race_ork/troops_wargear/heads/nob_skullsplitta/nob_skullsplitta.model",
+    "gun": "art/race_ork/troops_wargear/weapons_ranged/slugga_nob_rare/slugga_nob_rare.model",
+    "choppa": "art/race_ork/troops_wargear/weapons_melee/choppa_nob_rare/choppa_nob_rare.model",
+    "klaw": "art/race_ork/troops_wargear/weapons_melee/power_klaw/power_klaw.model"
+   },
+   "anims": "art/race_ork/troops/nob/animations/melee_blade_range_pistol",
+   "looks": {
+    "default": [
+     "body",
+     "head",
+     "gun",
+     "choppa"
+    ],
+    "slug+fist": [
+     "body",
+     "head",
+     "gun",
+     "klaw"
+    ]
+   },
+   "tem": "--ps",
+   "h": 1.95
+  },
+  {
+   "id": "ork2_kommando",
+   "game": "dow2",
+   "match": "Kommando",
+   "skeleton": "art/race_ork/troops/boy/boy.model",
+   "parts": {
+    "body": "art/race_ork/troops_wargear/armour/kommandoboyz_armour_common/kommandoboyz_armour_common.model",
+    "head": "art/race_ork/troops_wargear/heads/boy/boy.model",
+    "gun": "art/race_ork/troops_wargear/weapons_ranged/slugga_common/slugga_common.model",
+    "choppa": "art/race_ork/troops_wargear/weapons_melee/choppa_common/choppa_common.model"
+   },
+   "anims": "art/race_ork/troops/boy/animations/melee_blade_range_pistol",
+   "tem": "--ps",
+   "h": 1.8,
+   "clips": {
+    "run": "fb_run_f",
+    "fire": "fb_fire_stand_01"
+   }
+  },
+  {
+   "id": "ork2_boy",
+   "game": "dow2",
+   "match": "Ork Boy",
+   "skeleton": "art/race_ork/troops/boy/boy.model",
+   "parts": {
+    "body": "art/race_ork/troops_wargear/armour/sluggaboyz_armour_common/sluggaboyz_armour_common.model",
+    "head": "art/race_ork/troops_wargear/heads/boy/boy.model",
+    "gun": "art/race_ork/troops_wargear/weapons_ranged/slugga_common/slugga_common.model",
+    "choppa": "art/race_ork/troops_wargear/weapons_melee/choppa_common/choppa_common.model",
+    "burna": "art/race_ork/troops_wargear/weapons_ranged/burna_common/burna_common.model",
+    "rokkit": "art/race_ork/troops_wargear/weapons_ranged/rokkit_launcha_common/rokkit_launcha_common.model",
+    "bigshoota": "art/race_ork/troops_wargear/weapons_ranged/big_shoota_common/big_shoota_common.model"
+   },
+   "anims": "art/race_ork/troops/boy/animations/melee_blade_range_pistol",
+   "looks": {
+    "default": [
+     "body",
+     "head",
+     "gun",
+     "choppa"
+    ],
+    "flame": [
+     "body",
+     "head",
+     "burna"
+    ],
+    "shell": [
+     "body",
+     "head",
+     "rokkit"
+    ],
+    "bigshoota": [
+     "body",
+     "head",
+     "bigshoota"
+    ]
+   },
+   "sets": {
+    "flame": "art/race_ork/troops/boy/animations/range_flamer",
+    "shell": "art/race_ork/troops/boy/animations/range_missile_launcher",
+    "bigshoota": "art/race_ork/troops/boy/animations/range_heavy_automatic"
+   },
+   "tem": "--ps",
+   "h": 1.8,
+   "kits": {
+    "Big Shoota": "bigshoota"
+   },
+   "clips": {
+    "run": [
+     "fb_run_f",
+     "fb_run"
+    ],
+    "fire": "fb_fire_stand_01"
+   }
+  },
+  {
+   "id": "sm_sergeant",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/space_marines/troops/sergeant.whm",
+   "match": "^Astartes .*\\| *(Bolt|Plasma) Pistol",
+   "not": "Scout|Terminator|Tactical Dreadnought",
+   "h": 1.8,
+   "clips_from": "sm_marine",
+   "looks": {
+    "default": "vis_bolt_chainsword",
+    "bolt+chain": "vis_bolt_chainsword",
+    "bolt+power": "vis_bolt_sword",
+    "bolt+fist": "vis_bolt_fist",
+    "plasma": "vis_plasma_chainsword",
+    "plasma+power": "vis_plasma_sword",
+    "plasma+fist": "vis_plasma_fist"
+   },
+   "kits": {
+    "Plasma": "plasma"
+   },
+   "sets": {
+    "bolt+fist": "power_fist",
+    "plasma+fist": {
+     "prefix": "power_fist",
+     "fire": "sergeant_plasma_pistol_fire"
+    },
+    "plasma": {
+     "fire": "sergeant_plasma_pistol_fire"
+    },
+    "plasma+power": {
+     "fire": "sergeant_plasma_pistol_fire"
+    }
+   }
+  },
+  {
+   "id": "sm_terminator",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/space_marines/troops/terminator.whm",
+   "match": "^Astartes .*(Terminator|Tactical Dreadnought|Cataphractii)",
+   "h": 2.05,
+   "base": [
+    "terminator_legs",
+    "terminator_shoulder_pad_l",
+    "terminator_shoulder_pad_r"
+   ],
+   "looks": {
+    "default": [
+     "terminator_storm_bolter"
+    ],
+    "flame": [
+     "terminator_heavy_flamer"
+    ],
+    "slug": [
+     "terminator_assult_cannon"
+    ],
+    "shell": [
+     "terminator_assult_cannon"
+    ]
+   },
+   "kits": {
+    "Assault Cannon": "slug"
+   },
+   "sets": {
+    "flame": {
+     "fire": "heavy_flamer_fire_1",
+     "run": "heavy_flamer_run_fire",
+     "die": "heavy_flamer_die_1"
+    },
+    "slug": {
+     "run": "assault_cannon_run_fire",
+     "die": "assault_cannon_die_1"
+    },
+    "shell": {
+     "run": "assault_cannon_run_fire",
+     "die": "assault_cannon_die_1"
+    }
+   }
+  },
+  {
+   "id": "sm_scout",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/space_marines/troops/scout.whm",
+   "match": "^Astartes Astartes Scout",
+   "h": 1.7,
+   "clips_from": "sm_marine",
+   "own": false,
+   "looks": {
+    "default": "scout_bolter_vis",
+    "plasma": "scout_plasma_rifle_vis",
+    "flame": "scout_flamer_vis",
+    "las": "scout_sniper_rifle_vis",
+    "blade": "scout_knife_vis"
+   },
+   "kits": {
+    "Plasma": "plasma",
+    "Sniper|Long-Las": "las"
+   },
+   "sets": {
+    "flame": {
+     "fire": "scout_flamer_fire"
+    },
+    "las": {
+     "fire": "scout_sniper_rifle_fire"
+    }
+   }
+  },
+  {
+   "id": "sm_marine",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/space_marines/troops/space_marine.whm",
+   "match": "^Astartes ",
+   "h": 1.8,
+   "looks": {
+    "default": "vis_bolter",
+    "plasma": "vis_plasma",
+    "flame": "vis_flamer",
+    "melta": "vis_flamer",
+    "shell": "vis_missile_launcher",
+    "lascannon": "vis_missile_launcher",
+    "hbolt": "vis_heavy_bolter",
+    "blade": "vis_knife",
+    "chain": "vis_knife"
+   },
+   "kits": {
+    "Heavy Bolter|Autocannon|Multi-Melta": "hbolt",
+    "Plasma": "plasma"
+   },
+   "sets": {
+    "hbolt": "marine_heavy_bolter",
+    "flame": {
+     "prefix": "marine_flamer",
+     "run": "marine_flamer_run_fire"
+    },
+    "melta": {
+     "prefix": "marine_flamer",
+     "run": "marine_flamer_run_fire"
+    },
+    "shell": {
+     "prefix": "marine_missile_launcher",
+     "fire": "marine_missile_launcher_fire_and_reload"
+    },
+    "lascannon": {
+     "prefix": "marine_missile_launcher",
+     "fire": "marine_missile_launcher_fire_and_reload"
+    }
+   },
+   "clips": {
+    "throw": "marine_grenade_fire"
+   }
+  },
+  {
+   "id": "custodes",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/space_marines/troops/grey_knight.whm",
+   "match": "^Custodes (Custodian|Shield-Captain)",
+   "h": 1.95,
+   "proxy": "Grey Knight",
+   "tint": "#e0b040",
+   "looks": {
+    "default": "vis_main"
+   }
+  },
+  {
+   "id": "sister_of_silence",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/sisters/troops/battle_sister_veteran_superior.whm",
+   "match": "Sister of Silence",
+   "h": 1.72,
+   "proxy": "Sororitas Veteran Superior",
+   "looks": {
+    "default": [
+     "vis_body",
+     "vis_sword"
+    ]
+   },
+   "clips": {
+    "fire": "idle_fire_boltpistol"
+   }
+  },
+  {
+   "id": "ig_sergeant",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/imperial_guard/troops/guardsmen_sergeant.whm",
+   "match": "Astra Militarum Sergeant|Inquisitorial Acolyte|Chaos Cultist Champion",
+   "h": 1.72,
+   "base": [
+    "vis_base",
+    "vis_chest_1",
+    "vis_knee_1",
+    "vis_shoulder_1"
+   ],
+   "looks": {
+    "default": [
+     "vis_laspistol",
+     "vis_sword"
+    ],
+    "las+power": [
+     "vis_laspistol",
+     "vis_powersword"
+    ],
+    "plasma": [
+     "vis_plasmapistol",
+     "vis_sword"
+    ]
+   }
+  },
+  {
+   "id": "ig_kasrkin",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/imperial_guard/troops/kasrkin.whm",
+   "match": "Tempestus Scion|Skitarii",
+   "h": 1.75,
+   "prefix": "hellgun_",
+   "base": [
+    "vis_body"
+   ],
+   "looks": {
+    "default": [
+     "vis_hellgun"
+    ],
+    "plasma": [
+     "vis_plasma"
+    ],
+    "shell": [
+     "vis_grenade_launcher"
+    ]
+   },
+   "kits": {
+    "Plasma": "plasma"
+   },
+   "sets": {
+    "shell": "grenade_launcher"
+   }
+  },
+  {
+   "id": "ig_commissar",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/imperial_guard/troops/commissar.whm",
+   "match": "Commissar",
+   "h": 1.78,
+   "base": [
+    "vis_base"
+   ],
+   "looks": {
+    "default": [
+     "vis_laspistol",
+     "vis_sword"
+    ],
+    "bolt+fist": [
+     "vis_laspistol",
+     "vis_powerclaw"
+    ]
+   },
+   "sets": {
+    "bolt+fist": {
+     "melee": "powerfist_melee_attack_1"
+    }
+   }
+  },
+  {
+   "id": "ig_guardsman",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/imperial_guard/troops/guardsmen.whm",
+   "match": "Guardsman",
+   "h": 1.7,
+   "prefix": "lasgun_",
+   "base": [
+    "vis_base_unit",
+    "vis_chest01",
+    "vis_head01",
+    "vis_knee01",
+    "vis_shoulder01"
+   ],
+   "looks": {
+    "default": [
+     "vis_lasgun"
+    ],
+    "flame": [
+     "vis_flamer"
+    ],
+    "plasma": [
+     "vis_plasma_pistol"
+    ],
+    "shell": [
+     "vis_grenade_launcher"
+    ]
+   },
+   "kits": {
+    "Plasma": "plasma"
+   },
+   "sets": {
+    "flame": {
+     "fire": "flamer_idle_firing"
+    },
+    "shell": {
+     "fire": "grenade_launcher_idle_firing"
+    }
+   }
+  },
+  {
+   "id": "inquisitor",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/imperial_guard/troops/imperial_captain.whm",
+   "match": "Inquisitor +\\|",
+   "h": 1.8,
+   "proxy": "Imperial Guard captain",
+   "base": [
+    "vis_arms",
+    "vis_cape",
+    "vis_head",
+    "vis_legs",
+    "vis_torso_sash"
+   ],
+   "looks": {
+    "default": [
+     "vis_bolter"
+    ],
+    "plasma": [
+     "vis_plasma"
+    ],
+    "las": [
+     "vis_laspistol"
+    ]
+   }
+  },
+  {
+   "id": "interrogator",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/sisters/troops/missionary.whm",
+   "match": "Interrogator",
+   "h": 1.74,
+   "proxy": "Ecclesiarchy missionary",
+   "looks": {
+    "default": [
+     "vis_base_unit",
+     "vis_range_upgrade_1",
+     "vis_melee_upgrade_1"
+    ]
+   },
+   "clips": {
+    "fire": "idle_firing_upgrade_1"
+   }
+  },
+  {
+   "id": "psyker",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/imperial_guard/troops/sanctioned_psyker.whm",
+   "match": "Sanctioned Psyker|Astropath|Navigator",
+   "h": 1.74,
+   "base": [
+    "vis_base"
+   ],
+   "looks": {
+    "default": [
+     "vis_staff"
+    ],
+    "las": [
+     "vis_laspistol",
+     "vis_staff"
+    ]
+   }
+  },
+  {
+   "id": "techpriest",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/imperial_guard/troops/tech_priest.whm",
+   "match": "Tech-Priest|Magos|Electro-Priest",
+   "h": 1.8,
+   "looks": {
+    "default": [
+     "*"
+    ]
+   }
+  },
+  {
+   "id": "servitor",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/space_marines/troops/servitor.whm",
+   "match": "Servitor",
+   "h": 1.5,
+   "looks": {
+    "default": [
+     "*"
+    ]
+   }
+  },
+  {
+   "id": "ruststalker",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/sisters/troops/death_cult_assassin.whm",
+   "match": "Sicarian",
+   "h": 1.8,
+   "proxy": "Death Cult Assassin",
+   "looks": {
+    "default": [
+     "vis_base_unit",
+     "vis_melee_upgrade_1"
+    ]
+   }
+  },
+  {
+   "id": "sob_sister",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/sisters/troops/battle_sister.whm",
+   "match": "Adepta Sororitas|Battle Sister",
+   "h": 1.7,
+   "base": [
+    "vis_body",
+    "vis_head_1"
+   ],
+   "looks": {
+    "default": [
+     "vis_bolter"
+    ],
+    "flame": [
+     "vis_flamer"
+    ],
+    "melta": [
+     "vis_flamer"
+    ],
+    "blade": [
+     "vis_knife"
+    ]
+   },
+   "clips": {
+    "throw": "grenade",
+    "fire": "idle_aim_fire"
+   }
+  },
+  {
+   "id": "eld_guardian",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/eldar/troops/guardian.whm",
+   "match": "Aeldari Guardian",
+   "h": 1.8,
+   "looks": {
+    "default": "vis_shuriken",
+    "blade": "vis_knife"
+   }
+  },
+  {
+   "id": "eld_ranger",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/eldar/troops/ranger.whm",
+   "match": "Aeldari Ranger",
+   "h": 1.8,
+   "base": [
+    "vis_body"
+   ],
+   "looks": {
+    "default": [
+     "vis_long_rifle"
+    ]
+   },
+   "clips": {
+    "run": "run_2"
+   }
+  },
+  {
+   "id": "eld_exarch",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/eldar/troops/howling_banshee_exarch.whm",
+   "match": "^Aeldari Exarch",
+   "h": 1.88,
+   "clips_from": "eld_banshee",
+   "looks": {
+    "default": "vis_pistol_sword"
+   },
+   "clips": {
+    "melee": "melee_witchblade"
+   }
+  },
+  {
+   "id": "eld_banshee",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/eldar/troops/howling_banshee.whm",
+   "match": "Aspect Warrior",
+   "h": 1.8,
+   "looks": {
+    "default": "vis_pistol_powersword"
+   },
+   "clips": {
+    "die": "thrown_death"
+   }
+  },
+  {
+   "id": "eld_autarch",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/eldar/troops/fire_dragon_exarch.whm",
+   "match": "Autarch",
+   "h": 1.85,
+   "proxy": "Fire Dragon Exarch",
+   "looks": {
+    "default": "vis_fusion_cannon"
+   }
+  },
+  {
+   "id": "eld_warlock",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/eldar/troops/warlock.whm",
+   "match": "Warlock",
+   "h": 1.82,
+   "clips_from": "eld_farseer",
+   "looks": {
+    "default": "vis_pistol_witchblade"
+   }
+  },
+  {
+   "id": "eld_farseer",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/eldar/troops/farseer.whm",
+   "match": "Farseer",
+   "h": 1.85,
+   "base": [
+    "vis_cape",
+    "vis_gauntlets",
+    "vis_ghosthelm",
+    "vis_skirt",
+    "vis_torso"
+   ],
+   "looks": {
+    "default": [
+     "vis_staff",
+     "vis_pistol"
+    ]
+   }
+  },
+  {
+   "id": "de_succubus",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/dark_eldar/troops/wych_succubus.whm",
+   "match": "Succubus",
+   "h": 1.82,
+   "base": [
+    "vis_body"
+   ],
+   "looks": {
+    "default": [
+     "vis_splinter_pistol",
+     "vis_whip"
+    ]
+   }
+  },
+  {
+   "id": "de_wych",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/dark_eldar/troops/wych.whm",
+   "match": "Drukhari Wych",
+   "h": 1.78,
+   "base": [
+    "vis_body"
+   ],
+   "looks": {
+    "default": [
+     "vis_splinter_pistol",
+     "vis_trident"
+    ]
+   }
+  },
+  {
+   "id": "de_incubus",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/dark_eldar/troops/incubus.whm",
+   "match": "Incubus",
+   "h": 1.85,
+   "base": [
+    "vis_body",
+    "vis_head_standard"
+   ],
+   "looks": {
+    "default": [
+     "vis_punisher"
+    ]
+   },
+   "clips": {
+    "run": "move"
+   }
+  },
+  {
+   "id": "de_archon",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/dark_eldar/troops/dark_eldar_archon_sp.whm",
+   "match": "Archon",
+   "h": 1.88,
+   "base": [
+    "vis_body"
+   ],
+   "looks": {
+    "default": [
+     "vis_splinter_pistol",
+     "vis_agonizer"
+    ]
+   }
+  },
+  {
+   "id": "de_haemonculus",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/dark_eldar/troops/haemonculus.whm",
+   "match": "Haemonculus",
+   "h": 1.85,
+   "looks": {
+    "default": [
+     "vis_body",
+     "vis_head"
+    ]
+   }
+  },
+  {
+   "id": "de_wrack",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/dark_eldar/troops/tortured_slave.whm",
+   "match": "Wrack",
+   "h": 1.7,
+   "proxy": "Tortured Slave",
+   "looks": {
+    "default": [
+     "vis_vis_slave"
+    ]
+   }
+  },
+  {
+   "id": "de_mandrake",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/dark_eldar/troops/mandrake.whm",
+   "match": "Mandrake",
+   "h": 1.8,
+   "looks": {
+    "default": [
+     "vis_vis_body",
+     "vis_vis_head_1"
+    ]
+   }
+  },
+  {
+   "id": "de_scourge",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/dark_eldar/troops/scourge.whm",
+   "match": "Scourge",
+   "h": 1.8,
+   "base": [
+    "vis_scourge_body",
+    "vis_scourge_head_std"
+   ],
+   "looks": {
+    "default": [
+     "vis_scourge_splintercannon"
+    ]
+   }
+  },
+  {
+   "id": "de_warrior",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/dark_eldar/troops/warrior.whm",
+   "match": "Kabalite",
+   "h": 1.8,
+   "base": [
+    "vis_dwbody"
+   ],
+   "looks": {
+    "default": [
+     "vis_dwsplinter_rifle"
+    ],
+    "blade": [
+     "vis_dwknife_1"
+    ]
+   },
+   "clips": {
+    "run": "move_sprifle"
+   }
+  },
+  {
+   "id": "nec_warrior",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/necrons/troops/necron_basic_warrior.whm",
+   "match": "Necron Warrior",
+   "h": 1.85,
+   "looks": {
+    "default": [
+     "vis_body"
+    ]
+   }
+  },
+  {
+   "id": "nec_immortal",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/necrons/troops/necron_immortal.whm",
+   "match": "Necron Immortal|Deathmark",
+   "h": 2.0,
+   "looks": {
+    "default": "vis_main"
+   }
+  },
+  {
+   "id": "nec_lychguard",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/necrons/troops/necron_pariah.whm",
+   "match": "Lychguard",
+   "h": 2.05,
+   "proxy": "Pariah",
+   "looks": {
+    "default": [
+     "vis_body",
+     "vis_staff"
+    ]
+   }
+  },
+  {
+   "id": "nec_lord",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/necrons/troops/necron_lord.whm",
+   "match": "Necron Overlord|Cryptek",
+   "h": 2.1,
+   "looks": {
+    "default": [
+     "vis_arms",
+     "vis_body",
+     "vis_head",
+     "vis_shoulders",
+     "vis_torso",
+     "vis_under_pads",
+     "vis_staff_head",
+     "vis_staff_lower_hilt",
+     "vis_staff_upper_hilt",
+     "vis_staff_lower_blade"
+    ]
+   }
+  },
+  {
+   "id": "nec_flayed",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/necrons/troops/flayed_one.whm",
+   "match": "Flayed One",
+   "h": 1.85,
+   "looks": {
+    "default": [
+     "vis_body",
+     "vis_arm_l_1",
+     "vis_arm_r_1",
+     "vis_head_1",
+     "vis_spine",
+     "vis_thigh_l",
+     "vis_thigh_r",
+     "vis_back_1",
+     "vis_upper_arm_l"
+    ]
+   }
+  },
+  {
+   "id": "nec_destroyer",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/necrons/troops/necron_destroyer.whm",
+   "match": "Skorpekh",
+   "h": 2.1,
+   "proxy": "Destroyer",
+   "size": "bounds",
+   "looks": {
+    "default": "vis_all"
+   },
+   "clips": {
+    "idle": "idle_01"
+   }
+  },
+  {
+   "id": "ork_meganob",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/orks/troops/mega_armoured_nobz.whm",
+   "match": "Meganob",
+   "h": 2.0,
+   "looks": {
+    "default": [
+     "vis_body"
+    ]
+   },
+   "drop": [
+    "ork_flag",
+    "ork_flag_pole"
+   ]
+  },
+  {
+   "id": "ork_warboss",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/orks/troops/warboss.whm",
+   "match": "Warboss",
+   "h": 2.1,
+   "base": [
+    "vis_base_body",
+    "vis_og_hornz",
+    "vis_og_jaw",
+    "vis_og_shoulder_pads",
+    "vis_og_leg_armour"
+   ],
+   "looks": {
+    "default": [
+     "vis_shoota",
+     "vis_power_klaw"
+    ]
+   }
+  },
+  {
+   "id": "ork_bigmek",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/orks/troops/big_mek.whm",
+   "match": "Ork (Big )?Mek",
+   "h": 1.85,
+   "looks": {
+    "default": "vis_mega_blasta_choppa",
+    "slug": "vis_slugga_choppa"
+   }
+  },
+  {
+   "id": "ork_painboy",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/orks/troops/bad_dok.whm",
+   "match": "Painboy",
+   "h": 1.8,
+   "clips_from": "ork_boy",
+   "own": false,
+   "looks": {
+    "default": "vis_slugga_choppa_axe"
+   }
+  },
+  {
+   "id": "ork_nob",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/orks/troops/nobz.whm",
+   "match": "Ork Nob|Weirdboy",
+   "h": 1.95,
+   "clips_from": "ork_boy",
+   "own": false,
+   "looks": {
+    "default": "vis_slugga_choppa_axe",
+    "slug+fist": "vis_slugga_power_klaw"
+   }
+  },
+  {
+   "id": "ork_grot",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/orks/troops/grots.whm",
+   "match": "Gretchin",
+   "h": 1.6,
+   "looks": {
+    "default": "vis_blaster_knife"
+   }
+  },
+  {
+   "id": "ork_boy",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/orks/troops/boyz.whm",
+   "match": "^Orks ",
+   "h": 1.8,
+   "prefix": "boyz_slugga_",
+   "looks": {
+    "default": "vis_slugga_choppa_axe",
+    "flame": "vis_burna",
+    "shell": "vis_rokkit_launcha",
+    "bigshoota": "vis_big_shoota"
+   },
+   "kits": {
+    "Big Shoota": "bigshoota"
+   },
+   "sets": {
+    "bigshoota": {
+     "prefix": "boyz_big_shoota",
+     "hit": "boyz_big_shoota_damage"
+    },
+    "flame": {
+     "prefix": "boyz_burna",
+     "hit": "boyz_burna_damage"
+    },
+    "shell": {
+     "idle": "boyz_rokkit_launcha_fire_idle_1",
+     "fire": "boyz_rokkit_launcha_fire_and_reload"
+    }
+   }
+  },
+  {
+   "id": "tau_commander",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/tau/troops/commander.whm",
+   "match": "Commander \\(Shas'o\\)",
+   "h": 1.95,
+   "base": [
+    "vis_base",
+    "vis_armour_v1",
+    "vis_head_lv1"
+   ],
+   "looks": {
+    "default": [
+     "vis_plasma_right_hand"
+    ],
+    "pulse": [
+     "vis_burst_right_hand"
+    ],
+    "flame": [
+     "vis_flamethrower_left_hand"
+    ],
+    "melta": [
+     "vis_fusion_right_hand"
+    ]
+   },
+   "clips": {
+    "run": "move_1",
+    "fire": "plasma_rifle_idle_firing"
+   },
+   "sets": {
+    "pulse": {
+     "fire": "burst_cannon_idle_firing"
+    },
+    "flame": {
+     "fire": "flamer_idle_firing"
+    },
+    "melta": {
+     "fire": "fusion_blaster_idle_firing"
+    }
+   }
+  },
+  {
+   "id": "tau_crisis",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/tau/troops/crisis_suit.whm",
+   "match": "Battlesuit Pilot",
+   "h": 1.95,
+   "base": [
+    "vis_main"
+   ],
+   "looks": {
+    "default": [
+     "vis_burst_canon"
+    ],
+    "flame": [
+     "vis_flamer"
+    ],
+    "melta": [
+     "vis_fusion_blaster"
+    ],
+    "shell": [
+     "vis_missles"
+    ]
+   },
+   "clips": {
+    "fire": "burstcanon_idle_firing_a"
+   },
+   "sets": {
+    "flame": {
+     "fire": "flamer_idle_firing"
+    },
+    "melta": {
+     "fire": "fusionblaster_idle_firing"
+    },
+    "shell": {
+     "fire": "missles_idle_firing"
+    }
+   }
+  },
+  {
+   "id": "tau_shasui",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/tau/troops/shasui_fire_warrior.whm",
+   "match": "Shas'ui",
+   "h": 1.72,
+   "looks": {
+    "default": [
+     "vis_body",
+     "vis_rifle"
+    ]
+   }
+  },
+  {
+   "id": "tau_firewarrior",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/tau/troops/fire_warrior.whm",
+   "match": "Fire Warrior",
+   "h": 1.7,
+   "looks": {
+    "default": [
+     "vis_body",
+     "vis_rifle"
+    ]
+   }
+  },
+  {
+   "id": "tau_pathfinder",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/tau/troops/pathfinder.whm",
+   "match": "Pathfinder|(Earth|Air) Caste",
+   "h": 1.68,
+   "looks": {
+    "default": [
+     "vis_body",
+     "vis_gun"
+    ]
+   }
+  },
+  {
+   "id": "tau_ethereal",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/tau/troops/ethereal.whm",
+   "match": "Ethereal|Water Caste",
+   "h": 1.8,
+   "looks": {
+    "default": [
+     "vis_body",
+     "vis_cape",
+     "vis_staff"
+    ]
+   }
+  },
+  {
+   "id": "tau_drone",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/tau/troops/attack_drone.whm",
+   "match": "Gun Drone",
+   "h": 1.3,
+   "looks": {
+    "default": [
+     "vis_body"
+    ]
+   }
+  },
+  {
+   "id": "vespid",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/tau/troops/vespid.whm",
+   "match": "Vespid",
+   "h": 1.8,
+   "looks": {
+    "default": [
+     "vis_body"
+    ]
+   },
+   "clips": {
+    "run": "move_1a_run"
+   }
+  },
+  {
+   "id": "kroot_shaper",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/tau/troops/kroot_shaper.whm",
+   "match": "Kroot Shaper",
+   "h": 1.95,
+   "looks": {
+    "default": [
+     "vis_body",
+     "vis_arm_l_01",
+     "vis_arm_r_01",
+     "vis_hand_l_01",
+     "vis_hand_r_01",
+     "vis_rifle",
+     "vis_blade_waist"
+    ]
+   }
+  },
+  {
+   "id": "kroot",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/tau/troops/kroot_warrior.whm",
+   "match": "Kroot",
+   "h": 1.9,
+   "looks": {
+    "default": [
+     "vis_body",
+     "vis_arm_l_01",
+     "vis_arm_r_01",
+     "vis_hand_l_01",
+     "vis_hand_r_01",
+     "vis_head_01",
+     "vis_rifle",
+     "vis_belt",
+     "vis_shldr_l",
+     "vis_shldr_r"
+    ]
+   }
+  },
+  {
+   "id": "chaos_lord",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/chaos/troops/chaos_lord.whm",
+   "match": "Chaos Lord",
+   "h": 1.95,
+   "clips_from": "sm_sergeant",
+   "base": [
+    "vis_torso_cape",
+    "vis_head_standard",
+    "vis_chest_standard",
+    "vis_legs_standard",
+    "vis_shoulders_standard"
+   ],
+   "looks": {
+    "default": [
+     "vis_gun_bolter",
+     "vis_melee_sword"
+    ],
+    "plasma": [
+     "vis_gun_plasma",
+     "vis_melee_sword"
+    ]
+   }
+  },
+  {
+   "id": "chaos_sorcerer",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/chaos/troops/chaos_sorcerer.whm",
+   "match": "Chaos Sorcerer",
+   "h": 1.9,
+   "looks": {
+    "default": "vis_bolter_staff",
+    "plasma": "vis_plasma_staff"
+   },
+   "clips": {
+    "melee": "librarian_force_weapon_melee_1"
+   }
+  },
+  {
+   "id": "chaos_berzerker",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/chaos/troops/khorne_bezerker.whm",
+   "match": "Berzerker",
+   "h": 1.85,
+   "looks": {
+    "default": "vis_bolter_chainsword"
+   },
+   "clips": {
+    "fire": "idle_firing_1"
+   }
+  },
+  {
+   "id": "chaos_possessed",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/chaos/troops/possessed_chaos_marine.whm",
+   "match": "Possessed",
+   "h": 1.85,
+   "looks": {
+    "default": "vis_mutant_a_no_flag"
+   }
+  },
+  {
+   "id": "csm_champion",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/chaos/troops/aspiring_champion.whm",
+   "match": "^(Heretic Astartes|Rubric Marines) .*\\| *(Bolt|Plasma) Pistol",
+   "h": 1.82,
+   "clips_from": "sm_sergeant",
+   "own": false,
+   "drop": [
+    "aspiring_champion_banner",
+    "marine_sergeant_banner_rod"
+   ],
+   "looks": {
+    "default": "vis_bolt_chain",
+    "bolt+power": "vis_bolt_sword",
+    "bolt+fist": "vis_bolt_fist",
+    "plasma": "vis_plasma_chain",
+    "plasma+power": "vis_plasma_sword"
+   }
+  },
+  {
+   "id": "csm",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/chaos/troops/chaos_space_marine.whm",
+   "match": "^(Heretic Astartes|Rubric Marines) ",
+   "h": 1.8,
+   "clips_from": "sm_marine",
+   "own": false,
+   "looks": {
+    "default": "vis_bolter",
+    "plasma": "vis_plasma",
+    "flame": "vis_flamer",
+    "shell": "vis_missile_launcher",
+    "hbolt": "vis_heavy_bolter",
+    "blade": "vis_knife",
+    "chain": "vis_knife"
+   },
+   "kits": {
+    "Heavy Bolter|Autocannon": "hbolt",
+    "Plasma": "plasma"
+   }
+  },
+  {
+   "id": "cultist",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/chaos/troops/cultist.whm",
+   "match": "Chaos Cultist",
+   "h": 1.7,
+   "looks": {
+    "default": "vis_laspistol_sword",
+    "plasma": "vis_plasma_gun",
+    "shell": "vis_grenade_launcher"
+   },
+   "kits": {
+    "Plasma": "plasma"
+   },
+   "sets": {
+    "plasma": "2hand",
+    "shell": "2hand"
+   }
+  },
+  {
+   "id": "veh_predator",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/space_marines/troops/predator.whm",
+   "match": "Predator",
+   "veh": true,
+   "h": 2.3,
+   "turret": "aim_horizontal_main",
+   "looks": {
+    "default": [
+     "predator_chassis",
+     "predator_l_wheels",
+     "predator_r_wheels",
+     "predator_track_l",
+     "predator_track_r",
+     "predator_turretbase",
+     "predator_autocannon",
+     "predator_lsidegunmount",
+     "predator_rsidegunmount",
+     "predator_heavybolter_lside",
+     "predator_heavybolter_rside"
+    ]
+   }
+  },
+  {
+   "id": "veh_rhino",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/space_marines/troops/rhino.whm",
+   "match": "Rhino",
+   "veh": true,
+   "h": 1.8,
+   "looks": {
+    "default": [
+     "*"
+    ]
+   }
+  },
+  {
+   "id": "veh_landraider",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/space_marines/troops/land_raider.whm",
+   "match": "Land Raider",
+   "veh": true,
+   "h": 2.5,
+   "looks": {
+    "default": [
+     "*"
+    ]
+   }
+  },
+  {
+   "id": "veh_russ",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/imperial_guard/troops/leman_russ_battle_tank.whm",
+   "match": "Leman Russ",
+   "veh": true,
+   "h": 2.5,
+   "turret": "leman_russ_bone_04_aim_hor",
+   "looks": {
+    "default": [
+     "leman_body",
+     "leman_l_tread",
+     "leman_r_tread",
+     "leman_tread_sys_left",
+     "leman_tread_sys_right",
+     "leman_turret_base",
+     "leman_turret_barrel",
+     "leman_small_cannon_base",
+     "leman_l_heavy_bolter",
+     "leman_r_heavy_bolter",
+     "treadcap_l",
+     "treadcap_r"
+    ]
+   }
+  },
+  {
+   "id": "veh_chimera",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/imperial_guard/troops/chimera.whm",
+   "match": "Chimera",
+   "veh": true,
+   "h": 2.3,
+   "turret": "chimera_bone_04_aim_hor",
+   "looks": {
+    "default": [
+     "chimera_body",
+     "chimera_lasgun_barrel_l1",
+     "chimera_lasgun_barrel_l2",
+     "chimera_lasgun_barrel_l3",
+     "chimera_lasgun_barrel_r1",
+     "chimera_lasgun_barrel_r2",
+     "chimera_lasgun_barrel_r3",
+     "chimera_lasgun_l1",
+     "chimera_lasgun_l2",
+     "chimera_lasgun_l3",
+     "chimera_lasgun_r1",
+     "chimera_lasgun_r2",
+     "chimera_lasgun_r3",
+     "chimera_multi-laser",
+     "chimera_tread_armour_left",
+     "chimera_tread_armour_right",
+     "chimera_tread_chassis_left",
+     "chimera_tread_chassis_right",
+     "chimera_tread_left",
+     "chimera_tread_right",
+     "chimera_turret"
+    ]
+   }
+  },
+  {
+   "id": "veh_sentinel",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/imperial_guard/troops/sentinel.whm",
+   "match": "Sentinel",
+   "veh": true,
+   "h": 3.0,
+   "looks": {
+    "default": [
+     "*",
+     "sentinel_multi_laser"
+    ]
+   }
+  },
+  {
+   "id": "veh_trukk",
+   "game": "soulstorm",
+   "whm": "art/ebps/races/orks/troops/trukk.whm",
+   "match": "Trukk",
+   "veh": true,
+   "h": 2.2,
+   "looks": {
+    "default": [
+     "*"
+    ]
+   }
+  },
+  {
+   "id": "nid_termagant",
+   "game": "dow2",
+   "match": "Termagant",
+   "skeleton": "art/race_tyranid/troops/termagaunt/termagaunt.model",
+   "parts": {
+    "body": "art/race_tyranid/troops_wargear/armour/termagaunt_armour_common/termagaunt_armour_common.model"
+   },
+   "anims": "art/race_tyranid/troops/termagaunt/animations/devourer",
+   "h": 1.25
+  },
+  {
+   "id": "nid_hormagaunt",
+   "game": "dow2",
+   "match": "Hormagaunt",
+   "skeleton": "art/race_tyranid/troops/hormagaunt/hormagaunt.model",
+   "parts": {
+    "body": "art/race_tyranid/troops_wargear/armour/hormagaunt_armour_common/hormagaunt_armour_common.model"
+   },
+   "anims": "art/race_tyranid/troops/hormagaunt/animations/melee_blade",
+   "h": 1.3
+  },
+  {
+   "id": "nid_genestealer",
+   "game": "dow2",
+   "match": "Genestealer",
+   "skeleton": "art/race_tyranid/troops/genestealer/genestealer.model",
+   "parts": {
+    "body": "art/race_tyranid/troops_wargear/armour/genestealer_armour_common/genestealer_armour_common.model",
+    "claws": "art/race_tyranid/troops_wargear/weapons_melee/genestealer_rending_claws/genestealer_rending_claws.model"
+   },
+   "anims": "art/race_tyranid/troops/genestealer/animations/melee_claw",
+   "h": 1.75,
+   "tem": "--sp"
+  },
+  {
+   "id": "nid_lictor",
+   "game": "dow2",
+   "match": "Lictor",
+   "skeleton": "art/race_tyranid/troops/lictor/lictor.model",
+   "parts": {
+    "body": "art/race_tyranid/troops_wargear/armour/lictor_armour_common/lictor_armour_common.model"
+   },
+   "anims": "art/race_tyranid/troops/lictor/animations/talons_claws",
+   "h": 1.9,
+   "clips": {
+    "run": "fb_run_01",
+    "die": "fb_die_normal_b"
+   }
+  },
+  {
+   "id": "nid_ravener",
+   "game": "dow2",
+   "match": "Ravener",
+   "skeleton": "art/race_tyranid/troops/ravener/ravener.model",
+   "parts": {
+    "body": "art/race_tyranid/troops_wargear/armour/ravener_armour_common/ravener_armour_common.model"
+   },
+   "anims": "art/race_tyranid/troops/ravener/animations/melee_talons_talons",
+   "h": 1.5,
+   "size": "bounds"
+  },
+  {
+   "id": "nid_warrior_talons",
+   "game": "dow2",
+   "match": "Tyranid Warrior \\(Bonesword",
+   "skeleton": "art/race_tyranid/troops/warrior_brood/warrior_brood.model",
+   "parts": {
+    "body": "art/race_tyranid/troops_wargear/armour/warrior_brood_armour_common/warrior_brood_armour_common.model",
+    "talons": "art/race_tyranid/troops_wargear/weapons_melee/warrior_lower_scything_talons_common/warrior_lower_scything_talons_common.model"
+   },
+   "anims": "art/race_tyranid/troops/warrior_brood/animations/melee_talons_ranged_burst",
+   "h": 1.9
+  },
+  {
+   "id": "nid_warrior",
+   "game": "dow2",
+   "match": "Tyranid Warrior",
+   "skeleton": "art/race_tyranid/troops/warrior_brood/warrior_brood.model",
+   "parts": {
+    "body": "art/race_tyranid/troops_wargear/armour/warrior_brood_armour_common/warrior_brood_armour_common.model",
+    "claws": "art/race_tyranid/troops_wargear/weapons_melee/warrior_claws_common/warrior_claws_common.model"
+   },
+   "anims": "art/race_tyranid/troops/warrior_brood/animations/talons_rending",
+   "h": 1.9
+  },
+  {
+   "id": "nid_carnifex",
+   "game": "dow2",
+   "match": "Carnifex",
+   "skeleton": "art/race_tyranid/troops/carnifex/carnifex.model",
+   "parts": {
+    "body": "art/race_tyranid/troops_wargear/armour/carnifex_armour_common/carnifex_armour_common.model",
+    "claws": "art/race_tyranid/troops_wargear/weapons_melee/carnifex_crushing_claws_common/carnifex_crushing_claws_common.model",
+    "tail": "art/race_tyranid/troops_wargear/weapons_melee/carnifex_scything_tail_common/carnifex_scything_tail_common.model"
+   },
+   "anims": "art/race_tyranid/troops/carnifex/animations/talons_crushing",
+   "h": 1.6,
+   "size": "bounds"
+  },
+  {
+   "id": "nid_tyrant",
+   "game": "dow2",
+   "match": "Hive Tyrant",
+   "skeleton": "art/race_tyranid/troops/hive_tyrant/hive_tyrant.model",
+   "parts": {
+    "body": "art/race_tyranid/troops_wargear/armour/hive_tyrant_armour_rare/hive_tyrant_armour_rare.model",
+    "talons": "art/race_tyranid/troops_wargear/weapons_melee/hivetyrant_lower_talons_rare/hivetyrant_lower_talons_rare.model"
+   },
+   "anims": "art/race_tyranid/troops/hive_tyrant/animations/melee_talons_talons",
+   "h": 1.9
+  },
+  {
+   "id": "nid_zoanthrope",
+   "game": "dow2",
+   "match": "Zoanthrope",
+   "skeleton": "art/race_tyranid/troops/zoanthrope/zoanthrope.model",
+   "parts": {
+    "body": "art/race_tyranid/troops_wargear/armour/zoanthrope_armour_common/zoanthrope_armour_common.model"
+   },
+   "anims": "art/race_tyranid/troops/zoanthrope/animations/mouth",
+   "h": 1.7,
+   "size": "bounds",
+   "clips": {
+    "melee": "fb_melee_01"
+   }
+  }
+ ]
+}

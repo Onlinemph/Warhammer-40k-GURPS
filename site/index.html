@@ -6196,6 +6196,7 @@ if (typeof document !== "undefined") (() => {
             <button type="button" data-tool="walls" aria-pressed="false" title="Lower the walls to see into the rooms" hidden>Low walls</button>
             <button type="button" data-tool="cine" aria-pressed="false" title="Action camera: everyone moves, then the camera cuts to each attack in turn" hidden>Action cam</button>
             <button type="button" data-tool="follow" aria-pressed="false" title="Keep the camera on the selected model" hidden>Follow</button>
+            <button type="button" data-tool="snd" aria-pressed="false" title="Play the weapons' sounds (needs a local sound pack: tools/dow/README.md)" hidden>Sound</button>
             <button type="button" data-tool="fit" title="Fit the battle to the view">Fit</button>
             <button type="button" data-tool="grid" aria-pressed="true" title="Show the hex grid">Grid</button>
             <button type="button" data-tool="trails" aria-pressed="true" title="Show each model's path this second">Paths</button>
@@ -6292,7 +6293,8 @@ if (typeof document !== "undefined") (() => {
   // Tyranids, T'au, Aeldari...) and jointed so it can walk, aim, recoil, swing, dodge, flinch, kneel, go prone and
   // fall; vehicles have tracks that roll, turrets that turn and guns that recoil. Shots are drawn by weapon (las and
   // gauss beams, bolt and plasma rounds, flame, shells), with particles, light flashes, bloom and scorch marks.
-  // Textures are painted on canvases at load; no image or model files. Drag to orbit, right-drag or Shift-drag (two
+  // Textures are painted on canvases at load; no image or model files, unless a local pack of game models is there
+  // (31-view3d-models.js). Drag to orbit, right-drag or Shift-drag (two
   // fingers) to pan, wheel or pinch to zoom, click a figure for its sheet, Follow keeps the camera on it.
   const THREE_URL = "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js";
   let threeLoading = null;
@@ -6368,6 +6370,7 @@ if (typeof document !== "undefined") (() => {
     const bx0 = Math.min(...pts.map(p => p[0])) - 6, bx1 = Math.max(...pts.map(p => p[0])) + 6, by0 = Math.min(...pts.map(p => p[1])) - 6, by1 = Math.max(...pts.map(p => p[1])) + 6;
     const cx = (bx0 + bx1) / 2, cy = (by0 + by1) / 2, span = Math.max(bx1 - bx0, by1 - by0);
     const indoor = T && T.kind !== "ruins";
+    let skyDome = null;
     const horizon = indoor ? 0x15171b : 0x8a7d6c;
     scene.fog = new THREE.Fog(lin(horizon), Math.max(60, span * .9), Math.max(200, span * 2.6));
     if (indoor) scene.background = lin(0x101216);
@@ -6377,7 +6380,7 @@ if (typeof document !== "undefined") (() => {
         uniforms: { top: { value: lin(0x2e3846) }, hor: { value: lin(horizon) }, bot: { value: lin(0x3a3228) } },
         vertexShader: "varying vec3 vP; void main(){ vP = position; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }",
         fragmentShader: "uniform vec3 top; uniform vec3 hor; uniform vec3 bot; varying vec3 vP; void main(){ float h = normalize(vP).y; vec3 c = h > 0.0 ? mix(hor, top, pow(min(1.0, h * 1.6), 0.7)) : mix(hor, bot, min(1.0, -h * 4.0)); gl_FragColor = vec4(c, 1.0); }" })));
-      sky.position.set(cx, 0, cy); scene.add(sky);
+      sky.position.set(cx, 0, cy); scene.add(sky); skyDome = sky;
     }
     scene.add(new THREE.HemisphereLight(lin(indoor ? 0xaab4c4 : 0xc8d4e6), lin(0x4a3f30), indoor ? 1.1 : 1.0));
     const sun = new THREE.DirectionalLight(lin(indoor ? 0xf2f0ea : 0xffdcb0), indoor ? 2.2 : 3.0);
@@ -6388,6 +6391,7 @@ if (typeof document !== "undefined") (() => {
     const fill = new THREE.DirectionalLight(lin(0x8fa8d0), .6); fill.position.set(cx + span, span * .4, cy + span * .6); scene.add(fill);
 
     // ================= the battlefield
+    const decor = { crates: [] };   // the built pieces a local scenery pack replaces (31-view3d-scenery.js)
     const hexGeo = (h, k = 1) => {
       const sh = new THREE.Shape();
       for (let i = 0; i < 6; i++) { const x = Math.cos(i * Math.PI / 3) * k, y = Math.sin(i * Math.PI / 3) * k; i ? sh.lineTo(x, y) : sh.moveTo(x, y); }
@@ -6448,8 +6452,9 @@ if (typeof document !== "undefined") (() => {
       const cGeo = keep(new THREE.BoxGeometry(1.15, 1, 1.15));
       for (const [kind, mt] of [["light", M(0xffffff, { map: TEX.wood, r: .8 })], ["heavy", M(0xffffff, { map: TEX.metal, r: .55, m: .45 })]]) {
         const list = crates.filter(([, v]) => v === kind);
-        inst(cGeo, mt, list, (im2, [k], i) => { const [q, r] = keyHex(k), [x, y] = P(q, r), h = kind === "heavy" ? 1.1 : .85; m4.compose(W3(x, y, zOf(q, r) + h / 2), new THREE.Quaternion().setFromAxisAngle(yAx, hash(q, r) * .6), new THREE.Vector3(1, h, 1)); im2.setMatrixAt(i, m4); });
+        decor.crates.push(inst(cGeo, mt, list, (im2, [k], i) => { const [q, r] = keyHex(k), [x, y] = P(q, r), h = kind === "heavy" ? 1.1 : .85; m4.compose(W3(x, y, zOf(q, r) + h / 2), new THREE.Quaternion().setFromAxisAngle(yAx, hash(q, r) * .6), new THREE.Vector3(1, h, 1)); im2.setMatrixAt(i, m4); }));
       }
+      decor.crateList = crates;
       doorList = [...(T.doors || [])];
       doorMesh = inst(hexGeo(2.3, .9), M(0xffffff, { m: .45, r: .45 }), doorList, (im, k, i) => { const [q, r] = keyHex(k), [x, y] = P(q, r); m4.makeTranslation(x, 0, y); im.setMatrixAt(i, m4); im.setColorAt(i, col.set(0x9aa1a8)); });
       const rMat = M(0x4a4e55, { r: .9 });
@@ -6471,7 +6476,7 @@ if (typeof document !== "undefined") (() => {
       const R1 = rng(17), rocks = [];
       for (let i = 0; i < Math.min(400, span * 3); i++) rocks.push([cx + (R1() - .5) * span * 1.6, cy + (R1() - .5) * span * 1.6, .25 + R1() * R1() * 1.4]);
       const e3 = new THREE.Euler(), rq = new THREE.Quaternion();
-      inst(chunkGeo, M(0x6f675a, { r: .95 }), rocks, (im, [x, y, s], i) => { e3.set(R1() * 3, R1() * 3, R1() * 3); rq.setFromEuler(e3); m4.compose(new THREE.Vector3(x, zXY(x, y) + s * .05, y), rq, new THREE.Vector3(s, s * .55, s)); im.setMatrixAt(i, m4); im.setColorAt(i, col.setScalar(.7 + R1() * .4)); });
+      decor.rocks = inst(chunkGeo, M(0x6f675a, { r: .95 }), rocks, (im, [x, y, s], i) => { e3.set(R1() * 3, R1() * 3, R1() * 3); rq.setFromEuler(e3); m4.compose(new THREE.Vector3(x, zXY(x, y) + s * .05, y), rq, new THREE.Vector3(s, s * .55, s)); im.setMatrixAt(i, m4); im.setColorAt(i, col.setScalar(.7 + R1() * .4)); });
       const cr = [];
       for (let i = 0; i < Math.max(6, span / 6); i++) cr.push([cx + (R1() - .5) * span * 1.4, cy + (R1() - .5) * span * 1.4, 1.5 + R1() * 3]);
       const cMat = keep(new THREE.MeshStandardMaterial({ map: TEX.scorch, transparent: true, depthWrite: false, roughness: 1, polygonOffset: true, polygonOffsetFactor: -1 }));
@@ -6507,7 +6512,8 @@ if (typeof document !== "undefined") (() => {
     const SCHEME = [
       [/Custodes/, [0xc9a347, 0x8a1c1c, 0xd9a982, 0xd4b45a, 0x66ccff]], [/Sororitas/, [0x24242a, 0x8a1a1a, 0xe2c3a8, 0x9a9a9a, 0x000000]],
       [/Mechanicus/, [0x8e2a22, 0x2d2d33, 0xd9a982, 0xb0a070, 0x7dff9a]], [/Khorne/, [0x8a1c1c, 0x2a2a2e, 0xd9a982, 0xa07a3a, 0xff5a3a]],
-      [/Rubric|Thousand/, [0x1f6f78, 0xc9a347, 0xd9a982, 0xc9a347, 0x7affff]], [/Heretic|Chaos Space|Traitor Astartes/, [0x24242a, 0x9a7a3a, 0xd9a982, 0x9a7a3a, 0xff3a2a]],
+      [/Rubric|Thousand/, [0x1f6f78, 0xc9a347, 0xd9a982, 0xc9a347, 0x7affff]], [/Plague/, [0x6f7a45, 0x8a6a3a, 0xb8c08a, 0x7a6a4a, 0xc8ff5a]], [/Noise/, [0xb03a8a, 0x1c1c22, 0xe0c0d0, 0xc9a347, 0x7affea]],
+      [/Heretic|Chaos Space|Traitor Astartes/, [0x24242a, 0x9a7a3a, 0xd9a982, 0x9a7a3a, 0xff3a2a]],
       [/Traitor|Cultist/, [0x5a4632, 0x7a2a22, 0xcf9f7c, 0x77736a, 0xff6a3a]], [/Deathwatch/, [0x1a1a1e, 0xa9a9b0, 0xd9a982, 0xa9a9b0, 0x3aff6a]],
       [/Grey Knight/, [0x9aa0a8, 0x6a2a8a, 0xd9a982, 0xb0b6be, 0x7ab8ff]], [/Astartes/, [0x1f3f8f, 0xc9a24a, 0xd9a982, 0xa9a9b0, 0xff3a2a]],
       [/Guard|Militarum|Tempestus/, [0x6a6a48, 0x3e4a2c, 0xd9a982, 0x77736a, 0x000000]], [/Inquisition|Psyker/, [0x2e2a2e, 0x8a1a1a, 0xd9a982, 0x9a9a9a, 0x66ccff]],
@@ -6826,6 +6832,334 @@ if (typeof document !== "undefined") (() => {
 
 // Part of makeView3D, one function body split into files by section (tools/sim/page/30-37): the locals and
 // helpers declared in earlier parts are in scope here. tools/sim/README.md has the layout.
+    // ================= models from the user's own games (optional)
+    // tools/dow/build_pack.py converts models out of a Dawn of War install into site/models/. That folder is never
+    // committed: the models are Relic's and Games Workshop's. When it is there, each figure it covers is swapped for
+    // the game's model, repainted in the faction's colours and driven by the game's own animations; without it (or
+    // for a figure it doesn't cover) the built miniature above stays. Everything loads through <script> tags and
+    // data URLs, so the page still works opened straight from disk.
+    const PACK = "models/", GLTF_URL = "https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js";
+    let gone = false; keep({ dispose() { gone = true; } });
+    const loadScript = src => new Promise((ok, no) => { const s = document.createElement("script"); s.src = src; s.async = true; s.onload = () => ok(); s.onerror = () => { s.remove(); no(new Error("could not load " + src)); }; document.head.appendChild(s); });
+    let gltfLoading = null;   // the loader comes down once, whoever asks first (the models or the scenery)
+    const gltfReady = () => THREE.GLTFLoader ? Promise.resolve() : gltfLoading || (gltfLoading = loadScript(GLTF_URL));
+    const loadImage = src => new Promise((ok, no) => { const im = new Image(); im.onload = () => ok(im); im.onerror = () => no(new Error("a model texture did not decode")); im.src = src; });
+    const pixelsOf = (im, w, h) => { const c = document.createElement("canvas"); c.width = w; c.height = h; const g = c.getContext("2d"); g.drawImage(im, 0, 0, w, h); return [c, g, g.getImageData(0, 0, w, h)]; };
+    const rgb01 = c => { if (typeof c === "string") c = parseInt(c.replace("#", ""), 16); return [(c >> 16 & 255) / 255, (c >> 8 & 255) / 255, (c & 255) / 255]; };
+
+    // The game's team colouring: each mask (primary, secondary, trim, weapons, eyes) is overlaid with its colour and
+    // the results added; the "dirt" mask says how much of the painted default texture shows through on top.
+    async function paintTexture(t, paint) {
+      const base = await loadImage(t.base), w = base.naturalWidth, h = base.naturalHeight, [cv, g, B] = pixelsOf(base, w, h);
+      if (t.m1) {
+        const [i1, i2] = await Promise.all([loadImage(t.m1), loadImage(t.m2)]), M1 = pixelsOf(i1, w, h)[2].data, M2 = pixelsOf(i2, w, h)[2].data, d = B.data;
+        // some units use the "eyes" layer for a second pattern (Guard camouflage): a lens colour belongs only on a small one
+        let eyeArea = 0; for (let i = 1; i < M2.length; i += 4) if (M2[i] > 30) eyeArea++;
+        const cs = [paint.primary, paint.secondary, paint.trim, paint.weapons, eyeArea > M2.length / 4 * .012 ? paint.secondary : paint.eyes].map(rgb01), ms = [0, 0, 0, 0, 0];
+        for (let i = 0; i < d.length; i += 4) {
+          ms[0] = M1[i] / 255; ms[1] = M1[i + 1] / 255; ms[2] = M1[i + 2] / 255; ms[3] = M2[i] / 255; ms[4] = M2[i + 1] / 255;
+          const dirt = M2[i + 2] / 255;
+          for (let ch = 0; ch < 3; ch++) {
+            let v = d[i + ch] / 255 * dirt;
+            for (let L = 0; L < 5; L++) { const m = ms[L]; if (m > .04) { const c = cs[L][ch]; v += m < .5 ? 2 * m * c : 1 - 2 * (1 - m) * (1 - c); } }
+            d[i + ch] = v >= 1 ? 255 : v * 255;
+          }
+        }
+        g.putImageData(B, 0, 0);
+      }
+      const tex = keep(new THREE.CanvasTexture(cv)); tex.encoding = THREE.sRGBEncoding; tex.flipY = false;
+      tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy()); return tex;
+    }
+    const paintOf = (u, S) => ({ primary: S[0], secondary: S[1], trim: S[1], weapons: 0x3a3b40, eyes: S[4] || 0xff3a2a, ...(u.paint || {}) });
+    const modelMats = new Map();
+    function modelMaterial(u, asset, name, paint) {
+      const t = asset.tex[name];
+      if (!t) { if (!modelMats.has("plain")) modelMats.set("plain", Promise.resolve(keep(new THREE.MeshStandardMaterial({ color: lin(0x77736a), roughness: .6, metalness: .2, skinning: true })))); return modelMats.get("plain"); }   // a mesh whose textures the pack lacks
+      const key = u.id + "|" + name + "|" + (t.m1 ? Object.values(paint).join(",") : "");
+      if (!modelMats.has(key)) modelMats.set(key, (async () => {
+        const map = await paintTexture(t, paint);
+        const mat = keep(new THREE.MeshStandardMaterial({ map, color: u.tint ? lin(parseInt(u.tint.slice(1), 16)) : 0xffffff, roughness: .5, metalness: .25, skinning: true, alphaTest: t.cutout ? .5 : 0, side: t.cutout ? THREE.DoubleSide : THREE.FrontSide }));
+        if (t.glow) { const gl = keep(new THREE.Texture(await loadImage(t.glow))); gl.encoding = THREE.sRGBEncoding; gl.flipY = false; gl.needsUpdate = true; mat.emissiveMap = gl; mat.emissive = new THREE.Color(0xffffff); mat.emissiveIntensity = 1.6; }
+        return mat;
+      })());
+      return modelMats.get(key);
+    }
+    async function loadAsset(id) {
+      if (!(window.DOW_MODELS || {})[id]) await loadScript(PACK + id + ".js");
+      const d = window.DOW_MODELS[id], bin = atob(d.glb), buf = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i);
+      const gltf = await new Promise((ok, no) => new THREE.GLTFLoader().parse(buf.buffer, "", ok, no));
+      gltf.scene.traverse(o => { if (o.isMesh) { keep(o.geometry); if (o.material && o.material.dispose) keep(o.material); } });
+      return { scene: gltf.scene, clips: gltf.animations, tex: d.tex, meta: d.meta };
+    }
+    // Some models carry no animations of their own: the game plays another unit's on the same skeleton (a Chaos
+    // Marine moves as a Space Marine). Borrow those clips, dropping the tracks for bones this model doesn't have.
+    function borrowClips(asset, from) {
+      const have = new Map(); asset.scene.traverse(o => have.set(o.name.toLowerCase(), o.name));   // bone names differ in case between the game's older and newer models
+      const own = new Set(asset.clips.map(c => c.name));
+      asset.meta.alias = { ...(from.meta.alias || {}), ...(asset.meta.alias || {}) };
+      for (const c of from.clips) if (!own.has(c.name)) asset.clips.push(new THREE.AnimationClip(c.name, c.duration, c.tracks.map(t => { const [node, prop] = t.name.split("."), mine = have.get(node.toLowerCase()); if (!mine) return null; const t2 = t.clone(); t2.name = mine + "." + prop; return t2; }).filter(Boolean)));
+    }
+    // a copy of a rigged model with its own skeleton (Object3D.clone alone leaves the copy bound to the first one's bones)
+    function cloneRig(src) {
+      const dst = src.clone(true), a = [], b = [];
+      src.traverse(o => a.push(o)); dst.traverse(o => b.push(o));
+      const twin = new Map(a.map((o, i) => [o, b[i]]));
+      a.forEach((o, i) => { if (!o.isSkinnedMesh) return; const c = b[i]; c.skeleton = new THREE.Skeleton(o.skeleton.bones.map(bn => twin.get(bn)), o.skeleton.boneInverses); c.bind(c.skeleton, o.bindMatrix); });
+      return dst;
+    }
+    async function attachModel(F, r, u, asset) {
+      const S = scheme(r), paint = paintOf(u, S), root = cloneRig(asset.scene), k = F.k;
+      // which meshes show: the look for this ranged and melee weapon, else for either, else the default. A weapon the
+      // unit lists by name (its "kits": a heavy bolter is a bolt weapon, but a different thing to carry) comes first.
+      const L = asset.meta.looks, rk = r.rk === "lob" ? "shell" : r.rk || "", named = Object.entries(u.kits || {}).find(([rx]) => new RegExp(rx, "i").test((r.kit || "").split("|")[0]));
+      const key = [named && named[1], rk].flatMap(gun => gun ? [gun + "+" + (r.mk || ""), gun] : []).concat(rk ? [] : [r.mk]).find(k => k && L[k]) || "default", look = L[key] || asset.meta.meshes, show = new Set(look);
+      const set = (asset.meta.alias || {})[key] || key;   // looks that move alike share one set of clips
+      // which of the game's meshes a drawn mesh belongs to: the exporter prefixes mesh names (so none collides with a bone's),
+      // and one with several materials arrives as a group of pieces
+      const partOf = o => { for (let q = o; q && q !== root.parent; q = q.parent) { const n = (q.userData.name || q.name).replace(/^M_/, ""); if (asset.meta.bounds[n]) return n; } return o.name; };
+      const meshes = []; root.traverse(o => { if (o.isMesh) meshes.push(o); });
+      for (const o of meshes) {
+        o.visible = show.has(partOf(o));
+        o.userData.mat = (o.material && o.material.name) || "";
+        o.material = await modelMaterial(u, asset, o.userData.mat, paint);
+        o.castShadow = !big; o.receiveShadow = false; o.frustumCulled = false; o.userData.i = F.i;
+      }
+      if (gone) return;
+      // the game's models stand on z = 0 facing -y; the exporter turns that to y-up facing +z, and the figures here face +x
+      const tall = u.tall || (asset.meta.head && u.size !== "bounds" ? asset.meta.head * 1.14 : Math.max(...(L.default || look).map(n => (asset.meta.bounds[n] || [0, 0])[1])));   // the head bone sits at the base of the skull
+      const h = u.h || 1.75; root.scale.setScalar(h / tall); root.rotation.y = Math.PI / 2 + (u.yaw || 0);
+      for (const c of F.fig.children) c.visible = false;
+      F.fig.add(root);
+      for (let j = pick.length - 1; j >= 0; j--) if (pick[j].userData.i === F.i) pick.splice(j, 1);
+      for (const o of meshes) if (o.visible) pick.push(o);
+      const mixer = new THREE.AnimationMixer(root), acts = {}, w = {};
+      // a look can have clips of its own ("idle@flame": a flamer is held and fired differently); those win over the plain ones
+      for (const clip of asset.clips) { const [name, only] = clip.name.split("@"); if (only ? only !== set : asset.clips.some(c => c.name === name + "@" + set)) continue; const a = mixer.clipAction(clip); a.play(); a.setEffectiveWeight(0); acts[name] = a; w[name] = 0; }
+      F.model = { root, mixer, acts, w, u };
+      F.top = h * k * 1.06; F.bars.position.y = F.top + .25;
+      if (F.veh) {
+        // the built vehicle's moving parts are gone; the turret is the model's own bone, turned about the hull's up axis
+        Object.assign(F, { tracks: [], wheels: [], barrels: [], legs: [], walker: 0, exhaust: null, turret: null });
+        // tracks: the game runs a strip of texture round each one. Slide it as the tank covers ground: the links on
+        // the top run move forward and those underneath move back, so measure how fast the strip's v climbs toward
+        // the front (+z) along each run. Each tank gets its own copy of the material, since tanks of a kind share theirs.
+        root.updateMatrixWorld(true);
+        const size = root.getWorldScale(new THREE.Vector3()).x, median = a => a.sort((x, y) => x - y)[a.length >> 1];
+        for (const o of meshes) {
+          const P = o.geometry.attributes.position, U = o.geometry.attributes.uv, I = o.geometry.index;
+          if (!o.visible || !/track/i.test(o.userData.mat) || !o.material.map || !P || !U || !I) continue;
+          o.geometry.computeBoundingBox();
+          const y0 = o.geometry.boundingBox.min.y, band = (o.geometry.boundingBox.max.y - y0) * .3, over = [], under = [];
+          for (let t = 0; t < I.count; t += 3) for (let e = 0; e < 3; e++) {
+            const i = I.getX(t + e), j = I.getX(t + (e + 1) % 3), dz = P.getZ(j) - P.getZ(i), dy = P.getY(j) - P.getY(i), run = Math.hypot(dy, dz);
+            if (run < .05 || Math.abs(dz) < .7 * run || Math.abs(P.getX(j) - P.getX(i)) > .3 * run) continue;   // only edges along the run
+            const y = (P.getY(i) + P.getY(j)) / 2 - y0, slope = (U.getY(j) - U.getY(i)) / dz;
+            if (y > 2.33 * band) over.push(slope); else if (y < band) under.push(slope);
+          }
+          if (!over.length && !under.length) continue;
+          const rate = over.length && under.length ? (median(over) - median(under)) / 2 : over.length ? median(over) : -median(under);
+          const mat = keep(o.material.clone()), map = keep(o.material.map.clone()); map.needsUpdate = true; mat.map = map; o.material = mat;
+          (F.model.tracks ||= []).push({ map, rate: rate / size });
+        }
+        const bone = u.turret && root.getObjectByName(u.turret);
+        if (bone) {
+          const rest = bone.quaternion.clone(), up = new THREE.Vector3(), qa = new THREE.Quaternion(), qb = new THREE.Quaternion(), rot = { v: 0 };
+          Object.defineProperty(rot, "y", { get: () => rot.v, set(a) {
+            rot.v = a; F.fig.updateMatrixWorld(true);
+            bone.parent.getWorldQuaternion(qa); F.fig.getWorldQuaternion(qb); qa.invert().multiply(qb);   // the figure's frame seen from the bone's parent
+            up.set(0, 1, 0).applyQuaternion(qa).normalize(); bone.quaternion.setFromAxisAngle(up, a).multiply(rest);
+          } });
+          F.turret = { rotation: rot };
+        }
+      }
+    }
+
+    // ---- posing a model: the replay can jump anywhere, so every clip's weight and time is set from the state each frame
+    function poseModel(F, bitsv, p, ev, dt, dead) {
+      const m = F.model, A = m.acts, W = m.w, fig = F.fig, k = F.k;
+      fig.position.set(0, 0, 0); fig.rotation.set(0, 0, 0);
+      const prone = bitsv & 2, kneel = bitsv & 4, stun = bitsv & 1, reload = bitsv & 1024;
+      const want = {}, time = {};
+      const dur = n => A[n].getClip().duration, clampT = (n, t) => Math.max(0, Math.min(dur(n) - 1e-3, t));
+      let over = 0;
+      if (dead && A.die) { want.die = 1; time.die = clampT("die", ease(dead.f) * dur("die")); over = 1; }
+      else {
+        // a blow, a throw or a flinch plays through once around its moment
+        if (A.melee) for (const s of ev.swing || []) { const d = (p - s.p) * TS + .25, L = Math.min(dur("melee"), 1.1); if (d >= 0 && d <= .8) { want.melee = Math.min(1, d / .1, (.8 - d) / .15); time.melee = clampT("melee", d / .8 * L); } }
+        if (A.throw) for (const f of ev.fire || []) if (f.kind === "grenade") { const d = (p - f.p) * TS + .3, L = dur("throw"); if (d >= 0 && d <= .7) { want.throw = Math.min(1, d / .1, (.7 - d) / .15); time.throw = clampT("throw", d / .7 * L); } }
+        over = Math.max(want.melee || 0, want.throw || 0);
+        if (A.hit && !over) for (const hh of ev.hit || []) { const d = (p - hh.p) * TS; if (d >= 0 && d <= .5) { want.hit = Math.sin(Math.PI * d / .5) * .7; time.hit = clampT("hit", d / .5 * dur("hit")); } }
+        const rest = 1 - Math.max(over, want.hit || 0);
+        // shooting: the aiming pose held, the firing clip run from each shot
+        let fireW = 0;
+        if (A.fire && !reload) { fireW = F.aim * rest * (1 - .45 * F.walk); time.fire = 0; for (const f of ev.fire || []) { const d = (p - f.p) * TS; if (d >= 0 && d < dur("fire")) time.fire = clampT("fire", d); } want.fire = fireW; }
+        const legs = rest - fireW;
+        const crouch = A.kneel && kneel && !prone ? 1 - F.walk : 0;
+        if (A.run) { want.run = legs * F.walk; time.run = ((F.phase / (2 * Math.PI)) % 1 + 1) % 1 * dur("run"); }
+        if (A.kneel) { want.kneel = legs * (1 - (A.run ? F.walk : 0)) * crouch; time.kneel = (clock + F.i * .37) % dur("kneel"); }
+        if (A.idle) { want.idle = Math.max(0, legs - (want.run || 0) - (want.kneel || 0)); time.idle = (clock * (stun ? .3 : 1) + F.i * .37) % dur("idle"); }
+      }
+      const snap = o.reduce || dt <= 0 || over === 1 && dead;
+      for (const n in A) {
+        const target = want[n] || 0; W[n] = snap ? target : W[n] + (target - W[n]) * Math.min(1, dt * 14);
+        if (W[n] < .004 && !target) W[n] = 0;
+        A[n].setEffectiveWeight(W[n]); if (time[n] != null) A[n].time = time[n];
+      }
+      m.mixer.update(0);
+      // posture and reactions the clips don't cover, on the whole figure
+      let dodge = 0; for (const d of ev.dodge || []) dodge = Math.max(dodge, bump((p - d.p) * TS + .05, .3));
+      fig.position.z = dodge * (F.i % 2 ? -.3 : .3) * k; fig.rotation.x = dodge * (F.i % 2 ? .35 : -.35);
+      if (prone && !dead) { fig.rotation.z = -Math.PI / 2 + .04; fig.position.y = .16 * k; fig.position.x = -.85 * k; }
+      if (stun && !prone && !dead) { fig.rotation.x += Math.sin(clock * 5 + F.i) * .1; fig.rotation.z = .1; }
+      if (dead && !A.die) { const f = ease(dead.f); fig.rotation.z = f * (Math.PI / 2 - .05); fig.position.y = .12 * k * f; fig.position.x = .55 * k * f; }
+    }
+
+    // a vehicle model: its idle and moving clips if it has any (a walker's stride follows the ground covered)
+    function poseVehicleModel(F) {
+      const m = F.model, A = m.acts; let any = false;
+      for (const n in A) {
+        const wgt = n === "run" ? F.walk : n === "idle" ? (A.run ? 1 - F.walk : 1) : 0; A[n].setEffectiveWeight(wgt); if (!wgt) continue;
+        const d = A[n].getClip().duration; A[n].time = n === "run" ? ((F.phase * .5 / (2 * Math.PI)) % 1 + 1) % 1 * d : (clock + F.i) % d; any = true;
+      }
+      if (any) m.mixer.update(0);
+    }
+
+    // ---- swap in the models (the figures were built in the part before this one)
+    (async () => {
+      try { if (!window.DOW_INDEX) await loadScript(PACK + "index.js"); } catch (e) { return; }   // no pack here: the built miniatures stay
+      const idx = window.DOW_INDEX; if (!idx || gone) return;
+      const rules = idx.units.map(u => ({ ...u, re: new RegExp(u.match), nre: u.not ? new RegExp(u.not) : null }));
+      const jobs = figs.map(F => { const r = ros[F.i], s = `${r.faction || ""} ${r.template || ""} ${r.veh || ""} | ${r.kit || ""}`; return rules.find(u => !!u.veh === !!F.veh && u.re.test(s) && !(u.nre && u.nre.test(s))) || null; });
+      if (!jobs.some(Boolean)) return;
+      await gltfReady();
+      // each model once, with the clips it borrows (and those its lender borrows in turn)
+      const loading = new Map(), byId = new Map(rules.map(u => [u.id, u])), assets = new Map();
+      const assetOf = id => { if (!loading.has(id)) loading.set(id, (async () => { const u = byId.get(id), a = await loadAsset(id); if (u && u.clips_from) borrowClips(a, await assetOf(u.clips_from)); return a; })()); return loading.get(id); };
+      for (const u of new Set(jobs.filter(Boolean))) {
+        try { assets.set(u.id, await assetOf(u.id)); } catch (e) { console.warn("model " + u.id + " not loaded:", e); }
+        if (gone) return;
+      }
+      for (const F of figs) { const u = jobs[F.i], a = u && assets.get(u.id); if (a) await attachModel(F, ros[F.i], u, a); if (gone) return; }
+      if (!running) { update(last.t, last.p, last.st); render(); }
+    })().catch(e => console.warn("models not loaded:", e));
+// Part of makeView3D, one function body split into files by section (tools/sim/page/30-37): the locals and
+// helpers declared in earlier parts are in scope here. tools/sim/README.md has the layout.
+    // ================= battlefield scenery from the user's own games (optional)
+    // tools/dow/build_pack.py also writes site/models/scenery.js: Dawn of War II's terrain textures and some of its
+    // world objects (tools/dow/scenery.json says which). With it the painted ground and walls take the game's
+    // textures, the cover crates become its sandbags, barrels and ammunition cases, and an outdoor battlefield gets
+    // its rubble, tank traps, a ruined skyline and its sky. None of it changes the fight: the cover the simulator
+    // models keeps its place and size, and anything else big enough to hide behind stands clear of every hex a
+    // figure enters. Like the models, the file is never committed, and without it the painted battlefield stays.
+    (async () => {
+      try { if (!window.DOW_SCENERY) await loadScript(PACK + "scenery.js"); } catch (e) { return; }
+      const S = window.DOW_SCENERY; if (!S || gone) return;
+      const redraw = () => { if (!running) render(); };
+      for (const n in S.tex) if (TEX[n]) { const im = await loadImage(S.tex[n]); if (gone) return; TEX[n].image = im; TEX[n].needsUpdate = true; }
+      redraw();
+      await gltfReady(); if (gone) return;
+
+      // a world object: its meshes, each with the game's texture
+      const aniso = Math.min(8, renderer.capabilities.getMaxAnisotropy()), loaded = new Map();
+      const names = role => Object.keys(S.props).filter(n => S.props[n].role === role);
+      const propOf = (n, flat) => { if (!loaded.has(n)) loaded.set(n, (async () => {
+        const p = S.props[n], bin = atob(p.glb), buf = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i);
+        const gltf = await new Promise((ok, no) => new THREE.GLTFLoader().parse(buf.buffer, "", ok, no)), found = [], meshes = [];
+        gltf.scene.traverse(o => { if (o.isMesh) { found.push(o); if (o.material && o.material.dispose) keep(o.material); } });
+        for (const o of found) {
+          const name = o.material.name, map = keep(new THREE.Texture(await loadImage(p.tex[name]))), cut = p.cut.includes(name);
+          map.encoding = THREE.sRGBEncoding; map.flipY = false; map.wrapS = map.wrapT = THREE.RepeatWrapping; map.anisotropy = aniso; map.needsUpdate = true;
+          meshes.push([keep(o.geometry), keep(flat ? new THREE.MeshBasicMaterial({ map, side: THREE.DoubleSide, fog: false, depthWrite: false })
+            : new THREE.MeshStandardMaterial({ map, roughness: .9, metalness: .05, alphaTest: cut ? .5 : 0, side: cut ? THREE.DoubleSide : THREE.FrontSide }))]);
+        }
+        return { p, meshes };
+      })()); return loaded.get(n); };
+      const v3 = new THREE.Vector3(), s3 = new THREE.Vector3(), qy = new THREE.Quaternion();
+      // many copies of one object: each [x, height, y, turn, scale]
+      const strew = async (n, list) => { const pr = await propOf(n); if (gone) return; for (const [geo, mat] of pr.meshes) inst(geo, mat, list, (im, [x, h, y, yaw, s], i) => { m4.compose(v3.set(x, h, y), qy.setFromAxisAngle(yAx, yaw), s3.set(s, s, s)); im.setMatrixAt(i, m4); }).frustumCulled = false; };
+      const lists = new Map(), put = (n, at) => { if (!lists.has(n)) lists.set(n, []); lists.get(n).push(at); };
+      const R = rng(53), pick = a => a[Math.floor(R() * a.length)];
+
+      // the map's cover: the same hexes, about the same size, as the crates they replace
+      if (decor.crateList && decor.crateList.length && names("crate_light").length && names("crate_heavy").length) {
+        for (const [k, kind] of decor.crateList) {
+          const [q, r] = keyHex(k), [x, y] = P(q, r), opts = names("crate_" + kind), n = opts[Math.floor(hash(q, r) * opts.length) % opts.length], p = S.props[n];
+          const s = Math.min(1.5 / Math.max(p.hi[0] - p.lo[0], p.hi[2] - p.lo[2]), (kind === "heavy" ? 1.45 : 1.1) / (p.hi[1] - p.lo[1]));
+          put(n, [x, zOf(q, r) - p.lo[1] * s, y, hash(r, q) * 6.283, s]);
+        }
+        for (const [n, list] of lists) await strew(n, list);
+        if (gone) return;
+        decor.crates.forEach(m => { m.visible = false; }); lists.clear(); redraw();
+      }
+
+      if (!indoor) {
+        // a point d yards outside the fighting area (which already reaches 6 yards past anywhere a figure goes)
+        const edge = (t, d) => { const w = bx1 - bx0 + 2 * d, h = by1 - by0 + 2 * d; t = (t % 1) * 2 * (w + h); return t < w ? [bx0 - d + t, by0 - d, 0] : t < w + h ? [bx1 + d, by0 - d + t - w, 1] : t < 2 * w + h ? [bx1 + d - (t - w - h), by1 + d, 2] : [bx0 - d, by1 + d - (t - 2 * w - h), 3]; };
+        const within = (x, y) => x > bx0 && x < bx1 && y > by0 && y < by1;
+        if (!T) {
+          // open ground: small debris underfoot, larger pieces only where nobody fights
+          const sc = names("scatter");
+          if (sc.length) {
+            for (let i = 0; i < Math.min(360, span * 3); i++) { const x = cx + (R() - .5) * span * 1.8, y = cy + (R() - .5) * span * 1.8, n = pick(sc); put(n, [x, zXY(x, y), y, R() * 6.283, S.props[n].scale * (within(x, y) ? .3 + R() * .3 : .6 + R() * .9)]); }
+            if (decor.rocks) decor.rocks.visible = false;
+          }
+        }
+        const bigs = names("big");
+        if (bigs.length) for (let i = 0; i < Math.max(10, Math.min(48, span / 2)); i++) { const [x, y] = edge(R(), 1.5 + R() * R() * 22), n = pick(bigs); put(n, [x, T ? 0 : zXY(x, y), y, R() * 6.283, S.props[n].scale * (.8 + R() * .5)]); }
+        for (const [n, list] of lists) await strew(n, list);
+        if (gone) return;
+        redraw();
+
+        // the skyline: ruined blocks around the field, a second row behind where the ground reaches that far
+        const blds = names("building"), towers = [];
+        if (blds.length) {
+          if (T) {   // a walled map stands on nothing: give the city something to stand on
+            const gt = TEX.dirt.clone(); keep(gt); gt.repeat.set(span * 6 / 12, span * 6 / 12); gt.needsUpdate = true;
+            const ground = new THREE.Mesh(keep(new THREE.PlaneGeometry(span * 6, span * 6)), keep(new THREE.MeshStandardMaterial({ map: gt, roughness: 1 })));
+            ground.rotation.x = -Math.PI / 2; ground.position.set(cx, -.2, cy); ground.receiveShadow = true; scene.add(ground);
+          }
+          const rows = [[19, 15, 23, 1, .25]]; if (span * 3 - Math.max(bx1 - bx0, by1 - by0) / 2 > 95) rows.push([52, 22, 34, 1.25, .5]);
+          for (const [d0, dd, step, k0, kk] of rows) {
+            const per = 2 * (bx1 - bx0 + by1 - by0 + 4 * d0), count = Math.max(6, Math.round(per / step));
+            for (let i = 0; i < count; i++) {
+              const [x, y, side] = edge((i + R() * .5) / count, d0 + R() * dd), pr = await propOf(pick(blds)); if (gone) return;
+              const g = new THREE.Group(), k = pr.p.scale * (k0 + R() * kk);
+              for (const [geo, mat] of pr.meshes) { const m = new THREE.Mesh(geo, mat); m.castShadow = !big; m.receiveShadow = true; g.add(m); }
+              g.position.set(x, 0, y); g.rotation.y = side * Math.PI / 2 + (R() - .5) * .5 + (R() < .3 ? Math.PI / 2 : 0); g.scale.setScalar(k); scene.add(g);
+              towers.push({ g, x, y, rad: Math.hypot(pr.p.hi[0] - pr.p.lo[0], pr.p.hi[2] - pr.p.lo[2]) * k / 2, top: pr.p.hi[1] * k });
+            }
+          }
+          // a block standing between the camera and what it looks at steps out of the way
+          const fwd = new THREE.Vector3();
+          decor.frame = () => {
+            camera.getWorldDirection(fwd);
+            const c = camera.position, len = fwd.y < -.01 ? Math.min(600, c.y / -fwd.y) : 600, ax = fwd.x * len, ay = fwd.z * len, l2 = ax * ax + ay * ay || 1;
+            for (const b of towers) {
+              const t = Math.max(0, Math.min(1, ((b.x - c.x) * ax + (b.y - c.z) * ay) / l2));
+              b.g.visible = !(Math.hypot(c.x + ax * t - b.x, c.z + ay * t - b.y) < b.rad + 2 && c.y + fwd.y * len * t < b.top + 1);
+            }
+          };
+        }
+
+        const skies = names("sky");
+        if (skies.length && skyDome) {
+          const pr = await propOf(skies[0], true); if (gone) return;
+          const k = 590 / Math.max(pr.p.hi[0], -pr.p.lo[0], pr.p.hi[2], -pr.p.lo[2]);
+          for (const [geo, mat] of pr.meshes) { const m = new THREE.Mesh(geo, mat); m.scale.setScalar(k); m.position.set(cx, -120, cy); m.renderOrder = -1; m.frustumCulled = false; scene.add(m); }
+          skyDome.visible = false;
+          // the haze takes the colour of the sky low down, so the far ground fades into it
+          const c = document.createElement("canvas"); c.width = c.height = 32; const g = c.getContext("2d"); g.drawImage(pr.meshes[0][1].map.image, 0, 0, 32, 32);
+          const px = g.getImageData(0, 0, 32, 32).data, sum = [0, 0, 0];
+          for (let i = 0; i < 24; i++) { const a = i * Math.PI / 12, o = 4 * (Math.round(16 + Math.sin(a) * 11) * 32 + Math.round(16 + Math.cos(a) * 11)); for (let ch = 0; ch < 3; ch++) sum[ch] += px[o + ch] / 24 / 255; }
+          scene.fog.color.setRGB(sum[0], sum[1], sum[2]).convertSRGBToLinear();
+        }
+      }
+      decor.ready = true; redraw();
+    })().catch(e => console.warn("scenery not loaded:", e));
+// Part of makeView3D, one function body split into files by section (tools/sim/page/30-37): the locals and
+// helpers declared in earlier parts are in scope here. tools/sim/README.md has the layout.
     // ================= effects: two particle systems (glowing and smoky), beams, light flashes, decals
     function particles(max, tex, blending) {
       const geo = keep(new THREE.BufferGeometry());
@@ -6909,6 +7243,129 @@ if (typeof document !== "undefined") (() => {
 
 // Part of makeView3D, one function body split into files by section (tools/sim/page/30-37): the locals and
 // helpers declared in earlier parts are in scope here. tools/sim/README.md has the layout.
+    // ================= sound (optional, from the same local pack as the models)
+    // tools/dow/build_pack.py also writes site/models/sounds.js: the game's own weapon, impact, explosion and melee
+    // sounds, as it stores them (IMA ADPCM, a quarter the size of plain samples), keyed by what happens in the
+    // replay: "fire.bolt", "hit.armour", "blast", "swing.chain"... A key may end in a race ("fire.slug.ork") for a
+    // sound only that race makes. Nothing plays unless the Sound button is on and the replay is running. The units'
+    // voices come the same way (further down).
+    const SND = { ctx: null, out: null, lib: null, bufs: new Map(), last: new Map(), live: 0, on: false };
+    const ADPCM_STEP = [7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 19, 21, 23, 25, 28, 31, 34, 37, 41, 45, 50, 55, 60, 66, 73, 80, 88, 97, 107, 118, 130, 143, 157, 173, 190, 209, 230, 253, 279, 307, 337, 371, 408, 449, 494, 544, 598, 658, 724, 796, 876, 963, 1060, 1166, 1282, 1411, 1552, 1707, 1878, 2066, 2272, 2499, 2749, 3024, 3327, 3660, 4026, 4428, 4871, 5358, 5894, 6484, 7132, 7845, 8630, 9493, 10442, 11487, 12635, 13899, 15289, 16818, 18500, 20350, 22385, 24623, 27086, 29794, 32767];
+    const ADPCM_MOVE = [-1, -1, -1, -1, 2, 4, 6, 8];
+    // blocks of 36 bytes: a starting sample and step index, then 64 four-bit steps, low half of each byte first
+    function decodeAdpcm(b64) {
+      const raw = atob(b64), n = Math.floor(raw.length / 36), out = new Float32Array(n * 64);
+      let at = 0;
+      for (let b = 0; b < n * 36; b += 36) {
+        let pred = (raw.charCodeAt(b) | raw.charCodeAt(b + 1) << 8) << 16 >> 16, idx = Math.min(88, raw.charCodeAt(b + 2));
+        for (let k = 4; k < 36; k++) {
+          const byte = raw.charCodeAt(b + k);
+          for (let half = 0; half < 2; half++) {
+            const nib = half ? byte >> 4 : byte & 15, step = ADPCM_STEP[idx];
+            let diff = step >> 3; if (nib & 1) diff += step >> 2; if (nib & 2) diff += step >> 1; if (nib & 4) diff += step;
+            pred = Math.max(-32768, Math.min(32767, nib & 8 ? pred - diff : pred + diff));
+            idx = Math.max(0, Math.min(88, idx + ADPCM_MOVE[nib & 7]));
+            out[at++] = pred / 32768;
+          }
+        }
+      }
+      return levelled(out);
+    }
+    // 8-bit mu-law, one byte a sample: what the pack holds for sounds that weren't ADPCM in their game
+    function decodeUlaw(b64) {
+      const raw = atob(b64), out = new Float32Array(raw.length);
+      for (let i = 0; i < raw.length; i++) { const y = raw.charCodeAt(i) / 127.5 - 1; out[i] = Math.sign(y) * (Math.pow(256, Math.abs(y)) - 1) / 255; }
+      return levelled(out);
+    }
+    function levelled(out) {
+      // even out the recordings (they differ sixfold in loudness), and fade the end: a long one may have been cut
+      let sq = 0, peak = .01; for (let i = 0; i < out.length; i++) { sq += out[i] * out[i]; peak = Math.max(peak, Math.abs(out[i])); }
+      const level = Math.min(1.2 / peak, Math.max(.4, Math.min(2.5, .22 / Math.max(.01, Math.sqrt(sq / Math.max(1, out.length)))))), tail = Math.min(4000, out.length >> 2);
+      for (let i = 0; i < out.length; i++) out[i] *= level * Math.min(1, (out.length - i) / tail);
+      return out;
+    }
+    function soundBuffer(key, i, item) {
+      const id = key + "#" + i;
+      if (!SND.bufs.has(id)) { const pcm = item[2] === "u" ? decodeUlaw(item[1]) : decodeAdpcm(item[1]), buf = SND.ctx.createBuffer(1, Math.max(1, pcm.length), item[0]); buf.getChannelData(0).set(pcm); SND.bufs.set(id, buf); }
+      return SND.bufs.get(id);
+    }
+    const raceOf = F => { const f = ros[F.i].faction || ""; return /Ork/.test(f) ? "ork" : /Tyranid/.test(f) ? "nid" : /Aeldari|Drukhari/.test(f) ? "eld" : /Guard|Cultist/.test(f) ? "ig" : ""; };
+    // where: a figure, or a point; louder near the camera, and from the side of the screen it is on
+    function playSound(key, where, vol = 1) {
+      if (!SND.on || !SND.lib || !lastSt.playing) return;
+      const F = where && where.g ? where : null, pos = F ? F.g.position : where;
+      const full = F && SND.lib[key + "." + raceOf(F)] ? key + "." + raceOf(F) : SND.lib[key] ? key : key.split(".")[0];
+      const list = SND.lib[full]; if (!list || !list.length) return;
+      const now = SND.ctx.currentTime;
+      if (now - (SND.last.get(full) ?? -1) < .045 || SND.live >= 18) return;   // a volley is a few voices, not forty
+      SND.last.set(full, now);
+      const i = Math.floor(rnd() * list.length);
+      SND.live++; emit(soundBuffer(full, i, list[i]), pos, vol, .95 + rnd() * .1, () => { SND.live--; });
+    }
+    function emit(buffer, pos, vol, rate, done) {
+      const src = SND.ctx.createBufferSource(), gain = SND.ctx.createGain();
+      src.buffer = buffer; src.playbackRate.value = rate;
+      gain.gain.value = Math.min(1, vol * 14 / (10 + (pos ? camera.position.distanceTo(pos) : 10)));
+      let end = gain;
+      if (pos && SND.ctx.createStereoPanner) { end = SND.ctx.createStereoPanner(); end.pan.value = Math.max(-1, Math.min(1, pos.clone().project(camera).x)) * .7; gain.connect(end); }
+      src.connect(gain); end.connect(SND.out);
+      src.onended = done;
+      src.start();
+    }
+
+    // ---- voices (optional, from the same pack): the units' own lines from Dawn of War II. site/models/voices.js says
+    // which roster entries speak with which voices; each voice is a file of its own (voice_<id>.js), fetched only for
+    // the voices in this battle. A voice has lines by event: "attack", "charge", "fire" (under fire), "kill", "down"
+    // (a comrade falls), and the grunts "pain", "effort" and "death"; "attack.o" is a line said only of Orks.
+    const VOX = { rules: null, of: new Map(), lib: {}, live: 0, grunts: 0, lastLine: -9, lastBy: new Map() };
+    const GRUNT = { pain: 1, effort: 1, death: 1 };
+    const foeLetter = F => { const f = ros[F.i].faction || ""; return /Heretic|Chaos|Rubric/.test(f) ? "c" : /Astartes|Custodes|Deathwatch/.test(f) ? "s" : /Aeldari|Drukhari/.test(f) ? "e" : /Ork/.test(f) ? "o" : /Tyranid/.test(f) ? "t" : /Militarum|Guard/.test(f) ? "i" : ""; };
+    async function loadVoices() {
+      if (VOX.rules) return;
+      VOX.rules = [];
+      try { if (!window.DOW_VOICES) await loadScript(PACK + "voices.js"); } catch (e) { return; }   // a pack without voices
+      VOX.rules = window.DOW_VOICES.rules.map(r => ({ ...r, re: new RegExp(r.match), nre: r.not ? new RegExp(r.not) : null }));
+      const share = new Map();   // a rule with several voices deals them out in turn
+      figs.forEach(F => {
+        if (F.veh) return;
+        const r = ros[F.i], s = `${r.faction || ""} ${r.template || ""} ${r.veh || ""} | ${r.kit || ""}`, rule = VOX.rules.find(u => u.re.test(s) && !(u.nre && u.nre.test(s)));
+        if (!rule) return;
+        const n = share.get(rule) || 0; share.set(rule, n + 1); VOX.of.set(F.i, rule.voices[n % rule.voices.length]);
+      });
+      for (const id of new Set(VOX.of.values())) loadScript(PACK + "voice_" + id + ".js").then(() => { VOX.lib[id] = (window.DOW_VOICE || {})[id]; }, () => {});
+    }
+    // a figure speaks. Lines don't pile up: two at once at most, a breath between them, and nobody again for a while;
+    // grunts and screams are short and come freely. `foe` picks a line about that foe's race when the voice has one.
+    function say(F, event, foe, chance = 1) {
+      if (!SND.on || !lastSt.playing || !F || rnd() > chance) return;
+      const id = VOX.of.get(F.i), lib = id && VOX.lib[id]; if (!lib) return;
+      const now = SND.ctx.currentTime, grunt = GRUNT[event], since = now - (VOX.lastBy.get(F.i) ?? -9);
+      if (grunt ? VOX.grunts >= 4 || (event !== "death" && since < .6) : VOX.live >= 2 || now - VOX.lastLine < 1.1 || since < 6) return;
+      const about = foe ? event + "." + foeLetter(foe) : "", key = lib[about] && (!lib[event] || rnd() < .4) ? about : event, list = lib[key];
+      if (!list) return;
+      const i = Math.floor(rnd() * list.length);
+      VOX.lastBy.set(F.i, now);
+      if (grunt) { VOX.grunts++; emit(soundBuffer("voice:" + id + ":" + key, i, list[i]), F.g.position, 1.3, .97 + rnd() * .06, () => { VOX.grunts--; }); return; }
+      VOX.live++; VOX.lastLine = now;
+      emit(soundBuffer("voice:" + id + ":" + key, i, list[i]), F.g.position, 1.7, 1, () => { VOX.live--; });
+    }
+    // true if sound is now as asked; false if there is no sound pack or no audio here
+    async function setSound(on) {
+      if (!on) { SND.on = false; return true; }
+      try { if (!window.DOW_SOUNDS) await loadScript(PACK + "sounds.js"); } catch (e) { return false; }
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!window.DOW_SOUNDS || !AC) return false;
+      SND.lib = window.DOW_SOUNDS;
+      if (!SND.ctx) {
+        SND.ctx = new AC(); SND.out = SND.ctx.createGain(); SND.out.gain.value = .55;
+        const squash = SND.ctx.createDynamicsCompressor(); SND.out.connect(squash); squash.connect(SND.ctx.destination);
+        keep({ dispose() { SND.on = false; SND.ctx.close(); } });
+      }
+      if (SND.ctx.state === "suspended") await SND.ctx.resume();
+      SND.on = true; loadVoices(); return true;
+    }
+// Part of makeView3D, one function body split into files by section (tools/sim/page/30-37): the locals and
+// helpers declared in earlier parts are in scope here. tools/sim/README.md has the layout.
     // ================= the timeline: when each model went down and came back, from the frames and casualty events
     const downs = ros.map(() => []);   // per model: [{ t: frame it vanished, at: [x, y], dead, back: frame it reappeared or null }]
     {
@@ -6978,14 +7435,23 @@ if (typeof document !== "undefined") (() => {
       TS = cine ? pl.tsc : 1;
       if (t <= 0) return;
       const es = fx[t - 1] || [], lastImpact = new Map(), u = 1 / TS;
-      if (cine) { cineSchedule(pl, u, es); sched.sort((a, b) => a.p - b.p); return; }
+      hitBy.clear(); for (const e of es) if ((e[0] === "s" || e[0] === "m") && e[6] && e[8] >= 0) hitBy.set(e[8], e[7]);
+      if (cine) { cineSchedule(pl, u, es); fallSounds(t); sched.sort((a, b) => a.p - b.p); return; }
       let n = 0;
       // when an attack goes off: spread through the first .4 of a normal second, or a little into its attacker's beat
       const lagOf = () => Math.min(.35, n++ * .03) + .05;
       const imp = (tg, at) => { if (tg >= 0) lastImpact.set(tg, at); };
+      // a shooter that moves this second fires as it reaches the hex it fired from, not from part-way there
+      const firedAt = e => {
+        const cur = fr[t] && fr[t][e[7]], prev = fr[t - 1] && fr[t - 1][e[7]], tr = cur && cur[6];
+        if (!prev || !tr || !tr.length || (prev[0] === e[1] && prev[1] === e[2])) return 0;
+        let L = 0, at = -1, a = P(prev[0], prev[1]);
+        for (const [q, r] of tr) { const b = P(q, r); L += Math.hypot(b[0] - a[0], b[1] - a[1]); a = b; if (at < 0 && q === e[1] && r === e[2]) at = L; }
+        return at > 0 ? Math.min(.72, .7 * at / L + .02) : 0;
+      };
       for (const e of es) {
         if (e[0] === "s") {
-          const lag = lagOf(e), kind = e[12] || "slug", K = KIND[kind] || KIND.slug;
+          const lag = Math.max(lagOf(e), firedAt(e)), kind = e[12] || "slug", K = KIND[kind] || KIND.slug;
           const travel = K.beam || K.flame ? .05 : K.dur || .15;
           (evFor[e[7]].fire ||= []).push({ p: lag, kind, tgt: e[8], hits: e[10] || 0, nb: e[11] || 1 });
           imp(e[8], lag + travel * u);
@@ -6994,6 +7460,8 @@ if (typeof document !== "undefined") (() => {
           const lag = lagOf(e);
           (evFor[e[7]].swing ||= []).push({ p: lag, tgt: e[8] });
           imp(e[8], lag + .22 * u);
+          sched.push({ p: lag, run: () => swingSound(e, false) });
+          if (e[6]) sched.push({ p: lag + .22 * u, run: () => swingSound(e, true) });
           if (e[6]) sched.push({ p: lag + .22 * u, run: () => { const F = figs[e[8]]; if (F) burst(glow, chestOf(F), 10, { speed: 3, life: .25, s0: .12, s1: .02, c: C(0xffe0a0), grav: 6 }); } });
         } else if (e[0] === "v") {
           const pi = lastImpact.get(e[1]) ?? .3 * u; (evFor[e[1]].dodge ||= []).push({ p: pi - .08 * u, how: e[2] });
@@ -7010,8 +7478,26 @@ if (typeof document !== "undefined") (() => {
           sched.push({ p: pb, run: () => blastFx(W3(x, y, zOf(e[1], e[2])), e[3]) });
         }
       }
+      fallSounds(t);
       sched.sort((a, b) => a.p - b.p);
     }
+    // a blow's sound: the swing, then what it lands on; a body hitting the ground when a model falls this second
+    const swingSound = (e, landed) => { const A = figs[e[7]], F = figs[e[8]], mk = ros[e[7]].mk || ""; if (landed) { if (F) playSound("melee." + mk, F, .9); } else if (A) { playSound("swing." + mk, A, .7); if (rnd() < .3) say(A, "charge", F); else say(A, "effort", null, .6); } };
+    // who struck whom this second, so the one who felled a foe can say so
+    const hitBy = new Map();
+    const fallSounds = t => figs.forEach((F, i) => {
+      if (F.veh || !downs[i].some(d => d.t === t && d.fell)) return;
+      const p = deathP.get(i) ?? .35 / TS;
+      sched.push({ p, run: () => say(F, "death", null, .9) });
+      sched.push({ p: p + .3 / TS, run: () => playSound(F.arch === "marine" || F.arch === "terminator" || F.arch === "custodes" ? "fall.armour" : "fall", F, .8) });
+      // then the one who did it, or a comrade who saw it
+      sched.push({ p: Math.min(.98, p + .5 / TS), run: () => {
+        const by = figs[hitBy.get(i)];
+        if (by && rnd() < .5) return say(by, "kill", F, .8);
+        const mate = figs.find(M => M !== F && !M.veh && M.g.visible && ros[M.i].side === ros[i].side && !deathOf(M.i, t) && M.g.position.distanceTo(F.g.position) < 12);
+        if (mate) say(mate, "down", null, .6);
+      } });
+    });
     // the action camera's timeline: each beat aims for .6 of a second, then fires its rounds one at a time
     function cineSchedule(pl, u, es) {
       for (const b of pl.beats) {
@@ -7027,6 +7513,8 @@ if (typeof document !== "undefined") (() => {
             sched.push({ p: fp, run: () => fireFx(one, kind, K) });
           } else {
             (evFor[e[7]].swing ||= []).push({ p: fp, tgt: e[8] });
+            sched.push({ p: fp, run: () => swingSound(e, false) });
+            if (r.hit) sched.push({ p: fp + travel * u, run: () => swingSound(e, true) });
             if (r.hit) sched.push({ p: fp + travel * u, run: () => { const F = figs[e[8]]; if (F) burst(glow, chestOf(F), 10, { speed: 3, life: .25, s0: .12, s1: .02, c: C(0xffe0a0), grav: 6 }); } });
           }
           r.ip = fp + travel * u;
@@ -7043,17 +7531,46 @@ if (typeof document !== "undefined") (() => {
       for (const e of es) if ((e[0] === "h" || e[0] === "f") && !hP.has(e)) { const ip = .5 / TS; hP.set(e, ip); if (e[0] === "h") { deathP.set(e[1], ip); const F = figs[e[1]]; sched.push({ p: ip, run: () => { if (F) impactFx(F, e[2] > 0); } }); } }
     }
     const chestOf = F => F.g.position.clone().add(new THREE.Vector3(0, (F.veh ? .9 : F.top * .62), 0));
-    const muzzleOf = (F, toward) => {
-      const at = F.g.position.clone(), h = F.veh ? (F.turret && F.turret !== F.hull ? .9 : .7) : F.top * (F.arch === "beast" ? .45 : .62);
+    // where a shot starts or ends: on the figure while it stands in the hex the shot was fired from (or at). A
+    // figure drawn part-way through its move isn't there, and a line drawn to it could cross a wall the shot never
+    // did, so the shot keeps to its hex
+    const standAt = (F, q, r) => { const [x, y] = P(q, r); return F && F.g.visible && Math.hypot(F.g.position.x - x, F.g.position.z - y) < .5 ? F.g.position.clone() : W3(x, y, zOf(q, r)); };
+    const muzzleOf = (F, toward, at = F.g.position.clone()) => {
+      const h = F.veh ? (F.turret && F.turret !== F.hull ? .9 : .7) : F.top * (F.arch === "beast" ? .45 : .62);
       const d = toward.clone().sub(at); d.y = 0; d.normalize();
       return at.add(new THREE.Vector3(0, h, 0)).add(d.multiplyScalar(F.veh ? 1.2 : .45 * Math.max(1, F.k)));
     };
+    // a shot that misses flies on past its target, until a standing wall, a shut door or the ground stops it or it
+    // has gone some way further
+    const hexAt = (x, y) => { const q = x / 1.5, r = y / SQ3 - q / 2; let rx = Math.round(q), ry = Math.round(-q - r), rz = Math.round(r); const dx = Math.abs(rx - q), dy = Math.abs(ry + q + r), dz = Math.abs(rz - r); if (dx > dy && dx > dz) rx = -ry - rz; else if (dy <= dz) rz = -rx - ry; return rx + "," + rz; };
+    let strayT = -1; const brokenNow = new Set(), shutNow = new Set(), wallTopOf = new Map();
+    function flyOn(from, near) {
+      const d = near.clone().sub(from), len = d.length(), p = near.clone(); if (len < .01) return { to: p, stopped: false };
+      d.multiplyScalar(1 / len);
+      if (T && strayT !== schedT) {
+        strayT = schedT; brokenNow.clear(); shutNow.clear();
+        for (const k of T.shut || []) shutNow.add(k);
+        for (const [tt, k, what] of T.events || []) if (tt <= schedT) { if (what === "broken") { brokenNow.add(k); shutNow.delete(k); } else if (what === "closed") shutNow.add(k); else shutNow.delete(k); }
+        if (!wallTopOf.size) wallList.forEach((k, i) => wallTopOf.set(k, wallH[i]));
+      }
+      const reach = len + 25 + rnd() * 35;
+      for (let s = Math.max(0, len - 1.5); s < reach; s += .3) {
+        p.copy(d).multiplyScalar(s).add(from);
+        if (p.y < zXY(p.x, p.z) + .05) return { to: p, stopped: true };
+        if (!T) continue;
+        const k = hexAt(p.x, p.z);
+        if (floorSet.has(k) ? shutNow.has(k) && p.y < 2.3 : !brokenNow.has(k) && (indoor || p.y < (wallTopOf.get(k) ?? -1))) return { to: p, stopped: true };
+      }
+      return { to: p, stopped: false };
+    }
     function fireFx(e, kind, K) {
       const A = figs[e[7]]; if (!A) return;
       const tF = e[8] >= 0 ? figs[e[8]] : null;
-      const [bx, by] = P(e[3], e[4]);
-      const tgt = tF && tF.g.visible ? chestOf(tF) : W3(bx, by, zOf(e[3], e[4]) + .8);
-      const from = muzzleOf(A, tgt), hit = !!e[6];
+      const tgt = standAt(tF, e[3], e[4]); tgt.y += tF ? (tF.veh ? .9 : tF.top * .62) : .8;
+      const from = muzzleOf(A, tgt, standAt(A, e[1], e[2])), hit = !!e[6];
+      const shots = K.beam || K.flame ? 1 : Math.min(3, K.pulses || 1, Math.max(1, e[11] || 1));
+      for (let j = 0; j < shots; j++) setTimeout(() => playSound("fire." + kind, A, A.veh ? 1.3 : 1), j * 70 * speedK());
+      say(A, "attack", tF, .3); if (tF && !hit) say(tF, "fire", A, .12);
       const miss = () => tgt.clone().add(new THREE.Vector3((rnd() - .5) * 2.5, (rnd() - .2) * 1.2, (rnd() - .5) * 2.5));
       if (o.reduce) return;
       // muzzle flash
@@ -7069,25 +7586,31 @@ if (typeof document !== "undefined") (() => {
         return;
       }
       for (let j = 0; j < pulses; j++) {
-        const to = hit && j < Math.max(1, e[10] || 1) ? tgt.clone().add(new THREE.Vector3((rnd() - .5) * .2, (rnd() - .5) * .3, (rnd() - .5) * .2)) : miss();
+        const lands = hit && j < Math.max(1, e[10] || 1), near = lands ? tgt.clone().add(new THREE.Vector3((rnd() - .5) * .2, (rnd() - .5) * .3, (rnd() - .5) * .2)) : miss();
+        const stray = lands || K.arc ? null : flyOn(from, near), to = stray ? stray.to : near, struck = !stray || stray.stopped;
         const delay = j * .06;
         if (K.beam) {
           setTimeout(() => {
             beam(from, to, K.c, K.beam, K.life, K.crackle ? .08 : 0);
+            if (!struck) return;
+            if (stray) burst(glow, to, 5, { speed: 2.5, life: .2, s0: .12, s1: .02, c: C(0xffe0a0), grav: 6 });
             if (K.flare) { burst(glow, to, 14, { speed: 2.4, life: .3, s0: .5, s1: .05, c: C(0xffc0b0) }); flash(to, K.c, 3, .2, 8); }
             if (K.heat) burst(glow, to, 10, { speed: 1, life: .35, s0: .6, s1: .1, c: C(0xffe0c0) });
             if (K.crackle) burst(glow, to, 8, { speed: 1.5, life: .35, s0: .18, s1: .02, c: C(0x7aff9a), spread: .3 });
           }, delay * 1000 * speedK());
         } else {
           const K2 = K;
-          setTimeout(() => projectile(from.clone(), to, { dur: (K2.dur || .15) * (1 + from.distanceTo(to) / 60), arc: K2.arc ? Math.min(8, from.distanceTo(to) * .35 * K2.arc) : 0, c: K2.c, size: K2.proj, trail: !K2.smoke, smokeTrail: !!K2.smoke,
-            onHit: K2.pop ? at => burst(glow, at, 6, { speed: 1.5, life: .2, s0: .35, s1: .05, c: C(0xffc070) }) : null }), delay * 1000 * speedK());
+          const far = from.distanceTo(near), dur = (K2.dur || .15) * (1 + far / 60) * (stray ? from.distanceTo(to) / Math.max(1, far) : 1);   // a stray keeps the speed it had to the target
+          setTimeout(() => projectile(from.clone(), to, { dur, arc: K2.arc ? Math.min(8, from.distanceTo(to) * .35 * K2.arc) : 0, c: K2.c, size: K2.proj, trail: !K2.smoke, smokeTrail: !!K2.smoke,
+            onHit: !struck ? null : K2.pop ? at => burst(glow, at, 6, { speed: 1.5, life: .2, s0: .35, s1: .05, c: C(0xffc070) }) : stray ? at => burst(glow, at, 5, { speed: 2.5, life: .2, s0: .12, s1: .02, c: C(0xffe0a0), grav: 6 }) : null }), delay * 1000 * speedK());
         }
       }
     }
     let speedMs = 1000;
     const speedK = () => Math.max(.25, Math.min(2, speedMs / 1000));
     function impactFx(F, pen) {
+      playSound(!pen ? "hit.glance" : F.veh || /Necron/.test(ros[F.i].faction || "") || F.arch === "marine" || F.arch === "terminator" ? "hit.armour" : "hit.flesh", F, .8);
+      if (pen) say(F, "pain", null, .5); else say(F, "fire", null, .15);
       if (o.reduce) return;
       const at = chestOf(F).add(new THREE.Vector3((rnd() - .5) * .3, (rnd() - .5) * .3, (rnd() - .5) * .3));
       const metal = F.veh || /Necron/.test(ros[F.i].faction || "");
@@ -7095,8 +7618,9 @@ if (typeof document !== "undefined") (() => {
       else if (metal) { burst(glow, at, 14, { speed: 4.5, life: .45, s0: .14, s1: .02, c: C(0xffd070), grav: 9, floor: F.g.position.y + .02, drag: .95 }); burst(smoke, at, 3, { speed: .4, life: 1.2, s0: .3, s1: .9, c: C(0x2a2826), a: .5, lift: .6 }); }
       else { burst(smoke, at, 8, { speed: 1.6, life: .45, s0: .12, s1: .28, c: C(0x7a0e0a), a: .9, grav: 7, drag: .9 }); burst(glow, at, 4, { speed: 2, life: .15, s0: .2, s1: .05, c: C(0xffb090) }); }
     }
-    function shieldFx(F) { const at = chestOf(F); burst(glow, at, 18, { speed: 1.4, life: .35, s0: .25, s1: .05, c: C(0x58b6e8), spread: .8 }); flash(at, 0x58b6e8, 1.6, .15, 5); }
+    function shieldFx(F) { playSound("hit.shield", F, .8); const at = chestOf(F); burst(glow, at, 18, { speed: 1.4, life: .35, s0: .25, s1: .05, c: C(0x58b6e8), spread: .8 }); flash(at, 0x58b6e8, 1.6, .15, 5); }
     function blastFx(at, R) {
+      playSound("blast", at, 1.4);
       if (o.reduce) return;
       const s = 1 + Math.max(0, R - 1) * .3;   // the blast's radius on the 2D map, toned down for the eye
       flash(at.clone().add(new THREE.Vector3(0, 1.2, 0)), 0xffa040, 5 * s, .35, 8 + s * 4);
@@ -7176,7 +7700,7 @@ if (typeof document !== "undefined") (() => {
       const s = H * renderer.getPixelRatio() / (2 * Math.tan(camera.fov * Math.PI / 360)); glow.mat.uniforms.scale.value = s; smoke.mat.uniforms.scale.value = s;
       place(); render();
     }
-    function render() { if (!W) return; if (composer) composer.render(); else renderer.render(scene, camera); }
+    function render() { if (!W) return; if (decor.frame) decor.frame(); if (composer) composer.render(); else renderer.render(scene, camera); }
 
 // Part of makeView3D, one function body split into files by section (tools/sim/page/30-37): the locals and
 // helpers declared in earlier parts are in scope here. tools/sim/README.md has the layout.
@@ -7204,6 +7728,7 @@ if (typeof document !== "undefined") (() => {
       if (reload) aimT = 0;
       F.aim += (aimT - F.aim) * Math.min(1, dt * 10 + (o.reduce ? 1 : 0));
       if (F.veh) return poseVehicle(F, x, ev, p, moved, dt, recoil);
+      if (F.model) return poseModel(F, bitsv, p, ev, dt, dead);
       const fig = F.fig, k = F.k;
       fig.position.set(0, 0, 0); fig.rotation.set(0, 0, 0);
       const breathe = Math.sin(clock * 1.7 + F.i) * .012;
@@ -7270,7 +7795,9 @@ if (typeof document !== "undefined") (() => {
       }
     }
     function poseVehicle(F, x, ev, p, moved, dt, recoil) {
+      if (F.model) poseVehicleModel(F);
       for (const tm of F.tracks) tm.map.offset.x -= moved * .45;
+      if (F.model && F.model.tracks) for (const tk of F.model.tracks) tk.map.offset.y -= moved * tk.rate;
       for (const w of F.wheels) w.rotation.z -= moved * 3;
       F.fig.position.y = F.walk > .1 && !F.walker ? Math.sin(clock * 22) * .01 : 0;
       if (F.walker) { for (const L of F.legs) { L.p.rotation.z = .5 + Math.sin(F.phase * 1.6 + (L.s > 0 ? 0 : Math.PI)) * .4 * F.walk; L.kn.rotation.z = -1.0 - Math.max(0, Math.sin(F.phase * 1.6 + (L.s > 0 ? 0 : Math.PI))) * .5 * F.walk; } F.hips.position.y = F.hipY + Math.abs(Math.sin(F.phase * 1.6)) * .05 * F.walk; }
@@ -7513,6 +8040,7 @@ if (typeof document !== "undefined") (() => {
     return {
       update(t, p, st) { update(t, p, st); if (!running) render(); }, resize, active,
       secLen(t) { return planOf(t).tsc; },
+      sound: setSound,
       cineOff() { syncOrb(); cap.hidden = true; },
       fit(whole) { fit(whole); update(last.t, last.p, last.st); render(); },
       dispose() { active(false); clearText(); clearLines(); for (const b of beams) { scene.remove(b.core); scene.remove(b.halo); } for (const d of disposables) d.dispose && d.dispose(); if (composer) composer.renderTarget1 && composer.renderTarget1.dispose(); renderer.dispose(); el.remove(); },
@@ -7887,7 +8415,7 @@ if (typeof document !== "undefined") (() => {
     };
     const set3d = on => {
       st.view3d = on; toolBtn("3d").setAttribute("aria-pressed", on);
-      toolBtn("walls").hidden = !on || !T; toolBtn("measure").hidden = on; toolBtn("follow").hidden = !on; toolBtn("cine").hidden = !on;
+      toolBtn("walls").hidden = !on || !T; toolBtn("measure").hidden = on; toolBtn("follow").hidden = !on; toolBtn("cine").hidden = !on; toolBtn("snd").hidden = !on;
       if (v3) v3.active(on);
       if (on) { st.measure = false; st.meas = null; toolBtn("measure").setAttribute("aria-pressed", "false"); }
       host3.hidden = !on; cv.style.visibility = on ? "hidden" : "";
@@ -7908,6 +8436,10 @@ if (typeof document !== "undefined") (() => {
         const tp2 = document.getElementById("vtt-tip"); tp2.hidden = false; tp2.style.left = "12px"; tp2.style.top = "46px";
         tp2.innerHTML = `<b>3D view unavailable</b><span>${esc(err.message)}</span>`; setTimeout(() => { tp2.hidden = true; }, 4000);
       }).finally(() => { const b3 = toolBtn("3d"); b3.textContent = "3D"; b3.disabled = false; });
+    };
+    toolBtn("snd").onclick = e => {
+      const b = e.currentTarget, on = b.getAttribute("aria-pressed") !== "true";
+      if (v3) v3.sound(on).then(ok => { b.setAttribute("aria-pressed", ok && on); if (!ok) { b.disabled = true; b.title = "No sound pack here: tools/dow/README.md says how to build one"; } });
     };
     toolBtn("walls").onclick = e => { st.lowWalls = !st.lowWalls; e.currentTarget.setAttribute("aria-pressed", st.lowWalls); draw(); };
     toolBtn("follow").onclick = e => { st.follow = !st.follow; e.currentTarget.setAttribute("aria-pressed", st.follow); draw(); };
