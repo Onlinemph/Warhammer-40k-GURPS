@@ -181,6 +181,9 @@ test("penetration against armour (docs/framework.md weapon and armour tables)", 
     ["Missile Launcher", "Krak", 440, 93.9, "krak is reliable against AV14"],
     ["Missile Launcher", "Krak", 1350, 0, "krak never beats a Leman Russ glacis"],
     ["Seeker Missile", "", 440, 93.9, "the T'au seeker missile is the krak anchor"],
+    ["Bright Lance", "", 1350, 100, "a lance goes through even the glacis"],
+    ["Dark Lance", "", 1350, 100, "the dark lance is the bright lance"],
+    ["Eldritch Lance", "", 1350, 100, "the Eldritch lance ignores armour too"],
     ["Gauss Flayer", "", 100, 80.8, "gauss flayer vs a Mk VII torso"],
   ];
   for (const [item, usage, dr, pct, what] of rows) near(+penChance(damageOf(item, usage), dr).toFixed(1), pct, 0.05, what);

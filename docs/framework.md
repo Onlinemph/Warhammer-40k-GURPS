@@ -341,7 +341,7 @@ Aeldari psychic powers use the same Sorcery model as Imperial psykers, but the A
 | Lasblaster | 7d(2) burn, rapid |
 | Fusion gun | Melta class (meltagun anchor) |
 | Starcannon | Plasma class (plasma gun anchor) with no overheating |
-| Bright lance | Anti-armour lance: its focused beam penetrates any armour to the same depth, so give it a high armour divisor (10) and moderate damage: about 6d×4(10) burn |
+| Bright lance | Anti-armour lance: its focused beam penetrates any armour to the same depth, so armour divisor (100) and moderate damage: 6d×4(100) burn. It gets through even the DR 1350 glacis every time (effective DR 13), where the lascannon gets 13%, but does a third of the lascannon's damage |
 | Wraithcannon | D-weapon: tears the target into the warp. Build as an honest special effect with extreme damage, short range |
 | Guardian mesh armour | Flexible, DR 36 (the mesh anchor), Weak Points 5 |
 | Aspect armour | Flexible thermoplas plates, DR 70, Weak Points 4 |
@@ -378,7 +378,7 @@ Drukhari traits: the shared Aeldari body (via include), **Soul Thirst** (disadva
 | Shardcarbine | Rifle damage, higher RoF, shorter range |
 | Splinter cannon | 5d(3) pi- + 3d tox follow-up, RoF 15+ |
 | Blaster / blast pistol | Dark-lance tech in a hand weapon: 6d×3(10) burn / 6d×2(10) burn, short range |
-| Dark lance | As the bright lance: 6d×4(10) burn |
+| Dark lance | As the bright lance: 6d×4(100) burn |
 | Disintegrator cannon | Plasma class like the starcannon, no overheating |
 | Shredder | Monofilament net: short-range area weapon that entangles and cuts (Binding plus cut damage) |
 | Haywire blaster | Anti-machine pulse: big damage to vehicles and electronics, near nothing to flesh |
