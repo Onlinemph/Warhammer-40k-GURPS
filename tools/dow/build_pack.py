@@ -219,7 +219,7 @@ def build_voices(force):
     for vid, v in doc["voices"].items():
         lib = libs[vid] = {}
         if "dow1" in v:
-            for event, folders in doc["events1"].items():
+            for event, folders in {**doc["events1"], **v.get("events1", {})}.items():
                 lib[event] = old_clips([v["dow1"] + "/" + f for f in folders], limit[event])
         elif "dirs" in v:
             for event, (folder, rx) in v["dirs"].items():

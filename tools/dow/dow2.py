@@ -336,16 +336,22 @@ def read_sound(buf, seconds=2.5):
     48-byte header ("FSB4", sample count, size of the sample headers, size of the data, ...), then an 80-byte
     header per sample: its name, length in samples at 32, flags at 48, rate at 52, channels at 62. With flag
     0x400000 the data is IMA ADPCM in 36-byte blocks of 64 samples, which is how it goes into the pack (the page
-    decodes it). None for anything else: stereo, plain samples or MPEG, which the game uses for music and ambience.
+    decodes it). A stereo recording (ambiences) has 72-byte blocks: the two channels' 4-byte headers, then their
+    data in alternating 4-byte words; the left channel is taken, as blocks of the mono kind. None for anything
+    else: plain samples or MPEG, which the game uses for music.
     """
     if buf[:4] != b"FSB4" or struct.unpack_from("<I", buf, 4)[0] != 1:
         return None
     headers, size = struct.unpack_from("<II", buf, 8)
     flags, rate = struct.unpack_from("<Ii", buf, 48 + 48)
-    if not flags & 0x400000 or struct.unpack_from("<H", buf, 48 + 62)[0] != 1:
+    channels = struct.unpack_from("<H", buf, 48 + 62)[0]
+    if not flags & 0x400000 or channels not in (1, 2):
         return None
-    blocks = min(size // 36, int(rate * seconds) // 64)
-    return rate, buf[48 + headers:48 + headers + 36 * blocks]
+    blocks = min(size // (36 * channels), int(rate * seconds) // 64)
+    data = buf[48 + headers:48 + headers + 36 * channels * blocks]
+    if channels == 2:
+        data = b"".join(data[at:at + 4] + b"".join(data[at + 8 + 8 * k:at + 12 + 8 * k] for k in range(8)) for at in range(0, len(data), 72))
+    return rate, data
 
 
 # ------------------------------------------------------------------ glTF

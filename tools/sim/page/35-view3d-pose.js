@@ -111,6 +111,7 @@
     let lastFrameT = performance.now(), lastSt = {};
     function update(t, p, st) {
       last = { t, p, st }; lastSt = st;
+      loopSounds();
       speedMs = +(document.getElementById("rspeed") || { value: 1000 }).value || 1000;
       if (schedT !== t || schedC !== !!st.cine) { if (t < schedT) { glow.clear(); smoke.clear(); } buildSchedule(t, !!st.cine); }
       const pm = TS > 1 ? Math.min(1, p * TS / MOVE) : p;   // with the action camera everyone moves first, then the beats play

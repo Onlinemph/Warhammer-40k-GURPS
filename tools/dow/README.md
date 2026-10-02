@@ -67,7 +67,7 @@ python tools/dow/build_pack.py scenery    # only the scenery
 
 ## Sound
 
-`build_pack.py` also writes `site/models/sounds.js` from Dawn of War II's sound archives: weapon fire for each of the simulator's weapon kinds, impacts on flesh, armour and shields, ricochets, explosions, melee swings and hits, and bodies falling. `sounds.json` says which of the game's sounds goes with which replay event. In the 3D view the **Sound** button switches them on; they play while the replay runs, louder near the camera and panned to their side of the screen. Like the models, the sound pack is the game's own audio and stays on your machine.
+`build_pack.py` also writes `site/models/sounds.js` from Dawn of War II's sound archives: weapon fire for each of the simulator's weapon kinds, impacts on flesh, armour and shields, ricochets, explosions, melee swings and hits, and bodies falling. It also holds three loops: a distant battle under everything, an engine for each vehicle, and its tracks as it drives. `sounds.json` says which of the game's sounds goes with which replay event. In the 3D view the **Sound** button switches them on; they play while the replay runs, louder near the camera and panned to their side of the screen. Like the models, the sound pack is the game's own audio and stays on your machine.
 
 ```sh
 python tools/dow/build_pack.py sounds     # only the sounds
@@ -83,7 +83,8 @@ The same button brings the units' voices: `build_pack.py` writes `site/models/vo
 - Lines don't pile up: two at once at most, a pause between them, and the same figure not again for six seconds. Grunts and screams come freely.
 - From Dawn of War II's English speech archives: Space Marines (three squad voices shared out among the figures, plus Scouts, Terminators, Librarian, Techmarine, Apothecary), Guardsmen, Chaos Marines, Lords, Sorcerers, Plague Marines and cultists, Aeldari Guardians, Rangers, Aspect Warriors, Farseers and Autarchs, and Ork Boyz, Kommandos, Weirdboyz and Warbosses. Tyranids growl and screech in three sizes.
 - From Soulstorm's, for what Dawn of War II lacks: the T'au (Fire Warriors, Shas'ui, Pathfinders, battlesuits, Commander, Ethereal, Earth caste, drones, Kroot, Vespid), Necrons (who say very little), Drukhari, Sisters of Battle, Commissars, Tempestus Scions (as Kasrkin), psykers, Tech-Priests (as the Enginseer), the Inquisitor, Possessed and Berzerkers, Warlocks, and Ork Nobz, Meganobz, Meks, Painboyz and Gretchin. Soulstorm's lines have no "foe felled" or "comrade down", so those units stay quiet then.
-- Custodes, Skitarii, Sisters of Silence, servitors and vehicles stay silent: neither game has a voice for them.
+- Vehicles speak with their Soulstorm crews' voices (Predator, Rhino, Land Raider, Leman Russ, Chimera, Sentinel, Trukk).
+- Custodes, Skitarii, Sisters of Silence and servitors stay silent: neither game has a voice for them.
 
 `voices.json` says which of a unit's lines go with which replay event and which roster entries use which voice. A unit with no grunts of its own borrows them from one that sounds like it.
 
