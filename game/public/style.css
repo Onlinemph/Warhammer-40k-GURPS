@@ -14,9 +14,9 @@ svg { display: block; width: 100%; height: auto; }
 .lane { stroke: var(--lane); stroke-width: 1.5; }
 .world { cursor: pointer; stroke: var(--ink); stroke-width: 1; }
 .world.sel { stroke-width: 3; }
-.wname { font-size: 12px; fill: var(--ink); pointer-events: none; }
+.wname { fill: var(--ink); pointer-events: none; paint-order: stroke; stroke: var(--card); stroke-width: 3px; stroke-linejoin: round; }
 .here { fill: none; stroke: var(--accent); stroke-width: 3; stroke-dasharray: 4 3; }
-.force { font-size: 10px; fill: var(--muted); pointer-events: none; }
+.force { fill: var(--muted); pointer-events: none; paint-order: stroke; stroke: var(--card); stroke-width: 3px; stroke-linejoin: round; }
 .muted { color: var(--muted); }
 .err { color: var(--err); min-height: 1.2em; }
 label { display: block; margin: 8px 0; }
@@ -28,4 +28,4 @@ button { background: var(--accent); color: var(--bg); border: 0; border-radius: 
 .feed { margin: 0; padding-left: 18px; max-height: 260px; overflow: auto; }
 .feed li { margin-bottom: 6px; }
 table { border-collapse: collapse; width: 100%; } td { padding: 2px 4px; }
-@media (max-width: 600px) { .wname { font-size: 26px; } .force { font-size: 20px; } .world { stroke-width: 2; } }
+@media (max-width: 600px) { .world { stroke-width: 2; } }

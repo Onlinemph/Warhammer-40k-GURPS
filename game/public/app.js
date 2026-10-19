@@ -27,6 +27,35 @@ function countdown() {
   $("#turn").textContent = `Turn ${V.turn} · next tick in ${Math.floor(s / 3600)}h ${Math.floor(s / 60) % 60}m ${s % 60}s`;
   if (s === 0) setTimeout(load, 2000);
 }
+// World labels, laid out for the screen they're on. Text is sized so it reads at about 12px however small the map
+// is drawn, and each label tries the right, left, top and bottom of its world, taking the first spot that stays on
+// the map and clear of other labels and worlds. Labels go down in order of importance (your warband's world, the
+// one picked, its neighbours, capitals, your worlds, what you can see, the rest); a minor world whose label can't
+// fit goes without (tap it to see its name in the panel).
+function labels(W, me) {
+  const svgEl = $("#map"), scale = (svgEl.getBoundingClientRect().width || 1000) / 1000, fs = Math.max(12, 12 / scale), fs2 = fs * 0.8;
+  const near = new Set(W[me.at].links), prio = w => w.id === me.at ? 0 : w.id === sel ? 1 : near.has(w.id) ? 2 : w.capital ? 3 : w.owner === V.you.faction ? 4 : w.seen ? 5 : 6;
+  const placed = [], dots = V.worlds.map(w => ({ id: w.id, x0: w.x - 13, y0: w.y - 13, x1: w.x + 13, y1: w.y + 13 }));
+  const hit = (b, id) => b.x0 < 2 || b.y0 < 2 || b.x1 > 998 || b.y1 > 598 || placed.some(p => b.x0 < p.x1 && b.x1 > p.x0 && b.y0 < p.y1 && b.y1 > p.y0) || dots.some(d => d.id !== id && b.x0 < d.x1 && b.x1 > d.x0 && b.y0 < d.y1 && b.y1 > d.y0);
+  let out = "";
+  for (const w of V.worlds.slice().sort((a, b) => prio(a) - prio(b))) {
+    const n = w.forces ? w.forces.reduce((a, f) => a + Object.values(f.army).reduce((x, y) => x + y, 0), 0) : null;
+    const sub = n != null && prio(w) <= 5 ? `${n} troops` : "", wd = Math.max(w.name.length * fs * 0.58, sub.length * fs2 * 0.56), ht = fs + (sub ? fs2 + 2 : 0), r = (w.id === me.at ? 19 : w.capital ? 13 : 10) + 4;   // clear of the warband ring too
+    const spots = [
+      { x0: w.x + r, y0: w.y - fs * 0.8, anchor: "start", tx: w.x + r },
+      { x0: w.x - r - wd, y0: w.y - fs * 0.8, anchor: "end", tx: w.x - r },
+      { x0: w.x - wd / 2, y0: w.y - r - ht, anchor: "middle", tx: w.x },
+      { x0: w.x - wd / 2, y0: w.y + r, anchor: "middle", tx: w.x },
+    ].map(b => ({ ...b, x1: b.x0 + wd, y1: b.y0 + ht }));
+    let b = spots.find(s => !hit(s, w.id));
+    if (!b && prio(w) <= 1) b = spots.find(s => s.x0 >= 2 && s.x1 <= 998) || spots[0];   // your world and the picked one always get a label
+    if (!b) continue;
+    placed.push(b);
+    out += `<text class="wname" x="${b.tx}" y="${b.y0 + fs * 0.85}" text-anchor="${b.anchor}" style="font-size:${fs.toFixed(1)}px;stroke-width:${(fs * 0.25).toFixed(1)}px">${esc(w.name)}</text>`;
+    if (sub) out += `<text class="force" x="${b.tx}" y="${b.y0 + fs + fs2 * 0.9}" text-anchor="${b.anchor}" style="font-size:${fs2.toFixed(1)}px;stroke-width:${(fs2 * 0.25).toFixed(1)}px">${sub}</text>`;
+  }
+  return out;
+}
 function draw() {
   V.got = performance.now();
   const W = Object.fromEntries(V.worlds.map(w => [w.id, w])), col = f => f ? V.factions[f].colour : "#8d887e";
@@ -37,10 +66,8 @@ function draw() {
     const n = w.forces ? w.forces.reduce((a, f) => a + Object.values(f.army).reduce((x, y) => x + y, 0), 0) : null;
     svg += `<circle class="world${sel === w.id ? " sel" : ""}" data-id="${w.id}" cx="${w.x}" cy="${w.y}" r="${w.capital ? 13 : 10}" fill="${col(w.owner)}" opacity="${w.seen ? 1 : .55}"><title>${esc(w.name)}</title></circle>`;
     if (me.at === w.id) svg += `<circle class="here" cx="${w.x}" cy="${w.y}" r="19"/>`;
-    svg += `<text class="wname" x="${w.x + 15}" y="${w.y + 4}">${esc(w.name)}</text>`;
-    if (n != null) svg += `<text class="force" x="${w.x + 15}" y="${w.y + 17}">${n} troops</text>`;
   }
-  $("#map").innerHTML = svg;
+  $("#map").innerHTML = svg + labels(W, me);
   $("#map").querySelectorAll(".world").forEach(c => c.onclick = () => { sel = c.dataset.id; draw(); });
   const st = Object.entries(V.you.stock).map(([k, v]) => `${Math.floor(v)} ${k}`).join(" · ");
   $("#me").innerHTML = `<h2>${esc(V.you.name)}</h2><p>${esc(V.factions[V.you.faction].name)} · stockpile: ${esc(st)}</p>
@@ -66,6 +93,8 @@ function draw() {
   countdown();
 }
 $("#j-go").onclick = joinWar;
+let resizeT = null;
+addEventListener("resize", () => { clearTimeout(resizeT); resizeT = setTimeout(() => V && draw(), 150); });
 setInterval(countdown, 1000);
 setInterval(load, 60000);
 load();
