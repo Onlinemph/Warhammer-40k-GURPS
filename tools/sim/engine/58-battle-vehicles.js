@@ -171,7 +171,7 @@
       }
       m.scanT = -1;   // a fresh look at the field each time it acts
       const pool = scanFoes(m).filter(f => f.state === "ok" && f.h).sort((a, b) => walk(m.h, a.h) - walk(m.h, b.h));
-      if (!pool.length) { if (AWARE) search(m); return; }
+      if (!pool.length) { if (!orderMove(m) && AWARE) search(m); return; }
       const adj = pool.filter(f => hexDist(f.h, m.h) <= u.melee.reachMax && los(m.h, f.h) && levelOK(m.h, u, f.h, f.u, u.melee));
       const shooter = u.ranged || u.powers.some(p => !p.melee);
       // stand up (Change Posture) unless a shooter holding its ground is better off prone
@@ -340,14 +340,14 @@
         && (!u.melee || !pool[0] || expInjRandom(u.melee, pool[0].u) < 1)) {
         add(-0.5 * risk(m, here, "duck"), "lie-low", () => { if (!m.prone) { m.prone = true; L(`${m.id} goes to ground, with nothing left to fight with`); } else L(`${m.id} keeps its head down`); });
       }
-      if (!adj.length) flankOption(m, opts, add, rNow);
+      if (!adj.length) orderOption(m, opts, add, rNow);
       // keeping its head down (TS p. 21): only what doesn't expose it: reload, ready, defend, a door, or stay down
       if (m.headsDown && !adj.length) {
         const safe = opts.filter(o => /^(reload|reloading|tac-reload|ready-|re-ready-|draw-early|orders|aod|concentrate|close-door|door)/.test(o.label));
         opts.length = 0; opts.push(...safe);
         add(-rNow * 0.5, "heads-down", () => L(`${m.id} keeps its head down`));
       }
-      if (rose) { const still = opts.filter(o => !/^(advance|close|charge|aoa-charge|heroic|move-closer|advance-fire|cover@|peel|reload-cover|step-|ca-flyout|watch|flank@)/.test(o.label)); opts.length = 0; opts.push(...still); }
+      if (rose) { const still = opts.filter(o => !/^(advance|close|charge|aoa-charge|heroic|move-closer|advance-fire|cover@|peel|reload-cover|step-|ca-flyout|watch|flank@|assault@|support@)/.test(o.label)); opts.length = 0; opts.push(...still); }
       if (!opts.length) return;
       // pick the best; a disorderly faction picks among the near-best
       const top = opts.reduce((a, b) => b.v > a.v ? b : a);

@@ -55,6 +55,10 @@
     let turnNow = 0;
     if (terr) for (let i = 0; i < nH; i++) if (terr.doorI[i] && R() < 0.5) closed[i] = 1;   // half the doors start shut
     const idx = k => terr.ids.get(k);
+    // the line-of-sight and cover caches live with each map; only the map being fought over keeps its own (a
+    // Monte Carlo over six countryside maps would otherwise hold six sets of millions of lines)
+    for (const M of MAPS.values()) if (M !== terr) { M.lineC.clear(); M.covC.clear(); if (M.nav) M.nav.cache.clear(); }
+    const LINE_CAP = terr && terr.hx.length > 12000 ? 1.5e6 : 3e6;
     // the same lookup by coordinates, off a dense grid kept with the map (no string key per hex)
     const QR = terr ? (terr.qr ||= (() => {
       let q0 = Infinity, q1 = -Infinity, r0 = Infinity, r1 = -Infinity;

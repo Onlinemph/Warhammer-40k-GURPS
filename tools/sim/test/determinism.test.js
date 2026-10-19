@@ -87,3 +87,15 @@ test("awareness: line troops weigh the nearest few foes, snipers, leaders, lone 
   const r2 = roster([{ side: 0, spec: spec("Astra Militarum Guardsman", 2, { scan: 7 }) }, side(1, "Ork Boy", 2)]);
   assert.equal(scanOf(r2, "Astra Militarum Guardsman"), 7);
 });
+
+test("the director: on a big field each side gives its squads orders by need, and only when it's switched on", () => {
+  const broods = [0, 1, 2].map(i => ({ side: 0, spec: spec("Genestealer", 6, { squad: "brood" + i, squadName: "Brood " + (i + 1) }) }));
+  const units = () => [...broods, ...squad("Astra Militarum Infantry Squad", 1), ...squad("Astra Militarum Infantry Squad", 1).map(x => ({ ...x, spec: { ...x.spec, squad: x.spec.squad + "b" } }))];
+  const opt = { battlefield: "countryside", mapSeed: 2, mapW: 160, mapH: 80, seed: 3, maxTurns: 120, log: true };
+  const on = SIM.runBattle(units(), opt), off = SIM.runBattle(units(), { ...opt, director: false });
+  assert.ok(on.log.some(l => / are sent against /.test(l)), "hand-to-hand broods should be sent against a squad");
+  assert.ok(on.log.some(l => /closes in by cover/.test(l)), "and close in by the ground the enemy can't see");
+  assert.ok(!off.log.some(l => / are sent against |closes in by cover|go to support/.test(l)), "no orders with the director off");
+  // the same seed plays the same battle, orders and all
+  assert.deepEqual(SIM.runBattle(units(), opt).log, on.log);
+});

@@ -29,13 +29,13 @@
       // a stalker near its prey moves at half Move (no -5 to Stealth) and keeps to steps the foe can't see, then the dark
       if (stalk && hexDist(m.h, goal) <= 20) steps = Math.min(steps, Math.max(1, Math.floor(moveOf(m) / 2)));
       // (a flanker keeps out of the nearest foes' sight where it can)
-      const foesK = stalk ? known(m).filter(f => f.h) : m.flanking ? scanFoes(m).filter(f => f.state === "ok" && f.h).slice(0, 3) : [];
-      const sc = n => (stalk ? (foesK.some(f => los(f.h, n)) ? 10 : 0) + (darkAt(n) <= -3 ? 0 : 1) : m.flanking ? (foesK.some(f => los(f.h, n)) ? 6 : 0) : 0) + (spread ? nearFriends(m, n) : 0);
+      const foesK = stalk ? known(m).filter(f => f.h) : m.covert ? scanFoes(m).filter(f => f.state === "ok" && f.h).slice(0, 3) : [];
+      const sc = n => (stalk ? (foesK.some(f => los(f.h, n)) ? 10 : 0) + (darkAt(n) <= -3 ? 0 : 1) : m.covert ? (foesK.some(f => los(f.h, n)) ? 6 : 0) : 0) + (spread ? nearFriends(m, n) : 0);
       const better = (n, d, bd, best) => d < bd || (d === bd && best && (sc(n) < sc(best) || (sc(n) === sc(best) && AR() < 0.3)));
       if (terr) {
         // round the walls: each step goes to a free neighbour nearer the goal on foot, hopping crates it's big
         // enough to jump and friends in the way
-        const cls = obstClass(m), cc = climbCls(m), F = fieldToward(m.h, goal, cls, cc, m.flanking ? threatMap(m.u.side) : null);
+        const cls = obstClass(m), cc = climbCls(m), F = fieldToward(m.h, goal, cls, cc, m.covert ? threatMap(m.u.side) : null);
         while (moved < steps) {
           const cur = F.at(m.h.q, m.h.r) ?? 999, ci = iQR(m.h.q, m.h.r);
           if (cur <= stopAt && los(m.h, goal)) break;

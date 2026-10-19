@@ -1861,6 +1861,10 @@ const SIM = (() => {
     let turnNow = 0;
     if (terr) for (let i = 0; i < nH; i++) if (terr.doorI[i] && R() < 0.5) closed[i] = 1;   // half the doors start shut
     const idx = k => terr.ids.get(k);
+    // the line-of-sight and cover caches live with each map; only the map being fought over keeps its own (a
+    // Monte Carlo over six countryside maps would otherwise hold six sets of millions of lines)
+    for (const M of MAPS.values()) if (M !== terr) { M.lineC.clear(); M.covC.clear(); if (M.nav) M.nav.cache.clear(); }
+    const LINE_CAP = terr && terr.hx.length > 12000 ? 1.5e6 : 3e6;
     // the same lookup by coordinates, off a dense grid kept with the map (no string key per hex)
     const QR = terr ? (terr.qr ||= (() => {
       let q0 = Infinity, q1 = -Infinity, r0 = Infinity, r1 = -Infinity;
@@ -1933,7 +1937,7 @@ const SIM = (() => {
     function lineEntry(a, b) {
       const k = NK(a.q, a.r) * 16777216 + NK(b.q, b.r);
       let e = terr.lineC.get(k);
-      if (e === undefined) { e = [lineBlockers(a, b, 1), lineBlockers(a, b, -1)]; if (terr.lineC.size > 3e6) terr.lineC.clear(); terr.lineC.set(k, e); }
+      if (e === undefined) { e = [lineBlockers(a, b, 1), lineBlockers(a, b, -1)]; if (terr.lineC.size > LINE_CAP) terr.lineC.clear(); terr.lineC.set(k, e); }
       return e;
     }
     const lineOpen = L2 => L2 !== null && L2.every(i => !blocker(i));
@@ -1955,7 +1959,7 @@ const SIM = (() => {
         if (c === undefined) {
           const a = firstLineHex(h, f, 1), b = firstLineHex(h, f, -1);
           c = [iQR(a.q, a.r), iQR(b.q, b.r)].filter(i => i != null && terr.crateI[i]);
-          if (terr.covC.size > 3e6) terr.covC.clear();
+          if (terr.covC.size > LINE_CAP) terr.covC.clear();
           terr.covC.set(k, c);
         }
         for (const i of c) if (!crateGone[i]) return { kind: terr.crates.get(key(terr.hx[i].q, terr.hx[i].r)) === "heavy" ? "barricade" : "crate", i };
@@ -3653,13 +3657,13 @@ const SIM = (() => {
       // a stalker near its prey moves at half Move (no -5 to Stealth) and keeps to steps the foe can't see, then the dark
       if (stalk && hexDist(m.h, goal) <= 20) steps = Math.min(steps, Math.max(1, Math.floor(moveOf(m) / 2)));
       // (a flanker keeps out of the nearest foes' sight where it can)
-      const foesK = stalk ? known(m).filter(f => f.h) : m.flanking ? scanFoes(m).filter(f => f.state === "ok" && f.h).slice(0, 3) : [];
-      const sc = n => (stalk ? (foesK.some(f => los(f.h, n)) ? 10 : 0) + (darkAt(n) <= -3 ? 0 : 1) : m.flanking ? (foesK.some(f => los(f.h, n)) ? 6 : 0) : 0) + (spread ? nearFriends(m, n) : 0);
+      const foesK = stalk ? known(m).filter(f => f.h) : m.covert ? scanFoes(m).filter(f => f.state === "ok" && f.h).slice(0, 3) : [];
+      const sc = n => (stalk ? (foesK.some(f => los(f.h, n)) ? 10 : 0) + (darkAt(n) <= -3 ? 0 : 1) : m.covert ? (foesK.some(f => los(f.h, n)) ? 6 : 0) : 0) + (spread ? nearFriends(m, n) : 0);
       const better = (n, d, bd, best) => d < bd || (d === bd && best && (sc(n) < sc(best) || (sc(n) === sc(best) && AR() < 0.3)));
       if (terr) {
         // round the walls: each step goes to a free neighbour nearer the goal on foot, hopping crates it's big
         // enough to jump and friends in the way
-        const cls = obstClass(m), cc = climbCls(m), F = fieldToward(m.h, goal, cls, cc, m.flanking ? threatMap(m.u.side) : null);
+        const cls = obstClass(m), cc = climbCls(m), F = fieldToward(m.h, goal, cls, cc, m.covert ? threatMap(m.u.side) : null);
         while (moved < steps) {
           const cur = F.at(m.h.q, m.h.r) ?? 999, ci = iQR(m.h.q, m.h.r);
           if (cur <= stopAt && los(m.h, goal)) break;
@@ -4398,7 +4402,7 @@ const SIM = (() => {
       const rem = remOf(t), share = Math.min(1, E / rem);
       // Bloodlust (B125): it goes for the killing blow, so a wounded foe is worth more to it
       const prey = m && t.hp < t.u.HP ? Math.max(m.u.ai.prey > 1 ? m.u.ai.prey : 1, m.u.flags.bloodlust ? 1.5 : 1) : 1;
-      return share * threatOf(t) * prey * HORIZON;   // a foe taken out stops hurting us for the rest of the fight
+      return share * threatOf(t) * prey * orderWeight(m, t) * HORIZON;   // a foe taken out stops hurting us for the rest of the fight
     }
     // expected injury to m next turn standing on hex h: "aoa" (no defence), "aod" (+2) or normal
     // chance a foe under our fire keeps its head down or freezes (TS p. 21, 34): Will-2 in cover without Combat
@@ -4704,7 +4708,7 @@ const SIM = (() => {
       }
       m.scanT = -1;   // a fresh look at the field each time it acts
       const pool = scanFoes(m).filter(f => f.state === "ok" && f.h).sort((a, b) => walk(m.h, a.h) - walk(m.h, b.h));
-      if (!pool.length) { if (AWARE) search(m); return; }
+      if (!pool.length) { if (!orderMove(m) && AWARE) search(m); return; }
       const adj = pool.filter(f => hexDist(f.h, m.h) <= u.melee.reachMax && los(m.h, f.h) && levelOK(m.h, u, f.h, f.u, u.melee));
       const shooter = u.ranged || u.powers.some(p => !p.melee);
       // stand up (Change Posture) unless a shooter holding its ground is better off prone
@@ -4873,14 +4877,14 @@ const SIM = (() => {
         && (!u.melee || !pool[0] || expInjRandom(u.melee, pool[0].u) < 1)) {
         add(-0.5 * risk(m, here, "duck"), "lie-low", () => { if (!m.prone) { m.prone = true; L(`${m.id} goes to ground, with nothing left to fight with`); } else L(`${m.id} keeps its head down`); });
       }
-      if (!adj.length) flankOption(m, opts, add, rNow);
+      if (!adj.length) orderOption(m, opts, add, rNow);
       // keeping its head down (TS p. 21): only what doesn't expose it: reload, ready, defend, a door, or stay down
       if (m.headsDown && !adj.length) {
         const safe = opts.filter(o => /^(reload|reloading|tac-reload|ready-|re-ready-|draw-early|orders|aod|concentrate|close-door|door)/.test(o.label));
         opts.length = 0; opts.push(...safe);
         add(-rNow * 0.5, "heads-down", () => L(`${m.id} keeps its head down`));
       }
-      if (rose) { const still = opts.filter(o => !/^(advance|close|charge|aoa-charge|heroic|move-closer|advance-fire|cover@|peel|reload-cover|step-|ca-flyout|watch|flank@)/.test(o.label)); opts.length = 0; opts.push(...still); }
+      if (rose) { const still = opts.filter(o => !/^(advance|close|charge|aoa-charge|heroic|move-closer|advance-fire|cover@|peel|reload-cover|step-|ca-flyout|watch|flank@|assault@|support@)/.test(o.label)); opts.length = 0; opts.push(...still); }
       if (!opts.length) return;
       // pick the best; a disorderly faction picks among the near-best
       const top = opts.reduce((a, b) => b.v > a.v ? b : a);
@@ -6308,19 +6312,25 @@ const SIM = (() => {
     }
 // Part of runBattle, one function body split into files by section (tools/sim/engine/50-69): the locals
 // and helpers declared in earlier parts are in scope here. tools/sim/README.md has the layout.
-    // ================= fix and flank: the squads' plan on a big field
-    // A soldier weighs only what one move can do, so on its own it never walks a hundred yards round a hedge to
-    // shoot a line from the side. This is the plan above it. Once a side has seen enough of the enemy, it keeps some
-    // squads where they are as a base of fire and sends others round the end of the enemy's line, by the side whose
-    // route the enemy sees least of. A flanking squad moves by the hexes the enemy can't see; when it's beside their
-    // line (or meets them, or has lost half its men, or two minutes have gone) it goes back to fighting as before,
-    // now from the side: the enemy's cover faces the wrong way, and a man facing his front defends at -2 against a
-    // shot from his side and not at all from behind (B390).
-    // How readily a faction does it is `flank` in data/sim/ai.yaml (the share of its squads it sends). Only on maps
-    // that deploy along the edges (the countryside), unless opt.flanking says otherwise: true or false for both
-    // sides, or [side A, side B].
-    const FLANK_ON = s => Array.isArray(opt.flanking) ? !!opt.flanking[s] : opt.flanking != null ? !!opt.flanking : !!(terr && terr.deploy === "edge");
-    const PLAN_EVERY = 6, FLANK_MAX = 120;
+    // ================= the faction's director: orders by need
+    // A soldier weighs only what one move can do. Above the soldiers each side has a director, which every few
+    // seconds looks at what the side knows and gives each squad an order by what the fight needs:
+    //   fire     the squad's guns go on one enemy squad, the one most worth killing (its threat, how close it is to
+    //            breaking); soldiers still pick their own shots, but men of that squad count for more to them
+    //   assault  a hand-to-hand squad goes for an enemy squad, routed by the ground the enemy can't see
+    //   support  a squad losing men or pinned gets help: a free squad turns on whoever is hurting it, moving up
+    //            beside it if it can't see them
+    //   flank    against an enemy dug in behind cover, a spare squad goes round the end of their line (three legs:
+    //            out to a lane past it, up the lane, in beside them)
+    // Orders steer; they don't puppet. Each soldier keeps its own tactics (defences, aim, cover, posture) and sees an
+    // order as a target priority and one more option, to keep moving where it's sent.
+    // Faction temper comes from data/sim/ai.yaml: `focus` (discipline) sets how hard men favour the squad they're
+    // told to shoot, `flank` the share of squads it sends round. On by default on the countryside (a big field);
+    // opt.director (true, false or [side A, side B]) overrides it. opt.flanking does the same for flanking alone.
+    const DIRECTOR_ON = s => Array.isArray(opt.director) ? !!opt.director[s] : opt.director != null ? !!opt.director : !!(terr && terr.deploy === "edge");
+    const FLANK_ON = s => DIRECTOR_ON(s) && (Array.isArray(opt.flanking) ? !!opt.flanking[s] : opt.flanking != null ? !!opt.flanking : true);
+    const PLAN_EVERY = 6, FLANK_MAX = 120, ORDER_MAX = 90;
+    const KINDS = new Set(opt.directorOrders || ["fire", "assault", "support", "flank"]);   // which orders it gives (all, normally)
     const planAt = [-99, -99], flankDir = [0, 0];
     const centroid = hs => { let x = 0, y = 0; for (const h of hs) { const [a, b] = px(h); x += a; y += b; } return [x / hs.length, y / hs.length]; };
     // the hex at pixel point (x, y): the inverse of px, cube-rounded
@@ -6383,15 +6393,8 @@ const SIM = (() => {
     // the plan, made again every few seconds: who fixes, who flanks, and which way round. A flanking move has three
     // legs, so the squad doesn't just walk at the end of the enemy line through its fire: out sideways to a lane
     // past the end of their line, up that lane to just short of them, then in beside them
-    function planManeuvers() {
-      if (!terr) return;
-      for (const S of [0, 1]) {
-        if (!FLANK_ON(S) || turn - planAt[S] < PLAN_EVERY) continue;
-        const foesH = enemyPicture(S);
-        if (foesH.length < 3) continue;
-        planAt[S] = turn;
-        if (NAV) makeThreatMap(S, foesH);
-        const gs = groups.filter(g => g.units[0].side === S && g.models.some(x => x.state === "ok" && x.h && !x.u.routed));
+    function planFlanks(S, foesH, gs) {
+      {
         const movers = g => g.models.filter(x => x.state === "ok" && x.h && !(x.u.ranged && x.u.ranged.needsSetup) && !x.u.team);
         // the geometry: our mass, theirs, the axis between, and the enemy line's ends across it
         const ours = models.filter(x => x.u.side === S && x.state === "ok" && x.h && !x.u.routed).map(x => x.h);
@@ -6415,14 +6418,14 @@ const SIM = (() => {
           const o = g.order;
           if (!o || o.kind !== "flank") continue;
           const live = movers(g);
-          if (!live.length) { g.order = { kind: "engage", since: turn, flanked: true }; continue; }
+          if (!live.length) { (g.order = null, g.flanked = true); continue; }
           const [cx, cy] = centroid(live.map(x => x.h)), here = hexAt(cx, cy), near = Math.min(...foesH.map(f => hexDist(f, here)));
           const legs = legsFor(o.dir, here);
           if (legs) { o.legs[1] = legs[1]; o.legs[2] = legs[2]; }   // the enemy moved: the lane and the end of their line move with them; the first leg stays put
           while (o.stage < 2 && hexDist(here, o.legs[o.stage]) <= 10) o.stage++;
           const done = o.stage === 2 && hexDist(here, o.legs[2]) <= 10;
           if (done || near <= 20 || live.length * 2 < o.n0 || turn - o.since > FLANK_MAX) {
-            g.order = { kind: "engage", since: turn, flanked: true };
+            (g.order = null, g.flanked = true);
             L(`${g.name} ${near <= 20 ? "close with the enemy on the flank" : done ? "are in position on the flank" : "give up the flanking move"}`);
           }
         }
@@ -6439,21 +6442,21 @@ const SIM = (() => {
             if (c < bc) { bc = c; best = dir; }
           }
           flankDir[S] = best;
-          if (!best) continue;
+          if (!best) return;
         }
         // who goes: the share the faction sends, never all of them, the quickest and keenest first; and nobody new
         // while the enemy stands in the open toward us (there's nothing to go round)
         const share = Math.max(...gs.map(g => g.units[0].ai.flank ?? 0.3));
         let n = gs.length < 2 ? 0 : Math.min(gs.length - 1, Math.max(share >= 0.15 ? 1 : 0, Math.round(gs.length * share)));
         const worth = coverShare(foesH, from) >= 0.3;
-        n -= gs.filter(g => g.order && g.order.kind === "engage" && g.order.flanked).length;
+        n -= gs.filter(g => g.flanked).length;
         const suit = g => {
           const u = g.units[0], live = movers(g);
           if (!live.length) return -Infinity;   // a heavy weapons squad stays
           const [cx, cy] = centroid(live.map(x => x.h)), lat = ((cx - ex) * qx + (cy - ey) * qy) * flankDir[S];
           return live.reduce((a, x) => a + moveOf(x), 0) / live.length + (u.stance === "charge" ? 3 : 0) + 2 * (u.ai.zeal || 0) + lat / 25;
         };
-        const ranked = gs.filter(g => (!g.order || g.order.kind === "flank" || g.order.kind === "fix") && suit(g) > -Infinity).sort((a, b) => suit(b) - suit(a));
+        const ranked = gs.filter(g => (!g.order || g.order.kind === "flank" || g.order.kind === "fire") && !meleeMinded(g) && suit(g) > -Infinity).sort((a, b) => suit(b) - suit(a));
         const pincer = share >= 0.45 && n >= 2;
         ranked.forEach((g, i) => {
           if (i < n && worth && (!g.order || g.order.kind !== "flank")) {
@@ -6463,36 +6466,161 @@ const SIM = (() => {
             if (!legs) return;
             g.order = { kind: "flank", dir, legs, stage: 0, since: turn, n0: live.length };
             L(`${g.name} move round the enemy's ${dir > 0 ? "right" : "left"} flank`);
-          } else if (i >= n && !g.order) g.order = { kind: "fix", since: turn };
+          }
         });
       }
     }
-    // a flanking squad's soldier: one more option, to keep moving round, valued over whatever else it could do as
-    // long as the step doesn't walk it into much more fire than it stands in now; each takes its own spot in a line
-    // across the goal so the squad arrives spread out
-    function flankOption(m, opts, add, rNow) {
+    // ---- the director
+    const liveOf = g => g.models.filter(x => x.state === "ok" && x.h && !x.u.routed);
+    const moversOf = g => liveOf(g).filter(x => !(x.u.ranged && x.u.ranged.needsSetup) && !x.u.team);
+    const hexOfAll = ms => hexAt(...centroid(ms.map(x => x.h)));
+    // hand-to-hand minded: no gun, a charging stance, or a faction that would rather close
+    const meleeMinded = g => { const ls = liveOf(g); return ls.length > 0 && ls.filter(x => !x.u.ranged || x.u.stance === "charge" || x.u.ai.melee > 1.25 * x.u.ai.ranged).length * 2 > ls.length; };
+    function direct() {
+      for (const S of [0, 1]) {
+        if (!DIRECTOR_ON(S) || turn - planAt[S] < PLAN_EVERY) continue;
+        const foesH = enemyPicture(S);
+        if (!foesH.length) continue;
+        planAt[S] = turn;
+        if (NAV) makeThreatMap(S, foesH);
+        const gs = groups.filter(g => g.units[0].side === S && liveOf(g).length);
+        // the enemy as the side knows it, squad by squad: who's in it that we know of, where, how dangerous, how
+        // close to breaking
+        const E = new Map();
+        for (const [f, t] of seenAt[S]) {
+          if (f.state !== "ok" || f.u.routed || t < turn - 20 || !f.u.group) continue;
+          const h = t >= turn - 1 && f.h ? f.h : f.lastSeenH;
+          if (!h) continue;
+          let e = E.get(f.u.group);
+          if (!e) E.set(f.u.group, e = { g: f.u.group, ms: [], hs: [], threat: 0 });
+          e.ms.push(f); e.hs.push(h); e.threat += threatOf(f);
+        }
+        const foes = [...E.values()];
+        for (const e of foes) {
+          e.at = hexAt(...centroid(e.hs));
+          const left = liveOf(e.g).length / Math.max(1, e.g.count);
+          // worth: what it does to us, more for one already hurt (a squad near half strength is near its morale check)
+          e.worth = e.threat * (1 + 0.8 * (1 - left)) * (e.g.units.some(u => u.veh) ? 1.2 : 1);
+        }
+        // our squads: losses since the last look, how pinned, whether in hand-to-hand already
+        for (const g of gs) {
+          const ls = liveOf(g);
+          g.lost = Math.max(0, (g.seenLive ?? ls.length) - ls.length); g.seenLive = ls.length;
+          g.pinnedShare = ls.filter(x => x.pinned || x.headsDown || x.stunned).length / ls.length;
+          g.inMelee = ls.some(x => modelsNear(x.h, 1).some(f => f.u.side !== S && f.state === "ok"));
+          g.at = hexOfAll(ls);
+          // an order that's done or stale is dropped (the squad gets a new one below)
+          const o = g.order;
+          if (o && o.kind !== "flank" && (turn - o.since > ORDER_MAX || (o.target && !liveOf(o.target).length))) g.order = null;
+        }
+        if (KINDS.has("flank") && FLANK_ON(S) && foesH.length >= 3 && gs.length >= 2) planFlanks(S, foesH, gs);
+        const busy = g => g.order && g.order.kind === "flank";
+        const sees = (g, e) => liveOf(g).some(x => e.ms.some(f => f.h && los(x.h, f.h)));
+        // 1. support: a squad that lost a fifth of its men since the last look, or is half pinned, gets help: the
+        //    enemy squad nearest it is put down by a free squad (the nearest that isn't itself in trouble)
+        const trouble = gs.filter(g => !g.inMelee && (g.lost * 10 >= g.count * 3 || g.pinnedShare >= 0.6)).sort((a, b) => b.lost - a.lost);
+        const helped = new Set();
+        for (const g of KINDS.has("support") ? trouble : []) {
+          const e = foes.slice().sort((a, b) => hexDist(a.at, g.at) - hexDist(b.at, g.at))[0];
+          if (!e) continue;
+          const help = gs.filter(h => h !== g && !busy(h) && !helped.has(h) && !h.inMelee && !trouble.includes(h) && !meleeMinded(h) && moversOf(h).length)
+            .sort((a, b) => hexDist(a.at, g.at) - hexDist(b.at, g.at))[0];
+          if (!help) continue;
+          helped.add(help);
+          const was = help.order;
+          // a helper that can already see them only turns its guns on them; one that can't moves up beside the friend
+          if (sees(help, e)) { help.order = { kind: "fire", target: e.g, since: was && was.kind === "fire" && was.target === e.g ? was.since : turn }; continue; }
+          help.order = { kind: "support", target: e.g, goal: g.at, friend: g, since: was && was.kind === "support" && was.friend === g ? was.since : turn };
+          if (!was || was.kind !== "support" || was.friend !== g) L(`${help.name} go to support ${g.name}`);
+        }
+        // 2. assault: a hand-to-hand squad goes for the enemy squad it can reach soonest, weighted to the most worth it
+        for (const g of gs) {
+          if (!KINDS.has("assault") || busy(g) || helped.has(g) || g.inMelee || !meleeMinded(g)) continue;
+          const e = foes.slice().sort((a, b) => hexDist(a.at, g.at) / (1 + a.worth) - hexDist(b.at, g.at) / (1 + b.worth))[0];
+          if (!e) continue;
+          const was = g.order;
+          g.order = { kind: "assault", target: e.g, goal: e.at, since: was && was.kind === "assault" && was.target === e.g ? was.since : turn };
+          if (!was || was.kind !== "assault" || was.target !== e.g) L(`${g.name} are sent against ${e.g.name}`);
+        }
+        // 3. fire: every other squad puts its guns on the enemy squad most worth killing of those it can see,
+        //    the side as a whole leaning to the same one or two
+        const ranked = foes.slice().sort((a, b) => b.worth - a.worth);
+        for (const g of gs) {
+          if (!KINDS.has("fire") || busy(g) || helped.has(g) || (g.order && g.order.kind === "assault")) continue;
+          const e = ranked.find(x => sees(g, x)) || null;
+          if (!e) { if (g.order && g.order.kind === "fire") g.order = null; continue; }
+          const was = g.order;
+          g.order = { kind: "fire", target: e.g, since: was && was.kind === "fire" && was.target === e.g ? was.since : turn };
+        }
+      }
+    }
+    // how much more a soldier makes of a foe its squad has been told to put down: a disciplined army follows the
+    // order closely (a T'au Fire Warrior), an unruly one hardly at all (an Ork)
+    function orderWeight(m, t) {
+      const o = m && m.u.group && m.u.group.order;
+      return o && o.target && t.u.group === o.target ? 1 + 0.4 * Math.min(1.5, m.u.ai.focus ?? 1) : 1;
+    }
+    // a soldier with somewhere to go (assault, support, flank): one more option, to keep moving there, worth a third
+    // more than its best other choice unless the step takes it into more fire than it stands in now. Each takes its own
+    // spot across the goal so the squad arrives spread out. It ends when there's no more need: an assaulting man close
+    // enough to charge, a supporting man who can see the enemy squad it was sent against
+    // where a soldier's order sends it now, or null: nowhere, or no further (an assaulting man close enough to
+    // charge, a supporting man who can see the enemy squad it was sent against)
+    function orderGoal(m) {
       const g = m.u.group, o = g && g.order;
-      if (!o || o.kind !== "flank" || !m.h || (m.u.ranged && m.u.ranged.needsSetup) || m.u.team) return;   // its heavy weapon team stays with the base of fire
-      const live = g.models.filter(x => x.state === "ok" && x.h && !(x.u.ranged && x.u.ranged.needsSetup) && !x.u.team), i = live.indexOf(m);
-      const leg = o.legs[o.stage], [gx, gy] = px(leg), [cx, cy] = px(m.h);
+      if (!o || !m.h || (m.u.ranged && m.u.ranged.needsSetup) || m.u.team) return null;   // heavy weapon teams stay put
+      let to = null;
+      if (o.kind === "flank") to = o.legs[o.stage];
+      else if (o.kind === "assault" || o.kind === "support") {
+        const tm = liveOf(o.target).filter(f => (seenAt[m.u.side].get(f) ?? -99) >= turn - 20);
+        if (o.kind === "assault") {
+          const near = tm.length ? Math.min(...tm.map(f => hexDist(f.h, m.h))) : Infinity;
+          if (near <= moveOf(m) * 2 + 2 && tm.some(f => los(m.h, f.h))) return null;   // close enough: its own charge does the rest
+          to = tm.length ? hexOfAll(tm) : o.goal;
+        } else {
+          if (tm.some(f => f.h && los(m.h, f.h))) return null;   // it can see them: its guns do the rest
+          to = o.goal;
+        }
+      }
+      if (!to) return null;
+      // each takes its own spot across the goal, so the squad arrives spread out
+      const live = moversOf(g), i = live.indexOf(m);
+      const [gx, gy] = px(to), [cx, cy] = px(m.h);
       let dx = gx - cx, dy = gy - cy; const L0 = Math.hypot(dx, dy) || 1; dx /= L0; dy /= L0;
-      const goal = openNear(gx - dy * 2 * (i - (live.length - 1) / 2), gy + dx * 2 * (i - (live.length - 1) / 2)) || leg;
-      // a flanker with nobody to shoot at doesn't lie down in the grass: it's on its way somewhere
+      const goal = openNear(gx - dy * 2 * (i - (live.length - 1) / 2), gy + dx * 2 * (i - (live.length - 1) / 2)) || to;
+      return hexDist(goal, m.h) <= 1 ? null : goal;
+    }
+    function orderStep(m, goal) {
+      const o = m.u.group.order;
+      // down on its belly it would only crawl: up to a kneel first (Change Posture)
+      if (m.prone && m.legsLost < 2 && !gripsOn(m).length) { m.prone = false; m.kneel = true; m.lyingLow = false; L(`${m.id} gets up to move on`); return; }
+      m.covert = true;
+      const n = stepToward(m, goal, runMove(m), 0);
+      m.covert = false;
+      if (n >= moveOf(m) - 1) m.runK = m.runPrev + 1;
+      if (m.state !== "ok" || !m.h) return;
+      const f = scanFoes(m).find(x => x.state === "ok" && x.h && los(m.h, x.h)); if (f) faceTo(m, f.h);
+      L(`${m.id} ${{ flank: "works round the flank", assault: "closes in by cover", support: "moves up in support" }[o.kind]}`);
+    }
+    // a soldier with somewhere to go (assault, support, flank): one more option, to keep moving there, worth a third
+    // more than its best other choice unless the step takes it into more fire than it stands in now
+    function orderOption(m, opts, add, rNow) {
+      const goal = orderGoal(m);
+      if (!goal) return;
+      // a man on his way somewhere doesn't lie down in the grass for want of a target
       for (let k = opts.length - 1; k >= 0; k--) if (opts[k].label === "lie-low") opts.splice(k, 1);
       const top0 = opts.reduce((a, b) => b.v > a.v ? b : a, { v: 0 });
       const next = stepHex(m.h, goal, moveOf(m));
       const vF = Math.max(top0.v, 0) + 0.35 * Math.max(0.02, Math.abs(top0.v)) - Math.max(0, risk(m, next, "") - rNow);
-      add(vF, `flank@${goal.q},${goal.r}`, () => {
-        // down on its belly it would only crawl: up to a kneel first (Change Posture), then on next turn
-        if (m.prone && m.legsLost < 2 && !gripsOn(m).length) { m.prone = false; m.kneel = true; m.lyingLow = false; L(`${m.id} gets up to move on round the flank`); return; }
-        m.flanking = true;
-        const n = stepToward(m, goal, runMove(m), 0);
-        m.flanking = false;
-        if (n >= moveOf(m) - 1) m.runK = m.runPrev + 1;
-        if (m.state !== "ok" || !m.h) return;
-        const f = scanFoes(m).find(x => x.state === "ok" && x.h && los(m.h, x.h)); if (f) faceTo(m, f.h);
-        L(`${m.id} works round the flank`);
-      });
+      add(vF, `${m.u.group.order.kind}@${goal.q},${goal.r}`, () => orderStep(m, goal));
+    }
+    // a soldier who knows of no foe itself, but whose squad has been told where to go, goes there instead of
+    // searching: the side knows where the enemy is even when this man hasn't seen them
+    function orderMove(m) {
+      const goal = orderGoal(m);
+      if (!goal) return false;
+      orderStep(m, goal);
+      return true;
     }
 // Part of runBattle, one function body split into files by section (tools/sim/engine/50-69): the locals
 // and helpers declared in earlier parts are in scope here. tools/sim/README.md has the layout.
@@ -6528,7 +6656,7 @@ const SIM = (() => {
       for (const m of models) if (m.state === "ok" && m.h && !m.u.routed && !m.stunned) firingLine(m);
       lookAround();
       assignRoles();
-      planManeuvers();
+      direct();
       // the order is fixed for the fight (B363): Basic Speed, then DX, then a roll made at the start
       const order = models.filter(active).sort((a, b) => (b.u.speed - a.u.speed) || (b.u.dx - a.u.dx) || (a.init - b.init));
       for (const m of order) {

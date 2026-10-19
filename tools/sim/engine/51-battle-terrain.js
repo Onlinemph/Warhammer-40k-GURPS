@@ -55,7 +55,7 @@
     function lineEntry(a, b) {
       const k = NK(a.q, a.r) * 16777216 + NK(b.q, b.r);
       let e = terr.lineC.get(k);
-      if (e === undefined) { e = [lineBlockers(a, b, 1), lineBlockers(a, b, -1)]; if (terr.lineC.size > 3e6) terr.lineC.clear(); terr.lineC.set(k, e); }
+      if (e === undefined) { e = [lineBlockers(a, b, 1), lineBlockers(a, b, -1)]; if (terr.lineC.size > LINE_CAP) terr.lineC.clear(); terr.lineC.set(k, e); }
       return e;
     }
     const lineOpen = L2 => L2 !== null && L2.every(i => !blocker(i));
@@ -77,7 +77,7 @@
         if (c === undefined) {
           const a = firstLineHex(h, f, 1), b = firstLineHex(h, f, -1);
           c = [iQR(a.q, a.r), iQR(b.q, b.r)].filter(i => i != null && terr.crateI[i]);
-          if (terr.covC.size > 3e6) terr.covC.clear();
+          if (terr.covC.size > LINE_CAP) terr.covC.clear();
           terr.covC.set(k, c);
         }
         for (const i of c) if (!crateGone[i]) return { kind: terr.crates.get(key(terr.hx[i].q, terr.hx[i].r)) === "heavy" ? "barricade" : "crate", i };

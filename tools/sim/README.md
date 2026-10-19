@@ -14,7 +14,7 @@ The code is split into numbered parts that are joined in file-name order. `engin
 | `engine/40-hexes-and-maps.js` | Hex geometry, facing arcs, the facility and ruins maps |
 | `engine/45-aim-and-cover.js` | Called-shot penalties, chinks, cover DR and penalties |
 | `engine/50-69-battle-*.js` | `runBattle`, one function split into sections: setup, terrain and sight, injury, defence, movement, attacks, maneuvers, the decision layer, vehicles, the AI's options, reactions, grappling, the turn loop |
-| `engine/64-battle-flanking.js` | Fix and flank: the squads' plan on a big field (who holds as a base of fire, who goes round which end of the enemy line, by three legs) and the flanking soldier's option |
+| `engine/64-battle-director.js` | Each side's director: orders by need every few seconds (fire, assault, support, flank), the threat map flankers and assaulters route by, and how a soldier follows an order |
 | `engine/90-api.js` | `monteCarlo` and what `SIM` exports, including `SIM.rules` for the tests |
 | `page/10-picker-and-results.js` | The unit picker and the results charts |
 | `page/20-tabletop-map.js` | Shared map palette and hex helpers for the replays |

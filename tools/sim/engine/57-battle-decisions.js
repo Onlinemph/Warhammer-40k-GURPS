@@ -37,7 +37,7 @@
       const rem = remOf(t), share = Math.min(1, E / rem);
       // Bloodlust (B125): it goes for the killing blow, so a wounded foe is worth more to it
       const prey = m && t.hp < t.u.HP ? Math.max(m.u.ai.prey > 1 ? m.u.ai.prey : 1, m.u.flags.bloodlust ? 1.5 : 1) : 1;
-      return share * threatOf(t) * prey * HORIZON;   // a foe taken out stops hurting us for the rest of the fight
+      return share * threatOf(t) * prey * orderWeight(m, t) * HORIZON;   // a foe taken out stops hurting us for the rest of the fight
     }
     // expected injury to m next turn standing on hex h: "aoa" (no defence), "aod" (+2) or normal
     // chance a foe under our fire keeps its head down or freezes (TS p. 21, 34): Will-2 in cover without Combat

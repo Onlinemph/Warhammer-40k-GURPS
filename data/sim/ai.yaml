@@ -8,13 +8,14 @@
 #   caution     weight on harm taken (low = reckless, high = values its own life)
 #   melee       weight on hand-to-hand options (charging, striking, grappling)
 #   ranged      weight on shooting options
-#   focus       how strongly a model avoids piling onto a foe squad-mates already shoot (discipline)
+#   focus       discipline: how strongly a model avoids piling onto a foe squad-mates already shoot, and how closely
+#               it follows its director's order to put down a given enemy squad
 #   noise       random spread in the choice (0 = always the best option; Orks improvise)
 #   zeal        0-1: how little a hand-to-hand fight still several turns away is discounted (Orks run at the enemy)
 #   scan        optional: how many of the nearest foes in sight a model weighs (default 4 for line troops, 12 for
 #               leaders, snipers, anti-armour gunners, lone characters and vehicles; docs/simulator.md, Awareness)
-#   flank       share of a side's squads sent round the enemy's flank on a big field (countryside); the rest
-#               hold as a base of fire (docs/simulator.md, Fix and flank). 0.3 if unset
+#   flank       share of a side's squads its director sends round the enemy's flank on a big field (countryside)
+#               when the enemy is dug in (docs/simulator.md, The director). 0.3 if unset
 #   drilled     trained in battle drills (Tactical Shooting p. 22-23): fires past drilled friends at -2 and never hits them by
 #               mistake, and pairs up for fire and movement
 # Profiles are matched to templates by the regex in `match` (first profile that matches wins).
