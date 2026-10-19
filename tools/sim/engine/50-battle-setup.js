@@ -22,6 +22,18 @@
     const units = unitSpecs.map(s => s.spec.vehicle ? buildVehicle(s.spec, s.side) : buildUnit(s.spec, s.side));
     const models = [];
     const occ = new Map();
+    // models within r hexes of h, in roster order, the same list a pass over every model gives: read off the
+    // occupancy map (one model per hex; the downed leave it) when that's fewer hexes than there are models
+    function modelsNear(h, r) {
+      if (3 * r * (r + 1) + 1 >= models.length) return models.filter(x => x.h && hexDist(x.h, h) <= r);
+      const out = [];
+      for (let dq = -r; dq <= r; dq++) for (let dr = Math.max(-r, -dq - r); dr <= Math.min(r, -dq + r); dr++) { const x = occ.get(key(h.q + dq, h.r + dr)); if (x) out.push(x); }
+      return out.sort((a, b) => a.ix - b.ix);
+    }
+    // who has whom in their sights, and who holds a Wait for an opening on whom, kept on the target as well so the
+    // planner can ask "who's covering this foe" without a pass over every model
+    const setAim = (m, t) => { if (m.aimTarget === t) return; if (m.aimTarget) m.aimTarget.aimedBy.delete(m); m.aimTarget = t; if (t) t.aimedBy.add(m); };
+    const setOpen = (m, o) => { if (m.waitOpen) m.waitOpen.t.openBy.delete(m); m.waitOpen = o; if (o) o.t.openBy.add(m); };
     const place = (m, h) => { if (!h && m.h && m.cargo && m.cargo.length) dismount(m, true); if (m.h) occ.delete(key(m.h.q, m.h.r)); m.prevH = m.h; m.h = h; if (h) { occ.set(key(h.q, h.r), m); if (frames && m.trail) m.trail.push([h.q, h.r]); } };
     // terrain: walls block movement and sight until breached; crates block movement only; doors block both
     // while closed. The map is shared by every run; what changes in a battle (doors, breaches, wall damage) lives here

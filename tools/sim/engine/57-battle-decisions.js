@@ -51,7 +51,7 @@
     // a foe a friend is covering (an overwatch shooter's target, or inside a friend's suppression zone) shoots back
     // at less than full effect: that's what covering fire is for (TS p. 21)
     const covered = (m, f) => zones.some(z => z.side === m.u.side && z.owner.state === "ok" && f.h && z.hexes.has(key(f.h.q, f.h.r)))
-      || models.some(x => x !== m && x.u.side === m.u.side && x.state === "ok" && x.role === "cover" && x.aimTarget === f);
+      || [...f.aimedBy].some(x => x !== m && x.u.side === m.u.side && x.state === "ok" && x.role === "cover" && x.aimTarget === f);
     function incoming(m, h, mode) {
       let tot = 0;
       const near = known(m).filter(f => f.h && f.state === "ok").sort((a, b) => walk(h, a.h) - walk(h, b.h)).slice(0, 8);
@@ -83,7 +83,7 @@
     // likelier the throw). Cover from the thrower, kneeling and lying all cut the fragments that land (B414, B551)
     function grenadeRisk(m, h, near) {
       let worst = 0;
-      const crowd = models.filter(x => x !== m && x.u.side === m.u.side && x.state === "ok" && x.h && hexDist(x.h, h) <= 2).length;
+      const crowd = modelsNear(h, 2).filter(x => x !== m && x.u.side === m.u.side && x.state === "ok").length;
       const low = m.prone || m.kneel;
       for (const f of near) {
         if (!f.u.grenades.length || f.grips.length || f.armsLost >= 1) continue;
@@ -118,7 +118,7 @@
     };
     // how many squad-mates already have this foe in their sights (for spreading fire)
     // (only a gun that can hurt the foe stakes a claim: boltguns plinking at a tank don't crowd out the lascannon)
-    const claims = (m, f) => models.reduce((a, x) => a + (x !== m && x.u.side === m.u.side && x.state === "ok" && x.aimTarget === f && (!x.u.ranged || expInjRandom(x.u.ranged, f.u) > 0) ? 1 : 0), 0);
+    const claims = (m, f) => [...f.aimedBy].reduce((a, x) => a + (x !== m && x.u.side === m.u.side && x.state === "ok" && x.aimTarget === f && (!x.u.ranged || expInjRandom(x.u.ranged, f.u) > 0) ? 1 : 0), 0);
     // sustained harm of a gun: turns firing a magazine vs turns reloading it
     function sustainOf(w) {
       if (!w.shots || w.shots.mag === Infinity) return 1;

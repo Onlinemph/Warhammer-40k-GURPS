@@ -88,7 +88,7 @@
           const inter = w.malediction ? [] : between(m.h, t.h, m.u.side).filter(x => x !== t);
           const base = wl(m, w) - skillPen(m) + rangePenalty(rngD(m.h, t.h, d) + spdOf(t.steps || 0)) + t.u.sm - linePen(m, inter) - darkPen(m, t);
           const fx = w.malediction ? null : shotFx(t, m.h, false);
-          const pals = w.malediction || w.dmg.ex ? [] : [...new Set([...inter, ...models.filter(x => x !== m && x.state === "ok" && x.h && hexDist(x.h, t.h) <= 1)])].filter(x => x.u.side === u.side && !(drilled(m) && drilled(x)));
+          const pals = w.malediction || w.dmg.ex ? [] : [...new Set([...inter, ...modelsNear(t.h, 1).filter(x => x !== m && x.state === "ok")])].filter(x => x.u.side === u.side && !(drilled(m) && drilled(x)));
           // a cone catches every friend in the wedge (who may dive clear)
           const coneFF = w.cone ? P3[cl(base)] * coneCaught(m, w, t).filter(x => x.u.side === u.side).reduce((a, x) => { const dd = rangedDefence(x, m); return a + (1 - (dd == null ? 0 : P3[cl(dd)])) * Math.min(1, expInj(w, x.u, "area") / remOf(x)) * threatOf(x) * HORIZON; }, 0) * u.ai.caution : 0;
           const ffCost = coneFF + (pals.length && !w.cone ? (1 - P3[cl(base)]) * pals.reduce((a, x) => a + P3[cl(9 + x.u.sm)] * Math.min(1, expInjRandom(w, x.u) / remOf(x)) * threatOf(x) * HORIZON, 0) * u.ai.caution : 0);
@@ -103,7 +103,7 @@
           if (hopeless(w, t, m.h)) continue;
           // a friendly heavy gun is holding for an opening on this foe: rattling it (a crit, a knock-down, a stun, its
           // fatigue spent on feverish dodges) is worth more than the shot alone, most of all from a burst
-          const forGun = models.some(x => x !== m && x.u.side === u.side && x.waitOpen && x.waitOpen.t === t && x.state === "ok");
+          const forGun = [...t.openBy].some(x => x !== m && x.u.side === u.side && x.waitOpen && x.waitOpen.t === t && x.state === "ok");
           const vNow = (Wr * kv(m, t, Enow) - fpCost - ffCost) * (forGun ? ((w.rof || 1) >= 3 ? 1.6 : 1.25) : 1);
           // a big gun (a hit all but kills) against a foe who dodges most shots: don't waste it; keep the aim and hold
           // for an opening (stunned, down, exhausted, committed to an attack), fired the moment it comes (a Wait, B366)
@@ -124,16 +124,16 @@
           if (holdIt) {
             add(Math.max(vNow, 0) * 1.2 + 0.001 - rNow, `hold@${t.id}`, () => {
               if (m.aimTarget !== t) m.aimTurns = 0;
-              m.aimTarget = t; m.aimTurns = Math.min(3, m.aimTurns + 1); faceTo(m, t.h); m.waitOpen = { t, w }; m.holdN = (m.holdN || 0) + 1;
+              setAim(m, t); m.aimTurns = Math.min(3, m.aimTurns + 1); faceTo(m, t.h); setOpen(m, { t, w }); m.holdN = (m.holdN || 0) + 1;
               L(`${m.id} holds its aim on ${t.id}, waiting for an opening (Wait)`);
             });
             continue;
           }
-          add(vNow - rNow, `fire ${w.name}@${t.id}`, () => { m.aimTarget = t; faceTo(m, t.h); fireAt(m, w, t, { aim: aimed }); });
+          add(vNow - rNow, `fire ${w.name}@${t.id}`, () => { setAim(m, t); faceTo(m, t.h); fireAt(m, w, t, { aim: aimed }); });
           // All-Out Attack (Determined, +1 ranged): only worth it when little can hit back
           if (threatNow < 1) {
             const Eaoa = planAttack(m, w, t, base + bB + aimB + fA - own + 1, false, null, { aim: aimB + fA, braced: br, fx }).score * sustainOf(w) * spread;
-            add(Wr * kv(m, t, Eaoa) - fpCost - ffCost - risk(m, m.h, "aoa"), `aoa-fire@${t.id}`, () => { m.aoa = true; m.aimTarget = t; faceTo(m, t.h); fireAt(m, w, t, { aim: aimed, aoa: true }); });
+            add(Wr * kv(m, t, Eaoa) - fpCost - ffCost - risk(m, m.h, "aoa"), `aoa-fire@${t.id}`, () => { m.aoa = true; setAim(m, t); faceTo(m, t.h); fireAt(m, w, t, { aim: aimed, aoa: true }); });
           }
           // Aim (B364): pay a turn now for Acc (and +1/+2 more on later turns) next turn
           if ((w.acc || 0) >= 1 && !(aimed && m.aimTurns >= 3)) {
@@ -146,7 +146,7 @@
             const live = 1 - Math.min(0.95, incoming(m, m.h, "") / remOf(m));
             add(GAMMA * live * Wr * kv(m, t, keepP * Eaim + (1 - keepP) * Eun) - GAMMA * ffCost - rNow, `aim@${t.id}`, () => {
               if (m.aimTarget !== t) m.aimTurns = 0;
-              m.aimTarget = t; m.aimTurns++; faceTo(m, t.h); L(`${m.id} aims at ${t.id}`);
+              setAim(m, t); m.aimTurns++; faceTo(m, t.h); L(`${m.id} aims at ${t.id}`);
             });
           }
         }
@@ -415,7 +415,7 @@
       const near = pool.slice(0, 8);
       const g0 = grenadeRisk(m, m.h, near);
       if (!(g0 > 0)) return;
-      const crowd = h => models.filter(x => x !== m && x.u.side === m.u.side && x.state === "ok" && x.h && hexDist(x.h, h) <= 2).length;
+      const crowd = h => modelsNear(h, 2).filter(x => x !== m && x.u.side === m.u.side && x.state === "ok").length;
       const c0 = crowd(m.h);
       if (!c0) return;
       const spots = [];

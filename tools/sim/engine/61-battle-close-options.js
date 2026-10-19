@@ -276,7 +276,7 @@
           // everyone else in reach of the blast (3 yards counted) and the fragments, friends (and the thrower) included
           let others = 0;
           const fr = g.dmg.frag, fR = fr ? 5 * fr.n : 0;
-          for (const x of models) {
+          for (const x of modelsNear(c.h, Math.max(3, fR))) {
             if (x === c || !x.h || x.state !== "ok") continue;
             const k = Math.max(1, hexDist(x.h, c.h));
             if (k > Math.max(3, fR) || !los(c.h, x.h)) continue;

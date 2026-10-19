@@ -264,9 +264,9 @@
         const o = x.waitOpen;
         if (!o || x.state !== "ok" || !x.h || x.stunned) continue;
         const t = o.t;
-        if (t.state !== "ok" || !t.h) { x.waitOpen = null; continue; }
+        if (t.state !== "ok" || !t.h) { setOpen(x, null); continue; }
         if (!openFor(t, x) || !los(x.h, t.h) || duckedFrom(t, x.h) || !weaponsFor(x, false).includes(o.w) || (o.w === x.u.ranged && x.ammo <= 0)) continue;
-        x.waitOpen = null;
+        setOpen(x, null);
         L(`${x.id} sees ${t.id} falter and fires (Wait)`);
         fireAt(x, o.w, t, { aim: x.aimTarget === t && x.aimTurns > 0 });
         x.skipNext = true; x.skipWhy = "it fired on its Wait";

@@ -260,7 +260,7 @@
         const col = u.side === 0 ? -2 * rank : distance + 2 * rank;
         const row = row0[u.side] + 2 * file;
         const m = { u, id: `${u.name} #${i + 1}`, hp: u.HP, fp: u.fp, state: "ok", shock: 0, stunned: false, init: R(),
-          facing: u.side === 0 ? 0 : 3, prone: false, moved: false, aimTurns: 0, aimTarget: null, lastTarget: null,
+          facing: u.side === 0 ? 0 : 3, prone: false, moved: false, aimTurns: 0, aimTarget: null, aimedBy: new Set(), waitOpen: null, openBy: new Set(), lastTarget: null,
           ammo: u.ranged ? u.ranged.shots.mag : 0, mags: u.mags, reload: 0, jam: 0, gunBroken: false, conc: 0,
           sp: u.shield ? u.shield.sp : 0, spHit: -99, spCollapsed: false, shHP: u.cs && u.cs.hp != null ? u.cs.hp : 0, shState: "ok",
           parries: 0, retreated: false, blocked: false, attacked: false, aoa: false, aod: false, feint: null,

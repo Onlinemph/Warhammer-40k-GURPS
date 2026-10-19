@@ -33,7 +33,7 @@
     const vehShotLvl = (m, x, w, t) => wl(m, w) + (m.moved ? 0 : 1) + rangePenalty(rngD(m.h, t.h, Math.max(1, hexDist(m.h, t.h))) + spdOf(t.steps || 0)) + t.u.sm - darkPen(m, t) - movePen(m, x);
     function vehicleAct(m) {
       const u = m.u, V = u.veh;
-      m.aoa = m.aod = m.mna = false; m.steps = 0; m.moved = false; m.movedFar = false; m.waiting = null; m.waitOpen = null; clearZone(m);
+      m.aoa = m.aod = m.mna = false; m.steps = 0; m.moved = false; m.movedFar = false; m.waiting = null; setOpen(m, null); clearZone(m);
       if (m.doNothing) { m.doNothing = false; return; }
       if (m.surprised) { m.surprised = false; L(`${m.id} is caught by surprise`); return; }
       if (m.skipNext) { m.skipNext = false; m.skipWhy = null; return; }
@@ -156,7 +156,7 @@
       m.aoa = false; m.aod = false; m.mna = false; m.offBalance = false; m.readied = false; m.steps = 0; m.moved = false; m.movedFar = false;
       m.runPrev = m.runK || 0; m.runK = 0;   // a sprint carries on only through consecutive straight Moves
       if (m.feint && m.feint.turn !== turn - 1) m.feint = null;   // a feint lapses if not used the next turn (B365)
-      clearZone(m); m.waiting = null; m.watch = false; m.ducked = false; m.waitOpen = null;
+      clearZone(m); m.waiting = null; m.watch = false; m.ducked = false; setOpen(m, null);
       if (m.doNothing) { m.doNothing = false; L(`${m.id} reels from the blow (Do Nothing)`); return; }
       if (m.surprised) { m.surprised = false; L(`${m.id} is caught by surprise`); return; }
       if (m.skipNext) { m.skipNext = false; L(`${m.id} already acted this second (${m.skipWhy || "it saw the foe first"})`); m.skipWhy = null; return; }
