@@ -377,6 +377,8 @@ def combat_flags(t, flags):
         flags["noMorale"] = 1       # soulless machines: Necrons do not break
     elif n.startswith("Synapse Discipline"):
         flags["synDisc"] = 1        # Fearlessness 5 and High Pain Threshold, only while a synapse creature is in range (the sim works out which)
+    elif n.startswith("Independent Hunter"):
+        flags["synIndep"] = 1       # needs no synapse: always linked
     elif n.startswith("Synapse Creature"):
         # its field's radius, from the Area Effect modifier ("Area Effect, 16 yards")
         txt = " ".join(str(x.get("name", x) if isinstance(x, dict) else x) for x in t.get("modifiers", [])) + " " + n

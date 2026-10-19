@@ -109,4 +109,6 @@ test("synapse: a brood is fearless, feels no pain and takes orders only inside a
   const led = SIM.runBattle([{ side: 0, spec: spec("Hormagaunt", 10, { squad: "b", squadName: "Brood" }) }, { side: 0, spec: spec("Tyranid Warrior", 1) }, ...guard], opt);
   assert.equal(led.units.find(u => u.name === "Hormagaunt").synapse, true, "a Warrior beside it: linked");
   assert.ok(led.units.filter(u => u.side === 1).every(u => u.synapse === null), "nobody else has a synapse state");
+  const stealers = SIM.runBattle([{ side: 0, spec: spec("Genestealer", 6, { squad: "g", squadName: "Brood" }) }, ...guard], opt);
+  assert.equal(stealers.units.find(u => u.name === "Genestealer").synapse, true, "Genestealers need no synapse creature");
 });

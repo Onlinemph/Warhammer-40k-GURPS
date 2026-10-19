@@ -19,6 +19,7 @@
     // or a Zoanthrope's 16 yards, a Hive Tyrant's 32) has Synapse Discipline, Fearlessness 5 and High Pain Threshold,
     // and fights to the Hive Mind's purpose: it takes the director's orders. Out of every field it falls back on
     // instinct (Synapse Dependence): no fearlessness, no pain immunity, no orders; it fights what's in front of it.
+    // A Genestealer (Independent Hunter) needs no field: it's always linked.
     // Worked out each second, brood by brood (linked when at least half its living members are in a field), so
     // killing the synapse creatures first breaks the swarm, as the Imperium teaches.
     const SYN = units.some(u => u.flags.synDisc);
@@ -31,7 +32,7 @@
         const ls = u.models.filter(x => x.state === "ok" && x.h);
         if (!ls.length) continue;
         const inField = ls.filter(x => x.u.flags.synapse || nodes.some(n => n.u.side === u.side && hexDist(n.h, x.h) <= n.u.flags.synapse)).length;
-        const linked = inField * 2 >= ls.length;
+        const linked = !!u.flags.synIndep || inField * 2 >= ls.length;   // an Independent Hunter needs no field
         if (u.linked !== undefined && linked !== u.linked) L(linked ? `${u.name} come back under synapse` : `${u.name} lose synapse and fall back on instinct`);
         u.linked = linked;
         u.flags.fearless = u.baseFearless + (linked ? 5 : 0);
