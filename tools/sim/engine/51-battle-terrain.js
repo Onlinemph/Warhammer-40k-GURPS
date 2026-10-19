@@ -258,8 +258,11 @@
       return { CS, cw, ch, open, rep, cache: new Map() };
     })()) : null;
     const cellOf = h => { const c = h.q, r = h.r + (c - (c & 1)) / 2; return Math.floor(r / NAV.CS) * NAV.cw + Math.floor(c / NAV.CS); };
-    function coarseField(goalCell) {
-      let C = NAV.cache.get(goalCell);
+    // T: a threat map over the cells (how many known foes see each), for a route that keeps out of sight; such a
+    // field is cached with the map it was made from
+    function coarseField(goalCell, T) {
+      const cache = T ? (T.cache || (T.cache = new Map())) : NAV.cache;
+      let C = cache.get(goalCell);
       if (C) return C;
       const { cw, ch, open, CS } = NAV, n = cw * ch, full = CS * CS;
       C = new Float64Array(n).fill(Infinity);
@@ -277,17 +280,17 @@
           if (x < 0 || y < 0 || x >= cw || y >= ch) continue;
           const nc = y * cw + x;
           if (open[nc] < full / 4) continue;                                   // mostly wall or thicket: go round
-          const nd = d + (dx && dy ? 1.41 : 1) * CS * (1 + 2 * (1 - open[nc] / full));
+          const nd = d + (dx && dy ? 1.41 : 1) * CS * (1 + 2 * (1 - open[nc] / full)) * (T ? 1 + 1.5 * T[nc] : 1);
           if (nd < C[nc]) { C[nc] = nd; heap.push([nd, nc]); }
         }
       }
-      NAV.cache.set(goalCell, C);
+      cache.set(goalCell, C);
       return C;
     }
     // where to steer for now on the way from `from` to a far goal: a few cells along the coarse route, about half
     // a field's reach ahead, so the walking field from there covers the ground in between
-    function waypoint(from, goal) {
-      const gc = cellOf(goal), C = coarseField(gc);
+    function waypoint(from, goal, T) {
+      const gc = cellOf(goal), C = coarseField(gc, T);
       let cur = cellOf(from);
       for (let k = 0; k < 8 && cur !== gc; k++) {
         const cx = cur % NAV.cw, cy = (cur - cx) / NAV.cw;
@@ -303,10 +306,11 @@
       return cur === gc || NAV.rep[cur] < 0 ? goal : terr.hx[NAV.rep[cur]];
     }
     // the field to walk by toward goal: the goal's own if it reaches from, else the next waypoint's
-    function fieldToward(from, goal, cls, cc) {
+    // (T: keep out of the sight of the foes on that threat map where the route allows)
+    function fieldToward(from, goal, cls, cc, T) {
       const F = field(goal, cls, cc);
       if (!BIG || F.at(from.q, from.r) !== undefined) return F;
-      return field(waypoint(from, goal), cls, cc);
+      return field(waypoint(from, goal, T), cls, cc);
     }
     // walking distance (symmetric): the field is built from b, so pass the foe's hex second
     // (on a big map, past 30 yards the straight distance stands in for it: the field is for what's close)

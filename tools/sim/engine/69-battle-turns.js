@@ -32,6 +32,7 @@
       for (const m of models) if (m.state === "ok" && m.h && !m.u.routed && !m.stunned) firingLine(m);
       lookAround();
       assignRoles();
+      planManeuvers();
       // the order is fixed for the fight (B363): Basic Speed, then DX, then a roll made at the start
       const order = models.filter(active).sort((a, b) => (b.u.speed - a.u.speed) || (b.u.dx - a.u.dx) || (a.init - b.init));
       for (const m of order) {

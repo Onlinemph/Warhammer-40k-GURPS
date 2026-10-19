@@ -13,6 +13,8 @@
 #   zeal        0-1: how little a hand-to-hand fight still several turns away is discounted (Orks run at the enemy)
 #   scan        optional: how many of the nearest foes in sight a model weighs (default 4 for line troops, 12 for
 #               leaders, snipers, anti-armour gunners, lone characters and vehicles; docs/simulator.md, Awareness)
+#   flank       share of a side's squads sent round the enemy's flank on a big field (countryside); the rest
+#               hold as a base of fire (docs/simulator.md, Fix and flank). 0.3 if unset
 #   drilled     trained in battle drills (Tactical Shooting p. 22-23): fires past drilled friends at -2 and never hits them by
 #               mistake, and pairs up for fire and movement
 # Profiles are matched to templates by the regex in `match` (first profile that matches wins).
@@ -26,6 +28,7 @@ profiles:
     focus: 0.4
     noise: 0.35
     zeal: 0.6
+    flank: 0.15
     lore: Orks live for the fight and love close combat; they shoot wildly, charge anything, and don't count the cost.
   - name: Tyranids
     match: "^(Termagant|Hormagaunt|Genestealer|Lictor|Ravener|Tyranid|Carnifex|Hive Tyrant|Zoanthrope)"
@@ -36,6 +39,7 @@ profiles:
     focus: 0.9
     noise: 0.1
     zeal: 0.5
+    flank: 0.5
     lore: The Hive Mind spends bodies without regret; synapse keeps the swarm on target.
   - name: Necrons
     match: "^(Necron|Lychguard|Deathmark|Cryptek|Flayed One|Skorpekh)"
@@ -46,6 +50,7 @@ profiles:
     focus: 1.3
     noise: 0.0
     drilled: true
+    flank: 0.1
     lore: Methodical, relentless and unafraid of damage they will reanimate from; precise target selection.
   - name: Khorne
     match: "^(Khorne Berzerker|Possessed)"
@@ -56,6 +61,7 @@ profiles:
     focus: 0.5
     noise: 0.15
     zeal: 0.7
+    flank: 0.1
     lore: "Blood for the Blood God: Berzerkers and the Possessed run at the enemy and care nothing for what it costs them."
   - name: Rubric Marines
     match: "^Rubric Marine"
@@ -67,6 +73,7 @@ profiles:
     noise: 0
     zeal: 0
     drilled: true
+    flank: 0.15
     lore: Soulless automata that walk through fire and shoot on their Sorcerer's will, untroubled by anything that happens to them.
   - name: Heretic Astartes
     match: "^(Chaos Space Marine|Chaos Lord|Chaos Sorcerer|Plague Marine|Noise Marine)"
@@ -78,6 +85,7 @@ profiles:
     noise: 0.1
     zeal: 0.1
     drilled: true
+    flank: 0.3
     lore: Ten thousand years of war have kept the Legions' drill and sharpened their hunger for the kill.
   - name: Traitor Guard
     match: "^Traitor Guardsman"
@@ -89,6 +97,7 @@ profiles:
     noise: 0.15
     zeal: 0
     drilled: true
+    flank: 0.25
     lore: Turned regiments keep the Guard's drill, with the Imperium's discipline traded for a cult's fervour.
   - name: Chaos Cultists
     match: "^Chaos Cultist"
@@ -99,6 +108,7 @@ profiles:
     focus: 0.4
     noise: 0.3
     zeal: 0.3
+    flank: 0.2
     lore: "Untrained fanatics in their hundreds: brave in a mob, wild with a gun, and thrown away by their masters."
   - name: Custodes
     match: "^(Custodian|Shield-Captain|Sister of Silence)"
@@ -109,6 +119,7 @@ profiles:
     focus: 1.3
     noise: 0.0
     drilled: true
+    flank: 0.3
     lore: Supremely confident demigods and their null-maiden sisters; they close and finish the most dangerous foe first.
   - name: Astartes
     match: "^(Astartes|Primaris)"
@@ -119,6 +130,7 @@ profiles:
     focus: 1.3
     noise: 0.0
     drilled: true
+    flank: 0.35
     lore: Disciplined, fearless, tactically near-optimal.
   - name: Adepta Sororitas
     match: "^Adepta Sororitas"
@@ -129,6 +141,7 @@ profiles:
     focus: 1.2
     noise: 0.0
     drilled: true
+    flank: 0.25
     lore: Faith-driven and disciplined; bolter drill first.
   - name: Adeptus Mechanicus
     match: "^(Skitarii|Sicarian|Tech-Priest|Magos|Electro-Priest|Combat Servitor)"
@@ -139,6 +152,7 @@ profiles:
     focus: 1.3
     noise: 0.0
     drilled: true
+    flank: 0.2
     lore: Doctrina-imperative logic; efficient to the point of coldness.
   - name: Imperial Guard
     match: "^(Astra Militarum|Militarum Tempestus|Commissar)"
@@ -149,6 +163,7 @@ profiles:
     focus: 1.1
     noise: 0.05
     drilled: true
+    flank: 0.3
     lore: Drilled line troops; they hold, shoot and don't want to be in hand-to-hand.
   - name: Inquisition and Psykers
     match: "^(Inquisitor|Inquisitorial|Interrogator|Astropath|Navigator|Sanctioned Psyker)"
@@ -158,6 +173,7 @@ profiles:
     ranged: 1.0
     focus: 1.1
     noise: 0.0
+    flank: 0.3
     lore: Experienced agents who value their own lives.
   - name: Aeldari
     match: "^(Aeldari|Aspect Warrior|Exarch|Autarch|Warlock|Farseer)"
@@ -168,6 +184,7 @@ profiles:
     focus: 1.3
     noise: 0.0
     drilled: true
+    flank: 0.5
     lore: A dying race that spends every life with care; precise, surgical strikes.
   - name: Drukhari
     match: "^(Kabalite|Wych|Succubus|Incubus|Archon|Haemonculus|Wrack|Mandrake|Scourge)"
@@ -177,6 +194,7 @@ profiles:
     ranged: 1.0
     focus: 0.9
     noise: 0.05
+    flank: 0.5
     lore: Cruel raiders who favour the kill in reach and the wounded victim.
     prey: 1.5
   - name: T'au
@@ -188,6 +206,7 @@ profiles:
     focus: 1.4
     noise: 0.0
     drilled: true
+    flank: 0.35
     lore: Coordinated firepower; close combat is a failure of doctrine.
   - name: Kroot and Vespid
     match: "^(Kroot|Vespid)"
@@ -197,6 +216,7 @@ profiles:
     ranged: 1.0
     focus: 1.0
     noise: 0.1
+    flank: 0.5
     lore: Hunters and auxiliaries; the Kroot like it close and bloody.
   - name: Default
     match: ".*"
@@ -206,3 +226,4 @@ profiles:
     ranged: 1.0
     focus: 1.0
     noise: 0.0
+    flank: 0.3
