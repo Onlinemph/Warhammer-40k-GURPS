@@ -396,11 +396,13 @@
     const rows = [ri(4, 8), ri(15, 21), ri(28, 32)], spots = [];
     rows.forEach((r, i) => {
       if (i === 1 && rnd() < 0.4) return;                                  // the middle bridge is down as often as not
-      const wide = i === 1 ? 1 : 0;
+      // (two hexes wide, the middle one three: a one-hex bridge took a swarm in single file and a body on it closed it,
+      // user report)
+      const wide = i === 1 ? 2 : 1;
       carve(mid(r) - 4, r, mid(r) + 3, r + wide);
       for (const c of [mid(r) - 6, mid(r) - 5, mid(r) + 4, mid(r) + 5]) spots.push([c, r - 1], [c, r + wide + 1]);
     });
-    const ford = ri(10, 26); carve(mid(ford) - 4, ford, mid(ford) + 3, ford);
+    const ford = ri(10, 26); carve(mid(ford) - 4, ford, mid(ford) + 3, ford + 1);
     for (let i = 0; i < 40; i++) spots.push([ri(9, W - 10), ri(2, H - 3)]);
     M.cover(spots, 0.55);
     for (let i = 0; i < 6; i++) { const c = rnd() < 0.5 ? ri(12, 24) : ri(W - 25, W - 13), r = ri(3, H - 6); wall(c, r, c + ri(1, 3), r, rnd() < 0.5 ? 1.2 : 5); }   // field walls on the banks

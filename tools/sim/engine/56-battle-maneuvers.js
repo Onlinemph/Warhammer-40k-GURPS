@@ -33,7 +33,7 @@
       const fd = hand === "melee" ? m.u.fdBlade : m.u.fdGun;
       if (fd > -Infinity && !m.fastDrew && check(fd - skillPen(m)).ok) {
         L(`${m.id} fast-draws the ${w.name}${keep ? `, keeping the ${m.u.ranged.name.split(",")[0]} in its other hand` : ""}`);
-        m.fastDrew = true; act(m); m.fastDrew = false;
+        m.fastDrew = true; m.asking = act(m) || null; m.fastDrew = false;
         return;
       }
       L(`${m.id} readies the ${w.name}${keep ? `, keeping the ${m.u.ranged.name.split(",")[0]} in its other hand` : ""}`);

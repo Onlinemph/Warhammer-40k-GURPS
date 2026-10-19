@@ -5,6 +5,22 @@
     const ease = x => x <= 0 ? 0 : x >= 1 ? 1 : x * x * (3 - 2 * x);
     const bump = (x, w) => x < 0 || x > w ? 0 : Math.sin(Math.PI * x / w);
     let last = { t: 0, p: 1, st: {} }, clock = 0;
+    // a model that broke and ran, s through the current second: where it is on its way off the table, and which way it
+    // faces, at its sprinting pace (Move x 1.2 a second); nothing once it's off
+    const D6 = [[1, 0], [1, -1], [0, -1], [-1, 0], [-1, 1], [0, 1]], angN = a => Math.atan2(Math.sin(a), Math.cos(a));
+    const YD = (([a, b], [c, e]) => Math.hypot(c - a, e - b))(P(0, 0), P(1, 0));   // a yard (one hex) in the scene
+    const runYaw = (() => { const o0 = P(0, 0), dirA = k => { const v = P(D6[k][0], D6[k][1]); return Math.atan2(v[1] - o0[1], v[0] - o0[0]); };
+      const s = Math.sign(angN(facingAng(0) - facingAng(1)) / angN(dirA(1) - dirA(0))) || 1; return ang => -facingAng(0) + s * angN(ang - dirA(0)); })();
+    function runOff(i, d, t, s) {
+      const pts = d.run, sp = Math.max(3, (ros[i].move || 5) * 1.2) * YD;
+      let left = ((t - d.t) + Math.max(0, Math.min(1, s))) * sp;
+      for (let j = 1; j < pts.length; j++) {
+        const a = pts[j - 1], b = pts[j], L = Math.hypot(b[0] - a[0], b[1] - a[1]);
+        if (left <= L) { const f = L ? left / L : 1; return { at: [a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f], yaw: runYaw(Math.atan2(b[1] - a[1], b[0] - a[0])) }; }
+        left -= L;
+      }
+      return null;
+    }
     function pose(F, x, bitsv, p, ev, at, dt, dead) {
       const B = F.B || {};
       // walking: the stride follows the ground actually covered
@@ -114,9 +130,11 @@
       loopSounds();
       speedMs = +(document.getElementById("rspeed") || { value: 1000 }).value || 1000;
       if (schedT !== t || schedC !== !!st.cine) { if (t < schedT) { glow.clear(); smoke.clear(); } buildSchedule(t, !!st.cine); }
-      const pm = TS > 1 ? Math.min(1, p * TS / MOVE) : p;   // with the action camera everyone moves first, then the beats play
+      // with the action camera everyone moves first, then the beats play; the move fills that whole stretch (the table
+      // finishes a path at 0.7 of its second, which in 3D read as a sprint and a halt every second)
+      const pm = (TS > 1 ? Math.min(1, p * TS / MOVE) : p) * .7;
       if (fxT !== t) buildText(t);
-      buildDecals(t);
+      buildDecals(t); drawMarks(st);
       // effects whose moment has come this second
       if (p < prevP) prevP = 0;
       for (const s of sched) if (s.p > prevP && s.p <= p) s.run();
@@ -125,11 +143,21 @@
       const now = performance.now(), dt = Math.min(.1, (now - lastFrameT) / 1000);
       figs.forEach((F, i) => {
         const x = f[i];
-        let at = posAt(i, t, pm), dead = null;
+        let at = posAt(i, t, pm), dead = null, run = null;
         const d = downs[i].find(dd => dd.t <= t && (dd.back == null || dd.back > t));
-        if (!x && d) {
-          if (!d.fell) { F.g.visible = false; return; }   // fled, boarded a transport or phased out: gone from the table
-          at = d.at; dead = { f: d.t === t ? (o.reduce ? 1 : Math.max(0, Math.min(1, (p - (deathP.get(i) ?? .35 / TS)) * TS / .4))) : 1 };
+        // fled: it runs its way off the table at a sprint, then it's gone (user direction); boarded a transport or
+        // phased out: gone at once
+        if (!x && d && !d.fell) {
+          run = d.run ? runOff(i, d, t, pm / .7) : null;
+          if (!run) { F.g.visible = false; return; }
+          at = run.at;
+        } else if (!x && d) {
+          // (in the second it falls it covers the ground it did before going down, from where it stood to where it fell)
+          const a0 = d.t === t && prev[i] ? P(prev[i][0], prev[i][1]) : null, s = Math.min(1, pm / .7);
+          at = a0 ? [a0[0] + (d.at[0] - a0[0]) * s, a0[1] + (d.at[1] - a0[1]) * s] : d.at; dead = { f: d.t === t ? (o.reduce ? 1 : Math.max(0, Math.min(1, (p - (deathP.get(i) ?? .35 / TS)) * TS / .4))) : 1 };
+          // a sync kill's victim fights on until the blow that kills it starts
+          const sk = syncOf(i, d);
+          if (sk) { const s = (evFor[i].slain || [])[0]; if (d.t === t && s && p < s.p && !o.reduce) dead = null; else dead.sync = sk; }
         }
         const back = downs[i].find(dd => dd.back === t);
         if (x && back && back.fell && !o.reduce && p < .7) { at = back.at; dead = { f: 1 - Math.max(0, (p - .1) / .6) }; if (p > .1 && p < .14 && /Necron/.test(ros[i].faction || "")) burst(glow, F.g.position.clone().add(new THREE.Vector3(0, .5, 0)), 20, { speed: 1, life: .8, s0: .4, s1: .05, c: C(0x39ff6a), spread: .8, lift: 1 }); }
@@ -137,13 +165,13 @@
         if (!at) return;
         const cur = x || prev[i] || (d && fr[d.t - 1] && fr[d.t - 1][i]) || [0, 0, F.side, 0, 0, 1, null, 0, -1, -1];
         F.g.position.set(at[0], zXY(at[0], at[1]), at[1]);
-        const yaw = -facingAng(cur[4] || 0);
+        const yaw = dead && dead.sync ? dead.sync.yaw : run ? run.yaw : -facingAng(cur[4] || 0);
         if (F.yaw == null) F.yaw = yaw;
         let dy = ((yaw - F.yaw) % (2 * Math.PI) + 3 * Math.PI) % (2 * Math.PI) - Math.PI; F.yaw += dy * Math.min(1, dt * 9 + (o.reduce || p >= 1 && !st.playing ? 1 : 0));
         F.g.rotation.y = F.yaw;
         pose(F, x, cur[7] || 0, p, evFor[i], at, dt, dead);
         F.sel.visible = !dead && (i === st.sel || i === st.hover); F.sel.material.color.set(i === st.sel ? 0xffffff : 0x9aa0a8);
-        F.bars.visible = !dead;
+        F.bars.visible = !dead && !st.clean;   // the broadcast view shows health on its scoreboard, not over every head
         const hpv = cur[5] == null ? 1 : Math.max(0, cur[5]);
         F.hp.scale.set(1.24 * hpv, .13, 1); F.hp.position.x = -.62 + .62 * hpv; F.hp.material.color.set(hpv > .6 ? 0x5fbf6a : hpv > .3 ? 0xe3b341 : 0xe0564b);
         F.sp.visible = cur[8] >= 0; if (cur[8] >= 0) { F.sp.scale.set(1.24 * cur[8], .07, 1); F.sp.position.set(-.62 + .62 * cur[8], .14, 0); }

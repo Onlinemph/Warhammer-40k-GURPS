@@ -13,7 +13,7 @@
     const zones = [];
     // the firing line, settled for everyone at the start of the second so the rear rank sees the front rank down
     function firingLine(m) {
-      if (m.u.veh) return;
+      if (m.u.veh || UP(m.u)) return;
       if (m.prone) { m.kneelVol = false; return; }
       const pool = foes(m).filter(f => f.h).sort((a, b) => hexDist(m.h, a.h) - hexDist(m.h, b.h));
       if (!pool.length) return;

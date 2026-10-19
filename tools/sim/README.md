@@ -13,15 +13,18 @@ The code is split into numbered parts that are joined in file-name order. `engin
 | `engine/30-wounds.js` | Wounding multipliers, Injury Tolerance, large-area injury, the hit location table |
 | `engine/40-hexes-and-maps.js` | Hex geometry, facing arcs, the facility and ruins maps |
 | `engine/45-aim-and-cover.js` | Called-shot penalties, chinks, cover DR and penalties |
-| `engine/50-69-battle-*.js` | `runBattle`, one function split into sections: setup, terrain and sight, injury, defence, movement, attacks, maneuvers, the decision layer, vehicles, the AI's options, reactions, grappling, the turn loop |
+| `engine/50-69-battle-*.js` | The battle, one function split into sections (a generator, `battleSteps`, which `runBattle` runs to its end and `playBattle` hands to the page for a person to play): setup, terrain and sight, injury, defence, movement, attacks, maneuvers, the decision layer, vehicles, the AI's options, reactions, grappling, the turn loop |
 | `engine/90-api.js` | `monteCarlo` and what `SIM` exports, including `SIM.rules` for the tests |
 | `page/10-picker-and-results.js` | The unit picker and the results charts |
 | `page/20-tabletop-map.js` | Shared map palette and hex helpers for the replays |
 | `page/30-37-view3d-*.js` | `makeView3D`, the three.js replay, split by section: scene, figures, models, battlefield scenery and sound from a local Dawn of War pack (optional, see `tools/dow/README.md`), effects, timeline and action camera plan, camera, posing, action camera, input |
+| `page/15-colour-schemes.js` | Named paint schemes a side can be given in the 3D view |
 | `page/40-table.js` | The 2D replay |
+| `page/42-broadcast.js` | The broadcast view: the 3D replay full screen with a scoreboard, kill feed, title and result cards, for recording |
+| `page/45-play.js` | Playing a battle: the Orders pane, which asks the player at each stop of `SIM.playBattle` and feeds the answer back |
 | `page/90-wire.js` | Wiring the page together |
 
-`runBattle` and `makeView3D` are each one function whose body is split across several files. Their locals are shared closure state, so each part can use anything an earlier part declared. Those files aren't standalone modules. Splitting them for real would mean passing the battle state around as an explicit object, which is a bigger refactor than this split.
+The battle (`battleSteps`) and `makeView3D` are each one function whose body is split across several files. Their locals are shared closure state, so each part can use anything an earlier part declared. Those files aren't standalone modules. Splitting them for real would mean passing the battle state around as an explicit object, which is a bigger refactor than this split.
 
 Under node, `require("tools/sim/load.js")` gives you `SIM`. Errors name the part file and line, for example `tools/sim/engine/55-battle-attacks.js:120`, not a line in the joined file.
 

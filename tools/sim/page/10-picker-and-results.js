@@ -165,7 +165,7 @@
     const side = si => `<section class="sside"><h2>Side ${"AB"[si]}${sidePts(si) ? `<small>${sidePts(si).toLocaleString("en-US")} pts</small>` : ""}</h2>${S.sides[si].map((u, ui) => (u.squad && (ui === 0 || S.sides[si][ui - 1].squad !== u.squad) ? squadHead(u, si) : "") + unitCard(u, si, ui)).join("") || `<p class="empty">No units yet.</p>`}
       <select class="addu" data-add="${si}" aria-label="Add a unit to side ${"AB"[si]}">${tmplOptions()}</select></section>`;
     $("#main").innerHTML = `<header class="libhead"><div class="eyebrow">Tools</div><h1>Combat Simulator</h1>
-      <p>Pit units against each other using their templates and default loadouts. Every run plays a full GURPS fight second by second; the result is the spread over many runs.</p></header>
+      <p>Pit units against each other using their templates and default loadouts. Every run plays a full GURPS fight second by second; the result is the spread over many runs. Or play one battle yourself against the AI.</p></header>
       <div class="spresets">${PRESETS.map((p, i) => `<button class="chip tag" data-preset="${i}">${esc(p[0])}</button>`).join("")}</div>
       <form class="sset" onsubmit="return false">
         <fieldset><legend>Engagement</legend>
@@ -179,7 +179,7 @@
           <label for="s-hp">Wounds <select id="s-hp" data-h><option value="standard"${S.health !== "fractional" ? " selected" : ""}>Standard HP</option><option value="fractional"${S.health === "fractional" ? " selected" : ""}>Fractional Health</option></select></label>
           <label class="chk" for="s-sight"><input id="s-sight" type="checkbox" data-g="sightedShots"${S.sightedShots ? " checked" : ""}> Aimed shots are All-Out Attacks (Tactical Shooting)</label>
           <label class="chk" for="s-ldodge"><input id="s-ldodge" type="checkbox" data-g="limitedDodges"${S.limitedDodges !== false ? " checked" : ""}> -1 per extra dodge in a turn (Martial Arts; on by default)</label>
-          <label class="chk" for="s-cine"><input id="s-cine" type="checkbox" data-g="cinematicEffort"${S.cinematicEffort ? " checked" : ""}> Cinematic extra effort: Heroic Charge (Martial Arts)</label>
+          <label class="chk" for="s-cine"><input id="s-cine" type="checkbox" data-g="cinematicEffort"${S.cinematicEffort !== false ? " checked" : ""}> Cinematic extra effort: Heroic Charge (Martial Arts)</label>
           <label class="chk" for="s-tdodge"><input id="s-tdodge" type="checkbox" data-g="tacticalDodge"${S.tacticalDodge ? " checked" : ""}> Dodge gunfire from one shooter only (Tactical Shooting)</label>
           ${S.health === "fractional" ? `<label for="s-box">Boxes per level <input id="s-box" type="number" min="1" max="9" value="${S.boxes || 5}" data-g="boxes"></label>` : ""}
         </fieldset>
@@ -193,16 +193,66 @@
           <label for="s-ca">Cover, side A <select id="s-ca" data-o="coverA"><option${(S.coverA || "none") === "none" ? " selected" : ""}>none</option><option${S.coverA === "light" ? " selected" : ""}>light</option><option${S.coverA === "heavy" ? " selected" : ""}>heavy</option></select></label>
           <label for="s-cb">Cover, side B <select id="s-cb" data-o="coverB"><option${(S.coverB || "none") === "none" ? " selected" : ""}>none</option><option${S.coverB === "light" ? " selected" : ""}>light</option><option${S.coverB === "heavy" ? " selected" : ""}>heavy</option></select></label>
         </fieldset>
+        <fieldset><legend>Broadcast</legend>
+          <label for="s-title">Title <input id="s-title" type="text" maxlength="80" placeholder="Episode 1" value="${esc(S.showTitle || "")}" data-o="showTitle"></label>
+          <label for="s-na">Side A is called <input id="s-na" type="text" maxlength="40" placeholder="its colours or faction" value="${esc(S.nameA || "")}" data-o="nameA"></label>
+          <label for="s-ca2">Side A colours <select id="s-ca2" data-o="colA">${colourOptions(S.colA)}</select></label>
+          <label for="s-nb">Side B is called <input id="s-nb" type="text" maxlength="40" placeholder="its colours or faction" value="${esc(S.nameB || "")}" data-o="nameB"></label>
+          <label for="s-cb2">Side B colours <select id="s-cb2" data-o="colB">${colourOptions(S.colB)}</select></label>
+        </fieldset>
         <div class="go"><button class="run" id="simrun" type="button">Run simulation</button><p>${MAPPED() ? DEPLOYS[S.battlefield] + "; starting distance is ignored." : "Sides deploy in lines facing each other at the starting distance."}</p></div>
+        <div class="go play"><button class="run alt" id="simplay" type="button">Play it yourself</button>
+          <label for="s-pside">as <select id="s-pside" data-o="playSide"><option value="0"${S.playSide !== "1" ? " selected" : ""}>Side A</option><option value="1"${S.playSide === "1" ? " selected" : ""}>Side B</option></select></label>
+          <label for="s-pctl">commanding <select id="s-pctl" data-o="playCtl"><option value="models"${S.playCtl !== "squads" ? " selected" : ""}>every model, turn by turn</option><option value="squads"${S.playCtl === "squads" ? " selected" : ""}>units, by standing orders</option></select></label>
+          <p>One battle, fought by you against the AI. It can be changed unit by unit as you go.</p></div>
       </form>
       <div class="sgrid">${side(0)}${side(1)}</div>
       <div id="simout">${last ? results(last) : ""}</div>
       <details class="more"><summary>How the simulator works</summary><p>${esc(HOW)}</p></details>`;
+    if (game) { endGame(); if (vtt) { vtt.stop(); vtt = null; } }   // the page was redrawn under a battle being played
     wire();
     if (last) setupReplay();
   }
   const HOW = `Every run plays a full GURPS 4e fight on a hex map, one yard per hex, second by second. Models act in Basic Speed order and an AI picks each one's maneuver: Aim, Attack, Move and Attack, All-Out Attack (Determined or Double) when nothing can hurt it, All-Out Defense when it can't hurt its foe, Feint and Deceptive Attack against strong defences, Rapid Strike, Ready to reload or clear a jam, Change Posture, and Concentrate for psychic powers. Facing matters: attacks from a flank cost the defender 2, from behind it gets no defence, so surrounding a foe pays. Elite attackers (best combat skill 17+, IQ 8+) aim at the location that does most harm (vitals, skull, eye lens at −10, neck, limbs, or a chink in the armour at −8 or −10 that halves its DR); everyone else hits random locations, with 1 in 6 face hits striking an eye lens. The setting can let everyone aim, as RAW allows, or no one. Ranged fire uses range penalties, per-round rolls with climbing Recoil for automatic fire, and can malfunction or overheat; explosions splash neighbours, fragments fly, flamers hit the whole cone. Defenders Dodge, Parry or Block with retreat and shield DB, and shooters Dodge and Drop. Cover hides legs and groin and costs attackers 2; prone models are harder to shoot but fight badly. Armour divisors, Weak Points, regenerating shields, wounding, Injury Tolerance, Damage Reduction, follow-ups, crippling, knockback, bleeding, shock, stun, consciousness and death rolls, Reanimation Protocols, morale and Perils of the Warp all apply, with either standard HP or the Revised Fractional Health wound system. The full rule list with page references is docs/simulator.md. A charging mob that can barely hurt its foe grabs it, drags it down and pins it (B370), then the rest lay in with All-Out Attack (Strong) and Mighty Blows (1 FP). Not modelled: vehicles and stealth.`;
 
+  // the table a battle is shown on: the map, its tools, the side panes and the time controls. play adds the Orders
+  // pane a battle being played asks its questions in (page/45-play.js)
+  function tableHtml(maxT, play) {
+    return `<div class="vtt" id="vtt">
+        <div class="vtt-main">
+          <canvas class="vtt-c" id="vtt-c" aria-label="Battle map. Drag to pan, scroll or pinch to zoom, click a token to see its sheet."></canvas>
+          <div class="vtt-3d" id="vtt-3d" hidden aria-label="Battle in 3D. Drag to orbit, right-drag or Shift-drag to pan, scroll or pinch to zoom, click a figure to see its sheet."></div>
+          <div class="vtt-hud"><span class="hud-a" id="hudA"></span><span class="clock" id="rlab"></span><span class="hud-b" id="hudB"></span></div>
+          <div class="vtt-tools" role="toolbar" aria-label="Map tools">
+            <button type="button" data-tool="show" aria-pressed="false" title="Broadcast view: the 3D battle full screen with a scoreboard, for recording (Esc leaves it)">Broadcast</button>
+            <button type="button" data-tool="3d" aria-pressed="false" title="Show the battle in 3D (loads three.js)">3D</button>
+            <button type="button" data-tool="walls" aria-pressed="false" title="Lower the walls to see into the rooms" hidden>Low walls</button>
+            <button type="button" data-tool="cine" aria-pressed="false" title="Action camera: everyone moves, then the camera cuts to each attack in turn" hidden>Action cam</button>
+            <button type="button" data-tool="follow" aria-pressed="false" title="Keep the camera on the selected model" hidden>Follow</button>
+            <button type="button" data-tool="snd" aria-pressed="false" title="Play the weapons' sounds (needs a local sound pack: tools/dow/README.md)" hidden>Sound</button>
+            <button type="button" data-tool="fit" title="Fit the battle to the view">Fit</button>
+            <button type="button" data-tool="grid" aria-pressed="true" title="Show the hex grid">Grid</button>
+            <button type="button" data-tool="trails" aria-pressed="true" title="Show each model's path this second">Paths</button>
+            <button type="button" data-tool="measure" aria-pressed="false" title="Drag between two hexes to measure range">Measure</button>
+          </div>
+          <div class="vtt-tip" id="vtt-tip" hidden></div>
+        </div>
+        <aside class="vtt-side">
+          <div class="vtt-tabs" role="tablist">${play ? `<button type="button" role="tab" data-tab="orders" aria-selected="false">Orders</button>` : ""}<button type="button" role="tab" data-tab="init" aria-selected="true">Initiative</button><button type="button" role="tab" data-tab="chat" aria-selected="false">Log</button><button type="button" role="tab" data-tab="sheet" aria-selected="false">Sheet</button></div>
+          ${play ? `<div class="vtt-pane" id="vtt-orders" hidden></div>` : ""}
+          <div class="vtt-pane" id="vtt-init"></div>
+          <div class="vtt-pane" id="vtt-chat" hidden></div>
+          <div class="vtt-pane" id="vtt-sheet" hidden><p class="vtt-empty">Click a token on the map, or a name in the initiative list.</p></div>
+        </aside>
+        <div class="vtt-time">
+          <button type="button" id="rback" title="Back one second" aria-label="Back one second">◂◂</button>
+          <button type="button" id="rplay" class="primary" aria-label="Play">Play</button>
+          <button type="button" id="rstep" title="Forward one second" aria-label="Forward one second">▸▸</button>
+          <div class="vtt-track"><div class="vtt-ticks" id="vtt-ticks"></div><input id="rturn" type="range" min="0" max="${maxT}" value="0" aria-label="Second"></div>
+          <label for="rspeed">Speed <select id="rspeed"><option value="1400">½×</option><option value="800" selected>1×</option><option value="420">2×</option><option value="200">4×</option></select></label>
+        </div>
+      </div>`;
+  }
   function results(r) {
     const pct = x => Math.round(100 * x / r.runs);
     const sideUnits = si => r.units.filter(u => u.side === si);
@@ -221,38 +271,7 @@
         <figure class="rcard"><figcaption>What was left of each unit (average)</figcaption>${casualties(r)}</figure>
       </div>
       <h2>One battle on the table</h2>
-      <div class="vtt" id="vtt">
-        <div class="vtt-main">
-          <canvas class="vtt-c" id="vtt-c" aria-label="Battle map. Drag to pan, scroll or pinch to zoom, click a token to see its sheet."></canvas>
-          <div class="vtt-3d" id="vtt-3d" hidden aria-label="Battle in 3D. Drag to orbit, right-drag or Shift-drag to pan, scroll or pinch to zoom, click a figure to see its sheet."></div>
-          <div class="vtt-hud"><span class="hud-a" id="hudA"></span><span class="clock" id="rlab"></span><span class="hud-b" id="hudB"></span></div>
-          <div class="vtt-tools" role="toolbar" aria-label="Map tools">
-            <button type="button" data-tool="3d" aria-pressed="false" title="Show the battle in 3D (loads three.js)">3D</button>
-            <button type="button" data-tool="walls" aria-pressed="false" title="Lower the walls to see into the rooms" hidden>Low walls</button>
-            <button type="button" data-tool="cine" aria-pressed="false" title="Action camera: everyone moves, then the camera cuts to each attack in turn" hidden>Action cam</button>
-            <button type="button" data-tool="follow" aria-pressed="false" title="Keep the camera on the selected model" hidden>Follow</button>
-            <button type="button" data-tool="snd" aria-pressed="false" title="Play the weapons' sounds (needs a local sound pack: tools/dow/README.md)" hidden>Sound</button>
-            <button type="button" data-tool="fit" title="Fit the battle to the view">Fit</button>
-            <button type="button" data-tool="grid" aria-pressed="true" title="Show the hex grid">Grid</button>
-            <button type="button" data-tool="trails" aria-pressed="true" title="Show each model's path this second">Paths</button>
-            <button type="button" data-tool="measure" aria-pressed="false" title="Drag between two hexes to measure range">Measure</button>
-          </div>
-          <div class="vtt-tip" id="vtt-tip" hidden></div>
-        </div>
-        <aside class="vtt-side">
-          <div class="vtt-tabs" role="tablist"><button type="button" role="tab" data-tab="init" aria-selected="true">Initiative</button><button type="button" role="tab" data-tab="chat" aria-selected="false">Log</button><button type="button" role="tab" data-tab="sheet" aria-selected="false">Sheet</button></div>
-          <div class="vtt-pane" id="vtt-init"></div>
-          <div class="vtt-pane" id="vtt-chat" hidden></div>
-          <div class="vtt-pane" id="vtt-sheet" hidden><p class="vtt-empty">Click a token on the map, or a name in the initiative list.</p></div>
-        </aside>
-        <div class="vtt-time">
-          <button type="button" id="rback" title="Back one second" aria-label="Back one second">◂◂</button>
-          <button type="button" id="rplay" class="primary" aria-label="Play">Play</button>
-          <button type="button" id="rstep" title="Forward one second" aria-label="Forward one second">▸▸</button>
-          <div class="vtt-track"><div class="vtt-ticks" id="vtt-ticks"></div><input id="rturn" type="range" min="0" max="${Math.max(0, r.sample.frames.length - 1)}" value="0" aria-label="Second"></div>
-          <label for="rspeed">Speed <select id="rspeed"><option value="1400">½×</option><option value="800" selected>1×</option><option value="420">2×</option><option value="200">4×</option></select></label>
-        </div>
-      </div>
+      ${tableHtml(Math.max(0, r.sample.frames.length - 1), false)}
       <p class="rleg">Drag to pan, scroll or pinch to zoom, click a token for its sheet. Space plays and pauses; the arrow keys step. Tokens: rim colour is the side, bar is health (blue above it is a shield). Badges: <b>S</b> stunned, <b>P</b> prone, <b>K</b> kneeling, <b>G</b> held, <b>H</b> holding, <b>D</b> All-Out Defense, <b>A</b> All-Out Attack, <b>W</b> waiting; a dotted line shows what a model is aiming at. Floating numbers are injury; grey is a hit armour stopped.</p>
       <details class="more"><summary>Blow-by-blow of the whole battle</summary><pre class="slog">${esc(r.sample.log.join("\n"))}</pre></details>`;
   }

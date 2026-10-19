@@ -377,7 +377,12 @@ def combat_flags(t, flags):
         flags["reanimation"] = 1
         flags["noMorale"] = 1       # soulless machines: Necrons do not break
     elif n.startswith("Synapse Discipline"):
-        flags["fearless"] = flags.get("fearless", 0) + 5   # Fearlessness 5 while linked; the sim assumes synapse is near
+        # the sim assumes synapse is near, and the link gives what the trait's notes say it does: no fear (Fearlessness
+        # 5, and no Fright Checks under fire or morale breaks: "utterly fearless... to the last organism") and no pain
+        # (High Pain Threshold: no shock, +3 against knockdown). User report: Hormagaunts froze under fire.
+        flags["fearless"] = flags.get("fearless", 0) + 5
+        flags["unfazeable"] = 1
+        flags["hpt"] = 1
     if n.startswith("Necrodermis Machine-Body") or n.startswith("Machine Body") or n.startswith("Machine Mind") or n == "Machine":
         flags["machine"] = 1        # Machines have no FP to spend on extra effort (B16, B263; user direction for Necrons)
     if ("metabolic hazards" in low or "toxins" in low or "poison" in low) and (

@@ -25,7 +25,7 @@
       [/Aeldari/, [0x2c6e6a, 0xe8d8b0, 0xe8d8c8, 0xd8c9a8, 0x7affea]], [/T'au/, [0xc9b98c, 0x3a3d42, 0x6a8aa8, 0x8a8f96, 0x7ad8ff]],
       [/Kroot|Vespid/, [0x7a6a4a, 0x3a5a3a, 0x9a8a5a, 0x77736a, 0xffd03a]],
     ];
-    const scheme = r => (SCHEME.find(([re]) => re.test(r.faction || "") || re.test(r.template || "")) || [0, [0x6b6f76, 0x3a3d42, 0xd9a982, 0x8a8f96, 0x000000]])[1];
+    const scheme = r => (o.colours && o.colours[r.side || 0]) || (SCHEME.find(([re]) => re.test(r.faction || "") || re.test(r.template || "")) || [0, [0x6b6f76, 0x3a3d42, 0xd9a982, 0x8a8f96, 0x000000]])[1];
     // what kind of miniature each model is
     function archOf(r) {
       const f = (r.faction || "") + " " + (r.template || ""), kit = r.kit || "";

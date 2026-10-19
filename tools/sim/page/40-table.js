@@ -5,13 +5,16 @@
     vtt = makeTable(last.sample, cv);
   }
 
-  function makeTable(sample, cv) {
+  // live: set when the battle is being played and is still growing (page/45-play.js); it carries the hooks the
+  // orders panel needs: onMap(model index or -1, hex or null) for a click on the map
+  function makeTable(sample, cv, live) {
     const fr = sample.frames, fx = sample.fx || [], log = sample.log, T = sample.terrain, ros = sample.roster || [];
     const P = (q, r) => SIM.px({ q, r });
     const g = cv.getContext("2d");
     const reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
     const st = { t: 0, p: 1, playing: false, grid: true, trails: true, measure: false, sel: -1, hover: -1, meas: null, view3d: false, lowWalls: false };
     let v3 = null;   // the 3D view, made the first time it's switched on
+    let bc = null;   // the broadcast view
     // ---- the map, painted once
     const pts = [];
     fr.forEach(f => f.forEach(x => { if (x) pts.push(P(x[0], x[1])); }));
@@ -20,7 +23,8 @@
     const ZM = new Map(T && T.elev ? T.elev : []), RG = sample.ridge;
     const zOf = (q, r) => { if (RG) { const x = RG.dir * (q - RG.qc); return x <= 0 ? RG.H : x >= RG.S ? 0 : RG.H * (1 - x / RG.S); } return ZM.get(q + "," + r) || 0; };
     if (T) for (const k of T.floor) { const [q, r] = k.split(",").map(Number); pts.push(P(q, r)); }
-    let x0 = Math.min(...pts.map(p => p[0])) - 4, x1 = Math.max(...pts.map(p => p[0])) + 4, y0 = Math.min(...pts.map(p => p[1])) - 4, y1 = Math.max(...pts.map(p => p[1])) + 4;
+    const PB = live && !T ? 18 : 4;   // a battle still to be fought: room around the deployment for it to spread into
+    let x0 = Math.min(...pts.map(p => p[0])) - PB, x1 = Math.max(...pts.map(p => p[0])) + PB, y0 = Math.min(...pts.map(p => p[1])) - PB, y1 = Math.max(...pts.map(p => p[1])) + PB;
     if (!T) { const padX = Math.max(0, 24 - (x1 - x0)) / 2, padY = Math.max(0, 16 - (y1 - y0)) / 2; x0 -= padX; x1 += padX; y0 -= padY; y1 += padY; }
     const RES = Math.max(8, Math.min(24, Math.floor(4200 / Math.max(x1 - x0, y1 - y0))));
     const bg = document.createElement("canvas");
@@ -117,7 +121,8 @@
     const fit = () => frame(x0, y0, x1, y1);
     const resize = () => {
       const r = cv.getBoundingClientRect(); dpr = Math.min(2, window.devicePixelRatio || 1);
-      const w = Math.max(200, Math.round(r.width)), h = Math.round(Math.min(640, Math.max(280, w * 0.62)));
+      const main = cv.closest(".vtt-main"), full = main && main.classList.contains("bc-on");   // the broadcast view fills the screen
+      const w = Math.max(200, Math.round(full ? main.clientWidth : r.width)), h = full ? Math.max(200, main.clientHeight) : Math.round(Math.min(640, Math.max(280, w * 0.62)));
       cv.style.height = h + "px"; cv.width = w * dpr; cv.height = h * dpr;
       const side = cv.closest(".vtt").querySelector(".vtt-side"); if (side) side.style.height = window.innerWidth > 820 ? h + "px" : "";
       const firstFit = !W; W = w; H = h; if (firstFit) frame(...act);
@@ -154,9 +159,13 @@
     };
     // the fallen: where and when each model went down, from the casualty events
     const fallen = [];
-    fx.forEach((es, k) => es.forEach(e => { if (e[0] === "d") fallen.push({ t: k + 1, q: e[1], r: e[2], side: e[3], dead: e[4] }); }));
     const ticks = document.getElementById("vtt-ticks");
-    if (ticks) ticks.innerHTML = fallen.map(f => `<i class="s${f.side ? "b" : "a"}${f.dead ? " dead" : ""}" style="left:${(100 * f.t / Math.max(1, fr.length - 1)).toFixed(2)}%"></i>`).join("");
+    const scanFallen = () => {
+      fallen.length = 0;
+      fx.forEach((es, k) => es.forEach(e => { if (e[0] === "d") fallen.push({ t: k + 1, q: e[1], r: e[2], side: e[3], dead: e[4] }); }));
+      if (ticks) ticks.innerHTML = fallen.map(f => `<i class="s${f.side ? "b" : "a"}${f.dead ? " dead" : ""}" style="left:${(100 * f.t / Math.max(1, fr.length - 1)).toFixed(2)}%"></i>`).join("");
+    };
+    scanFallen();
     const names = ros.map(r => r.id), sideOf = i => ros[i] ? ros[i].side : 0;
     const order = ros.map((r, i) => i).sort((a, c) => (ros[c].speed - ros[a].speed) || a - c);
 
@@ -190,6 +199,7 @@
       g.restore();
     }
     function draw() {
+      if (bc) bc.update(st.t, st.p);
       if (st.view3d && v3) { v3.update(st.t, st.p, st); return; }
       const t = st.t, p = st.p;
       g.setTransform(dpr, 0, 0, dpr, 0, 0); g.fillStyle = T ? MAP.wall : MAP.earth; g.fillRect(0, 0, W, H);
@@ -285,6 +295,12 @@
           const yy = cy - 1 - lift - n * .55; g.strokeText(txt, cx + .6, yy); g.fillStyle = col; g.fillText(txt, cx + .6, yy); g.globalAlpha = 1;
         }
       }
+      // a battle being played: whose turn it is, the target picked, where a move would end, how far it can go
+      if (st.mark) {
+        const mk = st.mark;
+        if (mk.range) { const [cx, cy] = P(mk.range[0], mk.range[1]); g.strokeStyle = "rgba(255,255,255,.3)"; g.lineWidth = .08; g.setLineDash([.4, .3]); g.beginPath(); g.arc(cx, cy, mk.range[2] * SQ3 + .6, 0, 7); g.stroke(); g.setLineDash([]); }
+        for (const [q, r, col] of mk.rings || []) { const [cx, cy] = P(q, r); g.strokeStyle = col; g.lineWidth = .16; hexPath(g, cx, cy, 1.08); g.stroke(); }
+      }
       // the measuring tape
       if (st.meas) {
         const [a, c] = st.meas, [ax, ay] = P(a.q, a.r), [cx, cy] = P(c.q, c.r), d = hexDistUI(a, c);
@@ -305,11 +321,14 @@
       const t = st.t, f = fr[t] || [];
       const up = s => f.filter(x => x && x[2] === s && x[3]).length, tot = s => ros.filter(r => r.side === s).length;
       hudA.textContent = `A ${up(0)}/${tot(0)}`; hudB.textContent = `B ${up(1)}/${tot(1)}`;
-      clock.textContent = t === 0 ? "Deployment" : t === fr.length - 1 ? `End · ${t} s` : `${t} s`;
+      // (a played battle's frames are beats within its seconds, so the clock comes from the beat's own second)
+      const over = sample.over !== false, BT = live && sample.beatTurn;
+      clock.textContent = t === 0 ? "Deployment" : over && t === fr.length - 1 ? `End · ${sample.turns ?? t} s` : BT ? `Second ${BT[t]}` : `${t} s`;
       initEl.innerHTML = `<ol class="vtt-init">${order.map(i => { const x = f[i], r = ros[i], hp = x ? x[5] : 0;
         return `<li data-i="${i}" class="s${r.side ? "b" : "a"}${x ? "" : " gone"}${i === st.sel ? " sel" : ""}"><span class="spd">${r.speed.toFixed(2)}</span><span class="nm">${esc(r.id)}</span><span class="hb"><i style="width:${Math.round(100 * Math.max(0, hp))}%"></i></span><span class="st">${x ? COND.filter(([bit]) => x[7] & bit).map(c => c[1]).join(", ") : esc(fate(i, t))}</span></li>`; }).join("")}</ol>`;
-      const a = log.findIndex(l => l === `— Turn ${t} —`), b2 = log.findIndex(l => l === `— Turn ${t + 1} —`);
-      const lines = t === 0 ? ["The sides deploy."] : a < 0 ? log.slice(-3) : log.slice(a + 1, b2 < 0 ? undefined : b2);
+      const LA = sample.logAt, a = log.findIndex(l => l === `— Turn ${t} —`), b2 = log.findIndex(l => l === `— Turn ${t + 1} —`);
+      const lines = t === 0 ? ["The sides deploy."] : LA ? log.slice(LA[t - 1], over && t === fr.length - 1 ? undefined : LA[t]).filter(l => !/^— Turn \d+ —$/.test(l))
+        : a < 0 ? log.slice(-3) : log.slice(a + 1, b2 < 0 ? undefined : b2);
       chatEl.innerHTML = lines.map(l => { const sub = l.startsWith("  "); let h = esc(l.trim()); if (idRe) h = h.replace(idRe, m2 => `<b class="s${idSide.get(m2) ? "b" : "a"}">${m2}</b>`); return `<p class="${sub ? "sub" : "act"}">${h}</p>`; }).join("");
       if (st.sel >= 0) {
         const i = st.sel, r = ros[i], x = f[i];
@@ -323,22 +342,29 @@
       }
     }
     const tabs = [...document.querySelectorAll(".vtt-tabs [data-tab]")];
-    const showTab = name => { tabs.forEach(b2 => b2.setAttribute("aria-selected", b2.dataset.tab === name)); [initEl, chatEl, sheetEl].forEach(el => el.hidden = el.id !== "vtt-" + name); };
+    const ordEl = document.getElementById("vtt-orders");
+    const showTab = name => { tabs.forEach(b2 => b2.setAttribute("aria-selected", b2.dataset.tab === name)); [initEl, chatEl, sheetEl, ordEl].forEach(el => { if (el) el.hidden = el.id !== "vtt-" + name; }); };
     tabs.forEach(b2 => b2.onclick = () => showTab(b2.dataset.tab));
     initEl.onclick = e => { const li = e.target.closest("li[data-i]"); if (!li) return; st.sel = +li.dataset.i; panels(); draw(); showTab("sheet"); };
     // ---- time
     const slider = document.getElementById("rturn"), play = document.getElementById("rplay"), speed = document.getElementById("rspeed");
     let raf = 0, t0 = 0;
-    const setT = (t, animate) => { st.t = Math.max(0, Math.min(fr.length - 1, t)); slider.value = st.t; st.p = animate && !reduce ? 0 : 1; t0 = performance.now(); panels(); if (animate && !reduce) loop(); else draw(); };
+    // (a played battle: reaching the newest beat is when the orders panel may ask its question)
+    const atEnd = () => { if (st.t >= fr.length - 1 && st.p >= 1 && st.onEnd) { const f = st.onEnd; st.onEnd = null; f(); } };
+    // a beat in which nothing was fired or moved (a model aimed, or readied a weapon) goes by quickly
+    const quiet = t => live && t > 0 && !(fx[t - 1] || []).length && !(fr[t] || []).some(x => x && x[6] && x[6].length) ? .3 : 1;
+    const setT = (t, animate) => { st.t = Math.max(0, Math.min(fr.length - 1, t)); slider.value = st.t; st.p = animate && !reduce ? 0 : 1; t0 = performance.now(); panels(); if (animate && !reduce) loop(); else { draw(); atEnd(); } };
     function loop() {
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(now => {
         const dur = +speed.value;
         const len = st.view3d && st.cine && v3 ? v3.secLen(st.t) : 1;   // the action camera stretches a busy second
-        st.p = Math.min(1, (now - t0) / (dur * 0.85 * len));
+        st.p = Math.min(1, (now - t0) / (dur * 0.85 * len * quiet(st.t)));
         draw();
         if (st.p < 1) loop();
-        else if (st.playing) { if (st.t >= fr.length - 1) stopPlay(); else setTimeout(() => { if (st.playing) setT(st.t + 1, true); }, dur * 0.15); }
+        // (under the action camera a second of nothing but movement runs straight into the next: no halt mid-stride)
+        else if (st.playing) { if (st.t >= fr.length - 1) { stopPlay(); atEnd(); } else setTimeout(() => { if (st.playing) setT(st.t + 1, true); }, st.view3d && st.cine && v3 && v3.calm(st.t) ? 0 : dur * 0.15 * quiet(st.t)); }
+        else atEnd();
       });
     }
     const stopPlay = () => { st.playing = false; play.textContent = "Play"; play.setAttribute("aria-label", "Play"); };
@@ -376,8 +402,9 @@
       const b3 = toolBtn("3d"); b3.textContent = "Loading…"; b3.disabled = true;
       loadThree().then(THREE => {
         if (!v3) {
-          v3 = makeView3D(THREE, { host: host3, fr, fx, T, ros, P, posAt, fallen, reduce, zOf,
-            onPick: i => { st.sel = i; panels(); draw(); if (i >= 0) showTab("sheet"); }, onHover: tip3,
+          v3 = makeView3D(THREE, { host: host3, fr, fx, T, ros, P, posAt, fallen, reduce, zOf, live: !!live, colours: [colourScheme(S.colA), colourScheme(S.colB)], colourNames: [S.colA || "", S.colB || ""],
+            onPick: i => { if (live && live.onMap(i, null)) return; st.sel = i; panels(); draw(); if (i >= 0) showTab("sheet"); }, onHover: tip3,
+            onGround: k => { if (!live) return false; const [q, r] = k.split(",").map(Number); return live.onMap(-1, { q, r }); },
             onCineOff: () => { st.cine = false; toolBtn("cine").setAttribute("aria-pressed", "false"); } });
           host3.hidden = false; v3.resize(W, H); v3.fit(false);
         }
@@ -393,7 +420,13 @@
     };
     toolBtn("walls").onclick = e => { st.lowWalls = !st.lowWalls; e.currentTarget.setAttribute("aria-pressed", st.lowWalls); draw(); };
     toolBtn("follow").onclick = e => { st.follow = !st.follow; e.currentTarget.setAttribute("aria-pressed", st.follow); draw(); };
-    toolBtn("cine").onclick = e => { st.cine = !st.cine; e.currentTarget.setAttribute("aria-pressed", st.cine); if (!st.cine && v3) v3.cineOff(); draw(); };
+    const setCine = on2 => { st.cine = !!on2; toolBtn("cine").setAttribute("aria-pressed", st.cine); if (!st.cine && v3) v3.cineOff(); draw(); };
+    toolBtn("cine").onclick = () => setCine(!st.cine);
+    // the broadcast view (page/42-broadcast.js): it needs the 3D view up, which may still have to load
+    const ensure3d = () => new Promise((ok, no) => { if (st.view3d) return ok(); toolBtn("3d").click(); let n = 0; const w = () => st.view3d ? ok() : ++n > 300 ? no(new Error("no 3D view")) : setTimeout(w, 100); w(); });
+    bc = makeBroadcast({ main: cv.closest(".vtt-main"), sample, fr, fx, ros, st, live: !!live, toolBtn, resize: () => resize(), ensure3d, setCine, portrait: i => v3 ? v3.portrait(i) : null,
+      setT: (t, a) => setT(t, a), startPlay: () => startPlay(), stopPlay: () => stopPlay(), redraw: () => { panels(); draw(); } });
+    toolBtn("show").onclick = () => bc.enter();
     toolBtn("grid").onclick = e => { st.grid = !st.grid; e.currentTarget.setAttribute("aria-pressed", st.grid); draw(); };
     toolBtn("trails").onclick = e => { st.trails = !st.trails; e.currentTarget.setAttribute("aria-pressed", st.trails); draw(); };
     toolBtn("measure").onclick = e => { st.measure = !st.measure; e.currentTarget.setAttribute("aria-pressed", st.measure); if (!st.measure) st.meas = null; cv.classList.toggle("measuring", st.measure); draw(); };
@@ -426,7 +459,10 @@
     const end = e => {
       pointers.delete(e.pointerId);
       if (pointers.size < 2) pinch = null;
-      if (drag && !drag.measure && !drag.moved) { const [sx, sy] = local(e); const i = pick(sx, sy); st.sel = i; panels(); draw(); if (i >= 0) showTab("sheet"); }
+      if (drag && !drag.measure && !drag.moved) {
+        const [sx, sy] = local(e); const i = pick(sx, sy), [wx, wy] = toWorld(sx, sy);
+        if (!(live && live.onMap(i, toHex(wx, wy)))) { st.sel = i; panels(); draw(); if (i >= 0) showTab("sheet"); }
+      }
       drag = null;
     };
     cv.addEventListener("pointerup", end); cv.addEventListener("pointercancel", end);
@@ -434,6 +470,27 @@
     cv.addEventListener("wheel", e => { e.preventDefault(); const [sx, sy] = local(e), [wx, wy] = toWorld(sx, sy); cam.s = Math.max(2, Math.min(90, cam.s * Math.exp(-e.deltaY * 0.0015))); cam.x = wx - sx / cam.s; cam.y = wy - sy / cam.s; draw(); }, { passive: false });
     const ro = new ResizeObserver(() => resize()); ro.observe(cv);
     resize(); panels(); draw();
-    return { stop() { stopPlay(); cancelAnimationFrame(raf); ro.disconnect(); root.removeEventListener("keydown", onKey); if (v3) { v3.dispose(); v3 = null; } } };
+    return { stop() { stopPlay(); cancelAnimationFrame(raf); ro.disconnect(); root.removeEventListener("keydown", onKey); if (bc) bc.dispose(); if (v3) { v3.dispose(); v3 = null; } },
+      // ---- for a battle being played (page/45-play.js)
+      st, showTab, redraw() { panels(); draw(); },
+      // the battle has gone on: take in what is new
+      grow(view) {
+        if (view) { (view.roster || []).forEach((r, i) => { if (ros[i]) Object.assign(ros[i], r); }); for (const k of ["over", "winner", "timeout", "turns", "units"]) sample[k] = view[k]; }
+        scanFallen(); slider.max = Math.max(0, fr.length - 1); if (v3) v3.grow();
+      },
+      // play on from where the view stands to the newest beat, then call back
+      catchUp(cb, from) {
+        st.onEnd = cb || null;
+        if (from != null && st.t < from) { st.t = Math.min(from, fr.length - 1); st.p = 1; }   // it was looking back: start from where the battle had got to
+        if (st.t >= fr.length - 1 || reduce) { setT(fr.length - 1, false); return; }
+        st.playing = true; play.textContent = "Pause"; play.setAttribute("aria-label", "Pause"); setT(st.t + 1, true);
+      },
+      // bring a model into view if it isn't
+      focus(i) {
+        const x = (fr[st.t] || [])[i]; if (!x) return;
+        if (st.view3d && v3) { v3.look(i); return; }
+        const [wx, wy] = P(x[0], x[1]), m = 3;
+        if (wx < cam.x + m || wx > cam.x + W / cam.s - m || wy < cam.y + m || wy > cam.y + H / cam.s - m) { cam.x = wx - W / cam.s / 2; cam.y = wy - H / cam.s / 2; draw(); }
+      } };
   }
 

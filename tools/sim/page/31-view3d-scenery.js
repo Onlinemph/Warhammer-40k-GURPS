@@ -37,7 +37,7 @@
 
       // a world object: its meshes, each with the game's texture
       const aniso = Math.min(8, renderer.capabilities.getMaxAnisotropy()), loaded = new Map();
-      const names = role => Object.keys(S.props).filter(n => S.props[n].role === role);
+      const names = role => Object.keys(S.props).filter(n => S.props[n].role === role || S.props[n].also === role);
       const propOf = (n, flat) => { if (!loaded.has(n)) loaded.set(n, (async () => {
         const p = S.props[n], bin = atob(p.glb), buf = new Uint8Array(bin.length);
         for (let i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i);
@@ -63,10 +63,19 @@
           const [q, r] = keyHex(k), [x, y] = P(q, r), opts = names("crate_" + kind), n = opts[Math.floor(hash(q, r) * opts.length) % opts.length], p = S.props[n];
           const s = Math.min(1.5 / Math.max(p.hi[0] - p.lo[0], p.hi[2] - p.lo[2]), (kind === "heavy" ? 1.45 : 1.1) / (p.hi[1] - p.lo[1]));
           put(n, [x, zOf(q, r) - p.lo[1] * s, y, hash(r, q) * 6.283, s]);
+          (decor.blockers ||= []).push({ x, y, rad: .8, top: zOf(q, r) + (p.hi[1] - p.lo[1]) * s });
         }
         for (const [n, list] of lists) await strew(n, list);
         if (gone) return;
         decor.crates.forEach(m => { m.visible = false; }); lists.clear(); redraw();
+      }
+      // a breached wall leaves the game's rubble where the built chunks lay (shown from the second it comes down)
+      const rub = names("rubble");
+      if (rub.length) for (const rb of rubble) {
+        const [q, r] = keyHex(rb.k), [x, y] = P(q, r), n = rub[Math.floor(hash(q, r) * rub.length) % rub.length], pr = await propOf(n); if (gone) return;
+        const s = 1.7 / Math.max(pr.p.hi[0] - pr.p.lo[0], pr.p.hi[2] - pr.p.lo[2], .01);
+        for (const c of rb.g.children) c.visible = false;
+        for (const [geo, mat] of pr.meshes) { const m = new THREE.Mesh(geo, mat); m.position.set(x, zOf(q, r) - pr.p.lo[1] * s, y); m.rotation.y = hash(r, q) * 6.283; m.scale.setScalar(s); m.castShadow = !big; m.receiveShadow = true; rb.g.add(m); }
       }
 
       if (!indoor) {
@@ -82,13 +91,56 @@
           }
         }
         const bigs = names("big");
-        if (bigs.length) for (let i = 0; i < Math.max(10, Math.min(48, span / 2)); i++) { const [x, y] = edge(R(), 1.5 + R() * R() * 22), n = pick(bigs); put(n, [x, T ? 0 : zXY(x, y), y, R() * 6.283, S.props[n].scale * (.8 + R() * .5)]); }
+        if (bigs.length) for (let i = 0; i < Math.max(10, Math.min(48, span / 2)); i++) {
+          const [x, y] = edge(R(), 1.5 + R() * R() * 22), n = pick(bigs), p = S.props[n], k = p.scale * (.8 + R() * .5); put(n, [x, T ? 0 : zXY(x, y), y, R() * 6.283, k]);
+          (decor.blockers ||= []).push({ x, y, rad: Math.hypot(p.hi[0] - p.lo[0], p.hi[2] - p.lo[2]) * k / 2, top: p.hi[1] * k });
+        }
         for (const [n, list] of lists) await strew(n, list);
         if (gone) return;
         redraw();
 
         // the skyline: ruined blocks around the field, a second row behind where the ground reaches that far
         const blds = names("building"), towers = [];
+        // Blocks nobody can enter (a city's standing blocks): solid masses of tall wall, which the page draws only as
+        // the ring of columns round each. A building of the game's stands on every rectangle of at least three by
+        // three hexes, stretched to fill it; the columns under it stay as a low plinth, so the hexes the fight is
+        // decided on are still marked. Buildings that are fought in (rooms, ruins) keep their walls.
+        if (blds.length && T && T.wallTop) {
+          const solid = new Set();   // "col,row" of every tall wall hex
+          for (const [k, top] of T.wallTop) if (top >= 5) { const [q, r] = keyHex(k); solid.add(q + "," + (r + (q - (q & 1)) / 2)); }
+          const rects = [];
+          for (let guard = 0; guard < 40; guard++) {
+            // the largest rectangle of solid cells left (few cells: the plain search will do)
+            let best = null; const cells = [...solid].map(s => s.split(",").map(Number));
+            const c0 = Math.min(...cells.map(c => c[0])), c1 = Math.max(...cells.map(c => c[0])), r0 = Math.min(...cells.map(c => c[1])), r1 = Math.max(...cells.map(c => c[1]));
+            if (!cells.length) break;
+            const hgt = new Map();
+            for (let r = r0; r <= r1; r++) for (let c = c0; c <= c1; c++) {
+              const h = solid.has(c + "," + r) ? (hgt.get(c + "," + (r - 1)) || 0) + 1 : 0; hgt.set(c + "," + r, h);
+              if (!h) continue;
+              let mh = h; for (let c2 = c; c2 >= c0 && (hgt.get(c2 + "," + r) || 0) > 0; c2--) { mh = Math.min(mh, hgt.get(c2 + "," + r)); const area = mh * (c - c2 + 1); if (mh >= 3 && c - c2 + 1 >= 3 && (!best || area > best.area)) best = { area, c0: c2, c1: c, r0: r - mh + 1, r1: r }; }
+            }
+            if (!best || best.area < 12) break;
+            rects.push(best); for (let c = best.c0; c <= best.c1; c++) for (let r = best.r0; r <= best.r1; r++) solid.delete(c + "," + r);
+          }
+          if (rects.length && !wallTopOf.size) wallList.forEach((k, i) => wallTopOf.set(k, wallH[i]));   // shots still stop at the height the block has
+          for (const rc of rects) {
+            const x0 = 1.5 * rc.c0 - 1, x1 = 1.5 * rc.c1 + 1, y0 = SQ3 * (rc.r0 - .5), y1 = SQ3 * (rc.r1 + 1), w = (x1 - x0) * .98, d = (y1 - y0) * .98;
+            // the building whose footprint is nearest this shape, turned a quarter if that fits better
+            let pk = null;
+            for (const n of blds) { const p = S.props[n], pw = p.hi[0] - p.lo[0], pd = p.hi[2] - p.lo[2]; for (const turn of [0, 1]) { const a = turn ? pd / pw : pw / pd, miss = Math.abs(Math.log(a / (w / d))) + hash(rc.c0 + blds.indexOf(n), rc.r0) * .25; if (!pk || miss < pk.miss) pk = { n, turn, miss }; } }
+            const pr = await propOf(pk.n); if (gone) return;
+            const p = pr.p, pw = p.hi[0] - p.lo[0], pd = p.hi[2] - p.lo[2], sx = (pk.turn ? d : w) / pw, sz = (pk.turn ? w : d) / pd, sy = Math.min((sx + sz) / 2, 16 / (p.hi[1] - p.lo[1]));
+            const g = new THREE.Group(), inner = new THREE.Group();
+            for (const [geo, mat] of pr.meshes) { const m = new THREE.Mesh(geo, mat); m.castShadow = !big; m.receiveShadow = true; inner.add(m); }
+            inner.scale.set(sx, sy, sz); inner.position.set(-(p.lo[0] + p.hi[0]) / 2 * sx, -p.lo[1] * sy, -(p.lo[2] + p.hi[2]) / 2 * sz); g.add(inner);
+            g.rotation.y = pk.turn ? Math.PI / 2 : 0; g.position.set((x0 + x1) / 2, 0, (y0 + y1) / 2); scene.add(g);
+            towers.push({ g, x: (x0 + x1) / 2, y: (y0 + y1) / 2, rad: Math.hypot(w, d) / 2, top: (p.hi[1] - p.lo[1]) * sy, block: true });
+            // its columns: a plinth
+            wallList.forEach((k, i) => { const [q, r] = keyHex(k), row = r + (q - (q & 1)) / 2; if (q >= rc.c0 && q <= rc.c1 && row >= rc.r0 && row <= rc.r1) wallH[i] = Math.min(wallH[i], .7); });
+          }
+          decor.blocks = rects.length;
+        }
         if (blds.length) {
           if (T) {   // a walled map stands on nothing: give the city something to stand on
             const gt = TEX.dirt.clone(); keep(gt); gt.repeat.set(span * 6 / 12, span * 6 / 12); gt.needsUpdate = true;

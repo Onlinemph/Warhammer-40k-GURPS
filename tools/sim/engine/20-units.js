@@ -379,7 +379,7 @@
       elite: Math.max(melee ? melee.level : 0, ranged ? ranged.level : 0, ...powers.map(p => p.level)) >= 17 && st.iq >= 8,
       // grappling (B370): DX, or Wrestling, Judo or Sumo Wrestling if better
       grapple: Math.max(st.dx, ...(st.skills || []).filter(s => /^(Wrestling|Judo|Sumo Wrestling)\b/.test(s.name) && s.level != null).map(s => s.level)),
-      ai: aiProfile(spec.template),
+      ai: { ...aiProfile(spec.template), ...(spec.ai || {}) },   // (a spec may override the profile's weights: tuning, user direction)
       stance: spec.stance || "shoot", ambush: !!spec.ambush, stats: st, flags, speed: st.speed, move: Math.max(1, Math.floor((st.move + arm.move) * [1, 0.8, 0.6, 0.4, 0.2][enc])),
       dodge: st.dodge - enc + arm.dodge, enc, HP: st.hp + arm.hp, HT: st.ht, will: st.will, sm: (st.sm || 0) + arm.sm,
       arm, nat, ranged, melee, parry: parryOf(melee), knife, knifeParry: knife ? parryOf(knife) : null, cs, judo: (st.skills || []).some(s => /^(Judo|Karate|Boxing)/.test(s.name) && s.level != null), bl: Math.round(liftST * liftST / 5),

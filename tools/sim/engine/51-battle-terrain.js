@@ -319,7 +319,8 @@
     const AWARE = opt.awareness ? opt.awareness === "limited" : !!terr;
     const seenAt = [new Map(), new Map()];
     const contact = [0, 0];   // the last second each side saw a foe
-    const spot = (side, f) => { contact[side] = turn; if (!seenAt[side].has(f) && f.u.ambush && !f.revealed) L(`  ${f.id} is spotted`); seenAt[side].set(f, turn); f.lastSeenH = f.h; };
+    const met = [false, false];   // whether it has seen one at all
+    const spot = (side, f) => { contact[side] = turn; met[side] = true; if (!seenAt[side].has(f) && f.u.ambush && !f.revealed) L(`  ${f.id} is spotted`); seenAt[side].set(f, turn); f.lastSeenH = f.h; };
     // ---- stealth (B222, B47): a model with something to hide behind (cover from the viewer, lying down, a chameleon
     // hide, or 20+ yards) and that hasn't given itself away this second or the last is spotted only by winning a
     // Quick Contest: the viewing side's best Perception (or Observation) plus Acute Vision, the range penalty and the
@@ -365,15 +366,19 @@
       if (!AWARE || !m.h) return;
       const loud = !!w && !w.thrown && w.usage !== "power" && !QUIET.test(w.name || "");
       m.loudAt = turn;
-      const side = 1 - m.u.side, fresh = !seenAt[side].has(m), unseen = (seenAt[side].get(m) ?? -99) < turn - 1;
+      // (a surprise needs a foe that has lost track of it: out of sight for five seconds or more, not one that ducked behind a
+      // wall for a second or two and came up again where it was seen; user report: Hormagaunts stood still under such fire)
+      const side = 1 - m.u.side, fresh = !seenAt[side].has(m), unseen = (seenAt[side].get(m) ?? -99) < turn - 5;
       m.revealed = true;
       if (!models.some(x => x.state === "ok" && x.h && x.u.side === side && (loud ? hexDist(x.h, m.h) <= 40 : los(x.h, m.h)))) return;
-      seenAt[side].set(m, turn); m.lastSeenH = m.h; contact[side] = turn;
+      // (and a side already in the fight isn't surprised again: the first shot from hiding is, the next man's isn't)
+      const calm = !met[side] || turn - contact[side] > 5;
+      seenAt[side].set(m, turn); m.lastSeenH = m.h; contact[side] = turn; met[side] = true;
       if (fresh && m.u.ambush && !m.u.sprung) {
         m.u.sprung = true;
         L(`  ${m.u.name} spring their ambush`);
         for (const x of models) if (x.state === "ok" && x.h && x.u.side === side && !check((x.u.stats.iq || 10) + (x.u.flags.cr ? 6 : 0)).ok) x.surprised = true;
-      } else if (unseen) {
+      } else if (unseen && calm) {
         // any attack out of hiding is a surprise attack (B393): foes who see it or are within 10 yards roll IQ
         // (+6 with Combat Reflexes) or lose their next turn
         L(`  ${m.id} strikes from hiding`); m.hiddenStrike = turn;
@@ -420,7 +425,8 @@
       if (!COVER_PEN[k] || !ELEV || !COVER_TOP[k] || !f || elevAt(f) <= elevAt(h)) return COVER_PEN[k];
       return Object.keys(HIDES[k]).some(l => hideOf(k, l, m, f, h) > 0) ? COVER_PEN[k] : 0;
     }
-    // drilled squads (TS p. 22-23, 37): a drilled shooter fires past a drilled friend at -2, not -4, and doesn't hit him by mistake
+    // drilled squads (TS p. 22-23, 37): a drilled shooter fires past a drilled friend at -2, not -4. (It used to never
+    // hit him by mistake either, which left friendly fire to the few undrilled factions; user direction: anyone can.)
     const drilled = x => !!(x && x.u.ai.drilled);
     const linePen = (m, inter) => inter.reduce((a, x) => a + (drilled(m) && x.u.side === m.u.side && drilled(x) ? 2 : 4), 0);
 
@@ -462,7 +468,7 @@
         const ms = models.filter(x => x.u === u && x.state === "ok" && x.h && !u.routed);
         // peeling (TS p. 22-23): cautious line troops outgunned by what they can see fall back by pairs out of its
         // sight and hold there (shooting stance), covering each other
-        if (!u.peel && u.ai.caution >= 1.1 && !((u.ai.zeal || 0) > 0) && u.ranged && ms.length >= 2 && turn > 3) {
+        if (!u.peel && u.side !== HUMAN && u.ai.caution >= 1.1 && !((u.ai.zeal || 0) > 0) && u.ranged && ms.length >= 2 && turn > 3) {
           const ours = ms.reduce((a, x) => a + threatOf(x), 0);
           const seen = models.filter(f => f.u.side !== u.side && f.state === "ok" && f.h && ms.some(x => los(x.h, f.h)));
           const theirs = seen.reduce((a, f) => a + threatOf(f), 0);
@@ -489,7 +495,7 @@
         const r = fright(m.u, -e.horror + ledBonus(m), Infinity);
         if (!r.ok) { frightTable(m, -r.margin, `${e.horrorWhy}, -${e.horror}`); if (m.stunned || m.state !== "ok" || m.u.routed) return true; }
       }
-      if (covered && !m.u.flags.cr && !check(m.u.will - 2).ok) m.headsDown = true;
+      if (covered && !m.u.flags.cr && !UP(m.u) && !check(m.u.will - 2).ok) m.headsDown = true;
       return false;
     }
     // Leadership (B204): a leader who spends its turn giving orders gives everyone in its squad who can hear it +1
@@ -527,7 +533,7 @@
       if (!v) return;
       if (v.h && (hexDist(c.h, v.h) > 20 || !los(c.h, v.h))) return;
       L(`${c.id} executes ${v.id} for cowardice`);
-      v.state = "dead"; if (v.h) { FX(["d", v.h.q, v.h.r, v.u.side, 1]); place(v, null); }
+      v.state = "dead"; if (v.h) { FX(["d", v.h.q, v.h.r, v.u.side, 1, v.ix]); place(v, null); }
       g.executed++; g.execAt = turn;
       const it = skillOf(c.u, /^Intimidation/), w = Math.max(...g.models.filter(x => active(x) && x !== c).map(x => x.u.will), 0);
       if (contest(Math.max(it, c.u.will) + 3 + (c.u.flags.callous ? 1 : 0), w)) {
@@ -550,7 +556,32 @@
       else if (r <= 15) { spendFP(m, d6()); stun(d6(), "willmod", "loses fatigue and freezes"); }
       else if (r === 16) stun(d6(), "willmod");
       else if (r <= 20 || r >= 22) { incapacitate(m, `faints or collapses (${why}, Fright Check Table ${r})`); }
-      else { m.state = "routed"; place(m, null); L(`  ${m.id} panics and runs (${why}, Fright Check Table 21)`); }
+      else { if (fx) FX(["q", m.ix, fleePath(m)]); m.state = "routed"; place(m, null); L(`  ${m.id} panics and runs (${why}, Fright Check Table 21)`); }
+    }
+    // the way off the table for a model that breaks and runs, for the replay to show it going (user direction): on a
+    // map, through open ground to the nearest edge; on open ground, forty yards straight away from the nearest foe.
+    // As [q, r, q, r, ...] from where it stands
+    function fleePath(m) {
+      if (!m.h) return [];
+      if (terr) {
+        const prev = new Map([[key(m.h.q, m.h.r), null]]), q = [m.h];
+        let end = null;
+        for (let i = 0; i < q.length && i < 8000; i++) {
+          const h = q[i];
+          if (DIRS.some(([dq, dr]) => idx(key(h.q + dq, h.r + dr)) == null)) { end = h; break; }
+          for (const [dq, dr] of DIRS) { const n = { q: h.q + dq, r: h.r + dr }, k = key(n.q, n.r); if (prev.has(k) || !walkable(k)) continue; prev.set(k, h); q.push(n); }
+        }
+        const out = [];
+        for (let h = end; h; h = prev.get(key(h.q, h.r))) out.unshift(h.q, h.r);
+        // and on over the edge, out of sight: eight yards on past it
+        const off = end && DIRS.find(([dq, dr]) => idx(key(end.q + dq, end.r + dr)) == null);
+        if (off) out.push(end.q + off[0] * 8, end.r + off[1] * 8);
+        return out;
+      }
+      const foe = models.filter(x => x.u.side !== m.u.side && x.state === "ok" && x.h).sort((a, b) => hexDist(a.h, m.h) - hexDist(b.h, m.h))[0];
+      const [mx, my] = px(m.h), [fx2, fy2] = foe ? px(foe.h) : [mx + (m.u.side ? -1 : 1), my];
+      const L0 = Math.hypot(mx - fx2, my - fy2) || 1, far = hexOfPx(mx + (mx - fx2) / L0 * 40 * Math.sqrt(3), my + (my - fy2) / L0 * 40 * Math.sqrt(3));
+      return [m.h.q, m.h.r, far.q, far.r];
     }
     // stun recovery: physical stun on HT (B420); a fright stun as its table row says; other mental stun on IQ,
     // +6 with Combat Reflexes (B43, B364)

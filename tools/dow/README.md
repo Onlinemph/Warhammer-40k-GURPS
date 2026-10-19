@@ -23,6 +23,21 @@ A full build runs Blender once per Soulstorm unit, four at a time (`DOW_JOBS` ch
 
 On Windows, run it with a Python installed from python.org or a virtual environment. The Microsoft Store Python gives Blender a private copy of `AppData`, where it can't see its extensions.
 
+## Sync kills
+
+Both games' paired finishing moves come with their units, and the replay plays a pair when a melee blow from the next hex kills.
+
+- **Dawn of War II**: `kill` and `killB` (the killer's half of the unit's first and second pair) and `slain` and `slainB` (the victim's). A unit that carries a gun takes its killer's half from one of its melee animation sets. The game picks a pair by who is killing whom; here a unit has its first two, so the halves fit as well as the game's generic pairs do.
+- **Soulstorm**: `kill1` to `kill4` and `slain1` to `slain4`, the game's `sync_kill_N` and `sync_death_N`. A killer's N goes with its victim's N (1 to 3 between infantry, 4 for a big model's throw), so the replay looks for a number both have.
+
+A unit also gets up to three more death clips (`die2` to `die4`), so its figures don't all fall the same way.
+
+## Badges and banners
+
+`python tools/dow/build_pack.py badges` writes `site/models/badges.js`: Dawn of War II's 104 army badges. Each Dawn of War II unit's entry says where its materials show them (the game lays a badge over a patch of the material's texture by a matrix; `read_badges` in `build_pack.py` has the arithmetic), and the page draws the side's badge into that patch. The Space Marine sergeant wears the game's back banner.
+
+Soulstorm keeps a texture's badge and banner rectangles in the `.wtp` beside it and files its 143 badge and banner images by race; `old_badges` reads the rectangles and `badges.js` carries the images as `ss/<race>/<name>` and `ssb/<race>/<name>`. 34 of the Soulstorm units have a badge or a banner place.
+
 ## What is covered
 
 `units.json` lists 109 units: 39 from Dawn of War II (the Predator, Rhino and Trukk; Space Marines with sergeants, Scouts and Terminators; Guardsmen; Chaos Marines, Plague Marines, Berzerkers, lords, sorcerers and cultists; Aeldari Guardians, Rangers, Banshees, Warlocks and Farseers; Ork Boyz, Kommandos, Nobz, a Warboss and a Weirdboy; ten Tyranids) and 70 from Soulstorm (63 infantry and 7 vehicles). Where both games have a unit, the Dawn of War II entry comes first in the file and wins; the Soulstorm one is used when that game's files aren't there. Most are the unit itself. The game has no model for some, so these use the nearest stand-in (marked `proxy` in the file):

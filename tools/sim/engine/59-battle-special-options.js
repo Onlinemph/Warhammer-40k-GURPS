@@ -55,7 +55,7 @@
     }
     // ---- mental disadvantages steer the choice (B120 self-control rolls)
     const AGGR = /^(aoa|charge|strike|step-|rapid|flurry|mighty|dual|heroic|ca-|da-strike|beat|feint|ruse|grab|shove|fire |point-blank|advance|close@|move-closer|throw|suppress)/;
-    const CAUTIOUS = /^(aod|peel|reload-cover|cover@|wait|watch|spread)/;
+    const CAUTIOUS = /^(aod|peel|reload-cover|cover@|wait|watch|spread|fall-back|take-cover)/;
     const DANGER = /^(charge|aoa-charge|heroic|advance|close@|move-closer|step-|grab)/;
     const bestOf = (opts, re, not) => opts.filter(o => re.test(o.label) && !(not && not.test(o.label))).reduce((a, b) => !a || b.v > a.v ? b : a, null);
     function mentalPick(m, opts, pick, adj) {
@@ -144,7 +144,7 @@
       // up out of a trench: a foe in sight that m's cover screens it from
       for (const t of cands.slice(0, 4)) {
         const k = coverAt(m.h, t.h, m);
-        if (!DUCK.has(k) || !covPenAt(m.h, t.h, m)) continue;
+        if (UP(u) || !DUCK.has(k) || !covPenAt(m.h, t.h, m)) continue;   // (one that stays on its feet doesn't duck behind a parapet)
         for (const w of usable) {
           const E = shotAt(m.h, t, w);
           if (E <= 0) continue;
@@ -186,7 +186,7 @@
       return DUCK.has(k) && covPenAt(t.h, fh, t) > 0;
     }
     // ---- the heavy weapon team's choices, laid over the ordinary ones
-    const MOVES = /^(advance|move-closer|cover@|high-ground|close@|charge|aoa-charge|heroic|advance-fire|spread@|peel|reload-cover|step-|popup@|search|rejoin)/;
+    const MOVES = /^(advance|move-closer|cover@|high-ground|close@|charge|aoa-charge|heroic|advance-fire|spread@|peel|reload-cover|step-|popup@|search|rejoin|hunt@|fall-back|take-cover)/;
     const targetsFor = (m, w, h = m.h) => known(m).filter(f => f.h && f.state === "ok" && hexDist(h, f.h) <= w.range.max && hexDist(h, f.h) >= (w.minRange || 0) && (w.indirect ? spotted(m, f) : los(h, f.h)));
     function crewOptions(m, pool, opts, add, rNow, adj) {
       const u = m.u, top = () => opts.reduce((a, b) => b.v > a.v ? b : a, { v: 0 }), force = (label, run) => { const t0 = top(); add(t0.v + 0.5 * Math.max(0.05, Math.abs(t0.v)), label, run); };

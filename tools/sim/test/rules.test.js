@@ -235,10 +235,16 @@ test("nobody fires a weapon that cannot hurt its target (user report: boltguns a
   SIM.seed(3);
   const tank = { side: 0, spec: { vehicle: "Leman Russ Battle Tank", template: "Leman Russ Battle Tank", count: 1, stance: "shoot", armour: [] } };
   const r = SIM.runBattle([tank, ...squad("Astartes Tactical Squad", 1)], { distance: 150, log: true });
-  // nothing in this squad gets through the tank's front, so it should not shoot at it at all
-  const shots = r.log.filter(l => l.startsWith("Tactical Squad") && l.includes(" fires ") && l.includes("at Leman Russ"));
+  // nothing in this squad gets through the tank's front, so it should not shoot at it from there at all: none in
+  // the first ten seconds, before anyone can have got round it
+  const t11 = r.log.findIndex(l => /Turn 11\b/.test(l));
+  assert.ok(t11 > 0, "the fight should last past ten seconds");
+  const shots = r.log.slice(0, t11).filter(l => l.startsWith("Tactical Squad") && l.includes(" fires ") && l.includes("at Leman Russ"));
   assert.equal(shots.length, 0, "shots that could not hurt the tank:\n" + shots.slice(0, 5).join("\n"));
-  assert.ok(r.log.some(l => l.includes("goes to ground, with nothing left to fight with")), "the squad should take cover instead");
+  // it works round to the armour its weapons can get through instead (user direction)
+  assert.ok(r.log.some(l => /works round to Leman Russ Battle Tank #1's side armour with its Missile Launcher/.test(l)), "the missile launcher should make for the side armour");
+  assert.ok(r.log.some(l => /works round to Leman Russ Battle Tank #1's rear armour with its Krak Grenade/.test(l)), "the rest should make for the rear with krak grenades");
+  assert.ok(r.log.some(l => /throws a Krak Grenade at Leman Russ/.test(l)), "and get a grenade onto it");
 });
 
 test("every battlefield builds, and both sides can reach each other on every layout", () => {
@@ -255,6 +261,185 @@ test("every battlefield builds, and both sides can reach each other on every lay
     assert.ok(seen.has(at(m.spawn[1])), `${name} ${seed}: no way from one side to the other`);
     assert.ok(seen.size > 0.8 * (m.floor.size - m.crates.size), `${name} ${seed}: ${m.floor.size - m.crates.size - seen.size} floor hexes cut off`);
   }
+});
+
+// ---- a battle a person plays: SIM.playBattle stops for them, and the same battle left to the AI is the simulation
+const playSpecs = () => { const lo = DATA.loadouts, spec = (t, n) => ({ template: t, count: n, ...lo[t] }); return [{ side: 0, spec: spec("Astartes Battle-Brother", 3) }, { side: 1, spec: spec("Ork Boy", 6) }]; };
+test("a played battle answered with the AI's own picks is the simulated battle", () => {
+  SIM.seed(11);
+  const sim = SIM.runBattle(playSpecs(), { distance: 40, log: true, frames: true });
+  const g = SIM.playBattle(playSpecs(), { distance: 40, seed: 11, human: { side: 0, direct: "all" } });
+  let s = g.next(), acts = 0, turns = 0;
+  for (; !s.done; s = g.next(null)) {
+    const v = s.value;
+    assert.equal(v.view.fx.length, v.view.frames.length - 1, "one stretch of events between each pair of beats");
+    assert.equal(v.view.frames.length, v.view.beatTurn.length);
+    if (v.type === "turn") { turns++; assert.ok(v.units.filter(u => u.side === 0).every(u => u.direct)); continue; }
+    acts++;
+    assert.ok(v.opts[v.pick], "the AI's pick is one of the options");
+    assert.ok(v.opts.some(o => o.label === "pass"), "holding still is always offered");
+    assert.equal(v.view.roster[v.ix].side, 0, "only the player's models stop the battle");
+  }
+  assert.ok(acts > 3 && turns === s.value.turns);
+  assert.equal(s.value.over, true);
+  // the same dice in the same order (the one extra option, holding still, is never the AI's pick)
+  assert.equal(s.value.winner, sim.winner);
+  assert.deepEqual(s.value.log, sim.log);
+});
+test("a played battle: an ordered move, standing orders, a unit given back to the AI", () => {
+  const g = SIM.playBattle(playSpecs(), { distance: 40, seed: 5, human: { side: 0, direct: "all" } });
+  let s = g.next();
+  assert.equal(s.value.type, "turn");
+  s = g.next({ units: { 0: { stance: "charge" } } });
+  assert.equal(s.value.type, "act");
+  // walk three yards toward the enemy
+  const a = s.value, to = { q: a.at[0] + 3, r: a.at[1] };
+  s = g.next({ move: to });
+  const f = s.value.view.frames[s.value.view.frames.length - 1][a.ix];
+  assert.deepEqual([f[0], f[1]], [to.q, to.r], "the model stands on the hex it was sent to");
+  assert.ok(s.value.view.log.some(l => l === `${a.id} moves 3 yards (ordered)`));
+  // give the unit back to the AI: no more stops for its models, and the standing order shows at the next second
+  s = g.next({ release: true });
+  while (!s.done && s.value.type !== "turn") s = g.next(null);
+  if (!s.done) {
+    assert.equal(s.value.units[0].stance, "charge");
+    assert.equal(s.value.units[0].direct, false);
+    for (s = g.next(null); !s.done; s = g.next(null)) assert.equal(s.value.type, "turn", "a unit left to the AI stops only for orders at each second");
+  }
+  assert.equal(s.value.over, true);
+});
+test("a simulated battle never stops for a player", () => {
+  SIM.seed(3);
+  const r = SIM.runBattle(playSpecs(), { distance: 40, human: { side: 0, direct: "all" } });
+  assert.ok(r.winner === 0 || r.winner === 1 || r.winner === -1);
+});
+
+test("Necrons stay on their feet (user direction: ai.yaml `upright`)", () => {
+  const lo = DATA.loadouts, spec = (t, n) => ({ template: t, count: n, ...lo[t] });
+  for (const seed of [3, 4]) {
+    SIM.seed(seed);
+    const r = SIM.runBattle([{ side: 0, spec: spec("Fire Warrior (Shas'la)", 8) }, { side: 1, spec: spec("Necron Warrior", 8) }], { battlefield: "streets", mapSeed: 1, log: true, frames: true });
+    const down = r.log.filter(l => /Necron Warrior #\d+ (kneels to fire|goes to ground|keeps its head down|ducks back down)/.test(l));
+    assert.deepEqual(down, [], "a Necron chose to go down");
+    // prone only while knocked down and getting up: a small share of the fight
+    let prone = 0, all = 0;
+    r.frames.forEach(f => f.forEach((x, i) => { if (x && r.roster[i].side === 1) { all++; if (x[7] & 2) prone++; } }));
+    assert.ok(prone < 0.2 * all, `Necrons prone in ${prone} of ${all} frames`);
+  }
+});
+test("the elite stay on their feet too (skill 17+), and line troops still use the ground", () => {
+  const lo = DATA.loadouts, spec = (t, n) => ({ template: t, count: n, ...lo[t] });
+  SIM.seed(8);
+  const r = SIM.runBattle([{ side: 0, spec: spec("Astartes Battle-Brother", 5) }, { side: 1, spec: spec("Astra Militarum Guardsman", 20) }], { distance: 80, log: true, frames: true });
+  const down = who => r.log.filter(l => new RegExp(who + " #[0-9]+ (kneels to fire|goes to ground|keeps its head down|ducks back down)").test(l)).length;
+  assert.equal(down("Astartes Battle-Brother"), 0, "a Marine chose to go down");
+  assert.ok(down("Astra Militarum Guardsman") > 0, "Guardsmen kneel to fire and keep their heads down");
+});
+test("a squad that can't hurt its foe falls back from it (user report: Guardsmen standing still for a Carnifex)", () => {
+  const lo = DATA.loadouts, spec = (t, n) => ({ template: t, count: n, ...lo[t] });
+  SIM.seed(5);
+  const r = SIM.runBattle([{ side: 0, spec: spec("Astra Militarum Guardsman", 10) }, { side: 1, spec: spec("Carnifex", 1) }], { distance: 60, log: true, frames: true });
+  assert.ok(r.log.some(l => /Guardsman #\d+ falls back from Carnifex/.test(l)));
+  assert.ok(!r.log.some(l => /goes to ground, with nothing left to fight with/.test(l)), "nobody lies down in front of it");
+  // by the third second most of them are moving
+  const moving = r.frames[3].filter((x, i) => x && r.roster[i].side === 0 && x[6] && x[6].length).length;
+  assert.ok(moving >= 7, `${moving} of 10 on the move`);
+  assert.ok(r.log.some(l => /quits the field/.test(l)), "those that get clear leave the field");
+});
+test("a squad stays while its heavy weapon is still in the fight, and a model run down turns at bay (user direction)", () => {
+  const lo = DATA.loadouts || {};
+  const squad = (name, side) => SIM.squadSpecs(name, name + side).map(sp => ({ side, spec: { ...(lo[sp.template] || {}), ...sp, armour: sp.armour || (lo[sp.template] || {}).armour || [] } }));
+  let bay = 0;
+  for (const seed of [1, 2, 3]) {
+    SIM.seed(seed * 7 + 1);
+    const r = SIM.runBattle([...squad("Astra Militarum Infantry Squad", 0), { side: 1, spec: { template: "Carnifex", count: 1, ...lo.Carnifex } }], { distance: 60, log: true });
+    // nobody leaves while the heavy bolter is still in the fight: the Carnifex has to have got to its crew first
+    const gone = r.log.findIndex(l => /quits the field/.test(l));
+    if (gone >= 0) assert.ok(r.log.slice(0, gone).some(l => /Carnifex #1 strikes Guard Squad (Heavy Bolter|Loader) #1 /.test(l)), `seed ${seed}: the squad left before the Carnifex reached its heavy bolter`);
+    bay += r.log.filter(l => /turns at bay/.test(l)).length;
+    // and nobody with nothing to hurt it with walks up to it
+    assert.ok(!r.log.some(l => /Guard Squad (Guardsman|Flamer|Sergeant|Vox-caster) #\d+ (closes in on|moves in on|advances toward) Carnifex/.test(l)), `seed ${seed}: a Guardsman walked up to the Carnifex`);
+  }
+  assert.ok(bay > 0, "somebody caught by it should turn at bay");
+});
+test("a Hormagaunt swarm under fire keeps coming: no fear, no standing about (user report)", () => {
+  const lo = DATA.loadouts, spec = (t, n) => ({ template: t, count: n, ...lo[t] });
+  SIM.seed(8);
+  const r = SIM.runBattle([{ side: 0, spec: spec("Astra Militarum Guardsman", 10) }, { side: 1, spec: spec("Hormagaunt", 20) }], { distance: 80, log: true, frames: true });
+  // under synapse (the sim assumes it): no Fright Checks under fire
+  assert.ok(!r.log.some(l => /Hormagaunt #\d+ (freezes|loses fatigue and freezes|retches|faints)/.test(l)), "a Hormagaunt froze");
+  // and none stands three seconds in one place with no foe beside it (they used to, a fast model's charge being
+  // read as overshooting its brood)
+  const stuck = [];
+  r.roster.forEach((u, i) => { if (u.side !== 1) return; for (let t = 2; t < r.frames.length; t++) {
+    const [a, b, c] = [r.frames[t - 2][i], r.frames[t - 1][i], r.frames[t][i]];
+    if (!a || !b || !c || a[0] !== c[0] || a[1] !== c[1] || b[0] !== c[0] || b[1] !== c[1]) continue;
+    if ([a, b, c].some(x => (x[7] || 0) & 7)) continue;   // stunned, down or getting up: that's not standing about
+    const near = r.frames[t].some((x, j) => x && r.roster[j].side === 0 && Math.max(Math.abs(x[0] - c[0]), Math.abs(x[1] - c[1]), Math.abs(x[0] + x[1] - c[0] - c[1])) <= 2);
+    if (!near) stuck.push(u.id + "@" + t);
+  } });
+  assert.ok(stuck.length <= 2, "Hormagaunts standing about: " + stuck.slice(0, 6).join(" "));
+});
+test("Termagants advance as a swarm rather than trade shots at long range (user direction)", () => {
+  const lo = DATA.loadouts, spec = (t, n) => ({ template: t, count: n, ...lo[t] });
+  SIM.seed(8);
+  const r = SIM.runBattle([{ side: 0, spec: spec("Termagant", 20) }, { side: 1, spec: spec("Astra Militarum Guardsman", 10) }], { distance: 60, log: true, frames: true });
+  const hd = (a, b) => Math.max(Math.abs(a[0] - b[0]), Math.abs(a[1] - b[1]), Math.abs(a[0] + a[1] - b[0] - b[1]));
+  const f = r.frames[5], T = [], G = [];
+  f.forEach((x, i) => { if (x) (r.roster[i].side ? G : T).push(x); });
+  const near = Math.min(...T.map(a => Math.min(...G.map(b => hd(a, b)))));
+  assert.ok(near <= 30, `after five seconds the nearest Termagant is still ${near} yards off`);
+  // and they don't stand at range aiming while the lasguns work on them
+  const early = r.log.slice(0, r.log.findIndex(l => /Turn 5\b/.test(l)));
+  assert.ok(early.filter(l => /^Termagant #\d+ aims/.test(l)).length <= 2, "Termagants aimed at long range");
+});
+test("Necron gunlines hold and shoot: no walking up to Marines to grapple them (user report)", () => {
+  const lo = DATA.loadouts, spec = (t, n) => ({ template: t, count: n, ...lo[t] });
+  let melee = 0, fire = 0;
+  for (const seed of [1, 2, 3]) {
+    SIM.seed(seed * 7 + 1);
+    const r = SIM.runBattle([{ side: 0, spec: spec("Necron Immortal", 5) }, { side: 1, spec: spec("Astartes Battle-Brother", 5) }], { distance: 60, log: true });
+    melee += r.log.filter(l => /^Necron Immortal #\d+ (charges|slams|rushes|moves in on|closes in on)/.test(l)).length;
+    fire += r.log.filter(l => /^Necron Immortal #\d+ fires/.test(l)).length;
+  }
+  // they used to charge, slam and grapple the Marines; now any hand-to-hand is the Marines' doing
+  assert.ok(melee <= 3, `Immortals went looking for a fight hand to hand ${melee} times`);
+  assert.ok(fire > 50, "and they shoot");
+});
+test("a swarm gets over the river: nobody stuck at a crossing (user report)", () => {
+  const lo = DATA.loadouts || {};
+  const squad = (name, side) => SIM.squadSpecs(name, name + side).map(sp => ({ side, spec: { ...(lo[sp.template] || {}), ...sp, armour: sp.armour || (lo[sp.template] || {}).armour || [] } }));
+  for (const seed of [1, 4, 6]) {
+    SIM.seed(seed * 7 + 1);
+    const r = SIM.runBattle([...squad("Astra Militarum Infantry Squad", 0), { side: 1, spec: { template: "Hormagaunt", count: 20, ...lo.Hormagaunt } }], { battlefield: "river", awareness: "limited", mapSeed: seed, log: true });
+    const stuck = r.log.filter(l => /can't find a way/.test(l));
+    assert.equal(stuck.length, 0, `layout ${seed}: ` + stuck.slice(0, 3).join(" | "));
+  }
+});
+test("friendly fire: any squad can hit its own, and shooters step clear of a friend in the line (user direction)", () => {
+  const lo = DATA.loadouts || {};
+  const squad = (name, side) => SIM.squadSpecs(name, name + side).map(sp => ({ side, spec: { ...(lo[sp.template] || {}), ...sp, armour: sp.armour || (lo[sp.template] || {}).armour || [] } }));
+  let ff = 0, steps = 0;
+  for (const seed of [1, 2, 3, 4]) {
+    SIM.seed(seed * 7 + 1);
+    const r = SIM.runBattle([...squad("Astartes Tactical Squad", 0), ...squad("Chaos Space Marine Squad", 1)], { battlefield: "outpost", awareness: "limited", mapSeed: seed, log: true });
+    ff += r.log.filter(l => /\(friendly fire\)/.test(l)).length;   // both squads are drilled: they used to be immune
+    steps += r.log.filter(l => /steps aside to clear its line of fire/.test(l)).length;
+  }
+  assert.ok(ff > 0, "drilled squads should be able to hit each other by mistake");
+  assert.ok(steps > 0, "a shooter with a friend in its line should sometimes step clear");
+});
+test("troops under fire from several guns keep their feet, and Tyranids never go down by choice (user direction)", () => {
+  const lo = DATA.loadouts, spec = (t, n) => ({ template: t, count: n, ...lo[t] });
+  SIM.seed(8);
+  const a = SIM.runBattle([{ side: 0, spec: spec("Adepta Sororitas Battle Sister", 10) }, { side: 1, spec: spec("Chaos Space Marine", 5) }], { distance: 60, log: true });
+  // getting up is what a Dodge and Drop costs: before, Sisters did it eleven times a fight each
+  const ups = {};
+  for (const l of a.log) { const m = /^(Adepta Sororitas Battle Sister #\d+) gets up to a kneel/.exec(l); if (m) ups[m[1]] = (ups[m[1]] || 0) + 1; }
+  assert.ok(Math.max(0, ...Object.values(ups)) <= 3, "a Sister got up " + Math.max(0, ...Object.values(ups)) + " times");
+  SIM.seed(8);
+  const b = SIM.runBattle([{ side: 0, spec: spec("Termagant", 20) }, { side: 1, spec: spec("Astra Militarum Guardsman", 10) }], { distance: 60, log: true });
+  assert.ok(!b.log.some(l => /^Termagant #\d+ (kneels to fire|goes to ground|keeps its head down)/.test(l)), "a Termagant knelt or went to ground");
 });
 
 test("design notes quote the current AV table", () => {

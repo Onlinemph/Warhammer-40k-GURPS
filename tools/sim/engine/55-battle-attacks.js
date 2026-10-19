@@ -65,7 +65,6 @@
     // at it. The first that is hit, or defends, ends the round's flight. Drilled squads don't hit each other by mistake
     function strayAt(m, w, c, raw) {
       if (!c.h || c.state !== "ok" || !m.h) return false;
-      if (c.u.side === m.u.side && drilled(m) && drilled(c)) return false;
       const d = Math.max(1, hexDist(m.h, c.h));
       const lvl = Math.min(9, wl(m, w) - skillPen(m) + rangePenalty(rngD(m.h, c.h, d)) + c.u.sm + shotFx(c, m.h, false).pen("random") - darkPen(m, c));
       if (lvl < 3 || !check(lvl).ok) return false;

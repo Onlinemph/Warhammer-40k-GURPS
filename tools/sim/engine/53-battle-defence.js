@@ -244,7 +244,16 @@
         let d = dodgeOf(t) + mod + aod("dodge") + feverish(t, att, false, dodgeOf(t) + mod);
         // Dodge and Drop (B377): a shooter not in melee drops prone for +3
         let drop = false;
-        if (!t.prone && t.u.stance === "shoot" && (t.u.ranged || t.u.powers.some(p => !p.melee)) && !engaged(t)) { d += 3; drop = true; }
+        // (one that stays on its feet drops only from a shot that would do it a major wound or put it down: take it
+        // to 0 HP, or, already below that, to its next death check; a faction that is `upright` never drops)
+        const HPu = t.u.HP, fells = Math.min(HPu / 2, t.hp > 0 ? t.hp : t.hp + (Math.floor(-t.hp / HPu) + 1) * HPu);
+        // Everyone else judges it the same way (user direction): a drop costs two seconds getting up, so it is for the
+        // shot that would really hurt, and only for a shooter holding its ground (one closing in keeps its feet).
+        // And only from a lone gun: lying there is -3 to every defence after this one, so with a second gun on it
+        // the drop gives away more than it gains.
+        if (!t.prone && !engaged(t) && !t.u.ai.upright && (UP(t.u) || (t.u.stance === "shoot" && (t.u.ranged || t.u.powers.some(p => !p.melee))))
+          && !!(aw && aw.dmg) && expInjRandom(aw, t.u) >= fells
+          && !models.some(x => x !== att && x.u.side !== t.u.side && x.state === "ok" && x.h && (x.u.ranged || x.u.veh) && los(x.h, t.h))) { d += 3; drop = true; }
         if (LIMDODGE && !t.u.flags.master) d -= t.dodges || 0;
         t.dodges = (t.dodges || 0) + 1;
         const r = check(d);

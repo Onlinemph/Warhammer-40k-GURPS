@@ -24,7 +24,7 @@
     });
     // the ground under the pointer follows it: right is (sin, -cos), forward (away from the camera) is (-cos, -sin)
     const panBy = (dx, dy) => { const s = orb.r * .0016, c = Math.cos(orb.th), n = Math.sin(orb.th); orb.tx += (-c * dy - n * dx) * s; orb.tz += (-n * dy + c * dx) * s; };
-    const up = e => { ptr.delete(e.pointerId); if (ptr.size < 2) pin = null; if (drag && !drag.moved && ptr.size === 0) { const [sx, sy] = loc(e); o.onPick(hit(sx, sy)); } if (!ptr.size) drag = null; };
+    const up = e => { ptr.delete(e.pointerId); if (ptr.size < 2) pin = null; if (drag && !drag.moved && ptr.size === 0) { const [sx, sy] = loc(e), i = hit(sx, sy), g2 = i < 0 && o.onGround ? groundAt(sx, sy) : null; if (!(g2 && o.onGround(hexAt(g2[0], g2[1])))) o.onPick(i); } if (!ptr.size) drag = null; };
     el.addEventListener("pointerup", up); el.addEventListener("pointercancel", up);
     el.addEventListener("pointerleave", () => o.onHover(-1));
     // zoom toward the ground under the pointer
@@ -35,9 +35,45 @@
       if (g2 && f < 1) { orb.tx += (g2[0] - orb.tx) * (1 - f); orb.tz += (g2[1] - orb.tz) * (1 - f); }
       orb.r *= f; place(); if (!running) { update(last.t, last.p, last.st); render(); }
     }, { passive: false });
+    // ================= portraits: a figure's head and shoulders as a small picture, in its side's colours. One per
+    // kind of model and side, drawn from a figure of that kind that is standing (layer 1 holds just that figure and
+    // the lights), and drawn again once the game's model has replaced the built one.
+    const PS = 128, prt = keep(new THREE.WebGLRenderTarget(PS, PS)), pcam = new THREE.PerspectiveCamera(26, 1, .05, 60), pix = new Uint8Array(PS * PS * 4), pmade = new Map();
+    pcam.layers.set(1); scene.traverse(x => { if (x.isLight) x.layers.enable(1); });
+    function portrait(i) {
+      const r = ros[i]; if (!r || !figs[i]) return null;
+      const kind = `${r.side}|${r.template}|${r.veh || ""}|${r.kit || ""}`;
+      const F = figs.find(G => G.g.visible && !deathOf(G.i, last.t) && ros[G.i] && `${ros[G.i].side}|${ros[G.i].template}|${ros[G.i].veh || ""}|${ros[G.i].kit || ""}` === kind && !(fr[last.t] && fr[last.t][G.i] && (fr[last.t][G.i][7] & 2)));
+      const key = kind + "|" + (F && F.model ? 1 : 0), have = pmade.get(kind);
+      if (have && (have.key === key || !F)) return have.url;
+      if (!F) return null;
+      F.g.updateMatrixWorld(true);
+      const yaw = F.g.rotation.y, fwd = new THREE.Vector3(Math.cos(yaw), 0, -Math.sin(yaw)), rt = new THREE.Vector3(-fwd.z, 0, fwd.x), top = F.veh ? 2.2 : F.top;
+      // the head, by the model's own head bone where it has one (a Genestealer's is nowhere near the top of its back)
+      let head = null; if (F.model && !F.veh) { F.model.root.traverse(x => { if (!head && x.isBone && /head/i.test(x.name) && !/nub|headgear|_end/i.test(x.name)) head = x; }); }
+      const look = head ? head.getWorldPosition(new THREE.Vector3()).addScaledVector(UP, -top * .06) : F.g.position.clone().addScaledVector(UP, F.veh ? top * .5 : top * .8), dist = F.veh ? 9 : Math.max(1.7, top * 1.1);
+      pcam.position.copy(look).addScaledVector(fwd, dist * .9).addScaledVector(rt, dist * .42).addScaledVector(UP, dist * .12); pcam.lookAt(look); pcam.updateMatrixWorld(true);
+      F.g.traverse(x => x.layers.enable(1)); const barsOn = F.bars.visible, selOn = F.sel.visible; F.bars.visible = false; F.sel.visible = false;
+      const bg = scene.background, fog = scene.fog, clr = renderer.getClearColor(new THREE.Color()), ca = renderer.getClearAlpha();
+      scene.background = null; scene.fog = null; renderer.setClearColor(0x1b1c22, 1); renderer.setRenderTarget(prt); renderer.clear(); renderer.render(scene, pcam);
+      renderer.readRenderTargetPixels(prt, 0, 0, PS, PS, pix);
+      renderer.setRenderTarget(null); renderer.setClearColor(clr, ca); scene.background = bg; scene.fog = fog;
+      F.g.traverse(x => x.layers.disable(1)); F.bars.visible = barsOn; F.sel.visible = selOn;
+      // the target holds linear light, upside down: to sRGB, a little brighter, the right way up
+      const c = document.createElement("canvas"); c.width = c.height = PS; const g = c.getContext("2d"), im = g.createImageData(PS, PS), lin2 = renderer.outputEncoding !== THREE.sRGBEncoding || true;
+      for (let y = 0; y < PS; y++) for (let x = 0; x < PS; x++) { const s = 4 * ((PS - 1 - y) * PS + x), d = 4 * (y * PS + x); for (let ch = 0; ch < 3; ch++) { const v = pix[s + ch] / 255; im.data[d + ch] = Math.min(255, 255 * Math.pow(Math.min(1, v * 1.35), lin2 ? 1 / 2.2 : 1)); } im.data[d + 3] = 255; }
+      g.putImageData(im, 0, 0);
+      const url = c.toDataURL("image/jpeg", .85); pmade.set(kind, { key, url }); return url;
+    }
     return {
       update(t, p, st) { update(t, p, st); if (!running) render(); }, resize, active,
       secLen(t) { return planOf(t).tsc; },
+      calm(t) { return !planOf(t).beats.length; },
+      portrait,
+      // a battle being played has gone on: scan the new beats
+      grow() { scanDowns(); scanBlasts(); decalT = -1; resync(); },
+      // turn the camera to a model that is out of the middle of the view
+      look(i) { const F = figs[i]; if (!F || lastSt.cine) return; const d = Math.hypot(F.g.position.x - orb.tx, F.g.position.z - orb.tz); if (d > orb.r * .45) { orb.tx = F.g.position.x; orb.tz = F.g.position.z; place(); if (!running) { update(last.t, last.p, last.st); render(); } } },
       sound: setSound,
       cineOff() { syncOrb(); cap.hidden = true; },
       fit(whole) { fit(whole); update(last.t, last.p, last.st); render(); },

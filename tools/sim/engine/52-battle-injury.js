@@ -10,7 +10,7 @@
     // a model cut down by wounds (at 0 HP or below) is as horrible to see as one killed outright
     // Reanimation Protocols: a Necron put down any way short of destruction (unconscious, mortally wounded, a ruined
     // limb's worth of injury) drops inert and rolls to rise again, as when it's killed (see kill)
-    function incapacitate(t, why) { if (t.state === "ok") { sawFall(t); if (frac ? t.lastHitBy : t.hp <= 0) { horror(t.lastHitBy, t); downed(t.lastHitBy); } if (t.h) FX(["d", t.h.q, t.h.r, t.u.side, 0]); const re = t.u.flags.reanimation && !t.u.veh; t.state = re ? "down" : "out"; if (re) t.reanim = 3; place(t, null); L(`  ${t.id} ${why}${re ? "; reanimation protocols engage" : ""}`); } }
+    function incapacitate(t, why) { if (t.state === "ok") { sawFall(t); if (frac ? t.lastHitBy : t.hp <= 0) { horror(t.lastHitBy, t); downed(t.lastHitBy); } if (t.h) FX(["d", t.h.q, t.h.r, t.u.side, 0, t.ix]); const re = t.u.flags.reanimation && !t.u.veh; t.state = re ? "down" : "out"; if (re) t.reanim = 3; place(t, null); L(`  ${t.id} ${why}${re ? "; reanimation protocols engage" : ""}`); } }
     // crippling (B421): an arm or hand drops what it holds and can't hold anything; the weapon goes to the other
     // hand (off-hand -4), two-handed weapons can't be used, and a crippled shield arm loses the shield. A leg drops
     // the model, which can fight lying down and crawl
@@ -186,7 +186,7 @@
     function kill(att, t, how) {
       if (t.state !== "ok") return;
       sawFall(t); horror(att, t); downed(att);
-      if (t.h) FX(["d", t.h.q, t.h.r, t.u.side, 1]);
+      if (t.h) FX(["d", t.h.q, t.h.r, t.u.side, 1, t.ix]);
       place(t, null);
       if (t.u.flags.reanimation && how !== "destroyed" && t.hp > -5 * t.u.HP) {
         t.state = "down"; t.reanim = 3; L(`  ${t.id} falls; reanimation protocols engage`);

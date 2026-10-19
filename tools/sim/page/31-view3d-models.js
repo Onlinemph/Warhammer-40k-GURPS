@@ -17,7 +17,9 @@
 
     // The game's team colouring: each mask (primary, secondary, trim, weapons, eyes) is overlaid with its colour and
     // the results added; the "dirt" mask says how much of the painted default texture shows through on top.
-    async function paintTexture(t, paint) {
+    // badges: the pack says where on a material's texture each of its badges lies (tools/dow/build_pack.py,
+    // read_badges); the side's badge is drawn into that patch, turned and sized as the game lays it
+    async function paintTexture(t, paint, badges) {
       const base = await loadImage(t.base), w = base.naturalWidth, h = base.naturalHeight, [cv, g, B] = pixelsOf(base, w, h);
       if (t.m1) {
         const [i1, i2] = await Promise.all([loadImage(t.m1), loadImage(t.m2)]), M1 = pixelsOf(i1, w, h)[2].data, M2 = pixelsOf(i2, w, h)[2].data, d = B.data;
@@ -35,17 +37,28 @@
         }
         g.putImageData(B, 0, 0);
       }
+      for (const b of badges || []) {
+        const src = (window.DOW_BADGES || {})[b.name]; if (!src) continue;
+        const im = await loadImage(src), [a, b1, c, d] = b.m, [tx, ty] = b.t, det = a * d - c * b1, bw = im.naturalWidth, bh = im.naturalHeight;
+        // the badge's point is (a x + c y + tx, b x + d y + ty) for a texture point (x, y): turned round, that is where each of its pixels lands
+        let E = (-d * tx + c * ty) / det, F = (b1 * tx - a * ty) / det;
+        const mx = E + (d - c) / det / 2, my = F + (a - b1) / det / 2; E -= Math.floor(mx); F -= Math.floor(my);   // the patch may be given a whole texture away
+        g.save(); g.setTransform(w * d / det / bw, -h * b1 / det / bw, -w * c / det / bh, h * a / det / bh, w * E, h * F); g.globalAlpha = .92; g.drawImage(im, 0, 0); g.restore();
+      }
       const tex = keep(new THREE.CanvasTexture(cv)); tex.encoding = THREE.sRGBEncoding; tex.flipY = false;
       tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy()); return tex;
     }
     const paintOf = (u, S) => ({ primary: S[0], secondary: S[1], trim: S[1], weapons: 0x3a3b40, eyes: S[4] || 0xff3a2a, ...(u.paint || {}) });
     const modelMats = new Map();
-    function modelMaterial(u, asset, name, paint) {
+    function modelMaterial(u, asset, name, paint, badge, who) {
       const t = asset.tex[name];
+      // Dawn of War II: slot 1 is the army's badge (the side's, when it has one; `null` for none), slot 2 the unit's own
+      // marking, as the model has it. Soulstorm (an entry with a race): the army's badge, and on a banner its banner.
+      const badges = ((asset.meta.badges || {})[name] || []).map(b => ({ ...b, name: b.race ? oldBadge(b.race, who.scheme, who.faction, b.slot === 3) : b.slot === 1 && badge !== undefined ? badge : b.tex })).filter(b => b.name && b.name !== "nobadge" && b.tex !== "nobadge");
       if (!t) { if (!modelMats.has("plain")) modelMats.set("plain", Promise.resolve(keep(new THREE.MeshStandardMaterial({ color: lin(0x77736a), roughness: .6, metalness: .2, skinning: true })))); return modelMats.get("plain"); }   // a mesh whose textures the pack lacks
-      const key = u.id + "|" + name + "|" + (t.m1 ? Object.values(paint).join(",") : "");
+      const key = u.id + "|" + name + "|" + (t.m1 ? Object.values(paint).join(",") : "") + "|" + badges.map(b => b.name).join(",");
       if (!modelMats.has(key)) modelMats.set(key, (async () => {
-        const map = await paintTexture(t, paint);
+        const map = await paintTexture(t, paint, badges);
         const mat = keep(new THREE.MeshStandardMaterial({ map, color: u.tint ? lin(parseInt(u.tint.slice(1), 16)) : 0xffffff, roughness: .5, metalness: .25, skinning: true, alphaTest: t.cutout ? .5 : 0, side: t.cutout ? THREE.DoubleSide : THREE.FrontSide }));
         if (t.glow) { const gl = keep(new THREE.Texture(await loadImage(t.glow))); gl.encoding = THREE.sRGBEncoding; gl.flipY = false; gl.needsUpdate = true; mat.emissiveMap = gl; mat.emissive = new THREE.Color(0xffffff); mat.emissiveIntensity = 1.6; }
         return mat;
@@ -77,7 +90,7 @@
       return dst;
     }
     async function attachModel(F, r, u, asset) {
-      const S = scheme(r), paint = paintOf(u, S), root = cloneRig(asset.scene), k = F.k;
+      const S = scheme(r), paint = paintOf(u, S), root = cloneRig(asset.scene), k = F.k, badge = badgeFor((o.colourNames || [])[r.side || 0], r.faction);
       // which meshes show: the look for this ranged and melee weapon, else for either, else the default. A weapon the
       // unit lists by name (its "kits": a heavy bolter is a bolt weapon, but a different thing to carry) comes first.
       const L = asset.meta.looks, rk = r.rk === "lob" ? "shell" : r.rk || "", named = Object.entries(u.kits || {}).find(([rx]) => new RegExp(rx, "i").test((r.kit || "").split("|")[0]));
@@ -90,7 +103,7 @@
       for (const o of meshes) {
         o.visible = show.has(partOf(o));
         o.userData.mat = (o.material && o.material.name) || "";
-        o.material = await modelMaterial(u, asset, o.userData.mat, paint);
+        o.material = await modelMaterial(u, asset, o.userData.mat, paint, badge, { scheme: (o.colourNames || [])[r.side || 0], faction: r.faction });
         o.castShadow = !big; o.receiveShadow = false; o.frustumCulled = false; o.userData.i = F.i;
       }
       if (gone) return;
@@ -104,7 +117,8 @@
       const mixer = new THREE.AnimationMixer(root), acts = {}, w = {};
       // a look can have clips of its own ("idle@flame": a flamer is held and fired differently); those win over the plain ones
       for (const clip of asset.clips) { const [name, only] = clip.name.split("@"); if (only ? only !== set : asset.clips.some(c => c.name === name + "@" + set)) continue; const a = mixer.clipAction(clip); a.play(); a.setEffectiveWeight(0); acts[name] = a; w[name] = 0; }
-      F.model = { root, mixer, acts, w, u };
+      let hips = null; root.traverse(x => { if (x.isBone && /^bip01$/i.test(x.name)) hips ||= x; }); if (!hips) root.traverse(x => { if (x.isBone && /pelvis|root/i.test(x.name)) hips ||= x; });
+      F.model = { root, mixer, acts, w, u, hips };
       F.top = h * k * 1.06; F.bars.position.y = F.top + .25;
       if (F.veh) {
         // the built vehicle's moving parts are gone; the turret is the model's own bone, turned about the hull's up axis
@@ -153,19 +167,29 @@
       const want = {}, time = {};
       const dur = n => A[n].getClip().duration, clampT = (n, t) => Math.max(0, Math.min(dur(n) - 1e-3, t));
       let over = 0;
-      if (dead && A.die) { want.die = 1; time.die = clampT("die", ease(dead.f) * dur("die")); over = 1; }
+      // a sync kill's victim dies by the clip made to go with its killer's (in step with it under the action camera,
+      // else run through as the death is) and lies as that clip leaves it
+      // (a model has up to four ways to die; each figure keeps to one, so its body lies the same whenever it is looked at)
+      const SL = dead && dead.sync && A[dead.sync.slain] ? dead.sync.slain : null, DIE = m.die ||= (ds => ds[F.i % ds.length])(["die", "die2", "die3", "die4"].filter(n => A[n]));
+      if (SL) { const s = (ev.slain || [])[0]; want[SL] = 1; time[SL] = clampT(SL, dead.f >= 1 && !s ? dur(SL) : s ? Math.max(0, (p - s.p) * TS * SYNC_RATE) : ease(dead.f) * dur(SL)); over = 1; }
+      else if (dead && DIE) { want[DIE] = 1; time[DIE] = clampT(DIE, ease(dead.f) * dur(DIE)); over = 1; }
       else {
         // a blow, a throw or a flinch plays through once around its moment
         if (A.melee) for (const s of ev.swing || []) { const d = (p - s.p) * TS + .25, L = Math.min(dur("melee"), 1.1); if (d >= 0 && d <= .8) { want.melee = Math.min(1, d / .1, (.8 - d) / .15); time.melee = clampT("melee", d / .8 * L); } }
         if (A.throw) for (const f of ev.fire || []) if (f.kind === "grenade") { const d = (p - f.p) * TS + .3, L = dur("throw"); if (d >= 0 && d <= .7) { want.throw = Math.min(1, d / .1, (.7 - d) / .15); time.throw = clampT("throw", d / .7 * L); } }
-        over = Math.max(want.melee || 0, want.throw || 0);
+        // the killer's half of a sync kill
+        let killW = 0;
+        for (const s of ev.kill || []) { const d = (p - s.p) * TS; if (A[s.clip] && d >= 0 && d <= s.len) { killW = want[s.clip] = Math.min(1, d / .12, (s.len - d) / .2); time[s.clip] = clampT(s.clip, d * SYNC_RATE); } }
+        over = Math.max(want.melee || 0, want.throw || 0, killW);
         if (A.hit && !over) for (const hh of ev.hit || []) { const d = (p - hh.p) * TS; if (d >= 0 && d <= .5) { want.hit = Math.sin(Math.PI * d / .5) * .7; time.hit = clampT("hit", d / .5 * dur("hit")); } }
         const rest = 1 - Math.max(over, want.hit || 0);
         // shooting: the aiming pose held, the firing clip run from each shot
         let fireW = 0;
         if (A.fire && !reload) { fireW = F.aim * rest * (1 - .45 * F.walk); time.fire = 0; for (const f of ev.fire || []) { const d = (p - f.p) * TS; if (d >= 0 && d < dur("fire")) time.fire = clampT("fire", d); } want.fire = fireW; }
         const legs = rest - fireW;
-        const crouch = A.kneel && kneel && !prone ? 1 - F.walk : 0;
+        // a prone model: the games have no clip for lying down, and the standing pose tipped flat looks like a statue
+        // pushed over. It crouches instead (the kneeling clip where the model has one), or failing that hunches low
+        const crouch = A.kneel && (kneel || prone) ? (prone ? 1 : 1 - F.walk) : 0;
         if (A.run) { want.run = legs * F.walk; time.run = ((F.phase / (2 * Math.PI)) % 1 + 1) % 1 * dur("run"); }
         if (A.kneel) { want.kneel = legs * (1 - (A.run ? F.walk : 0)) * crouch; time.kneel = (clock + F.i * .37) % dur("kneel"); }
         if (A.idle) { want.idle = Math.max(0, legs - (want.run || 0) - (want.kneel || 0)); time.idle = (clock * (stun ? .3 : 1) + F.i * .37) % dur("idle"); }
@@ -180,9 +204,19 @@
       // posture and reactions the clips don't cover, on the whole figure
       let dodge = 0; for (const d of ev.dodge || []) dodge = Math.max(dodge, bump((p - d.p) * TS + .05, .3));
       fig.position.z = dodge * (F.i % 2 ? -.3 : .3) * k; fig.rotation.x = dodge * (F.i % 2 ? .35 : -.35);
-      if (prone && !dead) { fig.rotation.z = -Math.PI / 2 + .04; fig.position.y = .16 * k; fig.position.x = -.85 * k; }
+      if (prone && !dead) { if (A.kneel) fig.rotation.z = -.22; else { fig.rotation.z = -.62; fig.position.x = -.12 * k; } }
       if (stun && !prone && !dead) { fig.rotation.x += Math.sin(clock * 5 + F.i) * .1; fig.rotation.z = .1; }
-      if (dead && !A.die) { const f = ease(dead.f); fig.rotation.z = f * (Math.PI / 2 - .05); fig.position.y = .12 * k * f; fig.position.x = .55 * k * f; }
+      if (dead && !DIE && !SL) { const f = ease(dead.f); fig.rotation.z = f * (Math.PI / 2 - .05); fig.position.y = .12 * k * f; fig.position.x = .55 * k * f; }
+      // some deaths throw the body yards from where it stood: on a walled map it stops short of a wall
+      if (dead && T && m.hips && over) {
+        const key = (SL || DIE) + (dead.f >= 1 && !(ev.slain || []).length ? "|end" : "");
+        if (!m.lie || m.lie.key !== key || !key.endsWith("|end")) {
+          F.g.updateMatrixWorld(true); const hp = m.hips.getWorldPosition(new THREE.Vector3()), gx = F.g.position.x, gz = F.g.position.z, dx = hp.x - gx, dz = hp.z - gz, far = Math.hypot(dx, dz);
+          const room = far > .9 ? clearRun(gx, gz, dx / far, dz / far, far) : far, cut = far - room, c = Math.cos(F.g.rotation.y), s = Math.sin(F.g.rotation.y);
+          m.lie = { key, x: cut > .05 ? -(dx / far * c - dz / far * s) * cut : 0, z: cut > .05 ? -(dx / far * s + dz / far * c) * cut : 0 };
+        }
+        fig.position.x += m.lie.x; fig.position.z += m.lie.z;
+      }
     }
 
     // a vehicle model: its idle and moving clips if it has any (a walker's stride follows the ground covered)
@@ -216,6 +250,7 @@
       const jobs = figs.map(F => { const r = ros[F.i], s = `${r.faction || ""} ${r.template || ""} ${r.veh || ""} | ${r.kit || ""}`; return rules.find(u => !!u.veh === !!F.veh && u.re.test(s) && !(u.nre && u.nre.test(s))) || null; });
       if (!jobs.some(Boolean)) return;
       await gltfReady();
+      try { if (!window.DOW_BADGES) await loadScript(PACK + "badges.js"); } catch (e) { /* a pack without badges: the models go without */ }
       // each model once, with the clips it borrows (and those its lender borrows in turn)
       const loading = new Map(), byId = new Map(rules.map(u => [u.id, u])), assets = new Map();
       const assetOf = id => { if (!loading.has(id)) loading.set(id, (async () => { const u = byId.get(id), a = await loadAsset(id); if (u && u.clips_from) borrowClips(a, await assetOf(u.clips_from)); return a; })()); return loading.get(id); };
@@ -224,5 +259,6 @@
         if (gone) return;
       }
       for (const F of figs) { const u = jobs[F.i], a = u && assets.get(u.id); if (a) await attachModel(F, ros[F.i], u, a); if (gone) return; }
+      resync();
       if (!running) { update(last.t, last.p, last.st); render(); }
     })().catch(e => console.warn("models not loaded:", e));

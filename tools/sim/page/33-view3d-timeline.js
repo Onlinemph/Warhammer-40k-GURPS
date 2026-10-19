@@ -2,23 +2,68 @@
 // helpers declared in earlier parts are in scope here. tools/sim/README.md has the layout.
     // ================= the timeline: when each model went down and came back, from the frames and casualty events
     const downs = ros.map(() => []);   // per model: [{ t: frame it vanished, at: [x, y], dead, back: frame it reappeared or null }]
-    {
+    // (a function, because a battle being played grows and is scanned again)
+    const scanDowns = () => {
+      for (const d of downs) d.length = 0;
       const dEv = [];
-      fx.forEach((es, k) => es.forEach(e => { if (e[0] === "d") dEv.push({ t: k + 1, q: e[1], r: e[2], dead: !!e[4] }); }));
+      fx.forEach((es, k) => es.forEach(e => { if (e[0] === "d") dEv.push({ t: k + 1, q: e[1], r: e[2], dead: !!e[4], ix: e[5] }); }));
+      // a model that broke and ran: its way off the table, [q, r, ...]
+      const qEv = new Map(); fx.forEach((es, k) => es.forEach(e => { if (e[0] === "q") qEv.set((k + 1) + ":" + e[1], e[2] || []); }));
       for (let i = 0; i < ros.length; i++) {
         let cur = null;
         for (let t = 1; t < fr.length; t++) {
           const a = fr[t - 1] && fr[t - 1][i], b = fr[t] && fr[t][i];
-          if (a && !b) { const ev = dEv.find(d => d.t === t && d.q === a[0] && d.r === a[1]); cur = { t, at: P(a[0], a[1]), q: a[0], r: a[1], dead: ev ? ev.dead : null, fell: !!ev, back: null, facing: a[4] }; downs[i].push(cur); }
+          // (a fall names its model; an older recording only its hex, which misses a model that moved or was thrown back
+          // before it fell: that one used to vanish as if it had left the field, user report)
+          if (a && !b) { const ev = dEv.find(d => d.t === t && (d.ix != null ? d.ix === i : d.q === a[0] && d.r === a[1])), q = ev ? ev.q : a[0], r = ev ? ev.r : a[1]; cur = { t, at: P(q, r), q, r, dead: ev ? ev.dead : null, fell: !!ev, back: null, facing: a[4] }; const run = !ev && qEv.get(t + ":" + i); if (run && run.length >= 4) { cur.run = [cur.at]; for (let j = 0; j < run.length; j += 2) cur.run.push(P(run[j], run[j + 1])); } downs[i].push(cur); }
           else if (!a && b && cur) { cur.back = t; cur = null; }
         }
       }
-    }
+    };
+    scanDowns();
     const deathOf = (i, t) => downs[i].find(d => d.fell && d.t <= t && (d.back == null || d.back > t)) || null;
+    // A sync kill (the Dawn of War games' paired finishing moves): a melee blow that puts its target down, struck from
+    // beside it, between two models whose pack entries have the clips ("kill" for the one, "slain" for the other).
+    // The victim turns to face its killer and dies by the paired clip, and lies as that clip leaves it.
+    // d.sync: undefined until worked out, then null or { a: the killer, yaw: the victim's, len: seconds }
+    const SYNC_RATE = 1.35;   // the clips run about five seconds in the game: a little faster here keeps a battle moving
+    function syncOf(i, d) {
+      if (d.sync !== undefined) return d.sync;
+      d.sync = null;
+      const V = figs[i], es = fx[d.t - 1] || [];
+      if (!d.fell || !V || !V.model) return null;
+      let at = -1; for (let k = es.length - 1; k >= 0; k--) if (es[k][0] === "h" && es[k][1] === i) { at = k; break; }
+      for (let k = at - 1; k >= 0; k--) {
+        const e = es[k]; if (e[0] !== "s" && e[0] !== "m") continue;
+        const A = figs[e[7]];
+        if (e[0] !== "m" || e[8] !== i || !e[6] || !A || !A.model) return null;
+        const [ax, ay] = P(e[1], e[2]), [vx, vy] = P(e[3], e[4]);
+        if (Math.hypot(ax - vx, ay - vy) > 2) return null;   // from the next hex only: the clips are made at arm's length
+        // Soulstorm numbers its moves and a killer's N goes with its victim's N; Dawn of War II's units have a first
+        // and a second pair; across the two games, any killer's half with any victim's. One is picked per death.
+        const ka = A.model.acts, va = V.model.acts, pairs = [];
+        for (const n of [1, 2, 3]) if (ka["kill" + n] && va["slain" + n]) pairs.push(["kill" + n, "slain" + n]);
+        if (ka.kill && va.slain) pairs.push(["kill", "slain"]);
+        if (ka.killB && va.slainB) pairs.push(["killB", "slainB"]);
+        if (!pairs.length && ka.kill4 && va.slain4) pairs.push(["kill4", "slain4"]);
+        if (!pairs.length) { const k = ["kill", "killB", "kill1", "kill2", "kill3"].find(n => ka[n]), s = ["slain", "slainB", "slain1", "slain2", "slain3"].find(n => va[n]); if (k && s) pairs.push([k, s]); }
+        if (!pairs.length) return null;
+        const [kill, slain] = pairs[(i * 7 + d.t * 3) % pairs.length];
+        const len = Math.min(5.6, Math.max(ka[kill].getClip().duration, va[slain].getClip().duration) / SYNC_RATE);
+        return d.sync = { a: e[7], yaw: Math.atan2(-(ay - vy), ax - vx), len, kill, slain };
+      }
+      return null;
+    }
+    const syncKill = (i, t) => { const d = downs[i].find(x => x.t === t && x.fell); return d ? syncOf(i, d) : null; };
+    // the models have arrived (or the battle has grown): work the sync kills and the action camera's plans out again
+    const resync = () => { for (const ds of downs) for (const d of ds) delete d.sync; plans.clear(); schedT = -1; };
 
     // ================= the action camera: a second split into a move beat, then one beat per attacker in the order
     // they acted, the camera cutting to each; TS is how many seconds of normal replay time this second now takes
-    const MOVE = 1.2, plans = new Map();
+    // the movement at the head of each second, in units of the replay's second (0.85 of the speed setting: 680 ms at
+    // the default): 1.47 of them is a full second of real time, so a model runs across the table at its own pace
+    // (user report: at 1.2 the opening advance looked hurried)
+    const MOVE = 1.47, plans = new Map();
     let TS = 1;
     // every round fired (or blow struck) is its own step, with the results that followed it: a dodge, a shield,
     // a wound or armour holding; misses are spread among the hits
@@ -50,10 +95,16 @@
       for (const b of beats) {
         const n = b.rounds.length;
         b.SH = b.melee ? .6 : b.rounds[0] && b.rounds[0].blast ? .6 : Math.max(.18, Math.min(.45, 4 / n));
-        const L = .6 + n * b.SH + 1.1;
+        // each round's start within the beat; the blow of a sync kill runs as long as its clips do
+        let off = .6;
+        for (const r of b.rounds) {
+          const sk = b.melee && r.res.some(x => x.down) ? syncKill(b.tgt, t) : null;
+          r.off = off; r.sync = sk && sk.a === b.a ? sk : null; off += r.sync ? r.sync.len : b.SH;
+        }
+        const L = off + (b.rounds.some(r => r.sync) ? .5 : 1.1);
         b.start = at; b.L = L; at += L;
       }
-      const tsc = beats.length ? at + .2 : 1;
+      const tsc = beats.length ? at + .2 : MOVE;   // (a second with no attacks is all movement)
       for (const b of beats) { b.start /= tsc; b.len = b.L / tsc; }
       const pl = { beats, tsc, byA };
       plans.set(t, pl); return pl;
@@ -70,7 +121,7 @@
       if (t <= 0) return;
       const es = fx[t - 1] || [], lastImpact = new Map(), u = 1 / TS;
       hitBy.clear(); for (const e of es) if ((e[0] === "s" || e[0] === "m") && e[6] && e[8] >= 0) hitBy.set(e[8], e[7]);
-      if (cine) { cineSchedule(pl, u, es); fallSounds(t); sched.sort((a, b) => a.p - b.p); return; }
+      if (cine) { cineSchedule(pl, u, es); fallSounds(t); breachDust(t); sched.sort((a, b) => a.p - b.p); return; }
       let n = 0;
       // when an attack goes off: spread through the first .4 of a normal second, or a little into its attacker's beat
       const lagOf = () => Math.min(.35, n++ * .03) + .05;
@@ -113,8 +164,11 @@
         }
       }
       fallSounds(t);
+      breachDust(t);
       sched.sort((a, b) => a.p - b.p);
     }
+    // a wall breached this second comes down in a cloud of dust
+    const breachDust = t => { if (T) for (const [tt, k, what] of T.events || []) if (what === "broken" && tt === t) { const [q, r] = keyHex(k), [x, y] = P(q, r); sched.push({ p: .03, run: () => { if (o.reduce) return; const at = W3(x, y, zOf(q, r) + .6); burst(smoke, at, 16, { speed: 1.6, life: 2.4, s0: .5, s1: 2.2, c: C(0x8a8478), a: .5, up: .8, lift: .5, drag: .9, fadeIn: 1 }); burst(glow, at, 10, { speed: 4, life: .6, s0: .1, s1: .02, c: C(0xd8c8a8), grav: 9, floor: at.y - .55, drag: .96 }); playSound("blast", at, .7); } }); } };
     // a blow's sound: the swing, then what it lands on; a body hitting the ground when a model falls this second
     const swingSound = (e, landed) => { const A = figs[e[7]], F = figs[e[8]], mk = ros[e[7]].mk || ""; if (landed) { if (F) playSound("melee." + mk, F, .9); } else if (A) { playSound("swing." + mk, A, .7); if (rnd() < .3) say(A, "charge", F); else say(A, "effort", null, .6); } };
     // who struck whom this second, so the one who felled a foe can say so
@@ -137,8 +191,17 @@
       for (const b of pl.beats) {
         b.fireP = b.start + .6 * u;
         b.rounds.forEach((r, j) => {
-          const e = r.e, fp = b.start + (.6 + j * b.SH) * u; r.p = fp;
+          const e = r.e, fp = b.start + r.off * u; r.p = fp;
           let travel = .22;
+          if (r.sync) {
+            // a sync kill: the killer's clip and the victim's start together; the blow lands a third of the way in
+            travel = r.sync.len * .35;
+            (evFor[e[7]].kill ||= []).push({ p: fp, len: r.sync.len, clip: r.sync.kill });
+            (evFor[e[8]].slain ||= []).push({ p: fp });
+            sched.push({ p: fp, run: () => swingSound(e, false) });
+            sched.push({ p: fp + travel * u, run: () => swingSound(e, true) });
+            sched.push({ p: fp + travel * u, run: () => { const F = figs[e[8]]; if (F) burst(glow, chestOf(F), 10, { speed: 3, life: .25, s0: .12, s1: .02, c: C(0xffe0a0), grav: 6 }); } });
+          } else
           if (e[0] === "s") {
             const kind = e[12] || "slug", K = KIND[kind] || KIND.slug, one = e.slice();
             if (!r.blast) { one[11] = 1; one[10] = r.hit ? 1 : 0; one[6] = r.hit ? 1 : 0; }
@@ -155,7 +218,7 @@
           r.res.forEach((x, k) => {
             const e2 = x.e, ip = r.ip + k * (r.blast ? .15 : .1) * u; x.p = ip;
             if (e2[0] === "v") (evFor[e2[1]].dodge ||= []).push({ p: ip - .08 * u, how: e2[2] });
-            else if (e2[0] === "h") { const F = figs[e2[1]]; hP.set(e2, ip); deathP.set(e2[1], ip); if (e2[2] > 0) (evFor[e2[1]].hit ||= []).push({ p: ip }); sched.push({ p: ip, run: () => { if (F) impactFx(F, e2[2] > 0); } }); }
+            else if (e2[0] === "h") { const F = figs[e2[1]]; hP.set(e2, ip); deathP.set(e2[1], r.sync ? fp : ip); if (e2[2] > 0) (evFor[e2[1]].hit ||= []).push({ p: ip }); sched.push({ p: ip, run: () => { if (F) impactFx(F, e2[2] > 0); } }); }
             else if (e2[0] === "f") { hP.set(e2, ip); sched.push({ p: ip, run: () => { const F = figs[e2[1]]; if (F) shieldFx(F); } }); }
             else if (e2[0] === "b") { const [x2, y2] = P(e2[1], e2[2]); sched.push({ p: ip, run: () => blastFx(W3(x2, y2, zOf(e2[1], e2[2])), e2[3]) }); }
           });
@@ -178,6 +241,14 @@
     // has gone some way further
     const hexAt = (x, y) => { const q = x / 1.5, r = y / SQ3 - q / 2; let rx = Math.round(q), ry = Math.round(-q - r), rz = Math.round(r); const dx = Math.abs(rx - q), dy = Math.abs(ry + q + r), dz = Math.abs(rz - r); if (dx > dy && dx > dz) rx = -ry - rz; else if (dy <= dz) rz = -rx - ry; return rx + "," + rz; };
     let strayT = -1; const brokenNow = new Set(), shutNow = new Set(), wallTopOf = new Map();
+    // how far a body can slide from (x, y) along (dx, dy) before a wall that still stands: up to `far` yards
+    function clearRun(x, y, dx, dy, far) {
+      for (let s = .6; s <= far + .3; s += .3) {
+        const k = hexAt(x + dx * s, y + dy * s);
+        if (!floorSet.has(k) && !(T.events || []).some(([tt, k2, what]) => what === "broken" && k2 === k && tt <= last.t)) return Math.max(0, s - .7);
+      }
+      return far;
+    }
     function flyOn(from, near) {
       const d = near.clone().sub(from), len = d.length(), p = near.clone(); if (len < .01) return { to: p, stopped: false };
       d.multiplyScalar(1 / len);
@@ -288,6 +359,17 @@
         scene.add(s);
         fxObjs.push({ obj: s, run(p) { const show = p >= pi || o.reduce; s.visible = show; s.position.set(x + .5, base + (o.reduce ? .5 : .2 + Math.min(1, Math.max(0, (p - pi) * TS / .55)) * 1.0), y); s.material.opacity = p >= 1 ? .8 : Math.min(1, (1.15 - p) * 2 + .3); } });
       }
+    }
+    // a battle being played: rings on the hexes the orders panel points at (whose turn, the target, where a move ends)
+    const markPool = [];
+    function drawMarks(st) {
+      const rings = (st.mark && st.mark.rings) || [];
+      rings.forEach(([q, r, col], k) => {
+        let m = markPool[k];
+        if (!m) { m = new THREE.Mesh(G.ring, keep(new THREE.MeshBasicMaterial({ color: 0xffffff, depthTest: false, transparent: true, opacity: .9 }))); m.rotation.x = Math.PI / 2; m.renderOrder = 15; scene.add(m); markPool.push(m); }
+        const [x, y] = P(q, r); m.position.set(x, zOf(q, r) + .12, y); m.scale.setScalar(1.45); m.material.color.set(col); m.visible = true;
+      });
+      for (let k = rings.length; k < markPool.length; k++) markPool[k].visible = false;
     }
     // aim lines and paths, rebuilt every frame (few of them)
     let lineObjs = [];

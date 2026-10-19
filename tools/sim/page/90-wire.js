@@ -3,7 +3,7 @@
     main.querySelectorAll("[data-g]").forEach(el => el.onchange = () => {
       S[el.dataset.g] = el.type === "checkbox" ? el.checked : Math.max(1, Number(el.value) || 1); save();
     });
-    main.querySelectorAll("[data-o]").forEach(el => el.onchange = () => { S[el.dataset.o] = el.value; save(); if (el.dataset.o === "battlefield" || el.dataset.o === "ridge") render(); });
+    main.querySelectorAll("[data-o]").forEach(el => el.onchange = () => { S[el.dataset.o] = el.value; save(); if (/^(battlefield|ridge|colA|colB)$/.test(el.dataset.o)) render(); });
     const hs = main.querySelector("[data-h]"); hs.onchange = () => { S.health = hs.value; save(); render(); };
     main.querySelectorAll("[data-add]").forEach(el => el.onchange = () => {
       if (!el.value) return; const si = +el.dataset.add;
@@ -40,16 +40,14 @@
       det.open = !!u.open; det.ontoggle = () => { u.open = det.open; save(); };
     });
     $("#simrun").onclick = () => {
-      const specs = S.sides.flatMap((units, si) => units.map(u => ({ side: si, spec: u })));
+      const { specs, opts } = battleSetup();
       if (!S.sides[0].length || !S.sides[1].length) { $("#simout").innerHTML = `<p class="empty">Add at least one unit to each side.</p>`; return; }
       $("#simout").innerHTML = `<p class="empty">Fighting ${S.runs} battles…</p>`;
       setTimeout(() => {
-        try { last = SIM.monteCarlo(specs, { runs: S.runs, distance: S.distance, maxTurns: S.maxTurns, morale: S.morale, health: S.health, boxes: S.boxes || 5,
-          locations: S.locations || "elite", cover: [S.coverA || "none", S.coverB || "none"], battlefield: S.battlefield || "open", mapSeed: S.mapSeed || 1,
-          ridge: !MAPPED() && S.ridge ? { side: +S.ridge, height: S.ridgeH || 8 } : null,
-          awareness: MAPPED() ? S.awareness || "limited" : undefined, lighting: S.lighting || "mixed", sightedShots: !!S.sightedShots, tacticalDodge: !!S.tacticalDodge, limitedDodges: S.limitedDodges !== false, cinematicEffort: !!S.cinematicEffort }); $("#simout").innerHTML = results(last); setupReplay(); }
+        try { if (game) endGame(); last = SIM.monteCarlo(specs, { ...opts, runs: S.runs }); $("#simout").innerHTML = results(last); setupReplay(); }
         catch (e) { $("#simout").innerHTML = `<p class="empty">Could not run: ${esc(e.message)}</p>`; }
       }, 20);
     };
+    $("#simplay").onclick = startGame;
   }
   window.simView = render;

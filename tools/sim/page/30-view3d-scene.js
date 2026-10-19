@@ -78,7 +78,8 @@
     const pts = [];
     fr.forEach(f => f.forEach(x => { if (x) pts.push(P(x[0], x[1])); }));
     if (T) for (const k of T.floor) { const [q, r] = k.split(",").map(Number); pts.push(P(q, r)); }
-    const bx0 = Math.min(...pts.map(p => p[0])) - 6, bx1 = Math.max(...pts.map(p => p[0])) + 6, by0 = Math.min(...pts.map(p => p[1])) - 6, by1 = Math.max(...pts.map(p => p[1])) + 6;
+    const PB3 = o.live && !T ? 30 : 6;   // a battle still to be fought has only its deployment to measure
+    const bx0 = Math.min(...pts.map(p => p[0])) - PB3, bx1 = Math.max(...pts.map(p => p[0])) + PB3, by0 = Math.min(...pts.map(p => p[1])) - PB3, by1 = Math.max(...pts.map(p => p[1])) + PB3;
     const cx = (bx0 + bx1) / 2, cy = (by0 + by1) / 2, span = Math.max(bx1 - bx0, by1 - by0);
     const indoor = T && T.kind !== "ruins";
     let skyDome = null;
