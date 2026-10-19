@@ -1,0 +1,25 @@
+# Any small Linux server with Docker (a Hetzner, DigitalOcean or similar VPS): the war behind Caddy, which gets and
+# renews the HTTPS certificate by itself. Set WAR_DOMAIN and ADMIN_KEY in deploy/.env (see deploy/README.md).
+services:
+  war:
+    build: { context: .., dockerfile: Dockerfile }
+    restart: unless-stopped
+    environment:
+      ADMIN_KEY: ${ADMIN_KEY:?set ADMIN_KEY in deploy/.env}
+      TURN_SECONDS: ${TURN_SECONDS:-43200}
+      TRUST_PROXY: "1"
+    volumes:
+      - war_data:/data
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    ports: ["80:80", "443:443"]
+    environment:
+      WAR_DOMAIN: ${WAR_DOMAIN:?set WAR_DOMAIN in deploy/.env}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+    depends_on: [war]
+volumes:
+  war_data:
+  caddy_data:

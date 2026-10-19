@@ -4,6 +4,8 @@
 //
 //   node game/server.js                 # http://localhost:8080
 //   PORT=8080 TURN_SECONDS=43200 DATA_DIR=game/data ADMIN_KEY=... node game/server.js
+//   TRUST_PROXY=1 behind a proxy (Fly, Caddy): the client's address comes from its header, not the socket
+//   BACKUPS=14: daily copies of the event log kept in DATA_DIR/backups (deploy/README.md)
 //
 // API (JSON; the player's token as "Authorization: Bearer <token>"):
 //   POST /api/join   {name, faction}            -> {token}
@@ -17,6 +19,7 @@ const { Worker } = require("worker_threads");
 const { apply, rebuild, view, order } = require("./world/rules.js");
 const { FACTIONS } = require("./world/units.js");
 
+const TRUST_PROXY = process.env.TRUST_PROXY === "1", KEEP_BACKUPS = +(process.env.BACKUPS ?? 14);
 const PORT = +process.env.PORT || 8080, TURN = (+process.env.TURN_SECONDS || 43200) * 1000;
 const DATA = process.env.DATA_DIR || path.join(__dirname, "data"), ADMIN = process.env.ADMIN_KEY || null;
 fs.mkdirSync(DATA, { recursive: true });
@@ -96,8 +99,11 @@ const STATIC = { "/": ["index.html", "text/html"], "/app.js": ["app.js", "text/j
 
 const server = http.createServer(async (req, res) => {
   try {
-    if (limited(req.socket.remoteAddress)) return send(res, 429, { error: "slow down" });
+    // behind a proxy every request comes from the proxy: take the client's address from the header it adds
+    const ip = TRUST_PROXY ? (req.headers["fly-client-ip"] || String(req.headers["x-forwarded-for"] || "").split(",")[0].trim() || req.socket.remoteAddress) : req.socket.remoteAddress;
+    if (limited(ip)) return send(res, 429, { error: "slow down" });
     const url = new URL(req.url, "http://x");
+    if (url.pathname === "/healthz") return send(res, 200, { ok: true, turn: S.turn, players: Object.keys(S.players).length });
     if (req.method === "GET" && STATIC[url.pathname]) { const [f, t] = STATIC[url.pathname]; return send(res, 200, fs.readFileSync(path.join(__dirname, "public", f)), t); }
     if (req.method === "POST" && url.pathname === "/api/join") {
       const { name, faction } = await readBody(req);
@@ -143,7 +149,26 @@ const server = http.createServer(async (req, res) => {
     send(res, 404, { error: "not found" });
   } catch (e) { send(res, 400, { error: e.message }); }
 });
-if (require.main === module) { schedule(); server.listen(PORT, () => console.log(`the war is on http://localhost:${PORT} (turn ${S.turn}, a tick every ${TURN / 1000} s)`)); }
+// ---- backups: once a day (and at start), a copy of the event log in DATA_DIR/backups, the newest KEEP_BACKUPS
+// kept. The log is the whole war; the volume's own snapshots are the second line, an off-site copy the third
+const BACKUPS = path.join(DATA, "backups");
+function backup() {
+  if (!KEEP_BACKUPS || !fs.existsSync(LOG)) return;
+  fs.mkdirSync(BACKUPS, { recursive: true });
+  const name = `events-${new Date().toISOString().slice(0, 10)}.jsonl`;
+  fs.copyFileSync(LOG, path.join(BACKUPS, name));
+  if (fs.existsSync(TOKENS)) fs.copyFileSync(TOKENS, path.join(BACKUPS, "tokens.json"));
+  const all = fs.readdirSync(BACKUPS).filter(f => /^events-\d{4}-\d{2}-\d{2}\.jsonl$/.test(f)).sort();
+  for (const f of all.slice(0, Math.max(0, all.length - KEEP_BACKUPS))) fs.unlinkSync(path.join(BACKUPS, f));
+}
 // for tests and a clean shutdown: no clock, no replay worker
 function stop() { clearTimeout(timer); if (worker) worker.terminate(); worker = null; }
 module.exports = { server, schedule, stop, state: () => S, wantReplay };
+if (require.main === module) {
+  schedule();
+  try { backup(); } catch (e) { console.error("backup failed:", e.message); }
+  setInterval(() => { try { backup(); } catch (e) { console.error("backup failed:", e.message); } }, 24 * 3600 * 1000).unref();
+  server.listen(PORT, () => console.log(`the war is on http://localhost:${PORT} (turn ${S.turn}, a tick every ${TURN / 1000} s)`));
+  // the host stops the machine with SIGTERM (a deploy, a restart): every input is already on disk, so just stop
+  for (const sig of ["SIGTERM", "SIGINT"]) process.on(sig, () => { console.log(`${sig}: stopping`); stop(); server.close(() => process.exit(0)); setTimeout(() => process.exit(0), 3000).unref(); });
+}
