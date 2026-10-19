@@ -353,7 +353,7 @@
       if (A.noise > 0) {
         const span = Math.max(0.05, Math.abs(top.v)) * A.noise;
         const close = opts.filter(o => o.v >= top.v - span);
-        pick = close[Math.floor(R() * close.length)];
+        pick = close[Math.floor(AR() * close.length)];
       }
       // Battle Rage (B124): berserk on entering combat unless it makes its self-control roll
       if (u.flags.battleRage && !m.rageRolled) { m.rageRolled = true; if (roll3() > u.flags.berserk + ledBonus(m)) goBerserk(m, "battle rage"); }

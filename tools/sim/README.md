@@ -30,8 +30,15 @@ Under node, `require("tools/sim/load.js")` gives you `SIM`. Errors name the part
 ```sh
 python3 tools/build_site.py                  # rebuild site/index.html (the tests read its data)
 node --test tools/sim/test/rules.test.js     # rules assertions, under a second
+node --test tools/sim/test/determinism.test.js   # golden battles and seeding, a few seconds
 node tools/sim/test/smoke.js [name] [log]    # reference fights with win rates, about a minute
 node tools/sim/assemble.js > /tmp/sim.js     # the joined simulator, to read or diff
 ```
 
-`test/rules.test.js` checks the engine's tables and formulas against the Basic Set and the user's house rules: success rolls, damage notation, the ST damage table, range, rapid fire, Progressive Recoil, wounding and Injury Tolerance, and hit location. It also checks the data against the anchors in `docs/framework.md`: armour DR, weapon penetration percentages, the AV-to-DR table and vehicle HP. Finally it checks that a battle replays identically from its seed. When a test fails, the engine, the data or the doc has drifted, so fix whichever one is wrong.
+`test/rules.test.js` checks the engine's tables and formulas against the Basic Set and the user's house rules: success rolls, damage notation, the ST damage table, range, rapid fire, Progressive Recoil, wounding and Injury Tolerance, and hit location. It also checks the data against the anchors in `docs/framework.md`: armour DR, weapon penetration percentages, the AV-to-DR table and vehicle HP. Finally it checks that a battle replays identically from its seed.
+
+`test/determinism.test.js` replays a handful of seeded battles and compares each one's outcome and a hash of its full log with `test/golden.json`. A change that alters any of them fails. When that's intended (a rules fix, new AI behaviour), regenerate the file with `GOLDEN_UPDATE=1 node --test tools/sim/test/determinism.test.js` and commit it with the change, so the diff shows which battles moved.
+
+## Randomness
+
+There are two random streams. `R` rolls every die that decides what happens: to-hit, defences, damage, hit locations, morale. `AR` is the AI's own: the sample rolls behind its expected-injury estimates and its tie-breaks between equal choices. A change to how the AI estimates, or how many targets it looks at, therefore can't move a single real die. Both are `Math.random` until seeded. `SIM.seed(s)` seeds both, `runBattle(specs, { seed })` seeds a single battle so it plays the same whatever ran before it, and `monteCarlo` with a seed gives run `i` the seed `SIM.mixSeed(seed, i)`, so any run can be replayed alone. The result of `runBattle` carries the seed it was played from. When a test fails, the engine, the data or the doc has drifted, so fix whichever one is wrong.

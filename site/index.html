@@ -606,13 +606,23 @@ function fmtPtsPlain(p){ return p+" pts"; }
 
 const SIM = (() => {
   // ------------------------------------------------------------------ dice
-  let R = Math.random;
-  function seed(s) {
+  // Two random streams. R is the dice: every roll that decides what happens in the battle. AR is the AI's own
+  // stream, for the planner's sample rolls (expected injury) and its tie-breaks. Keeping them apart means a change
+  // to how the AI estimates or how often it looks doesn't shift a single real die, so seeded battles stay put.
+  // Unseeded, both are Math.random. seed(s) sets both from one number.
+  let R = Math.random, AR = Math.random;
+  function mulberry(s) {
     let a = s >>> 0;
-    R = () => { a |= 0; a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    return () => { a |= 0; a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a);
       t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
   }
-  const d6 = () => 1 + Math.floor(R() * 6);
+  // a well-mixed 32-bit seed from a seed and a salt, so neighbouring seeds give unrelated streams
+  function mixSeed(s, salt) {
+    let h = (Math.imul((s >>> 0) ^ 0x9E3779B9, 0x85EBCA6B) ^ Math.imul((salt >>> 0) + 0x632BE5AB, 0xC2B2AE35)) >>> 0;
+    h = Math.imul(h ^ (h >>> 16), 0x7FEB352D); h = Math.imul(h ^ (h >>> 15), 0x846CA68B); return (h ^ (h >>> 16)) >>> 0;
+  }
+  function seed(s) { R = mulberry(s); AR = mulberry(mixSeed(s, 0xA1)); }
+  const d6 = (rnd = R) => 1 + Math.floor(rnd() * 6);
   // P3[n] = chance that 3d6 rolls n or less (success chance at effective skill n, crits aside)
   const P3 = (() => { const c = Array(19).fill(0); for (let a = 1; a <= 6; a++) for (let b = 1; b <= 6; b++) for (let d = 1; d <= 6; d++) c[a + b + d]++;
     const out = []; let t = 0; for (let n = 0; n <= 18; n++) { t += c[n]; out.push(t / 216); }
@@ -664,9 +674,10 @@ const SIM = (() => {
     if (!any) return null;
     return { n, add, mult, div, type, ex, frag, text: String(str) };
   }
-  function rollDamage(dm) {
+  // rnd: which stream rolls it (the planner passes AR for its estimates)
+  function rollDamage(dm, rnd = R) {
     let t = dm.add;
-    for (let i = 0; i < dm.n; i++) t += d6();
+    for (let i = 0; i < dm.n; i++) t += d6(rnd);
     t = Math.max(dm.type === "cr" ? 0 : 1, t);
     return Math.floor(t * dm.mult);
   }
@@ -1703,6 +1714,8 @@ const SIM = (() => {
 
   // ------------------------------------------------------------------ battle
   function runBattle(unitSpecs, opt = {}) {
+    // opt.seed: this battle's dice and AI streams start from it, whatever ran before (the MMO's replays rely on it)
+    if (opt.seed != null) seed(opt.seed);
     const distance = Math.max(2, Math.round(opt.distance ?? 100)), maxTurns = opt.maxTurns ?? 1200, morale = opt.morale !== false;
     const frac = opt.health === "fractional", boxes = opt.boxes || 5;
     const SIGHTED = !!opt.sightedShots;
@@ -3030,7 +3043,7 @@ const SIM = (() => {
       const halfDR = d.div === Infinity ? 0 : Math.floor(((aDR ? Math.floor(armDR / 2) : gapDR(tu, loc)) + natDR) / d.div);
       const injOf = pen => Math.min(cap, ((d.type === "tox" && tu.flags.poison === "immune" ? 0 : pen * woundMult(d.type, loc, tu.flags, d.ex)) + avgF) / red);
       for (let i = 0; i < 20; i++) {
-        const raw = rollDamage(d), pen = raw - effDR;
+        const raw = rollDamage(d, AR), pen = raw - effDR;
         if (pen > 0) tot += injOf(pen);
         else {
           const bt = armDR > 0 ? Math.min(cap, bluntOf(raw, d.type, tu.arm.flexible, d.ex) / red) : 0;
@@ -3048,7 +3061,7 @@ const SIM = (() => {
       const effDR = d.div === Infinity ? 0 : Math.floor(dr / d.div), vm = vehMult(d.type, loc, d.ex);
       const avgF = fol ? (fol.n * 3.5 + fol.add) * fol.mult * (fol.ex ? 3 : 1) * vehMult(fol.type, "body", fol.ex) : 0;
       let tot = 0;
-      for (let i = 0; i < 20; i++) { const pen = rollDamage(d) - effDR; if (pen > 0) tot += pen * vm + avgF; }
+      for (let i = 0; i < 20; i++) { const pen = rollDamage(d, AR) - effDR; if (pen > 0) tot += pen * vm + avgF; }
       return tot / 20;
     }
     // Can this weapon never get through that foe's armour, even on its best roll? The planner's expected injury comes
@@ -3326,7 +3339,7 @@ const SIM = (() => {
       if (stalk && hexDist(m.h, goal) <= 20) steps = Math.min(steps, Math.max(1, Math.floor(moveOf(m) / 2)));
       const foesK = stalk ? known(m).filter(f => f.h) : [];
       const sc = n => (stalk ? (foesK.some(f => los(f.h, n)) ? 10 : 0) + (darkAt(n) <= -3 ? 0 : 1) : 0) + (spread ? nearFriends(m, n) : 0);
-      const better = (n, d, bd, best) => d < bd || (d === bd && best && (sc(n) < sc(best) || (sc(n) === sc(best) && R() < 0.3)));
+      const better = (n, d, bd, best) => d < bd || (d === bd && best && (sc(n) < sc(best) || (sc(n) === sc(best) && AR() < 0.3)));
       if (terr) {
         // round the walls: each step goes to a free neighbour nearer the goal on foot, hopping crates it's big
         // enough to jump and friends in the way
@@ -4181,7 +4194,7 @@ const SIM = (() => {
       if (!goal || hexDist(goal, m.h) <= 1) {
         // then the far staging bay, then sweep the facility room by room (a random walkable hex at a time)
         if (!m.searchGoal) m.searchGoal = terr.spawn[1 - m.u.side];
-        while (hexDist(m.searchGoal, m.h) <= 2) { const i = Math.floor(R() * terr.hx.length); if (pass[i]) m.searchGoal = terr.hx[i]; }
+        while (hexDist(m.searchGoal, m.h) <= 2) { const i = Math.floor(AR() * terr.hx.length); if (pass[i]) m.searchGoal = terr.hx[i]; }
         goal = m.searchGoal;
       }
       const n = stepToward(m, goal, runMove(m), 1);
@@ -4542,7 +4555,7 @@ const SIM = (() => {
       if (A.noise > 0) {
         const span = Math.max(0.05, Math.abs(top.v)) * A.noise;
         const close = opts.filter(o => o.v >= top.v - span);
-        pick = close[Math.floor(R() * close.length)];
+        pick = close[Math.floor(AR() * close.length)];
       }
       // Battle Rage (B124): berserk on entering combat unless it makes its self-control roll
       if (u.flags.battleRage && !m.rageRolled) { m.rageRolled = true; if (roll3() > u.flags.berserk + ledBonus(m)) goBerserk(m, "battle rage"); }
@@ -6113,7 +6126,7 @@ const SIM = (() => {
     L(winner >= 0 ? `Side ${winner === 0 ? "A" : "B"} wins in ${turn - 1} turns` :
       timeout ? `Still fighting when the ${maxTurns}-second limit ran out` : `Both sides destroyed or broken after ${turn - 1} turns`);
     return {
-      winner, timeout, turns: turn - 1, log, frames, fx, terrain: frames && terr ? { floor: [...terr.floor], crates: [...terr.crates], doors: [...terr.doors], shut: [...startShut], events: tev, light: [...terr.floor].map(k => { const [q, r] = k.split(",").map(Number); return [k, darkAt({ q, r })]; }).filter(x => x[1]),
+      winner, seed: opt.seed ?? null, timeout, turns: turn - 1, log, frames, fx, terrain: frames && terr ? { floor: [...terr.floor], crates: [...terr.crates], doors: [...terr.doors], shut: [...startShut], events: tev, light: [...terr.floor].map(k => { const [q, r] = k.split(",").map(Number); return [k, darkAt({ q, r })]; }).filter(x => x[1]),
         elev: EL ? terr.hx.map((h, i) => [key(h.q, h.r), EL[i]]).filter(x => x[1]) : [], kind: terr.kind || "facility", style: terr.style || "", theme: terr.theme || "", water: terr.water ? [...terr.water] : [],
         wallTop: WT ? terr.hx.map((h, i) => [key(h.q, h.r), WT[i]]).filter((x, i) => terr.wallI[i] && x[1] < 99) : null } : null,
       ridge: frames && RIDGE ? { ...RIDGE } : null, roster: models.map(m => { const u = m.u; return { id: m.id, side: u.side, unit: u.idx, template: u.template, faction: u.ai.name, speed: u.speed, move: u.move, hp: u.HP, st: u.st, dx: u.dx, dodge: u.dodge, parry: u.parry, dr: drAt(u.arm.dr, "torso") + drAt(u.nat, "torso"), sp: u.shield ? u.shield.sp : 0, sm: u.sm || 0, body: u.body || "upright", rk: wkind(u.ranged), mk: u.veh ? "" : mkind(u.melee), kit: [((u.ranged && u.ranged.name) || ""), ((u.melee && u.melee.name) || ""), ...(u.armourNames || [])].join("|"), veh: u.veh ? u.veh.name : "", vlocs: u.veh ? u.veh.locs : null,
@@ -6132,11 +6145,12 @@ const SIM = (() => {
 
   function monteCarlo(unitSpecs, opt = {}) {
     const runs = opt.runs ?? 200;
-    if (opt.seed != null) seed(opt.seed);
+    // seeded, run i gets its own seed mixed from opt.seed and i, so no run depends on the ones before it
+    const runSeed = i => opt.seed == null ? undefined : mixSeed(opt.seed, i);
     const res = { runs, wins: [0, 0], draws: 0, timeouts: 0, mutual: 0, turns: 0, units: null, sample: null, runsList: [] };
     const terrain = battleMap(opt);
     for (let i = 0; i < runs; i++) {
-      const r = runBattle(unitSpecs, { ...opt, terrain, log: i === 0, frames: i === 0 });
+      const r = runBattle(unitSpecs, { ...opt, seed: runSeed(i), terrain, log: i === 0, frames: i === 0 });
       if (i === 0) res.sample = r;
       if (r.winner < 0) { res.draws++; if (r.timeout) res.timeouts++; else res.mutual++; } else res.wins[r.winner]++;
       res.runsList.push([r.turns, r.winner]);
@@ -6154,7 +6168,7 @@ const SIM = (() => {
     return res;
   }
 
-  return { index, buildUnit, buildVehicle, describe, runBattle, monteCarlo, parseDamage, seed, woundMult, fmtDice, px, facilityMap, ruinsMap, battlefields: BATTLEFIELDS, fromOffset, rangePenalty, DIRS, squadSpecs,
+  return { index, buildUnit, buildVehicle, describe, runBattle, monteCarlo, parseDamage, seed, mixSeed, woundMult, fmtDice, px, facilityMap, ruinsMap, battlefields: BATTLEFIELDS, fromOffset, rangePenalty, DIRS, squadSpecs,
     get squads() { return SQUADS; }, get vehicles() { return VEHICLES; },
     get templates() { return TEMPLATES; }, get equipment() { return EQ; }, traitWeapons,
     // the pure rule helpers, for test/rules.test.js

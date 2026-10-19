@@ -1,5 +1,5 @@
 // Rules assertions: the engine's tables and formulas against the Basic Set, the user's house rules and the anchors
-// in docs/framework.md. Run `node --test tools/sim/test/` after `python3 tools/build_site.py` (the data comes from
+// in docs/framework.md. Run `node --test tools/sim/test/*.test.js` after `python3 tools/build_site.py` (the data comes from
 // the built site). A failure here means the engine, the data or the doc has drifted; fix whichever is wrong.
 const test = require("node:test");
 const assert = require("node:assert/strict");

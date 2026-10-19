@@ -1,5 +1,7 @@
   // ------------------------------------------------------------------ battle
   function runBattle(unitSpecs, opt = {}) {
+    // opt.seed: this battle's dice and AI streams start from it, whatever ran before (the MMO's replays rely on it)
+    if (opt.seed != null) seed(opt.seed);
     const distance = Math.max(2, Math.round(opt.distance ?? 100)), maxTurns = opt.maxTurns ?? 1200, morale = opt.morale !== false;
     const frac = opt.health === "fractional", boxes = opt.boxes || 5;
     const SIGHTED = !!opt.sightedShots;

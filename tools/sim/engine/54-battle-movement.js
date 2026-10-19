@@ -30,7 +30,7 @@
       if (stalk && hexDist(m.h, goal) <= 20) steps = Math.min(steps, Math.max(1, Math.floor(moveOf(m) / 2)));
       const foesK = stalk ? known(m).filter(f => f.h) : [];
       const sc = n => (stalk ? (foesK.some(f => los(f.h, n)) ? 10 : 0) + (darkAt(n) <= -3 ? 0 : 1) : 0) + (spread ? nearFriends(m, n) : 0);
-      const better = (n, d, bd, best) => d < bd || (d === bd && best && (sc(n) < sc(best) || (sc(n) === sc(best) && R() < 0.3)));
+      const better = (n, d, bd, best) => d < bd || (d === bd && best && (sc(n) < sc(best) || (sc(n) === sc(best) && AR() < 0.3)));
       if (terr) {
         // round the walls: each step goes to a free neighbour nearer the goal on foot, hopping crates it's big
         // enough to jump and friends in the way

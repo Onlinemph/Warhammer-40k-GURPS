@@ -33,7 +33,7 @@
       const halfDR = d.div === Infinity ? 0 : Math.floor(((aDR ? Math.floor(armDR / 2) : gapDR(tu, loc)) + natDR) / d.div);
       const injOf = pen => Math.min(cap, ((d.type === "tox" && tu.flags.poison === "immune" ? 0 : pen * woundMult(d.type, loc, tu.flags, d.ex)) + avgF) / red);
       for (let i = 0; i < 20; i++) {
-        const raw = rollDamage(d), pen = raw - effDR;
+        const raw = rollDamage(d, AR), pen = raw - effDR;
         if (pen > 0) tot += injOf(pen);
         else {
           const bt = armDR > 0 ? Math.min(cap, bluntOf(raw, d.type, tu.arm.flexible, d.ex) / red) : 0;
@@ -51,7 +51,7 @@
       const effDR = d.div === Infinity ? 0 : Math.floor(dr / d.div), vm = vehMult(d.type, loc, d.ex);
       const avgF = fol ? (fol.n * 3.5 + fol.add) * fol.mult * (fol.ex ? 3 : 1) * vehMult(fol.type, "body", fol.ex) : 0;
       let tot = 0;
-      for (let i = 0; i < 20; i++) { const pen = rollDamage(d) - effDR; if (pen > 0) tot += pen * vm + avgF; }
+      for (let i = 0; i < 20; i++) { const pen = rollDamage(d, AR) - effDR; if (pen > 0) tot += pen * vm + avgF; }
       return tot / 20;
     }
     // Can this weapon never get through that foe's armour, even on its best roll? The planner's expected injury comes

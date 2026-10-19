@@ -149,7 +149,7 @@
       if (!goal || hexDist(goal, m.h) <= 1) {
         // then the far staging bay, then sweep the facility room by room (a random walkable hex at a time)
         if (!m.searchGoal) m.searchGoal = terr.spawn[1 - m.u.side];
-        while (hexDist(m.searchGoal, m.h) <= 2) { const i = Math.floor(R() * terr.hx.length); if (pass[i]) m.searchGoal = terr.hx[i]; }
+        while (hexDist(m.searchGoal, m.h) <= 2) { const i = Math.floor(AR() * terr.hx.length); if (pass[i]) m.searchGoal = terr.hx[i]; }
         goal = m.searchGoal;
       }
       const n = stepToward(m, goal, runMove(m), 1);
