@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Galactic War</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header><h1>Galactic War</h1><div id="turn"></div></header>
+<main id="join" hidden>
+  <section class="card">
+    <h2>Raise a warband</h2>
+    <p>Lead a warband in a war that runs whether you're here or not. Orders are due before each tick.</p>
+    <label>Your name <input id="j-name" maxlength="24" autocomplete="off"></label>
+    <div class="factions">
+      <label><input type="radio" name="faction" value="hegemony" checked> <b>The Hegemony</b><br><small>A decaying empire of levies and rare super-soldiers.</small></label>
+      <label><input type="radio" name="faction" value="brawl"> <b>The Brawl</b><br><small>A brute species that treats war as sport.</small></label>
+    </div>
+    <button id="j-go">Join the war</button>
+    <p class="err" id="j-err"></p>
+  </section>
+</main>
+<main id="game" hidden>
+  <section class="map card"><svg id="map" viewBox="0 0 1000 600" role="img" aria-label="Galaxy map"></svg></section>
+  <aside>
+    <section class="card" id="me"></section>
+    <section class="card" id="world"><p class="muted">Pick a world on the map.</p></section>
+    <section class="card" id="orders"></section>
+    <section class="card"><h3>Battles</h3><ol id="reports" class="feed"></ol></section>
+    <section class="card"><h3>News</h3><ol id="news" class="feed"></ol></section>
+  </aside>
+</main>
+<script src="/app.js"></script>
+</body>
+</html>
