@@ -252,7 +252,7 @@
         const c = h.q, r = h.r + (c - (c & 1)) / 2, cx = Math.floor(c / CS), cy = Math.floor(r / CS), id = cy * cw + cx;
         if (terr.wallI[i] || terr.crateI[i] || terr.doorI[i]) return;
         open[id]++;
-        const d = Math.hypot(c - (cx + 0.5) * CS, r - (cy + 0.5) * CS);
+        const d = hyp(c - (cx + 0.5) * CS, r - (cy + 0.5) * CS);
         if (d < best[id]) { best[id] = d; rep[id] = i; }
       });
       return { CS, cw, ch, open, rep, cache: new Map() };
@@ -770,7 +770,7 @@
       const base = moveOf(m);
       if (m.legsLost || m.halfMove) return base;
       const k = m.runPrev || 0, L = m.u.flags.enhMove || 0;
-      if (L > 0) return Math.min(Math.floor(base * Math.pow(2, L)), base * (k + 1));
+      if (L > 0) return Math.min(Math.floor(base * pow2h(L)), base * (k + 1));
       return k >= 1 ? Math.max(base + 1, Math.floor(base * 1.2)) : base;
     }
     const baseMove = m => m.u.ranged && m.u.ranged.needsSetup && !m.setUp ? m.u.movePacked : m.u.move;

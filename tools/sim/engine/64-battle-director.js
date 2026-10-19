@@ -49,7 +49,7 @@
     const centroid = hs => { let x = 0, y = 0; for (const h of hs) { const [a, b] = px(h); x += a; y += b; } return [x / hs.length, y / hs.length]; };
     // the hex at pixel point (x, y): the inverse of px, cube-rounded
     function hexAt(x, y) {
-      const q = x / 1.5, r = y / Math.sqrt(3) - q / 2, s = -q - r;
+      const q = x / 1.5, r = y / SQRT3 - q / 2, s = -q - r;
       let rq = Math.round(q), rr = Math.round(r); const rs = Math.round(s);
       const dq = Math.abs(rq - q), dr = Math.abs(rr - r), ds = Math.abs(rs - s);
       if (dq > dr && dq > ds) rq = -rr - rs; else if (dr > ds) rr = -rq - rs;
@@ -75,7 +75,7 @@
     // nearest few known foes
     function exposure(a, b, foesH) {
       let seen = 0;
-      const [ax, ay] = px(a), [bx, by] = px(b), n = Math.max(2, Math.round(Math.hypot(bx - ax, by - ay) / 12));
+      const [ax, ay] = px(a), [bx, by] = px(b), n = Math.max(2, Math.round(hyp(bx - ax, by - ay) / 12));
       for (let i = 1; i <= n; i++) {
         const h = openNear(ax + (bx - ax) * i / n, ay + (by - ay) * i / n);
         if (!h) { seen += 3; continue; }
@@ -114,7 +114,7 @@
         const ours = models.filter(x => x.u.side === S && x.state === "ok" && x.h && !x.u.routed).map(x => x.h);
         const [ox, oy] = centroid(ours), [ex, ey] = centroid(foesH);
         let ax = ex - ox, ay = ey - oy;
-        const len = Math.hypot(ax, ay) || 1; ax /= len; ay /= len;
+        const len = hyp(ax, ay) || 1; ax /= len; ay /= len;
         const qx = -ay, qy = ax;   // across the axis
         let lo = Infinity, hi = -Infinity;
         for (const f of foesH) { const [fx, fy] = px(f), t = (fx - ex) * qx + (fy - ey) * qy; lo = Math.min(lo, t); hi = Math.max(hi, t); }
@@ -300,7 +300,7 @@
       // each takes its own spot across the goal, so the squad arrives spread out
       const live = moversOf(g), i = live.indexOf(m);
       const [gx, gy] = px(to), [cx, cy] = px(m.h);
-      let dx = gx - cx, dy = gy - cy; const L0 = Math.hypot(dx, dy) || 1; dx /= L0; dy /= L0;
+      let dx = gx - cx, dy = gy - cy; const L0 = hyp(dx, dy) || 1; dx /= L0; dy /= L0;
       const goal = openNear(gx - dy * 2 * (i - (live.length - 1) / 2), gy + dx * 2 * (i - (live.length - 1) / 2)) || to;
       return hexDist(goal, m.h) <= 1 ? null : goal;
     }

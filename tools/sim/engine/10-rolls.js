@@ -131,6 +131,6 @@
   function rapidBonus(shots) {
     if (shots < 5) return 0; if (shots <= 8) return 1; if (shots <= 12) return 2; if (shots <= 16) return 3;
     if (shots <= 24) return 4; if (shots <= 49) return 5; if (shots <= 99) return 6;
-    return 6 + Math.floor(Math.log2(shots / 50));   // +1 per doubling past 50-99 (B373)
+    return 6 + ilog2(shots / 50);   // +1 per doubling past 50-99 (B373)
   }
 

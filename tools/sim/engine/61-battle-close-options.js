@@ -70,7 +70,7 @@
         // zeal (faction profile): how little a far-off fight is discounted; Orks and the swarm run at the enemy
         // and zealots run in on faith: they half-ignore the fire on the way and believe the fight is worth having
         const z = u.ai.zeal || 0, rm = Math.max(mv, runMove(m) + (u.flags.enhMove ? mv : 0)), turns = (Math.ceil((len - mv) / Math.max(1, rm)) + 1) * (1 - z);
-        const v = Math.pow(GAMMA, turns) * Wm * Math.max(worth, z * 0.1 * threatOf(tgt) * HORIZON) - risk(m, arrive, "") * (1 - z / 2);
+        const v = dpow(GAMMA, turns) * Wm * Math.max(worth, z * 0.1 * threatOf(tgt) * HORIZON) - risk(m, arrive, "") * (1 - z / 2);
         if (cohesion(m, tgt) <= len - rm) add(v, `close@${tgt.id}`, () => { const n = go(runMove(m)); if (n >= mv - 1) m.runK = m.runPrev + 1; if (stopped()) return; if (tgt.h) faceTo(m, tgt.h); L(n ? `${m.id} moves in on ${tgt.id}` : `${m.id} can't find a way to ${tgt.id}`); });
       }
     }
@@ -213,7 +213,7 @@
         if (gun && gun.shots.mag !== Infinity && m.ammo < gun.shots.mag && gun.shots.reload <= 3 && (m.mags > 0 || m.reload > 0)) {
           const turns = Math.max(1, gun.shots.reload - Math.max(0, m.reload > 0 ? gun.shots.reload - m.reload : 0));
           const Eg = planAttack(m, gun, t, gun.level + Math.min(0, gun.bulk || 0) - skillPen(m), false).score;
-          add(Math.pow(GAMMA, turns) * Wr * kv(m, t, Eg) - rNow, `reload-cc`, () => {
+          add(dpow(GAMMA, turns) * Wr * kv(m, t, Eg) - rNow, `reload-cc`, () => {
             if (m.reload === 0) m.reload = gun.shots.reload;
             if (--m.reload <= 0) { m.reload = 0; refill(m, gun); } L(`${m.id} reloads in close combat`);
           });

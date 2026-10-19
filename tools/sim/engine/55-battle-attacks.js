@@ -274,8 +274,8 @@
     // Cones (B413): one attack roll at the aim point; everyone in the wedge (a yard wide at the muzzle, widening
     // to the full width at maximum range) whom the shooter can see is caught, and may dodge. Large-area injury (B400)
     function coneCaught(m, w, target, from = m.h) {
-      const S = Math.sqrt(3), [ax, ay] = px(from), [bx, by] = px(target.h);
-      const len = Math.hypot(bx - ax, by - ay) || 1, ux = (bx - ax) / len, uy = (by - ay) / len;
+      const S = SQRT3, [ax, ay] = px(from), [bx, by] = px(target.h);
+      const len = hyp(bx - ax, by - ay) || 1, ux = (bx - ax) / len, uy = (by - ay) / len;
       const caught = [target];
       for (const x of models) {
         if (x === m || x === target || x.state !== "ok" || !x.h) continue;

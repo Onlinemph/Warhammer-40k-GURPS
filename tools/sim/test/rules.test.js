@@ -292,3 +292,15 @@ test("countryside: sides deploy in lines along their own edges, on open ground, 
   const small = SIM.battlefields.countryside(3, { mapW: 160, mapH: 80 });
   assert.equal(small.W, 160); assert.equal(small.H, 80);
 });
+
+test("the engine uses only maths that every JavaScript engine computes bit for bit the same", () => {
+  // + - * / and Math.sqrt are correctly rounded by the standard; these aren't, and a replay re-runs the battle in
+  // whatever browser opens it. engine/05-dmath.js has the stand-ins (dexp, dsin, dlog, dpow, powi, hyp, ilog2)
+  const BAD = /Math\.(sin|cos|tan|asin|acos|atan|atan2|sinh|cosh|tanh|asinh|acosh|atanh|exp|expm1|log|log2|log10|log1p|pow|hypot|cbrt)\s*\(/;
+  for (const f of fs.readdirSync(path.join(__dirname, "..", "engine"))) {
+    if (f === "05-dmath.js") continue;
+    fs.readFileSync(path.join(__dirname, "..", "engine", f), "utf8").split("\n").forEach((line, i) => {
+      if (BAD.test(line)) assert.fail(`${f}:${i + 1} calls ${line.match(BAD)[0]}): use the deterministic stand-in`);
+    });
+  }
+});

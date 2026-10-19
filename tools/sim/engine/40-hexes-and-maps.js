@@ -25,28 +25,29 @@
     if (dx > dy && dx > dz) rx = -ry - rz; else if (dy <= dz) rz = -rx - ry;
     return { q: rx, r: rz };
   }
-  const px = h => [1.5 * h.q, Math.sqrt(3) * (h.r + h.q / 2)];
+  const px = h => [1.5 * h.q, SQRT3 * (h.r + h.q / 2)];
   const key = (q, r) => q + "," + r;
-  const DIRANG = DIRS.map(([q, r]) => { const [x, y] = px({ q, r }); return Math.atan2(y, x); });
+  // the six facings as unit vectors (all the same length, sqrt 3, before scaling)
+  const DIRV = DIRS.map(([q, r]) => { const [x, y] = px({ q, r }); return [x / SQRT3, y / SQRT3]; });
+  // Facing geometry by dot and cross products (no angles: atan2 differs between engines). cos 91 and cos 151
+  // degrees, the arc boundaries, as constants
+  const COS91 = -0.01745240643728351, COS151 = -0.8746197071393957;
   // arc of `from` as seen by a model at `at` facing `facing`: front (3 hexes), side, rear (B385-386)
   function arcOf(at, facing, from) {
-    const [ax, ay] = px(at), [bx, by] = px(from);
-    let d = Math.abs(Math.atan2(by - ay, bx - ax) - DIRANG[facing]) * 180 / Math.PI;
-    if (d > 180) d = 360 - d;
-    return d <= 91 ? "front" : d <= 151 ? "side" : "rear";
+    const [ax, ay] = px(at), [bx, by] = px(from), vx = bx - ax, vy = by - ay, L = hyp(vx, vy);
+    if (!L) return "front";
+    const c = (vx * DIRV[facing][0] + vy * DIRV[facing][1]) / L;
+    return c >= COS91 ? "front" : c >= COS151 ? "side" : "rear";
   }
   // which side a figure in a side or front hex is on: "L" or "R" (the shield arm is the left)
   function sideOf(at, facing, from) {
-    const [ax, ay] = px(at), [bx, by] = px(from);
-    let d = Math.atan2(by - ay, bx - ax) - DIRANG[facing];
-    while (d > Math.PI) d -= 2 * Math.PI; while (d < -Math.PI) d += 2 * Math.PI;
-    return d < 0 ? "L" : "R";
+    const [ax, ay] = px(at), [bx, by] = px(from), [fx, fy] = DIRV[facing];
+    return fx * (by - ay) - fy * (bx - ax) < 0 ? "L" : "R";
   }
   function faceToward(at, to) {
-    const [ax, ay] = px(at), [bx, by] = px(to);
-    const a = Math.atan2(by - ay, bx - ax);
-    let best = 0, bd = 9;
-    DIRANG.forEach((d, i) => { let x = Math.abs(a - d); if (x > Math.PI) x = 2 * Math.PI - x; if (x < bd) { bd = x; best = i; } });
+    const [ax, ay] = px(at), [bx, by] = px(to), vx = bx - ax, vy = by - ay;
+    let best = 0, bd = -Infinity;
+    DIRV.forEach(([dx, dy], i) => { const d = dx * vx + dy * vy; if (d > bd) { bd = d; best = i; } });
     return best;
   }
   // offset (column, row) to axial, flat-topped "odd-q" layout: a column is a straight line of hexes
@@ -329,7 +330,7 @@
     const { W, H, rnd, ri, carve, wall, zAt, lightAt, K, each } = M;
     carve(1, 1, W - 2, H - 2);
     const hillTop = rnd() < 0.5, hc = ri(22, 42), hr = hillTop ? ri(4, 7) : ri(H - 8, H - 5);
-    each(hc - 9, hr - 6, hc + 9, hr + 6, (k, c, r) => { const z = Math.round(3 - Math.hypot((c - hc) * 0.75, r - hr) / 1.6); if (z > 0) zAt.set(k, Math.min(3, z)); });
+    each(hc - 9, hr - 6, hc + 9, hr + 6, (k, c, r) => { const z = Math.round(3 - hyp((c - hc) * 0.75, r - hr) / 1.6); if (z > 0) zAt.set(k, Math.min(3, z)); });
     const made = [];
     for (let tries = 0; made.length < 6 && tries < 60; tries++) {
       const w = ri(5, 9), h = ri(4, 6), x0 = ri(12, W - 13 - w), y0 = hillTop ? ri(13, H - 3 - h) : ri(2, H - 14 - h), x1 = x0 + w, y1 = y0 + h;
@@ -401,7 +402,7 @@
   const riverMap = (seed = 1) => builtMap("river", seed, M => {
     const { W, H, rnd, ri, carve, wall, water, K, each } = M;
     carve(1, 1, W - 2, H - 2);
-    const phase = rnd() * 6.28, bend = 2 + rnd() * 2.5, mid = r => Math.round(W / 2 + bend * Math.sin(r / 5.5 + phase));
+    const phase = rnd() * 6.28, bend = 2 + rnd() * 2.5, mid = r => Math.round(W / 2 + bend * dsin(r / 5.5 + phase));
     for (let r = 1; r < H - 1; r++) each(mid(r) - 3, r, mid(r) + 2, r, k => { M.floor.delete(k); M.top.set(k, 0.02); water.add(k); });
     const rows = [ri(4, 8), ri(15, 21), ri(28, 32)], spots = [];
     rows.forEach((r, i) => {
@@ -434,9 +435,9 @@
       for (let i = 0, n = Math.round(W * H / 9000) + 2; i < n; i++) hills.push([ri(band + 10, W - band - 11), ri(8, H - 9), 2.5 + rnd() * 3, 12 + rnd() * 12]);
       each(1, 1, W - 2, H - 2, (k, c, r) => {
         let z = 0;
-        for (const [hc, hr, h, s] of hills) { const d2 = ((c - hc) * 0.87) ** 2 + (r - hr) ** 2; if (d2 < 9 * s * s) z += h * Math.exp(-d2 / (2 * s * s)); }
+        for (const [hc, hr, h, s] of hills) { const d2 = ((c - hc) * 0.87) ** 2 + (r - hr) ** 2; if (d2 < 9 * s * s) z += h * dexp(-d2 / (2 * s * s)); }
         const edge = Math.min(1, Math.min(c, W - 1 - c) / (band + 6));
-        z = Math.round(7 * (1 - Math.exp(-z * edge / 7)) * 10) / 10;   // where hills overlap they merge, not stack
+        z = Math.round(7 * (1 - dexp(-z * edge / 7)) * 10) / 10;   // where hills overlap they merge, not stack
         if (z > 0.05) zAt.set(k, z);
       });
       const free = (c, r) => { const k = K(c, r); return M.floor.has(k) && !crates.has(k); };
@@ -486,7 +487,7 @@
       for (let i = 0, n = Math.round(W * H / 6000) + 2; i < n; i++) {
         const wc = ri(band + 8, W - band - 9), wr = ri(6, H - 7), rad = 6 + rnd() * 12;
         each(Math.round(wc - rad * 1.2), Math.round(wr - rad), Math.round(wc + rad * 1.2), Math.round(wr + rad), (k, c, r) => {
-          if (Math.hypot((c - wc) * 0.85, r - wr) > rad * (0.75 + 0.25 * rnd())) return;
+          if (hyp((c - wc) * 0.85, r - wr) > rad * (0.75 + 0.25 * rnd())) return;
           const x = rnd();
           if (x < 0.3) lone(c, r, k2 => wall(c, r, c, r, 99));
           else if (x < 0.4) lone(c, r, k2 => crates.set(k2, "light"));

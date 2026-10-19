@@ -8,6 +8,7 @@ The code is split into numbered parts that are joined in file-name order. `engin
 
 | Part | What's in it |
 |---|---|
+| `engine/05-dmath.js` | Deterministic maths: exp, sin, log, powers and hypot from correctly rounded operations only, so a replay comes out the same in every browser (a test forbids the built-in versions in the engine) |
 | `engine/10-rolls.js` | Dice, success rolls, damage notation, range, rate of fire, Progressive Recoil |
 | `engine/20-units.js` | The data index, armour profiles, the ST damage table, building a unit or a vehicle from its template |
 | `engine/30-wounds.js` | Wounding multipliers, Injury Tolerance, large-area injury, the hit location table |

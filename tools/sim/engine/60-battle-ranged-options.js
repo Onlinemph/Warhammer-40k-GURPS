@@ -56,10 +56,10 @@
       if (u.ranged && !m.gunBroken && m.reload === 0 && m.mags > 0 && u.ranged.shots.mag !== Infinity && m.ammo < u.ranged.shots.mag && u.ranged.shots.reload > 0 && u.ranged.shots.reload <= 3) {
         const w = u.ranged, turns = reloadTime(m, w);
         if (!cands.length && m.ammo > 0 && m.ammo < w.shots.mag * 0.6)
-          add(Math.pow(GAMMA, turns) * 0.5 * shotValueFrom(m, m.h, pool) - rNow + 0.002 * (1 - m.ammo / w.shots.mag), "tac-reload", () => { m.reload = turns; L(`${m.id} tops up its magazine`); });
+          add(dpow(GAMMA, turns) * 0.5 * shotValueFrom(m, m.h, pool) - rNow + 0.002 * (1 - m.ammo / w.shots.mag), "tac-reload", () => { m.reload = turns; L(`${m.id} tops up its magazine`); });
         if (terr && cands.length && m.ammo <= 0) {
           const hide = hideHex(m, pool);
-          if (hide) add(Math.pow(GAMMA, turns + 1) * shotValueFrom(m, m.h, pool) - risk(m, hide.h, ""), "reload-cover", () => { followPath(m, hide.path, moveOf(m)); L(`${m.id} steps out of sight to reload`); });
+          if (hide) add(dpow(GAMMA, turns + 1) * shotValueFrom(m, m.h, pool) - risk(m, hide.h, ""), "reload-cover", () => { followPath(m, hide.path, moveOf(m)); L(`${m.id} steps out of sight to reload`); });
         }
       }
       for (const w of ws) {
@@ -71,12 +71,12 @@
         if (isGun && m.ammo <= 0) {
           if (m.mags <= 0) continue;   // out of magazines: the gun is done
           const turns = reloadTime(m, w);
-          add(Math.pow(GAMMA, turns) * shotValueFrom(m, m.h, pool) - rNow, "reload", () => { m.reload = turns; if (w.natural && w.shots.reload > 3) m.reload = 0; L(`${m.id} ${crewNear(m) ? "and its loader reload" : "reloads"}`); });
+          add(dpow(GAMMA, turns) * shotValueFrom(m, m.h, pool) - rNow, "reload", () => { m.reload = turns; if (w.natural && w.shots.reload > 3) m.reload = 0; L(`${m.id} ${crewNear(m) ? "and its loader reload" : "reloads"}`); });
           continue;
         }
         if (w.indirect) { indirectOptions(m, w, add, rNow, Wr); continue; }
         if (w.concentrate && m.conc < w.concentrate) {
-          add(Math.pow(GAMMA, w.concentrate - m.conc) * shotValueFrom(m, m.h, pool) - rNow, "concentrate", () => { m.conc++; L(`${m.id} concentrates on ${w.name}`); });
+          add(dpow(GAMMA, w.concentrate - m.conc) * shotValueFrom(m, m.h, pool) - rNow, "concentrate", () => { m.conc++; L(`${m.id} concentrates on ${w.name}`); });
           continue;
         }
         const fpCost = (w.fp || 0) * 0.02;
@@ -118,7 +118,7 @@
             const pOpen = Math.min(0.6, 0.08 * bursts), live = 1 - Math.min(0.9, incoming(m, m.h, "") / remOf(m));
             const Eopen = Enow / Math.max(0.05, 1 - pD) * (1 - 0.375);
             let vHold = 0;
-            for (let k = 1; k <= 3; k++) vHold += Math.pow(GAMMA * live, k) * pOpen * Math.pow(1 - pOpen, k - 1) * Eopen;
+            for (let k = 1; k <= 3; k++) vHold += dpow(GAMMA * live, k) * pOpen * dpow(1 - pOpen, k - 1) * Eopen;
             holdIt = vHold > 1.1 * Enow;
           }
           if (holdIt) {
@@ -183,7 +183,7 @@
             let sv = GAMMA * shotValueFrom(m, h2, pool);
             if (w.range && w.range.half > stop && d > w.range.half) {
               const k = Math.ceil((d - w.range.half + 1) / Math.max(1, moveOf(m)));
-              if (k > 1) sv = Math.max(sv, Math.pow(GAMMA, k) * shotValueFrom(m, stepHex(m.h, t.h, d - w.range.half + 1), pool));
+              if (k > 1) sv = Math.max(sv, dpow(GAMMA, k) * shotValueFrom(m, stepHex(m.h, t.h, d - w.range.half + 1), pool));
             }
             add(sv - risk(m, h2, "") - 0.001, `move-closer@${t.id}`, () => {
               stepToward(m, t.h, moveOf(m), stop); if (m.state !== "ok" || !m.h) return; if (t.h) faceTo(m, t.h); L(`${m.id} closes in on ${t.id}`);
@@ -242,7 +242,7 @@
         if (g && g.v >= kv(m, g.c, Math.max(0.5, 0.05 * remOf(g.c)))) {
           const gv = Wr * g.v, left = 2 - grenadeStage(m, g.i);
           if (!left) add(gv - rNow, "throw", () => throwGrenade(m, g));
-          else add(Math.pow(GAMMA, left) * gv - rNow, "ready-grenade", () => readyGrenade(m, g.i));
+          else add(dpow(GAMMA, left) * gv - rNow, "ready-grenade", () => readyGrenade(m, g.i));
         }
       }
     }
@@ -339,9 +339,9 @@
           let V;
           broken[j] = 1;
           if (!melee && shotValueFrom(m, m.h, pool) > 0) V = shotValueFrom(m, m.h, pool);
-          else V = Wm * kv(m, f, planAttack(m, m.u.melee, f, m.u.melee.level - skillPen(m), true).score) * Math.pow(GAMMA, Math.ceil(hd / mv));
+          else V = Wm * kv(m, f, planAttack(m, m.u.melee, f, m.u.melee.level - skillPen(m), true).score) * dpow(GAMMA, Math.ceil(hd / mv));
           broken[j] = 0;
-          if (V > 0) add(Math.pow(GAMMA, T - 1) * V - rNow, `breach@${th.q},${th.r}`, () => attackStructure(m, w, j, melee));
+          if (V > 0) add(dpow(GAMMA, T - 1) * V - rNow, `breach@${th.q},${th.r}`, () => attackStructure(m, w, j, melee));
         }
       }
       // a grenade (krak, above all) against the wall: Ready it, then throw
@@ -354,9 +354,9 @@
         const T = Math.ceil(hp / E) * 3 - grenadeStage(m, gi);
         if (T > 4 || T - 1 > (wk - hd) / mv || m.grenadesLeft[gi] * 3 < T) return;
         broken[j] = 1;
-        const V = shotValueFrom(m, m.h, pool) || Wm * kv(m, f, planAttack(m, m.u.melee, f, m.u.melee.level - skillPen(m), true).score) * Math.pow(GAMMA, Math.ceil(hd / mv));
+        const V = shotValueFrom(m, m.h, pool) || Wm * kv(m, f, planAttack(m, m.u.melee, f, m.u.melee.level - skillPen(m), true).score) * dpow(GAMMA, Math.ceil(hd / mv));
         broken[j] = 0;
-        if (V > 0) add(Math.pow(GAMMA, T - 1) * V - rNow, `breach-grenade@${th.q},${th.r}`, () => {
+        if (V > 0) add(dpow(GAMMA, T - 1) * V - rNow, `breach-grenade@${th.q},${th.r}`, () => {
           if (grenadeStage(m, gi) < 2) { readyGrenade(m, gi, ` to breach the ${hexName(j)}`); return; }
           m.grenadeReady = null; m.grenadeArmed = false; m.grenadesLeft[gi]--; m.attacked = true; faceTo(m, th);
           const r = check(lvl), raw = rollDamage(dm);
@@ -486,7 +486,7 @@
       for (const { h, d } of spots.slice(0, 2)) {
         const path = [];
         for (let k = key(h.q, h.r), n = h; k !== start; ) { path.unshift(n); const p = prev.get(k); k = key(p.q, p.r); n = p; }
-        add(Math.pow(GAMMA, Math.ceil(d / mv)) * shotValueFrom(m, h, pool) - risk(m, h, ""), `high-ground@${h.q},${h.r}`, () => {
+        add(dpow(GAMMA, Math.ceil(d / mv)) * shotValueFrom(m, h, pool) - risk(m, h, ""), `high-ground@${h.q},${h.r}`, () => {
           followPath(m, path, mv); if (m.state !== "ok" || !m.h) return;
           const f = pool.find(x => x.h && los(m.h, x.h)); if (f) faceTo(m, f.h);
           L(`${m.id} ${elevAt(m.h) >= elevAt(h) - 0.01 ? "takes the high ground" : "heads for the high ground"}`);
