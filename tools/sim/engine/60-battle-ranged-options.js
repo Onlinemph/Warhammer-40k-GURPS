@@ -38,7 +38,7 @@
       // shot through it, at random hit location, with the structure's DR on top of its own; the partition takes the hits
       if (terr && AWARE) for (const t of pool.slice(0, 6)) {
         if (!t.h || los(m.h, t.h) || (seenAt[u.side].get(t) ?? -99) < turn - 1) continue;
-        const d = hexDist(m.h, t.h), line = lineHexes(m.h, t.h).map(h => idx(key(h.q, h.r))).filter(i => i != null && blocker(i));
+        const d = hexDist(m.h, t.h), line = lineHexes(m.h, t.h).map(h => iQR(h.q, h.r)).filter(i => i != null && blocker(i));
         if (line.length !== 1) continue;
         const i = line[0], st = structOf(i) || STRUCT.door;
         for (const w of ws) {
@@ -197,7 +197,7 @@
             if (hexDist(m.h, c.h) > w.range.max) continue;
             const inZ = pool.filter(x => hexDist(x.h, c.h) <= 1);
             // area denial (TS p. 18): a cluster, or a lone foe in cover or in a doorway
-            if (inZ.length < 3 && !(inCover(c, m.h) || (terr && terr.doorI[idx(key(c.h.q, c.h.r))]))) continue;
+            if (inZ.length < 3 && !(inCover(c, m.h) || (terr && terr.doorI[iQR(c.h.q, c.h.r)]))) continue;
             const shots = w.shots.mag === Infinity ? w.rof : Math.min(w.rof, m.ammo);
             const Ez = x => P3[cl(Math.min(6, w.level - skillPen(m) + rangePenalty(rngD(m.h, x.h, Math.max(1, hexDist(m.h, x.h))))) + rapidBonus(shots) + x.u.sm)] * (1 - P3[cl(rangedDefence(x, m))]) * expInjRandom(w, x.u);
             // the zone attacks friends in it too (B409): their loss counts against it
@@ -261,10 +261,10 @@
     function stepHex(a, b, n) {
       let h = a;
       if (terr) {
-        const F = field(b);
+        const F = fieldToward(a, b, 1, 0);
         for (let i = 0; i < n; i++) {
-          let best = null, bd = F.get(key(h.q, h.r)) ?? 999;
-          for (const [dq, dr] of DIRS) { const x = { q: h.q + dq, r: h.r + dr }, d = F.get(key(x.q, x.r)); if (d != null && d < bd) { bd = d; best = x; } }
+          let best = null, bd = F.at(h.q, h.r) ?? 999;
+          for (const [dq, dr] of DIRS) { const x = { q: h.q + dq, r: h.r + dr }, d = F.at(x.q, x.r); if (d != null && d < bd) { bd = d; best = x; } }
           if (!best || bd < 1) break;
           h = best;
         }
@@ -449,7 +449,7 @@
         for (const [dq, dr] of DIRS) {
           const n = { q: h.q + dq, r: h.r + dr }, nk = key(n.q, n.r);
           if (prev.has(nk) || taken(nk)) continue;
-          const e = EL ? climb(idx(key(h.q, h.r)), idx(nk), climbCls(m)) : 0;
+          const e = EL ? climb(iQR(h.q, h.r), idx(nk), climbCls(m)) : 0;
           if (e === Infinity || d + 1 + e > mv) continue;
           prev.set(nk, h); q.push({ h: n, d: d + 1 + e });
         }
@@ -477,7 +477,7 @@
         for (const [dq, dr] of DIRS) {
           const n = { q: h.q + dq, r: h.r + dr }, nk = key(n.q, n.r);
           if (prev.has(nk) || taken(nk) || !walkable(nk)) continue;
-          const e = climb(idx(key(h.q, h.r)), idx(nk), cc);
+          const e = climb(iQR(h.q, h.r), idx(nk), cc);
           if (e === Infinity || d + 1 + e > 2 * mv) continue;
           prev.set(nk, h); q.push({ h: n, d: d + 1 + e });
         }

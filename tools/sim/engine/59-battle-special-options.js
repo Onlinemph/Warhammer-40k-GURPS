@@ -159,7 +159,7 @@
       }
       // round a corner: nobody in sight from here, a known foe in sight from the next hex
       if (!terr || cands.length || m.u.stance === "charge") return;
-      const ci = idx(key(m.h.q, m.h.r));
+      const ci = iQR(m.h.q, m.h.r);
       for (const [dq, dr] of DIRS) {
         const n = { q: m.h.q + dq, r: m.h.r + dr }, nk = key(n.q, n.r);
         if (taken(nk) || !walkable(nk) || (EL && climb(ci, idx(nk), climbCls(m)) > 0)) continue;

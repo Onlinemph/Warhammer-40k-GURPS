@@ -72,7 +72,7 @@
           let best = null, bs = -Infinity;
           for (const [dq, dr] of DIRS) {
             const g = { q: m.h.q + dq * steps, r: m.h.r + dr * steps };
-            const sc = Math.min(...melee.map(f => hexDist(g, f.h))) + (terr && idx(key(g.q, g.r)) == null ? -99 : 0);
+            const sc = Math.min(...melee.map(f => hexDist(g, f.h))) + (terr && iQR(g.q, g.r) == null ? -99 : 0);
             if (sc > bs) { bs = sc; best = g; }
           }
           if (best) { drove = stepToward(m, best, steps, 0); if (drove) L(`${m.id} reverses away from ${melee[0].id}`); }

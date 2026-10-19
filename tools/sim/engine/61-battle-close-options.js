@@ -294,7 +294,7 @@
         if (terr) for (const c of pool.slice(0, 6)) {
           if (!c.h || los(m.h, c.h) || hexDist(m.h, c.h) > g.range.max + 2) continue;
           for (const [dq, dr] of [...DIRS, ...DIRS.map(([a, b]) => [2 * a, 2 * b])]) {
-            const X = { q: c.h.q + dq, r: c.h.r + dr }, xi = idx(key(X.q, X.r));
+            const X = { q: c.h.q + dq, r: c.h.r + dr }, xi = iQR(X.q, X.r);
             if (xi == null || !pass[xi] || closed[xi] || !los(m.h, X) || !los(X, c.h)) continue;
             const d = hexDist(m.h, X);
             if (d < 3 || d > g.range.max) continue;
@@ -346,7 +346,7 @@
         const r = g.lvl < 3 ? { ok: false, margin: g.lvl - 10 } : check(g.lvl), raw = rollDamage(w.dmg);
         const off = r.ok ? 0 : Math.max(1, Math.min(Math.ceil(hexDist(m.h, g.hex) / 2), -r.margin));
         const at = off ? scatter(g.hex, off) : g.hex;
-        const how = g.feet ? `at ${c.id}'s feet` : terr && terr.doorI[idx(key(g.hex.q, g.hex.r))] ? `through the doorway at ${c.id}` : `round the corner at ${c.id}`;
+        const how = g.feet ? `at ${c.id}'s feet` : terr && terr.doorI[iQR(g.hex.q, g.hex.r)] ? `through the doorway at ${c.id}` : `round the corner at ${c.id}`;
         L(`${m.id} lobs a ${w.name} ${how} (skill ${g.lvl})${off ? `: ${off} yd off` : ""}`);
         if (m.h) FX(["s", m.h.q, m.h.r, at.q, at.r, m.u.side, 1, m.ix, c ? c.ix : -1, g.lvl, 1, 1, "grenade"]);
         landOn(m, w, at, raw);

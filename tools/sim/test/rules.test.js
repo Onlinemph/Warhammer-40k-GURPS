@@ -273,3 +273,22 @@ test("design notes quote the current AV table", () => {
   }
   assert.deepEqual(bad, [], "stale AV figures:\n" + bad.join("\n"));
 });
+
+test("countryside: sides deploy in lines along their own edges, on open ground, and fight across it", () => {
+  const lo = DATA.loadouts, spec = (t, n) => ({ template: t, count: n, ...lo[t] });
+  const units = [{ side: 0, spec: spec("Astra Militarum Guardsman", 30) }, { side: 1, spec: spec("Ork Boy", 30) }];
+  const m = SIM.battlefields.countryside(2);
+  assert.equal(m.deploy, "edge");
+  const r = SIM.runBattle(units, { battlefield: "countryside", mapSeed: 2, seed: 9, maxTurns: 30 });
+  const seen = new Set();
+  for (const x of r.roster) {
+    const [q, rr] = x.start, k = q + "," + rr, i = m.ids.get(k), col = q;
+    assert.ok(i != null && !m.wallI[i] && !m.crateI[i], `${x.id} starts on ${k}, not open floor`);
+    assert.ok(!seen.has(k), `${x.id} shares ${k}`); seen.add(k);
+    assert.ok(x.side === 0 ? col < m.band + 4 : col > m.W - m.band - 5, `${x.id} starts at column ${col}, outside its side's band`);
+  }
+  assert.ok(r.turns >= 1);
+  // a custom size is honoured
+  const small = SIM.battlefields.countryside(3, { mapW: 160, mapH: 80 });
+  assert.equal(small.W, 160); assert.equal(small.H, 80);
+});

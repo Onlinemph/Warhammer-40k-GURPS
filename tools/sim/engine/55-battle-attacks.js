@@ -117,7 +117,7 @@
     function scatter(at, n) {
       const [dq, dr] = DIRS[Math.floor(R() * 6)];
       let h = at;
-      for (let i = 0; i < n; i++) { const x = { q: h.q + dq, r: h.r + dr }; if (terr && (idx(key(x.q, x.r)) == null || wallAt(key(x.q, x.r)))) break; h = x; }
+      for (let i = 0; i < n; i++) { const x = { q: h.q + dq, r: h.r + dr }; if (terr && (iQR(x.q, x.r) == null || wallAt(key(x.q, x.r)))) break; h = x; }
       return h;
     }
     // Bracing (the user's Progressive Recoil rule): a gun fired without moving from a mount or bipod line, from prone,
