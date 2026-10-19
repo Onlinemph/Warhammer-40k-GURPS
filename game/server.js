@@ -10,7 +10,10 @@
 //   GET  /api/view                               -> what that player can see, and when the next tick is
 //   POST /api/orders {move, recruit:[{unit,count}]} -> {ok} or {error}
 //   POST /api/admin/tick  (header x-admin-key)  -> ticks now (testing)
-const http = require("http"), fs = require("fs"), path = require("path"), crypto = require("crypto");
+//   GET  /api/replay/<report id>                 -> {status, progress, ahead} until it's ready, then the replay
+//                                                   (gzipped JSON); asking for one that isn't queued queues it
+const http = require("http"), fs = require("fs"), path = require("path"), crypto = require("crypto"), zlib = require("zlib");
+const { Worker } = require("worker_threads");
 const { apply, rebuild, view, order } = require("./world/rules.js");
 const { FACTIONS } = require("./world/units.js");
 
@@ -33,13 +36,49 @@ if (!S) record({ type: "create", seed: crypto.randomInt(2 ** 31) });
 const tokens = fs.existsSync(TOKENS) ? JSON.parse(fs.readFileSync(TOKENS, "utf8")) : {};
 const hash = t => crypto.createHash("sha256").update(t).digest("hex");
 
+// ---- battle replays: the full engine re-fights a battle (game/replay/build.js) on a worker thread, one at a time,
+// into data/replays/<id>.json.gz, kept for good (a seed always replays the same battle). Every battle a player
+// fought in is queued as soon as its tick publishes, so most are ready before anyone opens them; any other is
+// queued when someone asks for it
+const REPLAYS = path.join(DATA, "replays");
+fs.mkdirSync(REPLAYS, { recursive: true });
+const replayFile = id => path.join(REPLAYS, id.replace(/[^\w-]/g, "") + ".json.gz");
+const jobs = new Map(), queue = [];   // id -> {status, progress}; ids waiting
+let worker = null, busy = null;
+function startWorker() {
+  worker = new Worker(path.join(__dirname, "replay", "worker.js"));
+  worker.unref();
+  worker.on("message", m => {
+    const j = jobs.get(m.id); if (!j) return;
+    if (m.progress) j.progress = m.progress;
+    if (m.done || m.error) { j.status = m.done ? "ready" : "failed"; j.error = m.error; busy = null; nextReplay(); }
+  });
+  worker.on("error", e => { if (busy) { const j = jobs.get(busy); if (j) { j.status = "failed"; j.error = e.message; } } busy = null; worker = null; nextReplay(); });
+}
+function nextReplay() {
+  if (busy || !queue.length) return;
+  const id = queue.shift(), report = S.reports.find(r => r.id === id);
+  if (!report) { jobs.delete(id); return nextReplay(); }
+  if (!worker) startWorker();
+  busy = id; jobs.get(id).status = "running";
+  worker.postMessage({ report, file: replayFile(id) });
+}
+function wantReplay(id) {
+  if (fs.existsSync(replayFile(id))) return { status: "ready" };
+  if (!jobs.has(id) || jobs.get(id).status === "failed") { jobs.set(id, { status: "queued", progress: null }); queue.push(id); nextReplay(); }
+  return jobs.get(id);
+}
+function queuePlayerBattles(from) {
+  for (const r of S.reports.slice(from)) if (r.sides.some(s => s.players.length)) wantReplay(r.id);
+}
+
 // ---- the clock
 const lastTick = () => { for (let i = events.length - 1; i >= 0; i--) if (events[i].type === "tick" || events[i].type === "create") return events[i].at; return Date.now(); };
 let timer = null;
 function schedule() {
   clearTimeout(timer);
   const due = lastTick() + TURN;
-  timer = setTimeout(() => { record({ type: "tick", seed: crypto.randomInt(2 ** 31) }); schedule(); }, Math.max(0, due - Date.now()));
+  timer = setTimeout(() => { const n = S.reports.length; record({ type: "tick", seed: crypto.randomInt(2 ** 31) }); queuePlayerBattles(n); schedule(); }, Math.max(0, due - Date.now()));
   timer.unref();   // the listening server keeps the process alive, not the clock
 }
 
@@ -53,7 +92,7 @@ const readBody = req => new Promise((ok, bad) => {
   req.on("end", () => { try { ok(b ? JSON.parse(b) : {}); } catch (e) { bad(new Error("bad JSON")); } });
 });
 const who = req => { const m = /^Bearer (\S+)$/.exec(req.headers.authorization || ""); return m ? tokens[hash(m[1])] || null : null; };
-const STATIC = { "/": ["index.html", "text/html"], "/app.js": ["app.js", "text/javascript"], "/style.css": ["style.css", "text/css"] };
+const STATIC = { "/": ["index.html", "text/html"], "/app.js": ["app.js", "text/javascript"], "/style.css": ["style.css", "text/css"], "/replay.js": ["replay.js", "text/javascript"] };
 
 const server = http.createServer(async (req, res) => {
   try {
@@ -87,11 +126,24 @@ const server = http.createServer(async (req, res) => {
     }
     if (req.method === "POST" && url.pathname === "/api/admin/tick") {
       if (!ADMIN || req.headers["x-admin-key"] !== ADMIN) return send(res, 403, { error: "no" });
-      record({ type: "tick", seed: crypto.randomInt(2 ** 31) }); schedule();
+      const n = S.reports.length;
+      record({ type: "tick", seed: crypto.randomInt(2 ** 31) }); queuePlayerBattles(n); schedule();
       return send(res, 200, { turn: S.turn });
+    }
+    const rm = /^\/api\/replay\/([\w-]+)$/.exec(url.pathname);
+    if (req.method === "GET" && rm) {
+      const p = who(req); if (!p) return send(res, 401, { error: "join first" });
+      const id = rm[1], seen = view(S, p).reports.some(r => r.id === id) || S.reports.some(r => r.id === id && r.sides.some(s => s.faction === S.players[p].faction));
+      if (!seen) return send(res, 404, { error: "no such battle that you know of" });
+      const j = wantReplay(id);
+      if (j.status !== "ready") return send(res, 200, { status: j.status, progress: j.progress, error: j.error, ahead: j.status === "queued" ? queue.indexOf(id) + (busy ? 1 : 0) : 0 });
+      res.writeHead(200, { "content-type": "application/json", "content-encoding": "gzip", "cache-control": "private, max-age=86400" });
+      return res.end(fs.readFileSync(replayFile(id)));
     }
     send(res, 404, { error: "not found" });
   } catch (e) { send(res, 400, { error: e.message }); }
 });
 if (require.main === module) { schedule(); server.listen(PORT, () => console.log(`the war is on http://localhost:${PORT} (turn ${S.turn}, a tick every ${TURN / 1000} s)`)); }
-module.exports = { server, schedule, state: () => S };
+// for tests and a clean shutdown: no clock, no replay worker
+function stop() { clearTimeout(timer); if (worker) worker.terminate(); worker = null; }
+module.exports = { server, schedule, stop, state: () => S, wantReplay };

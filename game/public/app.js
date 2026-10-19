@@ -57,7 +57,7 @@ function labels(W, me) {
   return out;
 }
 function draw() {
-  V.got = performance.now();
+  V.got = performance.now(); window.warView = V;
   const W = Object.fromEntries(V.worlds.map(w => [w.id, w])), col = f => f ? V.factions[f].colour : "#8d887e";
   const me = V.you.warband;
   let svg = "";
@@ -88,7 +88,8 @@ function draw() {
       await api("/api/orders", { move: $("#o-move").value || null, recruit }); load();
     } catch (e) { $("#o-err").textContent = e.message; }
   };
-  $("#reports").innerHTML = V.reports.map(r => `<li><b>Turn ${r.turn}</b> · ${esc(r.text)}</li>`).join("") || "<li class='muted'>No battles yet.</li>";
+  $("#reports").innerHTML = V.reports.map((r, i) => `<li><b>Turn ${r.turn}</b> · ${esc(r.text)} ${r.id ? `<button class="link" data-rep="${i}">Watch</button>` : ""}</li>`).join("") || "<li class='muted'>No battles yet.</li>";
+  $("#reports").querySelectorAll("[data-rep]").forEach(b => b.onclick = () => openReplay(V.reports[+b.dataset.rep].id, V.reports[+b.dataset.rep]));
   $("#news").innerHTML = V.news.map(n => `<li><b>Turn ${n.turn}</b> · ${esc(n.text)}</li>`).join("");
   countdown();
 }

@@ -7,7 +7,7 @@ test("the server: join, see, order, tick, and survive a restart", async () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "war-"));
   process.env.DATA_DIR = dir; process.env.ADMIN_KEY = "k"; process.env.TURN_SECONDS = "3600";
   delete require.cache[require.resolve("../server.js")];
-  const { server, state } = require("../server.js");
+  const { server, state, stop } = require("../server.js");
   await new Promise(r => server.listen(0, r));
   const base = `http://127.0.0.1:${server.address().port}`;
   const call = async (p, body, h = {}) => { const r = await fetch(base + p, { method: body ? "POST" : "GET", headers: { "content-type": "application/json", ...h }, body: body ? JSON.stringify(body) : undefined }); return [r.status, await r.json()]; };
@@ -33,5 +33,5 @@ test("the server: join, see, order, tick, and survive a restart", async () => {
     const ev = fs.readFileSync(path.join(dir, "events.jsonl"), "utf8").split("\n").filter(Boolean).map(JSON.parse);
     assert.deepEqual(rebuild(ev), state());
     assert.ok(!fs.readFileSync(path.join(dir, "events.jsonl"), "utf8").includes(token), "no secrets in the log");
-  } finally { server.closeAllConnections(); server.close(); }
+  } finally { stop(); server.closeAllConnections(); server.close(); }
 });

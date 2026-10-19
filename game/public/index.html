@@ -31,6 +31,28 @@
     <section class="card"><h3>News</h3><ol id="news" class="feed"></ol></section>
   </aside>
 </main>
+<div id="replay" class="overlay" hidden>
+  <section class="card rp">
+    <header class="rp-head"><h2 id="rp-title"></h2><button id="rp-close" aria-label="Close">Close</button></header>
+    <div id="rp-load">
+      <p>The battle is being fought out in full. It's kept once it's done, so it only takes this long the first time.</p>
+      <div class="bar"><div id="rp-bar"></div></div>
+      <p id="rp-msg" class="muted">Starting…</p>
+    </div>
+    <div id="rp-play" hidden>
+      <div id="rp-sides" class="rp-sides"></div>
+      <p id="rp-note" class="err"></p>
+      <div class="rp-stage"><canvas id="rp-canvas"></canvas></div>
+      <div class="rp-controls">
+        <button id="rp-toggle">Pause</button>
+        <input id="rp-slider" type="range" min="0" value="0" aria-label="Second">
+        <select id="rp-speed" aria-label="Speed"><option value="1">1×</option><option value="2" selected>2×</option><option value="4">4×</option><option value="8">8×</option></select>
+      </div>
+      <p id="rp-time" class="muted"></p>
+    </div>
+  </section>
+</div>
 <script src="/app.js"></script>
+<script src="/replay.js"></script>
 </body>
 </html>

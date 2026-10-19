@@ -178,7 +178,8 @@ function fight(S, w, A, B, R) {
   const winner = draw ? null : aWins ? A.faction : B.faction;
   const fname = f => f === "militia" ? "the local militia" : FACTIONS[f].name;
   const report = {
-    turn: S.turn, world: w.id, worldName: w.name, seed, odds: Math.round(pA * 100), winner,
+    id: `t${S.turn}-${w.id}-${S.reports.filter(r => r.turn === S.turn && r.world === w.id).length}`,
+    turn: S.turn, world: w.id, worldName: w.name, worldType: w.type, seed, odds: Math.round(pA * 100), winner, secs: Math.round(p.seconds),
     sides: before.map((b, i) => ({ faction: b.faction, before: b.army, players: [A, B][i].parts.filter(x => x.kind === "warband").map(x => S.players[x.player].name) })),
     text: `${w.name}: ${fname(A.faction)} (${describe(A.army)}) against ${fname(B.faction)} (${describe(B.army)}). ` +
       (draw ? "Neither side gives way." : `${cap(fname(winner))} win${pA > 0.75 && aWins || pA < 0.25 && !aWins ? ", as expected" : pA > 0.25 && pA < 0.75 ? " a close fight" : " against the odds"}.`) +

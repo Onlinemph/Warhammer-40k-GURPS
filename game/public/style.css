@@ -29,3 +29,15 @@ button { background: var(--accent); color: var(--bg); border: 0; border-radius: 
 .feed li { margin-bottom: 6px; }
 table { border-collapse: collapse; width: 100%; } td { padding: 2px 4px; }
 @media (max-width: 600px) { .world { stroke-width: 2; } }
+button.link { background: none; color: var(--accent); padding: 0 2px; text-decoration: underline; }
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,.55); display: flex; align-items: flex-start; justify-content: center; padding: 24px 16px; overflow: auto; z-index: 10; }
+.overlay[hidden] { display: none; }
+.rp { width: min(1100px, 100%); }
+.rp-head { display: flex; justify-content: space-between; align-items: center; padding: 0 0 8px; border: 0; }
+.bar { height: 10px; background: var(--line); border-radius: 5px; overflow: hidden; margin: 12px 0 8px; }
+#rp-bar { height: 100%; width: 0; background: var(--accent); transition: width .5s; }
+.rp-stage canvas { display: block; width: 100%; border-radius: 6px; }
+.rp-controls { display: flex; gap: 8px; align-items: center; margin-top: 8px; }
+.rp-controls input[type=range] { flex: 1; }
+.rp-sides { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 6px; }
+.rp-sides i { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }

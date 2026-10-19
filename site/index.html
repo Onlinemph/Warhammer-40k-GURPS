@@ -6723,6 +6723,7 @@ const SIM = (() => {
     for (turn = 1; turn <= maxTurns; turn++) {
       if (!sideActive(0) || !sideActive(1)) break;
       tally.push(countSides());
+      if (opt.onTurn) opt.onTurn(turn, maxTurns);   // progress, for a caller showing a loading bar
       L(`— Turn ${turn} —`); newFields(); turnNow = turn - 1;
       if (frames) { if (turn > 1) { fx.push(fxb); fxb = []; } frames.push(snap()); }
       for (const m of models) {
