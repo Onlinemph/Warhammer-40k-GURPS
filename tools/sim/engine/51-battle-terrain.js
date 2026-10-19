@@ -356,6 +356,34 @@
     // what a side knows: foes in sight now, and for 5 seconds those last seen that haven't moved since; one that
     // slipped out of sight and moved is only a last known position (search goes there)
     const known = m => !AWARE ? foes(m) : foes(m).filter(f => { const t = seenAt[m.u.side].get(f) ?? -99; return t >= turn - 1 || (t >= turn - 5 && f.h && f.lastSeenH && f.h.q === f.lastSeenH.q && f.h.r === f.lastSeenH.r); });
+    // ---- awareness: how many foes a model actually weighs
+    // A line trooper thinks about the few nearest foes it knows of; snipers, squad leaders, lone characters,
+    // anti-armour gunners and vehicles take in more of the field. Every decision a model makes (targets, the fire it
+    // expects at each spot it could move to, whether it's safe to go all-out) draws on this list, so it's what keeps
+    // a soldier's thinking from growing with the size of the battle. A spec or an AI profile can set `scan` itself.
+    const SCAN_LINE = 4, SCAN_WIDE = 12;
+    const SNIPER = /sniper|long[- ]?rifle|long[- ]?las|marksman/i;
+    function scanOf(u) {
+      if (u.scanN != null) return u.scanN;
+      const r = u.ranged, set = u.scan ?? u.ai.scan;
+      const wide = !!u.veh || u.leader || (u.count === 1 && !u.squad)
+        || (r && ((r.acc || 0) >= 8 || SNIPER.test(r.name) || (r.dmg && r.dmg.div >= 5)));
+      return (u.scanN = Math.max(1, set != null ? Number(set) : wide ? SCAN_WIDE : SCAN_LINE));
+    }
+    // the foes model m weighs this turn: the known foes nearest it, out to its scan-th one in sight (with any
+    // unseen ones nearer than that, around a corner or behind a door, up to twice that many in all). Built once per
+    // turn and hex; callers drop any that have gone down since
+    function scanFoes(m) {
+      if (!m.h) return [];
+      const hk = key(m.h.q, m.h.r);
+      if (m.scanT === turn && m.scanH === hk) return m.scanL;
+      const K = scanOf(m.u), ks = known(m).filter(f => f.h).map(f => [hexDist(m.h, f.h), f]).sort((a, b) => a[0] - b[0]);
+      const out = [];
+      let seen = 0;
+      for (const [, f] of ks) { if (out.length >= 2 * K) break; out.push(f); if (los(m.h, f.h) && ++seen >= K) break; }
+      m.scanT = turn; m.scanH = hk; m.scanL = out;
+      return out;
+    }
     // an ambusher that attacks gives itself away; foes who hadn't seen it are partly surprised (B393): each must make
     // an IQ roll (+6 with Combat Reflexes) or lose its next turn
     // an attack gives the attacker away: a gunshot to every foe within earshot (40 yards, walls or not), anything

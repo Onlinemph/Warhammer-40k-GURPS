@@ -72,3 +72,18 @@ test("the result carries the seed it was played from", () => {
   assert.equal(SIM.runBattle(b.units(), { ...b.opt, seed: 4242 }).seed, 4242);
   assert.equal(SIM.runBattle(b.units(), b.opt).seed, null);
 });
+
+test("awareness: line troops weigh the nearest few foes, snipers, leaders, lone characters and vehicles more", () => {
+  const roster = units => SIM.runBattle(units, { distance: 60, seed: 1, maxTurns: 1 }).roster;
+  const scanOf = (r, name) => r.find(x => x.id.startsWith(name)).scan;
+  const r = roster([...squad("Astra Militarum Infantry Squad", 0), side(1, "Aeldari Ranger", 2), side(1, "Inquisitor", 1),
+    { side: 1, spec: { vehicle: "Leman Russ Battle Tank", template: "Leman Russ Battle Tank", count: 1, stance: "shoot", armour: [] } }]);
+  assert.equal(scanOf(r, "Guard Squad Guardsman"), 4, "a line trooper");
+  assert.equal(scanOf(r, "Guard Squad Sergeant"), 12, "a squad leader");
+  assert.equal(scanOf(r, "Aeldari Ranger"), 12, "a sniper (Long Rifle)");
+  assert.equal(scanOf(r, "Inquisitor"), 12, "a lone character");
+  assert.equal(scanOf(r, "Leman Russ"), 12, "a vehicle");
+  // a spec can set it outright
+  const r2 = roster([{ side: 0, spec: spec("Astra Militarum Guardsman", 2, { scan: 7 }) }, side(1, "Ork Boy", 2)]);
+  assert.equal(scanOf(r2, "Astra Militarum Guardsman"), 7);
+});

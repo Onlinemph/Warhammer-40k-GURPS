@@ -83,7 +83,7 @@
       if (keepTurn !== turn) { keepC.clear(); keepTurn = turn; }
       if (keepC.has(m)) return keepC.get(m);
       let p = 1;
-      for (const f of models) {
+      for (const f of scanFoes(m)) {
         if (f.u.side === m.u.side || f.state !== "ok" || !f.h || !m.h || f.pinned) continue;
         // a stunned foe may shake it off and come on this very turn: half the threat
         const d = hexDist(f.h, m.h), reach = f.u.melee ? f.u.melee.reachMax : 1, half = x => f.stunned ? 1 - (1 - x) / 2 : x;
@@ -91,7 +91,7 @@
         const closer = f.u.melee && (f.u.stance === "charge" || (f.u.ai.zeal || 0) > 0 || bladeReady(f)) && d <= moveOf(f) + reach;
         if (closer) { p *= half(0.5); continue; }
         if (f.u.ranged && d <= f.u.ranged.range.max && los(f.h, m.h)) {
-          const mine = models.filter(x => x.u.side === m.u.side && x.state === "ok" && x.h && hexDist(f.h, x.h) <= f.u.ranged.range.max).length;
+          const mine = sideWithin(m.u.side, f, f.u.ranged.range.max);
           p *= 1 - 0.5 / Math.max(1, mine);
         }
       }

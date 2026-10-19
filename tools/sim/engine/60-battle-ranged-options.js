@@ -114,7 +114,7 @@
           let holdIt = !w.malediction && !w.cone && (w.rof || 1) <= 2 && pD >= 0.5 && (m.holdN || 0) < 8
             && expInjRandom(w, t.u) >= 0.5 * remOf(t) && (terr ? walk(m.h, t.h) : d) > moveOf(t) + 3;
           if (holdIt) {
-            const bursts = models.filter(x => x !== m && x.u.side === u.side && x.state === "ok" && x.h && !x.stunned && x.u.ranged && (x.u.ranged.rof || 1) >= 3 && los(x.h, t.h) && hexDist(x.h, t.h) <= x.u.ranged.range.max).length;
+            const bursts = u.group.models.filter(x => x !== m && x.u.side === u.side && x.state === "ok" && x.h && !x.stunned && x.u.ranged && (x.u.ranged.rof || 1) >= 3 && los(x.h, t.h) && hexDist(x.h, t.h) <= x.u.ranged.range.max).length;
             const pOpen = Math.min(0.6, 0.08 * bursts), live = 1 - Math.min(0.9, incoming(m, m.h, "") / remOf(m));
             const Eopen = Enow / Math.max(0.05, 1 - pD) * (1 - 0.375);
             let vHold = 0;
@@ -201,7 +201,7 @@
             const shots = w.shots.mag === Infinity ? w.rof : Math.min(w.rof, m.ammo);
             const Ez = x => P3[cl(Math.min(6, w.level - skillPen(m) + rangePenalty(rngD(m.h, x.h, Math.max(1, hexDist(m.h, x.h))))) + rapidBonus(shots) + x.u.sm)] * (1 - P3[cl(rangedDefence(x, m))]) * expInjRandom(w, x.u);
             // the zone attacks friends in it too (B409): their loss counts against it
-            const pals = models.filter(x => x !== m && x.state === "ok" && x.h && x.u.side === u.side && hexDist(x.h, c.h) <= 1);
+            const pals = modelsNear(c.h, 1).filter(x => x !== m && x.state === "ok" && x.u.side === u.side);
             // pinning them is worth the harm their fire won't do while our squad moves (TS p. 21)
             const pinV = inZ.reduce((a, x) => a + (x.u.veh ? 0 : pinOf(x) * Math.min(1, threatOf(x)) * 0.25 * HORIZON * (x.u.ranged ? 1 : 0.3)), 0);   // a tank's crew isn't pinned by rifle fire
             const v = pinV + inZ.reduce((a, x) => a + kv(m, x, Ez(x) * sustainOf(w)), 0)
@@ -285,7 +285,7 @@
       for (const f of pool) {
         if (!f.u.melee || hexDist(f.h, m.h) - f.u.melee.reachMax > moveOf(f)) continue;
         let inj = 0;
-        for (const a of models) {
+        for (const a of m.u.group.models) {   // its squad: the ones who'd act on it
           if (a === m || a.state !== "ok" || !a.h || a.u.side !== m.u.side) continue;
           const d = hexDist(a.h, f.h);
           const mw = a.u.melee, rw = a.u.ranged;

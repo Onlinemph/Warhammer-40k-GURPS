@@ -348,7 +348,7 @@
       liftST,   // Lifting ST counts in grappling (B65)
       // squads: units sharing a squad tag deploy together and take morale together; the leader can give orders
       // (Leadership, B204), a vox-caster carries the orders to the whole squad, a Commissar keeps it in the fight
-      squad: spec.squad || null, squadName: spec.squadName || null, role: spec.role || null, leader: !!spec.leader, vox: !!spec.vox,
+      squad: spec.squad || null, squadName: spec.squadName || null, role: spec.role || null, leader: !!spec.leader, vox: !!spec.vox, scan: spec.scan ?? null,
       team: spec.team || null, crew: spec.crew || null, heavy, movePacked: Math.max(1, Math.floor((st.move + arm.move) * [1, 0.8, 0.6, 0.4, 0.2][encOf(load + packLb)])),
       commissar: !!spec.commissar || /Commissar/.test(spec.template),
       ranged2,
@@ -429,7 +429,7 @@
       thrCr, ranged: main ? main.w : null, ranged2: null, heavy: null, hooks: null, grenades: [], powers: [], team: null, crew: null,
       arm, nat: {}, flags: { machine: 1, unliving: 1, hpt: 1, noblood: 1, noMorale: 1, unfazeable: 1, vehicle: 1 },
       _br: ctl, bothReady: true, body: vehicleLocs(V.locations).L ? "walker" : "vehicle", grapple: 0, elite: false, burns: false, enc: 0, mags: 9,
-      squad: spec.squad || null, squadName: spec.squadName || null, role: null, leader: false, vox: false, commissar: false,
+      squad: spec.squad || null, squadName: spec.squadName || null, role: null, leader: false, vox: false, commissar: false, scan: spec.scan ?? null,
       stance: spec.stance || "shoot", ambush: !!spec.ambush,
     });
   }

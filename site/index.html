@@ -1091,7 +1091,7 @@ const SIM = (() => {
       liftST,   // Lifting ST counts in grappling (B65)
       // squads: units sharing a squad tag deploy together and take morale together; the leader can give orders
       // (Leadership, B204), a vox-caster carries the orders to the whole squad, a Commissar keeps it in the fight
-      squad: spec.squad || null, squadName: spec.squadName || null, role: spec.role || null, leader: !!spec.leader, vox: !!spec.vox,
+      squad: spec.squad || null, squadName: spec.squadName || null, role: spec.role || null, leader: !!spec.leader, vox: !!spec.vox, scan: spec.scan ?? null,
       team: spec.team || null, crew: spec.crew || null, heavy, movePacked: Math.max(1, Math.floor((st.move + arm.move) * [1, 0.8, 0.6, 0.4, 0.2][encOf(load + packLb)])),
       commissar: !!spec.commissar || /Commissar/.test(spec.template),
       ranged2,
@@ -1172,7 +1172,7 @@ const SIM = (() => {
       thrCr, ranged: main ? main.w : null, ranged2: null, heavy: null, hooks: null, grenades: [], powers: [], team: null, crew: null,
       arm, nat: {}, flags: { machine: 1, unliving: 1, hpt: 1, noblood: 1, noMorale: 1, unfazeable: 1, vehicle: 1 },
       _br: ctl, bothReady: true, body: vehicleLocs(V.locations).L ? "walker" : "vehicle", grapple: 0, elite: false, burns: false, enc: 0, mags: 9,
-      squad: spec.squad || null, squadName: spec.squadName || null, role: null, leader: false, vox: false, commissar: false,
+      squad: spec.squad || null, squadName: spec.squadName || null, role: null, leader: false, vox: false, commissar: false, scan: spec.scan ?? null,
       stance: spec.stance || "shoot", ambush: !!spec.ambush,
     });
   }
@@ -2126,6 +2126,34 @@ const SIM = (() => {
     // what a side knows: foes in sight now, and for 5 seconds those last seen that haven't moved since; one that
     // slipped out of sight and moved is only a last known position (search goes there)
     const known = m => !AWARE ? foes(m) : foes(m).filter(f => { const t = seenAt[m.u.side].get(f) ?? -99; return t >= turn - 1 || (t >= turn - 5 && f.h && f.lastSeenH && f.h.q === f.lastSeenH.q && f.h.r === f.lastSeenH.r); });
+    // ---- awareness: how many foes a model actually weighs
+    // A line trooper thinks about the few nearest foes it knows of; snipers, squad leaders, lone characters,
+    // anti-armour gunners and vehicles take in more of the field. Every decision a model makes (targets, the fire it
+    // expects at each spot it could move to, whether it's safe to go all-out) draws on this list, so it's what keeps
+    // a soldier's thinking from growing with the size of the battle. A spec or an AI profile can set `scan` itself.
+    const SCAN_LINE = 4, SCAN_WIDE = 12;
+    const SNIPER = /sniper|long[- ]?rifle|long[- ]?las|marksman/i;
+    function scanOf(u) {
+      if (u.scanN != null) return u.scanN;
+      const r = u.ranged, set = u.scan ?? u.ai.scan;
+      const wide = !!u.veh || u.leader || (u.count === 1 && !u.squad)
+        || (r && ((r.acc || 0) >= 8 || SNIPER.test(r.name) || (r.dmg && r.dmg.div >= 5)));
+      return (u.scanN = Math.max(1, set != null ? Number(set) : wide ? SCAN_WIDE : SCAN_LINE));
+    }
+    // the foes model m weighs this turn: the known foes nearest it, out to its scan-th one in sight (with any
+    // unseen ones nearer than that, around a corner or behind a door, up to twice that many in all). Built once per
+    // turn and hex; callers drop any that have gone down since
+    function scanFoes(m) {
+      if (!m.h) return [];
+      const hk = key(m.h.q, m.h.r);
+      if (m.scanT === turn && m.scanH === hk) return m.scanL;
+      const K = scanOf(m.u), ks = known(m).filter(f => f.h).map(f => [hexDist(m.h, f.h), f]).sort((a, b) => a[0] - b[0]);
+      const out = [];
+      let seen = 0;
+      for (const [, f] of ks) { if (out.length >= 2 * K) break; out.push(f); if (los(m.h, f.h) && ++seen >= K) break; }
+      m.scanT = turn; m.scanH = hk; m.scanL = out;
+      return out;
+    }
     // an ambusher that attacks gives itself away; foes who hadn't seen it are partly surprised (B393): each must make
     // an IQ roll (+6 with Combat Reflexes) or lose its next turn
     // an attack gives the attacker away: a gunshot to every foe within earshot (40 yards, walls or not), anything
@@ -3318,8 +3346,8 @@ const SIM = (() => {
     // ---- threat: expected harm a foe can do to m this turn (for All-Out Attack / Defense choices)
     function threatTo(m) {
       let t = 0;
-      for (const f of foes(m)) {
-        if (!f.h || !m.h) continue;
+      for (const f of scanFoes(m)) {
+        if (!f.h || !m.h || f.state !== "ok") continue;
         const d = hexDist(f.h, m.h);
         const w = d <= f.u.melee.reachMax ? f.u.melee : f.u.ranged && d <= f.u.ranged.range.max && los(f.h, m.h) ? f.u.ranged : null;
         if (w) t += expInj(w, m.u, "torso");
@@ -4118,14 +4146,29 @@ const SIM = (() => {
     // at less than full effect: that's what covering fire is for (TS p. 21)
     const covered = (m, f) => zones.some(z => z.side === m.u.side && z.owner.state === "ok" && f.h && z.hexes.has(key(f.h.q, f.h.r)))
       || [...f.aimedBy].some(x => x !== m && x.u.side === m.u.side && x.state === "ok" && x.role === "cover" && x.aimTarget === f);
+    // how many models of a side stand within d of foe f: from f's distances to that side's models, taken once a
+    // turn (a planner's estimate; who moved earlier this second doesn't change it much)
+    const RIV = new Map();
+    let rivT = -1;
+    function sideWithin(side, f, d) {
+      if (rivT !== turn) { RIV.clear(); rivT = turn; }
+      const k = f.ix * 2 + side;
+      let a = RIV.get(k);
+      if (!a) { a = models.filter(x => x.u.side === side && x.state === "ok" && x.h).map(x => hexDist(x.h, f.h)).sort((p, q) => p - q); RIV.set(k, a); }
+      let lo = 0, hi = a.length;
+      while (lo < hi) { const mid = (lo + hi) >> 1; if (a[mid] <= d) lo = mid + 1; else hi = mid; }
+      return lo;
+    }
+    // ...and the same with m itself left out
+    const rivalsOf = (m, f, d) => Math.max(0, sideWithin(m.u.side, f, d) - (m.state === "ok" && m.h && hexDist(m.h, f.h) <= d ? 1 : 0));
     function incoming(m, h, mode) {
       let tot = 0;
-      const near = known(m).filter(f => f.h && f.state === "ok").sort((a, b) => walk(h, a.h) - walk(h, b.h)).slice(0, 8);
+      const near = scanFoes(m).filter(f => f.h && f.state === "ok").sort((a, b) => walk(h, a.h) - walk(h, b.h)).slice(0, 8);
       for (const f of near) {
         if (f.pinned || f.grips.length > 1) continue;
         const d = hexDist(f.h, h);
         // a foe spreads its attacks over the models of ours at least as close to it as this hex
-        const rivals = models.filter(x => x !== m && x.u.side === m.u.side && x.state === "ok" && x.h && hexDist(x.h, f.h) <= d).length;
+        const rivals = rivalsOf(m, f, d);
         const share = 1 / (1 + rivals);
         let best = 0;
         const mw = f.u.melee;
@@ -4392,7 +4435,8 @@ const SIM = (() => {
         else { m.jam = 3; L(`${m.id} fails to clear its ${u.ranged.name}`); }
         return;
       }
-      const pool = known(m).filter(f => f.h).sort((a, b) => walk(m.h, a.h) - walk(m.h, b.h));
+      m.scanT = -1;   // a fresh look at the field each time it acts
+      const pool = scanFoes(m).filter(f => f.state === "ok" && f.h).sort((a, b) => walk(m.h, a.h) - walk(m.h, b.h));
       if (!pool.length) { if (AWARE) search(m); return; }
       const adj = pool.filter(f => hexDist(f.h, m.h) <= u.melee.reachMax && los(m.h, f.h) && levelOK(m.h, u, f.h, f.u, u.melee));
       const shooter = u.ranged || u.powers.some(p => !p.melee);
@@ -4671,7 +4715,7 @@ const SIM = (() => {
       if (keepTurn !== turn) { keepC.clear(); keepTurn = turn; }
       if (keepC.has(m)) return keepC.get(m);
       let p = 1;
-      for (const f of models) {
+      for (const f of scanFoes(m)) {
         if (f.u.side === m.u.side || f.state !== "ok" || !f.h || !m.h || f.pinned) continue;
         // a stunned foe may shake it off and come on this very turn: half the threat
         const d = hexDist(f.h, m.h), reach = f.u.melee ? f.u.melee.reachMax : 1, half = x => f.stunned ? 1 - (1 - x) / 2 : x;
@@ -4679,7 +4723,7 @@ const SIM = (() => {
         const closer = f.u.melee && (f.u.stance === "charge" || (f.u.ai.zeal || 0) > 0 || bladeReady(f)) && d <= moveOf(f) + reach;
         if (closer) { p *= half(0.5); continue; }
         if (f.u.ranged && d <= f.u.ranged.range.max && los(f.h, m.h)) {
-          const mine = models.filter(x => x.u.side === m.u.side && x.state === "ok" && x.h && hexDist(f.h, x.h) <= f.u.ranged.range.max).length;
+          const mine = sideWithin(m.u.side, f, f.u.ranged.range.max);
           p *= 1 - 0.5 / Math.max(1, mine);
         }
       }
@@ -4976,7 +5020,7 @@ const SIM = (() => {
           let holdIt = !w.malediction && !w.cone && (w.rof || 1) <= 2 && pD >= 0.5 && (m.holdN || 0) < 8
             && expInjRandom(w, t.u) >= 0.5 * remOf(t) && (terr ? walk(m.h, t.h) : d) > moveOf(t) + 3;
           if (holdIt) {
-            const bursts = models.filter(x => x !== m && x.u.side === u.side && x.state === "ok" && x.h && !x.stunned && x.u.ranged && (x.u.ranged.rof || 1) >= 3 && los(x.h, t.h) && hexDist(x.h, t.h) <= x.u.ranged.range.max).length;
+            const bursts = u.group.models.filter(x => x !== m && x.u.side === u.side && x.state === "ok" && x.h && !x.stunned && x.u.ranged && (x.u.ranged.rof || 1) >= 3 && los(x.h, t.h) && hexDist(x.h, t.h) <= x.u.ranged.range.max).length;
             const pOpen = Math.min(0.6, 0.08 * bursts), live = 1 - Math.min(0.9, incoming(m, m.h, "") / remOf(m));
             const Eopen = Enow / Math.max(0.05, 1 - pD) * (1 - 0.375);
             let vHold = 0;
@@ -5063,7 +5107,7 @@ const SIM = (() => {
             const shots = w.shots.mag === Infinity ? w.rof : Math.min(w.rof, m.ammo);
             const Ez = x => P3[cl(Math.min(6, w.level - skillPen(m) + rangePenalty(rngD(m.h, x.h, Math.max(1, hexDist(m.h, x.h))))) + rapidBonus(shots) + x.u.sm)] * (1 - P3[cl(rangedDefence(x, m))]) * expInjRandom(w, x.u);
             // the zone attacks friends in it too (B409): their loss counts against it
-            const pals = models.filter(x => x !== m && x.state === "ok" && x.h && x.u.side === u.side && hexDist(x.h, c.h) <= 1);
+            const pals = modelsNear(c.h, 1).filter(x => x !== m && x.state === "ok" && x.u.side === u.side);
             // pinning them is worth the harm their fire won't do while our squad moves (TS p. 21)
             const pinV = inZ.reduce((a, x) => a + (x.u.veh ? 0 : pinOf(x) * Math.min(1, threatOf(x)) * 0.25 * HORIZON * (x.u.ranged ? 1 : 0.3)), 0);   // a tank's crew isn't pinned by rifle fire
             const v = pinV + inZ.reduce((a, x) => a + kv(m, x, Ez(x) * sustainOf(w)), 0)
@@ -5147,7 +5191,7 @@ const SIM = (() => {
       for (const f of pool) {
         if (!f.u.melee || hexDist(f.h, m.h) - f.u.melee.reachMax > moveOf(f)) continue;
         let inj = 0;
-        for (const a of models) {
+        for (const a of m.u.group.models) {   // its squad: the ones who'd act on it
           if (a === m || a.state !== "ok" || !a.h || a.u.side !== m.u.side) continue;
           const d = hexDist(a.h, f.h);
           const mw = a.u.melee, rw = a.u.ranged;
@@ -6150,7 +6194,7 @@ const SIM = (() => {
       winner, seed: opt.seed ?? null, timeout, turns: turn - 1, log, frames, fx, terrain: frames && terr ? { floor: [...terr.floor], crates: [...terr.crates], doors: [...terr.doors], shut: [...startShut], events: tev, light: [...terr.floor].map(k => { const [q, r] = k.split(",").map(Number); return [k, darkAt({ q, r })]; }).filter(x => x[1]),
         elev: EL ? terr.hx.map((h, i) => [key(h.q, h.r), EL[i]]).filter(x => x[1]) : [], kind: terr.kind || "facility", style: terr.style || "", theme: terr.theme || "", water: terr.water ? [...terr.water] : [],
         wallTop: WT ? terr.hx.map((h, i) => [key(h.q, h.r), WT[i]]).filter((x, i) => terr.wallI[i] && x[1] < 99) : null } : null,
-      ridge: frames && RIDGE ? { ...RIDGE } : null, roster: models.map(m => { const u = m.u; return { id: m.id, side: u.side, unit: u.idx, template: u.template, faction: u.ai.name, speed: u.speed, move: u.move, hp: u.HP, st: u.st, dx: u.dx, dodge: u.dodge, parry: u.parry, dr: drAt(u.arm.dr, "torso") + drAt(u.nat, "torso"), sp: u.shield ? u.shield.sp : 0, sm: u.sm || 0, body: u.body || "upright", rk: wkind(u.ranged), mk: u.veh ? "" : mkind(u.melee), kit: [((u.ranged && u.ranged.name) || ""), ((u.melee && u.melee.name) || ""), ...(u.armourNames || [])].join("|"), veh: u.veh ? u.veh.name : "", vlocs: u.veh ? u.veh.locs : null,
+      ridge: frames && RIDGE ? { ...RIDGE } : null, roster: models.map(m => { const u = m.u; return { id: m.id, side: u.side, unit: u.idx, scan: scanOf(u), template: u.template, faction: u.ai.name, speed: u.speed, move: u.move, hp: u.HP, st: u.st, dx: u.dx, dodge: u.dodge, parry: u.parry, dr: drAt(u.arm.dr, "torso") + drAt(u.nat, "torso"), sp: u.shield ? u.shield.sp : 0, sm: u.sm || 0, body: u.body || "upright", rk: wkind(u.ranged), mk: u.veh ? "" : mkind(u.melee), kit: [((u.ranged && u.ranged.name) || ""), ((u.melee && u.melee.name) || ""), ...(u.armourNames || [])].join("|"), veh: u.veh ? u.veh.name : "", vlocs: u.veh ? u.veh.locs : null,
         ranged: u.ranged ? `${u.ranged.name} (${u.ranged.text}${u.ranged.followText ? " + " + u.ranged.followText : ""})` : "", melee: `${u.melee.name} (${u.melee.text})`, kills: m.kills, fate: m.state }; }),
       units: units.map(u => ({
         name: u.name, side: u.side, count: u.count, routed: u.routed,

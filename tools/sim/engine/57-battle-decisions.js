@@ -52,14 +52,29 @@
     // at less than full effect: that's what covering fire is for (TS p. 21)
     const covered = (m, f) => zones.some(z => z.side === m.u.side && z.owner.state === "ok" && f.h && z.hexes.has(key(f.h.q, f.h.r)))
       || [...f.aimedBy].some(x => x !== m && x.u.side === m.u.side && x.state === "ok" && x.role === "cover" && x.aimTarget === f);
+    // how many models of a side stand within d of foe f: from f's distances to that side's models, taken once a
+    // turn (a planner's estimate; who moved earlier this second doesn't change it much)
+    const RIV = new Map();
+    let rivT = -1;
+    function sideWithin(side, f, d) {
+      if (rivT !== turn) { RIV.clear(); rivT = turn; }
+      const k = f.ix * 2 + side;
+      let a = RIV.get(k);
+      if (!a) { a = models.filter(x => x.u.side === side && x.state === "ok" && x.h).map(x => hexDist(x.h, f.h)).sort((p, q) => p - q); RIV.set(k, a); }
+      let lo = 0, hi = a.length;
+      while (lo < hi) { const mid = (lo + hi) >> 1; if (a[mid] <= d) lo = mid + 1; else hi = mid; }
+      return lo;
+    }
+    // ...and the same with m itself left out
+    const rivalsOf = (m, f, d) => Math.max(0, sideWithin(m.u.side, f, d) - (m.state === "ok" && m.h && hexDist(m.h, f.h) <= d ? 1 : 0));
     function incoming(m, h, mode) {
       let tot = 0;
-      const near = known(m).filter(f => f.h && f.state === "ok").sort((a, b) => walk(h, a.h) - walk(h, b.h)).slice(0, 8);
+      const near = scanFoes(m).filter(f => f.h && f.state === "ok").sort((a, b) => walk(h, a.h) - walk(h, b.h)).slice(0, 8);
       for (const f of near) {
         if (f.pinned || f.grips.length > 1) continue;
         const d = hexDist(f.h, h);
         // a foe spreads its attacks over the models of ours at least as close to it as this hex
-        const rivals = models.filter(x => x !== m && x.u.side === m.u.side && x.state === "ok" && x.h && hexDist(x.h, f.h) <= d).length;
+        const rivals = rivalsOf(m, f, d);
         const share = 1 / (1 + rivals);
         let best = 0;
         const mw = f.u.melee;

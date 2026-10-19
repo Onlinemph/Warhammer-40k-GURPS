@@ -169,7 +169,8 @@
         else { m.jam = 3; L(`${m.id} fails to clear its ${u.ranged.name}`); }
         return;
       }
-      const pool = known(m).filter(f => f.h).sort((a, b) => walk(m.h, a.h) - walk(m.h, b.h));
+      m.scanT = -1;   // a fresh look at the field each time it acts
+      const pool = scanFoes(m).filter(f => f.state === "ok" && f.h).sort((a, b) => walk(m.h, a.h) - walk(m.h, b.h));
       if (!pool.length) { if (AWARE) search(m); return; }
       const adj = pool.filter(f => hexDist(f.h, m.h) <= u.melee.reachMax && los(m.h, f.h) && levelOK(m.h, u, f.h, f.u, u.melee));
       const shooter = u.ranged || u.powers.some(p => !p.melee);

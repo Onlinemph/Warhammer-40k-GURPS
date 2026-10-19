@@ -296,8 +296,8 @@
     // ---- threat: expected harm a foe can do to m this turn (for All-Out Attack / Defense choices)
     function threatTo(m) {
       let t = 0;
-      for (const f of foes(m)) {
-        if (!f.h || !m.h) continue;
+      for (const f of scanFoes(m)) {
+        if (!f.h || !m.h || f.state !== "ok") continue;
         const d = hexDist(f.h, m.h);
         const w = d <= f.u.melee.reachMax ? f.u.melee : f.u.ranged && d <= f.u.ranged.range.max && los(f.h, m.h) ? f.u.ranged : null;
         if (w) t += expInj(w, m.u, "torso");
