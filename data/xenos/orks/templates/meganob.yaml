@@ -6,12 +6,22 @@ notes: >
   infantry of a Waaagh. Built as a Nob (Ork Physiology plus Growth Lens:
   Nob) with a shock-fighter skill package; the armour and klaw are
   equipment, not included in the points. Point math: Ork Physiology 311 +
-  Growth Lens: Nob 119 + skills 37 = 467 points. Stats: ST 34, DX 11, IQ 9,
-  HT 14, HP 40, Will 9, Per 9, Move 9 unarmoured, about 6 in Mega Armour (SM 0; before mega armour's servo ST). Sits
+  Growth Lens: Nob 119 + skills 37 + Keen Senses 5 = 472 points. Stats: ST 34, DX 11, IQ 9,
+  HT 14, HP 40, Will 9, Per 10, Move 9 unarmoured, about 6 in Mega Armour (SM 0; before mega armour's servo ST). Sits
   in the middle of framework.md's Senior agents tier (350-600); the armour is what makes a
   Meganob a match for Terminators, not the body inside it. Enable at most
   one Klan lens for flavor.
 traits:
+  - name: Keen Senses
+    points: 5
+    attributes: {per: 1}
+    tags: [Mental]
+    notes: Per +1 (Per 10).
+    lore: >-
+      Dull it may be, but not blind: a soldier who survives a few fights learns to see movement in the grass.
+    design: >-
+      Per +1 at 5 points a level (B16), from Per 9 to Per 10: user direction that low-IQ creatures should
+      still perceive at 10-12, so a swarm can spot an enemy in the simulator instead of walking blind into its fire.
   - include: "xenos/orks/traits.yaml#Ork Physiology"
   - include: "xenos/orks/traits.yaml#Growth Lens: Nob"
   - include: "xenos/orks/traits.yaml#Klan: Blood Axe"

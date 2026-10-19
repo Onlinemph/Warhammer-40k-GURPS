@@ -15,6 +15,31 @@
     // Faction temper comes from data/sim/ai.yaml: `focus` (discipline) sets how hard men favour the squad they're
     // told to shoot, `flank` the share of squads it sends round. On by default on the countryside (a big field);
     // opt.director (true, false or [side A, side B]) overrides it. opt.flanking does the same for flanking alone.
+    // ---- synapse (data/xenos/tyranids/traits.yaml): a Tyranid brood within a synapse creature's field (a Warrior's
+    // or a Zoanthrope's 16 yards, a Hive Tyrant's 32) has Synapse Discipline, Fearlessness 5 and High Pain Threshold,
+    // and fights to the Hive Mind's purpose: it takes the director's orders. Out of every field it falls back on
+    // instinct (Synapse Dependence): no fearlessness, no pain immunity, no orders; it fights what's in front of it.
+    // Worked out each second, brood by brood (linked when at least half its living members are in a field), so
+    // killing the synapse creatures first breaks the swarm, as the Imperium teaches.
+    const SYN = units.some(u => u.flags.synDisc);
+    for (const u of units) if (u.flags.synDisc) { u.baseFearless = u.flags.fearless || 0; u.baseHpt = !!u.flags.hpt; }
+    function linkSynapse() {
+      if (!SYN) return;
+      const nodes = models.filter(x => x.state === "ok" && x.h && x.u.flags.synapse);
+      for (const u of units) {
+        if (!u.flags.synDisc || u.routed) continue;
+        const ls = u.models.filter(x => x.state === "ok" && x.h);
+        if (!ls.length) continue;
+        const inField = ls.filter(x => x.u.flags.synapse || nodes.some(n => n.u.side === u.side && hexDist(n.h, x.h) <= n.u.flags.synapse)).length;
+        const linked = inField * 2 >= ls.length;
+        if (u.linked !== undefined && linked !== u.linked) L(linked ? `${u.name} come back under synapse` : `${u.name} lose synapse and fall back on instinct`);
+        u.linked = linked;
+        u.flags.fearless = u.baseFearless + (linked ? 5 : 0);
+        u.flags.hpt = u.baseHpt || linked ? 1 : 0;
+      }
+    }
+    // a Tyranid brood cut off from synapse hears no orders
+    const hearsOrders = u => !u.flags.synDisc || !!u.linked;
     const DIRECTOR_ON = s => Array.isArray(opt.director) ? !!opt.director[s] : opt.director != null ? !!opt.director : !!(terr && terr.deploy === "edge");
     const FLANK_ON = s => DIRECTOR_ON(s) && (Array.isArray(opt.flanking) ? !!opt.flanking[s] : opt.flanking != null ? !!opt.flanking : true);
     const PLAN_EVERY = 6, FLANK_MAX = 120, ORDER_MAX = 90;
@@ -246,7 +271,7 @@
     // order closely (a T'au Fire Warrior), an unruly one hardly at all (an Ork)
     function orderWeight(m, t) {
       const o = m && m.u.group && m.u.group.order;
-      return o && o.target && t.u.group === o.target ? 1 + 0.4 * Math.min(1.5, m.u.ai.focus ?? 1) : 1;
+      return o && o.target && t.u.group === o.target && hearsOrders(m.u) ? 1 + 0.4 * Math.min(1.5, m.u.ai.focus ?? 1) : 1;
     }
     // a soldier with somewhere to go (assault, support, flank): one more option, to keep moving there, worth a third
     // more than its best other choice unless the step takes it into more fire than it stands in now. Each takes its own
@@ -256,7 +281,7 @@
     // charge, a supporting man who can see the enemy squad it was sent against)
     function orderGoal(m) {
       const g = m.u.group, o = g && g.order;
-      if (!o || !m.h || (m.u.ranged && m.u.ranged.needsSetup) || m.u.team) return null;   // heavy weapon teams stay put
+      if (!o || !m.h || (m.u.ranged && m.u.ranged.needsSetup) || m.u.team || !hearsOrders(m.u)) return null;   // heavy weapon teams stay put
       let to = null;
       if (o.kind === "flank") to = o.legs[o.stage];
       else if (o.kind === "assault" || o.kind === "support") {

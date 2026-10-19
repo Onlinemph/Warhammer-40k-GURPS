@@ -31,6 +31,7 @@
       }
       for (const m of models) if (m.state === "ok" && m.h && !m.u.routed && !m.stunned) firingLine(m);
       lookAround();
+      linkSynapse();
       assignRoles();
       direct();
       // the order is fixed for the fight (B363): Basic Speed, then DX, then a roll made at the start
@@ -158,7 +159,7 @@
       ridge: frames && RIDGE ? { ...RIDGE } : null, roster: models.map(m => { const u = m.u; return { id: m.id, side: u.side, unit: u.idx, scan: scanOf(u), start: m.h0, template: u.template, faction: u.ai.name, speed: u.speed, move: u.move, hp: u.HP, st: u.st, dx: u.dx, dodge: u.dodge, parry: u.parry, dr: drAt(u.arm.dr, "torso") + drAt(u.nat, "torso"), sp: u.shield ? u.shield.sp : 0, sm: u.sm || 0, body: u.body || "upright", rk: wkind(u.ranged), mk: u.veh ? "" : mkind(u.melee), kit: [((u.ranged && u.ranged.name) || ""), ((u.melee && u.melee.name) || ""), ...(u.armourNames || [])].join("|"), veh: u.veh ? u.veh.name : "", vlocs: u.veh ? u.veh.locs : null,
         ranged: u.ranged ? `${u.ranged.name} (${u.ranged.text}${u.ranged.followText ? " + " + u.ranged.followText : ""})` : "", melee: `${u.melee.name} (${u.melee.text})`, kills: m.kills, fate: m.state }; }),
       units: units.map(u => ({
-        name: u.name, side: u.side, count: u.count, routed: u.routed,
+        name: u.name, side: u.side, count: u.count, routed: u.routed, synapse: u.flags.synDisc ? !!u.linked : null,
         standing: u.models.filter(m => m.state === "ok").length,
         dead: u.models.filter(m => m.state === "dead").length,
         out: u.models.filter(m => m.state === "out" || m.state === "down").length,

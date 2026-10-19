@@ -1,8 +1,24 @@
 {
 	"version": 5,
 	"id": "Bzsl-h5nDGyAkxL3K",
-	"notes": "NPC creature stat block, not a player-facing race. Point math: Tyranid Biology 20 + Body Lens: Lictor 763 (incl. Injury Tolerance 2, Clinging) + Flesh Hooks 11 + Rending Claws 38 + Extra Attack (Scything Talons) 25 + skills 12 = 869 points. Stats: SM +1, ST 36, DX 15, IQ 8, HT 13, HP 40, Will 8, Per 8, natural chitin torso DR 60 (Weak Points 5, eye DR 30), Basic Move 11, Chameleonic Hide (-4/-2 to others' Vision rolls), Pheromone Trail, Shadow in the Warp (8 yards) — framework.md's Lictor anchor line exactly. This lands just below the Tyranid Warrior template, in the upper half of framework.md's Astartes point tier (550-850): a solitary ambush predator built to scout, terrorise and mark a kill zone rather than to hold a line. The point total is for GM reference only; do not read it as a measure of how a lone Lictor performs in a stand-up fight, which is never its role in the fiction.\nWeapon-symbiotes: carries Flesh Hooks (a ranged grapple/snare) plus Rending Claws for its actual kill, both built as natural-attack traits in data/xenos/tyranids/bio-weapons.yaml. The Lash Whip (a Bonesword companion carried by Warriors) was removed from the Lictor; the Codex gives Lictors flesh hooks, grasping talons and rending claws. There is no Grasping Talons entry yet.\n",
+	"notes": "NPC creature stat block, not a player-facing race. Point math: Tyranid Biology 20 + Body Lens: Lictor 763 (incl. Injury Tolerance 2, Clinging) + Flesh Hooks 11 + Rending Claws 38 + Extra Attack (Scything Talons) 25 + skills 12 + Hunting Senses 20 = 889 points. Stats: SM +1, ST 36, DX 15, IQ 8, HT 13, HP 40, Will 8, Per 12, natural chitin torso DR 60 (Weak Points 5, eye DR 30), Basic Move 11, Chameleonic Hide (-4/-2 to others' Vision rolls), Pheromone Trail, Shadow in the Warp (8 yards) — framework.md's Lictor anchor line exactly. This lands just below the Tyranid Warrior template, in the upper half of framework.md's Astartes point tier (550-850): a solitary ambush predator built to scout, terrorise and mark a kill zone rather than to hold a line. The point total is for GM reference only; do not read it as a measure of how a lone Lictor performs in a stand-up fight, which is never its role in the fiction.\nWeapon-symbiotes: carries Flesh Hooks (a ranged grapple/snare) plus Rending Claws for its actual kill, both built as natural-attack traits in data/xenos/tyranids/bio-weapons.yaml. The Lash Whip (a Bonesword companion carried by Warriors) was removed from the Lictor; the Codex gives Lictors flesh hooks, grasping talons and rending claws. There is no Grasping Talons entry yet.\n",
 	"traits": [
+		{
+			"id": "tk-gYc72aS7kvBlH1",
+			"name": "Hunting Senses",
+			"local_notes": "Per +4 (Per 12).\n\nLore: Every bioform is grown to find prey for the Hive Mind: whatever its wits, its senses are a hunter's, and the swarm notices a man in a hedgerow long before it could understand what he is.\n\nDesign: Per +4 at 5 points a level (B16), from Per 8 to Per 12: user direction that low-IQ creatures should still perceive at 10-12, so a swarm can spot an enemy in the simulator instead of walking blind into its fire.",
+			"tags": [
+				"Mental"
+			],
+			"base_points": 20,
+			"features": [
+				{
+					"type": "attribute_bonus",
+					"attribute": "per",
+					"amount": 4
+				}
+			]
+		},
 		{
 			"id": "TamW7k7hQJE7T5Dsy",
 			"name": "Tyranid Biology",

@@ -3,8 +3,8 @@ output: Xenos/Orks/Templates/Gretchin.gct
 notes: >
   A Gretchin (Grot): small, cowardly, expendable Ork underclass, usually
   found minding artillery, running errands, or being driven forward by a
-  Runtherd. Point math: Gretchin Physiology -11 + skills 21 = 10 points.
-  Stats: ST 8, DX 11, IQ 9, HT 10, HP 8, Will 9, Per 9, Move 7, SM -1 —
+  Runtherd. Point math: Gretchin Physiology -11 + skills 21 + Keen Senses 5 = 15 points.
+  Stats: ST 8, DX 11, IQ 9, HT 10, HP 8, Will 9, Per 10, Move 7, SM -1 —
   framework.md's Gretchin anchor line exactly. A 10-point total is honest
   for this template rather than forced upward to hit a tier: a Gretchin
   is explicitly written as weaker than an ordinary, untrained adult in
@@ -13,6 +13,16 @@ notes: >
   in the Ork line, at the bottom of framework.md's Ordinary Citizen tier
   (0-50), not a combatant to be taken individually seriously.
 traits:
+  - name: Keen Senses
+    points: 5
+    attributes: {per: 1}
+    tags: [Mental]
+    notes: Per +1 (Per 10).
+    lore: >-
+      Dull it may be, but not blind: a soldier who survives a few fights learns to see movement in the grass.
+    design: >-
+      Per +1 at 5 points a level (B16), from Per 9 to Per 10: user direction that low-IQ creatures should
+      still perceive at 10-12, so a swarm can spot an enemy in the simulator instead of walking blind into its fire.
   - include: "xenos/orks/traits.yaml#Gretchin Physiology"
 skills:
   - name: Guns

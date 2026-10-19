@@ -3,8 +3,8 @@ output: Xenos/Tyranids/Templates/Lictor.gct
 notes: >
   NPC creature stat block, not a player-facing race. Point math: Tyranid
   Biology 20 + Body Lens: Lictor 763 (incl. Injury Tolerance 2, Clinging) + Flesh Hooks 11 + Rending Claws 38 +
-  Extra Attack (Scything Talons) 25 + skills 12 = 869 points. Stats: SM
-  +1, ST 36, DX 15, IQ 8, HT 13, HP 40, Will 8, Per 8, natural chitin
+  Extra Attack (Scything Talons) 25 + skills 12 + Hunting Senses 20 = 889 points. Stats: SM
+  +1, ST 36, DX 15, IQ 8, HT 13, HP 40, Will 8, Per 12, natural chitin
   torso DR 60 (Weak Points 5, eye DR 30), Basic Move 11, Chameleonic Hide (-4/-2 to
   others' Vision rolls), Pheromone Trail, Shadow in the Warp (8 yards) —
   framework.md's Lictor anchor line exactly. This lands just below the
@@ -21,6 +21,16 @@ notes: >
   gives Lictors flesh hooks, grasping talons and rending claws. There is
   no Grasping Talons entry yet.
 traits:
+  - name: Hunting Senses
+    points: 20
+    attributes: {per: 4}
+    tags: [Mental]
+    notes: Per +4 (Per 12).
+    lore: >-
+      Every bioform is grown to find prey for the Hive Mind: whatever its wits, its senses are a hunter's, and the swarm notices a man in a hedgerow long before it could understand what he is.
+    design: >-
+      Per +4 at 5 points a level (B16), from Per 8 to Per 12: user direction that low-IQ creatures should
+      still perceive at 10-12, so a swarm can spot an enemy in the simulator instead of walking blind into its fire.
   - include: "xenos/tyranids/traits.yaml#Tyranid Biology"
   - include: "xenos/tyranids/traits.yaml#Body Lens: Lictor"
   - include: "xenos/tyranids/bio-weapons.yaml#Flesh Hooks"

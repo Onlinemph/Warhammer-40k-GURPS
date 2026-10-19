@@ -90,6 +90,7 @@ test("awareness: line troops weigh the nearest few foes, snipers, leaders, lone 
 
 test("the director: on a big field each side gives its squads orders by need, and only when it's switched on", () => {
   const broods = [0, 1, 2].map(i => ({ side: 0, spec: spec("Genestealer", 6, { squad: "brood" + i, squadName: "Brood " + (i + 1) }) }));
+  broods.push({ side: 0, spec: spec("Tyranid Warrior", 3, { squad: "node", squadName: "Warriors" }) });   // synapse, or the broods hear no orders
   const units = () => [...broods, ...squad("Astra Militarum Infantry Squad", 1), ...squad("Astra Militarum Infantry Squad", 1).map(x => ({ ...x, spec: { ...x.spec, squad: x.spec.squad + "b" } }))];
   const opt = { battlefield: "countryside", mapSeed: 2, mapW: 160, mapH: 80, seed: 3, maxTurns: 120, log: true };
   const on = SIM.runBattle(units(), opt), off = SIM.runBattle(units(), { ...opt, director: false });
@@ -98,4 +99,14 @@ test("the director: on a big field each side gives its squads orders by need, an
   assert.ok(!off.log.some(l => / are sent against |closes in by cover|go to support/.test(l)), "no orders with the director off");
   // the same seed plays the same battle, orders and all
   assert.deepEqual(SIM.runBattle(units(), opt).log, on.log);
+});
+
+test("synapse: a brood is fearless, feels no pain and takes orders only inside a synapse creature's field", () => {
+  const guard = squad("Astra Militarum Infantry Squad", 1);
+  const opt = { battlefield: "countryside", mapSeed: 2, mapW: 160, mapH: 80, seed: 3, maxTurns: 1 };
+  const alone = SIM.runBattle([{ side: 0, spec: spec("Hormagaunt", 10, { squad: "b", squadName: "Brood" }) }, ...guard], opt);
+  assert.equal(alone.units.find(u => u.name === "Hormagaunt").synapse, false, "no synapse creature: instinct");
+  const led = SIM.runBattle([{ side: 0, spec: spec("Hormagaunt", 10, { squad: "b", squadName: "Brood" }) }, { side: 0, spec: spec("Tyranid Warrior", 1) }, ...guard], opt);
+  assert.equal(led.units.find(u => u.name === "Hormagaunt").synapse, true, "a Warrior beside it: linked");
+  assert.ok(led.units.filter(u => u.side === 1).every(u => u.synapse === null), "nobody else has a synapse state");
 });
