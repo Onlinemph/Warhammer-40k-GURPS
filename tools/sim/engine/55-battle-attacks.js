@@ -116,7 +116,7 @@
     function scatter(at, n) {
       const [dq, dr] = DIRS[Math.floor(R() * 6)];
       let h = at;
-      for (let i = 0; i < n; i++) { const x = { q: h.q + dq, r: h.r + dr }; if (terr && (idx(key(x.q, x.r)) == null || wallAt(key(x.q, x.r)))) break; h = x; }
+      for (let i = 0; i < n; i++) { const x = { q: h.q + dq, r: h.r + dr }; if (terr && (iQR(x.q, x.r) == null || wallAt(key(x.q, x.r)))) break; h = x; }
       return h;
     }
     // Bracing (the user's Progressive Recoil rule): a gun fired without moving from a mount or bipod line, from prone,
@@ -273,8 +273,8 @@
     // Cones (B413): one attack roll at the aim point; everyone in the wedge (a yard wide at the muzzle, widening
     // to the full width at maximum range) whom the shooter can see is caught, and may dodge. Large-area injury (B400)
     function coneCaught(m, w, target, from = m.h) {
-      const S = Math.sqrt(3), [ax, ay] = px(from), [bx, by] = px(target.h);
-      const len = Math.hypot(bx - ax, by - ay) || 1, ux = (bx - ax) / len, uy = (by - ay) / len;
+      const S = SQRT3, [ax, ay] = px(from), [bx, by] = px(target.h);
+      const len = hyp(bx - ax, by - ay) || 1, ux = (bx - ax) / len, uy = (by - ay) / len;
       const caught = [target];
       for (const x of models) {
         if (x === m || x === target || x.state !== "ok" || !x.h) continue;

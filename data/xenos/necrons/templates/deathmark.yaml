@@ -3,14 +3,24 @@ output: Xenos/Necrons/Templates/Deathmark.gct
 notes: >
   A Deathmark: a dynasty's sniper and infiltrator, phased partly out of
   reality between shots. Point math: Necron Physiology 174 + Body Lens:
-  Deathmark 552 + Mind: Deathmark Focus -5 + Deathmark Phase-Shift 18 + skills 28 = 767 points.
-  Stats: ST 26, DX 13, IQ 9, HT 14, HP 32, Will 9, Per 9, natural torso DR
+  Deathmark 552 + Mind: Deathmark Focus -5 + Deathmark Phase-Shift 18 + skills 28 + Sensor Array 15 = 782 points.
+  Stats: ST 26, DX 13, IQ 9, HT 14, HP 32, Will 9, Per 12, natural torso DR
   60 (Weak Points 4, eye DR 30) — framework.md's Deathmark anchor line
   exactly. This lands within framework.md's Astartes tier (550-800): a
   Deathmark is a dedicated one-target killer whose whole build (DX,
   stealth and marksmanship skills, minimal social skills) reflects a
   specialist rather than a line trooper or an all-rounder.
 traits:
+  - name: Sensor Array
+    points: 15
+    attributes: {per: 3}
+    tags: [Mental]
+    notes: Per +3 (Per 12).
+    lore: >-
+      Its awareness comes from machine senses, not a quick mind: auspex-grade optics and sensors that pick out movement whether or not anything behind them could reason about it.
+    design: >-
+      Per +3 at 5 points a level (B16), from Per 9 to Per 12: user direction that low-IQ creatures should
+      still perceive at 10-12, so a swarm can spot an enemy in the simulator instead of walking blind into its fire.
   - include: "xenos/necrons/traits.yaml#Necron Physiology"
   - include: "xenos/necrons/traits.yaml#Body Lens: Deathmark"
   - include: "xenos/necrons/traits.yaml#Mind: Deathmark Focus"

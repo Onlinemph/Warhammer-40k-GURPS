@@ -1,5 +1,5 @@
 // Rules assertions: the engine's tables and formulas against the Basic Set, the user's house rules and the anchors
-// in docs/framework.md. Run `node --test tools/sim/test/` after `python3 tools/build_site.py` (the data comes from
+// in docs/framework.md. Run `node --test tools/sim/test/*.test.js` after `python3 tools/build_site.py` (the data comes from
 // the built site). A failure here means the engine, the data or the doc has drifted; fix whichever is wrong.
 const test = require("node:test");
 const assert = require("node:assert/strict");
@@ -362,16 +362,23 @@ test("a squad stays while its heavy weapon is still in the fight, and a model ru
   }
   assert.ok(bay > 0, "somebody caught by it should turn at bay");
 });
-test("a Hormagaunt swarm under fire keeps coming: no fear, no standing about (user report)", () => {
+test("a Hormagaunt swarm under synapse keeps coming under fire: no fear, no standing about (user report)", () => {
   const lo = DATA.loadouts, spec = (t, n) => ({ template: t, count: n, ...lo[t] });
   SIM.seed(8);
-  const r = SIM.runBattle([{ side: 0, spec: spec("Astra Militarum Guardsman", 10) }, { side: 1, spec: spec("Hormagaunt", 20) }], { distance: 80, log: true, frames: true });
-  // under synapse (the sim assumes it): no Fright Checks under fire
-  assert.ok(!r.log.some(l => /Hormagaunt #\d+ (freezes|loses fatigue and freezes|retches|faints)/.test(l)), "a Hormagaunt froze");
+  const r = SIM.runBattle([{ side: 0, spec: spec("Astra Militarum Guardsman", 10) }, { side: 1, spec: spec("Hormagaunt", 20) }, { side: 1, spec: spec("Tyranid Warrior", 2) }], { distance: 80, log: true, frames: true });
+  // while the brood is linked (Synapse Discipline): no Fright Checks under fire. Out of the field it may freeze;
+  // the fast Hormagaunts outrun their Warriors here, so the test follows the link through the log
+  const first = r.log.find(l => /^Hormagaunt (lose|come back)/.test(l));
+  let linked = !first || /lose/.test(first), froze = 0;
+  for (const l of r.log) {
+    if (/^Hormagaunt lose synapse/.test(l)) linked = false; else if (/^Hormagaunt come back/.test(l)) linked = true;
+    else if (linked && /Hormagaunt #\d+ (freezes|loses fatigue and freezes|retches|faints)/.test(l)) froze++;
+  }
+  assert.equal(froze, 0, "a Hormagaunt froze under synapse");
   // and none stands three seconds in one place with no foe beside it (they used to, a fast model's charge being
   // read as overshooting its brood)
   const stuck = [];
-  r.roster.forEach((u, i) => { if (u.side !== 1) return; for (let t = 2; t < r.frames.length; t++) {
+  r.roster.forEach((u, i) => { if (u.template !== "Hormagaunt") return; for (let t = 2; t < r.frames.length; t++) {
     const [a, b, c] = [r.frames[t - 2][i], r.frames[t - 1][i], r.frames[t][i]];
     if (!a || !b || !c || a[0] !== c[0] || a[1] !== c[1] || b[0] !== c[0] || b[1] !== c[1]) continue;
     if ([a, b, c].some(x => (x[7] || 0) & 7)) continue;   // stunned, down or getting up: that's not standing about
@@ -383,10 +390,11 @@ test("a Hormagaunt swarm under fire keeps coming: no fear, no standing about (us
 test("Termagants advance as a swarm rather than trade shots at long range (user direction)", () => {
   const lo = DATA.loadouts, spec = (t, n) => ({ template: t, count: n, ...lo[t] });
   SIM.seed(8);
-  const r = SIM.runBattle([{ side: 0, spec: spec("Termagant", 20) }, { side: 1, spec: spec("Astra Militarum Guardsman", 10) }], { distance: 60, log: true, frames: true });
+  // with their synapse Warriors: a brood cut off from synapse fights on instinct, and doesn't advance as one
+  const r = SIM.runBattle([{ side: 0, spec: spec("Termagant", 20) }, { side: 0, spec: spec("Tyranid Warrior", 2) }, { side: 1, spec: spec("Astra Militarum Guardsman", 10) }], { distance: 60, log: true, frames: true });
   const hd = (a, b) => Math.max(Math.abs(a[0] - b[0]), Math.abs(a[1] - b[1]), Math.abs(a[0] + a[1] - b[0] - b[1]));
   const f = r.frames[5], T = [], G = [];
-  f.forEach((x, i) => { if (x) (r.roster[i].side ? G : T).push(x); });
+  f.forEach((x, i) => { if (x && r.roster[i].side) G.push(x); else if (x && r.roster[i].template === "Termagant") T.push(x); });
   const near = Math.min(...T.map(a => Math.min(...G.map(b => hd(a, b)))));
   assert.ok(near <= 30, `after five seconds the nearest Termagant is still ${near} yards off`);
   // and they don't stand at range aiming while the lasguns work on them
@@ -457,4 +465,35 @@ test("design notes quote the current AV table", () => {
     }
   }
   assert.deepEqual(bad, [], "stale AV figures:\n" + bad.join("\n"));
+});
+
+test("countryside: sides deploy in lines along their own edges, on open ground, and fight across it", () => {
+  const lo = DATA.loadouts, spec = (t, n) => ({ template: t, count: n, ...lo[t] });
+  const units = [{ side: 0, spec: spec("Astra Militarum Guardsman", 30) }, { side: 1, spec: spec("Ork Boy", 30) }];
+  const m = SIM.battlefields.countryside(2);
+  assert.equal(m.deploy, "edge");
+  const r = SIM.runBattle(units, { battlefield: "countryside", mapSeed: 2, seed: 9, maxTurns: 30 });
+  const seen = new Set();
+  for (const x of r.roster) {
+    const [q, rr] = x.start, k = q + "," + rr, i = m.ids.get(k), col = q;
+    assert.ok(i != null && !m.wallI[i] && !m.crateI[i], `${x.id} starts on ${k}, not open floor`);
+    assert.ok(!seen.has(k), `${x.id} shares ${k}`); seen.add(k);
+    assert.ok(x.side === 0 ? col < m.band + 4 : col > m.W - m.band - 5, `${x.id} starts at column ${col}, outside its side's band`);
+  }
+  assert.ok(r.turns >= 1);
+  // a custom size is honoured
+  const small = SIM.battlefields.countryside(3, { mapW: 160, mapH: 80 });
+  assert.equal(small.W, 160); assert.equal(small.H, 80);
+});
+
+test("the engine uses only maths that every JavaScript engine computes bit for bit the same", () => {
+  // + - * / and Math.sqrt are correctly rounded by the standard; these aren't, and a replay re-runs the battle in
+  // whatever browser opens it. engine/05-dmath.js has the stand-ins (dexp, dsin, dcos, datan2, dlog, dpow, powi, hyp, ilog2)
+  const BAD = /Math\.(sin|cos|tan|asin|acos|atan|atan2|sinh|cosh|tanh|asinh|acosh|atanh|exp|expm1|log|log2|log10|log1p|pow|hypot|cbrt)\s*\(/;
+  for (const f of fs.readdirSync(path.join(__dirname, "..", "engine"))) {
+    if (f === "05-dmath.js") continue;
+    fs.readFileSync(path.join(__dirname, "..", "engine", f), "utf8").split("\n").forEach((line, i) => {
+      if (BAD.test(line)) assert.fail(`${f}:${i + 1} calls ${line.match(BAD)[0]}): use the deterministic stand-in`);
+    });
+  }
 });

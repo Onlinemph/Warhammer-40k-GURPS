@@ -76,7 +76,7 @@
         // (not a swarm-born shooter whose gun does far more than its claws: a Termagant runs in to shoot, user direction)
         const gunFirst = u.ranged && !m.gunBroken && (m.ammo > 0 || m.mags > 0 || u.ranged.shots.mag === Infinity || u.ranged.natural) && expInjRandom(u.ranged, tgt.u) > 2 * expInjRandom(w, tgt.u);
         const z = gunFirst ? 0 : u.ai.zeal || 0, rm = Math.max(mv, runMove(m) + (u.flags.enhMove ? mv : 0)), turns = (Math.ceil((len - mv) / Math.max(1, rm)) + 1) * (1 - z);
-        const v = Math.pow(GAMMA, turns) * Wm * Math.max(worth, z * 0.1 * threatOf(tgt) * HORIZON) - risk(m, arrive, "") * (1 - z / 2);
+        const v = dpow(GAMMA, turns) * Wm * Math.max(worth, z * 0.1 * threatOf(tgt) * HORIZON) - risk(m, arrive, "") * (1 - z / 2);
         // (where it ends up: no nearer than the foe, however far its sprint could take it; a fast model one run from
         // the foe used to read as overshooting, fail the squad check and stand still, user report: Hormagaunts)
         // (blocked on the way, a queue of its own side on a bridge or in a doorway: the full search, through friends
@@ -228,7 +228,7 @@
         if (gun && gun.shots.mag !== Infinity && m.ammo < gun.shots.mag && gun.shots.reload <= 3 && (m.mags > 0 || m.reload > 0)) {
           const turns = Math.max(1, gun.shots.reload - Math.max(0, m.reload > 0 ? gun.shots.reload - m.reload : 0));
           const Eg = planAttack(m, gun, t, gun.level + Math.min(0, gun.bulk || 0) - skillPen(m), false).score;
-          add(Math.pow(GAMMA, turns) * Wr * kv(m, t, Eg) - rNow, `reload-cc`, () => {
+          add(dpow(GAMMA, turns) * Wr * kv(m, t, Eg) - rNow, `reload-cc`, () => {
             if (m.reload === 0) m.reload = gun.shots.reload;
             if (--m.reload <= 0) { m.reload = 0; refill(m, gun); } L(`${m.id} reloads in close combat`);
           });
@@ -292,7 +292,7 @@
           // everyone else in reach of the blast (3 yards counted) and the fragments, friends (and the thrower) included
           let others = 0;
           const fr = g.dmg.frag, fR = fr ? 5 * fr.n : 0;
-          for (const x of models) {
+          for (const x of modelsNear(c.h, Math.max(3, fR))) {
             if (x === c || !x.h || x.state !== "ok") continue;
             const k = Math.max(1, hexDist(x.h, c.h));
             if (k > Math.max(3, fR) || !los(c.h, x.h)) continue;
@@ -310,7 +310,7 @@
         if (terr) for (const c of pool.slice(0, 6)) {
           if (!c.h || los(m.h, c.h) || hexDist(m.h, c.h) > g.range.max + 2) continue;
           for (const [dq, dr] of [...DIRS, ...DIRS.map(([a, b]) => [2 * a, 2 * b])]) {
-            const X = { q: c.h.q + dq, r: c.h.r + dr }, xi = idx(key(X.q, X.r));
+            const X = { q: c.h.q + dq, r: c.h.r + dr }, xi = iQR(X.q, X.r);
             if (xi == null || !pass[xi] || closed[xi] || !los(m.h, X) || !los(X, c.h)) continue;
             const d = hexDist(m.h, X);
             if (d < 3 || d > g.range.max) continue;
@@ -362,7 +362,7 @@
         const r = g.lvl < 3 ? { ok: false, margin: g.lvl - 10 } : check(g.lvl), raw = rollDamage(w.dmg);
         const off = r.ok ? 0 : Math.max(1, Math.min(Math.ceil(hexDist(m.h, g.hex) / 2), -r.margin));
         const at = off ? scatter(g.hex, off) : g.hex;
-        const how = g.feet ? `at ${c.id}'s feet` : terr && terr.doorI[idx(key(g.hex.q, g.hex.r))] ? `through the doorway at ${c.id}` : `round the corner at ${c.id}`;
+        const how = g.feet ? `at ${c.id}'s feet` : terr && terr.doorI[iQR(g.hex.q, g.hex.r)] ? `through the doorway at ${c.id}` : `round the corner at ${c.id}`;
         L(`${m.id} lobs a ${w.name} ${how} (skill ${g.lvl})${off ? `: ${off} yd off` : ""}`);
         if (m.h) FX(["s", m.h.q, m.h.r, at.q, at.r, m.u.side, 1, m.ix, c ? c.ix : -1, g.lvl, 1, 1, "grenade"]);
         landOn(m, w, at, raw);

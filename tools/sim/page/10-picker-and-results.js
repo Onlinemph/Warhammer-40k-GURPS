@@ -32,9 +32,9 @@
       ranged: lo.ranged ? { ...lo.ranged } : null, melee: lo.melee ? { ...lo.melee } : null,
       ranged2: lo.ranged2 ? { ...lo.ranged2 } : null, shield: lo.shield ? { ...lo.shield } : null, carried: lo.carried || null, grenades: (lo.grenades || []).map(g => ({ ...g })), body: lo.body, mags: lo.mags, knife: lo.knife ? { ...lo.knife } : null, skills: lo.skills ? { ...lo.skills } : undefined };
   }
-  const GROUNDS = [["open", "Open ground"], ["facility", "Facility"], ["ruins", "Ruins"], ["hulk", "Space hulk"], ["outpost", "Outpost"], ["trenches", "Trench lines"], ["streets", "City streets"], ["river", "River crossing"]];
+  const GROUNDS = [["open", "Open ground"], ["facility", "Facility"], ["ruins", "Ruins"], ["hulk", "Space hulk"], ["outpost", "Outpost"], ["trenches", "Trench lines"], ["streets", "City streets"], ["river", "River crossing"], ["countryside", "Countryside (300 yards)"]];
   const DEPLOYS = { facility: "Each side deploys in its staging bay", ruins: "Each side deploys at its end of the ruined block", hulk: "Each side deploys in its boarding bay, at either end of a maze of corridors a yard wide",
-    outpost: "Each side deploys at its edge of the open ground around the outpost", trenches: "Each side deploys behind its own trench lines, with no-man's-land between", streets: "Each side deploys at its end of the streets", river: "Each side deploys on its own bank" };
+    outpost: "Each side deploys at its edge of the open ground around the outpost", trenches: "Each side deploys behind its own trench lines, with no-man's-land between", streets: "Each side deploys at its end of the streets", river: "Each side deploys on its own bank", countryside: "Each side deploys in a line along its own edge of 300 yards of fields, hedges, woods and hills" };
   const MAPPED = () => !!DEPLOYS[S.battlefield];
   const PRESETS = [
     ["20 Guardsmen vs 5 Space Marines", [["Astra Militarum Guardsman", 20]], [["Astartes Battle-Brother", 5]], 150],

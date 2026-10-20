@@ -10,7 +10,7 @@
     })() : null;
     const ridgeZ = q => { const x = RIDGE.dir * (q - RIDGE.qc); return x <= 0 ? RIDGE.H : x >= RIDGE.S ? 0 : RIDGE.H * (1 - x / RIDGE.S); };
     const ELEV = !!(EL || RIDGE);
-    const elevAt = h => !h || !ELEV ? 0 : EL ? EL[idx(key(h.q, h.r))] || 0 : ridgeZ(h.q);
+    const elevAt = h => !h || !ELEV ? 0 : EL ? EL[iQR(h.q, h.r)] || 0 : ridgeZ(h.q);
     // firing up and down (B407): +1 yard of effective range a yard the target is above, -1 for every two yards it's
     // below (to no less than half the ground distance)
     const rngD = (a, b, d) => {
@@ -35,13 +35,13 @@
     const WT = terr && terr.wallTop ? terr.wallTop : null;
     function lineBlockers(a, b, sgn) {
       const n = hexDist(a, b), out = [];
-      const za = WT ? terr.elev[idx(key(a.q, a.r))] + 1.6 : 0, zb = WT ? terr.elev[idx(key(b.q, b.r))] + 1.6 : 0;
+      const za = WT ? terr.elev[iQR(a.q, a.r)] + 1.6 : 0, zb = WT ? terr.elev[iQR(b.q, b.r)] + 1.6 : 0;
       for (let i = 1; i < n; i++) {
         const t = i / n, x = a.q + (b.q - a.q) * t + 1e-6 * sgn, z = a.r + (b.r - a.r) * t + 1e-6 * sgn, y = -x - z;
         let rx = Math.round(x), ry = Math.round(y), rz = Math.round(z);
         const dx = Math.abs(rx - x), dy = Math.abs(ry - y), dz = Math.abs(rz - z);
         if (dx > dy && dx > dz) rx = -ry - rz; else if (dy <= dz) rz = -rx - ry;
-        const j = idx(key(rx, rz));
+        const j = iQR(rx, rz);
         if (j == null) return null;
         if (WT) {
           const lz = za + (zb - za) * t;
@@ -55,7 +55,7 @@
     function lineEntry(a, b) {
       const k = NK(a.q, a.r) * 16777216 + NK(b.q, b.r);
       let e = terr.lineC.get(k);
-      if (e === undefined) { e = [lineBlockers(a, b, 1), lineBlockers(a, b, -1)]; if (terr.lineC.size > 3e6) terr.lineC.clear(); terr.lineC.set(k, e); }
+      if (e === undefined) { e = [lineBlockers(a, b, 1), lineBlockers(a, b, -1)]; if (terr.lineC.size > LINE_CAP) terr.lineC.clear(); terr.lineC.set(k, e); }
       return e;
     }
     const lineOpen = L2 => L2 !== null && L2.every(i => !blocker(i));
@@ -75,17 +75,17 @@
         const k = NK(h.q, h.r) * 16777216 + NK(f.q, f.r);
         let c = terr.covC.get(k);
         if (c === undefined) {
-          const a = lineHexes(h, f, 1)[0], b = lineHexes(h, f, -1)[0];
-          c = [idx(key(a.q, a.r)), idx(key(b.q, b.r))].filter(i => i != null && terr.crateI[i]);
-          if (terr.covC.size > 3e6) terr.covC.clear();
+          const a = firstLineHex(h, f, 1), b = firstLineHex(h, f, -1);
+          c = [iQR(a.q, a.r), iQR(b.q, b.r)].filter(i => i != null && terr.crateI[i]);
+          if (terr.covC.size > LINE_CAP) terr.covC.clear();
           terr.covC.set(k, c);
         }
         for (const i of c) if (!crateGone[i]) return { kind: terr.crates.get(key(terr.hx[i].q, terr.hx[i].r)) === "heavy" ? "barricade" : "crate", i };
         // a broken wall in front of a target whose head clears it but whose waist doesn't: a parapet (ruins)
         if (WT) {
-          const hi = idx(key(h.q, h.r)), fi = idx(key(f.q, f.r)), n = hexDist(h, f);
-          for (const x of [lineHexes(h, f, 1)[0], lineHexes(h, f, -1)[0]]) {
-            const j = idx(key(x.q, x.r));
+          const hi = iQR(h.q, h.r), fi = iQR(f.q, f.r), n = hexDist(h, f);
+          for (const x of [firstLineHex(h, f, 1), firstLineHex(h, f, -1)]) {
+            const j = iQR(x.q, x.r);
             if (j == null || !terr.wallI[j] || broken[j] || hi == null || fi == null) continue;
             const zw = terr.elev[hi] + 0.9, zf = terr.elev[fi] + 1.6, lz = zw + (zf - zw) / n;
             if (WT[j] > lz && los(h, f)) return { kind: "parapet", i: -1 };
@@ -143,7 +143,7 @@
     }
     // the defence modifier: the lower fighter -1 at 3 feet, -2 at 4, -3 at 5 or more; the higher fighter as much better
     const heightDef = (t, att, w) => { const D = vdiff(att, t, w), a = Math.abs(D), k = a >= 5 ? 3 : a >= 4 ? 2 : a >= 3 ? 1 : 0; return D > 0 ? -k : k; };
-    const darkAt = h => { if (LIGHT === "lit" || !h) return 0; if (LIGHT === "dark") return -7; const i = idx(key(h.q, h.r)); return i == null || !terr.light ? 0 : terr.light[i]; };
+    const darkAt = h => { if (LIGHT === "lit" || !h) return 0; if (LIGHT === "dark") return -7; const i = iQR(h.q, h.r); return i == null || !terr.light ? 0 : terr.light[i]; };
     // what darkness at t's hex costs viewer v to see or strike it: less Night Vision, nothing with Dark Vision, nor with
     // Infravision against a warm body (B47, B60, B71, B394)
     const darkPen = (v, t) => { const L = -darkAt(t.h); if (!L || v.u.flags.darkVision || (v.u.flags.infravision && !t.u.flags.machine)) return 0; return Math.max(0, L - (v.u.flags.nightVision || 0)); };
@@ -211,30 +211,110 @@
       if (dz > 0) return dz <= 0.5 * s ? 0 : dz <= 1 * s + 0.01 ? 1 : dz <= 1.5 * s ? 3 : Infinity;
       return -dz <= 1 * s + 0.01 ? 0 : -dz <= 2 * s + 0.01 ? 1 : Infinity;
     }
+    // A big map (tens of thousands of hexes) caps each field at FIELD_LIM movement points out from its goal: a
+    // model only ever needs the walking distance to what's near it, and a march toward anything further takes its
+    // route from the coarse grid below. The arrays are recycled from one second to the next.
+    const BIG = !!terr && terr.hx.length > 12000, FIELD_LIM = BIG ? 48 : 32000, dPool = [];
     function field(goal, cls = 1, cc = 0) {
       const gk = key(goal.q, goal.r) + "|" + cls + "|" + cc;
       let F = fieldCache.get(gk);
       if (F) return F;
-      const N = terr.hx.length, D = new Int16Array(N).fill(-1), g = terr.ids.get(key(goal.q, goal.r));
-      // Dijkstra with small integer costs: 1 a hex, 2 to hop an obstacle, 6 to clamber over one
-      const dist = new Float64Array(N).fill(Infinity), heap = [];
-      const push = (i, d) => { if (d >= dist[i]) return; dist[i] = d; heap.push([d, i]); let c = heap.length - 1; while (c > 0) { const p = (c - 1) >> 1; if (heap[p][0] <= heap[c][0]) break; [heap[p], heap[c]] = [heap[c], heap[p]]; c = p; } };
-      const pop = () => { const top = heap[0], last = heap.pop(); if (heap.length) { heap[0] = last; let c = 0; for (;;) { const l = 2 * c + 1, r = l + 1; let m = c; if (l < heap.length && heap[l][0] < heap[m][0]) m = l; if (r < heap.length && heap[r][0] < heap[m][0]) m = r; if (m === c) break; [heap[m], heap[c]] = [heap[c], heap[m]]; c = m; } } return top; };
+      const N = terr.hx.length, D = dPool.pop() || new Int16Array(N), g = iQR(goal.q, goal.r);
+      D.fill(-1);
+      // Dijkstra over small integer costs (1 a hex, 2 to hop an obstacle, 6 to clamber over one, plus climbing), so
+      // a bucket per distance (Dial's algorithm) instead of a heap; same distances
+      const B = [];
+      const push = (i, d) => { if (d > FIELD_LIM || (D[i] >= 0 && d >= D[i])) return; D[i] = d; (B[d] || (B[d] = [])).push(i); };
       const cost = i => pass[i] ? 1 : hops(cls, i);
       if (g != null) push(g, 0);
-      else for (const [dq, dr] of DIRS) { const i = terr.ids.get(key(goal.q + dq, goal.r + dr)); if (i != null && cost(i)) push(i, cost(i)); }
-      while (heap.length) {
-        const [d, c] = pop();
-        if (d > dist[c]) continue;
-        for (const x of terr.nb[c]) { const k = cost(x); if (!k) continue; const e = climb(x, c, cc); if (e !== Infinity) push(x, d + k + e); }
+      else for (const [dq, dr] of DIRS) { const i = iQR(goal.q + dq, goal.r + dr); if (i != null && cost(i)) push(i, cost(i)); }
+      for (let d = 0; d < B.length; d++) {
+        const b = B[d];
+        if (!b) continue;
+        for (let n = 0; n < b.length; n++) {
+          const c = b[n];
+          if (D[c] !== d) continue;
+          for (const x of terr.nb[c]) { const k = cost(x); if (!k) continue; const e = climb(x, c, cc); if (e !== Infinity) push(x, d + k + e); }
+        }
       }
-      for (let i = 0; i < N; i++) if (dist[i] < Infinity) D[i] = Math.min(32000, dist[i]);
-      F = { get: k => { const i = terr.ids.get(k); return i == null || D[i] < 0 ? undefined : D[i]; }, D };
+      F = { get: k => { const i = terr.ids.get(k); return i == null || D[i] < 0 ? undefined : D[i]; }, at: (q, r) => { const i = iQR(q, r); return i == null || D[i] < 0 ? undefined : D[i]; }, D };
       fieldCache.set(gk, F);
       return F;
     }
+    // a new second: the fields go back to the pool (nobody holds one between turns)
+    function newFields() { if (BIG) for (const F of fieldCache.values()) if (dPool.length < 96) dPool.push(F.D); fieldCache.clear(); }
+    // ---- long marches on a big map: a coarse grid of 8-yard cells gives the route, the walking field the steps.
+    // Built once per map: how open each cell is (walls and obstacles count against it) and a walkable hex near its
+    // middle to steer for
+    const NAV = BIG ? (terr.nav ||= (() => {
+      const CS = 8, cw = Math.ceil(terr.W / CS), ch = Math.ceil(terr.H / CS), open = new Int16Array(cw * ch), rep = new Int32Array(cw * ch).fill(-1), best = new Float64Array(cw * ch).fill(Infinity);
+      terr.hx.forEach((h, i) => {
+        const c = h.q, r = h.r + (c - (c & 1)) / 2, cx = Math.floor(c / CS), cy = Math.floor(r / CS), id = cy * cw + cx;
+        if (terr.wallI[i] || terr.crateI[i] || terr.doorI[i]) return;
+        open[id]++;
+        const d = hyp(c - (cx + 0.5) * CS, r - (cy + 0.5) * CS);
+        if (d < best[id]) { best[id] = d; rep[id] = i; }
+      });
+      return { CS, cw, ch, open, rep, cache: new Map() };
+    })()) : null;
+    const cellOf = h => { const c = h.q, r = h.r + (c - (c & 1)) / 2; return Math.floor(r / NAV.CS) * NAV.cw + Math.floor(c / NAV.CS); };
+    // T: a threat map over the cells (how many known foes see each), for a route that keeps out of sight; such a
+    // field is cached with the map it was made from
+    function coarseField(goalCell, T) {
+      const cache = T ? (T.cache || (T.cache = new Map())) : NAV.cache;
+      let C = cache.get(goalCell);
+      if (C) return C;
+      const { cw, ch, open, CS } = NAV, n = cw * ch, full = CS * CS;
+      C = new Float64Array(n).fill(Infinity);
+      const heap = [[0, goalCell]];
+      C[goalCell] = 0;
+      while (heap.length) {
+        let bi = 0;
+        for (let k = 1; k < heap.length; k++) if (heap[k][0] < heap[bi][0]) bi = k;
+        const [d, c] = heap[bi]; heap[bi] = heap[heap.length - 1]; heap.pop();
+        if (d > C[c]) continue;
+        const cx = c % cw, cy = (c - cx) / cw;
+        for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
+          if (!dx && !dy) continue;
+          const x = cx + dx, y = cy + dy;
+          if (x < 0 || y < 0 || x >= cw || y >= ch) continue;
+          const nc = y * cw + x;
+          if (open[nc] < full / 4) continue;                                   // mostly wall or thicket: go round
+          const nd = d + (dx && dy ? 1.41 : 1) * CS * (1 + 2 * (1 - open[nc] / full)) * (T ? 1 + 1.5 * T[nc] : 1);
+          if (nd < C[nc]) { C[nc] = nd; heap.push([nd, nc]); }
+        }
+      }
+      cache.set(goalCell, C);
+      return C;
+    }
+    // where to steer for now on the way from `from` to a far goal: a few cells along the coarse route, about half
+    // a field's reach ahead, so the walking field from there covers the ground in between
+    function waypoint(from, goal, T) {
+      const gc = cellOf(goal), C = coarseField(gc, T);
+      let cur = cellOf(from);
+      for (let k = 0; k < 8 && cur !== gc; k++) {
+        const cx = cur % NAV.cw, cy = (cur - cx) / NAV.cw;
+        let nxt = -1, bd = C[cur];
+        for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
+          const x = cx + dx, y = cy + dy;
+          if ((dx || dy) && x >= 0 && y >= 0 && x < NAV.cw && y < NAV.ch && C[y * NAV.cw + x] < bd) { bd = C[y * NAV.cw + x]; nxt = y * NAV.cw + x; }
+        }
+        if (nxt < 0) break;
+        cur = nxt;
+        if (NAV.rep[cur] >= 0 && hexDist(from, terr.hx[NAV.rep[cur]]) >= FIELD_LIM * 0.4) break;
+      }
+      return cur === gc || NAV.rep[cur] < 0 ? goal : terr.hx[NAV.rep[cur]];
+    }
+    // the field to walk by toward goal: the goal's own if it reaches from, else the next waypoint's
+    // (T: keep out of the sight of the foes on that threat map where the route allows)
+    function fieldToward(from, goal, cls, cc, T) {
+      const F = field(goal, cls, cc);
+      if (!BIG || F.at(from.q, from.r) !== undefined) return F;
+      return field(waypoint(from, goal, T), cls, cc);
+    }
     // walking distance (symmetric): the field is built from b, so pass the foe's hex second
-    const walk = (a, b) => !terr ? hexDist(a, b) : (field(b).get(key(a.q, a.r)) ?? 999);
+    // (on a big map, past 30 yards the straight distance stands in for it: the field is for what's close)
+    const walk = (a, b) => !terr ? hexDist(a, b) : BIG && hexDist(a, b) > 30 ? hexDist(a, b) + 4 : (field(b).at(a.q, a.r) ?? (BIG ? FIELD_LIM + hexDist(a, b) : 999));
     // deployment in a facility: each side fills its staging bay outward from its spawn point, a yard apart
     const spawnList = terr ? terr.spawn.map(sp => { const F = field(sp); return terr.hx.map((h, i) => [key(h.q, h.r), F.D[i]]).filter(x => x[1] >= 0 && !terr.doorI[idx(x[0])]).sort((x, y) => x[1] - y[1]).map(x => x[0]); }) : null;
     const spawnAt = [0, 0];
@@ -252,6 +332,48 @@
     const sameSquad = (a, b) => a && b && a.squad && a.squad === b.squad && a.side === b.side;
     units.forEach((u, ui) => { width[u.side] += 2 * Math.min(u.count, 10) + (sameSquad(u, units[ui + 1]) ? 0 : 4); });
     const row0 = [-Math.floor((width[0] - 4) / 2), -Math.floor((width[1] - 4) / 2)];
+    // a big map (deploy: "edge"): the same lines, along each side's own edge; an army wider than the map folds into
+    // further lines behind the first, and the whole of it moves up from the edge as far as it needs
+    const EDGE = terr && terr.deploy === "edge" ? (() => {
+      const out = new Map(), rows = terr.H - 6;
+      for (const side of [0, 1]) {
+        const lines = [[]];
+        let used = 0;
+        units.forEach((u, ui) => {
+          if (u.side !== side) return;
+          const per = Math.min(u.count, Math.max(10, Math.ceil(u.count / 5)), Math.floor(rows / 2)), tall = 2 * per, gap = sameSquad(u, units[ui + 1]) ? 0 : 4;   // a big unit: wider ranks, five deep
+          if (used && used + tall > rows) { lines.push([]); used = 0; }
+          lines[lines.length - 1].push({ ui, per, at: used, deep: 2 * Math.ceil(u.count / per) });
+          used += tall + gap;
+        });
+        const depthOf = L => Math.max(2, ...L.map(x => x.deep)) + 4, total = lines.reduce((a, L) => a + depthOf(L), 0);
+        const front = Math.max(terr.band - 2, total + 2);
+        let back = 0;
+        for (const L of lines) {
+          const height = Math.max(...L.map(x => x.at + 2 * x.per)), top = Math.floor((terr.H - height) / 2);
+          for (const x of L) {
+            const u = units[x.ui], cells = [];
+            for (let i = 0; i < u.count; i++) {
+              const rank = Math.floor(i / x.per), file = i % x.per, c = front - back - 2 * rank;
+              cells.push([side === 0 ? c : terr.W - 1 - c, top + x.at + 2 * file]);
+            }
+            out.set(x.ui, cells);
+          }
+          back += depthOf(L);
+        }
+      }
+      return out;
+    })() : null;
+    // the nearest free, walkable hex to a planned spot, a yard clear of anyone already placed
+    function edgeSpot(col, row) {
+      const c0 = Math.max(1, Math.min(terr.W - 2, col)), r0 = Math.max(1, Math.min(terr.H - 2, row)), h0 = fromOffset(c0, r0);
+      for (let rad = 0; rad <= 12; rad++) for (let dq = -rad; dq <= rad; dq++) for (let dr = Math.max(-rad, -dq - rad); dr <= Math.min(rad, -dq + rad); dr++) {
+        if (hexDist({ q: 0, r: 0 }, { q: dq, r: dr }) !== rad) continue;
+        const h = { q: h0.q + dq, r: h0.r + dr }, k = key(h.q, h.r);
+        if (walkable(k) && !taken(k) && !DIRS.some(([a, b]) => occ.has(key(h.q + a, h.r + b)))) return h;
+      }
+      return nextSpawn(0);
+    }
     units.forEach((u, ui) => {
       u.idx = ui; u.models = []; u.routed = false; u.checked50 = false; u.checked25 = false;
       const perRank = Math.min(u.count, 10);
@@ -260,7 +382,7 @@
         const col = u.side === 0 ? -2 * rank : distance + 2 * rank;
         const row = row0[u.side] + 2 * file;
         const m = { u, id: `${u.name} #${i + 1}`, hp: u.HP, fp: u.fp, state: "ok", shock: 0, stunned: false, init: R(),
-          facing: u.side === 0 ? 0 : 3, prone: false, moved: false, aimTurns: 0, aimTarget: null, lastTarget: null,
+          facing: u.side === 0 ? 0 : 3, prone: false, moved: false, aimTurns: 0, aimTarget: null, aimedBy: new Set(), waitOpen: null, openBy: new Set(), lastTarget: null,
           ammo: u.ranged ? u.ranged.shots.mag : 0, mags: u.mags, reload: 0, jam: 0, gunBroken: false, conc: 0,
           sp: u.shield ? u.shield.sp : 0, spHit: -99, spCollapsed: false, shHP: u.cs && u.cs.hp != null ? u.cs.hp : 0, shState: "ok",
           parries: 0, retreated: false, blocked: false, attacked: false, aoa: false, aod: false, feint: null,
@@ -269,7 +391,7 @@
           inHand: u.bothReady ? "both" : u.stance === "charge" ? "melee" : "gun",
           setUp: !!(u.ranged && u.ranged.needsSetup), setupT: 0, setupTo: null, idle: 0,
           wounds: {}, pain: 0, painSev: 0, halfMove: false, halfDodge: false, gawd: 0, crippled: {} };
-        let h = terr ? nextSpawn(u.side) : fromOffset(col, row);
+        let h = EDGE ? edgeSpot(...EDGE.get(ui)[i]) : terr ? nextSpawn(u.side) : fromOffset(col, row);
         if (!terr) while (occ.has(key(h.q, h.r))) h = fromOffset(h.q + (u.side ? 1 : -1), row);
         // a loader deploys beside its gun, on the side away from the enemy where there's room
         const gun = u.crew === "loader" && models.find(x => x.u.side === u.side && x.u.squad === u.squad && x.u.team === u.team && x.u.crew === "gunner" && x.h);
@@ -282,7 +404,7 @@
         if (u.veh) Object.assign(m, { vel: 0, immobile: false, propHalf: 0, turretFacing: m.facing, turretJam: false, trackInj: {}, wheelsLost: 0,
           stn: u.veh.stations.map(s => ({ s, man: { cu: s.cu, hp: s.cu.HP, state: "ok", stunned: false }, ammo: s.w ? s.w.shots.mag : 0, mags: u.mags,
             reloading: 0, aimTurns: 0, aimT: null, follow: null, jam: 0, jamSkill: 0, gunBroken: false, out: false, busy: -1 })) });
-        m.ix = models.length; m.trail = []; u.models.push(m); models.push(m);
+        m.ix = models.length; m.trail = []; m.h0 = m.h ? [m.h.q, m.h.r] : null; u.models.push(m); models.push(m);
       }
       if (!u.besideGun) row0[u.side] += 2 * perRank + (sameSquad(u, units[ui + 1]) ? 0 : 4);
     });
@@ -333,8 +455,44 @@
       if ((f.loudAt ?? -99) >= turn - 1) return false;
       return f.prone || !!f.u.flags.chameleon || darkAt(f.h) <= -3 || hexDist(x.h, f.h) >= 20 || coverAt(f.h, x.h, f) !== "none";
     }
+    // who on side S could be looking at f: the nearest foes of f's in sight (the first SPOT_VIEWERS found among the
+    // nearest SPOT_CHECKS), plus any watcher with wide awareness (a sniper, a leader, a vehicle) wherever it stands.
+    // With a handful of models that's everyone with a line of sight, in roster order, as it always was
+    const SPOT_VIEWERS = 8, SPOT_CHECKS = 24, SPOT_WIDE = 16;
+    // (one: stop at the first, when all that matters is whether anyone sees it)
+    function viewersOf(f, S, one) {
+      const ok = x => x.state === "ok" && x.h && x.u.side === S, live = models.filter(ok);
+      if (live.length <= SPOT_VIEWERS) { const out = []; for (const x of live) if (los(x.h, f.h)) { out.push(x); if (one) break; } return out; }
+      // the nearest SPOT_CHECKS of them, from the grid: widen the box until the last of them is inside it. Worked
+      // out once a second for each watched model (it's checked at every step it takes), from where everyone stood then
+      const byD = (a, b) => a.spotD - b.spotD || a.ix - b.ix;
+      const C = (f.spotC || (f.spotC = []))[S];
+      if (C && C.turn === turn) {
+        const out = [];
+        for (const x of C.near) { if (out.length >= SPOT_VIEWERS) break; if (ok(x) && los(x.h, f.h)) { out.push(x); if (one) return out; } }
+        for (const x of C.wide) if (ok(x) && los(x.h, f.h)) { out.push(x); if (one) return out; }
+        return out;
+      }
+      let near = null;
+      for (let rad = 16; ; rad *= 2) {
+        const got = [];
+        gridBox(f.h, rad, x => { if (ok(x)) { x.spotD = hexDist(x.h, f.h); got.push(x); } });
+        got.sort(byD);
+        if ((got.length >= SPOT_CHECKS && got[SPOT_CHECKS - 1].spotD <= rad) || got.length >= live.length || rad > 4096) { near = got.slice(0, SPOT_CHECKS); break; }
+      }
+      // and the wide-awake beyond them, nearest first
+      const inNear = new Set(near), wide = live.filter(x => !inNear.has(x) && scanOf(x.u) > SCAN_LINE);
+      for (const x of wide) x.spotD = hexDist(x.h, f.h);
+      wide.sort(byD);
+      f.spotC[S] = { turn, near, wide: wide.slice(0, SPOT_WIDE) };
+      const out = [];
+      for (const x of near) { if (out.length >= SPOT_VIEWERS) break; if (los(x.h, f.h)) { out.push(x); if (one) return out; } }
+      for (let i = 0; i < wide.length && i < SPOT_WIDE; i++) if (los(wide[i].h, f.h)) { out.push(wide[i]); if (one) return out; }
+      return out;
+    }
     function trySpot(f) {
-      const S = 1 - f.u.side, viewers = models.filter(x => x.state === "ok" && x.h && x.u.side === S && los(x.h, f.h));
+      const S = 1 - f.u.side, hidden0 = f.u.ambush && !f.revealed, watched = (seenAt[S].get(f) ?? -99) >= turn - 1;
+      const viewers = viewersOf(f, S, watched && !hidden0);
       if (!viewers.length) return;
       const hidden = f.u.ambush && !f.revealed;
       if (hidden && !viewers.some(x => hexDist(x.h, f.h) <= 5)) return;   // an ambush shows only up close
@@ -357,6 +515,34 @@
     // what a side knows: foes in sight now, and for 5 seconds those last seen that haven't moved since; one that
     // slipped out of sight and moved is only a last known position (search goes there)
     const known = m => !AWARE ? foes(m) : foes(m).filter(f => { const t = seenAt[m.u.side].get(f) ?? -99; return t >= turn - 1 || (t >= turn - 5 && f.h && f.lastSeenH && f.h.q === f.lastSeenH.q && f.h.r === f.lastSeenH.r); });
+    // ---- awareness: how many foes a model actually weighs
+    // A line trooper thinks about the few nearest foes it knows of; snipers, squad leaders, lone characters,
+    // anti-armour gunners and vehicles take in more of the field. Every decision a model makes (targets, the fire it
+    // expects at each spot it could move to, whether it's safe to go all-out) draws on this list, so it's what keeps
+    // a soldier's thinking from growing with the size of the battle. A spec or an AI profile can set `scan` itself.
+    const SCAN_LINE = 4, SCAN_WIDE = 12;
+    const SNIPER = /sniper|long[- ]?rifle|long[- ]?las|marksman/i;
+    function scanOf(u) {
+      if (u.scanN != null) return u.scanN;
+      const r = u.ranged, set = u.scan ?? u.ai.scan;
+      const wide = !!u.veh || u.leader || (u.count === 1 && !u.squad)
+        || (r && ((r.acc || 0) >= 8 || SNIPER.test(r.name) || (r.dmg && r.dmg.div >= 5)));
+      return (u.scanN = Math.max(1, set != null ? Number(set) : wide ? SCAN_WIDE : SCAN_LINE));
+    }
+    // the foes model m weighs this turn: the known foes nearest it, out to its scan-th one in sight (with any
+    // unseen ones nearer than that, around a corner or behind a door, up to twice that many in all). Built once per
+    // turn and hex; callers drop any that have gone down since
+    function scanFoes(m) {
+      if (!m.h) return [];
+      const hk = key(m.h.q, m.h.r);
+      if (m.scanT === turn && m.scanH === hk) return m.scanL;
+      const K = scanOf(m.u), ks = known(m).filter(f => f.h).map(f => [hexDist(m.h, f.h), f]).sort((a, b) => a[0] - b[0]);
+      const out = [];
+      let seen = 0;
+      for (const [, f] of ks) { if (out.length >= 2 * K) break; out.push(f); if (los(m.h, f.h) && ++seen >= K) break; }
+      m.scanT = turn; m.scanH = hk; m.scanL = out;
+      return out;
+    }
     // an ambusher that attacks gives itself away; foes who hadn't seen it are partly surprised (B393): each must make
     // an IQ roll (+6 with Combat Reflexes) or lose its next turn
     // an attack gives the attacker away: a gunshot to every foe within earshot (40 yards, walls or not), anything
@@ -580,7 +766,7 @@
       }
       const foe = models.filter(x => x.u.side !== m.u.side && x.state === "ok" && x.h).sort((a, b) => hexDist(a.h, m.h) - hexDist(b.h, m.h))[0];
       const [mx, my] = px(m.h), [fx2, fy2] = foe ? px(foe.h) : [mx + (m.u.side ? -1 : 1), my];
-      const L0 = Math.hypot(mx - fx2, my - fy2) || 1, far = hexOfPx(mx + (mx - fx2) / L0 * 40 * Math.sqrt(3), my + (my - fy2) / L0 * 40 * Math.sqrt(3));
+      const L0 = hyp(mx - fx2, my - fy2) || 1, far = hexOfPx(mx + (mx - fx2) / L0 * 40 * Math.sqrt(3), my + (my - fy2) / L0 * 40 * Math.sqrt(3));
       return [m.h.q, m.h.r, far.q, far.r];
     }
     // stun recovery: physical stun on HT (B420); a fright stun as its table row says; other mental stun on IQ,
@@ -615,7 +801,7 @@
       const base = moveOf(m);
       if (m.legsLost || m.halfMove) return base;
       const k = m.runPrev || 0, L = m.u.flags.enhMove || 0;
-      if (L > 0) return Math.min(Math.floor(base * Math.pow(2, L)), base * (k + 1));
+      if (L > 0) return Math.min(Math.floor(base * pow2h(L)), base * (k + 1));
       return k >= 1 ? Math.max(base + 1, Math.floor(base * 1.2)) : base;
     }
     const baseMove = m => m.u.ranged && m.u.ranged.needsSetup && !m.setUp ? m.u.movePacked : m.u.move;

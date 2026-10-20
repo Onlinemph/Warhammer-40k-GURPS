@@ -37,7 +37,7 @@
       const rem = remOf(t), share = Math.min(1, E / rem);
       // Bloodlust (B125): it goes for the killing blow, so a wounded foe is worth more to it
       const prey = m && t.hp < t.u.HP ? Math.max(m.u.ai.prey > 1 ? m.u.ai.prey : 1, m.u.flags.bloodlust ? 1.5 : 1) : 1;
-      return share * threatOf(t) * prey * HORIZON;   // a foe taken out stops hurting us for the rest of the fight
+      return share * threatOf(t) * prey * orderWeight(m, t) * HORIZON;   // a foe taken out stops hurting us for the rest of the fight
     }
     // expected injury to m next turn standing on hex h: "aoa" (no defence), "aod" (+2) or normal
     // chance a foe under our fire keeps its head down or freezes (TS p. 21, 34): Will-2 in cover without Combat
@@ -51,15 +51,30 @@
     // a foe a friend is covering (an overwatch shooter's target, or inside a friend's suppression zone) shoots back
     // at less than full effect: that's what covering fire is for (TS p. 21)
     const covered = (m, f) => zones.some(z => z.side === m.u.side && z.owner.state === "ok" && f.h && z.hexes.has(key(f.h.q, f.h.r)))
-      || models.some(x => x !== m && x.u.side === m.u.side && x.state === "ok" && x.role === "cover" && x.aimTarget === f);
+      || [...f.aimedBy].some(x => x !== m && x.u.side === m.u.side && x.state === "ok" && x.role === "cover" && x.aimTarget === f);
+    // how many models of a side stand within d of foe f: from f's distances to that side's models, taken once a
+    // turn (a planner's estimate; who moved earlier this second doesn't change it much)
+    const RIV = new Map();
+    let rivT = -1;
+    function sideWithin(side, f, d) {
+      if (rivT !== turn) { RIV.clear(); rivT = turn; }
+      const k = f.ix * 2 + side;
+      let a = RIV.get(k);
+      if (!a) { a = models.filter(x => x.u.side === side && x.state === "ok" && x.h).map(x => hexDist(x.h, f.h)).sort((p, q) => p - q); RIV.set(k, a); }
+      let lo = 0, hi = a.length;
+      while (lo < hi) { const mid = (lo + hi) >> 1; if (a[mid] <= d) lo = mid + 1; else hi = mid; }
+      return lo;
+    }
+    // ...and the same with m itself left out
+    const rivalsOf = (m, f, d) => Math.max(0, sideWithin(m.u.side, f, d) - (m.state === "ok" && m.h && hexDist(m.h, f.h) <= d ? 1 : 0));
     function incoming(m, h, mode) {
       let tot = 0;
-      const near = known(m).filter(f => f.h && f.state === "ok").sort((a, b) => walk(h, a.h) - walk(h, b.h)).slice(0, 8);
+      const near = scanFoes(m).filter(f => f.h && f.state === "ok").sort((a, b) => walk(h, a.h) - walk(h, b.h)).slice(0, 8);
       for (const f of near) {
         if (f.pinned || f.grips.length > 1) continue;
         const d = hexDist(f.h, h);
         // a foe spreads its attacks over the models of ours at least as close to it as this hex
-        const rivals = models.filter(x => x !== m && x.u.side === m.u.side && x.state === "ok" && x.h && hexDist(x.h, f.h) <= d).length;
+        const rivals = rivalsOf(m, f, d);
         const share = 1 / (1 + rivals);
         let best = 0;
         const mw = f.u.melee;
@@ -83,7 +98,7 @@
     // likelier the throw). Cover from the thrower, kneeling and lying all cut the fragments that land (B414, B551)
     function grenadeRisk(m, h, near) {
       let worst = 0;
-      const crowd = models.filter(x => x !== m && x.u.side === m.u.side && x.state === "ok" && x.h && hexDist(x.h, h) <= 2).length;
+      const crowd = modelsNear(h, 2).filter(x => x !== m && x.u.side === m.u.side && x.state === "ok").length;
       const low = m.prone || m.kneel;
       for (const f of near) {
         if (!f.u.grenades.length || f.grips.length || f.armsLost >= 1) continue;
@@ -118,7 +133,7 @@
     };
     // how many squad-mates already have this foe in their sights (for spreading fire)
     // (only a gun that can hurt the foe stakes a claim: boltguns plinking at a tank don't crowd out the lascannon)
-    const claims = (m, f) => models.reduce((a, x) => a + (x !== m && x.u.side === m.u.side && x.state === "ok" && x.aimTarget === f && (!x.u.ranged || expInjRandom(x.u.ranged, f.u) > 0) ? 1 : 0), 0);
+    const claims = (m, f) => [...f.aimedBy].reduce((a, x) => a + (x !== m && x.u.side === m.u.side && x.state === "ok" && x.aimTarget === f && (!x.u.ranged || expInjRandom(x.u.ranged, f.u) > 0) ? 1 : 0), 0);
     // sustained harm of a gun: turns firing a magazine vs turns reloading it
     function sustainOf(w) {
       if (!w.shots || w.shots.mag === Infinity) return 1;
@@ -149,7 +164,7 @@
       if (!goal || hexDist(goal, m.h) <= 1) {
         // then the far staging bay, then sweep the facility room by room (a random walkable hex at a time)
         if (!m.searchGoal) m.searchGoal = terr.spawn[1 - m.u.side];
-        while (hexDist(m.searchGoal, m.h) <= 2) { const i = Math.floor(R() * terr.hx.length); if (pass[i]) m.searchGoal = terr.hx[i]; }
+        while (hexDist(m.searchGoal, m.h) <= 2) { const i = Math.floor(AR() * terr.hx.length); if (pass[i]) m.searchGoal = terr.hx[i]; }
         goal = m.searchGoal;
       }
       const n = stepToward(m, goal, runMove(m), 1);

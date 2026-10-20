@@ -15,28 +15,39 @@
     }
     return out;
   }
-  const px = h => [1.5 * h.q, Math.sqrt(3) * (h.r + h.q / 2)];
+  // the first hex of that line (the one next to a), without working out the rest
+  function firstLineHex(a, b, s = 1) {
+    const n = hexDist(a, b);
+    if (n < 2) return undefined;
+    const t = 1 / n, x = a.q + (b.q - a.q) * t + 1e-6 * s, z = a.r + (b.r - a.r) * t + 1e-6 * s, y = -x - z;
+    let rx = Math.round(x), ry = Math.round(y), rz = Math.round(z);
+    const dx = Math.abs(rx - x), dy = Math.abs(ry - y), dz = Math.abs(rz - z);
+    if (dx > dy && dx > dz) rx = -ry - rz; else if (dy <= dz) rz = -rx - ry;
+    return { q: rx, r: rz };
+  }
+  const px = h => [1.5 * h.q, SQRT3 * (h.r + h.q / 2)];
   const key = (q, r) => q + "," + r;
-  const DIRANG = DIRS.map(([q, r]) => { const [x, y] = px({ q, r }); return Math.atan2(y, x); });
+  // the six facings as unit vectors (all the same length, sqrt 3, before scaling)
+  const DIRV = DIRS.map(([q, r]) => { const [x, y] = px({ q, r }); return [x / SQRT3, y / SQRT3]; });
+  // Facing geometry by dot and cross products (no angles: atan2 differs between engines). cos 91 and cos 151
+  // degrees, the arc boundaries, as constants
+  const COS91 = -0.01745240643728351, COS151 = -0.8746197071393957;
   // arc of `from` as seen by a model at `at` facing `facing`: front (3 hexes), side, rear (B385-386)
   function arcOf(at, facing, from) {
-    const [ax, ay] = px(at), [bx, by] = px(from);
-    let d = Math.abs(Math.atan2(by - ay, bx - ax) - DIRANG[facing]) * 180 / Math.PI;
-    if (d > 180) d = 360 - d;
-    return d <= 91 ? "front" : d <= 151 ? "side" : "rear";
+    const [ax, ay] = px(at), [bx, by] = px(from), vx = bx - ax, vy = by - ay, L = hyp(vx, vy);
+    if (!L) return "front";
+    const c = (vx * DIRV[facing][0] + vy * DIRV[facing][1]) / L;
+    return c >= COS91 ? "front" : c >= COS151 ? "side" : "rear";
   }
   // which side a figure in a side or front hex is on: "L" or "R" (the shield arm is the left)
   function sideOf(at, facing, from) {
-    const [ax, ay] = px(at), [bx, by] = px(from);
-    let d = Math.atan2(by - ay, bx - ax) - DIRANG[facing];
-    while (d > Math.PI) d -= 2 * Math.PI; while (d < -Math.PI) d += 2 * Math.PI;
-    return d < 0 ? "L" : "R";
+    const [ax, ay] = px(at), [bx, by] = px(from), [fx, fy] = DIRV[facing];
+    return fx * (by - ay) - fy * (bx - ax) < 0 ? "L" : "R";
   }
   function faceToward(at, to) {
-    const [ax, ay] = px(at), [bx, by] = px(to);
-    const a = Math.atan2(by - ay, bx - ax);
-    let best = 0, bd = 9;
-    DIRANG.forEach((d, i) => { let x = Math.abs(a - d); if (x > Math.PI) x = 2 * Math.PI - x; if (x < bd) { bd = x; best = i; } });
+    const [ax, ay] = px(at), [bx, by] = px(to), vx = bx - ax, vy = by - ay;
+    let best = 0, bd = -Infinity;
+    DIRV.forEach(([dx, dy], i) => { const d = dx * vx + dy * vy; if (d > bd) { bd = d; best = i; } });
     return best;
   }
   // offset (column, row) to axial, flat-topped "odd-q" layout: a column is a straight line of hexes
@@ -286,7 +297,7 @@
     };
     return { W, H, rnd, ri, floor, crates, doors, zAt, top, lightAt, water, K, each, carve, wall, spawn, cover, finish };
   }
-  const builtMap = (name, seed, make) => { const mk = name + Math.max(1, Math.floor(seed)); if (!MAPS.has(mk)) MAPS.set(mk, make(mapKit(name, seed))); return MAPS.get(mk); };
+  const builtMap = (name, seed, make, W, H) => { const mk = name + Math.max(1, Math.floor(seed)) + (W ? "@" + W + "x" + H : ""); if (!MAPS.has(mk)) MAPS.set(mk, make(mapKit(name, seed, W, H))); return MAPS.get(mk); };
 
   // A space hulk: corridors one yard wide between junctions, a few cramped chambers, bulkhead doors, much of it dark
   const hulkMap = (seed = 1) => builtMap("hulk", seed, M => {
@@ -319,7 +330,7 @@
     const { W, H, rnd, ri, carve, wall, zAt, lightAt, K, each } = M;
     carve(1, 1, W - 2, H - 2);
     const hillTop = rnd() < 0.5, hc = ri(22, 42), hr = hillTop ? ri(4, 7) : ri(H - 8, H - 5);
-    each(hc - 9, hr - 6, hc + 9, hr + 6, (k, c, r) => { const z = Math.round(3 - Math.hypot((c - hc) * 0.75, r - hr) / 1.6); if (z > 0) zAt.set(k, Math.min(3, z)); });
+    each(hc - 9, hr - 6, hc + 9, hr + 6, (k, c, r) => { const z = Math.round(3 - hyp((c - hc) * 0.75, r - hr) / 1.6); if (z > 0) zAt.set(k, Math.min(3, z)); });
     const made = [];
     for (let tries = 0; made.length < 6 && tries < 60; tries++) {
       const w = ri(5, 9), h = ri(4, 6), x0 = ri(12, W - 13 - w), y0 = hillTop ? ri(13, H - 3 - h) : ri(2, H - 14 - h), x1 = x0 + w, y1 = y0 + h;
@@ -391,7 +402,7 @@
   const riverMap = (seed = 1) => builtMap("river", seed, M => {
     const { W, H, rnd, ri, carve, wall, water, K, each } = M;
     carve(1, 1, W - 2, H - 2);
-    const phase = rnd() * 6.28, bend = 2 + rnd() * 2.5, mid = r => Math.round(W / 2 + bend * Math.sin(r / 5.5 + phase));
+    const phase = rnd() * 6.28, bend = 2 + rnd() * 2.5, mid = r => Math.round(W / 2 + bend * dsin(r / 5.5 + phase));
     for (let r = 1; r < H - 1; r++) each(mid(r) - 3, r, mid(r) + 2, r, k => { M.floor.delete(k); M.top.set(k, 0.02); water.add(k); });
     const rows = [ri(4, 8), ri(15, 21), ri(28, 32)], spots = [];
     rows.forEach((r, i) => {
@@ -408,6 +419,88 @@
     for (let i = 0; i < 6; i++) { const c = rnd() < 0.5 ? ri(12, 24) : ri(W - 25, W - 13), r = ri(3, H - 6); wall(c, r, c + ri(1, 3), r, rnd() < 0.5 ? 1.2 : 5); }   // field walls on the banks
     return M.finish("ruins", { theme: "jungle" });
   });
-  const BATTLEFIELDS = { facility: facilityMap, ruins: ruinsMap, hulk: hulkMap, outpost: outpostMap, trenches: trenchMap, streets: streetsMap, river: riverMap };
-  const battleMap = opt => opt.terrain || (BATTLEFIELDS[opt.battlefield] ? BATTLEFIELDS[opt.battlefield](opt.mapSeed || 1) : null);
+  // Countryside: a field of battle hundreds of yards across (300 x 150 by default; mapW and mapH set it), for fights
+  // between whole companies. Rolling hills that hide whoever is behind them, woods of scattered trunks, fields
+  // walled by tall hedges (no seeing through, a gap now and then) and low stone walls (fire over them from cover),
+  // ruined farms, and brush. Each side deploys in a line along its own edge. Built so nothing can cut the ground in
+  // two: trunks and brush stand alone, every hedge and wall has gaps, every farm has doorways.
+  const countrysideMap = (seed = 1, o = {}) => {
+    const W = Math.max(80, Math.min(600, Math.round(o.mapW || 300))), H = Math.max(40, Math.min(300, Math.round(o.mapH || 150)));
+    return builtMap("countryside", seed, M => {
+      const { rnd, ri, carve, zAt, crates, K, each } = M;
+      const wall = (c0, r0, c1, r1, h) => each(c0, r0, c1, r1, (k, c, r) => M.wall(c, r, c, r, h >= 99 ? 99 : h + (zAt.get(k) || 0)));   // heights stand on the ground
+      carve(1, 1, W - 2, H - 2);
+      const band = 16;                                   // each side's deployment ground, kept clear
+      const inBand = c => c < band || c > W - 1 - band;
+      // hills: smooth rises (never steeper than half a yard a yard, so anyone walks them), low near the edges
+      const hills = [];
+      for (let i = 0, n = Math.round(W * H / 9000) + 2; i < n; i++) hills.push([ri(band + 10, W - band - 11), ri(8, H - 9), 2.5 + rnd() * 3, 12 + rnd() * 12]);
+      each(1, 1, W - 2, H - 2, (k, c, r) => {
+        let z = 0;
+        for (const [hc, hr, h, s] of hills) { const d2 = ((c - hc) * 0.87) ** 2 + (r - hr) ** 2; if (d2 < 9 * s * s) z += h * dexp(-d2 / (2 * s * s)); }
+        const edge = Math.min(1, Math.min(c, W - 1 - c) / (band + 6));
+        z = Math.round(7 * (1 - dexp(-z * edge / 7)) * 10) / 10;   // where hills overlap they merge, not stack
+        if (z > 0.05) zAt.set(k, z);
+      });
+      const free = (c, r) => { const k = K(c, r); return M.floor.has(k) && !crates.has(k); };
+      // a lone obstacle: only where no neighbour is already blocked, so it can never close a gap
+      const lone = (c, r, put) => {
+        if (inBand(c) || c < 2 || r < 2 || c > W - 3 || r > H - 3 || !free(c, r)) return;
+        const h = fromOffset(c, r);
+        for (const [dq, dr] of DIRS) { const n = key(h.q + dq, h.r + dr); if (!M.floor.has(n) || crates.has(n)) return; }
+        put(K(c, r));
+      };
+      // fields: a rough grid, each edge a tall hedge, a low stone wall or open; gaps every few yards
+      const xs = [band + 2], ys = [1];
+      while (xs[xs.length - 1] < W - band - 30) xs.push(xs[xs.length - 1] + ri(28, 48));
+      xs.push(W - band - 3);
+      while (ys[ys.length - 1] < H - 25) ys.push(ys[ys.length - 1] + ri(20, 34));
+      ys.push(H - 2);
+      const boundary = (c0, r0, c1, r1) => {
+        const kind = rnd(); if (kind < 0.35) return;
+        const h = kind < 0.7 ? 2.4 : 1.1, len = Math.max(Math.abs(c1 - c0), Math.abs(r1 - r0));
+        let gap = ri(3, 9);
+        for (let i = 0; i <= len; i++) {
+          const c = Math.round(c0 + (c1 - c0) * i / len), r = Math.round(r0 + (r1 - r0) * i / len);
+          if (--gap <= 0) { if (gap <= -ri(2, 3)) gap = ri(5, 12); continue; }        // a gate or a gap, 2-3 yards
+          if (rnd() < 0.06) continue;                                                  // the odd hole
+          if (free(c, r)) wall(c, r, c, r, h);
+        }
+      };
+      for (let i = 0; i < xs.length; i++) for (let j = 0; j + 1 < ys.length; j++) if (i > 0 && i < xs.length - 1) boundary(xs[i], ys[j], xs[i], ys[j + 1]);
+      for (let j = 1; j + 1 < ys.length; j++) for (let i = 0; i + 1 < xs.length; i++) boundary(xs[i], ys[j], xs[i + 1], ys[j]);
+      // farms: ruined buildings, walls of any height, two or more ways in
+      const farms = [];
+      for (let tries = 0; farms.length < Math.round(W * H / 7000) + 2 && tries < 200; tries++) {
+        const w = ri(6, 11), h = ri(5, 8), x0 = ri(band + 4, W - band - 5 - w), y0 = ri(3, H - 4 - h), x1 = x0 + w, y1 = y0 + h;
+        if (farms.some(([a, b, c, d]) => x0 <= c + 6 && x1 >= a - 6 && y0 <= d + 6 && y1 >= b - 6)) continue;
+        farms.push([x0, y0, x1, y1]);
+        carve(x0 - 1, y0 - 1, x1 + 1, y1 + 1);                                   // a yard round it, clear of hedges
+        const tall = () => rnd() < 0.3 ? 1.2 : 3 + 2 * ri(0, 2);
+        for (let c = x0; c <= x1; c++) { wall(c, y0, c, y0, tall()); wall(c, y1, c, y1, tall()); }
+        for (let r = y0; r <= y1; r++) { wall(x0, r, x0, r, tall()); wall(x1, r, x1, r, tall()); }
+        each(x0 + 1, y0 + 1, x1 - 1, y1 - 1, k => M.lightAt.set(k, -2));
+        const ways = [[ri(x0 + 1, x1 - 2), y0, 1, 0], [ri(x0 + 1, x1 - 2), y1, 1, 0], [x0, ri(y0 + 1, y1 - 2), 0, 1], [x1, ri(y0 + 1, y1 - 2), 0, 1]];
+        const a = ri(0, 3), b = (a + ri(1, 3)) % 4;
+        for (const i of [a, b]) { const [c, r, dc, dr] = ways[i]; carve(c, r, c + dc, r + dr); }
+        for (let i = 0; i < 4; i++) { const c = ri(x0 + 1, x1 - 1), r = rnd() < 0.5 ? y0 : y1; if (rnd() < 0.5) carve(c, r, c, r); }   // shell holes in the walls
+      }
+      // woods: blobs of scattered trunks (each blocks sight and the way, alone) and brush
+      for (let i = 0, n = Math.round(W * H / 6000) + 2; i < n; i++) {
+        const wc = ri(band + 8, W - band - 9), wr = ri(6, H - 7), rad = 6 + rnd() * 12;
+        each(Math.round(wc - rad * 1.2), Math.round(wr - rad), Math.round(wc + rad * 1.2), Math.round(wr + rad), (k, c, r) => {
+          if (hyp((c - wc) * 0.85, r - wr) > rad * (0.75 + 0.25 * rnd())) return;
+          const x = rnd();
+          if (x < 0.3) lone(c, r, k2 => wall(c, r, c, r, 99));
+          else if (x < 0.4) lone(c, r, k2 => crates.set(k2, "light"));
+        });
+      }
+      // brush, rubble and wreckage scattered over the open fields
+      for (let i = 0, n = Math.round(W * H / 220); i < n; i++) lone(ri(band, W - band), ri(2, H - 3), k => crates.set(k, rnd() < 0.5 ? "heavy" : "light"));
+      M.spawn[0] = fromOffset(Math.round(band / 2), Math.floor(H / 2)); M.spawn[1] = fromOffset(W - 1 - Math.round(band / 2), Math.floor(H / 2));
+      return M.finish("ruins", { theme: "jungle", deploy: "edge", band });
+    }, W, H);
+  };
+  const BATTLEFIELDS = { facility: facilityMap, ruins: ruinsMap, hulk: hulkMap, outpost: outpostMap, trenches: trenchMap, streets: streetsMap, river: riverMap, countryside: countrysideMap };
+  const battleMap = opt => opt.terrain || (BATTLEFIELDS[opt.battlefield] ? BATTLEFIELDS[opt.battlefield](opt.mapSeed || 1, opt) : null);
 

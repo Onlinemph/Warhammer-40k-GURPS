@@ -33,7 +33,7 @@
     const vehShotLvl = (m, x, w, t) => wl(m, w) + (m.moved ? 0 : 1) + rangePenalty(rngD(m.h, t.h, Math.max(1, hexDist(m.h, t.h))) + spdOf(t.steps || 0)) + t.u.sm - darkPen(m, t) - movePen(m, x);
     function vehicleAct(m) {
       const u = m.u, V = u.veh;
-      m.aoa = m.aod = m.mna = false; m.steps = 0; m.moved = false; m.movedFar = false; m.waiting = null; m.waitOpen = null; clearZone(m);
+      m.aoa = m.aod = m.mna = false; m.steps = 0; m.moved = false; m.movedFar = false; m.waiting = null; setOpen(m, null); clearZone(m);
       if (m.doNothing) { m.doNothing = false; return; }
       if (m.surprised) { m.surprised = false; L(`${m.id} is caught by surprise`); return; }
       if (m.skipNext) { m.skipNext = false; m.skipWhy = null; return; }
@@ -72,7 +72,7 @@
           let best = null, bs = -Infinity;
           for (const [dq, dr] of DIRS) {
             const g = { q: m.h.q + dq * steps, r: m.h.r + dr * steps };
-            const sc = Math.min(...melee.map(f => hexDist(g, f.h))) + (terr && idx(key(g.q, g.r)) == null ? -99 : 0);
+            const sc = Math.min(...melee.map(f => hexDist(g, f.h))) + (terr && iQR(g.q, g.r) == null ? -99 : 0);
             if (sc > bs) { bs = sc; best = g; }
           }
           if (best) { drove = stepToward(m, best, steps, 0); if (drove) L(`${m.id} reverses away from ${melee[0].id}`); }
@@ -219,6 +219,8 @@
     // A gun makes for the face itself (the nearer way round, and from in front of it by turns). Grenades and blades
     // can't chase a hull that pivots faster than a man runs, so those models ring it instead: each takes its own
     // place on a circle round it, and uses what it has when the weak plate comes round to it.
+    // the angle each hex direction points at, for working round a vehicle (deterministic: datan2, not Math.atan2)
+    const DIRANG = DIRS.map(([q, r]) => { const [x, y] = px({ q, r }); return datan2(y, x); });
     function huntPlan(m, t) {
       const u = m.u, cand = [];
       if (u.ranged && !u.ranged.cone && !m.gunBroken && (m.ammo > 0 || m.mags > 0 || u.ranged.shots.mag === Infinity)) { const a = faceFor(u.ranged, t); if (a) cand.push({ w: u.ranged, arc: a, r: Math.min(u.ranged.range.half || u.ranged.range.max, 40), gun: true }); }
@@ -227,7 +229,7 @@
       if (!cand.length) return null;
       // the least demanding face first, then the longer reach
       const best = cand.sort((x, y) => FACES.indexOf(x.arc) - FACES.indexOf(y.arc) || y.r - x.r)[0], need = NEED[best.arc];
-      const [tx, ty] = px(t.h), [mx, my] = px(m.h), d = hexDist(m.h, t.h), ma = Math.atan2(my - ty, mx - tx);
+      const [tx, ty] = px(t.h), [mx, my] = px(m.h), d = hexDist(m.h, t.h), ma = datan2(my - ty, mx - tx);
       const norm = x => { while (x > Math.PI) x -= 2 * Math.PI; while (x <= -Math.PI) x += 2 * Math.PI; return x; };
       const off = norm(ma - DIRANG[t.facing]), inArc = Math.abs(off) >= need;
       let sign, left;
@@ -238,14 +240,14 @@
       } else {
         const ring = models.filter(x => x.u.side === u.side && !x.u.veh), delta = norm(2 * Math.PI * ring.indexOf(m) / ring.length - ma);
         sign = delta < 0 ? -1 : 1; left = Math.abs(delta);
-        const spot = hexOfPx(tx + Math.sqrt(3) * best.r * Math.cos(ma + delta), ty + Math.sqrt(3) * best.r * Math.sin(ma + delta));
+        const spot = hexOfPx(tx + Math.sqrt(3) * best.r * dcos(ma + delta), ty + Math.sqrt(3) * best.r * dsin(ma + delta));
         if (hexDist(spot, m.h) <= 1 || (left < 0.25 && d <= best.r + 1)) return { ...best, inArc, wait: true, goal: m.h };
       }
       m.huntT = t;
       // a step of the way: up to 70 degrees round, closing as it goes (never nearer than it needs to be, or 12 yards)
       const turn1 = Math.min(left, 70 * Math.PI / 180), last = turn1 >= left;
       const rad = last ? Math.min(d, best.r) : Math.max(Math.min(d, best.r), Math.min(d, Math.max(12, 0.7 * d)));
-      const a2 = ma + sign * turn1, goal = standNear(hexOfPx(tx + Math.sqrt(3) * rad * Math.cos(a2), ty + Math.sqrt(3) * rad * Math.sin(a2)));
+      const a2 = ma + sign * turn1, goal = standNear(hexOfPx(tx + Math.sqrt(3) * rad * dcos(a2), ty + Math.sqrt(3) * rad * dsin(a2)));
       return !goal ? null : hexDist(goal, m.h) >= 1 ? { ...best, inArc, goal } : best.gun ? null : { ...best, inArc, wait: true, goal: m.h };
     }
     // a model a person commands directly (not a vehicle, whose crew the AI plays)
@@ -257,7 +259,7 @@
       m.aoa = false; m.aod = false; m.mna = false; m.offBalance = false; m.readied = false; m.steps = 0; m.moved = false; m.movedFar = false;
       m.runPrev = m.runK || 0; m.runK = 0;   // a sprint carries on only through consecutive straight Moves
       if (m.feint && m.feint.turn !== turn - 1) m.feint = null;   // a feint lapses if not used the next turn (B365)
-      clearZone(m); m.waiting = null; m.watch = false; m.ducked = false; m.waitOpen = null;
+      clearZone(m); m.waiting = null; m.watch = false; m.ducked = false; setOpen(m, null);
       if (m.doNothing) { m.doNothing = false; L(`${m.id} reels from the blow (Do Nothing)`); return; }
       if (m.surprised) { m.surprised = false; L(`${m.id} is caught by surprise`); return; }
       if (m.skipNext) { m.skipNext = false; L(`${m.id} already acted this second (${m.skipWhy || "it saw the foe first"})`); m.skipWhy = null; return; }
@@ -270,14 +272,15 @@
         else { m.jam = 3; L(`${m.id} fails to clear its ${u.ranged.name}`); }
         return;
       }
-      const pool = known(m).filter(f => f.h).sort((a, b) => walk(m.h, a.h) - walk(m.h, b.h));
+      m.scanT = -1;   // a fresh look at the field each time it acts
+      const pool = scanFoes(m).filter(f => f.state === "ok" && f.h).sort((a, b) => walk(m.h, a.h) - walk(m.h, b.h));
       if (!pool.length) {
-        // no foe known: the AI goes looking; the player's model asks where to go (search, hold, or a hex of their choosing)
+        // no foe known: the AI goes looking (or follows its order); the player's model asks where to go (search, hold, or a hex of their choosing)
         if (directed(m) && !m.berserk) {
           const o2 = [...(AWARE ? [{ v: 0, label: "search", run: () => search(m), to: null }] : []), { v: -1e-6, label: "pass", run: () => L(`${m.id} holds`), to: null }];
           return { opts: o2, pick: o2[0], adj: [] };
         }
-        if (AWARE) search(m); return;
+        if (!orderMove(m) && AWARE) search(m); return;
       }
       const adj = pool.filter(f => hexDist(f.h, m.h) <= u.melee.reachMax && los(m.h, f.h) && levelOK(m.h, u, f.h, f.u, u.melee));
       const shooter = u.ranged || u.powers.some(p => !p.melee);
@@ -528,13 +531,14 @@
       if (!adj.length && helpless && stuck && !u.ai.upright && (seen || !UP(u))) {
         add(-0.5 * risk(m, here, "duck"), "lie-low", () => { m.lowAt = turn; if (!m.prone) { m.prone = true; L(`${m.id} goes to ground, with nothing left to fight with`); } else L(`${m.id} keeps its head down`); });
       }
+      if (!adj.length) orderOption(m, opts, add, rNow);
       // keeping its head down (TS p. 21): only what doesn't expose it: reload, ready, defend, a door, or stay down
       if (m.headsDown && !adj.length) {
         const safe = opts.filter(o => /^(reload|reloading|tac-reload|ready-|re-ready-|draw-early|orders|aod|concentrate|close-door|door)/.test(o.label));
         opts.length = 0; opts.push(...safe);
         add(-rNow * 0.5, "heads-down", () => L(`${m.id} keeps its head down`));
       }
-      if (rose) { const still = opts.filter(o => !/^(advance|close|charge|aoa-charge|heroic|move-closer|advance-fire|cover@|peel|reload-cover|step-|ca-flyout|watch|fall-back|take-cover|hunt@)/.test(o.label)); opts.length = 0; opts.push(...still); }
+      if (rose) { const still = opts.filter(o => !/^(advance|close|charge|aoa-charge|heroic|move-closer|advance-fire|cover@|peel|reload-cover|step-|ca-flyout|watch|fall-back|take-cover|hunt@|flank@|assault@|support@)/.test(o.label)); opts.length = 0; opts.push(...still); }
       if (!opts.length) return;
       // pick the best; a disorderly faction picks among the near-best
       const top = opts.reduce((a, b) => b.v > a.v ? b : a);
@@ -542,7 +546,7 @@
       if (A.noise > 0) {
         const span = Math.max(0.05, Math.abs(top.v)) * A.noise;
         const close = opts.filter(o => o.v >= top.v - span);
-        pick = close[Math.floor(R() * close.length)];
+        pick = close[Math.floor(AR() * close.length)];
       }
       // Battle Rage (B124): berserk on entering combat unless it makes its self-control roll
       if (u.flags.battleRage && !m.rageRolled) { m.rageRolled = true; if (roll3() > u.flags.berserk + ledBonus(m)) goBerserk(m, "battle rage"); }

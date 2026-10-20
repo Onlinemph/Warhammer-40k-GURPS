@@ -1,11 +1,21 @@
   // ------------------------------------------------------------------ dice
-  let R = Math.random;
-  function seed(s) {
+  // Two random streams. R is the dice: every roll that decides what happens in the battle. AR is the AI's own
+  // stream, for the planner's sample rolls (expected injury) and its tie-breaks. Keeping them apart means a change
+  // to how the AI estimates or how often it looks doesn't shift a single real die, so seeded battles stay put.
+  // Unseeded, both are Math.random. seed(s) sets both from one number.
+  let R = Math.random, AR = Math.random;
+  function mulberry(s) {
     let a = s >>> 0;
-    R = () => { a |= 0; a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    return () => { a |= 0; a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a);
       t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
   }
-  const d6 = () => 1 + Math.floor(R() * 6);
+  // a well-mixed 32-bit seed from a seed and a salt, so neighbouring seeds give unrelated streams
+  function mixSeed(s, salt) {
+    let h = (Math.imul((s >>> 0) ^ 0x9E3779B9, 0x85EBCA6B) ^ Math.imul((salt >>> 0) + 0x632BE5AB, 0xC2B2AE35)) >>> 0;
+    h = Math.imul(h ^ (h >>> 16), 0x7FEB352D); h = Math.imul(h ^ (h >>> 15), 0x846CA68B); return (h ^ (h >>> 16)) >>> 0;
+  }
+  function seed(s) { R = mulberry(s); AR = mulberry(mixSeed(s, 0xA1)); }
+  const d6 = (rnd = R) => 1 + Math.floor(rnd() * 6);
   // P3[n] = chance that 3d6 rolls n or less (success chance at effective skill n, crits aside)
   const P3 = (() => { const c = Array(19).fill(0); for (let a = 1; a <= 6; a++) for (let b = 1; b <= 6; b++) for (let d = 1; d <= 6; d++) c[a + b + d]++;
     const out = []; let t = 0; for (let n = 0; n <= 18; n++) { t += c[n]; out.push(t / 216); }
@@ -57,9 +67,10 @@
     if (!any) return null;
     return { n, add, mult, div, type, ex, frag, text: String(str) };
   }
-  function rollDamage(dm) {
+  // rnd: which stream rolls it (the planner passes AR for its estimates)
+  function rollDamage(dm, rnd = R) {
     let t = dm.add;
-    for (let i = 0; i < dm.n; i++) t += d6();
+    for (let i = 0; i < dm.n; i++) t += d6(rnd);
     t = Math.max(dm.type === "cr" ? 0 : 1, t);
     return Math.floor(t * dm.mult);
   }
@@ -120,6 +131,6 @@
   function rapidBonus(shots) {
     if (shots < 5) return 0; if (shots <= 8) return 1; if (shots <= 12) return 2; if (shots <= 16) return 3;
     if (shots <= 24) return 4; if (shots <= 49) return 5; if (shots <= 99) return 6;
-    return 6 + Math.floor(Math.log2(shots / 50));   // +1 per doubling past 50-99 (B373)
+    return 6 + ilog2(shots / 50);   // +1 per doubling past 50-99 (B373)
   }
 

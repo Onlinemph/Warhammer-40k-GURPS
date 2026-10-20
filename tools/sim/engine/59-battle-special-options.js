@@ -83,7 +83,7 @@
       if (keepTurn !== turn) { keepC.clear(); keepTurn = turn; }
       if (keepC.has(m)) return keepC.get(m);
       let p = 1;
-      for (const f of models) {
+      for (const f of scanFoes(m)) {
         if (f.u.side === m.u.side || f.state !== "ok" || !f.h || !m.h || f.pinned) continue;
         // a stunned foe may shake it off and come on this very turn: half the threat
         const d = hexDist(f.h, m.h), reach = f.u.melee ? f.u.melee.reachMax : 1, half = x => f.stunned ? 1 - (1 - x) / 2 : x;
@@ -91,7 +91,7 @@
         const closer = f.u.melee && (f.u.stance === "charge" || (f.u.ai.zeal || 0) > 0 || bladeReady(f)) && d <= moveOf(f) + reach;
         if (closer) { p *= half(0.5); continue; }
         if (f.u.ranged && d <= f.u.ranged.range.max && los(f.h, m.h)) {
-          const mine = models.filter(x => x.u.side === m.u.side && x.state === "ok" && x.h && hexDist(f.h, x.h) <= f.u.ranged.range.max).length;
+          const mine = sideWithin(m.u.side, f, f.u.ranged.range.max);
           p *= 1 - 0.5 / Math.max(1, mine);
         }
       }
@@ -159,7 +159,7 @@
       }
       // round a corner: nobody in sight from here, a known foe in sight from the next hex
       if (!terr || cands.length || m.u.stance === "charge") return;
-      const ci = idx(key(m.h.q, m.h.r));
+      const ci = iQR(m.h.q, m.h.r);
       for (const [dq, dr] of DIRS) {
         const n = { q: m.h.q + dq, r: m.h.r + dr }, nk = key(n.q, n.r);
         if (taken(nk) || !walkable(nk) || (EL && climb(ci, idx(nk), climbCls(m)) > 0)) continue;
@@ -264,9 +264,9 @@
         const o = x.waitOpen;
         if (!o || x.state !== "ok" || !x.h || x.stunned) continue;
         const t = o.t;
-        if (t.state !== "ok" || !t.h) { x.waitOpen = null; continue; }
+        if (t.state !== "ok" || !t.h) { setOpen(x, null); continue; }
         if (!openFor(t, x) || !los(x.h, t.h) || duckedFrom(t, x.h) || !weaponsFor(x, false).includes(o.w) || (o.w === x.u.ranged && x.ammo <= 0)) continue;
-        x.waitOpen = null;
+        setOpen(x, null);
         L(`${x.id} sees ${t.id} falter and fires (Wait)`);
         fireAt(x, o.w, t, { aim: x.aimTarget === t && x.aimTurns > 0 });
         x.skipNext = true; x.skipWhy = "it fired on its Wait";

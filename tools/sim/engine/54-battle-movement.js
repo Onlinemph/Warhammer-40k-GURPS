@@ -30,15 +30,16 @@
       const spread = grenadeThreat(m), stalk = stalker(m);
       // a stalker near its prey moves at half Move (no -5 to Stealth) and keeps to steps the foe can't see, then the dark
       if (stalk && hexDist(m.h, goal) <= 20) steps = Math.min(steps, Math.max(1, Math.floor(moveOf(m) / 2)));
-      const foesK = stalk ? known(m).filter(f => f.h) : [];
-      const sc = n => (stalk ? (foesK.some(f => los(f.h, n)) ? 10 : 0) + (darkAt(n) <= -3 ? 0 : 1) : 0) + (spread ? nearFriends(m, n) : 0);
-      const better = (n, d, bd, best) => d < bd || (d === bd && best && (sc(n) < sc(best) || (sc(n) === sc(best) && R() < 0.3)));
+      // (a flanker keeps out of the nearest foes' sight where it can)
+      const foesK = stalk ? known(m).filter(f => f.h) : m.covert ? scanFoes(m).filter(f => f.state === "ok" && f.h).slice(0, 3) : [];
+      const sc = n => (stalk ? (foesK.some(f => los(f.h, n)) ? 10 : 0) + (darkAt(n) <= -3 ? 0 : 1) : m.covert ? (foesK.some(f => los(f.h, n)) ? 6 : 0) : 0) + (spread ? nearFriends(m, n) : 0);
+      const better = (n, d, bd, best) => d < bd || (d === bd && best && (sc(n) < sc(best) || (sc(n) === sc(best) && AR() < 0.3)));
       if (terr) {
         // round the walls: each step goes to a free neighbour nearer the goal on foot, hopping crates it's big
         // enough to jump and friends in the way
-        const cls = obstClass(m), cc = climbCls(m), F = field(goal, cls, cc);
+        const cls = obstClass(m), cc = climbCls(m), F = fieldToward(m.h, goal, cls, cc, m.covert ? threatMap(m.u.side) : null);
         while (moved < steps) {
-          const cur = F.get(key(m.h.q, m.h.r)) ?? 999, ci = idx(key(m.h.q, m.h.r));
+          const cur = F.at(m.h.q, m.h.r) ?? 999, ci = iQR(m.h.q, m.h.r);
           if (cur <= stopAt && los(m.h, goal)) break;
           let best = null, bd = cur, via = null, bc = 1;
           for (const [dq, dr] of DIRS) {
@@ -63,7 +64,7 @@
             if (d < bd) { bd = d; best = b; via = n; bc = cost + 1; }
           }
           if (!best) break;
-          const bi = idx(key(best.q, best.r));
+          const bi = iQR(best.q, best.r);
           if (closed[bi]) { if (!moved) setDoor(bi, false, m); break; }   // opening a door is a Ready (B382)
           if (via) { if (!hopTo(m, via, best, bc - 1)) { moved = steps; break; } moved += bc >= 7 ? steps : bc; }
           else { place(m, best); moved += bc; }
@@ -152,7 +153,7 @@
       // a friend on the path is passed through for an extra movement point (B368), never stopped on
       let from = m.h;
       for (const n of path) {
-        const nk = key(n.q, n.r), e = EL ? climb(idx(key(from.q, from.r)), idx(nk), climbCls(m)) : 0;
+        const nk = key(n.q, n.r), e = EL ? climb(iQR(from.q, from.r), idx(nk), climbCls(m)) : 0;
         if (moved >= steps || e === Infinity || (e && moved + 1 + e > steps)) break;
         from = n;
         if (taken(nk)) { if (friendAt(m, nk) && moved + 2 + e < steps) { moved += 2 + e; continue; } break; }

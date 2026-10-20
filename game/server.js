@@ -1,0 +1,174 @@
+// The war server: the world service from docs/mmo/design.md in its first form. One process holds the war, keeps
+// its event log on disk (data/events.jsonl, one JSON input per line, appended before it's applied), rebuilds the
+// state from it on start, ticks on a timer, and serves the web client and its API. Node's standard library only.
+//
+//   node game/server.js                 # http://localhost:8080
+//   PORT=8080 TURN_SECONDS=43200 DATA_DIR=game/data ADMIN_KEY=... node game/server.js
+//   TRUST_PROXY=1 behind a proxy (Fly, Caddy): the client's address comes from its header, not the socket
+//   BACKUPS=14: daily copies of the event log kept in DATA_DIR/backups (deploy/README.md)
+//
+// API (JSON; the player's token as "Authorization: Bearer <token>"):
+//   POST /api/join   {name, faction}            -> {token}
+//   GET  /api/view                               -> what that player can see, and when the next tick is
+//   POST /api/orders {move, recruit:[{unit,count}]} -> {ok} or {error}
+//   POST /api/admin/tick  (header x-admin-key)  -> ticks now (testing)
+//   GET  /api/replay/<report id>                 -> {status, progress, ahead} until it's ready, then the replay
+//                                                   (gzipped JSON); asking for one that isn't queued queues it
+const http = require("http"), fs = require("fs"), path = require("path"), crypto = require("crypto"), zlib = require("zlib");
+const { Worker } = require("worker_threads");
+const { apply, rebuild, view, order } = require("./world/rules.js");
+const { FACTIONS } = require("./world/units.js");
+
+const TRUST_PROXY = process.env.TRUST_PROXY === "1", KEEP_BACKUPS = +(process.env.BACKUPS ?? 14);
+const PORT = +process.env.PORT || 8080, TURN = (+process.env.TURN_SECONDS || 43200) * 1000;
+const DATA = process.env.DATA_DIR || path.join(__dirname, "data"), ADMIN = process.env.ADMIN_KEY || null;
+fs.mkdirSync(DATA, { recursive: true });
+const LOG = path.join(DATA, "events.jsonl"), TOKENS = path.join(DATA, "tokens.json");
+
+// ---- the log and the state
+const events = fs.existsSync(LOG) ? fs.readFileSync(LOG, "utf8").split("\n").filter(Boolean).map(l => JSON.parse(l)) : [];
+let S = rebuild(events);
+function record(e) {
+  e.at = Date.now();
+  fs.appendFileSync(LOG, JSON.stringify(e) + "\n");
+  events.push(e);
+  S = apply(S, e);
+}
+if (!S) record({ type: "create", seed: crypto.randomInt(2 ** 31) });
+// tokens: player id by the hash of their secret (kept apart from the log, which holds no secrets)
+const tokens = fs.existsSync(TOKENS) ? JSON.parse(fs.readFileSync(TOKENS, "utf8")) : {};
+const hash = t => crypto.createHash("sha256").update(t).digest("hex");
+
+// ---- battle replays: the full engine re-fights a battle (game/replay/build.js) on a worker thread, one at a time,
+// into data/replays/<id>.json.gz, kept for good (a seed always replays the same battle). Every battle a player
+// fought in is queued as soon as its tick publishes, so most are ready before anyone opens them; any other is
+// queued when someone asks for it
+const REPLAYS = path.join(DATA, "replays");
+fs.mkdirSync(REPLAYS, { recursive: true });
+const replayFile = id => path.join(REPLAYS, id.replace(/[^\w-]/g, "") + ".json.gz");
+const jobs = new Map(), queue = [];   // id -> {status, progress}; ids waiting
+let worker = null, busy = null;
+function startWorker() {
+  worker = new Worker(path.join(__dirname, "replay", "worker.js"));
+  worker.unref();
+  worker.on("message", m => {
+    const j = jobs.get(m.id); if (!j) return;
+    if (m.progress) j.progress = m.progress;
+    if (m.done || m.error) { j.status = m.done ? "ready" : "failed"; j.error = m.error; busy = null; nextReplay(); }
+  });
+  worker.on("error", e => { if (busy) { const j = jobs.get(busy); if (j) { j.status = "failed"; j.error = e.message; } } busy = null; worker = null; nextReplay(); });
+}
+function nextReplay() {
+  if (busy || !queue.length) return;
+  const id = queue.shift(), report = S.reports.find(r => r.id === id);
+  if (!report) { jobs.delete(id); return nextReplay(); }
+  if (!worker) startWorker();
+  busy = id; jobs.get(id).status = "running";
+  worker.postMessage({ report, file: replayFile(id) });
+}
+function wantReplay(id) {
+  if (fs.existsSync(replayFile(id))) return { status: "ready" };
+  if (!jobs.has(id) || jobs.get(id).status === "failed") { jobs.set(id, { status: "queued", progress: null }); queue.push(id); nextReplay(); }
+  return jobs.get(id);
+}
+function queuePlayerBattles(from) {
+  for (const r of S.reports.slice(from)) if (r.sides.some(s => s.players.length)) wantReplay(r.id);
+}
+
+// ---- the clock
+const lastTick = () => { for (let i = events.length - 1; i >= 0; i--) if (events[i].type === "tick" || events[i].type === "create") return events[i].at; return Date.now(); };
+let timer = null;
+function schedule() {
+  clearTimeout(timer);
+  const due = lastTick() + TURN;
+  timer = setTimeout(() => { const n = S.reports.length; record({ type: "tick", seed: crypto.randomInt(2 ** 31) }); queuePlayerBattles(n); schedule(); }, Math.max(0, due - Date.now()));
+  timer.unref();   // the listening server keeps the process alive, not the clock
+}
+
+// ---- requests
+const hits = new Map();   // a crude per-address rate limit: 60 requests a minute
+const limited = ip => { const now = Date.now(), h = (hits.get(ip) || []).filter(t => now - t < 60000); h.push(now); hits.set(ip, h); return h.length > 60; };
+const send = (res, code, body, type = "application/json") => { res.writeHead(code, { "content-type": type, "cache-control": "no-store", "x-content-type-options": "nosniff" }); res.end(type === "application/json" ? JSON.stringify(body) : body); };
+const readBody = req => new Promise((ok, bad) => {
+  let b = "";
+  req.on("data", c => { b += c; if (b.length > 10000) { bad(new Error("too big")); req.destroy(); } });
+  req.on("end", () => { try { ok(b ? JSON.parse(b) : {}); } catch (e) { bad(new Error("bad JSON")); } });
+});
+const who = req => { const m = /^Bearer (\S+)$/.exec(req.headers.authorization || ""); return m ? tokens[hash(m[1])] || null : null; };
+const STATIC = { "/": ["index.html", "text/html"], "/app.js": ["app.js", "text/javascript"], "/style.css": ["style.css", "text/css"], "/replay.js": ["replay.js", "text/javascript"] };
+
+const server = http.createServer(async (req, res) => {
+  try {
+    // behind a proxy every request comes from the proxy: take the client's address from the header it adds
+    const ip = TRUST_PROXY ? (req.headers["fly-client-ip"] || String(req.headers["x-forwarded-for"] || "").split(",")[0].trim() || req.socket.remoteAddress) : req.socket.remoteAddress;
+    if (limited(ip)) return send(res, 429, { error: "slow down" });
+    const url = new URL(req.url, "http://x");
+    if (url.pathname === "/healthz") return send(res, 200, { ok: true, turn: S.turn, players: Object.keys(S.players).length });
+    if (req.method === "GET" && STATIC[url.pathname]) { const [f, t] = STATIC[url.pathname]; return send(res, 200, fs.readFileSync(path.join(__dirname, "public", f)), t); }
+    if (req.method === "POST" && url.pathname === "/api/join") {
+      const { name, faction } = await readBody(req);
+      const nm = String(name || "").trim().replace(/[^\p{L}\p{N} '\-]/gu, "").slice(0, 24);
+      if (nm.length < 2) return send(res, 400, { error: "a name of 2 to 24 letters" });
+      if (!FACTIONS[faction] || !FACTIONS[faction].player) return send(res, 400, { error: "choose the Hegemony or the Brawl" });
+      if (Object.values(S.players).some(p => p.name.toLowerCase() === nm.toLowerCase())) return send(res, 400, { error: "that name is taken" });
+      const player = "p" + crypto.randomBytes(6).toString("hex"), token = crypto.randomBytes(24).toString("base64url");
+      tokens[hash(token)] = player; fs.writeFileSync(TOKENS, JSON.stringify(tokens));
+      record({ type: "join", player, name: nm, faction });
+      return send(res, 200, { token });
+    }
+    if (req.method === "GET" && url.pathname === "/api/view") {
+      const p = who(req); if (!p) return send(res, 401, { error: "join first" });
+      return send(res, 200, { ...view(S, p), nextTick: lastTick() + TURN, now: Date.now() });
+    }
+    if (req.method === "POST" && url.pathname === "/api/orders") {
+      const p = who(req); if (!p) return send(res, 401, { error: "join first" });
+      const { move, recruit } = await readBody(req);
+      const e = { type: "order", player: p, move: typeof move === "string" ? move : null, recruit: Array.isArray(recruit) ? recruit.slice(0, 6).map(r => ({ unit: String(r.unit), count: Math.floor(+r.count) })) : [] };
+      // check against a copy first: a refused order isn't logged
+      const err = order(JSON.parse(JSON.stringify(S)), e);
+      if (err) return send(res, 400, { error: err });
+      record(e);
+      return send(res, 200, { ok: true });
+    }
+    if (req.method === "POST" && url.pathname === "/api/admin/tick") {
+      if (!ADMIN || req.headers["x-admin-key"] !== ADMIN) return send(res, 403, { error: "no" });
+      const n = S.reports.length;
+      record({ type: "tick", seed: crypto.randomInt(2 ** 31) }); queuePlayerBattles(n); schedule();
+      return send(res, 200, { turn: S.turn });
+    }
+    const rm = /^\/api\/replay\/([\w-]+)$/.exec(url.pathname);
+    if (req.method === "GET" && rm) {
+      const p = who(req); if (!p) return send(res, 401, { error: "join first" });
+      const id = rm[1], seen = view(S, p).reports.some(r => r.id === id) || S.reports.some(r => r.id === id && r.sides.some(s => s.faction === S.players[p].faction));
+      if (!seen) return send(res, 404, { error: "no such battle that you know of" });
+      const j = wantReplay(id);
+      if (j.status !== "ready") return send(res, 200, { status: j.status, progress: j.progress, error: j.error, ahead: j.status === "queued" ? queue.indexOf(id) + (busy ? 1 : 0) : 0 });
+      res.writeHead(200, { "content-type": "application/json", "content-encoding": "gzip", "cache-control": "private, max-age=86400" });
+      return res.end(fs.readFileSync(replayFile(id)));
+    }
+    send(res, 404, { error: "not found" });
+  } catch (e) { send(res, 400, { error: e.message }); }
+});
+// ---- backups: once a day (and at start), a copy of the event log in DATA_DIR/backups, the newest KEEP_BACKUPS
+// kept. The log is the whole war; the volume's own snapshots are the second line, an off-site copy the third
+const BACKUPS = path.join(DATA, "backups");
+function backup() {
+  if (!KEEP_BACKUPS || !fs.existsSync(LOG)) return;
+  fs.mkdirSync(BACKUPS, { recursive: true });
+  const name = `events-${new Date().toISOString().slice(0, 10)}.jsonl`;
+  fs.copyFileSync(LOG, path.join(BACKUPS, name));
+  if (fs.existsSync(TOKENS)) fs.copyFileSync(TOKENS, path.join(BACKUPS, "tokens.json"));
+  const all = fs.readdirSync(BACKUPS).filter(f => /^events-\d{4}-\d{2}-\d{2}\.jsonl$/.test(f)).sort();
+  for (const f of all.slice(0, Math.max(0, all.length - KEEP_BACKUPS))) fs.unlinkSync(path.join(BACKUPS, f));
+}
+// for tests and a clean shutdown: no clock, no replay worker
+function stop() { clearTimeout(timer); if (worker) worker.terminate(); worker = null; }
+module.exports = { server, schedule, stop, state: () => S, wantReplay };
+if (require.main === module) {
+  schedule();
+  try { backup(); } catch (e) { console.error("backup failed:", e.message); }
+  setInterval(() => { try { backup(); } catch (e) { console.error("backup failed:", e.message); } }, 24 * 3600 * 1000).unref();
+  server.listen(PORT, () => console.log(`the war is on http://localhost:${PORT} (turn ${S.turn}, a tick every ${TURN / 1000} s)`));
+  // the host stops the machine with SIGTERM (a deploy, a restart): every input is already on disk, so just stop
+  for (const sig of ["SIGTERM", "SIGINT"]) process.on(sig, () => { console.log(`${sig}: stopping`); stop(); server.close(() => process.exit(0)); setTimeout(() => process.exit(0), 3000).unref(); });
+}

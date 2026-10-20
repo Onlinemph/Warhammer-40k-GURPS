@@ -377,12 +377,17 @@ def combat_flags(t, flags):
         flags["reanimation"] = 1
         flags["noMorale"] = 1       # soulless machines: Necrons do not break
     elif n.startswith("Synapse Discipline"):
-        # the sim assumes synapse is near, and the link gives what the trait's notes say it does: no fear (Fearlessness
-        # 5, and no Fright Checks under fire or morale breaks: "utterly fearless... to the last organism") and no pain
-        # (High Pain Threshold: no shock, +3 against knockdown). User report: Hormagaunts froze under fire.
-        flags["fearless"] = flags.get("fearless", 0) + 5
-        flags["unfazeable"] = 1
-        flags["hpt"] = 1
+        # Fearlessness 5, no Fright Checks under fire or morale breaks ("utterly fearless... to the last organism"), and
+        # High Pain Threshold, only while a synapse creature is in range (the sim works out which). User report:
+        # Hormagaunts froze under fire when the link gave Fearlessness alone.
+        flags["synDisc"] = 1
+    elif n.startswith("Independent Hunter"):
+        flags["synIndep"] = 1       # needs no synapse: always linked
+    elif n.startswith("Synapse Creature"):
+        # its field's radius, from the Area Effect modifier ("Area Effect, 16 yards")
+        txt = " ".join(str(x.get("name", x) if isinstance(x, dict) else x) for x in t.get("modifiers", [])) + " " + n
+        yd = re.search(r"(\d+)\s*yards", txt)
+        flags["synapse"] = max(flags.get("synapse", 0), int(yd.group(1)) if yd else 16)
     if n.startswith("Necrodermis Machine-Body") or n.startswith("Machine Body") or n.startswith("Machine Mind") or n == "Machine":
         flags["machine"] = 1        # Machines have no FP to spend on extra effort (B16, B263; user direction for Necrons)
     if ("metabolic hazards" in low or "toxins" in low or "poison" in low) and (

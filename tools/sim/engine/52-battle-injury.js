@@ -591,7 +591,7 @@
     const noDiv = dm => dm.div === 1 ? dm : { ...dm, div: 1, key: (dm.key || "") + "nd" };
     // struck: the model the explosive hit directly (it takes the full blast already, and every fragment roll hits it)
     function explosion(att, w, at, raw, struck) {
-      FX(["b", at.q, at.r, Math.min(6, 1 + Math.floor(Math.log2(Math.max(2, raw)) / 2) * (w.explosion || 1))]);
+      FX(["b", at.q, at.r, Math.min(6, 1 + Math.floor(ilog2(Math.max(2, raw)) / 2) * (w.explosion || 1))]);
       // a blast also batters the walls and doors beside it (B558; no armour divisor)
       if (terr) for (const [dq, dr] of [[0, 0], ...DIRS]) { const i = idx(key(at.q + dq, at.r + dr)); if (i != null && structOf(i)) damageStructure(i, Math.floor(raw / 3), w.dmg, false); }
       const lv = w.explosion || 1;

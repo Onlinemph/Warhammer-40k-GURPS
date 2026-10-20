@@ -5,7 +5,7 @@ notes: >
   three Guardsmen in a straight fight and utterly indifferent to the odds.
   Point math (see Xenos/Orks/Traits/Ork Physiology.adq for the full
   derivation of every trait below): Ork Physiology 311 (incl. Injury Tolerance
-  (Damage Reduction) 2, 50) + skills 30 = 341 points. Stats: ST 28, DX 11, IQ 8, HT 13, HP 32, Will 8, Per 8, Move 9, SM 0 —
+  (Damage Reduction) 2, 50) + skills 30 + Keen Senses 10 = 351 points. Stats: ST 28, DX 11, IQ 8, HT 13, HP 32, Will 8, Per 10, Move 9, SM 0 —
   landing exactly on framework.md's Boy anchor line. This sits well above
   framework.md's "Trained soldier" tier (100-175) and at the top of
   "Elite human" territory (200-350) almost entirely on the strength of
@@ -24,6 +24,16 @@ notes: >
   points, disabled by default) to build a Stormboy: a young, fast Boy with
   a jump pack.
 traits:
+  - name: Keen Senses
+    points: 10
+    attributes: {per: 2}
+    tags: [Mental]
+    notes: Per +2 (Per 10).
+    lore: >-
+      Dull it may be, but not blind: a soldier who survives a few fights learns to see movement in the grass.
+    design: >-
+      Per +2 at 5 points a level (B16), from Per 8 to Per 10: user direction that low-IQ creatures should
+      still perceive at 10-12, so a swarm can spot an enemy in the simulator instead of walking blind into its fire.
   - include: "xenos/orks/traits.yaml#Ork Physiology"
   - include: "xenos/orks/traits.yaml#Klan: Blood Axe"
     disabled: true
