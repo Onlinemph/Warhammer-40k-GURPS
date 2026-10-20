@@ -6,6 +6,8 @@
 //   PORT=8080 TURN_SECONDS=43200 DATA_DIR=game/data ADMIN_KEY=... node game/server.js
 //   TRUST_PROXY=1 behind a proxy (Fly, Caddy): the client's address comes from its header, not the socket
 //   BACKUPS=14: daily copies of the event log kept in DATA_DIR/backups (deploy/README.md)
+//   BOTS=2: that many scripted warbands for each player faction (game/sample-wars.js), for a playtest; their joins and
+//   orders go in the log like anyone's, given just before each tick
 //
 //   PUBLIC_URL, DISCORD_CLIENT_ID/SECRET, GOOGLE_CLIENT_ID/SECRET: sign-in (game/auth.js, deploy/README.md)
 //   ALLOW_DEV_JOIN=1 keeps the development join (a name and a browser token, no account) even with sign-in set up;
@@ -85,8 +87,29 @@ function wantReplay(id) {
   return jobs.get(id);
 }
 function queuePlayerBattles(from) {
-  for (const r of S.reports.slice(from)) if (r.sides.some(s => s.players.length)) wantReplay(r.id);
+  for (const r of S.reports.slice(from)) if (r.sides.some(s => s.players.some(n => !/ bot \d+$/.test(n)))) wantReplay(r.id);   // not the bots' own fights
 }
+
+// ---- bots: scripted warbands for a playtest
+const BOTS = +(process.env.BOTS || 0);
+const botRand = () => Math.random();
+function botsJoin() {
+  if (!BOTS) return;
+  for (const [f, F] of Object.entries(FACTIONS)) if (F.player) for (let i = 1; i <= BOTS; i++) {
+    const id = `bot-${f}-${i}`;
+    if (!S.players[id]) record({ type: "join", player: id, name: `${F.name.replace(/^The /, "")} bot ${i}`, faction: f });
+  }
+}
+function botsOrder() {
+  if (!BOTS) return;
+  const { decide } = require("./sample-wars.js");
+  for (const p of Object.values(S.players)) {
+    if (!p.id.startsWith("bot-")) continue;
+    const o = decide(S, p, botRand);
+    if (o && !order(JSON.parse(JSON.stringify(S)), { type: "order", player: p.id, ...o })) record({ type: "order", player: p.id, ...o });
+  }
+}
+const tickNow = () => { botsOrder(); const n = S.reports.length; record({ type: "tick", seed: crypto.randomInt(2 ** 31) }); queuePlayerBattles(n); };
 
 // ---- the clock
 const lastTick = () => { for (let i = events.length - 1; i >= 0; i--) if (events[i].type === "tick" || events[i].type === "create") return events[i].at; return Date.now(); };
@@ -94,7 +117,7 @@ let timer = null;
 function schedule() {
   clearTimeout(timer);
   const due = lastTick() + TURN;
-  timer = setTimeout(() => { const n = S.reports.length; record({ type: "tick", seed: crypto.randomInt(2 ** 31) }); queuePlayerBattles(n); schedule(); }, Math.max(0, due - Date.now()));
+  timer = setTimeout(() => { tickNow(); schedule(); }, Math.max(0, due - Date.now()));
   timer.unref();   // the listening server keeps the process alive, not the clock
 }
 
@@ -173,8 +196,7 @@ const server = http.createServer(async (req, res) => {
     }
     if (req.method === "POST" && url.pathname === "/api/admin/tick") {
       if (!ADMIN || req.headers["x-admin-key"] !== ADMIN) return send(res, 403, { error: "no" });
-      const n = S.reports.length;
-      record({ type: "tick", seed: crypto.randomInt(2 ** 31) }); queuePlayerBattles(n); schedule();
+      tickNow(); schedule();
       return send(res, 200, { turn: S.turn });
     }
     const rm = /^\/api\/replay\/([\w-]+)$/.exec(url.pathname);
@@ -207,6 +229,7 @@ function backup() {
 function stop() { clearTimeout(timer); if (worker) worker.terminate(); worker = null; }
 module.exports = { server, schedule, stop, state: () => S, wantReplay, auth };
 if (require.main === module) {
+  botsJoin();
   schedule();
   try { backup(); } catch (e) { console.error("backup failed:", e.message); }
   setInterval(() => { try { backup(); } catch (e) { console.error("backup failed:", e.message); } }, 24 * 3600 * 1000).unref();

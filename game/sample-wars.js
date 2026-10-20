@@ -26,9 +26,11 @@ function stepToward(S, f, from, want) {
   }
   return null;
 }
-function play(S, p, R) {
+// a scripted warband's orders for the next tick ({move, recruit, ritual}), or null when it has none to give. The
+// server's bots (BOTS=n) use it too, through order events in the log like anyone's
+function decide(S, p, R) {
   const wb = p.warband, f = p.faction, here = S.worlds[wb.at], n = total(wb.army);
-  if (wb.ritual) return;
+  if (wb.ritual) return null;
   // home is the capital, or while it is lost, any world the faction still holds
   const capital = S.worlds[S.factions[f].capital]?.owner === f ? S.factions[f].capital : null, home = here.owner === f && (!capital || wb.at === capital);
   const recruit = home && n < FULL ? MIX[f].filter(r => r.unit !== "warden" || here.capital || S.turn - here.heldSince >= FX.WARDEN_HELD) : [];
@@ -36,7 +38,7 @@ function play(S, p, R) {
     const cap = S.factions.apostates.stock.captives || 0;
     const ripe = here.links.map(id => S.worlds[id]).find(w => w.owner === "hegemony" && !w.capital && w.loyalty < FX.LOYALTY.corruptible);
     const ritual = ripe && cap >= FX.RITUALS.corrupt.captives ? { kind: "corrupt", target: ripe.id } : cap >= FX.RITUALS.summon.captives ? { kind: "summon" } : null;
-    if (ritual && !order(S, { player: p.id, recruit, ritual })) return;
+    if (ritual && !order(JSON.parse(JSON.stringify(S)), { player: p.id, recruit, ritual })) return { move: null, recruit, ritual };
   }
   let move = null;
   if (n < WEAK || (n < FULL && !home)) { if (!home) move = stepToward(S, f, wb.at, w => w.id === capital) || stepToward(S, f, wb.at, w => w.owner === f); }
@@ -48,8 +50,9 @@ function play(S, p, R) {
       move = next[0].id;
     } else move = stepToward(S, f, wb.at, w => w.owner !== f);
   }
-  order(S, { player: p.id, move, recruit });
+  return { move, recruit, ritual: null };
 }
+function play(S, p, R) { const o = decide(S, p, R); if (o) order(S, { player: p.id, ...o }); }
 function war(seed, turns) {
   const R = rng(seed * 7919), log = [{ type: "create", seed }];
   for (const f of ["hegemony", "apostates", "brawl"]) for (const i of [1, 2]) log.push({ type: "join", player: `${f}${i}`, name: `${f} ${i}`, faction: f });
@@ -77,4 +80,4 @@ if (require.main === module) {
   console.log("  wiped out".padEnd(20) + FACTIONS.map(f => `${res.filter(r => r.held[last][f] === 0).length}/${res.length}`.padStart(10)).join(""));
   console.log("  most worlds".padEnd(20) + FACTIONS.map(f => String(Math.max(...res.map(r => r.held[last][f]))).padStart(10)).join(""));
 }
-module.exports = { war };
+module.exports = { war, decide };

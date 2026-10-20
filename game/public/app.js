@@ -119,6 +119,13 @@ function draw() {
   countdown();
 }
 $("#j-go").onclick = joinWar;
+// a playtest: open the page with ?admin=<ADMIN_KEY> once, and a Tick now button runs the next turn by hand
+{
+  const q = new URLSearchParams(location.search);
+  if (q.has("admin")) { sessionStorage.setItem("war-admin", q.get("admin")); history.replaceState(null, "", "/"); }
+  const key = sessionStorage.getItem("war-admin");
+  if (key) { $("#tick").hidden = false; $("#tick").onclick = async () => { $("#tick").disabled = true; try { await fetch("/api/admin/tick", { method: "POST", headers: { "x-admin-key": key } }); await load(); } finally { $("#tick").disabled = false; } }; }
+}
 $("#signout").onclick = async () => { await api("/auth/logout", {}).catch(() => {}); V = null; load(); };
 // a sign-in that went wrong comes back as ?signin=<what happened>
 { const q = new URLSearchParams(location.search); if (q.has("signin")) { $("#j-err").textContent = q.get("signin"); history.replaceState(null, "", "/"); } }
