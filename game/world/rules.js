@@ -136,9 +136,10 @@ function tick(S, seed) {
   // 3. the AI factions
   chorusTurn(S, R);
   dormantTurn(S, R);
-  // 4. battles, wherever two factions meet
+  // 4. battles, wherever two factions meet (first, Levies marching on an Apostate world may turn, factions.js)
   for (const id of S.order) {
     const w = W(id);
+    FX.beforeBattle(S, w, H, R);
     for (let guard = 0; guard < 4; guard++) {
       const sides = factionsAt(S, w).sort((a, b) => strength(b.army) - strength(a.army));
       if (sides.length < 2) break;

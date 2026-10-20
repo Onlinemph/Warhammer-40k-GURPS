@@ -26,7 +26,7 @@ World types, by what they give (same numbers as now):
 Costs follow what each unit is worth, measured with the resolver (`game/world/units.js` says how). Equal-cost
 armies of each player faction's usual mix are within about 20 points of even; the Hegemony's Wardens beat the
 Apostates' Vessels hard, and the Apostates have the hardest start (the map puts them between the Hegemony and the
-Chorus).
+Chorus, and the Hegemony's Levies turn on reaching an Apostate world to make up for it: see Faction mechanics).
 
 A war fields three or four of them. The first test war has three player sides (**the Hegemony, the Apostates
 and the Brawl**) and two AI sides (**the Chorus and the Dormant**). The Last Court comes later (a tiny elite
@@ -152,6 +152,13 @@ guesses, to be measured in the sample wars. All of it is worked out at the tick 
     over to the Apostates, and its levies become Turncoats.
 - **Turned regiments:** a Hegemony warband out of supply for 3 turns in a row loses a tenth of its Levies a turn to
   the nearest Apostate world as Turncoats, instead of just wasting away.
+- **Brothers' worlds:** when a Hegemony warband marches onto an Apostate world, half its Levies turn their coats
+  before the battle and join the world's garrison as Turncoats (the Apostate worlds were Hegemony worlds; the men
+  sent to take them back are asked to fire on their own kind). Storm Levies, Oathsisters and Wardens don't turn.
+  Measured over 96 sample wars of 60 turns: without it the Apostates were wiped out in 60 of them (the Hegemony's
+  warbands, with about three times the Apostates' power for the same cost, walked through their home worlds while the
+  Apostate warbands were away); with it, in 2. The Hegemony pays for it: 10.9 worlds at turn 60 before, 4.6
+  after, wiped out in 12 wars instead of none.
 
 ### The Brawl: fame
 - **Fame** (its currency). After every battle a Brawl warband fights, it gains fame in proportion to the enemy's

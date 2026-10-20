@@ -12,7 +12,9 @@ const RITUALS = {
   summon:  { name: "Summoning",  captives: 15, turns: 3 },
   corrupt: { name: "Corruption", captives: 10, turns: 3 },
 };
-const TURNED = { after: 3, share: 0.1 };       // a Hegemony warband out of supply this long loses Levies to the Apostates
+// a Hegemony warband out of supply this long loses Levies to the Apostates; and of the Levies that march onto an
+// Apostate world, this share turn their coats before the battle
+const TURNED = { after: 3, share: 0.1, onWorld: 0.5 };
 const FAME = { odds: 2, raise: 0.1, peace: 4, infighting: 0.05, grow: 0.1 };
 const CORPSE = 1;                          // biomass the Chorus gets for each soldier dead on a field it holds
 const INFEST = { dead: 60, delay: 3, guard: 20, brood: { leaper: 10, spitter: 5 } };
@@ -129,6 +131,21 @@ function outOfSupply(S, p, H, R) {
   return true;
 }
 
+// ---- before the battles on a world: Levies sent against an Apostate world, once Hegemony like their own, turn on
+// arrival and join its garrison as Turncoats
+function beforeBattle(S, w, H, R) {
+  if (w.owner !== "apostates") return;
+  for (const p of Object.values(S.players)) {
+    const wb = p.warband;
+    if (p.faction !== "hegemony" || wb.at !== w.id || !wb.army.levy) continue;
+    const n = wb.army.levy - H.cut({ levy: wb.army.levy }, TURNED.onWorld, R).levy;
+    if (!n) continue;
+    wb.army.levy -= n; w.garrison.turncoat = (w.garrison.turncoat || 0) + n;
+    wb.history.push(`Turn ${S.turn}: ${n} Levies turned their coats at ${w.name}`);
+    note(S, `${n} of ${p.name}'s Levies go over to the Apostates at ${w.name}`);
+  }
+}
+
 // ---- the end of the tick: loyalty and edicts, rituals, fame, the dead rising
 function upkeep(S, H, R, T) {
   const W = Object.values(S.worlds);
@@ -217,4 +234,4 @@ function edicts(S, H, R) {
   note(S, `A sealed edict opens: ${text}, within ${EDICT.lasts} turns`);
 }
 
-module.exports = { canMove, moves, setup, joined, checkOrder, beginRitual, afterBattle, captured, outOfSupply, upkeep, RITUALS, LOYALTY, WARDEN_HELD };
+module.exports = { canMove, moves, setup, joined, checkOrder, beginRitual, beforeBattle, afterBattle, captured, outOfSupply, upkeep, RITUALS, LOYALTY, WARDEN_HELD, TURNED };

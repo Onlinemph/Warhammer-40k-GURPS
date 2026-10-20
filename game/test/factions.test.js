@@ -116,6 +116,25 @@ test("a Hegemony warband out of supply for three turns loses Levies to the Apost
   assert.ok(W(S).filter(w => w.owner === "apostates").reduce((n, w) => n + (w.garrison.turncoat || 0), 0) > t0);
 });
 
+test("Levies marching onto an Apostate world: about half turn their coats before the battle", () => {
+  let S = quiet(start());
+  const apo = W(S).find(w => w.owner === "apostates");
+  for (const p of Object.values(S.players)) p.warband.at = S.factions[p.faction].capital;
+  S.players.h.warband.at = apo.id; S.players.h.warband.army = { levy: 40, storm: 2 };
+  S = quiet(tick(S, 40));
+  const line = S.players.h.warband.history.find(x => /Levies turned their coats/.test(x));
+  assert.ok(line, "the warband's history says so");
+  const n = Number(line.match(/: (\d+) Levies/)[1]);
+  assert.ok(n >= 12 && n <= 28, `${n} of 40 turned`);
+  assert.ok(S.log.some(l => /Levies go over to the Apostates at/.test(l.text)));
+  // nowhere else: on a free world nobody turns
+  let T = quiet(start());
+  const free = W(T).find(w => !w.owner);
+  T.players.h.warband.at = free.id; T.players.h.warband.army = { levy: 40 };
+  T = quiet(tick(T, 41));
+  assert.ok(!T.players.h.warband.history.some(x => /turned their coats/.test(x)));
+});
+
 test("Brawl fame: won in battle, doubled against the odds, grows Bosses, and peace makes them fight each other", () => {
   let S = quiet(start());
   const b = S.players.b, home = S.worlds[b.warband.at];
