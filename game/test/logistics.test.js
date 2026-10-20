@@ -1,6 +1,7 @@
 // Supply and logistics (game/world/logistics.js): eating, being short, depots, convoys and raids on them, blockades.
 const test = require("node:test");
 const assert = require("node:assert/strict");
+const { SCALE } = require("../world/units.js");
 const { apply, rebuild, order } = require("../world/rules.js");
 const LOG = require("../world/logistics.js");
 const { at, hold, cap: capOf, quiet } = require("./helpers.js");
@@ -12,7 +13,7 @@ const own = S => Object.values(S.worlds).filter(w => w.owner === "hegemony");
 test("warbands eat a supply a turn per ten soldiers; with none to eat they're short and fight at x0.8", () => {
   let S = quiet(start());
   const wb = S.players.h.warband;
-  wb.army = { levy: 95 };
+  wb.army = { levy: 95 * SCALE };
   const s0 = S.factions.hegemony.stock.supply;
   S = quiet(tick(S, 1));
   assert.equal(S.players.h.warband.eats, 10);
@@ -23,7 +24,7 @@ test("warbands eat a supply a turn per ten soldiers; with none to eat they're sh
   S.factions.hegemony.stock.supply = 0;
   for (const w of Object.values(S.worlds)) if (w.owner === "hegemony") w.owner = w.capital ? "hegemony" : null;
   S.worlds[S.factions.hegemony.capital].type = "death";
-  S.players.h.warband.army = { levy: 200 };
+  S.players.h.warband.army = { levy: 200 * SCALE };
   S = quiet(tick(S, 2));
   assert.equal(S.players.h.warband.short, true);
   assert.ok(S.players.h.warband.history.some(h => /short of supply/.test(h)));
@@ -33,7 +34,7 @@ test("warbands eat a supply a turn per ten soldiers; with none to eat they're sh
 test("a depot (30 materiel) feeds a warband beside it, even far from home, and keeps it in supply", () => {
   let S = quiet(start());
   const wb = S.players.h.warband, here = S.worlds[wb.at];
-  S.factions.hegemony.stock.materiel = 100;
+  S.factions.hegemony.stock.materiel = 100 * SCALE;
   S = apply(S, { type: "order", player: "h", move: null, recruit: [], build: "depot" });
   S = quiet(tick(S, 3));
   assert.ok(S.worlds[here.id].depot, "built");
@@ -42,7 +43,7 @@ test("a depot (30 materiel) feeds a warband beside it, even far from home, and k
   const far = Object.values(S.worlds).find(w => !w.owner && w.links.length >= 1 && !w.links.some(n => S.worlds[n].owner === "hegemony"));
   hold(far, "hegemony"); far.depot = { supply: 50 };
   const next = hold(S.worlds[far.links[0]], null); next.tomb = false;
-  at(S, S.players.h, next.id); S.players.h.warband.army = { levy: 40 };
+  at(S, S.players.h, next.id); S.players.h.warband.army = { levy: 40 * SCALE };
   S = quiet(tick(S, 4));
   assert.equal(S.players.h.warband.depotFed, true);
   assert.equal(S.players.h.warband.supplied, true);

@@ -4,6 +4,9 @@
 // capital and more than half its cities. Deterministic: a world's regions come from the war's seed.
 const { rng } = require("./galaxy.js");
 const { TERRAIN } = require("./terrain.js");
+const { SCALE } = require("./units.js");
+// a free world's Local Defence: to every ten, a sergeant and a heavy stubber
+const defence = n => { const k = Math.floor(n / 10); return { militia: n - 2 * k, ...(k ? { militia_sgt: k, militia_heavy: k } : {}) }; };
 
 const SYL = ["ka", "vor", "tal", "en", "mir", "dus", "ae", "ol", "ix", "ran", "sel", "gor", "thi", "um", "bra", "nek", "os", "lia", "qer", "zan", "hel", "dro", "cas", "ur"];
 // how a region of each ground is called after its name
@@ -114,10 +117,10 @@ function setup(S, START, R) {
     if (w.owner) {
       c.garrison = { ...START[w.owner].garrison };
       const basic = { hegemony: "levy", apostates: "faithless", brawl: "brawler", chorus: "leaper" }[w.owner];
-      if (basic) for (const r of cities(w)) if (!r.capital) r.garrison = { [basic]: 5 };
+      if (basic) for (const r of cities(w)) if (!r.capital) r.garrison = { [basic]: 5 * SCALE };
     } else {
-      c.garrison = { militia: 10 + Math.floor(R() * 16) };
-      for (const r of cities(w)) if (!r.capital) r.garrison = { militia: 3 + Math.floor(R() * 6) };
+      c.garrison = defence((10 + Math.floor(R() * 16)) * SCALE);
+      for (const r of cities(w)) if (!r.capital) r.garrison = defence((3 + Math.floor(R() * 6)) * SCALE);
     }
   }
 }

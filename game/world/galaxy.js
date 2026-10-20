@@ -2,17 +2,19 @@
 // loops), each world a type that sets what it produces. The Hegemony starts in the far west with the Apostates
 // beside it, the Brawl in the east, the Chorus in a cluster in the middle, and the Dormant asleep in three tomb
 // worlds, one a sector, as far from everyone as the map allows; the rest are unclaimed, held by local defence.
-const { WORLD_NAMES } = require("./units.js");
+const { WORLD_NAMES, SCALE } = require("./units.js");
 const rng = seed => { let a = seed >>> 0; return () => { a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; };
+// (each yield is SCALE times its base: units.js)
+const Y = (manpower, materiel, supply) => ({ manpower: manpower * SCALE, materiel: materiel * SCALE, supply: supply * SCALE });
 const TYPES = {
-  hive:     { name: WORLD_NAMES.hive,     manpower: 6, materiel: 2, supply: 2 },
-  forge:    { name: WORLD_NAMES.forge,    manpower: 2, materiel: 6, supply: 2 },
-  agri:     { name: WORLD_NAMES.agri,     manpower: 2, materiel: 1, supply: 6 },
-  fortress: { name: WORLD_NAMES.fortress, manpower: 3, materiel: 3, supply: 3, defence: 1.5 },
-  death:    { name: WORLD_NAMES.death,    manpower: 1, materiel: 2, supply: 1 },
+  hive:     { name: WORLD_NAMES.hive,     ...Y(6, 2, 2) },
+  forge:    { name: WORLD_NAMES.forge,    ...Y(2, 6, 2) },
+  agri:     { name: WORLD_NAMES.agri,     ...Y(2, 1, 6) },
+  fortress: { name: WORLD_NAMES.fortress, ...Y(3, 3, 3), defence: 1.5 },
+  death:    { name: WORLD_NAMES.death,    ...Y(1, 2, 1) },
 };
 // a tomb world: the Dormant's, built to be held; taken, it is ruins that give a little (tomb types are never rolled)
-const TOMB = { name: "Tomb world", manpower: 1, materiel: 3, supply: 1, defence: 1.5 };
+const TOMB = { name: "Tomb world", ...Y(1, 3, 1), defence: 1.5 };
 const SYL = ["ka", "vor", "tal", "en", "mir", "dus", "ae", "ol", "ix", "ran", "sel", "gor", "thi", "um", "bra", "nek", "os", "lia", "qer", "zan"];
 function generate(seed = 1, opt = {}) {
   const R = rng(seed), n = opt.worlds || 24, W = 1000, H = 600;

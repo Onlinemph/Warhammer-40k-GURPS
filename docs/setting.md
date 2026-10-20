@@ -593,6 +593,43 @@ against 10 in the open, 50 yards apart; the war bolts terrain and holding a city
 - **Checked** against the engine on each class, both ways of deploying, mixed armies from 10 to 250 a side, before
   and after, and reported as before: the error in the win chance and in the share lost.
 
+### As built
+*User direction while building: much larger battles than the draft's 4x, and no cap on elements a side.*
+- **`SCALE = 10`** (`game/world/units.js`), one constant through the war: starting warbands and garrisons, the Local
+  Defence, worlds' yields (so income, rallies and raids), a world's levies a turn and the garrison cap, the Chorus's
+  broods and the size a brood swarms at, the Dormant's sleepers, the dead that rise and the guard that stops them,
+  the muster, walls, depots, edicts, rituals' captives, recruit orders (up to 500), the bots' mixes and thresholds. A
+  supply feeds 100 soldiers, so supply itself isn't scaled. A Chorus brood keeps one Conductor however big; a tomb has
+  one Overlord and three Crypteks.
+- **Elements stay about ten soldiers** however big the battle (the article's 4 to 40 a side is passed), so a battle
+  of a thousand is a hundred elements a side. The map grows with them (up to 120 hexes wide, 2,400 yards) and so
+  does the round limit (half the map's width, at least 16). Measured, one battle on open ground: 700 soldiers 0.06
+  s, 2,800 0.9 s, 5,000 1.7 s, 10,000 3.8 s, 20,000 8.4 s. A battle's odds take fewer quick runs the bigger it is
+  (8 at a thousand or fewer, down to 2), and the same question is answered once.
+- **The new units** are in, each rated by SCER (its own gun for a variant, a psyker's best power at half, as the
+  article says for FP-using abilities) and priced from its worth as the war now fights: `tools/resolver/price.js`
+  fights each against a line of Levies, a mob of Brawlers, Wardens and a Chorus brood, the fewest that win half the
+  time against the Levies it takes. Special and heavy weapons are limited to one for every ten line troops (Levies;
+  Turncoats and Faithless; Brawlers). Free worlds' Local Defence has a sergeant and a heavy stubber to every ten.
+  The Chorus breeds its new forms by chance, an Overmind rarely; the Dormant wake with theirs.
+- **Every unit's `power`** (the AI's sums) is now its measured worth. The older units keep their prices for now.
+  **Measured worths, in Levies:** Storm Levy 2.0, Warden 2.1, Levy Gunner 1.0, Heavy Team 2.5, Levy Melta 0.5,
+  Marksman 0.35, Seer 0.22, Levy Burner 0.03; Turncoat 0.61, Turncoat Heavy 1.2, Rotted 2.35, Fallen Warden 2.1;
+  Brawler 0.38, Boss 2.3, Ironhide 3.4, Big Shoota 1.3; Leaper 0.45, Spitter 0.06, Bulwark 3.5, Overmind 2.8;
+  Husk 1.0, Heavy Husk 6.1. Under Tactical Mass Combat the elites are worth far less against the line than in the
+  engine (a Warden 2.1 Levies, against 41), and the short-ranged (flamers 2 hexes, psykers 5) are nearly worthless:
+  the fire table is fought at range, and a lasgun reaches 20.
+- **3D replays and live battles** of more than 250 soldiers are fought as a sample, each unit in its share, and the
+  replay says so.
+- **Measured** (8 wars of 60 turns, about 90 seconds a war to run): battles of 401 soldiers at the median, 851 at
+  the 90th percentile, 1,509 the biggest; 96 battles a war, 70 cities and 10 or 11 worlds taken. **Worse:** close
+  fights (40-60%) fell from 18% of battles to 8%, and the winner at 95%+ rose from 29% to 50%: with a hundred
+  elements a side the dice average out, and the bigger side wins far more surely than with ten. Balance at turn 60:
+  Hegemony 3.1, Apostates 5.4, Brawl 5.5, Chorus 5.0, Dormant 2.4.
+- Found on the way: a stalemate was fought up to four times in the same turn (the battle loop ran while two sides
+  stood); now it's the turn's fighting there. The view keeps a player's own last ten battles even when thirty others
+  are newer.
+
 ### The order to build in
 0. The resolver that knows the ground (above).
 1. The 3D view and a replay at 250 figures, measured.

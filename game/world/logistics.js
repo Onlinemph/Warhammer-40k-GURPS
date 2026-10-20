@@ -1,10 +1,10 @@
 // Supply and logistics (docs/setting.md): supply is made on worlds and eaten by warbands, stored in depots, carried
 // by convoys that can be raided, and cut off by blockades; a warband short of it fights worse. Worked out at the tick
 // from the log; the tick's dice (`R`) are the only randomness. Called from rules.js with its helpers (`H`).
-const { FACTIONS } = require("./units.js");
+const { FACTIONS, SCALE } = require("./units.js");
 
-const EAT = 10;                                    // soldiers a supply feeds for a turn
-const DEPOT = { cost: 30, cap: 60 }, CONVOY = { max: 30 };
+const EAT = 10 * SCALE;                            // soldiers a supply feeds for a turn (SCALE: units.js)
+const DEPOT = { cost: 30 * SCALE, cap: 60 }, CONVOY = { max: 30 };
 const SHORT = 0.8;                                 // a hungry or cut-off warband's side fights at this
 const STARVE = 0.1, BLOCKADE_LOYALTY = 5;
 const WASTE_AFTER = 3;                             // turns out of supply before a warband starts wasting away
@@ -13,7 +13,7 @@ const need = army => Math.ceil(Object.values(army).reduce((a, n) => a + n, 0) / 
 
 function setup(S) {
   S.convoys = [];
-  for (const [f, F] of Object.entries(S.factions)) if (isPlayerFaction(f)) F.stock.supply = 20;
+  for (const [f, F] of Object.entries(S.factions)) if (isPlayerFaction(f)) F.stock.supply = 20;   // (supply isn't scaled: a supply feeds SCALE times as many)
 }
 
 // a world of its holder's that has no lane to another of its holder's worlds, with an enemy next door
@@ -27,7 +27,7 @@ function blockaded(S, w, H) {
 function income(S, H) {
   for (const f of Object.keys(S.factions)) {
     if (!isPlayerFaction(f)) continue;
-    for (const id of H.supplied(S, f)) { const w = S.worlds[id]; if (!blockaded(S, w, H)) S.factions[f].stock.supply += (H.TYPES[w.type].supply || 0) * H.heldShare(w, f); }
+    for (const id of H.supplied(S, f)) { const w = S.worlds[id]; if (!blockaded(S, w, H)) S.factions[f].stock.supply += (H.TYPES[w.type].supply || 0) / SCALE * H.heldShare(w, f); }
   }
 }
 const noIncome = (S, w, H) => blockaded(S, w, H);

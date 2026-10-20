@@ -2,6 +2,7 @@
 // mechanic is the thing that decides.
 const test = require("node:test");
 const assert = require("node:assert/strict");
+const { SCALE } = require("../world/units.js");
 const { apply, rebuild, order, total } = require("../world/rules.js");
 const { at, hold, clear, G, cap, quiet } = require("./helpers.js");
 
@@ -63,24 +64,24 @@ test("Apostate captives, a Summoning that gives Vessels, and one broken by a fig
   const a = S.players.a, home = S.worlds[a.warband.at];
   // a battle the Apostates can't lose, against local defence next door
   const tgt = S.worlds[home.links.find(n => !S.worlds[n].owner) || home.links[0]];
-  hold(tgt, null, { militia: 20 });
-  at(S, a, tgt.id); a.warband.army = { fallen: 6 };
+  hold(tgt, null, { militia: 20 * SCALE });
+  at(S, a, tgt.id); a.warband.army = { fallen: 20 * SCALE };
   S = tick(S, 4);
   assert.ok(S.factions.apostates.stock.captives > 0, "captives taken");
   // a Summoning: 15 captives, three turns, two Vessels
   S = quiet(S);
-  at(S, a, home.id); S.factions.apostates.stock.captives = 20;
+  at(S, a, home.id); S.factions.apostates.stock.captives = 20 * SCALE;
   const v0 = S.players.a.warband.army.vessel || 0;
   S = apply(S, { type: "order", player: "a", move: null, recruit: [], ritual: { kind: "summon" } });
   S = tick(S, 5);
-  assert.equal(S.factions.apostates.stock.captives, 5);
+  assert.equal(S.factions.apostates.stock.captives, 5 * SCALE);
   assert.ok(S.players.a.warband.ritual, "under way");
   assert.match(order(S, { player: "a", move: home.links[0] }), /holds the warband/);
   S = quiet(tick(S, 6)); S = quiet(tick(S, 7)); S = tick(S, 8);
   assert.equal(S.players.a.warband.army.vessel, v0 + 2);
   assert.ok(S.log.some(l => /answers Ashen's Summoning/.test(l.text)));
   // another, broken by an enemy warband arriving
-  S.factions.apostates.stock.captives = 15;
+  S.factions.apostates.stock.captives = 15 * SCALE;
   S = apply(S, { type: "order", player: "a", move: null, recruit: [], ritual: { kind: "summon" } });
   S = tick(S, 9);
   at(S, S.players.b, S.players.a.warband.at, S.players.a.warband.region); S.players.b.warband.army = { brawler: 5 };
@@ -95,7 +96,7 @@ test("Apostate Corruption turns the capital of a disloyal Hegemony world next do
   let t = W(S).find(w => w.owner === "hegemony" && !w.capital && w.links.includes(home.id));
   if (!t) { t = S.worlds[home.links.find(n => !S.worlds[n].capital)]; hold(t, "hegemony", { levy: 6 }); }
   t.loyalty = 40; cap(t).garrison = { levy: 6 };
-  S.factions.apostates.stock.captives = 10;
+  S.factions.apostates.stock.captives = 10 * SCALE;
   assert.match(order(S, { player: "a", ritual: { kind: "corrupt", target: home.links.find(n => S.worlds[n].owner !== "hegemony") || "x" } }), /Hegemony world next door|no such|too loyal/);
   S = apply(S, { type: "order", player: "a", move: null, recruit: [], ritual: { kind: "corrupt", target: t.id } });
   for (let k = 0; k < 3; k++) { S = quiet(tick(S, 20 + k)); S.worlds[t.id].loyalty = Math.min(S.worlds[t.id].loyalty, 40); for (const p of Object.values(S.players)) if (p.id !== "a") at(S, p, S.factions[p.faction].capital); }
@@ -158,9 +159,9 @@ test("the Chorus eats the dead of a field it holds, and a heap of dead beside it
   let S = start();
   const cw = W(S).find(w => w.owner === "chorus"), n = S.worlds[cw.links.find(l => S.worlds[l].owner !== "chorus")];
   // a big swarm on a world held by a few Levies: the Chorus wins and feeds
-  hold(n, n.owner === "dormant" ? null : n.owner, { militia: 60 }); n.tomb = false;
-  S.swarms = [{ id: "x", faction: "chorus", at: n.id, region: cap(n).id, army: { stalker: 10, leaper: 40 } }];
-  const b0 = S.factions.chorus.stock.biomass;
+  hold(n, n.owner === "dormant" ? null : n.owner, { militia: 20 * SCALE }); n.tomb = false;
+  S.swarms = [{ id: "x", faction: "chorus", at: n.id, region: cap(n).id, army: { stalker: 25 * SCALE, leaper: 60 * SCALE, conductor: 1 } }];
+  S.factions.chorus.stock.biomass = 0; const b0 = 0;   // (what it breeds this tick it spends before the battle)
   S = tick(S, 60);
   const rep = S.reports.find(r => r.world === n.id);
   assert.ok(rep && rep.winner === "chorus");
@@ -169,8 +170,8 @@ test("the Chorus eats the dead of a field it holds, and a heap of dead beside it
   // turns later
   S = start();
   const c2 = W(S).find(w => w.owner === "chorus"), m = S.worlds[c2.links.find(l => !S.worlds[l].owner || S.worlds[l].owner === "brawl" || S.worlds[l].owner === "hegemony") || c2.links[0]];
-  hold(m, null, { militia: 80 }); m.tomb = false;
-  at(S, S.players.b, m.id); S.players.b.warband.army = { brawler: 200, ironhide: 10 };
+  hold(m, null, { militia: 80 * SCALE }); m.tomb = false;
+  at(S, S.players.b, m.id); S.players.b.warband.army = { brawler: 200 * SCALE, ironhide: 10 * SCALE };
   S = tick(S, 61);
   assert.ok(S.reports.some(r => r.world === m.id), "a battle there");
   for (const p of Object.values(S.players)) at(S, p, S.factions[p.faction].capital);

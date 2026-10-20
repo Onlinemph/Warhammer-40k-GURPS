@@ -2,6 +2,7 @@
 // region by region, changing hands only when its capital and most of its cities are held.
 const test = require("node:test");
 const assert = require("node:assert/strict");
+const { SCALE } = require("../world/units.js");
 const { apply, rebuild, order, view } = require("../world/rules.js");
 const RG = require("../world/regions.js");
 const { TERRAIN } = require("../world/terrain.js");
@@ -82,13 +83,13 @@ test("landing: where the order says, and never in or beside a fortress capital i
 
 test("a city attacked: the holder's garrisons elsewhere on the world march half their strength to its defence", () => {
   let S = start();
-  const w = hold(free(S), null, { militia: 4 }); w.tomb = false;
-  const other = RG.cities(w).find(r => !r.capital); other.garrison = { militia: 20 };
-  at(S, S.players.h, w.id); S.players.h.warband.army = { levy: 30 };
+  const w = hold(free(S), null, { militia: 4 * SCALE }); w.tomb = false;
+  const other = RG.cities(w).find(r => !r.capital); other.garrison = { militia: 20 * SCALE };
+  at(S, S.players.h, w.id); S.players.h.warband.army = { levy: 30 * SCALE };
   S = tick(S, 6);
   const rep = S.reports.find(r => r.world === w.id && r.region === cap(w).id);
   assert.ok(rep, "a battle at the capital");
   const rallied = +((S.log.find(l => /rallies \d+ of its people/.test(l.text)) || { text: "rallies 0" }).text.match(/rallies (\d+)/)[1]);
-  assert.equal(rep.sides.find(s => s.faction === "militia").before.militia, 14 + rallied, "4 there, 10 come from the other city, and its people rallied");
-  assert.ok(S.log.some(l => /10 of the local defence march to the defence of/.test(l.text)));
+  assert.equal(rep.sides.find(s => s.faction === "militia").before.militia, 14 * SCALE + rallied, "4 there, 10 come from the other city, and its people rallied");
+  assert.ok(S.log.some(l => new RegExp(`${10 * SCALE} of the local defence march to the defence of`).test(l.text)));
 });

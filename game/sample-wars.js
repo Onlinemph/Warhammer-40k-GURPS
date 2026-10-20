@@ -10,12 +10,14 @@ const FX = require("./world/factions.js");
 const LOG = require("./world/logistics.js");
 const RG = require("./world/regions.js");
 
+const { SCALE, UNITS, FACTIONS: FACTIONS_ } = require("./world/units.js");
+// a recruiting round's mix, line troops first so the special and heavy weapons have their ten each to go among
 const MIX = {
-  hegemony:  [{ unit: "levy", count: 10 }, { unit: "storm", count: 2 }, { unit: "warden", count: 1 }],
-  apostates: [{ unit: "turncoat", count: 6 }, { unit: "faithless", count: 6 }, { unit: "vessel", count: 1 }],
-  brawl:     [{ unit: "brawler", count: 10 }, { unit: "boss", count: 2 }],
+  hegemony:  [{ unit: "levy", count: 100 }, { unit: "storm", count: 20 }, { unit: "warden", count: 6 }, { unit: "levy_gunner", count: 4 }, { unit: "heavy_team", count: 3 }, { unit: "levy_melta", count: 2 }, { unit: "seer", count: 1 }],
+  apostates: [{ unit: "turncoat", count: 60 }, { unit: "faithless", count: 60 }, { unit: "vessel", count: 6 }, { unit: "turncoat_gunner", count: 5 }, { unit: "turncoat_heavy", count: 4 }, { unit: "frenzied", count: 4 }, { unit: "hierophant", count: 1 }],
+  brawl:     [{ unit: "brawler", count: 100 }, { unit: "boss", count: 20 }, { unit: "rokkit", count: 4 }, { unit: "big_shoota", count: 4 }, { unit: "burna", count: 2 }, { unit: "mek", count: 2 }],
 };
-const FULL = 25, WEAK = 12;
+const FULL = 25 * SCALE, WEAK = 12 * SCALE;
 const FACTIONS = ["hegemony", "apostates", "brawl", "chorus", "dormant"];
 
 // the first step toward the nearest world that passes `want`, by the moves the faction has (lanes and gates)
@@ -37,7 +39,12 @@ function decide(S, p, R) {
   if (wb.ritual) return null;
   // home is a city it holds on its capital world, or while the capital is lost, any city it holds
   const capital = S.worlds[S.factions[f].capital]?.owner === f ? S.factions[f].capital : null, home = hr.city && hr.owner === f && (!capital || wb.at === capital);
-  const recruit = home && n < FULL ? MIX[f].filter(r => r.unit !== "warden" || here.capital || S.turn - here.heldSince >= FX.WARDEN_HELD) : [];
+  let recruit = home && n < FULL ? MIX[f].filter(r => r.unit !== "warden" || here.capital || S.turn - here.heldSince >= FX.WARDEN_HELD) : [];
+  // (special and heavy weapons only as far as the line troops allow: one for every ten)
+  const special = u => UNITS[u].role === "special" || UNITS[u].role === "heavy";
+  const line = FACTIONS_[f].line.reduce((a, k) => a + (wb.army[k] || 0) + (recruit.find(r => r.unit === k) || { count: 0 }).count, 0);
+  let room = Math.floor(line / 10) - Object.entries(wb.army).reduce((a, [k, c]) => a + (special(k) ? c : 0), 0);
+  recruit = recruit.map(r => { if (!special(r.unit)) return r; const c = Math.max(0, Math.min(r.count, room)); room -= c; return { ...r, count: c }; }).filter(r => r.count > 0);
   if (f === "apostates" && here.owner === f) {
     const cap = S.factions.apostates.stock.captives || 0;
     const ripe = here.links.map(id => S.worlds[id]).find(w => w.owner === "hegemony" && !w.capital && w.loyalty < FX.LOYALTY.corruptible && RG.capitalOf(w).owner === "hegemony");
@@ -95,7 +102,7 @@ function decide(S, p, R) {
   const border = here.links.some(id => S.worlds[id].owner !== f), lvl = here.walls || 0;
   const mat = S.factions[f].stock.materiel || 0, sup = S.factions[f].stock.supply || 0;
   // a depot on a border world first (when there's materiel to spare), then walls
-  const build = here.owner === f && border && !here.depot && mat >= 90 ? "depot" : here.owner === f && border && lvl < 2 && mat >= 3 * [20, 40][lvl] ? "walls" : null;
+  const build = here.owner === f && border && !here.depot && mat >= 90 * SCALE ? "depot" : here.owner === f && border && lvl < 2 && mat >= 3 * [20, 40][lvl] * SCALE ? "walls" : null;
   // from the capital, a convoy to the emptiest depot when the stockpile has supply to spare
   let convoy = null;
   if (here.owner === f && here.capital && sup >= 40) {
@@ -118,12 +125,12 @@ function politicsFor(S, p) {
   const best = P.candidates.map(id => S.players[id]).filter(Boolean).sort((a, b) => b.warband.service - a.warband.service)[0];
   if (best && P.votes[p.id] !== best.id) out.push({ action: "vote", for: best.id });
   for (const k of P.contracts) if (k.offer === p.id && !k.accepted) out.push({ action: "accept", id: k.id });
-  if (P.warmaster === p.id && P.contracts.length < 2 && (S.factions[f].stock.materiel || 0) >= 60) {
+  if (P.warmaster === p.id && P.contracts.length < 2 && (S.factions[f].stock.materiel || 0) >= 60 * SCALE) {
     const mine = Object.values(S.worlds).filter(w => w.owner === f);
     const near = [...new Set(mine.flatMap(w => w.links))].map(id => S.worlds[id]).filter(w => w.owner !== f && w.owner !== "dormant" && !P.contracts.some(k => k.world === w.id));
     const them = w => strength(Object.values(S.players).filter(q => q.faction !== f && q.warband.at === w.id).reduce((a, q) => ({ ...a, ...q.warband.army }), RG.garrisonOf(w)));
     const t = near.sort((a, b) => them(a) - them(b))[0];
-    if (t) out.push({ action: "post", contract: { kind: "take", world: t.id, deadline: 10, reward: { manpower: 10, materiel: 20 } } });
+    if (t) out.push({ action: "post", contract: { kind: "take", world: t.id, deadline: 10, reward: { manpower: 10 * SCALE, materiel: 20 * SCALE } } });
   }
   return out.map(a => ({ type: "politics", player: p.id, ...a }));
 }

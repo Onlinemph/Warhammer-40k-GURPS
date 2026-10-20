@@ -2,6 +2,7 @@
 // paid into treasuries, priority, and the log still rebuilding the war.
 const test = require("node:test");
 const assert = require("node:assert/strict");
+const { SCALE } = require("../world/units.js");
 const { apply, rebuild, politics } = require("../world/rules.js");
 const { at, hold, quiet } = require("./helpers.js");
 
@@ -112,15 +113,15 @@ test("priority draws a double share of the stockpile, and a treasury pays where 
   S.players.a.warband.army = {};
   pol(S, "a", "priority", { warbands: ["b"] });
   S.factions.hegemony.stock = { manpower: 0, materiel: 0, supply: 100 };
-  for (const id of ["b", "c"]) S = apply(S, { type: "order", player: id, move: null, recruit: [{ unit: "levy", count: 50 }] });
+  for (const id of ["b", "c"]) S = apply(S, { type: "order", player: id, move: null, recruit: [{ unit: "levy", count: 50 * SCALE }] });
   const n0 = { b: S.players.b.warband.army.levy, c: S.players.c.warband.army.levy };
   S = tick(S, 40);
   const got = { b: S.players.b.warband.army.levy - n0.b, c: S.players.c.warband.army.levy - n0.c };
   assert.ok(got.b >= 2 * got.c - 1 && got.b > 0, `double share: ${got.b} and ${got.c}`);
   // a treasury tops up
   S.factions.hegemony.stock = { manpower: 0, materiel: 0, supply: 100 };
-  S.players.c.warband.treasury = { manpower: 30, materiel: 30, supply: 0 };
-  S = apply(S, { type: "order", player: "c", move: null, recruit: [{ unit: "levy", count: 50 }] });
+  S.players.c.warband.treasury = { manpower: 30 * SCALE, materiel: 30 * SCALE, supply: 0 };
+  S = apply(S, { type: "order", player: "c", move: null, recruit: [{ unit: "levy", count: 50 * SCALE }] });
   const c0 = S.players.c.warband.army.levy;
   S = tick(S, 41);
   assert.ok(S.players.c.warband.army.levy - c0 >= 50 || S.players.c.warband.treasury.materiel < 30, "spent its treasury");

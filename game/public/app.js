@@ -217,7 +217,11 @@ function draw() {
     ${V.you.rituals && here.owner === V.you.faction && !rit ? `<label>Ritual <select id="o-rit"><option value="">none</option>${Object.entries(V.you.rituals).map(([k, r]) => k === "corrupt"
       ? here.links.map(l => W[l]).filter(t => t.owner === "hegemony" && !t.capital).map(t => `<option value="corrupt:${t.id}">${r.name} against ${esc(t.name)}${t.loyalty != null ? " (loyalty " + t.loyalty + ")" : ""}, ${r.captives} captives</option>`).join("")
       : `<option value="${k}">${r.name}, ${r.captives} captives</option>`).join("")}</select></label>` : ""}
-    ${myR.city && myR.owner === V.you.faction ? Object.entries(V.units).map(([k, u]) => `<label>${esc(u.name)} <small class="muted">(${Object.entries(u.cost).map(([r, c]) => c + " " + r).join(", ")} each)</small> <input type="number" min="0" max="50" value="0" data-unit="${k}"></label>`).join("") : "<p class='muted'>Recruits only come from cities you hold.</p>"}
+    ${myR.city && myR.owner === V.you.faction ? [["line", "Line troops"], ["troops", "Troops"], ["special", "Special weapons"], ["heavy", "Heavy weapons"], ["specialist", "Specialists"], ["elite", "Elites"]].map(([role, title]) => {
+      const list = Object.entries(V.units).filter(([, u]) => u.role === role);
+      if (!list.length) return "";
+      return `<fieldset class="recruit"><legend>${title}${role === "special" ? ` <small class="muted">(special and heavy: ${V.specials.have} of ${V.specials.cap}, one for every ten line troops)</small>` : ""}</legend>${list.map(([k, u]) => `<label>${esc(u.name)} <small class="muted">(${Object.entries(u.cost).map(([r, c]) => c + " " + r).join(", ")} each)</small> <input type="number" min="0" value="0" data-unit="${k}"></label>`).join("")}</fieldset>`;
+    }).join("") : "<p class='muted'>Recruits only come from cities you hold.</p>"}
     <button id="o-go">Send orders</button><p class="err" id="o-err"></p>`;
   $("#o-move").onchange = () => setLanding($("#o-move").value, null);
   $("#o-go").onclick = async () => {

@@ -10,7 +10,7 @@
 //           earthworks: bool, prMult: 1, orMult: 1 }
 //   -> { winner: 0 | 1 | null, kind, rounds, lost: [{unit: n}, {unit: n}], fled, surrendered, recon, night, events, ... }
 const { rng } = require("./galaxy.js");
-const { UNITS, templateOf } = require("./units.js");
+const { UNITS, templateOf, ratingKey } = require("./units.js");
 const RT = require("./ratings.json").templates;
 
 // ---- the tables, as the article gives them, and the expanded results built from them cell by cell
@@ -59,7 +59,7 @@ const GROUND = {
   town: { built: 0.3, woods: 0.08, town: true }, city: { built: 0.6, town: true }, hive: { built: 0.85, town: true }, fortress: { built: 0.5, town: true, wall: true },
 };
 function buildMap(ground, seed, elements) {
-  const R = rng((seed ^ 0x3c6ef372) >>> 0), W = Math.max(18, Math.min(40, 16 + Math.round(elements * 0.5))), H = Math.round(W * 0.6);
+  const R = rng((seed ^ 0x3c6ef372) >>> 0), W = Math.max(18, Math.min(120, 16 + Math.round(elements * 0.5))), H = Math.round(W * 0.6);
   const g = GROUND[ground] || GROUND.plains, t = new Array(W * H).fill("clear");
   const at = (x, y) => y * W + x, inside = (x, y) => x >= 0 && y >= 0 && x < W && y < H;
   // patches grown by walkers; towns grow from the middle outward, the rest anywhere
@@ -113,14 +113,16 @@ function fight(opt) {
   const R = rng(opt.seed >>> 0), d6 = () => 1 + Math.floor(R() * 6), roll2 = () => d6() + d6(), roll3 = () => d6() + d6() + d6();
   const ground = GROUND[opt.ground] ? opt.ground : "plains", log = opt.log ? [] : null, events = [];
   const say = (text, kind) => { events.push({ round, text, kind }); if (log) log.push({ t: "say", round, text }); };
-  // elements: each unit type in a side split into elements of up to ten (evenly)
+  // elements: each unit type in a side split into elements of up to ten soldiers (evenly), however big the battle
+  // (user direction: no cap on elements a side, past the article's 4 to 40)
   const els = [];
   opt.sides.forEach((sd, side) => {
+    const size = 10;
     for (const [unit, count] of Object.entries(sd.army)) {
       if (!(count > 0)) continue;
-      const template = UNITS[unit] || unit === "militia" ? templateOf(unit) : unit, rt = RT[template];   // (a template by name too: tools/resolver/score-tmc.js)
+      const template = UNITS[unit] || unit === "militia" ? ratingKey(unit) : unit, rt = RT[template];   // (a template by name too: tools/resolver/score-tmc.js)
       if (!rt) throw new Error(`no ratings for ${template}`);
-      const k = Math.ceil(count / 10), extra = (sd.extra || {})[unit] || 0, named = (sd.named || {})[unit] || 0;
+      const k = Math.ceil(count / size), extra = (sd.extra || {})[unit] || 0, named = (sd.named || {})[unit] || 0;
       for (let i = 0; i < k; i++) {
         const n = Math.floor(count / k) + (i < count % k ? 1 : 0);
         els.push({ id: els.length, side, unit, template, rt, n0: n, n, worth: 1 + (i === 0 ? extra / n : 0), named: i < named ? 1 : 0,
@@ -213,7 +215,13 @@ function fight(opt) {
     if (holder === e.side) m *= sideOf(e.side).prMult || 1;
     return e.n * e.worth * e.rt.pr * m;
   };
-  const canSee = (a, b) => between(a, b).every(([x, y]) => !["woods", "built", "high"].includes(terr(x, y)));
+  const seeCache = new Map();
+  const canSee = (a, b) => {
+    const k1 = a.y * W + a.x, k2 = b.y * W + b.x, key = k1 < k2 ? k1 * 4096 + k2 : k2 * 4096 + k1;
+    let v = seeCache.get(key);
+    if (v === undefined) { v = between(a, b).every(([x, y]) => !["woods", "built", "high"].includes(terr(x, y))); seeCache.set(key, v); }
+    return v;
+  };
   const demoralized = [false, false];
   const mayAttack = e => e.state === "ok" && !e.pinned && !e.broken && !(confused[e.side] && round === 1) && (!demoralized[e.side] || e.rt.elite || e.rt.fanatic);
 
@@ -295,19 +303,25 @@ function fight(opt) {
 
   // ---- movement
   const meleeMinded = e => !e.rt.classes.fire || e.rt.orClose >= e.rt.orFire;
+  let foeAt = null, foeNext = null, crowd = null;
+  const mapFoes = s => {
+    foeAt = new Uint8Array(W * H); foeNext = new Uint8Array(W * H); crowd = new Uint8Array(W * H);
+    for (const f of mine(1 - s)) { foeAt[f.y * W + f.x] = 1; for (const d of DIRS) { const [x, y] = step(f.x, f.y, d); if (x >= 0 && y >= 0 && x < W && y < H) foeNext[y * W + x] = 1; } }
+    for (const e of live()) crowd[e.y * W + e.x]++;
+  };
   function reach(e) {
     // cheapest paths from e with its movement points; it stops on moving next to an enemy and can't enter one's hex
-    const mp = MP[e.rt.mobility] || 3, cost = COST[e.rt.mobility] || COST.foot, foes = mine(1 - e.side);
+    const mp = MP[e.rt.mobility] || 3, cost = COST[e.rt.mobility] || COST.foot;
     const best = new Map([[e.y * W + e.x, 0]]), q = [[e.x, e.y, 0]];
     while (q.length) {
       q.sort((a, b) => a[2] - b[2]);
       const [x, y, c] = q.shift();
-      if (c > 0 && foes.some(f => dist(f, { x, y }) === 1)) continue;   // stopped next to the enemy
+      if (c > 0 && foeNext[y * W + x]) continue;   // stopped next to the enemy
       for (const d of DIRS) {
         const [nx, ny] = step(x, y, d);
         if (nx < 0 || ny < 0 || nx >= W || ny >= H) continue;
         const k = terr(nx, ny); if (k === "water") continue;
-        if (foes.some(f => f.x === nx && f.y === ny)) continue;
+        if (foeAt[ny * W + nx]) continue;
         const nc = c + (cost[k] || 1);
         if (nc > mp) continue;
         const key = ny * W + nx;
@@ -315,33 +329,37 @@ function fight(opt) {
         best.set(key, nc); q.push([nx, ny, nc]);
       }
     }
-    return [...best.keys()].map(k => ({ x: k % W, y: Math.floor(k / W) })).filter(h => (h.x === e.x && h.y === e.y) || occ(h.x, h.y).length < 4);
+    return [...best.keys()].map(k => ({ x: k % W, y: Math.floor(k / W) })).filter(h => (h.x === e.x && h.y === e.y) || crowd[h.y * W + h.x] < 4);
   }
   function movePhase(s) {
-    const list = mine(s).sort((a, b) => a.id - b.id);
+    const list = mine(s).sort((a, b) => a.id - b.id), foes = mine(1 - s);
+    if (!foes.length) return;
+    mapFoes(s);
+    // the nearest foe from each hex, once a turn
+    const near = new Float32Array(W * H).fill(99);
+    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) for (const f of foes) { const d = dist(f, { x, y }); if (d < near[y * W + x]) near[y * W + x] = d; }
+    const moveTo = (e, h) => { crowd[e.y * W + e.x]--; e.x = h.x; e.y = h.y; crowd[e.y * W + e.x]++; };
     for (const e of list) {
       if (e.state !== "ok" || e.pinned || e.engaged || (confused[s] && round === 1)) continue;
-      const foes = mine(1 - s);
-      if (!foes.length) return;
       const hexes = reach(e);
       // the broken and the demoralized fall back to their edge, and off it
       if (e.broken || (demoralized[s] && !e.rt.elite && !e.rt.fanatic)) {
         const h = hexes.sort((a, b) => edgeDist(s, a.x) - edgeDist(s, b.x) || a.y - b.y)[0];
-        e.x = h.x; e.y = h.y;
+        moveTo(e, h);
         if (edgeDist(s, e.x) === 0) { e.state = "fled"; if (log) log.push({ t: "fled", round, id: e.id }); }
         else if (log) log.push({ t: "move", round, id: e.id, x: e.x, y: e.y });
         continue;
       }
       // a holding garrison stays in its buildings
       if (holder === s && ["built", "woods"].includes(terr(e.x, e.y)) && !e.rt.impetuous) continue;
-      const nearest = h => Math.min(...foes.map(f => dist(f, h)));
+      const nearest = h => near[h.y * W + h.x];
       let pick;
       if (meleeMinded(e)) pick = hexes.sort((a, b) => nearest(a) - nearest(b) || cover(b.x, b.y) - cover(a.x, a.y) || a.y - b.y || a.x - b.x)[0];
       else {
-        const score = h => { const can = foes.some(f => { const d = dist(f, h); return d >= 2 && d <= e.rt.range && canSee(h, f); }); const n = nearest(h); return (can ? 10 : -n * 0.3) + cover(h.x, h.y) * 1.2 - (n <= 1 ? 6 : 0) - (works.has(h.y * W + h.x) ? -2 : 0); };
+        const score = h => { const n0 = near[h.y * W + h.x], can = n0 <= e.rt.range && foes.some(f => { const d = dist(f, h); return d >= 2 && d <= e.rt.range && canSee(h, f); }); const n = nearest(h); return (can ? 10 : -n * 0.3) + cover(h.x, h.y) * 1.2 - (n <= 1 ? 6 : 0) - (works.has(h.y * W + h.x) ? -2 : 0); };
         pick = hexes.map(h => ({ h, s: score(h) })).sort((a, b) => b.s - a.s || a.h.y - b.h.y || a.h.x - b.h.x)[0].h;
       }
-      if (pick && (pick.x !== e.x || pick.y !== e.y)) { e.x = pick.x; e.y = pick.y; if (log) log.push({ t: "move", round, id: e.id, x: e.x, y: e.y }); }
+      if (pick && (pick.x !== e.x || pick.y !== e.y)) { moveTo(e, pick); if (log) log.push({ t: "move", round, id: e.id, x: e.x, y: e.y }); }
     }
   }
 
@@ -442,7 +460,8 @@ function fight(opt) {
   // 4 suppressed, 8 engaged, 16 fled, 32 gone, 64 reduced)
   const snap = s => ({ t: "snap", round, side: s, els: els.filter(e => e.state !== "merged").map(e => [e.id, e.x, e.y, e.n, (e.state === "fled" ? 16 : e.state === "gone" ? 32 : (e.pinned ? 1 : 0) | (e.broken ? 2 : 0) | (e.suppressed ? 4 : 0) | (e.engaged ? 8 : 0)) | (e.reduced ? 64 : 0)]) });
   if (log) log.push(snap(null));
-  const MAX = opt.maxRounds || 16;
+  // (16 rounds, or more on a bigger map: half its width, the time it takes armies to cross it)
+  const MAX = opt.maxRounds || Math.max(16, Math.ceil(W / 2));
   let winner = null, withdrew = null;
   const since = [null, null];
   for (round = 1; round <= MAX; round++) {
@@ -477,7 +496,20 @@ function fight(opt) {
 }
 
 // ---- odds: the share of wins over a few quick battles (for advice, the AI's choices, turning back)
+// (the same inputs always give the same answer, so answers are kept: the AI and the view ask the same question often)
+const MEMO = new Map();
 function predict(opt, runs = 8) {
+  // (a battle of thousands takes fewer quick runs: no fewer than two)
+  const n = opt.sides.reduce((a, sd) => a + Object.values(sd.army).reduce((x, y) => x + (y > 0 ? y : 0), 0), 0);
+  runs = Math.max(2, Math.min(runs, Math.round(runs * 1000 / Math.max(1000, n))));
+  const key = runs + JSON.stringify(opt);
+  if (MEMO.has(key)) return MEMO.get(key);
+  const out = predictRuns(opt, runs);
+  if (MEMO.size > 20000) MEMO.clear();
+  MEMO.set(key, out);
+  return out;
+}
+function predictRuns(opt, runs) {
   let w = [0, 0], d = 0, lA = 0, lB = 0, rounds = 0;
   for (let i = 0; i < runs; i++) {
     const r = fight({ ...opt, seed: ((opt.seed || 1) * 2654435761 + i * 40503) >>> 0, log: false });

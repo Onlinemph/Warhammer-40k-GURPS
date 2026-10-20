@@ -1,24 +1,24 @@
 // Each faction's own rules (docs/setting.md, Faction mechanics): its currency and what it does at the tick. Called
 // from rules.js, which passes its helpers in (`H`) so the two files don't require each other. Like everything in the
 // war it is worked out from the log: the tick's dice (`R`) are the only randomness.
-const { UNITS, FACTIONS } = require("./units.js");
+const { UNITS, FACTIONS, SCALE } = require("./units.js");
 const RG = require("./regions.js");
 
 // loyalty: +5 a turn in supply; -5 beside an Apostate world, -10 with an Apostate warband on it or next door
 const LOYALTY = { start: 60, capital: 100, retaken: 30, gain: 5, nearWorld: 5, nearWarband: 10, defect: 25, corruptible: 50 };
-const EDICT = { every: 10, lasts: 10, hold: 5, loyalty: 20, materiel: 60, fail: 10 };
+const EDICT = { every: 10, lasts: 10, hold: 5, loyalty: 20, materiel: 60 * SCALE, fail: 10 };
 const WARDEN_HELD = 10;                        // turns a world must be held before it can grow Wardens
 const CAPTIVES = 0.2;                          // share of the enemy's fallen the Apostates take alive
 const RITUALS = {
-  summon:  { name: "Summoning",  captives: 15, turns: 3 },
-  corrupt: { name: "Corruption", captives: 10, turns: 3 },
+  summon:  { name: "Summoning",  captives: 15 * SCALE, turns: 3 },
+  corrupt: { name: "Corruption", captives: 10 * SCALE, turns: 3 },
 };
 // a Hegemony warband out of supply this long loses Levies to the Apostates; and of the Levies that march onto an
 // Apostate world, this share turn their coats before the battle
 const TURNED = { after: 3, share: 0.1, onWorld: 0.5 };
 const FAME = { odds: 2, raise: 0.1, peace: 4, infighting: 0.05, grow: 0.1 };
 const CORPSE = 1;                          // biomass the Chorus gets for each soldier dead on a field it holds
-const INFEST = { dead: 60, delay: 3, guard: 20, brood: { leaper: 10, spitter: 5 } };
+const INFEST = { dead: 60 * SCALE, delay: 3, guard: 20 * SCALE, brood: { leaper: 10 * SCALE, spitter: 5 * SCALE } };
 
 const note = (S, text) => S.log.push({ turn: S.turn, text });
 // T, passed to afterBattle and upkeep, is the tick's scratch (where battles were, how many died), kept off the state

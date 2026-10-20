@@ -1,6 +1,7 @@
 // The standing orders: stances (advance, fortify, raid), turning back from bad odds, and walls.
 const test = require("node:test");
 const assert = require("node:assert/strict");
+const { SCALE } = require("../world/units.js");
 const { apply, rebuild, order, holdBonus } = require("../world/rules.js");
 const { TYPES } = require("../world/galaxy.js");
 const { hold, cap: capOf } = require("./helpers.js");
@@ -29,7 +30,7 @@ test("fortify: a fortified warband can't move, and fights at x1.5 where it holds
 test("walls: 20 materiel for the first level, 40 for the second, and no third", () => {
   let S = start();
   const id = S.players.h.warband.at;
-  S.factions.hegemony.stock.materiel = 100;
+  S.factions.hegemony.stock.materiel = 100 * SCALE;
   S = apply(S, { type: "order", player: "h", move: null, recruit: [], build: "walls" });
   const m0 = S.factions.hegemony.stock.materiel;
   S = tick(S, 2);

@@ -7,7 +7,7 @@
 // that region's ground, garrisons are kept region by region, and a world changes hands when one faction holds its
 // capital and more than half its cities. A position is { at: world, region }.
 const { generate, TYPES, rng } = require("./galaxy.js");
-const { UNITS, FACTIONS, MILITIA, templateOf, nameOf } = require("./units.js");
+const { UNITS, FACTIONS, MILITIA, templateOf, nameOf, SCALE } = require("./units.js");
 const { predict } = require("../../tools/resolver/resolver.js");
 const FX = require("./factions.js");
 const VET = require("./veterans.js");
@@ -19,18 +19,26 @@ const TER = require("./terrain.js");
 const TMC = require("./tmc.js");
 const RG = require("./regions.js");
 
-const START = {
+// (each count SCALE times what's written here: units.js)
+const START0 = {
   hegemony:  { stock: { manpower: 40, materiel: 60 }, warband: { levy: 15, storm: 3 }, garrison: { levy: 20 } },
   apostates: { stock: { manpower: 40, materiel: 40 }, warband: { turncoat: 15, zealot: 3, vessel: 1 }, garrison: { faithless: 20, turncoat: 12 } },
   brawl:     { stock: { manpower: 40, materiel: 40 }, warband: { brawler: 20, boss: 3 }, garrison: { brawler: 20 } },
   chorus:    { stock: { biomass: 40 }, garrison: { leaper: 20, spitter: 10, conductor: 1 } },
   // a tomb's sleepers: the whole of the Dormant there will ever be
-  dormant:   { stock: {}, garrison: { husk: 6, sentinel: 2, watcher: 1, flenser: 2, keeper: 1 } },
+  dormant:   { stock: {}, garrison: { husk: 5, heavy_husk: 1, sentinel: 2, watcher: 1, flenser: 2, keeper: 1, reaper: 1 } },
 };
-const GARRISON_CAP = 30, ATTRITION = 0.1;
+const sc = o => Object.fromEntries(Object.entries(o).map(([k, n]) => [k, typeof n === "number" ? n * SCALE : sc(n)]));
+const START = Object.fromEntries(Object.entries(START0).map(([f, x]) => [f, { stock: sc(x.stock), warband: x.warband ? sc(x.warband) : undefined, garrison: sc(x.garrison) }]));
+// a Chorus brood keeps its one Conductor whatever its size
+START.chorus.garrison.conductor = 1;
+// and each tomb has one Overlord and a few Crypteks
+Object.assign(START.dormant.garrison, { overlord: 1, cryptek: 3 });
+const GARRISON_CAP = 30 * SCALE, ATTRITION = 0.1;
 // the Dormant: a tomb wakes when it is fought over, or by itself between these turns; awake, the fallen on a field
 // it holds are repaired at this rate
-const WAKE = [8, 18], REPAIR = 0.5, RAID_REST = 4;
+// (a tomb marches when it has about half a full tomb's strength, in Levies' worth: tmc.js prices)
+const WAKE = [8, 18], REPAIR = 0.5, RAID_REST = 4, DORMANT_RAID = 100;
 
 // ---- armies: { unitId: count }; the militia's unit id is "militia"
 const total = army => Object.values(army).reduce((a, n) => a + n, 0);
@@ -113,9 +121,12 @@ function order(S, { player, move, land, region, recruit, ritual, stance, careful
   for (const r of recruit || []) {
     const u = UNITS[r.unit];
     if (!u || u.faction !== p.faction) return `${p.name}'s faction can't raise ${r.unit}`;
-    if (!(r.count > 0 && r.count <= 50 && Number.isInteger(r.count))) return "recruit 1 to 50 at a time";
+    if (!(r.count > 0 && r.count <= 50 * SCALE && Number.isInteger(r.count))) return `recruit 1 to ${50 * SCALE} at a time`;
   }
   if ((recruit || []).length && !(hr.city && hr.owner === p.faction)) return "recruits only come from cities you hold";
+  // special and heavy weapons: one for every ten of the faction's line troops in the warband (counting this order's)
+  const after = addArmy({ ...wb.army }, Object.fromEntries((recruit || []).map(r => [r.unit, r.count])));
+  if ((recruit || []).some(r => isSpecial(r.unit)) && specials(after) > specialCap(p.faction, after)) return `special and heavy weapons: one for every ten line troops (this would be ${specials(after)} for ${specialCap(p.faction, after) * 10} line troops)`;
   const rit = ritual && typeof ritual === "object" ? { kind: String(ritual.kind), target: ritual.target ? String(ritual.target) : null } : null;
   const err = FX.checkOrder(S, p, { move: move || region, recruit, ritual: rit });
   if (err) return err;
@@ -124,9 +135,12 @@ function order(S, { player, move, land, region, recruit, ritual, stance, careful
   return null;
 }
 const STANCES = ["advance", "fortify", "raid"];
+const isSpecial = id => UNITS[id] && (UNITS[id].role === "special" || UNITS[id].role === "heavy");
+const specials = army => Object.entries(army).reduce((a, [k, n]) => a + (isSpecial(k) ? n : 0), 0);
+const specialCap = (f, army) => Math.floor((FACTIONS[f].line || []).reduce((a, k) => a + (army[k] || 0), 0) / 10);
 // fortify: x1.5 where you hold; walls: +25% a level in the world's cities, two levels, 20 then 40 materiel; turn back
 // under 25%; a raid takes six turns of the city's share of its world's yield
-const FORTIFY = 1.5, WALLS = { max: 2, each: 0.25, cost: [20, 40] }, TURN_BACK = 25, RAID_LOOT = 6;
+const FORTIFY = 1.5, WALLS = { max: 2, each: 0.25, cost: [20 * SCALE, 40 * SCALE] }, TURN_BACK = 25, RAID_LOOT = 6;
 // how much a side's holding of a region counts for in a battle there, past what the resolver already knows of
 // fighting from a city's buildings (the ground and the holding are in its rates, tools/resolver): its world's own
 // defence and its walls in a city, and a warband of the holder's fortified in it
@@ -151,7 +165,7 @@ function oddsAt(S, p, id, rid, fog) {
   const close = r.owner === p.faction || Object.values(S.players).some(q => q.faction === p.faction && q.warband.at === id);
   const me = { faction: p.faction, army: p.warband.army, parts: [{ kind: "warband", player: p.id }] };
   const them = { ...foe, army: fog && !close ? BT.rough(foe.army) : foe.army };
-  const q = TMC.predict({ ground: r.terrain, seed: 1, sides: [tmcSide(S, w, r, me), tmcSide(S, w, r, them)], hold: holds(r, foe) ? 1 : undefined, attacker: 0 }, 8);
+  const q = TMC.predict({ ground: r.terrain, seed: 1, sides: [tmcSide(S, w, r, me), tmcSide(S, w, r, them)], hold: holds(r, foe) ? 1 : undefined, attacker: 0 }, 6);
   return Math.round(100 * q.pWinA);
 }
 
@@ -221,7 +235,8 @@ function tick(S, seed) {
     for (const r of o.recruit) {
       const u = UNITS[r.unit];
       const why = FX.checkOrder(S, p, { recruit: [r] }) || (!(hr.city && hr.owner === p.faction) ? "not in a city you hold" : !p.warband.supplied ? "out of supply" : null);
-      const can = why ? 0 : Math.min(r.count, ...Object.entries(u.cost).map(([k, c]) => Math.floor((Math.min(st[k] || 0, mine[k] || 0) + (tr[k] || 0)) / c + 1e-9)));
+      const room = isSpecial(r.unit) ? Math.max(0, specialCap(p.faction, p.warband.army) - specials(p.warband.army)) : Infinity;
+      const can = why ? 0 : Math.min(r.count, room, ...Object.entries(u.cost).map(([k, c]) => Math.floor((Math.min(st[k] || 0, mine[k] || 0) + (tr[k] || 0)) / c + 1e-9)));
       if (can > 0) {
         for (const [k, c] of Object.entries(u.cost)) { const all = c * can, fromShare = Math.min(all, Math.max(0, Math.min(st[k] || 0, mine[k] || 0))); st[k] -= fromShare; mine[k] -= fromShare; POL.fromTreasury(p, k, all - fromShare); }
         p.warband.army[r.unit] = (p.warband.army[r.unit] || 0) + can;
@@ -281,6 +296,9 @@ function tick(S, seed) {
         // a warband whose leader commands its battles in person: held open until the next tick, nothing else here meanwhile
         if (commanders(S, sides[0], sides[1]).some(Boolean)) { hold(S, w, r, sides[0], sides[1], R); break; }
         fight(S, w, r, sides[0], sides[1], R, T);
+        // a stalemate is the turn's fighting there: both dig in, and fight again next turn
+        const last = S.reports[S.reports.length - 1];
+        if (last && last.world === w.id && last.region === r.id && last.turn === S.turn && (last.outcome === "stalemate" || last.outcome === "standoff")) break;
       }
     }
   }
@@ -338,7 +356,7 @@ function tick(S, seed) {
     const basic = w.owner && FACTIONS[w.owner].basic;
     if (!basic || !supplied(S, w.owner).has(w.id)) continue;
     const c = RG.cities(w).filter(r => r.owner === w.owner && total(r.garrison) < GARRISON_CAP).sort((a, b) => total(a.garrison) - total(b.garrison) || +a.id.slice(1) - +b.id.slice(1))[0];
-    if (c) c.garrison[basic] = (c.garrison[basic] || 0) + 2;
+    if (c) c.garrison[basic] = (c.garrison[basic] || 0) + 2 * SCALE;
   }
   // 8. each faction's own rules: loyalty and edicts, rituals, fame, the dead rising
   FX.upkeep(S, H, R, T);
@@ -353,7 +371,7 @@ function tick(S, seed) {
 }
 // a city under attack: its holder's garrisons in the other regions of the world march half their strength to its
 // defence (those of at least MUSTER.min, none that are fighting a battle of their own or have foes in their region)
-const MUSTER = { share: 0.5, min: 6 };
+const MUSTER = { share: 0.5, min: 6 * SCALE };
 function muster(S, w, r, R) {
   const f = r.owner || "militia";
   if (!r.city || r.heldIn || !factionsAt(S, w, r).some(s => s.faction !== f)) return;
@@ -549,25 +567,33 @@ function chorusTurn(S, R) {
   // the broods: every city it holds
   const mine = Object.values(S.worlds).flatMap(w => w.regions.filter(r => r.city && r.owner === "chorus"));
   // a siege-form now and then, once the biomass has piled up, at the biggest brood
-  if (st.biomass >= 80 && mine.length && R() < 0.25) {
+  if (st.biomass >= 80 * SCALE && mine.length && R() < 0.25) {
     const r = mine.slice().sort((a, b) => total(b.garrison) - total(a.garrison))[0];
     r.garrison.bulwark = (r.garrison.bulwark || 0) + 1; st.biomass -= UNITS.bulwark.cost.biomass;
   }
+  if (st.biomass >= 200 * SCALE && mine.length && R() < 0.1) {
+    const r = mine.slice().sort((a, b) => total(b.garrison) - total(a.garrison))[0];
+    r.garrison.overmind = (r.garrison.overmind || 0) + 1; st.biomass -= UNITS.overmind.cost.biomass;
+  }
   // first a Conductor for every brood without one, the biggest first, so they stay under synapse
   for (const r of mine.slice().sort((a, b) => total(b.garrison) - total(a.garrison))) if (!r.garrison.conductor && st.biomass >= UNITS.conductor.cost.biomass) { r.garrison.conductor = 1; st.biomass -= UNITS.conductor.cost.biomass; }
-  const each = Math.min(Math.floor(st.biomass / (mine.length || 1)), 24);
+  const each = Math.min(Math.floor(st.biomass / (mine.length || 1)), 24 * SCALE);
   for (const r of mine) {
     let want = each;
     if (want <= 0) continue;
     st.biomass -= want;
     const add = (k, n = 1) => { r.garrison[k] = (r.garrison[k] || 0) + n; want -= UNITS[k].cost.biomass * n; };
-    // now and then a hunter-form
-    if (want >= 12 && R() < 0.2) add("hollow");
-    else if (want >= 20 && R() < 0.3) add("stalker");
+    // its other forms, each by its own chance, a few at a time (a tenth of what it breeds this turn at most):
+    // Stalkers and Hollows hunting, Burrowers under the ground, Bonewarriors to lead, a Mindspike now and then
+    for (const [k, p] of [["stalker", 0.3], ["hollow", 0.2], ["burrower", 0.2], ["bonewarrior", 0.15], ["mindspike", 0.1]]) {
+      if (R() >= p) continue;
+      const n = Math.floor(R() * Math.max(1, Math.floor(each / 10 / UNITS[k].cost.biomass)) + 1);
+      if (want >= n * UNITS[k].cost.biomass) add(k, n);
+    }
     if (want > 0) { const l = Math.ceil(want / 2); add("leaper", l); if (want > 0) add("spitter", want); }
   }
   for (const w of Object.values(S.worlds)) for (const r of w.regions) {
-    if (r.owner !== "chorus" || total(r.garrison) < 25 || r.heldIn) continue;
+    if (r.owner !== "chorus" || total(r.garrison) < 25 * SCALE || r.heldIn) continue;
     const send = cut(r.garrison, 0.4, R), go = Object.fromEntries(Object.entries(r.garrison).map(([k, n]) => [k, n - (send[k] || 0)]));
     // a swarm goes out with a Conductor if the brood can spare one (it breeds another), so its broods stay linked
     if (!go.conductor && (send.conductor || 0) >= 1) { send.conductor--; go.conductor = 1; }
@@ -594,7 +620,7 @@ function dormantTurn(S, R) {
     if (w.owner !== "dormant") continue;
     if (w.tomb && !w.awake) { if (S.turn >= w.wakeAt) { w.awake = true; note(S, `Lights kindle deep inside ${w.name}: the tomb is waking`); } continue; }
     const r = RG.capitalOf(w);
-    if (r.owner !== "dormant" || strength(r.garrison) < 60 || r.heldIn || S.turn - (w.raidT ?? -99) < RAID_REST) continue;   // a tomb rests between raids
+    if (r.owner !== "dormant" || strength(r.garrison) < DORMANT_RAID || r.heldIn || S.turn - (w.raidT ?? -99) < RAID_REST) continue;   // a tomb rests between raids
     // through the gates, the worlds next to every other gate the Dormant hold
     const gates = w.gate ? Object.values(S.worlds).filter(g => g.gate && g.owner === "dormant" && g !== w).flatMap(g => g.links) : [];
     const stay = cut(r.garrison, 0.5, R), go = Object.fromEntries(Object.entries(r.garrison).map(([k, n]) => [k, n - (stay[k] || 0)]));
@@ -651,7 +677,8 @@ function view(S, player) {
     held: (S.held || []).filter(h => h.commanders.includes(p.id)).map(h => ({ id: h.id, world: h.worldName, region: h.regionName, turn: h.turn, done: !!h.result })),
     highlights: HL.view(S, p, knows(S, p)),
     factions: { ...Object.fromEntries(Object.entries(S.factions).map(([k, v]) => [k, { name: v.name, colour: v.colour }])), militia: { name: MILITIA.name, colour: "#8d887e" } },
-    units: Object.fromEntries(Object.entries(UNITS).filter(([, u]) => u.faction === f).map(([k, u]) => [k, { name: u.name, cost: u.cost }])),
+    units: Object.fromEntries(Object.entries(UNITS).filter(([, u]) => u.faction === f).map(([k, u]) => [k, { name: u.name, cost: u.cost, role: u.role || (FACTIONS[f].line || []).includes(k) ? u.role || "line" : "troops" }])),
+    specials: { have: specials(wb.army), cap: specialCap(f, wb.army) },
     terrains: Object.fromEntries(Object.entries(TER.TERRAIN).map(([k, t]) => [k, t.name])),
     worlds: S.order.map(id => {
       const w = S.worlds[id], seen = eyes.has(id);
@@ -666,7 +693,9 @@ function view(S, player) {
         regions: w.regions.map(r => ({ id: r.id, name: r.name, terrain: r.terrain, city: r.city, capital: r.capital, x: r.x, y: r.y, links: r.links, owner: r.owner, battle: !!r.heldIn || undefined,
           forces: seen ? forcesIn(w, factionsAt(S, w, r).map(s => ({ ...s, region: r }))) : null })) };
     }),
-    reports: S.reports.filter(r => r.sides.some(s => s.faction === f) || eyes.has(r.world)).slice(-30).reverse(),
+    // the last 30 battles the faction knows of, and always its own warbands' last 10
+    reports: (() => { const k = S.reports.filter(r => r.sides.some(s => s.faction === f) || eyes.has(r.world)), last = k.slice(-30), own = k.filter(r => r.sides.some(s => s.players.length && s.faction === f)).slice(-10);
+      return [...new Set([...last, ...own])].sort((a, b) => S.reports.indexOf(b) - S.reports.indexOf(a)); })(),
     news: S.log.slice(-30).reverse(),
   };
 }

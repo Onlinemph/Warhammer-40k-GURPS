@@ -1,6 +1,7 @@
 // The war's rules: a game is its event log, and the log rebuilds the same war every time.
 const test = require("node:test");
 const assert = require("node:assert/strict");
+const { SCALE } = require("../world/units.js");
 const { apply, rebuild, view, order, total, supplied } = require("../world/rules.js");
 const { at, hold, clear: clearW, G, RG } = require("./helpers.js");
 
@@ -73,9 +74,9 @@ test("a tick moves, recruits, pays for it, and writes the warband's history", ()
   S = apply(S, { type: "order", player: "p1", move: to, recruit: [{ unit: "levy", count: 5 }] });
   S = apply(S, { type: "tick", seed: 1 });
   assert.equal(S.players.p1.warband.at, to);
-  assert.equal(S.players.p1.warband.army.levy, 20);
+  assert.equal(S.players.p1.warband.army.levy, 15 * SCALE + 5);
   assert.ok(S.players.p1.warband.history.some(h => /raised 5 Levy\b/.test(h)));
-  assert.ok(S.factions.hegemony.stock.materiel < before + 20);
+  assert.ok(S.factions.hegemony.stock.materiel < before + 20 * SCALE);
 });
 test("battles happen, worlds change hands, and the Chorus spreads", () => {
   const { S } = play(40);
@@ -111,12 +112,12 @@ test("the stockpile is shared out: two warbands recruiting in one tick get half 
   let S = rebuild([{ type: "create", seed: 7 }, { type: "join", player: "a", name: "A", faction: "hegemony" }, { type: "join", player: "b", name: "B", faction: "hegemony" }]);
   S.swarms = [];
   S.factions.hegemony.stock = { manpower: 0, materiel: 0 };   // only this tick's income to share: not enough for 50 each
-  for (const id of ["a", "b"]) S = apply(S, { type: "order", player: id, move: null, recruit: [{ unit: "levy", count: 50 }] });
+  for (const id of ["a", "b"]) S = apply(S, { type: "order", player: id, move: null, recruit: [{ unit: "levy", count: 50 * SCALE }] });
   const before = { a: S.players.a.warband.army.levy, b: S.players.b.warband.army.levy };
   S = apply(S, { type: "tick", seed: 1 });
   const got = { a: S.players.a.warband.army.levy - before.a, b: S.players.b.warband.army.levy - before.b };
   // income comes in first (the capital's), then each may spend half of what there is
   assert.ok(Math.abs(got.a - got.b) <= 1, `equal shares: ${got.a} and ${got.b}`);
-  assert.ok(got.a < 50 && got.a > 0);
-  assert.ok(S.players.a.warband.history.some(h => new RegExp(`raised ${got.a} of 50 Levy .*share of the stockpile ran short`).test(h)));
+  assert.ok(got.a < 50 * SCALE && got.a > 0);
+  assert.ok(S.players.a.warband.history.some(h => new RegExp(`raised ${got.a} of ${50 * SCALE} Levy .*share of the stockpile ran short`).test(h)));
 });

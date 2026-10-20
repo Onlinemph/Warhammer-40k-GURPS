@@ -43,10 +43,14 @@ function attack(w, ranged, u) {
   dmg = Math.ceil(dmg * ((TYPE[d.type] ?? 1) + (d.ex ? 0.5 : 0))) + 5 * adSteps(d.div || 1);
   return { name: w.name, text: w.text, skill, dmg, total: skill + dmg };
 }
-function rate(template) {
-  const u = SIM.buildUnit(unitSpec(template, 1, 0).spec, 0), f = u.flags || {}, st = u.stats;
+// `extra`: spec fields laid over the template's own (a different gun: { ranged: { item } })
+function rate(template, extra = {}) {
+  const u = SIM.buildUnit(unitSpec(template, 1, 0, extra).spec, 0), f = u.flags || {}, st = u.stats;
   // OR: the better of its gun and its hand weapon, then FP and Move
-  const best = [attack(u.ranged, true, u), attack(u.melee, false, u)].filter(Boolean).sort((a, b) => b.total - a.total)[0];
+  // psychic powers count as the article's FP-using abilities: their score halved
+  const powers = (u.powers || []).filter(p => p.dmg && p.dmg.n).map(p => { const a = attack(p, true, u); return { ...a, skill: Math.floor(a.skill / 2), dmg: Math.ceil(a.dmg / 2), total: Math.floor(a.skill / 2) + Math.ceil(a.dmg / 2), power: true, range: p.range }; });
+  const bestPower = powers.sort((a, b) => b.total - a.total)[0];
+  const best = [attack(u.ranged, true, u), attack(u.melee, false, u), bestPower].filter(Boolean).sort((a, b) => b.total - a.total)[0];
   const fp = (u.fp ?? st.fp) - 10, move = u.move - 6;
   const OR = Math.max(1, best.total + fp + move);
   // PR: active defence (Dodge, or Parry/Block if better), DR over head, arms, legs and torso, health, HP, Will
@@ -73,11 +77,12 @@ function rate(template) {
   const sOR = Math.max(1, Math.round(scaleSkill(best.skill) + scaleDamage(best.dmg) + fp + move));
   // (each attack on its own, for Tactical Mass Combat: fire combat uses the gun's, close combat the hand weapon's)
   const sOf = a => a ? Math.max(1, Math.round(scaleSkill(a.skill) + scaleDamage(a.dmg) + fp + move)) : 0;
-  const orFire = sOf(attack(u.ranged, true, u)), orClose = sOf(attack(u.melee, false, u));
+  const gun = attack(u.ranged, true, u), fireAtt = [gun, bestPower].filter(Boolean).sort((a, b) => b.total - a.total)[0];
+  const orFire = sOf(fireAtt), orClose = sOf(attack(u.melee, false, u));
   const sPR = Math.max(1, Math.round(scaleDefense(ad) + scaleDR(drw) + scaleHT(health) + scaleHP(hp) + scaleWill(will)));
   const syn = sOR > 0 && sPR > 0 ? Math.round(Math.sqrt(sOR * sPR) * 0.2) : 0;
   return { template, OR, PR, CER: OR + PR, best: best.name, parts: { skill: best.skill, damage: best.dmg, fp, move, defence: ad, dr: drs, health, hp, will },
-    scaled: { OR: sOR, PR: sPR, synergy: syn, SCER: Math.max(1, sOR + sPR + syn), dr: drw, orFire, orClose }, unit: u };
+    scaled: { OR: sOR, PR: sPR, synergy: syn, SCER: Math.max(1, sOR + sPR + syn), dr: drw, orFire, orClose }, unit: u, firePower: fireAtt && fireAtt.power ? fireAtt : null };
 }
 // SCER's curves (scer-handoff.md section 5): signs kept, a soft cap past 500
 // (the handoff caps at 500; this setting's damage and DR run five to ten times Dungeon Fantasy's, so it isn't capped here:

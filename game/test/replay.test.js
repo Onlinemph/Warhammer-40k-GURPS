@@ -30,10 +30,23 @@ test("the server queues a player's battles at the tick and serves the replay whe
   try {
     const [, { token }] = await call("/api/join", { name: "Varro", faction: "hegemony" }), auth = { authorization: "Bearer " + token };
     let rep = null;
-    for (let k = 0; k < 5 && !rep; k++) {
+    for (let k = 0; k < 10 && !rep; k++) {
       const [, v] = await call("/api/view", null, auth), here = v.worlds.find(w => w.id === v.you.warband.at);
+      // on a world it doesn't hold, landed away from the capital (a fortress denied the sky): march on the capital
+      const capR = here.regions.find(r => r.capital);
+      if (here.owner !== "hegemony" && v.you.warband.region !== capR.id) {
+        const prev = { [v.you.warband.region]: null }, q = [v.you.warband.region];
+        while (q.length && !(capR.id in prev)) { const a = q.shift(); for (const b of here.regions.find(r => r.id === a).links) if (!(b in prev)) { prev[b] = a; q.push(b); } }
+        let s = capR.id; while (prev[s] !== v.you.warband.region) s = prev[s];
+        await call("/api/orders", { region: s }, auth);
+        await call("/api/admin/tick", {}, { "x-admin-key": "k" });
+        rep = (await call("/api/view", null, auth))[1].reports.find(r => r.sides.some(x => x.players.includes("Varro")));
+        continue;
+      }
       const to = here.links.map(l => v.worlds.find(w => w.id === l)).find(w => w.owner !== "hegemony") || v.worlds.find(w => w.id === here.links[0]);
-      await call("/api/orders", { move: to.id, recruit: [{ unit: "levy", count: 20 }] }, auth);
+      // (landing at the capital, where there's a garrison to fight, if it may)
+      const cap = to.regions.find(r => r.capital), L = v.you.landing[to.id], land = L && L.may.includes(cap.id) ? cap.id : undefined;
+      await call("/api/orders", { move: to.id, land, recruit: [{ unit: "levy", count: 20 }] }, auth);
       await call("/api/admin/tick", {}, { "x-admin-key": "k" });
       rep = (await call("/api/view", null, auth))[1].reports.find(r => r.sides.some(s => s.players.includes("Varro")));
     }
