@@ -100,3 +100,16 @@ test("fog of war: a player sees armies only where the faction has eyes", () => {
   for (const w of v.worlds.filter(w => w.owner === "hegemony")) assert.ok(w.seen);
   assert.ok(!JSON.stringify(v).includes('"tokens"'));
 });
+test("the stockpile is shared out: two warbands recruiting in one tick get half each, and a shortfall is reported", () => {
+  let S = rebuild([{ type: "create", seed: 7 }, { type: "join", player: "a", name: "A", faction: "hegemony" }, { type: "join", player: "b", name: "B", faction: "hegemony" }]);
+  S.swarms = [];
+  S.factions.hegemony.stock = { manpower: 0, materiel: 0 };   // only this tick's income to share: not enough for 50 each
+  for (const id of ["a", "b"]) S = apply(S, { type: "order", player: id, move: null, recruit: [{ unit: "levy", count: 50 }] });
+  const before = { a: S.players.a.warband.army.levy, b: S.players.b.warband.army.levy };
+  S = apply(S, { type: "tick", seed: 1 });
+  const got = { a: S.players.a.warband.army.levy - before.a, b: S.players.b.warband.army.levy - before.b };
+  // income comes in first (the capital's), then each may spend half of what there is
+  assert.ok(Math.abs(got.a - got.b) <= 1, `equal shares: ${got.a} and ${got.b}`);
+  assert.ok(got.a < 50 && got.a > 0);
+  assert.ok(S.players.a.warband.history.some(h => new RegExp(`raised ${got.a} of 50 Levy .*share of the stockpile ran short`).test(h)));
+});

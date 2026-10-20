@@ -8,7 +8,7 @@ const api = async (path, body) => {
   const j = await r.json(); if (!r.ok) throw new Error(j.error || r.statusText); return j;
 };
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-const armyText = a => Object.entries(a).map(([k, n]) => `${n} ${esc(k)}`).join(", ") || "nobody";
+const armyText = a => Object.entries(a).filter(([, n]) => n > 0).map(([k, n]) => `${n} ${esc(k)}`).join(", ") || "nobody";
 
 async function joinWar() {
   try {
@@ -94,13 +94,13 @@ function draw() {
   $("#me").innerHTML = `<h2>${esc(V.you.name)}</h2><p>${esc(V.factions[V.you.faction].name)} · stockpile: ${esc(st)}</p>
     <p>Warband at <b>${esc(W[me.at].name)}</b>${me.supplied ? "" : " · <span class='err'>out of supply</span>"}<br>${armyText(Object.fromEntries(Object.entries(me.army).map(([k, n]) => [V.units[k] ? V.units[k].name : k, n])))}</p>
     ${me.orders ? `<p class="muted">Orders in: ${me.orders.move ? "move to " + esc(W[me.orders.move].name) : "hold"}${me.orders.recruit.length ? ", recruit " + me.orders.recruit.map(r => r.count + " " + esc(V.units[r.unit].name)).join(", ") : ""}</p>` : ""}
-    ${own}<details><summary>History</summary><ol class="feed">${me.history.slice().reverse().map(h => `<li>${esc(h)}</li>`).join("")}</ol></details>`;
+    ${own}${me.history.some(h => h.startsWith(`Turn ${V.turn}:`)) ? `<ul class="feed">${me.history.filter(h => h.startsWith(`Turn ${V.turn}:`)).map(h => `<li>${esc(h.replace(/^Turn \d+: /, ""))}</li>`).join("")}</ul>` : ""}<details><summary>History</summary><ol class="feed">${me.history.slice().reverse().map(h => `<li>${esc(h)}</li>`).join("")}</ol></details>`;
   const w = sel && W[sel];
   $("#world").innerHTML = w ? `<h3>${esc(w.name)}</h3><p>${esc(w.typeName)}${w.capital ? ", a capital" : ""}${w.asleep ? ", its tomb asleep" : w.asleep === false ? ", its tomb awake" : ""}${w.gate ? ", a gate" : ""} · ${w.owner ? esc(V.factions[w.owner].name) : "unclaimed"}${w.loyalty != null ? ` · loyalty ${w.loyalty}` : ""}${w.held != null ? ` · held ${w.held} turns` : ""}</p>
-    ${w.forces ? (w.forces.length ? `<table>${w.forces.map(f => `<tr><td>${esc(V.factions[f.faction].name)}${f.players.length ? " (" + f.players.map(esc).join(", ") + ")" : ""}</td><td>${armyText(f.army)}</td></tr>`).join("")}</table>` : "<p class='muted'>Nobody there.</p>") : "<p class='muted'>Your faction has no eyes here.</p>"}` : `<p class="muted">Pick a world on the map.</p>`;
+    ${V.you.odds[w.id] != null ? `<p>If your warband fights here: about <b>${V.you.odds[w.id]}%</b> to win against the strongest force.</p>` : ""}${w.forces ? (w.forces.length ? `<table>${w.forces.map(f => `<tr><td>${esc(V.factions[f.faction].name)}${f.players.length ? " (" + f.players.map(esc).join(", ") + ")" : ""}</td><td>${armyText(f.army)}</td></tr>`).join("")}</table>` : "<p class='muted'>Nobody there.</p>") : "<p class='muted'>Your faction has no eyes here.</p>"}` : `<p class="muted">Pick a world on the map.</p>`;
   const here = W[me.at];
   $("#orders").innerHTML = `<h3>Orders for the next tick</h3>
-    <label>Move <select id="o-move"${rit ? " disabled" : ""}><option value="">Hold at ${esc(here.name)}</option>${V.you.moves.map(l => `<option value="${l}">${here.links.includes(l) ? "to" : "through the gate to"} ${esc(W[l].name)}</option>`).join("")}</select></label>
+    <label>Move <select id="o-move"${rit ? " disabled" : ""}><option value="">Hold at ${esc(here.name)}</option>${V.you.moves.map(l => `<option value="${l}">${here.links.includes(l) ? "to" : "through the gate to"} ${esc(W[l].name)}${V.you.odds[l] != null ? ` (fight there: about ${V.you.odds[l]}% to win)` : ""}</option>`).join("")}</select></label>
     ${V.you.rituals && here.owner === V.you.faction && !rit ? `<label>Ritual <select id="o-rit"><option value="">none</option>${Object.entries(V.you.rituals).map(([k, r]) => k === "corrupt"
       ? here.links.map(l => W[l]).filter(t => t.owner === "hegemony" && !t.capital).map(t => `<option value="corrupt:${t.id}">${r.name} against ${esc(t.name)}${t.loyalty != null ? " (loyalty " + t.loyalty + ")" : ""}, ${r.captives} captives</option>`).join("")
       : `<option value="${k}">${r.name}, ${r.captives} captives</option>`).join("")}</select></label>` : ""}
@@ -124,7 +124,7 @@ $("#j-go").onclick = joinWar;
   const q = new URLSearchParams(location.search);
   if (q.has("admin")) { sessionStorage.setItem("war-admin", q.get("admin")); history.replaceState(null, "", "/"); }
   const key = sessionStorage.getItem("war-admin");
-  if (key) { $("#tick").hidden = false; $("#tick").onclick = async () => { $("#tick").disabled = true; try { await fetch("/api/admin/tick", { method: "POST", headers: { "x-admin-key": key } }); await load(); } finally { $("#tick").disabled = false; } }; }
+  if (key) { $("#tick").hidden = false; $("#tick").onclick = async () => { $("#tick").disabled = true; try { const r = await fetch("/api/admin/tick", { method: "POST", headers: { "x-admin-key": key } }); if (!r.ok) alert("Tick failed: " + ((await r.json().catch(() => ({}))).error || r.status)); await load(); } finally { $("#tick").disabled = false; } }; }
 }
 $("#signout").onclick = async () => { await api("/auth/logout", {}).catch(() => {}); V = null; load(); };
 // a sign-in that went wrong comes back as ?signin=<what happened>

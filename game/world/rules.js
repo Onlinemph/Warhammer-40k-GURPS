@@ -116,18 +116,29 @@ function tick(S, seed) {
     if (w.owner === "chorus") st.biomass = (st.biomass || 0) + t.manpower + t.materiel;
     else { st.manpower += t.manpower; st.materiel += t.materiel; }
   }
-  // 2. players' orders: recruit where they stand, then move
+  // 2. players' orders: recruit where they stand, then move. The stockpile is shared out: each warband recruiting
+  // this tick may spend an equal share of what the faction had at the tick's start (what isn't spent stays), so
+  // whoever orders first doesn't take it all
+  const share = {};
+  for (const f of Object.keys(FACTIONS)) {
+    const n = Object.values(S.players).filter(p => p.faction === f && p.warband.orders && p.warband.orders.recruit.length).length;
+    if (n) share[f] = Object.fromEntries(Object.entries(S.factions[f].stock).map(([k, v]) => [k, v / n]));
+  }
   for (const p of Object.values(S.players)) {
     const o = p.warband.orders; if (!o) continue;
-    const st = S.factions[p.faction].stock;
+    const st = S.factions[p.faction].stock, mine = share[p.faction] ? { ...share[p.faction] } : {}, here = W(p.warband.at);
     for (const r of o.recruit) {
-      const u = UNITS[r.unit], can = Math.min(r.count, ...Object.entries(u.cost).map(([k, c]) => Math.floor((st[k] || 0) / c)));
-      if (FX.checkOrder(S, p, { recruit: [r] })) continue;   // Wardens only where they can be grown
-      if (can > 0 && W(p.warband.at).owner === p.faction && p.warband.supplied) {
-        for (const [k, c] of Object.entries(u.cost)) st[k] -= c * can;
+      const u = UNITS[r.unit];
+      const why = FX.checkOrder(S, p, { recruit: [r] }) || (here.owner !== p.faction ? "not on your own world" : !p.warband.supplied ? "out of supply" : null);
+      const can = why ? 0 : Math.min(r.count, ...Object.entries(u.cost).map(([k, c]) => Math.floor(Math.min(st[k] || 0, mine[k] || 0) / c + 1e-9)));
+      if (can > 0) {
+        for (const [k, c] of Object.entries(u.cost)) { st[k] -= c * can; mine[k] -= c * can; }
         p.warband.army[r.unit] = (p.warband.army[r.unit] || 0) + can;
-        p.warband.history.push(`Turn ${S.turn}: raised ${can} ${u.name} at ${W(p.warband.at).name}`);
       }
+      // say what happened, and why it fell short
+      const short = Object.entries(u.cost).filter(([k, c]) => (mine[k] || 0) < c).map(([k]) => k).join(" and ");
+      if (can === r.count) p.warband.history.push(`Turn ${S.turn}: raised ${can} ${u.name} at ${here.name}`);
+      else p.warband.history.push(`Turn ${S.turn}: raised ${can} of ${r.count} ${u.name} at ${here.name}: ${why || `your share of the stockpile ran short of ${short}`}`);
     }
     FX.beginRitual(S, p, o);
     if (o.move && !p.warband.ritual && FX.canMove(S, p.faction, p.warband.at, o.move)) { p.warband.history.push(`Turn ${S.turn}: moved from ${W(p.warband.at).name} to ${W(o.move).name}`); p.warband.at = o.move; }
@@ -220,7 +231,7 @@ function fight(S, w, A, B, R, T) {
     sides: before.map((b, i) => ({ faction: b.faction, before: b.army, players: [A, B][i].parts.filter(x => x.kind === "warband").map(x => S.players[x.player].name) })),
     text: `${w.name}: ${fname(A.faction)} (${describe(A.army)}) against ${fname(B.faction)} (${describe(B.army)}). ` +
       (draw ? "Neither side gives way." : `${cap(fname(winner))} win${pA > 0.75 && aWins || pA < 0.25 && !aWins ? ", as expected" : pA > 0.25 && pA < 0.75 ? " a close fight" : " against the odds"}.`) +
-      ` Roughly ${Math.round(lossA * 100)}% and ${Math.round(lossB * 100)}% lost.`,
+      ` ${cap(fname(A.faction))} lost about ${Math.round(lossA * 100)}%, ${fname(B.faction)} about ${Math.round(lossB * 100)}%.`,
   };
   for (const pl of report.sides.flatMap(s => s.players)) { const pp = Object.values(S.players).find(x => x.name === pl); if (pp) pp.warband.history.push(`Turn ${S.turn}: battle at ${w.name}, ${winner === pp.faction ? "won" : draw ? "held" : "lost"}`); }
   S.reports.push(report);
@@ -310,8 +321,19 @@ function view(S, player) {
   const f = p.faction, eyes = new Set();
   for (const w of Object.values(S.worlds)) if (w.owner === f) { eyes.add(w.id); w.links.forEach(n => eyes.add(n)); }
   for (const q of Object.values(S.players)) if (q.faction === f) { eyes.add(q.warband.at); S.worlds[q.warband.at].links.forEach(n => eyes.add(n)); }
+  // the odds the warband would have where it can go, against the strongest foe it can see there (the resolver, with a
+  // fixed seed: advice, not the battle's dice; a world's defence favours its holder as in a real fight)
+  const odds = {}, mine = asResolverArmy(p.warband.army);
+  if (mine.length) for (const id of FX.moves(S, f, p.warband.at)) {
+    const w = S.worlds[id];
+    if (!eyes.has(id)) continue;
+    const foe = factionsAt(S, w).filter(s => s.faction !== f).sort((a, b) => strength(b.army) - strength(a.army))[0];
+    if (!foe) continue;
+    const q = predict(mine, asResolverArmy(foe.army), { seed: 1, sims: 100 }), d = w.owner === foe.faction ? TYPES[w.type].defence || 1 : 1;
+    odds[id] = Math.round(100 * q.pWinA / (q.pWinA + q.pWinB * d || 1));
+  }
   return {
-    turn: S.turn, you: { name: p.name, faction: f, warband: p.warband, stock: S.factions[f].stock, moves: FX.moves(S, f, p.warband.at),
+    turn: S.turn, you: { name: p.name, faction: f, warband: p.warband, stock: S.factions[f].stock, moves: FX.moves(S, f, p.warband.at), odds,
       edict: f === "hegemony" ? S.factions.hegemony.edict : null, rituals: f === "apostates" ? FX.RITUALS : null },
     factions: { ...Object.fromEntries(Object.entries(S.factions).map(([k, v]) => [k, { name: v.name, colour: v.colour }])), militia: { name: MILITIA.name, colour: "#8d887e" } },
     units: Object.fromEntries(Object.entries(UNITS).filter(([, u]) => u.faction === f).map(([k, u]) => [k, { name: u.name, cost: u.cost }])),

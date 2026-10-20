@@ -122,8 +122,8 @@ function schedule() {
 }
 
 // ---- requests
-const hits = new Map();   // a crude per-address rate limit: 60 requests a minute
-const limited = ip => { const now = Date.now(), h = (hits.get(ip) || []).filter(t => now - t < 60000); h.push(now); hits.set(ip, h); return h.length > 60; };
+const hits = new Map();   // a crude per-address rate limit
+const limited = ip => { const now = Date.now(), h = (hits.get(ip) || []).filter(t => now - t < 60000); h.push(now); hits.set(ip, h); return h.length > 300; };   // 300 a minute: a player clicking fast, not a script hammering
 const send = (res, code, body, type = "application/json") => { res.writeHead(code, { "content-type": type, "cache-control": "no-store", "x-content-type-options": "nosniff" }); res.end(type === "application/json" ? JSON.stringify(body) : body); };
 const readBody = req => new Promise((ok, bad) => {
   let b = "";
