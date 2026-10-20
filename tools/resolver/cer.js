@@ -36,7 +36,8 @@ const adSteps = d => d >= 100 ? 5 : d >= 10 ? 4 : d >= 5 ? 3 : d >= 3 ? 2 : d >=
 function attack(w, ranged, u) {
   if (!w) return null;
   const rb = ranged ? rofBonus(w.rof || 1) : 0, d = w.dmg;
-  let skill = w.level - 10 + rb + (ranged ? (w.acc ?? 3) + 2 : 0) + ((u.flags.extraAttack || 0) ? 5 : 0);
+  // (a flame cone counts as the article's attack that hits automatically, +15: it washes over whoever is in it)
+  let skill = w.level - 10 + rb + (ranged ? (w.acc ?? 3) + 2 : 0) + ((u.flags.extraAttack || 0) ? 5 : 0) + (w.cone ? 15 : 0);
   const dice = d.n * (d.mult || 1);
   let dmg = Math.ceil(dice * 3.5) + (d.add || 0) * (d.mult || 1);
   dmg = Math.ceil(dmg * (rb + 1));

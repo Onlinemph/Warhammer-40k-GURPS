@@ -626,6 +626,17 @@ against 10 in the open, 50 yards apart; the war bolts terrain and holding a city
   fights (40-60%) fell from 18% of battles to 8%, and the winner at 95%+ rose from 29% to 50%: with a hundred
   elements a side the dice average out, and the bigger side wins far more surely than with ten. Balance at turn 60:
   Hegemony 3.1, Apostates 5.4, Brawl 5.5, Chorus 5.0, Dormant 2.4.
+- **Repriced** (user direction, after the first measurements): every unit now costs its measured worth at its
+  faction's rate, set by what its line troops cost for a Levy's worth (the Hegemony 0.6, the Apostates 3.2, the
+  Brawl 2.9, the Chorus 2.3 biomass); the line keeps its price, the Brawl's Bosses and Ironhides their fame. A Warden
+  now costs 1.3 (it was 25), a Stalker 2 biomass (20), a Bulwark 8 (40). And every element that shoots has at least 6
+  hexes of range (a round is half a minute; a squad with a short weapon closes in within it; the article gives every
+  infantry element one range), a flamer counts in close combat too, and a flame cone counts as an attack that hits
+  automatically (the article's +15): flamer squads went from 0.03 Levies' worth to 0.34, Meltas 0.5 to 1.15, Meks 0.6
+  to 0.95. Psykers stay weak (a Seer 0.23, a Weirdboy 0.08): CER halves an ability that costs FP, and the fire table
+  favours range. Measured over 4 wars of 60 turns: Hegemony 4.3 worlds at turn 60 (3.1 before), Apostates 3.3 (5.4),
+  Brawl 5.8 (5.5), Chorus 6.3 (5.0), Dormant 2.3 (2.4); close fights 9.5% of battles, 95%+ 49%; battles of 340 at the
+  median, 1,953 the biggest.
 - Found on the way: a stalemate was fought up to four times in the same turn (the battle loop ran while two sides
   stood); now it's the turn's fighting there. The view keeps a player's own last ten battles even when thirty others
   are newer.

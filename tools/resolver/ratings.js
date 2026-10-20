@@ -5,14 +5,16 @@
 const fs = require("fs"), path = require("path");
 const { rate } = require("./cer.js");
 const { engineCommit } = require("./common.js");
-const YARDS = 20;   // a hex
+const YARDS = 20, MIN_RANGE = 6;   // a hex; the shortest fire range
 // Recon: the stealthy and the scouts; C3I: those who command or link others
 const RECON = /Kommando|Scout|Ranger|Pathfinder|Lictor|Ravener|Mandrake|Vanguard|Deathmark/;
 const C3I = /Sergeant|Commissar|Champion|Nob\b|Lord|Overlord|Exarch|Shas'ui|Warboss|Tyranid Warrior/;
 function ratingOf(template, extra) {
   const r = rate(template, extra), u = r.unit, f = u.flags || {}, s = r.scaled, w = u.ranged, pw = r.firePower;
+  // a flamer is a close-quarters weapon too: it counts in close combat if it's better than the hand weapon
+  const orClose = w && w.cone ? Math.max(s.orClose, s.orFire) : s.orClose;
   return {
-    or: s.OR, orFire: s.orFire, orClose: s.orClose, pr: s.PR, scer: s.SCER, cer: r.CER,
+    or: s.OR, orFire: s.orFire, orClose, pr: s.PR, scer: s.SCER, cer: r.CER,
     classes: {
       fire: !!w || !!pw,
       armor: s.dr >= 60,
@@ -23,7 +25,9 @@ function ratingOf(template, extra) {
     },
     mobility: u.move >= 10 ? "mounted" : "foot",
     // fire range in hexes: the gun's half-damage range
-    range: pw ? Math.max(2, Math.min(40, Math.round((pw.range.max || 100) / YARDS))) : w ? Math.max(2, Math.min(40, Math.round((w.range.half || 100) / YARDS))) : 0,
+    // (at least MIN_RANGE: a round is about half a minute, and a squad with a short weapon closes in within it; the
+    // article itself gives every infantry element one range, whatever its gun)
+    range: pw ? Math.max(MIN_RANGE, Math.min(40, Math.round((pw.range.max || 100) / YARDS))) : w ? Math.max(MIN_RANGE, Math.min(40, Math.round((w.range.half || 100) / YARDS))) : 0,
     night: (f.nightVision || 0) >= 3 || !!f.infravision || !!f.machine,
     impetuous: !!(f.impulsive || f.bloodlust),
     fanatic: (f.fearless || 0) >= 6 || !!f.unfazeable || !!f.noMorale,
