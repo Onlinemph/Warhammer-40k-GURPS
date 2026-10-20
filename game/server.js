@@ -35,12 +35,14 @@
 //   GET  /api/live/<held battle id>              -> a battle held for you to fight: setup, answers so far, whose turn
 //   POST /api/live/<id>/answer {k, ans}          -> the k-th answer, from the side the battle waits on
 //   POST /api/upvote {report}                    -> {ok}: one mark a player a battle (the highlight feed)
+//   GET  /api/tmc/<report id>                    -> a battle fought again on its hex map, with its log round by round
 //   GET  /api/replay/<report id>                 -> {status, progress, ahead} until it's ready, then the replay
 //                                                   (gzipped JSON); asking for one that isn't queued queues it
 const http = require("http"), fs = require("fs"), path = require("path"), crypto = require("crypto"), zlib = require("zlib");
 const { Worker } = require("worker_threads");
-const { apply, rebuild, view, order, politics, upvote } = require("./world/rules.js");
-const { FACTIONS } = require("./world/units.js");
+const { apply, rebuild, view, order, politics, upvote, knows } = require("./world/rules.js");
+const { FACTIONS, UNITS } = require("./world/units.js");
+const TMC = require("./world/tmc.js");
 const { makeAuth } = require("./auth.js");
 const { makeLive } = require("./live.js");
 
@@ -149,7 +151,8 @@ function schedule() {
 
 // ---- requests
 const hits = new Map();   // a crude per-address rate limit
-const limited = ip => { const now = Date.now(), h = (hits.get(ip) || []).filter(t => now - t < 60000); h.push(now); hits.set(ip, h); return h.length > 300; };   // 300 a minute: a player clicking fast, not a script hammering
+const limited = ip => { const now = Date.now(), h = (hits.get(ip) || []).filter(t => now - t < 60000); h.push(now); hits.set(ip, h); return h.length > RATE; };   // 300 a minute: a player clicking fast, not a script hammering
+const RATE = +(process.env.RATE_LIMIT || 300);
 const send = (res, code, body, type = "application/json") => { res.writeHead(code, { "content-type": type, "cache-control": "no-store", "x-content-type-options": "nosniff" }); res.end(type === "application/json" ? JSON.stringify(body) : body); };
 const readBody = req => new Promise((ok, bad) => {
   let b = "";
@@ -164,7 +167,7 @@ const redirect = (res, to, cookie) => { res.writeHead(302, { location: to, "cach
 // the simulator's page (the library and the 3D replays), served at /sim: the 3D view of a war battle opens it on
 // /sim#war=<report id>
 const SIM_PAGE = path.join(__dirname, "..", "site", "index.html");
-const STATIC = { "/": ["index.html", "text/html"], "/app.js": ["app.js", "text/javascript"], "/style.css": ["style.css", "text/css"], "/replay.js": ["replay.js", "text/javascript"] };
+const STATIC = { "/": ["index.html", "text/html"], "/app.js": ["app.js", "text/javascript"], "/style.css": ["style.css", "text/css"], "/replay.js": ["replay.js", "text/javascript"], "/tmcview.js": ["tmcview.js", "text/javascript"] };
 
 const server = http.createServer(async (req, res) => {
   try {
@@ -268,6 +271,17 @@ const server = http.createServer(async (req, res) => {
       if (act === "rollback") { const r = rollback(); if (r.error) return send(res, 400, r); adminLog("rollback", r); return send(res, 200, { ...status(), ...r }); }
       if (act === "newwar") { const r = newWar(); adminLog("newwar", r); return send(res, 200, { ...status(), ...r }); }
       return send(res, 404, { error: "no such admin action" });
+    }
+    // a battle on its hex map: Tactical Mass Combat fights it again from its record, round by round (game/world/tmc.js)
+    const tm = /^\/api\/tmc\/([\w-]+)$/.exec(url.pathname);
+    if (req.method === "GET" && tm) {
+      const p = who(req); if (!p) return send(res, 401, { error: "sign in and join first" });
+      const r = S.reports.find(x => x.id === tm[1]);
+      if (!r || !knows(S, S.players[p])(r)) return send(res, 404, { error: "no such battle that you know of" });
+      if (!r.tmc) return send(res, 404, { error: "that battle was fought live, not on the map" });
+      const b = TMC.fight({ ...r.tmc, log: true });
+      return send(res, 200, { id: r.id, title: `${r.regionName} on ${r.worldName}, turn ${r.turn}`, terrain: r.terrain, sides: r.sides.map((s0, i) => ({ faction: s0.faction, name: r.tmc.sides[i].name, colour: s0.faction === "militia" ? "#8d887e" : FACTIONS[s0.faction].colour })),
+        units: Object.fromEntries([...Object.entries(UNITS).map(([k, u]) => [k, u.name]), ["militia", "Local Defence"]]), winner: b.winner, kind: b.kind, rounds: b.rounds, recon: b.recon, night: b.night, log: b.log, text: r.text });
     }
     const rm = /^\/api\/replay\/([\w-]+)$/.exec(url.pathname);
     if (req.method === "GET" && rm) {

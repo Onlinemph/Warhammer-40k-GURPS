@@ -31,13 +31,15 @@ test("the galaxy: every world reachable, each side with a capital it holds", () 
 });
 test("the Dormant: a tomb sleeps, wakes when fought over or in its time, and repairs its fallen on a field it holds", () => {
   let S = rebuild(start());
-  const id = Object.values(S.worlds).find(w => w.tomb).id, n0 = total(G(S.worlds[id])), wake = S.worlds[id].wakeAt;
+  const id = Object.values(S.worlds).find(w => w.tomb).id, wake = S.worlds[id].wakeAt;
+  // (the sleepers: the garrisons of the regions the Dormant hold; someone else may take a region of the tomb world)
+  const sleepers = w => w.regions.filter(r => r.owner === "dormant").reduce((a, r) => a + total(r.garrison), 0), n0 = sleepers(S.worlds[id]);
   // left alone (no one fights there) it wakes on its turn, not before, and never adds to its sleepers
   for (let t = 1; t <= wake; t++) {
     S = apply(S, { type: "tick", seed: t });
     const fought = S.reports.some(r => r.world === id);
     if (!fought) assert.equal(S.worlds[id].awake, S.turn >= wake, `turn ${S.turn}`);
-    if (S.worlds[id].owner === "dormant") assert.ok(total(G(S.worlds[id])) <= n0);
+    if (S.worlds[id].owner === "dormant") assert.ok(sleepers(S.worlds[id]) <= n0);
   }
   // a fight it holds: the fallen come back by half
   S = rebuild(start());

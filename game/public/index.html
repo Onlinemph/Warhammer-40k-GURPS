@@ -62,7 +62,22 @@
     </div>
   </section>
 </div>
+<div id="hexview" class="overlay" hidden>
+  <section class="card rp">
+    <header class="rp-head"><h2 id="hx-title"></h2><button id="hx-close" aria-label="Close">Close</button></header>
+    <div id="hx-sides" class="legend"></div>
+    <div class="rp-stage"><canvas id="hx-canvas"></canvas></div>
+    <div class="rp-controls">
+      <button id="hx-toggle">Pause</button>
+      <input id="hx-slider" type="range" min="0" value="0" aria-label="Turn">
+      <select id="hx-speed" aria-label="Speed"><option value="0.5">½×</option><option value="1" selected>1×</option><option value="2">2×</option><option value="4">4×</option></select>
+    </div>
+    <p id="hx-turn" class="muted"></p>
+    <ol id="hx-feed" class="feed"></ol>
+  </section>
+</div>
 <script src="/app.js"></script>
+<script src="/tmcview.js"></script>
 <script src="/replay.js"></script>
 </body>
 </html>

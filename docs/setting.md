@@ -874,6 +874,38 @@ fights, outcomes, balance.
 4. The hex map view of a battle in the client.
 5. Then the bigger armies and new units (above), whose new weapons get their ratings the same way.
 
+### As built
+`game/world/tmc.js`, with the ratings in `game/world/ratings.json` (`tools/resolver/ratings.js`, SCER uncapped, an
+OR for fire and one for close combat). Built as drafted, with these choices and changes, each from watching it:
+- **Scale:** a hex is 20 yards; Foot moves 3 hexes a turn and Mounted (Move 10 or more) 5, at the article's terrain
+  costs; a gun's range is its half-damage range in hexes. The map is 18 to 40 hexes wide by the number of elements.
+  Towns and cities get **streets** (every third row and column open): without them, built-up blobs left no line of
+  fire anywhere and nearly every city battle stalled.
+- **Lines of fire** follow the article's spotting rule: into, but not through, woods, built-up or high ground.
+- **Commanders:** a warband's leader's skill counts for both Leadership and Strategy (so Command Points are half
+  of it), the same for Intelligence Analysis in the Reconnaissance Contest; others 1d+8, a tomb lord 12. Mass
+  Combat's Terrain Ratings (Plains 8 ... Jungle 3, halved at night) set surprise and ambush.
+- **The attacker grows bolder:** it assaults at 1:1, from the fourth round at 1:2, from the seventh at 1:3 (or at any
+  odds if it must, Impetuous or Fanatic, or is already locked in). Holding garrisons stay in their buildings.
+- **Ending:** a demoralized side still demoralized a round later withdraws (the article lets the GM rule that a
+  demoralized force has lost); a battle still going after 16 rounds is a stalemate. A stalemate where hardly anyone
+  fell (under 5% between them) is a **standoff**: the attacker found no way in and pulls back where it came from.
+  Without that, small swarms sat in the same region fighting the same quiet battle every turn.
+- **The AI's odds** are the share of real wins over 4 to 8 quick battles; a likely stalemate no longer counts as half
+  a win when the Chorus and the Dormant choose where to strike.
+- **Kept from before:** a city's rally, the Dormant's repair after a battle they hold, the veterans' leader bonus
+  and supply's x0.8 (as OR), named soldiers' worth (as their element's), a world's defence and walls in its cities (as
+  PR), fortify (as earthworks). Live battles still settle by the engine's result.
+
+**Measured** (8 wars of 60 turns, two scripted warbands a player faction): 138 battles a war, 42 soldiers on the
+field on average, about 10 rounds; the winner's odds 40-60% in 18% of battles (2% before), 95%+ in 29% (91%
+before); 6 upsets a war, 33 stalemates, 3 repulses, 8 Pyrrhic victories, 12 ambushes and 67 surprises (half of all
+battles: city and night Terrain Ratings are low), night in about half. Balance over 24 wars at turn 60: Hegemony
+3.2, Apostates 5.8, Brawl 6.3, Chorus 4.6, Dormant 1.7 (wiped out in 3 of 24); before, 2.4, 5.3, 5.0, 7.3, 2.5.
+**Against the engine** (174 kept battles, for information): Tactical Mass Combat picks the engine's favourite in
+118 (68%) and its win chance is 31 points off on average (the old resolver: 4.7). That is the decision taken: the
+war follows the article, and the 3D replay of a battle may end differently from the war's record.
+
 ### Not in this pass
 Air, transports and vehicles (the war has no vehicles yet), off-map artillery, battles of more than two factions,
 and fighting a Tactical Mass Combat battle yourself.

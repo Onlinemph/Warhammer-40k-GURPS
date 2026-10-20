@@ -71,13 +71,18 @@ function rate(template) {
   const PR = Math.max(1, ad + drs + health + hp + will);
   // SCER: each sub-score through its curve (changes 2-4), the soft cap, and the synergy of lethal and hard to kill
   const sOR = Math.max(1, Math.round(scaleSkill(best.skill) + scaleDamage(best.dmg) + fp + move));
+  // (each attack on its own, for Tactical Mass Combat: fire combat uses the gun's, close combat the hand weapon's)
+  const sOf = a => a ? Math.max(1, Math.round(scaleSkill(a.skill) + scaleDamage(a.dmg) + fp + move)) : 0;
+  const orFire = sOf(attack(u.ranged, true, u)), orClose = sOf(attack(u.melee, false, u));
   const sPR = Math.max(1, Math.round(scaleDefense(ad) + scaleDR(drw) + scaleHT(health) + scaleHP(hp) + scaleWill(will)));
   const syn = sOR > 0 && sPR > 0 ? Math.round(Math.sqrt(sOR * sPR) * 0.2) : 0;
   return { template, OR, PR, CER: OR + PR, best: best.name, parts: { skill: best.skill, damage: best.dmg, fp, move, defence: ad, dr: drs, health, hp, will },
-    scaled: { OR: sOR, PR: sPR, synergy: syn, SCER: Math.max(1, sOR + sPR + syn), dr: drw } };
+    scaled: { OR: sOR, PR: sPR, synergy: syn, SCER: Math.max(1, sOR + sPR + syn), dr: drw, orFire, orClose }, unit: u };
 }
 // SCER's curves (scer-handoff.md section 5): signs kept, a soft cap past 500
-const CAP = +(process.env.SCER_CAP || 500), softCap = x => Math.abs(x) <= CAP ? x : Math.sign(x) * CAP * (1 + Math.log(Math.abs(x) / CAP));
+// (the handoff caps at 500; this setting's damage and DR run five to ten times Dungeon Fantasy's, so it isn't capped here:
+// SCER_CAP=500 gives the handoff's own)
+const CAP = +(process.env.SCER_CAP || Infinity), softCap = x => Math.abs(x) <= CAP ? x : Math.sign(x) * CAP * (1 + Math.log(Math.abs(x) / CAP));
 const pw = (x, e) => x >= 0 ? Math.pow(x, e) : -Math.pow(-x, e);
 const scaleSkill = x => softCap(x + x * x / 7 * Math.sign(x)), scaleDamage = x => softCap(pw(x, 1.5)), scaleDR = x => softCap(pw(x, 1.75));
 const scaleDefense = x => softCap(x * (1 + Math.abs(x) / 5)), scaleHP = x => softCap(pw(x, 1.2)), scaleHT = scaleHP, scaleWill = scaleHP;

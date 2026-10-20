@@ -32,7 +32,7 @@ test("a commanded battle is held: the warband stays put, the world isn't taken, 
 
 test("fought live through the server: answers in order from the side it waits on, the result applied at the next tick", async () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "war-live-"));
-  Object.assign(process.env, { DATA_DIR: dir, ADMIN_KEY: "k", TURN_SECONDS: "3600" });
+  Object.assign(process.env, { DATA_DIR: dir, ADMIN_KEY: "k", TURN_SECONDS: "3600", RATE_LIMIT: "100000" });   // (a long battle is many answers)
   for (const k of ["DISCORD_CLIENT_ID", "DISCORD_CLIENT_SECRET", "GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "BOTS", "PUBLIC_URL"]) delete process.env[k];
   delete require.cache[require.resolve("../server.js")];
   const { server, state, stop } = require("../server.js");
