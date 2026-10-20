@@ -54,7 +54,7 @@ function decide(S, p, R) {
       if (SMART) {
         // (a world with a contract on it is worth a bit more to march on)
         const P = S.politics && S.politics[f], wanted = new Set(P ? P.contracts.filter(k => (k.kind === "take" || k.kind === "break") && (!k.offer || (k.accepted && k.offer === p.id))).map(k => k.world) : []);
-        const scored = next.map(w => ({ w, o: oddsAt(S, p, w.id) ?? 100 })).sort((a, b) => (b.o + (wanted.has(b.w.id) && b.o >= 25 ? 30 : 0)) - (a.o + (wanted.has(a.w.id) && a.o >= 25 ? 30 : 0)));
+        const scored = next.map(w => ({ w, o: oddsAt(S, p, w.id, true) ?? 100 })).sort((a, b) => (b.o + (wanted.has(b.w.id) && b.o >= 25 ? 30 : 0)) - (a.o + (wanted.has(a.w.id) && a.o >= 25 ? 30 : 0)));
         move = scored[0].o >= 25 ? scored[0].w.id : home ? null : stepToward(S, f, wb.at, w => w.id === capital) || stepToward(S, f, wb.at, w => w.owner === f);
       }
     } else move = stepToward(S, f, wb.at, w => w.owner !== f);
@@ -62,7 +62,7 @@ function decide(S, p, R) {
   if (!SMART) return { move, recruit, ritual: null };
   // the standing orders: fortify while it stays on its own world, raid a world it can't be sure of taking (under 60%),
   // always turn back from a fight under 25%, and wall up a border world when the stockpile has materiel to spare
-  const target = move && S.worlds[move], odds = target && target.owner !== f ? oddsAt(S, p, move) : null;
+  const target = move && S.worlds[move], odds = target && target.owner !== f ? oddsAt(S, p, move, true) : null;
   const stance = !move ? (here.owner === f ? "fortify" : wb.stance || "advance") : odds != null && odds < 60 ? "raid" : "advance";
   const border = here.links.some(id => S.worlds[id].owner !== f), lvl = here.walls || 0;
   const mat = S.factions[f].stock.materiel || 0, sup = S.factions[f].stock.supply || 0;

@@ -147,4 +147,4 @@ function reconcile(S, R) {
 // what the replay needs: each named soldier as their own figure, with their rank (and scars) on their skills
 const forReplay = wb => (wb.named || []).map(n => ({ name: n.name, unit: n.unit, bonus: rankLevel(n.battles) - n.scars.length }));
 
-module.exports = { joined, leaderBonus, extraOf, sideLeader, afterBattle, reconcile, forReplay, rankOf, MAX_NAMED };
+module.exports = { joined, leaderBonus, extraOf, sideLeader, afterBattle, reconcile, forReplay, rankOf, rankLevel, MAX_NAMED };

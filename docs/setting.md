@@ -390,3 +390,110 @@ From the design doc: replays, a highlight feed, and battles fought live between 
 ### Not in this pass
 Sector splitting for very large replays, the 3D view inside the war page itself, sharing highlights outside the
 game, a following feed for individual soldiers, and live spectating of someone else's live battle.
+
+## Battles that can go either way
+
+In a 40-turn war, the winner had 95% odds or better in 53 of 54 battles. The attacker only attacks when it's sure,
+and the resolver's odds grow steep with numbers. Three changes:
+
+- **The leaders' contest** (design doc): before every battle, each side's leader rolls Strategy against the other's.
+  A warband's leader rolls at 10 plus their rank (a Legend at 14), Warmasters +2, and AI and militia at a flat 10
+  (12 for a Dormant tomb lord). The margin buys one advantage per 2 points, chosen by what suits the winning side:
+  - **Ambush:** the loser's first 2 seconds are lost (in the war's odds, x1.25 for the winner).
+  - **The ground:** the winner picks the battle map and its edge (x1.15).
+  - **First volley:** the winner's side fires a turn early (x1.1).
+  - **Night or weather:** -2 to everyone's shooting, which helps whoever fights hand to hand (x1.15 for the side with
+    more melee).
+
+  The report says what was won ("Yara Keel outwitted the Chorus: an ambush and the high ground").
+- **Fog:** you no longer see a force's exact numbers before you're there. Odds are shown as a band ("about 60-80%"),
+  wider the less your faction can see, so a move can still surprise you. A world next to yours shows rough numbers; one
+  further off shows only "a garrison".
+- **Not all-or-nothing:** a battle ends in one of four ways, by how it went:
+  - **Rout:** the beaten side is broken, as now.
+  - **Repulse:** the attacker is thrown back to where it came from, both sides bloodied, the world unchanged.
+  - **Stalemate:** both sides dig in and fight again next turn.
+  - **Pyrrhic victory:** the winner holds, but loses more than half.
+
+  Close fights mostly end the middle two ways, so a world can take several turns of fighting to take.
+
+**As built** (`game/world/battle.js`), with two additions the measurements called for:
+- The advantages count as **fighting strength**: the winner's numbers going into the resolver count for that much
+  more, rather than its odds being multiplied, so the contest swings fights within about 3 to 1 and can't turn a
+  rout.
+- **A world rallies:** attacked by a force more than twice as strong as its defenders, a world with a garrison raises
+  three of its people for every point of its yield, as its holder's basic troops.
+- **Through the fog:** the bots, the Chorus, the Dormant and the turn-back order all judge a world by what can be seen
+  of it, its rough numbers where they neither hold it nor have a warband there.
+
+**Measured** (8 wars of 60 turns, before → after):
+- Battles between sides within 3 to 1 went from 15% to 33%.
+- The winner had 40-60% odds in 1% → 4%.
+- Stalemates and repulses went from 0.5 to 4 a war; Pyrrhic victories from 0 to 10.
+- The winner had 95% odds or more in 95% → 91%.
+
+That last number is still the problem. The resolver's odds are steep (calibrated on the engine, where a 2 to 1 edge
+almost always wins), and the Chorus's swarms are the weaker side in 58% of battles.
+
+## Worlds to conquer (draft for review)
+
+Today a world is taken in a single battle. Instead, each world becomes a campaign: many regions, many cities, its own
+terrain, and battles fought on maps made from that terrain.
+
+### What a world is made of
+- Each world has **8 to 20 regions** in a map of its own (a small graph of its own, like the galaxy's), drawn from
+  its type:
+  - a **Spire world** is mostly hive cities and their wastes;
+  - a **Granary** is plains, fields and farm towns;
+  - a **Wildworld** is jungle, swamp and mountains;
+  - a **Bastion** is fortress cities, trench lines and hills;
+  - a **Foundry world** is industrial sprawl, slag wastes and refinery towns;
+  - a **Tomb world** is desert and buried necropolises.
+- **Terrain types** (each with its own battle map): plains, farmland, forest, jungle, hills, mountains, desert, swamp,
+  tundra, wasteland, river valley, and four kinds of town: farm town, city, hive city, fortress. Each world has
+  several towns and cities, each with its own name, and one is its capital.
+- **What's held:** each region has a holder and its own garrison. Cities are where income, recruits and supply
+  come from (a world's yield is shared among its cities), and where a world's levies are raised.
+
+### Conquest
+- **Landing:** a warband arriving from another world lands in a region of its choice. A defended world's
+  orbital fortress or fortress city can deny a landing next to it. Inside a world, a warband moves one region a
+  turn, along the world's own links.
+- **Battles are fought per region,** wherever two factions meet in one, on a map built from that region's terrain.
+- **A world changes hands** when one faction holds its capital and more than half its cities. Until then it's
+  **contested**: both sides hold parts of it, each draws income only from the cities it holds, and the galaxy map
+  shows it split.
+- The AI factions, the bots, raids, rituals, convoys, contracts and edicts all work at the region level. A raid
+  hits a city, Corruption turns a city, a contract can name a city, and a convoy unloads at a city's depot.
+
+### Battle maps from the terrain
+- The countryside generator becomes a **terrain-driven** one, with every element dialled by the region's terrain:
+  hills and their height, woods and how thick, hedges and walls, farms and buildings, rubble and craters, rivers
+  and marsh water, rock outcrops, and the 3D view's ground and scenery theme.
+  - **Mountains:** high ground and rock, few buildings.
+  - **Jungle:** thick trunks everywhere.
+  - **Desert:** open sand and rock.
+  - **Swamp:** pools and reeds.
+  - **Wasteland:** craters and wreckage.
+  - **River valley:** a river with its crossings.
+- A new **city** generator, at war scale: blocks of buildings, streets and squares, rubble where blocks have
+  fallen. Its density and building height grow from farm town to city to hive city (towering blocks, narrow streets).
+  A fortress adds walls and a gate.
+- The map is built from the region and the battle's seed, so its replay rebuilds it exactly.
+- The leader who wins **the ground** picks the edge (and on a hill, the higher one).
+
+### In the client
+- Clicking a world opens its **planet view**: its regions and cities on a map of their own, coloured by holder,
+  with terrain, garrisons where you can see them, and your warband's region. Orders target regions there.
+- The galaxy map shows contested worlds split by the share each faction holds.
+
+### Not in this pass
+Orbit and space battles, sieges lasting several turns as a mechanic of their own, the planet surface in 3D, and
+weather that changes between turns.
+
+### The order to build in
+1. **Battles that can go either way**, on the war as it is (a few sessions' work, measured on the sample wars).
+2. **Terrain-driven battle maps** for the existing worlds: each world gets a terrain profile, and its battles use
+   it. This is an engine change; the generator has to be deterministic and keep its replays rebuilding.
+3. **Regions and cities**: the war's rules, AI, client and every system above move to the region level. This is
+   the biggest change since the war began, and the event log of a war started before it won't rebuild after it.

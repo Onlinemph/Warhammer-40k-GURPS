@@ -5,7 +5,7 @@
 // Costs are per soldier, set from what each is worth: `power` is how many Levies one is worth, measured with the
 // resolver as the fewest of it that beat each of seven reference armies (a hundred Levies, Brawlers or Turncoats, a
 // Chorus brood, twenty Wardens, thirty Bosses, thirty Husks), against the Levies it takes, a geometric mean.
-// The AI uses power for its sums of who is stronger; the resolver does the real reckoning. Within a faction the
+// `melee`: fights mainly hand to hand (a night battle favours such a side, battle.js). The AI uses power for its sums of who is stronger; the resolver does the real reckoning. Within a faction the
 // prices follow power; across factions each faction's prices are scaled so that equal-cost armies of its usual mix
 // break even with the Brawl's (the Hegemony x0.31, the Apostates x0.88): recruiting stays cheap.
 const UNITS = {
@@ -20,27 +20,27 @@ const UNITS = {
   faithless:  { faction: "apostates", name: "Faithless",     template: "Chaos Cultist",                  cost: { manpower: 0.45, materiel: 0.45 },   power: 0.3 },
   turncoat:   { faction: "apostates", name: "Turncoat",      template: "Traitor Guardsman",              cost: { manpower: 0.9, materiel: 1.8 },       power: 1.4 },
   zealot:     { faction: "apostates", name: "Zealot",        template: "Chaos Cultist Champion",         cost: { manpower: 0.45, materiel: 0.45 },   power: 0.2 },
-  vessel:     { faction: "apostates", name: "Vessel",        template: "Possessed",                      cost: { manpower: 6, materiel: 24 },      power: 17 },
+  vessel:     { faction: "apostates", name: "Vessel",        template: "Possessed",                      cost: { manpower: 6, materiel: 24 },      power: 17, melee: true },
   fallen:     { faction: "apostates", name: "Fallen Warden", template: "Chaos Space Marine",             cost: { manpower: 18, materiel: 70 },     power: 51 },
   // the Brawl: a brute species that treats war as sport
   runt:       { faction: "brawl",     name: "Runt",          template: "Gretchin",                       cost: { manpower: 0.25, materiel: 0.25 }, power: 0.1 },
-  brawler:    { faction: "brawl",     name: "Brawler",       template: "Ork Boy",                        cost: { manpower: 0.5, materiel: 0.5 },   power: 0.5 },
+  brawler:    { faction: "brawl",     name: "Brawler",       template: "Ork Boy",                        cost: { manpower: 0.5, materiel: 0.5 },   power: 0.5, melee: true },
   sneak:      { faction: "brawl",     name: "Sneak",         template: "Ork Kommando",                   cost: { manpower: 0.5, materiel: 1 },     power: 0.5 },
-  boss:       { faction: "brawl",     name: "Boss",          template: "Ork Nob",                        cost: { manpower: 2, materiel: 4, fame: 3 },       power: 2.7 },
-  ironhide:   { faction: "brawl",     name: "Ironhide",      template: "Ork Meganob",                    cost: { manpower: 6, materiel: 18, fame: 10 },      power: 12 },
+  boss:       { faction: "brawl",     name: "Boss",          template: "Ork Nob",                        cost: { manpower: 2, materiel: 4, fame: 3 },       power: 2.7, melee: true },
+  ironhide:   { faction: "brawl",     name: "Ironhide",      template: "Ork Meganob",                    cost: { manpower: 6, materiel: 18, fame: 10 },      power: 12, melee: true },
   // the Chorus: one hungry intelligence wearing a million bodies (AI)
-  leaper:     { faction: "chorus",    name: "Leaper",        template: "Hormagaunt",                     cost: { biomass: 1 },  power: 0.1 },
+  leaper:     { faction: "chorus",    name: "Leaper",        template: "Hormagaunt",                     cost: { biomass: 1 },  power: 0.1, melee: true },
   spitter:    { faction: "chorus",    name: "Spitter",       template: "Termagant",                      cost: { biomass: 1 },  power: 0.1 },
-  stalker:    { faction: "chorus",    name: "Stalker",       template: "Genestealer",                    cost: { biomass: 20 }, power: 39 },
+  stalker:    { faction: "chorus",    name: "Stalker",       template: "Genestealer",                    cost: { biomass: 20 }, power: 39, melee: true },
   conductor:  { faction: "chorus",    name: "Conductor",     template: "Tyranid Warrior",                cost: { biomass: 15 }, power: 20 },
-  hollow:     { faction: "chorus",    name: "Hollow",        template: "Lictor",                         cost: { biomass: 12 }, power: 5 },
-  bulwark:    { faction: "chorus",    name: "Bulwark",       template: "Carnifex",                       cost: { biomass: 40 }, power: 20 },
+  hollow:     { faction: "chorus",    name: "Hollow",        template: "Lictor",                         cost: { biomass: 12 }, power: 5, melee: true },
+  bulwark:    { faction: "chorus",    name: "Bulwark",       template: "Carnifex",                       cost: { biomass: 40 }, power: 20, melee: true },
   // the Dormant: the galaxy's last rulers, waking in their tombs (AI). They never recruit: what wakes is all there is
   husk:       { faction: "dormant",   name: "Husk",          template: "Necron Warrior",                 cost: {}, power: 16 },
   sentinel:   { faction: "dormant",   name: "Sentinel",      template: "Necron Immortal",                cost: {}, power: 20 },
   watcher:    { faction: "dormant",   name: "Watcher",       template: "Deathmark",                      cost: {}, power: 35 },
-  flenser:    { faction: "dormant",   name: "Flenser",       template: "Flayed One",                     cost: {}, power: 14 },
-  keeper:     { faction: "dormant",   name: "Keeper",        template: "Lychguard",                      cost: {}, power: 20 },
+  flenser:    { faction: "dormant",   name: "Flenser",       template: "Flayed One",                     cost: {}, power: 14, melee: true },
+  keeper:     { faction: "dormant",   name: "Keeper",        template: "Lychguard",                      cost: {}, power: 20, melee: true },
 };
 // `basic` is what a faction's supplied worlds raise as local levies each turn
 const FACTIONS = {
