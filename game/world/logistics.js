@@ -79,7 +79,7 @@ function orders(S, p, o, mine, H) {
 
 // ---- convoys: a jump a turn along their own worlds; taken by a raiding warband on or beside a world they pass,
 // unless a warband of theirs is with them; unloaded at the depot
-function convoys(S, H) {
+function convoys(S, H, T) {
   for (const c of S.convoys) {
     if (c.done) continue;
     const here = S.worlds[c.at];
@@ -100,6 +100,7 @@ function convoys(S, H) {
     }
     if (c.at === c.to) {
       const d = w.depot;
+      if (T) T.delivered.push({ player: c.player, world: w.id, n: c.supply });   // for contracts
       if (d) { const put = Math.min(c.supply, DEPOT.cap - d.supply); d.supply += put; const owner = S.players[c.player]; if (owner) owner.warband.history.push(`Turn ${S.turn}: a convoy reached ${w.name} with ${c.supply} supply${put < c.supply ? ` (the depot took ${put})` : ""}`); }
       c.done = true;
     }
@@ -111,10 +112,11 @@ function convoys(S, H) {
 // share of the stockpile. One fed from a depot counts as in supply even far from home. Returns nothing; sets
 // wb.eats, wb.short and wb.depotFed
 function eat(S, H) {
+  // shares weighted as the stockpile's are (the Warmaster's priority draws double)
   const share = {};
   for (const f of Object.keys(S.factions)) {
     if (!isPlayerFaction(f)) continue;
-    const n = Object.values(S.players).filter(p => p.faction === f && H.total(p.warband.army)).length;
+    const n = Object.values(S.players).filter(p => p.faction === f && H.total(p.warband.army)).reduce((a, p) => a + H.weight(S, p), 0);
     share[f] = n ? S.factions[f].stock.supply / n : 0;
   }
   for (const p of Object.values(S.players)) {
@@ -125,7 +127,9 @@ function eat(S, H) {
     const here = S.worlds[wb.at];
     const depots = [here, ...here.links.map(n => S.worlds[n])].filter(w => w.owner === p.faction && w.depot && w.depot.supply > 0).sort((a, b) => b.depot.supply - a.depot.supply);
     for (const d of depots) { const t = Math.min(want - got, d.depot.supply); d.depot.supply -= t; got += t; if (t) wb.depotFed = true; if (got >= want) break; }
-    if (got < want && wb.supplied) { const st = S.factions[p.faction].stock, t = Math.min(want - got, share[p.faction], st.supply); st.supply -= t; got += t; }
+    if (got < want && wb.supplied) { const st = S.factions[p.faction].stock, t = Math.min(want - got, share[p.faction] * H.weight(S, p), st.supply); st.supply -= t; got += t; }
+    // then its own treasury, wherever it is
+    if (got < want) got += (want - got) - H.fromTreasury(p, "supply", want - got);
     if (got + 1e-9 < want) { wb.short = true; wb.history.push(`Turn ${S.turn}: short of supply: ate ${Math.floor(got)} of ${want}`); }
   }
 }

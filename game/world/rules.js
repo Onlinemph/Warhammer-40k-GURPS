@@ -8,6 +8,7 @@ const { predict } = require("../../tools/resolver/resolver.js");
 const FX = require("./factions.js");
 const VET = require("./veterans.js");
 const LOG = require("./logistics.js");
+const POL = require("./politics.js");
 
 const START = {
   hegemony:  { stock: { manpower: 40, materiel: 60 }, warband: { levy: 15, storm: 3 }, garrison: { levy: 20 } },
@@ -53,6 +54,7 @@ function create(seed, opt = {}) {
   for (const w of Object.values(S.worlds)) if (w.tomb) { w.awake = false; w.wakeAt = WAKE[0] + Math.floor(R() * (WAKE[1] - WAKE[0] + 1)); }
   FX.setup(S);
   LOG.setup(S);
+  POL.setup(S);
   return S;
 }
 function join(S, { player, name, faction }) {
@@ -61,6 +63,7 @@ function join(S, { player, name, faction }) {
   S.players[player] = { id: player, name, faction, warband: { at: S.factions[faction].capital, army: { ...START[faction].warband }, supplied: true, orders: null, history: [] } };
   FX.joined(S, S.players[player]);
   VET.joined(S, S.players[player]);
+  POL.joined(S, S.players[player]);
   note(S, `${name} raises a warband for ${FACTIONS[faction].name}`);
 }
 function note(S, text) { S.log.push({ turn: S.turn, text }); }
@@ -92,6 +95,7 @@ function order(S, { player, move, recruit, ritual, stance, careful, build, convo
   const rit = ritual && typeof ritual === "object" ? { kind: String(ritual.kind), target: ritual.target ? String(ritual.target) : null } : null;
   const err = FX.checkOrder(S, p, { move, recruit, ritual: rit });
   if (err) return err;
+  p.lastActive = S.turn;
   wb.orders = { move: move || null, recruit: recruit || [], ritual: rit, stance: stance ?? null, careful: careful == null ? null : !!careful, build: build || null, convoy: cv };
   return null;
 }
@@ -137,12 +141,12 @@ function supplied(S, f) {
 }
 
 // what factions.js needs from here
-const H = { total, cut, supplied: (...a) => supplied(...a), factionsAt: (...a) => factionsAt(...a), ATTRITION, GARRISON_CAP, TYPES, note: (...a) => note(...a) };
+const H = { weight: (...a) => POL.weight(...a), fromTreasury: (...a) => POL.fromTreasury(...a), total, cut, supplied: (...a) => supplied(...a), factionsAt: (...a) => factionsAt(...a), ATTRITION, GARRISON_CAP, TYPES, note: (...a) => note(...a) };
 
 function tick(S, seed) {
   const R = rng(seed);
   S.turn++;
-  const W = id => S.worlds[id], T = { fought: new Set(), dead: {} };
+  const W = id => S.worlds[id], T = { fought: new Set(), dead: {}, captured: {}, delivered: [] };
   // 1. income (none from a blockaded world; supply from the worlds joined to the capital, logistics.js)
   for (const w of Object.values(S.worlds)) {
     if (!w.owner || LOG.noIncome(S, w, H)) continue;
@@ -155,20 +159,23 @@ function tick(S, seed) {
   // 2. players' orders: recruit where they stand, then move. The stockpile is shared out: each warband recruiting
   // this tick may spend an equal share of what the faction had at the tick's start (what isn't spent stays), so
   // whoever orders first doesn't take it all
+  // (a Warmaster's priority warbands draw a double share, politics.js; past its share a warband may spend its own
+  // treasury)
   const share = {};
   for (const f of Object.keys(FACTIONS)) {
-    const n = Object.values(S.players).filter(p => p.faction === f && p.warband.orders && p.warband.orders.recruit.length).length;
-    if (n) share[f] = Object.fromEntries(Object.entries(S.factions[f].stock).map(([k, v]) => [k, v / n]));
+    const ws = Object.values(S.players).filter(p => p.faction === f && p.warband.orders && (p.warband.orders.recruit.length || p.warband.orders.build)).reduce((a, p) => a + POL.weight(S, p), 0);
+    if (ws) share[f] = Object.fromEntries(Object.entries(S.factions[f].stock).map(([k, v]) => [k, v / ws]));
   }
   for (const p of Object.values(S.players)) {
     const o = p.warband.orders; if (!o) continue;
-    const st = S.factions[p.faction].stock, mine = share[p.faction] ? { ...share[p.faction] } : {}, here = W(p.warband.at);
+    const st = S.factions[p.faction].stock, mine = share[p.faction] ? Object.fromEntries(Object.entries(share[p.faction]).map(([k, v]) => [k, v * POL.weight(S, p)])) : {}, here = W(p.warband.at);
+    const tr = p.warband.treasury || {};
     for (const r of o.recruit) {
       const u = UNITS[r.unit];
       const why = FX.checkOrder(S, p, { recruit: [r] }) || (here.owner !== p.faction ? "not on your own world" : !p.warband.supplied ? "out of supply" : null);
-      const can = why ? 0 : Math.min(r.count, ...Object.entries(u.cost).map(([k, c]) => Math.floor(Math.min(st[k] || 0, mine[k] || 0) / c + 1e-9)));
+      const can = why ? 0 : Math.min(r.count, ...Object.entries(u.cost).map(([k, c]) => Math.floor((Math.min(st[k] || 0, mine[k] || 0) + (tr[k] || 0)) / c + 1e-9)));
       if (can > 0) {
-        for (const [k, c] of Object.entries(u.cost)) { st[k] -= c * can; mine[k] -= c * can; }
+        for (const [k, c] of Object.entries(u.cost)) { const all = c * can, fromShare = Math.min(all, Math.max(0, Math.min(st[k] || 0, mine[k] || 0))); st[k] -= fromShare; mine[k] -= fromShare; POL.fromTreasury(p, k, all - fromShare); }
         p.warband.army[r.unit] = (p.warband.army[r.unit] || 0) + can;
       }
       // say what happened, and why it fell short
@@ -179,7 +186,8 @@ function tick(S, seed) {
     // walls, from the warband's share like recruits
     if (o.build === "walls" && here.owner === p.faction && (here.walls || 0) < WALLS.max) {
       const c = WALLS.cost[here.walls || 0];
-      if (Math.min(st.materiel, mine.materiel ?? st.materiel) >= c) { st.materiel -= c; if (mine.materiel != null) mine.materiel -= c; here.walls = (here.walls || 0) + 1; p.warband.history.push(`Turn ${S.turn}: raised ${here.name}'s walls to level ${here.walls}`); }
+      const fromShare = Math.min(c, Math.max(0, Math.min(st.materiel, mine.materiel ?? st.materiel)));
+      if (fromShare + (tr.materiel || 0) >= c) { st.materiel -= fromShare; if (mine.materiel != null) mine.materiel -= fromShare; POL.fromTreasury(p, "materiel", c - fromShare); here.walls = (here.walls || 0) + 1; p.warband.history.push(`Turn ${S.turn}: raised ${here.name}'s walls to level ${here.walls}`); }
       else p.warband.history.push(`Turn ${S.turn}: couldn't raise ${here.name}'s walls: ${c} materiel needed from your share`);
     }
     LOG.orders(S, p, o, mine, H);   // a depot, a convoy
@@ -198,7 +206,7 @@ function tick(S, seed) {
   chorusTurn(S, R);
   dormantTurn(S, R);
   // 3b. convoys move a jump, and raiders take the ones they catch
-  LOG.convoys(S, H);
+  LOG.convoys(S, H, T);
   // 4. battles, wherever two factions meet (first, Levies marching on an Apostate world may turn, factions.js)
   for (const id of S.order) {
     const w = W(id);
@@ -217,6 +225,7 @@ function tick(S, seed) {
     if (sides.length === 1 && !raiders && sides[0].faction !== "militia" && sides[0].faction !== "dormant" && sides[0].faction !== w.owner) {
       const was = w.owner;
       w.owner = sides[0].faction; w.garrison = {};
+      T.captured[w.id] = sides[0].parts.filter(x => x.kind === "warband").map(x => x.player);   // for contracts
       const broken = was === "dormant" && w.tomb;
       FX.captured(S, w, was);
       if (broken) w.tomb = false;   // a taken tomb is ruins: it never holds sleepers again (its gate stays)
@@ -266,6 +275,8 @@ function tick(S, seed) {
   LOG.blockades(S, H, R);
   // named soldiers lost with their units to hunger, desertion or infighting
   VET.reconcile(S, R);
+  // politics: service, contracts paid or expired, recall, absence, elections
+  POL.tick(S, T);
 }
 
 // one battle: the resolver gives the odds and the expected losses; the tick's dice say who won
@@ -304,6 +315,7 @@ function fight(S, w, A, B, R, T) {
   S.swarms = S.swarms.filter(s => total(s.army));
   const winner = draw ? null : aWins ? A.faction : B.faction;
   // the named: who falls, who is named, the leader
+  for (const x of parts) POL.battle(S, S.players[x.part.player], [A, B][x.i].faction === winner);
   const fallenNamed = parts.flatMap(x => VET.afterBattle(S, w, x.part, x.was, S.players[x.part.player].warband.army, [A, B][x.i].faction === winner, x.lost, x.i ? lossB : lossA, R));
   // who the battle feeds: captives, biomass, fame (factions.js)
   FX.afterBattle(S, w, [A, B].map((x, i) => ({ faction: x.faction, parts: x.parts, won: winner === x.faction, p: i ? 1 - pA : pA, lostN: fell[i].n, lostPower: fell[i].power })), R, T);
@@ -394,7 +406,8 @@ function apply(S, e) {
   if (e.type === "join") { join(S, e); return S; }
   if (e.type === "order") { const err = order(S, e); if (err) note(S, `order refused: ${err}`); return S; }
   if (e.type === "tick") { tick(S, e.seed); return S; }
-  if (e.type === "notice") { note(S, String(e.text)); return S; }   // a word from the admin, in the news (a rollback, a pause)
+  if (e.type === "notice") { note(S, String(e.text)); return S; }
+  if (e.type === "politics") { POL.apply(S, e); return S; }   // votes, standing, the Warmaster's acts (checked when given)   // a word from the admin, in the news (a rollback, a pause)
   throw new Error(`unknown event ${e.type}`);
 }
 const rebuild = events => events.reduce((S, e) => apply(S, e), null);
@@ -414,6 +427,7 @@ function view(S, player) {
   return {
     turn: S.turn, you: { name: p.name, faction: f, warband: p.warband, stock: S.factions[f].stock, moves: FX.moves(S, f, p.warband.at), odds,
       edict: f === "hegemony" ? S.factions.hegemony.edict : null, rituals: f === "apostates" ? FX.RITUALS : null, walls: WALLS, turnBack: TURN_BACK, depot: LOG.DEPOT, convoyMax: LOG.CONVOY.max },
+    politics: POL.view(S, p),
     factions: { ...Object.fromEntries(Object.entries(S.factions).map(([k, v]) => [k, { name: v.name, colour: v.colour }])), militia: { name: MILITIA.name, colour: "#8d887e" } },
     units: Object.fromEntries(Object.entries(UNITS).filter(([, u]) => u.faction === f).map(([k, u]) => [k, { name: u.name, cost: u.cost }])),
     worlds: S.order.map(id => {
@@ -430,4 +444,6 @@ function view(S, player) {
     news: S.log.slice(-30).reverse(),
   };
 }
-module.exports = { apply, rebuild, view, order, total, strength, supplied, holdBonus, oddsAt, START };
+// a politics action checked against the state now (the server logs only what passes)
+const politics = (S, e) => POL.check(S, e);
+module.exports = { politics, apply, rebuild, view, order, total, strength, supplied, holdBonus, oddsAt, START };

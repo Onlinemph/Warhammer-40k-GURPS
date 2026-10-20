@@ -19,6 +19,40 @@ function rosterHtml(me) {
     <ol class="feed">${named.map(row).join("") || "<li class='muted'>No one named yet: win a battle.</li>"}</ol></details>
     ${fallen.length ? `<details><summary>Memorial (${fallen.length})</summary><ol class="feed">${fallen.map(m => `<li><b>${esc(m.name)}</b>${m.leader ? " (leader)" : ""} · ${esc(m.rank)} · ${m.retired ? `went home on turn ${m.turn}` : `fell at ${esc(m.fell)} on turn ${m.turn}`}${m.letter ? `<br><i>${esc(m.letter)}</i>` : ""}</li>`).join("")}</ol></details>` : ""}`;
 }
+// the faction's politics: the Warmaster, the election, recall, contracts, the faction log (game/world/politics.js)
+const payText = r => ["manpower", "materiel", "supply"].filter(k => r && r[k]).map(k => `${r[k]} ${k}`).join(", ") || "nothing";
+function politicsHtml() {
+  const P = V.politics, me = V.you.warband;
+  if (!P) return "";
+  const wm = P.warmaster, iAm = wm && wm.id === P.youAre, cand = P.candidates.some(c => c.id === P.youAre);
+  const worlds = V.worlds.slice().sort((a, b) => a.name.localeCompare(b.name));
+  return `<h3>Politics</h3>
+    <p>Warmaster: <b>${wm ? esc(wm.name) : "none"}</b>${wm ? ` <small class="muted">(posted ${wm.record.posted}, paid ${wm.record.paid}, cancelled ${wm.record.cancelled})</small>` : ""} · next election on turn ${P.nextElection}</p>
+    <p class="muted">Your service ${me.service} · treasury ${esc(payText(me.treasury))} · contracts done ${me.record.done}, failed ${me.record.failed}</p>
+    <p>Candidates: ${P.candidates.map(c => `${esc(c.name)} (${c.votes} votes, ${c.service} service)${P.yourVote === c.id ? " ✓" : ` <button class="link" data-pol="vote" data-for="${c.id}">vote</button>`}`).join("; ") || "<span class='muted'>none yet</span>"}
+    ${!cand && P.eligible && !iAm ? ` <button class="link" data-pol="stand">Stand for Warmaster</button>` : ""}</p>
+    ${wm ? `<p class="muted">Recall: ${P.recall.yes} of ${P.recall.total} service wants ${esc(wm.name)} out (more than half recalls) <button class="link" data-pol="recall" data-yes="${!P.recall.you}">${P.recall.you ? "withdraw my recall vote" : "vote to recall"}</button></p>` : ""}
+    <h3>Contracts</h3><ol class="feed">${P.contracts.map(k => `<li>${esc(k.text)} · <b>${esc(payText(k.reward))}</b> · by turn ${k.deadline}${k.offer ? ` · for ${esc(k.offer.name)}${k.accepted ? " (accepted)" : ""}` : " · open bounty"}${k.progress ? ` · your progress ${k.progress}` : ""}
+      ${k.offer && k.offer.id === P.youAre && !k.accepted ? ` <button class="link" data-pol="accept" data-id="${k.id}">accept</button>` : ""}${iAm ? ` <button class="link" data-pol="cancel" data-id="${k.id}">cancel</button>` : ""}</li>`).join("") || "<li class='muted'>No contracts.</li>"}</ol>
+    ${iAm ? `<details><summary>Warmaster: post a contract, set priorities</summary>
+      <label>Kind <select id="k-kind"><option value="take">take a world</option><option value="hold">hold a world</option><option value="deliver">deliver supply to a depot</option><option value="break">break a tomb</option></select></label>
+      <label>World <select id="k-world">${worlds.map(w => `<option value="${w.id}">${esc(w.name)}${w.owner ? " (" + esc(V.factions[w.owner].name) + ")" : ""}</option>`).join("")}</select></label>
+      <label>Turns to hold <input type="number" id="k-turns" min="${P.limits.hold[0]}" max="${P.limits.hold[1]}" value="3"> · supply to deliver <input type="number" id="k-supply" min="1" max="200" value="30"></label>
+      <label>Reward <input type="number" id="k-man" min="0" value="10"> manpower <input type="number" id="k-mat" min="0" value="20"> materiel <input type="number" id="k-sup" min="0" value="0"> supply</label>
+      <label>Deadline in <input type="number" id="k-dl" min="1" max="${P.limits.deadline}" value="10"> turns · offer to <select id="k-offer"><option value="">anyone (open bounty)</option>${P.members.map(m => `<option value="${m.id}">${esc(m.name)}</option>`).join("")}</select></label>
+      <button id="k-post">Post the contract</button>
+      <label>Priority (double share): <select id="k-p1"><option value="">none</option>${P.members.map(m => `<option value="${m.id}"${P.priority[0] && P.priority[0].id === m.id ? " selected" : ""}>${esc(m.name)}</option>`).join("")}</select>
+        <select id="k-p2"><option value="">none</option>${P.members.map(m => `<option value="${m.id}"${P.priority[1] && P.priority[1].id === m.id ? " selected" : ""}>${esc(m.name)}</option>`).join("")}</select> <button id="k-prio">Set</button></label></details>` : ""}
+    <p class="err" id="pol-err"></p>
+    <details><summary>Faction log</summary><ol class="feed">${P.log.map(l => `<li><b>Turn ${l.turn}</b> · ${esc(l.text)}</li>`).join("")}</ol></details>`;
+}
+async function pol(body) { try { await api("/api/politics", body); load(); } catch (e) { $("#pol-err").textContent = e.message; } }
+function wirePolitics() {
+  document.querySelectorAll("[data-pol]").forEach(b => b.onclick = () => pol({ action: b.dataset.pol, for: b.dataset.for, id: b.dataset.id, yes: b.dataset.yes === "true" }));
+  if ($("#k-post")) $("#k-post").onclick = () => pol({ action: "post", contract: { kind: $("#k-kind").value, world: $("#k-world").value, turns: +$("#k-turns").value, supply: +$("#k-supply").value,
+    deadline: +$("#k-dl").value, offer: $("#k-offer").value || null, reward: { manpower: +$("#k-man").value, materiel: +$("#k-mat").value, supply: +$("#k-sup").value } } });
+  if ($("#k-prio")) $("#k-prio").onclick = () => pol({ action: "priority", warbands: [$("#k-p1").value, $("#k-p2").value].filter(Boolean) });
+}
 const armyText = a => Object.entries(a).filter(([, n]) => n > 0).map(([k, n]) => `${n} ${esc(k)}`).join(", ") || "nobody";
 
 async function joinWar() {
@@ -137,6 +171,7 @@ function draw() {
   };
   $("#reports").innerHTML = V.reports.map((r, i) => `<li><b>Turn ${r.turn}</b> · ${esc(r.text)} ${r.id ? `<button class="link" data-rep="${i}">Watch</button>` : ""}</li>`).join("") || "<li class='muted'>No battles yet.</li>";
   $("#reports").querySelectorAll("[data-rep]").forEach(b => b.onclick = () => openReplay(V.reports[+b.dataset.rep].id, V.reports[+b.dataset.rep]));
+  $("#politics").innerHTML = politicsHtml(); wirePolitics();
   $("#news").innerHTML = V.news.map(n => `<li><b>Turn ${n.turn}</b> · ${esc(n.text)}</li>`).join("");
   countdown();
 }

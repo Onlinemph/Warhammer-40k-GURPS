@@ -4,7 +4,7 @@
 // toward foreign worlds (the weakest next door first, gates included), and comes home to rebuild when cut below 12. The
 // Apostates hold a Corruption when a Hegemony world next door is ripe, or a Summoning, whenever they have the
 // captives. Prints the mean worlds held per faction at turns 20, 40 and 60, and in how many wars each was wiped out.
-const { apply, order, total, strength, oddsAt } = require("./world/rules.js");
+const { apply, order, total, strength, oddsAt, politics } = require("./world/rules.js");
 const { rng } = require("./world/galaxy.js");
 const FX = require("./world/factions.js");
 const LOG = require("./world/logistics.js");
@@ -52,7 +52,9 @@ function decide(S, p, R) {
       // with the standing orders it reads the odds: the best fight on offer, and none at all if every one is hopeless
       // (then home to grow, rather than marching at the same wall every turn)
       if (SMART) {
-        const scored = next.map(w => ({ w, o: oddsAt(S, p, w.id) ?? 100 })).sort((a, b) => b.o - a.o);
+        // (a world with a contract on it is worth a bit more to march on)
+        const P = S.politics && S.politics[f], wanted = new Set(P ? P.contracts.filter(k => (k.kind === "take" || k.kind === "break") && (!k.offer || (k.accepted && k.offer === p.id))).map(k => k.world) : []);
+        const scored = next.map(w => ({ w, o: oddsAt(S, p, w.id) ?? 100 })).sort((a, b) => (b.o + (wanted.has(b.w.id) && b.o >= 25 ? 30 : 0)) - (a.o + (wanted.has(a.w.id) && a.o >= 25 ? 30 : 0)));
         move = scored[0].o >= 25 ? scored[0].w.id : home ? null : stepToward(S, f, wb.at, w => w.id === capital) || stepToward(S, f, wb.at, w => w.owner === f);
       }
     } else move = stepToward(S, f, wb.at, w => w.owner !== f);
@@ -77,13 +79,33 @@ function decide(S, p, R) {
 // BOT_ORDERS=0: the bots as they were, moving and recruiting only (to measure what the standing orders change)
 const SMART = process.env.BOT_ORDERS !== "0";
 function play(S, p, R) { const o = decide(S, p, R); if (o) order(S, { player: p.id, ...o }); }
+// a bot's politics for this turn, as politics events: stand when it's the most served of its faction, vote for the
+// most served candidate, accept what's offered to it, and as Warmaster post a "take" bounty on the weakest enemy world
+// beside the faction's territory when the stockpile can spare it
+function politicsFor(S, p) {
+  if (!SMART || !S.politics || !S.politics[p.faction]) return [];
+  const f = p.faction, P = S.politics[f], out = [], mates = Object.values(S.players).filter(q => q.faction === f);
+  const top = mates.slice().sort((a, b) => b.warband.service - a.warband.service)[0];
+  if (top === p && !P.candidates.includes(p.id) && P.warmaster !== p.id) out.push({ action: "stand" });
+  const best = P.candidates.map(id => S.players[id]).filter(Boolean).sort((a, b) => b.warband.service - a.warband.service)[0];
+  if (best && P.votes[p.id] !== best.id) out.push({ action: "vote", for: best.id });
+  for (const k of P.contracts) if (k.offer === p.id && !k.accepted) out.push({ action: "accept", id: k.id });
+  if (P.warmaster === p.id && P.contracts.length < 2 && (S.factions[f].stock.materiel || 0) >= 60) {
+    const mine = Object.values(S.worlds).filter(w => w.owner === f);
+    const near = [...new Set(mine.flatMap(w => w.links))].map(id => S.worlds[id]).filter(w => w.owner !== f && w.owner !== "dormant" && !P.contracts.some(k => k.world === w.id));
+    const them = w => strength(Object.values(S.players).filter(q => q.faction !== f && q.warband.at === w.id).reduce((a, q) => ({ ...a, ...q.warband.army }), { ...w.garrison }));
+    const t = near.sort((a, b) => them(a) - them(b))[0];
+    if (t) out.push({ action: "post", contract: { kind: "take", world: t.id, deadline: 10, reward: { manpower: 10, materiel: 20 } } });
+  }
+  return out.map(a => ({ type: "politics", player: p.id, ...a }));
+}
 function war(seed, turns) {
   const R = rng(seed * 7919), log = [{ type: "create", seed }];
   for (const f of ["hegemony", "apostates", "brawl"]) for (const i of [1, 2]) log.push({ type: "join", player: `${f}${i}`, name: `${f} ${i}`, faction: f });
   let S = log.reduce((s, e) => apply(s, e), null);
   const held = {};
   for (let t = 1; t <= turns; t++) {
-    for (const p of Object.values(S.players)) play(S, p, R);
+    for (const p of Object.values(S.players)) { for (const e of politicsFor(S, p)) if (!politics(S, e)) S = apply(S, e); play(S, p, R); }
     S = apply(S, { type: "tick", seed: Math.floor(R() * 2 ** 31) });
     if (t % 20 === 0) held[t] = Object.fromEntries(FACTIONS.map(f => [f, Object.values(S.worlds).filter(w => w.owner === f).length]));
   }
@@ -104,4 +126,4 @@ if (require.main === module) {
   console.log("  wiped out".padEnd(20) + FACTIONS.map(f => `${res.filter(r => r.held[last][f] === 0).length}/${res.length}`.padStart(10)).join(""));
   console.log("  most worlds".padEnd(20) + FACTIONS.map(f => String(Math.max(...res.map(r => r.held[last][f]))).padStart(10)).join(""));
 }
-module.exports = { war, decide };
+module.exports = { war, decide, politicsFor };

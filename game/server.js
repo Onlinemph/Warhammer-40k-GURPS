@@ -29,11 +29,14 @@
 //   POST /api/admin/rollback                     -> undo the last tick (its battles and the orders given since); the
 //                                                   removed events are kept in DATA_DIR/rolledback/
 //   POST /api/admin/newwar                       -> archive this war in DATA_DIR/archive/ and start a fresh one
+//   POST /api/politics {action: stand|vote|recall|priority|post|cancel|accept, ...} -> {ok} or {error}
+//        (vote: {for}; recall: {yes}; priority: {warbands}; post: {contract: {kind, world, turns, supply, reward, offer,
+//        deadline}}; cancel and accept: {id}); takes effect at once, in the log as a "politics" event
 //   GET  /api/replay/<report id>                 -> {status, progress, ahead} until it's ready, then the replay
 //                                                   (gzipped JSON); asking for one that isn't queued queues it
 const http = require("http"), fs = require("fs"), path = require("path"), crypto = require("crypto"), zlib = require("zlib");
 const { Worker } = require("worker_threads");
-const { apply, rebuild, view, order } = require("./world/rules.js");
+const { apply, rebuild, view, order, politics } = require("./world/rules.js");
 const { FACTIONS } = require("./world/units.js");
 const { makeAuth } = require("./auth.js");
 
@@ -115,9 +118,10 @@ function botsJoin() {
 }
 function botsOrder() {
   if (!BOTS) return;
-  const { decide } = require("./sample-wars.js");
+  const { decide, politicsFor } = require("./sample-wars.js");
   for (const p of Object.values(S.players)) {
     if (!p.id.startsWith("bot-")) continue;
+    for (const e of politicsFor(S, p)) if (!politics(S, e)) record(e);
     const o = decide(S, p, botRand);
     if (o && !order(JSON.parse(JSON.stringify(S)), { type: "order", player: p.id, ...o })) record({ type: "order", player: p.id, ...o });
   }
@@ -197,6 +201,20 @@ const server = http.createServer(async (req, res) => {
     if (req.method === "GET" && url.pathname === "/api/view") {
       const p = who(req); if (!p) return send(res, 401, { error: "sign in and join first" });
       return send(res, 200, { ...view(S, p), nextTick: nextTick(), paused: adm.paused, now: Date.now() });
+    }
+    if (req.method === "POST" && url.pathname === "/api/politics") {
+      const p = who(req); if (!p) return send(res, 401, { error: "sign in and join first" });
+      const b = await readBody(req), str = (x, n = 16) => x == null ? null : String(x).slice(0, n), num = x => Math.floor(+x) || 0;
+      const c = b.contract && typeof b.contract === "object" ? b.contract : null;
+      const e = { type: "politics", player: p, action: str(b.action), for: str(b.for), yes: b.yes == null ? undefined : !!b.yes, id: str(b.id),
+        warbands: Array.isArray(b.warbands) ? b.warbands.slice(0, 2).map(x => str(x, 32)) : undefined,
+        contract: c ? { kind: str(c.kind), world: str(c.world), turns: num(c.turns), supply: num(c.supply), deadline: num(c.deadline), offer: str(c.offer, 32),
+          reward: { manpower: num(c.reward && c.reward.manpower), materiel: num(c.reward && c.reward.materiel), supply: num(c.reward && c.reward.supply) } } : undefined };
+      for (const k of Object.keys(e)) if (e[k] === undefined || e[k] === null) delete e[k];
+      const err = politics(S, e);
+      if (err) return send(res, 400, { error: err });
+      record(e);
+      return send(res, 200, { ok: true });
     }
     if (req.method === "POST" && url.pathname === "/api/orders") {
       const p = who(req); if (!p) return send(res, 401, { error: "sign in and join first" });

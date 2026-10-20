@@ -275,3 +275,64 @@ made, carried, stored, cut off and fought over. Like the rest, it is worked out 
 ### Not in this pass
 Ships and orbit, faction travel styles beyond gates, supply moving on its own along the lanes, convoys of troops,
 and medics and healing.
+
+## Politics and contracts
+
+From the design doc: players run their factions. Ranks are elected, votes are weighted by service in this war, and
+the elected set the stockpile's priorities and post binding contracts paid from escrow. Nobody can force another
+player to obey; contracts make it worth their while. Worked out from the log like everything else (`game/world/politics.js`).
+
+### Service
+- Every warband earns **service** in its war: 1 a turn in the field, 2 a battle fought, 3 a battle won, 5 a contract
+  completed. It's shown on the warband and decides how much its vote weighs.
+
+### The Warmaster
+- Each player faction has one elected office, the **Warmaster**. An election is held every 10 turns, on turns 5, 15,
+  25 and so on.
+- **Standing:** any warband with 5 turns served and 3 battles fought can stand, with a new order, *stand for
+  Warmaster*.
+- **Voting:** every warband of the faction may vote with the order *vote for* (the last vote before the election
+  counts), weighted by its service. The candidate with the most weight wins, a tie going to the one with more
+  service. With no candidates the office stays as it is.
+- **Recall:** at any tick, if votes to recall the Warmaster (the order *vote to recall*) carry more than half the
+  faction's service, the office falls vacant until the next election.
+- **Absence:** a Warmaster who gives no orders for 3 turns loses the office.
+- Ranks end with the war.
+
+### What the Warmaster can do
+- **Priority:** name up to two warbands to draw a double share of the stockpile (recruits, supply, walls and depots).
+- **Contracts:** post one, with its reward taken from the stockpile into **escrow** when it's posted, and a deadline
+  of up to 15 turns. Up to 4 open at once. Each is either an *open bounty* (anyone of the faction may complete it) or
+  *offered to* one warband (which must accept it first). Four kinds, each checked at the tick:
+  - *Take* a named world (paid to the warband or warbands whose forces took it).
+  - *Hold* a named world for N turns, 2 to 6 (the taker's warband must be on it, and the faction holding it, each of
+    those turns).
+  - *Deliver* N supply to a named depot by convoy (counted as the taker's convoys arrive).
+  - *Break* a named tomb.
+- **Pay** goes into the completing warband's **treasury**: manpower, materiel and supply it spends on its own orders,
+  after its share of the stockpile.
+- **Cancel:** a contract can be withdrawn. An accepted one pays its taker half in compensation, and the rest returns
+  to the stockpile. One that reaches its deadline undone returns to the stockpile, and an accepted one counts as
+  failed.
+
+### Reputation
+- Each warband's record: contracts completed and failed, shown to its faction. The Warmaster's own record shows
+  contracts posted, paid and cancelled.
+
+### The faction's own log
+- Every election, vote total, priority, contract posted, accepted, paid, failed or cancelled goes in a log only that
+  faction can read.
+
+### The bots
+- Bots vote for the candidate with the most service, stand when they are the faction's most served, and take open
+  bounties that lie on their way. A bot Warmaster posts a *take* contract on the weakest enemy world next to the
+  faction's territory when the stockpile can spare it.
+
+### In the client
+- A **Politics** card: the Warmaster, the next election and its candidates, your service and vote, the recall tally,
+  the contracts board (accept, and what each pays), your treasury and record, and the faction log.
+- For the Warmaster: post a contract, set priorities, cancel.
+
+### Not in this pass
+More offices than one, appointment by the elected, edict votes, sanctioned traitors, counter-intelligence,
+propaganda, captive treatment, duels, and contracts between factions.
