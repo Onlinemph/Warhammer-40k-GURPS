@@ -110,8 +110,10 @@ function makeAuth({ dataDir, env = process.env }) {
   }
   const playerOf = account => (account && accounts[account] && accounts[account].player) || null;
   function bind(account, player) { accounts[account].player = player; save(ACCOUNTS, accounts); }
+  // a new war: every account is free to raise a warband again
+  function unbindAll() { for (const a of Object.values(accounts)) a.player = null; save(ACCOUNTS, accounts); }
 
-  return { providers, enabled, begin, finish, clearFlow, accountOf, playerOf, bind, signOut, cookieHeader, openSession, files: [ACCOUNTS, SESSIONS] };
+  return { providers, enabled, begin, finish, clearFlow, accountOf, playerOf, bind, unbindAll, signOut, cookieHeader, openSession, files: [ACCOUNTS, SESSIONS] };
 }
 
 module.exports = { makeAuth };

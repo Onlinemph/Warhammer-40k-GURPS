@@ -370,6 +370,7 @@ function apply(S, e) {
   if (e.type === "join") { join(S, e); return S; }
   if (e.type === "order") { const err = order(S, e); if (err) note(S, `order refused: ${err}`); return S; }
   if (e.type === "tick") { tick(S, e.seed); return S; }
+  if (e.type === "notice") { note(S, String(e.text)); return S; }   // a word from the admin, in the news (a rollback, a pause)
   throw new Error(`unknown event ${e.type}`);
 }
 const rebuild = events => events.reduce((S, e) => apply(S, e), null);

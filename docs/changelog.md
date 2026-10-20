@@ -388,3 +388,9 @@ Anchor and rule changes to `framework.md`, with the reason for each.
   - Reports give the odds each battle was fought at, and say when one side held the world (behind walls or not).
   - A side's holding bonus is now one sum (the world's defence, its walls, a fortified warband); with no walls and nobody fortified it gives exactly the odds of before, so the sample wars are unchanged (the bots use none of this yet).
   - Tests: `game/test/orders.test.js` (fortify and walls, a turn-back, a raid that loots and comes home); war tests 28/28. Checked in the playtest war in the browser: stance, turn back and walls set from the order panel and kept.
+- **Admin tools** for running a test war (the handoff's roadmap step 4). With `ADMIN_KEY` set, the page opened once with `?admin=<key>` shows an admin panel, and the same actions are `/api/admin/<action>`:
+  - **Pause and resume**: no ticks while paused; a resume gives a full turn. Kept across restarts (`data/admin.json`).
+  - **Roll back the last turn**: the tick and the orders given since are removed (joins stay), the war is rebuilt from the log, the removed events are kept in `data/rolledback/`, the replays of that turn's battles are deleted (their ids will be reused), and the clock gives a full turn.
+  - **New war**: the log, replays and tokens go to `data/archive/war-<when>/`, accounts are freed to join again, a fresh galaxy is made, and the bots join it.
+  - Every action is written to `data/admin-log.jsonl`, and a new `notice` event puts pause, resume and rollback in the players' news. The playtest's Tick button became part of the panel.
+  - Tests: `game/test/admin.test.js` (all four, the log on disk rebuilding the server's state after a rollback, the admin log); war tests 29/29. Checked in the playtest war: pause, resume, tick and a rollback of turn 11 from the panel.

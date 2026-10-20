@@ -177,8 +177,8 @@ itself hasn't been validated with flyctl. **Run exactly one server**, or the war
 ## What's next
 
 1. **Deploy and run the closed test war** (roadmap step 4). Sign-in is in, tested against a stand-in provider but
-   not yet against real Discord or Google: register the apps (`deploy/README.md`, Sign-in) and try both. Still
-   needed: admin tools to pause, roll back a turn, and start a new war.
+   not yet against real Discord or Google: register the apps (`deploy/README.md`, Sign-in) and try both. The admin
+   tools are in (pause, roll back a turn, new war: `game/README.md`, Running a war).
 2. **The setting** is in (`docs/setting.md`: five factions in the war, the Last Court for later). Next for it: the
    factions' own mechanics from the design doc, and in time templates of the setting's own.
 3. **Later, guided by the playtest:**

@@ -50,6 +50,14 @@ reached; the finished replay is kept gzipped in `data/replays/` and served insta
 draws the field once and moves the soldiers smoothly between seconds, with each second's shots, blows and blasts,
 play, pause, scrub and speed.
 
+**Running a war** (`ADMIN_KEY` set). Open the page once with `?admin=<ADMIN_KEY>` for the admin panel (kept for
+that tab only): tick now, pause and resume (a resume gives a full turn), roll back the last turn (its battles and
+the orders given since go; joins stay; the removed events are kept in `data/rolledback/`), and start a new war (the
+old log, replays and tokens go to `data/archive/war-<when>/`; accounts are freed to join again). Every action is in
+`data/admin-log.jsonl`, and the players' news says when the war is paused, resumed or rolled back. The same actions
+are `/api/admin/<action>` with the `x-admin-key` header. For a playtest, `BOTS=2` adds two scripted warbands to
+each player faction.
+
 **What a player sees** is filtered on the server: the map and who holds each world are public; armies only where
 their faction has eyes (its worlds, its warbands, and one jump from either).
 

@@ -21,7 +21,13 @@
 //   POST /api/join   {name, faction}            -> {ok} for a signed-in account; {token} for a development join
 //   GET  /api/view                               -> what that player can see, and when the next tick is
 //   POST /api/orders {move, recruit:[{unit,count}], ritual:{kind,target}, stance, careful, build} -> {ok} or {error}
-//   POST /api/admin/tick  (header x-admin-key)  -> ticks now (testing)
+//   Admin (header x-admin-key; every action goes in DATA_DIR/admin-log.jsonl, and the players' news):
+//   GET  /api/admin/status                       -> {turn, paused, nextTick, players, bots}
+//   POST /api/admin/tick                         -> ticks now
+//   POST /api/admin/pause, /api/admin/resume     -> stop the clock; start it again with a full turn to go
+//   POST /api/admin/rollback                     -> undo the last tick (its battles and the orders given since); the
+//                                                   removed events are kept in DATA_DIR/rolledback/
+//   POST /api/admin/newwar                       -> archive this war in DATA_DIR/archive/ and start a fresh one
 //   GET  /api/replay/<report id>                 -> {status, progress, ahead} until it's ready, then the replay
 //                                                   (gzipped JSON); asking for one that isn't queued queues it
 const http = require("http"), fs = require("fs"), path = require("path"), crypto = require("crypto"), zlib = require("zlib");
@@ -34,7 +40,7 @@ const TRUST_PROXY = process.env.TRUST_PROXY === "1", KEEP_BACKUPS = +(process.en
 const PORT = +process.env.PORT || 8080, TURN = (+process.env.TURN_SECONDS || 43200) * 1000;
 const DATA = process.env.DATA_DIR || path.join(__dirname, "data"), ADMIN = process.env.ADMIN_KEY || null;
 fs.mkdirSync(DATA, { recursive: true });
-const LOG = path.join(DATA, "events.jsonl"), TOKENS = path.join(DATA, "tokens.json");
+const LOG = path.join(DATA, "events.jsonl"), TOKENS = path.join(DATA, "tokens.json"), ADMIN_FILE = path.join(DATA, "admin.json");
 
 // ---- the log and the state
 const events = fs.existsSync(LOG) ? fs.readFileSync(LOG, "utf8").split("\n").filter(Boolean).map(l => JSON.parse(l)) : [];
@@ -47,7 +53,13 @@ function record(e) {
 }
 if (!S) record({ type: "create", seed: crypto.randomInt(2 ** 31) });
 // tokens: player id by the hash of their secret (kept apart from the log, which holds no secrets)
-const tokens = fs.existsSync(TOKENS) ? JSON.parse(fs.readFileSync(TOKENS, "utf8")) : {};
+let tokens = fs.existsSync(TOKENS) ? JSON.parse(fs.readFileSync(TOKENS, "utf8")) : {};
+// the admin's switches, kept across restarts: paused, and when the next tick is due after a resume
+const adm = fs.existsSync(ADMIN_FILE) ? JSON.parse(fs.readFileSync(ADMIN_FILE, "utf8")) : { paused: false, dueAt: null };
+const saveAdm = () => fs.writeFileSync(ADMIN_FILE, JSON.stringify(adm));
+const adminLog = (action, extra = {}) => fs.appendFileSync(path.join(DATA, "admin-log.jsonl"), JSON.stringify({ at: Date.now(), action, turn: S.turn, ...extra }) + "\n");
+// the log written whole (a rollback or a new war), through a temporary file so a crash never leaves half of it
+function rewriteLog() { fs.writeFileSync(LOG + ".tmp", events.map(e => JSON.stringify(e) + "\n").join("")); fs.renameSync(LOG + ".tmp", LOG); }
 const hash = t => crypto.createHash("sha256").update(t).digest("hex");
 // accounts: a warband belongs to a Discord or Google account (game/auth.js)
 const PUBLIC_URL = (process.env.PUBLIC_URL || `http://localhost:${PORT}`).replace(/\/+$/, "");
@@ -109,14 +121,16 @@ function botsOrder() {
     if (o && !order(JSON.parse(JSON.stringify(S)), { type: "order", player: p.id, ...o })) record({ type: "order", player: p.id, ...o });
   }
 }
-const tickNow = () => { botsOrder(); const n = S.reports.length; record({ type: "tick", seed: crypto.randomInt(2 ** 31) }); queuePlayerBattles(n); };
+const tickNow = () => { botsOrder(); const n = S.reports.length; record({ type: "tick", seed: crypto.randomInt(2 ** 31) }); adm.dueAt = null; saveAdm(); queuePlayerBattles(n); };
 
 // ---- the clock
 const lastTick = () => { for (let i = events.length - 1; i >= 0; i--) if (events[i].type === "tick" || events[i].type === "create") return events[i].at; return Date.now(); };
 let timer = null;
+const nextTick = () => adm.paused ? null : adm.dueAt ?? lastTick() + TURN;
 function schedule() {
   clearTimeout(timer);
-  const due = lastTick() + TURN;
+  if (adm.paused) return;
+  const due = nextTick();
   timer = setTimeout(() => { tickNow(); schedule(); }, Math.max(0, due - Date.now()));
   timer.unref();   // the listening server keeps the process alive, not the clock
 }
@@ -181,7 +195,7 @@ const server = http.createServer(async (req, res) => {
     }
     if (req.method === "GET" && url.pathname === "/api/view") {
       const p = who(req); if (!p) return send(res, 401, { error: "sign in and join first" });
-      return send(res, 200, { ...view(S, p), nextTick: lastTick() + TURN, now: Date.now() });
+      return send(res, 200, { ...view(S, p), nextTick: nextTick(), paused: adm.paused, now: Date.now() });
     }
     if (req.method === "POST" && url.pathname === "/api/orders") {
       const p = who(req); if (!p) return send(res, 401, { error: "sign in and join first" });
@@ -195,10 +209,18 @@ const server = http.createServer(async (req, res) => {
       record(e);
       return send(res, 200, { ok: true });
     }
-    if (req.method === "POST" && url.pathname === "/api/admin/tick") {
+    const ad = /^\/api\/admin\/(\w+)$/.exec(url.pathname);
+    if (ad) {
       if (!ADMIN || req.headers["x-admin-key"] !== ADMIN) return send(res, 403, { error: "no" });
-      tickNow(); schedule();
-      return send(res, 200, { turn: S.turn });
+      const act = ad[1], status = () => ({ turn: S.turn, paused: adm.paused, nextTick: nextTick(), players: Object.values(S.players).filter(p => !p.id.startsWith("bot-")).length, bots: Object.keys(S.players).filter(id => id.startsWith("bot-")).length });
+      if (req.method === "GET" && act === "status") return send(res, 200, status());
+      if (req.method !== "POST") return send(res, 404, { error: "not found" });
+      if (act === "tick") { tickNow(); schedule(); adminLog("tick"); return send(res, 200, status()); }
+      if (act === "pause") { adm.paused = true; saveAdm(); schedule(); record({ type: "notice", text: "The war is paused" }); adminLog("pause"); return send(res, 200, status()); }
+      if (act === "resume") { adm.paused = false; adm.dueAt = Date.now() + TURN; saveAdm(); schedule(); record({ type: "notice", text: "The war resumes" }); adminLog("resume"); return send(res, 200, status()); }
+      if (act === "rollback") { const r = rollback(); if (r.error) return send(res, 400, r); adminLog("rollback", r); return send(res, 200, { ...status(), ...r }); }
+      if (act === "newwar") { const r = newWar(); adminLog("newwar", r); return send(res, 200, { ...status(), ...r }); }
+      return send(res, 404, { error: "no such admin action" });
     }
     const rm = /^\/api\/replay\/([\w-]+)$/.exec(url.pathname);
     if (req.method === "GET" && rm) {
@@ -213,6 +235,48 @@ const server = http.createServer(async (req, res) => {
     send(res, 404, { error: "not found" });
   } catch (e) { send(res, 400, { error: e.message }); }
 });
+// ---- the admin's undo: the last tick goes, with the orders given since (they were for the turn after it); joins
+// since are kept. What's removed is saved in DATA_DIR/rolledback/, the replays of that turn's battles are deleted
+// (their ids will be reused), and the clock gives a full turn again
+function rollback() {
+  let i = events.length - 1;
+  while (i >= 0 && events[i].type !== "tick") i--;
+  if (i < 0) return { error: "no turn to roll back" };
+  const turn = S.turn, removed = events.slice(i), kept = events.slice(0, i).concat(removed.filter(e => e.type === "join"));
+  const dir = path.join(DATA, "rolledback"); fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(path.join(dir, `turn-${turn}-${Date.now()}.jsonl`), removed.map(e => JSON.stringify(e) + "\n").join(""));
+  const gone = S.reports.filter(r => r.turn === turn).map(r => r.id);
+  stopReplays(gone);
+  events.length = 0; events.push(...kept); rewriteLog(); S = rebuild(events);
+  record({ type: "notice", text: `Turn ${turn} was rolled back by the war's admin: give your orders again` });
+  adm.dueAt = Date.now() + TURN; saveAdm(); schedule();
+  return { rolledBack: turn, removedEvents: removed.length - removed.filter(e => e.type === "join").length };
+}
+// forget replays (all, or these ids): files, queue, and a worker busy on one of them
+function stopReplays(ids) {
+  const drop = id => !ids || ids.includes(id);
+  for (const id of [...jobs.keys()]) if (drop(id)) jobs.delete(id);
+  for (let k = queue.length - 1; k >= 0; k--) if (drop(queue[k])) queue.splice(k, 1);
+  if (busy && drop(busy)) { if (worker) worker.terminate(); worker = null; busy = null; }
+  for (const f of fs.readdirSync(REPLAYS)) if (drop(f.replace(/\.json\.gz$/, ""))) fs.unlinkSync(path.join(REPLAYS, f));
+  nextReplay();
+}
+// a new war: this one's log, replays and tokens go to DATA_DIR/archive/war-<when>/, accounts are freed to join again,
+// and a fresh galaxy is made (the bots join it again)
+function newWar() {
+  const was = S.turn, dir = path.join(DATA, "archive", `war-${new Date().toISOString().replace(/[:.]/g, "-")}`);
+  fs.mkdirSync(dir, { recursive: true });
+  stopReplays(null);
+  if (fs.existsSync(LOG)) fs.renameSync(LOG, path.join(dir, "events.jsonl"));
+  if (fs.existsSync(TOKENS)) fs.renameSync(TOKENS, path.join(dir, "tokens.json"));
+  tokens = {}; auth.unbindAll();
+  events.length = 0; S = null;
+  record({ type: "create", seed: crypto.randomInt(2 ** 31) });
+  botsJoin();
+  adm.paused = false; adm.dueAt = null; saveAdm(); schedule();
+  return { archived: path.relative(DATA, dir), endedAtTurn: was };
+}
+
 // ---- backups: once a day (and at start), a copy of the event log in DATA_DIR/backups, the newest KEEP_BACKUPS
 // kept. The log is the whole war; the volume's own snapshots are the second line, an off-site copy the third
 const BACKUPS = path.join(DATA, "backups");
@@ -228,7 +292,7 @@ function backup() {
 }
 // for tests and a clean shutdown: no clock, no replay worker
 function stop() { clearTimeout(timer); if (worker) worker.terminate(); worker = null; }
-module.exports = { server, schedule, stop, state: () => S, wantReplay, auth };
+module.exports = { server, schedule, stop, state: () => S, wantReplay, auth, events };
 if (require.main === module) {
   botsJoin();
   schedule();

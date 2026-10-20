@@ -40,6 +40,7 @@ async function load() {
 function countdown() {
   if (!V) return;
   const s = Math.max(0, Math.round((V.nextTick - V.now - (performance.now() - V.got)) / 1000));
+  if (V.paused) { $("#turn").textContent = `Turn ${V.turn} · the war is paused`; return; }
   $("#turn").textContent = `Turn ${V.turn} · next tick in ${Math.floor(s / 3600)}h ${Math.floor(s / 60) % 60}m ${s % 60}s`;
   if (s === 0) setTimeout(load, 2000);
 }
@@ -124,13 +125,29 @@ function draw() {
   countdown();
 }
 $("#j-go").onclick = joinWar;
-// a playtest: open the page with ?admin=<ADMIN_KEY> once, and a Tick now button runs the next turn by hand
-{
+// the admin panel: open the page once with ?admin=<ADMIN_KEY> (kept for this tab only) to run the war by hand
+const adminKey = (() => {
   const q = new URLSearchParams(location.search);
   if (q.has("admin")) { sessionStorage.setItem("war-admin", q.get("admin")); history.replaceState(null, "", "/"); }
-  const key = sessionStorage.getItem("war-admin");
-  if (key) { $("#tick").hidden = false; $("#tick").onclick = async () => { $("#tick").disabled = true; try { const r = await fetch("/api/admin/tick", { method: "POST", headers: { "x-admin-key": key } }); if (!r.ok) alert("Tick failed: " + ((await r.json().catch(() => ({}))).error || r.status)); await load(); } finally { $("#tick").disabled = false; } }; }
+  return sessionStorage.getItem("war-admin");
+})();
+async function admin(act, ask) {
+  if (ask && !confirm(ask)) return;
+  const r = await fetch("/api/admin/" + act, { method: act === "status" ? "GET" : "POST", headers: { "x-admin-key": adminKey } });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) { $("#adm-msg").textContent = j.error || "failed: " + r.status; return; }
+  drawAdmin(j, act === "rollback" ? `Turn ${j.rolledBack} rolled back.` : act === "newwar" ? `A new war; the old one is in ${j.archived}.` : "");
+  if (act !== "status") { if (act === "newwar") { localStorage.removeItem("war-token"); token = null; } load(); }
 }
+function drawAdmin(st, msg = "") {
+  const el = $("#admin"); el.hidden = false;
+  el.innerHTML = `<h3>Admin</h3><p class="muted">Turn ${st.turn} · ${st.paused ? "paused" : "running"} · ${st.players} player${st.players === 1 ? "" : "s"}${st.bots ? `, ${st.bots} bots` : ""}</p>
+    <div class="admin-buttons"><button data-a="tick">Tick now</button>${st.paused ? `<button data-a="resume">Resume</button>` : `<button data-a="pause">Pause</button>`}
+    <button data-a="rollback" data-ask="Roll back turn ${st.turn}? Its battles and the orders given since go.">Roll back turn ${st.turn}</button>
+    <button data-a="newwar" data-ask="End this war and start a new one? Everyone joins again.">New war</button></div><p class="muted" id="adm-msg">${esc(msg)}</p>`;
+  el.querySelectorAll("[data-a]").forEach(b => b.onclick = () => admin(b.dataset.a, b.dataset.ask));
+}
+if (adminKey) admin("status");
 $("#signout").onclick = async () => { await api("/auth/logout", {}).catch(() => {}); V = null; load(); };
 // a sign-in that went wrong comes back as ?signin=<what happened>
 { const q = new URLSearchParams(location.search); if (q.has("signin")) { $("#j-err").textContent = q.get("signin"); history.replaceState(null, "", "/"); } }

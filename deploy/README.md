@@ -36,7 +36,9 @@ machine would miss its ticks. Turns are 12 hours (`TURN_SECONDS`); change it the
 **Updating** is `fly deploy`. The machine restarts and rebuilds the war from its log. Replays already made are
 kept; battles replayed after an engine change are fought by the new engine.
 
-**Ticking by hand** (a test war on fast turns, or to catch up after an outage):
+**Running the war by hand**: open `https://<your-app-name>.fly.dev/?admin=<your ADMIN_KEY>` once for the admin panel
+(tick, pause and resume, roll back the last turn, start a new war; `game/README.md` has what each does). Or with
+curl, for a tick (a test war on fast turns, or to catch up after an outage):
 
 ```sh
 curl -X POST -H "x-admin-key: <your ADMIN_KEY>" https://<your-app-name>.fly.dev/api/admin/tick
@@ -116,5 +118,5 @@ The war's data is in the `war_data` Docker volume; copy the log out for an off-s
 
 ## Before real players
 
-Set up sign-in (above) and try it from a phone and a second browser. Still missing for a closed test war: admin
-tools to pause the war, roll back a turn and start a new war.
+Set up sign-in (above) and try it from a phone and a second browser. The admin panel covers pausing, rolling back a
+turn and starting a new war.
