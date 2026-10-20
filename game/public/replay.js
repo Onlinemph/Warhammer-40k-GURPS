@@ -14,7 +14,7 @@
     $("#rp-load").hidden = false; $("#rp-play").hidden = true;
     const step = async () => {
       let j;
-      try { const r = await fetch("/api/replay/" + encodeURIComponent(id), { headers: { authorization: "Bearer " + localStorage.getItem("war-token") } }); j = await r.json(); if (!r.ok) throw new Error(j.error); }
+      try { const r = await fetch("/api/replay/" + encodeURIComponent(id), { headers: localStorage.getItem("war-token") ? { authorization: "Bearer " + localStorage.getItem("war-token") } : {} }); j = await r.json(); if (!r.ok) throw new Error(j.error); }
       catch (e) { $("#rp-msg").textContent = "Couldn't load it: " + e.message; return; }
       if (j.frames) return show(j);
       const p = j.progress;

@@ -6,7 +6,7 @@ dependencies.
 
 ```sh
 node game/server.js                                   # http://localhost:8080, a tick every 12 hours
-TURN_SECONDS=60 ADMIN_KEY=secret node game/server.js  # fast turns for testing
+TURN_SECONDS=60 ADMIN_KEY=secret node game/server.js  # fast turns for testing (development join, no sign-in)
 curl -X POST -H "x-admin-key: secret" localhost:8080/api/admin/tick   # tick now
 node --test game/test/*.test.js
 ```
@@ -27,7 +27,13 @@ raise a couple of local levies.
 **The log is the game.** `data/events.jsonl` holds only the inputs: the war's creation, joins, orders and ticks
 with their random seeds. The state is rebuilt from it on start and the same log always rebuilds the same war
 (tested), which is what rollbacks, audits and the warband histories come from. Each battle report keeps its seed
-for a full engine replay later. Player tokens are stored hashed in `data/tokens.json`, never in the log.
+for a full engine replay later. Accounts and sessions (`data/accounts.json`, `data/sessions.json`) and development
+tokens (`data/tokens.json`) are kept hashed beside it, never in the log.
+
+**Accounts** (`auth.js`). Players sign in with Discord or Google (OAuth code flow with PKCE) and get a 30-day session
+cookie; the warband belongs to the account, one a war. Which providers are offered depends on which have a client
+id and secret set (`deploy/README.md`, Sign-in). With none set, the server falls back to the development join (a
+name and a token kept in that browser), which `ALLOW_DEV_JOIN=1` keeps alongside sign-in for testing.
 
 **Watching a battle.** Every battle report has a Watch button. The full engine re-fights it on a worker thread
 (`replay/build.js`): the same armies on a countryside field sized to them, with seeds drawn from the report's until
@@ -44,5 +50,4 @@ their faction has eyes (its worlds, its warbands, and one jump from either).
 **The setting layer.** `world/units.js` gives each faction its own unit names on top of a combat template; renaming
 there re-skins the war without touching the GURPS data.
 
-Not yet: speculative compute, order cutoff, live battles, a 3D replay, highlight feed, politics and contracts, real
-authentication (the join is a dev login), ship travel styles per faction, multiple wars.
+Not yet: speculative compute, order cutoff, live battles, a 3D replay, highlight feed, politics and contracts, ship travel styles per faction, multiple wars.

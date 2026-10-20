@@ -144,8 +144,10 @@ state or secrets in the log.
   `world/units.js` gives each faction its own unit names over a combat template; that's the re-skin layer.
 - **A tick** runs income, recruiting and moves, the Chorus AI, battles (through the resolver, with readable reports
   that keep their seed), captures, supply attrition, then local levies.
-- **Server** (`server.js`): join, view, orders and admin tick. The view is fog-filtered on the server. Tokens are
-  stored hashed in `data/tokens.json`, never in the log. It also serves `/healthz`, takes the client address from
+- **Server** (`server.js`): sign-in, join, view, orders and admin tick. The view is fog-filtered on the server.
+  Players sign in with Discord or Google (`auth.js`: OAuth code flow with PKCE, a 30-day HttpOnly session cookie,
+  one warband an account); accounts, sessions and development-join tokens are stored hashed in `data/`, never in
+  the log. With no provider configured it falls back to the development join. It also serves `/healthz`, takes the client address from
   proxy headers under `TRUST_PROXY=1`, writes daily log backups, and stops cleanly on SIGTERM.
 - **Replays** (`replay/build.js`, run on a worker thread). The full engine re-fights a report's armies on a
   countryside field sized to them. It tries up to four seeds until the engine's winner matches the war's result.
@@ -172,12 +174,11 @@ itself hasn't been validated with flyctl. **Run exactly one server**, or the war
 
 ## What's next
 
-1. **Real accounts** (Discord or Google sign-in). The join is a development login, and a player who clears their
-   browser storage loses their warband. This is the last blocker before the test war.
-2. **Deploy and run the closed test war** (roadmap step 4), with admin tools to pause, roll back a turn, and start a
-   new war.
-3. **Re-skin** `game/world/units.js` (and eventually the templates) to the owner's setting.
-4. **Later, guided by the playtest:**
+1. **Deploy and run the closed test war** (roadmap step 4). Sign-in is in, tested against a stand-in provider but
+   not yet against real Discord or Google: register the apps (`deploy/README.md`, Sign-in) and try both. Still
+   needed: admin tools to pause, roll back a turn, and start a new war.
+2. **Re-skin** `game/world/units.js` (and eventually the templates) to the owner's setting.
+3. **Later, guided by the playtest:**
    - Live battles, the highlight feed, politics and contracts (design doc).
    - Resolver accuracy on close fights and terrain.
    - Sector splitting for huge replays.

@@ -1,6 +1,7 @@
 :root { --bg: #f4f2ee; --card: #fff; --ink: #1d1c1a; --muted: #6b6760; --line: #d9d4ca; --lane: #b9b2a5; --accent: #8a5a00; --err: #b3261e; }
 @media (prefers-color-scheme: dark) { :root { --bg: #14130f; --card: #1f1d18; --ink: #ece8df; --muted: #a39d92; --line: #36332c; --lane: #4a463d; --accent: #e0b24a; --err: #ff8a80; } }
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.45 system-ui, sans-serif; }
 header { display: flex; justify-content: space-between; align-items: baseline; padding: 12px 16px; border-bottom: 1px solid var(--line); }
 h1 { font-size: 20px; margin: 0; letter-spacing: .02em; }
@@ -41,3 +42,5 @@ button.link { background: none; color: var(--accent); padding: 0 2px; text-decor
 .rp-controls input[type=range] { flex: 1; }
 .rp-sides { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 6px; }
 .rp-sides i { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }
+.providers { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0 12px; }
+a.button { display: inline-block; background: var(--accent); color: var(--bg); border-radius: 6px; padding: 7px 14px; text-decoration: none; }

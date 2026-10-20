@@ -7,8 +7,16 @@
 //   TRUST_PROXY=1 behind a proxy (Fly, Caddy): the client's address comes from its header, not the socket
 //   BACKUPS=14: daily copies of the event log kept in DATA_DIR/backups (deploy/README.md)
 //
-// API (JSON; the player's token as "Authorization: Bearer <token>"):
-//   POST /api/join   {name, faction}            -> {token}
+//   PUBLIC_URL, DISCORD_CLIENT_ID/SECRET, GOOGLE_CLIENT_ID/SECRET: sign-in (game/auth.js, deploy/README.md)
+//   ALLOW_DEV_JOIN=1 keeps the development join (a name and a browser token, no account) even with sign-in set up;
+//   it is on by default only when no sign-in provider is configured
+//
+// Sign-in (a session cookie afterwards):
+//   GET  /auth/<discord|google>                  -> to the provider, and back to /auth/<provider>/callback
+//   POST /auth/logout
+// API (JSON; the session cookie, or a development join's token as "Authorization: Bearer <token>"):
+//   GET  /api/me                                 -> {providers, devJoin, signedIn, joined}
+//   POST /api/join   {name, faction}            -> {ok} for a signed-in account; {token} for a development join
 //   GET  /api/view                               -> what that player can see, and when the next tick is
 //   POST /api/orders {move, recruit:[{unit,count}]} -> {ok} or {error}
 //   POST /api/admin/tick  (header x-admin-key)  -> ticks now (testing)
@@ -18,6 +26,7 @@ const http = require("http"), fs = require("fs"), path = require("path"), crypto
 const { Worker } = require("worker_threads");
 const { apply, rebuild, view, order } = require("./world/rules.js");
 const { FACTIONS } = require("./world/units.js");
+const { makeAuth } = require("./auth.js");
 
 const TRUST_PROXY = process.env.TRUST_PROXY === "1", KEEP_BACKUPS = +(process.env.BACKUPS ?? 14);
 const PORT = +process.env.PORT || 8080, TURN = (+process.env.TURN_SECONDS || 43200) * 1000;
@@ -38,6 +47,10 @@ if (!S) record({ type: "create", seed: crypto.randomInt(2 ** 31) });
 // tokens: player id by the hash of their secret (kept apart from the log, which holds no secrets)
 const tokens = fs.existsSync(TOKENS) ? JSON.parse(fs.readFileSync(TOKENS, "utf8")) : {};
 const hash = t => crypto.createHash("sha256").update(t).digest("hex");
+// accounts: a warband belongs to a Discord or Google account (game/auth.js)
+const PUBLIC_URL = (process.env.PUBLIC_URL || `http://localhost:${PORT}`).replace(/\/+$/, "");
+const auth = makeAuth({ dataDir: DATA, env: { ...process.env, PUBLIC_URL } });
+const DEV_JOIN = process.env.ALLOW_DEV_JOIN === "1" || (process.env.ALLOW_DEV_JOIN !== "0" && !auth.enabled().length);
 
 // ---- battle replays: the full engine re-fights a battle (game/replay/build.js) on a worker thread, one at a time,
 // into data/replays/<id>.json.gz, kept for good (a seed always replays the same battle). Every battle a player
@@ -94,7 +107,11 @@ const readBody = req => new Promise((ok, bad) => {
   req.on("data", c => { b += c; if (b.length > 10000) { bad(new Error("too big")); req.destroy(); } });
   req.on("end", () => { try { ok(b ? JSON.parse(b) : {}); } catch (e) { bad(new Error("bad JSON")); } });
 });
-const who = req => { const m = /^Bearer (\S+)$/.exec(req.headers.authorization || ""); return m ? tokens[hash(m[1])] || null : null; };
+// the player behind a request: the signed-in account's warband, or a development join's token
+const who = req => { const p = auth.playerOf(auth.accountOf(req)); if (p) return p; const m = /^Bearer (\S+)$/.exec(req.headers.authorization || ""); return m ? tokens[hash(m[1])] || null : null; };
+// a POST must come from the war's own pages (the cookie is SameSite=Lax as well): a page elsewhere can't act for a player
+const sameOrigin = req => { const o = req.headers.origin; if (!o) return true; try { const h = new URL(o).host; return h === req.headers.host || h === new URL(PUBLIC_URL).host; } catch (e) { return false; } };
+const redirect = (res, to, cookie) => { res.writeHead(302, { location: to, "cache-control": "no-store", ...(cookie ? { "set-cookie": cookie } : {}) }); res.end(); };
 const STATIC = { "/": ["index.html", "text/html"], "/app.js": ["app.js", "text/javascript"], "/style.css": ["style.css", "text/css"], "/replay.js": ["replay.js", "text/javascript"] };
 
 const server = http.createServer(async (req, res) => {
@@ -105,23 +122,45 @@ const server = http.createServer(async (req, res) => {
     const url = new URL(req.url, "http://x");
     if (url.pathname === "/healthz") return send(res, 200, { ok: true, turn: S.turn, players: Object.keys(S.players).length });
     if (req.method === "GET" && STATIC[url.pathname]) { const [f, t] = STATIC[url.pathname]; return send(res, 200, fs.readFileSync(path.join(__dirname, "public", f)), t); }
+    if (req.method === "POST" && !sameOrigin(req)) return send(res, 403, { error: "not from this site" });
+    const am = /^\/auth\/(\w+)(\/callback)?$/.exec(url.pathname);
+    if (req.method === "GET" && am && !am[2]) {
+      const to = auth.begin(am[1]);
+      return to ? redirect(res, to.url, to.cookie) : send(res, 404, { error: "no such sign-in" });
+    }
+    if (req.method === "GET" && am && am[2]) {
+      try {
+        const secret = await auth.finish(am[1], Object.fromEntries(url.searchParams), req);
+        return redirect(res, "/", [auth.cookieHeader(secret), auth.clearFlow]);
+      } catch (e) { return redirect(res, "/?signin=" + encodeURIComponent(e.message), auth.clearFlow); }
+    }
+    if (req.method === "POST" && url.pathname === "/auth/logout") { auth.signOut(req); res.setHeader("set-cookie", auth.cookieHeader("")); return send(res, 200, { ok: true }); }
+    if (req.method === "GET" && url.pathname === "/api/me") {
+      const a = auth.accountOf(req);
+      return send(res, 200, { providers: auth.enabled(), devJoin: DEV_JOIN, signedIn: !!a, joined: !!who(req) });
+    }
     if (req.method === "POST" && url.pathname === "/api/join") {
+      const account = auth.accountOf(req);
+      if (!account && !DEV_JOIN) return send(res, 401, { error: "sign in first" });
+      if (account && auth.playerOf(account)) return send(res, 400, { error: "you already lead a warband in this war" });
       const { name, faction } = await readBody(req);
       const nm = String(name || "").trim().replace(/[^\p{L}\p{N} '\-]/gu, "").slice(0, 24);
       if (nm.length < 2) return send(res, 400, { error: "a name of 2 to 24 letters" });
       if (!FACTIONS[faction] || !FACTIONS[faction].player) return send(res, 400, { error: "choose the Hegemony or the Brawl" });
       if (Object.values(S.players).some(p => p.name.toLowerCase() === nm.toLowerCase())) return send(res, 400, { error: "that name is taken" });
-      const player = "p" + crypto.randomBytes(6).toString("hex"), token = crypto.randomBytes(24).toString("base64url");
+      const player = "p" + crypto.randomBytes(6).toString("hex");
+      if (account) { auth.bind(account, player); record({ type: "join", player, name: nm, faction }); return send(res, 200, { ok: true }); }
+      const token = crypto.randomBytes(24).toString("base64url");
       tokens[hash(token)] = player; fs.writeFileSync(TOKENS, JSON.stringify(tokens));
       record({ type: "join", player, name: nm, faction });
       return send(res, 200, { token });
     }
     if (req.method === "GET" && url.pathname === "/api/view") {
-      const p = who(req); if (!p) return send(res, 401, { error: "join first" });
+      const p = who(req); if (!p) return send(res, 401, { error: "sign in and join first" });
       return send(res, 200, { ...view(S, p), nextTick: lastTick() + TURN, now: Date.now() });
     }
     if (req.method === "POST" && url.pathname === "/api/orders") {
-      const p = who(req); if (!p) return send(res, 401, { error: "join first" });
+      const p = who(req); if (!p) return send(res, 401, { error: "sign in and join first" });
       const { move, recruit } = await readBody(req);
       const e = { type: "order", player: p, move: typeof move === "string" ? move : null, recruit: Array.isArray(recruit) ? recruit.slice(0, 6).map(r => ({ unit: String(r.unit), count: Math.floor(+r.count) })) : [] };
       // check against a copy first: a refused order isn't logged
@@ -138,7 +177,7 @@ const server = http.createServer(async (req, res) => {
     }
     const rm = /^\/api\/replay\/([\w-]+)$/.exec(url.pathname);
     if (req.method === "GET" && rm) {
-      const p = who(req); if (!p) return send(res, 401, { error: "join first" });
+      const p = who(req); if (!p) return send(res, 401, { error: "sign in and join first" });
       const id = rm[1], seen = view(S, p).reports.some(r => r.id === id) || S.reports.some(r => r.id === id && r.sides.some(s => s.faction === S.players[p].faction));
       if (!seen) return send(res, 404, { error: "no such battle that you know of" });
       const j = wantReplay(id);
@@ -158,12 +197,13 @@ function backup() {
   const name = `events-${new Date().toISOString().slice(0, 10)}.jsonl`;
   fs.copyFileSync(LOG, path.join(BACKUPS, name));
   if (fs.existsSync(TOKENS)) fs.copyFileSync(TOKENS, path.join(BACKUPS, "tokens.json"));
+  if (fs.existsSync(auth.files[0])) fs.copyFileSync(auth.files[0], path.join(BACKUPS, "accounts.json"));   // which account leads which warband
   const all = fs.readdirSync(BACKUPS).filter(f => /^events-\d{4}-\d{2}-\d{2}\.jsonl$/.test(f)).sort();
   for (const f of all.slice(0, Math.max(0, all.length - KEEP_BACKUPS))) fs.unlinkSync(path.join(BACKUPS, f));
 }
 // for tests and a clean shutdown: no clock, no replay worker
 function stop() { clearTimeout(timer); if (worker) worker.terminate(); worker = null; }
-module.exports = { server, schedule, stop, state: () => S, wantReplay };
+module.exports = { server, schedule, stop, state: () => S, wantReplay, auth };
 if (require.main === module) {
   schedule();
   try { backup(); } catch (e) { console.error("backup failed:", e.message); }

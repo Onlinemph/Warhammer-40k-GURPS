@@ -1,7 +1,8 @@
 // The web client: draws what the server says this player can see and sends orders. It holds no hidden
 // information; the server filters everything.
 const $ = s => document.querySelector(s);
-let token = localStorage.getItem("war-token"), V = null, sel = null;
+// signed in, the session cookie goes with every request by itself; a development join keeps a token in this browser
+let token = localStorage.getItem("war-token"), V = null, sel = null, ME = null;
 const api = async (path, body) => {
   const r = await fetch(path, { method: body ? "POST" : "GET", headers: { "content-type": "application/json", ...(token ? { authorization: "Bearer " + token } : {}) }, body: body ? JSON.stringify(body) : undefined });
   const j = await r.json(); if (!r.ok) throw new Error(j.error || r.statusText); return j;
@@ -12,12 +13,26 @@ const armyText = a => Object.entries(a).map(([k, n]) => `${n} ${esc(k)}`).join("
 async function joinWar() {
   try {
     const name = $("#j-name").value, faction = document.querySelector("input[name=faction]:checked").value;
-    token = (await api("/api/join", { name, faction })).token; localStorage.setItem("war-token", token); load();
+    const r = await api("/api/join", { name, faction });
+    if (r.token) { token = r.token; localStorage.setItem("war-token", token); }
+    load();
   } catch (e) { $("#j-err").textContent = e.message; }
 }
+// signed out: the providers (and the development join, where the server allows it); signed in without a warband:
+// the join form; with one: the war
+function showJoin() {
+  $("#join").hidden = false; $("#game").hidden = true;
+  $("#signin").hidden = ME.signedIn || !ME.providers.length;
+  $("#providers").innerHTML = ME.providers.map(p => `<a class="button" href="/auth/${encodeURIComponent(p.id)}">Sign in with ${esc(p.name)}</a>`).join("");
+  $("#raise").hidden = !(ME.signedIn || ME.devJoin);
+  $("#j-dev").hidden = ME.signedIn;
+  if (!ME.signedIn && !ME.devJoin && !ME.providers.length) $("#j-err").textContent = "Sign-in isn't set up on this server yet.";
+}
 async function load() {
-  if (!token) { $("#join").hidden = false; $("#game").hidden = true; return; }
-  try { V = await api("/api/view"); } catch (e) { localStorage.removeItem("war-token"); token = null; return load(); }
+  try { ME = await api("/api/me"); } catch (e) { $("#j-err").textContent = e.message; return; }
+  $("#signout").hidden = !ME.signedIn;
+  if (!ME.joined) { if (token) { localStorage.removeItem("war-token"); token = null; } return showJoin(); }
+  try { V = await api("/api/view"); } catch (e) { return showJoin(); }
   $("#join").hidden = true; $("#game").hidden = false;
   draw();
 }
@@ -94,8 +109,11 @@ function draw() {
   countdown();
 }
 $("#j-go").onclick = joinWar;
+$("#signout").onclick = async () => { await api("/auth/logout", {}).catch(() => {}); V = null; load(); };
+// a sign-in that went wrong comes back as ?signin=<what happened>
+{ const q = new URLSearchParams(location.search); if (q.has("signin")) { $("#j-err").textContent = q.get("signin"); history.replaceState(null, "", "/"); } }
 let resizeT = null;
 addEventListener("resize", () => { clearTimeout(resizeT); resizeT = setTimeout(() => V && draw(), 150); });
 setInterval(countdown, 1000);
-setInterval(load, 60000);
+setInterval(() => V && load(), 60000);
 load();
