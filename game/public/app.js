@@ -134,7 +134,8 @@ function draw() {
   const st = Object.entries(V.you.stock).map(([k, v]) => `${Math.floor(v)} ${k}`).join(" · ");
   // the faction's own business: the Hegemony's edict, a ritual under way, a Brawl warband growing restless
   const ed = V.you.edict, rit = me.ritual, idle = V.turn - (me.lastFight ?? V.turn);
-  const own = (ed ? `<p><b>Edict:</b> ${esc(ed.text)}, by turn ${ed.until}${ed.kind === "hold" ? ` (held ${ed.held} of 5)` : ""}</p>` : "") +
+  const heldHtml = (V.held || []).map(h => `<p class="${h.done ? "muted" : "err"}">${h.done ? `The battle at ${esc(h.world)} is fought; it counts at the next tick.` : `A battle at <b>${esc(h.world)}</b> waits for you. <a class="link" href="/sim#live=${encodeURIComponent(h.id)}" target="_blank" rel="noopener">Fight it</a> before the next tick, or the war settles it.`}</p>`).join("");
+  const own = heldHtml + (ed ? `<p><b>Edict:</b> ${esc(ed.text)}, by turn ${ed.until}${ed.kind === "hold" ? ` (held ${ed.held} of 5)` : ""}</p>` : "") +
     (rit ? `<p><b>${esc(V.you.rituals[rit.kind].name)}</b> under way at ${esc(W[rit.at].name)}${rit.target ? " against " + esc(W[rit.target].name) : ""}, done on turn ${rit.done} if the world isn't fought over</p>` : "") +
     (V.you.faction === "brawl" && idle >= 3 ? `<p class="err">The lads are restless: no fight for ${idle} turns${idle >= 4 ? ", and they're fighting each other" : ""}</p>` : "");
   $("#me").innerHTML = `<h2>${esc(V.you.name)}</h2><p>${esc(V.factions[V.you.faction].name)} · stockpile: ${esc(st)}</p>
@@ -149,6 +150,7 @@ function draw() {
   const here = W[me.at];
   $("#orders").innerHTML = `<h3>Orders for the next tick</h3>
     <label>Stance <select id="o-stance">${[["advance", "Advance: go where sent, take what you win"], ["fortify", "Fortify: stay, and fight harder on your own world"], ["raid", "Raid: strike, loot, come back"]].map(([k, t]) => `<option value="${k}"${(me.stance || "advance") === k ? " selected" : ""}>${t}</option>`).join("")}</select></label>
+    <label><input type="checkbox" id="o-command"${me.command ? " checked" : ""}> Command my warband's battles in person (each is held until the next tick for you to fight; unfought, the war settles it)</label>
     <label><input type="checkbox" id="o-careful"${me.careful ? " checked" : ""}> Turn back if the odds are under ${V.you.turnBack}%</label>
     ${here.owner === V.you.faction && !here.depot ? `<label><input type="checkbox" id="o-depot"> Build a depot at ${esc(here.name)} (${V.you.depot.cost} materiel; holds up to ${V.you.depot.cap} supply)</label>` : ""}
     ${here.owner === V.you.faction && (here.capital || here.depot) && V.worlds.some(t => t.owner === V.you.faction && t.depot && t.id !== here.id) ? `<label>Send a convoy to <select id="o-cv-to"><option value="">none</option>${V.worlds.filter(t => t.owner === V.you.faction && t.depot && t.id !== here.id).map(t => `<option value="${t.id}">${esc(t.name)} (${t.depot.supply} there)</option>`).join("")}</select> with <input type="number" id="o-cv-n" min="1" max="${V.you.convoyMax}" value="${V.you.convoyMax}"> supply</label>` : ""}
@@ -164,7 +166,7 @@ function draw() {
       const recruit = [...document.querySelectorAll("[data-unit]")].map(i => ({ unit: i.dataset.unit, count: +i.value })).filter(r => r.count > 0);
       const rv = $("#o-rit") ? $("#o-rit").value : "", [kind, target] = rv.split(":");
       await api("/api/orders", { move: $("#o-move").value || null, recruit, ritual: rv ? { kind, target: target || null } : null,
-        stance: $("#o-stance").value, careful: $("#o-careful").checked,
+        stance: $("#o-stance").value, careful: $("#o-careful").checked, command: $("#o-command").checked,
         build: $("#o-depot") && $("#o-depot").checked ? "depot" : $("#o-walls") && $("#o-walls").checked ? "walls" : null,
         convoy: $("#o-cv-to") && $("#o-cv-to").value ? { to: $("#o-cv-to").value, supply: +$("#o-cv-n").value } : null }); load();
     } catch (e) { $("#o-err").textContent = e.message; }

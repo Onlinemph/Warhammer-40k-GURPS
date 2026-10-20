@@ -4,7 +4,10 @@
   // each model under direct control (for a choice among its options). runBattle, below the turn loop, runs it
   // through; playBattle hands the stepper to the page.
   function* battleSteps(unitSpecs, opt = {}) {
-    const HUMAN = opt.human ? opt.human.side : null;
+    // the side a person plays (opt.human.side: 0 or 1), or "both" for a battle between two people; HUMAN is the one
+    // side when there's one (the page's play mode), isHuman asks of any side
+    const HUMANS = !opt.human ? [] : opt.human.side === "both" ? [0, 1] : [opt.human.side];
+    const isHuman = s => HUMANS.includes(s), HUMAN = HUMANS.length === 1 ? HUMANS[0] : HUMANS.length ? -1 : null;
     // Who stays on its feet (user direction): the elite (a best combat skill of 17 or more: Space Marines, Custodians,
     // Aspect Warriors, a Genestealer) and any faction whose profile says so (`upright` in data/sim/ai.yaml: Necrons).
     // Standing is nearly always the better place to dodge from, so they don't kneel to fire, go to ground, duck

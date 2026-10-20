@@ -63,12 +63,17 @@
     let gen, step;
     try { gen = SIM.playBattle(specs, { ...opts, seed: Math.floor(Math.random() * 2147483647), human: { side, direct: S.playCtl === "squads" ? [] : "all" } }); step = gen.next(); }
     catch (e) { $("#simout").innerHTML = `<p class="empty">Could not start: ${esc(e.message)}</p>`; return; }
+    beginGame(gen, step, side, S.playCtl === "squads", null);
+  }
+  // a battle to play from its stepper: here, or from the war (page/46-war-replay.js), where `remote` sends each
+  // answer to the war's server (sent) and waits for the other commander's (wait)
+  function beginGame(gen, step, side, pause, remote, shell) {
     last = null;
     if (vtt) vtt.stop();
     // pause: stop at each second for orders to units (always on while no model is commanded directly, or the battle
     // would run to its end untouched); autoTurn: the second the AI was asked to finish
-    game = { gen, step, side, pause: S.playCtl === "squads", autoTurn: -1, target: null, waiting: false, cur: null, view: step.done ? step.value : step.value.view };
-    $("#simout").innerHTML = playShell();
+    game = { gen, step, side, pause, remote, autoTurn: -1, target: null, waiting: false, cur: null, view: step.done ? step.value : step.value.view };
+    $("#simout").innerHTML = shell || playShell();
     vtt = makeTable(game.view, document.getElementById("vtt-c"), { onMap: mapClick });
     const d = document.getElementById("playlog-d");
     if (d) d.ontoggle = () => { if (d.open) document.getElementById("playlog").textContent = game ? game.view.log.join("\n") : ""; };
@@ -80,15 +85,17 @@
   const endGame = () => { game = null; document.removeEventListener("keydown", playKey); };
 
   // answer the stop the battle is at and run it on to the next one that needs the player
-  function go(ans) {
+  // (theirs: the answer is the other commander's, come from the war's server, so it isn't sent back)
+  function go(ans, theirs) {
     const G = game; if (!G || G.step.done || !G.waiting) return;
     G.waiting = false; G.cur = null; G.said = G.view.log.length;
     const from = G.view.frames.length - 1;
+    const next = (a, mine) => { const s = G.gen.next(a); if (G.remote && mine) G.remote.sent(a); return s; };
     try {
-      let step = G.gen.next(ans);
+      let step = next(ans, !theirs);
       while (!step.done) {
         const v = step.value;
-        if ((v.type === "turn" && !G.pause && v.units.some(u => u.side === G.side && u.direct && u.up > 0)) || (v.type === "act" && G.autoTurn === v.turn)) step = G.gen.next(null);
+        if (v.side === G.side && ((v.type === "turn" && !G.pause && v.units.some(u => u.side === G.side && u.direct && u.up > 0)) || (v.type === "act" && G.autoTurn === v.turn))) step = next(null, true);
         else break;
       }
       G.step = step;
@@ -104,6 +111,12 @@
     G.waiting = true; vtt.showTab("orders");
     if (G.step.done) return showEnd(el, G.step.value);
     const v = G.step.value;
+    // the other commander's stop, in a battle between two people: wait for their answer
+    if (G.remote && v.side !== G.side) {
+      el.innerHTML = `<p class="vtt-empty">Waiting for the other side's commander…</p>`;
+      G.remote.wait().then(a => { if (game === G) go(a, true); });
+      return;
+    }
     if (v.type === "turn") showTurn(el, v); else { G.target = null; showAct(el, v); }
   }
 
@@ -179,7 +192,7 @@
     el.innerHTML = `<div class="ord"><p class="ord-k">The battle is over · ${r.turns} second${r.turns === 1 ? "" : "s"}</p>
       <h3>${won ? "Victory" : lost ? "Defeat" : r.timeout ? "Time ran out" : "Mutual ruin"}</h3>
       <ul class="ord-end">${r.units.map(line).join("")}</ul>
-      <button type="button" class="ord-ai" data-again><span>Play it again</span></button>
+      ${G.remote ? `<p class="ord-h">${esc(G.remote.endNote || "")}</p>` : `<button type="button" class="ord-ai" data-again><span>Play it again</span></button>`}
       <p class="ord-h">The controls under the map play the whole battle back, in 2D or 3D.</p></div>`;
     vtt.st.mark = null; vtt.redraw();
     const d = document.getElementById("playlog-d"); if (d && d.open) document.getElementById("playlog").textContent = r.log.join("\n");

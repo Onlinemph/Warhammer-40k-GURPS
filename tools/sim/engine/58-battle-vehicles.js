@@ -251,7 +251,7 @@
       return !goal ? null : hexDist(goal, m.h) >= 1 ? { ...best, inArc, goal } : best.gun ? null : { ...best, inArc, wait: true, goal: m.h };
     }
     // a model a person commands directly (not a vehicle, whose crew the AI plays)
-    const directed = m => HUMAN != null && m.u.side === HUMAN && m.u.direct && !m.u.veh;
+    const directed = m => isHuman(m.u.side) && m.u.direct && !m.u.veh;
     // act returns nothing when the turn is done, or the choice it has to put to the player: { opts, pick, adj }
     function act(m) {
       if (m.u.veh) return vehicleAct(m);

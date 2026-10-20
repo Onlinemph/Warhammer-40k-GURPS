@@ -32,6 +32,8 @@
 //   POST /api/politics {action: stand|vote|recall|priority|post|cancel|accept, ...} -> {ok} or {error}
 //        (vote: {for}; recall: {yes}; priority: {warbands}; post: {contract: {kind, world, turns, supply, reward, offer,
 //        deadline}}; cancel and accept: {id}); takes effect at once, in the log as a "politics" event
+//   GET  /api/live/<held battle id>              -> a battle held for you to fight: setup, answers so far, whose turn
+//   POST /api/live/<id>/answer {k, ans}          -> the k-th answer, from the side the battle waits on
 //   POST /api/upvote {report}                    -> {ok}: one mark a player a battle (the highlight feed)
 //   GET  /api/replay/<report id>                 -> {status, progress, ahead} until it's ready, then the replay
 //                                                   (gzipped JSON); asking for one that isn't queued queues it
@@ -40,6 +42,7 @@ const { Worker } = require("worker_threads");
 const { apply, rebuild, view, order, politics, upvote } = require("./world/rules.js");
 const { FACTIONS } = require("./world/units.js");
 const { makeAuth } = require("./auth.js");
+const { makeLive } = require("./live.js");
 
 const TRUST_PROXY = process.env.TRUST_PROXY === "1", KEEP_BACKUPS = +(process.env.BACKUPS ?? 14);
 const PORT = +process.env.PORT || 8080, TURN = (+process.env.TURN_SECONDS || 43200) * 1000;
@@ -70,6 +73,9 @@ const hash = t => crypto.createHash("sha256").update(t).digest("hex");
 const PUBLIC_URL = (process.env.PUBLIC_URL || `http://localhost:${PORT}`).replace(/\/+$/, "");
 const auth = makeAuth({ dataDir: DATA, env: { ...process.env, PUBLIC_URL } });
 const DEV_JOIN = process.env.ALLOW_DEV_JOIN === "1" || (process.env.ALLOW_DEV_JOIN !== "0" && !auth.enabled().length);
+
+// battles fought live from the commanders' browsers (game/live.js)
+const live = makeLive({ dataDir: DATA, state: () => S, record: e => record(e) });
 
 // ---- battle replays: the full engine re-fights a battle (game/replay/build.js) on a worker thread, one at a time,
 // into data/replays/<id>.json.gz, kept for good (a seed always replays the same battle). Every battle a player
@@ -127,7 +133,7 @@ function botsOrder() {
     if (o && !order(JSON.parse(JSON.stringify(S)), { type: "order", player: p.id, ...o })) record({ type: "order", player: p.id, ...o });
   }
 }
-const tickNow = () => { botsOrder(); const n = S.reports.length; record({ type: "tick", seed: crypto.randomInt(2 ** 31) }); adm.dueAt = null; saveAdm(); queuePlayerBattles(n); };
+const tickNow = () => { botsOrder(); const n = S.reports.length; record({ type: "tick", seed: crypto.randomInt(2 ** 31) }); adm.dueAt = null; saveAdm(); queuePlayerBattles(n); live.sweep(); };
 
 // ---- the clock
 const lastTick = () => { for (let i = events.length - 1; i >= 0; i--) if (events[i].type === "tick" || events[i].type === "create") return events[i].at; return Date.now(); };
@@ -207,6 +213,13 @@ const server = http.createServer(async (req, res) => {
       const p = who(req); if (!p) return send(res, 401, { error: "sign in and join first" });
       return send(res, 200, { ...view(S, p), nextTick: nextTick(), paused: adm.paused, now: Date.now() });
     }
+    const lm = /^\/api\/live\/([\w-]+)(\/answer)?$/.exec(url.pathname);
+    if (lm) {
+      const p = who(req); if (!p) return send(res, 401, { error: "sign in and join first" });
+      if (req.method === "GET" && !lm[2]) { const r = live.get(lm[1], p); return send(res, r.error ? 400 : 200, r); }
+      if (req.method === "POST" && lm[2]) { const b = await readBody(req), r = live.answer(lm[1], p, Math.floor(+b.k), b.ans ?? null); return send(res, r.error ? 400 : 200, r); }
+      return send(res, 404, { error: "not found" });
+    }
     if (req.method === "POST" && url.pathname === "/api/upvote") {
       const p = who(req); if (!p) return send(res, 401, { error: "sign in and join first" });
       const b = await readBody(req), e = { type: "upvote", player: p, report: String(b.report || "").slice(0, 40) };
@@ -231,11 +244,12 @@ const server = http.createServer(async (req, res) => {
     }
     if (req.method === "POST" && url.pathname === "/api/orders") {
       const p = who(req); if (!p) return send(res, 401, { error: "sign in and join first" });
-      const { move, recruit, ritual, stance, careful, build, convoy } = await readBody(req);
+      const { move, recruit, ritual, stance, careful, build, convoy, command } = await readBody(req);
       const e = { type: "order", player: p, move: typeof move === "string" ? move : null, recruit: Array.isArray(recruit) ? recruit.slice(0, 6).map(r => ({ unit: String(r.unit), count: Math.floor(+r.count) })) : [],
         ritual: ritual && typeof ritual === "object" ? { kind: String(ritual.kind).slice(0, 16), target: ritual.target ? String(ritual.target).slice(0, 16) : null } : null,
         stance: stance == null ? null : String(stance).slice(0, 16), careful: careful == null ? null : !!careful, build: build == null ? null : String(build).slice(0, 16),
-        convoy: convoy && typeof convoy === "object" ? { to: String(convoy.to).slice(0, 16), supply: Math.floor(+convoy.supply) || 0 } : null };
+        convoy: convoy && typeof convoy === "object" ? { to: String(convoy.to).slice(0, 16), supply: Math.floor(+convoy.supply) || 0 } : null,
+        command: command == null ? null : !!command };
       // check against a copy first: a refused order isn't logged
       const err = order(JSON.parse(JSON.stringify(S)), e);
       if (err) return send(res, 400, { error: err });

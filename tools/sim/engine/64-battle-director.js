@@ -43,7 +43,7 @@
     // a Tyranid brood cut off from synapse hears no orders
     const hearsOrders = u => !u.flags.synDisc || !!u.linked;
     // (a side a person plays has no director: the player gives its orders)
-    const DIRECTOR_ON = s => s === HUMAN ? false : Array.isArray(opt.director) ? !!opt.director[s] : opt.director != null ? !!opt.director : !!(terr && terr.deploy === "edge");
+    const DIRECTOR_ON = s => isHuman(s) ? false : Array.isArray(opt.director) ? !!opt.director[s] : opt.director != null ? !!opt.director : !!(terr && terr.deploy === "edge");
     const FLANK_ON = s => DIRECTOR_ON(s) && (Array.isArray(opt.flanking) ? !!opt.flanking[s] : opt.flanking != null ? !!opt.flanking : true);
     const PLAN_EVERY = 6, FLANK_MAX = 120, ORDER_MAX = 90;
     const KINDS = new Set(opt.directorOrders || ["fire", "assault", "support", "flank"]);   // which orders it gives (all, normally)

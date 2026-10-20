@@ -654,7 +654,7 @@
         const ms = models.filter(x => x.u === u && x.state === "ok" && x.h && !u.routed);
         // peeling (TS p. 22-23): cautious line troops outgunned by what they can see fall back by pairs out of its
         // sight and hold there (shooting stance), covering each other
-        if (!u.peel && u.side !== HUMAN && u.ai.caution >= 1.1 && !((u.ai.zeal || 0) > 0) && u.ranged && ms.length >= 2 && turn > 3) {
+        if (!u.peel && !isHuman(u.side) && u.ai.caution >= 1.1 && !((u.ai.zeal || 0) > 0) && u.ranged && ms.length >= 2 && turn > 3) {
           const ours = ms.reduce((a, x) => a + threatOf(x), 0);
           const seen = models.filter(f => f.u.side !== u.side && f.state === "ok" && f.h && ms.some(x => los(x.h, f.h)));
           const theirs = seen.reduce((a, f) => a + threatOf(f), 0);

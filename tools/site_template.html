@@ -690,5 +690,6 @@ window.addEventListener("hashchange", ()=>{ const h=location.hash.slice(1); if(h
 const start = (location.hash||"").slice(1);
 // a war battle, opened from the war's client: /sim#war=<report id>
 if (start.startsWith("war=") && window.warReplay) window.warReplay(decodeURIComponent(start.slice(4)));
+else if (start.startsWith("live=") && window.warLive) window.warLive(decodeURIComponent(start.slice(5)));
 else showLib(start==="sim"||LIBS.some(l=>l.id===start) ? start : (LIBS.find(l=>l.id.includes("las-weapons"))||LIBS[0]).id);
 </script>

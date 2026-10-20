@@ -75,10 +75,11 @@ function note(S, text) { S.log.push({ turn: S.turn, text }); }
 // Standing orders kept from tick to tick: a stance (advance, fortify: stay and fight harder on your own world, raid:
 // strike, loot and come back without taking the world), and `careful`: turn back from a move whose odds are poor.
 // `build: "walls"` raises a world's walls a level.
-function order(S, { player, move, recruit, ritual, stance, careful, build, convoy }) {
+function order(S, { player, move, recruit, ritual, stance, careful, build, convoy, command }) {
   const p = S.players[player];
   if (!p) return "no such player";
   const wb = p.warband, here = S.worlds[wb.at];
+  if (wb.heldIn && (move || (recruit || []).length)) return `your warband is held in the battle at ${here.name} until it's fought`;
   if (move && !FX.canMove(S, p.faction, wb.at, move)) return `${S.worlds[move] ? S.worlds[move].name : move} is not one jump from ${here.name}`;
   if (stance != null && !STANCES.includes(stance)) return "no such stance";
   if (move && (stance ?? wb.stance) === "fortify") return "a fortified warband stays where it is: change its stance to move";
@@ -98,7 +99,7 @@ function order(S, { player, move, recruit, ritual, stance, careful, build, convo
   const err = FX.checkOrder(S, p, { move, recruit, ritual: rit });
   if (err) return err;
   p.lastActive = S.turn;
-  wb.orders = { move: move || null, recruit: recruit || [], ritual: rit, stance: stance ?? null, careful: careful == null ? null : !!careful, build: build || null, convoy: cv };
+  wb.orders = { move: move || null, recruit: recruit || [], ritual: rit, stance: stance ?? null, careful: careful == null ? null : !!careful, build: build || null, convoy: cv, command: command == null ? null : !!command };
   return null;
 }
 const STANCES = ["advance", "fortify", "raid"];
@@ -196,8 +197,9 @@ function tick(S, seed) {
     const wb = p.warband;
     if (o.stance) wb.stance = o.stance;
     if (o.careful != null) wb.careful = o.careful;
+    if (o.command != null) wb.command = o.command;
     FX.beginRitual(S, p, o);
-    if (o.move && !wb.ritual && wb.stance !== "fortify" && FX.canMove(S, p.faction, wb.at, o.move)) {
+    if (o.move && !wb.ritual && !wb.heldIn && wb.stance !== "fortify" && FX.canMove(S, p.faction, wb.at, o.move)) {
       const odds = wb.careful ? oddsAt(S, p, o.move) : null;
       if (odds != null && odds < TURN_BACK) wb.history.push(`Turn ${S.turn}: turned back from ${W(o.move).name}: about ${odds}% to win there`);
       else { wb.history.push(`Turn ${S.turn}: ${wb.stance === "raid" ? "raided" : "moved"} from ${here.name} to ${W(o.move).name}`); if (wb.stance === "raid") wb.raidFrom = wb.at; wb.at = o.move; }
@@ -210,12 +212,17 @@ function tick(S, seed) {
   // 3b. convoys move a jump, and raiders take the ones they catch
   LOG.convoys(S, H, T);
   // 4. battles, wherever two factions meet (first, Levies marching on an Apostate world may turn, factions.js)
+  // battles held open last tick for a commander are settled first: by the result fought live if one came in, by the
+  // resolver if not (nothing is lost by sleeping)
+  settleHeld(S, R, T);
   for (const id of S.order) {
     const w = W(id);
     FX.beforeBattle(S, w, H, R);
     for (let guard = 0; guard < 4; guard++) {
       const sides = factionsAt(S, w).sort((a, b) => strength(b.army) - strength(a.army));
       if (sides.length < 2) break;
+      // a warband whose leader commands its battles in person: held open until the next tick, nothing else here meanwhile
+      if (commanders(S, sides[0], sides[1]).some(Boolean)) { hold(S, w, sides[0], sides[1], R); break; }
       fight(S, w, sides[0], sides[1], R, T);
     }
   }
@@ -223,6 +230,7 @@ function tick(S, seed) {
   // settle)
   for (const id of S.order) {
     const w = W(id), sides = factionsAt(S, w);
+    if (w.heldIn) continue;   // a battle still to be fought there
     const raiders = sides.length === 1 && sides[0].parts.every(x => x.kind === "warband" && S.players[x.player].warband.raidFrom);
     if (sides.length === 1 && !raiders && sides[0].faction !== "militia" && sides[0].faction !== "dormant" && sides[0].faction !== w.owner) {
       const was = w.owner;
@@ -284,14 +292,16 @@ function tick(S, seed) {
 }
 
 // one battle: the resolver gives the odds and the expected losses; the tick's dice say who won
-function fight(S, w, A, B, R, T) {
+function fight(S, w, A, B, R, T, fixed) {
   // named soldiers add to their side's worth, and a leader to its chances (veterans.js)
   const armyOf = x => asResolverArmy(addArmy({ ...x.army }, VET.extraOf(S, x.parts)));
   const seed = Math.floor(R() * 2 ** 31), p = predict(armyOf(A), armyOf(B), { seed, sims: 200 });
   const hA = holdBonus(S, w, A.faction), hB = holdBonus(S, w, B.faction), dA = hA * VET.sideLeader(S, A.parts) * LOG.sideFactor(S, A.parts), dB = hB * VET.sideLeader(S, B.parts) * LOG.sideFactor(S, B.parts);
   const pA = p.pWinA * dA / (p.pWinA * dA + p.pWinB * dB || 1), r = R();
-  const draw = r < p.pDraw, aWins = !draw && R() < pA;
-  const lossA = draw ? p.lossA : aWins ? Math.min(p.lossA, 0.9) : Math.max(p.lossA, 0.6), lossB = draw ? p.lossB : aWins ? Math.max(p.lossB, 0.6) : Math.min(p.lossB, 0.9);
+  let draw = r < p.pDraw, aWins = !draw && R() < pA;
+  let lossA = draw ? p.lossA : aWins ? Math.min(p.lossA, 0.9) : Math.max(p.lossA, 0.6), lossB = draw ? p.lossB : aWins ? Math.max(p.lossB, 0.6) : Math.min(p.lossB, 0.9);
+  // a battle fought live: its own result (who held the field, and the share each side lost)
+  if (fixed) { draw = fixed.winner < 0; aWins = fixed.winner === 0; lossA = fixed.losses[0]; lossB = fixed.losses[1]; }
   const before = [A, B].map(x => ({ faction: x.faction, army: { ...x.army }, named: x.parts.filter(y => y.kind === "warband").flatMap(y => VET.forReplay(S.players[y.player].warband)), short: LOG.sideShort(S, x.parts) }));
   const parts = [];   // each warband part's army before and after, for its named soldiers
   // a sleeping tomb that is fought over wakes
@@ -328,13 +338,14 @@ function fight(S, w, A, B, R, T) {
   const report = {
     id: `t${S.turn}-${w.id}-${S.reports.filter(r => r.turn === S.turn && r.world === w.id).length}`,
     turn: S.turn, world: w.id, worldName: w.name, worldType: w.type, seed, odds: Math.round(pA * 100), winner, secs: Math.round(p.seconds),
-    losses: [Math.round(lossA * 100) / 100, Math.round(lossB * 100) / 100], fallen: fallenNamed.filter(n => !leadersFell.includes(n)), leaders: leadersFell,
+    losses: [Math.round(lossA * 100) / 100, Math.round(lossB * 100) / 100], live: fixed ? true : undefined, held: fixed ? fixed.id : undefined, fallen: fallenNamed.filter(n => !leadersFell.includes(n)), leaders: leadersFell,
     sides: before.map((b, i) => ({ faction: b.faction, before: b.army, named: b.named, short: b.short || undefined, players: [A, B][i].parts.filter(x => x.kind === "warband").map(x => S.players[x.player].name) })),
     text: `${w.name}: ${fname(A.faction)} (${describe(A.army)}) against ${fname(B.faction)} (${describe(B.army)}). ` +
       (draw ? "Neither side gives way." : `${cap(fname(winner))} win${pA > 0.75 && aWins || pA < 0.25 && !aWins ? ", as expected" : pA > 0.25 && pA < 0.75 ? " a close fight" : " against the odds"}.`) +
       ` The odds were ${Math.round(pA * 100)}% for ${fname(A.faction)}${hA > 1 || hB > 1 ? `, ${fname(hA > 1 ? A.faction : B.faction)} holding the world${(w.walls || 0) ? " behind walls" : ""}` : ""}.` +
       ` ${cap(fname(A.faction))} lost about ${Math.round(lossA * 100)}%, ${fname(B.faction)} about ${Math.round(lossB * 100)}%.` +
-      (fallenNamed.length ? ` Fallen among the named: ${fallenNamed.join(", ")}.` : ""),
+      (fallenNamed.length ? ` Fallen among the named: ${fallenNamed.join(", ")}.` : "") +
+      (fixed ? ` Fought live${fixed.by.length ? " by " + fixed.by.join(" and ") : ""}.` : ""),
   };
   for (const pl of report.sides.flatMap(s => s.players)) { const pp = Object.values(S.players).find(x => x.name === pl); if (pp) pp.warband.history.push(`Turn ${S.turn}: battle at ${w.name}, ${winner === pp.faction ? "won" : draw ? "held" : "lost"}`); }
   S.reports.push(report);
@@ -364,7 +375,7 @@ function chorusTurn(S, R) {
     if (want > 0) { const l = Math.ceil(want / 2); add("leaper", l); if (want > 0) add("spitter", want); }
   }
   for (const w of mine) {
-    if (total(w.garrison) < 25) continue;
+    if (total(w.garrison) < 25 || w.heldIn) continue;
     const targets = w.links.map(id => S.worlds[id]).filter(n => n.owner !== "chorus")
       .map(n => ({ n, them: factionsAt(S, n).reduce((a, s) => addArmy(a, s.army), {}) })).sort((a, b) => strength(a.them) - strength(b.them));
     const t = targets[0];
@@ -383,7 +394,7 @@ function chorusTurn(S, R) {
 // has fallen stays where it is, a lost remnant
 function dormantTurn(S, R) {
   for (const sw of S.swarms) {
-    if (sw.faction !== "dormant") continue;
+    if (sw.faction !== "dormant" || sw.heldIn) continue;
     const home = S.worlds[sw.home];
     if (home && home.owner === "dormant") { addArmy(home.garrison, sw.army); sw.army = {}; }
   }
@@ -391,7 +402,7 @@ function dormantTurn(S, R) {
   for (const w of Object.values(S.worlds)) {
     if (w.owner !== "dormant") continue;
     if (w.tomb && !w.awake) { if (S.turn >= w.wakeAt) { w.awake = true; note(S, `Lights kindle deep inside ${w.name}: the tomb is waking`); } continue; }
-    if (strength(w.garrison) < 60 || S.turn - (w.raidT ?? -99) < RAID_REST) continue;   // a tomb rests between raids
+    if (strength(w.garrison) < 60 || w.heldIn || S.turn - (w.raidT ?? -99) < RAID_REST) continue;   // a tomb rests between raids
     // its own neighbours, and through the gates, the neighbours of every other gate the Dormant hold
     const reach = new Set(w.links);
     if (w.gate) for (const g of Object.values(S.worlds)) if (g.gate && g.owner === "dormant" && g !== w) g.links.forEach(n => reach.add(n));
@@ -414,6 +425,7 @@ function apply(S, e) {
   if (e.type === "tick") { tick(S, e.seed); return S; }
   if (e.type === "notice") { note(S, String(e.text)); return S; }
   if (e.type === "politics") { POL.apply(S, e); return S; }
+  if (e.type === "live") { const h = (S.held || []).find(x => x.id === e.id); if (h && !h.result) h.result = { winner: e.winner, losses: e.losses }; return S; }   // a held battle's result, fought live
   if (e.type === "upvote") { if (!upvote(S, e)) HL.vote(S, e); return S; }   // a highlight marked worth watching   // votes, standing, the Warmaster's acts (checked when given)   // a word from the admin, in the news (a rollback, a pause)
   throw new Error(`unknown event ${e.type}`);
 }
@@ -435,6 +447,7 @@ function view(S, player) {
     turn: S.turn, you: { name: p.name, faction: f, warband: p.warband, stock: S.factions[f].stock, moves: FX.moves(S, f, p.warband.at), odds,
       edict: f === "hegemony" ? S.factions.hegemony.edict : null, rituals: f === "apostates" ? FX.RITUALS : null, walls: WALLS, turnBack: TURN_BACK, depot: LOG.DEPOT, convoyMax: LOG.CONVOY.max },
     politics: POL.view(S, p),
+    held: (S.held || []).filter(h => h.commanders.includes(p.id)).map(h => ({ id: h.id, world: h.worldName, turn: h.turn, done: !!h.result })),
     highlights: HL.view(S, p, knows(S, p)),
     factions: { ...Object.fromEntries(Object.entries(S.factions).map(([k, v]) => [k, { name: v.name, colour: v.colour }])), militia: { name: MILITIA.name, colour: "#8d887e" } },
     units: Object.fromEntries(Object.entries(UNITS).filter(([, u]) => u.faction === f).map(([k, u]) => [k, { name: u.name, cost: u.cost }])),
@@ -452,6 +465,48 @@ function view(S, player) {
     news: S.log.slice(-30).reverse(),
   };
 }
+// ---- battles fought live. A warband with `command` on has its battles held open at the tick for its player to fight
+// in person on the full engine (game/live.js runs it on the server from the player's answers); the result comes in as
+// a "live" event and is applied at the next tick, or the resolver settles it there if none did
+const commanders = (S, A, B) => [A, B].map(x => { const q = x.parts.find(y => y.kind === "warband" && S.players[y.player].warband.command && !y.player.startsWith("bot-")); return q ? q.player : null; });
+function hold(S, w, A, B, R) {
+  const id = `h${S.turn}-${w.id}`, cmd = commanders(S, A, B);
+  const seed = Math.floor(R() * 2 ** 31);
+  const sides = [A, B].map(x => ({ faction: x.faction, before: { ...x.army }, named: x.parts.filter(y => y.kind === "warband").flatMap(y => VET.forReplay(S.players[y.player].warband)), short: LOG.sideShort(S, x.parts),
+    players: x.parts.filter(y => y.kind === "warband").map(y => S.players[y.player].name) }));
+  // who is in it: only these forces are settled by it (anyone arriving meanwhile fights afterwards, as usual)
+  const parts = [A, B].map(x => x.parts.map(y => ({ ...y })));
+  (S.held ||= []).push({ id, world: w.id, worldName: w.name, turn: S.turn, seed, factions: [A.faction, B.faction], sides, parts, commanders: cmd, result: null });
+  w.heldIn = id;
+  for (const x of [A, B]) for (const part of x.parts) {
+    if (part.kind === "warband") { const wb = S.players[part.player].warband; wb.heldIn = id; wb.history.push(`Turn ${S.turn}: a battle at ${w.name}, held for ${cmd.filter(Boolean).map(c => S.players[c].name).join(" and ")} to fight`); }
+    else if (part.kind === "swarm") { const sw = S.swarms.find(s => s.id === part.id); if (sw) sw.heldIn = id; }
+  }
+  note(S, `A battle at ${w.name} waits for its commander${cmd.filter(Boolean).length > 1 ? "s" : ""}: ${cmd.filter(Boolean).map(c => S.players[c].name).join(" and ")}`);
+}
+// a held battle's side as it stands now: the same forces, with what they have left
+function heldSide(S, w, faction, parts) {
+  const side = { faction, army: {}, parts: [] };
+  for (const part of parts) {
+    const box = part.kind === "garrison" ? ((w.owner || "militia") === faction ? w.garrison : null) : part.kind === "warband" ? (S.players[part.player] && S.players[part.player].warband.at === w.id ? S.players[part.player].warband.army : null) : (S.swarms.find(s => s.id === part.id && s.at === w.id) || {}).army;
+    if (!box || !total(box)) continue;
+    addArmy(side.army, box); side.parts.push(part);
+  }
+  return side.parts.length ? side : null;
+}
+function settleHeld(S, R, T) {
+  for (const h of S.held || []) {
+    const w = S.worlds[h.world];
+    const A = heldSide(S, w, h.factions[0], h.parts[0]), B = heldSide(S, w, h.factions[1], h.parts[1]);
+    w.heldIn = null;
+    for (const p of Object.values(S.players)) if (p.warband.heldIn === h.id) p.warband.heldIn = null;
+    for (const sw of S.swarms) if (sw.heldIn === h.id) sw.heldIn = null;
+    if (!A || !B) continue;   // one side gone meanwhile (a rollback, a deserted garrison): nothing to fight
+    fight(S, w, A, B, R, T, h.result ? { ...h.result, id: h.id, by: h.commanders.filter(Boolean).map(c => S.players[c] ? S.players[c].name : c) } : null);
+  }
+  S.held = [];
+}
+
 // a politics action checked against the state now (the server logs only what passes)
 const politics = (S, e) => POL.check(S, e);
 // which battles a player's faction knows of: its own, and those where it has eyes

@@ -18,8 +18,10 @@ function skillsFor(template, bonus) {
   for (const w of [u.ranged, u.melee]) if (w && w.skill && w.level != null) out[w.skill] = w.level + bonus;
   return out;
 }
-function build(report, onProgress = () => {}) {
-  const field = fieldFor(report), roster = [];
+// a report's (or a held battle's) armies as engine unit specs: the named as themselves, a side short of supply with
+// two spare magazines; with the roster of names in the order the engine numbers the models
+function unitsFor(report) {
+  const roster = [];
   const units = report.sides.flatMap((s, side) => {
     // the named fight as themselves, out of their unit's count, in its squad
     const named = (s.named || []).filter(n => (s.before[n.unit] || 0) > 0), left = { ...s.before };
@@ -33,6 +35,10 @@ function build(report, onProgress = () => {}) {
       return out;
     });
   });
+  return { units, roster };
+}
+function build(report, onProgress = () => {}) {
+  const field = fieldFor(report), { units, roster } = unitsFor(report);
   const want = report.winner == null ? -1 : report.sides[0].faction === report.winner ? 0 : 1;
   let r = null, attempt = 0;
   for (attempt = 1; attempt <= ATTEMPTS; attempt++) {
@@ -55,4 +61,4 @@ function build(report, onProgress = () => {}) {
       timeout: r.timeout, over: r.over ?? true, turns: r.turns, ridge: r.ridge, tally: r.tally },
   };
 }
-module.exports = { build, fieldFor, ATTEMPTS };
+module.exports = { build, fieldFor, unitsFor, ATTEMPTS };

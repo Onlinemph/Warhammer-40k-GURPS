@@ -34,3 +34,33 @@
     setTimeout(to3d, 400);
   }
   window.warReplay = warReplay;
+
+  // ================= fighting a war battle live: /sim#live=<held battle id>. The war's server sends the battle's setup
+  // and the answers so far; the page runs the battle from them (as Play it yourself does), sends each answer back, and
+  // in a battle between two commanders waits for the other's. The server steps its own copy and keeps the result
+  async function warLive(id) {
+    const main = $("#main");
+    main.innerHTML = `<header class="libhead"><div class="eyebrow">Galactic War</div><h1 id="war-h">A battle to fight</h1><p id="war-msg">Loading the battle…</p></header><div id="simout"></div>`;
+    const msg = t => { const el = document.getElementById("war-msg"); if (el) el.textContent = t; };
+    const tok = localStorage.getItem("war-token"), H = { "content-type": "application/json", ...(tok ? { authorization: "Bearer " + tok } : {}) };
+    const api = async (p, body) => { const r = await fetch(p, { method: body ? "POST" : "GET", cache: "no-cache", headers: H, body: body ? JSON.stringify(body) : undefined }); const j = await r.json(); if (!r.ok) throw new Error(j.error || r.status); return j; };
+    let B;
+    try { B = await api("/api/live/" + encodeURIComponent(id)); } catch (e) { msg(e.message); return; }
+    const names = B.sides.map(s => s.name + (s.players.length ? ` (${s.players.join(", ")})` : ""));
+    document.getElementById("war-h").textContent = `${B.world}, turn ${B.turn}`;
+    msg(`You command ${names[B.you]}, against ${names[1 - B.you]}${B.commanders[1 - B.you] ? " (commanded in person too: the battle waits on both of you)" : " (the engine's AI)"}. The battle counts for the war at its next tick; unfought by then, the war settles it.`);
+    // the same battle as the server's, stepped through the answers so far
+    let gen, step;
+    try { gen = SIM.playBattle(B.setup.units, B.setup.opts); step = gen.next(); for (const a of B.answers) step = gen.next(a); }
+    catch (e) { msg("Couldn't start the battle: " + e.message); return; }
+    let k = B.answers.length, chain = Promise.resolve();
+    const remote = {
+      endNote: "The result goes to the war: it counts at the next tick.",
+      // each answer in order, one after another
+      sent: a => { const n = k++; chain = chain.then(() => api(`/api/live/${encodeURIComponent(id)}/answer`, { k: n, ans: a })).catch(e => msg("The war's server refused an answer: " + e.message + ". Reload the page to pick up where it stands.")); },
+      // the other commander's next answer, when it comes
+      wait: async () => { for (;;) { await chain; const j = await api("/api/live/" + encodeURIComponent(id)); if (j.answers.length > k) return j.answers[k++]; await new Promise(ok => setTimeout(ok, 2000)); } },
+    };
+    beginGame(gen, step, B.you, true, remote);
+  }
+  window.warLive = warLive;

@@ -337,7 +337,7 @@ player to obey; contracts make it worth their while. Worked out from the log lik
 More offices than one, appointment by the elected, edict votes, sanctioned traitors, counter-intelligence,
 propaganda, captive treatment, duels, and contracts between factions.
 
-## Watching battles (draft for review)
+## Watching battles
 
 From the design doc: replays, a highlight feed, and battles fought live between ticks. Three parts:
 
@@ -378,7 +378,14 @@ From the design doc: replays, a highlight feed, and battles fought live between 
   human player of theirs who also chose to command, in which case each of you commands your own side and the battle
   waits on both.
 - **Limits:** a held battle keeps its armies in place on that world until it's settled. While it waits, neither side
-  can move away or recruit into it.
+  can move away or recruit into it. Forces that arrive meanwhile aren't in it: the result settles only those that
+  fought it, and the newcomers fight afterwards, as usual (built so after a playtest in which a bot's Wardens,
+  arriving late, died in a fight they never took part in).
+- **How it runs** (`game/live.js`, `tools/sim/page/46-war-replay.js`): the war server sends the battle's setup and
+  seed, the browser runs the same battle as "Play it yourself" does and sends every answer, and the server steps
+  its own copy with each one. It takes an answer only in order and only from the commander of the side the battle
+  waits on, keeps the answers on disk (a restart steps the battle again from them), and logs the result as a "live"
+  event when the battle ends. The engine runs on the server's main thread between answers.
 
 ### Not in this pass
 Sector splitting for very large replays, the 3D view inside the war page itself, sharing highlights outside the

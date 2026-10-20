@@ -1967,7 +1967,10 @@ const SIM = (() => {
   // each model under direct control (for a choice among its options). runBattle, below the turn loop, runs it
   // through; playBattle hands the stepper to the page.
   function* battleSteps(unitSpecs, opt = {}) {
-    const HUMAN = opt.human ? opt.human.side : null;
+    // the side a person plays (opt.human.side: 0 or 1), or "both" for a battle between two people; HUMAN is the one
+    // side when there's one (the page's play mode), isHuman asks of any side
+    const HUMANS = !opt.human ? [] : opt.human.side === "both" ? [0, 1] : [opt.human.side];
+    const isHuman = s => HUMANS.includes(s), HUMAN = HUMANS.length === 1 ? HUMANS[0] : HUMANS.length ? -1 : null;
     // Who stays on its feet (user direction): the elite (a best combat skill of 17 or more: Space Marines, Custodians,
     // Aspect Warriors, a Genestealer) and any faction whose profile says so (`upright` in data/sim/ai.yaml: Necrons).
     // Standing is nearly always the better place to dodge from, so they don't kneel to fire, go to ground, duck
@@ -2708,7 +2711,7 @@ const SIM = (() => {
         const ms = models.filter(x => x.u === u && x.state === "ok" && x.h && !u.routed);
         // peeling (TS p. 22-23): cautious line troops outgunned by what they can see fall back by pairs out of its
         // sight and hold there (shooting stance), covering each other
-        if (!u.peel && u.side !== HUMAN && u.ai.caution >= 1.1 && !((u.ai.zeal || 0) > 0) && u.ranged && ms.length >= 2 && turn > 3) {
+        if (!u.peel && !isHuman(u.side) && u.ai.caution >= 1.1 && !((u.ai.zeal || 0) > 0) && u.ranged && ms.length >= 2 && turn > 3) {
           const ours = ms.reduce((a, x) => a + threatOf(x), 0);
           const seen = models.filter(f => f.u.side !== u.side && f.state === "ok" && f.h && ms.some(x => los(x.h, f.h)));
           const theirs = seen.reduce((a, f) => a + threatOf(f), 0);
@@ -5003,7 +5006,7 @@ const SIM = (() => {
       return !goal ? null : hexDist(goal, m.h) >= 1 ? { ...best, inArc, goal } : best.gun ? null : { ...best, inArc, wait: true, goal: m.h };
     }
     // a model a person commands directly (not a vehicle, whose crew the AI plays)
-    const directed = m => HUMAN != null && m.u.side === HUMAN && m.u.direct && !m.u.veh;
+    const directed = m => isHuman(m.u.side) && m.u.direct && !m.u.veh;
     // act returns nothing when the turn is done, or the choice it has to put to the player: { opts, pick, adj }
     function act(m) {
       if (m.u.veh) return vehicleAct(m);
@@ -6856,7 +6859,7 @@ const SIM = (() => {
     // a Tyranid brood cut off from synapse hears no orders
     const hearsOrders = u => !u.flags.synDisc || !!u.linked;
     // (a side a person plays has no director: the player gives its orders)
-    const DIRECTOR_ON = s => s === HUMAN ? false : Array.isArray(opt.director) ? !!opt.director[s] : opt.director != null ? !!opt.director : !!(terr && terr.deploy === "edge");
+    const DIRECTOR_ON = s => isHuman(s) ? false : Array.isArray(opt.director) ? !!opt.director[s] : opt.director != null ? !!opt.director : !!(terr && terr.deploy === "edge");
     const FLANK_ON = s => DIRECTOR_ON(s) && (Array.isArray(opt.flanking) ? !!opt.flanking[s] : opt.flanking != null ? !!opt.flanking : true);
     const PLAN_EVERY = 6, FLANK_MAX = 120, ORDER_MAX = 90;
     const KINDS = new Set(opt.directorOrders || ["fire", "assault", "support", "flank"]);   // which orders it gives (all, normally)
@@ -7175,7 +7178,7 @@ const SIM = (() => {
     const beat = () => { if (frames.length) { fx.push(fxb); fxb = []; } frames.push(snap()); beatTurn.push(turn); logAt.push(log ? log.length : 0); turnNow = frames.length - 1; };
     // what the player is told when the battle stops for them: the battle so far, as a finished one is reported
     const unitList = () => units.map(u => ({ idx: u.idx, name: u.name, side: u.side, stance: u.stance, direct: !!u.direct, veh: !!u.veh, count: u.count, up: u.models.filter(active).length, squad: u.squad || null, squadName: u.squad && u.group ? u.group.name : null }));
-    if (HUMAN != null) { const d = opt.human.direct; for (const u of units) if (u.side === HUMAN) u.direct = d === "all" || (Array.isArray(d) && d.includes(u.idx)); }
+    if (HUMANS.length) { const d = opt.human.direct; for (const u of units) if (isHuman(u.side)) u.direct = d === "all" || (Array.isArray(d) && d.includes(u.idx)); }
     let turn = 0;
     // how many of each side are standing at the start of each second (the resolver calibrates its rates from it)
     const tally = [];
@@ -7186,11 +7189,11 @@ const SIM = (() => {
       if (opt.onTurn) opt.onTurn(turn, maxTurns);   // progress, for a caller showing a loading bar
       L(`— Turn ${turn} —`); newFields(); turnNow = turn - 1;
       if (frames) beat();
-      if (HUMAN != null) {
-        // orders to whole units for this second: { units: { idx: { stance, direct } } }
-        const ans = yield { type: "turn", turn, units: unitList(), view: outcome(false) };
+      // orders to whole units for this second, from each side a person plays in turn: { units: { idx: { stance, direct } } }
+      for (const hs of HUMANS) {
+        const ans = yield { type: "turn", side: hs, turn, units: unitList(), view: outcome(false) };
         for (const [k, o] of Object.entries((ans && ans.units) || {})) {
-          const u = units[k]; if (!u || u.side !== HUMAN) continue;
+          const u = units[k]; if (!u || u.side !== hs) continue;
           if (["shoot", "advance", "charge"].includes(o.stance)) { u.stance = o.stance; u.peel = false; }
           if (o.direct != null) u.direct = !!o.direct;
         }
@@ -7240,7 +7243,7 @@ const SIM = (() => {
         for (let pend = act(m); pend; pend = m.asking) {
           m.asking = null;
           if (frames && log && log.length > logAt[logAt.length - 1]) beat();
-          const ans = yield { type: "act", turn, ix: m.ix, id: m.id, unit: m.u.idx, at: [m.h.q, m.h.r], move: runMove(m),
+          const ans = yield { type: "act", side: m.u.side, turn, ix: m.ix, id: m.id, unit: m.u.idx, at: [m.h.q, m.h.r], move: runMove(m),
             opts: pend.opts.map((o, i) => ({ i, label: o.label, v: o.v, to: o.to ? [o.to.q, o.to.r] : null })), pick: pend.opts.indexOf(pend.pick), view: outcome(false) };
           if (ans && ans.release) m.u.direct = false;
           if (obey(m, pend, ans && ans.move ? ans : ans && typeof ans.i === "number" ? ans.i : null) === false) m.asking = pend;
@@ -10606,12 +10609,17 @@ if (typeof document !== "undefined") (() => {
     let gen, step;
     try { gen = SIM.playBattle(specs, { ...opts, seed: Math.floor(Math.random() * 2147483647), human: { side, direct: S.playCtl === "squads" ? [] : "all" } }); step = gen.next(); }
     catch (e) { $("#simout").innerHTML = `<p class="empty">Could not start: ${esc(e.message)}</p>`; return; }
+    beginGame(gen, step, side, S.playCtl === "squads", null);
+  }
+  // a battle to play from its stepper: here, or from the war (page/46-war-replay.js), where `remote` sends each
+  // answer to the war's server (sent) and waits for the other commander's (wait)
+  function beginGame(gen, step, side, pause, remote, shell) {
     last = null;
     if (vtt) vtt.stop();
     // pause: stop at each second for orders to units (always on while no model is commanded directly, or the battle
     // would run to its end untouched); autoTurn: the second the AI was asked to finish
-    game = { gen, step, side, pause: S.playCtl === "squads", autoTurn: -1, target: null, waiting: false, cur: null, view: step.done ? step.value : step.value.view };
-    $("#simout").innerHTML = playShell();
+    game = { gen, step, side, pause, remote, autoTurn: -1, target: null, waiting: false, cur: null, view: step.done ? step.value : step.value.view };
+    $("#simout").innerHTML = shell || playShell();
     vtt = makeTable(game.view, document.getElementById("vtt-c"), { onMap: mapClick });
     const d = document.getElementById("playlog-d");
     if (d) d.ontoggle = () => { if (d.open) document.getElementById("playlog").textContent = game ? game.view.log.join("\n") : ""; };
@@ -10623,15 +10631,17 @@ if (typeof document !== "undefined") (() => {
   const endGame = () => { game = null; document.removeEventListener("keydown", playKey); };
 
   // answer the stop the battle is at and run it on to the next one that needs the player
-  function go(ans) {
+  // (theirs: the answer is the other commander's, come from the war's server, so it isn't sent back)
+  function go(ans, theirs) {
     const G = game; if (!G || G.step.done || !G.waiting) return;
     G.waiting = false; G.cur = null; G.said = G.view.log.length;
     const from = G.view.frames.length - 1;
+    const next = (a, mine) => { const s = G.gen.next(a); if (G.remote && mine) G.remote.sent(a); return s; };
     try {
-      let step = G.gen.next(ans);
+      let step = next(ans, !theirs);
       while (!step.done) {
         const v = step.value;
-        if ((v.type === "turn" && !G.pause && v.units.some(u => u.side === G.side && u.direct && u.up > 0)) || (v.type === "act" && G.autoTurn === v.turn)) step = G.gen.next(null);
+        if (v.side === G.side && ((v.type === "turn" && !G.pause && v.units.some(u => u.side === G.side && u.direct && u.up > 0)) || (v.type === "act" && G.autoTurn === v.turn))) step = next(null, true);
         else break;
       }
       G.step = step;
@@ -10647,6 +10657,12 @@ if (typeof document !== "undefined") (() => {
     G.waiting = true; vtt.showTab("orders");
     if (G.step.done) return showEnd(el, G.step.value);
     const v = G.step.value;
+    // the other commander's stop, in a battle between two people: wait for their answer
+    if (G.remote && v.side !== G.side) {
+      el.innerHTML = `<p class="vtt-empty">Waiting for the other side's commander…</p>`;
+      G.remote.wait().then(a => { if (game === G) go(a, true); });
+      return;
+    }
     if (v.type === "turn") showTurn(el, v); else { G.target = null; showAct(el, v); }
   }
 
@@ -10722,7 +10738,7 @@ if (typeof document !== "undefined") (() => {
     el.innerHTML = `<div class="ord"><p class="ord-k">The battle is over · ${r.turns} second${r.turns === 1 ? "" : "s"}</p>
       <h3>${won ? "Victory" : lost ? "Defeat" : r.timeout ? "Time ran out" : "Mutual ruin"}</h3>
       <ul class="ord-end">${r.units.map(line).join("")}</ul>
-      <button type="button" class="ord-ai" data-again><span>Play it again</span></button>
+      ${G.remote ? `<p class="ord-h">${esc(G.remote.endNote || "")}</p>` : `<button type="button" class="ord-ai" data-again><span>Play it again</span></button>`}
       <p class="ord-h">The controls under the map play the whole battle back, in 2D or 3D.</p></div>`;
     vtt.st.mark = null; vtt.redraw();
     const d = document.getElementById("playlog-d"); if (d && d.open) document.getElementById("playlog").textContent = r.log.join("\n");
@@ -10809,6 +10825,36 @@ if (typeof document !== "undefined") (() => {
     setTimeout(to3d, 400);
   }
   window.warReplay = warReplay;
+
+  // ================= fighting a war battle live: /sim#live=<held battle id>. The war's server sends the battle's setup
+  // and the answers so far; the page runs the battle from them (as Play it yourself does), sends each answer back, and
+  // in a battle between two commanders waits for the other's. The server steps its own copy and keeps the result
+  async function warLive(id) {
+    const main = $("#main");
+    main.innerHTML = `<header class="libhead"><div class="eyebrow">Galactic War</div><h1 id="war-h">A battle to fight</h1><p id="war-msg">Loading the battle…</p></header><div id="simout"></div>`;
+    const msg = t => { const el = document.getElementById("war-msg"); if (el) el.textContent = t; };
+    const tok = localStorage.getItem("war-token"), H = { "content-type": "application/json", ...(tok ? { authorization: "Bearer " + tok } : {}) };
+    const api = async (p, body) => { const r = await fetch(p, { method: body ? "POST" : "GET", cache: "no-cache", headers: H, body: body ? JSON.stringify(body) : undefined }); const j = await r.json(); if (!r.ok) throw new Error(j.error || r.status); return j; };
+    let B;
+    try { B = await api("/api/live/" + encodeURIComponent(id)); } catch (e) { msg(e.message); return; }
+    const names = B.sides.map(s => s.name + (s.players.length ? ` (${s.players.join(", ")})` : ""));
+    document.getElementById("war-h").textContent = `${B.world}, turn ${B.turn}`;
+    msg(`You command ${names[B.you]}, against ${names[1 - B.you]}${B.commanders[1 - B.you] ? " (commanded in person too: the battle waits on both of you)" : " (the engine's AI)"}. The battle counts for the war at its next tick; unfought by then, the war settles it.`);
+    // the same battle as the server's, stepped through the answers so far
+    let gen, step;
+    try { gen = SIM.playBattle(B.setup.units, B.setup.opts); step = gen.next(); for (const a of B.answers) step = gen.next(a); }
+    catch (e) { msg("Couldn't start the battle: " + e.message); return; }
+    let k = B.answers.length, chain = Promise.resolve();
+    const remote = {
+      endNote: "The result goes to the war: it counts at the next tick.",
+      // each answer in order, one after another
+      sent: a => { const n = k++; chain = chain.then(() => api(`/api/live/${encodeURIComponent(id)}/answer`, { k: n, ans: a })).catch(e => msg("The war's server refused an answer: " + e.message + ". Reload the page to pick up where it stands.")); },
+      // the other commander's next answer, when it comes
+      wait: async () => { for (;;) { await chain; const j = await api("/api/live/" + encodeURIComponent(id)); if (j.answers.length > k) return j.answers[k++]; await new Promise(ok => setTimeout(ok, 2000)); } },
+    };
+    beginGame(gen, step, B.you, true, remote);
+  }
+  window.warLive = warLive;
   function wire() {
     const main = $("#main");
     main.querySelectorAll("[data-g]").forEach(el => el.onchange = () => {
@@ -11790,5 +11836,6 @@ window.addEventListener("hashchange", ()=>{ const h=location.hash.slice(1); if(h
 const start = (location.hash||"").slice(1);
 // a war battle, opened from the war's client: /sim#war=<report id>
 if (start.startsWith("war=") && window.warReplay) window.warReplay(decodeURIComponent(start.slice(4)));
+else if (start.startsWith("live=") && window.warLive) window.warLive(decodeURIComponent(start.slice(5)));
 else showLib(start==="sim"||LIBS.some(l=>l.id===start) ? start : (LIBS.find(l=>l.id.includes("las-weapons"))||LIBS[0]).id);
 </script>

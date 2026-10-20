@@ -22,7 +22,7 @@
     const beat = () => { if (frames.length) { fx.push(fxb); fxb = []; } frames.push(snap()); beatTurn.push(turn); logAt.push(log ? log.length : 0); turnNow = frames.length - 1; };
     // what the player is told when the battle stops for them: the battle so far, as a finished one is reported
     const unitList = () => units.map(u => ({ idx: u.idx, name: u.name, side: u.side, stance: u.stance, direct: !!u.direct, veh: !!u.veh, count: u.count, up: u.models.filter(active).length, squad: u.squad || null, squadName: u.squad && u.group ? u.group.name : null }));
-    if (HUMAN != null) { const d = opt.human.direct; for (const u of units) if (u.side === HUMAN) u.direct = d === "all" || (Array.isArray(d) && d.includes(u.idx)); }
+    if (HUMANS.length) { const d = opt.human.direct; for (const u of units) if (isHuman(u.side)) u.direct = d === "all" || (Array.isArray(d) && d.includes(u.idx)); }
     let turn = 0;
     // how many of each side are standing at the start of each second (the resolver calibrates its rates from it)
     const tally = [];
@@ -33,11 +33,11 @@
       if (opt.onTurn) opt.onTurn(turn, maxTurns);   // progress, for a caller showing a loading bar
       L(`— Turn ${turn} —`); newFields(); turnNow = turn - 1;
       if (frames) beat();
-      if (HUMAN != null) {
-        // orders to whole units for this second: { units: { idx: { stance, direct } } }
-        const ans = yield { type: "turn", turn, units: unitList(), view: outcome(false) };
+      // orders to whole units for this second, from each side a person plays in turn: { units: { idx: { stance, direct } } }
+      for (const hs of HUMANS) {
+        const ans = yield { type: "turn", side: hs, turn, units: unitList(), view: outcome(false) };
         for (const [k, o] of Object.entries((ans && ans.units) || {})) {
-          const u = units[k]; if (!u || u.side !== HUMAN) continue;
+          const u = units[k]; if (!u || u.side !== hs) continue;
           if (["shoot", "advance", "charge"].includes(o.stance)) { u.stance = o.stance; u.peel = false; }
           if (o.direct != null) u.direct = !!o.direct;
         }
@@ -87,7 +87,7 @@
         for (let pend = act(m); pend; pend = m.asking) {
           m.asking = null;
           if (frames && log && log.length > logAt[logAt.length - 1]) beat();
-          const ans = yield { type: "act", turn, ix: m.ix, id: m.id, unit: m.u.idx, at: [m.h.q, m.h.r], move: runMove(m),
+          const ans = yield { type: "act", side: m.u.side, turn, ix: m.ix, id: m.id, unit: m.u.idx, at: [m.h.q, m.h.r], move: runMove(m),
             opts: pend.opts.map((o, i) => ({ i, label: o.label, v: o.v, to: o.to ? [o.to.q, o.to.r] : null })), pick: pend.opts.indexOf(pend.pick), view: outcome(false) };
           if (ans && ans.release) m.u.direct = false;
           if (obey(m, pend, ans && ans.move ? ans : ans && typeof ans.i === "number" ? ans.i : null) === false) m.asking = pend;
