@@ -29,8 +29,8 @@ const UNITS = {
   boss:       { faction: "brawl",     name: "Boss",          template: "Ork Nob",                        cost: { manpower: 2, materiel: 4, fame: 3 },       power: 2.7, melee: true },
   ironhide:   { faction: "brawl",     name: "Ironhide",      template: "Ork Meganob",                    cost: { manpower: 6, materiel: 18, fame: 10 },      power: 12, melee: true },
   // the Chorus: one hungry intelligence wearing a million bodies (AI)
-  leaper:     { faction: "chorus",    name: "Leaper",        template: "Hormagaunt",                     cost: { biomass: 1 },  power: 0.1, melee: true },
-  spitter:    { faction: "chorus",    name: "Spitter",       template: "Termagant",                      cost: { biomass: 1 },  power: 0.1 },
+  leaper:     { faction: "chorus",    name: "Leaper",        template: "Hormagaunt",                     cost: { biomass: 1 },  power: 0.4, melee: true },
+  spitter:    { faction: "chorus",    name: "Spitter",       template: "Termagant",                      cost: { biomass: 1 },  power: 0.4 },
   stalker:    { faction: "chorus",    name: "Stalker",       template: "Genestealer",                    cost: { biomass: 20 }, power: 39, melee: true },
   conductor:  { faction: "chorus",    name: "Conductor",     template: "Tyranid Warrior",                cost: { biomass: 15 }, power: 20 },
   hollow:     { faction: "chorus",    name: "Hollow",        template: "Lictor",                         cost: { biomass: 12 }, power: 5, melee: true },

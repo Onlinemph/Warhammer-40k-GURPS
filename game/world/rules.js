@@ -28,9 +28,11 @@ const WAKE = [8, 18], REPAIR = 0.5, RAID_REST = 4;
 // ---- armies: { unitId: count }; the militia's unit id is "militia"
 const total = army => Object.values(army).reduce((a, n) => a + n, 0);
 const addArmy = (to, from) => { for (const [k, n] of Object.entries(from)) if (n > 0) to[k] = (to[k] || 0) + n; return to; };
+// (a Chorus force with a Conductor among it fights as linked broods: the resolver's linked gaunts, tools/resolver)
+const LINKABLE = new Set(["leaper", "spitter"]);
 const asResolverArmy = army => {
-  const byT = {};
-  for (const [id, n] of Object.entries(army)) if (n > 0) byT[templateOf(id)] = (byT[templateOf(id)] || 0) + n;
+  const byT = {}, linked = (army.conductor || 0) > 0;
+  for (const [id, n] of Object.entries(army)) if (n > 0) { const t = templateOf(id) + (linked && LINKABLE.has(id) ? " (linked)" : ""); byT[t] = (byT[t] || 0) + n; }
   return Object.entries(byT).map(([template, count]) => ({ template, count }));
 };
 // take a share of an army away, type by type (rounded so the expected loss is kept overall)
@@ -402,6 +404,8 @@ function chorusTurn(S, R) {
     const t = targets[0];
     if (!t) continue;
     const send = cut(w.garrison, 0.4, R), go = Object.fromEntries(Object.entries(w.garrison).map(([k, n]) => [k, n - (send[k] || 0)]));
+    // a swarm goes out with a Conductor if the world can spare one (it breeds another), so its broods stay linked
+    if (!go.conductor && (send.conductor || 0) >= 1) { send.conductor--; go.conductor = 1; }
     if (total(t.them) && predict(asResolverArmy(go), asResolverArmy(BT.rough(t.them)), { seed: Math.floor(R() * 2 ** 31), sims: 100 }).pWinA < 0.6) continue;   // judged through the fog
     w.garrison = send;
     S.swarms.push({ id: `s${S.turn}-${w.id}`, faction: "chorus", at: t.n.id, from: w.id, army: go });

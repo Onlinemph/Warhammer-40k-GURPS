@@ -1042,7 +1042,7 @@ const SIM = (() => {
     const T = TEMPLATES.get(spec.template);
     if (!T) throw new Error("Unknown template: " + spec.template);
     // a squad's specialist trains on its weapon: spec.skills {"Gunner (Rockets)": 20} sets those skill levels
-    const st = spec.skills ? { ...T.t.stats, skills: [...(T.t.stats.skills || []).filter(x => !(x.name in spec.skills)), ...Object.entries(spec.skills).map(([name, level]) => ({ name, level }))] } : T.t.stats, flags = { ...(st.flags || {}) };   // its own copy: a battle may change a unit's flags (synapse)
+    const st = spec.skills ? { ...T.t.stats, skills: [...(T.t.stats.skills || []).filter(x => !(x.name in spec.skills)), ...Object.entries(spec.skills).map(([name, level]) => ({ name, level }))] } : T.t.stats, flags = { ...(st.flags || {}), ...(spec.flags || {}) };   // its own copy: a battle may change a unit's flags (synapse); a spec may add some (a brood known to be linked)
     const arm = armourProfile(spec.armour);
     const nat = {};
     for (const [k, v] of Object.entries(st.dr || {})) nat[k] = v;

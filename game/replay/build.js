@@ -5,7 +5,7 @@
 // with the shots, blows and blasts of that second.
 const { SIM, unitSpec } = require("../../tools/resolver/common.js");
 const { templateOf, nameOf } = require("../world/units.js");
-const ATTEMPTS = 4;
+const ATTEMPTS = 4, STALEMATE_SECONDS = 40;
 
 function fieldFor(report) {
   const n = report.sides.reduce((a, s) => a + Object.values(s.before).reduce((x, y) => x + y, 0), 0);
@@ -43,7 +43,8 @@ function build(report, onProgress = () => {}) {
   let r = null, attempt = 0;
   for (attempt = 1; attempt <= ATTEMPTS; attempt++) {
     const seed = (report.seed + attempt * 7919) >>> 0;
-    r = SIM.runBattle(units, { battlefield: "countryside", ...field, seed, maxTurns: 600, frames: true, log: true, onTurn: t => onProgress({ attempt, attempts: ATTEMPTS, second: t, estimate: report.secs || 60 }) });
+    // a stalemate (neither side gave way, both dug in) is a shorter fight that leaves both standing
+    r = SIM.runBattle(units, { battlefield: "countryside", ...field, seed, maxTurns: report.outcome === "stalemate" ? STALEMATE_SECONDS : 600, frames: true, log: true, onTurn: t => onProgress({ attempt, attempts: ATTEMPTS, second: t, estimate: report.secs || 60 }) });
     if (r.winner === want) break;
   }
   const map = SIM.battlefields.countryside(field.mapSeed, field);

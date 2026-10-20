@@ -39,7 +39,7 @@ function contest(S, A, B, R) {
 }
 function contestText(c, names) {
   if (c.winner < 0 || !c.adv.length) return "";
-  const who = c.leaders[c.winner].name || names[c.winner];
+  const who = c.leaders[c.winner].name || names[c.winner].replace(/^./, x => x.toUpperCase());
   const list = c.adv.map(a => a.text), words = list.length > 1 ? list.slice(0, -1).join(", ") + " and " + list[list.length - 1] : list[0];
   return ` ${who} outwitted ${names[1 - c.winner]}: ${words}.`;
 }

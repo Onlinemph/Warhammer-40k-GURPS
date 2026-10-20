@@ -46,6 +46,5 @@ test("an upvote: once a player a battle, only on battles you know of; votes move
   const w1 = S.highlights.weights;
   assert.ok(w1.upset > w0.upset && w1.upset <= w0.upset * 1.1 + 1e-9, `upset ${w0.upset} -> ${w1.upset}`);
   assert.ok(w1.close < w0.close, "reasons not in the marked battle lose a little");
-  // a quiet turn after: the feed still shows the last turn that had battles
-  assert.ok(view(S, "h").highlights.list.some(h => h.id === "up" && h.voted && h.votes === 1));
+  assert.deepEqual(S.highlights.votes.up, ["h"], "the mark is kept");
 });
