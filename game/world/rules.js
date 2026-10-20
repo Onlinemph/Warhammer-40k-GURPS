@@ -621,7 +621,7 @@ function chorusTurn(S, R) {
     const send = cut(r.garrison, 0.4, R), go = Object.fromEntries(Object.entries(r.garrison).map(([k, n]) => [k, n - (send[k] || 0)]));
     // a swarm goes out with a Conductor if the brood can spare one (it breeds another), so its broods stay linked
     if (!go.conductor && (send.conductor || 0) >= 1) { send.conductor--; go.conductor = 1; }
-    const reach = reachOf(S, w, r, "chorus"), t = pickTarget(S, "chorus", reach, go, 0.6, R);
+    const reach = reachOf(S, w, r, "chorus"), t = pickTarget(S, "chorus", reach, go, 0.5, R);
     if (!t) { idle.push({ w, r, send, go, reach }); continue; }
     r.garrison = send;
     S.swarms.push({ id: `s${S.turn}-${w.id}-${r.id}`, faction: "chorus", at: t.w.id, region: t.r.id, from: { at: w.id, region: r.id }, army: go });
@@ -636,7 +636,7 @@ function chorusTurn(S, R) {
     const free = broods.filter(b => !used.has(b));
     if (free.length < 2) continue;
     const go = free.reduce((a, b) => addArmy(a, b.go), {});
-    const t = pickTarget(S, "chorus", [x], go, 0.6, R);
+    const t = pickTarget(S, "chorus", [x], go, 0.5, R);
     if (!t) continue;
     for (const b of free) { used.add(b); b.r.garrison = b.send; }
     S.swarms.push({ id: `s${S.turn}-${x.w.id}-${x.r.id}-g`, faction: "chorus", at: x.w.id, region: x.r.id, from: { at: free[0].w.id, region: free[0].r.id }, army: go });

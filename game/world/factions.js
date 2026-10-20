@@ -5,7 +5,7 @@ const { UNITS, FACTIONS, SCALE } = require("./units.js");
 const RG = require("./regions.js");
 
 // loyalty: +5 a turn in supply; -5 beside an Apostate world, -10 with an Apostate warband on it or next door
-const LOYALTY = { start: 60, capital: 100, retaken: 30, gain: 5, nearWorld: 5, nearWarband: 10, defect: 25, corruptible: 50 };
+const LOYALTY = { start: 60, capital: 100, retaken: 30, gain: 5, nearWorld: 2, nearWarband: 10, defect: 25, corruptible: 50 };
 const EDICT = { every: 10, lasts: 10, hold: 5, loyalty: 20, materiel: 60 * SCALE, fail: 10 };
 const WARDEN_HELD = 10;                        // turns a world must be held before it can grow Wardens
 const CAPTIVES = 0.2;                          // share of the enemy's fallen the Apostates take alive

@@ -68,12 +68,12 @@ function factors(t, A, B) {
 const battlefield = t => { const m = (TERRAIN[t] || TERRAIN.plains).map; return m.city ? { battlefield: "city", city: m.city } : { battlefield: "countryside", ...(m.ground && Object.keys(m.ground).length ? { ground: m.ground } : {}) }; };
 // ---- weather (docs/setting.md): each world's, drawn each turn by its kind; shares of clear, rain, storm, fog, dust
 const WEATHER = {
-  hive:     { clear: 4, rain: 1, storm: 1, fog: 4, dust: 0 },     // smog
-  forge:    { clear: 4, rain: 1, storm: 1, fog: 3, dust: 1 },
-  agri:     { clear: 6, rain: 3, storm: 1, fog: 1, dust: 0 },
-  fortress: { clear: 6, rain: 2, storm: 1, fog: 1, dust: 0 },
-  death:    { clear: 3, rain: 3, storm: 3, fog: 1, dust: 0 },
-  tomb:     { clear: 5, rain: 0, storm: 1, fog: 0, dust: 4 },
+  hive:     { clear: 7, rain: 1, storm: 0.5, fog: 1.5, dust: 0 },     // smog
+  forge:    { clear: 7, rain: 1, storm: 0.5, fog: 1, dust: 0.5 },
+  agri:     { clear: 8, rain: 1.5, storm: 0.25, fog: 0.25, dust: 0 },
+  fortress: { clear: 8, rain: 1.2, storm: 0.4, fog: 0.4, dust: 0 },
+  death:    { clear: 5, rain: 2, storm: 2, fog: 1, dust: 0 },
+  tomb:     { clear: 7, rain: 0, storm: 0.5, fog: 0, dust: 2.5 },
 };
 const WEATHER_NAMES = { clear: "clear", rain: "rain", storm: "a storm", fog: "fog", dust: "a dust storm" };
 function weatherFor(type, R) {

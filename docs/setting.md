@@ -134,7 +134,7 @@ guesses, to be measured in the sample wars. All of it is worked out at the tick 
 
 ### The Hegemony: loyalty and edicts
 - **Loyalty** (its currency), per Hegemony world, 0 to 100. It rises 5 a turn while the world is held in supply. It
-  falls 5 a turn beside an Apostate world, and 10 with an Apostate warband on it or next door (measured: at 10 for
+  falls 2 a turn beside an Apostate world (5 until the balance pass), and 10 with an Apostate warband on it or next door (measured: at 10 for
   a world alone, the Hegemony's border went over within 7 turns without a shot). A world taken back from someone starts at 30.
   Below 25, a world can go over to the Apostates (see Corruption), garrison and all.
 - **Edicts.** Every 10 turns a sealed edict opens: one war goal for the whole faction, picked by the tick's dice from
@@ -1016,6 +1016,37 @@ After everything above and the vehicles below, so it tunes the war as it will be
 - **The bar**, measured over 16 wars of 60 turns: each player faction 3 to 7 worlds at turn 60 on average, none wiped
   out in more than 1 war of 16; the Chorus 4 to 7; the Dormant 2 to 3 (they don't expand); close fights at least 15%.
   Each change is measured on its own and kept only if it moves the war toward the bar.
+- **As built (first round):** eight changes tried, three kept. Each was screened over 8 wars against the same seeds,
+  and the kept set confirmed over 16 (`tools/balance/par.js`, eight wars at a time):
+
+  | | Hegemony | Apostates | Brawl | Chorus | Dormant | Close fights | 95%+ | Bad weather |
+  |---|---|---|---|---|---|---|---|---|
+  | Before | 2.7 | 4.2 | 5.3 | 7.6 | 2.3 (1 wiped) | 12.5% | 56% | 54% |
+  | After | 3.3 | 4.1 | 4.8 | **7.8** | 2.4 | 15.5% | 52% | 30% |
+
+  - **Kept:**
+    - **Weather** (`terrain.js`): fewer bad days. Bad weather fell from 54% of battles to 30%; death worlds
+      still storm half the time. Close fights rose 12.2% → 13.9% on the same seeds.
+    - **Hegemony loyalty** falls 2 a turn beside an Apostate world, from 5. Its border worlds had been going over
+      2.5 times a war, its biggest loss of worlds; now 1.4, and the Hegemony holds 3.4 worlds on the same seeds
+      (from 3.0). This is outside the list of what may move. It is a faction rule like the Chorus's breeding.
+    - **Chorus swarms** go out at 50% odds, from 60% (`rules.js`, both the lone brood's and the gathered broods').
+      Close fights rose 13.5% → 15.5% over 16 wars. The bots' warbands, which choose near-sure fights (88-97% of
+      their attacks are 95%+), are not where close fights come from; swarms, raids and counter-attacks are.
+  - **Tried and dropped:**
+    - **Bots landing beside a city too strong to storm, to besiege it.** It worked, but only 0.3 sieges a war,
+      and it didn't move the balance. The bots reach a campaign city only at 50%+ odds, so they seldom face a
+      city they'd besiege. Sieges stay a player's tool.
+    - **Bots weighing every chance above 70% alike** (going for the bigger prize): close fights fell, 15.0% → 12.2%.
+    - **The Chorus's breeding cap per brood, 24 → 18 a turn:** no change at all. The cap never binds, because
+      its biomass runs out first.
+    - **Chorus income at 85%:** Chorus 8.3 → 8.0, close fights down, within the noise.
+    - **Free worlds' Local Defence half as strong again:** Chorus 8.3 → 7.5, but the Hegemony 3.0 → 2.4 and
+      close fights 11.8% → 10.6%.
+    - **Half the biomass from the dead, with the 50% swarms:** Chorus 8.8 → 8.3, close fights 15.8% → 14.0%,
+      within the noise.
+  - **Still off the bar:** the Chorus, at 7.8 against 7. It takes free worlds (2.6 a war, the most of anyone). Nothing
+    tried on its breeding moved it beyond the noise. At 8 wars one faction's mean wanders about ±0.4 worlds.
 
 ### 3. Vehicles
 The codex has seven, and the engine can field them all: the **Chimera** (a transport), **Leman Russ Battle Tank** and
