@@ -404,4 +404,4 @@ function view(S, player) {
     news: S.log.slice(-30).reverse(),
   };
 }
-module.exports = { apply, rebuild, view, order, total, strength, supplied, holdBonus, START };
+module.exports = { apply, rebuild, view, order, total, strength, supplied, holdBonus, oddsAt, START };

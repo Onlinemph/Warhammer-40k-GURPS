@@ -4,7 +4,7 @@
 // toward foreign worlds (the weakest next door first, gates included), and comes home to rebuild when cut below 12. The
 // Apostates hold a Corruption when a Hegemony world next door is ripe, or a Summoning, whenever they have the
 // captives. Prints the mean worlds held per faction at turns 20, 40 and 60, and in how many wars each was wiped out.
-const { apply, order, total, strength } = require("./world/rules.js");
+const { apply, order, total, strength, oddsAt } = require("./world/rules.js");
 const { rng } = require("./world/galaxy.js");
 const FX = require("./world/factions.js");
 
@@ -48,10 +48,25 @@ function decide(S, p, R) {
       const them = w => strength(Object.values(S.players).filter(q => q.faction !== f && q.warband.at === w.id).reduce((a, q) => ({ ...a, ...q.warband.army }), { ...w.garrison }));
       next.sort((a, b) => them(a) - them(b) || R() - 0.5);
       move = next[0].id;
+      // with the standing orders it reads the odds: the best fight on offer, and none at all if every one is hopeless
+      // (then home to grow, rather than marching at the same wall every turn)
+      if (SMART) {
+        const scored = next.map(w => ({ w, o: oddsAt(S, p, w.id) ?? 100 })).sort((a, b) => b.o - a.o);
+        move = scored[0].o >= 25 ? scored[0].w.id : home ? null : stepToward(S, f, wb.at, w => w.id === capital) || stepToward(S, f, wb.at, w => w.owner === f);
+      }
     } else move = stepToward(S, f, wb.at, w => w.owner !== f);
   }
-  return { move, recruit, ritual: null };
+  if (!SMART) return { move, recruit, ritual: null };
+  // the standing orders: fortify while it stays on its own world, raid a world it can't be sure of taking (under 60%),
+  // always turn back from a fight under 25%, and wall up a border world when the stockpile has materiel to spare
+  const target = move && S.worlds[move], odds = target && target.owner !== f ? oddsAt(S, p, move) : null;
+  const stance = !move ? (here.owner === f ? "fortify" : wb.stance || "advance") : odds != null && odds < 60 ? "raid" : "advance";
+  const border = here.links.some(id => S.worlds[id].owner !== f), lvl = here.walls || 0;
+  const build = here.owner === f && border && lvl < 2 && (S.factions[f].stock.materiel || 0) >= 3 * [20, 40][lvl] ? "walls" : null;
+  return { move, recruit, ritual: null, stance, careful: true, build };
 }
+// BOT_ORDERS=0: the bots as they were, moving and recruiting only (to measure what the standing orders change)
+const SMART = process.env.BOT_ORDERS !== "0";
 function play(S, p, R) { const o = decide(S, p, R); if (o) order(S, { player: p.id, ...o }); }
 function war(seed, turns) {
   const R = rng(seed * 7919), log = [{ type: "create", seed }];
