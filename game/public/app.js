@@ -172,6 +172,12 @@ function draw() {
   $("#reports").innerHTML = V.reports.map((r, i) => `<li><b>Turn ${r.turn}</b> · ${esc(r.text)} ${r.id ? `<button class="link" data-rep="${i}">Watch</button> <a class="link" href="/sim#war=${encodeURIComponent(r.id)}" target="_blank" rel="noopener">Watch in 3D</a>` : ""}</li>`).join("") || "<li class='muted'>No battles yet.</li>";
   $("#reports").querySelectorAll("[data-rep]").forEach(b => b.onclick = () => openReplay(V.reports[+b.dataset.rep].id, V.reports[+b.dataset.rep]));
   $("#politics").innerHTML = politicsHtml(); wirePolitics();
+  // the highlight feed: this turn's best battles your faction knows of, why, and a mark for the ones worth watching
+  const HLV = V.highlights;
+  $("#highlights").innerHTML = `<h3>Highlights, turn ${HLV.turn}</h3><ol class="feed">${HLV.list.map(h => `<li${h.mine ? ' class="mine"' : ""}><b>${esc(h.world)}</b>${h.mine ? " · yours" : ""} · ${esc(h.why.join("; ") || "a fight")}
+    <br><button class="link" data-hlw="${esc(h.id)}">Watch</button> <a class="link" href="/sim#war=${encodeURIComponent(h.id)}" target="_blank" rel="noopener">in 3D</a> · ${h.votes} mark${h.votes === 1 ? "" : "s"}${h.voted ? " (yours)" : ` <button class="link" data-hlv="${esc(h.id)}">worth watching</button>`}</li>`).join("") || "<li class='muted'>No battles this turn.</li>"}</ol>`;
+  $("#highlights").querySelectorAll("[data-hlw]").forEach(b => b.onclick = () => { const r = V.reports.find(x => x.id === b.dataset.hlw) || { id: b.dataset.hlw }; openReplay(r.id, r); });
+  $("#highlights").querySelectorAll("[data-hlv]").forEach(b => b.onclick = async () => { try { await api("/api/upvote", { report: b.dataset.hlv }); load(); } catch (e) { b.textContent = e.message; } });
   $("#news").innerHTML = V.news.map(n => `<li><b>Turn ${n.turn}</b> · ${esc(n.text)}</li>`).join("");
   countdown();
 }

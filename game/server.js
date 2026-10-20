@@ -32,11 +32,12 @@
 //   POST /api/politics {action: stand|vote|recall|priority|post|cancel|accept, ...} -> {ok} or {error}
 //        (vote: {for}; recall: {yes}; priority: {warbands}; post: {contract: {kind, world, turns, supply, reward, offer,
 //        deadline}}; cancel and accept: {id}); takes effect at once, in the log as a "politics" event
+//   POST /api/upvote {report}                    -> {ok}: one mark a player a battle (the highlight feed)
 //   GET  /api/replay/<report id>                 -> {status, progress, ahead} until it's ready, then the replay
 //                                                   (gzipped JSON); asking for one that isn't queued queues it
 const http = require("http"), fs = require("fs"), path = require("path"), crypto = require("crypto"), zlib = require("zlib");
 const { Worker } = require("worker_threads");
-const { apply, rebuild, view, order, politics } = require("./world/rules.js");
+const { apply, rebuild, view, order, politics, upvote } = require("./world/rules.js");
 const { FACTIONS } = require("./world/units.js");
 const { makeAuth } = require("./auth.js");
 
@@ -205,6 +206,14 @@ const server = http.createServer(async (req, res) => {
     if (req.method === "GET" && url.pathname === "/api/view") {
       const p = who(req); if (!p) return send(res, 401, { error: "sign in and join first" });
       return send(res, 200, { ...view(S, p), nextTick: nextTick(), paused: adm.paused, now: Date.now() });
+    }
+    if (req.method === "POST" && url.pathname === "/api/upvote") {
+      const p = who(req); if (!p) return send(res, 401, { error: "sign in and join first" });
+      const b = await readBody(req), e = { type: "upvote", player: p, report: String(b.report || "").slice(0, 40) };
+      const err = upvote(S, e);
+      if (err) return send(res, 400, { error: err });
+      record(e);
+      return send(res, 200, { ok: true });
     }
     if (req.method === "POST" && url.pathname === "/api/politics") {
       const p = who(req); if (!p) return send(res, 401, { error: "sign in and join first" });

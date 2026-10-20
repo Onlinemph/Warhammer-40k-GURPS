@@ -9,6 +9,7 @@ const FX = require("./factions.js");
 const VET = require("./veterans.js");
 const LOG = require("./logistics.js");
 const POL = require("./politics.js");
+const HL = require("./highlights.js");
 
 const START = {
   hegemony:  { stock: { manpower: 40, materiel: 60 }, warband: { levy: 15, storm: 3 }, garrison: { levy: 20 } },
@@ -55,6 +56,7 @@ function create(seed, opt = {}) {
   FX.setup(S);
   LOG.setup(S);
   POL.setup(S);
+  HL.setup(S);
   return S;
 }
 function join(S, { player, name, faction }) {
@@ -277,6 +279,8 @@ function tick(S, seed) {
   VET.reconcile(S, R);
   // politics: service, contracts paid or expired, recall, absence, elections
   POL.tick(S, T);
+  // the highlight feed: this tick's battles scored, last turn's upvotes moving the weights
+  HL.score(S, T); HL.drift(S);
 }
 
 // one battle: the resolver gives the odds and the expected losses; the tick's dice say who won
@@ -317,12 +321,14 @@ function fight(S, w, A, B, R, T) {
   // the named: who falls, who is named, the leader
   for (const x of parts) POL.battle(S, S.players[x.part.player], [A, B][x.i].faction === winner);
   const fallenNamed = parts.flatMap(x => VET.afterBattle(S, w, x.part, x.was, S.players[x.part.player].warband.army, [A, B][x.i].faction === winner, x.lost, x.i ? lossB : lossA, R));
+  const leadersFell = parts.flatMap(x => S.players[x.part.player].warband.memorial.filter(m => m.leader && m.turn === S.turn && m.fell === w.name).map(m => m.name));
   // who the battle feeds: captives, biomass, fame (factions.js)
   FX.afterBattle(S, w, [A, B].map((x, i) => ({ faction: x.faction, parts: x.parts, won: winner === x.faction, p: i ? 1 - pA : pA, lostN: fell[i].n, lostPower: fell[i].power })), R, T);
   const fname = f => f === "militia" ? "the " + MILITIA.name.toLowerCase() : FACTIONS[f].name;
   const report = {
     id: `t${S.turn}-${w.id}-${S.reports.filter(r => r.turn === S.turn && r.world === w.id).length}`,
     turn: S.turn, world: w.id, worldName: w.name, worldType: w.type, seed, odds: Math.round(pA * 100), winner, secs: Math.round(p.seconds),
+    losses: [Math.round(lossA * 100) / 100, Math.round(lossB * 100) / 100], fallen: fallenNamed.filter(n => !leadersFell.includes(n)), leaders: leadersFell,
     sides: before.map((b, i) => ({ faction: b.faction, before: b.army, named: b.named, short: b.short || undefined, players: [A, B][i].parts.filter(x => x.kind === "warband").map(x => S.players[x.player].name) })),
     text: `${w.name}: ${fname(A.faction)} (${describe(A.army)}) against ${fname(B.faction)} (${describe(B.army)}). ` +
       (draw ? "Neither side gives way." : `${cap(fname(winner))} win${pA > 0.75 && aWins || pA < 0.25 && !aWins ? ", as expected" : pA > 0.25 && pA < 0.75 ? " a close fight" : " against the odds"}.`) +
@@ -407,7 +413,8 @@ function apply(S, e) {
   if (e.type === "order") { const err = order(S, e); if (err) note(S, `order refused: ${err}`); return S; }
   if (e.type === "tick") { tick(S, e.seed); return S; }
   if (e.type === "notice") { note(S, String(e.text)); return S; }
-  if (e.type === "politics") { POL.apply(S, e); return S; }   // votes, standing, the Warmaster's acts (checked when given)   // a word from the admin, in the news (a rollback, a pause)
+  if (e.type === "politics") { POL.apply(S, e); return S; }
+  if (e.type === "upvote") { if (!upvote(S, e)) HL.vote(S, e); return S; }   // a highlight marked worth watching   // votes, standing, the Warmaster's acts (checked when given)   // a word from the admin, in the news (a rollback, a pause)
   throw new Error(`unknown event ${e.type}`);
 }
 const rebuild = events => events.reduce((S, e) => apply(S, e), null);
@@ -428,6 +435,7 @@ function view(S, player) {
     turn: S.turn, you: { name: p.name, faction: f, warband: p.warband, stock: S.factions[f].stock, moves: FX.moves(S, f, p.warband.at), odds,
       edict: f === "hegemony" ? S.factions.hegemony.edict : null, rituals: f === "apostates" ? FX.RITUALS : null, walls: WALLS, turnBack: TURN_BACK, depot: LOG.DEPOT, convoyMax: LOG.CONVOY.max },
     politics: POL.view(S, p),
+    highlights: HL.view(S, p, knows(S, p)),
     factions: { ...Object.fromEntries(Object.entries(S.factions).map(([k, v]) => [k, { name: v.name, colour: v.colour }])), militia: { name: MILITIA.name, colour: "#8d887e" } },
     units: Object.fromEntries(Object.entries(UNITS).filter(([, u]) => u.faction === f).map(([k, u]) => [k, { name: u.name, cost: u.cost }])),
     worlds: S.order.map(id => {
@@ -446,4 +454,13 @@ function view(S, player) {
 }
 // a politics action checked against the state now (the server logs only what passes)
 const politics = (S, e) => POL.check(S, e);
-module.exports = { politics, apply, rebuild, view, order, total, strength, supplied, holdBonus, oddsAt, START };
+// which battles a player's faction knows of: its own, and those where it has eyes
+function knows(S, p) {
+  const f = p.faction, eyes = new Set();
+  for (const w of Object.values(S.worlds)) if (w.owner === f) { eyes.add(w.id); w.links.forEach(n => eyes.add(n)); }
+  for (const q of Object.values(S.players)) if (q.faction === f) { eyes.add(q.warband.at); S.worlds[q.warband.at].links.forEach(n => eyes.add(n)); }
+  return r => r.sides.some(s => s.faction === f) || eyes.has(r.world);
+}
+// an upvote checked: returns the problem or null
+const upvote = (S, e) => S.players[e.player] ? HL.checkVote(S, e, knows(S, S.players[e.player])) : "no such player";
+module.exports = { politics, upvote, apply, rebuild, view, order, total, strength, supplied, holdBonus, oddsAt, START };
