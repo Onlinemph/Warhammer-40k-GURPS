@@ -486,10 +486,35 @@ terrain, and battles fought on maps made from that terrain.
   close or open ground counts in the war's odds (x1.15 for the hand-to-hand side in close ground, x1.1 for the
   guns in the open).
 
+- **As built (step 3):** `game/world/regions.js`. Each world has 8 to 20 regions (by type: a Spire world 12-20, a
+  Bastion 9-14, a tomb 8-12), joined by links of their own; a third of them (at least three) are cities, drawn from
+  the world's towns, and the region nearest the middle is the capital, built as the world's kind of capital (a hive
+  city, a fortress, a city, a farm town). Cities have names; the countryside is named for its ground ("Vorka
+  Hills"); a capital is "<world> Prime". A world's starting garrison is in its capital, with five of its basic troops
+  (a free world's three to eight Local Defence) in each other city. A warband marches one region a turn (`region`
+  in the order) or moves to another world, landing in the region it names (`land`) or the one nearest the capital
+  it may land in. Only a **fortress capital** held by a foe with a garrison denies the sky, over itself and the
+  regions next to it: when every fortress city denied it, a Bastion couldn't be landed on at all, and the bots
+  beside one walked up and down their own lanes. Battles are fought region by region on the region's ground; a
+  region held by one faction's forces alone is theirs; a world goes to whoever holds its capital and more than half
+  its cities (or to the capital's holder, where the old holder has no city left), and is **contested** until then.
+  Each city gives its holder its share of the world's yield (the capital counts double); recruits come only from a
+  city you hold; a world's two new levies a turn go to its holder's emptiest city; walls and a world's defence count
+  in its cities, and a fortress city's works x1.25. **Added by measurement:** a city under attack is reinforced by
+  half of each of its holder's other garrisons on the world (a muster), since otherwise warbands picked off cities
+  of three to eight defenders. Rallies are a city's share of its world's people; a raid loots a city; Corruption
+  turns a world's capital; the dead rise in the region where most of them fell; the Chorus breeds in every city it
+  holds, each with its own Conductor; the Dormant raid regions in reach.
+
 ### In the client
 - Clicking a world opens its **planet view**: its regions and cities on a map of their own, coloured by holder,
   with terrain, garrisons where you can see them, and your warband's region. Orders target regions there.
 - The galaxy map shows contested worlds split by the share each faction holds.
+- **As built:** a planet card under the galaxy map draws the picked world (or your warband's) region by region:
+  cities as squares, the capital biggest, each coloured by its holder, troops seen as numbers, your warband ringed,
+  a battle waiting circled red. Picking a region shows its ground, holder and forces, the odds if you'd fight there,
+  and sets a march or a landing in the orders. The orders have a march (to a region next door, with its odds) and a
+  move to another world with its landing choice.
 
 ### Not in this pass
 Orbit and space battles, sieges lasting several turns as a mechanic of their own, the planet surface in 3D, and

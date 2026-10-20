@@ -2,7 +2,7 @@
 // information; the server filters everything.
 const $ = s => document.querySelector(s);
 // signed in, the session cookie goes with every request by itself; a development join keeps a token in this browser
-let token = localStorage.getItem("war-token"), V = null, sel = null, ME = null;
+let token = localStorage.getItem("war-token"), V = null, sel = null, selR = null, ME = null;
 const api = async (path, body) => {
   const r = await fetch(path, { method: body ? "POST" : "GET", headers: { "content-type": "application/json", ...(token ? { authorization: "Bearer " + token } : {}) }, body: body ? JSON.stringify(body) : undefined });
   const j = await r.json(); if (!r.ok) throw new Error(j.error || r.statusText); return j;
@@ -118,6 +118,57 @@ function labels(W, me) {
   }
   return out;
 }
+// a contested world's slices: each holder's share of its cities
+function pie(cx, cy, r, split, col, op) {
+  let a = -Math.PI / 2, out = "";
+  for (const [f, s] of Object.entries(split).sort()) {
+    if (s <= 0) continue;
+    const b = a + s * 2 * Math.PI, p = t => `${(cx + r * Math.cos(t)).toFixed(2)} ${(cy + r * Math.sin(t)).toFixed(2)}`;
+    out += `<path d="M${cx} ${cy} L${p(a)} A${r} ${r} 0 ${s > 0.5 ? 1 : 0} 1 ${p(b)} Z" fill="${col(f)}" opacity="${op}" pointer-events="none"/>`;
+    a = b;
+  }
+  return out;
+}
+// the landing choice for a move: the regions the warband may land in on that world, the default first
+function setLanding(id, pick) {
+  const L = id && V.you.landing[id], w = id && V.worlds.find(x => x.id === id);
+  $("#o-land-l").hidden = !L;
+  if (!L) return;
+  $("#o-land").innerHTML = L.may.map(rid => { const r = w.regions.find(x => x.id === rid), o = V.you.odds[id + "/" + rid]; return `<option value="${rid}"${rid === (pick || L.default) ? " selected" : ""}>${esc(r.name)} (${esc(V.terrains[r.terrain])}${r.capital ? ", the capital" : r.city ? ", a city" : ""}${o ? `; about ${o[0]}-${o[1]}%` : ""})</option>`; }).join("");
+}
+// the planet view: the picked world's regions (or your warband's world's), coloured by holder; cities are squares,
+// the capital the biggest; your warband's region ringed, a battle waiting dashed red. Picking a region shows what's
+// there and sets a march or a landing in the orders
+function planet(W, me, col) {
+  const w = W[sel || me.at], R = id => w.regions.find(r => r.id === id);
+  let s = "";
+  for (const r of w.regions) for (const l of r.links) if (r.id < l) s += `<line class="rlink" x1="${r.x}" y1="${r.y}" x2="${R(l).x}" y2="${R(l).y}"/>`;
+  for (const r of w.regions) {
+    const rad = r.capital ? 3.4 : r.city ? 2.6 : 1.8, c = col(r.owner), cls = `region${selR === r.id ? " sel" : ""}`;
+    const n = r.forces ? r.forces.reduce((a, f) => a + Object.values(f.army).reduce((x, y) => x + y, 0), 0) : 0;
+    const tip = `<title>${esc(r.name)}: ${esc(V.terrains[r.terrain])}${r.capital ? ", the capital" : r.city ? ", a city" : ""} · ${r.owner ? esc(V.factions[r.owner].name) : "unclaimed"}</title>`;
+    s += r.city ? `<rect class="${cls}" data-r="${r.id}" x="${r.x - rad}" y="${r.y - rad}" width="${2 * rad}" height="${2 * rad}" rx="${r.capital ? .3 : .6}" fill="${c}">${tip}</rect>` : `<circle class="${cls}" data-r="${r.id}" cx="${r.x}" cy="${r.y}" r="${rad}" fill="${c}">${tip}</circle>`;
+    if (me.at === w.id && me.region === r.id) s += `<circle class="here" cx="${r.x}" cy="${r.y}" r="${rad + 1.4}" style="stroke-width:.5;stroke-dasharray:1 .7"/>`;
+    if (r.battle) s += `<circle class="rbattle" cx="${r.x}" cy="${r.y}" r="${rad + 2.2}"/>`;
+    if (n) s += `<text class="rforce" x="${r.x}" y="${r.y + .65}" text-anchor="middle">${n}</text>`;
+    s += r.city ? `<text class="rname" x="${r.x}" y="${r.y + rad + 2.4}" text-anchor="middle">${esc(r.name)}</text>` : `<text class="rground" x="${r.x}" y="${r.y + rad + 1.9}" text-anchor="middle">${esc(V.terrains[r.terrain])}</text>`;
+  }
+  const r = selR && R(selR), here = me.at === w.id, odds = r && V.you.odds[w.id + "/" + r.id];
+  const canMarch = r && here && V.you.marches.includes(r.id), canLand = r && V.you.landing[w.id] && V.you.landing[w.id].may.includes(r.id);
+  const owners = [...new Set(w.regions.map(x => x.owner))];
+  $("#planet").innerHTML = `<h3>${esc(w.name)}: its regions</h3>
+    <div class="legend">${owners.map(f => `<span><i style="background:${col(f)}"></i>${f ? esc(V.factions[f].name) : "unclaimed"}</span>`).join("")}<span class="muted">squares are cities, the biggest the capital; numbers are troops seen</span></div>
+    <svg class="planet-map" viewBox="0 0 100 60" role="img" aria-label="Map of ${esc(w.name)}">${s}</svg>
+    ${r ? `<p><b>${esc(r.name)}</b> · ${esc(V.terrains[r.terrain])}${r.capital ? ", the capital" : r.city ? ", a city" : ""} · ${r.owner ? esc(V.factions[r.owner].name) : "unclaimed"}${r.battle ? " · <span class='err'>a battle waits here</span>" : ""}</p>
+      ${r.forces ? (r.forces.length ? `<table>${r.forces.map(f => `<tr><td>${esc(V.factions[f.faction].name)}${f.players.length ? " (" + f.players.map(esc).join(", ") + ")" : ""}</td><td>${f.rough ? "about " : ""}${armyText(f.army)}</td></tr>`).join("")}</table>` : "<p class='muted'>Nobody there.</p>") : "<p class='muted'>Your faction has no eyes here.</p>"}
+      ${odds ? `<p>If your warband fights here: about <b>${odds[0]}-${odds[1]}%</b> to win.</p>` : ""}
+      ${canMarch ? `<button id="p-march">March here next tick</button>` : canLand ? `<button id="p-land">Land here next tick</button>` : here && me.region === r.id ? "<p class='muted'>Your warband is here.</p>" : ""}<p class="muted" id="p-msg"></p>`
+      : `<p class="muted">Pick a region on the map.</p>`}`;
+  $("#planet").querySelectorAll(".region").forEach(c => c.onclick = () => { selR = c.dataset.r; draw(); });
+  const set = () => { $("#p-msg").textContent = "Set in your orders below: send them before the tick."; };
+  if ($("#p-march")) $("#p-march").onclick = () => { $("#o-move").value = ""; setLanding(null); $("#o-march").value = r.id; set(); };
+  if ($("#p-land")) $("#p-land").onclick = () => { $("#o-march").value = ""; $("#o-move").value = w.id; setLanding(w.id, r.id); set(); };
+}
 function draw() {
   V.got = performance.now(); window.warView = V;
   const W = Object.fromEntries(V.worlds.map(w => [w.id, w])), col = f => f ? V.factions[f].colour : "#8d887e";
@@ -126,27 +177,32 @@ function draw() {
   for (const w of V.worlds) for (const l of w.links) if (w.id < l) svg += `<line class="lane" x1="${w.x}" y1="${w.y}" x2="${W[l].x}" y2="${W[l].y}"/>`;
   for (const w of V.worlds) {
     const n = w.forces ? w.forces.reduce((a, f) => a + Object.values(f.army).reduce((x, y) => x + y, 0), 0) : null;
-    svg += `<circle class="world${sel === w.id ? " sel" : ""}" data-id="${w.id}" cx="${w.x}" cy="${w.y}" r="${w.capital ? 13 : 10}" fill="${col(w.owner)}" opacity="${w.seen ? 1 : .55}"><title>${esc(w.name)}</title></circle>`;
+    svg += `<circle class="world${sel === w.id ? " sel" : ""}" data-id="${w.id}" cx="${w.x}" cy="${w.y}" r="${w.capital ? 13 : 10}" fill="${col(w.owner)}" opacity="${w.seen ? 1 : .55}"><title>${esc(w.name)}${w.contested ? " (contested)" : ""}</title></circle>`;
+    // a contested world: its cities' holders as slices
+    if (w.contested) svg += pie(w.x, w.y, w.capital ? 12 : 9, w.split, f => col(f === "militia" ? null : f), w.seen ? 1 : .55);
     if (me.at === w.id) svg += `<circle class="here" cx="${w.x}" cy="${w.y}" r="19"/>`;
   }
   $("#map").innerHTML = svg + labels(W, me);
-  $("#map").querySelectorAll(".world").forEach(c => c.onclick = () => { sel = c.dataset.id; draw(); });
+  $("#map").querySelectorAll(".world").forEach(c => c.onclick = () => { if (sel !== c.dataset.id) selR = null; sel = c.dataset.id; draw(); });
+  const myR = W[me.at].regions.find(r => r.id === me.region) || {};
+  planet(W, me, col);
   const st = Object.entries(V.you.stock).map(([k, v]) => `${Math.floor(v)} ${k}`).join(" · ");
   // the faction's own business: the Hegemony's edict, a ritual under way, a Brawl warband growing restless
   const ed = V.you.edict, rit = me.ritual, idle = V.turn - (me.lastFight ?? V.turn);
-  const heldHtml = (V.held || []).map(h => `<p class="${h.done ? "muted" : "err"}">${h.done ? `The battle at ${esc(h.world)} is fought; it counts at the next tick.` : `A battle at <b>${esc(h.world)}</b> waits for you. <a class="link" href="/sim#live=${encodeURIComponent(h.id)}" target="_blank" rel="noopener">Fight it</a> before the next tick, or the war settles it.`}</p>`).join("");
+  const heldHtml = (V.held || []).map(h => `<p class="${h.done ? "muted" : "err"}">${h.done ? `The battle at ${esc(h.region || "")} on ${esc(h.world)} is fought; it counts at the next tick.` : `A battle at <b>${esc(h.region || "")}</b> on <b>${esc(h.world)}</b> waits for you. <a class="link" href="/sim#live=${encodeURIComponent(h.id)}" target="_blank" rel="noopener">Fight it</a> before the next tick, or the war settles it.`}</p>`).join("");
   const own = heldHtml + (ed ? `<p><b>Edict:</b> ${esc(ed.text)}, by turn ${ed.until}${ed.kind === "hold" ? ` (held ${ed.held} of 5)` : ""}</p>` : "") +
     (rit ? `<p><b>${esc(V.you.rituals[rit.kind].name)}</b> under way at ${esc(W[rit.at].name)}${rit.target ? " against " + esc(W[rit.target].name) : ""}, done on turn ${rit.done} if the world isn't fought over</p>` : "") +
     (V.you.faction === "brawl" && idle >= 3 ? `<p class="err">The lads are restless: no fight for ${idle} turns${idle >= 4 ? ", and they're fighting each other" : ""}</p>` : "");
   $("#me").innerHTML = `<h2>${esc(V.you.name)}</h2><p>${esc(V.factions[V.you.faction].name)} · stockpile: ${esc(st)}</p>
-    <p>Warband at <b>${esc(W[me.at].name)}</b>${me.supplied ? "" : " · <span class='err'>out of supply</span>"}<br>${armyText(Object.fromEntries(Object.entries(me.army).map(([k, n]) => [V.units[k] ? V.units[k].name : k, n])))}</p>
+    <p>Warband at <b>${esc(myR.name || "")}</b> on <b>${esc(W[me.at].name)}</b>${me.supplied ? "" : " · <span class='err'>out of supply</span>"}<br>${armyText(Object.fromEntries(Object.entries(me.army).map(([k, n]) => [V.units[k] ? V.units[k].name : k, n])))}</p>
     <p class="muted">Eats ${me.eats ?? 0} supply a turn${me.short ? " · <span class='err'>short of supply: fights at x0.8</span>" : ""}${me.depotFed ? " · fed from a depot" : ""}</p>
     <p class="muted">Stance: ${esc(me.stance || "advance")}${me.careful ? ", turning back from bad odds" : ""}</p>
-    ${me.orders ? `<p class="muted">Orders in: ${me.orders.move ? "move to " + esc(W[me.orders.move].name) : "hold"}${me.orders.recruit.length ? ", recruit " + me.orders.recruit.map(r => r.count + " " + esc(V.units[r.unit].name)).join(", ") : ""}</p>` : ""}
+    ${me.orders ? `<p class="muted">Orders in: ${me.orders.move ? "move to " + esc(W[me.orders.move].name) + (me.orders.land ? ", landing at " + esc((W[me.orders.move].regions.find(r => r.id === me.orders.land) || {}).name || "") : "") : me.orders.region ? "march to " + esc((W[me.at].regions.find(r => r.id === me.orders.region) || {}).name || "") : "hold"}${me.orders.recruit.length ? ", recruit " + me.orders.recruit.map(r => r.count + " " + esc(V.units[r.unit].name)).join(", ") : ""}</p>` : ""}
     ${own}${rosterHtml(me)}${me.history.some(h => h.startsWith(`Turn ${V.turn}:`)) ? `<ul class="feed">${me.history.filter(h => h.startsWith(`Turn ${V.turn}:`)).map(h => `<li>${esc(h.replace(/^Turn \d+: /, ""))}</li>`).join("")}</ul>` : ""}<details><summary>History</summary><ol class="feed">${me.history.slice().reverse().map(h => `<li>${esc(h)}</li>`).join("")}</ol></details>`;
   const w = sel && W[sel];
-  $("#world").innerHTML = w ? `<h3>${esc(w.name)}</h3><p>${esc(w.typeName)}${w.capital ? ", a capital" : ""}${w.asleep ? ", its tomb asleep" : w.asleep === false ? ", its tomb awake" : ""}${w.gate ? ", a gate" : ""}${w.walls ? `, walls level ${w.walls}` : ""}${w.depot ? `, a depot${w.depot.supply != null ? ` (${w.depot.supply} supply)` : ""}` : ""}${w.blockaded ? ", <span class='err'>blockaded</span>" : ""} · ${w.owner ? esc(V.factions[w.owner].name) : "unclaimed"}${w.loyalty != null ? ` · loyalty ${w.loyalty}` : ""}${w.held != null ? ` · held ${w.held} turns` : ""}</p>
-    ${w.convoys && w.convoys.length ? `<p>Convoys here: ${w.convoys.map(c => `${esc(V.factions[c.faction].name)} to ${esc(c.to)}${c.supply != null ? ` (${c.supply} supply)` : ""}`).join("; ")}</p>` : ""}${V.you.odds[w.id] != null ? `<p>If your warband fights here: about <b>${V.you.odds[w.id][0]}-${V.you.odds[w.id][1]}%</b> to win against the strongest force, before the leaders' contest.</p>` : ""}${w.terrain && w.terrain.length ? `<p class="muted">Ground: ${esc(w.terrain.join(", "))}</p>` : ""}${w.forces ? (w.forces.length ? `<table>${w.forces.map(f => `<tr><td>${esc(V.factions[f.faction].name)}${f.players.length ? " (" + f.players.map(esc).join(", ") + ")" : ""}</td><td>${f.rough ? "about " : ""}${armyText(f.army)}</td></tr>`).join("")}</table>` : "<p class='muted'>Nobody there.</p>") : "<p class='muted'>Your faction has no eyes here.</p>"}` : `<p class="muted">Pick a world on the map.</p>`;
+  $("#world").innerHTML = w ? `<h3>${esc(w.name)}</h3><p>${esc(w.typeName)}${w.capital ? ", a capital" : ""}${w.asleep ? ", its tomb asleep" : w.asleep === false ? ", its tomb awake" : ""}${w.gate ? ", a gate" : ""}${w.walls ? `, walls level ${w.walls}` : ""}${w.depot ? `, a depot${w.depot.supply != null ? ` (${w.depot.supply} supply)` : ""}` : ""}${w.blockaded ? ", <span class='err'>blockaded</span>" : ""} · ${w.owner ? esc(V.factions[w.owner].name) : "unclaimed"}${w.contested ? ` · <b>contested</b>: ${Object.entries(w.split).sort((a, b) => b[1] - a[1]).map(([f, s]) => `${esc(V.factions[f].name)} ${Math.round(s * 100)}%`).join(", ")} of its cities` : ""}${w.loyalty != null ? ` · loyalty ${w.loyalty}` : ""}${w.held != null ? ` · held ${w.held} turns` : ""}</p>
+    ${w.convoys && w.convoys.length ? `<p>Convoys here: ${w.convoys.map(c => `${esc(V.factions[c.faction].name)} to ${esc(c.to)}${c.supply != null ? ` (${c.supply} supply)` : ""}`).join("; ")}</p>` : ""}${V.you.odds[w.id] != null ? `<p>If your warband lands here (${esc((w.regions.find(r => r.id === V.you.landing[w.id].default) || {}).name || "")}): about <b>${V.you.odds[w.id][0]}-${V.you.odds[w.id][1]}%</b> to win against the strongest force there, before the leaders' contest.</p>` : ""}
+    <p class="muted">${w.regions.length} regions, ${w.regions.filter(r => r.city).length} cities; it falls to whoever holds its capital and more than half its cities. Its map is below.</p>${w.terrain && w.terrain.length ? `<p class="muted">Ground: ${esc(w.terrain.join(", "))}</p>` : ""}${w.forces ? (w.forces.length ? `<table>${w.forces.map(f => `<tr><td>${esc(V.factions[f.faction].name)}${f.players.length ? " (" + f.players.map(esc).join(", ") + ")" : ""}</td><td>${f.rough ? "about " : ""}${armyText(f.army)}</td></tr>`).join("")}</table>` : "<p class='muted'>Nobody there.</p>") : "<p class='muted'>Your faction has no eyes here.</p>"}` : `<p class="muted">Pick a world on the map.</p>`;
   const here = W[me.at];
   $("#orders").innerHTML = `<h3>Orders for the next tick</h3>
     <label>Stance <select id="o-stance">${[["advance", "Advance: go where sent, take what you win"], ["fortify", "Fortify: stay, and fight harder on your own world"], ["raid", "Raid: strike, loot, come back"]].map(([k, t]) => `<option value="${k}"${(me.stance || "advance") === k ? " selected" : ""}>${t}</option>`).join("")}</select></label>
@@ -155,17 +211,21 @@ function draw() {
     ${here.owner === V.you.faction && !here.depot ? `<label><input type="checkbox" id="o-depot"> Build a depot at ${esc(here.name)} (${V.you.depot.cost} materiel; holds up to ${V.you.depot.cap} supply)</label>` : ""}
     ${here.owner === V.you.faction && (here.capital || here.depot) && V.worlds.some(t => t.owner === V.you.faction && t.depot && t.id !== here.id) ? `<label>Send a convoy to <select id="o-cv-to"><option value="">none</option>${V.worlds.filter(t => t.owner === V.you.faction && t.depot && t.id !== here.id).map(t => `<option value="${t.id}">${esc(t.name)} (${t.depot.supply} there)</option>`).join("")}</select> with <input type="number" id="o-cv-n" min="1" max="${V.you.convoyMax}" value="${V.you.convoyMax}"> supply</label>` : ""}
     ${here.owner === V.you.faction && here.walls < V.you.walls.max ? `<label><input type="checkbox" id="o-walls"> Raise the walls of ${esc(here.name)} to level ${here.walls + 1} (${V.you.walls.cost[here.walls]} materiel)</label>` : ""}
-    <label>Move <select id="o-move"${rit ? " disabled" : ""}><option value="">Hold at ${esc(here.name)}</option>${V.you.moves.map(l => `<option value="${l}">${here.links.includes(l) ? "to" : "through the gate to"} ${esc(W[l].name)}${V.you.odds[l] != null ? ` (fight there: about ${V.you.odds[l][0]}-${V.you.odds[l][1]}% to win)` : ""}</option>`).join("")}</select></label>
+    <label>March <select id="o-march"${rit ? " disabled" : ""}><option value="">Stay at ${esc(myR.name || "")}</option>${V.you.marches.map(id => { const r = here.regions.find(x => x.id === id), o = V.you.odds[here.id + "/" + id]; return `<option value="${id}">to ${esc(r.name)} (${esc(V.terrains[r.terrain])}${r.city ? ", a city" : ""}${o ? `; fight there: about ${o[0]}-${o[1]}%` : ""})</option>`; }).join("")}</select></label>
+    <label>Or move to another world <select id="o-move"${rit ? " disabled" : ""}><option value="">Stay on ${esc(here.name)}</option>${V.you.moves.map(l => `<option value="${l}">${here.links.includes(l) ? "to" : "through the gate to"} ${esc(W[l].name)}${V.you.odds[l] != null ? ` (fight where you'd land: about ${V.you.odds[l][0]}-${V.you.odds[l][1]}% to win)` : ""}</option>`).join("")}</select></label>
+    <label id="o-land-l" hidden>Landing at <select id="o-land"></select></label>
     ${V.you.rituals && here.owner === V.you.faction && !rit ? `<label>Ritual <select id="o-rit"><option value="">none</option>${Object.entries(V.you.rituals).map(([k, r]) => k === "corrupt"
       ? here.links.map(l => W[l]).filter(t => t.owner === "hegemony" && !t.capital).map(t => `<option value="corrupt:${t.id}">${r.name} against ${esc(t.name)}${t.loyalty != null ? " (loyalty " + t.loyalty + ")" : ""}, ${r.captives} captives</option>`).join("")
       : `<option value="${k}">${r.name}, ${r.captives} captives</option>`).join("")}</select></label>` : ""}
-    ${here.owner === V.you.faction ? Object.entries(V.units).map(([k, u]) => `<label>${esc(u.name)} <small class="muted">(${Object.entries(u.cost).map(([r, c]) => c + " " + r).join(", ")} each)</small> <input type="number" min="0" max="50" value="0" data-unit="${k}"></label>`).join("") : "<p class='muted'>Recruits only come from your own worlds.</p>"}
+    ${myR.city && myR.owner === V.you.faction ? Object.entries(V.units).map(([k, u]) => `<label>${esc(u.name)} <small class="muted">(${Object.entries(u.cost).map(([r, c]) => c + " " + r).join(", ")} each)</small> <input type="number" min="0" max="50" value="0" data-unit="${k}"></label>`).join("") : "<p class='muted'>Recruits only come from cities you hold.</p>"}
     <button id="o-go">Send orders</button><p class="err" id="o-err"></p>`;
+  $("#o-move").onchange = () => setLanding($("#o-move").value, null);
   $("#o-go").onclick = async () => {
     try {
       const recruit = [...document.querySelectorAll("[data-unit]")].map(i => ({ unit: i.dataset.unit, count: +i.value })).filter(r => r.count > 0);
       const rv = $("#o-rit") ? $("#o-rit").value : "", [kind, target] = rv.split(":");
-      await api("/api/orders", { move: $("#o-move").value || null, recruit, ritual: rv ? { kind, target: target || null } : null,
+      const move = $("#o-move").value || null;
+      await api("/api/orders", { move, land: move ? $("#o-land").value || null : null, region: move ? null : $("#o-march").value || null, recruit, ritual: rv ? { kind, target: target || null } : null,
         stance: $("#o-stance").value, careful: $("#o-careful").checked, command: $("#o-command").checked,
         build: $("#o-depot") && $("#o-depot").checked ? "depot" : $("#o-walls") && $("#o-walls").checked ? "walls" : null,
         convoy: $("#o-cv-to") && $("#o-cv-to").value ? { to: $("#o-cv-to").value, supply: +$("#o-cv-n").value } : null }); load();

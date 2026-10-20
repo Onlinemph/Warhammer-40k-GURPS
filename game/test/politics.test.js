@@ -3,10 +3,10 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
 const { apply, rebuild, politics } = require("../world/rules.js");
+const { at, hold, quiet } = require("./helpers.js");
 
 const start = () => { const S = rebuild([{ type: "create", seed: 7 },
   { type: "join", player: "a", name: "Ansel", faction: "hegemony" }, { type: "join", player: "b", name: "Brannoc", faction: "hegemony" }, { type: "join", player: "c", name: "Corvin", faction: "hegemony" }]); S.swarms = []; return S; };
-const quiet = S => { S.swarms = []; for (const w of Object.values(S.worlds)) if (w.owner === "chorus" || w.owner === "dormant") w.garrison = {}; return S; };
 const tick = (S, seed) => quiet(apply(quiet(S), { type: "tick", seed }));
 const pol = (S, player, action, rest = {}) => { const e = { type: "politics", player, action, ...rest }; const err = politics(S, e); if (err) return err; apply(S, e); return null; };
 const P = S => S.politics.hegemony;
@@ -17,7 +17,7 @@ test("service: a turn in the field, a battle, a win", () => {
   S = tick(S, 1);
   assert.equal(S.players.a.warband.service, s0 + 1);
   const wb = S.players.a.warband, here = S.worlds[wb.at], to = S.worlds[here.links.find(l => S.worlds[l].owner !== "hegemony") || here.links[0]];
-  Object.assign(to, { owner: null, tomb: false, garrison: { militia: 3 } });
+  hold(to, null, { militia: 3 }); to.tomb = false;
   wb.army = { levy: 60, storm: 10 };
   S = apply(S, { type: "order", player: "a", move: to.id, recruit: [] });
   const s1 = S.players.a.warband.service;
@@ -61,7 +61,8 @@ test("contracts: the reward goes into escrow; taking the world pays the taker's 
   const st = S.factions.hegemony.stock;
   st.materiel = 100; st.manpower = 100;
   const wb = S.players.b.warband, here = S.worlds[wb.at], to = S.worlds[here.links.find(l => S.worlds[l].owner !== "hegemony") || here.links[0]];
-  Object.assign(to, { owner: null, tomb: false, garrison: { militia: 3 } });
+  hold(to, null, { militia: 3 }); to.tomb = false;
+  for (const r of to.regions) if (!r.capital) r.owner = "hegemony";   // the last battle of a campaign: the rest is taken
   assert.match(pol(S, "b", "post", { contract: { kind: "take", world: to.id, deadline: 5, reward: { materiel: 20 } } }), /only the Warmaster/);
   assert.match(pol(S, "a", "post", { contract: { kind: "take", world: to.id, deadline: 5, reward: { materiel: 500 } } }), /hasn't 500 materiel/);
   assert.equal(pol(S, "a", "post", { contract: { kind: "take", world: to.id, deadline: 5, reward: { materiel: 20, manpower: 10 } } }), null);
@@ -107,7 +108,7 @@ test("hold and deliver contracts count turns and supply; an accepted one left un
 test("priority draws a double share of the stockpile, and a treasury pays where the share runs out", () => {
   let S = start();
   P(S).warmaster = "a";
-  for (const id of ["b", "c"]) { S.players[id].warband.at = S.factions.hegemony.capital; }
+  for (const id of ["b", "c"]) { at(S, S.players[id], S.factions.hegemony.capital); }
   S.players.a.warband.army = {};
   pol(S, "a", "priority", { warbands: ["b"] });
   S.factions.hegemony.stock = { manpower: 0, materiel: 0, supply: 100 };

@@ -27,7 +27,7 @@ function blockaded(S, w, H) {
 function income(S, H) {
   for (const f of Object.keys(S.factions)) {
     if (!isPlayerFaction(f)) continue;
-    for (const id of H.supplied(S, f)) { const w = S.worlds[id]; if (!blockaded(S, w, H)) S.factions[f].stock.supply += H.TYPES[w.type].supply || 0; }
+    for (const id of H.supplied(S, f)) { const w = S.worlds[id]; if (!blockaded(S, w, H)) S.factions[f].stock.supply += (H.TYPES[w.type].supply || 0) * H.heldShare(w, f); }
   }
 }
 const noIncome = (S, w, H) => blockaded(S, w, H);
@@ -141,9 +141,10 @@ function blockades(S, H, R) {
     if (!blockaded(S, w, H)) { w.blockaded = false; continue; }
     if (!w.blockaded) H.note(S, `${w.name} is blockaded`);
     w.blockaded = true;
-    const want = need(w.garrison);
+    // (every garrison of its holder's on the world)
+    const held = w.regions.filter(r => r.owner === w.owner), want = Math.ceil(held.reduce((a, r) => a + H.total(r.garrison), 0) / EAT);
     if (w.depot && w.depot.supply >= want) { w.depot.supply -= want; }
-    else if (want) w.garrison = H.cut(w.garrison, STARVE, R);
+    else if (want) for (const r of held) r.garrison = H.cut(r.garrison, STARVE, R);
     if (w.owner === "hegemony" && w.loyalty != null) w.loyalty = Math.max(0, w.loyalty - BLOCKADE_LOYALTY);
   }
 }

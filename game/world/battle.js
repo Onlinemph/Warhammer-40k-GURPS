@@ -66,17 +66,18 @@ function outcome(p, pA, attacker, R) {
 const rough = army => Object.fromEntries(Object.entries(army).map(([k, n]) => [k, Math.max(n > 0 ? 1 : 0, Math.round(n / 5) * 5)]));
 const band = (odds, exact) => { const w = exact ? 5 : 15; return [Math.max(0, odds - w), Math.min(100, odds + w)]; };
 
-// ---- a world rallies: attacked by a force more than twice as strong as its defenders, a world with a garrison raises
-// three of its people for every point of its yield (a Spire world 24, a Granary 9), as its holder's basic troops (the
-// Chorus breeds Leapers; a tomb raises nothing; a free world's are more of its Local Defence)
-const RALLY = { ratio: 2, perYield: 3 };
-function rally(S, w, def, att, strength) {
-  if (!def || !att || !def.parts.some(x => x.kind === "garrison") || strength(att.army) <= RALLY.ratio * strength(def.army)) return 0;
-  const { TYPES } = require("./galaxy.js"), { FACTIONS } = require("./units.js");
+// ---- a city rallies: attacked by a force more than twice as strong as its defenders, a city with a garrison raises
+// six of its people for every point of its share of its world's yield (a Spire world's capital 16, a Granary's 6), as
+// its holder's basic troops (the Chorus breeds Leapers; a tomb raises nothing; a free world's are more of its Local
+// Defence). The countryside has no people to raise
+const RALLY = { ratio: 2, perYield: 6 };
+function rally(S, w, r, def, att, strength) {
+  if (!r.city || !def || !att || !def.parts.some(x => x.kind === "garrison") || strength(att.army) <= RALLY.ratio * strength(def.army)) return 0;
+  const { TYPES } = require("./galaxy.js"), { FACTIONS } = require("./units.js"), { share } = require("./regions.js");
   const unit = def.faction === "militia" ? "militia" : def.faction === "chorus" ? "leaper" : FACTIONS[def.faction] && FACTIONS[def.faction].basic;
   if (!unit) return 0;
-  const t = TYPES[w.type], n = RALLY.perYield * (t.manpower + t.materiel);
-  w.garrison[unit] = (w.garrison[unit] || 0) + n; def.army[unit] = (def.army[unit] || 0) + n;
+  const t = TYPES[w.type], n = Math.max(1, Math.round(RALLY.perYield * (t.manpower + t.materiel) * share(w, r)));
+  r.garrison[unit] = (r.garrison[unit] || 0) + n; def.army[unit] = (def.army[unit] || 0) + n;
   return n;
 }
 module.exports = { contest, contestText, outcome, leaderOf, rough, band, rally, ADVANTAGES };

@@ -2,6 +2,7 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
 const { apply, rebuild, view, order, total, supplied } = require("../world/rules.js");
+const { at, hold, clear: clearW, G, RG } = require("./helpers.js");
 
 const start = () => [{ type: "create", seed: 7 }, { type: "join", player: "p1", name: "Varro", faction: "hegemony" }, { type: "join", player: "p2", name: "Gutrip", faction: "brawl" }];
 function play(turns) {
@@ -30,24 +31,24 @@ test("the galaxy: every world reachable, each side with a capital it holds", () 
 });
 test("the Dormant: a tomb sleeps, wakes when fought over or in its time, and repairs its fallen on a field it holds", () => {
   let S = rebuild(start());
-  const id = Object.values(S.worlds).find(w => w.tomb).id, n0 = total(S.worlds[id].garrison), at = S.worlds[id].wakeAt;
+  const id = Object.values(S.worlds).find(w => w.tomb).id, n0 = total(G(S.worlds[id])), wake = S.worlds[id].wakeAt;
   // left alone (no one fights there) it wakes on its turn, not before, and never adds to its sleepers
-  for (let t = 1; t <= at; t++) {
+  for (let t = 1; t <= wake; t++) {
     S = apply(S, { type: "tick", seed: t });
     const fought = S.reports.some(r => r.world === id);
-    if (!fought) assert.equal(S.worlds[id].awake, S.turn >= at, `turn ${S.turn}`);
-    if (S.worlds[id].owner === "dormant") assert.ok(total(S.worlds[id].garrison) <= n0);
+    if (!fought) assert.equal(S.worlds[id].awake, S.turn >= wake, `turn ${S.turn}`);
+    if (S.worlds[id].owner === "dormant") assert.ok(total(G(S.worlds[id])) <= n0);
   }
   // a fight it holds: the fallen come back by half
   S = rebuild(start());
   const w = Object.values(S.worlds).find(x => x.tomb);
-  const p = S.players.p1.warband; p.at = w.id; p.army = { levy: 30 };
+  const p = at(S, S.players.p1, w.id); p.army = { levy: 30 };
   S = apply(S, { type: "tick", seed: 5 });
   const rep = S.reports.find(r => r.world === w.id);
   assert.ok(rep, "the levies fought at the tomb");
   assert.ok(S.worlds[w.id].awake, "the tomb woke");
   if (rep.winner === "dormant") {
-    const before = total(rep.sides.find(s => s.faction === "dormant").before), after = total(S.worlds[w.id].garrison);
+    const before = total(rep.sides.find(s => s.faction === "dormant").before), after = total(RG.capitalOf(S.worlds[w.id]).garrison);
     assert.ok(after > before * 0.6, `repaired: ${after} of ${before}`);
   }
 });
@@ -66,7 +67,7 @@ test("orders: one jump at a time, recruits only at home, and a refused order cha
 test("a tick moves, recruits, pays for it, and writes the warband's history", () => {
   let S = rebuild(start());
   const wb = S.players.p1.warband, to = S.worlds[wb.at].links[0], before = S.factions.hegemony.stock.materiel;
-  Object.assign(S.worlds[to], { owner: "hegemony", garrison: {} });   // home ground next door: no battle
+  hold(S.worlds[to], "hegemony");   // home ground next door: no battle
   S = apply(S, { type: "order", player: "p1", move: to, recruit: [{ unit: "levy", count: 5 }] });
   S = apply(S, { type: "tick", seed: 1 });
   assert.equal(S.players.p1.warband.at, to);
@@ -77,7 +78,8 @@ test("a tick moves, recruits, pays for it, and writes the warband's history", ()
 test("battles happen, worlds change hands, and the Chorus spreads", () => {
   const { S } = play(40);
   assert.ok(S.reports.length > 5, `${S.reports.length} battles`);
-  assert.ok(Object.values(S.worlds).filter(w => w.owner === "chorus").length > 4, "the Chorus should have grown");
+  assert.ok(Object.values(S.worlds).filter(w => w.regions.some(r => r.owner === "chorus")).length > 4, "the Chorus should have spread");
+  assert.ok(Object.values(S.worlds).some(w => w.regions.some(r => r.owner && r.owner !== w.owner)), "some world contested");
   for (const r of S.reports) assert.ok(r.seed >= 0 && r.text.length > 20);
 });
 test("supply: a warband far from its own worlds holds out two turns, then wastes away", () => {
@@ -85,8 +87,8 @@ test("supply: a warband far from its own worlds holds out two turns, then wastes
   const wb = S.players.p1.warband;
   const ok = supplied(S, "hegemony");
   const far = Object.values(S.worlds).find(w => !ok.has(w.id) && !w.links.some(n => ok.has(n)));
-  const clear = () => { S.worlds[far.id].garrison = {}; S.swarms = []; for (const w of Object.values(S.worlds)) if (w.links.includes(far.id) && w.owner !== "hegemony") w.garrison = {}; };
-  wb.at = far.id; wb.army = { brawler: 0, levy: 40 }; S.players.p1.faction = "hegemony"; clear();
+  const clear = () => { clearW(S.worlds[far.id]); S.swarms = []; for (const w of Object.values(S.worlds)) if (w.links.includes(far.id) && w.owner !== "hegemony") clearW(w); };
+  at(S, wb, far.id); wb.army = { brawler: 0, levy: 40 }; S.players.p1.faction = "hegemony"; clear();
   const n0 = total(wb.army);
   S = apply(S, { type: "tick", seed: 3 }); clear();
   S = apply(S, { type: "tick", seed: 4 }); clear();

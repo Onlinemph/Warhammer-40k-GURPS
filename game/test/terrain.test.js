@@ -19,12 +19,12 @@ test("every ground builds a map the armies can cross, the same each time, and pl
   }
 });
 
-test("each world has a mix of ground from its type, and each battle is fought on one of them", () => {
+test("each world has a mix of ground from its type, and each battle is fought on its region's ground", () => {
   let S = apply(null, { type: "create", seed: 7 });
   for (const w of Object.values(S.worlds)) { assert.ok(Object.keys(w.terrain).length >= 2); for (const k of Object.keys(w.terrain)) assert.ok(TER.TERRAIN[k]); }
   for (let t = 0; t < 15; t++) S = apply(S, { type: "tick", seed: 100 + t });
   assert.ok(S.reports.length > 0);
-  for (const r of S.reports) { assert.ok(S.worlds[r.world].terrain[r.terrain] > 0, `${r.terrain} on ${r.worldName}`); assert.match(r.text, /Fought (on|in|at) /); }
+  for (const r of S.reports) { assert.equal(S.worlds[r.world].regions.find(x => x.id === r.region).terrain, r.terrain, `${r.terrain} at ${r.regionName}`); assert.match(r.text, /Fought (on|in|at) /); }
   // a leader who wins the ground picks close ground for hand-to-hand fighters, open for the guns
   const w = { terrain: { plains: 3, forest: 1, city: 1 } };
   assert.ok(TER.TERRAIN[TER.pick(w, 1, { melee: true })].close);

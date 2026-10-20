@@ -2,13 +2,14 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
 const { apply, rebuild } = require("../world/rules.js");
+const { at, hold, quiet } = require("./helpers.js");
 const VET = require("../world/veterans.js");
 
 const start = () => { const S = rebuild([{ type: "create", seed: 7 }, { type: "join", player: "h", name: "Varro", faction: "hegemony" }]); S.swarms = []; return S; };
 // a fight next door the warband can't lose
 function easyWin(S, seed) {
   const wb = S.players.h.warband, here = S.worlds[wb.at], to = S.worlds[here.links.find(l => S.worlds[l].owner !== "hegemony") || here.links[0]];
-  Object.assign(to, { owner: null, tomb: false, garrison: { militia: 4 } });
+  hold(to, null, { militia: 4 }); to.tomb = false;
   S = apply(S, { type: "order", player: "h", move: to.id, recruit: [] });
   return apply(S, { type: "tick", seed });
 }
@@ -44,9 +45,9 @@ test("when their unit is wiped out the named fall, each with a last letter home,
   wb.named = [{ name: "Ansel Varga", unit: "levy", home: here.name, joined: 0, battles: 4, scars: ["lost an eye"], how: "held the line" }];
   // a hopeless fight with nowhere to fall back to: every world next door belongs to someone else
   const to = S.worlds[here.links[0]];
-  Object.assign(to, { owner: null, tomb: false, garrison: { militia: 300 } });
+  hold(to, null, { militia: 300 }); to.tomb = false;
   for (const n of to.links) if (S.worlds[n].owner === "hegemony" && n !== here.id) S.worlds[n].owner = null;
-  S.worlds[here.id].owner = "brawl"; S.worlds[here.id].garrison = {};
+  hold(S.worlds[here.id], "brawl");
   S = apply(S, { type: "order", player: "h", move: to.id, recruit: [] });
   S = apply(S, { type: "tick", seed: 2 });
   const m = S.players.h.warband.memorial.find(x => x.name === "Ansel Varga");

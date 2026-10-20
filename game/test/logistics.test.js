@@ -3,10 +3,10 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 const { apply, rebuild, order } = require("../world/rules.js");
 const LOG = require("../world/logistics.js");
+const { at, hold, cap: capOf, quiet } = require("./helpers.js");
 
 const start = (extra = []) => { const S = rebuild([{ type: "create", seed: 7 }, { type: "join", player: "h", name: "Varro", faction: "hegemony" }, ...extra]); S.swarms = []; return S; };
 const tick = (S, seed = 1) => apply(S, { type: "tick", seed });
-const quiet = S => { S.swarms = []; for (const w of Object.values(S.worlds)) if (w.owner === "chorus" || w.owner === "dormant") w.garrison = {}; return S; };
 const own = S => Object.values(S.worlds).filter(w => w.owner === "hegemony");
 
 test("warbands eat a supply a turn per ten soldiers; with none to eat they're short and fight at x0.8", () => {
@@ -40,9 +40,9 @@ test("a depot (30 materiel) feeds a warband beside it, even far from home, and k
   assert.match(order(S, { player: "h", build: "depot" }), /has a depot already/);
   // a depot cut off from the capital, full, with the warband beside it
   const far = Object.values(S.worlds).find(w => !w.owner && w.links.length >= 1 && !w.links.some(n => S.worlds[n].owner === "hegemony"));
-  Object.assign(far, { owner: "hegemony", garrison: {}, depot: { supply: 50 } });
-  const next = S.worlds[far.links[0]]; Object.assign(next, { owner: null, tomb: false, garrison: {} });
-  S.players.h.warband.at = next.id; S.players.h.warband.army = { levy: 40 };
+  hold(far, "hegemony"); far.depot = { supply: 50 };
+  const next = hold(S.worlds[far.links[0]], null); next.tomb = false;
+  at(S, S.players.h, next.id); S.players.h.warband.army = { levy: 40 };
   S = quiet(tick(S, 4));
   assert.equal(S.players.h.warband.depotFed, true);
   assert.equal(S.players.h.warband.supplied, true);
@@ -54,10 +54,10 @@ test("a convoy goes a jump a turn through your own worlds and fills the depot; a
   const cap = S.worlds[S.factions.hegemony.capital];
   // a chain of three Hegemony worlds from the capital: cap - a - b, the depot at b
   const a = S.worlds[cap.links[0]], b = S.worlds[a.links.find(l => l !== cap.id)];
-  for (const w of [a, b]) Object.assign(w, { owner: "hegemony", garrison: {}, tomb: false });
+  for (const w of [a, b]) { hold(w, "hegemony"); w.tomb = false; }
   b.depot = { supply: 0 };
   S.factions.hegemony.stock.supply = 50;
-  S.players.h.warband.at = cap.id; S.players.b.warband.at = S.factions.brawl.capital;
+  at(S, S.players.h, cap.id); at(S, S.players.b, S.factions.brawl.capital);
   assert.equal(order(S, { player: "h", convoy: { to: b.id, supply: 25 } }), null);
   S = apply(S, { type: "order", player: "h", move: null, recruit: [], convoy: { to: b.id, supply: 25 } });
   S = quiet(tick(S, 5));
@@ -70,11 +70,11 @@ test("a convoy goes a jump a turn through your own worlds and fills the depot; a
   S.factions.hegemony.stock.supply = 50;
   S = apply(S, { type: "order", player: "h", move: null, recruit: [], convoy: { to: b.id, supply: 20 } });
   const beside = b.links.find(l => l !== a.id && l !== cap.id);   // next to the convoy's last stop
-  Object.assign(S.worlds[beside], { owner: null, tomb: false, garrison: {} });
-  S.players.b.warband.at = beside; S.players.b.warband.stance = "raid"; S.players.b.warband.army = { brawler: 30 };
+  hold(S.worlds[beside], null); S.worlds[beside].tomb = false;
+  at(S, S.players.b, beside); S.players.b.warband.stance = "raid"; S.players.b.warband.army = { brawler: 30 };
   const bs = S.factions.brawl.stock.supply;
   S = quiet(tick(S, 10));
-  for (let k = 0; k < 2 && S.convoys.length; k++) { S.players.b.warband.at = beside; S = quiet(tick(S, 11 + k)); }
+  for (let k = 0; k < 2 && S.convoys.length; k++) { at(S, S.players.b, beside); S = quiet(tick(S, 11 + k)); }
   assert.ok(S.log.some(l => /takes a convoy/.test(l.text)), "raided");
   assert.ok(S.factions.brawl.stock.supply >= bs + 10 - 5);
 });
@@ -82,24 +82,24 @@ test("a convoy goes a jump a turn through your own worlds and fills the depot; a
 test("a blockaded world earns nothing and its garrison starves, unless a depot feeds it", () => {
   let S = quiet(start());
   const w = Object.values(S.worlds).find(x => !x.owner && x.links.length >= 1 && !x.links.some(n => S.worlds[n].owner === "hegemony"));
-  Object.assign(w, { owner: "hegemony", garrison: { levy: 30 }, tomb: false });
-  const n = S.worlds[w.links[0]]; Object.assign(n, { owner: null, tomb: false, garrison: { militia: 5 } });
+  hold(w, "hegemony", { levy: 30 }); w.tomb = false;
+  const n = hold(S.worlds[w.links[0]], null, { militia: 5 }); n.tomb = false;
   S = quiet(tick(S, 20));
   assert.equal(S.worlds[w.id].blockaded, true);
-  assert.ok(S.worlds[w.id].garrison.levy < 30 + 2, "starving");
+  assert.ok(capOf(S.worlds[w.id]).garrison.levy < 30 + 2, "starving");
   assert.ok(S.log.some(l => l.text === `${w.name} is blockaded`));
   // with a depot it holds
-  S.worlds[w.id].depot = { supply: 40 }; S.worlds[w.id].garrison = { levy: 30 };
-  S.worlds[n.id].garrison = { militia: 5 };
+  S.worlds[w.id].depot = { supply: 40 }; capOf(S.worlds[w.id]).garrison = { levy: 30 };
+  capOf(S.worlds[n.id]).garrison = { militia: 5 };
   S = quiet(tick(S, 21));
-  assert.ok(S.worlds[w.id].garrison.levy >= 30);
+  assert.ok(capOf(S.worlds[w.id]).garrison.levy >= 30);
   assert.ok(S.worlds[w.id].depot.supply < 40);
 });
 
 test("a side short of supply is marked in its battle report, for the replay's magazines", () => {
   let S = quiet(start());
   const wb = S.players.h.warband, here = S.worlds[wb.at], to = S.worlds[here.links.find(l => S.worlds[l].owner !== "hegemony") || here.links[0]];
-  Object.assign(to, { owner: null, tomb: false, garrison: { militia: 5 } });
+  hold(to, null, { militia: 5 }); to.tomb = false;
   wb.army = { levy: 40 }; wb.short = true;
   S = apply(S, { type: "order", player: "h", move: to.id, recruit: [] });
   S = tick(S, 30);

@@ -2,6 +2,7 @@
 // from rules.js, which passes its helpers in (`H`) so the two files don't require each other. Like everything in the
 // war it is worked out from the log: the tick's dice (`R`) are the only randomness.
 const { UNITS, FACTIONS } = require("./units.js");
+const RG = require("./regions.js");
 
 // loyalty: +5 a turn in supply; -5 beside an Apostate world, -10 with an Apostate warband on it or next door
 const LOYALTY = { start: 60, capital: 100, retaken: 30, gain: 5, nearWorld: 5, nearWarband: 10, defect: 25, corruptible: 50 };
@@ -77,15 +78,17 @@ function beginRitual(S, p, o) {
 
 // ---- a battle's aftermath: who it feeds. `sides` are the two sides with what each lost (count and power), whether
 // it won, and its chance
-function afterBattle(S, w, sides, R, T) {
+function afterBattle(S, w, sides, R, T, r) {
   const dead = sides.reduce((a, s) => a + s.lostN, 0);
   T.fought.add(w.id);
   T.dead[w.id] = (T.dead[w.id] || 0) + dead;
+  // (where on the world the most fell: where they rise, if they do)
+  const at = (T.deadAt[w.id] ||= {}); at[r.id] = (at[r.id] || 0) + dead;
   for (const [s, o] of [[sides[0], sides[1]], [sides[1], sides[0]]]) {
     // the Apostates take a fifth of the enemy's fallen alive
     if (s.faction === "apostates" && s.won) S.factions.apostates.stock.captives += Math.round(o.lostN * CAPTIVES);
     // the Chorus eats the dead of a field it holds
-    if (s.faction === "chorus" && (s.won || (!o.won && w.owner === "chorus"))) S.factions.chorus.stock.biomass += dead * CORPSE;
+    if (s.faction === "chorus" && (s.won || (!o.won && r.owner === "chorus"))) S.factions.chorus.stock.biomass += dead * CORPSE;
     for (const part of s.parts) {
       if (part.kind !== "warband") continue;
       const wb = S.players[part.player].warband;
@@ -108,12 +111,13 @@ function captured(S, w, was) {
   if (w.owner === "hegemony") w.loyalty = LOYALTY.retaken; else delete w.loyalty;
   if (was === "dormant" && w.type === "tomb") S.broken.push({ world: w.id, by: w.owner, turn: S.turn });
 }
-// a Hegemony world going over to the Apostates: its Levies turn their coats
+// a Hegemony world going over to the Apostates: every region the Hegemony holds there, its Levies turning their coats
 function defect(S, w, why) {
-  const levies = w.garrison.levy || 0;
-  w.owner = "apostates"; w.garrison = levies ? { turncoat: levies } : {}; w.heldSince = S.turn; delete w.loyalty;
+  for (const r of w.regions) if (r.owner === "hegemony") turn(r);
+  w.owner = "apostates"; w.heldSince = S.turn; delete w.loyalty;
   note(S, `${w.name} goes over to the Apostates${why}`);
 }
+const turn = r => { const levies = r.garrison.levy || 0; r.owner = "apostates"; r.garrison = levies ? { turncoat: levies } : {}; };
 
 // ---- supply: what a Hegemony warband long out of supply loses goes to the Apostates; returns true when handled
 function outOfSupply(S, p, H, R) {
@@ -124,25 +128,27 @@ function outOfSupply(S, p, H, R) {
   let to = null;
   while (q.length && !to) for (const n of S.worlds[q.shift()].links) { if (seen.has(n)) continue; seen.add(n); if (S.worlds[n].owner === "apostates") { to = S.worlds[n]; break; } q.push(n); }
   if (!to) return false;
+  const seat = RG.seatOf(to, "apostates");
+  if (!seat) return false;
   const kept = H.cut({ levy: wb.army.levy }, TURNED.share, R).levy, n = wb.army.levy - kept;
   const rest = H.cut(Object.fromEntries(Object.entries(wb.army).filter(([k]) => k !== "levy")), H.ATTRITION, R);
   wb.army = { ...rest, levy: kept };
-  if (n) { to.garrison.turncoat = (to.garrison.turncoat || 0) + n; wb.history.push(`Turn ${S.turn}: ${n} Levies deserted to the Apostates at ${to.name}`); }
+  if (n) { seat.garrison.turncoat = (seat.garrison.turncoat || 0) + n; wb.history.push(`Turn ${S.turn}: ${n} Levies deserted to the Apostates at ${to.name}`); }
   return true;
 }
 
-// ---- before the battles on a world: Levies sent against an Apostate world, once Hegemony like their own, turn on
+// ---- before the battles in a region: Levies sent against an Apostate city, once Hegemony like their own, turn on
 // arrival and join its garrison as Turncoats
-function beforeBattle(S, w, H, R) {
-  if (w.owner !== "apostates") return;
+function beforeBattle(S, w, r, H, R) {
+  if (r.owner !== "apostates" || !r.city) return;
   for (const p of Object.values(S.players)) {
     const wb = p.warband;
-    if (p.faction !== "hegemony" || wb.at !== w.id || !wb.army.levy) continue;
+    if (p.faction !== "hegemony" || wb.at !== w.id || wb.region !== r.id || !wb.army.levy) continue;
     const n = wb.army.levy - H.cut({ levy: wb.army.levy }, TURNED.onWorld, R).levy;
     if (!n) continue;
-    wb.army.levy -= n; w.garrison.turncoat = (w.garrison.turncoat || 0) + n;
-    wb.history.push(`Turn ${S.turn}: ${n} Levies turned their coats at ${w.name}`);
-    note(S, `${n} of ${p.name}'s Levies go over to the Apostates at ${w.name}`);
+    wb.army.levy -= n; r.garrison.turncoat = (r.garrison.turncoat || 0) + n;
+    wb.history.push(`Turn ${S.turn}: ${n} Levies turned their coats at ${r.name} on ${w.name}`);
+    note(S, `${n} of ${p.name}'s Levies go over to the Apostates at ${r.name} on ${w.name}`);
   }
 }
 
@@ -170,15 +176,18 @@ function upkeep(S, H, R, T) {
     if (r.kind === "summon") { wb.army.vessel = (wb.army.vessel || 0) + 2; note(S, `Something answers ${p.name}'s Summoning on ${at.name}`); wb.history.push(`Turn ${S.turn}: the Summoning gave 2 Vessels`); }
     else {
       const t = S.worlds[r.target];
-      if (t.owner === "hegemony" && !t.capital && t.loyalty < LOYALTY.corruptible) { defect(S, t, `, corrupted by ${p.name}`); wb.history.push(`Turn ${S.turn}: corrupted ${t.name}`); }
+      // a Corruption turns a city: the world's capital, the seat of its governor, and its Levies with it
+      const c = RG.capitalOf(t);
+      if (t.owner === "hegemony" && !t.capital && t.loyalty < LOYALTY.corruptible && c.owner === "hegemony") { turn(c); note(S, `${c.name} on ${t.name} goes over to the Apostates, corrupted by ${p.name}`); wb.history.push(`Turn ${S.turn}: corrupted ${c.name} on ${t.name}`); }
       else note(S, `${p.name}'s Corruption finds no purchase on ${t.name}`);
     }
   }
   // the Brawl: fame raises free Brawlers at the capital; warbands at peace fight each other
   const bst = S.factions.brawl.stock, bcap = S.worlds[S.factions.brawl.capital];
-  if (bcap && bcap.owner === "brawl") {
-    const n = Math.min(H.GARRISON_CAP - H.total(bcap.garrison), Math.floor(bst.fame * FAME.raise / UNITS.brawler.power));
-    if (n > 0) bcap.garrison.brawler = (bcap.garrison.brawler || 0) + n;
+  const bseat = bcap && RG.capitalOf(bcap);
+  if (bcap && bcap.owner === "brawl" && bseat.owner === "brawl") {
+    const n = Math.min(H.GARRISON_CAP - H.total(bseat.garrison), Math.floor(bst.fame * FAME.raise / UNITS.brawler.power));
+    if (n > 0) bseat.garrison.brawler = (bseat.garrison.brawler || 0) + n;
   }
   for (const p of Object.values(S.players)) {
     if (p.faction !== "brawl" || S.turn - (p.warband.lastFight ?? 0) < FAME.peace || !H.total(p.warband.army)) continue;
@@ -187,16 +196,22 @@ function upkeep(S, H, R, T) {
     const n = before - H.total(p.warband.army);
     if (n) p.warband.history.push(`Turn ${S.turn}: bored, the warband fought itself (${n} lost)`);
   }
-  // the Chorus: a heap of dead beside a Chorus world rises a few turns later, unless it is held in strength
+  // the Chorus: a heap of dead on a world beside the Chorus, or where it holds a region, rises a few turns later in the
+  // region where most of them fell, unless that region is held in strength
+  const nearChorus = w => w.regions.some(r => r.owner === "chorus") || w.links.some(n => S.worlds[n].owner === "chorus");
   for (const w of W) {
-    if ((T.dead[w.id] || 0) >= INFEST.dead && w.owner !== "chorus" && w.infestAt == null && w.links.some(n => S.worlds[n].owner === "chorus")) w.infestAt = S.turn + INFEST.delay;
+    if ((T.dead[w.id] || 0) >= INFEST.dead && w.infestAt == null && nearChorus(w)) {
+      const at = Object.entries(T.deadAt[w.id] || {}).sort((a, b) => b[1] - a[1])[0];
+      if (at && RG.region(w, at[0]).owner !== "chorus") { w.infestAt = S.turn + INFEST.delay; w.infestIn = at[0]; }
+    }
     if (w.infestAt !== S.turn) continue;
     w.infestAt = null;
-    const held = H.factionsAt(S, w).filter(s => s.faction !== "chorus").reduce((a, s) => a + H.total(s.army), 0);
-    if (w.owner === "chorus" || held >= INFEST.guard) continue;
-    const was = w.owner;
-    w.owner = "chorus"; w.garrison = { ...INFEST.brood }; w.heldSince = S.turn; delete w.loyalty;
-    note(S, `The dead of ${w.name} rise: it is the Chorus's now${was ? ", lost by " + FACTIONS[was].name : ""}`);
+    const r = RG.region(w, w.infestIn);
+    const held = H.factionsIn(S, w, r).filter(s => s.faction !== "chorus").reduce((a, s) => a + H.total(s.army), 0);
+    if (r.owner === "chorus" || held >= INFEST.guard) continue;
+    const was = r.owner;
+    r.owner = "chorus"; r.garrison = { ...INFEST.brood };
+    note(S, `The dead of ${r.name} on ${w.name} rise: it is the Chorus's now${was ? ", lost by " + FACTIONS[was].name : ""}`);
   }
 }
 

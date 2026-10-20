@@ -39,15 +39,17 @@ test("how a battle ends: an attacker beaten in a close fight is thrown back; a l
   assert.equal(o.kind, "pyrrhic");
 });
 
-test("a world attacked by a far stronger force rallies its people; fog rounds what you see of a world you don't hold", () => {
+test("a city attacked by a far stronger force rallies its people; fog rounds what you see of a world you don't hold", () => {
   const S = rebuild([{ type: "create", seed: 7 }, { type: "join", player: "h", name: "Varro", faction: "hegemony" }]);
-  const w = Object.values(S.worlds).find(x => x.owner === "hegemony" && !x.capital);
-  w.garrison = { levy: 4 };
+  const w = Object.values(S.worlds).find(x => x.owner === "hegemony" && !x.capital), r = w.regions.find(x => x.capital);
+  r.garrison = { levy: 4 };
   const def = side("hegemony", { levy: 4 }, [{ kind: "garrison" }]), att = side("brawl", { ironhide: 20 });
   const strength = a => Object.values(a).reduce((x, y) => x + y, 0) * 1;
-  const n = BT.rally(S, w, def, att, strength);
-  assert.ok(n > 0 && w.garrison.levy === 4 + n && def.army.levy === 4 + n);
-  assert.equal(BT.rally(S, w, side("hegemony", { levy: 999 }, [{ kind: "garrison" }]), att, strength), 0, "not when the defenders are a match");
+  const n = BT.rally(S, w, r, def, att, strength);
+  assert.ok(n > 0 && r.garrison.levy === 4 + n && def.army.levy === 4 + n);
+  assert.equal(BT.rally(S, w, r, side("hegemony", { levy: 999 }, [{ kind: "garrison" }]), att, strength), 0, "not when the defenders are a match");
+  const country = w.regions.find(x => !x.city);
+  assert.equal(BT.rally(S, w, country, side("hegemony", { levy: 1 }, [{ kind: "garrison" }]), att, strength), 0, "the countryside has nobody to raise");
   assert.deepEqual(BT.rough({ levy: 23, warden: 1 }), { levy: 25, warden: 1 });
   // in the view: odds are a band
   let S2 = rebuild([{ type: "create", seed: 7 }, { type: "join", player: "h", name: "Varro", faction: "hegemony" }]);

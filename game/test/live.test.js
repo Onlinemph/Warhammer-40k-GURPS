@@ -4,13 +4,13 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 const fs = require("fs"), os = require("os"), path = require("path");
 const { apply, rebuild, order } = require("../world/rules.js");
+const { at, hold, quiet } = require("./helpers.js");
 
-const quiet = S => { S.swarms = []; for (const w of Object.values(S.worlds)) if (w.owner === "chorus" || w.owner === "dormant") w.garrison = {}; return S; };
 
 test("a commanded battle is held: the warband stays put, the world isn't taken, and an unfought one is settled at the next tick", () => {
   let S = quiet(rebuild([{ type: "create", seed: 7 }, { type: "join", player: "h", name: "Varro", faction: "hegemony" }]));
   const wb = S.players.h.warband, here = S.worlds[wb.at], to = S.worlds[here.links.find(l => S.worlds[l].owner !== "hegemony") || here.links[0]];
-  Object.assign(to, { owner: null, tomb: false, garrison: { militia: 8 } });
+  hold(to, null, { militia: 8 }); to.tomb = false;
   wb.army = { levy: 40, storm: 4 };
   S = apply(S, { type: "order", player: "h", move: to.id, recruit: [], command: true });
   S = quiet(apply(S, { type: "tick", seed: 1 }));
@@ -46,7 +46,7 @@ test("fought live through the server: answers in order from the side it waits on
     // a small fight next door (set up on the server's state directly, for the test)
     const S = quiet(state()), p = Object.values(S.players).find(x => x.name === "Varro"), here = S.worlds[p.warband.at];
     const to = S.worlds[here.links.find(l => S.worlds[l].owner !== "hegemony") || here.links[0]];
-    Object.assign(to, { owner: null, tomb: false, garrison: { militia: 4 } });
+    hold(to, null, { militia: 4 }); to.tomb = false;
     p.warband.army = { levy: 12 };
     assert.equal((await call("/api/orders", { move: to.id, recruit: [], command: true }, me))[0], 200);
     await call("/api/admin/tick", {}, { "x-admin-key": "k" });
@@ -60,7 +60,7 @@ test("fought live through the server: answers in order from the side it waits on
     // answer every stop with the AI's own choice, until it's over
     let k = 0, r;
     do { [, r] = await call(`/api/live/${h.id}/answer`, { k, ans: null }, me); k++; } while (r.ok && !r.done && k < 5000);
-    assert.ok(r.done, "the battle ended");
+    assert.ok(r.done, `the battle ended (${JSON.stringify(r).slice(0, 200)}, ${k} answers)`);
     assert.ok(state().held[0].result, "its result is in the log");
     const ev = fs.readFileSync(path.join(dir, "events.jsonl"), "utf8").split("\n").filter(Boolean).map(JSON.parse).filter(e => e.type === "live");
     assert.equal(ev.length, 1);
@@ -74,9 +74,9 @@ test("fought live through the server: answers in order from the side it waits on
 test("a held battle settles only the forces that were in it: a warband arriving meanwhile isn't touched by its result", () => {
   let S = quiet(rebuild([{ type: "create", seed: 7 }, { type: "join", player: "h", name: "Varro", faction: "hegemony" }, { type: "join", player: "g", name: "Gaius", faction: "hegemony" }]));
   const wb = S.players.h.warband, here = S.worlds[wb.at], to = S.worlds[here.links.find(l => S.worlds[l].owner !== "hegemony") || here.links[0]];
-  Object.assign(to, { owner: null, tomb: false, garrison: { militia: 8 } });
+  hold(to, null, { militia: 8 }); to.tomb = false;
   wb.army = { levy: 20 };
-  S.players.g.warband.army = { warden: 6 }; S.players.g.warband.at = here.id;
+  S.players.g.warband.army = { warden: 6 }; at(S, S.players.g, here.id);
   S = apply(S, { type: "order", player: "h", move: to.id, recruit: [], command: true });
   S = quiet(apply(S, { type: "tick", seed: 1 }));
   const h = S.held[0];
