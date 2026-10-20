@@ -7,6 +7,7 @@
 const { apply, order, total, strength, oddsAt } = require("./world/rules.js");
 const { rng } = require("./world/galaxy.js");
 const FX = require("./world/factions.js");
+const LOG = require("./world/logistics.js");
 
 const MIX = {
   hegemony:  [{ unit: "levy", count: 10 }, { unit: "storm", count: 2 }, { unit: "warden", count: 1 }],
@@ -62,8 +63,16 @@ function decide(S, p, R) {
   const target = move && S.worlds[move], odds = target && target.owner !== f ? oddsAt(S, p, move) : null;
   const stance = !move ? (here.owner === f ? "fortify" : wb.stance || "advance") : odds != null && odds < 60 ? "raid" : "advance";
   const border = here.links.some(id => S.worlds[id].owner !== f), lvl = here.walls || 0;
-  const build = here.owner === f && border && lvl < 2 && (S.factions[f].stock.materiel || 0) >= 3 * [20, 40][lvl] ? "walls" : null;
-  return { move, recruit, ritual: null, stance, careful: true, build };
+  const mat = S.factions[f].stock.materiel || 0, sup = S.factions[f].stock.supply || 0;
+  // a depot on a border world first (when there's materiel to spare), then walls
+  const build = here.owner === f && border && !here.depot && mat >= 90 ? "depot" : here.owner === f && border && lvl < 2 && mat >= 3 * [20, 40][lvl] ? "walls" : null;
+  // from the capital, a convoy to the emptiest depot when the stockpile has supply to spare
+  let convoy = null;
+  if (here.owner === f && here.capital && sup >= 40) {
+    const d = Object.values(S.worlds).filter(w => w.owner === f && w.depot && w.id !== here.id && w.depot.supply < 30).sort((a, b) => a.depot.supply - b.depot.supply)[0];
+    if (d && LOG.route(S, f, here.id, d.id)) convoy = { to: d.id, supply: 20 };
+  }
+  return { move, recruit, ritual: null, stance, careful: true, build, convoy };
 }
 // BOT_ORDERS=0: the bots as they were, moving and recruiting only (to measure what the standing orders change)
 const SMART = process.env.BOT_ORDERS !== "0";

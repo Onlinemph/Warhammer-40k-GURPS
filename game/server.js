@@ -20,7 +20,8 @@
 //   GET  /api/me                                 -> {providers, devJoin, signedIn, joined}
 //   POST /api/join   {name, faction}            -> {ok} for a signed-in account; {token} for a development join
 //   GET  /api/view                               -> what that player can see, and when the next tick is
-//   POST /api/orders {move, recruit:[{unit,count}], ritual:{kind,target}, stance, careful, build} -> {ok} or {error}
+//   POST /api/orders {move, recruit:[{unit,count}], ritual:{kind,target}, stance, careful, build: walls|depot,
+//                     convoy:{to, supply}} -> {ok} or {error}
 //   Admin (header x-admin-key; every action goes in DATA_DIR/admin-log.jsonl, and the players' news):
 //   GET  /api/admin/status                       -> {turn, paused, nextTick, players, bots}
 //   POST /api/admin/tick                         -> ticks now
@@ -199,10 +200,11 @@ const server = http.createServer(async (req, res) => {
     }
     if (req.method === "POST" && url.pathname === "/api/orders") {
       const p = who(req); if (!p) return send(res, 401, { error: "sign in and join first" });
-      const { move, recruit, ritual, stance, careful, build } = await readBody(req);
+      const { move, recruit, ritual, stance, careful, build, convoy } = await readBody(req);
       const e = { type: "order", player: p, move: typeof move === "string" ? move : null, recruit: Array.isArray(recruit) ? recruit.slice(0, 6).map(r => ({ unit: String(r.unit), count: Math.floor(+r.count) })) : [],
         ritual: ritual && typeof ritual === "object" ? { kind: String(ritual.kind).slice(0, 16), target: ritual.target ? String(ritual.target).slice(0, 16) : null } : null,
-        stance: stance == null ? null : String(stance).slice(0, 16), careful: careful == null ? null : !!careful, build: build == null ? null : String(build).slice(0, 16) };
+        stance: stance == null ? null : String(stance).slice(0, 16), careful: careful == null ? null : !!careful, build: build == null ? null : String(build).slice(0, 16),
+        convoy: convoy && typeof convoy === "object" ? { to: String(convoy.to).slice(0, 16), supply: Math.floor(+convoy.supply) || 0 } : null };
       // check against a copy first: a refused order isn't logged
       const err = order(JSON.parse(JSON.stringify(S)), e);
       if (err) return send(res, 400, { error: err });

@@ -80,17 +80,20 @@ test("battles happen, worlds change hands, and the Chorus spreads", () => {
   assert.ok(Object.values(S.worlds).filter(w => w.owner === "chorus").length > 4, "the Chorus should have grown");
   for (const r of S.reports) assert.ok(r.seed >= 0 && r.text.length > 20);
 });
-test("supply: a warband far from its own worlds wastes away", () => {
+test("supply: a warband far from its own worlds holds out two turns, then wastes away", () => {
   let S = rebuild(start());
   const wb = S.players.p1.warband;
   const ok = supplied(S, "hegemony");
   const far = Object.values(S.worlds).find(w => !ok.has(w.id) && !w.links.some(n => ok.has(n)));
-  wb.at = far.id; S.worlds[far.id].garrison = {}; S.swarms = [];
-  for (const w of Object.values(S.worlds)) if (w.links.includes(far.id) && w.owner !== "hegemony") w.garrison = {};
+  const clear = () => { S.worlds[far.id].garrison = {}; S.swarms = []; for (const w of Object.values(S.worlds)) if (w.links.includes(far.id) && w.owner !== "hegemony") w.garrison = {}; };
+  wb.at = far.id; wb.army = { brawler: 0, levy: 40 }; S.players.p1.faction = "hegemony"; clear();
   const n0 = total(wb.army);
-  S = apply(S, { type: "tick", seed: 3 });
+  S = apply(S, { type: "tick", seed: 3 }); clear();
+  S = apply(S, { type: "tick", seed: 4 }); clear();
   assert.equal(S.players.p1.warband.supplied, false);
-  assert.ok(total(S.players.p1.warband.army) < n0);
+  assert.equal(total(S.players.p1.warband.army), n0, "two turns' grace");
+  S = apply(S, { type: "tick", seed: 5 });
+  assert.ok(total(S.players.p1.warband.army) < n0, "then it starts to go");
 });
 test("fog of war: a player sees armies only where the faction has eyes", () => {
   const { S } = play(5), v = view(S, "p1");

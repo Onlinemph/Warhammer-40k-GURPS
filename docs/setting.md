@@ -233,3 +233,45 @@ the tick's own (`game/world/veterans.js`).
 ### Not in this pass
 Friendships and rivalries, XP spent on particular skills by what a soldier did, augmetics as gear, retiring as
 drill instructors or governors, players marking soldiers to follow, captives among the named, and leader duels.
+
+## Supply and logistics
+
+The design doc: "the economy stays small; logistics is where the war is won." Today supply is only "within a jump of
+a world joined to your capital", and each world's supply rating goes unused. This pass makes supply a thing that is
+made, carried, stored, cut off and fought over. Like the rest, it is worked out at the tick from the log
+(`game/world/logistics.js`).
+
+### Supply is made and eaten
+- **Supply** is the shared fourth resource of every player faction. Each of its worlds yields its supply rating a
+  turn (Granary 6, Bastion 3, Spire and Foundry 2, Wildworld 1, Tomb 1), and so do worlds joined to the capital.
+- **Every warband eats**: 1 supply a turn for each 10 soldiers (rounded up), taken from its share of the stockpile
+  like recruits. A warband that can't eat its fill is **short**.
+
+### Depots and convoys
+- **Depots:** a new order at your own world, *build a depot* (30 materiel). A depot holds supply, up to 60. A warband
+  on a depot world or next to it eats from the depot first, so it can fight far from home.
+- **Convoys:** a new order at a depot or the capital, *send a convoy* of up to 30 supply to a depot of yours. A convoy
+  moves one jump a turn along your own worlds, the shortest way, and is listed in the news.
+- **Raiding a convoy:** an enemy warband in the *raid* stance on a world a convoy passes through, or next to it,
+  takes it: half the supply goes to the raiders' faction, the rest is lost. An escort (a warband of the convoy's
+  faction on the same world when it gets there) stops the raid.
+
+### Blockade
+- A world of yours with **no lane to another world of yours**, and an enemy warband or garrison next door, is
+  **blockaded**: no income at all, its garrison loses a tenth a turn, and on Hegemony worlds loyalty falls 5 a turn.
+  A depot on a blockaded world feeds its own garrison first (1 supply a turn per 10).
+
+### Fighting short of supply
+- A warband that is short, or out of supply as now, fights at x0.8 in the war's battles, and in the replays its
+  soldiers carry two spare magazines instead of the usual (the engine counts them, so they really do run dry).
+- Out of supply for 3 turns it starts wasting away (and Hegemony Levies desert, as before). Before this pass the
+  wasting started on the first turn out of supply; the draft said "as now", and it is built as the draft's 3 turns.
+
+### In the client
+- The stockpile shows supply, and your warband's line shows how much it eats and whether it's short.
+- World panel: depots and their supply, blockades, convoys passing.
+- Orders: *build a depot*, *send a convoy* (to which depot, how much).
+
+### Not in this pass
+Ships and orbit, faction travel styles beyond gates, supply moving on its own along the lanes, convoys of troops,
+and medics and healing.
