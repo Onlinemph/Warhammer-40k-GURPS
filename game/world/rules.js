@@ -3,20 +3,23 @@
 // is worked out from those, so the same log always rebuilds the same war (rollbacks after an exploit, audits and
 // the soldiers' histories all come from that), and the server only has to store the log.
 const { generate, TYPES, rng } = require("./galaxy.js");
-const { UNITS, FACTIONS } = require("./units.js");
+const { UNITS, FACTIONS, MILITIA, templateOf, nameOf } = require("./units.js");
 const { predict } = require("../../tools/resolver/resolver.js");
 
-const MILITIA = { name: "Militia", template: "Chaos Cultist" };
 const START = {
-  hegemony: { stock: { manpower: 40, materiel: 60 }, warband: { levy: 15, storm: 3 }, garrison: { levy: 20 } },
-  brawl:    { stock: { manpower: 40, materiel: 40 }, warband: { brawler: 20, boss: 3 }, garrison: { brawler: 20 } },
-  chorus:   { stock: { biomass: 40 }, garrison: { leaper: 20, spitter: 10 } },
+  hegemony:  { stock: { manpower: 40, materiel: 60 }, warband: { levy: 15, storm: 3 }, garrison: { levy: 20 } },
+  apostates: { stock: { manpower: 40, materiel: 40 }, warband: { turncoat: 15, zealot: 3, vessel: 1 }, garrison: { faithless: 20, turncoat: 12 } },
+  brawl:     { stock: { manpower: 40, materiel: 40 }, warband: { brawler: 20, boss: 3 }, garrison: { brawler: 20 } },
+  chorus:    { stock: { biomass: 40 }, garrison: { leaper: 20, spitter: 10, conductor: 1 } },
+  // a tomb's sleepers: the whole of the Dormant there will ever be
+  dormant:   { stock: {}, garrison: { husk: 6, sentinel: 2, watcher: 1, flenser: 2, keeper: 1 } },
 };
 const GARRISON_CAP = 30, ATTRITION = 0.1;
+// the Dormant: a tomb wakes when it is fought over, or by itself between these turns; awake, the fallen on a field
+// it holds are repaired at this rate
+const WAKE = [8, 18], REPAIR = 0.5, RAID_REST = 4;
 
 // ---- armies: { unitId: count }; the militia's unit id is "militia"
-const templateOf = id => id === "militia" ? MILITIA.template : UNITS[id].template;
-const nameOf = id => id === "militia" ? MILITIA.name : UNITS[id].name;
 const total = army => Object.values(army).reduce((a, n) => a + n, 0);
 const addArmy = (to, from) => { for (const [k, n] of Object.entries(from)) if (n > 0) to[k] = (to[k] || 0) + n; return to; };
 const asResolverArmy = army => {
@@ -42,8 +45,9 @@ function create(seed, opt = {}) {
   const S = { seed, turn: 0, worlds: {}, order: g.worlds.map(w => w.id), factions: {}, players: {}, swarms: [], reports: [], log: [] };
   for (const w of g.worlds) S.worlds[w.id] = { ...w, garrison: {} };
   const R = rng(seed ^ 0x5bd1e995);
-  for (const [f, st] of Object.entries(START)) S.factions[f] = { id: f, ...FACTIONS[f], stock: { ...st.stock }, capital: Object.values(S.worlds).find(w => w.owner === f && w.capital).id };
+  for (const [f, st] of Object.entries(START)) S.factions[f] = { id: f, ...FACTIONS[f], stock: { ...st.stock }, capital: (Object.values(S.worlds).find(w => w.owner === f && w.capital) || { id: null }).id };   // the Dormant have none
   for (const w of Object.values(S.worlds)) w.garrison = w.owner ? { ...START[w.owner].garrison } : { militia: 10 + Math.floor(R() * 16) };
+  for (const w of Object.values(S.worlds)) if (w.tomb) { w.awake = false; w.wakeAt = WAKE[0] + Math.floor(R() * (WAKE[1] - WAKE[0] + 1)); }
   return S;
 }
 function join(S, { player, name, faction }) {
@@ -76,10 +80,11 @@ const factionsAt = (S, w) => {
   const put = (f, army, who) => { if (!total(army)) return; (by[f] ||= { faction: f, army: {}, parts: [] }); addArmy(by[f].army, army); by[f].parts.push(who); };
   if (total(w.garrison)) put(w.owner || "militia", w.garrison, { kind: "garrison" });
   for (const p of Object.values(S.players)) if (p.warband.at === w.id) put(p.faction, p.warband.army, { kind: "warband", player: p.id });
-  for (const sw of S.swarms) if (sw.at === w.id) put("chorus", sw.army, { kind: "swarm", id: sw.id });
+  for (const sw of S.swarms) if (sw.at === w.id) put(sw.faction || "chorus", sw.army, { kind: "swarm", id: sw.id });
   return Object.values(by);
 };
-const strength = army => total(army) && asResolverArmy(army).reduce((a, e) => a + e.count * ({ "Astartes Battle-Brother": 8, "Militarum Tempestus Scion": 3, "Ork Nob": 3, "Genestealer": 6, "Tyranid Warrior": 8 }[e.template] || 1), 0);
+// a rough worth in Levies, for ordering sides and the AI's choice of target (the resolver does the real reckoning)
+const strength = army => Object.entries(army).reduce((a, [k, n]) => a + n * (k === "militia" ? 1 : UNITS[k].power), 0);
 // worlds a faction can supply: its own, joined to its capital through its own
 function supplied(S, f) {
   const cap = S.worlds[S.factions[f].capital], seen = new Set();
@@ -97,6 +102,7 @@ function tick(S, seed) {
   for (const w of Object.values(S.worlds)) {
     if (!w.owner) continue;
     const t = TYPES[w.type], st = S.factions[w.owner].stock;
+    if (w.owner === "dormant") continue;   // they don't recruit
     if (w.owner === "chorus") st.biomass = (st.biomass || 0) + t.manpower + t.materiel;
     else { st.manpower += t.manpower; st.materiel += t.materiel; }
   }
@@ -115,8 +121,9 @@ function tick(S, seed) {
     if (o.move && W(p.warband.at).links.includes(o.move)) { p.warband.history.push(`Turn ${S.turn}: moved from ${W(p.warband.at).name} to ${W(o.move).name}`); p.warband.at = o.move; }
     p.warband.orders = null;
   }
-  // 3. the Chorus
+  // 3. the AI factions
   chorusTurn(S, R);
+  dormantTurn(S, R);
   // 4. battles, wherever two factions meet
   for (const id of S.order) {
     const w = W(id);
@@ -126,13 +133,16 @@ function tick(S, seed) {
       fight(S, w, sides[0], sides[1], R);
     }
   }
-  // 5. captures: a world held by one faction's forces alone becomes theirs
+  // 5. captures: a world held by one faction's forces alone becomes theirs (not the Dormant's: they raid, they don't
+  // settle)
   for (const id of S.order) {
     const w = W(id), sides = factionsAt(S, w);
-    if (sides.length === 1 && sides[0].faction !== "militia" && sides[0].faction !== w.owner) {
+    if (sides.length === 1 && sides[0].faction !== "militia" && sides[0].faction !== "dormant" && sides[0].faction !== w.owner) {
       const was = w.owner;
       w.owner = sides[0].faction; w.garrison = {};
-      note(S, `${FACTIONS[w.owner].name} take ${w.name}${was ? " from " + FACTIONS[was].name : ""}`);
+      const broken = was === "dormant" && w.tomb;
+      if (broken) w.tomb = false;   // a taken tomb is ruins: it never holds sleepers again
+      note(S, `${FACTIONS[w.owner].name} take ${w.name}${was ? " from " + FACTIONS[was].name : ""}${broken ? ": the tomb is broken open" : ""}`);
     }
   }
   // 6. supply: a warband on or beside its own supplied world is fed; otherwise it wastes away
@@ -146,8 +156,8 @@ function tick(S, seed) {
   }
   // 7. garrisons: each player faction's supplied worlds raise a few local levies a turn
   for (const w of Object.values(S.worlds)) {
-    if (!w.owner || w.owner === "chorus") continue;
-    const basic = w.owner === "hegemony" ? "levy" : "brawler";
+    const basic = w.owner && FACTIONS[w.owner].basic;
+    if (!basic) continue;
     if (supplied(S, w.owner).has(w.id) && total(w.garrison) < GARRISON_CAP) w.garrison[basic] = (w.garrison[basic] || 0) + 2;
   }
 }
@@ -160,11 +170,16 @@ function fight(S, w, A, B, R) {
   const draw = r < p.pDraw, aWins = !draw && R() < pA;
   const lossA = draw ? p.lossA : aWins ? Math.min(p.lossA, 0.9) : Math.max(p.lossA, 0.6), lossB = draw ? p.lossB : aWins ? Math.max(p.lossB, 0.6) : Math.min(p.lossB, 0.9);
   const before = [A, B].map(x => ({ faction: x.faction, army: { ...x.army } }));
+  // a sleeping tomb that is fought over wakes
+  if (w.tomb && !w.awake && (A.faction === "dormant" || B.faction === "dormant")) { w.awake = true; note(S, `The tomb on ${w.name} wakes to the sound of battle`); }
   const hurt = (side, loss, lost) => {
     for (const part of side.parts) {
       const box = part.kind === "garrison" ? w : part.kind === "warband" ? S.players[part.player].warband : S.swarms.find(s => s.id === part.id);
       const key = part.kind === "garrison" ? "garrison" : "army";
+      const was = box[key];
       box[key] = cut(box[key], loss, R);
+      // the Dormant repair their fallen on a field they hold
+      if (side.faction === "dormant" && !lost) for (const [k, n] of Object.entries(was)) { const x = (n - box[key][k]) * REPAIR; box[key][k] += Math.floor(x) + (R() < x - Math.floor(x) ? 1 : 0); }
       if (!lost) continue;
       // the beaten side: garrisons are gone, warbands and swarms fall back to a friendly world next door or die
       if (part.kind === "garrison") { w.garrison = {}; continue; }
@@ -176,7 +191,7 @@ function fight(S, w, A, B, R) {
   hurt(A, lossA, !draw && !aWins); hurt(B, lossB, !draw && aWins);
   S.swarms = S.swarms.filter(s => total(s.army));
   const winner = draw ? null : aWins ? A.faction : B.faction;
-  const fname = f => f === "militia" ? "the local militia" : FACTIONS[f].name;
+  const fname = f => f === "militia" ? "the " + MILITIA.name.toLowerCase() : FACTIONS[f].name;
   const report = {
     id: `t${S.turn}-${w.id}-${S.reports.filter(r => r.turn === S.turn && r.world === w.id).length}`,
     turn: S.turn, world: w.id, worldName: w.name, worldType: w.type, seed, odds: Math.round(pA * 100), winner, secs: Math.round(p.seconds),
@@ -194,15 +209,23 @@ function fight(S, w, A, B, R) {
 function chorusTurn(S, R) {
   const st = S.factions.chorus.stock, mine = Object.values(S.worlds).filter(w => w.owner === "chorus");
   // swarms that hold a Chorus world join its garrison again
-  for (const sw of S.swarms) if (S.worlds[sw.at].owner === "chorus") { addArmy(S.worlds[sw.at].garrison, sw.army); sw.army = {}; }
+  for (const sw of S.swarms) if ((sw.faction || "chorus") === "chorus" && S.worlds[sw.at].owner === "chorus") { addArmy(S.worlds[sw.at].garrison, sw.army); sw.army = {}; }
   S.swarms = S.swarms.filter(s => total(s.army));
+  // a siege-form now and then, once the biomass has piled up, at the biggest brood-world
+  if (st.biomass >= 80 && mine.length && R() < 0.25) {
+    const w = mine.slice().sort((a, b) => total(b.garrison) - total(a.garrison))[0];
+    w.garrison.bulwark = (w.garrison.bulwark || 0) + 1; st.biomass -= UNITS.bulwark.cost.biomass;
+  }
   for (const w of mine) {
-    const want = Math.min(Math.floor(st.biomass / mine.length), 12);
+    let want = Math.min(Math.floor(st.biomass / mine.length), 24);
     if (want <= 0) continue;
-    const stalk = want >= 12 && R() < 0.3 ? 1 : 0, leapers = want - stalk * 6;
-    w.garrison.leaper = (w.garrison.leaper || 0) + Math.ceil(leapers / 2); w.garrison.spitter = (w.garrison.spitter || 0) + Math.floor(leapers / 2);
-    if (stalk) w.garrison.stalker = (w.garrison.stalker || 0) + 1;
     st.biomass -= want;
+    const add = (k, n = 1) => { w.garrison[k] = (w.garrison[k] || 0) + n; want -= UNITS[k].cost.biomass * n; };
+    // each brood-world keeps a Conductor, so its broods stay under synapse; then now and then a hunter-form
+    if (!w.garrison.conductor && want >= 15) add("conductor");
+    else if (want >= 12 && R() < 0.2) add("hollow");
+    else if (want >= 20 && R() < 0.3) add("stalker");
+    if (want > 0) { const l = Math.ceil(want / 2); add("leaper", l); if (want > 0) add("spitter", want); }
   }
   for (const w of mine) {
     if (total(w.garrison) < 25) continue;
@@ -213,8 +236,34 @@ function chorusTurn(S, R) {
     const send = cut(w.garrison, 0.4, R), go = Object.fromEntries(Object.entries(w.garrison).map(([k, n]) => [k, n - (send[k] || 0)]));
     if (total(t.them) && predict(asResolverArmy(go), asResolverArmy(t.them), { seed: Math.floor(R() * 2 ** 31), sims: 100 }).pWinA < 0.6) continue;
     w.garrison = send;
-    S.swarms.push({ id: `s${S.turn}-${w.id}`, at: t.n.id, army: go });
+    S.swarms.push({ id: `s${S.turn}-${w.id}`, faction: "chorus", at: t.n.id, army: go });
     note(S, `The Chorus swarms from ${w.name} toward ${t.n.name}`);
+  }
+}
+
+// ---- the Dormant: a tomb sleeps until it is fought over or its turn comes. Awake, it holds what it has and sends a
+// war party at a neighbour only when sure of winning (it can't replace the fallen, only repair them), keeping half
+// at home. A war party raids and comes home the next turn: the Dormant purge, they don't settle. One whose tomb
+// has fallen stays where it is, a lost remnant
+function dormantTurn(S, R) {
+  for (const sw of S.swarms) {
+    if (sw.faction !== "dormant") continue;
+    const home = S.worlds[sw.home];
+    if (home && home.owner === "dormant") { addArmy(home.garrison, sw.army); sw.army = {}; }
+  }
+  S.swarms = S.swarms.filter(s => total(s.army));
+  for (const w of Object.values(S.worlds)) {
+    if (w.owner !== "dormant") continue;
+    if (w.tomb && !w.awake) { if (S.turn >= w.wakeAt) { w.awake = true; note(S, `Lights kindle deep inside ${w.name}: the tomb is waking`); } continue; }
+    if (strength(w.garrison) < 60 || S.turn - (w.raidT ?? -99) < RAID_REST) continue;   // a tomb rests between raids
+    const t = w.links.map(id => S.worlds[id]).filter(n => n.owner !== "dormant")
+      .map(n => ({ n, them: factionsAt(S, n).reduce((a, s) => addArmy(a, s.army), {}) })).sort((a, b) => strength(a.them) - strength(b.them))[0];
+    if (!t) continue;
+    const stay = cut(w.garrison, 0.5, R), go = Object.fromEntries(Object.entries(w.garrison).map(([k, n]) => [k, n - (stay[k] || 0)]));
+    if (!total(go) || (total(t.them) && predict(asResolverArmy(go), asResolverArmy(t.them), { seed: Math.floor(R() * 2 ** 31), sims: 100 }).pWinA < 0.75)) continue;
+    w.garrison = stay;
+    S.swarms.push({ id: `d${S.turn}-${w.id}`, faction: "dormant", at: t.n.id, home: w.id, army: go }); w.raidT = S.turn;
+    note(S, `The Dormant march out of ${w.name} toward ${t.n.name}`);
   }
 }
 
@@ -238,11 +287,11 @@ function view(S, player) {
   for (const q of Object.values(S.players)) if (q.faction === f) { eyes.add(q.warband.at); S.worlds[q.warband.at].links.forEach(n => eyes.add(n)); }
   return {
     turn: S.turn, you: { name: p.name, faction: f, warband: p.warband, stock: S.factions[f].stock },
-    factions: Object.fromEntries(Object.entries(S.factions).map(([k, v]) => [k, { name: v.name, colour: v.colour }])),
+    factions: { ...Object.fromEntries(Object.entries(S.factions).map(([k, v]) => [k, { name: v.name, colour: v.colour }])), militia: { name: MILITIA.name, colour: "#8d887e" } },
     units: Object.fromEntries(Object.entries(UNITS).filter(([, u]) => u.faction === f).map(([k, u]) => [k, { name: u.name, cost: u.cost }])),
     worlds: S.order.map(id => {
       const w = S.worlds[id], seen = eyes.has(id);
-      return { id, name: w.name, x: w.x, y: w.y, type: w.type, typeName: TYPES[w.type].name, owner: w.owner, links: w.links, capital: !!w.capital, seen,
+      return { id, name: w.name, x: w.x, y: w.y, type: w.type, typeName: TYPES[w.type].name, owner: w.owner, links: w.links, capital: !!w.capital, seen, tomb: !!w.tomb, asleep: seen && w.tomb ? !w.awake : undefined,
         forces: seen ? factionsAt(S, w).map(s => ({ faction: s.faction, army: Object.fromEntries(Object.entries(s.army).map(([k, n]) => [nameOf(k), n])), players: s.parts.filter(x => x.kind === "warband").map(x => S.players[x.player].name) })) : null };
     }),
     reports: S.reports.filter(r => r.sides.some(s => s.faction === f) || eyes.has(r.world)).slice(-30).reverse(),

@@ -21,13 +21,16 @@ test("the server: join, see, order, tick, and survive a restart", async () => {
     const [, v] = await call("/api/view", null, auth);
     assert.equal(v.you.name, "Varro");
     const here = v.worlds.find(w => w.id === v.you.warband.at);
+    // one of the Hegemony's own worlds next door, so the move isn't a battle
+    const to = here.links.find(l => v.worlds.find(w => w.id === l).owner === "hegemony");
+    assert.ok(to, "the capital has a Hegemony world next door");
     assert.equal((await call("/api/orders", { move: "nowhere" }, auth))[0], 400);
-    assert.equal((await call("/api/orders", { move: here.links[0], recruit: [{ unit: "levy", count: 3 }] }, auth))[0], 200);
+    assert.equal((await call("/api/orders", { move: to, recruit: [{ unit: "levy", count: 3 }] }, auth))[0], 200);
     assert.equal((await call("/api/admin/tick", {}, { "x-admin-key": "nope" }))[0], 403);
     const [, t] = await call("/api/admin/tick", {}, { "x-admin-key": "k" });
     assert.equal(t.turn, 1);
     const [, v2] = await call("/api/view", null, auth);
-    assert.equal(v2.you.warband.at, here.links[0]);
+    assert.equal(v2.you.warband.at, to);
     // the log alone rebuilds the state
     const { rebuild } = require("../world/rules.js");
     const ev = fs.readFileSync(path.join(dir, "events.jsonl"), "utf8").split("\n").filter(Boolean).map(JSON.parse);

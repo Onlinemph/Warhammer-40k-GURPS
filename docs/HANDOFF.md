@@ -27,6 +27,7 @@ The repository has three layers, built on each other:
 | Path | What it is |
 | --- | --- |
 | `docs/mmo/design.md` | The game design document and roadmap (the owner's spec) |
+| `docs/setting.md` | The war's setting: factions, units and world types, and what each unit is on underneath |
 | `docs/simulator.md` | Every simulator rule, with Basic Set page references (the rules reference for the engine) |
 | `docs/framework.md`, `docs/data-format.md` | Calibration anchors for the data, and the YAML field reference |
 | `data/**/*.yaml` | Source of truth for units, traits, gear. `data/sim/` holds the simulator's AI profiles (`ai.yaml`), loadouts, squads |
@@ -140,7 +141,8 @@ engine changes that move results**, and add new unit types to `roster.json` firs
 **The game is its event log.** `data/events.jsonl` holds only inputs: the war's creation, joins, orders, and ticks
 with their seeds. `world/rules.js` rebuilds the state deterministically, and tests assert it. Never put derived
 state or secrets in the log.
-- **Galaxy.** 24 worlds in three sectors. The Hegemony and the Brawl are for players; the Chorus is the AI swarm.
+- **Galaxy.** 24 worlds in three sectors. The Hegemony, the Apostates and the Brawl are for players; the Chorus and the
+  Dormant (tomb worlds that wake and raid) are AI.
   `world/units.js` gives each faction its own unit names over a combat template; that's the re-skin layer.
 - **A tick** runs income, recruiting and moves, the Chorus AI, battles (through the resolver, with readable reports
   that keep their seed), captures, supply attrition, then local levies.
@@ -177,7 +179,8 @@ itself hasn't been validated with flyctl. **Run exactly one server**, or the war
 1. **Deploy and run the closed test war** (roadmap step 4). Sign-in is in, tested against a stand-in provider but
    not yet against real Discord or Google: register the apps (`deploy/README.md`, Sign-in) and try both. Still
    needed: admin tools to pause, roll back a turn, and start a new war.
-2. **Re-skin** `game/world/units.js` (and eventually the templates) to the owner's setting.
+2. **The setting** is in (`docs/setting.md`: five factions in the war, the Last Court for later). Next for it: the
+   factions' own mechanics from the design doc, and in time templates of the setting's own.
 3. **Later, guided by the playtest:**
    - Live battles, the highlight feed, politics and contracts (design doc).
    - Resolver accuracy on close fights and terrain.

@@ -25,6 +25,7 @@ function showJoin() {
   $("#signin").hidden = ME.signedIn || !ME.providers.length;
   $("#providers").innerHTML = ME.providers.map(p => `<a class="button" href="/auth/${encodeURIComponent(p.id)}">Sign in with ${esc(p.name)}</a>`).join("");
   $("#raise").hidden = !(ME.signedIn || ME.devJoin);
+  if (!$("#j-factions").children.length) $("#j-factions").innerHTML = ME.factions.map((f, i) => `<label style="border-left:4px solid ${esc(f.colour)}"><input type="radio" name="faction" value="${esc(f.id)}"${i ? "" : " checked"}> <b>${esc(f.name)}</b><br><small>${esc(f.blurb)}</small></label>`).join("");
   $("#j-dev").hidden = ME.signedIn;
   if (!ME.signedIn && !ME.devJoin && !ME.providers.length) $("#j-err").textContent = "Sign-in isn't set up on this server yet.";
 }
@@ -90,8 +91,8 @@ function draw() {
     ${me.orders ? `<p class="muted">Orders in: ${me.orders.move ? "move to " + esc(W[me.orders.move].name) : "hold"}${me.orders.recruit.length ? ", recruit " + me.orders.recruit.map(r => r.count + " " + esc(V.units[r.unit].name)).join(", ") : ""}</p>` : ""}
     <details><summary>History</summary><ol class="feed">${me.history.slice().reverse().map(h => `<li>${esc(h)}</li>`).join("")}</ol></details>`;
   const w = sel && W[sel];
-  $("#world").innerHTML = w ? `<h3>${esc(w.name)}</h3><p>${esc(w.typeName)}${w.capital ? ", a capital" : ""} · ${w.owner ? esc(V.factions[w.owner].name) : "unclaimed"}</p>
-    ${w.forces ? (w.forces.length ? `<table>${w.forces.map(f => `<tr><td>${f.faction === "militia" ? "Militia" : esc(V.factions[f.faction].name)}${f.players.length ? " (" + f.players.map(esc).join(", ") + ")" : ""}</td><td>${armyText(f.army)}</td></tr>`).join("")}</table>` : "<p class='muted'>Nobody there.</p>") : "<p class='muted'>Your faction has no eyes here.</p>"}` : `<p class="muted">Pick a world on the map.</p>`;
+  $("#world").innerHTML = w ? `<h3>${esc(w.name)}</h3><p>${esc(w.typeName)}${w.capital ? ", a capital" : ""}${w.asleep ? ", its tomb asleep" : w.asleep === false ? ", its tomb awake" : ""} · ${w.owner ? esc(V.factions[w.owner].name) : "unclaimed"}</p>
+    ${w.forces ? (w.forces.length ? `<table>${w.forces.map(f => `<tr><td>${esc(V.factions[f.faction].name)}${f.players.length ? " (" + f.players.map(esc).join(", ") + ")" : ""}</td><td>${armyText(f.army)}</td></tr>`).join("")}</table>` : "<p class='muted'>Nobody there.</p>") : "<p class='muted'>Your faction has no eyes here.</p>"}` : `<p class="muted">Pick a world on the map.</p>`;
   const here = W[me.at];
   $("#orders").innerHTML = `<h3>Orders for the next tick</h3>
     <label>Move <select id="o-move"><option value="">Hold at ${esc(here.name)}</option>${here.links.map(l => `<option value="${l}">to ${esc(W[l].name)}</option>`).join("")}</select></label>

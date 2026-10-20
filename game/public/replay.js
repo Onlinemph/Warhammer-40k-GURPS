@@ -36,9 +36,9 @@
   function show(rep) {
     R = rep; t = 0; playing = true;
     $("#rp-load").hidden = true; $("#rp-play").hidden = false;
-    const col = f => f === "militia" ? "#8d887e" : (window.warView && warView.factions[f] ? warView.factions[f].colour : "#999");
+    const col = f => window.warView && warView.factions[f] ? warView.factions[f].colour : "#999";
     R.colours = R.sides.map(s => col(s.faction));
-    const names = R.sides.map(s => (s.faction === "militia" ? "Militia" : warView.factions[s.faction].name) + (s.players.length ? ` (${s.players.join(", ")})` : ""));
+    const names = R.sides.map(s => (warView.factions[s.faction] ? warView.factions[s.faction].name : s.faction) + (s.players.length ? ` (${s.players.join(", ")})` : ""));
     $("#rp-sides").innerHTML = names.map((n, i) => `<span><i style="background:${R.colours[i]}"></i>${esc(n)}</span>`).join("");
     $("#rp-note").textContent = R.matched ? "" : "This replay played out differently from the war's result.";
     const sl = $("#rp-slider"); sl.max = R.frames.length - 1; sl.value = 0;

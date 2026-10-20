@@ -137,7 +137,8 @@ const server = http.createServer(async (req, res) => {
     if (req.method === "POST" && url.pathname === "/auth/logout") { auth.signOut(req); res.setHeader("set-cookie", auth.cookieHeader("")); return send(res, 200, { ok: true }); }
     if (req.method === "GET" && url.pathname === "/api/me") {
       const a = auth.accountOf(req);
-      return send(res, 200, { providers: auth.enabled(), devJoin: DEV_JOIN, signedIn: !!a, joined: !!who(req) });
+      const factions = Object.entries(FACTIONS).filter(([, f]) => f.player).map(([id, f]) => ({ id, name: f.name, blurb: f.blurb, colour: f.colour }));
+      return send(res, 200, { providers: auth.enabled(), devJoin: DEV_JOIN, signedIn: !!a, joined: !!who(req), factions });
     }
     if (req.method === "POST" && url.pathname === "/api/join") {
       const account = auth.accountOf(req);
@@ -146,7 +147,7 @@ const server = http.createServer(async (req, res) => {
       const { name, faction } = await readBody(req);
       const nm = String(name || "").trim().replace(/[^\p{L}\p{N} '\-]/gu, "").slice(0, 24);
       if (nm.length < 2) return send(res, 400, { error: "a name of 2 to 24 letters" });
-      if (!FACTIONS[faction] || !FACTIONS[faction].player) return send(res, 400, { error: "choose the Hegemony or the Brawl" });
+      if (!FACTIONS[faction] || !FACTIONS[faction].player) return send(res, 400, { error: "choose one of the factions open to players" });
       if (Object.values(S.players).some(p => p.name.toLowerCase() === nm.toLowerCase())) return send(res, 400, { error: "that name is taken" });
       const player = "p" + crypto.randomBytes(6).toString("hex");
       if (account) { auth.bind(account, player); record({ type: "join", player, name: nm, faction }); return send(res, 200, { ok: true }); }

@@ -11,14 +11,15 @@ curl -X POST -H "x-admin-key: secret" localhost:8080/api/admin/tick   # tick now
 node --test game/test/*.test.js
 ```
 
-**The war.** 24 worlds in three sectors joined by lanes. The Hegemony starts in the west, the Brawl in the east
-(both for players), the Chorus (an AI swarm) in the middle, militia on the rest. Each world's type sets what it
-yields each turn: manpower, materiel (the Chorus turns both into biomass). Players join one of the two player
-factions and lead a warband from its capital.
+**The war.** 24 worlds in three sectors joined by lanes, in the setting of `docs/setting.md`. The Hegemony starts
+in the far west with the Apostates beside it, the Brawl in the east (all three for players), the Chorus (an AI
+swarm) in the middle, the Dormant (AI) asleep in three tomb worlds, and local defence on the rest. Each world's type
+sets what it yields each turn: manpower, materiel (the Chorus turns both into biomass; the Dormant take nothing,
+since they never recruit). Players join one of the player factions and lead a warband from its capital.
 
 **A turn.** Orders are in any time before the tick: move one jump, and recruit at your own worlds from the
 faction's stockpile. At the tick, in order: income; recruiting and movement; the Chorus breeds broods and sends
-swarms at whatever next door it can beat; battles wherever two factions meet (the resolver gives the odds and
+swarms at whatever next door it can beat, and awake Dormant tombs march on a neighbour they are sure of; battles wherever two factions meet (the resolver gives the odds and
 expected losses, the tick's dice decide; a fortress world favours its holder; the beaten fall back to a friendly
 world next door or are destroyed); worlds held by one faction's forces alone change hands; warbands out of supply
 (not on or next to a world joined to their capital through their own) lose a tenth of their men; supplied worlds
@@ -47,7 +48,8 @@ play, pause, scrub and speed.
 **What a player sees** is filtered on the server: the map and who holds each world are public; armies only where
 their faction has eyes (its worlds, its warbands, and one jump from either).
 
-**The setting layer.** `world/units.js` gives each faction its own unit names on top of a combat template; renaming
-there re-skins the war without touching the GURPS data.
+**The setting layer.** `world/units.js` gives each faction its own units on top of a combat template, from
+`docs/setting.md`; renaming there re-skins the war without touching the GURPS data. Each unit's `power` is a rough
+worth in Levies for the AI's sums; the resolver does the real reckoning.
 
 Not yet: speculative compute, order cutoff, live battles, a 3D replay, highlight feed, politics and contracts, ship travel styles per faction, multiple wars.

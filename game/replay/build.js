@@ -4,10 +4,8 @@
 // says so. The replay is compact: the map once, a roster, and per second each model's hex, state and condition,
 // with the shots, blows and blasts of that second.
 const { SIM, unitSpec } = require("../../tools/resolver/common.js");
-const { UNITS } = require("../world/units.js");
+const { templateOf, nameOf } = require("../world/units.js");
 const ATTEMPTS = 4;
-const templateOf = id => id === "militia" ? "Chaos Cultist" : UNITS[id].template;
-const nameOf = id => id === "militia" ? "Militia" : UNITS[id].name;
 
 function fieldFor(report) {
   const n = report.sides.reduce((a, s) => a + Object.values(s.before).reduce((x, y) => x + y, 0), 0);

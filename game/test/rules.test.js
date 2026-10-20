@@ -22,7 +22,34 @@ test("the galaxy: every world reachable, each side with a capital it holds", () 
   const seen = new Set(["w0"]), q = ["w0"];
   while (q.length) for (const n of S.worlds[q.shift()].links) if (!seen.has(n)) { seen.add(n); q.push(n); }
   assert.equal(seen.size, Object.keys(S.worlds).length);
-  for (const f of ["hegemony", "brawl", "chorus"]) assert.equal(S.worlds[S.factions[f].capital].owner, f);
+  for (const f of ["hegemony", "apostates", "brawl", "chorus"]) assert.equal(S.worlds[S.factions[f].capital].owner, f);
+  // three Dormant tombs, one a sector, asleep
+  const tombs = Object.values(S.worlds).filter(w => w.tomb);
+  assert.deepEqual(tombs.map(w => w.sector).sort(), [0, 1, 2]);
+  for (const w of tombs) { assert.equal(w.owner, "dormant"); assert.equal(w.awake, false); }
+});
+test("the Dormant: a tomb sleeps, wakes when fought over or in its time, and repairs its fallen on a field it holds", () => {
+  let S = rebuild(start());
+  const id = Object.values(S.worlds).find(w => w.tomb).id, n0 = total(S.worlds[id].garrison), at = S.worlds[id].wakeAt;
+  // left alone (no one fights there) it wakes on its turn, not before, and never adds to its sleepers
+  for (let t = 1; t <= at; t++) {
+    S = apply(S, { type: "tick", seed: t });
+    const fought = S.reports.some(r => r.world === id);
+    if (!fought) assert.equal(S.worlds[id].awake, S.turn >= at, `turn ${S.turn}`);
+    if (S.worlds[id].owner === "dormant") assert.ok(total(S.worlds[id].garrison) <= n0);
+  }
+  // a fight it holds: the fallen come back by half
+  S = rebuild(start());
+  const w = Object.values(S.worlds).find(x => x.tomb);
+  const p = S.players.p1.warband; p.at = w.id; p.army = { levy: 30 };
+  S = apply(S, { type: "tick", seed: 5 });
+  const rep = S.reports.find(r => r.world === w.id);
+  assert.ok(rep, "the levies fought at the tomb");
+  assert.ok(S.worlds[w.id].awake, "the tomb woke");
+  if (rep.winner === "dormant") {
+    const before = total(rep.sides.find(s => s.faction === "dormant").before), after = total(S.worlds[w.id].garrison);
+    assert.ok(after > before * 0.6, `repaired: ${after} of ${before}`);
+  }
 });
 test("the log rebuilds exactly the same war", () => {
   const { S, ev } = play(20);
@@ -44,7 +71,7 @@ test("a tick moves, recruits, pays for it, and writes the warband's history", ()
   S = apply(S, { type: "tick", seed: 1 });
   assert.equal(S.players.p1.warband.at, to);
   assert.equal(S.players.p1.warband.army.levy, 20);
-  assert.ok(S.players.p1.warband.history.some(h => /raised 5 Levy Trooper/.test(h)));
+  assert.ok(S.players.p1.warband.history.some(h => /raised 5 Levy\b/.test(h)));
   assert.ok(S.factions.hegemony.stock.materiel < before + 20);
 });
 test("battles happen, worlds change hands, and the Chorus spreads", () => {

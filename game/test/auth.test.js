@@ -57,7 +57,8 @@ test("sign-in: a warband belongs to an account, on any browser, and the log hold
   }
   try {
     let [, me] = await call("/api/me");
-    assert.deepEqual(me, { providers: [{ id: "discord", name: "Discord" }], devJoin: false, signedIn: false, joined: false });
+    assert.deepEqual({ ...me, factions: undefined }, { providers: [{ id: "discord", name: "Discord" }], devJoin: false, signedIn: false, joined: false, factions: undefined });
+    assert.deepEqual(me.factions.map(f => f.id), ["hegemony", "apostates", "brawl"]);
     assert.equal((await call("/auth/nowhere"))[0], 404);
     // with sign-in set up there's no development join
     assert.equal((await call("/api/join", { name: "Varro", faction: "hegemony" }))[0], 401);
