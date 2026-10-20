@@ -19,6 +19,7 @@ import hashlib
 import json
 import re
 import sys
+import time
 from pathlib import Path
 
 import yaml
@@ -98,8 +99,8 @@ def attr_ref(attr, mod):
 MELEE_FAMILY = {
     "Broadsword": [("DX", -5), ("Force Sword", None, -4), ("Rapier", None, -4), ("Saber", None, -4),
                    ("Shortsword", None, -2), ("Two-Handed Sword", None, -4)],
-    "Shortsword": [("DX", -5), ("Broadsword", None, -2), ("Force Sword", None, -3), ("Jitte/Sai", None, -3),
-                   ("Knife", None, -4), ("Saber", None, -3), ("Smallsword", None, -4), ("Tonfa", None, -3)],
+    "Shortsword": [("DX", -5), ("Broadsword", None, -2), ("Force Sword", None, -4), ("Jitte/Sai", None, -3),
+                   ("Knife", None, -4), ("Saber", None, -4), ("Smallsword", None, -4), ("Tonfa", None, -3)],
     "Knife": [("DX", -4), ("Force Sword", None, -3), ("Main-Gauche", None, -3), ("Shortsword", None, -3)],
     "Axe/Mace": [("DX", -5), ("Flail", None, -4), ("Two-Handed Axe/Mace", None, -3)],
     "Two-Handed Axe/Mace": [("DX", -5), ("Axe/Mace", None, -3), ("Polearm", None, -4), ("Two-Handed Flail", None, -4)],
@@ -518,7 +519,7 @@ def resolve_includes(items, ctx, depth=0):
                 if not src.exists():
                     err(ctx, f"include file not found: {target}")
                     continue
-                _include_cache[src] = yaml.safe_load(src.read_text())
+                _include_cache[src] = yaml.safe_load(src.read_text(encoding="utf-8"))
             doc = _include_cache[src]
             pool = doc.get("items") or (doc.get("traits", []) + doc.get("skills", []) + doc.get("equipment", []))
             pool = resolve_includes(pool, f"{ctx} -> {target}", depth + 1)  # chained includes
@@ -561,7 +562,7 @@ EXT = {"equipment": ".eqp", "traits": ".adq", "skills": ".skl", "template": ".gc
 
 def build_file(src):
     rel = src.relative_to(DATA).as_posix()
-    doc = yaml.safe_load(src.read_text())
+    doc = yaml.safe_load(src.read_text(encoding="utf-8"))
     kind, output = doc.get("kind"), doc.get("output")
     if kind not in EXT or not output:
         err(rel, "needs 'kind' (equipment|traits|skills|template) and 'output'")
@@ -598,7 +599,17 @@ def main():
         if not a.check:
             dest = LIB / output
             dest.parent.mkdir(parents=True, exist_ok=True)
-            dest.write_text(json.dumps(doc, indent="\t", ensure_ascii=False) + "\n")
+            text = json.dumps(doc, indent="\t", ensure_ascii=False) + "\n"
+            # on Windows a file another program is reading (a sync client, a virus scanner) can't be opened for a
+            # moment: try again rather than fail the whole build
+            for attempt in range(10):
+                try:
+                    dest.write_text(text, encoding="utf-8", newline="\n")
+                    break
+                except OSError:
+                    if attempt == 9:
+                        raise
+                    time.sleep(0.3)
         built += 1
     for e in errors:
         print("ERROR", e, file=sys.stderr)

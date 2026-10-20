@@ -55,7 +55,7 @@
     }
     // ---- mental disadvantages steer the choice (B120 self-control rolls)
     const AGGR = /^(aoa|charge|strike|step-|rapid|flurry|mighty|dual|heroic|ca-|da-strike|beat|feint|ruse|grab|shove|fire |point-blank|advance|close@|move-closer|throw|suppress)/;
-    const CAUTIOUS = /^(aod|peel|reload-cover|cover@|wait|watch|spread)/;
+    const CAUTIOUS = /^(aod|peel|reload-cover|cover@|wait|watch|spread|fall-back|take-cover)/;
     const DANGER = /^(charge|aoa-charge|heroic|advance|close@|move-closer|step-|grab)/;
     const bestOf = (opts, re, not) => opts.filter(o => re.test(o.label) && !(not && not.test(o.label))).reduce((a, b) => !a || b.v > a.v ? b : a, null);
     function mentalPick(m, opts, pick, adj) {
@@ -83,7 +83,7 @@
       if (keepTurn !== turn) { keepC.clear(); keepTurn = turn; }
       if (keepC.has(m)) return keepC.get(m);
       let p = 1;
-      for (const f of models) {
+      for (const f of scanFoes(m)) {
         if (f.u.side === m.u.side || f.state !== "ok" || !f.h || !m.h || f.pinned) continue;
         // a stunned foe may shake it off and come on this very turn: half the threat
         const d = hexDist(f.h, m.h), reach = f.u.melee ? f.u.melee.reachMax : 1, half = x => f.stunned ? 1 - (1 - x) / 2 : x;
@@ -91,7 +91,7 @@
         const closer = f.u.melee && (f.u.stance === "charge" || (f.u.ai.zeal || 0) > 0 || bladeReady(f)) && d <= moveOf(f) + reach;
         if (closer) { p *= half(0.5); continue; }
         if (f.u.ranged && d <= f.u.ranged.range.max && los(f.h, m.h)) {
-          const mine = models.filter(x => x.u.side === m.u.side && x.state === "ok" && x.h && hexDist(f.h, x.h) <= f.u.ranged.range.max).length;
+          const mine = sideWithin(m.u.side, f, f.u.ranged.range.max);
           p *= 1 - 0.5 / Math.max(1, mine);
         }
       }
@@ -123,7 +123,7 @@
       for (const f of models) {
         if (m.state !== "ok" || m.stunned) return;
         if (!f.waiting || !f.watch || f.state !== "ok" || !f.h || f.u.side === m.u.side || f.stunned) continue;
-        if (!los(f.h, m.h) || hexDist(f.h, m.h) > f.waiting.range.max) continue;
+        if (!los(f.h, m.h) || hexDist(f.h, m.h) > f.waiting.range.max || holdsFire(f, f.waiting, m)) continue;
         const w = f.waiting; f.waiting = null; f.watch = false;
         if (w === f.u.ranged && gunGrip(f)) continue;
         L(`${f.id} was waiting for ${m.id} to show itself (Wait)`);
@@ -144,9 +144,9 @@
       // up out of a trench: a foe in sight that m's cover screens it from
       for (const t of cands.slice(0, 4)) {
         const k = coverAt(m.h, t.h, m);
-        if (!DUCK.has(k) || !covPenAt(m.h, t.h, m)) continue;
+        if (UP(u) || !DUCK.has(k) || !covPenAt(m.h, t.h, m)) continue;   // (one that stays on its feet doesn't duck behind a parapet)
         for (const w of usable) {
-          const E = shotAt(m.h, t, w);
+          const E = holdsFire(m, w, t) ? 0 : shotAt(m.h, t, w);
           if (E <= 0) continue;
           add(Wr * kv(m, t, E) - risk(m, m.h, "duck") - waitRisk(m, m.h), `popup-trench@${t.id}`, () => {
             L(`${m.id} rises out of cover to fire at ${t.id} (pop-up attack)`);
@@ -159,14 +159,14 @@
       }
       // round a corner: nobody in sight from here, a known foe in sight from the next hex
       if (!terr || cands.length || m.u.stance === "charge") return;
-      const ci = idx(key(m.h.q, m.h.r));
+      const ci = iQR(m.h.q, m.h.r);
       for (const [dq, dr] of DIRS) {
         const n = { q: m.h.q + dq, r: m.h.r + dr }, nk = key(n.q, n.r);
         if (taken(nk) || !walkable(nk) || (EL && climb(ci, idx(nk), climbCls(m)) > 0)) continue;
         let best = null;
         for (const t of pool.slice(0, 6)) {
           if (!t.h || !los(n, t.h) || duckedFrom(t, n)) continue;
-          for (const w of usable) { const E = shotAt(n, t, w); if (E > 0 && (!best || E * kv(m, t, 1) > best.v)) best = { t, w, E, v: E * kv(m, t, 1) }; }
+          for (const w of usable) { const E = holdsFire(m, w, t, n) ? 0 : shotAt(n, t, w); if (E > 0 && (!best || E * kv(m, t, 1) > best.v)) best = { t, w, E, v: E * kv(m, t, 1) }; }
         }
         if (!best) continue;
         const { t, w, E } = best;
@@ -186,7 +186,7 @@
       return DUCK.has(k) && covPenAt(t.h, fh, t) > 0;
     }
     // ---- the heavy weapon team's choices, laid over the ordinary ones
-    const MOVES = /^(advance|move-closer|cover@|high-ground|close@|charge|aoa-charge|heroic|advance-fire|spread@|peel|reload-cover|step-|popup@|search|rejoin)/;
+    const MOVES = /^(advance|move-closer|cover@|high-ground|close@|charge|aoa-charge|heroic|advance-fire|spread@|peel|reload-cover|step-|popup@|search|rejoin|hunt@|fall-back|take-cover)/;
     const targetsFor = (m, w, h = m.h) => known(m).filter(f => f.h && f.state === "ok" && hexDist(h, f.h) <= w.range.max && hexDist(h, f.h) >= (w.minRange || 0) && (w.indirect ? spotted(m, f) : los(h, f.h)));
     function crewOptions(m, pool, opts, add, rNow, adj) {
       const u = m.u, top = () => opts.reduce((a, b) => b.v > a.v ? b : a, { v: 0 }), force = (label, run) => { const t0 = top(); add(t0.v + 0.5 * Math.max(0.05, Math.abs(t0.v)), label, run); };
@@ -264,9 +264,9 @@
         const o = x.waitOpen;
         if (!o || x.state !== "ok" || !x.h || x.stunned) continue;
         const t = o.t;
-        if (t.state !== "ok" || !t.h) { x.waitOpen = null; continue; }
-        if (!openFor(t, x) || !los(x.h, t.h) || duckedFrom(t, x.h) || !weaponsFor(x, false).includes(o.w) || (o.w === x.u.ranged && x.ammo <= 0)) continue;
-        x.waitOpen = null;
+        if (t.state !== "ok" || !t.h) { setOpen(x, null); continue; }
+        if (!openFor(t, x) || !los(x.h, t.h) || duckedFrom(t, x.h) || !weaponsFor(x, false).includes(o.w) || (o.w === x.u.ranged && x.ammo <= 0) || holdsFire(x, o.w, t)) continue;
+        setOpen(x, null);
         L(`${x.id} sees ${t.id} falter and fires (Wait)`);
         fireAt(x, o.w, t, { aim: x.aimTarget === t && x.aimTurns > 0 });
         x.skipNext = true; x.skipWhy = "it fired on its Wait";

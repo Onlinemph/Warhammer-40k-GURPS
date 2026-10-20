@@ -6,6 +6,42 @@
     const beatAt = (pl, p) => { let b = null; for (const x of pl.beats) if (p >= x.start - .25 / pl.tsc) b = x; return b; };
     // close in: side on; middling range: over the shoulder with both in frame; long range: over the shoulder, then
     // a cut to the target as the shot goes in
+    // How much stands between a camera position and the points it has to show: every other standing figure whose
+    // body the line of sight passes through, one near the camera counting for more (it fills the frame).
+    function blockers(cam, pts, skip) {
+      let n = 0;
+      for (const F of figs) {
+        if (!F.g.visible || skip.includes(F) || deathOf(F.i, last.t)) continue;
+        const c = F.g.position, rad = (F.veh ? 1.7 : .5) * Math.max(1, F.k || 1), top = c.y + (F.veh ? 2.2 : F.top);
+        for (const q of pts) {
+          const dx = q.x - cam.x, dz = q.z - cam.z, l2 = dx * dx + dz * dz; if (l2 < 1e-4) continue;
+          const u = ((c.x - cam.x) * dx + (c.z - cam.z) * dz) / l2; if (u <= .04 || u >= .93) continue;
+          if (Math.hypot(cam.x + dx * u - c.x, cam.z + dz * u - c.z) > rad || cam.y + (q.y - cam.y) * u > top) continue;
+          n += 1 + 2 * (1 - u);
+        }
+      }
+      // scenery on the field (cover objects, the big pieces round it), and the walls as the action camera draws them
+      for (const b of decor.blockers || []) for (const q of pts) {
+        const dx = q.x - cam.x, dz = q.z - cam.z, l2 = dx * dx + dz * dz; if (l2 < 1e-4) continue;
+        const u = ((b.x - cam.x) * dx + (b.y - cam.z) * dz) / l2; if (u <= .04 || u >= .93) continue;
+        if (Math.hypot(cam.x + dx * u - b.x, cam.z + dz * u - b.y) > b.rad || cam.y + (q.y - cam.y) * u > b.top) continue;
+        n += 1 + 2 * (1 - u);
+      }
+      if (T) for (const q of pts) {
+        const dx = q.x - cam.x, dy = q.y - cam.y, dz = q.z - cam.z, len = Math.hypot(dx, dz);
+        for (let s = .8; s < len - .8; s += .6) {
+          const k = hexAt(cam.x + dx * s / len, cam.z + dz * s / len), top = wallNow.get(k);
+          if (top != null && cam.y + dy * s / len < top * .25 + zOf(...keyHex(k))) { n += 1 + 2 * (1 - s / len); break; }
+        }
+      }
+      return n;
+    }
+    // the walls standing, and how tall (the action camera draws them at a quarter of that)
+    const wallNow = new Map(); let wallNowT = -1;
+    const wallsNow = () => { if (!T || wallNowT === last.t) return; wallNowT = last.t; wallNow.clear(); wallList.forEach((k, i) => wallNow.set(k, wallH[i])); for (const [tt, k, what] of T.events || []) if (what === "broken" && tt <= last.t) wallNow.delete(k); };
+    // The shot for a beat. Each kind of shot has a first choice (on the side of the line the camera is already on)
+    // and others to fall back on when figures stand in the way: the other side, further round, then higher, where
+    // little can block it. The choice is made once per beat and kept, so the camera doesn't hunt as figures sway.
     function shotOf(b, p) {
       const A = figs[b.a]; if (!A || !A.g.visible) return null;
       const tF = b.tgt >= 0 ? figs[b.tgt] : null;
@@ -16,16 +52,29 @@
       const mid = a.clone().add(bp).multiplyScalar(.5);
       // keep to the side of the line the camera is already on, so it doesn't swing across
       const side = new THREE.Vector3(-dir.z, 0, dir.x); if (side.dot(camera.position.clone().sub(mid)) < 0) side.negate();
-      if (d <= 2.2) {
-        camWant.copy(mid).addScaledVector(side, 3 + h).addScaledVector(UP, 1.6 + h * .6).addScaledVector(dir, -.8);
-        lookWant.copy(mid).addScaledVector(UP, h * .5); return "melee";
+      const mode = d <= 2.2 ? "melee" : d > 10 && p >= b.fireP + .12 / TS ? "target" : "shoulder";
+      const aC = a.clone().addScaledVector(UP, h * .6), bC = bp.clone().addScaledVector(UP, ht * .6), skip = tF ? [A, tF] : [A];
+      // candidates: [side sign, how far round toward the line (0 = square on), height factor], nearest the usual shot first
+      const tries = mode === "melee" ? [[1, 0, 1], [-1, 0, 1], [1, .7, 1], [-1, .7, 1], [1, -.7, 1], [-1, -.7, 1], [1, 0, 2.1], [-1, 0, 2.1], [1, .7, 2.6], [1, 0, 3.6]]
+        : [[1, 0, 1], [-1, 0, 1], [1, 0, 1.7], [-1, 0, 1.7], [1, 1, 2.2], [-1, 1, 2.2], [1, 0, 3.2]];
+      const at = ([sg, round, up], out) => {
+        if (mode === "melee") return out.copy(mid).addScaledVector(side, sg * (3 + h) * Math.cos(round)).addScaledVector(dir, -.8 - (3 + h) * Math.sin(round)).addScaledVector(UP, (1.6 + h * .6) * up);
+        if (mode === "target") return out.copy(bp).addScaledVector(dir, -(4 + ht * 1.5)).addScaledVector(side, sg * (1.5 + ht * .4) * (1 + round)).addScaledVector(UP, (1.8 + ht) * up);
+        return out.copy(a).addScaledVector(dir, -(2.4 + h * 1.2)).addScaledVector(side, sg * (1 + h * .4) * (1 + round * 1.5)).addScaledVector(UP, (1.6 + h * 1.1) * up);
+      };
+      const need = mode === "melee" ? [aC, bC] : mode === "target" ? [bC] : [aC, bC];
+      b.cam ||= {};
+      if (b.cam[mode] == null) {
+        wallsNow();
+        let best = 0, bs = Infinity; const v = new THREE.Vector3();
+        for (let k = 0; k < tries.length; k++) { const s = blockers(at(tries[k], v), need, skip) + k * .15; if (s < bs) { bs = s; best = k; } if (s < .5) break; }
+        b.cam[mode] = best; b.camBlock = { first: blockers(at(tries[0], v), need, skip), chosen: bs - best * .15, pick: best };
       }
-      if (d > 10 && p >= b.fireP + .12 / TS) {
-        camWant.copy(bp).addScaledVector(dir, -(4 + ht * 1.5)).addScaledVector(side, 1.5 + ht * .4).addScaledVector(UP, 1.8 + ht);
-        lookWant.copy(bp).addScaledVector(UP, ht * .85); return "target";
-      }
-      camWant.copy(a).addScaledVector(dir, -(2.4 + h * 1.2)).addScaledVector(side, 1 + h * .4).addScaledVector(UP, 1.6 + h * 1.1);
-      lookWant.copy(a).addScaledVector(dir, Math.min(d * .6, 7)).addScaledVector(UP, h * .45); return "shoulder";
+      at(tries[b.cam[mode]], camWant);
+      if (mode === "melee") lookWant.copy(mid).addScaledVector(UP, h * .5);
+      else if (mode === "target") lookWant.copy(bp).addScaledVector(UP, ht * .85);
+      else lookWant.copy(a).addScaledVector(dir, Math.min(d * .6, 7)).addScaledVector(UP, h * .45);
+      return mode;
     }
     function wideOf(t) {
       const f = fr[t] || [], pts2 = [];

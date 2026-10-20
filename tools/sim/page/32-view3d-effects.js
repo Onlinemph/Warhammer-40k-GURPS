@@ -72,7 +72,8 @@
       oil: keep(new THREE.MeshStandardMaterial({ color: 0x0c0c0c, alphaMap: TEX.pool, transparent: true, depthWrite: false, roughness: .25, polygonOffset: true, polygonOffsetFactor: -3 })) };
     const decalGeo = keep(new THREE.PlaneGeometry(1, 1));
     const blasts = [];
-    fx.forEach((es, k) => es.forEach(e => { if (e[0] === "b") blasts.push({ t: k + 1, q: e[1], r: e[2], R: e[3] }); }));
+    const scanBlasts = () => { blasts.length = 0; fx.forEach((es, k) => es.forEach(e => { if (e[0] === "b") blasts.push({ t: k + 1, q: e[1], r: e[2], R: e[3] }); })); };
+    scanBlasts();
     let decalT = -1;
     const buildDecals = t => {
       if (decalT === t) return; decalT = t;

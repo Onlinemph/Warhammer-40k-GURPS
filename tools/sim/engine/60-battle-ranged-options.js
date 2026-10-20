@@ -1,5 +1,16 @@
 // Part of runBattle, one function body split into files by section (tools/sim/engine/50-69): the locals
 // and helpers declared in earlier parts are in scope here. tools/sim/README.md has the layout.
+    // what a shot's misses may do to its own side (B389, B392): every round of a burst that misses can fly on into a
+    // friend on the line, one fighting beside the target, or the first figure beyond it; valued as the share of each
+    // taken out times what he's worth (user direction: friendly fire for everyone, and the AI weighing it)
+    function ffRisk(m, w, t, lvl, inter = []) {
+      if (w.malediction || w.cone || (w.dmg && w.dmg.ex) || !t.h || !m.h) return 0;
+      const past = beyond(m, w, t.h);
+      const pals = [...new Set([...inter, ...models.filter(x => x !== m && x !== t && x.state === "ok" && x.h && hexDist(x.h, t.h) <= 1), ...(past ? [past] : [])])].filter(x => x !== m && x.u.side === m.u.side);
+      if (!pals.length) return 0;
+      const rounds = Math.max(1, Math.min(w.rof || 1, w === m.u.ranged && w.shots.mag !== Infinity ? Math.max(1, m.ammo) : Infinity));
+      return rounds * (1 - P3[cl(lvl)]) * pals.reduce((a, x) => a + P3[cl(9 + x.u.sm)] * Math.min(1, expInjRandom(w, x.u) / remOf(x)) * threatOf(x) * HORIZON, 0) * m.u.ai.caution;
+    }
     // ---- options at range: shoot (each weapon and target), aim, Move and Attack, suppression, grenades, Wait, reload
     function rangedOptions(m, pool, add, rNow, Wr) {
       const u = m.u;
@@ -12,7 +23,7 @@
         const t = pool[0];
         if (!cands.length && t) {
           const h2 = stepHex(m.h, t.h, runMove(m));
-          add(GAMMA * shotValueFrom(m, h2, pool) - risk(m, h2, "") + 0.001, `advance@${t.id}`, () => {
+          DEST = h2; add(GAMMA * shotValueFrom(m, h2, pool) - risk(m, h2, "") + 0.001, `advance@${t.id}`, () => {
             if (stepToward(m, t.h, runMove(m), 1) >= moveOf(m) - 1) m.runK = m.runPrev + 1; if (m.state !== "ok" || !m.h) return; if (t.h) faceTo(m, t.h); L(`${m.id} advances toward ${t.id}`);
           });
         }
@@ -38,7 +49,7 @@
       // shot through it, at random hit location, with the structure's DR on top of its own; the partition takes the hits
       if (terr && AWARE) for (const t of pool.slice(0, 6)) {
         if (!t.h || los(m.h, t.h) || (seenAt[u.side].get(t) ?? -99) < turn - 1) continue;
-        const d = hexDist(m.h, t.h), line = lineHexes(m.h, t.h).map(h => idx(key(h.q, h.r))).filter(i => i != null && blocker(i));
+        const d = hexDist(m.h, t.h), line = lineHexes(m.h, t.h).map(h => iQR(h.q, h.r)).filter(i => i != null && blocker(i));
         if (line.length !== 1) continue;
         const i = line[0], st = structOf(i) || STRUCT.door;
         for (const w of ws) {
@@ -56,10 +67,10 @@
       if (u.ranged && !m.gunBroken && m.reload === 0 && m.mags > 0 && u.ranged.shots.mag !== Infinity && m.ammo < u.ranged.shots.mag && u.ranged.shots.reload > 0 && u.ranged.shots.reload <= 3) {
         const w = u.ranged, turns = reloadTime(m, w);
         if (!cands.length && m.ammo > 0 && m.ammo < w.shots.mag * 0.6)
-          add(Math.pow(GAMMA, turns) * 0.5 * shotValueFrom(m, m.h, pool) - rNow + 0.002 * (1 - m.ammo / w.shots.mag), "tac-reload", () => { m.reload = turns; L(`${m.id} tops up its magazine`); });
+          add(dpow(GAMMA, turns) * 0.5 * shotValueFrom(m, m.h, pool) - rNow + 0.002 * (1 - m.ammo / w.shots.mag), "tac-reload", () => { m.reload = turns; L(`${m.id} tops up its magazine`); });
         if (terr && cands.length && m.ammo <= 0) {
           const hide = hideHex(m, pool);
-          if (hide) add(Math.pow(GAMMA, turns + 1) * shotValueFrom(m, m.h, pool) - risk(m, hide.h, ""), "reload-cover", () => { followPath(m, hide.path, moveOf(m)); L(`${m.id} steps out of sight to reload`); });
+          DEST = hide && hide.h; if (hide) add(dpow(GAMMA, turns + 1) * shotValueFrom(m, m.h, pool) - risk(m, hide.h, ""), "reload-cover", () => { followPath(m, hide.path, moveOf(m)); L(`${m.id} steps out of sight to reload`); });
         }
       }
       for (const w of ws) {
@@ -71,12 +82,12 @@
         if (isGun && m.ammo <= 0) {
           if (m.mags <= 0) continue;   // out of magazines: the gun is done
           const turns = reloadTime(m, w);
-          add(Math.pow(GAMMA, turns) * shotValueFrom(m, m.h, pool) - rNow, "reload", () => { m.reload = turns; if (w.natural && w.shots.reload > 3) m.reload = 0; L(`${m.id} ${crewNear(m) ? "and its loader reload" : "reloads"}`); });
+          add(dpow(GAMMA, turns) * shotValueFrom(m, m.h, pool) - rNow, "reload", () => { m.reload = turns; if (w.natural && w.shots.reload > 3) m.reload = 0; L(`${m.id} ${crewNear(m) ? "and its loader reload" : "reloads"}`); });
           continue;
         }
         if (w.indirect) { indirectOptions(m, w, add, rNow, Wr); continue; }
         if (w.concentrate && m.conc < w.concentrate) {
-          add(Math.pow(GAMMA, w.concentrate - m.conc) * shotValueFrom(m, m.h, pool) - rNow, "concentrate", () => { m.conc++; L(`${m.id} concentrates on ${w.name}`); });
+          add(dpow(GAMMA, w.concentrate - m.conc) * shotValueFrom(m, m.h, pool) - rNow, "concentrate", () => { m.conc++; L(`${m.id} concentrates on ${w.name}`); });
           continue;
         }
         const fpCost = (w.fp || 0) * 0.02;
@@ -88,10 +99,23 @@
           const inter = w.malediction ? [] : between(m.h, t.h, m.u.side).filter(x => x !== t);
           const base = wl(m, w) - skillPen(m) + rangePenalty(rngD(m.h, t.h, d) + spdOf(t.steps || 0)) + t.u.sm - linePen(m, inter) - darkPen(m, t);
           const fx = w.malediction ? null : shotFx(t, m.h, false);
-          const pals = w.malediction || w.dmg.ex ? [] : [...new Set([...inter, ...models.filter(x => x !== m && x.state === "ok" && x.h && hexDist(x.h, t.h) <= 1)])].filter(x => x.u.side === u.side && !(drilled(m) && drilled(x)));
+          // (and the first figure beyond the target, where a miss or a dodged round flies on to)
+          const past = w.malediction || w.dmg.ex ? null : beyond(m, w, t.h);
+          const pals = w.malediction || w.dmg.ex ? [] : [...new Set([...inter, ...modelsNear(t.h, 1).filter(x => x !== m && x.state === "ok"), ...(past ? [past] : [])])].filter(x => x.u.side === u.side);
           // a cone catches every friend in the wedge (who may dive clear)
           const coneFF = w.cone ? P3[cl(base)] * coneCaught(m, w, t).filter(x => x.u.side === u.side).reduce((a, x) => { const dd = rangedDefence(x, m); return a + (1 - (dd == null ? 0 : P3[cl(dd)])) * Math.min(1, expInj(w, x.u, "area") / remOf(x)) * threatOf(x) * HORIZON; }, 0) * u.ai.caution : 0;
-          const ffCost = coneFF + (pals.length && !w.cone ? (1 - P3[cl(base)]) * pals.reduce((a, x) => a + P3[cl(9 + x.u.sm)] * Math.min(1, expInjRandom(w, x.u) / remOf(x)) * threatOf(x) * HORIZON, 0) * u.ai.caution : 0);
+          // (every round of a burst that misses may fly on into a friend, not just one: user direction, friendly fire)
+          const rounds = Math.max(1, Math.min(w.rof || 1, isGun && w.shots.mag !== Infinity ? Math.max(1, m.ammo) : Infinity));
+          const ffCost = coneFF + (pals.length && !w.cone ? rounds * (1 - P3[cl(base)]) * pals.reduce((a, x) => a + P3[cl(9 + x.u.sm)] * Math.min(1, expInjRandom(w, x.u) / remOf(x)) * threatOf(x) * HORIZON, 0) * u.ai.caution : 0);
+          // fire discipline (user report: a lot of friendly fire): no shot through a friend standing in the line (step
+          // aside to clear it, below, or find another target), and none at a foe a friend is fighting hand to hand,
+          // unless the shooter is a marksman (16 or better as it stands). The stray-round rule (B389) is unchanged; the
+          // AI had judged such shots worth the risk, and with bursts of ten at a flat 9 a stray it seldom was
+          // (the same check as every other way of firing, holdsFire in 55-battle-attacks.js, here against the shot as
+          // planned)
+          const friendInLine = inter.some(x => x.u.side === u.side);
+          const intoMelee = !w.malediction && d > 1 && base < 16 && modelsNear(t.h, 1).some(x => x !== m && x.u.side === u.side && x.state === "ok" && !x.u.veh);
+          const noShot = friendInLine || intoMelee;
           const aimed = m.aimTarget === t && m.aimTurns > 0;
           const aimB = aimed ? Math.min(2 * w.acc, w.acc + (m.aimTurns >= 3 ? 2 : m.aimTurns >= 2 ? 1 : 0)) : 0;
           const fA = !aimed && m.follow && m.follow.t === t && m.follow.w === w && !m.moved ? m.follow.acc : 0;
@@ -103,7 +127,7 @@
           if (hopeless(w, t, m.h)) continue;
           // a friendly heavy gun is holding for an opening on this foe: rattling it (a crit, a knock-down, a stun, its
           // fatigue spent on feverish dodges) is worth more than the shot alone, most of all from a burst
-          const forGun = models.some(x => x !== m && x.u.side === u.side && x.waitOpen && x.waitOpen.t === t && x.state === "ok");
+          const forGun = [...t.openBy].some(x => x !== m && x.u.side === u.side && x.waitOpen && x.waitOpen.t === t && x.state === "ok");
           const vNow = (Wr * kv(m, t, Enow) - fpCost - ffCost) * (forGun ? ((w.rof || 1) >= 3 ? 1.6 : 1.25) : 1);
           // a big gun (a hit all but kills) against a foe who dodges most shots: don't waste it; keep the aim and hold
           // for an opening (stunned, down, exhausted, committed to an attack), fired the moment it comes (a Wait, B366)
@@ -111,32 +135,55 @@
           // few seconds (more likely the more friendly bursts can reach the foe: each forces a dodge, -1 the next,
           // MA122), at a defence of 9 or less, discounted for the seconds and for the gunner surviving them
           const dd0 = rangedDefence(t, m), pD = dd0 == null ? 0 : P3[cl(dd0)];
-          let holdIt = !w.malediction && !w.cone && (w.rof || 1) <= 2 && pD >= 0.5 && (m.holdN || 0) < 8
+          let holdIt = !noShot && !w.malediction && !w.cone && (w.rof || 1) <= 2 && pD >= 0.5 && (m.holdN || 0) < 8
             && expInjRandom(w, t.u) >= 0.5 * remOf(t) && (terr ? walk(m.h, t.h) : d) > moveOf(t) + 3;
           if (holdIt) {
-            const bursts = models.filter(x => x !== m && x.u.side === u.side && x.state === "ok" && x.h && !x.stunned && x.u.ranged && (x.u.ranged.rof || 1) >= 3 && los(x.h, t.h) && hexDist(x.h, t.h) <= x.u.ranged.range.max).length;
+            const bursts = u.group.models.filter(x => x !== m && x.u.side === u.side && x.state === "ok" && x.h && !x.stunned && x.u.ranged && (x.u.ranged.rof || 1) >= 3 && los(x.h, t.h) && hexDist(x.h, t.h) <= x.u.ranged.range.max).length;
             const pOpen = Math.min(0.6, 0.08 * bursts), live = 1 - Math.min(0.9, incoming(m, m.h, "") / remOf(m));
             const Eopen = Enow / Math.max(0.05, 1 - pD) * (1 - 0.375);
             let vHold = 0;
-            for (let k = 1; k <= 3; k++) vHold += Math.pow(GAMMA * live, k) * pOpen * Math.pow(1 - pOpen, k - 1) * Eopen;
+            for (let k = 1; k <= 3; k++) vHold += dpow(GAMMA * live, k) * pOpen * dpow(1 - pOpen, k - 1) * Eopen;
             holdIt = vHold > 1.1 * Enow;
           }
           if (holdIt) {
             add(Math.max(vNow, 0) * 1.2 + 0.001 - rNow, `hold@${t.id}`, () => {
               if (m.aimTarget !== t) m.aimTurns = 0;
-              m.aimTarget = t; m.aimTurns = Math.min(3, m.aimTurns + 1); faceTo(m, t.h); m.waitOpen = { t, w }; m.holdN = (m.holdN || 0) + 1;
+              setAim(m, t); m.aimTurns = Math.min(3, m.aimTurns + 1); faceTo(m, t.h); setOpen(m, { t, w }); m.holdN = (m.holdN || 0) + 1;
               L(`${m.id} holds its aim on ${t.id}, waiting for an opening (Wait)`);
             });
             continue;
           }
-          add(vNow - rNow, `fire ${w.name}@${t.id}`, () => { m.aimTarget = t; faceTo(m, t.h); fireAt(m, w, t, { aim: aimed }); });
+          if (!noShot) add(vNow - rNow, `fire ${w.name}@${t.id}`, () => { setAim(m, t); faceTo(m, t.h); fireAt(m, w, t, { aim: aimed }); });
+          // a friend in the line of fire: step aside first (the step an Attack allows, B364) to a hex with a clear line,
+          // when that's worth more than firing past him and risking a stray round in his back (user direction:
+          // friendly fire for everyone, and the AI keeping clear of it). No aim or bracing carries over the step.
+          if (!w.cone && !m.prone && !m.grips.length && !engaged(m) && friendInLine && !intoMelee) {
+            const near = pals.filter(x => !inter.includes(x));
+            let bestS = null;
+            for (const [dq, dr] of DIRS) {
+              const h = { q: m.h.q + dq, r: m.h.r + dr }, k = key(h.q, h.r);
+              if (taken(k) || (terr && !walkable(k)) || !los(h, t.h) || hexDist(h, t.h) > w.range.max) continue;
+              const in2 = between(h, t.h, u.side).filter(x => x !== t && x !== m);
+              if (in2.some(x => x.u.side === u.side)) continue;
+              const b2 = base + linePen(m, inter) - linePen(m, in2);
+              const ff2 = near.length ? rounds * (1 - P3[cl(b2)]) * near.reduce((a, x) => a + P3[cl(9 + x.u.sm)] * Math.min(1, expInjRandom(w, x.u) / remOf(x)) * threatOf(x) * HORIZON, 0) * u.ai.caution : 0;
+              const E2 = planAttack(m, w, t, b2, false, null, { aim: 0, braced: false, fx: shotFx(t, h, false) }).score * sustainOf(w) * spread;
+              const v2 = Wr * kv(m, t, E2) - fpCost - ff2 - risk(m, h, "");
+              if (!bestS || v2 > bestS.v) bestS = { h, v: v2 };
+            }
+            if (bestS) { DEST = bestS.h; add(bestS.v, `step-fire ${w.name}@${t.id}`, () => {
+              place(m, bestS.h); m.steps = (m.steps || 0) + 1; L(`${m.id} steps aside to clear its line of fire`);
+              if (afterStep(m) || m.state !== "ok" || !m.h || !t.h) return;
+              setAim(m, t); m.aimTurns = 0; faceTo(m, t.h); fireAt(m, w, t, { aim: false });
+            }); }
+          }
           // All-Out Attack (Determined, +1 ranged): only worth it when little can hit back
-          if (threatNow < 1) {
+          if (threatNow < 1 && !noShot) {
             const Eaoa = planAttack(m, w, t, base + bB + aimB + fA - own + 1, false, null, { aim: aimB + fA, braced: br, fx }).score * sustainOf(w) * spread;
-            add(Wr * kv(m, t, Eaoa) - fpCost - ffCost - risk(m, m.h, "aoa"), `aoa-fire@${t.id}`, () => { m.aoa = true; m.aimTarget = t; faceTo(m, t.h); fireAt(m, w, t, { aim: aimed, aoa: true }); });
+            add(Wr * kv(m, t, Eaoa) - fpCost - ffCost - risk(m, m.h, "aoa"), `aoa-fire@${t.id}`, () => { m.aoa = true; setAim(m, t); faceTo(m, t.h); fireAt(m, w, t, { aim: aimed, aoa: true }); });
           }
           // Aim (B364): pay a turn now for Acc (and +1/+2 more on later turns) next turn
-          if ((w.acc || 0) >= 1 && !(aimed && m.aimTurns >= 3)) {
+          if (!noShot && (w.acc || 0) >= 1 && !(aimed && m.aimTurns >= 3)) {
             const nextB = Math.min(2 * w.acc, (aimed ? aimB : 0) + (aimed ? 1 : w.acc));
             const brA = bracedFor(m, w, t, false, true);
             const Eaim = planAttack(m, w, t, base + (brA ? 1 : 0) + nextB - ownCoverPen(m, t.h, brA), false, null, { aim: nextB, braced: brA, fx }).score * sustainOf(w) * spread;
@@ -146,7 +193,7 @@
             const live = 1 - Math.min(0.95, incoming(m, m.h, "") / remOf(m));
             add(GAMMA * live * Wr * kv(m, t, keepP * Eaim + (1 - keepP) * Eun) - GAMMA * ffCost - rNow, `aim@${t.id}`, () => {
               if (m.aimTarget !== t) m.aimTurns = 0;
-              m.aimTarget = t; m.aimTurns++; faceTo(m, t.h); L(`${m.id} aims at ${t.id}`);
+              setAim(m, t); m.aimTurns++; faceTo(m, t.h); L(`${m.id} aims at ${t.id}`);
             });
           }
         }
@@ -166,9 +213,13 @@
             const h2 = stepHex(m.h, t.h, mv);
             const E = planAttack(m, w, t, wl(m, w) - skillPen(m) + rangePenalty(nd + spdOf(t.steps || 0)) + t.u.sm + Math.min(-2, w.bulk || 0), false, null, { from: h2 }).score * sustainOf(w);
             const cont = GAMMA * (shotValueFrom(m, h2, pool) - shotValueFrom(m, m.h, pool));
-            if (!hopeless(w, t, h2)) add(Wr * kv(m, t, E) + cont - risk(m, h2, ""), `advance-fire@${t.id}`, () => {
+            // (fire discipline, as everywhere: not through a friend, nor into a friend's melee, from where it will stand or
+            // once it gets there)
+            DEST = h2; if (!hopeless(w, t, h2) && !holdsFire(m, w, t, h2)) add(Wr * kv(m, t, E) + cont - risk(m, h2, ""), `advance-fire@${t.id}`, () => {
               stepToward(m, t.h, mv, hold); if (m.state !== "ok" || !m.h || m.stunned || !t.h || m.readied) return;
-              faceTo(m, t.h); m.mna = true; fireAt(m, w, t, { moved: true });
+              faceTo(m, t.h);
+              if (holdsFire(m, w, t)) { L(`${m.id} holds its fire: a friend is in the way`); return; }
+              m.mna = true; fireAt(m, w, t, { moved: true });
             });
           }
         }
@@ -176,17 +227,37 @@
         // only when the shot from here is poor (-3 or worse for range, 7 yards and more): a soldier with a fair shot
         // takes it, or advances firing, rather than walking up to arm's length for one; and a gunman stops 3 yards off
         if (cands.length) {
-          const t = cands[0], d = hexDist(m.h, t.h), stop = Math.max(u.stance === "charge" ? 2 : 3, keep(t));
-          if (d > stop + 1 && (rangePenalty(d) <= -5 || w.fp)) {
+          // (a swarm, zeal: Tyranids, Orks, may run a move ahead of its nearest brood-mate: the rest are coming too)
+          const z = u.ai.zeal || 0, mvZ = z > 0 ? runMove(m) : moveOf(m);
+          const t = cands[0], d = hexDist(m.h, t.h), stop = Math.max(u.stance === "charge" ? 2 : 3, keep(t) - (z > 0 ? mvZ : 0));
+          // (a unit holding its ground walks up only when its best aimed shot from here is poor, skill 8 or less: under
+          // heavy fire every choice scores about the same, and stepping toward a foe that wants hand-to-hand won by a
+          // hair; user report: Necron Warriors and Immortals walked up to Space Marines)
+          const aimedLvl = wl(m, w) - skillPen(m) + rangePenalty(rngD(m.h, t.h, Math.max(1, d))) + t.u.sm + (w.acc || 0) + 1;
+          const holdOK = u.stance === "shoot" && !(u.ai.zeal > 0) && aimedLvl >= 9;
+          if (d > stop + 1 && (rangePenalty(d) <= -5 || w.fp) && !holdOK) {
             const h2 = stepHex(m.h, t.h, Math.min(moveOf(m), d - stop));
             // a short-ranged gun looks further ahead: the shot from inside 1/2D, however many moves away
             let sv = GAMMA * shotValueFrom(m, h2, pool);
             if (w.range && w.range.half > stop && d > w.range.half) {
               const k = Math.ceil((d - w.range.half + 1) / Math.max(1, moveOf(m)));
-              if (k > 1) sv = Math.max(sv, Math.pow(GAMMA, k) * shotValueFrom(m, stepHex(m.h, t.h, d - w.range.half + 1), pool));
+              if (k > 1) sv = Math.max(sv, dpow(GAMMA, k) * shotValueFrom(m, stepHex(m.h, t.h, d - w.range.half + 1), pool));
             }
-            add(sv - risk(m, h2, "") - 0.001, `move-closer@${t.id}`, () => {
-              stepToward(m, t.h, moveOf(m), stop); if (m.state !== "ok" || !m.h) return; if (t.h) faceTo(m, t.h); L(`${m.id} closes in on ${t.id}`);
+            // a swarm (zeal: Tyranids, Orks) runs in to where its guns tell, ten yards off, however many moves away,
+            // discounting the wait as a zealot discounts a fight still to come and half-ignoring the fire on the way
+            // (user direction: Termagants stood at sixty yards trading shots with lasguns and lost every time)
+            // Moving as a swarm, the fire on the way is spread over all of it: the risk is what it already takes where it
+            // stands, not what a lone model running out ahead would draw.
+            const gap = 10, h3 = z > 0 ? stepHex(m.h, t.h, Math.min(mvZ, d - stop)) : h2;
+            // (only from beyond twenty yards, and never as if it could fire from there this second)
+            if (z > 0 && d > 20) {
+              const k = Math.ceil((d - gap) / Math.max(1, mvZ));
+              sv = Math.max(sv, dpow(GAMMA, Math.max(1, k * (1 - z))) * shotValueFrom(m, stepHex(m.h, t.h, d - gap), pool));
+            }
+            const far = z > 0 && d > 20;   // the swarm's run-in: inside twenty yards it's back to weighing each step
+            DEST = h3; add(sv - (far ? rNow * (1 - z / 2) : risk(m, h3, "")) - 0.001, `move-closer@${t.id}`, () => {
+              const n = stepToward(m, t.h, mvZ, stop); if (z > 0 && n >= moveOf(m) - 1) m.runK = m.runPrev + 1;
+              if (m.state !== "ok" || !m.h) return; if (t.h) faceTo(m, t.h); L(`${m.id} ${z > 0 ? "runs in on" : "closes in on"} ${t.id}`);
             });
           }
         }
@@ -197,11 +268,11 @@
             if (hexDist(m.h, c.h) > w.range.max) continue;
             const inZ = pool.filter(x => hexDist(x.h, c.h) <= 1);
             // area denial (TS p. 18): a cluster, or a lone foe in cover or in a doorway
-            if (inZ.length < 3 && !(inCover(c, m.h) || (terr && terr.doorI[idx(key(c.h.q, c.h.r))]))) continue;
+            if (inZ.length < 3 && !(inCover(c, m.h) || (terr && terr.doorI[iQR(c.h.q, c.h.r)]))) continue;
             const shots = w.shots.mag === Infinity ? w.rof : Math.min(w.rof, m.ammo);
             const Ez = x => P3[cl(Math.min(6, w.level - skillPen(m) + rangePenalty(rngD(m.h, x.h, Math.max(1, hexDist(m.h, x.h))))) + rapidBonus(shots) + x.u.sm)] * (1 - P3[cl(rangedDefence(x, m))]) * expInjRandom(w, x.u);
             // the zone attacks friends in it too (B409): their loss counts against it
-            const pals = models.filter(x => x !== m && x.state === "ok" && x.h && x.u.side === u.side && hexDist(x.h, c.h) <= 1);
+            const pals = modelsNear(c.h, 1).filter(x => x !== m && x.state === "ok" && x.u.side === u.side);
             // pinning them is worth the harm their fire won't do while our squad moves (TS p. 21)
             const pinV = inZ.reduce((a, x) => a + (x.u.veh ? 0 : pinOf(x) * Math.min(1, threatOf(x)) * 0.25 * HORIZON * (x.u.ranged ? 1 : 0.3)), 0);   // a tank's crew isn't pinned by rifle fire
             const v = pinV + inZ.reduce((a, x) => a + kv(m, x, Ez(x) * sustainOf(w)), 0)
@@ -239,10 +310,10 @@
         const g = bestGrenade(m, pool);
         // a grenade that can't really hurt anyone (frags on power armour: a point or so of blunt trauma a fragment) isn't
         // worth the seconds to ready it: it has to promise at least 5% of the target's remaining HP
-        if (g && g.v >= kv(m, g.c, Math.max(0.5, 0.05 * remOf(g.c)))) {
+        if (g && g.v >= kv(m, g.c, Math.max(0.5, (g.c.u.veh ? 0.01 : 0.05) * remOf(g.c)))) {   // (a hull is whittled down: 1% of it)
           const gv = Wr * g.v, left = 2 - grenadeStage(m, g.i);
           if (!left) add(gv - rNow, "throw", () => throwGrenade(m, g));
-          else add(Math.pow(GAMMA, left) * gv - rNow, "ready-grenade", () => readyGrenade(m, g.i));
+          else add(dpow(GAMMA, left) * gv - rNow, "ready-grenade", () => readyGrenade(m, g.i));
         }
       }
     }
@@ -261,10 +332,10 @@
     function stepHex(a, b, n) {
       let h = a;
       if (terr) {
-        const F = field(b);
+        const F = fieldToward(a, b, 1, 0);
         for (let i = 0; i < n; i++) {
-          let best = null, bd = F.get(key(h.q, h.r)) ?? 999;
-          for (const [dq, dr] of DIRS) { const x = { q: h.q + dq, r: h.r + dr }, d = F.get(key(x.q, x.r)); if (d != null && d < bd) { bd = d; best = x; } }
+          let best = null, bd = F.at(h.q, h.r) ?? 999;
+          for (const [dq, dr] of DIRS) { const x = { q: h.q + dq, r: h.r + dr }, d = F.at(x.q, x.r); if (d != null && d < bd) { bd = d; best = x; } }
           if (!best || bd < 1) break;
           h = best;
         }
@@ -285,7 +356,7 @@
       for (const f of pool) {
         if (!f.u.melee || hexDist(f.h, m.h) - f.u.melee.reachMax > moveOf(f)) continue;
         let inj = 0;
-        for (const a of models) {
+        for (const a of m.u.group.models) {   // its squad: the ones who'd act on it
           if (a === m || a.state !== "ok" || !a.h || a.u.side !== m.u.side) continue;
           const d = hexDist(a.h, f.h);
           const mw = a.u.melee, rw = a.u.ranged;
@@ -339,9 +410,9 @@
           let V;
           broken[j] = 1;
           if (!melee && shotValueFrom(m, m.h, pool) > 0) V = shotValueFrom(m, m.h, pool);
-          else V = Wm * kv(m, f, planAttack(m, m.u.melee, f, m.u.melee.level - skillPen(m), true).score) * Math.pow(GAMMA, Math.ceil(hd / mv));
+          else V = Wm * kv(m, f, planAttack(m, m.u.melee, f, m.u.melee.level - skillPen(m), true).score) * dpow(GAMMA, Math.ceil(hd / mv));
           broken[j] = 0;
-          if (V > 0) add(Math.pow(GAMMA, T - 1) * V - rNow, `breach@${th.q},${th.r}`, () => attackStructure(m, w, j, melee));
+          if (V > 0) add(dpow(GAMMA, T - 1) * V - rNow, `breach@${th.q},${th.r}`, () => attackStructure(m, w, j, melee));
         }
       }
       // a grenade (krak, above all) against the wall: Ready it, then throw
@@ -354,9 +425,9 @@
         const T = Math.ceil(hp / E) * 3 - grenadeStage(m, gi);
         if (T > 4 || T - 1 > (wk - hd) / mv || m.grenadesLeft[gi] * 3 < T) return;
         broken[j] = 1;
-        const V = shotValueFrom(m, m.h, pool) || Wm * kv(m, f, planAttack(m, m.u.melee, f, m.u.melee.level - skillPen(m), true).score) * Math.pow(GAMMA, Math.ceil(hd / mv));
+        const V = shotValueFrom(m, m.h, pool) || Wm * kv(m, f, planAttack(m, m.u.melee, f, m.u.melee.level - skillPen(m), true).score) * dpow(GAMMA, Math.ceil(hd / mv));
         broken[j] = 0;
-        if (V > 0) add(Math.pow(GAMMA, T - 1) * V - rNow, `breach-grenade@${th.q},${th.r}`, () => {
+        if (V > 0) add(dpow(GAMMA, T - 1) * V - rNow, `breach-grenade@${th.q},${th.r}`, () => {
           if (grenadeStage(m, gi) < 2) { readyGrenade(m, gi, ` to breach the ${hexName(j)}`); return; }
           m.grenadeReady = null; m.grenadeArmed = false; m.grenadesLeft[gi]--; m.attacked = true; faceTo(m, th);
           const r = check(lvl), raw = rollDamage(dm);
@@ -415,7 +486,7 @@
       const near = pool.slice(0, 8);
       const g0 = grenadeRisk(m, m.h, near);
       if (!(g0 > 0)) return;
-      const crowd = h => models.filter(x => x !== m && x.u.side === m.u.side && x.state === "ok" && x.h && hexDist(x.h, h) <= 2).length;
+      const crowd = h => modelsNear(h, 2).filter(x => x !== m && x.u.side === m.u.side && x.state === "ok").length;
       const c0 = crowd(m.h);
       if (!c0) return;
       const spots = [];
@@ -426,7 +497,7 @@
       }
       spots.sort((a, b) => grenadeRisk(m, a, near) - grenadeRisk(m, b, near));
       for (const h of spots.slice(0, 2)) {
-        add(GAMMA * shotValueFrom(m, h, pool) - risk(m, h, ""), `spread@${h.q},${h.r}`, () => {
+        DEST = h; add(GAMMA * shotValueFrom(m, h, pool) - risk(m, h, ""), `spread@${h.q},${h.r}`, () => {
           stepToward(m, h, hexDist(m.h, h), 0); if (m.state !== "ok" || !m.h) return;
           const f = pool.find(x => x.h && los(m.h, x.h)); if (f) faceTo(m, f.h);
           L(`${m.id} spreads out from its squad-mates`);
@@ -449,7 +520,7 @@
         for (const [dq, dr] of DIRS) {
           const n = { q: h.q + dq, r: h.r + dr }, nk = key(n.q, n.r);
           if (prev.has(nk) || taken(nk)) continue;
-          const e = EL ? climb(idx(key(h.q, h.r)), idx(nk), climbCls(m)) : 0;
+          const e = EL ? climb(iQR(h.q, h.r), idx(nk), climbCls(m)) : 0;
           if (e === Infinity || d + 1 + e > mv) continue;
           prev.set(nk, h); q.push({ h: n, d: d + 1 + e });
         }
@@ -458,7 +529,7 @@
       for (const { h } of spots.slice(0, 4)) {
         const path = [];
         for (let k = key(h.q, h.r), n = h; k !== start; ) { path.unshift(n); const p = prev.get(k); k = key(p.q, p.r); n = p; }
-        add(GAMMA * shotValueFrom(m, h, pool) - risk(m, h, ""), `cover@${h.q},${h.r}`, () => {
+        DEST = h; add(GAMMA * shotValueFrom(m, h, pool) - risk(m, h, ""), `cover@${h.q},${h.r}`, () => {
           followPath(m, path, mv); if (m.state !== "ok" || !m.h) return;
           const f = pool.find(x => x.h && los(m.h, x.h)); if (f) faceTo(m, f.h);
           L(`${m.id} moves into cover`);
@@ -477,7 +548,7 @@
         for (const [dq, dr] of DIRS) {
           const n = { q: h.q + dq, r: h.r + dr }, nk = key(n.q, n.r);
           if (prev.has(nk) || taken(nk) || !walkable(nk)) continue;
-          const e = climb(idx(key(h.q, h.r)), idx(nk), cc);
+          const e = climb(iQR(h.q, h.r), idx(nk), cc);
           if (e === Infinity || d + 1 + e > 2 * mv) continue;
           prev.set(nk, h); q.push({ h: n, d: d + 1 + e });
         }
@@ -486,7 +557,7 @@
       for (const { h, d } of spots.slice(0, 2)) {
         const path = [];
         for (let k = key(h.q, h.r), n = h; k !== start; ) { path.unshift(n); const p = prev.get(k); k = key(p.q, p.r); n = p; }
-        add(Math.pow(GAMMA, Math.ceil(d / mv)) * shotValueFrom(m, h, pool) - risk(m, h, ""), `high-ground@${h.q},${h.r}`, () => {
+        DEST = h; add(dpow(GAMMA, Math.ceil(d / mv)) * shotValueFrom(m, h, pool) - risk(m, h, ""), `high-ground@${h.q},${h.r}`, () => {
           followPath(m, path, mv); if (m.state !== "ok" || !m.h) return;
           const f = pool.find(x => x.h && los(m.h, x.h)); if (f) faceTo(m, f.h);
           L(`${m.id} ${elevAt(m.h) >= elevAt(h) - 0.01 ? "takes the high ground" : "heads for the high ground"}`);

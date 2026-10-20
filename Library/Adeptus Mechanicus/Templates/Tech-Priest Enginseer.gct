@@ -1,7 +1,7 @@
 {
 	"version": 5,
 	"id": "BEV7Ab6ThwDJtu8cW",
-	"notes": "A field Enginseer: an ordained Tech-Priest sent out from a Forge World or a Titan Legion's Adeptus Mechanicus detachment to keep an Imperial Guard regiment's vehicles, weapons, and vox-network running, rather than a combat specialist in their own right (that's the Skitarii templates) or a senior Magos directing a whole forge (Magos.gct). Point math: ST 11 (+10), DX 12 (+40), IQ 13 (+60), HT 11 (+10) = 120, plus Will +1 (+5) = 125; advantages +128; disadvantages -47; skills +59. Total 265 points, inside the ~250-350 band this project's brief sets for the Enginseer rank. Augmetics and faith traits are pulled in with `include` from Adeptus Mechanicus/Traits/Augmetics and the Cult Mechanicus.adq rather than copied, per docs/data-format.md.\n",
+	"notes": "A field Enginseer: an ordained Tech-Priest sent out from a Forge World or a Titan Legion's Adeptus Mechanicus detachment to keep an Imperial Guard regiment's vehicles, weapons, and vox-network running, rather than a combat specialist in their own right (that's the Skitarii templates) or a senior Magos directing a whole forge (Magos.gct). Point math: ST 11 (+10), DX 12 (+40), IQ 13 (+60), HT 11 (+10) = 120, plus Will +1 (+5) = 125; advantages +126 (Language, Binharic 4 among them); disadvantages -47; skills +55. Total 259 points, inside the ~250-350 band this project's brief sets for the Enginseer rank. Augmetics and faith traits are pulled in with `include` from Adeptus Mechanicus/Traits/Augmetics and the Cult Mechanicus.adq rather than copied, per docs/data-format.md.\n",
 	"traits": [
 		{
 			"id": "tKg8IJ4WLzy7MZoZM",
@@ -137,7 +137,7 @@
 			"id": "tPJKcbS_8y-Ufz-Lb",
 			"name": "Augmetic Arm, Combat Pattern",
 			"reference": "B40",
-			"local_notes": "Arm ST +6 (Lifting ST +6 and Striking ST +6, applied by the sheet); DR 6 to the arm. GCS applies these to the whole character, so for a single prosthetic arm use them for that arm only.\n\nLore: Enginseers are drawn from the ranks of the Cult Mechanicus after some years of service; an augmetic arm lost to accident or willingly offered up as an act of devotion is common enough by this rank that it is included in the baseline rather than left optional.\n\nDesign: Arm ST +6 (B40, 5/level, 30) + DR 6, Partial (single limb) -60% (6x5=30, x0.4=12) = 42 points.",
+			"local_notes": "Arm ST +6 (Lifting ST +6 and Striking ST +6, applied by the sheet); DR 6 to the arm. GCS applies these to the whole character, so for a single prosthetic arm use them for that arm only.\n\nLore: Enginseers are drawn from the ranks of the Cult Mechanicus after some years of service; an augmetic arm lost to accident or willingly offered up as an act of devotion is common enough by this rank that it is included in the baseline rather than left optional.\n\nDesign: Arm ST +6 for one arm (B40, 3/level, 18) + DR 6, Partial (one arm) -40% (6x5=30, x0.6=18) = 36 points.",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -145,7 +145,7 @@
 				"Adeptus Mechanicus",
 				"Skitarii"
 			],
-			"base_points": 42,
+			"base_points": 36,
 			"features": [
 				{
 					"type": "dr_bonus",
@@ -195,7 +195,7 @@
 			"id": "tnXDafN442KDoCm5i",
 			"name": "Noospheric Link",
 			"reference": "B91",
-			"local_notes": "Short-to-medium range wireless data-link to the Cult Mechanicus' noosphere: other Noospheric Link-bearing adepts and compatible cogitators/machine spirits only.\n\nLore: A subcutaneous vox-and-data transceiver that lets a Tech-Priest read and post to the layered, half-mystical data-cloud the Mechanicus calls the noosphere — status runes, binharic liturgy, and tactical chatter overlaid on the world for anyone plugged in, and gibberish static to anyone who isn't.\n\nDesign: Basic Set Telecommunication (Radio type, B91, 10 points) with the Racial limitation (B91, -20%, restricted to others who share the trait — here, other noosphere-linked adepts and machine spirits): 10 x 0.8 = 8 points. Pairs with the Language (Binharic) skill (Adeptus Mechanicus/Skills/Mechanicus Skills.skl) for the liturgical cant spoken over the link; the link itself is the hardware, the language is the learned code riding on it.",
+			"local_notes": "Short-to-medium range wireless data-link to the Cult Mechanicus' noosphere: other Noospheric Link-bearing adepts and compatible cogitators/machine spirits only.\n\nLore: A subcutaneous vox-and-data transceiver that lets a Tech-Priest read and post to the layered, half-mystical data-cloud the Mechanicus calls the noosphere — status runes, binharic liturgy, and tactical chatter overlaid on the world for anyone plugged in, and gibberish static to anyone who isn't.\n\nDesign: Basic Set Telecommunication (Radio type, B91, 10 points) with the Racial limitation (B91, -20%, restricted to others who share the trait — here, other noosphere-linked adepts and machine spirits): 10 x 0.8 = 8 points. Pairs with Language (Binharic), below, for the liturgical cant spoken over the link; the link itself is the hardware, the language is the learned code riding on it.",
 			"tags": [
 				"Advantage",
 				"Mental",
@@ -203,6 +203,19 @@
 				"Adeptus Mechanicus"
 			],
 			"base_points": 8
+		},
+		{
+			"id": "tU5y2RP13F34dix3l",
+			"name": "Language (Binharic)",
+			"reference": "B24",
+			"local_notes": "Accented, spoken and written.\n\nLore: The Cult Mechanicus' machine-cant: a clipped, heavily compressed binary/logical language spoken and sub-vocalized between adepts, servitors, and machine spirits alike, ranging from a few ritual phrases a menial picks up to the dense technical liturgy a Magos trades with another Magos.\n\nDesign: A language is an advantage bought by comprehension level, not a skill (B24): Broken 1 point for speech and 1 for writing, Accented 2 and 2, Native 3 and 3. Listed here at Accented in both (4 points); a template that includes it sets its own level.",
+			"tags": [
+				"Advantage",
+				"Language",
+				"Imperium",
+				"Adeptus Mechanicus"
+			],
+			"base_points": 4
 		},
 		{
 			"id": "tIcpgySh5y9QjcBiK",
@@ -376,20 +389,6 @@
 				"Adeptus Mechanicus"
 			],
 			"specialization": "Archeotech",
-			"difficulty": "iq/a",
-			"points": 4
-		},
-		{
-			"id": "s7827i6ex7WatCG7g",
-			"name": "Language",
-			"reference": "B23",
-			"local_notes": "Lore: The Cult Mechanicus' machine-cant: a clipped, heavily compressed binary/logical language spoken and sub-vocalized between adepts, servitors, and machine spirits alike, ranging from a few ritual phrases a menial picks up to the dense technical liturgy a Magos trades with another Magos.\n\nDesign: IQ+1 (14) for 4 points, Average — comfortably fluent in the liturgical cant.",
-			"tags": [
-				"Mental",
-				"Imperium",
-				"Adeptus Mechanicus"
-			],
-			"specialization": "Binharic",
 			"difficulty": "iq/a",
 			"points": 4
 		},

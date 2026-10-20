@@ -1,0 +1,63 @@
+:root { --bg: #f4f2ee; --card: #fff; --ink: #1d1c1a; --muted: #6b6760; --line: #d9d4ca; --lane: #b9b2a5; --accent: #8a5a00; --err: #b3261e; }
+@media (prefers-color-scheme: dark) { :root { --bg: #14130f; --card: #1f1d18; --ink: #ece8df; --muted: #a39d92; --line: #36332c; --lane: #4a463d; --accent: #e0b24a; --err: #ff8a80; } }
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.45 system-ui, sans-serif; }
+header { display: flex; justify-content: space-between; align-items: baseline; padding: 12px 16px; border-bottom: 1px solid var(--line); }
+h1 { font-size: 20px; margin: 0; letter-spacing: .02em; }
+h2, h3 { margin: 0 0 8px; font-size: 16px; }
+main { padding: 16px; }
+#game { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 16px; }
+@media (max-width: 900px) { #game { grid-template-columns: 1fr; } }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; margin-bottom: 12px; }
+.map { padding: 0; overflow: hidden; }
+svg { display: block; width: 100%; height: auto; }
+.lane { stroke: var(--lane); stroke-width: 1.5; }
+.world { cursor: pointer; stroke: var(--ink); stroke-width: 1; }
+.world.sel { stroke-width: 3; }
+.wname { fill: var(--ink); pointer-events: none; paint-order: stroke; stroke: var(--card); stroke-width: 3px; stroke-linejoin: round; }
+.here { fill: none; stroke: var(--accent); stroke-width: 3; stroke-dasharray: 4 3; }
+.force { fill: var(--muted); pointer-events: none; paint-order: stroke; stroke: var(--card); stroke-width: 3px; stroke-linejoin: round; }
+.muted { color: var(--muted); }
+.err { color: var(--err); min-height: 1.2em; }
+label { display: block; margin: 8px 0; }
+input[type=number] { width: 64px; }
+input, select, button { font: inherit; }
+button { background: var(--accent); color: var(--bg); border: 0; border-radius: 6px; padding: 7px 14px; cursor: pointer; }
+.factions { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; }
+.factions label { border: 1px solid var(--line); border-radius: 6px; padding: 8px; }
+.feed { margin: 0; padding-left: 18px; max-height: 260px; overflow: auto; }
+.feed li { margin-bottom: 6px; }
+table { border-collapse: collapse; width: 100%; } td { padding: 2px 4px; }
+@media (max-width: 600px) { .world { stroke-width: 2; } }
+button.link { background: none; color: var(--accent); padding: 0 2px; text-decoration: underline; }
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,.55); display: flex; align-items: flex-start; justify-content: center; padding: 24px 16px; overflow: auto; z-index: 10; }
+.overlay[hidden] { display: none; }
+.rp { width: min(1100px, 100%); }
+.rp-head { display: flex; justify-content: space-between; align-items: center; padding: 0 0 8px; border: 0; }
+.bar { height: 10px; background: var(--line); border-radius: 5px; overflow: hidden; margin: 12px 0 8px; }
+#rp-bar { height: 100%; width: 0; background: var(--accent); transition: width .5s; }
+.rp-stage canvas { display: block; width: 100%; border-radius: 6px; }
+.rp-controls { display: flex; gap: 8px; align-items: center; margin-top: 8px; }
+.rp-controls input[type=range] { flex: 1; }
+.rp-sides { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 6px; }
+.rp-sides i { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }
+.admin-wrap { padding: 16px 16px 0; }
+.admin-wrap:has(> [hidden]) { display: none; }
+.admin-buttons { display: flex; gap: 6px; flex-wrap: wrap; }
+.providers { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0 12px; }
+a.button { display: inline-block; background: var(--accent); color: var(--bg); border-radius: 6px; padding: 7px 14px; text-decoration: none; }
+a.link { color: var(--accent); }
+.rlink { stroke: var(--lane); stroke-width: .5; }
+.region { cursor: pointer; stroke: var(--ink); stroke-width: .25; }
+.region.sel { stroke-width: .8; }
+.rname { fill: var(--ink); pointer-events: none; paint-order: stroke; stroke: var(--card); stroke-width: .5px; stroke-linejoin: round; font-size: 2.3px; }
+.rground { fill: var(--muted); pointer-events: none; font-size: 1.7px; }
+.rforce { fill: var(--ink); pointer-events: none; font-size: 1.8px; font-weight: 600; }
+.rbattle { fill: none; stroke: var(--err); stroke-width: .5; stroke-dasharray: 1 .6; }
+.planet-map { background: var(--bg); border-radius: 6px; margin: 8px 0; }
+.legend { display: flex; gap: 12px; flex-wrap: wrap; font-size: 13px; }
+.legend i { display: inline-block; width: 10px; height: 10px; margin-right: 4px; vertical-align: -1px; border: 1px solid var(--ink); }
+fieldset.recruit { border: 1px solid var(--line); border-radius: 6px; margin: 8px 0; padding: 4px 10px; }
+fieldset.recruit legend { font-weight: 600; font-size: 14px; }
+.feed li.mine { border-left: 3px solid var(--accent); padding-left: 6px; }

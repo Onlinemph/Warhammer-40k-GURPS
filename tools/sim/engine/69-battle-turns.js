@@ -18,11 +18,30 @@
       return m.h ? [m.h.q, m.h.r, m.u.side, m.state === "ok" ? (m.stunned ? 2 : m.prone ? 3 : 1) : 0, m.facing, Math.round(vit(m) * 100) / 100, path,
         bits(m), m.u.shield ? Math.round(100 * Math.max(0, m.sp) / m.u.shield.sp) / 100 : -1, m.aimTarget && m.aimTurns > 0 ? m.aimTarget.ix : -1, m.u.veh ? m.turretFacing ?? m.facing : null] : null;
     });
+    // a beat for the replay: the events since the last one, then where everyone stands now
+    const beat = () => { if (frames.length) { fx.push(fxb); fxb = []; } frames.push(snap()); beatTurn.push(turn); logAt.push(log ? log.length : 0); turnNow = frames.length - 1; };
+    // what the player is told when the battle stops for them: the battle so far, as a finished one is reported
+    const unitList = () => units.map(u => ({ idx: u.idx, name: u.name, side: u.side, stance: u.stance, direct: !!u.direct, veh: !!u.veh, count: u.count, up: u.models.filter(active).length, squad: u.squad || null, squadName: u.squad && u.group ? u.group.name : null }));
+    if (HUMANS.length) { const d = opt.human.direct; for (const u of units) if (isHuman(u.side)) u.direct = d === "all" || (Array.isArray(d) && d.includes(u.idx)); }
     let turn = 0;
+    // how many of each side are standing at the start of each second (the resolver calibrates its rates from it)
+    const tally = [];
+    const countSides = () => { const c = [0, 0]; for (const m of models) if (m.state === "ok" && !m.u.routed) c[m.u.side]++; return c; };
     for (turn = 1; turn <= maxTurns; turn++) {
       if (!sideActive(0) || !sideActive(1)) break;
-      L(`— Turn ${turn} —`); fieldCache.clear(); turnNow = turn - 1;
-      if (frames) { if (turn > 1) { fx.push(fxb); fxb = []; } frames.push(snap()); }
+      tally.push(countSides());
+      if (opt.onTurn) opt.onTurn(turn, maxTurns);   // progress, for a caller showing a loading bar
+      L(`— Turn ${turn} —`); newFields(); turnNow = turn - 1;
+      if (frames) beat();
+      // orders to whole units for this second, from each side a person plays in turn: { units: { idx: { stance, direct } } }
+      for (const hs of HUMANS) {
+        const ans = yield { type: "turn", side: hs, turn, units: unitList(), view: outcome(false) };
+        for (const [k, o] of Object.entries((ans && ans.units) || {})) {
+          const u = units[k]; if (!u || u.side !== hs) continue;
+          if (["shoot", "advance", "charge"].includes(o.stance)) { u.stance = o.stance; u.peel = false; }
+          if (o.direct != null) u.direct = !!o.direct;
+        }
+      }
       for (const m of models) {
         const sh = m.u.shield;
         if (!sh || m.state !== "ok" || m.sp >= sh.sp || !sh.recharge) continue;
@@ -31,7 +50,9 @@
       }
       for (const m of models) if (m.state === "ok" && m.h && !m.u.routed && !m.stunned) firingLine(m);
       lookAround();
+      linkSynapse();
       assignRoles();
+      direct();
       // the order is fixed for the fight (B363): Basic Speed, then DX, then a roll made at the start
       const order = models.filter(active).sort((a, b) => (b.u.speed - a.u.speed) || (b.u.dx - a.u.dx) || (a.init - b.init));
       for (const m of order) {
@@ -62,9 +83,23 @@
           if (!fc.ok) { L(`${m.id} feels the Shadow in the Warp close over its mind`); frightTable(m, -fc.margin, "Shadow in the Warp"); m.shock = 0; m.shockInj = 0; m.shockCap = 0; if (m.state !== "ok" || m.stunned) continue; }
           L(`${m.id} steels itself against the Shadow in the Warp`);
         }
-        act(m);
+        // a model the player commands: the battle stops, shows what has happened since it last stopped, and waits
+        for (let pend = act(m); pend; pend = m.asking) {
+          m.asking = null;
+          if (frames && log && log.length > logAt[logAt.length - 1]) beat();
+          const ans = yield { type: "act", side: m.u.side, turn, ix: m.ix, id: m.id, unit: m.u.idx, at: [m.h.q, m.h.r], move: runMove(m),
+            opts: pend.opts.map((o, i) => ({ i, label: o.label, v: o.v, to: o.to ? [o.to.q, o.to.r] : null })), pick: pend.opts.indexOf(pend.pick), view: outcome(false) };
+          if (ans && ans.release) m.u.direct = false;
+          if (obey(m, pend, ans && ans.move ? ans : ans && typeof ans.i === "number" ? ans.i : null) === false) m.asking = pend;
+        }
         m.shock = 0; m.shockInj = 0; m.shockCap = 0;
         seizeOpenings();
+      }
+      // a Wait for the way to clear (B366): a model held up behind its own side (single file over a bridge, through a
+      // doorway) moves once the models ahead of it have
+      for (const m of order) {
+        if (m.waitWay !== turn || m.state !== "ok" || m.u.routed || !m.h || m.stunned || !sideActive(0) || !sideActive(1)) continue;
+        m.waitWay = -1; act(m); m.shock = 0; m.shockInj = 0; m.shockCap = 0; seizeOpenings();
       }
       // Regeneration (B80): HP back each second; under Fractional Health the healing clears the least severe
       // wound box once enough has built up to cover that level's threshold
@@ -144,20 +179,23 @@
       }
       for (const m of models) if (m.h) m.lastH = m.h;
     }
-    if (frames) { fx.push(fxb); fxb = []; frames.push(snap()); fx.push([]); }
+    if (frames) { beat(); fx.push([]); }
+    L(sideActive(0) && !sideActive(1) ? `Side A wins in ${turn - 1} turns` : sideActive(1) && !sideActive(0) ? `Side B wins in ${turn - 1} turns` :
+      sideActive(0) ? `Still fighting when the ${maxTurns}-second limit ran out` : `Both sides destroyed or broken after ${turn - 1} turns`);
+    return outcome(true);
+    // the battle as reported: at its end, or so far (the arrays are the live ones, so they grow as it goes on)
+    function outcome(over) {
     const a = sideActive(0), b = sideActive(1);
-    const winner = a && !b ? 0 : b && !a ? 1 : -1;
-    const timeout = a && b;
-    L(winner >= 0 ? `Side ${winner === 0 ? "A" : "B"} wins in ${turn - 1} turns` :
-      timeout ? `Still fighting when the ${maxTurns}-second limit ran out` : `Both sides destroyed or broken after ${turn - 1} turns`);
+    const winner = !over ? -1 : a && !b ? 0 : b && !a ? 1 : -1;
+    const timeout = over && a && b;
     return {
-      winner, timeout, turns: turn - 1, log, frames, fx, terrain: frames && terr ? { floor: [...terr.floor], crates: [...terr.crates], doors: [...terr.doors], shut: [...startShut], events: tev, light: [...terr.floor].map(k => { const [q, r] = k.split(",").map(Number); return [k, darkAt({ q, r })]; }).filter(x => x[1]),
+      winner, seed: opt.seed ?? null, tally: [...tally, countSides()], timeout, over, turns: turn - 1, log, frames, fx, beatTurn, logAt, terrain: frames && terr ? (terrOut ||= { floor: [...terr.floor], crates: [...terr.crates], doors: [...terr.doors], shut: [...startShut], events: tev, light: [...terr.floor].map(k => { const [q, r] = k.split(",").map(Number); return [k, darkAt({ q, r })]; }).filter(x => x[1]),
         elev: EL ? terr.hx.map((h, i) => [key(h.q, h.r), EL[i]]).filter(x => x[1]) : [], kind: terr.kind || "facility", style: terr.style || "", theme: terr.theme || "", water: terr.water ? [...terr.water] : [],
-        wallTop: WT ? terr.hx.map((h, i) => [key(h.q, h.r), WT[i]]).filter((x, i) => terr.wallI[i] && x[1] < 99) : null } : null,
-      ridge: frames && RIDGE ? { ...RIDGE } : null, roster: models.map(m => { const u = m.u; return { id: m.id, side: u.side, unit: u.idx, template: u.template, faction: u.ai.name, speed: u.speed, move: u.move, hp: u.HP, st: u.st, dx: u.dx, dodge: u.dodge, parry: u.parry, dr: drAt(u.arm.dr, "torso") + drAt(u.nat, "torso"), sp: u.shield ? u.shield.sp : 0, sm: u.sm || 0, body: u.body || "upright", rk: wkind(u.ranged), mk: u.veh ? "" : mkind(u.melee), kit: [((u.ranged && u.ranged.name) || ""), ((u.melee && u.melee.name) || ""), ...(u.armourNames || [])].join("|"), veh: u.veh ? u.veh.name : "", vlocs: u.veh ? u.veh.locs : null,
+        wallTop: WT ? terr.hx.map((h, i) => [key(h.q, h.r), WT[i]]).filter((x, i) => terr.wallI[i] && x[1] < 99) : null }) : null,
+      ridge: frames && RIDGE ? { ...RIDGE } : null, roster: models.map(m => { const u = m.u; return { id: m.id, side: u.side, unit: u.idx, scan: scanOf(u), start: m.h0, template: u.template, faction: u.ai.name, speed: u.speed, move: u.move, hp: u.HP, st: u.st, dx: u.dx, dodge: u.dodge, parry: u.parry, dr: drAt(u.arm.dr, "torso") + drAt(u.nat, "torso"), sp: u.shield ? u.shield.sp : 0, sm: u.sm || 0, body: u.body || "upright", rk: wkind(u.ranged), mk: u.veh ? "" : mkind(u.melee), kit: [((u.ranged && u.ranged.name) || ""), ((u.melee && u.melee.name) || ""), ...(u.armourNames || [])].join("|"), veh: u.veh ? u.veh.name : "", vlocs: u.veh ? u.veh.locs : null,
         ranged: u.ranged ? `${u.ranged.name} (${u.ranged.text}${u.ranged.followText ? " + " + u.ranged.followText : ""})` : "", melee: `${u.melee.name} (${u.melee.text})`, kills: m.kills, fate: m.state }; }),
       units: units.map(u => ({
-        name: u.name, side: u.side, count: u.count, routed: u.routed,
+        name: u.name, side: u.side, count: u.count, routed: u.routed, synapse: u.flags.synDisc ? !!u.linked : null,
         standing: u.models.filter(m => m.state === "ok").length,
         dead: u.models.filter(m => m.state === "dead").length,
         out: u.models.filter(m => m.state === "out" || m.state === "down").length,
@@ -166,4 +204,18 @@
         kills: u.models.reduce((t, m) => t + m.kills, 0),
       })),
     };
+    }
+  }
+  function runBattle(unitSpecs, opt = {}) {
+    const g = battleSteps(unitSpecs, opt.human ? { ...opt, human: null } : opt);
+    let s = g.next();
+    while (!s.done) s = g.next();
+    return s.value;
+  }
+  // A battle one side of which a person plays: opt.human = { side: 0 or 1, direct: "all", or the numbers of the
+  // units commanded model by model }. Returns the stepper: next(answer) runs to the next stop and gives
+  // { done, value }, value being the stop (see battleSteps) or, when done, the finished battle
+  function playBattle(unitSpecs, opt = {}) {
+    if (opt.seed != null) seed(opt.seed);
+    return battleSteps(unitSpecs, { ...opt, log: true, frames: true, human: opt.human || { side: 0, direct: [] } });
   }

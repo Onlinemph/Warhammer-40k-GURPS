@@ -4,7 +4,9 @@
     // Moving through friends (B368): a model may pass through an ally's hex for +1 movement point but not stop there.
     // A hop over a friend or an obstacle lands on the free hex beyond it.
     // a friend, or a foe 3+ SM smaller that a big model simply steps over for a movement point (Pyramid 3/77 p. 6)
-    const friendAt = (m, k) => { const x = occ.get(k); return x && x !== m && (x.u.side === m.u.side || (x.state === "ok" && m.u.sm - x.u.sm >= 3)) ? x : null; };
+    // (a figure lying out of the fight, either side's, is stepped over the same way: a body on a one-hex bridge used
+    // to close it, user report)
+    const friendAt = (m, k) => { const x = occ.get(k); return x && x !== m && (x.u.side === m.u.side || x.state !== "ok" || m.u.sm - x.u.sm >= 3) ? x : null; };
     function hopTo(m, over, target, cost, ctx) {
       if (cost >= 6) {
         // too big to hop: the whole turn and a DX roll to clamber over (B352)
@@ -28,15 +30,16 @@
       const spread = grenadeThreat(m), stalk = stalker(m);
       // a stalker near its prey moves at half Move (no -5 to Stealth) and keeps to steps the foe can't see, then the dark
       if (stalk && hexDist(m.h, goal) <= 20) steps = Math.min(steps, Math.max(1, Math.floor(moveOf(m) / 2)));
-      const foesK = stalk ? known(m).filter(f => f.h) : [];
-      const sc = n => (stalk ? (foesK.some(f => los(f.h, n)) ? 10 : 0) + (darkAt(n) <= -3 ? 0 : 1) : 0) + (spread ? nearFriends(m, n) : 0);
-      const better = (n, d, bd, best) => d < bd || (d === bd && best && (sc(n) < sc(best) || (sc(n) === sc(best) && R() < 0.3)));
+      // (a flanker keeps out of the nearest foes' sight where it can)
+      const foesK = stalk ? known(m).filter(f => f.h) : m.covert ? scanFoes(m).filter(f => f.state === "ok" && f.h).slice(0, 3) : [];
+      const sc = n => (stalk ? (foesK.some(f => los(f.h, n)) ? 10 : 0) + (darkAt(n) <= -3 ? 0 : 1) : m.covert ? (foesK.some(f => los(f.h, n)) ? 6 : 0) : 0) + (spread ? nearFriends(m, n) : 0);
+      const better = (n, d, bd, best) => d < bd || (d === bd && best && (sc(n) < sc(best) || (sc(n) === sc(best) && AR() < 0.3)));
       if (terr) {
         // round the walls: each step goes to a free neighbour nearer the goal on foot, hopping crates it's big
         // enough to jump and friends in the way
-        const cls = obstClass(m), cc = climbCls(m), F = field(goal, cls, cc);
+        const cls = obstClass(m), cc = climbCls(m), F = fieldToward(m.h, goal, cls, cc, m.covert ? threatMap(m.u.side) : null);
         while (moved < steps) {
-          const cur = F.get(key(m.h.q, m.h.r)) ?? 999, ci = idx(key(m.h.q, m.h.r));
+          const cur = F.at(m.h.q, m.h.r) ?? 999, ci = iQR(m.h.q, m.h.r);
           if (cur <= stopAt && los(m.h, goal)) break;
           let best = null, bd = cur, via = null, bc = 1;
           for (const [dq, dr] of DIRS) {
@@ -61,7 +64,7 @@
             if (d < bd) { bd = d; best = b; via = n; bc = cost + 1; }
           }
           if (!best) break;
-          const bi = idx(key(best.q, best.r));
+          const bi = iQR(best.q, best.r);
           if (closed[bi]) { if (!moved) setDoor(bi, false, m); break; }   // opening a door is a Ready (B382)
           if (via) { if (!hopTo(m, via, best, bc - 1)) { moved = steps; break; } moved += bc >= 7 ? steps : bc; }
           else { place(m, best); moved += bc; }
@@ -95,7 +98,8 @@
     }
     // breadth-first search through free hexes for the nearest hex from which a foe is within reach: a mob flows
     // around its own front rank and spreads over every foe with room left beside it, instead of queueing on one
-    function engagePath(m, reach, pool, maxNodes = 2500) {
+    // (solid: its own side's figures block the way too, for finding a way round a queue)
+    function engagePath(m, reach, pool, maxNodes = 2500, solid = false) {
       const slots = new Map();
       for (const f of pool) {
         if (!f.h) continue;
@@ -132,7 +136,7 @@
         }
         for (const [dq, dr] of DIRS) {
           const n = { q: h.q + dq, r: h.r + dr }, nk = key(n.q, n.r);
-          if (prev.has(nk) || (taken(nk) && !friendAt(m, nk))) continue;   // friends can be passed through (B368)
+          if (prev.has(nk) || (taken(nk) && (solid || !friendAt(m, nk)))) continue;   // friends can be passed through (B368)
           const e = EL ? climb(idx(hk), idx(nk), cc) : 0;
           if (e === Infinity) continue;
           prev.set(nk, h); dist.set(nk, dist.get(hk) + (taken(nk) ? 2 : 1) + e); q.push(n);
@@ -144,11 +148,12 @@
       if (m.prone) steps = Math.min(steps, 1);   // lying down it can only crawl, a yard a second (B551)
       let moved = 0;
       // still more than a move out and under grenade threat: head for the same end but fan out on the way
-      if (path.length > steps + 1 && (grenadeThreat(m) || stalker(m))) return stepToward(m, path[path.length - 1], steps, 0);
+      // (and if that goes nowhere, a queue of its own side in the way, it keeps to the path after all)
+      if (path.length > steps + 1 && (grenadeThreat(m) || stalker(m))) { const n = stepToward(m, path[path.length - 1], steps, 0); if (n) return n; }
       // a friend on the path is passed through for an extra movement point (B368), never stopped on
       let from = m.h;
       for (const n of path) {
-        const nk = key(n.q, n.r), e = EL ? climb(idx(key(from.q, from.r)), idx(nk), climbCls(m)) : 0;
+        const nk = key(n.q, n.r), e = EL ? climb(iQR(from.q, from.r), idx(nk), climbCls(m)) : 0;
         if (moved >= steps || e === Infinity || (e && moved + 1 + e > steps)) break;
         from = n;
         if (taken(nk)) { if (friendAt(m, nk) && moved + 2 + e < steps) { moved += 2 + e; continue; } break; }

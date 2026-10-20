@@ -1,7 +1,10 @@
 // Part of runBattle, one function body split into files by section (tools/sim/engine/50-69): the locals
 // and helpers declared in earlier parts are in scope here. tools/sim/README.md has the layout.
     // ---- expected injury of weapon w against unit tu at a location (cached per battle)
-    const EXP = new Map();
+    // The planner asks for these constantly, so the cache is nested (weapon id, then unit index, then location and
+    // override) instead of one string key per call: building that string was most of the cost of a cache hit.
+    const EXP = new Map(), EXPR = new Map();
+    const expCache = (top, w, tu) => { let a = top.get(w.id); if (!a) top.set(w.id, a = []); return a[tu.idx] || (a[tu.idx] = new Map()); };
     // blunt trauma (B379, extended by user direction): flexible armour that stops a hit passes 1 HP per full 5 points
     // of crushing damage, or per full 10 of impaling or piercing; a cutting blow that doesn't get through lands as a
     // crushing one; rigid armour passes crushing force too, at half the rate (1 per full 10). Burning, toxic, corrosive
@@ -13,12 +16,13 @@
       return crushy ? Math.floor(raw / 10) : 0;
     }
     function expInj(w, tu, loc, dmgOverride) {
+      const C = expCache(EXP, w, tu), k = dmgOverride ? loc + "|" + (dmgOverride.key || "r") : loc;
+      const hit = C.get(k);
+      if (hit !== undefined) return hit;
       const chink = loc.endsWith("#c");
       if (chink) loc = loc.slice(0, -2);
       const d = dmgOverride || w.dmg;
-      const k = w.id + "|" + tu.idx + "|" + loc + (chink ? "#c" : "") + "|" + (dmgOverride ? dmgOverride.key || "r" : "");
-      if (EXP.has(k)) return EXP.get(k);
-      if (tu.veh) { const v = vehExp(d, w.follow, loc === "area" ? (tu.veh.dr.top ?? tu.veh.dr.rear) : tu.veh.est, loc === "vitals" ? "vitals" : "body"); EXP.set(k, v); return v; }
+      if (tu.veh) { const v = vehExp(d, w.follow, loc === "area" ? (tu.veh.dr.top ?? tu.veh.dr.rear) : tu.veh.est, loc === "vitals" ? "vitals" : "body"); C.set(k, v); return v; }
       const aDR = loc === "area" ? areaDR(tu) : null;
       if (aDR) loc = "torso";
       const armDR = aDR ? aDR.arm : chink ? gapDR(tu, loc) : drAt(tu.arm.dr, loc === "vitals" ? (tu.arm.dr.vitals != null ? "vitals" : "torso") : loc);
@@ -33,7 +37,7 @@
       const halfDR = d.div === Infinity ? 0 : Math.floor(((aDR ? Math.floor(armDR / 2) : gapDR(tu, loc)) + natDR) / d.div);
       const injOf = pen => Math.min(cap, ((d.type === "tox" && tu.flags.poison === "immune" ? 0 : pen * woundMult(d.type, loc, tu.flags, d.ex)) + avgF) / red);
       for (let i = 0; i < 20; i++) {
-        const raw = rollDamage(d), pen = raw - effDR;
+        const raw = rollDamage(d, AR), pen = raw - effDR;
         if (pen > 0) tot += injOf(pen);
         else {
           const bt = armDR > 0 ? Math.min(cap, bluntOf(raw, d.type, tu.arm.flexible, d.ex) / red) : 0;
@@ -42,7 +46,7 @@
         }
       }
       const v = tot / 20;
-      EXP.set(k, v);
+      C.set(k, v);
       return v;
     }
     const RANDOM_LOCS = [["skull", 4], ["face", 5], ["eye", 1], ["leg", 25 + 36], ["arm", 21 + 25], ["torso", 52], ["groin", 27], ["hand", 10], ["foot", 6], ["neck", 4]];
@@ -51,7 +55,7 @@
       const effDR = d.div === Infinity ? 0 : Math.floor(dr / d.div), vm = vehMult(d.type, loc, d.ex);
       const avgF = fol ? (fol.n * 3.5 + fol.add) * fol.mult * (fol.ex ? 3 : 1) * vehMult(fol.type, "body", fol.ex) : 0;
       let tot = 0;
-      for (let i = 0; i < 20; i++) { const pen = rollDamage(d) - effDR; if (pen > 0) tot += pen * vm + avgF; }
+      for (let i = 0; i < 20; i++) { const pen = rollDamage(d, AR) - effDR; if (pen > 0) tot += pen * vm + avgF; }
       return tot / 20;
     }
     // Can this weapon never get through that foe's armour, even on its best roll? The planner's expected injury comes
@@ -70,9 +74,14 @@
     }
     function expInjRandom(w, tu, dmgOverride) {
       if (tu.veh) return expInj(w, tu, "body", dmgOverride);
+      const C = expCache(EXPR, w, tu), k = dmgOverride ? dmgOverride.key || "r" : "";
+      const hit = C.get(k);
+      if (hit !== undefined) return hit;
       let s = 0;
       for (const [loc, n] of RANDOM_LOCS) s += n * expInj(w, tu, loc, dmgOverride);
-      return s / 216;
+      s /= 216;
+      C.set(k, s);
+      return s;
     }
     // best location and deceptive level: returns {loc, da, score, lvl}
     function planAttack(m, w, t, lvl, melee, dmgOverride, fo = {}) {
@@ -244,7 +253,16 @@
         let d = dodgeOf(t) + mod + aod("dodge") + feverish(t, att, false, dodgeOf(t) + mod);
         // Dodge and Drop (B377): a shooter not in melee drops prone for +3
         let drop = false;
-        if (!t.prone && t.u.stance === "shoot" && (t.u.ranged || t.u.powers.some(p => !p.melee)) && !engaged(t)) { d += 3; drop = true; }
+        // (one that stays on its feet drops only from a shot that would do it a major wound or put it down: take it
+        // to 0 HP, or, already below that, to its next death check; a faction that is `upright` never drops)
+        const HPu = t.u.HP, fells = Math.min(HPu / 2, t.hp > 0 ? t.hp : t.hp + (Math.floor(-t.hp / HPu) + 1) * HPu);
+        // Everyone else judges it the same way (user direction): a drop costs two seconds getting up, so it is for the
+        // shot that would really hurt, and only for a shooter holding its ground (one closing in keeps its feet).
+        // And only from a lone gun: lying there is -3 to every defence after this one, so with a second gun on it
+        // the drop gives away more than it gains.
+        if (!t.prone && !engaged(t) && !t.u.ai.upright && (UP(t.u) || (t.u.stance === "shoot" && (t.u.ranged || t.u.powers.some(p => !p.melee))))
+          && !!(aw && aw.dmg) && expInjRandom(aw, t.u) >= fells
+          && !models.some(x => x !== att && x.u.side !== t.u.side && x.state === "ok" && x.h && (x.u.ranged || x.u.veh) && los(x.h, t.h))) { d += 3; drop = true; }
         if (LIMDODGE && !t.u.flags.master) d -= t.dodges || 0;
         t.dodges = (t.dodges || 0) + 1;
         const r = check(d);
@@ -287,8 +305,8 @@
     // ---- threat: expected harm a foe can do to m this turn (for All-Out Attack / Defense choices)
     function threatTo(m) {
       let t = 0;
-      for (const f of foes(m)) {
-        if (!f.h || !m.h) continue;
+      for (const f of scanFoes(m)) {
+        if (!f.h || !m.h || f.state !== "ok") continue;
         const d = hexDist(f.h, m.h);
         const w = d <= f.u.melee.reachMax ? f.u.melee : f.u.ranged && d <= f.u.ranged.range.max && los(f.h, m.h) ? f.u.ranged : null;
         if (w) t += expInj(w, m.u, "torso");

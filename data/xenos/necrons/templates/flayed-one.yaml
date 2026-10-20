@@ -4,14 +4,24 @@ notes: >
   A Flayed One: a Necron whose reanimation matrix degenerated into the
   Flayer Curse, a compulsion to stalk, kill and flay the living. Point
   math: Necron Physiology 174 + Body Lens: Flayed One 432 + Mind: Flayer
-  Curse -35 + skills 18 = 589 points. Stats: ST 26, DX 12, IQ 6, HT 14, HP
-  32, Will 6, Per 6, Move 8 (Basic Move +2), natural torso DR 50 (Weak Points 4, eye DR 25) —
+  Curse -35 + skills 18 + Sensor Array 20 = 609 points. Stats: ST 26, DX 12, IQ 6, HT 14, HP
+  32, Will 6, Per 10, Move 8 (Basic Move +2), natural torso DR 50 (Weak Points 4, eye DR 25) —
   framework.md's Flayed One anchor line exactly. This sits in
   framework.md's Senior Agents tier (350-600): a Warrior-grade body made
   considerably more dangerous in a straight ambush by DX, stealth and
   raw compulsion, but with none of the discipline, formation or command
   structure a Warrior at least nominally has.
 traits:
+  - name: Sensor Array
+    points: 20
+    attributes: {per: 4}
+    tags: [Mental]
+    notes: Per +4 (Per 10).
+    lore: >-
+      Its awareness comes from machine senses, not a quick mind: auspex-grade optics and sensors that pick out movement whether or not anything behind them could reason about it.
+    design: >-
+      Per +4 at 5 points a level (B16), from Per 6 to Per 10: user direction that low-IQ creatures should
+      still perceive at 10-12, so a swarm can spot an enemy in the simulator instead of walking blind into its fire.
   - include: "xenos/necrons/traits.yaml#Necron Physiology"
   - include: "xenos/necrons/traits.yaml#Body Lens: Flayed One"
   - include: "xenos/necrons/traits.yaml#Mind: Flayer Curse"

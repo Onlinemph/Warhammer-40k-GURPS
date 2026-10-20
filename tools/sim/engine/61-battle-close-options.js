@@ -5,6 +5,10 @@
       const u = m.u;
       if (m.armsLost >= 2 && u.melee.name === "Punch") return;
       const mv = moveOf(m), reach = u.melee.reachMax, near = pool[0], d = walk(m.h, near.h);
+      // a unit holding its ground whose gun does more than twice what its blows do doesn't go looking for a fight
+      // hand to hand while it has a shot (user report: Necron Immortals charged, slammed and grappled Space Marines)
+      if (u.stance === "shoot" && u.ranged && !m.gunBroken && gunReady(m) && (m.ammo > 0 || m.mags > 0 || u.ranged.shots.mag === Infinity)
+        && near && near.h && expInjRandom(u.ranged, near.u) > 2 * expInjRandom(u.melee, near.u) && pool.some(f => f.h && los(m.h, f.h))) return;
       // the path search (a mob flowing round its front rank) only matters once the foe is nearly in reach;
       // further off a straight-line estimate and a greedy advance do
       const route = d <= mv + reach + 2 ? engagePath(m, reach, pool, 600) : null;
@@ -23,13 +27,13 @@
         const lvl = w.level - skillPen(m) - (m.prone ? 4 : 0) + smMelee(m, tgt);
         const n = 1 + (u.flags.extraAttack || 0);
         const stepIn = () => { followPath(m, route.path, stepN); return !stopped() && tgt.h && hexDist(m.h, tgt.h) <= reach; };
-        add(Wm * kv(m, tgt, planAttack(m, w, tgt, lvl, true).score * n) - risk(m, arrive, ""), `step-strike@${tgt.id}`, () => {
+        DEST = arrive; add(Wm * kv(m, tgt, planAttack(m, w, tgt, lvl, true).score * n) - risk(m, arrive, ""), `step-strike@${tgt.id}`, () => {
           if (stepIn()) { faceTo(m, tgt.h); strike(m, w, tgt, {}); }
         });
         add(Wm * kv(m, tgt, planAttack(m, w, tgt, lvl + 4, true).score * n) - risk(m, arrive, "aoa"), `step-aoa@${tgt.id}`, () => {
           if (stepIn()) { faceTo(m, tgt.h); m.aoa = true; strike(m, w, tgt, { determined: true }); }
         });
-        if (grabValue(m, tgt, 0) > 0) add(Wm * grabValue(m, tgt, helpers) - risk(m, arrive, ""), `step-grab@${tgt.id}`, () => {
+        DEST = arrive; if (grabValue(m, tgt, 0) > 0) add(Wm * grabValue(m, tgt, helpers) - risk(m, arrive, ""), `step-grab@${tgt.id}`, () => {
           if (stepIn() && hexDist(m.h, tgt.h) <= 1) { faceTo(m, tgt.h); grab(m, tgt); }
         });
       }
@@ -41,7 +45,7 @@
         // a Slam's worth: knocking the foe down sets up the pin (valued as a share of the foe taken out)
         const slamV = slamOK ? 0.25 * threatOf(tgt) * P3[cl(Math.max(u.dx, u.grapple) - skillPen(m))] * HORIZON : 0;
         const vMA = Wm * Math.max(kv(m, tgt, Ema), slamV) + GAMMA * Wm * worth - risk(m, arrive, "");
-        add(vMA, `charge@${tgt.id}`, () => {
+        DEST = arrive; add(vMA, `charge@${tgt.id}`, () => {
           const moved = go(mv); if (stopped() || !tgt.h) return; faceTo(m, tgt.h);
           if (tgt.h && hexDist(m.h, tgt.h) <= reach) slamOK && slamV > kv(m, tgt, Ema) ? slam(m, tgt, Math.max(1, moved), false) : strike(m, w, tgt, { charge: true });
           else L(`${m.id} charges at ${tgt.id} but can't get through to it`);
@@ -49,7 +53,7 @@
         // Heroic Charge (MA132, cinematic option): 1 FP to ignore the Move and Attack penalty and cap
         if (CINEMATIC && !u.flags.machine && m.fp > Math.max(3, u.fp / 3)) {
           const Eh = planAttack(m, w, tgt, w.level - skillPen(m), true).score;
-          add(Wm * kv(m, tgt, Eh) + GAMMA * Wm * worth - risk(m, arrive, "") - 0.02, `heroic-charge@${tgt.id}`, () => {
+          DEST = arrive; add(Wm * kv(m, tgt, Eh) + GAMMA * Wm * worth - risk(m, arrive, "") - 0.02, `heroic-charge@${tgt.id}`, () => {
             go(mv); if (stopped() || !tgt.h) return; faceTo(m, tgt.h);
             if (hexDist(m.h, tgt.h) <= reach) { spendFP(m, 1); L(`${m.id} makes a heroic charge (1 FP)`); strike(m, w, tgt, { charge: true, heroic: true }); }
           });
@@ -59,7 +63,7 @@
           const Eaoa = planAttack(m, w, tgt, w.level - skillPen(m) + 4 + smMelee(m, tgt), true).score;
           const grabNear = models.filter(f => f.u.side !== u.side && f.state === "ok" && f.h && hexDist(f.h, tgt.h) <= 2 && f.armsLost < 1).length;
           const rG = grabNear >= 3 ? 0.5 * threatOf(m) * HORIZON * Math.max(0.3, u.ai.caution) : 0;   // a crowd could drag an All-Out Attacker down (MA114)
-          add(Wm * Math.max(kv(m, tgt, Eaoa), slamV) + GAMMA * Wm * worth - risk(m, arrive, "aoa") - rG, `aoa-charge@${tgt.id}`, () => {
+          DEST = arrive; add(Wm * Math.max(kv(m, tgt, Eaoa), slamV) + GAMMA * Wm * worth - risk(m, arrive, "aoa") - rG, `aoa-charge@${tgt.id}`, () => {
             const moved = go(Math.max(2, Math.ceil(mv / 2))); if (stopped() || !tgt.h) return; faceTo(m, tgt.h);
             if (hexDist(m.h, tgt.h) <= reach) { m.aoa = true; L(`${m.id} charges in (All-Out Attack)`); slamOK && slamV > kv(m, tgt, Eaoa) ? slam(m, tgt, Math.max(1, moved), true) : strike(m, w, tgt, { determined: true }); }
             else L(`${m.id} rushes at ${tgt.id} but can't get through to it`);
@@ -69,9 +73,18 @@
         // still out of reach: close the distance; the payoff is the fight when it arrives
         // zeal (faction profile): how little a far-off fight is discounted; Orks and the swarm run at the enemy
         // and zealots run in on faith: they half-ignore the fire on the way and believe the fight is worth having
-        const z = u.ai.zeal || 0, rm = Math.max(mv, runMove(m) + (u.flags.enhMove ? mv : 0)), turns = (Math.ceil((len - mv) / Math.max(1, rm)) + 1) * (1 - z);
-        const v = Math.pow(GAMMA, turns) * Wm * Math.max(worth, z * 0.1 * threatOf(tgt) * HORIZON) - risk(m, arrive, "") * (1 - z / 2);
-        if (cohesion(m, tgt) <= len - rm) add(v, `close@${tgt.id}`, () => { const n = go(runMove(m)); if (n >= mv - 1) m.runK = m.runPrev + 1; if (stopped()) return; if (tgt.h) faceTo(m, tgt.h); L(n ? `${m.id} moves in on ${tgt.id}` : `${m.id} can't find a way to ${tgt.id}`); });
+        // (not a swarm-born shooter whose gun does far more than its claws: a Termagant runs in to shoot, user direction)
+        const gunFirst = u.ranged && !m.gunBroken && (m.ammo > 0 || m.mags > 0 || u.ranged.shots.mag === Infinity || u.ranged.natural) && expInjRandom(u.ranged, tgt.u) > 2 * expInjRandom(w, tgt.u);
+        const z = gunFirst ? 0 : u.ai.zeal || 0, rm = Math.max(mv, runMove(m) + (u.flags.enhMove ? mv : 0)), turns = (Math.ceil((len - mv) / Math.max(1, rm)) + 1) * (1 - z);
+        const v = dpow(GAMMA, turns) * Wm * Math.max(worth, z * 0.1 * threatOf(tgt) * HORIZON) - risk(m, arrive, "") * (1 - z / 2);
+        // (where it ends up: no nearer than the foe, however far its sprint could take it; a fast model one run from
+        // the foe used to read as overshooting, fail the squad check and stand still, user report: Hormagaunts)
+        // (blocked on the way, a queue of its own side on a bridge or in a doorway: the full search, through friends
+        // and round them by another way if that's shorter, user report: Hormagaunts stuck at a river crossing)
+        const around = () => { const rt = engagePath(m, reach, pool, 8000, true) || engagePath(m, reach, pool, 8000); return rt && rt.path.length ? followPath(m, rt.path, runMove(m)) : 0; };
+        if (cohesion(m, tgt) <= Math.max(0, len - rm)) add(v, `close@${tgt.id}`, () => { const n = go(runMove(m)) || around();
+          // still blocked: a Wait (B366) for the way to clear, once a second; it moves after the rest of the turn
+          if (!n && m.waitedT !== turn && !directed(m) && m.state === "ok") { m.waitedT = turn; m.waitWay = turn; L(`${m.id} waits for the way to clear (Wait)`); return; } if (n >= mv - 1) m.runK = m.runPrev + 1; if (stopped()) return; if (tgt.h) faceTo(m, tgt.h); L(n ? `${m.id} moves in on ${tgt.id}` : `${m.id} can't find a way to ${tgt.id}`); });
       }
     }
 
@@ -195,10 +208,12 @@
         // point-blank gun (Bulk penalty), averaged over its reloads
         if (gun && (gun.shots.mag === Infinity || m.ammo > 0) && m.reload === 0) {
           const E = planAttack(m, gun, t, gun.level + Math.min(0, gun.bulk || 0) - skillPen(m), false).score * sustainOf(gun);
-          add(Wr * kv(m, t, E) - rNow, `point-blank@${t.id}`, () => { face(); fireAt(m, gun, t, { pointBlank: true }); });
+          // (the friends fighting beside it, and anyone behind it, are in the way of what misses: user direction)
+          const ffPB = ffRisk(m, gun, t, gun.level + Math.min(0, gun.bulk || 0) - skillPen(m)), ffPB4 = ffRisk(m, gun, t, gun.level + Math.min(0, gun.bulk || 0) - skillPen(m) + 4);
+          add(Wr * kv(m, t, E) - ffPB - rNow, `point-blank@${t.id}`, () => { face(); fireAt(m, gun, t, { pointBlank: true }); });
           // All-Out Attack (Determined) with a gun at a foe in reach: +4 (TS p. 25)
           const E4 = planAttack(m, gun, t, gun.level + Math.min(0, gun.bulk || 0) - skillPen(m) + 4, false).score * sustainOf(gun);
-          add(Wr * kv(m, t, E4) - risk(m, m.h, "aoa"), `aoa-point-blank@${t.id}`, () => { face(); m.aoa = true; fireAt(m, gun, t, { pointBlank: true, aoa: true }); });
+          add(Wr * kv(m, t, E4) - ffPB4 - risk(m, m.h, "aoa"), `aoa-point-blank@${t.id}`, () => { face(); m.aoa = true; fireAt(m, gun, t, { pointBlank: true, aoa: true }); });
           // blade and pistol together (B417)
           if (gun.oneHanded && u.melee.oneHanded && u.melee.name !== "Punch" && !m.armsLost) {
             const pm = u.dualPen, pg = u.dualPen + u.offPen;
@@ -213,7 +228,7 @@
         if (gun && gun.shots.mag !== Infinity && m.ammo < gun.shots.mag && gun.shots.reload <= 3 && (m.mags > 0 || m.reload > 0)) {
           const turns = Math.max(1, gun.shots.reload - Math.max(0, m.reload > 0 ? gun.shots.reload - m.reload : 0));
           const Eg = planAttack(m, gun, t, gun.level + Math.min(0, gun.bulk || 0) - skillPen(m), false).score;
-          add(Math.pow(GAMMA, turns) * Wr * kv(m, t, Eg) - rNow, `reload-cc`, () => {
+          add(dpow(GAMMA, turns) * Wr * kv(m, t, Eg) - rNow, `reload-cc`, () => {
             if (m.reload === 0) m.reload = gun.shots.reload;
             if (--m.reload <= 0) { m.reload = 0; refill(m, gun); } L(`${m.id} reloads in close combat`);
           });
@@ -272,11 +287,12 @@
           // the target may Dodge (then it takes the blast at a yard, with no divisor)
           const dd = rangedDefence(c, m), pDodge = dd == null ? 0 : P3[Math.max(0, Math.min(18, dd))];
           const third = { ...g.dmg, div: 1, mult: g.dmg.mult / 3, key: "s1nd" };
-          const direct = kv(m, c, (1 - pDodge) * expInj(g, c.u, "torso") + pDodge * expInj(g, c.u, "area", third));
+          // (on a vehicle it lands on the plate the thrower faces)
+          const direct = kv(m, c, (1 - pDodge) * (c.u.veh ? vehAvg(g, vehFacingDR(c, "body", m.h)) : expInj(g, c.u, "torso")) + pDodge * expInj(g, c.u, "area", third));
           // everyone else in reach of the blast (3 yards counted) and the fragments, friends (and the thrower) included
           let others = 0;
           const fr = g.dmg.frag, fR = fr ? 5 * fr.n : 0;
-          for (const x of models) {
+          for (const x of modelsNear(c.h, Math.max(3, fR))) {
             if (x === c || !x.h || x.state !== "ok") continue;
             const k = Math.max(1, hexDist(x.h, c.h));
             if (k > Math.max(3, fR) || !los(c.h, x.h)) continue;
@@ -294,7 +310,7 @@
         if (terr) for (const c of pool.slice(0, 6)) {
           if (!c.h || los(m.h, c.h) || hexDist(m.h, c.h) > g.range.max + 2) continue;
           for (const [dq, dr] of [...DIRS, ...DIRS.map(([a, b]) => [2 * a, 2 * b])]) {
-            const X = { q: c.h.q + dq, r: c.h.r + dr }, xi = idx(key(X.q, X.r));
+            const X = { q: c.h.q + dq, r: c.h.r + dr }, xi = iQR(X.q, X.r);
             if (xi == null || !pass[xi] || closed[xi] || !los(m.h, X) || !los(X, c.h)) continue;
             const d = hexDist(m.h, X);
             if (d < 3 || d > g.range.max) continue;
@@ -346,7 +362,7 @@
         const r = g.lvl < 3 ? { ok: false, margin: g.lvl - 10 } : check(g.lvl), raw = rollDamage(w.dmg);
         const off = r.ok ? 0 : Math.max(1, Math.min(Math.ceil(hexDist(m.h, g.hex) / 2), -r.margin));
         const at = off ? scatter(g.hex, off) : g.hex;
-        const how = g.feet ? `at ${c.id}'s feet` : terr && terr.doorI[idx(key(g.hex.q, g.hex.r))] ? `through the doorway at ${c.id}` : `round the corner at ${c.id}`;
+        const how = g.feet ? `at ${c.id}'s feet` : terr && terr.doorI[iQR(g.hex.q, g.hex.r)] ? `through the doorway at ${c.id}` : `round the corner at ${c.id}`;
         L(`${m.id} lobs a ${w.name} ${how} (skill ${g.lvl})${off ? `: ${off} yd off` : ""}`);
         if (m.h) FX(["s", m.h.q, m.h.r, at.q, at.r, m.u.side, 1, m.ix, c ? c.ix : -1, g.lvl, 1, 1, "grenade"]);
         landOn(m, w, at, raw);

@@ -1,8 +1,24 @@
 {
 	"version": 5,
 	"id": "BnM9DFV639MvCf-aY",
-	"notes": "NPC creature stat block, not a player-facing race. Point math: Tyranid Biology 20 + Body Lens: Carnifex 1783 (incl. Injury Tolerance 3, Unfazeable, High Pain Threshold) + Monstrous Crushing Claws 79 + Heavy Venom Cannon 300 + Bio-plasma 300 + skills 16 = 2498 points. Stats: SM +2, ST 120 (user direction: flips tanks with little struggle), DX 10, IQ 4, HT 16, HP 150 (user direction: tougher), Will 4, Per 4, Basic Move 9, natural chitin torso DR 150 (Weak Points 3, eye DR 75), Regeneration (Fast) — framework.md's Carnifex anchor line exactly. It carries no Shadow in the Warp or synapse role: it is a mindless siege beast. This lands squarely in framework.md's Heroes and Legends tier (1,000-3,000), matching a Hive Tyrant's own physiology cost almost exactly despite the very different build (raw ST and DR rather than IQ, synapse range and psychic power): a living battering ram bred to soak up and deal out damage nothing else on the battlefield can match. The point total is for GM reference only, not party balance.\nWeapon-symbiotes: carries Monstrous Crushing Claws, a Heavy Venom Cannon and Bio-plasma spat from the maw (user direction: the powerful ranged weapons a Carnifex can carry), all built as natural-attack traits in data/xenos/tyranids/bio-weapons.yaml.\n",
+	"notes": "NPC creature stat block, not a player-facing race. Point math: Tyranid Biology 20 + Body Lens: Carnifex 1783 (incl. Injury Tolerance 3, Unfazeable, High Pain Threshold) + Monstrous Crushing Claws 79 + Heavy Venom Cannon 300 + Bio-plasma 300 + skills 16 + Hunting Senses 30 = 2528 points. Stats: SM +2, ST 120 (user direction: flips tanks with little struggle), DX 10, IQ 4, HT 16, HP 150 (user direction: tougher), Will 4, Per 10, Basic Move 9, natural chitin torso DR 150 (Weak Points 3, eye DR 75), Regeneration (Fast) — framework.md's Carnifex anchor line exactly. It carries no Shadow in the Warp or synapse role: it is a mindless siege beast. This lands squarely in framework.md's Heroes and Legends tier (1,000-3,000), matching a Hive Tyrant's own physiology cost almost exactly despite the very different build (raw ST and DR rather than IQ, synapse range and psychic power): a living battering ram bred to soak up and deal out damage nothing else on the battlefield can match. The point total is for GM reference only, not party balance.\nWeapon-symbiotes: carries Monstrous Crushing Claws, a Heavy Venom Cannon and Bio-plasma spat from the maw (user direction: the powerful ranged weapons a Carnifex can carry), all built as natural-attack traits in data/xenos/tyranids/bio-weapons.yaml.\n",
 	"traits": [
+		{
+			"id": "tMbcMHpr6tcLj_fJI",
+			"name": "Hunting Senses",
+			"local_notes": "Per +6 (Per 10).\n\nLore: Every bioform is grown to find prey for the Hive Mind: whatever its wits, its senses are a hunter's, and the swarm notices a man in a hedgerow long before it could understand what he is.\n\nDesign: Per +6 at 5 points a level (B16), from Per 4 to Per 10: user direction that low-IQ creatures should still perceive at 10-12, so a swarm can spot an enemy in the simulator instead of walking blind into its fire.",
+			"tags": [
+				"Mental"
+			],
+			"base_points": 30,
+			"features": [
+				{
+					"type": "attribute_bonus",
+					"attribute": "per",
+					"amount": 6
+				}
+			]
+		},
 		{
 			"id": "T5TrwWBZtR_s8FChp",
 			"name": "Tyranid Biology",
@@ -258,7 +274,7 @@
 			"id": "t0PaFn8t0pPLQIH1k",
 			"name": "Monstrous Crushing Claws",
 			"reference": "B88",
-			"local_notes": "Lore: A pair of massive crushing pincers grown in place of scything talons on some Carnifexes and Hive Tyrants, built to pulp armour and machinery outright rather than cut through it — the bio-weapon most often shown in Codex: Tyranids background and Black Library's Tyranid-focused fiction alike caving in a Dreadnought's hull or snapping a Rhino's axle in one blow.\n\nDesign: Framework.md's own anchor: \"Monstrous crushing claws | thr+6d(5) cr.\" Built at a Carnifex's own ST 60 (thr 7d-1): Crushing Striker (B88, 5 points) with Armor Divisor (5) (B102, +150%) = 5x2.5=12.5, rounded to 13, for the thr+0(5) baseline; the anchor's own +6d is bought as Innate Attack (Crush) (B61, 5/die) at 6 dice = 30, with Armor Divisor (5) (+150%) and Melee Attack, Reach C (-30%): net +120%, 30x2.2=66. Total 13+66=79. Checked by exact dice distribution at ST 60 (thr+6d(5) = 13d-1(5)): averages 44.5 and clears every personal-armour DR up to and including Astartes plate at 100%, dropping to 74.0% against a Terminator (DR 200, eff. 40) — the hardest-hitting personal-scale melee weapon in this file against the very heaviest infantry armour. Against vehicles: AV10 99.9%, AV11 87.1%, AV12 16.7%, AV13 and AV14 0% — genuinely \"cracks a Dreadnought or a Rhino,\" matching the anchor and the fiction, while still falling short of a main battle tank's frontal glacis, which is exactly the gap between this and a true anti-tank symbiote (the Heavy Venom Cannon or Stranglethorn Cannon above).",
+			"local_notes": "Lore: A pair of massive crushing pincers grown in place of scything talons on some Carnifexes and Hive Tyrants, built to pulp armour and machinery outright rather than cut through it — the bio-weapon most often shown in Codex: Tyranids background and Black Library's Tyranid-focused fiction alike caving in a Dreadnought's hull or snapping a Rhino's axle in one blow.\n\nDesign: Framework.md's own anchor: \"Monstrous crushing claws | thr+6d(5) cr.\" Built at a Carnifex's own ST 60 (thr 7d-1): Crushing Striker (B88, 5 points) with Armor Divisor (5) (B102, +150%) = 5x2.5=12.5, rounded to 13, for the thr+0(5) baseline; the anchor's own +6d is bought as Innate Attack (Crush) (B61, 5/die) at 6 dice = 30, with Armor Divisor (5) (+150%) and Melee Attack, Reach C (-30%): net +120%, 30x2.2=66. Total 13+66=79. Checked by exact dice distribution at ST 60 (thr+6d(5) = 13d-1(5)): averages 44.5 and clears every personal-armour DR up to and including Astartes plate at 100%, dropping to 74.0% against a Terminator (DR 200, eff. 40) — the hardest-hitting personal-scale melee weapon in this file against the very heaviest infantry armour. Those figures are from when the Carnifex was ST 60; at its present ST 120 with the Brawling bonus (19d+13(5), average 79.5) it gets through every personal armour and AV10 to AV12 always, AV13 93% of the time and AV14 11%. Against vehicles at the old ST 60: AV10 99.9%, AV11 87.1%, AV12 16.7%, AV13 and AV14 0% — genuinely \"cracks a Dreadnought or a Rhino,\" matching the anchor and the fiction, while still falling short of a main battle tank's frontal glacis, which is exactly the gap between this and a true anti-tank symbiote (the Heavy Venom Cannon or Stranglethorn Cannon above).",
 			"tags": [
 				"Advantage",
 				"Physical",
@@ -279,7 +295,7 @@
 					"reach": "1",
 					"parry": "0",
 					"usage": "Standard",
-					"usage_notes": "Written for a Carnifex-scale bearer (ST 60, thr 7d-1, giving a total of 13d-1(5) cr); rebuild the +6d Innate Attack component for any other bearer's own ST per this file's header note.",
+					"usage_notes": "A Carnifex (ST 120, thr 13d) totals 19d(5) cr, and 19d+13(5) with its Brawling at DX+2 or better (+1 per die of thrust, B182); rebuild the +6d Innate Attack component for any other bearer's own ST per this file's header note.",
 					"defaults": [
 						{
 							"type": "dx",

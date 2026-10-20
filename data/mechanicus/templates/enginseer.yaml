@@ -7,7 +7,7 @@ notes: >
   combat specialist in their own right (that's the Skitarii templates) or a
   senior Magos directing a whole forge (Magos.gct). Point math: ST 11 (+10),
   DX 12 (+40), IQ 13 (+60), HT 11 (+10) = 120, plus Will +1 (+5) = 125;
-  advantages +128; disadvantages -47; skills +59. Total 265 points, inside
+  advantages +126 (Language, Binharic 4 among them); disadvantages -47; skills +55. Total 259 points, inside
   the ~250-350 band this project's brief sets for the Enginseer rank.
   Augmetics and faith traits are pulled in with `include` from Adeptus
   Mechanicus/Traits/Augmetics and the Cult Mechanicus.adq rather than
@@ -55,6 +55,7 @@ traits:
       it is included in the baseline rather than left optional.
   - include: "mechanicus/traits/augmetics.yaml#Servo-Arm"
   - include: "mechanicus/traits/augmetics.yaml#Noospheric Link"
+  - include: "mechanicus/traits/augmetics.yaml#Language (Binharic)"
   - include: "mechanicus/traits/augmetics.yaml#Mechanicus Rank"
     levels: 2
     lore: An ordained Enginseer, several years past their Skitarii-adjacent novitiate but well below a Magos.
@@ -120,10 +121,6 @@ skills:
     tags: [Imperium, Adeptus Mechanicus]
     lore: Recognising STC fragments and Dark Age relics; see Imperium/Skills/Imperial Skills.skl.
     design: IQ+1 (14) for 4 points, Average.
-  - include: "mechanicus/skills/skills.yaml#Language"
-    spec: Binharic
-    points: 4
-    design: IQ+1 (14) for 4 points, Average — comfortably fluent in the liturgical cant.
   - include: "mechanicus/skills/skills.yaml#Savoir-Faire"
     spec: Adeptus Mechanicus
     points: 1

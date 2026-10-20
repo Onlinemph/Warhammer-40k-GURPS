@@ -60,12 +60,24 @@
       }
       return out;
     }
+    // Fire discipline (user report: a lot of friendly fire): a shooter holds its fire rather than shoot through a friend
+    // standing in its line of fire, or at a foe a friend is fighting hand to hand (unless it's a marksman, 16 or better
+    // for the shot as it stands). Point-blank shots inside a melee are their own (close options). The stray-round rule
+    // below is unchanged: the AI and the reactions had been taking such shots, and a missed round from a burst finds
+    // a friend in the way on a flat 9
+    function holdsFire(m, w, t, from = m.h) {
+      if (!from || !t || !t.h || w.malediction) return false;
+      const d = hexDist(from, t.h);
+      if (d <= 1) return false;
+      if (between(from, t.h, m.u.side).some(x => x !== t && x !== m && x.u.side === m.u.side)) return true;
+      const lvl = wl(m, w) - skillPen(m) + rangePenalty(rngD(from, t.h, d)) + t.u.sm;
+      return lvl < 16 && modelsNear(t.h, 1).some(x => x !== m && x.u.side === m.u.side && x.state === "ok" && !x.u.veh);
+    }
     // Hitting the wrong target (B389, B392): each figure that might be hit, closest first, is attacked at a flat 9 or
     // what the shooter would need to hit it on purpose, whichever is worse; it defends as it would against a shot
     // at it. The first that is hit, or defends, ends the round's flight. Drilled squads don't hit each other by mistake
     function strayAt(m, w, c, raw) {
       if (!c.h || c.state !== "ok" || !m.h) return false;
-      if (c.u.side === m.u.side && drilled(m) && drilled(c)) return false;
       const d = Math.max(1, hexDist(m.h, c.h));
       const lvl = Math.min(9, wl(m, w) - skillPen(m) + rangePenalty(rngD(m.h, c.h, d)) + c.u.sm + shotFx(c, m.h, false).pen("random") - darkPen(m, c));
       if (lvl < 3 || !check(lvl).ok) return false;
@@ -117,7 +129,7 @@
     function scatter(at, n) {
       const [dq, dr] = DIRS[Math.floor(R() * 6)];
       let h = at;
-      for (let i = 0; i < n; i++) { const x = { q: h.q + dq, r: h.r + dr }; if (terr && (idx(key(x.q, x.r)) == null || wallAt(key(x.q, x.r)))) break; h = x; }
+      for (let i = 0; i < n; i++) { const x = { q: h.q + dq, r: h.r + dr }; if (terr && (iQR(x.q, x.r) == null || wallAt(key(x.q, x.r)))) break; h = x; }
       return h;
     }
     // Bracing (the user's Progressive Recoil rule): a gun fired without moving from a mount or bipod line, from prone,
@@ -274,8 +286,8 @@
     // Cones (B413): one attack roll at the aim point; everyone in the wedge (a yard wide at the muzzle, widening
     // to the full width at maximum range) whom the shooter can see is caught, and may dodge. Large-area injury (B400)
     function coneCaught(m, w, target, from = m.h) {
-      const S = Math.sqrt(3), [ax, ay] = px(from), [bx, by] = px(target.h);
-      const len = Math.hypot(bx - ax, by - ay) || 1, ux = (bx - ax) / len, uy = (by - ay) / len;
+      const S = SQRT3, [ax, ay] = px(from), [bx, by] = px(target.h);
+      const len = hyp(bx - ax, by - ay) || 1, ux = (bx - ax) / len, uy = (by - ay) / len;
       const caught = [target];
       for (const x of models) {
         if (x === m || x === target || x.state !== "ok" || !x.h) continue;

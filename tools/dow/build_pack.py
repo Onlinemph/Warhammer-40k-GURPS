@@ -27,6 +27,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import threading
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
@@ -40,7 +41,15 @@ PAGE_KEYS = ("id", "match", "not", "veh", "turret", "clips_from", "h", "yaw", "p
 CLIPS = {"idle": ["idle_1", "idle", "idle_2"], "run": ["run_1", "run", "move_run_1", "walk_1", "walk", "move"],
          "fire": ["fire", "fire_1", "idle_firing", "idle_firing_1", "idle_fire", "fire_idle", "aim_idle"], "melee": ["melee_1", "melee", "attack_1", "melee_2"],
          "die": ["die_1", "die", "death_1", "die_2"], "hit": ["damage", "damage_1", "melee_damage_l"],
-         "kneel": ["cover_idle_1"], "throw": []}
+         "kneel": ["cover_idle_1"], "throw": [],
+         # other ways to die, so a squad doesn't fall as one
+         "die2": ["die_2", "die_normal_2", "die_normal_02", "death_2"], "die3": ["die_3", "die_normal_3"],
+         # sync kills: Soulstorm numbers its finishing moves, and a killer's sync_kill_N goes with its victim's
+         # sync_death_N (1 to 3 between infantry; 4 is a big model's)
+         "kill1": ["sync_kill_1", "synckill_1", "sync_kill_1_chainsword", "sync_kill_1_witchblade"], "kill2": ["sync_kill_2", "synckill_2", "sync_kill_2_witchblade"],
+         "kill3": ["sync_kill_3", "synckill_3", "synckill_3a", "sync_kill_3_witchblade"], "kill4": ["sync_kill_4", "synckill_4", "synckill_4a", "sync_kill_4_pound", "sync_kill_4_bashing"],
+         "slain1": ["sync_death_1", "syncdeath_1"], "slain2": ["sync_death_2", "syncdeath_2", "sync_death_2_witchblade"],
+         "slain3": ["sync_death_3", "syncdeath_3", "sync_death_3_witchblade"], "slain4": ["sync_death_4", "syncdeath_4"]}
 
 
 def find_blender():
@@ -83,7 +92,24 @@ CLIPS2 = {"idle": ["fb_idle_stand_01", "idle_stand_01", "fb_stand_idle_01", "fb_
           "fire": ["fb_fire_stand", "fire_stand", "fb_fire_stand_01", "fb_range_attack_01", "fb_range_attack", "fb_range_fire"],
           "melee": ["fb_melee_attack_01", "melee_attack_01", "fb_melee_01", "fb_melee_attack01"],
           "die": ["fb_die_normal_f", "die_normal_f", "fb_death_01", "fb_die_01", "fb_death_die", "fb_die_f", "fb_die", "fb_death_f01", "fb_death", "fb_die_normal_01"],
-          "kneel": ["fb_idle_crouch_01", "idle_crouch_01"], "throw": ["fb_grenade", "fb_grenade_throw_01"]}
+          "kneel": ["fb_idle_crouch_01", "idle_crouch_01"], "throw": ["fb_grenade", "fb_grenade_throw_01"],
+          # a sync kill: the killer's half and the victim's, which the game plays together when a melee blow kills. A
+          # unit that carries a gun takes the killer's half from one of its melee sets (a name with a slash)
+          "kill": ["fb_kill_sync_01", "fb_sync_kill_01", "fb_synckill_01", "sync_kill_01", "fb_sync_kill_03",
+                   "melee_blade_range_pistol/fb_kill_sync_01", "melee_axe_range_pistol/fb_kill_sync_01", "combo_blade_pistol/fb_kill_sync_01",
+                   "melee_powerfist_range_pistol/fb_kill_sync_01", "melee_twohand_hammer/fb_kill_sync_01", "melee_blade_melee_blade/fb_kill_sync_01",
+                   "melee_staff/fb_sync_kill_01", "melee_claw/fb_synckill_01", "melee_blade/sync_kill_01", "talons_crushing/fb_sync_kill_03"],
+          # a second pair, and the other ways to fall (the game's are by the side the blow came from)
+          "killB": ["fb_kill_sync_02", "fb_sync_kill_02", "fb_synckill_02", "sync_kill_02", "fb_sync_kill_04",
+                    "melee_blade_range_pistol/fb_kill_sync_02", "melee_axe_range_pistol/fb_kill_sync_02", "combo_blade_pistol/fb_kill_sync_02",
+                    "melee_staff/fb_sync_kill_02", "melee_claw/fb_synckill_02", "melee_blade/sync_kill_02"],
+          "slainB": ["fb_die_sync_02", "fb_death_sync_02", "fb_syncdeath_02", "die_sync_02",
+                     "range_burst/fb_die_sync_02", "melee_blade_range_pistol/fb_die_sync_02", "melee_blade_range_pistol/fb_death_sync_02", "melee_claw/fb_syncdeath_02", "melee_blade/die_sync_02"],
+          "die2": ["fb_die_normal_b", "die_normal_b", "fb_die_b", "fb_die_02", "fb_death_02", "fb_die_normal_02", "fb_die_normal_b01"],
+          "die3": ["fb_die_normal_l", "die_normal_l", "fb_die_l", "fb_die_03", "fb_death_03", "fb_die_normal_03", "fb_die_normal_l01"],
+          "die4": ["fb_die_normal_r", "die_normal_r", "fb_die_r", "fb_die_04", "fb_die_normal_04", "fb_die_normal_r01"],
+          "slain": ["fb_die_sync_01", "fb_death_sync_01", "fb_syncdeath_01", "die_sync_01", "fb_sync_death_11",
+                    "range_burst/fb_die_sync_01", "melee_blade_range_pistol/fb_die_sync_01", "melee_blade_range_pistol/fb_death_sync_01", "melee_claw/fb_syncdeath_01", "melee_blade/die_sync_01"]}
 _dow2 = []
 
 
@@ -100,11 +126,112 @@ def dow2_archives():
     return _dow2[0]
 
 
+BADGES = 2   # bump to rebuild the units when what is read about badges changes
+
+# Soulstorm keeps a texture's badge and banner places in the .wtp beside it: a rectangle in the texture's pixels.
+# Its badge images are filed by race.
+RACES = {"space_marines": "space_marine_race", "chaos": "chaos_marine_race", "imperial_guard": "guard_race", "orks": "ork_race", "eldar": "eldar_race",
+         "dark_eldar": "dark_eldar_race", "sisters": "sisters_race", "tau": "tau_race", "necrons": "necron_race"}
+_old = {"lock": threading.Lock(), "arcs": None, "wtp": {}}
+
+
+def old_archives():
+    """Soulstorm's archives, opened once (several units export at a time, so reads go through a lock)."""
+    import sga
+    with _old["lock"]:
+        if _old["arcs"] is None:
+            root = find_game("DOW_SOULSTORM", "Dawn of War Soulstorm")
+            _old["arcs"] = []
+            for p in sorted(root.glob("*/*.sga")) if root else []:
+                try:
+                    arc = sga.Archive(p)
+                except Exception:   # not an archive this reader knows
+                    continue
+                _old["arcs"].append(arc)
+                for name in arc.files:
+                    if name.endswith("_default.wtp"):
+                        _old["wtp"].setdefault(name.rsplit("/", 1)[-1][:-len("_default.wtp")], (arc, name))
+    return _old["arcs"]
+
+
+def old_badges(materials):
+    """Where a Soulstorm unit's materials show the army's badge and banner, as read_badges gives them."""
+    import struct
+    old_archives()
+    out = {}
+    for mat in materials:
+        hit = _old["wtp"].get(mat.lower())
+        if not hit:
+            continue
+        arc, path = hit
+        with _old["lock"]:
+            buf = arc.read(path)
+
+        def data(tag, fmt):
+            i = buf.find(b"DATA" + tag)
+            if i < 0:
+                return None
+            size, nlen = struct.unpack_from("<II", buf, i + 12)
+            return struct.unpack_from("<" + fmt * (size // 4), buf, i + 20 + nlen)
+        size = data(b"INFO", "I")
+        race = RACES.get(path.split("/")[3] if path.count("/") > 3 else "")
+        found = []
+        for slot, tag in ((1, b"PTBD"), (3, b"PTBN")):
+            r = data(tag, "f")
+            if not r or not size or not race or r[2] <= 0 or r[3] <= 0:
+                continue
+            x, y, w, h = r[:4]
+            # the rectangle is in pixels from the texture's top left; these textures are drawn head down (a face's
+            # chin is at the top), so the badge goes in upside down to come out upright on the model
+            found.append({"slot": slot, "race": race, "tex": "default", "m": [round(size[0] / w, 5), 0, 0, round(-size[1] / h, 5)], "t": [round(-x / w, 5), round((y + h) / h, 5)]})
+        if found:
+            out[mat] = found
+    return out
+
+
+def read_badges(buf):
+    """Where a model's materials show the army's badges: {material: [{slot, tex, m, t}]}.
+
+    The game lays a badge over a patch of the material's own texture. With (x, y) a point of that texture (y down
+    from the top), the badge's own point is (m[0]*x + m[2]*y + t[0], m[1]*x + m[3]*y + t[1]), shown where both lie
+    in 0..1. Slot 1 is the army's badge (a Chapter's symbol), slot 2 a marking of the unit's own (a company
+    numeral). 'tex' is the badge the model carries by default.
+    """
+    import struct
+    import dow2
+    out = {}
+    for _, _, name, _, _, kids in dow2.find(dow2.chunks(buf), "MTRL"):
+        var = {}
+        for _, typ, _, s, e, _ in kids:
+            if typ.strip(" \0") != "VAR":
+                continue
+            n = struct.unpack_from("<I", buf, s)[0]
+            key = buf[s + 4:s + 4 + n].decode("latin-1")
+            kind, size = struct.unpack_from("<II", buf, s + 4 + n)
+            raw = buf[s + 12 + n:s + 12 + n + size]
+            if kind == 9:
+                var[key] = raw.rstrip(b"\0").decode("latin-1").replace("\\", "/").lower().rsplit("/", 1)[-1]
+            elif kind == 5 and size == 16:
+                var[key] = struct.unpack("<4f", raw)
+        found = []
+        for slot in (1, 2):
+            tex, m, t = var.get(f"badge{slot}Tex"), var.get(f"badge{slot}MatrixRow1Row2"), var.get(f"badge{slot}Translate")
+            if not tex or not m or not t or tex.startswith("default") or abs(m[0] * m[3] - m[1] * m[2]) < 1e-6:
+                continue
+            found.append({"slot": slot, "tex": tex, "m": [round(v, 5) for v in m], "t": [round(v, 5) for v in t[:2]]})
+        if found:
+            out[name.split(".")[-1]] = found
+    return out
+
+
 def export_dow2(unit):
     """A Dawn of War II unit: read by tools/dow/dow2.py, no Blender."""
     import dow2
     arc = dow2_archives()
     glb, meta, textures = dow2.build(arc, {**unit, "clips": {**CLIPS2, **unit.get("clips", {})}})
+    meta["badges"] = {}
+    for spec in [unit["skeleton"], *unit["parts"].values()]:
+        meta["badges"].update(read_badges(arc.read(spec if isinstance(spec, str) else spec["model"])))
     tex = {}
     for name, images in textures.items():
         if "diffuseTex" not in images:
@@ -252,6 +379,45 @@ def build_voices(force):
     return f"voices: {len(made)} voices, {total // 1024} KB  ({'/'.join(doc['events'])}: {', '.join(report)})"
 
 
+def build_badges(force):
+    """site/models/badges.js: Dawn of War II's army badges (Chapter symbols, Legion marks, clan glyphs), by name."""
+    import dow2
+    from PIL import Image
+    root = find_game("DOW_DOW2", "Dawn of War 2")
+    dest, tag = OUT / "badges.js", OUT / "badges.tag"
+    want = hashlib.sha1((HERE / "dow2.py").read_bytes() + str(BADGES).encode()).hexdigest()
+    if not root:
+        return "badges: Dawn of War II not found, none built"
+    if not force and dest.exists() and tag.exists() and tag.read_text() == want:
+        return None
+    arc = dow2_archives()
+    out = {}
+    for p in arc.under("art/badges/units", ".dds"):
+        image = Image.open(io.BytesIO(arc.read(p))).convert("RGBA")
+        image.thumbnail((128, 128))
+        buf = io.BytesIO()
+        image.save(buf, "PNG", optimize=True)
+        out[p.rsplit("/", 1)[-1][:-4]] = "data:image/png;base64," + base64.b64encode(buf.getvalue()).decode()
+    # Soulstorm's, by race: "ss/<race>/<name>" a badge, "ssb/<race>/<name>" a banner
+    for arc in old_archives():
+        for p in arc.files:
+            kind = "ss" if p.startswith("art/badges/") else "ssb" if p.startswith("art/banners/") else None
+            if not kind or not p.endswith(".tga") or p.count("/") != 3:
+                continue
+            key = f"{kind}/{p.split('/')[2]}/{p.rsplit('/', 1)[-1][:-4]}"
+            if key in out:
+                continue
+            with _old["lock"]:
+                raw = arc.read(p)
+            buf = io.BytesIO()
+            Image.open(io.BytesIO(raw)).convert("RGBA").save(buf, "PNG", optimize=True)
+            out[key] = "data:image/png;base64," + base64.b64encode(buf.getvalue()).decode()
+    js = "window.DOW_BADGES = " + json.dumps(out, separators=(",", ":")) + ";\n"
+    dest.write_text(js)
+    tag.write_text(want)
+    return f"badges: {len(out)} images, {len(js) // 1024} KB"
+
+
 def jpeg_url(image, side, quality=88):
     image = image.convert("RGB")
     image.thumbnail((side, side))
@@ -350,6 +516,7 @@ def export(unit, blender, work):
     meta = json.loads((work / "meta.json").read_text())
     tex = {name: {k: (data_url(work / v) if isinstance(v, str) else v) for k, v in t.items()} for name, t in meta["materials"].items()}
     keep = {k: meta[k] for k in ("meshes", "looks", "bounds", "head", "mesh_material", "clips", "alias", "fps")}
+    keep["badges"] = old_badges(meta["materials"])
     notes.append("clips " + " ".join(f"{k}<-{v['from']}" for k, v in meta["clips"].items()) + "".join(f" {a}=@{b}" for a, b in meta["alias"].items()))
     lacks = [k for k in ("idle", "run", "fire", "melee", "die") if k not in meta["clips"]]
     if lacks and not unit.get("clips_from") and not unit.get("veh"):
@@ -363,7 +530,7 @@ def main(argv):
     force = "--force" in argv
     only = [a for a in argv if not a.startswith("--")]
     units = [u for u in json.loads((HERE / "units.json").read_text(encoding="utf-8"))["units"] if "id" in u]
-    unknown = set(only) - {u["id"] for u in units} - {"sounds", "voices", "scenery"}
+    unknown = set(only) - {u["id"] for u in units} - {"sounds", "voices", "scenery", "badges"}
     if unknown:
         raise SystemExit("no such unit: " + ", ".join(sorted(unknown)))
     sys.path.insert(0, str(HERE))
@@ -372,7 +539,7 @@ def main(argv):
     stamp = hashlib.sha1((HERE / "bl_export.py").read_bytes() + (HERE / "dow2.py").read_bytes()).hexdigest()[:8]
     def build(u):
         dest, tag = OUT / f"{u['id']}.js", OUT / f"{u['id']}.tag"
-        want = hashlib.sha1((json.dumps(u, sort_keys=True) + stamp).encode()).hexdigest()
+        want = hashlib.sha1((json.dumps(u, sort_keys=True) + stamp + (json.dumps(CLIPS2, sort_keys=True) if u["game"] == "dow2" else "") + str(BADGES)).encode()).hexdigest()
         if (only and u["id"] not in only) or (not force and dest.exists() and tag.exists() and tag.read_text() == want):
             return None
         with tempfile.TemporaryDirectory() as tmp:
@@ -390,7 +557,7 @@ def main(argv):
             if line:
                 print(line, flush=True)
     done = [{k: u[k] for k in PAGE_KEYS if k in u} for u in units if (OUT / f"{u['id']}.js").exists()]
-    for what, make in (("sounds", build_sounds), ("voices", build_voices), ("scenery", build_scenery)):
+    for what, make in (("sounds", build_sounds), ("voices", build_voices), ("scenery", build_scenery), ("badges", build_badges)):
         if not only or what in only:
             line = make(force)
             if line:

@@ -6,15 +6,14 @@ items:
   # confined to a single limb is priced as Partial (single limb), which we
   # treat as a steeper discount than the Partial (torso and vitals) used for
   # the Astartes Ossmodula (Imperium/Traits/Astartes Gene-Seed.adq, -10%):
-  # a single arm or leg is a much smaller fraction of the hit-location table
-  # and is rarely a called shot, so we price it at -60% (both legs together,
-  # covering two full limbs and rather more of the body's mass, at -50%).
-  # This is this project's own extrapolation of B47's Partial guidance, not
-  # a quoted number from the book.
+  # B47 prices Partial at -10% per -1 to hit the location, for both limbs
+  # of a pair, and doubles it for one limb alone: both arms or both legs
+  # (-2 to hit) are -20%, a single arm or leg -40%. Arm ST (B40) is 3
+  # points a level for one arm and 5 for two.
 
   - &augmetic_arm_menial
     name: Augmetic Arm, Menial Pattern
-    points: 14
+    points: 12
     tags: [Advantage, Physical, Imperium, Adeptus Mechanicus]
     ref: B40
     attributes: {lifting_st: 2, striking_st: 2}
@@ -30,13 +29,11 @@ items:
       an arm to an industrial accident: a servo-motor and a counterweight
       under a metal or plastek shell, strong enough for its job and no more.
     design: >
-      Arm ST +2 (B40, 5/level, 10 points) for the servo-assisted grip and
-      lift, plus DR 2, Partial (single limb) -60% (2x5=10, x0.4=4). 14
-      points. This is a trait built from Basic Set abilities, not a
+      Arm ST +2 for one arm (B40, 3/level, 6 points) for the servo-assisted grip and lift, plus DR 2, Partial (one arm) -40% (2x5=10, x0.6=6). 12 points. This is a trait built from Basic Set abilities, not a
       renamed Ultra-Tech/Bio-Tech catalogue "bionic arm."
   - &augmetic_arm_combat
     name: Augmetic Arm, Combat Pattern
-    points: 42
+    points: 36
     tags: [Advantage, Physical, Imperium, Adeptus Mechanicus, Skitarii]
     ref: B40
     attributes: {lifting_st: 6, striking_st: 6}
@@ -51,11 +48,10 @@ items:
       myomer bundles under an armoured casing, powerful enough to break a
       man's grip or punch through a hab door.
     design: >
-      Arm ST +6 (B40, 5/level, 30) + DR 6, Partial (single limb) -60%
-      (6x5=30, x0.4=12) = 42 points.
+      Arm ST +6 for one arm (B40, 3/level, 18) + DR 6, Partial (one arm) -40% (6x5=30, x0.6=18) = 36 points.
   - &augmetic_leg_menial
     name: Augmetic Leg, Menial Pattern
-    points: 5
+    points: 7
     tags: [Advantage, Physical, Imperium, Adeptus Mechanicus]
     ref: B46
     dr: {leg: 2}
@@ -64,15 +60,15 @@ items:
       A basic replacement leg for a menial or low-ranking adept: functional,
       unglamorous, and common wherever industrial accidents are common.
     design: >
-      DR 2, Partial (single limb) -60% (2x5=10, x0.4=4) + a 1-point Perk
+      DR 2, Partial (one leg) -40% (2x5=10, x0.6=6) + a 1-point Perk
       (B9) for a joint that never tires or cramps the way a natural knee
-      does over a long shift. 5 points. (Basic Set has no dedicated "Leg
+      does over a long shift. 7 points. (Basic Set has no dedicated "Leg
       ST" advantage the way it has Arm ST for arms; a single prosthetic leg
       does not meaningfully raise Move or damage on its own, so this entry
       is DR plus a flavor Perk rather than an invented attribute bonus.)
   - &augmetic_legs_combat
     name: Augmetic Legs, Combat Pattern (Matched Pair)
-    points: 20
+    points: 29
     tags: [Advantage, Physical, Imperium, Adeptus Mechanicus, Skitarii]
     ref: B46
     dr: {leg: 6}
@@ -84,9 +80,7 @@ items:
       synchronized actuators give a longer, steadier stride than a single
       prosthetic bolted onto an otherwise natural gait.
     design: >
-      DR 6, Partial (both legs, a larger fraction of the body than a single
-      limb) -50% (6x5=30, x0.5=15) + Basic Move +1 (B17, 5 points/level) =
-      20 points. Buying only one leg from this pair does not grant the Move
+      DR 6, Partial (both legs) -20% (6x5=30, x0.8=24) + Basic Move +1 (B17, 5 points/level) = 29 points. Buying only one leg from this pair does not grant the Move
       bonus; use Augmetic Leg, Menial Pattern for a single prosthetic
       instead.
 
@@ -235,10 +229,24 @@ items:
       Basic Set Telecommunication (Radio type, B91, 10 points) with the
       Racial limitation (B91, -20%, restricted to others who share the
       trait — here, other noosphere-linked adepts and machine spirits):
-      10 x 0.8 = 8 points. Pairs with the Language (Binharic) skill
-      (Adeptus Mechanicus/Skills/Mechanicus Skills.skl) for the liturgical
-      cant spoken over the link; the link itself is the hardware, the
+      10 x 0.8 = 8 points. Pairs with Language (Binharic), below, for the liturgical cant spoken over the link; the link itself is the hardware, the
       language is the learned code riding on it.
+  - name: Language (Binharic)
+    points: 4
+    tags: [Advantage, Language, Imperium, Adeptus Mechanicus]
+    ref: B24
+    notes: Accented, spoken and written.
+    lore: >
+      The Cult Mechanicus' machine-cant: a clipped, heavily compressed
+      binary/logical language spoken and sub-vocalized between adepts,
+      servitors, and machine spirits alike, ranging from a few ritual
+      phrases a menial picks up to the dense technical liturgy a Magos
+      trades with another Magos.
+    design: >
+      A language is an advantage bought by comprehension level, not a
+      skill (B24): Broken 1 point for speech and 1 for writing, Accented 2
+      and 2, Native 3 and 3. Listed here at Accented in both (4 points); a
+      template that includes it sets its own level.
   - &rapport_machine_spirits
     name: Rapport with Machine-Spirits
     points: 5
@@ -476,8 +484,9 @@ items:
       attack.
   - &electrostatic_gauntlets
     name: Electrostatic Gauntlets, Corpuscarii Pattern
-    per_level: 8
+    per_level: 5
     levels: 7
+    modifiers: ["Armor Divisor (2), +50%"]
     tags: [Advantage, Physical, Imperium, Adeptus Mechanicus, Electro-Priest]
     ref: B61
     weapons:
@@ -499,16 +508,16 @@ items:
       — a ranged weapon in its own right, not just a defensive field.
     design: >
       Innate Attack (Burning) (B61, 5 points/die) with Armor Divisor (2)
-      (B102, +50%): 5 x 1.5 = 7.5, rounded up to 8 points/die. Default 7
-      levels (56 points) gives 7d(2) burn, the lasgun anchor: the fiction
+      (B102, +50%): 5 x 1.5 = 7.5 points/die, rounded once on the total. Default 7 levels (52.5, so 53 points) gives 7d(2) burn, the lasgun anchor: the fiction
       shows Corpuscarii lightning killing armoured men, which a
       pistol-strength arc (an earlier 3d(2) draft) couldn't do. Exact odds
       per hit: flak (DR 30, eff. 15) 98%; carapace (eff. 35) 0.6%;
       Astartes plate never. Still an anti-infantry weapon, not anti-armour.
   - &electroleech_staff
     name: Electroleech Staff, Fulgurite Pattern
-    per_level: 13
+    per_level: 10
     levels: 4
+    modifiers: ["Melee Attack, Reach 1, -25%", "Leech, +50%"]
     tags: [Advantage, Physical, Imperium, Adeptus Mechanicus, Electro-Priest]
     ref: B61
     notes: >
@@ -531,8 +540,7 @@ items:
       published for the equivalent enhancement in GURPS Powers, cited here
       only for the percentage, not as a Basic Set source) that returns the
       wielder's own FP equal to the damage inflicted: 10 x
-      (1 - 0.25 + 0.50) = 10 x 1.25 = 12.5, rounded up to 13 points/die.
-      At the default 4 levels (52 points; raised from 2 so a Fulgurite can drop a man in two or three blows, as the fiction shows), this drains 4d FP (ignoring DR,
+      (1 - 0.25 + 0.50) = 10 x 1.25 = 12.5 points/die, rounded once on the total. At the default 4 levels (50 points; raised from 2 so a Fulgurite can drop a man in two or three blows, as the fiction shows), this drains 4d FP (ignoring DR,
       so carapace or even Astartes plate is irrelevant to it) and restores
       the same amount to the wielder's own FP pool -- a real threat to
       anything that still has FP to lose, and no threat at all to a

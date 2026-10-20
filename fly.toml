@@ -1,0 +1,41 @@
+# Fly.io: one always-on machine with a volume for the war's event log (deploy/README.md).
+# Change `app` to a name of your own and `primary_region` to the region nearest your players.
+app = "galactic-war"
+primary_region = "lhr"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  PORT = "8080"
+  DATA_DIR = "/data"
+  TRUST_PROXY = "1"
+  TURN_SECONDS = "43200"
+  BACKUPS = "14"
+  # the address players use: sign-in sends them back here (change it with `app`, or to your own domain)
+  PUBLIC_URL = "https://galactic-war.fly.dev"
+
+# the war ticks on a timer: the machine must never be stopped for being idle
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = "off"
+  auto_start_machines = true
+  min_machines_running = 1
+
+  [[http_service.checks]]
+    grace_period = "15s"
+    interval = "30s"
+    method = "GET"
+    path = "/healthz"
+    timeout = "5s"
+
+[[mounts]]
+  source = "war_data"
+  destination = "/data"
+
+# replays of big battles want memory; 1 GB is enough for company-sized fights
+[[vm]]
+  cpu_kind = "shared"
+  cpus = 1
+  memory = "1gb"

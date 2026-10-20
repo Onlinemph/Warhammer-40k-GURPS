@@ -4,7 +4,7 @@ notes: >
   NPC creature stat block, not a player-facing race. Point math: Tyranid
   Biology 20 + Body Lens: Ravener 660 (incl. Injury Tolerance 2) + Scything Talons 28 + skills 8 =
   716 points. Stats: SM
-  +1, ST 32, DX 14, IQ 5, HT 14, HP 36, Will 5, Per 5, natural chitin
+  +1, ST 32, DX 14, IQ 5, HT 14, HP 36, Will 5, Per 12, natural chitin
   torso DR 60 (Weak Points 5, eye DR 30), Basic Move 12 (Tunnel Move 7, a separate figure), Tunnelling,
   Shadow in the Warp (8 yards) — framework.md's Ravener anchor line exactly. This sits in
   the Astartes tier (550-850), toward its upper end: a burrowing
@@ -16,6 +16,16 @@ notes: >
   close-combat loadout, built as a natural-attack trait in
   data/xenos/tyranids/bio-weapons.yaml.
 traits:
+  - name: Hunting Senses
+    points: 35
+    attributes: {per: 7}
+    tags: [Mental]
+    notes: Per +7 (Per 12).
+    lore: >-
+      Every bioform is grown to find prey for the Hive Mind: whatever its wits, its senses are a hunter's, and the swarm notices a man in a hedgerow long before it could understand what he is.
+    design: >-
+      Per +7 at 5 points a level (B16), from Per 5 to Per 12: user direction that low-IQ creatures should
+      still perceive at 10-12, so a swarm can spot an enemy in the simulator instead of walking blind into its fire.
   - include: "xenos/tyranids/traits.yaml#Tyranid Biology"
   - include: "xenos/tyranids/traits.yaml#Body Lens: Ravener"
   - include: "xenos/tyranids/bio-weapons.yaml#Scything Talons"

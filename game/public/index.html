@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Galactic War</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header><h1>Galactic War</h1><div id="turn"></div><button id="signout" class="link" hidden>Sign out</button></header>
+<div class="admin-wrap"><section class="card" id="admin" hidden></section></div>
+<main id="join" hidden>
+  <section class="card">
+    <h2>Raise a warband</h2>
+    <p>Lead a warband in a war that runs whether you're here or not. Orders are due before each tick.</p>
+    <div id="signin" hidden>
+      <p>Sign in to raise one. Your warband belongs to your account, so it's there on any device.</p>
+      <div id="providers" class="providers"></div>
+    </div>
+    <div id="raise" hidden>
+      <p id="j-dev" class="muted" hidden>Development join, for testing: no account, and the warband lives in this browser only.</p>
+      <label>Your name <input id="j-name" maxlength="24" autocomplete="off"></label>
+      <div class="factions" id="j-factions"></div>
+      <button id="j-go">Join the war</button>
+    </div>
+    <p class="err" id="j-err"></p>
+  </section>
+</main>
+<main id="game" hidden>
+  <div>
+    <section class="map card"><svg id="map" viewBox="0 0 1000 600" role="img" aria-label="Galaxy map"></svg></section>
+    <section class="card" id="planet"></section>
+  </div>
+  <aside>
+    <section class="card" id="me"></section>
+    <section class="card" id="world"><p class="muted">Pick a world on the map.</p></section>
+    <section class="card" id="politics"></section>
+    <section class="card" id="orders"></section>
+    <section class="card" id="highlights"></section>
+    <section class="card"><h3>Battles</h3><ol id="reports" class="feed"></ol></section>
+    <section class="card"><h3>News</h3><ol id="news" class="feed"></ol></section>
+  </aside>
+</main>
+<div id="replay" class="overlay" hidden>
+  <section class="card rp">
+    <header class="rp-head"><h2 id="rp-title"></h2><button id="rp-close" aria-label="Close">Close</button></header>
+    <div id="rp-load">
+      <p>The battle is being fought out in full. It's kept once it's done, so it only takes this long the first time.</p>
+      <div class="bar"><div id="rp-bar"></div></div>
+      <p id="rp-msg" class="muted">Starting…</p>
+    </div>
+    <div id="rp-play" hidden>
+      <div id="rp-sides" class="rp-sides"></div>
+      <p id="rp-note" class="err"></p>
+      <div class="rp-stage"><canvas id="rp-canvas"></canvas></div>
+      <div class="rp-controls">
+        <button id="rp-toggle">Pause</button>
+        <input id="rp-slider" type="range" min="0" value="0" aria-label="Second">
+        <select id="rp-speed" aria-label="Speed"><option value="1">1×</option><option value="2" selected>2×</option><option value="4">4×</option><option value="8">8×</option></select>
+      </div>
+      <p id="rp-time" class="muted"></p>
+    </div>
+  </section>
+</div>
+<div id="hexview" class="overlay" hidden>
+  <section class="card rp">
+    <header class="rp-head"><h2 id="hx-title"></h2><button id="hx-close" aria-label="Close">Close</button></header>
+    <div id="hx-sides" class="legend"></div>
+    <div class="rp-stage"><canvas id="hx-canvas"></canvas></div>
+    <div class="rp-controls">
+      <button id="hx-toggle">Pause</button>
+      <input id="hx-slider" type="range" min="0" value="0" aria-label="Turn">
+      <select id="hx-speed" aria-label="Speed"><option value="0.5">½×</option><option value="1" selected>1×</option><option value="2">2×</option><option value="4">4×</option></select>
+    </div>
+    <p id="hx-turn" class="muted"></p>
+    <ol id="hx-feed" class="feed"></ol>
+  </section>
+</div>
+<script src="/app.js"></script>
+<script src="/tmcview.js"></script>
+<script src="/planet3d.js"></script>
+<script src="/replay.js"></script>
+</body>
+</html>

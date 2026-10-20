@@ -3,8 +3,8 @@ output: Xenos/Tyranids/Templates/Genestealer.gct
 notes: >
   NPC creature stat block, not a player-facing race. Point math: Tyranid
   Biology 20 + Body Lens: Genestealer 721 + Rending Claws 38 + skills
-  12 = 791 points. Stats:
-  SM 0, ST 26, DX 17, IQ 6, HT 13, HP 34, Will 6, Per 6, natural chitin
+  12 + Hunting Senses 30 + Independent Hunter 20 = 841 points. Stats:
+  SM 0, ST 26, DX 17, IQ 6, HT 13, HP 34, Will 6, Per 12, natural chitin
   torso DR 50 (Weak Points 5, eye DR 25), Basic Move 14 (Basic Speed
   7.5) with Enhanced Move (Ground) 1, Infravision, Extra Attack (second
   claw), Clinging, Lightning Reflexes (Combat Reflexes, Enhanced Dodge 2) and Injury Tolerance (Damage Reduction) 2 — framework.md's Genestealer anchor line (ST raised to 26 per the
@@ -21,7 +21,29 @@ notes: >
   trait in data/xenos/tyranids/bio-weapons.yaml (the Extra Attack trait
   above lets a Genestealer make two such attacks per turn).
 traits:
+  - name: Hunting Senses
+    points: 30
+    attributes: {per: 6}
+    tags: [Mental]
+    notes: Per +6 (Per 12).
+    lore: >-
+      Every bioform is grown to find prey for the Hive Mind: whatever its wits, its senses are a hunter's, and the swarm notices a man in a hedgerow long before it could understand what he is.
+    design: >-
+      Per +6 at 5 points a level (B16), from Per 6 to Per 12: user direction that low-IQ creatures should
+      still perceive at 10-12, so a swarm can spot an enemy in the simulator instead of walking blind into its fire.
   - include: "xenos/tyranids/traits.yaml#Tyranid Biology"
+  - name: Independent Hunter
+    points: 20
+    tags: [Mental, Xenos, Tyranids]
+    notes: >-
+      Needs no synapse creature: it always has Synapse Discipline (Fearlessness 5, High Pain Threshold) and
+      never falls back on Synapse Dependence, and it follows its side's orders wherever it is.
+    lore: >-
+      Vanguard hunters grown to range far ahead of the swarm, Genestealers carry the Hive Mind's purpose in
+      themselves instead of borrowing it from a synapse creature.
+    design: >-
+      Buys off Synapse Dependence (+10) and lifts Synapse Discipline's Accessibility limit (+10): 20 points.
+      User direction: Genestealers are independent of synapse.
   - include: "xenos/tyranids/traits.yaml#Body Lens: Genestealer"
   - include: "xenos/tyranids/bio-weapons.yaml#Rending Claws"
 skills:

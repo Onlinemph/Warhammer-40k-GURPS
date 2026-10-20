@@ -43,11 +43,13 @@
     }
     function soundBuffer(key, i, item, loop) {
       const id = key + "#" + i;
-      if (!SND.bufs.has(id)) { const pcm = item[2] === "u" ? decodeUlaw(item[1]) : decodeAdpcm(item[1], loop), buf = SND.ctx.createBuffer(1, Math.max(1, pcm.length), item[0]); buf.getChannelData(0).set(pcm); SND.bufs.set(id, buf); }
+      if (!SND.bufs.has(id)) { const pcm = item[2] === "u" ? decodeUlaw(item[1]) : decodeAdpcm(item[1], loop), buf = SND.ctx.createBuffer(1, Math.max(1, pcm.length), item[0]); buf.getChannelData(0).set(pcm); let sq = 0; for (let k = 0; k < pcm.length; k++) sq += pcm[k] * pcm[k]; buf.silent = Math.sqrt(sq / Math.max(1, pcm.length)) < .003; SND.bufs.set(id, buf); }
       return SND.bufs.get(id);
     }
     const raceOf = F => { const f = ros[F.i].faction || ""; return /Ork/.test(f) ? "ork" : /Tyranid/.test(f) ? "nid" : /Aeldari|Drukhari/.test(f) ? "eld" : /Guard|Cultist/.test(f) ? "ig" : ""; };
     // where: a figure, or a point; louder near the camera, and from the side of the screen it is on
+    // one of a list's recordings, taken at random; a few of the games' files are empty, and those are passed over
+    const audible = (key, list) => { for (let n = 0, i = Math.floor(rnd() * list.length); n < list.length; n++, i = (i + 1) % list.length) { const b = soundBuffer(key, i, list[i]); if (!b.silent) return b; } return null; };
     function playSound(key, where, vol = 1) {
       if (!SND.on || !SND.lib || !lastSt.playing) return;
       const F = where && where.g ? where : null, pos = F ? F.g.position : where;
@@ -56,8 +58,8 @@
       const now = SND.ctx.currentTime;
       if (now - (SND.last.get(full) ?? -1) < .045 || SND.live >= 18) return;   // a volley is a few voices, not forty
       SND.last.set(full, now);
-      const i = Math.floor(rnd() * list.length);
-      SND.live++; emit(soundBuffer(full, i, list[i]), pos, vol, .95 + rnd() * .1, () => { SND.live--; });
+      const buf = audible(full, list); if (!buf) return;
+      SND.live++; emit(buf, pos, vol, .95 + rnd() * .1, () => { SND.live--; });
     }
     function emit(buffer, pos, vol, rate, done) {
       const src = SND.ctx.createBufferSource(), gain = SND.ctx.createGain();
@@ -99,11 +101,11 @@
       if (grunt ? VOX.grunts >= 4 || (event !== "death" && since < .6) : VOX.live >= 2 || now - VOX.lastLine < 1.1 || since < 6) return;
       const about = foe ? event + "." + foeLetter(foe) : "", key = lib[about] && (!lib[event] || rnd() < .4) ? about : event, list = lib[key];
       if (!list) return;
-      const i = Math.floor(rnd() * list.length);
+      const buf = audible("voice:" + id + ":" + key, list); if (!buf) return;
       VOX.lastBy.set(F.i, now);
-      if (grunt) { VOX.grunts++; emit(soundBuffer("voice:" + id + ":" + key, i, list[i]), F.g.position, 1.3, .97 + rnd() * .06, () => { VOX.grunts--; }); return; }
+      if (grunt) { VOX.grunts++; emit(buf, F.g.position, 1.3, .97 + rnd() * .06, () => { VOX.grunts--; }); return; }
       VOX.live++; VOX.lastLine = now;
-      emit(soundBuffer("voice:" + id + ":" + key, i, list[i]), F.g.position, 1.7, 1, () => { VOX.live--; });
+      emit(buf, F.g.position, 1.7, 1, () => { VOX.live--; });
     }
     // ---- loops: the distant battle under everything, and for each vehicle its engine and, as it drives, its tracks
     const LOOPS = { amb: null, veh: new Map() };

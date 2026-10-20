@@ -40,12 +40,12 @@ items: [...]             # for equipment / traits / skills
   tags: [Missile Weapon, Imperium, Astra Militarum]
   weapons:
     - usage: Standard
-      damage: 4d burn    # "sw+1d cut", "6d(2) pi+", "6dx2(3) burn ex", "4d cr ex [2d]" (fragmentation)
-      acc: 10
-      range: 700/2100
+      damage: 7d(2) burn    # "sw+1d cut", "6d(2) pi+", "6dx2(3) burn ex", "4d cr ex [2d]" (fragmentation)
+      acc: 6
+      range: 400/1200
       rof: 10
       shots: 60(3)
-      st: 6
+      st: 9†               # † two hands, B bipod, M mounted
       bulk: -4
       rcl: 1
       skill: Beam Weapons (Rifle)   # standard defaults generated automatically
