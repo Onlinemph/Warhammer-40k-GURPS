@@ -107,8 +107,9 @@ function between(a, b) {
 }
 
 // ---- movement: points by mobility, terrain costs (the article's Terrain Effects Table)
-const MP = { foot: 3, mounted: 5 };
-const COST = { foot: { clear: 1, high: 2, woods: 2, built: 1, swamp: 2 }, mounted: { clear: 1, high: 3, woods: 2, built: 1, swamp: 2 } };
+const MP = { foot: 3, mounted: 5, mechanized: 9, motorized: 8 };
+const COST = { foot: { clear: 1, high: 2, woods: 2, built: 1, swamp: 2 }, mounted: { clear: 1, high: 3, woods: 2, built: 1, swamp: 2 },
+  mechanized: { clear: 1, high: 2, woods: 2, built: 2, swamp: 5 }, motorized: { clear: 1, high: 3, woods: 3, built: 1, swamp: 4 } };
 
 // ---- the battle
 function fight(opt) {
@@ -119,9 +120,9 @@ function fight(opt) {
   // (user direction: no cap on elements a side, past the article's 4 to 40)
   const els = [];
   opt.sides.forEach((sd, side) => {
-    const size = 10;
     for (const [unit, count] of Object.entries(sd.army)) {
       if (!(count > 0)) continue;
+      const size = UNITS[unit] && UNITS[unit].vehicle ? 1 : 10;   // (a vehicle is an element of one)
       const template = UNITS[unit] || unit === "militia" ? ratingKey(unit) : unit, rt = RT[template];   // (a template by name too: tools/resolver/score-tmc.js)
       if (!rt) throw new Error(`no ratings for ${template}`);
       const k = Math.ceil(count / size), extra = (sd.extra || {})[unit] || 0, named = (sd.named || {})[unit] || 0;
@@ -133,15 +134,19 @@ function fight(opt) {
     }
   });
   const map = buildMap(ground, opt.seed, els.length), { W, H } = map, terr = (x, y) => map.t[y * W + x];
-  const live = () => els.filter(e => e.state === "ok"), mine = s => els.filter(e => e.side === s && e.state === "ok");
-  const occ = (x, y) => els.filter(e => e.state === "ok" && e.x === x && e.y === y);
+  // (elements aboard a transport are with it: they don't fire, move, fight or count in a hex until they get out)
+  const aboard = e => e.carriedBy != null;
+  const live = () => els.filter(e => e.state === "ok" && !aboard(e)), mine = s => els.filter(e => e.side === s && e.state === "ok" && !aboard(e));
+  const occ = (x, y) => els.filter(e => e.state === "ok" && !aboard(e) && e.x === x && e.y === y);
   const adjacent = (a, b) => dist(a, b) === 1;
   const sideOf = s => opt.sides[s];
   let round = 0;
 
   // ---- before the battle: night, and the Reconnaissance Contest (Mass Combat pp. 28-29)
   const night = d6() + 1 >= 5;   // (every faction in the war is TL7 or more: +1)
-  const tr = Math.ceil((TERRAIN_RATING[ground] || 6) / (night ? 2 : 1));
+  // weather (Mass Combat): bad weather takes 1 off the Terrain Rating
+  const wx = opt.weather || "clear", bad = wx !== "clear";
+  const tr = Math.max(1, Math.ceil((TERRAIN_RATING[ground] || 6) / (night ? 2 : 1)) - (bad ? 1 : 0));
   const holder = opt.hold === 0 || opt.hold === 1 ? opt.hold : null;
   const reconTS = s => els.filter(e => e.side === s && e.rt.classes.recon).reduce((a, e) => a + e.n * (e.rt.or + e.rt.pr), 0);
   const totalTS = s => els.filter(e => e.side === s).reduce((a, e) => a + e.n * (e.rt.or + e.rt.pr), 0);
@@ -200,9 +205,20 @@ function fight(opt) {
     const list = els.filter(e => e.side === s && e.rt.mobility === "foot" && !["built", "swamp", "water"].includes(terr(e.x, e.y)));
     for (const e of list.slice(0, Math.ceil(els.filter(x => x.side === s && x.rt.mobility === "foot").length / 4))) works.add(e.y * W + e.x);
   });
+  // transports: each takes on Foot elements of its side up to its room (the nearest first), and carries them until
+  // it comes near the enemy (the article's Mounting and Dismounting; elements aboard die with it)
+  for (const t of els) {
+    const room0 = UNITS[t.unit] && UNITS[t.unit].carries;
+    if (!room0) continue;
+    let room = room0;
+    for (const c of els.filter(e => e.side === t.side && e.rt.mobility === "foot" && !aboard(e) && !(UNITS[e.unit] && UNITS[e.unit].carries)).sort((a, b) => dist(a, t) - dist(b, t) || a.id - b.id)) {
+      if (c.n > room) continue;
+      c.carriedBy = t.id; c.x = t.x; c.y = t.y; room -= c.n;
+    }
+  }
   // commanders: Command Points (Leadership + Strategy) / 4 (the leader's skill for both), with their best element
   const cp = [0, 1].map(s => Math.floor(2 * skill(s) / 4)), cpMax = cp.slice();
-  if (log) log.push({ t: "map", W, H, terrain: map.t, works: [...works], els: els.map(e => ({ id: e.id, side: e.side, unit: e.unit, n: e.n, x: e.x, y: e.y })), recon, night });
+  if (log) log.push({ t: "map", W, H, terrain: map.t, works: [...works], els: els.map(e => ({ id: e.id, side: e.side, unit: e.unit, n: e.n, x: e.x, y: e.y })), recon, night, weather: wx });
 
   // ---- ratings with the article's modifiers
   const synapseNear = e => e.side != null && els.some(o => o.side === e.side && o.state === "ok" && o.rt.synapse && dist(o, e) <= 3);
@@ -222,6 +238,7 @@ function fight(opt) {
     return e.n * e.worth * e.rt.pr * m;
   };
   const seeCache = new Map();
+  const rangeOf = e => Math.max(2, Math.round(e.rt.range * (wx === "fog" || wx === "storm" || (wx === "dust" && !e.rt.night) ? 0.5 : 1)));
   const canSee = (a, b) => {
     const k1 = a.y * W + a.x, k2 = b.y * W + b.x, key = k1 < k2 ? k1 * 4096 + k2 : k2 * 4096 + k1;
     let v = seeCache.get(key);
@@ -233,7 +250,8 @@ function fight(opt) {
 
   // a step lost: a full element is reduced to half its soldiers, a reduced one eliminated
   const loseStep = (e, why) => { if (e.state !== "ok") return; if (!e.reduced) { const keep = Math.ceil(e.n0 / 2); e.lost += e.n - keep; e.n = keep; e.reduced = true; } else eliminate(e, why); };
-  const eliminate = (e, why, surrendered) => { if (e.state !== "ok") return; e.lost += e.n; e.n = 0; e.state = "gone"; e.diedRound = round; e.surrendered = !!surrendered; e.pinned = e.engaged = false; if (log) log.push({ t: "gone", round, id: e.id, why }); };
+  const eliminate = (e, why, surrendered) => { if (e.state !== "ok") return; e.lost += e.n; e.n = 0; e.state = "gone"; e.diedRound = round; e.surrendered = !!surrendered; e.pinned = e.engaged = false; if (log) log.push({ t: "gone", round, id: e.id, why });
+    for (const c of els) if (c.carriedBy === e.id && c.state === "ok") { c.carriedBy = null; eliminate(c, "lost with its transport"); } };
   const pin = e => {
     if (e.state !== "ok") return;
     // (a Chorus element under synapse shrugs off its first pin)
@@ -267,11 +285,11 @@ function fight(opt) {
     for (const e of shooters) e.fired = false;
     for (const e of shooters) {
       if (e.fired || e.state !== "ok") continue;
-      const targets = mine(1 - s).filter(t => { const d = dist(e, t); return d >= 2 && d <= e.rt.range && canSee(e, t); });
+      const targets = mine(1 - s).filter(t => { const d = dist(e, t); return d >= 2 && d <= rangeOf(e) && canSee(e, t); });
       if (!targets.length) continue;
       // with up to three more of its own kind within two hexes that can also reach the target
       const best = targets.map(t => {
-        const group = [e, ...shooters.filter(o => o !== e && !o.fired && o.state === "ok" && o.template === e.template && dist(o, e) <= 2 && dist(o, t) >= 2 && dist(o, t) <= o.rt.range && canSee(o, t))].slice(0, 4);
+        const group = [e, ...shooters.filter(o => o !== e && !o.fired && o.state === "ok" && o.template === e.template && dist(o, e) <= 2 && dist(o, t) >= 2 && dist(o, t) <= rangeOf(o) && canSee(o, t))].slice(0, 4);
         const ratio = groupRatio(group, t), col = column(ratio, FCOLS);
         return { t, group, ratio, col, value: col + (t.reduced ? 1 : 0) + (t.named ? 0.5 : 0) };
       }).sort((a, b) => b.value - a.value || a.t.id - b.t.id)[0];
@@ -302,7 +320,7 @@ function fight(opt) {
     applyFire(t, res, group);
     // obliterated: another shot at half strength at an enemy in the same or a next hex
     if (res === "DO") {
-      const next = mine(1 - s).filter(u => dist(u, t) <= 1 && dist(u, group[0]) >= 2 && dist(u, group[0]) <= group[0].rt.range && canSee(group[0], u)).sort((a, b) => a.id - b.id)[0];
+      const next = mine(1 - s).filter(u => dist(u, t) <= 1 && dist(u, group[0]) >= 2 && dist(u, group[0]) <= rangeOf(group[0]) && canSee(group[0], u)).sort((a, b) => a.id - b.id)[0];
       if (next && share / 2 >= 1 / 64) shoot(group, next, share / 2);
     }
   }
@@ -317,7 +335,8 @@ function fight(opt) {
   };
   function reach(e) {
     // cheapest paths from e with its movement points; it stops on moving next to an enemy and can't enter one's hex
-    const mp = MP[e.rt.mobility] || 3, cost = COST[e.rt.mobility] || COST.foot;
+    const veh = e.rt.mobility === "mechanized" || e.rt.mobility === "motorized";
+    const mp = MP[e.rt.mobility] || 3, cost = veh && (wx === "fog" || wx === "storm") ? { ...COST[e.rt.mobility], clear: COST[e.rt.mobility].clear + 1 } : COST[e.rt.mobility] || COST.foot;
     const best = new Map([[e.y * W + e.x, 0]]), q = [[e.x, e.y, 0]];
     while (q.length) {
       q.sort((a, b) => a[2] - b[2]);
@@ -358,11 +377,21 @@ function fight(opt) {
       }
       // a holding garrison stays in its buildings
       if (holder === s && ["built", "woods"].includes(terr(e.x, e.y)) && !e.rt.impetuous) continue;
+      if (e.justOut === round) continue;   // (just out of a transport this turn)
+      const cargo = els.filter(c => c.carriedBy === e.id && c.state === "ok");
+      if (cargo.length) {
+        const h = hexes.filter(h => near[h.y * W + h.x] >= 2).sort((a, b) => Math.abs(near[a.y * W + a.x] - 3) - Math.abs(near[b.y * W + b.x] - 3) || cover(b.x, b.y) - cover(a.x, a.y) || a.y - b.y || a.x - b.x)[0] || { x: e.x, y: e.y };
+        moveTo(e, h);
+        for (const c of cargo) { c.x = e.x; c.y = e.y; }
+        if (log) log.push({ t: "move", round, id: e.id, x: e.x, y: e.y });
+        if (near[e.y * W + e.x] <= 4) { for (const c of cargo) { c.carriedBy = null; c.justOut = round; crowd[e.y * W + e.x]++; } if (log) log.push({ t: "unload", round, id: e.id, cargo: cargo.map(c => c.id) }); }
+        continue;
+      }
       const nearest = h => near[h.y * W + h.x];
       let pick;
       if (meleeMinded(e)) pick = hexes.sort((a, b) => nearest(a) - nearest(b) || cover(b.x, b.y) - cover(a.x, a.y) || a.y - b.y || a.x - b.x)[0];
       else {
-        const score = h => { const n0 = near[h.y * W + h.x], can = n0 <= e.rt.range && foes.some(f => { const d = dist(f, h); return d >= 2 && d <= e.rt.range && canSee(h, f); }); const n = nearest(h); return (can ? 10 : -n * 0.3) + cover(h.x, h.y) * 1.2 - (n <= 1 ? 6 : 0) - (works.has(h.y * W + h.x) ? -2 : 0); };
+        const score = h => { const n0 = near[h.y * W + h.x], can = n0 <= rangeOf(e) && foes.some(f => { const d = dist(f, h); return d >= 2 && d <= rangeOf(e) && canSee(h, f); }); const n = nearest(h); return (can ? 10 : -n * 0.3) + cover(h.x, h.y) * 1.2 - (n <= 1 ? 6 : 0) - (works.has(h.y * W + h.x) ? -2 : 0); };
         pick = hexes.map(h => ({ h, s: score(h) })).sort((a, b) => b.s - a.s || a.h.y - b.h.y || a.h.x - b.h.x)[0].h;
       }
       if (pick && (pick.x !== e.x || pick.y !== e.y)) { moveTo(e, pick); if (log) log.push({ t: "move", round, id: e.id, x: e.x, y: e.y }); }
@@ -464,7 +493,7 @@ function fight(opt) {
   // ---- the rounds
   // (for watching: every element's place, soldiers and state after each side's turn; flags 1 pinned, 2 broken,
   // 4 suppressed, 8 engaged, 16 fled, 32 gone, 64 reduced)
-  const snap = s => ({ t: "snap", round, side: s, els: els.filter(e => e.state !== "merged").map(e => [e.id, e.x, e.y, e.n, (e.state === "fled" ? 16 : e.state === "gone" ? 32 : (e.pinned ? 1 : 0) | (e.broken ? 2 : 0) | (e.suppressed ? 4 : 0) | (e.engaged ? 8 : 0)) | (e.reduced ? 64 : 0)]) });
+  const snap = s => ({ t: "snap", round, side: s, els: els.filter(e => e.state !== "merged").map(e => [e.id, e.x, e.y, e.n, (e.state === "fled" ? 16 : e.state === "gone" ? 32 : (e.pinned ? 1 : 0) | (e.broken ? 2 : 0) | (e.suppressed ? 4 : 0) | (e.engaged ? 8 : 0)) | (e.reduced ? 64 : 0) | (aboard(e) ? 128 : 0)]) });
   if (log) log.push(snap(null));
   // (16 rounds, or more on a bigger map: half its width, the time it takes armies to cross it)
   const MAX = opt.maxRounds || Math.max(16, Math.ceil(W / 2));
@@ -481,7 +510,7 @@ function fight(opt) {
     // (the article lets the GM rule a demoralized force has lost: still demoralized a round on, it withdraws, its
     // elements fleeing the field)
     for (const s of [0, 1]) if (demoralized[s]) { if (since[s] == null) since[s] = round; else if (round > since[s]) withdrew = s; }
-    if (withdrew != null) { for (const e of mine(withdrew)) { e.state = "fled"; if (log) log.push({ t: "fled", round, id: e.id }); } say(`${opt.sides[withdrew].name || opt.sides[withdrew].faction} withdraw`, "withdraw"); break; }
+    if (withdrew != null) { for (const e of els.filter(x => x.side === withdrew && x.state === "ok")) { e.state = "fled"; if (log) log.push({ t: "fled", round, id: e.id }); } say(`${opt.sides[withdrew].name || opt.sides[withdrew].faction} withdraw`, "withdraw"); break; }
   }
   round = Math.min(round, MAX);
   const left = [mine(0).length, mine(1).length];
@@ -497,7 +526,7 @@ function fight(opt) {
   const share = s => Object.values(lost[s]).reduce((a, n) => a + n, 0) / Math.max(1, n0[s]);
   const att = opt.attacker === 0 || opt.attacker === 1 ? opt.attacker : null;
   const kind = winner == null ? "stalemate" : att != null && winner !== att && share(att) < 0.5 ? "repulse" : share(winner) >= 0.5 ? "pyrrhic" : "rout";
-  return { winner, kind, rounds: round, lost, fled, surrendered, loss: [share(0), share(1)], recon, night, initiative, demoralized, fame, events,
+  return { winner, kind, rounds: round, lost, fled, surrendered, loss: [share(0), share(1)], recon, night, weather: wx, initiative, demoralized, fame, events,
     reanimated: els.filter(e => e.reanimated).length, log, map: log ? { W, H } : undefined };
 }
 

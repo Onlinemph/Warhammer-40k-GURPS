@@ -18,6 +18,7 @@ const BT = require("./battle.js");
 const TER = require("./terrain.js");
 const TMC = require("./tmc.js");
 const FR = require("./fronts.js");
+const SG = require("./siege.js");
 const RG = require("./regions.js");
 
 // (each count SCALE times what's written here: units.js)
@@ -127,6 +128,11 @@ function order(S, { player, move, land, region, recruit, ritual, stance, careful
   if ((recruit || []).length && !(hr.city && hr.owner === p.faction)) return "recruits only come from cities you hold";
   // special and heavy weapons: one for every ten of the faction's line troops in the warband (counting this order's)
   const after = addArmy({ ...wb.army }, Object.fromEntries((recruit || []).map(r => [r.unit, r.count])));
+  // vehicles: built in a city of a Foundry world or at the faction's capital, one for every twenty line troops
+  if ((recruit || []).some(r => isVehicle(r.unit))) {
+    if (!(here.type === "forge" || here.id === S.factions[p.faction].capital)) return "vehicles are built on a Foundry world or at your capital";
+    if (vehicles(after) > vehicleCap(p.faction, after)) return `vehicles: one for every twenty line troops (this would be ${vehicles(after)} for ${vehicleCap(p.faction, after) * 20} line troops)`;
+  }
   if ((recruit || []).some(r => isSpecial(r.unit)) && specials(after) > specialCap(p.faction, after)) return `special and heavy weapons: one for every ten line troops (this would be ${specials(after)} for ${specialCap(p.faction, after) * 10} line troops)`;
   const rit = ritual && typeof ritual === "object" ? { kind: String(ritual.kind), target: ritual.target ? String(ritual.target) : null } : null;
   const err = FX.checkOrder(S, p, { move: move || region, recruit, ritual: rit });
@@ -135,10 +141,13 @@ function order(S, { player, move, land, region, recruit, ritual, stance, careful
   wb.orders = { move: move || null, land: move && land != null ? String(land) : null, region: region || null, recruit: recruit || [], ritual: rit, stance: stance ?? null, careful: careful == null ? null : !!careful, build: build || null, convoy: cv, command: command == null ? null : !!command };
   return null;
 }
-const STANCES = ["advance", "fortify", "raid"];
+const STANCES = ["advance", "fortify", "raid", "besiege"];
 const isSpecial = id => UNITS[id] && (UNITS[id].role === "special" || UNITS[id].role === "heavy");
 const specials = army => Object.entries(army).reduce((a, [k, n]) => a + (isSpecial(k) ? n : 0), 0);
 const specialCap = (f, army) => Math.floor((FACTIONS[f].line || []).reduce((a, k) => a + (army[k] || 0), 0) / 10);
+const isVehicle = id => UNITS[id] && UNITS[id].role === "vehicle";
+const vehicles = army => Object.entries(army).reduce((a, [k, n]) => a + (isVehicle(k) ? n : 0), 0);
+const vehicleCap = (f, army) => Math.floor((FACTIONS[f].line || []).reduce((a, k) => a + (army[k] || 0), 0) / 20);
 // fortify: x1.5 where you hold; walls: +25% a level in the world's cities, two levels, 20 then 40 materiel; turn back
 // under 25%; a raid takes six turns of the city's share of its world's yield
 const FORTIFY = 1.5, WALLS = { max: 2, each: 0.25, cost: [20 * SCALE, 40 * SCALE] }, TURN_BACK = 25, RAID_LOOT = 6;
@@ -166,7 +175,7 @@ function oddsAt(S, p, id, rid, fog) {
   const close = r.owner === p.faction || Object.values(S.players).some(q => q.faction === p.faction && q.warband.at === id);
   const me = { faction: p.faction, army: p.warband.army, parts: [{ kind: "warband", player: p.id }] };
   const them = { ...foe, army: fog && !close ? BT.rough(foe.army) : foe.army };
-  const q = TMC.predict({ ground: r.terrain, seed: 1, sides: [tmcSide(S, w, r, me), tmcSide(S, w, r, them)], hold: holds(r, foe) ? 1 : undefined, attacker: 0 }, 6);
+  const q = TMC.predict({ ground: r.terrain, seed: 1, sides: [tmcSide(S, w, r, me), tmcSide(S, w, r, them)], hold: holds(r, foe) ? 1 : undefined, attacker: 0, weather: w.weather || "clear" }, 6);
   return Math.round(100 * q.pWinA);
 }
 
@@ -209,6 +218,8 @@ function tick(S, seed) {
   const R = rng(seed);
   S.turn++;
   const W = id => S.worlds[id], T = { fought: new Set(), dead: {}, deadAt: {}, captured: {}, delivered: [] };
+  // 0. the weather on every world this turn (terrain.js)
+  for (const id of S.order) S.worlds[id].weather = TER.weatherFor(S.worlds[id].type, R);
   // 1. income: each city gives its holder its share of its world's yield (none to a blockaded world's holder; supply
   // from the worlds joined to the capital, logistics.js)
   for (const w of Object.values(S.worlds)) {
@@ -238,7 +249,8 @@ function tick(S, seed) {
     for (const r of o.recruit) {
       const u = UNITS[r.unit];
       const why = FX.checkOrder(S, p, { recruit: [r] }) || (!(hr.city && hr.owner === p.faction) ? "not in a city you hold" : !p.warband.supplied ? "out of supply" : null);
-      const room = isSpecial(r.unit) ? Math.max(0, specialCap(p.faction, p.warband.army) - specials(p.warband.army)) : Infinity;
+      const room = isSpecial(r.unit) ? Math.max(0, specialCap(p.faction, p.warband.army) - specials(p.warband.army))
+        : isVehicle(r.unit) ? (here.type === "forge" || here.id === S.factions[p.faction].capital ? Math.max(0, vehicleCap(p.faction, p.warband.army) - vehicles(p.warband.army)) : 0) : Infinity;
       const can = why ? 0 : Math.min(r.count, room, ...Object.entries(u.cost).map(([k, c]) => Math.floor((Math.min(st[k] || 0, mine[k] || 0) + (tr[k] || 0)) / c + 1e-9)));
       if (can > 0) {
         for (const [k, c] of Object.entries(u.cost)) { const all = c * can, fromShare = Math.min(all, Math.max(0, Math.min(st[k] || 0, mine[k] || 0))); st[k] -= fromShare; mine[k] -= fromShare; POL.fromTreasury(p, k, all - fromShare); }
@@ -283,6 +295,8 @@ function tick(S, seed) {
   FR.settle(S, H);
   chorusTurn(S, R);
   dormantTurn(S, R);
+  // 3a. the besieged may sortie (siege.js)
+  SG.sorties(S, R, H);
   // 3b. convoys move a jump, and raiders take the ones they catch
   LOG.convoys(S, H, T);
   // 4. battles, wherever two factions meet in a region (first, Levies marching into an Apostate region may turn,
@@ -360,11 +374,13 @@ function tick(S, seed) {
   for (const w of Object.values(S.worlds)) {
     const basic = w.owner && FACTIONS[w.owner].basic;
     if (!basic || !supplied(S, w.owner).has(w.id)) continue;
-    const c = RG.cities(w).filter(r => r.owner === w.owner && total(r.garrison) < GARRISON_CAP).sort((a, b) => total(a.garrison) - total(b.garrison) || +a.id.slice(1) - +b.id.slice(1))[0];
+    const c = RG.cities(w).filter(r => r.owner === w.owner && !r.siege && total(r.garrison) < GARRISON_CAP).sort((a, b) => total(a.garrison) - total(b.garrison) || +a.id.slice(1) - +b.id.slice(1))[0];
     if (c) c.garrison[basic] = (c.garrison[basic] || 0) + 2 * SCALE;
   }
   // 7b. fronts (fronts.js): garrisons answer threats, quiet worlds help threatened ones, lost cities are counter-attacked
   FR.fronts(S, R, T, H);
+  // 7c. sieges (siege.js): the besieged starve, their walls are knocked down
+  SG.upkeep(S, R, H);
   // 8. each faction's own rules: loyalty and edicts, rituals, fame, the dead rising
   FX.upkeep(S, H, R, T);
   settleWorlds(S, T);
@@ -436,13 +452,13 @@ function tmcSide(S, w, r, X, roll) {
 function fight(S, w, r, A, B, R, T, fixed) {
   const seed = Math.floor(R() * 2 ** 31);
   // a city attacked by a force far stronger than its defenders rallies its people (battle.js)
-  const def0 = r.owner || "militia", rallied = fixed ? 0 : BT.rally(S, w, r, A.faction === def0 ? A : B.faction === def0 ? B : null, A.faction === def0 ? B : A, strength);
+  const def0 = r.owner || "militia", rallied = fixed || r.siege ? 0 : BT.rally(S, w, r, A.faction === def0 ? A : B.faction === def0 ? B : null, A.faction === def0 ? B : A, strength);
   if (rallied) note(S, `${where(w, r)} rallies ${rallied} of its people to the defence`);
   const ground = fixed && fixed.terrain ? fixed.terrain : r.terrain;
   const G = { ...groundOf(r, A, B), ground };
   const def = r.owner || "militia", attacker = A.faction === def ? 1 : B.faction === def ? 0 : null;
   const sideA = tmcSide(S, w, r, A, () => 1 + Math.floor(R() * 6)), sideB = tmcSide(S, w, r, B, () => 1 + Math.floor(R() * 6));
-  const input = { ground, seed, sides: [sideA, sideB], hold: G.hold, attacker };
+  const input = { ground, seed, sides: [sideA, sideB], hold: G.hold, attacker, weather: w.weather || "clear" };
   // the odds, for the report and the highlights: the share of wins over a few quick battles
   const p = TMC.predict({ ...input, seed: (seed ^ 0x9e3779b9) >>> 0 }, 8);
   const pA = p.pWinA + p.pDraw / 2;
@@ -508,14 +524,14 @@ function fight(S, w, r, A, B, R, T, fixed) {
   const report = {
     id: `t${S.turn}-${w.id}-${S.reports.filter(x => x.turn === S.turn && x.world === w.id).length}`,
     turn: S.turn, world: w.id, worldName: w.name, worldType: w.type, region: r.id, regionName: r.name, city: r.city || undefined, seed, odds: Math.round(pA * 100), winner,
-    secs: B0 ? B0.rounds * 30 : 60, rounds: B0 ? B0.rounds : undefined, outcome: O.kind, terrain: ground, hold: G.hold, night: B0 && B0.night ? true : undefined,
+    secs: B0 ? B0.rounds * 30 : 60, rounds: B0 ? B0.rounds : undefined, weather: w.weather && w.weather !== "clear" ? w.weather : undefined, outcome: O.kind, terrain: ground, hold: G.hold, night: B0 && B0.night ? true : undefined,
     recon: rc ? { winner: rc.winner, kind: rc.kind, surprise: rc.surprise || undefined, ambush: rc.ambush || undefined } : undefined,
     // what it takes to fight it again on the hex map (/api/tmc/<id>)
     tmc: B0 ? input : undefined,
     losses: [Math.round(lossA * 100) / 100, Math.round(lossB * 100) / 100], live: fixed ? true : undefined, held: fixed ? fixed.id : undefined, fallen: fallenNamed.filter(n => !leadersFell.includes(n)), leaders: leadersFell,
     sides: before.map((b, i) => ({ faction: b.faction, before: b.army, named: b.named, short: b.short || undefined, players: [A, B][i].parts.filter(x => x.kind === "warband").map(x => S.players[x.player].name) })),
     text: `${where(w, r)}: ${fname(A.faction)} (${describe(A.army)}) against ${fname(B.faction)} (${describe(B.army)}). ` +
-      `Fought ${TER.TERRAIN[ground].at}${B0 && B0.night ? ", at night" : ""}. ` + (reconText ? reconText + " " : "") +
+      `Fought ${TER.TERRAIN[ground].at}${B0 && B0.night ? ", at night" : ""}${w.weather && w.weather !== "clear" ? ", in " + TER.WEATHER_NAMES[w.weather] : ""}. ` + (reconText ? reconText + " " : "") +
       (O.kind === "standoff" ? `${cap(fname([A, B][attacker].faction))} find no way in, and pull back.` : draw ? "Neither side gives way: they dig in to fight again." : O.kind === "repulse" ? `${cap(fname(winner))} throw back ${fname(aWins ? B.faction : A.faction)}.`
         : `${cap(fname(winner))} win${O.kind === "pyrrhic" ? ", at a terrible price" : pA >= 0.75 && aWins || pA <= 0.25 && !aWins ? ", as expected" : pA > 0.25 && pA < 0.75 ? " a close fight" : " against the odds"}.`) +
       (ev ? " " + ev : "") +
@@ -701,19 +717,19 @@ function view(S, player) {
     highlights: HL.view(S, p, knows(S, p)),
     factions: { ...Object.fromEntries(Object.entries(S.factions).map(([k, v]) => [k, { name: v.name, colour: v.colour }])), militia: { name: MILITIA.name, colour: "#8d887e" } },
     units: Object.fromEntries(Object.entries(UNITS).filter(([, u]) => u.faction === f).map(([k, u]) => [k, { name: u.name, cost: u.cost, role: u.role || (FACTIONS[f].line || []).includes(k) ? u.role || "line" : "troops" }])),
-    specials: { have: specials(wb.army), cap: specialCap(f, wb.army) },
+    specials: { have: specials(wb.army), cap: specialCap(f, wb.army) }, vehicles: { have: vehicles(wb.army), cap: vehicleCap(f, wb.army), here: here.type === "forge" || here.id === S.factions[f].capital },
     terrains: Object.fromEntries(Object.entries(TER.TERRAIN).map(([k, t]) => [k, t.name])),
     worlds: S.order.map(id => {
       const w = S.worlds[id], seen = eyes.has(id);
       // loyalty is known to the Hegemony on its own worlds, and to the Apostates where they have eyes (they look for it)
       const loyal = w.owner === "hegemony" && (f === "hegemony" || (f === "apostates" && seen)) ? Math.round(w.loyalty) : undefined;
       return { id, name: w.name, x: w.x, y: w.y, type: w.type, typeName: TYPES[w.type].name, owner: w.owner, links: w.links, capital: !!w.capital, seen, walls: w.walls || 0, terrain: Object.keys(w.terrain || {}).sort((a, b) => w.terrain[b] - w.terrain[a]).map(k => TER.TERRAIN[k].name), blockaded: !!w.blockaded,
-        contested: RG.contested(w), split: RG.split(w),
+        contested: RG.contested(w), split: RG.split(w), weather: w.weather ? TER.WEATHER_NAMES[w.weather] : undefined,
         depot: w.depot ? (w.owner === f ? { supply: w.depot.supply } : seen ? {} : undefined) : undefined,
         convoys: S.convoys.filter(c => c.at === id && (c.faction === f || seen)).map(c => ({ faction: c.faction, to: S.worlds[c.to].name, supply: c.faction === f ? c.supply : undefined })), tomb: !!w.tomb, gate: !!w.gate, asleep: seen && w.tomb ? !w.awake : undefined, loyalty: loyal,
         held: w.owner === f ? S.turn - (w.heldSince ?? 0) : undefined,
         forces: seen ? forcesIn(w, factionsOn(S, w).map(s => ({ ...s, region: s.faction === f ? { owner: f } : {} }))) : null,
-        regions: w.regions.map(r => ({ id: r.id, name: r.name, terrain: r.terrain, city: r.city, capital: r.capital, x: r.x, y: r.y, links: r.links, owner: r.owner, battle: !!r.heldIn || undefined,
+        regions: w.regions.map(r => ({ id: r.id, name: r.name, terrain: r.terrain, city: r.city, capital: r.capital, x: r.x, y: r.y, links: r.links, owner: r.owner, battle: !!r.heldIn || undefined, siege: r.siege || undefined,
           forces: seen ? forcesIn(w, factionsAt(S, w, r).map(s => ({ ...s, region: r }))) : null })) };
     }),
     // the last 30 battles the faction knows of, and always its own warbands' last 10

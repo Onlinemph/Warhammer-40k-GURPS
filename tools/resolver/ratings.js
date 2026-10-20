@@ -17,13 +17,15 @@ function ratingOf(template, extra) {
     or: s.OR, orFire: s.orFire, orClose, pr: s.PR, scer: s.SCER, cer: r.CER,
     classes: {
       fire: !!w || !!pw,
-      armor: s.dr >= 60,
+      armor: s.dr >= 60 || !!u.veh,
       neutralizeArmor: !!w && (w.dmg.div || 1) >= 3,
       artillery: !!w && (w.blast > 0 || !!w.indirect),
       recon: RECON.test(template) || !!f.chameleon,
       c3i: C3I.test(template) || !!f.synapse,
     },
-    mobility: u.move >= 10 ? "mounted" : "foot",
+    // (vehicles: tracked are Mechanized, wheeled Motorized, a walker Mounted; the article's)
+    mobility: u.veh ? (/Trukk/.test(template) ? "motorized" : /Sentinel/.test(template) ? "mounted" : "mechanized") : u.move >= 10 ? "mounted" : "foot",
+    vehicle: u.veh ? { room: u.veh.room || 0, hp: u.HP } : undefined,
     // fire range in hexes: the gun's half-damage range
     // (at least MIN_RANGE: a round is about half a minute, and a squad with a short weapon closes in within it; the
     // article itself gives every infantry element one range, whatever its gun)
@@ -32,7 +34,7 @@ function ratingOf(template, extra) {
     impetuous: !!(f.impulsive || f.bloodlust),
     fanatic: (f.fearless || 0) >= 6 || !!f.unfazeable || !!f.noMorale,
     elite: !!u.elite,
-    getsHot: !!w && !!w.overheat,   // (plasma: it can cook its wielder)
+    getsHot: !!w && !!w.overheat && !u.veh,   // (plasma: it can cook its wielder)
     synapse: !!f.synapse,
     reanimates: !!f.reanimation,
     weapon: w ? w.name : null, hand: u.melee ? u.melee.name : null,
@@ -45,7 +47,8 @@ if (require.main === module) {
   // the war's own units with another gun than their template's (game/world/units.js `weapon`): "template|weapon"
   const { UNITS } = require("../../game/world/units.js");
   for (const u of Object.values(UNITS)) {
-    if (u.weapon) out.templates[`${u.template}|${u.weapon}`] = ratingOf(u.template, { ranged: { item: u.weapon } });
+    if (u.vehicle) out.templates[`vehicle:${u.vehicle}`] = ratingOf(`vehicle:${u.vehicle}`);
+    else if (u.weapon) out.templates[`${u.template}|${u.weapon}`] = ratingOf(u.template, { ranged: { item: u.weapon } });
     else if (!out.templates[u.template]) out.templates[u.template] = ratingOf(u.template);
   }
   fs.writeFileSync(path.join(__dirname, "..", "..", "game", "world", "ratings.json"), JSON.stringify(out, null, 1) + "\n");

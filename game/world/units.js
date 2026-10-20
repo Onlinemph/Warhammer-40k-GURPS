@@ -72,6 +72,15 @@ const UNITS = {
   cryptek:    { faction: "dormant", name: "Cryptek",    template: "Cryptek",            cost: {}, power: 2.1 },
   overlord:   { faction: "dormant", name: "Overlord",   template: "Necron Overlord",    cost: {}, power: 2, melee: true },
   heavy_husk: { faction: "dormant", name: "Heavy Husk", template: "Necron Warrior", weapon: "Heavy Gauss Cannon", cost: {}, power: 6.1 },
+  // vehicles (the codex's): built in a city of a Foundry world or at the faction's capital, one for every twenty line
+  // troops; a transport carries that many soldiers (`carries`)
+  chimera:     { faction: "hegemony",  name: "Chimera",     template: "Astra Militarum Guardsman", vehicle: "Chimera",                role: "vehicle", carries: 12, cost: { manpower: 0.5, materiel: 4.3 }, power: 7.9 },
+  leman_russ:  { faction: "hegemony",  name: "Leman Russ",  template: "Astra Militarum Guardsman", vehicle: "Leman Russ Battle Tank", role: "vehicle", cost: { manpower: 0.8, materiel: 7.3 }, power: 13.5 },
+  scout_sentinel: { faction: "hegemony", name: "Sentinel",   template: "Astra Militarum Guardsman", vehicle: "Scout Sentinel",         role: "vehicle", cost: { manpower: 0.2, materiel: 1.9 }, power: 3.5 },
+  rhino:       { faction: "apostates", name: "Rhino",       template: "Chaos Space Marine",        vehicle: "Rhino",                  role: "vehicle", carries: 10, cost: { manpower: 1.3, materiel: 11.3 }, power: 3.9 },
+  predator:    { faction: "apostates", name: "Predator",    template: "Chaos Space Marine",        vehicle: "Predator Destructor",    role: "vehicle", cost: { manpower: 3.9, materiel: 35 }, power: 12.2 },
+  land_raider: { faction: "apostates", name: "Land Raider", template: "Chaos Space Marine",        vehicle: "Land Raider",            role: "vehicle", carries: 10, cost: { manpower: 5.7, materiel: 51 }, power: 17.8 },
+  trukk:       { faction: "brawl",     name: "Trukk",       template: "Ork Boy",                   vehicle: "Trukk",                  role: "vehicle", carries: 12, cost: { manpower: 1.7, materiel: 15.5 }, power: 6 },
   // the free worlds' Local Defence: its sergeants and heavy stubbers, one of each to every ten (regions.js)
   militia_sgt:   { faction: "militia", name: "Defence Sergeant", template: "Astra Militarum Sergeant", cost: {}, power: 0.4 },
   militia_heavy: { faction: "militia", name: "Defence Heavy",    template: "Traitor Guardsman", weapon: "Heavy Stubber", cost: {}, power: 1.2 },
@@ -80,7 +89,7 @@ const UNITS = {
 // garrisons, levies, broods, sleepers, yields, stockpiles; what's measured per soldier (power, ratings) is not
 const SCALE = 10;
 // the key of a unit's ratings (ratings.json): its template, and its gun if it carries another than the template's
-const ratingKey = id => id === "militia" ? MILITIA.template : UNITS[id].weapon ? `${UNITS[id].template}|${UNITS[id].weapon}` : UNITS[id].template;
+const ratingKey = id => id === "militia" ? MILITIA.template : UNITS[id].vehicle ? `vehicle:${UNITS[id].vehicle}` : UNITS[id].weapon ? `${UNITS[id].template}|${UNITS[id].weapon}` : UNITS[id].template;
 // `basic` is what a faction's supplied worlds raise as local levies each turn
 const FACTIONS = {
   hegemony:  { name: "The Hegemony",  colour: "#c9a227", player: true,  basic: "levy", line: ["levy"],

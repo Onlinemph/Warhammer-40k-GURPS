@@ -27,7 +27,7 @@
     B.byId = Object.fromEntries(map.els.map(e => [e.id, e]));
     $("#hx-title").textContent = B.title;
     $("#hx-sides").innerHTML = B.sides.map(s => `<span><i style="background:${esc(s.colour)}"></i>${esc(s.name)}</span>`).join("") +
-      `<span class="muted">${B.night ? "night · " : ""}${esc(B.terrain)} · ${B.recon.winner == null ? B.recon.kind + " battle" : esc(B.sides[B.recon.winner].name) + (B.recon.ambush ? " ambushed them" : B.recon.surprise ? " took them by surprise" : " had the initiative")}</span>`;
+      `<span class="muted">${B.night ? "night · " : ""}${B.map.weather && B.map.weather !== "clear" ? esc(B.map.weather) + " · " : ""}${esc(B.terrain)} · ${B.recon.winner == null ? B.recon.kind + " battle" : esc(B.sides[B.recon.winner].name) + (B.recon.ambush ? " ambushed them" : B.recon.surprise ? " took them by surprise" : " had the initiative")}</span>`;
     $("#hx-slider").max = B.frames.length - 1;
   }
   const name = id => { const e = B.byId[id]; return !e ? "#" + id : e.unit === "militia" ? "the Local Defence" : `${B.sides[e.side].name.replace(/^The /, "")} ${B.units[e.unit] || e.unit}`; };
@@ -61,7 +61,7 @@
     }
     // elements: a counter each, in its side's colour; several in a hex fan out; reduced smaller, pinned ringed
     const byHex = {};
-    for (const x of els) if (!(x[4] & 48)) (byHex[x[1] + "," + x[2]] ||= []).push(x);
+    for (const x of els) if (!(x[4] & 176)) (byHex[x[1] + "," + x[2]] ||= []).push(x);   // (not gone, fled or aboard)
     for (const list of Object.values(byHex)) list.forEach((x, i) => {
       const e = B.byId[x[0]], k = list.length, ang = (i / k) * Math.PI * 2, off = k > 1 ? size * 0.42 : 0;
       const px = cx(x[1]) + off * Math.cos(ang), py = cy(x[1], x[2]) + off * Math.sin(ang), rad = size * (k > 1 ? 0.4 : 0.62) * (x[4] & 64 ? 0.75 : 1);

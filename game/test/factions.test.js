@@ -141,7 +141,7 @@ test("Brawl fame: won in battle, doubled against the odds, grows Bosses, and pea
   const b = S.players.b, home = S.worlds[b.warband.at];
   const tgt = S.worlds[home.links.find(n => !S.worlds[n].owner) || home.links[0]];
   hold(tgt, null, { militia: 10 });
-  at(S, b, tgt.id); b.warband.army = { brawler: 60, ironhide: 4 };
+  at(S, b, tgt.id); b.warband.army = { brawler: 60 * SCALE, ironhide: 4 * SCALE };
   S = tick(S, 40);
   assert.ok(S.factions.brawl.stock.fame > 0, "fame won");
   assert.ok(S.players.b.warband.history.some(x => /grew into Boss/.test(x)), "Brawlers grew");

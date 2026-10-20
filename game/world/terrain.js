@@ -66,4 +66,20 @@ function factors(t, A, B) {
 // the engine's battlefield for a ground
 // (plains, or a battle from before terrain, is the countryside as it always was: no dials, the same map)
 const battlefield = t => { const m = (TERRAIN[t] || TERRAIN.plains).map; return m.city ? { battlefield: "city", city: m.city } : { battlefield: "countryside", ...(m.ground && Object.keys(m.ground).length ? { ground: m.ground } : {}) }; };
-module.exports = { TERRAIN, MIX, worldTerrain, pick, factors, battlefield, melee };
+// ---- weather (docs/setting.md): each world's, drawn each turn by its kind; shares of clear, rain, storm, fog, dust
+const WEATHER = {
+  hive:     { clear: 4, rain: 1, storm: 1, fog: 4, dust: 0 },     // smog
+  forge:    { clear: 4, rain: 1, storm: 1, fog: 3, dust: 1 },
+  agri:     { clear: 6, rain: 3, storm: 1, fog: 1, dust: 0 },
+  fortress: { clear: 6, rain: 2, storm: 1, fog: 1, dust: 0 },
+  death:    { clear: 3, rain: 3, storm: 3, fog: 1, dust: 0 },
+  tomb:     { clear: 5, rain: 0, storm: 1, fog: 0, dust: 4 },
+};
+const WEATHER_NAMES = { clear: "clear", rain: "rain", storm: "a storm", fog: "fog", dust: "a dust storm" };
+function weatherFor(type, R) {
+  const mix = WEATHER[type] || WEATHER.agri, keys = Object.keys(mix), tot = keys.reduce((a, k) => a + mix[k], 0);
+  let x = R() * tot;
+  for (const k of keys) if ((x -= mix[k]) < 0) return k;
+  return "clear";
+}
+module.exports = { TERRAIN, MIX, worldTerrain, pick, factors, battlefield, melee, WEATHER, WEATHER_NAMES, weatherFor };

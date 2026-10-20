@@ -1054,6 +1054,32 @@ Overminds) and the Dormant have none yet.
   battles flaring. It turns with a drag; picking a region works as on the flat map, which stays as a choice.
 - The client only; nothing in the war changes.
 
+- **As built (vehicles, weather, sieges, the globe):**
+  - **Vehicles:** the seven, rated by SCER from the codex's own entries (`cer.js`: the best station's gun, +5 for
+    more than one gun, the hull's DR weighted by facing and its weakest face; `ratings.json` keys `vehicle:<name>`):
+    Leman Russ PR 49,434, Land Raider 303,957, Chimera 8,381, Trukk 5,174. In Tactical Mass Combat each is an element
+    of one, Armor, Mechanized (9 movement points at this scale) or Motorized (8, the Trukk) or Mounted (the Sentinel,
+    a walker), at the article's terrain costs; a transport (Chimera 12, Rhino 10, Land Raider 10, Trukk 12) carries
+    Foot elements from the start, stops two to four hexes from the enemy and lets them out (they move the turn
+    after), and they die with it. Worth (`price.js`): Land Raider 17.8 Levies, Leman Russ 13.5, Predator 12.2, Chimera
+    7.9, Trukk 6.0, Rhino 3.9, Sentinel 3.5; priced at the faction's rate, nine-tenths of it materiel. Built on a
+    Foundry world or at the faction's capital, one for every twenty line troops. The 3D replays field them.
+  - **Weather** (`terrain.js`): every world draws clear, rain, storm, fog or dust each turn by its kind (a Spire
+    world's smog, a Wildworld's storms, a tomb's dust). In a battle: bad weather takes 1 off the Terrain Rating; fog
+    and storm halve fire ranges, dust halves them for those without Night; in fog and storm vehicles pay 1 more to
+    cross open ground. Reports and the world panel say what it was.
+  - **Sieges** (`siege.js`): the "besiege" stance. Each turn under siege: a tenth of the garrison starves, no
+    levies, no rally; heavy weapons or vehicles among the besiegers take a level off the walls every two turns. The
+    besieged sortie with a third of the garrison when the odds are 60% or better. The bots lay siege to a city next
+    to them they'd storm at under 40%.
+  - **The globe** (`game/public/planet3d.js`): the planet card's Globe/Map switch (kept in the browser); three.js
+    loaded on first use.
+  - **Measured** (4 wars of 60 turns): vehicles in 54 of 107 battles a war; bad weather over 57% of battles (too
+    often: the shares want lowering in the balance pass); no siege laid by the bots in two wars (the stance works
+    and is tested; the bots' rule for it is too narrow); close fights 8.8% (13.7% with the fronts alone), 95%+
+    60%: a vehicle element decides a battle. Worlds at turn 60: Hegemony 3.3, Apostates 4.3, Brawl 5.5, Chorus 6.5,
+    Dormant 2.3.
+
 ### The order to build in
 1. Fronts (1), measured on its own.
 2. Vehicles (3), then weather (4), then sieges (5), each measured.

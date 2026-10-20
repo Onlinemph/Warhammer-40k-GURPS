@@ -8,7 +8,7 @@ const { templateOf, nameOf, UNITS } = require("../world/units.js");
 // the 3D view fights at most this many soldiers: a bigger battle is fought as a sample of it, each unit in its share
 const MAX_3D = 250;
 // a unit's own gun when it carries another than its template's
-const gunOf = id => UNITS[id] && UNITS[id].weapon ? { ranged: { item: UNITS[id].weapon } } : {};
+const gunOf = id => UNITS[id] && UNITS[id].vehicle ? { vehicle: UNITS[id].vehicle } : UNITS[id] && UNITS[id].weapon ? { ranged: { item: UNITS[id].weapon } } : {};
 const TER = require("../world/terrain.js");
 const ATTEMPTS = 4, STALEMATE_SECONDS = 40;
 

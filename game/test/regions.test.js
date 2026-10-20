@@ -36,7 +36,7 @@ test("a world changes hands only with its capital and more than half its cities;
   const w = hold(free(S), null, { militia: 2 }); w.tomb = false;
   const cs = RG.cities(w), others = cs.filter(r => !r.capital);
   // the capital alone: not enough
-  at(S, S.players.h, w.id); S.players.h.warband.army = { levy: 40, storm: 6 };
+  at(S, S.players.h, w.id); S.players.h.warband.army = { levy: 40 * SCALE, storm: 6 * SCALE };
   S = tick(S, 2);
   assert.equal(cap(S.worlds[w.id]).owner, "hegemony", "the capital taken");
   assert.equal(S.worlds[w.id].owner, null, "the world not yet");

@@ -167,7 +167,7 @@ const redirect = (res, to, cookie) => { res.writeHead(302, { location: to, "cach
 // the simulator's page (the library and the 3D replays), served at /sim: the 3D view of a war battle opens it on
 // /sim#war=<report id>
 const SIM_PAGE = path.join(__dirname, "..", "site", "index.html");
-const STATIC = { "/": ["index.html", "text/html"], "/app.js": ["app.js", "text/javascript"], "/style.css": ["style.css", "text/css"], "/replay.js": ["replay.js", "text/javascript"], "/tmcview.js": ["tmcview.js", "text/javascript"] };
+const STATIC = { "/": ["index.html", "text/html"], "/app.js": ["app.js", "text/javascript"], "/style.css": ["style.css", "text/css"], "/replay.js": ["replay.js", "text/javascript"], "/tmcview.js": ["tmcview.js", "text/javascript"], "/planet3d.js": ["planet3d.js", "text/javascript"] };
 
 const server = http.createServer(async (req, res) => {
   try {

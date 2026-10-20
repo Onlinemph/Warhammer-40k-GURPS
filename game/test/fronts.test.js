@@ -31,3 +31,22 @@ test("melee ignores cover unless it's a fortification: buildings don't stop an a
   assert.ok(p("city", false) >= 0.2, "an assault on a city held by Levies has a chance");
   assert.ok(p("city", true) <= p("city", false), "earthworks count against it");
 });
+
+test("a siege: the besieged starve, raise no levies, rally no one; guns breach the walls every two turns", () => {
+  let S = quiet(rebuild([{ type: "create", seed: 7 }, { type: "join", player: "h", name: "Varro", faction: "hegemony" }]));
+  const w = Object.values(S.worlds).find(x => !x.owner && !x.tomb);
+  hold(w, "apostates", { turncoat: 50 * SCALE }); w.walls = 2;
+  const c = cap(w), next = RG.region(w, c.links[0]);
+  next.owner = "hegemony";
+  at(S, S.players.h, w.id, next.id); S.players.h.warband.army = { levy: 20 * SCALE, heavy_team: 10 };
+  S = apply(S, { type: "order", player: "h", stance: "besiege", recruit: [] });
+  const g0 = total(c.garrison);
+  S = apply(S, { type: "tick", seed: 1 });
+  const c1 = RG.region(S.worlds[w.id], c.id);
+  assert.equal(c1.siege, 1);
+  assert.ok(total(c1.garrison) < g0, "starving");
+  S = apply(S, { type: "tick", seed: 2 });
+  assert.equal(RG.region(S.worlds[w.id], c.id).siege, 2);
+  assert.equal(S.worlds[w.id].walls, 1, "breached");
+  assert.ok(S.log.some(l => /lay siege to/.test(l.text)) && S.log.some(l => /breach/.test(l.text)));
+});

@@ -45,8 +45,19 @@ function attack(w, ranged, u) {
   return { name: w.name, text: w.text, skill, dmg, total: skill + dmg };
 }
 // `extra`: spec fields laid over the template's own (a different gun: { ranged: { item } })
+// a vehicle (the codex's vehicles, the engine's buildVehicle): `rate("vehicle:Leman Russ Battle Tank")`. Its best
+// station's gun is its attack, with the article's +5 for more than one attack when it has more than one gun; its DR
+// is its hull's, weighted by facing as hits come (front half, sides a third, rear the rest) and its weakest face
 function rate(template, extra = {}) {
-  const u = SIM.buildUnit(unitSpec(template, 1, 0, extra).spec, 0), f = u.flags || {}, st = u.stats;
+  const veh = template.startsWith("vehicle:") ? template.slice(8) : null;
+  const u = veh ? SIM.buildVehicle({ vehicle: veh, count: 1 }, 0) : SIM.buildUnit(unitSpec(template, 1, 0, extra).spec, 0), f = u.flags || {}, st = u.stats || {};
+  if (veh) {
+    const guns = u.veh.stations.filter(x => x.w).map(x => x.w);
+    if (guns.length > 1) f.extraAttack = 1;
+    u.ranged = guns.map(w => ({ w, a: attack(w, true, u) })).sort((a, b) => b.a.total - a.a.total)[0]?.w || null;
+    const D = u.veh.dr, wDR = D.front * 0.5 + D.side * 0.35 + D.rear * 0.15, minDR = Math.min(D.front, D.side, D.rear);
+    u.arm = { dr: { skull: wDR, arm: wDR, leg: wDR, torso: wDR }, gap: {} }; u.nat = {}; u._minDR = minDR;
+  }
   // OR: the better of its gun and its hand weapon, then FP and Move
   // psychic powers count as the article's FP-using abilities: their score halved
   const powers = (u.powers || []).filter(p => p.dmg && p.dmg.n).map(p => { const a = attack(p, true, u); return { ...a, skill: Math.floor(a.skill / 2), dmg: Math.ceil(a.dmg / 2), total: Math.floor(a.skill / 2) + Math.ceil(a.dmg / 2), power: true, range: p.range }; });
@@ -61,7 +72,7 @@ function rate(template, extra = {}) {
   let drs = Math.ceil((dr("skull") + dr("arm") + dr("leg") + dr("torso")) / 4);
   // SCER (the user's Scaled CER, scer-handoff.md, change 1): DR weighted by where hits land, half on the weakest spot
   const locs = [dr("skull"), dr("arm"), dr("leg"), dr("torso")], weighted = locs[0] * 0.15 + locs[1] * 0.15 + locs[3] * 0.5 + locs[2] * 0.2;
-  let drw = Math.ceil(weighted * 0.5 + Math.min(...locs) * 0.5);
+  let drw = Math.ceil(weighted * 0.5 + (u._minDR != null ? u._minDR : Math.min(...locs)) * 0.5);
   // traits by their points, 1 a 5: Damage Reduction (/2 50, /3 100, /4 150), Injury Tolerance (Unliving 20, No
   // Vitals 5, No Blood 5), Regeneration (Slow 10, Regular 25, Fast 50, Very Fast 100), reanimation as Unkillable 1
   // (50); Supernatural Durability isn't in the flags

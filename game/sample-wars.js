@@ -14,9 +14,9 @@ const FR = require("./world/fronts.js");
 const { SCALE, UNITS, FACTIONS: FACTIONS_ } = require("./world/units.js");
 // a recruiting round's mix, line troops first so the special and heavy weapons have their ten each to go among
 const MIX = {
-  hegemony:  [{ unit: "levy", count: 100 }, { unit: "storm", count: 20 }, { unit: "warden", count: 6 }, { unit: "levy_gunner", count: 4 }, { unit: "heavy_team", count: 3 }, { unit: "levy_melta", count: 2 }, { unit: "seer", count: 1 }],
-  apostates: [{ unit: "turncoat", count: 60 }, { unit: "faithless", count: 60 }, { unit: "vessel", count: 6 }, { unit: "turncoat_gunner", count: 5 }, { unit: "turncoat_heavy", count: 4 }, { unit: "frenzied", count: 4 }, { unit: "hierophant", count: 1 }],
-  brawl:     [{ unit: "brawler", count: 100 }, { unit: "boss", count: 20 }, { unit: "rokkit", count: 4 }, { unit: "big_shoota", count: 4 }, { unit: "burna", count: 2 }, { unit: "mek", count: 2 }],
+  hegemony:  [{ unit: "levy", count: 100 }, { unit: "storm", count: 20 }, { unit: "warden", count: 6 }, { unit: "levy_gunner", count: 4 }, { unit: "heavy_team", count: 3 }, { unit: "levy_melta", count: 2 }, { unit: "seer", count: 1 }, { unit: "chimera", count: 2 }, { unit: "leman_russ", count: 2 }, { unit: "scout_sentinel", count: 1 }],
+  apostates: [{ unit: "turncoat", count: 60 }, { unit: "faithless", count: 60 }, { unit: "vessel", count: 6 }, { unit: "turncoat_gunner", count: 5 }, { unit: "turncoat_heavy", count: 4 }, { unit: "frenzied", count: 4 }, { unit: "hierophant", count: 1 }, { unit: "rhino", count: 2 }, { unit: "predator", count: 2 }, { unit: "land_raider", count: 1 }],
+  brawl:     [{ unit: "brawler", count: 100 }, { unit: "boss", count: 20 }, { unit: "rokkit", count: 4 }, { unit: "big_shoota", count: 4 }, { unit: "burna", count: 2 }, { unit: "mek", count: 2 }, { unit: "trukk", count: 4 }],
 };
 const FULL = 25 * SCALE, WEAK = 12 * SCALE;
 const FACTIONS = ["hegemony", "apostates", "brawl", "chorus", "dormant"];
@@ -46,6 +46,10 @@ function decide(S, p, R) {
   const line = FACTIONS_[f].line.reduce((a, k) => a + (wb.army[k] || 0) + (recruit.find(r => r.unit === k) || { count: 0 }).count, 0);
   let room = Math.floor(line / 10) - Object.entries(wb.army).reduce((a, [k, c]) => a + (special(k) ? c : 0), 0);
   recruit = recruit.map(r => { if (!special(r.unit)) return r; const c = Math.max(0, Math.min(r.count, room)); room -= c; return { ...r, count: c }; }).filter(r => r.count > 0);
+  // (vehicles only where they're built, and one for every twenty line troops)
+  const canBuild = here.type === "forge" || wb.at === S.factions[f].capital;
+  let vroom = canBuild ? Math.floor(line / 20) - Object.entries(wb.army).reduce((a, [k, c]) => a + (UNITS[k].role === "vehicle" ? c : 0), 0) : 0;
+  recruit = recruit.map(r => { if (UNITS[r.unit].role !== "vehicle") return r; const c = Math.max(0, Math.min(r.count, vroom)); vroom -= c; return { ...r, count: c }; }).filter(r => r.count > 0);
   if (f === "apostates" && here.owner === f) {
     const cap = S.factions.apostates.stock.captives || 0;
     const ripe = here.links.map(id => S.worlds[id]).find(w => w.owner === "hegemony" && !w.capital && w.loyalty < FX.LOYALTY.corruptible && RG.capitalOf(w).owner === "hegemony");
@@ -89,7 +93,9 @@ function decide(S, p, R) {
     if (unheld(here)) {
       // a campaign on this world: the best of the cities it doesn't hold, a region a turn toward it
       const best = SMART ? RG.cities(here).filter(r => r.owner !== f).map(r => score(here, r)).sort((a, b) => b.s - a.s)[0] : { r: RG.cities(here).find(r => r.capital && r.owner !== f) || RG.cities(here).find(r => r.owner !== f), o: 100 };
-      if (best && best.o >= 25) { const s = RG.stepToward(here, wb.region, r => r.id === best.r.id); if (s) go = { region: s }; }
+      // (a city it can't be sure of storming, next to it: lay siege; one it can, storm)
+      if (SMART && best && best.o >= 5 && best.o < 40 && hr.links.includes(best.r.id)) go = { besiege: true };
+      else if (best && best.o >= 25) { const s = RG.stepToward(here, wb.region, r => r.id === best.r.id); if (s) go = { region: s }; }
       else if (n < FULL) go = home ? {} : goHome();
     }
     if (!go.region && !go.move) {
@@ -116,7 +122,7 @@ function decide(S, p, R) {
   // the standing orders: fortify while it stays where it holds, raid a world it can't be sure of taking (under 60%),
   // always turn back from a fight under 25%, and wall up a border world when the stockpile has materiel to spare
   if (move && odds == null && S.worlds[move].owner !== f) odds = oddsAt(S, p, move, go.land, true);
-  const stance = !move && !go.region ? (hr.owner === f ? "fortify" : wb.stance === "fortify" ? "advance" : wb.stance || "advance") : move && odds != null && odds < 60 ? "raid" : "advance";
+  const stance = go.besiege ? "besiege" : !move && !go.region ? (hr.owner === f ? "fortify" : wb.stance === "fortify" || wb.stance === "besiege" ? "advance" : wb.stance || "advance") : move && odds != null && odds < 60 ? "raid" : "advance";
   const border = here.links.some(id => S.worlds[id].owner !== f), lvl = here.walls || 0;
   const mat = S.factions[f].stock.materiel || 0, sup = S.factions[f].stock.supply || 0;
   // a depot on a border world first (when there's materiel to spare), then walls
