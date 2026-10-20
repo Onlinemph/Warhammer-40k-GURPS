@@ -6,6 +6,7 @@ const { generate, TYPES, rng } = require("./galaxy.js");
 const { UNITS, FACTIONS, MILITIA, templateOf, nameOf } = require("./units.js");
 const { predict } = require("../../tools/resolver/resolver.js");
 const FX = require("./factions.js");
+const VET = require("./veterans.js");
 
 const START = {
   hegemony:  { stock: { manpower: 40, materiel: 60 }, warband: { levy: 15, storm: 3 }, garrison: { levy: 20 } },
@@ -57,6 +58,7 @@ function join(S, { player, name, faction }) {
   if (!FACTIONS[faction] || !FACTIONS[faction].player) throw new Error(`no player faction ${faction}`);
   S.players[player] = { id: player, name, faction, warband: { at: S.factions[faction].capital, army: { ...START[faction].warband }, supplied: true, orders: null, history: [] } };
   FX.joined(S, S.players[player]);
+  VET.joined(S, S.players[player]);
   note(S, `${name} raises a warband for ${FACTIONS[faction].name}`);
 }
 function note(S, text) { S.log.push({ turn: S.turn, text }); }
@@ -249,16 +251,21 @@ function tick(S, seed) {
   }
   // 8. each faction's own rules: loyalty and edicts, rituals, fame, the dead rising
   FX.upkeep(S, H, R, T);
+  // named soldiers lost with their units to hunger, desertion or infighting
+  VET.reconcile(S, R);
 }
 
 // one battle: the resolver gives the odds and the expected losses; the tick's dice say who won
 function fight(S, w, A, B, R, T) {
-  const seed = Math.floor(R() * 2 ** 31), p = predict(asResolverArmy(A.army), asResolverArmy(B.army), { seed, sims: 200 });
-  const dA = holdBonus(S, w, A.faction), dB = holdBonus(S, w, B.faction);
+  // named soldiers add to their side's worth, and a leader to its chances (veterans.js)
+  const armyOf = x => asResolverArmy(addArmy({ ...x.army }, VET.extraOf(S, x.parts)));
+  const seed = Math.floor(R() * 2 ** 31), p = predict(armyOf(A), armyOf(B), { seed, sims: 200 });
+  const hA = holdBonus(S, w, A.faction), hB = holdBonus(S, w, B.faction), dA = hA * VET.sideLeader(S, A.parts), dB = hB * VET.sideLeader(S, B.parts);
   const pA = p.pWinA * dA / (p.pWinA * dA + p.pWinB * dB || 1), r = R();
   const draw = r < p.pDraw, aWins = !draw && R() < pA;
   const lossA = draw ? p.lossA : aWins ? Math.min(p.lossA, 0.9) : Math.max(p.lossA, 0.6), lossB = draw ? p.lossB : aWins ? Math.max(p.lossB, 0.6) : Math.min(p.lossB, 0.9);
-  const before = [A, B].map(x => ({ faction: x.faction, army: { ...x.army } }));
+  const before = [A, B].map(x => ({ faction: x.faction, army: { ...x.army }, named: x.parts.filter(y => y.kind === "warband").flatMap(y => VET.forReplay(S.players[y.player].warband)) }));
+  const parts = [];   // each warband part's army before and after, for its named soldiers
   // a sleeping tomb that is fought over wakes
   if (w.tomb && !w.awake && (A.faction === "dormant" || B.faction === "dormant")) { w.awake = true; note(S, `The tomb on ${w.name} wakes to the sound of battle`); }
   const fell = [{ n: 0, power: 0 }, { n: 0, power: 0 }];
@@ -268,6 +275,7 @@ function fight(S, w, A, B, R, T) {
       const key = part.kind === "garrison" ? "garrison" : "army";
       const was = box[key];
       box[key] = cut(box[key], loss, R);
+      if (part.kind === "warband") parts.push({ part, i, was, lost });
       // the Dormant repair their fallen on a field they hold
       if (side.faction === "dormant" && !lost) for (const [k, n] of Object.entries(was)) { const x = (n - box[key][k]) * REPAIR; box[key][k] += Math.floor(x) + (R() < x - Math.floor(x) ? 1 : 0); }
       fell[i].n += total(was) - total(box[key]); fell[i].power += strength(was) - strength(box[key]);
@@ -282,17 +290,20 @@ function fight(S, w, A, B, R, T) {
   hurt(A, lossA, !draw && !aWins, 0); hurt(B, lossB, !draw && aWins, 1);
   S.swarms = S.swarms.filter(s => total(s.army));
   const winner = draw ? null : aWins ? A.faction : B.faction;
+  // the named: who falls, who is named, the leader
+  const fallenNamed = parts.flatMap(x => VET.afterBattle(S, w, x.part, x.was, S.players[x.part.player].warband.army, [A, B][x.i].faction === winner, x.lost, x.i ? lossB : lossA, R));
   // who the battle feeds: captives, biomass, fame (factions.js)
   FX.afterBattle(S, w, [A, B].map((x, i) => ({ faction: x.faction, parts: x.parts, won: winner === x.faction, p: i ? 1 - pA : pA, lostN: fell[i].n, lostPower: fell[i].power })), R, T);
   const fname = f => f === "militia" ? "the " + MILITIA.name.toLowerCase() : FACTIONS[f].name;
   const report = {
     id: `t${S.turn}-${w.id}-${S.reports.filter(r => r.turn === S.turn && r.world === w.id).length}`,
     turn: S.turn, world: w.id, worldName: w.name, worldType: w.type, seed, odds: Math.round(pA * 100), winner, secs: Math.round(p.seconds),
-    sides: before.map((b, i) => ({ faction: b.faction, before: b.army, players: [A, B][i].parts.filter(x => x.kind === "warband").map(x => S.players[x.player].name) })),
+    sides: before.map((b, i) => ({ faction: b.faction, before: b.army, named: b.named, players: [A, B][i].parts.filter(x => x.kind === "warband").map(x => S.players[x.player].name) })),
     text: `${w.name}: ${fname(A.faction)} (${describe(A.army)}) against ${fname(B.faction)} (${describe(B.army)}). ` +
       (draw ? "Neither side gives way." : `${cap(fname(winner))} win${pA > 0.75 && aWins || pA < 0.25 && !aWins ? ", as expected" : pA > 0.25 && pA < 0.75 ? " a close fight" : " against the odds"}.`) +
-      ` The odds were ${Math.round(pA * 100)}% for ${fname(A.faction)}${dA > 1 || dB > 1 ? `, ${fname(dA > 1 ? A.faction : B.faction)} holding the world${(w.walls || 0) ? " behind walls" : ""}` : ""}.` +
-      ` ${cap(fname(A.faction))} lost about ${Math.round(lossA * 100)}%, ${fname(B.faction)} about ${Math.round(lossB * 100)}%.`,
+      ` The odds were ${Math.round(pA * 100)}% for ${fname(A.faction)}${hA > 1 || hB > 1 ? `, ${fname(hA > 1 ? A.faction : B.faction)} holding the world${(w.walls || 0) ? " behind walls" : ""}` : ""}.` +
+      ` ${cap(fname(A.faction))} lost about ${Math.round(lossA * 100)}%, ${fname(B.faction)} about ${Math.round(lossB * 100)}%.` +
+      (fallenNamed.length ? ` Fallen among the named: ${fallenNamed.join(", ")}.` : ""),
   };
   for (const pl of report.sides.flatMap(s => s.players)) { const pp = Object.values(S.players).find(x => x.name === pl); if (pp) pp.warband.history.push(`Turn ${S.turn}: battle at ${w.name}, ${winner === pp.faction ? "won" : draw ? "held" : "lost"}`); }
   S.reports.push(report);

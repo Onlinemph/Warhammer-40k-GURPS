@@ -8,6 +8,17 @@ const api = async (path, body) => {
   const j = await r.json(); if (!r.ok) throw new Error(j.error || r.statusText); return j;
 };
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+// a named soldier's rank by battles survived (game/world/veterans.js)
+const rankOf = b => b >= 10 ? "Legend" : b >= 6 ? "Hardened" : b >= 3 ? "Veteran" : b >= 1 ? "Blooded" : "Recruit";
+const unitName = u => u && V.units[u] ? V.units[u].name : "";
+function rosterHtml(me) {
+  const L = me.leader, named = (me.named || []).slice().sort((a, b) => b.battles - a.battles), fallen = (me.memorial || []).slice().reverse();
+  const row = n => `<li><b>${esc(n.name)}</b> · ${rankOf(n.battles)}${n.unit ? ", " + esc(unitName(n.unit)) : ""} · ${n.battles} battle${n.battles === 1 ? "" : "s"}${n.scars && n.scars.length ? ` · <span class="muted">${esc(n.scars.join(", "))}</span>` : ""}<br><small class="muted">${esc(n.how)}</small></li>`;
+  return `<details${named.length ? " open" : ""}><summary>Roster: ${L ? esc(L.name) + " and " : ""}${named.length} named</summary>
+    ${L ? `<p>Leader: <b>${esc(L.name)}</b> · ${rankOf(L.battles)} · ${L.battles} battles, ${L.wins} won · +${Math.round(Math.min(20, 10 + L.wins))}% in battle</p>` : ""}
+    <ol class="feed">${named.map(row).join("") || "<li class='muted'>No one named yet: win a battle.</li>"}</ol></details>
+    ${fallen.length ? `<details><summary>Memorial (${fallen.length})</summary><ol class="feed">${fallen.map(m => `<li><b>${esc(m.name)}</b>${m.leader ? " (leader)" : ""} · ${esc(m.rank)} · ${m.retired ? `went home on turn ${m.turn}` : `fell at ${esc(m.fell)} on turn ${m.turn}`}${m.letter ? `<br><i>${esc(m.letter)}</i>` : ""}</li>`).join("")}</ol></details>` : ""}`;
+}
 const armyText = a => Object.entries(a).filter(([, n]) => n > 0).map(([k, n]) => `${n} ${esc(k)}`).join(", ") || "nobody";
 
 async function joinWar() {
@@ -96,7 +107,7 @@ function draw() {
     <p>Warband at <b>${esc(W[me.at].name)}</b>${me.supplied ? "" : " · <span class='err'>out of supply</span>"}<br>${armyText(Object.fromEntries(Object.entries(me.army).map(([k, n]) => [V.units[k] ? V.units[k].name : k, n])))}</p>
     <p class="muted">Stance: ${esc(me.stance || "advance")}${me.careful ? ", turning back from bad odds" : ""}</p>
     ${me.orders ? `<p class="muted">Orders in: ${me.orders.move ? "move to " + esc(W[me.orders.move].name) : "hold"}${me.orders.recruit.length ? ", recruit " + me.orders.recruit.map(r => r.count + " " + esc(V.units[r.unit].name)).join(", ") : ""}</p>` : ""}
-    ${own}${me.history.some(h => h.startsWith(`Turn ${V.turn}:`)) ? `<ul class="feed">${me.history.filter(h => h.startsWith(`Turn ${V.turn}:`)).map(h => `<li>${esc(h.replace(/^Turn \d+: /, ""))}</li>`).join("")}</ul>` : ""}<details><summary>History</summary><ol class="feed">${me.history.slice().reverse().map(h => `<li>${esc(h)}</li>`).join("")}</ol></details>`;
+    ${own}${rosterHtml(me)}${me.history.some(h => h.startsWith(`Turn ${V.turn}:`)) ? `<ul class="feed">${me.history.filter(h => h.startsWith(`Turn ${V.turn}:`)).map(h => `<li>${esc(h.replace(/^Turn \d+: /, ""))}</li>`).join("")}</ul>` : ""}<details><summary>History</summary><ol class="feed">${me.history.slice().reverse().map(h => `<li>${esc(h)}</li>`).join("")}</ol></details>`;
   const w = sel && W[sel];
   $("#world").innerHTML = w ? `<h3>${esc(w.name)}</h3><p>${esc(w.typeName)}${w.capital ? ", a capital" : ""}${w.asleep ? ", its tomb asleep" : w.asleep === false ? ", its tomb awake" : ""}${w.gate ? ", a gate" : ""}${w.walls ? `, walls level ${w.walls}` : ""} · ${w.owner ? esc(V.factions[w.owner].name) : "unclaimed"}${w.loyalty != null ? ` · loyalty ${w.loyalty}` : ""}${w.held != null ? ` · held ${w.held} turns` : ""}</p>
     ${V.you.odds[w.id] != null ? `<p>If your warband fights here: about <b>${V.you.odds[w.id]}%</b> to win against the strongest force.</p>` : ""}${w.forces ? (w.forces.length ? `<table>${w.forces.map(f => `<tr><td>${esc(V.factions[f.faction].name)}${f.players.length ? " (" + f.players.map(esc).join(", ") + ")" : ""}</td><td>${armyText(f.army)}</td></tr>`).join("")}</table>` : "<p class='muted'>Nobody there.</p>") : "<p class='muted'>Your faction has no eyes here.</p>"}` : `<p class="muted">Pick a world on the map.</p>`;

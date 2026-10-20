@@ -12,12 +12,25 @@ function fieldFor(report) {
   const W = Math.max(100, Math.min(300, Math.round(100 + 0.6 * n)));
   return { mapW: W, mapH: Math.round(W / 2), mapSeed: 1 + (report.seed % 997) };
 }
+// a named soldier's weapon skills, raised by their rank (less their scars): the template's own levels plus the bonus
+function skillsFor(template, bonus) {
+  const u = SIM.buildUnit(unitSpec(template, 1, 0).spec, 0), out = {};
+  for (const w of [u.ranged, u.melee]) if (w && w.skill && w.level != null) out[w.skill] = w.level + bonus;
+  return out;
+}
 function build(report, onProgress = () => {}) {
   const field = fieldFor(report), roster = [];
-  const units = report.sides.flatMap((s, side) => Object.entries(s.before).filter(([, n]) => n > 0).map(([id, n], i) => {
-    for (let k = 0; k < n; k++) roster.push({ side, name: nameOf(id) });
-    return unitSpec(templateOf(id), n, side, { squad: `${side}-${id}-${i}`, squadName: nameOf(id), label: nameOf(id) });
-  }));
+  const units = report.sides.flatMap((s, side) => {
+    // the named fight as themselves, out of their unit's count, in its squad
+    const named = (s.named || []).filter(n => (s.before[n.unit] || 0) > 0), left = { ...s.before };
+    for (const n of named) left[n.unit]--;
+    return Object.entries(s.before).filter(([, n]) => n > 0).flatMap(([id], i) => {
+      const squad = `${side}-${id}-${i}`, out = [];
+      if (left[id] > 0) { for (let k = 0; k < left[id]; k++) roster.push({ side, name: nameOf(id) }); out.push(unitSpec(templateOf(id), left[id], side, { squad, squadName: nameOf(id), label: nameOf(id) })); }
+      for (const n of named.filter(m => m.unit === id)) { roster.push({ side, name: n.name }); out.push(unitSpec(templateOf(id), 1, side, { squad, squadName: nameOf(id), label: n.name, ...(n.bonus ? { skills: skillsFor(templateOf(id), n.bonus) } : {}) })); }
+      return out;
+    });
+  });
   const want = report.winner == null ? -1 : report.sides[0].faction === report.winner ? 0 : 1;
   let r = null, attempt = 0;
   for (attempt = 1; attempt <= ATTEMPTS; attempt++) {

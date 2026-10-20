@@ -184,3 +184,52 @@ guesses, to be measured in the sample wars. All of it is worked out at the tick 
 ### Not in this pass
 The Last Court, patron gifts and spawn, leaders and ascension, travel styles beyond gates, edict votes, and
 treating captives in other ways (execute, ransom, exchange).
+
+## Veterans and leaders
+
+The design doc's "stories nobody wrote": most of a warband stays a number, but the soldiers who live through
+battles get names, and the war remembers them. All of it is worked out at the tick from the log, and the dice are
+the tick's own (`game/world/veterans.js`).
+
+### Who gets a name
+- After a battle a warband **wins or holds**, up to two of its survivors are named (one if it barely won), up to
+  **12 named soldiers** a warband. They are picked by the dice from its unit types, weighted by how many of each
+  survived.
+- A name comes from the faction's own name lists, drawn by the tick's dice: Hegemony "Corporal Ansel Varga of
+  Kamirbra", Apostate "Mirel the Unbound", Brawl "Gutsnag Ironjaw". Each also gets a homeworld (the world the warband
+  recruited at), the turn they joined, and a short line about how they were named ("first over the wall at Braae").
+
+### What they gain
+- **Ranks by battles survived:** Blooded (1), Veteran (3), Hardened (6), Legend (10). Each rank is +1 to the
+  soldier's weapon skills in the full engine replays (the engine already takes a skill override per unit), so a
+  Legend Levy fights at +4.
+- **In the war's own battles** (the resolver), a side's named soldiers count as extra worth: a tenth of a soldier of
+  their type for each battle survived, up to double (a Legend counts as two), so twelve Hardened Levies are worth
+  about 7 more Levies. Small, but it adds up, and it's what makes losing them hurt. (The draft said "each rank adds a
+  tenth", which didn't give its own examples; the per-battle rule does.)
+- **Scars:** a named soldier on a side that loses half or more can come out with a lasting wound (a lost eye, a
+  crude augmetic arm, the shakes): -1 to their skills in the replays, and a line in their record. Two scars and they
+  retire home: they leave the warband and the record says so.
+
+### Death
+- When a warband takes losses, each named soldier dies with the same chance as any of its type (the share of that
+  type lost). The dead go to the warband's **memorial**: name, rank, battles, where they fell, and a short **last
+  letter home**, written from their record (homeworld, how they were named, their scars, the battle they died in),
+  from the faction's own phrases.
+
+### The leader
+- The player's warband has a **leader**, a named character from the start (the player's name, rank Veteran). The
+  leader gives the warband's side +10% in its battles, rising to +20% with experience (+1% a battle won).
+- A leader can fall: in a battle the warband loses, the leader dies with half the chance of a common soldier. The
+  highest-ranked named soldier takes command, keeping their experience; with none, a new leader is raised at rank
+  Blooded and the bonus drops back to +10%.
+
+### In the client
+- A **roster** card: the leader and every named soldier with rank, unit, battles, scars and how they were named;
+  the **memorial** with the fallen and their letters.
+- Battle reports name the named who fell ("Sergeant Varga fell at Qerum").
+- The replay labels named soldiers by name, so you can watch your veterans fight.
+
+### Not in this pass
+Friendships and rivalries, XP spent on particular skills by what a soldier did, augmetics as gear, retiring as
+drill instructors or governors, players marking soldiers to follow, captives among the named, and leader duels.
