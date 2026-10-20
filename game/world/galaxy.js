@@ -50,7 +50,7 @@ function generate(seed = 1, opt = {}) {
     const held = worlds.filter(w => w.owner), far = w => Math.min(...held.map(h => d(w, h)));
     const free = worlds.filter(w => !w.owner && w.sector === s && !w.links.some(id => worlds.find(x => x.id === id).owner));
     const t = (free.length ? free : worlds.filter(w => !w.owner && w.sector === s)).sort((a, b) => far(b) - far(a))[0];
-    if (t) { t.owner = "dormant"; t.type = "tomb"; t.tomb = true; }
+    if (t) { t.owner = "dormant"; t.type = "tomb"; t.tomb = true; t.gate = true; }   // every tomb is a gate, and stays one when broken
   }
   return { seed, worlds, types: TYPES };
 }

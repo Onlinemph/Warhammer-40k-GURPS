@@ -126,3 +126,54 @@ every death is a loss that never comes back. Colour: pale blue.
 **Not in this pass** (design doc, later): edicts, Host rituals and captives, fame, waking gates, seer visions,
 faction-specific travel.
 
+
+## Faction mechanics
+
+From the design doc, each faction's own currency and two rules that change how its war plays (`game/world/factions.js`). Numbers are first
+guesses, to be measured in the sample wars. All of it is worked out at the tick from the log, like everything else.
+
+### The Hegemony: loyalty and edicts
+- **Loyalty** (its currency), per Hegemony world, 0 to 100. It rises 5 a turn while the world is held in supply. It
+  falls 5 a turn beside an Apostate world, and 10 with an Apostate warband on it or next door (measured: at 10 for
+  a world alone, the Hegemony's border went over within 7 turns without a shot). A world taken back from someone starts at 30.
+  Below 25, a world can go over to the Apostates (see Corruption), garrison and all.
+- **Edicts.** Every 10 turns a sealed edict opens: one war goal for the whole faction, picked by the tick's dice from
+  the map as it stands. Take a named world, hold a named world for 5 turns, or break a tomb. It has 10 turns.
+  Fulfilled, every Hegemony world gains 20 loyalty and the stockpile 60 materiel. Failed, every world loses 10.
+- **Wardens are grown, not raised:** they can be recruited only at a world the Hegemony has held for 10 turns or
+  more (the capital always counts).
+
+### The Apostates: captives and rituals
+- **Captives** (their currency). After a battle the Apostates win, a fifth of the enemy's fallen are taken alive.
+- **Rituals**, a new order for an Apostate warband at one of its own worlds. A ritual takes 3 turns, and everyone
+  sees it in the news. It fails if the world is fought over meanwhile. Two kinds:
+  - *Summoning*: 15 captives become 2 Vessels in the warband.
+  - *Corruption*: 10 captives, aimed at a Hegemony world next door with loyalty under 50. On success the world goes
+    over to the Apostates, and its levies become Turncoats.
+- **Turned regiments:** a Hegemony warband out of supply for 3 turns in a row loses a tenth of its Levies a turn to
+  the nearest Apostate world as Turncoats, instead of just wasting away.
+
+### The Brawl: fame
+- **Fame** (its currency). After every battle a Brawl warband fights, it gains fame in proportion to the enemy's
+  power it put down, doubled when the odds were against it. Fame pays for Bosses and Ironhides (as well as manpower
+  and materiel), and each turn the capital raises free Brawlers worth a tenth of the faction's fame.
+- **Peace breeds trouble:** a Brawl warband that hasn't fought for 4 turns loses a twentieth of its men a turn to
+  fighting among themselves.
+- **They grow:** after a battle a Brawl warband wins, one surviving Brawler in ten becomes a Boss.
+
+### The Chorus: the dead
+- **Corpses** become biomass: after a battle on a field the Chorus holds, every fallen soldier on either side gives
+  it 1 biomass (Leapers are bred where they fell).
+- **Infestation:** a world next to a Chorus world where 60 or more died in one tick's battles rises as a Chorus
+  world three turns later, unless 20 or more of someone else's soldiers stand there (measured: at 40, battles big
+  enough were common, and the Chorus held 8 worlds of 24 by turn 60 instead of 6).
+
+### The Dormant: gates
+- As now: a fixed population, repair, waking tombs, raids that come home.
+- **The gate network:** every tomb world is a gate. From one gate you can jump to any other gate your faction holds,
+  as if it were next door. A broken tomb keeps its gate, so taking tombs opens fast routes across the map. Awake
+  Dormant tombs can raid through their gates.
+
+### Not in this pass
+The Last Court, patron gifts and spawn, leaders and ascension, travel styles beyond gates, edict votes, and
+treating captives in other ways (execute, ransom, exchange).

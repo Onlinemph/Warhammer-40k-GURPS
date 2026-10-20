@@ -26,8 +26,8 @@ const UNITS = {
   runt:       { faction: "brawl",     name: "Runt",          template: "Gretchin",                       cost: { manpower: 0.25, materiel: 0.25 }, power: 0.1 },
   brawler:    { faction: "brawl",     name: "Brawler",       template: "Ork Boy",                        cost: { manpower: 0.5, materiel: 0.5 },   power: 0.5 },
   sneak:      { faction: "brawl",     name: "Sneak",         template: "Ork Kommando",                   cost: { manpower: 0.5, materiel: 1 },     power: 0.5 },
-  boss:       { faction: "brawl",     name: "Boss",          template: "Ork Nob",                        cost: { manpower: 2, materiel: 4 },       power: 2.7 },
-  ironhide:   { faction: "brawl",     name: "Ironhide",      template: "Ork Meganob",                    cost: { manpower: 6, materiel: 18 },      power: 12 },
+  boss:       { faction: "brawl",     name: "Boss",          template: "Ork Nob",                        cost: { manpower: 2, materiel: 4, fame: 3 },       power: 2.7 },
+  ironhide:   { faction: "brawl",     name: "Ironhide",      template: "Ork Meganob",                    cost: { manpower: 6, materiel: 18, fame: 10 },      power: 12 },
   // the Chorus: one hungry intelligence wearing a million bodies (AI)
   leaper:     { faction: "chorus",    name: "Leaper",        template: "Hormagaunt",                     cost: { biomass: 1 },  power: 0.1 },
   spitter:    { faction: "chorus",    name: "Spitter",       template: "Termagant",                      cost: { biomass: 1 },  power: 0.1 },

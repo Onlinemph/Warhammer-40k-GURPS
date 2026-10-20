@@ -86,22 +86,31 @@ function draw() {
   $("#map").innerHTML = svg + labels(W, me);
   $("#map").querySelectorAll(".world").forEach(c => c.onclick = () => { sel = c.dataset.id; draw(); });
   const st = Object.entries(V.you.stock).map(([k, v]) => `${Math.floor(v)} ${k}`).join(" · ");
+  // the faction's own business: the Hegemony's edict, a ritual under way, a Brawl warband growing restless
+  const ed = V.you.edict, rit = me.ritual, idle = V.turn - (me.lastFight ?? V.turn);
+  const own = (ed ? `<p><b>Edict:</b> ${esc(ed.text)}, by turn ${ed.until}${ed.kind === "hold" ? ` (held ${ed.held} of 5)` : ""}</p>` : "") +
+    (rit ? `<p><b>${esc(V.you.rituals[rit.kind].name)}</b> under way at ${esc(W[rit.at].name)}${rit.target ? " against " + esc(W[rit.target].name) : ""}, done on turn ${rit.done} if the world isn't fought over</p>` : "") +
+    (V.you.faction === "brawl" && idle >= 3 ? `<p class="err">The lads are restless: no fight for ${idle} turns${idle >= 4 ? ", and they're fighting each other" : ""}</p>` : "");
   $("#me").innerHTML = `<h2>${esc(V.you.name)}</h2><p>${esc(V.factions[V.you.faction].name)} · stockpile: ${esc(st)}</p>
     <p>Warband at <b>${esc(W[me.at].name)}</b>${me.supplied ? "" : " · <span class='err'>out of supply</span>"}<br>${armyText(Object.fromEntries(Object.entries(me.army).map(([k, n]) => [V.units[k] ? V.units[k].name : k, n])))}</p>
     ${me.orders ? `<p class="muted">Orders in: ${me.orders.move ? "move to " + esc(W[me.orders.move].name) : "hold"}${me.orders.recruit.length ? ", recruit " + me.orders.recruit.map(r => r.count + " " + esc(V.units[r.unit].name)).join(", ") : ""}</p>` : ""}
-    <details><summary>History</summary><ol class="feed">${me.history.slice().reverse().map(h => `<li>${esc(h)}</li>`).join("")}</ol></details>`;
+    ${own}<details><summary>History</summary><ol class="feed">${me.history.slice().reverse().map(h => `<li>${esc(h)}</li>`).join("")}</ol></details>`;
   const w = sel && W[sel];
-  $("#world").innerHTML = w ? `<h3>${esc(w.name)}</h3><p>${esc(w.typeName)}${w.capital ? ", a capital" : ""}${w.asleep ? ", its tomb asleep" : w.asleep === false ? ", its tomb awake" : ""} · ${w.owner ? esc(V.factions[w.owner].name) : "unclaimed"}</p>
+  $("#world").innerHTML = w ? `<h3>${esc(w.name)}</h3><p>${esc(w.typeName)}${w.capital ? ", a capital" : ""}${w.asleep ? ", its tomb asleep" : w.asleep === false ? ", its tomb awake" : ""}${w.gate ? ", a gate" : ""} · ${w.owner ? esc(V.factions[w.owner].name) : "unclaimed"}${w.loyalty != null ? ` · loyalty ${w.loyalty}` : ""}${w.held != null ? ` · held ${w.held} turns` : ""}</p>
     ${w.forces ? (w.forces.length ? `<table>${w.forces.map(f => `<tr><td>${esc(V.factions[f.faction].name)}${f.players.length ? " (" + f.players.map(esc).join(", ") + ")" : ""}</td><td>${armyText(f.army)}</td></tr>`).join("")}</table>` : "<p class='muted'>Nobody there.</p>") : "<p class='muted'>Your faction has no eyes here.</p>"}` : `<p class="muted">Pick a world on the map.</p>`;
   const here = W[me.at];
   $("#orders").innerHTML = `<h3>Orders for the next tick</h3>
-    <label>Move <select id="o-move"><option value="">Hold at ${esc(here.name)}</option>${here.links.map(l => `<option value="${l}">to ${esc(W[l].name)}</option>`).join("")}</select></label>
+    <label>Move <select id="o-move"${rit ? " disabled" : ""}><option value="">Hold at ${esc(here.name)}</option>${V.you.moves.map(l => `<option value="${l}">${here.links.includes(l) ? "to" : "through the gate to"} ${esc(W[l].name)}</option>`).join("")}</select></label>
+    ${V.you.rituals && here.owner === V.you.faction && !rit ? `<label>Ritual <select id="o-rit"><option value="">none</option>${Object.entries(V.you.rituals).map(([k, r]) => k === "corrupt"
+      ? here.links.map(l => W[l]).filter(t => t.owner === "hegemony" && !t.capital).map(t => `<option value="corrupt:${t.id}">${r.name} against ${esc(t.name)}${t.loyalty != null ? " (loyalty " + t.loyalty + ")" : ""}, ${r.captives} captives</option>`).join("")
+      : `<option value="${k}">${r.name}, ${r.captives} captives</option>`).join("")}</select></label>` : ""}
     ${here.owner === V.you.faction ? Object.entries(V.units).map(([k, u]) => `<label>${esc(u.name)} <small class="muted">(${Object.entries(u.cost).map(([r, c]) => c + " " + r).join(", ")} each)</small> <input type="number" min="0" max="50" value="0" data-unit="${k}"></label>`).join("") : "<p class='muted'>Recruits only come from your own worlds.</p>"}
     <button id="o-go">Send orders</button><p class="err" id="o-err"></p>`;
   $("#o-go").onclick = async () => {
     try {
       const recruit = [...document.querySelectorAll("[data-unit]")].map(i => ({ unit: i.dataset.unit, count: +i.value })).filter(r => r.count > 0);
-      await api("/api/orders", { move: $("#o-move").value || null, recruit }); load();
+      const rv = $("#o-rit") ? $("#o-rit").value : "", [kind, target] = rv.split(":");
+      await api("/api/orders", { move: $("#o-move").value || null, recruit, ritual: rv ? { kind, target: target || null } : null }); load();
     } catch (e) { $("#o-err").textContent = e.message; }
   };
   $("#reports").innerHTML = V.reports.map((r, i) => `<li><b>Turn ${r.turn}</b> · ${esc(r.text)} ${r.id ? `<button class="link" data-rep="${i}">Watch</button>` : ""}</li>`).join("") || "<li class='muted'>No battles yet.</li>";

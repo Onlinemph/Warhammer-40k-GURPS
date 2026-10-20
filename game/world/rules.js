@@ -5,6 +5,7 @@
 const { generate, TYPES, rng } = require("./galaxy.js");
 const { UNITS, FACTIONS, MILITIA, templateOf, nameOf } = require("./units.js");
 const { predict } = require("../../tools/resolver/resolver.js");
+const FX = require("./factions.js");
 
 const START = {
   hegemony:  { stock: { manpower: 40, materiel: 60 }, warband: { levy: 15, storm: 3 }, garrison: { levy: 20 } },
@@ -48,29 +49,35 @@ function create(seed, opt = {}) {
   for (const [f, st] of Object.entries(START)) S.factions[f] = { id: f, ...FACTIONS[f], stock: { ...st.stock }, capital: (Object.values(S.worlds).find(w => w.owner === f && w.capital) || { id: null }).id };   // the Dormant have none
   for (const w of Object.values(S.worlds)) w.garrison = w.owner ? { ...START[w.owner].garrison } : { militia: 10 + Math.floor(R() * 16) };
   for (const w of Object.values(S.worlds)) if (w.tomb) { w.awake = false; w.wakeAt = WAKE[0] + Math.floor(R() * (WAKE[1] - WAKE[0] + 1)); }
+  FX.setup(S);
   return S;
 }
 function join(S, { player, name, faction }) {
   if (S.players[player]) return note(S, `${name} is already in the war`);
   if (!FACTIONS[faction] || !FACTIONS[faction].player) throw new Error(`no player faction ${faction}`);
   S.players[player] = { id: player, name, faction, warband: { at: S.factions[faction].capital, army: { ...START[faction].warband }, supplied: true, orders: null, history: [] } };
+  FX.joined(S, S.players[player]);
   note(S, `${name} raises a warband for ${FACTIONS[faction].name}`);
 }
 function note(S, text) { S.log.push({ turn: S.turn, text }); }
 
-// orders for the next tick, checked against the state now; returns the problem, or null when accepted
-function order(S, { player, move, recruit }) {
+// orders for the next tick, checked against the state now; returns the problem, or null when accepted. A move is one
+// jump along a lane, or from a gate to another gate the faction holds; a ritual (the Apostates) is factions.js's
+function order(S, { player, move, recruit, ritual }) {
   const p = S.players[player];
   if (!p) return "no such player";
   const wb = p.warband, here = S.worlds[wb.at];
-  if (move && !here.links.includes(move)) return `${S.worlds[move] ? S.worlds[move].name : move} is not one jump from ${here.name}`;
+  if (move && !FX.canMove(S, p.faction, wb.at, move)) return `${S.worlds[move] ? S.worlds[move].name : move} is not one jump from ${here.name}`;
   for (const r of recruit || []) {
     const u = UNITS[r.unit];
     if (!u || u.faction !== p.faction) return `${p.name}'s faction can't raise ${r.unit}`;
     if (!(r.count > 0 && r.count <= 50 && Number.isInteger(r.count))) return "recruit 1 to 50 at a time";
   }
   if ((recruit || []).length && here.owner !== p.faction) return "recruits only come from your own worlds";
-  wb.orders = { move: move || null, recruit: recruit || [] };
+  const rit = ritual && typeof ritual === "object" ? { kind: String(ritual.kind), target: ritual.target ? String(ritual.target) : null } : null;
+  const err = FX.checkOrder(S, p, { move, recruit, ritual: rit });
+  if (err) return err;
+  wb.orders = { move: move || null, recruit: recruit || [], ritual: rit };
   return null;
 }
 
@@ -94,10 +101,13 @@ function supplied(S, f) {
   return seen;
 }
 
+// what factions.js needs from here
+const H = { total, cut, supplied: (...a) => supplied(...a), factionsAt: (...a) => factionsAt(...a), ATTRITION, GARRISON_CAP };
+
 function tick(S, seed) {
   const R = rng(seed);
   S.turn++;
-  const W = id => S.worlds[id];
+  const W = id => S.worlds[id], T = { fought: new Set(), dead: {} };
   // 1. income
   for (const w of Object.values(S.worlds)) {
     if (!w.owner) continue;
@@ -112,13 +122,15 @@ function tick(S, seed) {
     const st = S.factions[p.faction].stock;
     for (const r of o.recruit) {
       const u = UNITS[r.unit], can = Math.min(r.count, ...Object.entries(u.cost).map(([k, c]) => Math.floor((st[k] || 0) / c)));
+      if (FX.checkOrder(S, p, { recruit: [r] })) continue;   // Wardens only where they can be grown
       if (can > 0 && W(p.warband.at).owner === p.faction && p.warband.supplied) {
         for (const [k, c] of Object.entries(u.cost)) st[k] -= c * can;
         p.warband.army[r.unit] = (p.warband.army[r.unit] || 0) + can;
         p.warband.history.push(`Turn ${S.turn}: raised ${can} ${u.name} at ${W(p.warband.at).name}`);
       }
     }
-    if (o.move && W(p.warband.at).links.includes(o.move)) { p.warband.history.push(`Turn ${S.turn}: moved from ${W(p.warband.at).name} to ${W(o.move).name}`); p.warband.at = o.move; }
+    FX.beginRitual(S, p, o);
+    if (o.move && !p.warband.ritual && FX.canMove(S, p.faction, p.warband.at, o.move)) { p.warband.history.push(`Turn ${S.turn}: moved from ${W(p.warband.at).name} to ${W(o.move).name}`); p.warband.at = o.move; }
     p.warband.orders = null;
   }
   // 3. the AI factions
@@ -130,7 +142,7 @@ function tick(S, seed) {
     for (let guard = 0; guard < 4; guard++) {
       const sides = factionsAt(S, w).sort((a, b) => strength(b.army) - strength(a.army));
       if (sides.length < 2) break;
-      fight(S, w, sides[0], sides[1], R);
+      fight(S, w, sides[0], sides[1], R, T);
     }
   }
   // 5. captures: a world held by one faction's forces alone becomes theirs (not the Dormant's: they raid, they don't
@@ -141,17 +153,20 @@ function tick(S, seed) {
       const was = w.owner;
       w.owner = sides[0].faction; w.garrison = {};
       const broken = was === "dormant" && w.tomb;
-      if (broken) w.tomb = false;   // a taken tomb is ruins: it never holds sleepers again
+      FX.captured(S, w, was);
+      if (broken) w.tomb = false;   // a taken tomb is ruins: it never holds sleepers again (its gate stays)
       note(S, `${FACTIONS[w.owner].name} take ${w.name}${was ? " from " + FACTIONS[was].name : ""}${broken ? ": the tomb is broken open" : ""}`);
     }
   }
-  // 6. supply: a warband on or beside its own supplied world is fed; otherwise it wastes away
+  // 6. supply: a warband on or beside its own supplied world is fed; otherwise it wastes away (a Hegemony warband
+  // long out of supply loses Levies to the Apostates instead, factions.js)
   for (const f of Object.keys(FACTIONS)) {
     const ok = supplied(S, f);
     for (const p of Object.values(S.players).filter(p => p.faction === f)) {
       const at = W(p.warband.at);
       p.warband.supplied = ok.has(at.id) || at.links.some(n => ok.has(n));
-      if (!p.warband.supplied && total(p.warband.army)) { p.warband.army = cut(p.warband.army, ATTRITION, R); p.warband.history.push(`Turn ${S.turn}: out of supply at ${at.name}, losing men`); }
+      p.warband.outFor = p.warband.supplied ? 0 : (p.warband.outFor || 0) + 1;
+      if (!p.warband.supplied && total(p.warband.army) && !FX.outOfSupply(S, p, H, R)) { p.warband.army = cut(p.warband.army, ATTRITION, R); p.warband.history.push(`Turn ${S.turn}: out of supply at ${at.name}, losing men`); }
     }
   }
   // 7. garrisons: each player faction's supplied worlds raise a few local levies a turn
@@ -160,10 +175,12 @@ function tick(S, seed) {
     if (!basic) continue;
     if (supplied(S, w.owner).has(w.id) && total(w.garrison) < GARRISON_CAP) w.garrison[basic] = (w.garrison[basic] || 0) + 2;
   }
+  // 8. each faction's own rules: loyalty and edicts, rituals, fame, the dead rising
+  FX.upkeep(S, H, R, T);
 }
 
 // one battle: the resolver gives the odds and the expected losses; the tick's dice say who won
-function fight(S, w, A, B, R) {
+function fight(S, w, A, B, R, T) {
   const seed = Math.floor(R() * 2 ** 31), p = predict(asResolverArmy(A.army), asResolverArmy(B.army), { seed, sims: 200 });
   const defence = w.owner === B.faction ? TYPES[w.type].defence || 1 : w.owner === A.faction ? 1 / (TYPES[w.type].defence || 1) : 1;
   const pA = p.pWinA / (p.pWinA + p.pWinB * defence || 1), r = R();
@@ -172,7 +189,8 @@ function fight(S, w, A, B, R) {
   const before = [A, B].map(x => ({ faction: x.faction, army: { ...x.army } }));
   // a sleeping tomb that is fought over wakes
   if (w.tomb && !w.awake && (A.faction === "dormant" || B.faction === "dormant")) { w.awake = true; note(S, `The tomb on ${w.name} wakes to the sound of battle`); }
-  const hurt = (side, loss, lost) => {
+  const fell = [{ n: 0, power: 0 }, { n: 0, power: 0 }];
+  const hurt = (side, loss, lost, i) => {
     for (const part of side.parts) {
       const box = part.kind === "garrison" ? w : part.kind === "warband" ? S.players[part.player].warband : S.swarms.find(s => s.id === part.id);
       const key = part.kind === "garrison" ? "garrison" : "army";
@@ -180,6 +198,7 @@ function fight(S, w, A, B, R) {
       box[key] = cut(box[key], loss, R);
       // the Dormant repair their fallen on a field they hold
       if (side.faction === "dormant" && !lost) for (const [k, n] of Object.entries(was)) { const x = (n - box[key][k]) * REPAIR; box[key][k] += Math.floor(x) + (R() < x - Math.floor(x) ? 1 : 0); }
+      fell[i].n += total(was) - total(box[key]); fell[i].power += strength(was) - strength(box[key]);
       if (!lost) continue;
       // the beaten side: garrisons are gone, warbands and swarms fall back to a friendly world next door or die
       if (part.kind === "garrison") { w.garrison = {}; continue; }
@@ -188,9 +207,11 @@ function fight(S, w, A, B, R) {
       if (part.kind === "warband") S.players[part.player].warband.history.push(`Turn ${S.turn}: beaten at ${w.name}${back ? ", fell back to " + back.name : ", destroyed"}`);
     }
   };
-  hurt(A, lossA, !draw && !aWins); hurt(B, lossB, !draw && aWins);
+  hurt(A, lossA, !draw && !aWins, 0); hurt(B, lossB, !draw && aWins, 1);
   S.swarms = S.swarms.filter(s => total(s.army));
   const winner = draw ? null : aWins ? A.faction : B.faction;
+  // who the battle feeds: captives, biomass, fame (factions.js)
+  FX.afterBattle(S, w, [A, B].map((x, i) => ({ faction: x.faction, parts: x.parts, won: winner === x.faction, p: i ? 1 - pA : pA, lostN: fell[i].n, lostPower: fell[i].power })), R, T);
   const fname = f => f === "militia" ? "the " + MILITIA.name.toLowerCase() : FACTIONS[f].name;
   const report = {
     id: `t${S.turn}-${w.id}-${S.reports.filter(r => r.turn === S.turn && r.world === w.id).length}`,
@@ -256,7 +277,10 @@ function dormantTurn(S, R) {
     if (w.owner !== "dormant") continue;
     if (w.tomb && !w.awake) { if (S.turn >= w.wakeAt) { w.awake = true; note(S, `Lights kindle deep inside ${w.name}: the tomb is waking`); } continue; }
     if (strength(w.garrison) < 60 || S.turn - (w.raidT ?? -99) < RAID_REST) continue;   // a tomb rests between raids
-    const t = w.links.map(id => S.worlds[id]).filter(n => n.owner !== "dormant")
+    // its own neighbours, and through the gates, the neighbours of every other gate the Dormant hold
+    const reach = new Set(w.links);
+    if (w.gate) for (const g of Object.values(S.worlds)) if (g.gate && g.owner === "dormant" && g !== w) g.links.forEach(n => reach.add(n));
+    const t = [...reach].map(id => S.worlds[id]).filter(n => n.owner !== "dormant")
       .map(n => ({ n, them: factionsAt(S, n).reduce((a, s) => addArmy(a, s.army), {}) })).sort((a, b) => strength(a.them) - strength(b.them))[0];
     if (!t) continue;
     const stay = cut(w.garrison, 0.5, R), go = Object.fromEntries(Object.entries(w.garrison).map(([k, n]) => [k, n - (stay[k] || 0)]));
@@ -286,12 +310,16 @@ function view(S, player) {
   for (const w of Object.values(S.worlds)) if (w.owner === f) { eyes.add(w.id); w.links.forEach(n => eyes.add(n)); }
   for (const q of Object.values(S.players)) if (q.faction === f) { eyes.add(q.warband.at); S.worlds[q.warband.at].links.forEach(n => eyes.add(n)); }
   return {
-    turn: S.turn, you: { name: p.name, faction: f, warband: p.warband, stock: S.factions[f].stock },
+    turn: S.turn, you: { name: p.name, faction: f, warband: p.warband, stock: S.factions[f].stock, moves: FX.moves(S, f, p.warband.at),
+      edict: f === "hegemony" ? S.factions.hegemony.edict : null, rituals: f === "apostates" ? FX.RITUALS : null },
     factions: { ...Object.fromEntries(Object.entries(S.factions).map(([k, v]) => [k, { name: v.name, colour: v.colour }])), militia: { name: MILITIA.name, colour: "#8d887e" } },
     units: Object.fromEntries(Object.entries(UNITS).filter(([, u]) => u.faction === f).map(([k, u]) => [k, { name: u.name, cost: u.cost }])),
     worlds: S.order.map(id => {
       const w = S.worlds[id], seen = eyes.has(id);
-      return { id, name: w.name, x: w.x, y: w.y, type: w.type, typeName: TYPES[w.type].name, owner: w.owner, links: w.links, capital: !!w.capital, seen, tomb: !!w.tomb, asleep: seen && w.tomb ? !w.awake : undefined,
+      // loyalty is known to the Hegemony on its own worlds, and to the Apostates where they have eyes (they look for it)
+      const loyal = w.owner === "hegemony" && (f === "hegemony" || (f === "apostates" && seen)) ? Math.round(w.loyalty) : undefined;
+      return { id, name: w.name, x: w.x, y: w.y, type: w.type, typeName: TYPES[w.type].name, owner: w.owner, links: w.links, capital: !!w.capital, seen, tomb: !!w.tomb, gate: !!w.gate, asleep: seen && w.tomb ? !w.awake : undefined, loyalty: loyal,
+        held: w.owner === f ? S.turn - (w.heldSince ?? 0) : undefined,
         forces: seen ? factionsAt(S, w).map(s => ({ faction: s.faction, army: Object.fromEntries(Object.entries(s.army).map(([k, n]) => [nameOf(k), n])), players: s.parts.filter(x => x.kind === "warband").map(x => S.players[x.player].name) })) : null };
     }),
     reports: S.reports.filter(r => r.sides.some(s => s.faction === f) || eyes.has(r.world)).slice(-30).reverse(),

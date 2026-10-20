@@ -48,6 +48,11 @@ play, pause, scrub and speed.
 **What a player sees** is filtered on the server: the map and who holds each world are public; armies only where
 their faction has eyes (its worlds, its warbands, and one jump from either).
 
+**Each faction's own rules** (`world/factions.js`, `docs/setting.md`): Hegemony loyalty, edicts and Wardens grown
+only on long-held worlds; Apostate captives, rituals (Summoning, Corruption) and deserting Levies; Brawl fame,
+growth and infighting; the Chorus eating the dead and infesting; the Dormant's gates. They run at the tick from the
+log like everything else; per-tick scratch (where battles were, how many died) stays off the state.
+
 **The setting layer.** `world/units.js` gives each faction its own units on top of a combat template, from
 `docs/setting.md`; renaming there re-skins the war without touching the GURPS data. Each unit's `power` is a rough
 worth in Levies for the AI's sums; the resolver does the real reckoning.

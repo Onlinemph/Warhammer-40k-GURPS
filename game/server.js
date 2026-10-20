@@ -18,7 +18,7 @@
 //   GET  /api/me                                 -> {providers, devJoin, signedIn, joined}
 //   POST /api/join   {name, faction}            -> {ok} for a signed-in account; {token} for a development join
 //   GET  /api/view                               -> what that player can see, and when the next tick is
-//   POST /api/orders {move, recruit:[{unit,count}]} -> {ok} or {error}
+//   POST /api/orders {move, recruit:[{unit,count}], ritual:{kind,target}} -> {ok} or {error}
 //   POST /api/admin/tick  (header x-admin-key)  -> ticks now (testing)
 //   GET  /api/replay/<report id>                 -> {status, progress, ahead} until it's ready, then the replay
 //                                                   (gzipped JSON); asking for one that isn't queued queues it
@@ -162,8 +162,9 @@ const server = http.createServer(async (req, res) => {
     }
     if (req.method === "POST" && url.pathname === "/api/orders") {
       const p = who(req); if (!p) return send(res, 401, { error: "sign in and join first" });
-      const { move, recruit } = await readBody(req);
-      const e = { type: "order", player: p, move: typeof move === "string" ? move : null, recruit: Array.isArray(recruit) ? recruit.slice(0, 6).map(r => ({ unit: String(r.unit), count: Math.floor(+r.count) })) : [] };
+      const { move, recruit, ritual } = await readBody(req);
+      const e = { type: "order", player: p, move: typeof move === "string" ? move : null, recruit: Array.isArray(recruit) ? recruit.slice(0, 6).map(r => ({ unit: String(r.unit), count: Math.floor(+r.count) })) : [],
+        ritual: ritual && typeof ritual === "object" ? { kind: String(ritual.kind).slice(0, 16), target: ritual.target ? String(ritual.target).slice(0, 16) : null } : null };
       // check against a copy first: a refused order isn't logged
       const err = order(JSON.parse(JSON.stringify(S)), e);
       if (err) return send(res, 400, { error: err });
