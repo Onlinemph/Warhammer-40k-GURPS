@@ -435,7 +435,7 @@ and the resolver's odds grow steep with numbers. Three changes:
 That last number is still the problem. The resolver's odds are steep (calibrated on the engine, where a 2 to 1 edge
 almost always wins), and the Chorus's swarms are the weaker side in 58% of battles.
 
-## Worlds to conquer (draft for review)
+## Worlds to conquer
 
 Today a world is taken in a single battle. Instead, each world becomes a campaign: many regions, many cities, its own
 terrain, and battles fought on maps made from that terrain.
@@ -481,6 +481,10 @@ terrain, and battles fought on maps made from that terrain.
   A fortress adds walls and a gate.
 - The map is built from the region and the battle's seed, so its replay rebuilds it exactly.
 - The leader who wins **the ground** picks the edge (and on a hill, the higher one).
+- **As built (step 2):** each world's battles are fought on a ground drawn from its mix (`game/world/terrain.js`),
+  until regions arrive in step 3. The leader who wins the ground picks the ground itself rather than the edge, and
+  close or open ground counts in the war's odds (x1.15 for the hand-to-hand side in close ground, x1.1 for the
+  guns in the open).
 
 ### In the client
 - Clicking a world opens its **planet view**: its regions and cities on a map of their own, coloured by holder,

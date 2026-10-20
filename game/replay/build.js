@@ -5,6 +5,7 @@
 // with the shots, blows and blasts of that second.
 const { SIM, unitSpec } = require("../../tools/resolver/common.js");
 const { templateOf, nameOf } = require("../world/units.js");
+const TER = require("../world/terrain.js");
 const ATTEMPTS = 4, STALEMATE_SECONDS = 40;
 
 function fieldFor(report) {
@@ -44,10 +45,10 @@ function build(report, onProgress = () => {}) {
   for (attempt = 1; attempt <= ATTEMPTS; attempt++) {
     const seed = (report.seed + attempt * 7919) >>> 0;
     // a stalemate (neither side gave way, both dug in) is a shorter fight that leaves both standing
-    r = SIM.runBattle(units, { battlefield: "countryside", ...field, seed, maxTurns: report.outcome === "stalemate" ? STALEMATE_SECONDS : 600, frames: true, log: true, onTurn: t => onProgress({ attempt, attempts: ATTEMPTS, second: t, estimate: report.secs || 60 }) });
+    r = SIM.runBattle(units, { ...TER.battlefield(report.terrain), ...field, seed, maxTurns: report.outcome === "stalemate" ? STALEMATE_SECONDS : 600, frames: true, log: true, onTurn: t => onProgress({ attempt, attempts: ATTEMPTS, second: t, estimate: report.secs || 60 }) });
     if (r.winner === want) break;
   }
-  const map = SIM.battlefields.countryside(field.mapSeed, field);
+  const bf = TER.battlefield(report.terrain), map = SIM.battlefields[bf.battlefield](field.mapSeed, { ...field, ...bf });
   // the map: every hex of the rectangle in order (offset columns, then rows), as ground height, or a wall's height
   // (negative), or an obstacle
   const ground = map.hx.map((h, i) => map.wallI[i] ? -Math.round(Math.min(99, map.wallTop[i]) * 10) : map.crateI[i] ? 1000 : Math.round(map.elev[i] * 10));

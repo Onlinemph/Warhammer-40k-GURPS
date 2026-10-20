@@ -7,6 +7,7 @@
 const fs = require("fs"), path = require("path");
 const { SIM } = require("../tools/resolver/common.js");
 const { unitsFor, fieldFor } = require("./replay/build.js");
+const TER = require("./world/terrain.js");
 const { FACTIONS, MILITIA } = require("./world/units.js");
 const factionName = f => f === "militia" ? MILITIA.name : FACTIONS[f] ? FACTIONS[f].name : f;
 
@@ -20,7 +21,7 @@ function makeLive({ dataDir, state, record }) {
   function setup(h) {
     const { units } = unitsFor(h), field = fieldFor(h);
     const sides = h.commanders.map((c, i) => c ? i : null).filter(x => x != null);
-    return { units, opts: { battlefield: "countryside", ...field, seed: h.seed, maxTurns: 600, human: { side: sides.length === 2 ? "both" : sides[0], direct: [] } } };
+    return { units, opts: { ...TER.battlefield(h.terrain), ...field, seed: h.seed, maxTurns: 600, human: { side: sides.length === 2 ? "both" : sides[0], direct: [] } } };
   }
   function open(id) {
     const S = state(), h = (S.held || []).find(x => x.id === id);

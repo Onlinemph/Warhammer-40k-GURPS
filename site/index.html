@@ -1851,9 +1851,17 @@ const SIM = (() => {
   // walled by tall hedges (no seeing through, a gap now and then) and low stone walls (fire over them from cover),
   // ruined farms, and brush. Each side deploys in a line along its own edge. Built so nothing can cut the ground in
   // two: trunks and brush stand alone, every hedge and wall has gaps, every farm has doorways.
+  //
+  // `o.ground` dials it to a terrain (the war's planets, game/world/terrain.js), each a multiple of the defaults: hills
+  // (how many), hillH (how high), zmax (the highest ground, yards), open / hedge (the share of field edges left open
+  // and hedged; the rest are low walls), farms, woods (patches), trunk / thicket (how thick a wood is), brush, rocks
+  // (outcrop patches), river (a river across the middle, with its crossings), pools (marsh water), theme (the 3D
+  // scenery). Left out, every dial is the old default and the map is the old map exactly
   const countrysideMap = (seed = 1, o = {}) => {
     const W = Math.max(80, Math.min(600, Math.round(o.mapW || 300))), H = Math.max(40, Math.min(300, Math.round(o.mapH || 150)));
-    return builtMap("countryside", seed, M => {
+    const G = { hills: 1, hillH: 1, zmax: 7, open: 0.35, hedge: 0.35, farms: 1, woods: 1, trunk: 0.3, thicket: 0.1, brush: 1, rocks: 0, river: 0, pools: 0, theme: "jungle", ...(o.ground || {}) };
+    const gk = o.ground ? ":" + Object.entries(G).map(([k, v]) => k + v).join(",") : "";
+    return builtMap("countryside" + gk, seed, M => {
       const { rnd, ri, carve, zAt, crates, K, each } = M;
       const wall = (c0, r0, c1, r1, h) => each(c0, r0, c1, r1, (k, c, r) => M.wall(c, r, c, r, h >= 99 ? 99 : h + (zAt.get(k) || 0)));   // heights stand on the ground
       carve(1, 1, W - 2, H - 2);
@@ -1861,12 +1869,12 @@ const SIM = (() => {
       const inBand = c => c < band || c > W - 1 - band;
       // hills: smooth rises (never steeper than half a yard a yard, so anyone walks them), low near the edges
       const hills = [];
-      for (let i = 0, n = Math.round(W * H / 9000) + 2; i < n; i++) hills.push([ri(band + 10, W - band - 11), ri(8, H - 9), 2.5 + rnd() * 3, 12 + rnd() * 12]);
+      for (let i = 0, n = Math.round((Math.round(W * H / 9000) + 2) * G.hills); i < n; i++) hills.push([ri(band + 10, W - band - 11), ri(8, H - 9), (2.5 + rnd() * 3) * G.hillH, 12 + rnd() * 12]);
       each(1, 1, W - 2, H - 2, (k, c, r) => {
         let z = 0;
         for (const [hc, hr, h, s] of hills) { const d2 = ((c - hc) * 0.87) ** 2 + (r - hr) ** 2; if (d2 < 9 * s * s) z += h * dexp(-d2 / (2 * s * s)); }
         const edge = Math.min(1, Math.min(c, W - 1 - c) / (band + 6));
-        z = Math.round(7 * (1 - dexp(-z * edge / 7)) * 10) / 10;   // where hills overlap they merge, not stack
+        z = Math.round(G.zmax * (1 - dexp(-z * edge / G.zmax)) * 10) / 10;   // where hills overlap they merge, not stack
         if (z > 0.05) zAt.set(k, z);
       });
       const free = (c, r) => { const k = K(c, r); return M.floor.has(k) && !crates.has(k); };
@@ -1884,8 +1892,8 @@ const SIM = (() => {
       while (ys[ys.length - 1] < H - 25) ys.push(ys[ys.length - 1] + ri(20, 34));
       ys.push(H - 2);
       const boundary = (c0, r0, c1, r1) => {
-        const kind = rnd(); if (kind < 0.35) return;
-        const h = kind < 0.7 ? 2.4 : 1.1, len = Math.max(Math.abs(c1 - c0), Math.abs(r1 - r0));
+        const kind = rnd(); if (kind < G.open) return;
+        const h = kind < G.open + G.hedge ? 2.4 : 1.1, len = Math.max(Math.abs(c1 - c0), Math.abs(r1 - r0));
         let gap = ri(3, 9);
         for (let i = 0; i <= len; i++) {
           const c = Math.round(c0 + (c1 - c0) * i / len), r = Math.round(r0 + (r1 - r0) * i / len);
@@ -1898,7 +1906,7 @@ const SIM = (() => {
       for (let j = 1; j + 1 < ys.length; j++) for (let i = 0; i + 1 < xs.length; i++) boundary(xs[i], ys[j], xs[i + 1], ys[j]);
       // farms: ruined buildings, walls of any height, two or more ways in
       const farms = [];
-      for (let tries = 0; farms.length < Math.round(W * H / 7000) + 2 && tries < 200; tries++) {
+      for (let tries = 0; farms.length < Math.round((Math.round(W * H / 7000) + 2) * G.farms) && tries < 200; tries++) {
         const w = ri(6, 11), h = ri(5, 8), x0 = ri(band + 4, W - band - 5 - w), y0 = ri(3, H - 4 - h), x1 = x0 + w, y1 = y0 + h;
         if (farms.some(([a, b, c, d]) => x0 <= c + 6 && x1 >= a - 6 && y0 <= d + 6 && y1 >= b - 6)) continue;
         farms.push([x0, y0, x1, y1]);
@@ -1913,22 +1921,83 @@ const SIM = (() => {
         for (let i = 0; i < 4; i++) { const c = ri(x0 + 1, x1 - 1), r = rnd() < 0.5 ? y0 : y1; if (rnd() < 0.5) carve(c, r, c, r); }   // shell holes in the walls
       }
       // woods: blobs of scattered trunks (each blocks sight and the way, alone) and brush
-      for (let i = 0, n = Math.round(W * H / 6000) + 2; i < n; i++) {
+      for (let i = 0, n = Math.round((Math.round(W * H / 6000) + 2) * G.woods); i < n; i++) {
         const wc = ri(band + 8, W - band - 9), wr = ri(6, H - 7), rad = 6 + rnd() * 12;
         each(Math.round(wc - rad * 1.2), Math.round(wr - rad), Math.round(wc + rad * 1.2), Math.round(wr + rad), (k, c, r) => {
           if (hyp((c - wc) * 0.85, r - wr) > rad * (0.75 + 0.25 * rnd())) return;
           const x = rnd();
-          if (x < 0.3) lone(c, r, k2 => wall(c, r, c, r, 99));
-          else if (x < 0.4) lone(c, r, k2 => crates.set(k2, "light"));
+          if (x < G.trunk) lone(c, r, k2 => wall(c, r, c, r, 99));
+          else if (x < G.trunk + G.thicket) lone(c, r, k2 => crates.set(k2, "light"));
         });
       }
       // brush, rubble and wreckage scattered over the open fields
-      for (let i = 0, n = Math.round(W * H / 220); i < n; i++) lone(ri(band, W - band), ri(2, H - 3), k => crates.set(k, rnd() < 0.5 ? "heavy" : "light"));
+      for (let i = 0, n = Math.round(W * H / 220 * G.brush); i < n; i++) lone(ri(band, W - band), ri(2, H - 3), k => crates.set(k, rnd() < 0.5 ? "heavy" : "light"));
+      // (the dials past the old map: each draws on the dice only when it's on, so an old map is unchanged)
+      // rock outcrops: patches of standing stones two to five yards high, alone like trunks so they never close a way
+      for (let i = 0, n = Math.round(W * H / 6000 * G.rocks); i < n; i++) {
+        const oc = ri(band + 6, W - band - 7), orr = ri(5, H - 6), rad = 3 + rnd() * 7;
+        each(Math.round(oc - rad), Math.round(orr - rad), Math.round(oc + rad), Math.round(orr + rad), (k, c, r) => { if (hyp(c - oc, r - orr) <= rad && rnd() < 0.45) lone(c, r, () => wall(c, r, c, r, 2 + ri(0, 3))); });
+      }
+      // a river across the middle from edge to edge, two or three bridges and a ford over it
+      if (G.river) {
+        const phase = rnd() * 6.28, bend = 3 + rnd() * 6, mid = r => Math.round(W / 2 + bend * dsin(r / 9 + phase)), wide = 3 + ri(0, 2);
+        const crossings = new Set(), n = Math.max(3, Math.round(H / 30));
+        for (let i = 0; i < n; i++) { const r = Math.round((i + 0.5) * H / n) + ri(-3, 3); for (let d = -1; d <= 2; d++) crossings.add(r + d); }
+        for (let r = 1; r < H - 1; r++) {
+          if (crossings.has(r)) { carve(mid(r) - wide, r, mid(r) + wide, r); each(mid(r) - wide, r, mid(r) + wide, r, k => crates.delete(k)); continue; }
+          each(mid(r) - wide, r, mid(r) + wide - 1, r, k => { M.floor.delete(k); crates.delete(k); M.top.set(k, 0.02); M.water.add(k); });
+        }
+      }
+      // marsh: pools of standing water, none in the deployment bands, none so near another that they close a way
+      for (let i = 0, n = Math.round(W * H / 2500 * G.pools); i < n; i++) {
+        const pc = ri(band + 4, W - band - 5), pr = ri(4, H - 5), rad = 1 + rnd() * 2.5;
+        each(Math.round(pc - rad), Math.round(pr - rad), Math.round(pc + rad), Math.round(pr + rad), (k, c, r) => {
+          if (hyp(c - pc, r - pr) > rad || inBand(c) || !free(c, r)) return;
+          M.floor.delete(k); M.top.set(k, 0.02); M.water.add(k);
+        });
+      }
       M.spawn[0] = fromOffset(Math.round(band / 2), Math.floor(H / 2)); M.spawn[1] = fromOffset(W - 1 - Math.round(band / 2), Math.floor(H / 2));
-      return M.finish("ruins", { theme: "jungle", deploy: "edge", band });
+      return M.finish("ruins", { theme: G.theme, deploy: "edge", band });
     }, W, H);
   };
-  const BATTLEFIELDS = { facility: facilityMap, ruins: ruinsMap, hulk: hulkMap, outpost: outpostMap, trenches: trenchMap, streets: streetsMap, river: riverMap, countryside: countrysideMap };
+  // A town or a city at the scale of a war: blocks of buildings nobody enters, streets between them, squares and rubble
+  // where blocks have come down, alleys through some. `o.city`: "town" (low and scattered, gardens between), "city",
+  // "hive" (towering blocks, narrow streets) or "fortress" (a city behind a wall with gates, held by side B). Each
+  // side deploys along its own edge, as on the countryside
+  const cityMap = (seed = 1, o = {}) => {
+    const W = Math.max(80, Math.min(400, Math.round(o.mapW || 160))), H = Math.max(40, Math.min(200, Math.round(o.mapH || 80))), kind = o.city || "city";
+    const C = { town: { st: 4, bw: [6, 11], bh: [5, 9], tall: [3, 6], gone: 0.4, alley: 0.2 }, city: { st: 3, bw: [9, 15], bh: [7, 12], tall: [6, 15], gone: 0.15, alley: 0.4 },
+      hive: { st: 2, bw: [12, 20], bh: [10, 16], tall: [14, 30], gone: 0.08, alley: 0.55 }, fortress: { st: 3, bw: [8, 13], bh: [7, 11], tall: [6, 12], gone: 0.12, alley: 0.35 } }[kind] || {};
+    return builtMap("city:" + kind, seed, M => {
+      const { rnd, ri, carve, wall, crates, K, each } = M;
+      carve(1, 1, W - 2, H - 2);
+      const band = 16, spots = [];
+      for (let x = band + 2; x < W - band - 4;) {
+        const bw = ri(C.bw[0], C.bw[1]), x1 = Math.min(W - band - 3, x + bw);
+        for (let y = 2; y < H - 3;) {
+          const bh = ri(C.bh[0], C.bh[1]), y1 = Math.min(H - 3, y + bh);
+          if (rnd() < C.gone || x1 - x < 3 || y1 - y < 3) { for (let i = 0; i < 4; i++) spots.push([ri(x, x1), ri(y, y1)]); }   // a square, or a block come down
+          else {
+            wall(x, y, x1, y1, ri(C.tall[0], C.tall[1]));
+            if (rnd() < C.alley) { const c = ri(x + 2, x1 - 2); carve(c, y, c, y1); }
+            if (rnd() < C.alley / 2) { const r = ri(y + 2, y1 - 2); carve(x, r, x1, r); }
+          }
+          y = y1 + C.st;
+        }
+        x = x1 + C.st;
+      }
+      for (let i = 0, n = Math.round(W * H / 180); i < n; i++) spots.push([ri(band, W - band), ri(2, H - 3)]);   // barricades, wrecks and rubble in the streets
+      M.cover(spots, 0.5);
+      // a fortress: a wall across the city on side B's half, a yard thick and six high, with three gates
+      if (kind === "fortress") {
+        const x = Math.round(W * 0.62), gates = [0.2, 0.5, 0.8].map(f => Math.round(H * f));
+        each(x, 1, x, H - 2, (k, c, r) => { if (gates.some(g => Math.abs(r - g) <= 1)) { carve(c, r, c, r); crates.delete(k); } else wall(c, r, c, r, 6); });
+      }
+      M.spawn[0] = fromOffset(Math.round(band / 2), Math.floor(H / 2)); M.spawn[1] = fromOffset(W - 1 - Math.round(band / 2), Math.floor(H / 2));
+      return M.finish("ruins", { theme: "urban", deploy: "edge", band });
+    }, W, H);
+  };
+  const BATTLEFIELDS = { facility: facilityMap, ruins: ruinsMap, hulk: hulkMap, outpost: outpostMap, trenches: trenchMap, streets: streetsMap, river: riverMap, countryside: countrysideMap, city: cityMap };
   const battleMap = opt => opt.terrain || (BATTLEFIELDS[opt.battlefield] ? BATTLEFIELDS[opt.battlefield](opt.mapSeed || 1, opt) : null);
 
   // called-shot locations and their penalties (B398-399)

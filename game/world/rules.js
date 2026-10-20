@@ -11,6 +11,7 @@ const LOG = require("./logistics.js");
 const POL = require("./politics.js");
 const HL = require("./highlights.js");
 const BT = require("./battle.js");
+const TER = require("./terrain.js");
 
 const START = {
   hegemony:  { stock: { manpower: 40, materiel: 60 }, warband: { levy: 15, storm: 3 }, garrison: { levy: 20 } },
@@ -56,6 +57,7 @@ function create(seed, opt = {}) {
   for (const [f, st] of Object.entries(START)) S.factions[f] = { id: f, ...FACTIONS[f], stock: { ...st.stock }, capital: (Object.values(S.worlds).find(w => w.owner === f && w.capital) || { id: null }).id };   // the Dormant have none
   for (const w of Object.values(S.worlds)) w.garrison = w.owner ? { ...START[w.owner].garrison } : { militia: 10 + Math.floor(R() * 16) };
   for (const w of Object.values(S.worlds)) if (w.tomb) { w.awake = false; w.wakeAt = WAKE[0] + Math.floor(R() * (WAKE[1] - WAKE[0] + 1)); }
+  for (const w of Object.values(S.worlds)) w.terrain = TER.worldTerrain(seed, w);   // what each world's ground is made of
   FX.setup(S);
   LOG.setup(S);
   POL.setup(S);
@@ -308,11 +310,16 @@ function fight(S, w, A, B, R, T, fixed) {
   // first volley (battle.js), as fighting strength: the winner's numbers count for that much more; a battle fought
   // live has had its own
   const C = fixed ? { winner: -1, factor: [1, 1], adv: [], leaders: [] } : BT.contest(S, A, B, R);
+  // the ground it's fought on: drawn from the world's terrain, or chosen by a leader who won the ground (terrain.js);
+  // close ground favours the side that fights hand to hand, open ground the guns
+  const won = C.winner >= 0 && C.adv.some(a => a.id === "ground") ? [A, B][C.winner] : null;
+  const ground = fixed && fixed.terrain ? fixed.terrain : TER.pick(w, seed, won ? { melee: TER.melee(won.army) > TER.melee((won === A ? B : A).army) } : null);
+  const tf = TER.factors(ground, A, B);
   const scale = (army, k) => k === 1 ? army : Object.fromEntries(Object.entries(army).map(([u, n]) => [u, Math.max(1, Math.round(n * k))]));
   const armyOf = (x, k) => asResolverArmy(scale(addArmy({ ...x.army }, VET.extraOf(S, x.parts)), k));
   const p = predict(armyOf(A, C.factor[0]), armyOf(B, C.factor[1]), { seed, sims: 200 });
   const hA = holdBonus(S, w, A.faction), hB = holdBonus(S, w, B.faction);
-  const dA = hA * VET.sideLeader(S, A.parts) * LOG.sideFactor(S, A.parts), dB = hB * VET.sideLeader(S, B.parts) * LOG.sideFactor(S, B.parts);
+  const dA = hA * VET.sideLeader(S, A.parts) * LOG.sideFactor(S, A.parts) * tf[0], dB = hB * VET.sideLeader(S, B.parts) * LOG.sideFactor(S, B.parts) * tf[1];
   const pA = p.pWinA * dA / (p.pWinA * dA + p.pWinB * dB || 1);
   // how it ends: a rout, an attacker thrown back, a stalemate both dig into, or a victory that costs more than half
   const def = w.owner || "militia", attacker = A.faction === def ? 1 : B.faction === def ? 0 : null;
@@ -357,12 +364,12 @@ function fight(S, w, A, B, R, T, fixed) {
   const fname = f => f === "militia" ? "the " + MILITIA.name.toLowerCase() : FACTIONS[f].name;
   const report = {
     id: `t${S.turn}-${w.id}-${S.reports.filter(r => r.turn === S.turn && r.world === w.id).length}`,
-    turn: S.turn, world: w.id, worldName: w.name, worldType: w.type, seed, odds: Math.round(pA * 100), winner, secs: Math.round(p.seconds), outcome: O.kind,
+    turn: S.turn, world: w.id, worldName: w.name, worldType: w.type, seed, odds: Math.round(pA * 100), winner, secs: Math.round(p.seconds), outcome: O.kind, terrain: ground,
     contest: C.adv.length ? { by: C.winner, leader: C.leaders[C.winner].name, adv: C.adv.map(a => a.id) } : undefined,
     losses: [Math.round(lossA * 100) / 100, Math.round(lossB * 100) / 100], live: fixed ? true : undefined, held: fixed ? fixed.id : undefined, fallen: fallenNamed.filter(n => !leadersFell.includes(n)), leaders: leadersFell,
     sides: before.map((b, i) => ({ faction: b.faction, before: b.army, named: b.named, short: b.short || undefined, players: [A, B][i].parts.filter(x => x.kind === "warband").map(x => S.players[x.player].name) })),
     text: `${w.name}: ${fname(A.faction)} (${describe(A.army)}) against ${fname(B.faction)} (${describe(B.army)}). ` +
-      BT.contestText(C, [fname(A.faction), fname(B.faction)]).trimStart() + " " +
+      `Fought ${TER.TERRAIN[ground].at}. ` + BT.contestText(C, [fname(A.faction), fname(B.faction)]).trimStart() + " " +
       (draw ? "Neither side gives way: they dig in to fight again." : O.kind === "repulse" ? `${cap(fname(winner))} throw back ${fname(aWins ? B.faction : A.faction)}.`
         : `${cap(fname(winner))} win${O.kind === "pyrrhic" ? ", at a terrible price" : pA > 0.75 && aWins || pA < 0.25 && !aWins ? ", as expected" : pA > 0.25 && pA < 0.75 ? " a close fight" : " against the odds"}.`) +
       ` The odds were ${Math.round(pA * 100)}% for ${fname(A.faction)}${hA > 1 || hB > 1 ? `, ${fname(hA > 1 ? A.faction : B.faction)} holding the world${(w.walls || 0) ? " behind walls" : ""}` : ""}.` +
@@ -484,7 +491,7 @@ function view(S, player) {
       const w = S.worlds[id], seen = eyes.has(id);
       // loyalty is known to the Hegemony on its own worlds, and to the Apostates where they have eyes (they look for it)
       const loyal = w.owner === "hegemony" && (f === "hegemony" || (f === "apostates" && seen)) ? Math.round(w.loyalty) : undefined;
-      return { id, name: w.name, x: w.x, y: w.y, type: w.type, typeName: TYPES[w.type].name, owner: w.owner, links: w.links, capital: !!w.capital, seen, walls: w.walls || 0, blockaded: !!w.blockaded,
+      return { id, name: w.name, x: w.x, y: w.y, type: w.type, typeName: TYPES[w.type].name, owner: w.owner, links: w.links, capital: !!w.capital, seen, walls: w.walls || 0, terrain: Object.keys(w.terrain || {}).sort((a, b) => w.terrain[b] - w.terrain[a]).map(k => TER.TERRAIN[k].name), blockaded: !!w.blockaded,
         depot: w.depot ? (w.owner === f ? { supply: w.depot.supply } : seen ? {} : undefined) : undefined,
         convoys: S.convoys.filter(c => c.at === id && (c.faction === f || seen)).map(c => ({ faction: c.faction, to: S.worlds[c.to].name, supply: c.faction === f ? c.supply : undefined })), tomb: !!w.tomb, gate: !!w.gate, asleep: seen && w.tomb ? !w.awake : undefined, loyalty: loyal,
         held: w.owner === f ? S.turn - (w.heldSince ?? 0) : undefined,
@@ -505,7 +512,7 @@ function hold(S, w, A, B, R) {
     players: x.parts.filter(y => y.kind === "warband").map(y => S.players[y.player].name) }));
   // who is in it: only these forces are settled by it (anyone arriving meanwhile fights afterwards, as usual)
   const parts = [A, B].map(x => x.parts.map(y => ({ ...y })));
-  (S.held ||= []).push({ id, world: w.id, worldName: w.name, turn: S.turn, seed, factions: [A.faction, B.faction], sides, parts, commanders: cmd, result: null });
+  (S.held ||= []).push({ id, world: w.id, worldName: w.name, turn: S.turn, seed, terrain: TER.pick(w, seed, null), factions: [A.faction, B.faction], sides, parts, commanders: cmd, result: null });
   w.heldIn = id;
   for (const x of [A, B]) for (const part of x.parts) {
     if (part.kind === "warband") { const wb = S.players[part.player].warband; wb.heldIn = id; wb.history.push(`Turn ${S.turn}: a battle at ${w.name}, held for ${cmd.filter(Boolean).map(c => S.players[c].name).join(" and ")} to fight`); }
@@ -531,7 +538,7 @@ function settleHeld(S, R, T) {
     for (const p of Object.values(S.players)) if (p.warband.heldIn === h.id) p.warband.heldIn = null;
     for (const sw of S.swarms) if (sw.heldIn === h.id) sw.heldIn = null;
     if (!A || !B) continue;   // one side gone meanwhile (a rollback, a deserted garrison): nothing to fight
-    fight(S, w, A, B, R, T, h.result ? { ...h.result, id: h.id, by: h.commanders.filter(Boolean).map(c => S.players[c] ? S.players[c].name : c) } : null);
+    fight(S, w, A, B, R, T, h.result ? { ...h.result, id: h.id, terrain: h.terrain, by: h.commanders.filter(Boolean).map(c => S.players[c] ? S.players[c].name : c) } : null);
   }
   S.held = [];
 }
