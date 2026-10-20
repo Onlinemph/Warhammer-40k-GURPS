@@ -4,11 +4,12 @@
 // toward foreign worlds (the weakest next door first, gates included), and comes home to rebuild when cut below 12. The
 // Apostates hold a Corruption when a Hegemony world next door is ripe, or a Summoning, whenever they have the
 // captives. Prints the mean worlds held per faction at turns 20, 40 and 60, and in how many wars each was wiped out.
-const { apply, order, total, strength, oddsAt, politics } = require("./world/rules.js");
+const { apply, order, total, strength, oddsAt, politics, factionsAt } = require("./world/rules.js");
 const { rng } = require("./world/galaxy.js");
 const FX = require("./world/factions.js");
 const LOG = require("./world/logistics.js");
 const RG = require("./world/regions.js");
+const FR = require("./world/fronts.js");
 
 const { SCALE, UNITS, FACTIONS: FACTIONS_ } = require("./world/units.js");
 // a recruiting round's mix, line troops first so the special and heavy weapons have their ten each to go among
@@ -62,11 +63,28 @@ function decide(S, p, R) {
   const landAt = w => { const c = RG.capitalOf(w); return RG.canLand(w, f, c.id) ? c.id : RG.defaultLanding(w, f); };
   const unheld = w => RG.cities(w).some(r => r.owner !== f);
   // a city worth the fight: its odds (through the fog), the capital counting 15 more
-  const score = (w, r) => { const o = oddsAt(S, p, w.id, r.id, true) ?? 100; return { w, r, o, s: o + (r.capital ? 15 : 0) }; };
+  // (by what the fight is worth, not only how sure: a capital counts double, a city that would give it the world half
+  // as much again; so a capital at 50% beats a farm town at 95%)
+  const givesWorld = (w, r) => { const cs = RG.cities(w), mineAfter = cs.filter(x => x.owner === f || x === r).length; const capHeld = RG.capitalOf(w).owner === f || r.capital; return capHeld && mineAfter * 2 > cs.length && w.owner !== f; };
+  const score = (w, r) => { const o = oddsAt(S, p, w.id, r.id, true) ?? 100; return { w, r, o, s: o * ((r.capital ? 2 : 1) + (givesWorld(w, r) ? 0.5 : 0)) }; };
   let go = {}, odds = null;
   // (a warband in the middle of a campaign on a world presses on until it's weak; elsewhere it fills up at home first)
   const campaign = unheld(here) && here.regions.some(r => r.owner === f);
-  if (n < WEAK || (n < FULL && !home && !campaign)) { if (!home) go = goHome(); }
+  // defending (the fronts): a city of its own under threat, here or on a world of its own next door, by a force it could
+  // stand against (at least two fifths of its strength): it goes there and holds it, fortified
+  const HF = { factionsIn: factionsAt, strength };
+  if (SMART && n >= WEAK) {
+    const mineNear = [here, ...FX.moves(S, f, wb.at).map(id => S.worlds[id])].filter(w => w.regions.some(r => r.owner === f && r.city));
+    const cand = mineNear.flatMap(w => RG.cities(w).filter(r => r.owner === f).map(r => ({ w, r, t: FR.threatTo(S, w, r, f, HF), own: factionsAt(S, w, r).filter(s => s.faction === f).reduce((a, s) => a + strength(s.army), 0) })))
+      .filter(x => x.t > x.own && strength(wb.army) >= 0.4 * (x.t - x.own) && !(x.w.id === wb.at && x.r.id === wb.region)).sort((a, b) => (b.t - b.own) - (a.t - a.own));
+    const d = cand[0];
+    if (d && !(here.id === wb.at && hr.id === d.r.id)) {
+      if (d.w === here) { const s2 = RG.stepToward(here, wb.region, x => x.id === d.r.id); if (s2) go = { region: s2, defend: true }; }
+      else if (RG.canLand(d.w, f, d.r.id)) go = { move: d.w.id, land: d.r.id, defend: true };
+    }
+  }
+  if (go.defend) { /* (on its way to defend) */ }
+  else if (n < WEAK || (n < FULL && !home && !campaign)) { if (!home) go = goHome(); }
   else if (n >= FULL || campaign) {
     if (unheld(here)) {
       // a campaign on this world: the best of the cities it doesn't hold, a region a turn toward it

@@ -79,8 +79,10 @@ function buildMap(ground, seed, elements) {
   // a river down the middle, with three crossings
   if (g.river) { const fords = [Math.floor(H / 5), Math.floor(H / 2), Math.floor(4 * H / 5)]; let x = Math.floor(W / 2); for (let y = 0; y < H; y++) { if (!fords.includes(y)) t[at(x, y)] = "water"; else t[at(x, y)] = "clear"; if (R() < 0.3) x = Math.max(2, Math.min(W - 3, x + (R() < 0.5 ? -1 : 1))); } }
   // a fortress city's wall across side 1's half, three gates
-  if (g.wall) { const x = Math.round(W * 0.62), gates = [0.2, 0.5, 0.8].map(f => Math.round(H * f)); for (let y = 0; y < H; y++) t[at(x, y)] = gates.includes(y) ? "clear" : "built"; }
-  return { W, H, t };
+  // (its wall hexes are fortification: they count against an assault, buildings don't)
+  const wall = new Set();
+  if (g.wall) { const x = Math.round(W * 0.62), gates = [0.2, 0.5, 0.8].map(f => Math.round(H * f)); for (let y = 0; y < H; y++) { t[at(x, y)] = gates.includes(y) ? "clear" : "built"; if (!gates.includes(y)) wall.add(at(x, y)); } }
+  return { W, H, t, wall };
 }
 // odd-q neighbours and distances (cube coordinates)
 const DIRS = [0, 1, 2, 3, 4, 5];
@@ -206,12 +208,16 @@ function fight(opt) {
   const synapseNear = e => e.side != null && els.some(o => o.side === e.side && o.state === "ok" && o.rt.synapse && dist(o, e) <= 3);
   const orFire = e => e.n * e.worth * e.rt.orFire * (sideOf(e.side).orMult || 1) * (e.suppressed ? 0.5 : 1) * (e.reduced ? 1 : 1);
   const orClose = e => e.n * e.worth * e.rt.orClose * (sideOf(e.side).orMult || 1);
+  // the defender's PR. Against fire: Foot in built-up x2 (the article). Against an assault (user direction: melee ignores
+  // cover unless it's a proper fortification): woods and buildings count for nothing, a fortress city's wall x3 for
+  // Foot (the article's built-up figure), earthworks x2 against both, and a world's walls and defence in the holder's
+  // city against both
   const prOf = (e, closeCombat) => {
-    const k = terr(e.x, e.y), foot = e.rt.mobility === "foot";
+    const k = terr(e.x, e.y), foot = e.rt.mobility === "foot", key = e.y * W + e.x;
     let m = 1;
-    if (foot && k === "built") m *= closeCombat ? 3 : 2;
-    else if (foot && k === "woods" && closeCombat) m *= 2;
-    if (works.has(e.y * W + e.x)) m *= 2;
+    if (closeCombat) { if (foot && map.wall.has(key)) m *= 3; }
+    else if (foot && k === "built") m *= 2;
+    if (works.has(key)) m *= 2;
     if (holder === e.side) m *= sideOf(e.side).prMult || 1;
     return e.n * e.worth * e.rt.pr * m;
   };

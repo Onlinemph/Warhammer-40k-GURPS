@@ -957,3 +957,105 @@ war follows the article, and the 3D replay of a battle may end differently from 
 ### Not in this pass
 Air, transports and vehicles (the war has no vehicles yet), off-map artillery, battles of more than two factions,
 and fighting a Tactical Mass Combat battle yourself.
+
+## Fronts, a balance pass, and what comes after
+
+*Draft, for approval.* User direction: do these three next: big fair fights through the AI, a balance pass, and
+the later list (vehicles, weather, sieges over several turns, planets in 3D). Where things stand (4 wars of 60
+turns, after the reprice): close fights (40-60% odds) are 9.5% of battles and the winner had 95%+ in 49%; battles
+are 340 soldiers at the median; worlds held at turn 60: Hegemony 4.3, Apostates 3.3, Brawl 5.8, Chorus 6.3,
+Dormant 2.3. Tactical Mass Combat stays as written throughout: these change who fights where, and with what, not
+the battle's rules.
+
+### 1. Fronts: big, fair fights through the AI
+The fights are lopsided because attackers pick the weakest city in reach and defenders stand where they started.
+- **Garrisons answer threats.** At the end of each turn a world's holder moves part of its quiet garrisons a region
+  toward its most threatened city: the one with the most enemy strength next to it, on the world or able to land on
+  it, against its own garrison. Up to a third of a quiet garrison a turn, never leaving a city under a sixth of what
+  it had. This is the muster's slower cousin: the muster brings help to a city attacked this turn; this brings help
+  before the attack.
+- **Worlds help worlds.** A faction moves part of its quiet worlds' garrisons to a threatened world next door (one
+  jump a turn, landing at its seat), the Hegemony and the Apostates and the Brawl by the same rule as the AI factions.
+  A world under threat is one with an enemy force on it, or next door and strong enough to win there.
+- **Counter-attacks.** A faction that lost a city this turn sends what it has next to it to take it back next turn,
+  if the odds are at least even, before the new holder's garrison grows.
+- **The Chorus gathers.** Broods next to the same target pool into one swarm rather than going in one at a time.
+- **The bots** choose by what a fight is worth, not only by how sure: the capital and contested cities count more,
+  and a fight at 50-80% that takes the world counts over a sure one that takes a farm town.
+- Measured on the sample wars: close fights, the share won at 95%+, battle sizes, how often a city falls without a
+  fight, balance. The bar: close fights back to at least 15%, without the war stalling (cities and worlds still
+  change hands at about today's rate).
+
+- **As built:** `game/world/fronts.js`, at the end of each turn, for every faction: garrisons move a third (to a
+  floor of 50) a region toward the city most in danger on their world; a quiet world sends a quarter of its biggest
+  garrison to the seat of a threatened world next door; a city lost this turn is counter-attacked by the old holder's
+  quiet garrisons on that world, as a force that fights there next turn and joins the garrison if it wins, when the
+  odds are at least even. The Chorus pools broods that couldn't win alone against a target in reach of two or more.
+  The bots weigh a fight's worth (a capital double, a city that gives them the world half as much again) by its odds,
+  and **defend**: a city of theirs threatened by a force they could stand against (two fifths of its strength), here
+  or next door, and they go and hold it, fortified.
+- **And (user direction, while building) melee ignores cover unless it's a fortification:** against an assault,
+  woods and buildings count for nothing; a fortress city's wall (x3 for Foot) and earthworks (x2) still do, and a
+  world's walls and defence in its cities. Fire is as before (half into woods or buildings; Foot in buildings x2).
+  Brawl assaulting Levies who hold a city: 25% to win, from nearly none.
+- **Measured** (4 wars of 60 turns): close fights 13.7% of battles (9.5% before), short of the bar of 15%; 95%+
+  48%; 87 cities taken a war (81 before) but 8.8 worlds (11.8): the defenders hold longer. Battles 363 at the
+  median, 3,034 the biggest. Worlds at turn 60: Hegemony 3.5, Apostates 3.3, Brawl 4.8, Chorus 8.0 (6.3: melee in
+  cities and gathered broods), Dormant 2.8. What keeps fights from being closer: with a hundred elements a side the
+  table's dice average out, so only nearly equal forces make a close fight, and the AI doesn't often bring those
+  together. The balance pass will look at the Chorus.
+
+### 2. A balance pass
+After everything above and the vehicles below, so it tunes the war as it will be, not as it is today.
+- **What may move:** prices and their faction rates, yields, starting forces and garrisons, the levies a world
+  raises, the Chorus's breeding and the Dormant's raids, the bots' mixes. **What may not:** Tactical Mass Combat's
+  rules and tables, and SCER.
+- **Known:** the Apostates fell to 3.3 worlds after the reprice (their line troops cost 3.2 a Levy's worth, the
+  Hegemony's 0.6); surprise comes in about half of all battles (the Terrain Ratings are low in cities and at night,
+  as written), and so does night (1d+1 on 5+ is half the time, as written).
+- **The bar**, measured over 16 wars of 60 turns: each player faction 3 to 7 worlds at turn 60 on average, none wiped
+  out in more than 1 war of 16; the Chorus 4 to 7; the Dormant 2 to 3 (they don't expand); close fights at least 15%.
+  Each change is measured on its own and kept only if it moves the war toward the bar.
+
+### 3. Vehicles
+The codex has seven, and the engine can field them all: the **Chimera** (a transport), **Leman Russ Battle Tank** and
+**Scout Sentinel** for the Hegemony; the **Rhino** (a transport), **Predator Destructor** and **Land Raider** for the
+Apostates, as traitor vehicles; the **Trukk** (a transport) for the Brawl. The Chorus fields its monsters (Bulwarks,
+Overminds) and the Dormant have none yet.
+- **In Tactical Mass Combat as written:** a vehicle is an element of one; tanks and armoured transports are Armor;
+  Mechanized (6 movement points, the article's) or Motorized (5); its own terrain costs (Mechanized: woods 2,
+  built-up 2, swamp 5); a transport carries elements up to its weight (the article's Mounting and Dismounting, and
+  elements aboard die with it); Mounted and Mechanized elements at half strength attacking into built-up or swamp.
+- **Ratings:** SCER worked out from the vehicle's own data (its best station's weapon, its armour by facing, its HP),
+  with a vehicle's crew skills; priced at its faction's rate like everything else.
+- **In the war:** recruited where the faction holds a Foundry world's city (a Foundry world builds them); special
+  limits as for heavy weapons (one for every twenty line troops); a transport lets the elements it carries move with
+  it. The 3D replays fight them as the engine does.
+
+### 4. Weather
+- Each world has weather each turn, drawn by its type and the tick's dice: clear, rain, storm, fog, dust (a desert's
+  and a wasteland's). It changes between turns and shows on the planet view and the battle reports.
+- In a battle, as Mass Combat has it: bad weather lowers the Terrain Rating by 1 (surprise is easier); fog and
+  storm halve fire ranges and add 1 to the cost of moving through open ground for vehicles; dust halves fire range
+  for those without Night. Clear weather changes nothing.
+
+### 5. Sieges over several turns
+- A warband can **besiege** a city instead of assaulting it: a new stance. It holds every region next to the city (or
+  as many as it can), doesn't attack, and each turn the city is under siege: its garrison isn't supplied (a tenth of
+  it lost a turn, as a blockade's), it raises no levies, it rallies no one, and an Artillery element among the
+  besiegers knocks a level off its walls every two turns.
+- The besieged may **sortie**: a battle on the besiegers' ground, the garrison attacking. The bots and the AI decide
+  it by the odds.
+- An assault can come at any time, by changing stance; a city that has been under siege fights it with its losses.
+
+### 6. Planets in 3D
+- The planet view becomes a globe: each world a sphere, its regions as areas on it (from the region map's places,
+  spread over the sphere), coloured by holder, with their ground's colours and city lights, the warband marked,
+  battles flaring. It turns with a drag; picking a region works as on the flat map, which stays as a choice.
+- The client only; nothing in the war changes.
+
+### The order to build in
+1. Fronts (1), measured on its own.
+2. Vehicles (3), then weather (4), then sieges (5), each measured.
+3. The balance pass (2), on the war as it then is.
+4. Planets in 3D (6).

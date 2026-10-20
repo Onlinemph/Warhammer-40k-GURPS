@@ -17,6 +17,7 @@ const HL = require("./highlights.js");
 const BT = require("./battle.js");
 const TER = require("./terrain.js");
 const TMC = require("./tmc.js");
+const FR = require("./fronts.js");
 const RG = require("./regions.js");
 
 // (each count SCALE times what's written here: units.js)
@@ -200,7 +201,9 @@ function supplied(S, f) {
 const heldShare = (w, f) => w.regions.reduce((a, r) => a + (r.owner === f ? RG.share(w, r) : 0), 0);
 
 // what factions.js and logistics.js need from here
-const H = { weight: (...a) => POL.weight(...a), fromTreasury: (...a) => POL.fromTreasury(...a), total, cut, supplied: (...a) => supplied(...a), factionsAt: (...a) => factionsOn(...a), factionsIn: (...a) => factionsAt(...a), heldShare, ATTRITION, GARRISON_CAP, TYPES, note: (...a) => note(...a) };
+const H = { strength: (...a) => strength(...a), addArmy, fname: (...a) => fname(...a),
+  odds: (S, w, r, f, army, them) => TMC.predict({ ground: r.terrain, seed: 1, sides: [tmcSide(S, w, r, { faction: f, army, parts: [] }), tmcSide(S, w, r, { faction: Object.keys(them).includes("militia") ? "militia" : (r.owner || "militia"), army: them, parts: [] })], attacker: 0 }, 4).pWinA,
+  weight: (...a) => POL.weight(...a), fromTreasury: (...a) => POL.fromTreasury(...a), total, cut, supplied: (...a) => supplied(...a), factionsAt: (...a) => factionsOn(...a), factionsIn: (...a) => factionsAt(...a), heldShare, ATTRITION, GARRISON_CAP, TYPES, note: (...a) => note(...a) };
 
 function tick(S, seed) {
   const R = rng(seed);
@@ -276,7 +279,8 @@ function tick(S, seed) {
     }
     p.warband.orders = null;
   }
-  // 3. the AI factions
+  // 3. the AI factions (and first, counter-attacks that took their city back join its garrison)
+  FR.settle(S, H);
   chorusTurn(S, R);
   dormantTurn(S, R);
   // 3b. convoys move a jump, and raiders take the ones they catch
@@ -314,6 +318,7 @@ function tick(S, seed) {
         const was = r.owner;
         r.owner = sides[0].faction; r.garrison = {};
         if (r.city) note(S, `${FACTIONS[r.owner].name} take ${where(w, r)}${was ? " from " + FACTIONS[was].name : ""}`);
+        if (r.city) (T.lostCities ||= []).push({ world: w.id, region: r.id, was });   // (fronts.js: a counter-attack)
       }
     }
   }
@@ -358,6 +363,8 @@ function tick(S, seed) {
     const c = RG.cities(w).filter(r => r.owner === w.owner && total(r.garrison) < GARRISON_CAP).sort((a, b) => total(a.garrison) - total(b.garrison) || +a.id.slice(1) - +b.id.slice(1))[0];
     if (c) c.garrison[basic] = (c.garrison[basic] || 0) + 2 * SCALE;
   }
+  // 7b. fronts (fronts.js): garrisons answer threats, quiet worlds help threatened ones, lost cities are counter-attacked
+  FR.fronts(S, R, T, H);
   // 8. each faction's own rules: loyalty and edicts, rituals, fame, the dead rising
   FX.upkeep(S, H, R, T);
   settleWorlds(S, T);
@@ -592,16 +599,32 @@ function chorusTurn(S, R) {
     }
     if (want > 0) { const l = Math.ceil(want / 2); add("leaper", l); if (want > 0) add("spitter", want); }
   }
+  const idle = [];
   for (const w of Object.values(S.worlds)) for (const r of w.regions) {
     if (r.owner !== "chorus" || total(r.garrison) < 25 * SCALE || r.heldIn) continue;
     const send = cut(r.garrison, 0.4, R), go = Object.fromEntries(Object.entries(r.garrison).map(([k, n]) => [k, n - (send[k] || 0)]));
     // a swarm goes out with a Conductor if the brood can spare one (it breeds another), so its broods stay linked
     if (!go.conductor && (send.conductor || 0) >= 1) { send.conductor--; go.conductor = 1; }
-    const t = pickTarget(S, "chorus", reachOf(S, w, r, "chorus"), go, 0.6, R);
-    if (!t) continue;
+    const reach = reachOf(S, w, r, "chorus"), t = pickTarget(S, "chorus", reach, go, 0.6, R);
+    if (!t) { idle.push({ w, r, send, go, reach }); continue; }
     r.garrison = send;
     S.swarms.push({ id: `s${S.turn}-${w.id}-${r.id}`, faction: "chorus", at: t.w.id, region: t.r.id, from: { at: w.id, region: r.id }, army: go });
     if (t.w !== w || t.r.city) note(S, `The Chorus swarms from ${where(w, r)} toward ${where(t.w, t.r)}`);
+  }
+  // the broods gather (fronts.js's draft): broods that couldn't win alone pool against a target in reach of two or
+  // more of them, the richest first, if together they're sure enough
+  const byTarget = new Map();
+  for (const b of idle) for (const x of b.reach) { const k = x.w.id + "/" + x.r.id; if (!byTarget.has(k)) byTarget.set(k, { x, broods: [] }); byTarget.get(k).broods.push(b); }
+  const used = new Set();
+  for (const { x, broods } of [...byTarget.values()].filter(t => t.broods.length >= 2).sort((a, b) => worth(b.x.r) - worth(a.x.r) || b.broods.length - a.broods.length || (a.x.w.id + a.x.r.id < b.x.w.id + b.x.r.id ? -1 : 1)).slice(0, 6)) {
+    const free = broods.filter(b => !used.has(b));
+    if (free.length < 2) continue;
+    const go = free.reduce((a, b) => addArmy(a, b.go), {});
+    const t = pickTarget(S, "chorus", [x], go, 0.6, R);
+    if (!t) continue;
+    for (const b of free) { used.add(b); b.r.garrison = b.send; }
+    S.swarms.push({ id: `s${S.turn}-${x.w.id}-${x.r.id}-g`, faction: "chorus", at: x.w.id, region: x.r.id, from: { at: free[0].w.id, region: free[0].r.id }, army: go });
+    note(S, `The Chorus gathers ${free.length} broods against ${where(x.w, x.r)}`);
   }
 }
 
