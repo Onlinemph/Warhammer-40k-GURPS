@@ -154,6 +154,9 @@ const who = req => { const p = auth.playerOf(auth.accountOf(req)); if (p) return
 // a POST must come from the war's own pages (the cookie is SameSite=Lax as well): a page elsewhere can't act for a player
 const sameOrigin = req => { const o = req.headers.origin; if (!o) return true; try { const h = new URL(o).host; return h === req.headers.host || h === new URL(PUBLIC_URL).host; } catch (e) { return false; } };
 const redirect = (res, to, cookie) => { res.writeHead(302, { location: to, "cache-control": "no-store", ...(cookie ? { "set-cookie": cookie } : {}) }); res.end(); };
+// the simulator's page (the library and the 3D replays), served at /sim: the 3D view of a war battle opens it on
+// /sim#war=<report id>
+const SIM_PAGE = path.join(__dirname, "..", "site", "index.html");
 const STATIC = { "/": ["index.html", "text/html"], "/app.js": ["app.js", "text/javascript"], "/style.css": ["style.css", "text/css"], "/replay.js": ["replay.js", "text/javascript"] };
 
 const server = http.createServer(async (req, res) => {
@@ -163,6 +166,7 @@ const server = http.createServer(async (req, res) => {
     if (limited(ip)) return send(res, 429, { error: "slow down" });
     const url = new URL(req.url, "http://x");
     if (url.pathname === "/healthz") return send(res, 200, { ok: true, turn: S.turn, players: Object.keys(S.players).length });
+    if (req.method === "GET" && url.pathname === "/sim") { if (!fs.existsSync(SIM_PAGE)) return send(res, 404, { error: "the simulator page isn't built" }); res.writeHead(200, { "content-type": "text/html", "cache-control": "no-cache" }); return res.end(fs.readFileSync(SIM_PAGE)); }
     if (req.method === "GET" && STATIC[url.pathname]) { const [f, t] = STATIC[url.pathname]; return send(res, 200, fs.readFileSync(path.join(__dirname, "public", f)), t); }
     if (req.method === "POST" && !sameOrigin(req)) return send(res, 403, { error: "not from this site" });
     const am = /^\/auth\/(\w+)(\/callback)?$/.exec(url.pathname);
@@ -249,8 +253,11 @@ const server = http.createServer(async (req, res) => {
       if (!seen) return send(res, 404, { error: "no such battle that you know of" });
       const j = wantReplay(id);
       if (j.status !== "ready") return send(res, 200, { status: j.status, progress: j.progress, error: j.error, ahead: j.status === "queued" ? queue.indexOf(id) + (busy ? 1 : 0) : 0 });
-      res.writeHead(200, { "content-type": "application/json", "content-encoding": "gzip", "cache-control": "private, max-age=86400" });
-      return res.end(fs.readFileSync(replayFile(id)));
+      // ?full=1: the engine's whole result, for the 3D view (replays made before it was kept have none: make it again)
+      const file = url.searchParams.get("full") ? replayFile(id).replace(/\.json\.gz$/, ".full.json.gz") : replayFile(id);
+      if (!fs.existsSync(file)) { fs.unlinkSync(replayFile(id)); return send(res, 200, wantReplay(id)); }
+      res.writeHead(200, { "content-type": "application/json", "content-encoding": "gzip", "cache-control": "private, no-cache" });   // a rollback can make a battle again under the same id
+      return res.end(fs.readFileSync(file));
     }
     send(res, 404, { error: "not found" });
   } catch (e) { send(res, 400, { error: e.message }); }
@@ -278,7 +285,7 @@ function stopReplays(ids) {
   for (const id of [...jobs.keys()]) if (drop(id)) jobs.delete(id);
   for (let k = queue.length - 1; k >= 0; k--) if (drop(queue[k])) queue.splice(k, 1);
   if (busy && drop(busy)) { if (worker) worker.terminate(); worker = null; busy = null; }
-  for (const f of fs.readdirSync(REPLAYS)) if (drop(f.replace(/\.json\.gz$/, ""))) fs.unlinkSync(path.join(REPLAYS, f));
+  for (const f of fs.readdirSync(REPLAYS)) if (drop(f.replace(/(\.full)?\.json\.gz$/, ""))) fs.unlinkSync(path.join(REPLAYS, f));
   nextReplay();
 }
 // a new war: this one's log, replays and tokens go to DATA_DIR/archive/war-<when>/, accounts are freed to join again,

@@ -336,3 +336,50 @@ player to obey; contracts make it worth their while. Worked out from the log lik
 ### Not in this pass
 More offices than one, appointment by the elected, edict votes, sanctioned traitors, counter-intelligence,
 propaganda, captive treatment, duels, and contracts between factions.
+
+## Watching battles (draft for review)
+
+From the design doc: replays, a highlight feed, and battles fought live between ticks. Three parts:
+
+### 1. War battles in 3D
+- Every war replay also keeps the **full engine result** (every model's facing, path, aim and condition each
+  second, every shot, blow, hit and fall, the terrain, each soldier's kit), gzipped beside the compact one.
+- The war server also serves the simulator's page, which already has the 3D view and the broadcast view (a
+  scoreboard, a kill feed, title and result cards). A battle report gets a second button, **Watch in 3D**. It opens
+  that page on the battle, with the sides' faction names and colours, named soldiers labelled, and the kill feed
+  naming them.
+- The 2D player stays. It loads fast and works on any phone; the 3D view wants a decent machine.
+- The Dawn of War models stay optional, as on the simulator page: without a local pack it uses its own miniatures.
+
+### 2. The highlight feed
+- Each tick, every battle gets a **score** from what happened:
+  - an **upset** (the winner's odds were under 35%), counting more the longer the odds;
+  - a **close fight** (odds between 40% and 60%, and heavy losses on both sides);
+  - **size** (soldiers on the field);
+  - **the named** (a named soldier or a leader fell, a Legend fought);
+  - **weight** (a capital, a tomb broken, a world changing hands, a contract or an edict fulfilled by it).
+- A **Highlights** card shows the faction's **top 10 of the turn** among the battles it can see, each with a line
+  saying why it's there ("an upset: 18% odds, and Sergeant Varga fell"), Watch buttons, and your own warband's
+  battles marked.
+- **Upvotes:** a player can mark a highlight worth watching, one vote per battle. The votes show, and over the war
+  each reason's weight drifts toward what players vote for (by at most a tenth a turn).
+
+### 3. Fighting a battle live
+- **Command it yourself:** a new standing choice for a warband. When it's on, a battle your warband fights at the
+  tick isn't settled by the resolver. It is **held open until the next tick** and listed in your news as "waiting
+  for you".
+- You fight it in the browser on the full engine, as on the simulator's "Play it yourself": standing orders to your
+  units each second, or each model's turn chosen from the options the AI weighed. The server runs the battle and
+  keeps it, so nothing is trusted from the browser. Each answer goes to the server, which steps the engine and sends
+  back what happened, and a battle survives a restart because its answers are kept.
+- When it ends, its result applies at the next tick: the winner, each side's losses, the named who fell.
+- **Not fought by the next tick:** the resolver settles it there as usual, and nothing is lost by sleeping (the
+  design doc's "respect players' time"). Only your own side is yours to command. The enemy is the engine's AI, or a
+  human player of theirs who also chose to command, in which case each of you commands your own side and the battle
+  waits on both.
+- **Limits:** a held battle keeps its armies in place on that world until it's settled. While it waits, neither side
+  can move away or recruit into it.
+
+### Not in this pass
+Sector splitting for very large replays, the 3D view inside the war page itself, sharing highlights outside the
+game, a following feed for individual soldiers, and live spectating of someone else's live battle.

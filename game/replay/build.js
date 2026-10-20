@@ -37,7 +37,7 @@ function build(report, onProgress = () => {}) {
   let r = null, attempt = 0;
   for (attempt = 1; attempt <= ATTEMPTS; attempt++) {
     const seed = (report.seed + attempt * 7919) >>> 0;
-    r = SIM.runBattle(units, { battlefield: "countryside", ...field, seed, maxTurns: 600, frames: true, onTurn: t => onProgress({ attempt, attempts: ATTEMPTS, second: t, estimate: report.secs || 60 }) });
+    r = SIM.runBattle(units, { battlefield: "countryside", ...field, seed, maxTurns: 600, frames: true, log: true, onTurn: t => onProgress({ attempt, attempts: ATTEMPTS, second: t, estimate: report.secs || 60 }) });
     if (r.winner === want) break;
   }
   const map = SIM.battlefields.countryside(field.mapSeed, field);
@@ -50,6 +50,9 @@ function build(report, onProgress = () => {}) {
     id: report.id, world: report.worldName, turn: report.turn, seed: report.seed, attempt: Math.min(attempt, ATTEMPTS), matched: r.winner === want,
     sides: report.sides.map(s => ({ faction: s.faction, players: s.players })), winner: r.winner, seconds: r.turns,
     map: { W: map.W, H: map.H, ground }, roster, frames, fx,
+    // the engine's own result, whole, for the 3D and broadcast views on the simulator page (kept in its own file)
+    full: { frames: r.frames, fx: r.fx, terrain: r.terrain, roster: r.roster, beatTurn: r.beatTurn, logAt: r.logAt, log: r.log, winner: r.winner,
+      timeout: r.timeout, over: r.over ?? true, turns: r.turns, ridge: r.ridge, tally: r.tally },
   };
 }
 module.exports = { build, fieldFor, ATTEMPTS };

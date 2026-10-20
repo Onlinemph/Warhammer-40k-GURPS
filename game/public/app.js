@@ -169,7 +169,7 @@ function draw() {
         convoy: $("#o-cv-to") && $("#o-cv-to").value ? { to: $("#o-cv-to").value, supply: +$("#o-cv-n").value } : null }); load();
     } catch (e) { $("#o-err").textContent = e.message; }
   };
-  $("#reports").innerHTML = V.reports.map((r, i) => `<li><b>Turn ${r.turn}</b> · ${esc(r.text)} ${r.id ? `<button class="link" data-rep="${i}">Watch</button>` : ""}</li>`).join("") || "<li class='muted'>No battles yet.</li>";
+  $("#reports").innerHTML = V.reports.map((r, i) => `<li><b>Turn ${r.turn}</b> · ${esc(r.text)} ${r.id ? `<button class="link" data-rep="${i}">Watch</button> <a class="link" href="/sim#war=${encodeURIComponent(r.id)}" target="_blank" rel="noopener">Watch in 3D</a>` : ""}</li>`).join("") || "<li class='muted'>No battles yet.</li>";
   $("#reports").querySelectorAll("[data-rep]").forEach(b => b.onclick = () => openReplay(V.reports[+b.dataset.rep].id, V.reports[+b.dataset.rep]));
   $("#politics").innerHTML = politicsHtml(); wirePolitics();
   $("#news").innerHTML = V.news.map(n => `<li><b>Turn ${n.turn}</b> · ${esc(n.text)}</li>`).join("");

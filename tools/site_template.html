@@ -688,5 +688,7 @@ let tmr; $("#q").addEventListener("input", e=>{ clearTimeout(tmr); tmr=setTimeou
 $("#menubtn").onclick = ()=>{ const s=$("#side"); s.classList.toggle("open"); $("#menubtn").setAttribute("aria-expanded", s.classList.contains("open")); };
 window.addEventListener("hashchange", ()=>{ const h=location.hash.slice(1); if(h && h!==current && (h==="sim"||LIBS.some(l=>l.id===h))) showLib(h); });
 const start = (location.hash||"").slice(1);
-showLib(start==="sim"||LIBS.some(l=>l.id===start) ? start : (LIBS.find(l=>l.id.includes("las-weapons"))||LIBS[0]).id);
+// a war battle, opened from the war's client: /sim#war=<report id>
+if (start.startsWith("war=") && window.warReplay) window.warReplay(decodeURIComponent(start.slice(4)));
+else showLib(start==="sim"||LIBS.some(l=>l.id===start) ? start : (LIBS.find(l=>l.id.includes("las-weapons"))||LIBS[0]).id);
 </script>
