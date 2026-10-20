@@ -60,6 +60,19 @@
       }
       return out;
     }
+    // Fire discipline (user report: a lot of friendly fire): a shooter holds its fire rather than shoot through a friend
+    // standing in its line of fire, or at a foe a friend is fighting hand to hand (unless it's a marksman, 16 or better
+    // for the shot as it stands). Point-blank shots inside a melee are their own (close options). The stray-round rule
+    // below is unchanged: the AI and the reactions had been taking such shots, and a missed round from a burst finds
+    // a friend in the way on a flat 9
+    function holdsFire(m, w, t, from = m.h) {
+      if (!from || !t || !t.h || w.malediction) return false;
+      const d = hexDist(from, t.h);
+      if (d <= 1) return false;
+      if (between(from, t.h, m.u.side).some(x => x !== t && x !== m && x.u.side === m.u.side)) return true;
+      const lvl = wl(m, w) - skillPen(m) + rangePenalty(rngD(from, t.h, d)) + t.u.sm;
+      return lvl < 16 && modelsNear(t.h, 1).some(x => x !== m && x.u.side === m.u.side && x.state === "ok" && !x.u.veh);
+    }
     // Hitting the wrong target (B389, B392): each figure that might be hit, closest first, is attacked at a flat 9 or
     // what the shooter would need to hit it on purpose, whichever is worse; it defends as it would against a shot
     // at it. The first that is hit, or defends, ends the round's flight. Drilled squads don't hit each other by mistake

@@ -41,6 +41,7 @@
         // a Wait on a door or corner fires at the first foe to step into view and range; any other at a charger closing in
         if (f.watch) { if (!los(f.h, m.h) || hexDist(f.h, m.h) > f.waiting.range.max) continue; }
         else if (hexDist(f.h, m.h) > (f.waiting === f.u.melee ? f.u.melee.reachMax : m.u.melee.reachMax + 1)) continue;
+        if (f.waiting !== f.u.melee && holdsFire(f, f.waiting, m)) continue;   // a friend in the way, or in a melee with it: the Wait holds
         const w = f.waiting; f.waiting = null; f.watch = false;
         if (w === f.u.ranged && gunGrip(f)) continue;
         L(`${f.id} was waiting for ${m.id} (Wait)`);
@@ -57,7 +58,7 @@
           for (const x of newly) {
             if (x.waiting || x.stunned || x.early === turn || m.state !== "ok" || !m.h || x.state !== "ok" || !x.h) continue;
             const xw = weaponsFor(x, false).find(w => w.range && hexDist(x.h, m.h) <= w.range.max && (w !== x.u.ranged || x.ammo > 0 || w.shots.mag === Infinity));
-            if (!xw || x.reload > 0 || x.jam) continue;
+            if (!xw || x.reload > 0 || x.jam || holdsFire(x, xw, m)) continue;
             const per = u => (u.stats.per || u.stats.iq || 10) + (u.flags.cr ? 1 : 0);
             const a = check(per(m.u)), b = check(per(x.u));
             const xWins = a.ok !== b.ok ? b.ok : b.margin > a.margin;

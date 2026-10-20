@@ -107,6 +107,15 @@
           // (every round of a burst that misses may fly on into a friend, not just one: user direction, friendly fire)
           const rounds = Math.max(1, Math.min(w.rof || 1, isGun && w.shots.mag !== Infinity ? Math.max(1, m.ammo) : Infinity));
           const ffCost = coneFF + (pals.length && !w.cone ? rounds * (1 - P3[cl(base)]) * pals.reduce((a, x) => a + P3[cl(9 + x.u.sm)] * Math.min(1, expInjRandom(w, x.u) / remOf(x)) * threatOf(x) * HORIZON, 0) * u.ai.caution : 0);
+          // fire discipline (user report: a lot of friendly fire): no shot through a friend standing in the line (step
+          // aside to clear it, below, or find another target), and none at a foe a friend is fighting hand to hand,
+          // unless the shooter is a marksman (16 or better as it stands). The stray-round rule (B389) is unchanged; the
+          // AI had judged such shots worth the risk, and with bursts of ten at a flat 9 a stray it seldom was
+          // (the same check as every other way of firing, holdsFire in 55-battle-attacks.js, here against the shot as
+          // planned)
+          const friendInLine = inter.some(x => x.u.side === u.side);
+          const intoMelee = !w.malediction && d > 1 && base < 16 && modelsNear(t.h, 1).some(x => x !== m && x.u.side === u.side && x.state === "ok" && !x.u.veh);
+          const noShot = friendInLine || intoMelee;
           const aimed = m.aimTarget === t && m.aimTurns > 0;
           const aimB = aimed ? Math.min(2 * w.acc, w.acc + (m.aimTurns >= 3 ? 2 : m.aimTurns >= 2 ? 1 : 0)) : 0;
           const fA = !aimed && m.follow && m.follow.t === t && m.follow.w === w && !m.moved ? m.follow.acc : 0;
@@ -126,7 +135,7 @@
           // few seconds (more likely the more friendly bursts can reach the foe: each forces a dodge, -1 the next,
           // MA122), at a defence of 9 or less, discounted for the seconds and for the gunner surviving them
           const dd0 = rangedDefence(t, m), pD = dd0 == null ? 0 : P3[cl(dd0)];
-          let holdIt = !w.malediction && !w.cone && (w.rof || 1) <= 2 && pD >= 0.5 && (m.holdN || 0) < 8
+          let holdIt = !noShot && !w.malediction && !w.cone && (w.rof || 1) <= 2 && pD >= 0.5 && (m.holdN || 0) < 8
             && expInjRandom(w, t.u) >= 0.5 * remOf(t) && (terr ? walk(m.h, t.h) : d) > moveOf(t) + 3;
           if (holdIt) {
             const bursts = u.group.models.filter(x => x !== m && x.u.side === u.side && x.state === "ok" && x.h && !x.stunned && x.u.ranged && (x.u.ranged.rof || 1) >= 3 && los(x.h, t.h) && hexDist(x.h, t.h) <= x.u.ranged.range.max).length;
@@ -144,11 +153,11 @@
             });
             continue;
           }
-          add(vNow - rNow, `fire ${w.name}@${t.id}`, () => { setAim(m, t); faceTo(m, t.h); fireAt(m, w, t, { aim: aimed }); });
+          if (!noShot) add(vNow - rNow, `fire ${w.name}@${t.id}`, () => { setAim(m, t); faceTo(m, t.h); fireAt(m, w, t, { aim: aimed }); });
           // a friend in the line of fire: step aside first (the step an Attack allows, B364) to a hex with a clear line,
           // when that's worth more than firing past him and risking a stray round in his back (user direction:
           // friendly fire for everyone, and the AI keeping clear of it). No aim or bracing carries over the step.
-          if (!w.cone && !m.prone && !m.grips.length && !engaged(m) && inter.some(x => x.u.side === u.side)) {
+          if (!w.cone && !m.prone && !m.grips.length && !engaged(m) && friendInLine && !intoMelee) {
             const near = pals.filter(x => !inter.includes(x));
             let bestS = null;
             for (const [dq, dr] of DIRS) {
@@ -169,12 +178,12 @@
             }); }
           }
           // All-Out Attack (Determined, +1 ranged): only worth it when little can hit back
-          if (threatNow < 1) {
+          if (threatNow < 1 && !noShot) {
             const Eaoa = planAttack(m, w, t, base + bB + aimB + fA - own + 1, false, null, { aim: aimB + fA, braced: br, fx }).score * sustainOf(w) * spread;
             add(Wr * kv(m, t, Eaoa) - fpCost - ffCost - risk(m, m.h, "aoa"), `aoa-fire@${t.id}`, () => { m.aoa = true; setAim(m, t); faceTo(m, t.h); fireAt(m, w, t, { aim: aimed, aoa: true }); });
           }
           // Aim (B364): pay a turn now for Acc (and +1/+2 more on later turns) next turn
-          if ((w.acc || 0) >= 1 && !(aimed && m.aimTurns >= 3)) {
+          if (!noShot && (w.acc || 0) >= 1 && !(aimed && m.aimTurns >= 3)) {
             const nextB = Math.min(2 * w.acc, (aimed ? aimB : 0) + (aimed ? 1 : w.acc));
             const brA = bracedFor(m, w, t, false, true);
             const Eaim = planAttack(m, w, t, base + (brA ? 1 : 0) + nextB - ownCoverPen(m, t.h, brA), false, null, { aim: nextB, braced: brA, fx }).score * sustainOf(w) * spread;
@@ -204,9 +213,13 @@
             const h2 = stepHex(m.h, t.h, mv);
             const E = planAttack(m, w, t, wl(m, w) - skillPen(m) + rangePenalty(nd + spdOf(t.steps || 0)) + t.u.sm + Math.min(-2, w.bulk || 0), false, null, { from: h2 }).score * sustainOf(w);
             const cont = GAMMA * (shotValueFrom(m, h2, pool) - shotValueFrom(m, m.h, pool));
-            DEST = h2; if (!hopeless(w, t, h2)) add(Wr * kv(m, t, E) + cont - risk(m, h2, ""), `advance-fire@${t.id}`, () => {
+            // (fire discipline, as everywhere: not through a friend, nor into a friend's melee, from where it will stand or
+            // once it gets there)
+            DEST = h2; if (!hopeless(w, t, h2) && !holdsFire(m, w, t, h2)) add(Wr * kv(m, t, E) + cont - risk(m, h2, ""), `advance-fire@${t.id}`, () => {
               stepToward(m, t.h, mv, hold); if (m.state !== "ok" || !m.h || m.stunned || !t.h || m.readied) return;
-              faceTo(m, t.h); m.mna = true; fireAt(m, w, t, { moved: true });
+              faceTo(m, t.h);
+              if (holdsFire(m, w, t)) { L(`${m.id} holds its fire: a friend is in the way`); return; }
+              m.mna = true; fireAt(m, w, t, { moved: true });
             });
           }
         }

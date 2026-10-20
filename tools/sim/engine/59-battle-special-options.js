@@ -123,7 +123,7 @@
       for (const f of models) {
         if (m.state !== "ok" || m.stunned) return;
         if (!f.waiting || !f.watch || f.state !== "ok" || !f.h || f.u.side === m.u.side || f.stunned) continue;
-        if (!los(f.h, m.h) || hexDist(f.h, m.h) > f.waiting.range.max) continue;
+        if (!los(f.h, m.h) || hexDist(f.h, m.h) > f.waiting.range.max || holdsFire(f, f.waiting, m)) continue;
         const w = f.waiting; f.waiting = null; f.watch = false;
         if (w === f.u.ranged && gunGrip(f)) continue;
         L(`${f.id} was waiting for ${m.id} to show itself (Wait)`);
@@ -146,7 +146,7 @@
         const k = coverAt(m.h, t.h, m);
         if (UP(u) || !DUCK.has(k) || !covPenAt(m.h, t.h, m)) continue;   // (one that stays on its feet doesn't duck behind a parapet)
         for (const w of usable) {
-          const E = shotAt(m.h, t, w);
+          const E = holdsFire(m, w, t) ? 0 : shotAt(m.h, t, w);
           if (E <= 0) continue;
           add(Wr * kv(m, t, E) - risk(m, m.h, "duck") - waitRisk(m, m.h), `popup-trench@${t.id}`, () => {
             L(`${m.id} rises out of cover to fire at ${t.id} (pop-up attack)`);
@@ -166,7 +166,7 @@
         let best = null;
         for (const t of pool.slice(0, 6)) {
           if (!t.h || !los(n, t.h) || duckedFrom(t, n)) continue;
-          for (const w of usable) { const E = shotAt(n, t, w); if (E > 0 && (!best || E * kv(m, t, 1) > best.v)) best = { t, w, E, v: E * kv(m, t, 1) }; }
+          for (const w of usable) { const E = holdsFire(m, w, t, n) ? 0 : shotAt(n, t, w); if (E > 0 && (!best || E * kv(m, t, 1) > best.v)) best = { t, w, E, v: E * kv(m, t, 1) }; }
         }
         if (!best) continue;
         const { t, w, E } = best;
@@ -265,7 +265,7 @@
         if (!o || x.state !== "ok" || !x.h || x.stunned) continue;
         const t = o.t;
         if (t.state !== "ok" || !t.h) { setOpen(x, null); continue; }
-        if (!openFor(t, x) || !los(x.h, t.h) || duckedFrom(t, x.h) || !weaponsFor(x, false).includes(o.w) || (o.w === x.u.ranged && x.ammo <= 0)) continue;
+        if (!openFor(t, x) || !los(x.h, t.h) || duckedFrom(t, x.h) || !weaponsFor(x, false).includes(o.w) || (o.w === x.u.ranged && x.ammo <= 0) || holdsFire(x, o.w, t)) continue;
         setOpen(x, null);
         L(`${x.id} sees ${t.id} falter and fires (Wait)`);
         fireAt(x, o.w, t, { aim: x.aimTarget === t && x.aimTurns > 0 });

@@ -497,3 +497,17 @@ test("the engine uses only maths that every JavaScript engine computes bit for b
     });
   }
 });
+test("fire discipline: no shooting through a friend or into a friend's melee, so friendly fire stays rare (user report)", () => {
+  // a war-sized fight on the countryside: Levies, Storm Levies and Wardens against a charging Ork mob. Before, about
+  // 16 of every 100 bursts put a stray round into a friend (shots through the front rank, pop-ups and Waits fired
+  // into melees, Move and Attack past a comrade)
+  const lo = DATA.loadouts, spec = (t, n) => ({ template: t, count: n, ...lo[t] });
+  let ff = 0, bursts = 0;
+  for (const s of [1, 2, 3]) {
+    const r = SIM.runBattle([{ side: 0, spec: { ...spec("Astra Militarum Guardsman", 40), squad: "a" } }, { side: 0, spec: { ...spec("Militarum Tempestus Scion", 8), squad: "b" } },
+      { side: 1, spec: { ...spec("Ork Boy", 50), squad: "c" } }, { side: 1, spec: { ...spec("Ork Nob", 8), squad: "d" } }], { battlefield: "countryside", mapW: 160, mapH: 80, mapSeed: s, seed: s * 7, maxTurns: 600, log: true });
+    ff += r.log.filter(l => /\(friendly fire\)/.test(l)).length;
+    bursts += r.log.filter(l => / fires /.test(l)).length;
+  }
+  assert.ok(ff / bursts < 0.03, `${ff} friendly hits in ${bursts} bursts`);
+});

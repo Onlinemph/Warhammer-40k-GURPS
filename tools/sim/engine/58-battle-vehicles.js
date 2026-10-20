@@ -107,6 +107,7 @@
           if (d > w.range.max || (w.minRange && d < w.minRange) || !arcOK(m, x, f.h) || !los(m.h, f.h) || duckedFrom(f, m.h)) continue;
           // no shell into a melee with our own side in it
           if ((w.dmg.ex || w.blast) && models.some(y => y.u.side === u.side && y !== m && y.state === "ok" && y.h && !y.u.veh && hexDist(y.h, f.h) <= 3)) continue;
+          if (holdsFire(m, w, f)) continue;
           const lvl = vehShotLvl(m, x, w, f), aimed = x.aimT === f && x.aimTurns > 0;
           const now = kv(m, f, planAttack(m, w, f, lvl + (aimed ? w.acc : 0), false, null, { aim: aimed ? w.acc : 0, braced: !m.moved }).score);
           const later = !aimed && !m.moved && w.acc >= 2 && !w.cone ? GAMMA * kv(m, f, planAttack(m, w, f, lvl + w.acc, false, null, { aim: w.acc, braced: true }).score) : 0;
