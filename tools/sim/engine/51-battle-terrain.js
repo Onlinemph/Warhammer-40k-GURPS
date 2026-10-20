@@ -337,6 +337,7 @@
     const EDGE = terr && terr.deploy === "edge" ? (() => {
       const out = new Map(), rows = terr.H - 6;
       for (const side of [0, 1]) {
+        if (opt.hold === side) { holdCells(side, out); continue; }
         const lines = [[]];
         let used = 0;
         units.forEach((u, ui) => {
@@ -364,6 +365,38 @@
       }
       return out;
     })() : null;
+    // a side holding its ground (`opt.hold`, the war's defender): spread through its own half, between a tenth and
+    // four tenths of the way in from its edge, each unit around the best spot left at least six yards from the units
+    // placed so far, its models two yards apart. The best spot has cover on the side the attacker comes from (walls,
+    // buildings, crates), a view over the ground the attacker must cross, and height
+    function holdCells(side, out) {
+      const c0 = Math.round(terr.W * 0.6), c1 = Math.round(terr.W * 0.9), spots = [], foe = terr.spawn[1 - side];
+      const looks = Array.from({ length: 12 }, (_, i) => fromOffset(side ? Math.round(terr.W * 0.4) : Math.round(terr.W * 0.6), Math.round((i + 0.5) * terr.H / 12)));
+      for (let c = c0; c <= c1; c++) for (let r = 2; r < terr.H - 2; r++) {
+        const col = side === 1 ? c : terr.W - 1 - c, h = fromOffset(col, r), k = key(h.q, h.r);
+        if (!walkable(k)) continue;
+        let front = 0, all = 0;
+        for (const [dq, dr] of DIRS) {
+          const n = { q: h.q + dq, r: h.r + dr }, k2 = key(n.q, n.r), v = !walkable(k2) ? 1 : terr.crates && terr.crates.has(k2) ? 0.7 : 0;
+          all += v; if (v && hexDist(n, foe) < hexDist(h, foe)) front += v;
+        }
+        if (front) spots.push({ col, r, h, s: 2 * front + 0.5 * all + (EL ? 0.3 * (terr.elev[iQR(h.q, h.r)] || 0) : 0) });
+      }
+      // the view, for the best few hundred by cover and height
+      spots.sort((a, b) => b.s - a.s || a.col - b.col || a.r - b.r);
+      const top = spots.slice(0, 400);
+      for (const x of top) x.s += looks.filter(l => los(x.h, l)).length / 2;
+      top.sort((a, b) => b.s - a.s || a.col - b.col || a.r - b.r);
+      const centres = [];
+      units.forEach((u, ui) => {
+        if (u.side !== side) return;
+        const s0 = top.find(x => centres.every(c => hexDist(c, x.h) >= 6)) || top[centres.length % Math.max(1, top.length)] || { col: side ? terr.W - 8 : 7, r: Math.floor(terr.H / 2), h: fromOffset(side ? terr.W - 8 : 7, Math.floor(terr.H / 2)) };
+        centres.push(s0.h);
+        const per = Math.ceil(Math.sqrt(u.count)), cells = [];
+        for (let i = 0; i < u.count; i++) cells.push([s0.col + 2 * (Math.floor(i / per) - Math.floor(per / 2)) * (side ? 1 : -1), s0.r + 2 * (i % per) - per + 1]);
+        out.set(ui, cells);
+      });
+    }
     // the nearest free, walkable hex to a planned spot, a yard clear of anyone already placed
     function edgeSpot(col, row) {
       const c0 = Math.max(1, Math.min(terr.W - 2, col)), r0 = Math.max(1, Math.min(terr.H - 2, row)), h0 = fromOffset(c0, r0);

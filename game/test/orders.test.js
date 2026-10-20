@@ -10,7 +10,7 @@ const tick = (S, seed = 1) => apply(S, { type: "tick", seed });
 
 test("fortify: a fortified warband can't move, and fights at x1.5 where it holds, walls +25% a level in the cities", () => {
   let S = start();
-  const cap = S.worlds[S.players.h.warband.at], c = capOf(cap), base = (TYPES[cap.type].defence || 1) * (c.terrain === "fortress" ? 1.25 : 1);
+  const cap = S.worlds[S.players.h.warband.at], c = capOf(cap), base = TYPES[cap.type].defence || 1;
   assert.equal(holdBonus(S, cap, c, "hegemony"), base);
   S = apply(S, { type: "order", player: "h", move: null, recruit: [], stance: "fortify" });
   S = tick(S, 1);

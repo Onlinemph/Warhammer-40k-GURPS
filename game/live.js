@@ -21,7 +21,7 @@ function makeLive({ dataDir, state, record }) {
   function setup(h) {
     const { units } = unitsFor(h), field = fieldFor(h);
     const sides = h.commanders.map((c, i) => c ? i : null).filter(x => x != null);
-    return { units, opts: { ...TER.battlefield(h.terrain), ...field, seed: h.seed, maxTurns: 600, human: { side: sides.length === 2 ? "both" : sides[0], direct: [] } } };
+    return { units, opts: { ...TER.battlefield(h.terrain), ...field, hold: h.hold, seed: h.seed, maxTurns: 600, human: { side: sides.length === 2 ? "both" : sides[0], direct: [] } } };
   }
   function open(id) {
     const S = state(), h = (S.held || []).find(x => x.id === id);

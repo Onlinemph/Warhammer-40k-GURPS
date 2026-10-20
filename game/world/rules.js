@@ -125,14 +125,19 @@ function order(S, { player, move, land, region, recruit, ritual, stance, careful
 const STANCES = ["advance", "fortify", "raid"];
 // fortify: x1.5 where you hold; walls: +25% a level in the world's cities, two levels, 20 then 40 materiel; turn back
 // under 25%; a raid takes six turns of the city's share of its world's yield
-const FORTIFY = 1.5, WALLS = { max: 2, each: 0.25, cost: [20, 40] }, TURN_BACK = 25, RAID_LOOT = 6, FORTRESS = 1.25;
-// how much a side's holding of a region counts for in a battle there: a city's share of its world's defence and its
-// walls, a fortress city's own works, and a warband of the holder's fortified in it
+const FORTIFY = 1.5, WALLS = { max: 2, each: 0.25, cost: [20, 40] }, TURN_BACK = 25, RAID_LOOT = 6;
+// how much a side's holding of a region counts for in a battle there, past what the resolver already knows of
+// fighting from a city's buildings (the ground and the holding are in its rates, tools/resolver): its world's own
+// defence and its walls in a city, and a warband of the holder's fortified in it
 function holdBonus(S, w, r, faction) {
   if (!r || r.owner !== faction) return 1;
   const fort = Object.values(S.players).some(p => p.faction === faction && p.warband.at === w.id && p.warband.region === r.id && p.warband.stance === "fortify" && total(p.warband.army));
-  return (r.city ? (TYPES[w.type].defence || 1) * (1 + WALLS.each * (w.walls || 0)) : 1) * (r.terrain === "fortress" ? FORTRESS : 1) * (fort ? FORTIFY : 1);
+  return (r.city ? (TYPES[w.type].defence || 1) * (1 + WALLS.each * (w.walls || 0)) : 1) * (fort ? FORTIFY : 1);
 }
+// how the resolver sees a battle in a region: its ground, and which side (0 or 1) holds it, a city's garrison
+// fighting from its buildings
+const holds = (r, x) => !!(r.city && x && x.faction === (r.owner || "militia") && x.parts.some(y => y.kind === "garrison"));
+const groundOf = (r, A, B) => ({ ground: r.terrain, hold: holds(r, A) ? 0 : holds(r, B) ? 1 : undefined });
 // a warband's chance against the strongest foe in a region (the resolver, a fixed seed: advice for the view and for
 // turning back, not the battle's own dice)
 // fog (battle.js): `fog` judges the foe by what the faction can see of it, rough numbers where it neither holds the
@@ -143,7 +148,7 @@ function oddsAt(S, p, id, rid, fog) {
   const foe = factionsAt(S, w, r).filter(s => s.faction !== p.faction).sort((a, b) => strength(b.army) - strength(a.army))[0];
   if (!foe || !mine.length) return null;
   const close = r.owner === p.faction || Object.values(S.players).some(q => q.faction === p.faction && q.warband.at === id);
-  const q = predict(mine, asResolverArmy(fog && !close ? BT.rough(foe.army) : foe.army), { seed: 1, sims: 100 }), dA = holdBonus(S, w, r, p.faction), dB = holdBonus(S, w, r, foe.faction);
+  const q = predict(mine, asResolverArmy(fog && !close ? BT.rough(foe.army) : foe.army), { seed: 1, sims: 100, ...groundOf(r, null, foe) }), dA = holdBonus(S, w, r, p.faction), dB = holdBonus(S, w, r, foe.faction);
   return Math.round(100 * q.pWinA * dA / (q.pWinA * dA + q.pWinB * dB || 1));
 }
 
@@ -399,12 +404,12 @@ function fight(S, w, r, A, B, R, T, fixed) {
   // the ground it's fought on is the region's (terrain.js): close ground favours the side that fights hand to hand,
   // open ground the guns
   const ground = fixed && fixed.terrain ? fixed.terrain : r.terrain;
-  const tf = TER.factors(ground, A, B);
+  const G = { ...groundOf(r, A, B), ground };
   const scale = (army, k) => k === 1 ? army : Object.fromEntries(Object.entries(army).map(([u, n]) => [u, Math.max(1, Math.round(n * k))]));
   const armyOf = (x, k) => asResolverArmy(scale(addArmy({ ...x.army }, VET.extraOf(S, x.parts)), k));
-  const p = predict(armyOf(A, C.factor[0]), armyOf(B, C.factor[1]), { seed, sims: 200 });
+  const p = predict(armyOf(A, C.factor[0]), armyOf(B, C.factor[1]), { seed, sims: 200, ...G });
   const hA = holdBonus(S, w, r, A.faction), hB = holdBonus(S, w, r, B.faction);
-  const dA = hA * VET.sideLeader(S, A.parts) * LOG.sideFactor(S, A.parts) * tf[0], dB = hB * VET.sideLeader(S, B.parts) * LOG.sideFactor(S, B.parts) * tf[1];
+  const dA = hA * VET.sideLeader(S, A.parts) * LOG.sideFactor(S, A.parts), dB = hB * VET.sideLeader(S, B.parts) * LOG.sideFactor(S, B.parts);
   const pA = p.pWinA * dA / (p.pWinA * dA + p.pWinB * dB || 1);
   // how it ends: a rout, an attacker thrown back, a stalemate both dig into, or a victory that costs more than half
   const def = r.owner || "militia", attacker = A.faction === def ? 1 : B.faction === def ? 0 : null;
@@ -447,7 +452,7 @@ function fight(S, w, r, A, B, R, T, fixed) {
   FX.afterBattle(S, w, [A, B].map((x, i) => ({ faction: x.faction, parts: x.parts, won: winner === x.faction, p: i ? 1 - pA : pA, lostN: fell[i].n, lostPower: fell[i].power })), R, T, r);
   const report = {
     id: `t${S.turn}-${w.id}-${S.reports.filter(x => x.turn === S.turn && x.world === w.id).length}`,
-    turn: S.turn, world: w.id, worldName: w.name, worldType: w.type, region: r.id, regionName: r.name, city: r.city || undefined, seed, odds: Math.round(pA * 100), winner, secs: Math.round(p.seconds), outcome: O.kind, terrain: ground,
+    turn: S.turn, world: w.id, worldName: w.name, worldType: w.type, region: r.id, regionName: r.name, city: r.city || undefined, seed, odds: Math.round(pA * 100), winner, secs: Math.round(p.seconds), outcome: O.kind, terrain: ground, hold: G.hold,
     contest: C.adv.length ? { by: C.winner, leader: C.leaders[C.winner].name, adv: C.adv.map(a => a.id) } : undefined,
     losses: [Math.round(lossA * 100) / 100, Math.round(lossB * 100) / 100], live: fixed ? true : undefined, held: fixed ? fixed.id : undefined, fallen: fallenNamed.filter(n => !leadersFell.includes(n)), leaders: leadersFell,
     sides: before.map((b, i) => ({ faction: b.faction, before: b.army, named: b.named, short: b.short || undefined, players: [A, B][i].parts.filter(x => x.kind === "warband").map(x => S.players[x.player].name) })),
@@ -491,7 +496,8 @@ function pickTarget(S, targets, go, sure, R) {
   list.sort((a, b) => (strength(a.them) > strength(go) ? 1 : 0) - (strength(b.them) > strength(go) ? 1 : 0));
   for (const t of list.slice(0, 3)) {
     const seed = Math.floor(R() * 2 ** 31);
-    if (!total(t.them) || predict(asResolverArmy(go), asResolverArmy(BT.rough(t.them)), { seed, sims: 100 }).pWinA >= sure) return t;
+    const theirs = factionsAt(S, t.w, t.r).sort((a, b) => strength(b.army) - strength(a.army))[0];
+    if (!total(t.them) || predict(asResolverArmy(go), asResolverArmy(BT.rough(t.them)), { seed, sims: 100, ground: t.r.terrain, hold: holds(t.r, theirs) ? 1 : undefined }).pWinA >= sure) return t;
   }
   return null;
 }
@@ -646,7 +652,7 @@ function hold(S, w, r, A, B, R) {
     players: x.parts.filter(y => y.kind === "warband").map(y => S.players[y.player].name) }));
   // who is in it: only these forces are settled by it (anyone arriving meanwhile fights afterwards, as usual)
   const parts = [A, B].map(x => x.parts.map(y => ({ ...y })));
-  (S.held ||= []).push({ id, world: w.id, worldName: w.name, region: r.id, regionName: r.name, turn: S.turn, seed, terrain: r.terrain, factions: [A.faction, B.faction], sides, parts, commanders: cmd, result: null });
+  (S.held ||= []).push({ id, world: w.id, worldName: w.name, region: r.id, regionName: r.name, turn: S.turn, seed, terrain: r.terrain, hold: groundOf(r, A, B).hold, factions: [A.faction, B.faction], sides, parts, commanders: cmd, result: null });
   r.heldIn = id;
   for (const x of [A, B]) for (const part of x.parts) {
     if (part.kind === "warband") { const wb = S.players[part.player].warband; wb.heldIn = id; wb.history.push(`Turn ${S.turn}: a battle at ${where(w, r)}, held for ${cmd.filter(Boolean).map(c => S.players[c].name).join(" and ")} to fight`); }

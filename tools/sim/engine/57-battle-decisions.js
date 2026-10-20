@@ -158,7 +158,8 @@
     function search(m) {
       // a holding unit waits 10 quiet seconds before it goes looking, an ambush a minute
       const quiet = turn - contact[m.u.side];
-      if ((m.u.ambush && !m.u.sprung && quiet < 60) || (m.u.stance === "shoot" && quiet < 10)) return;
+      // (a side holding its ground, opt.hold, waits for the attacker as an ambush does)
+      if ((m.u.ambush && !m.u.sprung && quiet < 60) || (opt.hold === m.u.side && quiet < 60) || (m.u.stance === "shoot" && quiet < 10)) return;
       let goal = null, best = -99;
       for (const [f, t] of seenAt[m.u.side]) if (t > best && f.state === "ok" && f.lastSeenH) { best = t; goal = f.lastSeenH; }
       if (!goal || hexDist(goal, m.h) <= 1) {

@@ -526,3 +526,354 @@ weather that changes between turns.
    it. This is an engine change; the generator has to be deterministic and keep its replays rebuilding.
 3. **Regions and cities**: the war's rules, AI, client and every system above move to the region level. This is
    the biggest change since the war began, and the event log of a war started before it won't rebuild after it.
+
+## Bigger armies, more kinds of soldier
+
+*Draft, for approval.* Today a battle has 36 soldiers at the median (90% under 79, the biggest 139), a warband ends a
+war about 23 strong, and a city's garrison is about 17 (measured over 4 sample wars of 60 turns). The aim is
+**warbands of 60 to 100** and **battles of 100 to 250**, with every side fielding a real mix: line troops, special
+and heavy weapons, specialists and a few rare leaders. One figure is still one soldier.
+
+### Four times the numbers
+- One constant, `SCALE = 4`, multiplies every count in the war: the starting warbands and garrisons, the Local
+  Defence, the levies a world raises each turn (8, not 2) and the garrison cap (120), a city's rally, the Chorus's
+  broods (96 a city a turn at most) and the size at which a brood swarms (100), the Dormant's sleepers and the
+  strength a tomb raids at, the dead that rise (240) and the guard that stops them (80), and a recruit order (up to
+  200). The bots fill up to 100 and go home under 48.
+- **Yields go up four times**, not prices down, so a soldier costs what it does now and the stockpile numbers read
+  four times bigger. A supply feeds 40 soldiers a turn, not 10, so supply stays as it is.
+- What's measured per soldier stays: power, the resolver's odds, the muster's half, a rally's share.
+
+### More kinds of soldier
+Each new unit is a template the engine already has, or a template with a different weapon. The second kind is a
+resolver variant, like the linked broods, calibrated with the rest. Each is priced by its measured power, as
+today. Special and heavy weapons are limited to **one for every ten** of the faction's line troops in a warband, as
+squads carry them. That gives every army a mix without an army of nothing but plasma guns.
+- **The Hegemony:** Levy Gunner (plasma gun), Levy Burner (flamer), Levy Melta (meltagun), Heavy Team (heavy bolter
+  or autocannon), Marksman (long-las), Seer (Sanctioned Psyker).
+- **The Apostates:** Turncoat Gunner (plasma gun), Turncoat Burner (flamer), Turncoat Heavy (heavy stubber or
+  autocannon), the Frenzied (Khorne Berzerker), the Rotted (Plague Marine), Hierophant (Chaos Sorcerer).
+- **The Brawl:** Burna (burna), Rokkit (rokkit launcha), Big Shoota, Mek (kustom mega-blasta), Weirdboy (psyker).
+- **The Chorus:** Burrower (Ravener), Mindspike (Zoanthrope), Bonewarrior (Tyranid Warrior with bonesword and lash
+  whip), and rarely an Overmind (Hive Tyrant), bred when the biomass has piled up.
+- **The Dormant:** Reaper (Skorpekh Destroyer), Cryptek, and one Overlord a tomb. Some Husks carry heavy gauss
+  cannons.
+- **Local Defence:** a sergeant and a heavy stubber for every ten.
+- The bots' mixes, the Chorus's breeding and the Dormant's sleepers use them. The recruit form groups units by role:
+  line, special weapons, heavy weapons, specialists, elites.
+- Each weapon is checked in the engine first: it has a profile there, it fires, and nobody gets stuck carrying it.
+  Any that don't are left out of this pass and listed.
+
+### What it costs to watch
+- Measured on the engine (one battle each, countryside): 100 against 130 takes 7 seconds to fight out, 200
+  against 260 takes 45 seconds, 400 against 520 takes 155 seconds. A replay tries up to four seeds to match the
+  war's winner, so at the sizes aimed for, a replay can take up to three minutes the first time. That's fine on the
+  worker, one at a time. The resolver decides the war's battles and costs nothing more.
+- The 3D view at 250 figures is measured before anything else is built. If it's slow, figures are drawn as
+  instances.
+- **Live battles** at 100 a side would mean answering for a hundred soldiers one by one. In this pass a commander
+  answers for the units they pick and the AI fights the rest. Orders for whole squads come later.
+- The resolver is validated again at these sizes (it was calibrated on smaller fights), and re-calibrated if its
+  error grows.
+
+### A resolver that knows the ground
+*User direction: make the resolver as smart as it can be, before the armies grow.* Today its rates come from 10
+against 10 in the open, 50 yards apart; the war bolts terrain and holding a city on as flat multipliers.
+- **Ground:** rates measured on the war's own maps, in four classes: open (plains, desert, tundra), broken (hills,
+  mountains, farmland, wasteland, river valley), close (forest, jungle, swamp) and urban (the four kinds of town).
+  A battle uses its region's class, in place of today's x1.15 and x1.1.
+- **Holding:** a defender deployed in the ground it holds (in the buildings of a city, in the cover of the
+  country), staying put and firing, against an attacker coming on from its edge. Measured as a second set of rates,
+  it takes the place of the flat bonus for holding a city (walls and fortifying stay as they are). This needs the
+  engine to deploy a side that way; it's off unless asked for, so every battle and replay so far is unchanged.
+- **Closing in:** a hand-to-hand fighter does nothing until it reaches the enemy and a gun has the opening volleys.
+  Each pair's rate is measured with how long it takes to start, not as one rate from the first second.
+- **Size:** the rates measured at more than one size, and how much a man's rate falls as the crowd grows (not
+  everyone can see or reach the enemy), fitted for each class.
+- **Checked** against the engine on each class, both ways of deploying, mixed armies from 10 to 250 a side, before
+  and after, and reported as before: the error in the win chance and in the share lost.
+
+### The order to build in
+0. The resolver that knows the ground (above).
+1. The 3D view and a replay at 250 figures, measured.
+2. `SCALE` through the war, the bots and the AI, with balance and battle sizes measured on the sample wars.
+3. The new units: weapons checked in the engine, the variants calibrated, prices measured, the factions' mixes and
+   the AI's breeding.
+4. The client: the recruit form by role, and army lists grouped by kind.
+
+### Not in this pass
+Vehicles, squads drawn as single figures, orders for whole squads in a live battle, and wargear chosen soldier by
+soldier.
+
+## Tactical Mass Combat as the resolver
+
+*Draft, for approval.* User direction: resolve the war's battles with **Tactical Mass Combat** (David L. Pulver,
+Pyramid 3/44 pp. 24-29, on GURPS Mass Combat), with each unit's offensive and defensive values from the **Combat
+Effectiveness Rating** (Christopher R. Rice, "It's a Threat!", Pyramid 3/77 pp. 29-33) in the user's scaled form
+(SCER, `docs/scer-handoff.md`), checked against the engine.
+This replaces the calibrated resolver as what decides a battle; the engine stays the 3D zoom-in on any battle.
+
+### A battle
+- **The map:** a small hex map built from the region's ground, each hex one of the article's terrains: clear
+  (plains, desert, tundra, farmland), woods (forest, jungle), high ground (hills, mountains), swampland (swamp, mud),
+  built-up (a town's or city's blocks), water and streams (a river valley), roads. A hive city is nearly all
+  built-up; a fortress city has its wall as built-up hexes with gates. The article's hexes are 100 yards for
+  battalions; ours are company fights, so a hex is 20 yards and ranges and moves are scaled to match (checked
+  against the engine, below).
+- **Elements:** each unit type in a force becomes elements of about ten soldiers (the last one smaller), a named
+  hero is an element of their own (the article's Hero), and the new heavy weapons are elements of their team.
+- **Before it:** the Reconnaissance Contest replaces the leaders' contest: initiative, and whether it's a pitched
+  battle, an encounter battle, or an ambush (the ambushed side confused on its first turn). Night on 5+ on 1d.
+  A side fortified in a region it holds has earthworks (one per four Foot elements). A city's garrison sets up in
+  its built-up hexes.
+- **Fighting it:** rounds of fire combat, movement and close combat, on the article's two tables (Fire Combat:
+  pinned, eliminated, obliterated with a follow-up shot at half strength; Close Combat: attackers or defenders
+  eliminated or retreating). Its modifiers as written: half strength firing into woods or buildings or at night,
+  Foot defending double in woods and in earthworks, triple in buildings, half strength attacking uphill or across a
+  stream.
+- **Commanders:** each side's leader has Command Points, (Leadership + Strategy) / 4, spent for +1 on a roll, a
+  rally, or a double move, and regained by planning. A warband's leader uses their own skills, a Warmaster +2; an AI
+  force has a standard leader (the article's 1d+8; 12 for the Dormant).
+- **Ending it:** a side is demoralized as the article says (over half its elements gone and losing more than the
+  enemy): its elements fall back to their edge and won't attack. A side with nothing left on the map has lost. A
+  battle with both sides still fighting after a set number of rounds is a stalemate.
+- **The AI:** both sides are played by a simple tactical AI, per element: fire at the target with the best odds in
+  range, advance toward the enemy through cover, close in with hand-to-hand elements when the odds are good, hold
+  built-up hexes and earthworks when defending, fall back when demoralized. Commanders spend points where the odds
+  are closest. Fighting the battle yourself, on the hex map, comes later.
+- **What it gives the war:** who holds the field, each side's elements lost (eliminated, or fled off the map and
+  back next turn), the named who fell (a Hero element eliminated), and how it ended (a rout; a repulse when the
+  attacker is demoralized; a stalemate; a Pyrrhic victory past half its elements). The war's odds, for advice and
+  for the AI, are the share of wins over a few dozen quick runs.
+
+### More results than the article's
+*User direction: more variety of results than Tactical Mass Combat gives.* The article's tables have four results
+for fire (no effect, pinned, eliminated, obliterated) and five for close combat. Ours keep each table's shape, the
+same odds columns and the same rolls, and split its results into finer steps, so a fight grinds and swings instead
+of going straight from nothing to gone.
+
+**Steps.** Every element has two steps: full, and reduced (half its soldiers lost, half its OR and PR). A result
+that costs a step reduces a full element and eliminates a reduced one. Two reduced elements of the same unit in one
+hex may merge into one full element in the Pin Recovery phase.
+
+**Fire Combat Results**, built from the article's table cell by cell: the roll just below its first P becomes S;
+its second P becomes PC; its first DE becomes SL; the rest is as written.
+
+| 2d | 1:10 | 1:5 | 1:3 | 1:2 | 1:1 | 2:1 | 3:1 | 4:1 | 5:1 | 10:1 | 20:1+ |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| 2- | NE | NE | NE | NE | NE | NE | NE | NE | NE | S | P |
+| 3 | NE | NE | NE | NE | NE | NE | NE | NE | S | P | PC |
+| 4 | NE | NE | NE | NE | NE | NE | NE | S | P | PC | SL |
+| 5 | NE | NE | NE | NE | NE | NE | S | P | PC | SL | DE |
+| 6 | NE | NE | NE | NE | NE | S | P | PC | SL | DE | DO |
+| 7 | NE | NE | NE | NE | S | P | PC | SL | DE | DO | DO |
+| 8 | NE | NE | NE | S | P | PC | SL | DE | DO | DO | DO |
+| 9 | NE | NE | S | P | PC | SL | DE | DO | DO | DO | DO |
+| 10 | NE | S | P | PC | SL | DE | DO | DO | DO | DO | DO |
+| 11 | S | P | PC | SL | DE | DO | DO | DO | DO | DO | DO |
+| 12+ | P | PC | SL | DE | DO | DO | DO | DO | DO | DO | DO |
+- **NE:** no effect.
+- **S, Suppressed** (new): the target fires at half OR next turn and may not move closer to the enemy. Gone in Pin
+  Recovery.
+- **P, Pinned** (as written): it may not move or attack until it recovers; a second P while pinned counts as a step
+  lost (the article has DE).
+- **PC, Pinned with casualties** (new): pinned, and a step lost.
+- **SL, Step lost** (new): a step lost, not pinned.
+- **DE, Eliminated** and **DO, Obliterated** (as written; DO's follow-up shot at half OR).
+
+Over all the columns, a shot does nothing 37% of the time (the article: 45%), suppresses 9%, pins 9%, pins with
+casualties 9%, takes a step 8%, eliminates 8% (the article: 16%) and obliterates 21% (unchanged).
+
+**Close Combat Results**, the same way: the article's NE becomes EN, or EX in the even columns (1:2, 1:1, 2:1);
+its last AR becomes AD; its first DR becomes DD; at 10:1 and up a 12 is DS.
+
+| 2d | 1:20 | 1:10 | 1:5 | 1:3 | 1:2 | 1:1 | 2:1 | 3:1 | 4:1 | 5:1 | 10:1 | 20:1+ |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 2- | AE | AE | AE | AE | AE | AE | AE | AR | AR | AD | EN | DD |
+| 3 | AE | AE | AE | AE | AE | AE | AR | AR | AD | EN | DD | DR |
+| 4 | AE | AE | AE | AE | AE | AR | AR | AD | EN | DD | DR | DR |
+| 5 | AE | AE | AE | AE | AR | AR | AD | EN | DD | DR | DR | DE |
+| 6 | AE | AE | AE | AR | AR | AD | EX | DD | DR | DR | DE | DE |
+| 7 | AE | AE | AR | AR | AD | EX | DD | DR | DR | DE | DE | DE |
+| 8 | AE | AR | AR | AD | EX | DD | DR | DR | DE | DE | DE | DE |
+| 9 | AR | AR | AD | EN | DD | DR | DR | DE | DE | DE | DE | DE |
+| 10 | AR | AD | EN | DD | DR | DR | DE | DE | DE | DE | DE | DE |
+| 11 | AD | EN | DD | DR | DR | DE | DE | DE | DE | DE | DE | DE |
+| 12+ | EN | DD | DR | DR | DE | DE | DE | DE | DE | DE | DS | DS |
+- **AE, Attackers eliminated** and **AR, Attackers retreat** (as written).
+- **AD, Attackers disrupted** (new): they lose a step and stay where they are, still adjacent.
+- **EN, Engaged** (new): locked in melee. Neither side may move away or fire at anyone else; they fight again in
+  the next Close Combat phase of either side.
+- **EX, Bloody exchange** (new): both sides lose a step, and stay engaged.
+- **DD, Defenders disrupted** (new): they lose a step and hold the hex.
+- **DR, Defenders retreat** and **DE, Defenders eliminated** (as written).
+- **DS, Defenders surrender** (new): eliminated, and taken prisoner (the Apostates' captives; anyone else's, a
+  share of the loot).
+
+**The dice themselves.**
+- **A natural 2 when firing a weapon that gets hot** (plasma, the Malf 14 and 16 weapons): the firing element loses a
+  step to its own guns instead of whatever the table says.
+- **A natural 12** in any attack by an element with a named soldier: the result is one step worse for the target
+  (NE becomes S, S becomes P, and so on), and the named soldier's history records the deed.
+- **A natural 2 in close combat** by the attacker: one of its named soldiers is wounded (a scar, veterans.js).
+
+**Breaking.** A reduced element that is pinned again **breaks**: it falls back two hexes toward its edge and may not
+attack until a commander spends a Command Point to rally it. A side's demoralization is as the article has it.
+
+**The factions' own.**
+- **The Dormant:** an eliminated Dormant element rolls 1d at the end of the round, and on 5-6 it **reanimates** as a
+  reduced element in its hex (the engine's reanimation protocols).
+- **The Chorus:** elements within 3 hexes of a Conductor ignore S and their first P (synapse). In close combat
+  their EN results count as EX: they don't stop.
+- **The Brawl:** Impetuous, as the article has it (they must attack when they can). A Brawl element that gets DD,
+  DR, DE or DS in close combat wins fame, and on an EX its Brawlers may grow into Bosses (factions.js).
+- **The Hegemony:** an element with a Provost turns its AR into AD (the Provost shoots the first to run, and the
+  rest stand) and ignores breaking once a battle.
+- **The Apostates:** Vessels are Fanatic (the article's rule: they ignore DR, and AR counts as AE). DS results give
+  them captives.
+
+What the war reads from it: steps lost become soldiers lost (half an element a step), engaged elements at the end
+of the battle count as a stalemate there, and surrenders and reanimations go into the report.
+
+### The ratings: OR and PR for every unit
+Each element's **OR** and **PR** are its soldiers' summed, worked out by the article's formulas from the same data
+the engine fights with (`tools/resolver/cer.js`):
+- **OR:** best attack's skill - 10 (+ Accuracy + 2 for a gun, + Rapid Fire's bonus, +5 for extra attacks), plus
+  damage (dice x 3.5 + adds, x Rapid Fire's bonus + 1, x the type: 0.5 small piercing, 1.5 cutting or large
+  piercing, 2 impaling, huge piercing or corrosion, +0.5 explosive; +5 a step of armour divisor), plus FP - 10 and
+  Move - 6.
+- **PR:** active defence ((Dodge - 8) x 2, or Parry - 8 if better), DR over skull, arms, legs and torso / 4, plus 1
+  per 5 points of Damage Reduction, Injury Tolerance, Regeneration and reanimation, plus HT - 10 (+ half Hard to
+  Kill, +2 High Pain Threshold), HP - 10, Will - 10 (+ half Fearlessness, +1 Combat Reflexes, +8 Unfazeable or no
+  morale).
+- An element **attacks with its OR** and **defends with its PR**: the ratio of the attacker's OR to the target's PR,
+  after the article's modifiers, is the column on its table.
+- **Classes** from the same data: Fire (has a gun), Neutralize Armor (armour divisor 3 or more), Armor (DR 60 or
+  more over the body), Artillery (the heavy weapons that fire indirect or with a blast), Recon (Stealth or
+  Chameleon: Lictors, Sneaks), C3I (Sergeants, Provosts, Conductors), and Mounted mobility for Move 8 or more.
+
+**SCER.** The user's Scaled CER (`docs/scer-handoff.md`) is also worked out for every unit (`tools/resolver/cer.js`):
+DR weighted by where hits land and half on the weakest spot, each sub-score through its curve (skill x + x²/7,
+damage x^1.5, DR x^1.75, defence x(1 + x/5), HP, HT and Will x^1.2), and the synergy of lethal and hard to kill
+(0.2 × √(OR × PR)). Its soft cap at 500 is lifted here: this setting's damage and DR run five to ten times
+Dungeon Fantasy's (a lasgun is 7d(2), flak armour DR 30), so at 500 nearly every unit hit the cap and the scale
+flattened again.
+
+Today's units, worked out, and for comparison what each is worth in the engine (the war's measured `power`, in
+Levies):
+
+| Unit | Faction | Template | OR | PR | CER | SCER OR | SCER PR | SCER | SCER in Levies | Engine worth |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Levy | Hegemony | Astra Militarum Guardsman | 95 | 32 | 127 | 763 | 287 | 1144 | 1.00 | 1 |
+| Levy Sergeant | Hegemony | Astra Militarum Sergeant | 32 | 33 | 65 | 153 | 288 | 483 | 0.42 | 0.5 |
+| Provost | Hegemony | Commissar | 53 | 28 | 81 | 283 | 77 | 390 | 0.34 | 1.5 |
+| Storm Levy | Hegemony | Militarum Tempestus Scion | 114 | 78 | 192 | 983 | 1543 | 2772 | 2.42 | 13 |
+| Oathsister | Hegemony | Adepta Sororitas Battle Sister | 63 | 89 | 152 | 366 | 1758 | 2284 | 2.00 | 8 |
+| Warden | Hegemony | Astartes Battle-Brother | 119 | 141 | 260 | 906 | 2872 | 4101 | 3.58 | 41 |
+| Faithless | Apostates | Chaos Cultist | 85 | 10 | 95 | 677 | 40 | 750 | 0.66 | 0.3 |
+| Turncoat | Apostates | Traitor Guardsman | 97 | 24 | 121 | 765 | 70 | 881 | 0.77 | 1.4 |
+| Zealot | Apostates | Chaos Cultist Champion | 30 | 13 | 43 | 151 | 44 | 211 | 0.18 | 0.2 |
+| Vessel | Apostates | Possessed | 91 | 164 | 255 | 511 | 3451 | 4228 | 3.70 | 17 |
+| Fallen Warden | Apostates | Chaos Space Marine | 122 | 140 | 262 | 919 | 2628 | 3858 | 3.37 | 51 |
+| Runt | Brawl | Gretchin | 14 | 1 | 15 | 32 | 1 | 34 | 0.03 | 0.1 |
+| Brawler | Brawl | Ork Boy | 48 | 44 | 92 | 247 | 143 | 428 | 0.37 | 0.5 |
+| Sneak | Brawl | Ork Kommando | 48 | 44 | 92 | 247 | 143 | 428 | 0.37 | 0.5 |
+| Boss | Brawl | Ork Nob | 160 | 103 | 263 | 1756 | 1369 | 3435 | 3.00 | 2.7 |
+| Ironhide | Brawl | Ork Meganob | 157 | 205 | 362 | 1746 | 7273 | 9732 | 8.51 | 12 |
+| Leaper | Chorus | Hormagaunt | 47 | 24 | 71 | 223 | 277 | 550 | 0.48 | 0.4 |
+| Spitter | Chorus | Termagant | 46 | 20 | 66 | 241 | 272 | 564 | 0.49 | 0.4 |
+| Stalker | Chorus | Genestealer | 74 | 94 | 168 | 391 | 1369 | 1906 | 1.67 | 39 |
+| Conductor | Chorus | Tyranid Warrior | 95 | 104 | 199 | 711 | 1759 | 2694 | 2.35 | 20 |
+| Hollow | Chorus | Lictor | 74 | 105 | 179 | 437 | 1762 | 2374 | 2.08 | 5 |
+| Bulwark | Chorus | Carnifex | 153 | 327 | 480 | 1612 | 8813 | 11179 | 9.77 | 20 |
+| Husk | Dormant | Necron Warrior | 80 | 105 | 185 | 556 | 1794 | 2550 | 2.23 | 16 |
+| Sentinel | Dormant | Necron Immortal | 89 | 142 | 231 | 640 | 3289 | 4219 | 3.69 | 20 |
+| Watcher | Dormant | Deathmark | 62 | 118 | 180 | 315 | 2250 | 2733 | 2.39 | 35 |
+| Flenser | Dormant | Flayed One | 48 | 105 | 153 | 240 | 1794 | 2165 | 1.89 | 14 |
+| Keeper | Dormant | Lychguard | 82 | 172 | 254 | 614 | 4821 | 5779 | 5.05 | 20 |
+| Local Defence | free worlds | Traitor Guardsman | 97 | 24 | 121 | 765 | 70 | 881 | 0.77 | 1.4 |
+
+**What the numbers say.** How far each rating is from the engine's worth, over the 28 units (the order: rank
+correlation with the engine's; the scale: how far off a unit typically is, as a factor, once the rating is lined up
+with the Levy):
+
+| Rating | Order | Typically off by | A Warden, in Levies (engine 41) |
+|---|---|---|---|
+| CER, as the article gives it | 0.82 | ×3.4 | 2.0 |
+| SCER, as the handoff gives it (cap 500) | 0.80 | ×2.7 | 2.3 |
+| SCER, no cap | 0.81 | ×2.4 | 3.6 |
+| SCER, no cap, raised to its best-fitting power (1.3) | 0.81 | ×2.2 | |
+| A matchup rating (prototype, below), raised to its best-fitting power (0.41) | 0.89 | ×1.56 | 24 |
+
+CER and SCER both get the order about right and the scale wrong. The reason is the one the handoff names as its
+issue 5: neither can see whether an attack gets through. The OR counts a weapon's damage whatever it's fired at, so
+lasguns (7d(2)) count the same against Cultists (DR 8) as against Wardens (DR 95), and the Brawl's Shootas, many
+shots of small damage, rate above a boltgun; in the engine they barely scratch power armour.
+
+The **matchup rating** prototype works it out pair by pair: how often each hits the other (3d6 against skill, less
+the other's Dodge), how much of each hit gets past the other's DR (by armour divisor) by damage type, shots a turn,
+and the other's HP; a unit's worth against a foe is the square root of what it does to the foe over what the foe
+does to it (Lanchester), relative to a Levy's, averaged over the reference foes the war's `power` was measured
+against. Raw, it overshoots wildly (full immunity makes worth explode: a Carnifex 15,000 Levies), but with one
+fitted power it lands within ×1.56 of the engine on average, with Storm Levies, Husks, Sentinels, Vessels and
+Bosses within a fifth. Its worst misses: Genestealers and Watchers rated a third of what they're worth (their
+edge is Deceptive Attacks and the first strike at range, which it doesn't count), Ironhides and Bulwarks three
+times (big bodies the engine's guns can still reach).
+
+**Checked on the Warden** (user question: are a Space Marine's numbers right?). The inputs match the codex's
+823-point Battle-Brother: ST 30, HT 15, HP 34, Will 14, Guns (Rifle) 20, Broadsword 19, Dodge 12, Parry 13, Move 12,
+Mk VII power armour DR 100 (skull, torso) and 88 (arms, legs) with the Ossmodula's DR 3, the boltgun 6d×2(2) pi++.
+Two traits were missed because the engine doesn't carry them and are now read from the codex's write-up: the
+Secondary Heart (Hard to Kill 2) and Larraman's Organ (Rapid Healing). DR is already the biggest part of its
+rating: 95 in CER, which at the article's 1 per 5 points is the same as about 475 points, and in SCER about 2,880 of
+its PR of 2,876, ten times the Levy's. What was wrong was comparing totals: the Levy's lasgun counted in full
+against armour it can't get through. Fought on Tactical Mass Combat's fire table with OR against PR, the Warden still
+comes out at only 4.2 Levies, because the table can't go further: at 1:5 a 12 on 2d still kills, about 3% a shot.
+With the damage in each attack counting only what gets past the target's DR, a Levy element's fire on Wardens
+falls below 1:10, the table's "no effect", as lasguns do in the engine. The engine's 41 is finite only because
+massed lasguns now and then find a gap or a critical; on the table that is up to four elements combining their fire
+in one attack, and how much gets through that way is fitted to the engine.
+
+**Decided (user direction): Tactical Mass Combat as written, for now.** The engine is for watching a battle in 3D,
+not the yardstick the war is tuned to. So:
+1. **SCER is the rating** every unit carries (OR and PR, uncapped for this setting's numbers), and an element's OR
+   and PR are its soldiers' summed.
+2. **The tables as the article gives them:** the attacker's OR against the target's PR, with the article's
+   modifiers, rounded in the defender's favour, up to four elements combining fire. No matchup layer and nothing
+   fitted to the engine: armour counts through the target's PR, as the article and the handoff have it.
+3. **Mass Combat's classes as written** for what the totals can't show: Armor and Neutralize Armor (the article's
+   rule for an element that can only hurt Armor), Artillery, Recon, C3I, and Mounted mobility, from the unit data as
+   above.
+
+How it plays, for the case asked about (ten Levies a squad against ten Wardens, each squad one element), on the
+article's table: one Levy squad firing at a Warden squad is at 1:5 (pinned on 11-12: 8% a shot, never eliminated);
+two or three combining fire are at 1:2 (pinned or worse 28%, eliminated 8%); four, the most that may combine, at 1:1
+(42% and 17%). A Warden squad firing at a Levy squad is at 3:1 (72% and 42%). (Corrected: the first figures here
+came from a misreading of the table, one P a column where it has two.) So massed Levies can bring Wardens down on the table, at a price, where in the
+engine they can't. That is the difference between the two this decision accepts; the 3D replay of such a battle may
+end differently from the war's own result, and the report says which is the record (the hex map).
+
+### Measured, not tuned
+The engine's kept battles (`tools/resolver/truth.js`) still score each version (`tools/resolver/score.js`), as
+information: how far the war's results are from what the engine would do, by ground and size, so the difference
+is known and can be revisited. Nothing is fitted to them. Measured on the sample wars after: battle sizes, close
+fights, outcomes, balance.
+
+### Watching a battle
+- Every battle can be watched on its **hex map**: counters for each element by faction, moving and firing round by
+  round, exactly as the war resolved it (the same seed gives the same battle), with each round's results in a feed.
+- **Watch in 3D** stays: the engine fights the same armies on the region's map, as now. It won't always end the same
+  way; the hex map is the war's own record.
+
+### The order to build in
+1. SCER for every unit, and its classes and mobility.
+2. Tactical Mass Combat itself: the map from the ground, elements, the recon contest, the two tables, commanders,
+   demoralization, and the AI for both sides. Measured against the engine's kept battles, for information.
+3. In the war: it decides battles, gives the AI and the player their odds, and the reports say what happened round
+   by round. Measured on the sample wars.
+4. The hex map view of a battle in the client.
+5. Then the bigger armies and new units (above), whose new weapons get their ratings the same way.
+
+### Not in this pass
+Air, transports and vehicles (the war has no vehicles yet), off-map artillery, battles of more than two factions,
+and fighting a Tactical Mass Combat battle yourself.

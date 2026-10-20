@@ -45,7 +45,7 @@ function build(report, onProgress = () => {}) {
   for (attempt = 1; attempt <= ATTEMPTS; attempt++) {
     const seed = (report.seed + attempt * 7919) >>> 0;
     // a stalemate (neither side gave way, both dug in) is a shorter fight that leaves both standing
-    r = SIM.runBattle(units, { ...TER.battlefield(report.terrain), ...field, seed, maxTurns: report.outcome === "stalemate" ? STALEMATE_SECONDS : 600, frames: true, log: true, onTurn: t => onProgress({ attempt, attempts: ATTEMPTS, second: t, estimate: report.secs || 60 }) });
+    r = SIM.runBattle(units, { ...TER.battlefield(report.terrain), ...field, hold: report.hold, seed, maxTurns: report.outcome === "stalemate" ? STALEMATE_SECONDS : 600, frames: true, log: true, onTurn: t => onProgress({ attempt, attempts: ATTEMPTS, second: t, estimate: report.secs || 60 }) });
     if (r.winner === want) break;
   }
   const bf = TER.battlefield(report.terrain), map = SIM.battlefields[bf.battlefield](field.mapSeed, { ...field, ...bf });
