@@ -381,3 +381,10 @@ Anchor and rule changes to `framework.md`, with the reason for each.
   - **Battle reports say who lost what** ("The Dormant lost about 6%, the Hegemony about 100%") instead of "Roughly 6% and 100% lost".
   - Units at 0 are no longer listed; the request limit is 300 a minute (60 was hit by ordinary clicking, and the Tick button then failed without a word; it now says so).
   - Noticed and left: Levies can't hurt the Dormant at all (their lasguns against Necron armour, in the GURPS data), and on small maps a tomb can sit next to a capital.
+- **More to decide each turn** (the next step after the playtest: what a player does each turn).
+  - **Stances**, standing orders kept from tick to tick: *advance* (as before), *fortify* (the warband stays put, and on its own world its side fights at x1.5), *raid* (strike a world, and if the field is held, loot three turns of its yield and knock a level off its walls, then come home; a raid never takes the world).
+  - **Turn back**: a standing choice to call a move off at the tick when the odds there are under 25% (the same estimate the move list shows).
+  - **Walls**, built with materiel from the warband's share: +25% a level for the world's holder, two levels (20, then 40 materiel); a level comes down when the world is taken or raided.
+  - Reports give the odds each battle was fought at, and say when one side held the world (behind walls or not).
+  - A side's holding bonus is now one sum (the world's defence, its walls, a fortified warband); with no walls and nobody fortified it gives exactly the odds of before, so the sample wars are unchanged (the bots use none of this yet).
+  - Tests: `game/test/orders.test.js` (fortify and walls, a turn-back, a raid that loots and comes home); war tests 28/28. Checked in the playtest war in the browser: stance, turn back and walls set from the order panel and kept.

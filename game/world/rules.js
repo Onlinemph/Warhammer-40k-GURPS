@@ -63,11 +63,19 @@ function note(S, text) { S.log.push({ turn: S.turn, text }); }
 
 // orders for the next tick, checked against the state now; returns the problem, or null when accepted. A move is one
 // jump along a lane, or from a gate to another gate the faction holds; a ritual (the Apostates) is factions.js's
-function order(S, { player, move, recruit, ritual }) {
+// Standing orders kept from tick to tick: a stance (advance, fortify: stay and fight harder on your own world, raid:
+// strike, loot and come back without taking the world), and `careful`: turn back from a move whose odds are poor.
+// `build: "walls"` raises a world's walls a level.
+function order(S, { player, move, recruit, ritual, stance, careful, build }) {
   const p = S.players[player];
   if (!p) return "no such player";
   const wb = p.warband, here = S.worlds[wb.at];
   if (move && !FX.canMove(S, p.faction, wb.at, move)) return `${S.worlds[move] ? S.worlds[move].name : move} is not one jump from ${here.name}`;
+  if (stance != null && !STANCES.includes(stance)) return "no such stance";
+  if (move && (stance ?? wb.stance) === "fortify") return "a fortified warband stays where it is: change its stance to move";
+  if (build != null && build !== "walls") return "nothing like that to build";
+  if (build && here.owner !== p.faction) return "walls go up only on your own worlds";
+  if (build && (here.walls || 0) >= WALLS.max) return `${here.name}'s walls are as high as they go`;
   for (const r of recruit || []) {
     const u = UNITS[r.unit];
     if (!u || u.faction !== p.faction) return `${p.name}'s faction can't raise ${r.unit}`;
@@ -77,8 +85,28 @@ function order(S, { player, move, recruit, ritual }) {
   const rit = ritual && typeof ritual === "object" ? { kind: String(ritual.kind), target: ritual.target ? String(ritual.target) : null } : null;
   const err = FX.checkOrder(S, p, { move, recruit, ritual: rit });
   if (err) return err;
-  wb.orders = { move: move || null, recruit: recruit || [], ritual: rit };
+  wb.orders = { move: move || null, recruit: recruit || [], ritual: rit, stance: stance ?? null, careful: careful == null ? null : !!careful, build: build || null };
   return null;
+}
+const STANCES = ["advance", "fortify", "raid"];
+// fortify: x1.5 on your own world; walls: +25% a level, two levels, 20 then 40 materiel; turn back under 25%; a raid
+// takes three turns' yield of the world it strikes
+const FORTIFY = 1.5, WALLS = { max: 2, each: 0.25, cost: [20, 40] }, TURN_BACK = 25, RAID_LOOT = 3;
+// how much a side's holding of the world counts for in a battle there: the world's own defence and its walls, and a
+// warband of the holder's fortified on it
+function holdBonus(S, w, faction) {
+  if (w.owner !== faction) return 1;
+  const fort = Object.values(S.players).some(p => p.faction === faction && p.warband.at === w.id && p.warband.stance === "fortify" && total(p.warband.army));
+  return (TYPES[w.type].defence || 1) * (1 + WALLS.each * (w.walls || 0)) * (fort ? FORTIFY : 1);
+}
+// a warband's chance against the strongest foe at a world (the resolver, a fixed seed: advice for the view and for
+// turning back, not the battle's own dice)
+function oddsAt(S, p, id) {
+  const w = S.worlds[id], mine = asResolverArmy(p.warband.army);
+  const foe = factionsAt(S, w).filter(s => s.faction !== p.faction).sort((a, b) => strength(b.army) - strength(a.army))[0];
+  if (!foe || !mine.length) return null;
+  const q = predict(mine, asResolverArmy(foe.army), { seed: 1, sims: 100 }), dA = holdBonus(S, w, p.faction), dB = holdBonus(S, w, foe.faction);
+  return Math.round(100 * q.pWinA * dA / (q.pWinA * dA + q.pWinB * dB || 1));
 }
 
 // ---- the tick
@@ -140,8 +168,21 @@ function tick(S, seed) {
       if (can === r.count) p.warband.history.push(`Turn ${S.turn}: raised ${can} ${u.name} at ${here.name}`);
       else p.warband.history.push(`Turn ${S.turn}: raised ${can} of ${r.count} ${u.name} at ${here.name}: ${why || `your share of the stockpile ran short of ${short}`}`);
     }
+    // walls, from the warband's share like recruits
+    if (o.build === "walls" && here.owner === p.faction && (here.walls || 0) < WALLS.max) {
+      const c = WALLS.cost[here.walls || 0];
+      if (Math.min(st.materiel, mine.materiel ?? st.materiel) >= c) { st.materiel -= c; if (mine.materiel != null) mine.materiel -= c; here.walls = (here.walls || 0) + 1; p.warband.history.push(`Turn ${S.turn}: raised ${here.name}'s walls to level ${here.walls}`); }
+      else p.warband.history.push(`Turn ${S.turn}: couldn't raise ${here.name}'s walls: ${c} materiel needed from your share`);
+    }
+    const wb = p.warband;
+    if (o.stance) wb.stance = o.stance;
+    if (o.careful != null) wb.careful = o.careful;
     FX.beginRitual(S, p, o);
-    if (o.move && !p.warband.ritual && FX.canMove(S, p.faction, p.warband.at, o.move)) { p.warband.history.push(`Turn ${S.turn}: moved from ${W(p.warband.at).name} to ${W(o.move).name}`); p.warband.at = o.move; }
+    if (o.move && !wb.ritual && wb.stance !== "fortify" && FX.canMove(S, p.faction, wb.at, o.move)) {
+      const odds = wb.careful ? oddsAt(S, p, o.move) : null;
+      if (odds != null && odds < TURN_BACK) wb.history.push(`Turn ${S.turn}: turned back from ${W(o.move).name}: about ${odds}% to win there`);
+      else { wb.history.push(`Turn ${S.turn}: ${wb.stance === "raid" ? "raided" : "moved"} from ${here.name} to ${W(o.move).name}`); if (wb.stance === "raid") wb.raidFrom = wb.at; wb.at = o.move; }
+    }
     p.warband.orders = null;
   }
   // 3. the AI factions
@@ -161,14 +202,33 @@ function tick(S, seed) {
   // settle)
   for (const id of S.order) {
     const w = W(id), sides = factionsAt(S, w);
-    if (sides.length === 1 && sides[0].faction !== "militia" && sides[0].faction !== "dormant" && sides[0].faction !== w.owner) {
+    const raiders = sides.length === 1 && sides[0].parts.every(x => x.kind === "warband" && S.players[x.player].warband.raidFrom);
+    if (sides.length === 1 && !raiders && sides[0].faction !== "militia" && sides[0].faction !== "dormant" && sides[0].faction !== w.owner) {
       const was = w.owner;
       w.owner = sides[0].faction; w.garrison = {};
       const broken = was === "dormant" && w.tomb;
       FX.captured(S, w, was);
       if (broken) w.tomb = false;   // a taken tomb is ruins: it never holds sleepers again (its gate stays)
+      if (w.walls) w.walls--;       // taken, a world's walls come down a level
       note(S, `${FACTIONS[w.owner].name} take ${w.name}${was ? " from " + FACTIONS[was].name : ""}${broken ? ": the tomb is broken open" : ""}`);
     }
+  }
+  // 5b. raiders: a raid that holds the field loots the world (three turns of its yield) and knocks a level off its
+  // walls, then comes home; a beaten one has already fallen back
+  for (const p of Object.values(S.players)) {
+    const wb = p.warband;
+    if (!wb.raidFrom) continue;
+    const w = W(wb.at), from = wb.raidFrom;
+    wb.raidFrom = null;
+    if (w.owner === p.faction) continue;
+    if (!factionsAt(S, w).some(s => s.faction !== p.faction)) {
+      const t = TYPES[w.type], st = S.factions[p.faction].stock, man = t.manpower * RAID_LOOT, mat = t.materiel * RAID_LOOT;
+      st.manpower += man; st.materiel += mat;
+      if (w.walls) w.walls--;
+      wb.history.push(`Turn ${S.turn}: looted ${w.name}: ${man} manpower, ${mat} materiel`);
+      note(S, `${p.name} raids ${w.name}${w.owner ? " of " + FACTIONS[w.owner].name : ""}`);
+    }
+    if (FX.canMove(S, p.faction, wb.at, from)) { wb.at = from; wb.history.push(`Turn ${S.turn}: back from the raid to ${W(from).name}`); }
   }
   // 6. supply: a warband on or beside its own supplied world is fed; otherwise it wastes away (a Hegemony warband
   // long out of supply loses Levies to the Apostates instead, factions.js)
@@ -194,8 +254,8 @@ function tick(S, seed) {
 // one battle: the resolver gives the odds and the expected losses; the tick's dice say who won
 function fight(S, w, A, B, R, T) {
   const seed = Math.floor(R() * 2 ** 31), p = predict(asResolverArmy(A.army), asResolverArmy(B.army), { seed, sims: 200 });
-  const defence = w.owner === B.faction ? TYPES[w.type].defence || 1 : w.owner === A.faction ? 1 / (TYPES[w.type].defence || 1) : 1;
-  const pA = p.pWinA / (p.pWinA + p.pWinB * defence || 1), r = R();
+  const dA = holdBonus(S, w, A.faction), dB = holdBonus(S, w, B.faction);
+  const pA = p.pWinA * dA / (p.pWinA * dA + p.pWinB * dB || 1), r = R();
   const draw = r < p.pDraw, aWins = !draw && R() < pA;
   const lossA = draw ? p.lossA : aWins ? Math.min(p.lossA, 0.9) : Math.max(p.lossA, 0.6), lossB = draw ? p.lossB : aWins ? Math.max(p.lossB, 0.6) : Math.min(p.lossB, 0.9);
   const before = [A, B].map(x => ({ faction: x.faction, army: { ...x.army } }));
@@ -231,6 +291,7 @@ function fight(S, w, A, B, R, T) {
     sides: before.map((b, i) => ({ faction: b.faction, before: b.army, players: [A, B][i].parts.filter(x => x.kind === "warband").map(x => S.players[x.player].name) })),
     text: `${w.name}: ${fname(A.faction)} (${describe(A.army)}) against ${fname(B.faction)} (${describe(B.army)}). ` +
       (draw ? "Neither side gives way." : `${cap(fname(winner))} win${pA > 0.75 && aWins || pA < 0.25 && !aWins ? ", as expected" : pA > 0.25 && pA < 0.75 ? " a close fight" : " against the odds"}.`) +
+      ` The odds were ${Math.round(pA * 100)}% for ${fname(A.faction)}${dA > 1 || dB > 1 ? `, ${fname(dA > 1 ? A.faction : B.faction)} holding the world${(w.walls || 0) ? " behind walls" : ""}` : ""}.` +
       ` ${cap(fname(A.faction))} lost about ${Math.round(lossA * 100)}%, ${fname(B.faction)} about ${Math.round(lossB * 100)}%.`,
   };
   for (const pl of report.sides.flatMap(s => s.players)) { const pp = Object.values(S.players).find(x => x.name === pl); if (pp) pp.warband.history.push(`Turn ${S.turn}: battle at ${w.name}, ${winner === pp.faction ? "won" : draw ? "held" : "lost"}`); }
@@ -323,25 +384,18 @@ function view(S, player) {
   for (const q of Object.values(S.players)) if (q.faction === f) { eyes.add(q.warband.at); S.worlds[q.warband.at].links.forEach(n => eyes.add(n)); }
   // the odds the warband would have where it can go, against the strongest foe it can see there (the resolver, with a
   // fixed seed: advice, not the battle's dice; a world's defence favours its holder as in a real fight)
-  const odds = {}, mine = asResolverArmy(p.warband.army);
-  if (mine.length) for (const id of FX.moves(S, f, p.warband.at)) {
-    const w = S.worlds[id];
-    if (!eyes.has(id)) continue;
-    const foe = factionsAt(S, w).filter(s => s.faction !== f).sort((a, b) => strength(b.army) - strength(a.army))[0];
-    if (!foe) continue;
-    const q = predict(mine, asResolverArmy(foe.army), { seed: 1, sims: 100 }), d = w.owner === foe.faction ? TYPES[w.type].defence || 1 : 1;
-    odds[id] = Math.round(100 * q.pWinA / (q.pWinA + q.pWinB * d || 1));
-  }
+  const odds = {};
+  for (const id of FX.moves(S, f, p.warband.at)) { if (!eyes.has(id)) continue; const o = oddsAt(S, p, id); if (o != null) odds[id] = o; }
   return {
     turn: S.turn, you: { name: p.name, faction: f, warband: p.warband, stock: S.factions[f].stock, moves: FX.moves(S, f, p.warband.at), odds,
-      edict: f === "hegemony" ? S.factions.hegemony.edict : null, rituals: f === "apostates" ? FX.RITUALS : null },
+      edict: f === "hegemony" ? S.factions.hegemony.edict : null, rituals: f === "apostates" ? FX.RITUALS : null, walls: WALLS, turnBack: TURN_BACK },
     factions: { ...Object.fromEntries(Object.entries(S.factions).map(([k, v]) => [k, { name: v.name, colour: v.colour }])), militia: { name: MILITIA.name, colour: "#8d887e" } },
     units: Object.fromEntries(Object.entries(UNITS).filter(([, u]) => u.faction === f).map(([k, u]) => [k, { name: u.name, cost: u.cost }])),
     worlds: S.order.map(id => {
       const w = S.worlds[id], seen = eyes.has(id);
       // loyalty is known to the Hegemony on its own worlds, and to the Apostates where they have eyes (they look for it)
       const loyal = w.owner === "hegemony" && (f === "hegemony" || (f === "apostates" && seen)) ? Math.round(w.loyalty) : undefined;
-      return { id, name: w.name, x: w.x, y: w.y, type: w.type, typeName: TYPES[w.type].name, owner: w.owner, links: w.links, capital: !!w.capital, seen, tomb: !!w.tomb, gate: !!w.gate, asleep: seen && w.tomb ? !w.awake : undefined, loyalty: loyal,
+      return { id, name: w.name, x: w.x, y: w.y, type: w.type, typeName: TYPES[w.type].name, owner: w.owner, links: w.links, capital: !!w.capital, seen, walls: w.walls || 0, tomb: !!w.tomb, gate: !!w.gate, asleep: seen && w.tomb ? !w.awake : undefined, loyalty: loyal,
         held: w.owner === f ? S.turn - (w.heldSince ?? 0) : undefined,
         forces: seen ? factionsAt(S, w).map(s => ({ faction: s.faction, army: Object.fromEntries(Object.entries(s.army).map(([k, n]) => [nameOf(k), n])), players: s.parts.filter(x => x.kind === "warband").map(x => S.players[x.player].name) })) : null };
     }),
@@ -349,4 +403,4 @@ function view(S, player) {
     news: S.log.slice(-30).reverse(),
   };
 }
-module.exports = { apply, rebuild, view, order, total, strength, supplied, START };
+module.exports = { apply, rebuild, view, order, total, strength, supplied, holdBonus, START };

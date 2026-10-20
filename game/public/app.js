@@ -93,13 +93,17 @@ function draw() {
     (V.you.faction === "brawl" && idle >= 3 ? `<p class="err">The lads are restless: no fight for ${idle} turns${idle >= 4 ? ", and they're fighting each other" : ""}</p>` : "");
   $("#me").innerHTML = `<h2>${esc(V.you.name)}</h2><p>${esc(V.factions[V.you.faction].name)} · stockpile: ${esc(st)}</p>
     <p>Warband at <b>${esc(W[me.at].name)}</b>${me.supplied ? "" : " · <span class='err'>out of supply</span>"}<br>${armyText(Object.fromEntries(Object.entries(me.army).map(([k, n]) => [V.units[k] ? V.units[k].name : k, n])))}</p>
+    <p class="muted">Stance: ${esc(me.stance || "advance")}${me.careful ? ", turning back from bad odds" : ""}</p>
     ${me.orders ? `<p class="muted">Orders in: ${me.orders.move ? "move to " + esc(W[me.orders.move].name) : "hold"}${me.orders.recruit.length ? ", recruit " + me.orders.recruit.map(r => r.count + " " + esc(V.units[r.unit].name)).join(", ") : ""}</p>` : ""}
     ${own}${me.history.some(h => h.startsWith(`Turn ${V.turn}:`)) ? `<ul class="feed">${me.history.filter(h => h.startsWith(`Turn ${V.turn}:`)).map(h => `<li>${esc(h.replace(/^Turn \d+: /, ""))}</li>`).join("")}</ul>` : ""}<details><summary>History</summary><ol class="feed">${me.history.slice().reverse().map(h => `<li>${esc(h)}</li>`).join("")}</ol></details>`;
   const w = sel && W[sel];
-  $("#world").innerHTML = w ? `<h3>${esc(w.name)}</h3><p>${esc(w.typeName)}${w.capital ? ", a capital" : ""}${w.asleep ? ", its tomb asleep" : w.asleep === false ? ", its tomb awake" : ""}${w.gate ? ", a gate" : ""} · ${w.owner ? esc(V.factions[w.owner].name) : "unclaimed"}${w.loyalty != null ? ` · loyalty ${w.loyalty}` : ""}${w.held != null ? ` · held ${w.held} turns` : ""}</p>
+  $("#world").innerHTML = w ? `<h3>${esc(w.name)}</h3><p>${esc(w.typeName)}${w.capital ? ", a capital" : ""}${w.asleep ? ", its tomb asleep" : w.asleep === false ? ", its tomb awake" : ""}${w.gate ? ", a gate" : ""}${w.walls ? `, walls level ${w.walls}` : ""} · ${w.owner ? esc(V.factions[w.owner].name) : "unclaimed"}${w.loyalty != null ? ` · loyalty ${w.loyalty}` : ""}${w.held != null ? ` · held ${w.held} turns` : ""}</p>
     ${V.you.odds[w.id] != null ? `<p>If your warband fights here: about <b>${V.you.odds[w.id]}%</b> to win against the strongest force.</p>` : ""}${w.forces ? (w.forces.length ? `<table>${w.forces.map(f => `<tr><td>${esc(V.factions[f.faction].name)}${f.players.length ? " (" + f.players.map(esc).join(", ") + ")" : ""}</td><td>${armyText(f.army)}</td></tr>`).join("")}</table>` : "<p class='muted'>Nobody there.</p>") : "<p class='muted'>Your faction has no eyes here.</p>"}` : `<p class="muted">Pick a world on the map.</p>`;
   const here = W[me.at];
   $("#orders").innerHTML = `<h3>Orders for the next tick</h3>
+    <label>Stance <select id="o-stance">${[["advance", "Advance: go where sent, take what you win"], ["fortify", "Fortify: stay, and fight harder on your own world"], ["raid", "Raid: strike, loot, come back"]].map(([k, t]) => `<option value="${k}"${(me.stance || "advance") === k ? " selected" : ""}>${t}</option>`).join("")}</select></label>
+    <label><input type="checkbox" id="o-careful"${me.careful ? " checked" : ""}> Turn back if the odds are under ${V.you.turnBack}%</label>
+    ${here.owner === V.you.faction && here.walls < V.you.walls.max ? `<label><input type="checkbox" id="o-walls"> Raise the walls of ${esc(here.name)} to level ${here.walls + 1} (${V.you.walls.cost[here.walls]} materiel)</label>` : ""}
     <label>Move <select id="o-move"${rit ? " disabled" : ""}><option value="">Hold at ${esc(here.name)}</option>${V.you.moves.map(l => `<option value="${l}">${here.links.includes(l) ? "to" : "through the gate to"} ${esc(W[l].name)}${V.you.odds[l] != null ? ` (fight there: about ${V.you.odds[l]}% to win)` : ""}</option>`).join("")}</select></label>
     ${V.you.rituals && here.owner === V.you.faction && !rit ? `<label>Ritual <select id="o-rit"><option value="">none</option>${Object.entries(V.you.rituals).map(([k, r]) => k === "corrupt"
       ? here.links.map(l => W[l]).filter(t => t.owner === "hegemony" && !t.capital).map(t => `<option value="corrupt:${t.id}">${r.name} against ${esc(t.name)}${t.loyalty != null ? " (loyalty " + t.loyalty + ")" : ""}, ${r.captives} captives</option>`).join("")
@@ -110,7 +114,8 @@ function draw() {
     try {
       const recruit = [...document.querySelectorAll("[data-unit]")].map(i => ({ unit: i.dataset.unit, count: +i.value })).filter(r => r.count > 0);
       const rv = $("#o-rit") ? $("#o-rit").value : "", [kind, target] = rv.split(":");
-      await api("/api/orders", { move: $("#o-move").value || null, recruit, ritual: rv ? { kind, target: target || null } : null }); load();
+      await api("/api/orders", { move: $("#o-move").value || null, recruit, ritual: rv ? { kind, target: target || null } : null,
+        stance: $("#o-stance").value, careful: $("#o-careful").checked, build: $("#o-walls") && $("#o-walls").checked ? "walls" : null }); load();
     } catch (e) { $("#o-err").textContent = e.message; }
   };
   $("#reports").innerHTML = V.reports.map((r, i) => `<li><b>Turn ${r.turn}</b> · ${esc(r.text)} ${r.id ? `<button class="link" data-rep="${i}">Watch</button>` : ""}</li>`).join("") || "<li class='muted'>No battles yet.</li>";

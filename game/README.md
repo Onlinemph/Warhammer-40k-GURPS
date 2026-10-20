@@ -17,8 +17,13 @@ swarm) in the middle, the Dormant (AI) asleep in three tomb worlds, and local de
 sets what it yields each turn: manpower, materiel (the Chorus turns both into biomass; the Dormant take nothing,
 since they never recruit). Players join one of the player factions and lead a warband from its capital.
 
-**A turn.** Orders are in any time before the tick: move one jump, and recruit at your own worlds from the
-faction's stockpile. At the tick, in order: income; recruiting and movement; the Chorus breeds broods and sends
+**A turn.** Orders are in any time before the tick: move one jump (or gate to gate), recruit at your own worlds
+from your share of the faction's stockpile, raise a world's walls, hold a ritual (the Apostates). Standing orders
+carry over: a stance (*advance*; *fortify*, stay put and fight at x1.5 on your own world; *raid*, strike a world,
+loot three turns of its yield and come home without taking it) and *turn back* (call a move off at the tick if the
+odds there are under 25%). Walls give a world's holder +25% a level, two levels (20 and 40 materiel), and lose a
+level when the world is taken or raided. The move list shows the odds against the strongest force seen at each
+world; reports give the odds each battle was fought at. At the tick, in order: income; recruiting and movement; the Chorus breeds broods and sends
 swarms at whatever next door it can beat, and awake Dormant tombs march on a neighbour they are sure of; battles wherever two factions meet (the resolver gives the odds and
 expected losses, the tick's dice decide; a fortress world favours its holder; the beaten fall back to a friendly
 world next door or are destroyed); worlds held by one faction's forces alone change hands; warbands out of supply
